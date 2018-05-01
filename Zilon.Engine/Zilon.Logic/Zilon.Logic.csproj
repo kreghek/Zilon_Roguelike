@@ -7,8 +7,8 @@
     <ProjectGuid>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Data</RootNamespace>
-    <AssemblyName>Zilon.Data</AssemblyName>
+    <RootNamespace>Zilon.Location</RootNamespace>
+    <AssemblyName>Zilon.Location</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,6 +42,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
+    <Compile Include="Schemes\LocationScheme.cs" />
+    <Compile Include="Schemes\PathScheme.cs" />
+    <Compile Include="Schemes\SchemeBase.cs" />
+    <Compile Include="Services\ISchemeService.cs" />
+    <Compile Include="Services\SchemeService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
