@@ -7,8 +7,8 @@
     <ProjectGuid>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Location</RootNamespace>
-    <AssemblyName>Zilon.Location</AssemblyName>
+    <RootNamespace>Zilon.Logic</RootNamespace>
+    <AssemblyName>Zilon.Logic</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Zilon.Client\Assets\Plugins\</OutputPath>
+    <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,10 +46,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
     <Compile Include="Schemes\LocationScheme.cs" />
+    <Compile Include="Schemes\MapScheme.cs" />
     <Compile Include="Schemes\PathScheme.cs" />
     <Compile Include="Schemes\SchemeBase.cs" />
+    <Compile Include="Services\ISchemeLocator.cs" />
     <Compile Include="Services\ISchemeService.cs" />
-    <Compile Include="Services\SchemeService.cs" />
+    <Compile Include="Services\Client\SchemeService.cs" />
+    <Compile Include="Services\SchemeFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

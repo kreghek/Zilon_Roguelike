@@ -1,4 +1,4 @@
-﻿namespace Zilon.Data.Schemes
+﻿namespace Zilon.Logic.Schemes
 {
     /// <summary>
     /// Интерфейс всех схем.

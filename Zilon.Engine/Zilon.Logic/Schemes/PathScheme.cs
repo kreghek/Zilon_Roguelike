@@ -1,4 +1,4 @@
-﻿namespace Zilon.Data.Schemes
+﻿namespace Zilon.Logic.Schemes
 {
     public sealed class PathScheme: SchemeBase
     {

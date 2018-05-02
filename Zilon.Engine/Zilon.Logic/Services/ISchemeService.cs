@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Zilon.Logic.Schemes;
 
-namespace Zilon.Data.Services
+namespace Zilon.Logic.Services
 {
     interface ISchemeService
     {
-        Dictionary<string, LocationScheme>
+        TScheme GetScheme<TScheme>(string sid) where TScheme: class, IScheme;
+        IEnumerable<TScheme> GetSchemes<TScheme>() where TScheme : class, IScheme;
     }
 }

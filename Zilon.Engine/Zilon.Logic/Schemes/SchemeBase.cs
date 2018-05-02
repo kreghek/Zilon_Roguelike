@@ -1,4 +1,4 @@
-﻿namespace Zilon.Data.Schemes
+﻿namespace Zilon.Logic.Schemes
 {
     /// <summary>
     /// Базовая схема с базовой реализацией.
