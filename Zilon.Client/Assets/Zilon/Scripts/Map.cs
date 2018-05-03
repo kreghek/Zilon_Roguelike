@@ -23,6 +23,11 @@ public class Map : MonoBehaviour
             throw new System.ArgumentNullException(nameof(schemeService));
         }
 
+        if (string.IsNullOrEmpty(sid))
+        {
+            throw new System.ArgumentException("Символьный идентификатор карты не может быть пустым.", nameof(sid));
+        }
+
         var mapScheme = schemeService.GetScheme<MapScheme>(sid);
 
         var locationSchemes = schemeService.GetSchemes<LocationScheme>();
