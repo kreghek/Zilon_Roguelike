@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zilon.Logic.Schemes;
+using Zilon.Logic.Services;
 
 public class Map : MonoBehaviour
 {
@@ -10,69 +12,42 @@ public class Map : MonoBehaviour
     public GroupVM GroupPrefab;
     public Canvas Canvas;
 
-    private LocationScheme[] locationSchemes;
-    private LocationTrasitionScheme[] trasitionSchemes;
-
     public List<MapLocation> MapLocations { get; set; }
     public List<GroupVM> Groups { get; set; }
     public GroupVM SelectedGroup { get; set; }
 
-    public Map()
+    public void CreateMapEntities(ISchemeService schemeService, string sid)
     {
-        locationSchemes = new[] {
-            new LocationScheme{
-                Sid = "loc1",
-                Position = new Vector2(0, 0)
-            },
-            new LocationScheme{
-                Sid = "loc2",
-                Position = new Vector2(3, 1)
-            },
-            new LocationScheme{
-                Sid = "loc3",
-                Position = new Vector2(-4, 3)
-            },
-            new LocationScheme{
-                Sid = "loc4",
-                Position = new Vector2(-5.5f, 2.5f)
-            }
-        };
+        if (schemeService == null)
+        {
+            throw new System.ArgumentNullException(nameof(schemeService));
+        }
 
-        trasitionSchemes = new[] {
-            new LocationTrasitionScheme{
-                StartLocationSid = "loc1",
-                EndLocationSid = "loc2",
-            },
-            new LocationTrasitionScheme{
-                StartLocationSid = "loc1",
-                EndLocationSid = "loc3",
-            },
-            new LocationTrasitionScheme{
-                StartLocationSid = "loc4",
-                EndLocationSid = "loc3",
-            },
-        };
-    }
+        var mapScheme = schemeService.GetScheme<MapScheme>(sid);
 
-    public void CreateMapEntities()
-    {
+        var locationSchemes = schemeService.GetSchemes<LocationScheme>();
+        var mapLocationSchemes = locationSchemes.Where(x => x.MapSid == sid).ToArray();
+
+        var pathSchemes = schemeService.GetSchemes<PathScheme>();
+        var mapPathSchemes = pathSchemes.Where(x => x.MapSid == sid).ToArray();
+
         var locations = new List<MapLocation>();
-        foreach (var locationScheme in locationSchemes)
+        foreach (var locationScheme in mapLocationSchemes)
         {
             var location = Instantiate(LocationPrefab, transform);
             location.Sid = locationScheme.Sid;
-            location.transform.position = new Vector3(locationScheme.Position.x, locationScheme.Position.y);
+            location.transform.position = new Vector3(locationScheme.X, locationScheme.Y);
             locations.Add(location);
             location.Canvas = Canvas;
             location.OnSelect += Location_OnSelect;
         }
 
-        foreach (var transitionScheme in trasitionSchemes)
+        foreach (var transitionScheme in mapPathSchemes)
         {
             var connector = Instantiate(ConnectorPrefab, transform);
 
-            connector.gameObject1 = locations.SingleOrDefault(x => x.Sid == transitionScheme.StartLocationSid).gameObject;
-            connector.gameObject2 = locations.SingleOrDefault(x => x.Sid == transitionScheme.EndLocationSid).gameObject;
+            connector.gameObject1 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid1).gameObject;
+            connector.gameObject2 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid2).gameObject;
         }
 
         MapLocations = locations;
@@ -110,17 +85,5 @@ public class Map : MonoBehaviour
     void Update()
     {
 
-    }
-
-    private class LocationScheme
-    {
-        public string Sid { get; set; }
-        public Vector2 Position { get; set; }
-    }
-
-    private class LocationTrasitionScheme
-    {
-        public string StartLocationSid { get; set; }
-        public string EndLocationSid { get; set; }
     }
 }

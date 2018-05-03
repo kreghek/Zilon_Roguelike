@@ -21,7 +21,7 @@ public class GlobeWorldVM : MonoBehaviour {
     private void Awake()
     {
         var schemeService = new SchemeService(SchemeLocator);
-        Map.CreateMapEntities();
+        Map.CreateMapEntities(schemeService, "main");
     }
 
     // Update is called once per frame

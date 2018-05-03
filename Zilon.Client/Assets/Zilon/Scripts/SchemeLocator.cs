@@ -14,20 +14,22 @@ public class SchemeLocator : MonoBehaviour, ISchemeLocator
         var result = new List<SchemeFile>();
         foreach (Object asset in jsonFileArray)
         {
+            var sid = asset.name;
+
+            // Загрузка контента по указанному пути из ресурсов.
             string assetPath = AssetDatabase.GetAssetPath(asset);
+            //TODO Разобраться, зачем эта операция
             assetPath = assetPath.Replace("Assets/Resources/", "");
-
-            Debug.Log($"Загрузка схемы: {assetPath}.");
-
             var content = LoadJson(assetPath);
 
-            Debug.Log($"Контент схемы: {content}.");
-
+            // Итоговый файл
             var file = new SchemeFile
             {
-                Sid = assetPath,
+                Sid = sid,
                 Content = content
             };
+
+            result.Add(file);
         }
 
         return result.ToArray();
