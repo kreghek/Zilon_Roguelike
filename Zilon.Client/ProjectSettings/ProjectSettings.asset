@@ -633,7 +633,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: ae8b5963-a919-4d0f-b3e0-17b7df5c9b56
   projectName: Zilon
   organizationId: kreghek
