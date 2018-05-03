@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Zilon.Logic.Services;
+﻿using UnityEngine;
 using Zilon.Logic.Services.Client;
 
 public class GlobeWorldVM : MonoBehaviour {

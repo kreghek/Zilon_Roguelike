@@ -13,6 +13,7 @@ public class Map : MonoBehaviour
     public Canvas Canvas;
 
     public List<MapLocation> MapLocations { get; set; }
+    public List<MapLocationConnector> Paths { get; set; }
     public List<GroupVM> Groups { get; set; }
     public GroupVM SelectedGroup { get; set; }
 
@@ -47,12 +48,14 @@ public class Map : MonoBehaviour
             location.OnSelect += Location_OnSelect;
         }
 
+        Paths = new List<MapLocationConnector>();
         foreach (var transitionScheme in mapPathSchemes)
         {
             var connector = Instantiate(ConnectorPrefab, transform);
 
             connector.gameObject1 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid1).gameObject;
             connector.gameObject2 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid2).gameObject;
+            Paths.Add(connector);
         }
 
         MapLocations = locations;
@@ -84,6 +87,24 @@ public class Map : MonoBehaviour
 
         SelectedGroup = sender as GroupVM;
         SelectedGroup.SetSelectState(true);
+
+        // Затенить все не доступные локации
+        foreach (var location in MapLocations)
+        {
+            location.SetAvailableState(false);
+        }
+
+        var currentLocation = SelectedGroup.CurrentLocation;
+        foreach (var location in MapLocations)
+        {
+            if (currentLocation == location)
+            {
+                location.SetAvailableState(true);
+                continue;
+            }
+
+            foreach(var path in tra)
+        }
     }
 
     // Update is called once per frame

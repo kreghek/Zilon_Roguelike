@@ -26,4 +26,9 @@ public class MapLocation : MonoBehaviour
     {
         OnSelect(this, new EventArgs());
     }
+
+    internal void SetAvailableState(bool v)
+    {
+        throw new NotImplementedException();
+    }
 }
