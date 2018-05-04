@@ -9,6 +9,8 @@ public class MapLocationConnector : MonoBehaviour {
 
     public LineRenderer line;                           // Line Renderer
 
+    public PathScheme Scheme { get; set; }
+
     // Use this for initialization
     void Start()
     {

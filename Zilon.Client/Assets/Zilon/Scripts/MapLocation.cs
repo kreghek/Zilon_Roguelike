@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class MapLocation : MonoBehaviour
 {
-
-    public string Sid { get; set; }
-
     public ModalDialog DialogPrefab;
     public Canvas Canvas;
     public event EventHandler OnSelect;
+    public SpriteRenderer Icon;
+
+    public string Sid { get; set; }
 
     // Use this for initialization
     void Start()
@@ -27,8 +27,8 @@ public class MapLocation : MonoBehaviour
         OnSelect(this, new EventArgs());
     }
 
-    internal void SetAvailableState(bool v)
+    internal void SetAvailableState(bool state)
     {
-        throw new NotImplementedException();
+        Icon.color = state ? Color.gray : Color.white;
     }
 }

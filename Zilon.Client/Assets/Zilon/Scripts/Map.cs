@@ -49,12 +49,16 @@ public class Map : MonoBehaviour
         }
 
         Paths = new List<MapLocationConnector>();
-        foreach (var transitionScheme in mapPathSchemes)
+        foreach (var pathScheme in mapPathSchemes)
         {
             var connector = Instantiate(ConnectorPrefab, transform);
 
-            connector.gameObject1 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid1).gameObject;
-            connector.gameObject2 = locations.SingleOrDefault(x => x.Sid == transitionScheme.Sid2).gameObject;
+            var location1 = locations.SingleOrDefault(x => x.Sid == pathScheme.Sid1);
+            var location2 = locations.SingleOrDefault(x => x.Sid == pathScheme.Sid2);
+
+            connector.gameObject1 = location1.gameObject;
+            connector.gameObject2 = location2.gameObject;
+            connector.Scheme = pathScheme;
             Paths.Add(connector);
         }
 
@@ -89,21 +93,29 @@ public class Map : MonoBehaviour
         SelectedGroup.SetSelectState(true);
 
         // Затенить все не доступные локации
-        foreach (var location in MapLocations)
-        {
-            location.SetAvailableState(false);
-        }
-
         var currentLocation = SelectedGroup.CurrentLocation;
         foreach (var location in MapLocations)
         {
-            if (currentLocation == location)
+            location.SetAvailableState(false);
+            UpdateLocationAvailableState(currentLocation, location);
+        }
+    }
+
+    private void UpdateLocationAvailableState(MapLocation currentLocation, MapLocation location)
+    {
+        if (currentLocation == location)
+        {
+            location.SetAvailableState(true);
+            return;
+        }
+
+        foreach (var path in Paths)
+        {
+            if (path.PathScheme.Sid1 == currentLocation.Sid ||
+                path.PathScheme.Sid2 == currentLocation.Sid)
             {
                 location.SetAvailableState(true);
-                continue;
             }
-
-            foreach(var path in tra)
         }
     }
 
