@@ -71,6 +71,7 @@ MonoBehaviour:
   DialogPrefab: {fileID: 114316790489742220, guid: a9f7f5629d4bd3243a95fb1d88123a2b,
     type: 2}
   Canvas: {fileID: 0}
+  Icon: {fileID: 212082855373520348}
 --- !u!212 &212082855373520348
 SpriteRenderer:
   m_ObjectHideFlags: 1

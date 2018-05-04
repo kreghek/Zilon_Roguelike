@@ -37,13 +37,13 @@ public class Map : MonoBehaviour
         var pathSchemes = schemeService.GetSchemes<PathScheme>();
         var mapPathSchemes = pathSchemes.Where(x => x.MapSid == sid).ToArray();
 
-        var locations = new List<MapLocation>();
+        MapLocations = new List<MapLocation>();
         foreach (var locationScheme in mapLocationSchemes)
         {
             var location = Instantiate(LocationPrefab, transform);
             location.Sid = locationScheme.Sid;
             location.transform.position = new Vector3(locationScheme.X, locationScheme.Y);
-            locations.Add(location);
+            MapLocations.Add(location);
             location.Canvas = Canvas;
             location.OnSelect += Location_OnSelect;
         }
@@ -53,8 +53,8 @@ public class Map : MonoBehaviour
         {
             var connector = Instantiate(ConnectorPrefab, transform);
 
-            var location1 = locations.SingleOrDefault(x => x.Sid == pathScheme.Sid1);
-            var location2 = locations.SingleOrDefault(x => x.Sid == pathScheme.Sid2);
+            var location1 = MapLocations.SingleOrDefault(x => x.Sid == pathScheme.Sid1);
+            var location2 = MapLocations.SingleOrDefault(x => x.Sid == pathScheme.Sid2);
 
             connector.gameObject1 = location1.gameObject;
             connector.gameObject2 = location2.gameObject;
@@ -62,11 +62,9 @@ public class Map : MonoBehaviour
             Paths.Add(connector);
         }
 
-        MapLocations = locations;
-
         Groups = new List<GroupVM>();
         var group = Instantiate(GroupPrefab, transform);
-        group.CurrentLocation = locations.First();
+        group.CurrentLocation = MapLocations.First();
         group.transform.position = group.CurrentLocation.transform.position;
         group.OnSelect += Group_OnSelect;
         Groups.Add(group);
@@ -78,6 +76,7 @@ public class Map : MonoBehaviour
         {
             var targetLocation = sender as MapLocation;
             SelectedGroup.CurrentLocation = targetLocation;
+            UpdateLocations();
         }
     }
 
@@ -92,31 +91,44 @@ public class Map : MonoBehaviour
         SelectedGroup = sender as GroupVM;
         SelectedGroup.SetSelectState(true);
 
+        UpdateLocations();
+    }
+
+    private void UpdateLocations()
+    {
         // Затенить все не доступные локации
         var currentLocation = SelectedGroup.CurrentLocation;
         foreach (var location in MapLocations)
         {
-            location.SetAvailableState(false);
             UpdateLocationAvailableState(currentLocation, location);
         }
     }
 
     private void UpdateLocationAvailableState(MapLocation currentLocation, MapLocation location)
     {
+        var isAvailable = IsLocationAvailable(currentLocation, location);
+        location.SetAvailableState(isAvailable);
+    }
+
+    private bool IsLocationAvailable(MapLocation currentLocation, MapLocation location)
+    {
         if (currentLocation == location)
         {
-            location.SetAvailableState(true);
-            return;
+            return true;
         }
 
-        foreach (var path in Paths)
+        var currentPaths = Paths.Where(path => path.Scheme.Sid1 == currentLocation.Sid ||
+                path.Scheme.Sid2 == currentLocation.Sid).ToArray();
+
+        foreach (var path in currentPaths)
         {
-            if (path.PathScheme.Sid1 == currentLocation.Sid ||
-                path.PathScheme.Sid2 == currentLocation.Sid)
+            if (path.Scheme.Sid1 == location.Sid || path.Scheme.Sid2 == location.Sid)
             {
-                location.SetAvailableState(true);
+                return true;
             }
         }
+
+        return false;
     }
 
     // Update is called once per frame

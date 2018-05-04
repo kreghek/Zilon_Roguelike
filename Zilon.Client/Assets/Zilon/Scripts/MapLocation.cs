@@ -29,6 +29,6 @@ public class MapLocation : MonoBehaviour
 
     internal void SetAvailableState(bool state)
     {
-        Icon.color = state ? Color.gray : Color.white;
+        Icon.color = state ? Color.white : Color.gray;
     }
 }

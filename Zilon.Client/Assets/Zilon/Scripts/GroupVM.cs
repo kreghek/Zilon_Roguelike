@@ -37,7 +37,7 @@ public class GroupVM : MonoBehaviour
 
     public void SetSelectState(bool state)
     {
-        Icon.color = state ? Color.gray : Color.white;
+        Icon.color = state ? Color.white : Color.gray;
 
         IsSelected = state;
     }
