@@ -5,6 +5,7 @@ using UnityEngine;
 public class CombatActorVM : MonoBehaviour {
 
     public int Team;
+    public int QuadIndex;
 
 	// Use this for initialization
 	void Start () {

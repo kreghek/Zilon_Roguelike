@@ -2,7 +2,7 @@
 using System.IO;
 using Zilon.Logic.Services;
 
-namespace Zilone.Engine.Tests.Services
+namespace Zilon.Logic.Services
 {
     public class FileSchemeLocator : ISchemeLocator
     {

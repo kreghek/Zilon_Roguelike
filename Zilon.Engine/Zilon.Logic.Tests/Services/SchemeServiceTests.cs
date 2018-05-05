@@ -2,11 +2,9 @@
 using System.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
-using Zilon.Logic.Services;
 using Zilon.Logic.Services.Client;
-using Zilone.Engine.Tests.Services;
 
-namespace Zilone.Engine.Tests
+namespace Zilon.Logic.Services.Tests
 {
     [TestFixture]
     public class SchemeServiceTests

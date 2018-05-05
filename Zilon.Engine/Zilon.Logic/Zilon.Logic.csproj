@@ -43,6 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Persons\Squad.cs" />
+    <Compile Include="Players\CpuPlayer.cs" />
+    <Compile Include="Players\HumanPlayer.cs" />
+    <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\PlayerBase.cs" />
+    <Compile Include="Services\CombatService.cs" />
+    <Compile Include="Services\FileSchemeLocator.cs" />
+    <Compile Include="Tactics\Actor.cs" />
+    <Compile Include="Tactics\Combat.cs" />
+    <Compile Include="Persons\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
     <Compile Include="Schemes\LocationScheme.cs" />
@@ -53,6 +63,11 @@
     <Compile Include="Services\ISchemeService.cs" />
     <Compile Include="Services\Client\SchemeService.cs" />
     <Compile Include="Services\SchemeFile.cs" />
+    <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
+    <Compile Include="Tactics\Initialization\CombatInitData.cs" />
+    <Compile Include="Tactics\Map\CombatMap.cs" />
+    <Compile Include="Tactics\Map\MapNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
