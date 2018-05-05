@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 1272584970}
   - component: {fileID: 1272584969}
   - component: {fileID: 1272584968}
+  - component: {fileID: 1272584972}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -464,6 +465,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1272584972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1272584967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3ddca8e199f2b4ca4d1fc2ad640dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disablePanning: 0
+  disableSelect: 0
+  disableZoom: 0
+  maximumZoom: 1
+  minimumZoom: 20
+  selectColor: {r: 0, g: 1, b: 0, a: 1}
+  selectLineWidth: 2
+  lookDamper: 5
+  selectionObjectName: RTS Selection
 --- !u!1 &2062469015
 GameObject:
   m_ObjectHideFlags: 0
