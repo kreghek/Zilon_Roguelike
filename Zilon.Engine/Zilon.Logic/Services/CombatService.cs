@@ -25,7 +25,7 @@ namespace Zilon.Logic.Services
 
         private void CreateActors(Combat combat, CombatInitData initData)
         {
-            var actors = new List<Actor>();
+            var squads = new List<ActorSquad>();
             var teamIndex = 0;
             foreach (var playerData in initData.Players)
             {
@@ -33,28 +33,35 @@ namespace Zilon.Logic.Services
                 var squadLocations = CombatMap.GetSquadNodes(teamLocation, combat.Map.Nodes);
                 for (var squadIndex = 0; squadIndex < playerData.Squads.Length; squadIndex++)
                 {
-                    var squadLocation = squadLocations[random.Next(0, squadLocations.Length)];
-                    var squad = playerData.Squads[squadIndex];
+                    var squadNode = squadLocations[random.Next(0, squadLocations.Length)];
+                    var squadData = playerData.Squads[squadIndex];
 
-                    for (var personIndex = 0; personIndex < squad.Persons.Length; personIndex++)
+                    var squad = new ActorSquad
                     {
-                        var person = squad.Persons[personIndex];
+                        CurrentNode = squadNode
+                    };
 
-                        var actor = CreateActor(person, squadLocation);
-                        actors.Add(actor);
+                    squads.Add(squad);
+
+                    for (var personIndex = 0; personIndex < squadData.Persons.Length; personIndex++)
+                    {
+                        var person = squadData.Persons[personIndex];
+
+                        var actor = CreateActor(person);
+                        squad.Actors.Add(actor);
                     }
                 }
 
                 teamIndex++;
             }
 
-            combat.Actors = actors.ToArray();
+            combat.Squads = squads.ToArray();
         }
 
         //TODO Создание актёров должен заниматься отдельный сервис
-        private Actor CreateActor(Person person, MapNode squadlocation)
+        private Actor CreateActor(Person person)
         {
-            var actor = new Actor(person, squadlocation);
+            var actor = new Actor(person);
             return actor;
         }
     }

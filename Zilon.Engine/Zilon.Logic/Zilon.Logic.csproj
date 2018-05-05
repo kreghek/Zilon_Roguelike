@@ -51,6 +51,7 @@
     <Compile Include="Services\CombatService.cs" />
     <Compile Include="Services\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
+    <Compile Include="Tactics\ActorSquad.cs" />
     <Compile Include="Tactics\Combat.cs" />
     <Compile Include="Persons\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
