@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Zilon.Logic.Math;
 using Zilon.Logic.Persons;
 using Zilon.Logic.Tactics;
 using Zilon.Logic.Tactics.Initialization;
@@ -55,18 +54,7 @@ namespace Zilon.Logic.Services
         //TODO Создание актёров должен заниматься отдельный сервис
         private Actor CreateActor(Person person, MapNode squadlocation)
         {
-            var offsetX = (float)random.NextDouble() * 4 - 2;
-            var offsetY = (float)random.NextDouble() * 4 - 2;
-
-            var actor = new Actor(person)
-            {
-                Position = new Vector2()
-                {
-                    X = squadlocation.Position.X + offsetX,
-                    Y = squadlocation.Position.Y + offsetY
-                }
-            };
-
+            var actor = new Actor(person, squadlocation);
             return actor;
         }
     }

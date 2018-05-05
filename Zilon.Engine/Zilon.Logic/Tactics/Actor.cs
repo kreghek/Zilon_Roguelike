@@ -1,18 +1,23 @@
-﻿using Zilon.Logic.Math;
-using Zilon.Logic.Persons;
+﻿using Zilon.Logic.Persons;
+using Zilon.Logic.Tactics.Map;
 
 namespace Zilon.Logic.Tactics
 {
     public class Actor
     {
         private readonly Person person;
+        private MapNode currentNode;
 
-        public Actor(Person person)
+        public Actor(Person person, MapNode currentNode)
         {
             this.person = person;
+            this.currentNode = currentNode;
         }
 
         public Person Person => person;
-        public Vector2 Position { get; set; }
+
+        public MapNode CurrentNode { get => currentNode; set => currentNode = value; }
+
+
     }
 }

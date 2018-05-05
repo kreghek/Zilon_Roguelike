@@ -47,7 +47,9 @@ public class CombatMapVM : MonoBehaviour
         foreach (var actor in combat.Actors)
         {
             var actorObj = Instantiate(ActorPrefab, transform);
-            actorObj.transform.position = new Vector3(actor.Position.X, actor.Position.Y);
+            var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
+            var locationPosition = new Vector3(actor.CurrentNode.Position.X, actor.CurrentNode.Position.Y);
+            actorObj.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
         }
     }
 
