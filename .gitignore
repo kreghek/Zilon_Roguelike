@@ -266,3 +266,4 @@ __pycache__/
 # 1. Тонна чужих файлов. Нам не нужно их версионирование.
 # 2. Автогенерируемые наши сборки.
 /Zilon.Client/Assets/Plugins
+/Zilon.Client/Assets/db.bytes

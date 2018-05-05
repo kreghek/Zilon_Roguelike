@@ -1,6 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.IO;
 using Mono.Data.Sqlite;
 using UnityEngine;
+using UnityEngine.UI;
 using Zilon.Logic.Services.Client;
 
 public class GlobeWorldVM : MonoBehaviour
@@ -8,6 +11,7 @@ public class GlobeWorldVM : MonoBehaviour
 
     public Map Map;
     public SchemeLocator SchemeLocator;
+    public Text Text;
 
     public GlobeWorldVM()
     {
@@ -17,28 +21,54 @@ public class GlobeWorldVM : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        string connectionString = "URI=file:" + Application.dataPath + "/db/db.bytes";
-        using (IDbConnection dbcon = (IDbConnection)new SqliteConnection(connectionString))
+        try
         {
-            dbcon.Open();
+            var dbAsset = Resources.Load<TextAsset>("Db/db");
 
-            // Выбираем нужные нам данные
-            var sql = "SELECT Id, Value FROM Test";
-            using (IDbCommand dbcmd = dbcon.CreateCommand())
+            Text.text = $"Db size: {dbAsset.bytes.Length.ToString()}";
+
+            var fs = File.Open(Application.dataPath + "/db.bytes", FileMode.Create);
+            BinaryWriter binary = new BinaryWriter(fs);
+            binary.Write(dbAsset.bytes);
+            fs.Close();
+
+            string connectionString = "URI=file:" + Application.dataPath + "/db.bytes";
+            using (IDbConnection dbcon = new SqliteConnection(connectionString))
             {
-                dbcmd.CommandText = sql;
-                // Выполняем запрос
-                using (IDataReader reader = dbcmd.ExecuteReader())
+                dbcon.Open();
+
+                // Выбираем нужные нам данные
+                var sql = "SELECT Id, Value FROM Test";
+                using (IDbCommand dbcmd = dbcon.CreateCommand())
                 {
-                    // Читаем и выводим результат
-                    while (reader.Read())
+                    dbcmd.CommandText = sql;
+                    // Выполняем запрос
+                    using (IDataReader reader = dbcmd.ExecuteReader())
                     {
-                        Debug.Log($"Id: {reader.GetInt32(0)}, Value: {reader.GetString(1)}");
+                        // Читаем и выводим результат
+                        while (reader.Read())
+                        {
+                            Text.text += $"Id: {reader.GetInt32(0)}, Value: {reader.GetString(1)}";
+                            Debug.Log($"Id: {reader.GetInt32(0)}, Value: {reader.GetString(1)}");
+                        }
                     }
                 }
+
+                var sqlInsert = "INSERT INTO Test(Value) VALUES('auto')";
+                using (IDbCommand dbcmd = dbcon.CreateCommand())
+                {
+                    dbcmd.CommandText = sqlInsert;
+                    // Выполняем запрос
+                    dbcmd.ExecuteNonQuery();
+                }
+
+                // Закрываем соединение
+                dbcon.Close();
             }
-            // Закрываем соединение
-            dbcon.Close();
+        }
+        catch (Exception e)
+        {
+            Text.text += e.ToString();
         }
     }
 
