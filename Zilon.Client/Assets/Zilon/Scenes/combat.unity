@@ -306,6 +306,8 @@ MonoBehaviour:
   LocationPrefab: {fileID: 114944877699021702, guid: 183121b2968834746a4752b239b5ed13,
     type: 2}
   PathPrefab: {fileID: 0}
+  SquadPrefab: {fileID: 114262641652161642, guid: 93787ae385b5c3b4b9b3a2b73f0d01d9,
+    type: 2}
   ActorPrefab: {fileID: 114287496602291752, guid: cc45db28f0f64b24eb0c59ecbb764a31,
     type: 2}
   Canvas: {fileID: 227365884}
@@ -476,15 +478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3ddca8e199f2b4ca4d1fc2ad640dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disablePanning: 0
-  disableSelect: 0
-  disableZoom: 0
-  maximumZoom: 1
-  minimumZoom: 20
-  selectColor: {r: 0, g: 1, b: 0, a: 1}
-  selectLineWidth: 2
-  lookDamper: 5
-  selectionObjectName: RTS Selection
 --- !u!1 &2062469015
 GameObject:
   m_ObjectHideFlags: 0

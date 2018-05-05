@@ -15,6 +15,7 @@ public class CombatMapVM : MonoBehaviour
 
     public CombatLocationVM LocationPrefab;
     public CombatPathVM PathPrefab;
+    public CombatSquadVM SquadPrefab;
     public CombatActorVM ActorPrefab;
     public Canvas Canvas;
 
@@ -34,22 +35,34 @@ public class CombatMapVM : MonoBehaviour
     {
         locations = new List<CombatLocationVM>();
 
-        foreach (var mapNode in combat.Map.Nodes)
+        foreach (var node in combat.Map.Nodes)
         {
-            var locationobj = Instantiate(LocationPrefab, transform);
-            locationobj.transform.position = new Vector3(mapNode.Position.X, mapNode.Position.Y);
-            locations.Add(locationobj);
+            var locationVM = Instantiate(LocationPrefab, transform);
+            locationVM.Node = node;
+            locationVM.transform.position = new Vector3(node.Position.X, node.Position.Y);
+            locations.Add(locationVM);
         }
     }
 
     private void CreateActors(Combat combat)
     {
-        foreach (var actor in combat.Actors)
+        foreach (var squad in combat.Squads)
         {
-            var actorObj = Instantiate(ActorPrefab, transform);
-            var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
-            var locationPosition = new Vector3(actor.CurrentNode.Position.X, actor.CurrentNode.Position.Y);
-            actorObj.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
+            var squadVM = Instantiate(SquadPrefab, transform);
+
+            var currentSquadNode = locations.SingleOrDefault(x => x.Node == squad.Node);
+            if (currentSquadNode != null)
+            {
+                foreach (var actor in squad.Actors)
+                {
+                    var actorVM = Instantiate(ActorPrefab, squadVM.transform);
+                    var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
+                    var locationPosition = currentSquadNode.transform.position;
+                    actorVM.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
+
+                    squadVM.Actors.Add(actorVM);
+                }
+            }
         }
     }
 

@@ -19,7 +19,7 @@ namespace Zilon.Logic.Tactics
 
         public void Move(ActorSquad squad, MapNode targetNode)
         {
-            squad.CurrentNode = targetNode;
+            squad.SetCurrentNode(targetNode);
         }
     }
 }

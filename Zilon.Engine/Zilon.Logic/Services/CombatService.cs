@@ -36,11 +36,7 @@ namespace Zilon.Logic.Services
                     var squadNode = squadLocations[random.Next(0, squadLocations.Length)];
                     var squadData = playerData.Squads[squadIndex];
 
-                    var squad = new ActorSquad
-                    {
-                        CurrentNode = squadNode
-                    };
-
+                    var squad = new ActorSquad(squadNode);
                     squads.Add(squad);
 
                     for (var personIndex = 0; personIndex < squadData.Persons.Length; personIndex++)
