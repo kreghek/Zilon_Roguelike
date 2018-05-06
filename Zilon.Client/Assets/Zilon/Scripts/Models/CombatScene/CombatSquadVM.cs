@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zilon.Logic.Tactics;
 
-//TODO Переименованить в просто Актёр, потому что актёры есть только в бою
 public class CombatSquadVM : MonoBehaviour
 {
     public ActorSquad ActorSquad { get; set; }

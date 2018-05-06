@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+//TODO Переименованить в просто Актёр, потому что актёры есть только в бою
 public class CombatActorVM : MonoBehaviour
 {
 
