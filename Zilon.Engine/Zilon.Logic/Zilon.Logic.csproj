@@ -50,6 +50,7 @@
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Services\CombatService.cs" />
     <Compile Include="Services\FileSchemeLocator.cs" />
+    <Compile Include="Services\ICombatService.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\ActorSquad.cs" />
     <Compile Include="Tactics\Combat.cs" />

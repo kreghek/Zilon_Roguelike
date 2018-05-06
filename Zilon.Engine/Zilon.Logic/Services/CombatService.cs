@@ -7,7 +7,7 @@ using Zilon.Logic.Tactics.Map;
 
 namespace Zilon.Logic.Services
 {
-    public class CombatService
+    public class CombatService : ICombatService
     {
         private Random random = new Random();
 

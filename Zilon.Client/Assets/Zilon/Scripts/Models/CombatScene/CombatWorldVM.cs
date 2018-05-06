@@ -3,6 +3,7 @@ using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using Zilon.Logic.Services;
 using Zilon.Logic.Tactics;
 
@@ -13,16 +14,12 @@ class CombatWorldVM : MonoBehaviour
     public SchemeLocator SchemeLocator;
     public Text Text;
 
-    private readonly ICommandManager commandManager;
-    private readonly CombatService combatService;
+    [Inject]
+    public ICommandManager CommandManager;
+    [Inject]
+    public ICombatService CombatService;
 
     private Combat combat;
-
-    public CombatWorldVM(CombatService combatService, ICommandManager commandManager)
-    {
-        this.commandManager = commandManager;
-        this.combatService = combatService;
-    }
 
     private void FixedUpdate()
     {
@@ -31,7 +28,7 @@ class CombatWorldVM : MonoBehaviour
 
     private void ExecuteCommands()
     {
-        var command = commandManager.Pop();
+        var command = CommandManager.Pop();
         if (command == null)
             return;
 
@@ -46,7 +43,7 @@ class CombatWorldVM : MonoBehaviour
     private void Awake()
     {
         var initData = CombatHelper.GetData();
-        var combat = combatService.CreateCombat(initData);
+        var combat = CombatService.CreateCombat(initData);
         Map.InitCombat(combat);
 
         this.combat = combat;

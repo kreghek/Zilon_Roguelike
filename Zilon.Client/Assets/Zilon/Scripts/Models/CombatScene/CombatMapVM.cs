@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Services;
 using UnityEngine;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Players;
+using Zenject;
 using Zilon.Logic.Services;
 using Zilon.Logic.Tactics;
-using Zilon.Logic.Tactics.Initialization;
-using Zilon.Logic.Tactics.Map;
 
 class CombatMapVM : MonoBehaviour
 {
@@ -24,16 +20,12 @@ class CombatMapVM : MonoBehaviour
     private List<CombatLocationVM> locations;
     private CombatSquadVM selectedSquad;
 
-    private readonly CombatService combatService;
-    private readonly ICommandManager commandManager;
+    [Inject]
+    public ICommandManager CommandManager;
+    [Inject]
+    public ICombatService CombatService;
 
     private Combat combat;
-
-    public CombatMapVM(CombatService combatService, ICommandManager commandManager)
-    {
-        this.commandManager = commandManager;
-        this.combatService = combatService;
-    }
 
     public void InitCombat(Combat combat)
     {
@@ -62,10 +54,10 @@ class CombatMapVM : MonoBehaviour
     {
         if (selectedSquad != null)
         {
-            if (combat != null && commandManager != null)
+            if (combat != null && CommandManager != null)
             {
                 var moveCommand = new MoveCommand(selectedSquad, sender as CombatLocationVM);
-                commandManager.Push((ICommand<ICommandContext>)moveCommand);
+                CommandManager.Push((ICommand<ICommandContext>)moveCommand);
             }
         }
     }
@@ -100,24 +92,5 @@ class CombatMapVM : MonoBehaviour
     {
         selectedSquad = sender as CombatSquadVM;
         Debug.Log("selected " + selectedSquad);
-    }
-
-    
-
-    public CombatMapVM()
-    {
-        combatService = new CombatService();
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
