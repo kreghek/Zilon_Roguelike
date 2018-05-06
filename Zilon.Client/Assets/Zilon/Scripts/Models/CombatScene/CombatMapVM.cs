@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Zilon.Scripts.Models.Commands;
+using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Services;
+using Assets.Zilon.Scripts.Services.CombatScene;
 using UnityEngine;
 using Zenject;
 using Zilon.Logic.Services;
-using Zilon.Logic.Tactics;
 
 class CombatMapVM : MonoBehaviour
 {
@@ -18,53 +17,43 @@ class CombatMapVM : MonoBehaviour
     public Canvas Canvas;
 
     private List<CombatLocationVM> locations;
-    private CombatSquadVM selectedSquad;
 
     [Inject]
     public ICommandManager CommandManager;
     [Inject]
     public ICombatService CombatService;
+    [Inject]
+    private IPersonCommandHandler PersonCommandHandler;
+    [Inject]
+    private ICombatManager CombatManager;
 
-    private Combat combat;
-
-    public void InitCombat(Combat combat)
+    public void InitCombat()
     {
-        this.combat = combat;
-        CreateLocations(combat);
-        CreateActors(combat);
+        CreateLocations();
+        CreateActors();
     }
 
 
-    private void CreateLocations(Combat combat)
+    private void CreateLocations()
     {
         locations = new List<CombatLocationVM>();
 
-        foreach (var node in combat.Map.Nodes)
+        foreach (var node in CombatManager.CurrentCombat.Map.Nodes)
         {
             var locationVM = Instantiate(LocationPrefab, transform);
             locationVM.Node = node;
             locationVM.transform.position = new Vector3(node.Position.X, node.Position.Y);
             locations.Add(locationVM);
 
-            locationVM.OnSelect += LocationVM_OnSelect;
+            locationVM.OnSelect += PersonCommandHandler.LocationVM_OnSelect;
         }
     }
 
-    private void LocationVM_OnSelect(object sender, EventArgs e)
-    {
-        if (selectedSquad != null)
-        {
-            if (combat != null && CommandManager != null)
-            {
-                var moveCommand = new MoveCommand(selectedSquad, sender as CombatLocationVM);
-                CommandManager.Push((ICommand<ICommandContext>)moveCommand);
-            }
-        }
-    }
+    
 
-    private void CreateActors(Combat combat)
+    private void CreateActors()
     {
-        foreach (var squad in combat.Squads)
+        foreach (var squad in CombatManager.CurrentCombat.Squads)
         {
             var squadVM = Instantiate(SquadPrefab, transform);
             squadVM.ActorSquad = squad;
@@ -84,13 +73,7 @@ class CombatMapVM : MonoBehaviour
                 }
             }
 
-            squadVM.OnSelect += SquadVM_OnSelect;
+            squadVM.OnSelect += PersonCommandHandler.SquadVM_OnSelect;
         }
-    }
-
-    private void SquadVM_OnSelect(object sender, EventArgs e)
-    {
-        selectedSquad = sender as CombatSquadVM;
-        Debug.Log("selected " + selectedSquad);
     }
 }

@@ -1,7 +1,21 @@
-﻿namespace Assets.Zilon.Scripts.Models.Commands
+﻿using Zilon.Logic.Tactics;
+
+namespace Assets.Zilon.Scripts.Models.Commands
 {
-    abstract class CombatCommandBase : ICommand<ICombatCommandContext>
+    abstract class CombatCommandBase : ICommand
     {
-        public abstract void Execute(ICombatCommandContext context);
+        protected readonly Combat combat;
+
+        public CombatCommandBase(Combat combat)
+        {
+            if (combat == null)
+            {
+                throw new System.ArgumentNullException(nameof(combat));
+            }
+
+            this.combat = combat;
+        }
+
+        public abstract void Execute();
     }
 }

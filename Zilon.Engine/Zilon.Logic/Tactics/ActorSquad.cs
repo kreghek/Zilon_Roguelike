@@ -20,7 +20,8 @@ namespace Zilon.Logic.Tactics
         public void SetCurrentNode(MapNode node)
         {
             Node = node;
-            NodeChanged(this, new EventArgs());
+
+            NodeChanged?.Invoke(this, new EventArgs());
         }
     }
 }

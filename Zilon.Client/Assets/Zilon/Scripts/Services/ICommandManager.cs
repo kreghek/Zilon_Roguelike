@@ -4,7 +4,7 @@ namespace Assets.Zilon.Scripts.Services
 {
     interface ICommandManager
     {
-        void Push(ICommand<ICommandContext> command);
-        ICommand<ICommandContext> Pop();
+        void Push(ICommand command);
+        ICommand Pop();
     }
 }
