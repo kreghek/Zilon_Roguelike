@@ -6,6 +6,7 @@ using Assets.Zilon.Scripts.Services.CombatScene;
 using UnityEngine;
 using Zenject;
 using Zilon.Logic.Services;
+using Zilon.Logic.Tactics;
 
 class CombatMapVM : MonoBehaviour
 {
@@ -16,7 +17,8 @@ class CombatMapVM : MonoBehaviour
     public CombatActorVM ActorPrefab;
     public Canvas Canvas;
 
-    private List<CombatLocationVM> locations;
+    private readonly List<CombatLocationVM> locations;
+    private readonly List<CombatSquadVM> squads;
 
     [Inject]
     public ICommandManager CommandManager;
@@ -27,6 +29,12 @@ class CombatMapVM : MonoBehaviour
     [Inject]
     private ICombatManager CombatManager;
 
+    public CombatMapVM()
+    {
+        locations = new List<CombatLocationVM>();
+        squads = new List<CombatSquadVM>();
+    }
+
     public void InitCombat()
     {
         CreateLocations();
@@ -36,8 +44,6 @@ class CombatMapVM : MonoBehaviour
 
     private void CreateLocations()
     {
-        locations = new List<CombatLocationVM>();
-
         foreach (var node in CombatManager.CurrentCombat.Map.Nodes)
         {
             var locationVM = Instantiate(LocationPrefab, transform);
@@ -49,13 +55,14 @@ class CombatMapVM : MonoBehaviour
         }
     }
 
-    
+
 
     private void CreateActors()
     {
         foreach (var squad in CombatManager.CurrentCombat.Squads)
         {
             var squadVM = Instantiate(SquadPrefab, transform);
+            squads.Add(squadVM);
             squadVM.ActorSquad = squad;
 
             var currentSquadNode = locations.SingleOrDefault(x => x.Node == squad.Node);
@@ -74,6 +81,14 @@ class CombatMapVM : MonoBehaviour
             }
 
             squadVM.OnSelect += PersonCommandHandler.SquadVM_OnSelect;
+            squadVM.OnNodeChanged += SquadVM_OnNodeChanged;
         }
+    }
+
+    private void SquadVM_OnNodeChanged(object sender, System.EventArgs e)
+    {
+        var squadVM = sender as CombatSquadVM;
+        var newNodeVM = locations.SingleOrDefault(x => x.Node == squadVM.ActorSquad.Node);
+        squadVM.MoveActors(newNodeVM);
     }
 }

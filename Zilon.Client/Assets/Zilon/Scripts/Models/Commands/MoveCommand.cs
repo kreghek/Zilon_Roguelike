@@ -26,7 +26,6 @@ namespace Assets.Zilon.Scripts.Models.Commands
         public override void Execute()
         {
             combat.Move(squadVM.ActorSquad, nodeVM.Node);
-            squadVM.MoveActors(nodeVM);
         }
     }
 }

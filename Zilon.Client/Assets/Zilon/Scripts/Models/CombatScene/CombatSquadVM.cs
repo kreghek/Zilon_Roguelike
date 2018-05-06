@@ -10,10 +10,21 @@ public class CombatSquadVM : MonoBehaviour
     public List<CombatActorVM> Actors { get; set; }
 
     public event EventHandler OnSelect;
+    public event EventHandler OnNodeChanged;
 
     public CombatSquadVM()
     {
         Actors = new List<CombatActorVM>();
+    }
+
+    public void Start()
+    {
+        ActorSquad.NodeChanged += ActorSquad_NodeChanged;
+    }
+
+    private void ActorSquad_NodeChanged(object sender, EventArgs e)
+    {
+        OnNodeChanged?.Invoke(this, new EventArgs());
     }
 
     public void AddActor(CombatActorVM actor)
@@ -24,7 +35,7 @@ public class CombatSquadVM : MonoBehaviour
 
     private void Actor_OnSelected(object sender, EventArgs e)
     {
-        OnSelect(this, new EventArgs());
+        OnSelect?.Invoke(this, new EventArgs());
     }
 
     internal void MoveActors(CombatLocationVM nodeVM)
