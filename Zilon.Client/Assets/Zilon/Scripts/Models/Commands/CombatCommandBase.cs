@@ -1,6 +1,6 @@
 ﻿using Zilon.Logic.Tactics;
 
-namespace Assets.Zilon.Scripts.Commands
+namespace Assets.Zilon.Scripts.Models.Commands
 {
     abstract class CombatCommandBase : ICommand
     {

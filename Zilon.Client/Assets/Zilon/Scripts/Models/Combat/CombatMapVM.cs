@@ -59,6 +59,7 @@ public class CombatMapVM : MonoBehaviour
                     var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
                     var locationPosition = currentSquadNode.transform.position;
                     actorVM.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
+                    actorVM.ChangeTargetPosition(actorVM.transform.position);
 
                     squadVM.Actors.Add(actorVM);
                 }

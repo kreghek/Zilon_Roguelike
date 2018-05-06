@@ -1,4 +1,4 @@
-﻿namespace Assets.Zilon.Scripts.Commands
+﻿namespace Assets.Zilon.Scripts.Models.Commands
 {
     interface ICommand
     {

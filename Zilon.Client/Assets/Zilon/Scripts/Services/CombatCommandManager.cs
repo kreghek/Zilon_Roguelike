@@ -1,17 +1,25 @@
-﻿using Assets.Zilon.Scripts.Commands;
+﻿using System.Collections.Generic;
+using Assets.Zilon.Scripts.Commands;
 
 namespace Assets.Zilon.Scripts.Services
 {
     class CombatCommandManager : ICommandManager<CombatCommandBase>
     {
+        private readonly Queue<CombatCommandBase> queue;
+
+        public CombatCommandManager()
+        {
+            queue = new Queue<CombatCommandBase>();
+        }
+
         public CombatCommandBase Pop()
         {
-            throw new System.NotImplementedException();
+            return queue.Dequeue();
         }
 
         public void Push(CombatCommandBase command)
         {
-            throw new System.NotImplementedException();
+            queue.Enqueue(command);
         }
     }
 }

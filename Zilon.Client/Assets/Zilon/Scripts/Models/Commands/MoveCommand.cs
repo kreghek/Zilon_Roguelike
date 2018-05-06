@@ -1,19 +1,22 @@
 ﻿using Zilon.Logic.Tactics;
 
-namespace Assets.Zilon.Scripts.Commands
+namespace Assets.Zilon.Scripts.Models.Commands
 {
     class MoveCommand : CombatCommandBase
     {
-        private readonly ActorSquad squad;
+        private readonly CombatSquadVM squadVM;
+        private readonly CombatLocationVM nodeVM;
 
-        public MoveCommand(Combat combat, ActorSquad squad): base(combat)
+        public MoveCommand(Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
         {
-            this.squad = squad;
+            this.squadVM = squadVM;
+            this.nodeVM = nodeVM;
         }
 
         public override void Execute()
         {
-            
+            combat.Move(squadVM.ActorSquad, nodeVM.Node);
+            squadVM.MoveActors(nodeVM);
         }
     }
 }

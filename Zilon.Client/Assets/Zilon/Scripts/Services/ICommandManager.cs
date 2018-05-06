@@ -2,9 +2,9 @@
 
 namespace Assets.Zilon.Scripts.Services
 {
-    interface ICommandManager<TCommand> where TCommand: ICommand
+    interface ICommandManager
     {
-        void Push(TCommand command);
-        TCommand Pop();
+        void Push(ICommand command);
+        ICommand Pop();
     }
 }

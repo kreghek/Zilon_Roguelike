@@ -1,19 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CombatActorVM : MonoBehaviour {
+public class CombatActorVM : MonoBehaviour
+{
 
-    public int Team;
-    public int QuadIndex;
+    private const float moveSpeedQ = 1;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private Vector3 targetPosition;
+    private float? moveCounter;
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (moveCounter != null)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetPosition, moveCounter.Value);
+            moveCounter += Time.deltaTime * moveSpeedQ;
+
+            if (moveCounter >= 1)
+            {
+                moveCounter = null;
+            }
+        }
+    }
+
+    public void ChangeTargetPosition(Vector3 targetPosition)
+    {
+        this.targetPosition = targetPosition;
+        moveCounter = 0;
+    }
 }
