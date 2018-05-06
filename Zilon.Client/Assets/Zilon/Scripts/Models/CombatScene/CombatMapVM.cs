@@ -25,21 +25,23 @@ class CombatMapVM : MonoBehaviour
     private CombatSquadVM selectedSquad;
 
     private readonly CombatService combatService;
-    private ICommandManager commandManager;
+    private readonly ICommandManager commandManager;
+
     private Combat combat;
 
-    public void SetCommandManager(ICommandManager commandManager)
+    public CombatMapVM(CombatService combatService, ICommandManager commandManager)
     {
         this.commandManager = commandManager;
+        this.combatService = combatService;
     }
 
-    private void Awake()
+    public void InitCombat(Combat combat)
     {
-        var initData = GetTwoGroupsData();
-        combat = combatService.CreateCombat(initData);
+        this.combat = combat;
         CreateLocations(combat);
         CreateActors(combat);
     }
+
 
     private void CreateLocations(Combat combat)
     {
@@ -62,8 +64,8 @@ class CombatMapVM : MonoBehaviour
         {
             if (combat != null && commandManager != null)
             {
-                var moveCommand = new MoveCommand(combat, selectedSquad, sender as CombatLocationVM);
-                commandManager.Push(moveCommand);
+                var moveCommand = new MoveCommand(selectedSquad, sender as CombatLocationVM);
+                commandManager.Push((ICommand<ICommandContext>)moveCommand);
             }
         }
     }
@@ -100,58 +102,7 @@ class CombatMapVM : MonoBehaviour
         Debug.Log("selected " + selectedSquad);
     }
 
-    private static CombatInitData GetTwoGroupsData()
-    {
-        return new CombatInitData
-        {
-            Map = new CombatMap(),
-            Players = new[] {
-                    new PlayerCombatInitData{
-                        Player = CreateFakePlayer(),
-                        Squads =new[]{
-                            CreateSquad(5),
-                            CreateSquad(3),
-                            CreateSquad(4)
-                        }
-                    },
-                    new PlayerCombatInitData{
-                        Player = CreateFakePlayer(),
-                        Squads =new[]{
-                            CreateSquad(5),
-                            CreateSquad(3),
-                            CreateSquad(4),
-                            CreateSquad(6),
-                        }
-                    }
-                }
-        };
-    }
-
-    private static Person CreatePerson()
-    {
-        var person = new Person { };
-        return person;
-    }
-
-    private static IPlayer CreateFakePlayer()
-    {
-        return new HumanPlayer();
-    }
-
-    private static Squad CreateSquad(int count)
-    {
-        var persons = new List<Person>();
-
-        for (var i = 0; i < count; i++)
-        {
-            persons.Add(CreatePerson());
-        }
-
-        return new Squad
-        {
-            Persons = persons.ToArray()
-        };
-    }
+    
 
     public CombatMapVM()
     {

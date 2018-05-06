@@ -1,7 +1,7 @@
 ﻿namespace Assets.Zilon.Scripts.Models.Commands
 {
-    interface ICommand
+    interface ICommand<in TContext> where TContext : class, ICommandContext
     {
-        void Execute();
+        void Execute(TContext context);
     }
 }

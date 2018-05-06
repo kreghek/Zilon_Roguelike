@@ -5,14 +5,14 @@ namespace Assets.Zilon.Scripts.Services
 {
     class CombatCommandManager : ICommandManager
     {
-        private readonly Queue<ICommand> queue;
+        private readonly Queue<ICommand<ICommandContext>> queue;
 
         public CombatCommandManager()
         {
-            queue = new Queue<ICommand>();
+            queue = new Queue<ICommand<ICommandContext>>();
         }
 
-        public ICommand Pop()
+        public ICommand<ICommandContext> Pop()
         {
             if (queue.Count == 0)
                 return null;
@@ -20,7 +20,7 @@ namespace Assets.Zilon.Scripts.Services
             return queue.Dequeue();
         }
 
-        public void Push(ICommand command)
+        public void Push(ICommand<ICommandContext> command)
         {
             queue.Enqueue(command);
         }
