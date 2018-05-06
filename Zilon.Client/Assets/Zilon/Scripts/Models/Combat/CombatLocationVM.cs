@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Zilon.Logic.Tactics.Map;
 
 public class CombatLocationVM : MonoBehaviour {
 
     public MapNode Node { get; set; }
+
+    public event EventHandler OnSelect;
 
 	// Use this for initialization
 	void Start () {
@@ -16,4 +17,9 @@ public class CombatLocationVM : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void OnMouseDown()
+    {
+        OnSelect(this, new EventArgs());
+    }
 }

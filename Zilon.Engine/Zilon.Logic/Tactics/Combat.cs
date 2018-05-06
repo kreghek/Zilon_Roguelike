@@ -19,6 +19,16 @@ namespace Zilon.Logic.Tactics
 
         public void Move(ActorSquad squad, MapNode targetNode)
         {
+            if (squad == null)
+            {
+                throw new ArgumentNullException(nameof(squad));
+            }
+
+            if (targetNode == null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
             squad.SetCurrentNode(targetNode);
         }
     }

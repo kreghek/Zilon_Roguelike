@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Zilon.Scripts.Models.Commands;
+using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using Zilon.Logic.Persons;
 using Zilon.Logic.Players;
@@ -10,7 +12,7 @@ using Zilon.Logic.Tactics;
 using Zilon.Logic.Tactics.Initialization;
 using Zilon.Logic.Tactics.Map;
 
-public class CombatMapVM : MonoBehaviour
+class CombatMapVM : MonoBehaviour
 {
 
     public CombatLocationVM LocationPrefab;
@@ -20,13 +22,21 @@ public class CombatMapVM : MonoBehaviour
     public Canvas Canvas;
 
     private List<CombatLocationVM> locations;
+    private CombatSquadVM selectedSquad;
 
     private readonly CombatService combatService;
+    private ICommandManager commandManager;
+    private Combat combat;
+
+    public void SetCommandManager(ICommandManager commandManager)
+    {
+        this.commandManager = commandManager;
+    }
 
     private void Awake()
     {
         var initData = GetTwoGroupsData();
-        var combat = combatService.CreateCombat(initData);
+        combat = combatService.CreateCombat(initData);
         CreateLocations(combat);
         CreateActors(combat);
     }
@@ -41,6 +51,20 @@ public class CombatMapVM : MonoBehaviour
             locationVM.Node = node;
             locationVM.transform.position = new Vector3(node.Position.X, node.Position.Y);
             locations.Add(locationVM);
+
+            locationVM.OnSelect += LocationVM_OnSelect;
+        }
+    }
+
+    private void LocationVM_OnSelect(object sender, EventArgs e)
+    {
+        if (selectedSquad != null)
+        {
+            if (combat != null && commandManager != null)
+            {
+                var moveCommand = new MoveCommand(combat, selectedSquad, sender as CombatLocationVM);
+                commandManager.Push(moveCommand);
+            }
         }
     }
 
@@ -49,6 +73,7 @@ public class CombatMapVM : MonoBehaviour
         foreach (var squad in combat.Squads)
         {
             var squadVM = Instantiate(SquadPrefab, transform);
+            squadVM.ActorSquad = squad;
 
             var currentSquadNode = locations.SingleOrDefault(x => x.Node == squad.Node);
             if (currentSquadNode != null)
@@ -61,10 +86,18 @@ public class CombatMapVM : MonoBehaviour
                     actorVM.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
                     actorVM.ChangeTargetPosition(actorVM.transform.position);
 
-                    squadVM.Actors.Add(actorVM);
+                    squadVM.AddActor(actorVM);
                 }
             }
+
+            squadVM.OnSelect += SquadVM_OnSelect;
         }
+    }
+
+    private void SquadVM_OnSelect(object sender, EventArgs e)
+    {
+        selectedSquad = sender as CombatSquadVM;
+        Debug.Log("selected " + selectedSquad);
     }
 
     private static CombatInitData GetTwoGroupsData()

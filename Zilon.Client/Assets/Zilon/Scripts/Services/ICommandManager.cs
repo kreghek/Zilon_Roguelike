@@ -1,4 +1,4 @@
-﻿using Assets.Zilon.Scripts.Commands;
+﻿using Assets.Zilon.Scripts.Models.Commands;
 
 namespace Assets.Zilon.Scripts.Services
 {

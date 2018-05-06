@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zilon.Logic.Tactics;
 
@@ -8,9 +9,22 @@ public class CombatSquadVM : MonoBehaviour
     public ActorSquad ActorSquad { get; set; }
     public List<CombatActorVM> Actors { get; set; }
 
+    public event EventHandler OnSelect;
+
     public CombatSquadVM()
     {
         Actors = new List<CombatActorVM>();
+    }
+
+    public void AddActor(CombatActorVM actor)
+    {
+        Actors.Add(actor);
+        actor.OnSelected += Actor_OnSelected;
+    }
+
+    private void Actor_OnSelected(object sender, EventArgs e)
+    {
+        OnSelect(this, new EventArgs());
     }
 
     internal void MoveActors(CombatLocationVM nodeVM)

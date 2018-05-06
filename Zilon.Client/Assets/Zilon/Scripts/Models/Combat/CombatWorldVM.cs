@@ -1,21 +1,21 @@
-﻿using Assets.Zilon.Scripts.Commands;
-using Assets.Zilon.Scripts.Services;
+﻿using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CombatWorldVM : MonoBehaviour
+class CombatWorldVM : MonoBehaviour
 {
 
     public CombatMapVM Map;
     public SchemeLocator SchemeLocator;
     public Text Text;
 
-    private readonly ICommandManager commandManager;
+    private ICommandManager commandManager;
 
     // Use this for initialization
     void Start()
     {
-
+        commandManager = new CombatCommandManager();
+        Map.SetCommandManager(commandManager);
     }
 
     // Update is called once per frame

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CombatActorVM : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class CombatActorVM : MonoBehaviour
 
     private Vector3 targetPosition;
     private float? moveCounter;
+
+    public event EventHandler OnSelected;
 
     // Use this for initialization
     void Start()
@@ -33,5 +36,10 @@ public class CombatActorVM : MonoBehaviour
     {
         this.targetPosition = targetPosition;
         moveCounter = 0;
+    }
+
+    public void OnMouseDown()
+    {
+        OnSelected(this, new EventArgs());
     }
 }
