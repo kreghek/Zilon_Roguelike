@@ -72,5 +72,20 @@ namespace Zilon.Logic.Tactics.Map
 
             return result.ToArray();
         }
+
+        internal bool IsPositionAvailableFor(MapNode targetNode, ActorSquad actorSquad)
+        {
+            return true;
+        }
+
+        internal void ReleaseNode(MapNode node, ActorSquad actorSquad)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void HoldNode(MapNode node, ActorSquad actorSquad)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

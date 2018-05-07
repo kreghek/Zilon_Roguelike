@@ -43,13 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logging\LogCodes.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="PathFinding\PathFindingContext.cs" />
     <Compile Include="Persons\Squad.cs" />
     <Compile Include="Players\CpuPlayer.cs" />
     <Compile Include="Players\HumanPlayer.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
+    <Compile Include="Services\CombatCommandResolver.cs" />
     <Compile Include="Services\CombatService.cs" />
+    <Compile Include="Services\CommandContext.cs" />
     <Compile Include="Services\FileSchemeLocator.cs" />
+    <Compile Include="Services\ICombatCommandResolver.cs" />
     <Compile Include="Services\ICombatService.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\ActorSquad.cs" />
@@ -69,6 +75,7 @@
     <Compile Include="Tactics\Events\CommandEventBase.cs" />
     <Compile Include="Tactics\Events\CommandResult.cs" />
     <Compile Include="Tactics\Events\CommandResultType.cs" />
+    <Compile Include="Tactics\Events\EventGroup.cs" />
     <Compile Include="Tactics\Events\ICommandEvent.cs" />
     <Compile Include="Tactics\Events\ActorMovedEvent.cs" />
     <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
@@ -76,6 +83,7 @@
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
     <Compile Include="Tactics\Map\CombatMap.cs" />
     <Compile Include="Tactics\Map\MapNode.cs" />
+    <Compile Include="Tactics\SquadTurnState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
