@@ -1,4 +1,5 @@
-﻿using Zilon.Logic.Tactics;
+﻿using Zilon.Logic.Services;
+using Zilon.Logic.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
@@ -6,8 +7,9 @@ namespace Assets.Zilon.Scripts.Models.Commands
     {
         private readonly CombatSquadVM squadVM;
         private readonly CombatLocationVM nodeVM;
+        private readonly ICombatService combatService;
 
-        public MoveCommand(Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
+        public MoveCommand(ICombatService combatService, Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
         {
             if (squadVM == null)
             {
@@ -25,6 +27,7 @@ namespace Assets.Zilon.Scripts.Models.Commands
 
         public override void Execute()
         {
+            combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);
             combat.Move(squadVM.ActorSquad, nodeVM.Node);
         }
     }

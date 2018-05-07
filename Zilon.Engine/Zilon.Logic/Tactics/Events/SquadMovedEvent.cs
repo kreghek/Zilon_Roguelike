@@ -3,16 +3,16 @@ using Zilon.Logic.Math;
 
 namespace Zilon.Logic.Tactics.Events
 {
-    public class ActorMovedEvent : CommandEventBase
+    public class SquadMovedEvent : CommandEventBase
     {
-        private readonly int actorId;
+        private readonly int squadId;
         private readonly Vector2 start;
         private readonly Vector2 finish;
 
-        public override string Id => "actor-moved";
+        public override string Id => "squad-moved";
 
         [JsonProperty("actorId")]
-        public int ActorId => actorId;
+        public int SquadId => squadId;
 
         [JsonProperty("start")]
         public Vector2 Start => start;
@@ -20,10 +20,10 @@ namespace Zilon.Logic.Tactics.Events
         [JsonProperty("finish")]
         public Vector2 Finish => finish;
 
-        public ActorMovedEvent(string triggerName, TargetTriggerGroup[] targetTriggers, int actorId, Vector2 start, Vector2 finish) :
+        public SquadMovedEvent(string triggerName, TargetTriggerGroup[] targetTriggers, int squadId, Vector2 start, Vector2 finish) :
             base(triggerName, targetTriggers)
         {
-            this.actorId = actorId;
+            this.squadId = squadId;
             this.start = start;
             this.finish = finish;
         }

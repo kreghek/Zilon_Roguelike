@@ -77,7 +77,7 @@
     <Compile Include="Tactics\Events\CommandResultType.cs" />
     <Compile Include="Tactics\Events\EventGroup.cs" />
     <Compile Include="Tactics\Events\ICommandEvent.cs" />
-    <Compile Include="Tactics\Events\ActorMovedEvent.cs" />
+    <Compile Include="Tactics\Events\SquadMovedEvent.cs" />
     <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
