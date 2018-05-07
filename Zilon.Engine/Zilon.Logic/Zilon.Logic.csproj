@@ -66,6 +66,12 @@
     <Compile Include="Services\Client\SchemeService.cs" />
     <Compile Include="Services\SchemeFile.cs" />
     <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Tactics\Events\CommandEventBase.cs" />
+    <Compile Include="Tactics\Events\CommandResult.cs" />
+    <Compile Include="Tactics\Events\CommandResultType.cs" />
+    <Compile Include="Tactics\Events\ICommandEvent.cs" />
+    <Compile Include="Tactics\Events\ActorMovedEvent.cs" />
+    <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
     <Compile Include="Tactics\Map\CombatMap.cs" />
