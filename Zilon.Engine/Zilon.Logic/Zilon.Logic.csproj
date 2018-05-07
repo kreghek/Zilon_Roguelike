@@ -52,8 +52,10 @@
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Services\CombatCommandResolver.cs" />
+    <Compile Include="Services\CombatEvents\CombatEventArgs.cs" />
     <Compile Include="Services\CombatService.cs" />
     <Compile Include="Services\CommandContext.cs" />
+    <Compile Include="Services\CombatEvents\EventManager.cs" />
     <Compile Include="Services\FileSchemeLocator.cs" />
     <Compile Include="Services\ICombatCommandResolver.cs" />
     <Compile Include="Services\ICombatService.cs" />

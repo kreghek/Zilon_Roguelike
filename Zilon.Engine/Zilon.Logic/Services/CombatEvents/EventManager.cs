@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Zilon.Logic.Tactics.Events;
 
-namespace Assets.Zilon.Scripts.Services.CombatScene
+namespace Zilon.Logic.Services.CombatEvents
 {
     public class EventManager
     {
@@ -11,6 +11,8 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
         private readonly List<ICommandEvent> launchEvents;
         private readonly List<ICommandEvent> waitingEvents;
         private bool processingBegins;
+
+        public event EventHandler<CombatEventArgs> OnEventProcessed;
 
 
         public EventManager()
@@ -27,8 +29,6 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
             processingBegins = true;
             EventsToQueue(events);
         }
-
-        
 
         public void LaunchTargetEvents(ICommandEvent targetEvent, string[] names)
         {
@@ -47,7 +47,21 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
 
         public void ProcessEvent(ICommandEvent targetEvent)
         {
+            var args = new CombatEventArgs
+            {
+                CommandEvent = targetEvent
+            };
 
+            args.OnComplete += (s, e)=> {
+                ComplateEvent(targetEvent);
+            };
+
+            OnEventProcessed?.Invoke(this, args);
+        }
+
+        private void ComplateEvent(ICommandEvent targetEvent)
+        {
+            throw new NotImplementedException();
         }
 
         private void EventsToQueue(ICommandEvent[] events)
