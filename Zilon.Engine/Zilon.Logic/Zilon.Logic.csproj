@@ -53,6 +53,7 @@
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Services\CombatCommandResolver.cs" />
     <Compile Include="Services\CombatEvents\CombatEventArgs.cs" />
+    <Compile Include="Services\CombatEvents\IEventManager.cs" />
     <Compile Include="Services\CombatService.cs" />
     <Compile Include="Services\CommandContext.cs" />
     <Compile Include="Services\CombatEvents\EventManager.cs" />

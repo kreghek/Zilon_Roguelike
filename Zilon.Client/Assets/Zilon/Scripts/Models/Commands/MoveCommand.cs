@@ -1,4 +1,5 @@
 ﻿using Zilon.Logic.Services;
+using Zilon.Logic.Services.CombatEvents;
 using Zilon.Logic.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.Commands
@@ -8,8 +9,9 @@ namespace Assets.Zilon.Scripts.Models.Commands
         private readonly CombatSquadVM squadVM;
         private readonly CombatLocationVM nodeVM;
         private readonly ICombatService combatService;
+        private readonly IEventManager eventManager;
 
-        public MoveCommand(ICombatService combatService, Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
+        public MoveCommand(IEventManager eventManager, ICombatService combatService, Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
         {
             if (squadVM == null)
             {
@@ -21,14 +23,17 @@ namespace Assets.Zilon.Scripts.Models.Commands
                 throw new System.ArgumentNullException(nameof(nodeVM));
             }
 
+            this.combatService = combatService;
+            this.eventManager = eventManager;
             this.squadVM = squadVM;
             this.nodeVM = nodeVM;
         }
 
         public override void Execute()
         {
-            combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);
-            combat.Move(squadVM.ActorSquad, nodeVM.Node);
+            var events = combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);
+            eventManager.SetEvents(events.Events);
+            //combat.Move(squadVM.ActorSquad, nodeVM.Node);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Zilon.Logic.Services;
+using Zilon.Logic.Services.CombatEvents;
 
 class CombatWorldVM : MonoBehaviour
 {
@@ -13,15 +14,23 @@ class CombatWorldVM : MonoBehaviour
     public Text Text;
 
     [Inject]
-    public ICommandManager CommandManager;
+    private ICommandManager CommandManager;
     [Inject]
-    public ICombatService CombatService;
+    private ICombatService CombatService;
     [Inject]
     private ICombatManager CombatManager;
+    [Inject]
+    private IEventManager EventManager;
 
     private void FixedUpdate()
     {
         ExecuteCommands();
+        UpdateEvents();
+    }
+
+    private void UpdateEvents()
+    {
+        EventManager.Update();
     }
 
     private void ExecuteCommands()
@@ -29,6 +38,8 @@ class CombatWorldVM : MonoBehaviour
         var command = CommandManager.Pop();
         if (command == null)
             return;
+
+        Debug.Log($"Executing {command}");
 
         command.Execute();
     }
@@ -38,7 +49,13 @@ class CombatWorldVM : MonoBehaviour
         var initData = CombatHelper.GetData();
         var combat = CombatService.CreateCombat(initData);
         CombatManager.CurrentCombat = combat;
+        EventManager.OnEventProcessed += EventManager_OnEventProcessed;
 
         Map.InitCombat();
+    }
+
+    private void EventManager_OnEventProcessed(object sender, CombatEventArgs e)
+    {
+        Debug.Log(e.CommandEvent);
     }
 }

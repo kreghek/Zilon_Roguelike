@@ -5,7 +5,7 @@ using Zilon.Logic.Tactics.Events;
 
 namespace Zilon.Logic.Services.CombatEvents
 {
-    public class EventManager
+    public class EventManager : IEventManager
     {
         private readonly Dictionary<string, List<ICommandEvent>> eventDict;
         private readonly List<ICommandEvent> launchEvents;
