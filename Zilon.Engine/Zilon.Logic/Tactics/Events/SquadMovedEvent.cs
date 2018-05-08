@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Zilon.Logic.Math;
 
 namespace Zilon.Logic.Tactics.Events
 {
     public class SquadMovedEvent : CommandEventBase
     {
         private readonly int squadId;
-        private readonly Vector2 start;
-        private readonly Vector2 finish;
+        private readonly int startNodeId;
+        private readonly int finishNodeId;
 
         public override string Id => "squad-moved";
 
@@ -15,17 +14,17 @@ namespace Zilon.Logic.Tactics.Events
         public int SquadId => squadId;
 
         [JsonProperty("start")]
-        public Vector2 Start => start;
+        public int StartNodeId => startNodeId;
 
         [JsonProperty("finish")]
-        public Vector2 Finish => finish;
+        public int FinishNodeId => finishNodeId;
 
-        public SquadMovedEvent(string triggerName, TargetTriggerGroup[] targetTriggers, int squadId, Vector2 start, Vector2 finish) :
+        public SquadMovedEvent(string triggerName, TargetTriggerGroup[] targetTriggers, int squadId, int startNodeId, int finishNodeId) :
             base(triggerName, targetTriggers)
         {
             this.squadId = squadId;
-            this.start = start;
-            this.finish = finish;
+            this.startNodeId = startNodeId;
+            this.finishNodeId = finishNodeId;
         }
     }
 }

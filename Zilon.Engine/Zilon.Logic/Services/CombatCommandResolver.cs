@@ -147,13 +147,14 @@ namespace Zilon.Logic.Services
             }
         }
 
-        private ICommandEvent[] ResolveSquadMovement(MapNode targetNode, ActorSquad actorSquad)
+        private static ICommandEvent[] ResolveSquadMovement(MapNode targetNode, ActorSquad actorSquad)
         {
+            var oldNode = actorSquad.Node;
             actorSquad.SetCurrentNode(targetNode);
 
             // Реализовать перемещние актёров
-
-            throw new NotImplementedException();
+            var moveSquadEvent = new SquadMovedEvent(null, null, actorSquad.Id, oldNode.Id, targetNode.Id);
+            return new ICommandEvent[] { moveSquadEvent };
         }
 
         private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode, int availableMP)

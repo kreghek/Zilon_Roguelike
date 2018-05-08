@@ -7,6 +7,8 @@ namespace Zilon.Logic.Tactics
 {
     public class ActorSquad
     {
+        public int Id { get; set; }
+
         public List<Actor> Actors { get; set; }
         public MapNode Node { get; private set; }
 
