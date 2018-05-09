@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using Zilon.Logic.Tactics.Initialization;
 using Zilon.Logic.Tests.Services;
@@ -31,7 +32,9 @@ namespace Zilon.Logic.Services.Tests
 
         private CombatService CreateCombatService()
         {
-            var combatService = new CombatService();
+            var combatCommandResolverMock = new Mock<ICombatCommandResolver>();
+            var combatCommandResolver = combatCommandResolverMock.Object;
+            var combatService = new CombatService(combatCommandResolver);
             return combatService;
         }
     }
