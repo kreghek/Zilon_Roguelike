@@ -122,7 +122,7 @@ namespace Zilon.Logic.Services
 
             // Выполняем перемещение
             combat.Map.ReleaseNode(actorSquad.Node, actorSquad);
-            var squadMovedEvents = ResolveSquadMovement(actorSquad.Node, actorSquad);
+            var squadMovedEvents = ResolveSquadMovement(targetNode, actorSquad);
             
             combat.Map.HoldNode(actorSquad.Node, actorSquad);
             actorSquad.MP--;

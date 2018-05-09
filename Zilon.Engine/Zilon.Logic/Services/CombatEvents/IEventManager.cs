@@ -8,6 +8,7 @@ namespace Zilon.Logic.Services.CombatEvents
         event EventHandler<CombatEventArgs> OnEventProcessed;
 
         void SetEvents(ICommandEvent[] events);
+        void EventsToQueue(ICommandEvent[] events);
         void Update();
     }
 }

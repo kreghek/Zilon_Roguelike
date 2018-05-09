@@ -33,7 +33,6 @@ namespace Assets.Zilon.Scripts.Models.Commands
         {
             var events = combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);
             eventManager.SetEvents(events.Events);
-            //combat.Move(squadVM.ActorSquad, nodeVM.Node);
         }
     }
 }

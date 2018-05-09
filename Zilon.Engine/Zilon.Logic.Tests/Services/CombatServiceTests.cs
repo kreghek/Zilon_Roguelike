@@ -75,6 +75,10 @@ namespace Zilon.Logic.Services.Tests
             commandResult.Type.Should().Be(CommandResultType.Complete);
             commandResult.Errors.Should().BeNullOrEmpty();
             commandResult.Events.Should().NotBeNullOrEmpty();
+
+            var eventGroup = commandResult.Events.First() as EventGroup;
+            var moveEvent = eventGroup.Events.First() as SquadMovedEvent;
+            moveEvent.FinishNodeId.Should().Be(targetNode.Id);
         }
 
         private CombatService CreateCombatService()

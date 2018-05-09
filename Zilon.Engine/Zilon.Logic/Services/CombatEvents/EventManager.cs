@@ -45,7 +45,7 @@ namespace Zilon.Logic.Services.CombatEvents
             }
         }
 
-        public void ProcessEvent(ICommandEvent targetEvent)
+        private void ProcessEvent(ICommandEvent targetEvent)
         {
             var args = new CombatEventArgs
             {
@@ -64,7 +64,7 @@ namespace Zilon.Logic.Services.CombatEvents
             throw new NotImplementedException();
         }
 
-        private void EventsToQueue(ICommandEvent[] events)
+        public void EventsToQueue(ICommandEvent[] events)
         {
             foreach (var combatEvent in events)
             {

@@ -44,6 +44,7 @@ namespace Zilon.Logic.Services
         {
             var squads = new List<ActorSquad>();
             var teamIndex = 0;
+            var squadIdCounter = 1;
             foreach (var playerData in initData.Players)
             {
                 var teamLocation = combat.Map.TeamNodes[teamIndex];
@@ -53,7 +54,7 @@ namespace Zilon.Logic.Services
                     var squadNode = squadLocations[random.Next(0, squadLocations.Length)];
                     var squad = playerData.Squads[squadIndex];
 
-                    var actorSquad = new ActorSquad(squad, squadNode);
+                    var actorSquad = new ActorSquad(squadIdCounter++, squad, squadNode);
                     squads.Add(actorSquad);
 
                     for (var personIndex = 0; personIndex < squad.Persons.Length; personIndex++)

@@ -7,6 +7,7 @@ using UnityEngine;
 using Zenject;
 using Zilon.Logic.Services;
 using Zilon.Logic.Tactics;
+using Zilon.Logic.Tactics.Map;
 
 class CombatMapVM : MonoBehaviour
 {
@@ -81,14 +82,14 @@ class CombatMapVM : MonoBehaviour
             }
 
             squadVM.OnSelect += PersonCommandHandler.SquadVM_OnSelect;
-            squadVM.OnNodeChanged += SquadVM_OnNodeChanged;
         }
     }
 
-    private void SquadVM_OnNodeChanged(object sender, System.EventArgs e)
+    public void MoveSquad(ActorSquad actorSquad, MapNode targetNode)
     {
-        var squadVM = sender as CombatSquadVM;
-        var newNodeVM = locations.SingleOrDefault(x => x.Node == squadVM.ActorSquad.Node);
-        squadVM.MoveActors(newNodeVM);
+        var actorSquadVM = squads.SingleOrDefault(x => x.ActorSquad == actorSquad);
+        var targetNodeVM = locations.SingleOrDefault(x => x.Node == targetNode);
+
+        actorSquadVM.MoveActors(targetNodeVM);
     }
 }
