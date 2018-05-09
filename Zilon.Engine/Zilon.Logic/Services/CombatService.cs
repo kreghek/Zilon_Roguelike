@@ -36,7 +36,7 @@ namespace Zilon.Logic.Services
             return ExecuteCommand(
                 context =>
                 {
-                    return combatCommandResolver.MoveSquad(context.Combat, actorSquad, targetNode);
+                    return combatCommandResolver.MoveSquad(combat, actorSquad, targetNode);
                 });
         }
 
@@ -51,17 +51,17 @@ namespace Zilon.Logic.Services
                 for (var squadIndex = 0; squadIndex < playerData.Squads.Length; squadIndex++)
                 {
                     var squadNode = squadLocations[random.Next(0, squadLocations.Length)];
-                    var squadData = playerData.Squads[squadIndex];
+                    var squad = playerData.Squads[squadIndex];
 
-                    var squad = new ActorSquad(squadNode);
-                    squads.Add(squad);
+                    var actorSquad = new ActorSquad(squad, squadNode);
+                    squads.Add(actorSquad);
 
-                    for (var personIndex = 0; personIndex < squadData.Persons.Length; personIndex++)
+                    for (var personIndex = 0; personIndex < squad.Persons.Length; personIndex++)
                     {
-                        var person = squadData.Persons[personIndex];
+                        var person = squad.Persons[personIndex];
 
                         var actor = CreateActor(person);
-                        squad.Actors.Add(actor);
+                        actorSquad.Actors.Add(actor);
                     }
                 }
 

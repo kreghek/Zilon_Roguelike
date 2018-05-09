@@ -18,6 +18,7 @@ namespace Zilon.Logic.Tactics.Map
             var nodes = new List<MapNode>();
             var teamNodes = new List<MapNode>();
 
+            var nodeIdCounter = 1;
             const int mapSize = 10;
             for (var i = 0; i < mapSize; i++)
             {
@@ -28,6 +29,7 @@ namespace Zilon.Logic.Tactics.Map
 
                     var node = new MapNode
                     {
+                        Id = nodeIdCounter++,
                         Position = new Vector2
                         {
                             X = locationDistance * i + offsetX,
@@ -80,12 +82,12 @@ namespace Zilon.Logic.Tactics.Map
 
         internal void ReleaseNode(MapNode node, ActorSquad actorSquad)
         {
-            throw new NotImplementedException();
+            
         }
 
         internal void HoldNode(MapNode node, ActorSquad actorSquad)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

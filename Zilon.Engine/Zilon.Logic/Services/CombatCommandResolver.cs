@@ -159,7 +159,7 @@ namespace Zilon.Logic.Services
 
         private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode, int availableMP)
         {
-            return new [] { targetNode };
+            return new [] { node, targetNode };
         }
     }
 }

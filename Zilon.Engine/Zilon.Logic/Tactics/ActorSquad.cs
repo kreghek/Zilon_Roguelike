@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Zilon.Logic.Math;
+using Zilon.Logic.Persons;
 using Zilon.Logic.Tactics.Map;
 
 namespace Zilon.Logic.Tactics
@@ -11,6 +12,7 @@ namespace Zilon.Logic.Tactics
 
         public List<Actor> Actors { get; set; }
         public MapNode Node { get; private set; }
+        public Squad Squad { get; private set; }
 
         public int MP { get; set; }
 
@@ -19,10 +21,12 @@ namespace Zilon.Logic.Tactics
 
         public event EventHandler NodeChanged;
 
-        public ActorSquad(MapNode node)
+        public ActorSquad(Squad squad, MapNode node)
         {
             Actors = new List<Actor>();
             Node = node;
+            Squad = squad;
+            MP = 1;
         }
 
         public void SetCurrentNode(MapNode node)
