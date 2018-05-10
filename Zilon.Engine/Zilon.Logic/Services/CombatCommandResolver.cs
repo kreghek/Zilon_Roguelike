@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Logic.PathFinding;
 using Zilon.Logic.Tactics;
 using Zilon.Logic.Tactics.Events;
@@ -10,7 +10,7 @@ namespace Zilon.Logic.Services
 {
     public class CombatCommandResolver : ICombatCommandResolver
     {
-        public const int MoveCost = 1;  //TODO Задавать в схеме персонажа
+        public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа
 
         public CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode)
         {
@@ -38,12 +38,12 @@ namespace Zilon.Logic.Services
             };
         }
 
-        private ICommandEvent[] GetMoveToPointEvents(Combat combat, ActorSquad actorSquad, MapNode targetNode, int availableMP, ref int groupIndex)
+        private ICommandEvent[] GetMoveToPointEvents(Combat combat, ActorSquad actorSquad, MapNode targetNode, int availableMp, ref int groupIndex)
         {
 
             var pathFindingContext = new PathFindingContext();
 
-            var path = FindPath(pathFindingContext, actorSquad.Node, targetNode, availableMP);
+            var path = FindPath(pathFindingContext, actorSquad.Node, targetNode, availableMp);
             //TODO Вероятно, тут нужно возвращать события Путь не найден
             if (path == null)
                 return null;
@@ -52,18 +52,18 @@ namespace Zilon.Logic.Services
 
             var pathList = path.ToArray();
             var i = 1;
-            while (actorSquad.MP > 0 && i < pathList.Length && availableMP > 0)
+            while (actorSquad.MP > 0 && i < pathList.Length && availableMp > 0)
             {
                 var oneMoveNode = pathList[i];
 
                 var moveResult = MoveOne(combat, actorSquad, oneMoveNode);
-                availableMP--;
+                availableMp--;
 
                 if (moveResult.Type != CommandResultType.Complete)
                     break;
 
                 var groupName = (string)null;
-                var groupTriggers = (TargetTriggerGroup[])null;
+                TargetTriggerGroup[] groupTriggers;
 
                 if (i == 1 && groupIndex == 0)
                 {
@@ -96,7 +96,7 @@ namespace Zilon.Logic.Services
         private CommandResult MoveOne(Combat combat, ActorSquad actorSquad, MapNode targetNode)
         {
             // Проверяем наличие MP - 1MP за клетку
-            if (actorSquad.MP < MoveCost)
+            if (actorSquad.MP < MOVE_COST)
             {
                 return new CommandResult
                 {
