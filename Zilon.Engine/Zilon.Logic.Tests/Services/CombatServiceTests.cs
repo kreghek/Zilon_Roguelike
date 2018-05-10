@@ -1,18 +1,22 @@
-﻿using Zilon.Logic.Services;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using Zilon.Logic.Tactics.Initialization;
-using Zilon.Logic.Tests.Services;
-using Zilon.Logic.Tactics.Map;
-using Zilon.Logic.Players;
-using Zilon.Logic.Persons;
-using System.Linq;
-using Zilon.Logic.Tactics.Events;
-
-namespace Zilon.Logic.Services.Tests
+﻿namespace Zilon.Logic.Tests.Services
 {
-    [TestFixture]
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+
+    using FluentAssertions;
+
+    using Moq;
+
+    using NUnit.Framework;
+
+    using Zilon.Logic.Persons;
+    using Zilon.Logic.Players;
+    using Zilon.Logic.Services;
+    using Zilon.Logic.Tactics.Events;
+    using Zilon.Logic.Tactics.Initialization;
+    using Zilon.Logic.Tactics.Map;
+
+    [TestFixture]
     public class CombatServiceTests
     {
         /// <summary>
@@ -37,8 +41,13 @@ namespace Zilon.Logic.Services.Tests
             combat.Should().NotBeNull();
         }
 
+        /// <summary>
+        /// 1. В системе есть бой. Взвод должен переместиться на произвольную свободную ноду.
+        /// 2. Перемещаем взвод.
+        /// 3. Получаем событие, содержащее информацию об успешном перемещении.
+        /// </summary>
         [Test]
-        public void MoveCommandTest()
+        public void MoveCommand_MoveToRandomCorrectNode_HasMoveEvent()
         {
             // ARRANGE
             var combatService = CreateCombatService();
@@ -48,12 +57,10 @@ namespace Zilon.Logic.Services.Tests
                 Players = new [] {
                     new PlayerCombatInitData{
                         Player = new Mock<IPlayer>().Object,
-                        Squads = new Squad[]{
+                        Squads = new[]{
                             new Squad{
                                 Persons = new []{
-                                    new Person{
-                                        
-                                    }
+                                    new Person()
                                 }
                             }
                         }
@@ -81,9 +88,8 @@ namespace Zilon.Logic.Services.Tests
             moveEvent.FinishNodeId.Should().Be(targetNode.Id);
         }
 
-        private CombatService CreateCombatService()
+        private static CombatService CreateCombatService()
         {
-            
             var combatCommandResolver = new CombatCommandResolver();
             var combatService = new CombatService(combatCommandResolver);
             return combatService;
