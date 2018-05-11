@@ -7,6 +7,7 @@
     using Zilon.Core.Math;
     using Zilon.Core.Services.CombatMap;
     using Zilon.Core.Tactics.Map;
+    using Zilon.Core.Tests.TestCommon;
 
     [TestFixture]
     public class CombatMapTests
@@ -19,40 +20,13 @@
         [Test]
         public void Constructor_Default_HasNodes()
         {
-            var mapGenerator = CreateMapGenerator();
+            var mapGenerator = MapGeneratorMocks.CreateTwoNodesMapGenerator();
             var map = new CombatMap();
             mapGenerator.CreateMap(map);
 
             map.Should().NotBeNull();
             map.Nodes.Should().NotBeNull();
             map.TeamNodes.Should().NotBeNull();
-        }
-
-        private IMapGenerator CreateMapGenerator()
-        {
-            var mapGeneratorMock = new Mock<IMapGenerator>();
-            mapGeneratorMock
-                .Setup(x => x.CreateMap(It.IsAny<ICombatMap>()))
-                .Callback<ICombatMap>(CreateTwoNodes);
-            return mapGeneratorMock.Object;
-        }
-
-        private void CreateTwoNodes(ICombatMap map)
-        {
-
-            var nodes = new List<MapNode> {
-                new MapNode{
-                    Id = 1,
-                    Position = new Vector2{X = 1, Y = 1 }
-                },
-                new MapNode{
-                    Id = 1,
-                    Position = new Vector2{X = 1, Y = 30 }
-                }
-            };
-
-            map.Nodes = nodes;
-            map.TeamNodes = nodes;
         }
     }
 }

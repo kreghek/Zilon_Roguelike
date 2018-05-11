@@ -77,6 +77,7 @@
     <Compile Include="Services\CombatServiceTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
+    <Compile Include="TestCommon\MapGeneratorMocks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

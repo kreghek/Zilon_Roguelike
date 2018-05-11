@@ -8,8 +8,10 @@
 
     using Zilon.Core.Persons;
     using Zilon.Core.Players;
+    using Zilon.Core.Services.CombatMap;
     using Zilon.Core.Tactics.Initialization;
     using Zilon.Core.Tactics.Map;
+    using Zilon.Core.Tests.TestCommon;
 
     class CombatServiceTestCaseGenerator
     {
@@ -23,9 +25,13 @@
 
         private static CombatInitData GetTwoGroupsData()
         {
+            var mapGenerator = MapGeneratorMocks.CreateTwoNodesMapGenerator();
+            var map = new CombatMap();
+            mapGenerator.CreateMap(map);
+
             return new CombatInitData
             {
-                Map = new CombatMap(),
+                Map = map,
                 Players = new[] {
                     new PlayerCombatInitData{
                         Player = CreateFakePlayer(),

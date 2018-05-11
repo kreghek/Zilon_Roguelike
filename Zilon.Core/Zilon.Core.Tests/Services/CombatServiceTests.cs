@@ -14,6 +14,7 @@
     using Zilon.Core.Tactics.Events;
     using Zilon.Core.Tactics.Initialization;
     using Zilon.Core.Tactics.Map;
+    using Zilon.Core.Tests.TestCommon;
 
     [TestFixture]
     public class CombatServiceTests
@@ -50,27 +51,12 @@
         {
             // ARRANGE
             var combatService = CreateCombatService();
-
-            var initData = new CombatInitData {
-                Map = new CombatMap(),
-                Players = new [] {
-                    new PlayerCombatInitData{
-                        Player = new Mock<IPlayer>().Object,
-                        Squads = new[]{
-                            new Squad{
-                                Persons = new []{
-                                    new Person()
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            var initData = CreateInitData();
 
             var combat = combatService.CreateCombat(initData);
             var squad = initData.Players.First().Squads.First();
-            var actorSquad = combat.Squads.SingleOrDefault(x=>x.Squad == squad);
-            var targetNode = combat.Map.Nodes.FirstOrDefault(x=>x != actorSquad.Node);
+            var actorSquad = combat.Squads.SingleOrDefault(x => x.Squad == squad);
+            var targetNode = combat.Map.Nodes.FirstOrDefault(x => x != actorSquad.Node);
 
 
             // ACT
@@ -85,6 +71,30 @@
             var eventGroup = commandResult.Events.First() as EventGroup;
             var moveEvent = eventGroup.Events.First() as SquadMovedEvent;
             moveEvent.FinishNodeId.Should().Be(targetNode.Id);
+        }
+
+        private static CombatInitData CreateInitData()
+        {
+            var mapGenerator = MapGeneratorMocks.CreateTwoNodesMapGenerator();
+            var map = new CombatMap();
+            mapGenerator.CreateMap(map);
+
+            return new CombatInitData
+            {
+                Map = map,
+                Players = new[] {
+                    new PlayerCombatInitData{
+                        Player = new Mock<IPlayer>().Object,
+                        Squads = new[]{
+                            new Squad{
+                                Persons = new []{
+                                    new Person()
+                                }
+                            }
+                        }
+                    }
+                }
+            };
         }
 
         private static CombatService CreateCombatService()
