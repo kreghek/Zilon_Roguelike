@@ -84,9 +84,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zilon.Logic\Zilon.Logic.csproj">
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
       <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
-      <Name>Zilon.Logic</Name>
+      <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

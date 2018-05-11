@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Logic", "Zilon.Logic\Zilon.Logic.csproj", "{93E96628-DE50-42AE-A2F5-4B4B042D66E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core", "Zilon.Core\Zilon.Core.csproj", "{93E96628-DE50-42AE-A2F5-4B4B042D66E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Logic.Tests", "Zilon.Logic.Tests\Zilon.Logic.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
