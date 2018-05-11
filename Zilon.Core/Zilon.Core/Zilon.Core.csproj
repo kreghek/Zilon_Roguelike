@@ -52,6 +52,7 @@
     <Compile Include="Players\HumanPlayer.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
+    <Compile Include="Services\CombatMap\CellMapGenerator.cs" />
     <Compile Include="Services\CombatCommandResolver.cs" />
     <Compile Include="Services\CombatEvents\CombatEventArgs.cs" />
     <Compile Include="Services\CombatEvents\IEventManager.cs" />
@@ -86,7 +87,9 @@
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
     <Compile Include="Tactics\Map\CombatMap.cs" />
+    <Compile Include="Tactics\Map\ICombatMap.cs" />
     <Compile Include="Tactics\Map\MapNode.cs" />
+    <Compile Include="Tactics\Map\NodeHelper.cs" />
     <Compile Include="Tactics\SquadTurnState.cs" />
   </ItemGroup>
   <ItemGroup>
