@@ -8,6 +8,8 @@
     public interface ICombatService
     {
         Combat CreateCombat(CombatInitData initData);
+        //TODO Переделать на команды вместо отдельных методов.
         CommandResult MoveCommand(Combat combat, ActorSquad actorSquad, MapNode targetNode);
+        CommandResult EndTurnCommand(Combat combat);
     }
 }

@@ -41,6 +41,15 @@
                 });
         }
 
+        public CommandResult EndTurnCommand(Combat combat)
+        {
+            return ExecuteCommand(
+                context =>
+                {
+                    return combatCommandResolver.EndTurn(combat);
+                });
+        }
+
         private void CreateActors(Combat combat, CombatInitData initData)
         {
             var squads = new List<ActorSquad>();

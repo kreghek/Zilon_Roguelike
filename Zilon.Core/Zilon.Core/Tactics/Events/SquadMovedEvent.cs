@@ -10,7 +10,7 @@
 
         public override string Id => "squad-moved";
 
-        [JsonProperty("actorId")]
+        [JsonProperty("squadId")]
         public int SquadId => squadId;
 
         [JsonProperty("start")]

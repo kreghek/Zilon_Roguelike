@@ -40,8 +40,12 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
                 var selectedNode = sender as CombatLocationVM;
                 Debug.Log($"Selected {selectedNode}");
                 _combatPlayerState.SelectedNode = selectedNode;
+
                 var moveCommand = _commandFactory.CreateCommand<MoveCommand>();
                 commandManager.Push(moveCommand);
+
+                var endTurnCommand = _commandFactory.CreateCommand<EndTurnCommand>();
+                commandManager.Push(endTurnCommand);
             }
         }
 

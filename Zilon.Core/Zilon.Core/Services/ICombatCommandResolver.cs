@@ -7,5 +7,6 @@
     public interface ICombatCommandResolver
     {
         CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode);
+        CommandResult EndTurn(Combat combat);
     }
 }

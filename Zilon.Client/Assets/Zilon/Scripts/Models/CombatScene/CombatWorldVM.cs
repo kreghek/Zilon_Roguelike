@@ -40,6 +40,11 @@ class CombatWorldVM : MonoBehaviour
 
     private void ExecuteCommands()
     {
+        if (CommandManager == null)
+        {
+            return;
+        }
+
         var command = CommandManager.Pop();
         if (command == null)
             return;

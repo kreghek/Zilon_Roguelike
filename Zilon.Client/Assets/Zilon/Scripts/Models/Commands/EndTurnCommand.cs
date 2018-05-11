@@ -8,12 +8,12 @@ using Zilon.Core.Tactics.Events;
 namespace Assets.Zilon.Scripts.Models.Commands
 {
     /// <summary>
-    /// Команда на перемещение взвода в указанный узел карты.
+    /// Команда на завершение хода текущим взводом.
     /// </summary>
-    class MoveCommand : SquadCommandBase
+    class EndTurnCommand : SquadCommandBase
     {
 
-        public MoveCommand(IEventManager eventManager,
+        public EndTurnCommand(IEventManager eventManager,
             ICombatManager combatManager,
             ICombatPlayerState combatPlayerState,
             ICombatService combatService) : 
@@ -31,10 +31,9 @@ namespace Assets.Zilon.Scripts.Models.Commands
         {
             var combat = _combatManager.CurrentCombat;
             var selectedSquadVM = _combatPlayerState.SelectedSquad;
-            var selectedNodeVM = _combatPlayerState.SelectedNode;
 
 
-            var tacticCommandResult = _combatService.MoveCommand(combat, selectedSquadVM.ActorSquad, selectedNodeVM.Node);
+            var tacticCommandResult = _combatService.EndTurnCommand(combat);
             var tacticCommandCompleted = tacticCommandResult.Type == CommandResultType.Complete;
             var hasNoCommandErrors = tacticCommandResult.Errors?.Any();
 

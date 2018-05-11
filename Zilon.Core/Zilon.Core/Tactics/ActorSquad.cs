@@ -19,6 +19,7 @@
 
         public SquadTurnState TurnState { get; set; }
         public Vector2? LookAt { get; set; }
+        public bool CanMove { get { return MP > 0; } }
 
         public event EventHandler NodeChanged;
 

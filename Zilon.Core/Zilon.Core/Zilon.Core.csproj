@@ -88,6 +88,7 @@
     <Compile Include="Tactics\Events\CommandResultType.cs" />
     <Compile Include="Tactics\Events\EventGroup.cs" />
     <Compile Include="Tactics\Events\ITacticEvent.cs" />
+    <Compile Include="Tactics\Events\SquadStatChangedEvent.cs" />
     <Compile Include="Tactics\Events\SquadMovedEvent.cs" />
     <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />

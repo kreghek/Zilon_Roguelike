@@ -8,12 +8,20 @@
     using Zilon.Core.Tactics.Events;
     using Zilon.Core.Tactics.Map;
 
+    //TODO Этот класс разделить тоже по паттерну команды
     public class CombatCommandResolver : ICombatCommandResolver
     {
         public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа
 
         public CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode)
         {
+            if (actorSquad.CanMove)
+            {
+                return new CommandResult {
+                    Type = CommandResultType.NotEnoughMP,
+                };
+            }
+
             var groupIndex = 0;
 
             var moveEvents = GetMoveToPointEvents(combat, actorSquad, targetNode, actorSquad.MP, ref groupIndex);
@@ -160,6 +168,25 @@
         private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode, int availableMP)
         {
             return new [] { node, targetNode };
+        }
+
+        public CommandResult EndTurn(Combat combat)
+        {
+            var restoreMpEvents = new List<ITacticEvent>();
+            foreach (var squad in combat.Squads)
+            {
+                if (!squad.CanMove)
+                {
+                    restoreMpEvents.Add(new SquadStatChangedEvent(null, null, squad.Id, 1));
+                }
+
+                squad.MP = 1;
+            }
+
+            return new CommandResult
+            {
+                Type = CommandResultType.Complete
+            };
         }
     }
 }
