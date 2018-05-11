@@ -8,7 +8,6 @@
     using NUnit.Framework;
 
     using Zilon.Core.Services;
-    using Zilon.Core.Services.Client;
 
     [TestFixture]
     public class SchemeServiceTests

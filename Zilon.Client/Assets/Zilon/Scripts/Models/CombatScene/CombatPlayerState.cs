@@ -3,5 +3,7 @@
     class CombatPlayerState : ICombatPlayerState
     {
         public CombatSquadVM SelectedSquad { get; set; }
+
+        public CombatLocationVM SelectedNode { get; set; }
     }
 }

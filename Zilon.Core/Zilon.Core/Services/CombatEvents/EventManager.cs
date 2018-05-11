@@ -8,9 +8,9 @@
 
     public class EventManager : IEventManager
     {
-        private readonly Dictionary<string, List<ICommandEvent>> eventDict;
-        private readonly List<ICommandEvent> launchEvents;
-        private readonly List<ICommandEvent> waitingEvents;
+        private readonly Dictionary<string, List<ITacticEvent>> eventDict;
+        private readonly List<ITacticEvent> launchEvents;
+        private readonly List<ITacticEvent> waitingEvents;
         private bool processingBegins;
 
         public event EventHandler<CombatEventArgs> OnEventProcessed;
@@ -18,12 +18,12 @@
 
         public EventManager()
         {
-            eventDict = new Dictionary<string, List<ICommandEvent>>();
-            launchEvents = new List<ICommandEvent>();
-            waitingEvents = new List<ICommandEvent>();
+            eventDict = new Dictionary<string, List<ITacticEvent>>();
+            launchEvents = new List<ITacticEvent>();
+            waitingEvents = new List<ITacticEvent>();
         }
 
-        public void SetEvents(ICommandEvent[] events)
+        public void SetEvents(ITacticEvent[] events)
         {
             eventDict.Clear();
             launchEvents.Clear();
@@ -31,7 +31,7 @@
             EventsToQueue(events);
         }
 
-        public void LaunchTargetEvents(ICommandEvent targetEvent, string[] names)
+        public void LaunchTargetEvents(ITacticEvent targetEvent, string[] names)
         {
         }
 
@@ -46,7 +46,7 @@
             }
         }
 
-        private void ProcessEvent(ICommandEvent targetEvent)
+        private void ProcessEvent(ITacticEvent targetEvent)
         {
             var args = new CombatEventArgs
             {
@@ -60,12 +60,12 @@
             OnEventProcessed?.Invoke(this, args);
         }
 
-        private void ComplateEvent(ICommandEvent targetEvent)
+        private void ComplateEvent(ITacticEvent targetEvent)
         {
             throw new NotImplementedException();
         }
 
-        public void EventsToQueue(ICommandEvent[] events)
+        public void EventsToQueue(ITacticEvent[] events)
         {
             foreach (var combatEvent in events)
             {
@@ -73,7 +73,7 @@
                 {
                     if (!eventDict.ContainsKey(combatEvent.TriggerName))
                     {
-                        eventDict.Add(combatEvent.TriggerName, new List<ICommandEvent>());
+                        eventDict.Add(combatEvent.TriggerName, new List<ITacticEvent>());
                     }
 
                     eventDict[combatEvent.TriggerName].Add(combatEvent);

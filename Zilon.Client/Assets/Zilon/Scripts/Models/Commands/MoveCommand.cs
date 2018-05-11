@@ -1,32 +1,24 @@
-﻿using Zilon.Core.Services;
+﻿using System.Linq;
+using Assets.Zilon.Scripts.Models.CombatScene;
+using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
-using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Events;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
-    class MoveCommand : CombatCommandBase
+    /// <summary>
+    /// Команда на перемещение взвода в указанный узел карты.
+    /// </summary>
+    class MoveCommand : SquadCommandBase
     {
-        private readonly CombatSquadVM squadVM;
-        private readonly CombatLocationVM nodeVM;
-        private readonly ICombatService combatService;
-        private readonly IEventManager eventManager;
 
-        public MoveCommand(IEventManager eventManager, ICombatService combatService, Combat combat, CombatSquadVM squadVM, CombatLocationVM nodeVM): base(combat)
+        public MoveCommand(IEventManager eventManager,
+            ICombatManager combatManager,
+            ICombatPlayerState combatPlayerState,
+            ICombatService combatService) : 
+            base(eventManager, combatManager, combatPlayerState, combatService)
         {
-            if (squadVM == null)
-            {
-                throw new System.ArgumentNullException(nameof(squadVM));
-            }
-
-            if (nodeVM == null)
-            {
-                throw new System.ArgumentNullException(nameof(nodeVM));
-            }
-
-            this.combatService = combatService;
-            this.eventManager = eventManager;
-            this.squadVM = squadVM;
-            this.nodeVM = nodeVM;
+            
         }
 
         public override bool CanExecute()
@@ -34,10 +26,23 @@ namespace Assets.Zilon.Scripts.Models.Commands
             return true;
         }
 
-        public override void Execute()
+        protected override ITacticEvent[] ExecuteTacticCommand()
         {
-            var events = combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);
-            eventManager.SetEvents(events.Events);
+            var combat = _combatManager.CurrentCombat;
+            var selectedSquadVM = _combatPlayerState.SelectedSquad;
+            var selectedNodeVM = _combatPlayerState.SelectedNode;
+
+
+            var tacticCommandResult = _combatService.MoveCommand(combat, selectedSquadVM.ActorSquad, selectedNodeVM.Node);
+            var tacticCommandCompleted = tacticCommandResult.Type == CommandResultType.Complete;
+            var hasNoCommandErrors = tacticCommandResult.Errors?.Any();
+
+            if (!tacticCommandCompleted || hasNoCommandErrors.GetValueOrDefault())
+            {
+                return null;
+            }
+
+            return tacticCommandResult.Events;
         }
     }
 }

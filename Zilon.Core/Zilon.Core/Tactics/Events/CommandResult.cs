@@ -8,7 +8,7 @@
         public CommandResultType Type { get; set; }
 
         [JsonProperty("events")]
-        public ICommandEvent[] Events { get; set; }
+        public ITacticEvent[] Events { get; set; }
 
         [JsonProperty("errors")]
         public string[] Errors { get; set; }

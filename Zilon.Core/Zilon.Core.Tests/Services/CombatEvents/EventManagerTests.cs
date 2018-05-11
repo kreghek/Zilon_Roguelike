@@ -22,7 +22,7 @@
         {
             // ARRANGE
             var eventManager = new EventManager();
-            var fakeEventMock = new Mock<ICommandEvent>();
+            var fakeEventMock = new Mock<ITacticEvent>();
             var fakeEvent = fakeEventMock.Object;
             var events = new[] { fakeEvent };
             eventManager.SetEvents(events);

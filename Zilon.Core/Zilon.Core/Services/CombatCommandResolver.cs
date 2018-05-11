@@ -38,7 +38,7 @@
             };
         }
 
-        private ICommandEvent[] GetMoveToPointEvents(Combat combat, ActorSquad actorSquad, MapNode targetNode, int availableMp, ref int groupIndex)
+        private ITacticEvent[] GetMoveToPointEvents(Combat combat, ActorSquad actorSquad, MapNode targetNode, int availableMp, ref int groupIndex)
         {
 
             var pathFindingContext = new PathFindingContext();
@@ -48,7 +48,7 @@
             if (path == null)
                 return null;
 
-            var moveEvents = new List<ICommandEvent>();
+            var moveEvents = new List<ITacticEvent>();
 
             var pathList = path.ToArray();
             var i = 1;
@@ -147,14 +147,14 @@
             }
         }
 
-        private static ICommandEvent[] ResolveSquadMovement(MapNode targetNode, ActorSquad actorSquad)
+        private static ITacticEvent[] ResolveSquadMovement(MapNode targetNode, ActorSquad actorSquad)
         {
             var oldNode = actorSquad.Node;
             actorSquad.SetCurrentNode(targetNode);
 
             // Реализовать перемещние актёров
             var moveSquadEvent = new SquadMovedEvent(null, null, actorSquad.Id, oldNode.Id, targetNode.Id);
-            return new ICommandEvent[] { moveSquadEvent };
+            return new ITacticEvent[] { moveSquadEvent };
         }
 
         private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode, int availableMP)

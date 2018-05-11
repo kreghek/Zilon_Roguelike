@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tactics.Events
 {
-    public interface ICommandEvent
+    public interface ITacticEvent
     {
         string Id { get; }
         string TriggerName { get; }

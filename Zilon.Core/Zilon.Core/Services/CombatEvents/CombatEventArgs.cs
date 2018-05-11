@@ -6,7 +6,7 @@
 
     public class CombatEventArgs : EventArgs
     {
-        public ICommandEvent CommandEvent { get; set; }
+        public ITacticEvent CommandEvent { get; set; }
         public event EventHandler<EventHandler> OnComplete;
     }
 }

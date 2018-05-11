@@ -5,6 +5,7 @@ using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
 using UnityEngine;
 using Zenject;
+using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Map;

@@ -8,8 +8,8 @@
     {
         event EventHandler<CombatEventArgs> OnEventProcessed;
 
-        void SetEvents(ICommandEvent[] events);
-        void EventsToQueue(ICommandEvent[] events);
+        void SetEvents(ITacticEvent[] events);
+        void EventsToQueue(ITacticEvent[] events);
         void Update();
     }
 }

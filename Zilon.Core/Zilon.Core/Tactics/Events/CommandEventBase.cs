@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public abstract class CommandEventBase : ICommandEvent
+    public abstract class CommandEventBase : ITacticEvent
     {
         protected string triggerName;
         protected TargetTriggerGroup[] targets;
