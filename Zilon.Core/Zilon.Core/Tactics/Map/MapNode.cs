@@ -1,7 +1,7 @@
-﻿using Zilon.Logic.Math;
-
-namespace Zilon.Logic.Tactics.Map
+﻿namespace Zilon.Core.Tactics.Map
 {
+    using Zilon.Core.Math;
+
     public class MapNode
     {
         public int Id { get; set; }

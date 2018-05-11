@@ -1,9 +1,9 @@
-﻿using Zilon.Logic.Tactics;
-using Zilon.Logic.Tactics.Events;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using Zilon.Core.Tactics;
+    using Zilon.Core.Tactics.Events;
+    using Zilon.Core.Tactics.Map;
+
     public interface ICombatCommandResolver
     {
         CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode);

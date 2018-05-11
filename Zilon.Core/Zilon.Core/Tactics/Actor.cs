@@ -1,8 +1,7 @@
-﻿using Zilon.Logic.Persons;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Tactics
+﻿namespace Zilon.Core.Tactics
 {
+    using Zilon.Core.Persons;
+
     public class Actor
     {
         private readonly Person person;

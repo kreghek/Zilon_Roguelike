@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Zilon.Logic.Schemes;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using System.Collections.Generic;
+
+    using Zilon.Core.Schemes;
+
     public interface ISchemeService
     {
         TScheme GetScheme<TScheme>(string sid) where TScheme: class, IScheme;

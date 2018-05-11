@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Zilon.Logic.Math;
-
-namespace Zilon.Logic.Tactics.Map
+﻿namespace Zilon.Core.Tactics.Map
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Zilon.Core.Math;
+
     public class CombatMap
     {
         private const float locationOffset = 5;

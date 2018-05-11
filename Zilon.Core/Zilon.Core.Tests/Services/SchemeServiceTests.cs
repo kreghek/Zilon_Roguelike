@@ -1,11 +1,15 @@
-﻿using System;
-using System.Configuration;
-using FluentAssertions;
-using NUnit.Framework;
-using Zilon.Logic.Services.Client;
-
-namespace Zilon.Logic.Services.Tests
+﻿namespace Zilon.Core.Tests.Services
 {
+    using System;
+    using System.Configuration;
+
+    using FluentAssertions;
+
+    using NUnit.Framework;
+
+    using Zilon.Core.Services;
+    using Zilon.Core.Services.Client;
+
     [TestFixture]
     public class SchemeServiceTests
     {

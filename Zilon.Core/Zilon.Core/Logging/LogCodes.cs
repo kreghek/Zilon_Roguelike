@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Logging
+﻿namespace Zilon.Core.Logging
 {
     //The first digit can detail the general class: 1xxx can be used for 'Start' operations, 2xxx for normal behaviour, 
     //3xxx for activity tracing, 4xxx for warnings, 5xxx for errors, 8xxx for 'Stop' operations, 9xxx for fatal errors, etc.

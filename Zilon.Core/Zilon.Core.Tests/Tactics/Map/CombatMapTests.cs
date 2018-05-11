@@ -1,12 +1,12 @@
-﻿namespace Zilon.Logic.Tests.Tactics.Map
+﻿namespace Zilon.Core.Tests.Tactics.Map
 {
-    using FluentAssertions;
+    using FluentAssertions;
 
-    using NUnit.Framework;
+    using NUnit.Framework;
 
-    using Zilon.Logic.Tactics.Map;
+    using Zilon.Core.Tactics.Map;
 
-    [TestFixture]
+    [TestFixture]
     public class CombatMapTests
     {
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Persons
+﻿namespace Zilon.Core.Persons
 {
     public class Squad
     {

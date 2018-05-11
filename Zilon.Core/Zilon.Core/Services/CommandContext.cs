@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Zilon.Logic.Tactics;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using System.Collections.Generic;
+
+    using Zilon.Core.Tactics;
+
     struct CommandContext
     {
         private List<string> errors;

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Zilon.Logic.Math;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Tactics
+﻿namespace Zilon.Core.Tactics
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Zilon.Core.Math;
+    using Zilon.Core.Persons;
+    using Zilon.Core.Tactics.Map;
+
     public class ActorSquad
     {
         public int Id { get; private set; }

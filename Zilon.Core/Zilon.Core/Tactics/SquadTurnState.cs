@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     public enum SquadTurnState
     {

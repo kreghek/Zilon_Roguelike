@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Zilon.Logic.Logging
+﻿namespace Zilon.Core.Logging
 {
+    using System;
+
     public static class Logger
     {
         public static void TraceInfo(LogCodes code, string message, Exception exception = null)

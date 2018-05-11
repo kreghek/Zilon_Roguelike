@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Math
+﻿namespace Zilon.Core.Math
 {
     public struct Vector2
     {

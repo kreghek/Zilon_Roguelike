@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Zilon.Logic.Services;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using System.Collections.Generic;
+    using System.IO;
+
     public class FileSchemeLocator : ISchemeLocator
     {
         private readonly string _schemeCatalog;

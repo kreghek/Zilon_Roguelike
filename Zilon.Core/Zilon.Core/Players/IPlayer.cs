@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Zilon.Logic.Players
+﻿namespace Zilon.Core.Players
 {
     public interface IPlayer
     {

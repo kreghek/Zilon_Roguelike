@@ -1,8 +1,9 @@
-﻿using System;
-using Zilon.Logic.Tactics.Events;
-
-namespace Zilon.Logic.Services.CombatEvents
+﻿namespace Zilon.Core.Services.CombatEvents
 {
+    using System;
+
+    using Zilon.Core.Tactics.Events;
+
     public class CombatEventArgs : EventArgs
     {
         public ICommandEvent CommandEvent { get; set; }

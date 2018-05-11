@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.PathFinding
+﻿namespace Zilon.Core.PathFinding
 {
     public struct PathFindingContext
     {

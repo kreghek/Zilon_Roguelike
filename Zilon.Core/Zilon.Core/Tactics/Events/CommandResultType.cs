@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Tactics.Events
+﻿namespace Zilon.Core.Tactics.Events
 {
     public enum CommandResultType
     {

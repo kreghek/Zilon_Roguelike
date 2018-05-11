@@ -1,10 +1,14 @@
-﻿using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using Zilon.Logic.Tactics.Events;
-
-namespace Zilon.Logic.Services.CombatEvents.Tests
+﻿namespace Zilon.Core.Tests.Services.CombatEvents
 {
+    using FluentAssertions;
+
+    using Moq;
+
+    using NUnit.Framework;
+
+    using Zilon.Core.Services.CombatEvents;
+    using Zilon.Core.Tactics.Events;
+
     [TestFixture]
     public class EventManagerTests
     {

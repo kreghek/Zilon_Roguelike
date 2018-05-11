@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Zilon.Logic.Logging;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Tactics;
-using Zilon.Logic.Tactics.Events;
-using Zilon.Logic.Tactics.Initialization;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Zilon.Core.Logging;
+    using Zilon.Core.Persons;
+    using Zilon.Core.Tactics;
+    using Zilon.Core.Tactics.Events;
+    using Zilon.Core.Tactics.Initialization;
+    using Zilon.Core.Tactics.Map;
+
     public sealed class CombatService : ICombatService
     {
         private Random random = new Random();

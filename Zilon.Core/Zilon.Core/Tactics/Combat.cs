@@ -1,10 +1,10 @@
-﻿using System;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Players;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Tactics
+﻿namespace Zilon.Core.Tactics
 {
+    using System;
+
+    using Zilon.Core.Players;
+    using Zilon.Core.Tactics.Map;
+
     public class Combat
     {
         public IPlayer[] Logins { get; set; }

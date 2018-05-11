@@ -1,13 +1,16 @@
-﻿using System.Collections;
-using Moq;
-using NUnit.Framework;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Players;
-using Zilon.Logic.Tactics.Initialization;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Tests.Services
+﻿namespace Zilon.Core.Tests.Services
 {
+    using System.Collections;
+
+    using Moq;
+
+    using NUnit.Framework;
+
+    using Zilon.Core.Persons;
+    using Zilon.Core.Players;
+    using Zilon.Core.Tactics.Initialization;
+    using Zilon.Core.Tactics.Map;
+
     class CombatServiceTestCaseGenerator
     {
         public static IEnumerable CreateCombatCorrectTestCases

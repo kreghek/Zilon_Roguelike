@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Players
+﻿namespace Zilon.Core.Players
 {
     public class HumanPlayer: PlayerBase
     {

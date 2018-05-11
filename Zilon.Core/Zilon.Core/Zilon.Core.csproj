@@ -7,8 +7,8 @@
     <ProjectGuid>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Logic</RootNamespace>
-    <AssemblyName>Zilon.Logic</AssemblyName>
+    <RootNamespace>Zilon.Core</RootNamespace>
+    <AssemblyName>Zilon.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

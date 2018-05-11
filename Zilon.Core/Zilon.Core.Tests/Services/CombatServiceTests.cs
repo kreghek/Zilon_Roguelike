@@ -1,22 +1,21 @@
-﻿namespace Zilon.Logic.Tests.Services
+﻿namespace Zilon.Core.Tests.Services
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    using FluentAssertions;
+    using FluentAssertions;
 
-    using Moq;
+    using Moq;
 
-    using NUnit.Framework;
+    using NUnit.Framework;
 
-    using Zilon.Logic.Persons;
-    using Zilon.Logic.Players;
-    using Zilon.Logic.Services;
-    using Zilon.Logic.Tactics.Events;
-    using Zilon.Logic.Tactics.Initialization;
-    using Zilon.Logic.Tactics.Map;
+    using Zilon.Core.Persons;
+    using Zilon.Core.Players;
+    using Zilon.Core.Services;
+    using Zilon.Core.Tactics.Events;
+    using Zilon.Core.Tactics.Initialization;
+    using Zilon.Core.Tactics.Map;
 
-    [TestFixture]
+    [TestFixture]
     public class CombatServiceTests
     {
         /// <summary>

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Logic.PathFinding;
-using Zilon.Logic.Tactics;
-using Zilon.Logic.Tactics.Events;
-using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Services
+﻿namespace Zilon.Core.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Zilon.Core.PathFinding;
+    using Zilon.Core.Tactics;
+    using Zilon.Core.Tactics.Events;
+    using Zilon.Core.Tactics.Map;
+
     public class CombatCommandResolver : ICombatCommandResolver
     {
         public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа

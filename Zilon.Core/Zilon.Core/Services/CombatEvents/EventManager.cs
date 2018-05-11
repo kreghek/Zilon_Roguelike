@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Zilon.Logic.Tactics.Events;
-
-namespace Zilon.Logic.Services.CombatEvents
+﻿namespace Zilon.Core.Services.CombatEvents
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Zilon.Core.Tactics.Events;
+
     public class EventManager : IEventManager
     {
         private readonly Dictionary<string, List<ICommandEvent>> eventDict;

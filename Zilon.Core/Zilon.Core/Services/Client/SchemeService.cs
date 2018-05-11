@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-using Zilon.Logic.Schemes;
-
-namespace Zilon.Logic.Services.Client
+﻿namespace Zilon.Core.Services.Client
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Newtonsoft.Json;
+
+    using Zilon.Core.Schemes;
+
     /// <summary>
     /// Класс для работы со схемами игрового мира.
     /// </summary>

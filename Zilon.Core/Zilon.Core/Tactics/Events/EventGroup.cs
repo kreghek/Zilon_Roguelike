@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Logic.Tactics.Events
+﻿namespace Zilon.Core.Tactics.Events
 {
+    using Newtonsoft.Json;
+
     public class EventGroup : CommandEventBase
     {
         public override string Id => "event-group";

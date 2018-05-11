@@ -1,7 +1,7 @@
-﻿using Zilon.Logic.Tactics.Map;
-
-namespace Zilon.Logic.Tactics.Initialization
+﻿namespace Zilon.Core.Tactics.Initialization
 {
+    using Zilon.Core.Tactics.Map;
+
     public class CombatInitData
     {
         public PlayerCombatInitData[] Players { get; set; }

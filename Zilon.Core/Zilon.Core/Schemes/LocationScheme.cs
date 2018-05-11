@@ -1,4 +1,4 @@
-﻿namespace Zilon.Logic.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     public sealed class LocationScheme: SchemeBase
     {
