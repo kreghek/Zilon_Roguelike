@@ -49,7 +49,7 @@
             foreach (var playerData in initData.Players)
             {
                 var teamLocation = combat.Map.TeamNodes[teamIndex];
-                var squadLocations = CombatMap.GetSquadNodes(teamLocation, combat.Map.Nodes);
+                var squadLocations = NodeHelper.GetSquadNodes(teamLocation, combat.Map.Nodes);
                 for (var squadIndex = 0; squadIndex < playerData.Squads.Length; squadIndex++)
                 {
                     var squadNode = squadLocations[random.Next(0, squadLocations.Length)];

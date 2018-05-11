@@ -2,8 +2,8 @@
 using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Models.Commands;
 using UnityEngine;
-using Zilon.Logic.Services;
-using Zilon.Logic.Services.CombatEvents;
+using Zilon.Core.Services;
+using Zilon.Core.Services.CombatEvents;
 
 namespace Assets.Zilon.Scripts.Services.CombatScene
 {

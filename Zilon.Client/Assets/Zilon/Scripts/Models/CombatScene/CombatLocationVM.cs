@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using Zilon.Logic.Tactics.Map;
+using Zilon.Core.Tactics.Map;
 
 public class CombatLocationVM : MonoBehaviour {
 

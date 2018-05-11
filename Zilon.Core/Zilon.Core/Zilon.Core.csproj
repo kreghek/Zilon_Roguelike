@@ -52,10 +52,11 @@
     <Compile Include="Players\HumanPlayer.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
-    <Compile Include="Services\CombatMap\CellMapGenerator.cs" />
+    <Compile Include="Services\CombatMap\GridMapGenerator.cs" />
     <Compile Include="Services\CombatCommandResolver.cs" />
     <Compile Include="Services\CombatEvents\CombatEventArgs.cs" />
     <Compile Include="Services\CombatEvents\IEventManager.cs" />
+    <Compile Include="Services\CombatMap\IMapGenerator.cs" />
     <Compile Include="Services\CombatService.cs" />
     <Compile Include="Services\CommandContext.cs" />
     <Compile Include="Services\CombatEvents\EventManager.cs" />

@@ -5,9 +5,9 @@ using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
 using UnityEngine;
 using Zenject;
-using Zilon.Logic.Services;
-using Zilon.Logic.Tactics;
-using Zilon.Logic.Tactics.Map;
+using Zilon.Core.Services;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Map;
 
 class CombatMapVM : MonoBehaviour
 {

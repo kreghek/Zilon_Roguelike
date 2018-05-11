@@ -19,7 +19,7 @@
         /// 3. При загрузке схем не происходит ошибок.
         /// </summary>
         [Test]
-        public void Contructor_CorrectSchemes_NoExceptions()
+        public void Constructor_CorrectSchemes_NoExceptions()
         {
             // ARRANGE
 

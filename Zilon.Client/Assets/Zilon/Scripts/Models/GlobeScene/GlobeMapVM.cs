@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zilon.Logic.Schemes;
-using Zilon.Logic.Services;
+using Zilon.Core.Schemes;
+using Zilon.Core.Services;
 
 public class GlobeMapVM : MonoBehaviour
 {

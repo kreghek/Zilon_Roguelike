@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
-using Zilon.Logic.Persons;
-using Zilon.Logic.Players;
-using Zilon.Logic.Tactics.Initialization;
-using Zilon.Logic.Tactics.Map;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Services.CombatMap;
+using Zilon.Core.Tactics.Initialization;
+using Zilon.Core.Tactics.Map;
 
 namespace Assets.Zilon.Scripts.Models.CombatScene
 {
     static class CombatHelper
     {
-        public static CombatInitData GetData()
+        public static CombatInitData GetData(IMapGenerator mapGenerator)
         {
+            var map = new CombatMap();
+
+            mapGenerator.CreateMap(map);
+
             return new CombatInitData
             {
-                Map = new CombatMap(),
+                Map = map,
                 Players = new[] {
                     new PlayerCombatInitData{
                         Player = CreateFakePlayer(),

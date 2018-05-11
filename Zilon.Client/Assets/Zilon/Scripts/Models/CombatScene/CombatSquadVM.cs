@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Zilon.Logic.Tactics;
+using Zilon.Core.Tactics;
 
 public class CombatSquadVM : MonoBehaviour
 {

@@ -2,8 +2,9 @@ using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
 using Zenject;
-using Zilon.Logic.Services;
-using Zilon.Logic.Services.CombatEvents;
+using Zilon.Core.Services;
+using Zilon.Core.Services.CombatEvents;
+using Zilon.Core.Services.CombatMap;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
 {
@@ -15,5 +16,6 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IPersonCommandHandler>().To<PersonCommandHandler>().AsSingle();
         Container.Bind<IEventManager>().To<EventManager>().AsSingle();
         Container.Bind<ICombatCommandResolver>().To<CombatCommandResolver>().AsSingle();
+        Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
     }
 }

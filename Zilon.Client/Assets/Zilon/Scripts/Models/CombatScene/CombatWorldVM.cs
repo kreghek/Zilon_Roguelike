@@ -4,9 +4,10 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using Zilon.Logic.Services;
-using Zilon.Logic.Services.CombatEvents;
-using Zilon.Logic.Tactics.Events;
+using Zilon.Core.Services;
+using Zilon.Core.Services.CombatEvents;
+using Zilon.Core.Services.CombatMap;
+using Zilon.Core.Tactics.Events;
 
 class CombatWorldVM : MonoBehaviour
 {
@@ -23,6 +24,8 @@ class CombatWorldVM : MonoBehaviour
     private ICombatManager CombatManager;
     [Inject]
     private IEventManager EventManager;
+    [Inject]
+    private IMapGenerator mapGenerator;
 
     private void FixedUpdate()
     {
@@ -48,7 +51,7 @@ class CombatWorldVM : MonoBehaviour
 
     private void Awake()
     {
-        var initData = CombatHelper.GetData();
+        var initData = CombatHelper.GetData(mapGenerator);
         var combat = CombatService.CreateCombat(initData);
         CombatManager.CurrentCombat = combat;
         EventManager.OnEventProcessed += EventManager_OnEventProcessed;

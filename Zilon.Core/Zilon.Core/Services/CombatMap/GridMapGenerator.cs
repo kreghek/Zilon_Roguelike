@@ -6,7 +6,7 @@
     using Zilon.Core.Math;
     using Zilon.Core.Tactics.Map;
 
-    public class CellMapGenerator
+    public class GridMapGenerator : IMapGenerator
     {
         private const float LOCATION_DISTANCE = 20;
         private const float LOCATION_OFFSET = LOCATION_DISTANCE / 4;

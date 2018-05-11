@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Zilon.Logic.Schemes;
+using Zilon.Core.Schemes;
 
 public class MapLocationConnector : MonoBehaviour {
 

@@ -1,4 +1,4 @@
-﻿using Zilon.Logic.Tactics;
+﻿using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {

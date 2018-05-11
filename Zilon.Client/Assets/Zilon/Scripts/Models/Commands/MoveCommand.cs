@@ -1,6 +1,6 @@
-﻿using Zilon.Logic.Services;
-using Zilon.Logic.Services.CombatEvents;
-using Zilon.Logic.Tactics;
+﻿using Zilon.Core.Services;
+using Zilon.Core.Services.CombatEvents;
+using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
