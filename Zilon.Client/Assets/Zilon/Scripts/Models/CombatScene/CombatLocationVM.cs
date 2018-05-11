@@ -22,4 +22,9 @@ public class CombatLocationVM : MonoBehaviour {
     {
         OnSelect(this, new EventArgs());
     }
+
+    public override string ToString()
+    {
+        return $"Id: {Node.Id} Position: {Node.Position}";
+    }
 }

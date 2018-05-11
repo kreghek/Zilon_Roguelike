@@ -2,6 +2,7 @@
 using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Models.Commands;
 using UnityEngine;
+using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
@@ -17,13 +18,11 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
         private readonly ICommandFactory _commandFactory;
         private readonly ICombatPlayerState _combatPlayerState;
 
-        private CombatSquadVM selectedSquad;
-
         public PersonCommandHandler(IEventManager eventManager,
             ICommandManager commandManager, 
             ICombatManager combatManager,
             ICombatService combatService,
-            ICommandFactory commandFactory,
+            [Inject(Id = "squad-command-factory")] ICommandFactory commandFactory,
             ICombatPlayerState combatPlayerState)
         {
             this.commandManager = commandManager;
@@ -36,14 +35,13 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
 
         public void LocationVM_OnSelect(object sender, EventArgs e)
         {
-            if (selectedSquad != null)
+            if (_combatPlayerState.SelectedSquad != null)
             {
-                var combat = combatManager.CurrentCombat;
-                if (combat != null && commandManager != null)
-                {
-                    var moveCommand = _commandFactory.CreateCommand<MoveCommand>();
-                    commandManager.Push(moveCommand);
-                }
+                var selectedNode = sender as CombatLocationVM;
+                Debug.Log($"Selected {selectedNode}");
+                _combatPlayerState.SelectedNode = selectedNode;
+                var moveCommand = _commandFactory.CreateCommand<MoveCommand>();
+                commandManager.Push(moveCommand);
             }
         }
 

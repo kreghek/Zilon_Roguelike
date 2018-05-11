@@ -1,4 +1,5 @@
 using Assets.Zilon.Scripts.Models.CombatScene;
+using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
 using Zenject;
 using Zilon.Core.Commands;
@@ -18,5 +19,6 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ICombatCommandResolver>().To<CombatCommandResolver>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
         Container.Bind<ICombatPlayerState>().To<CombatPlayerState>().AsSingle();
+        Container.Bind<ICommandFactory>().WithId("squad-command-factory").To<SquadCommandFactory>().AsSingle();
     }
 }

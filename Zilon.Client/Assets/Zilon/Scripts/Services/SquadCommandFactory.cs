@@ -25,8 +25,8 @@ namespace Assets.Zilon.Scripts.Services
         {
             var command = Activator.CreateInstance(typeof(T),
                 _eventManager,
-                _combatPlayerState,
                 _combatManager,
+                _combatPlayerState,
                 _combatService);
             return (ICommand)command;
         }
