@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Services.Client
+﻿namespace Zilon.Core.Services
 {
     using System;
     using System.Collections.Generic;

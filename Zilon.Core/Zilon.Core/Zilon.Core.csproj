@@ -75,7 +75,7 @@
     <Compile Include="Schemes\SchemeBase.cs" />
     <Compile Include="Services\ISchemeLocator.cs" />
     <Compile Include="Services\ISchemeService.cs" />
-    <Compile Include="Services\Client\SchemeService.cs" />
+    <Compile Include="Services\SchemeService.cs" />
     <Compile Include="Services\SchemeFile.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Tactics\Events\CommandEventBase.cs" />

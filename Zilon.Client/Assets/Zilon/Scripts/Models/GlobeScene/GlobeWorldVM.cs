@@ -4,7 +4,7 @@ using System.IO;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using UnityEngine.UI;
-using Zilon.Core.Services.Client;
+using Zilon.Core.Services;
 
 public class GlobeWorldVM : MonoBehaviour
 {
