@@ -29,6 +29,11 @@ namespace Assets.Zilon.Scripts.Models.Commands
             this.nodeVM = nodeVM;
         }
 
+        public override bool CanExecute()
+        {
+            return true;
+        }
+
         public override void Execute()
         {
             var events = combatService.MoveCommand(combat, squadVM.ActorSquad, nodeVM.Node);

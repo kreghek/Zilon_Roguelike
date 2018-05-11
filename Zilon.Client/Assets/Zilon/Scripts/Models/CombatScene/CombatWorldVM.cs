@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Assets.Zilon.Scripts.Models.CombatScene;
-using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
 using Zilon.Core.Services.CombatMap;

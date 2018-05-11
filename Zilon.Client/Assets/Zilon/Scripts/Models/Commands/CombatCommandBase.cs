@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics;
+﻿using Zilon.Core.Commands;
+using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
@@ -16,6 +17,7 @@ namespace Assets.Zilon.Scripts.Models.Commands
             this.combat = combat;
         }
 
+        public abstract bool CanExecute();
         public abstract void Execute();
     }
 }
