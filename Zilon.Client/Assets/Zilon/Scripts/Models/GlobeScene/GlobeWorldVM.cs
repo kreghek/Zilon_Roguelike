@@ -25,7 +25,7 @@ public class GlobeWorldVM : MonoBehaviour
         {
             var dbAsset = Resources.Load<TextAsset>("Db/db");
 
-            Text.text = $"Db size: {dbAsset.bytes.Length.ToString()}";
+            Text.text = $"Db size: {dbAsset.bytes.Length}";
 
             var fs = File.Open(Application.dataPath + "/db.bytes", FileMode.Create);
             BinaryWriter binary = new BinaryWriter(fs);

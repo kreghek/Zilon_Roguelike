@@ -175,12 +175,12 @@
             var restoreMpEvents = new List<ITacticEvent>();
             foreach (var squad in combat.Squads)
             {
+                squad.MP = 1;
+
                 if (!squad.CanMove)
                 {
-                    restoreMpEvents.Add(new SquadStatChangedEvent(null, null, squad.Id, 1));
+                    restoreMpEvents.Add(new SquadStatChangedEvent(null, null, squad.Id, squad.MP));
                 }
-
-                squad.MP = 1;
             }
 
             return new CommandResult

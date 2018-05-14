@@ -35,19 +35,13 @@
         public CommandResult MoveCommand(Combat combat, ActorSquad actorSquad, MapNode targetNode)
         {
             return ExecuteCommand(
-                context =>
-                {
-                    return combatCommandResolver.MoveSquad(combat, actorSquad, targetNode);
-                });
+                context => combatCommandResolver.MoveSquad(combat, actorSquad, targetNode));
         }
 
         public CommandResult EndTurnCommand(Combat combat)
         {
             return ExecuteCommand(
-                context =>
-                {
-                    return combatCommandResolver.EndTurn(combat);
-                });
+                context => combatCommandResolver.EndTurn(combat));
         }
 
         private void CreateActors(Combat combat, CombatInitData initData)
