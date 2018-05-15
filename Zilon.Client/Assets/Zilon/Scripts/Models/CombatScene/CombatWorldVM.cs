@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Assets.Zilon.Scripts.Models.CombatScene;
+using Assets.Zilon.Scripts.Models.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -11,6 +12,8 @@ using Zilon.Core.Tactics.Events;
 
 class CombatWorldVM : MonoBehaviour
 {
+
+    private float turnCounter;
 
     public CombatMapVM Map;
     public SchemeLocator SchemeLocator;
@@ -26,11 +29,26 @@ class CombatWorldVM : MonoBehaviour
     private IEventManager EventManager;
     [Inject]
     private IMapGenerator mapGenerator;
+    [Inject(Id = "squad-command-factory")]
+    private ICommandFactory _commandFactory;
 
     private void FixedUpdate()
     {
         ExecuteCommands();
         UpdateEvents();
+        UpdateTurnCounter();
+    }
+
+    private void UpdateTurnCounter()
+    {
+        turnCounter += Time.deltaTime;
+        if (turnCounter >= 10)
+        {
+            turnCounter = 0;
+
+            var endTurnCommand = _commandFactory.CreateCommand<EndTurnCommand>();
+            CommandManager.Push(endTurnCommand);
+        }
     }
 
     private void UpdateEvents()
