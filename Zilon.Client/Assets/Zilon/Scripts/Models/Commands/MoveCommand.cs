@@ -38,7 +38,18 @@ namespace Assets.Zilon.Scripts.Models.Commands
             var tacticCommandCompleted = tacticCommandResult.Type == CommandResultType.Complete;
             var hasNoCommandErrors = tacticCommandResult.Errors?.Any();
 
-            Debug.Log(tacticCommandResult.Events);
+            if (hasNoCommandErrors.GetValueOrDefault())
+            {
+                Debug.Log($"MoveCommand events: {tacticCommandResult.Events}");
+            }
+            else
+            {
+                Debug.Log($"MoveCommand result: {tacticCommandResult.Type}");
+                if (tacticCommandResult.Errors != null)
+                {
+                    Debug.Log($"MoveCommand errors: {string.Join(", ", tacticCommandResult.Errors)}");
+                }
+            }
 
             if (!tacticCommandCompleted || hasNoCommandErrors.GetValueOrDefault())
             {

@@ -15,7 +15,7 @@
 
         public CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode)
         {
-            if (actorSquad.CanMove)
+            if (!actorSquad.CanMove)
             {
                 return new CommandResult {
                     Type = CommandResultType.NotEnoughMP,
