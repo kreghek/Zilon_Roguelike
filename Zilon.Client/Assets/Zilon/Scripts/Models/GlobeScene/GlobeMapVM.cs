@@ -4,17 +4,49 @@ using UnityEngine;
 using Zilon.Core.Schemes;
 using Zilon.Core.Services;
 
+/// <summary>
+/// Модель представления глобальной карты.
+/// </summary>
 public class GlobeMapVM : MonoBehaviour
 {
-
+    /// <summary>
+    /// Префаб узла карты.
+    /// </summary>
     public MapLocation LocationPrefab;
+
+    /// <summary>
+    /// Префаб пути на карте.
+    /// </summary>
     public MapLocationConnector ConnectorPrefab;
+
+    /// <summary>
+    /// Префаб группы.
+    /// </summary>
     public GroupVM GroupPrefab;
+
+    /// <summary>
+    /// Ссылка на канвас на сцене Globe.
+    /// </summary>
     public Canvas Canvas;
 
-    public List<MapLocation> MapLocations { get; set; }
+    /// <summary>
+    /// Текущий набор путей представления узлов карты.
+    /// </summary>
+    public List<MapLocation> Nodes { get; set; }
+
+    /// <summary>
+    /// Текущий набор моделей представления путей между узлами карты.
+    /// </summary>
     public List<MapLocationConnector> Paths { get; set; }
+
+    /// <summary>
+    /// Текущие модели представления групп на карте.
+    /// </summary>
     public List<GroupVM> Groups { get; set; }
+
+    /// <summary>
+    /// Текущая выбранная пользователем группа.
+    /// </summary>
     public GroupVM SelectedGroup { get; set; }
 
     public void CreateMapEntities(ISchemeService schemeService, string sid)
@@ -29,21 +61,19 @@ public class GlobeMapVM : MonoBehaviour
             throw new System.ArgumentException("Символьный идентификатор карты не может быть пустым.", nameof(sid));
         }
 
-        var mapScheme = schemeService.GetScheme<MapScheme>(sid);
-
         var locationSchemes = schemeService.GetSchemes<LocationScheme>();
         var mapLocationSchemes = locationSchemes.Where(x => x.MapSid == sid).ToArray();
 
         var pathSchemes = schemeService.GetSchemes<PathScheme>();
         var mapPathSchemes = pathSchemes.Where(x => x.MapSid == sid).ToArray();
 
-        MapLocations = new List<MapLocation>();
+        Nodes = new List<MapLocation>();
         foreach (var locationScheme in mapLocationSchemes)
         {
             var location = Instantiate(LocationPrefab, transform);
             location.Sid = locationScheme.Sid;
             location.transform.position = new Vector3(locationScheme.X, locationScheme.Y);
-            MapLocations.Add(location);
+            Nodes.Add(location);
             location.Canvas = Canvas;
             location.OnSelect += Location_OnSelect;
         }
@@ -53,8 +83,8 @@ public class GlobeMapVM : MonoBehaviour
         {
             var connector = Instantiate(ConnectorPrefab, transform);
 
-            var location1 = MapLocations.SingleOrDefault(x => x.Sid == pathScheme.Sid1);
-            var location2 = MapLocations.SingleOrDefault(x => x.Sid == pathScheme.Sid2);
+            var location1 = Nodes.SingleOrDefault(x => x.Sid == pathScheme.Sid1);
+            var location2 = Nodes.SingleOrDefault(x => x.Sid == pathScheme.Sid2);
 
             connector.gameObject1 = location1.gameObject;
             connector.gameObject2 = location2.gameObject;
@@ -64,7 +94,7 @@ public class GlobeMapVM : MonoBehaviour
 
         Groups = new List<GroupVM>();
         var group = Instantiate(GroupPrefab, transform);
-        group.CurrentLocation = MapLocations.First();
+        group.CurrentLocation = Nodes.First();
         group.transform.position = group.CurrentLocation.transform.position;
         group.OnSelect += Group_OnSelect;
         Groups.Add(group);
@@ -98,7 +128,7 @@ public class GlobeMapVM : MonoBehaviour
     {
         // Затенить все не доступные локации
         var currentLocation = SelectedGroup.CurrentLocation;
-        foreach (var location in MapLocations)
+        foreach (var location in Nodes)
         {
             UpdateLocationAvailableState(currentLocation, location);
         }
@@ -129,11 +159,5 @@ public class GlobeMapVM : MonoBehaviour
         }
 
         return false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
