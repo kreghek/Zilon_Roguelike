@@ -6,5 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Zilon/map.unity
-    guid: 380d1fcc57970684ba510afd99f0ecdd
+    path: Assets/Zilon/Scenes/network.unity
+    guid: f50f9c840231da64384919dc613488e1
+  m_configObjects: {}
