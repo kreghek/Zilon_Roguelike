@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zilon.Core.Tactics;
 
@@ -37,8 +38,14 @@ public class CombatSquadVM : MonoBehaviour
         OnSelect?.Invoke(this, new EventArgs());
     }
 
-    internal void MoveActors(CombatLocationVM nodeVM)
+    public Task<bool> MoveActorsAsync(CombatLocationVM nodeVM)
     {
+        var promise = new TaskCompletionSource<bool>();
+
+        var task = promise.Task;
+
+        var completeTask = Task.WhenAny(task);
+
         foreach (var actor in Actors)
         {
             var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
