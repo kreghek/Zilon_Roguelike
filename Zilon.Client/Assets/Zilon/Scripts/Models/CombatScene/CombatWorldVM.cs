@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Models.Commands;
 using UnityEngine;
@@ -20,15 +21,16 @@ class CombatWorldVM : MonoBehaviour
     public Text Text;
 
     [Inject]
-    private ICommandManager CommandManager;
+    private ICommandManager _commandManager;
     [Inject]
-    private ICombatService CombatService;
+    private ICombatService _combatService;
     [Inject]
-    private ICombatManager CombatManager;
+    private ICombatManager _combatManager;
     [Inject]
-    private IEventManager EventManager;
+    private IEventManager _eventManager;
     [Inject]
-    private IMapGenerator mapGenerator;
+    private IMapGenerator _mapGenerator;
+
     [Inject(Id = "squad-command-factory")]
     private ICommandFactory _commandFactory;
 
@@ -42,28 +44,25 @@ class CombatWorldVM : MonoBehaviour
     private void UpdateTurnCounter()
     {
         turnCounter += Time.deltaTime;
-        if (turnCounter >= 10)
-        {
-            turnCounter = 0;
-
-            var endTurnCommand = _commandFactory.CreateCommand<EndTurnCommand>();
-            CommandManager.Push(endTurnCommand);
-        }
-    }
-
-    private void UpdateEvents()
-    {
-        EventManager.Update();
-    }
-
-    private void ExecuteCommands()
-    {
-        if (CommandManager == null)
+        if (turnCounter < 10)
         {
             return;
         }
 
-        var command = CommandManager.Pop();
+        turnCounter = 0;
+
+        var endTurnCommand = _commandFactory.CreateCommand<EndTurnCommand>();
+        _commandManager.Push(endTurnCommand);
+    }
+
+    private void UpdateEvents()
+    {
+        _eventManager.Update();
+    }
+
+    private void ExecuteCommands()
+    {
+        var command = _commandManager?.Pop();
         if (command == null)
             return;
 
@@ -74,10 +73,10 @@ class CombatWorldVM : MonoBehaviour
 
     private void Awake()
     {
-        var initData = CombatHelper.GetData(mapGenerator);
-        var combat = CombatService.CreateCombat(initData);
-        CombatManager.CurrentCombat = combat;
-        EventManager.OnEventProcessed += EventManager_OnEventProcessed;
+        var initData = CombatHelper.GetData(_mapGenerator);
+        var combat = _combatService.CreateCombat(initData);
+        _combatManager.CurrentCombat = combat;
+        _eventManager.OnEventProcessed += EventManager_OnEventProcessed;
 
         Map.InitCombat();
     }
@@ -89,8 +88,13 @@ class CombatWorldVM : MonoBehaviour
         switch (e.CommandEvent.Id)
         {
             case "squad-moved":
-                var combat = CombatManager.CurrentCombat;
+                var combat = _combatManager.CurrentCombat;
                 var squadMovedEvent = e.CommandEvent as SquadMovedEvent;
+                if (squadMovedEvent == null)
+                {
+                    throw new ArgumentNullException(nameof(squadMovedEvent));
+                }
+
                 var actorSquad = combat.Squads.SingleOrDefault(x => x.Id == squadMovedEvent.SquadId);
                 var targetNode = combat.Map.Nodes.SingleOrDefault(x => x.Id == squadMovedEvent.FinishNodeId);
 
@@ -101,12 +105,19 @@ class CombatWorldVM : MonoBehaviour
                 break;
 
             case "event-group":
-                var group = e.CommandEvent as EventGroup;
+                var eventGroup = e.CommandEvent as EventGroup;
+                if (eventGroup == null)
+                {
+                    throw new ArgumentNullException(nameof(eventGroup));
+                }
 
-                EventManager.EventsToQueue(group.Events);
+                _eventManager.EventsToQueue(eventGroup.Events);
 
                 //TODO Добавить обработка завершения событий.
                 break;
+
+            default:
+                throw new InvalidOperationException("Неизвесный тип события");
         }
     }
 }
