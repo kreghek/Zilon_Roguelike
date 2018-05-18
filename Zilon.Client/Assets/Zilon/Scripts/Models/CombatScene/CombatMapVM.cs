@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
@@ -76,7 +77,7 @@ class CombatMapVM : MonoBehaviour
                     var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
                     var locationPosition = currentSquadNode.transform.position;
                     actorVM.transform.position = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
-                    actorVM.ChangeTargetPosition(actorVM.transform.position);
+                    actorVM.MoveToPointAsync(actorVM.transform.position);
 
                     squadVM.AddActor(actorVM);
                 }
@@ -86,11 +87,11 @@ class CombatMapVM : MonoBehaviour
         }
     }
 
-    public void MoveSquad(ActorSquad actorSquad, MapNode targetNode)
+    public async Task<bool> MoveSquadAsync(ActorSquad actorSquad, MapNode targetNode)
     {
         var actorSquadVM = squads.SingleOrDefault(x => x.ActorSquad == actorSquad);
         var targetNodeVM = locations.SingleOrDefault(x => x.Node == targetNode);
 
-        actorSquadVM.MoveActors(targetNodeVM);
+        return await actorSquadVM.MoveActorsAsync(targetNodeVM);
     }
 }

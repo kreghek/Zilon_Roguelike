@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 //TODO Переименованить в просто Актёр, потому что актёры есть только в бою
 public class CombatActorVM : MonoBehaviour
 {
-
+    private TaskCompletionSource<bool> _moveTaskSource;
     private const float moveSpeedQ = 1;
 
     private Vector3 targetPosition;
@@ -23,14 +24,17 @@ public class CombatActorVM : MonoBehaviour
             if (moveCounter >= 1)
             {
                 moveCounter = null;
+                _moveTaskSource.TrySetResult(true);
             }
         }
     }
 
-    public void ChangeTargetPosition(Vector3 targetPosition)
+    public Task<bool> MoveToPointAsync(Vector3 targetPosition)
     {
+        _moveTaskSource = new TaskCompletionSource<bool>();
         this.targetPosition = targetPosition;
         moveCounter = 0;
+        return _moveTaskSource.Task;
     }
 
     public void OnMouseDown()

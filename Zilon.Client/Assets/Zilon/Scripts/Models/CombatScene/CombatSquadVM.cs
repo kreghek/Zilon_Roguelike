@@ -44,14 +44,18 @@ public class CombatSquadVM : MonoBehaviour
 
         var task = promise.Task;
 
-        var completeTask = Task.WhenAny(task);
-
+        var actorMoveTasks = new List<Task<bool>>();
         foreach (var actor in Actors)
         {
             var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
             var locationPosition = nodeVM.transform.position;
             var targetPosition = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
-            actor.ChangeTargetPosition(targetPosition);
+            var actorMoveTask = actor.MoveToPointAsync(targetPosition);
+            actorMoveTasks.Add(actorMoveTask);
         }
+
+        var squadTask = Task.WhenAll(actorMoveTasks).;
+
+        return squadTask;
     }
 }
