@@ -6,6 +6,8 @@ using Zilon.Core.Tactics;
 
 public class CombatSquadVM : MonoBehaviour
 {
+    private int? _moveCounter;
+
     public ActorSquad ActorSquad { get; set; }
     public List<CombatActorVM> Actors { get; set; }
 
@@ -58,4 +60,10 @@ public class CombatSquadVM : MonoBehaviour
 
         return squadTask;
     }
+
+    public void Update()
+    {
+
+    }
+
 }

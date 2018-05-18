@@ -6,24 +6,25 @@ using UnityEngine;
 public class CombatActorVM : MonoBehaviour
 {
     private TaskCompletionSource<bool> _moveTaskSource;
-    private const float moveSpeedQ = 1;
+    private const float MOVE_SPEED_Q = 1;
 
-    private Vector3 targetPosition;
-    private float? moveCounter;
+    private Vector3 _targetPosition;
+    private float? _moveCounter;
+    private Task _moveTask;
 
     public event EventHandler OnSelected;
 
     // Update is called once per frame
     void Update()
     {
-        if (moveCounter != null)
+        if (_moveCounter != null)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, moveCounter.Value);
-            moveCounter += Time.deltaTime * moveSpeedQ;
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
+            _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
 
-            if (moveCounter >= 1)
+            if (_moveCounter >= 1)
             {
-                moveCounter = null;
+                _moveCounter = null;
                 _moveTaskSource.TrySetResult(true);
             }
         }
