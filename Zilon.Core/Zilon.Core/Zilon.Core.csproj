@@ -69,7 +69,6 @@
     <Compile Include="Services\ICombatCommandResolver.cs" />
     <Compile Include="Services\ICombatService.cs" />
     <Compile Include="Tactics\Actor.cs" />
-    <Compile Include="Tactics\ActorSquad.cs" />
     <Compile Include="Tactics\Combat.cs" />
     <Compile Include="Persons\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,7 +96,6 @@
     <Compile Include="Tactics\Map\ICombatMap.cs" />
     <Compile Include="Tactics\Map\MapNode.cs" />
     <Compile Include="Tactics\Map\NodeHelper.cs" />
-    <Compile Include="Tactics\SquadTurnState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

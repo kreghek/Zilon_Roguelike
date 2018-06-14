@@ -32,16 +32,10 @@
             return combat;
         }
 
-        public CommandResult MoveCommand(Combat combat, ActorSquad actorSquad, MapNode targetNode)
+        public CommandResult MoveCommand(Combat combat, Actor actorSquad, MapNode targetNode)
         {
             return ExecuteCommand(
                 context => combatCommandResolver.MoveSquad(combat, actorSquad, targetNode));
-        }
-
-        public CommandResult EndTurnCommand(Combat combat)
-        {
-            return ExecuteCommand(
-                context => combatCommandResolver.EndTurn(combat));
         }
 
         private void CreateActors(Combat combat, CombatInitData initData)

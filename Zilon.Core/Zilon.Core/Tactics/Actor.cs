@@ -1,16 +1,24 @@
 ﻿namespace Zilon.Core.Tactics
 {
     using Zilon.Core.Persons;
+    using Zilon.Core.Tactics.Map;
 
     public class Actor
     {
-        private readonly Person person;
-
-        public Actor(Person person)
+        public Actor(Person person, MapNode node)
         {
-            this.person = person;
+            Person = person;
+            Node = node;
         }
 
-        public Person Person => person;
+        /// <summary>
+        /// Песонаж, который лежит в основе актёра.
+        /// </summary>
+        public Person Person { get; }
+
+        /// <summary>
+        /// Текущий узел карты, в котором находится актёр.
+        /// </summary>
+        public MapNode Node { get; set; }
     }
 }

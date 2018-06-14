@@ -13,18 +13,11 @@
     {
         public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа
 
-        public CommandResult MoveSquad(Combat combat, ActorSquad actorSquad, MapNode targetNode)
+        public CommandResult MoveSquad(Combat combat, Actor actor, MapNode targetNode)
         {
-            if (!actorSquad.CanMove)
-            {
-                return new CommandResult {
-                    Type = CommandResultType.NotEnoughMP,
-                };
-            }
-
             var groupIndex = 0;
 
-            var moveEvents = GetMoveToPointEvents(combat, actorSquad, targetNode, actorSquad.MP, ref groupIndex);
+            var moveEvents = GetMoveToPointEvents(combat, actor, targetNode, ref groupIndex);
 
             // Путь не найден
             if (moveEvents == null)
@@ -36,9 +29,6 @@
                 };
             }
 
-            // Изменяем состояние хода взвода
-            actorSquad.TurnState = SquadTurnState.Acted;
-
             return new CommandResult
             {
                 Type = CommandResultType.Complete,
@@ -46,12 +36,12 @@
             };
         }
 
-        private ITacticEvent[] GetMoveToPointEvents(Combat combat, ActorSquad actorSquad, MapNode targetNode, int availableMp, ref int groupIndex)
+        private ITacticEvent[] GetMoveToPointEvents(Combat combat, Actor actorSquad, MapNode targetNode, ref int groupIndex)
         {
 
             var pathFindingContext = new PathFindingContext();
 
-            var path = FindPath(pathFindingContext, actorSquad.Node, targetNode, availableMp);
+            var path = FindPath(pathFindingContext, actorSquad.Node, targetNode);
             //TODO Вероятно, тут нужно возвращать события Путь не найден
             if (path == null)
                 return null;
@@ -60,15 +50,14 @@
 
             var pathList = path.ToArray();
             var i = 1;
-            while (actorSquad.MP > 0 && i < pathList.Length && availableMp > 0)
+            if (i < pathList.Length)
             {
                 var oneMoveNode = pathList[i];
 
                 var moveResult = MoveOne(combat, actorSquad, oneMoveNode);
-                availableMp--;
 
                 if (moveResult.Type != CommandResultType.Complete)
-                    break;
+                    return moveEvents.ToArray();
 
                 var groupName = (string)null;
                 TargetTriggerGroup[] groupTriggers;
@@ -101,21 +90,12 @@
             return moveEvents.ToArray();
         }
 
-        private CommandResult MoveOne(Combat combat, ActorSquad actorSquad, MapNode targetNode)
+        private CommandResult MoveOne(Combat combat, Actor actor, MapNode targetNode)
         {
-            // Проверяем наличие MP - 1MP за клетку
-            if (actorSquad.MP < MOVE_COST)
-            {
-                return new CommandResult
-                {
-                    Type = CommandResultType.NotEnoughMP
-                };
-            }
-
             // Перемещение
 
             // Проверяем доступность клетки
-            if (!combat.Map.IsPositionAvailableFor(targetNode, actorSquad))
+            if (!combat.Map.IsPositionAvailableFor(targetNode, actor))
             {
                 return new CommandResult
                 {
@@ -123,18 +103,13 @@
                 };
             }
 
-            // Разворачиваем лицом к точке перемещения
-
-            var oldLookAt = actorSquad.LookAt;
-            actorSquad.LookAt = null;
-
             // Выполняем перемещение
-            combat.Map.ReleaseNode(actorSquad.Node, actorSquad);
-            var squadMovedEvents = ResolveSquadMovement(targetNode, actorSquad);
+            combat.Map.ReleaseNode(actor.Node, actor);
+            var squadMovedEvents = ResolveSquadMovement(targetNode, actor);
             
-            combat.Map.HoldNode(actorSquad.Node, actorSquad);
-            actorSquad.MP--;
+            combat.Map.HoldNode(actor.Node, actor);
 
+            //TODO Доработать определение, ясвляется ли данный актёр управляемым игроком.
             var isHumanPlayerSquad = true;
 
             if (isHumanPlayerSquad)
@@ -155,17 +130,17 @@
             }
         }
 
-        private static ITacticEvent[] ResolveSquadMovement(MapNode targetNode, ActorSquad actorSquad)
+        private static ITacticEvent[] ResolveSquadMovement(MapNode targetNode, Actor actor)
         {
-            var oldNode = actorSquad.Node;
-            actorSquad.SetCurrentNode(targetNode);
+            var oldNode = actor.Node;
+            actor.Node = targetNode;
 
             // Реализовать перемещние актёров
-            var moveSquadEvent = new SquadMovedEvent(null, null, actorSquad.Id, oldNode.Id, targetNode.Id);
+            var moveSquadEvent = new SquadMovedEvent(null, null, actor.Person.Id, oldNode.Id, targetNode.Id);
             return new ITacticEvent[] { moveSquadEvent };
         }
 
-        private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode, int availableMP)
+        private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode)
         {
             return new [] { node, targetNode };
         }
