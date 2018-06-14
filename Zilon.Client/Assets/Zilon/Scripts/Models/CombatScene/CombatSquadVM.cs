@@ -6,6 +6,7 @@ using Zilon.Core.Tactics;
 
 public class CombatSquadVM : MonoBehaviour
 {
+    private float ACTOR_OFFSET = 2;
     private int? _moveCounter;
 
     public ActorSquad ActorSquad { get; set; }
@@ -44,21 +45,23 @@ public class CombatSquadVM : MonoBehaviour
     {
         var promise = new TaskCompletionSource<bool>();
 
-        var task = promise.Task;
-
         var actorMoveTasks = new List<Task<bool>>();
         foreach (var actor in Actors)
         {
-            var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
+            var positionOffset = UnityEngine.Random.insideUnitCircle * ACTOR_OFFSET;
             var locationPosition = nodeVM.transform.position;
             var targetPosition = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
             var actorMoveTask = actor.MoveToPointAsync(targetPosition);
             actorMoveTasks.Add(actorMoveTask);
         }
 
-        var squadTask = Task.WhenAll(actorMoveTasks).;
+        var squadTask = Task.WhenAll(actorMoveTasks);
 
-        return squadTask;
+        
+ 
+        promise.TrySetResult(true);
+
+        return promise.Task;
     }
 
     public void Update()

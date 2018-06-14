@@ -7,6 +7,7 @@ public class CombatActorVM : MonoBehaviour
 {
     private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;
+    private const float END_MOVE_COUNTER = 1;
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
@@ -22,7 +23,7 @@ public class CombatActorVM : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
             _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
 
-            if (_moveCounter >= 1)
+            if (_moveCounter >= END_MOVE_COUNTER)
             {
                 _moveCounter = null;
                 _moveTaskSource.TrySetResult(true);
@@ -33,8 +34,8 @@ public class CombatActorVM : MonoBehaviour
     public Task<bool> MoveToPointAsync(Vector3 targetPosition)
     {
         _moveTaskSource = new TaskCompletionSource<bool>();
-        this.targetPosition = targetPosition;
-        moveCounter = 0;
+        _targetPosition = targetPosition;
+        _moveCounter = 0;
         return _moveTaskSource.Task;
     }
 
