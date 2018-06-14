@@ -1,42 +1,42 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 //TODO Переименованить в просто Актёр, потому что актёры есть только в бою
 public class CombatActorVM : MonoBehaviour
 {
+    private TaskCompletionSource<bool> _moveTaskSource;
+    private const float MOVE_SPEED_Q = 1;
+    private const float END_MOVE_COUNTER = 1;
 
-    private const float moveSpeedQ = 1;
-
-    private Vector3 targetPosition;
-    private float? moveCounter;
+    private Vector3 _targetPosition;
+    private float? _moveCounter;
+    private Task _moveTask;
 
     public event EventHandler OnSelected;
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-        if (moveCounter != null)
+        if (_moveCounter != null)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, moveCounter.Value);
-            moveCounter += Time.deltaTime * moveSpeedQ;
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
+            _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
 
-            if (moveCounter >= 1)
+            if (_moveCounter >= END_MOVE_COUNTER)
             {
-                moveCounter = null;
+                _moveCounter = null;
+                _moveTaskSource.TrySetResult(true);
             }
         }
     }
 
-    public void ChangeTargetPosition(Vector3 targetPosition)
+    public Task<bool> MoveToPointAsync(Vector3 targetPosition)
     {
-        this.targetPosition = targetPosition;
-        moveCounter = 0;
+        _moveTaskSource = new TaskCompletionSource<bool>();
+        _targetPosition = targetPosition;
+        _moveCounter = 0;
+        return _moveTaskSource.Task;
     }
 
     public void OnMouseDown()

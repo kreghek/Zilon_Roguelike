@@ -98,7 +98,7 @@ class CombatWorldVM : MonoBehaviour
                 var actorSquad = combat.Squads.SingleOrDefault(x => x.Id == squadMovedEvent.SquadId);
                 var targetNode = combat.Map.Nodes.SingleOrDefault(x => x.Id == squadMovedEvent.FinishNodeId);
 
-                Map.MoveSquad(actorSquad, targetNode);
+                Map.MoveSquadAsync(actorSquad, targetNode);
 
                 //TODO Добавить обработку завершения событий.
 

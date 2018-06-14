@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zilon.Core.Tactics;
 
 public class CombatSquadVM : MonoBehaviour
 {
+    private float ACTOR_OFFSET = 2;
+    private int? _moveCounter;
+
     public ActorSquad ActorSquad { get; set; }
     public List<CombatActorVM> Actors { get; set; }
 
@@ -37,14 +41,32 @@ public class CombatSquadVM : MonoBehaviour
         OnSelect?.Invoke(this, new EventArgs());
     }
 
-    internal void MoveActors(CombatLocationVM nodeVM)
+    public Task<bool> MoveActorsAsync(CombatLocationVM nodeVM)
     {
+        var promise = new TaskCompletionSource<bool>();
+
+        var actorMoveTasks = new List<Task<bool>>();
         foreach (var actor in Actors)
         {
-            var positionOffset = UnityEngine.Random.insideUnitCircle * 2;
+            var positionOffset = UnityEngine.Random.insideUnitCircle * ACTOR_OFFSET;
             var locationPosition = nodeVM.transform.position;
             var targetPosition = locationPosition + new Vector3(positionOffset.x, positionOffset.y);
-            actor.ChangeTargetPosition(targetPosition);
+            var actorMoveTask = actor.MoveToPointAsync(targetPosition);
+            actorMoveTasks.Add(actorMoveTask);
         }
+
+        var squadTask = Task.WhenAll(actorMoveTasks);
+
+        
+ 
+        promise.TrySetResult(true);
+
+        return promise.Task;
     }
+
+    public void Update()
+    {
+
+    }
+
 }
