@@ -40,7 +40,6 @@
 
         private void CreateActors(Combat combat, CombatInitData initData)
         {
-            var squads = new List<ActorSquad>();
             var teamIndex = 0;
             var squadIdCounter = 1;
             foreach (var playerData in initData.Players)

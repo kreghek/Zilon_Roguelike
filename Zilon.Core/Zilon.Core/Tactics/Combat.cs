@@ -17,11 +17,11 @@
         //public CombatTrigger[] Triggers { get; set; }
         //public Dictionary<string, AccountTask[]> AccountTaskDict { get; set; }
 
-        public void Move(ActorSquad squad, MapNode targetNode)
+        public void Move(Actor actor, MapNode targetNode)
         {
-            if (squad == null)
+            if (actor == null)
             {
-                throw new ArgumentNullException(nameof(squad));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (targetNode == null)
@@ -29,7 +29,7 @@
                 throw new ArgumentNullException(nameof(targetNode));
             }
 
-            squad.SetCurrentNode(targetNode);
+            actor.Node = targetNode;
         }
     }
 }

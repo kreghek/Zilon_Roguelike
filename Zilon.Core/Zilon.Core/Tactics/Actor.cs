@@ -1,8 +1,8 @@
-﻿namespace Zilon.Core.Tactics
-{
-    using Zilon.Core.Persons;
-    using Zilon.Core.Tactics.Map;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Map;
 
+namespace Zilon.Core.Tactics
+{
     public class Actor
     {
         public Actor(Person person, MapNode node)

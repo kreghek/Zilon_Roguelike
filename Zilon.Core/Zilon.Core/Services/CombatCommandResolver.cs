@@ -144,24 +144,5 @@
         {
             return new [] { node, targetNode };
         }
-
-        public CommandResult EndTurn(Combat combat)
-        {
-            var restoreMpEvents = new List<ITacticEvent>();
-            foreach (var squad in combat.Squads)
-            {
-                squad.MP = 1;
-
-                if (!squad.CanMove)
-                {
-                    restoreMpEvents.Add(new SquadStatChangedEvent(null, null, squad.Id, squad.MP));
-                }
-            }
-
-            return new CommandResult
-            {
-                Type = CommandResultType.Complete
-            };
-        }
     }
 }
