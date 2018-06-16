@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
 using Zilon.Core.Services.CombatMap;
+using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Events;
 using Zilon.Core.Tactics.Map;

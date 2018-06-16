@@ -11,7 +11,7 @@ using Zilon.Core.Services;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Map;
 
-class CombatMapVM : MonoBehaviour
+class SectorMapVM : MonoBehaviour
 {
 
     //public CombatLocationVM LocationPrefab;
@@ -32,7 +32,7 @@ class CombatMapVM : MonoBehaviour
     [Inject]
     private ICombatManager CombatManager;
 
-    public CombatMapVM()
+    public SectorMapVM()
     {
        // locations = new List<CombatLocationVM>();
         squads = new List<CombatSquadVM>();
