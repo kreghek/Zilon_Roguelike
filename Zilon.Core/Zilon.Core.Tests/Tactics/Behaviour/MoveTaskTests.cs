@@ -8,7 +8,7 @@ using Zilon.Core.Tests.TestCommon;
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
     [TestFixture()]
-    public class MoveToPointCommandTests
+    public class MoveTaskTests
     {
         [Test()]
         public void ExecuteTest()

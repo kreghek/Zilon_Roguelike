@@ -80,8 +80,8 @@
     <Compile Include="Services\CombatServiceTestCaseGenerator.cs" />
     <Compile Include="Services\CombatServiceTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
-    <Compile Include="Tactics\Behaviour\HumanIntentSourceTests.cs" />
-    <Compile Include="Tactics\Behaviour\MoveToPointCommandTests.cs" />
+    <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
+    <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
     <Compile Include="Tactics\Map\MapNodeTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />

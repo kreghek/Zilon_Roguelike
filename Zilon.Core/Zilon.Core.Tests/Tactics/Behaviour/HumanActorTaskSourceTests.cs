@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     /// По окончанию задачи на перемещение должен выдавать пустые намерения.
     /// </summary>
     [TestFixture()]
-    public class HumanIntentSourceTests
+    public class HumanActorTaskSourceTests
     {
         [Test()]
         public void GetIntentsTest()
@@ -73,21 +73,6 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             actor.Node.Should().Be(finishNode);
         }
 
-        private static IMap CreateTestMap()
-        {
-            var map = new TestMap();
-
-            for (var i = 0; i < 10; i++)
-            {
-                for (var j = 0; j < 10; j++)
-                {
-                    map.Nodes.Add(new HexNode(i, j));
-                }
-            }
-
-            return map;
-        }
-
         /// <summary>
         /// Данный методо проверяет, чтобы всегда при выдачи команды на перемещение генерировалась хотя бы одна команда.
         /// </summary>
@@ -137,13 +122,6 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var map = CreateTestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
-            var finishNode = map.Nodes.SelectBy(1, 5);
-
-            var expectedPath = new[] {
-                map.Nodes.SelectBy(2, 3),
-                map.Nodes.SelectBy(2, 4),
-                finishNode
-            };
 
             var actor = new Actor(new Person(), startNode);
 
@@ -270,6 +248,21 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             // ASSERT
             factCommands.Should().NotBeNullOrEmpty();
+        }
+
+        private static IMap CreateTestMap()
+        {
+            var map = new TestMap();
+
+            for (var i = 0; i < 10; i++)
+            {
+                for (var j = 0; j < 10; j++)
+                {
+                    map.Nodes.Add(new HexNode(i, j));
+                }
+            }
+
+            return map;
         }
     }
 }
