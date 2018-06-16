@@ -4,7 +4,7 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanBehaviourSource : IBehaviourSource
     {
-        private IActor _currentActor;
+        private readonly IActor _currentActor;
         private ICommand _currentCommand;
 
         private MapNode _targetNode;
