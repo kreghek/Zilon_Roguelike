@@ -1,11 +1,11 @@
 using Assets.Zilon.Scripts.Models.CombatScene;
-using Assets.Zilon.Scripts.Services;
 using Assets.Zilon.Scripts.Services.CombatScene;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
 using Zilon.Core.Services.CombatMap;
+using Zilon.Core.Services.MapGenerators;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
 {

@@ -20,7 +20,6 @@ class SectorVM : MonoBehaviour
 
     private float turnCounter;
 
-    public CombatMapVM Map;
     public SchemeLocator SchemeLocator;
     public Text Text;
     
