@@ -33,10 +33,17 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             _target.TakeDamage(Actor.Damage);
+
+            IsComplete = true;
         }
 
         public AttackTask(IActor actor, IAttackTarget target)
         {
+            if (actor == target)
+            {
+                throw new ArgumentException("Актур не может атаковать сом себя", nameof(target));
+            }
+
             _target = target;
             Actor = actor;
         }

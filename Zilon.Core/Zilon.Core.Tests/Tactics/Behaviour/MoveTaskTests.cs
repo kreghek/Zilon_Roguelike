@@ -10,22 +10,19 @@ using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class MoveTaskTests
     {
-        [Test()]
+        /// <summary>
+        /// Тест проверяет, то задача на перемещение за несколько итераций
+        /// перемещает актёра в целевой узел. В конце, на последней итерации,
+        /// когда актёр достиг цели, должна отмечаться, как заверщённая.
+        /// </summary>
+        [Test]
         public void ExecuteTest()
         {
             // ARRANGE
             var map = new TestMap();
-
-            for (var i = 0; i < 10; i++)
-            {
-                for (var j = 0; j < 10; j++)
-                {
-                    map.Nodes.Add(new HexNode(i, j));
-                }
-            }
 
             var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
             var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);

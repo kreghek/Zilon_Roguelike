@@ -14,5 +14,10 @@
         /// Урон персонажа.
         /// </summary>
         float Damage { get; }
+
+        /// <summary>
+        /// Хитпоинты персонажа.
+        /// </summary>
+        float Hp { get; }
     }
 }

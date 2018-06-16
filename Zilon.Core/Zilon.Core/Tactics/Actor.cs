@@ -4,12 +4,15 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public class Actor : IActor, IAttackTarget
+    public class Actor : IActor
     {
         public Actor(IPerson person, HexNode node)
         {
             Person = person;
             Node = node;
+
+            Hp = person.Hp;
+            Damage = person.Damage;
         }
 
         /// <summary>
@@ -22,7 +25,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public HexNode Node { get; set; }
 
-        public float Damage => Person.Damage;
+        public float Damage { get; set; }
 
         public float Hp { get; set; }
 

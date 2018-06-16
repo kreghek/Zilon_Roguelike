@@ -102,23 +102,27 @@ class SectorVM : MonoBehaviour
             mapNodeVM.transform.position = worldPosition;
             mapNodeVM.Node = node;
             
-            mapNodeVM.OnSelect+= MapNodeVmOnOnSelect;
+            mapNodeVM.OnSelect+= MapNodeVm_OnSelect;
 
             nodeVMs.Add(mapNodeVM);
         }
 
-        var playerPerson = new Person();
+
+
+        var playerActorStartNode = map.Nodes.Single(n => n.OffsetX == 0 && n.OffsetY == 0);
+        var playerActorVM = CreateActorVm(sector, playerActorStartNode, nodeVMs);
+
+        var enemy1StartNode = map.Nodes.Single(n => n.OffsetX == 5 && n.OffsetY == 5);
+        var enemy1ActorVM = CreateActorVm(sector, enemy1StartNode, nodeVMs);
+        enemy1ActorVM.IsEnemy = true;
+        enemy1ActorVM.OnSelected += EnemyActorVm_OnSelected;
         
-        var playerActor = sector.AddActor(playerPerson, map.Nodes.First());
+        var enemy2StartNode = map.Nodes.Single(n => n.OffsetX == 9 && n.OffsetY == 9);
+        var enemy2ActorVM = CreateActorVm(sector, enemy2StartNode, nodeVMs);
+        enemy2ActorVM.IsEnemy = true;
+        enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
-        var playerActorVM = Instantiate(ActorPrefab, transform);
-
-        var actorNodeVm = nodeVMs.Single(x => x.Node == playerActor.Node);
-        var actorPosition = actorNodeVm.transform.position;
-        playerActorVM.transform.position = actorPosition;
-        playerActorVM.Actor = playerActor;
-
-        _playerActorTaskSource = new HumanActorTaskSource(playerActor);
+        _playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
         sector.BehaviourSources = new IActorTaskSource[] { _playerActorTaskSource };
 
         _sector = sector;
@@ -126,7 +130,38 @@ class SectorVM : MonoBehaviour
         //Map.InitCombat();
     }
 
-    private void MapNodeVmOnOnSelect(object sender, EventArgs e)
+    private void EnemyActorVm_OnSelected(object sender, EventArgs e)
+    {
+        var actorVm = sender as ActorVM;
+
+        if (actorVm != null)
+        {
+            var targetActor = actorVm.Actor;
+ 
+            _playerActorTaskSource.IntentAttack(targetActor);
+            _sector.Update();
+        }
+    }
+
+    private ActorVM CreateActorVm(Sector sector, HexNode playerActorStartNode, List<MapNodeVM> nodeVMs)
+    {
+        var person = new Person
+        {
+            Hp = 1,
+            Damage = 1
+        };
+        var actor = sector.AddActor(person, playerActorStartNode);
+
+        var actorVm = Instantiate(ActorPrefab, transform);
+
+        var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
+        var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
+        actorVm.transform.position = actorPosition;
+        actorVm.Actor = actor;
+        return actorVm;
+    }
+
+    private void MapNodeVm_OnSelect(object sender, EventArgs e)
     {
         // указываем намерение двигиться на выбранную точку (узел).
         
@@ -135,7 +170,7 @@ class SectorVM : MonoBehaviour
         if (nodeVM != null)
         {
             var targetNode = nodeVM.Node;
-            _playerActorTaskSource.AssignMoveToPointCommand(targetNode);
+            _playerActorTaskSource.IntentMove(targetNode);
             _sector.Update();
         }
     }

@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics
     /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
     /// Актёр может умереть.
     /// </remarks>
-    public interface IActor
+    public interface IActor: IAttackTarget
     {
         /// <summary>
         /// Песонаж, который лежит в основе актёра.

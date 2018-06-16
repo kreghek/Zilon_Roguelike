@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Zilon.Core.Tactics.Behaviour;
+using System;
 using System.Linq;
 
 using FluentAssertions;
@@ -19,10 +20,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     public class HumanActorTaskSourceTests
     {
         [Test()]
-        public void GetIntentsTest()
+        public void GetActorTasksTest()
         {
             // ARRANGE
-            var map = CreateTestMap();
+            var map = new TestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -36,7 +37,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var actor = new Actor(new Person(), startNode);
 
             var behSource = new HumanActorTaskSource(actor);
-            behSource.AssignMoveToPointCommand(finishNode);
+            behSource.IntentMove(finishNode);
 
 
             // ACT
@@ -81,7 +82,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = CreateTestMap();
+            var map = new TestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -100,7 +101,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ACT
-            behSource.AssignMoveToPointCommand(startNode);
+            behSource.IntentMove(startNode);
 
 
 
@@ -119,7 +120,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = CreateTestMap();
+            var map = new TestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
 
@@ -130,7 +131,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ACT
-            Action act = () => { behSource.AssignMoveToPointCommand(null); };
+            Action act = () => { behSource.IntentMove(null); };
 
 
 
@@ -147,7 +148,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = CreateTestMap();
+            var map = new TestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -161,7 +162,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // ACT
 
             // 1. Формируем намерение.
-            behSource.AssignMoveToPointCommand(finishNode);
+            behSource.IntentMove(finishNode);
 
             // 2. Ждём, пока команда не отработает.
             var commands = behSource.GetActorTasks(map, new[] { actor });
@@ -181,7 +182,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behSource.AssignMoveToPointCommand(finishNode2);
+            behSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
@@ -203,7 +204,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = CreateTestMap();
+            var map = new TestMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -217,7 +218,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // ACT
 
             // 1. Формируем намерение.
-            behSource.AssignMoveToPointCommand(finishNode);
+            behSource.IntentMove(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
             var commands = behSource.GetActorTasks(map, new[] { actor });
@@ -237,7 +238,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behSource.AssignMoveToPointCommand(finishNode2);
+            behSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
@@ -250,19 +251,37 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             factCommands.Should().NotBeNullOrEmpty();
         }
 
-        private static IMap CreateTestMap()
+        /// <summary>
+        /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
+        /// </summary>
+        [Test()]
+        public void IntentAttackTest()
         {
+            //ARRANGE
+            var person = new Person { Hp = 1, Damage = 1 };
+
             var map = new TestMap();
 
-            for (var i = 0; i < 10; i++)
-            {
-                for (var j = 0; j < 10; j++)
-                {
-                    map.Nodes.Add(new HexNode(i, j));
-                }
-            }
+            var attackerStartNode = map.Nodes.SelectBy(3, 3);
+            var targetStartNode = map.Nodes.SelectBy(2, 3);
 
-            return map;
+            var attackerActor = new Actor(person, attackerStartNode);
+            var targetActor = new Actor(person, targetStartNode);
+
+
+            var taskSource = new HumanActorTaskSource(attackerActor);
+
+
+            // ACT
+            taskSource.IntentAttack(targetActor);
+
+
+
+            // ASSERT
+            var tasks = taskSource.GetActorTasks(map, new[] { attackerActor, targetActor });
+
+            tasks.Should().NotBeNullOrEmpty();
+            tasks[0].Should().BeOfType<AttackTask>();
         }
     }
 }

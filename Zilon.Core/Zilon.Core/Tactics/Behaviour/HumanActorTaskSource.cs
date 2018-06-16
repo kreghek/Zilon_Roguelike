@@ -6,10 +6,11 @@ namespace Zilon.Core.Tactics.Behaviour
     public class HumanActorTaskSource : IActorTaskSource
     {
         private readonly IActor _currentActor;
-        private IActorTask _currentCommand;
+        private IActorTask _currentTask;
 
         private HexNode _targetNode;
-        private bool _moveCommandActual = false;
+        private bool _taskIsActual = false;
+        private IAttackTarget _attackTarget;
 
         public HumanActorTaskSource(IActor startActor)
         {
@@ -18,9 +19,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask[] GetActorTasks(IMap map, IActor[] actors)
         {
-            if (_currentCommand != null)
+            if (_currentTask != null)
             {
-                if (_moveCommandActual && _currentCommand.IsComplete)
+                if (_taskIsActual && _currentTask.IsComplete)
                 {
                     _targetNode = null;
                 }
@@ -28,35 +29,57 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_targetNode != null)
             {
-                if (_moveCommandActual)
+                if (_taskIsActual)
                 {
-                    return new[] { _currentCommand };
+                    return new[] { _currentTask };
                 }
                 else
                 {
-                    _moveCommandActual = true;
-                    var moveCommand = new MoveTask(_currentActor, _targetNode, map);
-                    _currentCommand = moveCommand;
+                    _taskIsActual = true;
+                    var moveTask = new MoveTask(_currentActor, _targetNode, map);
+                    _currentTask = moveTask;
 
-                    return new[] { _currentCommand };
+                    return new[] { _currentTask };
                 }
+            }
+
+            if (_attackTarget != null)
+            {
+                var attackTask = new AttackTask(_currentActor, _attackTarget);
+                _currentTask = attackTask;
+
+                return new[] { _currentTask };
             }
 
             return null;
         }
 
-        public void AssignMoveToPointCommand(HexNode targetNode)
+        public void IntentMove(HexNode targetNode)
         {
             if (targetNode == null)
             {
                 throw new ArgumentException(nameof(targetNode));
             }
 
+            _attackTarget = null;
+
             if (targetNode != _targetNode)
             {
-                _moveCommandActual = false;
+                _taskIsActual = false;
                 _targetNode = targetNode;
             }
+        }
+
+        public void IntentAttack(IAttackTarget target)
+        {
+            if (target == null)
+            {
+                throw new ArgumentException(nameof(target));
+            }
+
+            _taskIsActual = false;
+            _targetNode = null;
+            _attackTarget = target;
         }
     }
 }

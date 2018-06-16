@@ -26,6 +26,14 @@ namespace Zilon.Core.Tests.TestCommon
         public TestMap()
         {
             Nodes = new List<HexNode>();
+
+            for (var i = 0; i < 10; i++)
+            {
+                for (var j = 0; j < 10; j++)
+                {
+                    Nodes.Add(new HexNode(i, j));
+                }
+            }
         }
     }
 }

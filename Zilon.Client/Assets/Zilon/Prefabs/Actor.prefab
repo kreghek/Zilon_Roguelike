@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4297484757141276}
   - component: {fileID: 212617522165328522}
   - component: {fileID: 114531107507698972}
+  - component: {fileID: 58200806409758386}
   m_Layer: 0
   m_Name: Actor
   m_TagString: Untagged
@@ -41,6 +42,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58200806409758386
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1763771338883492}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!114 &114531107507698972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -52,6 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d0e29b42706237429093e839d70ba24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEnemy: 0
 --- !u!212 &212617522165328522
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -10,23 +10,39 @@ public class ActorVM : MonoBehaviour
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
 
+    
+    public bool IsEnemy;
+    
     private Vector3 _targetPosition;
     private float? _moveCounter;
     private Task _moveTask;
 
     public event EventHandler OnSelected;
     public IActor Actor { get; set; }
+    
 
     public void Start()
     {
-        Actor.OnMoved += ActorOnOnMoved;
+        Actor.OnMoved += Actor_OnMoved;
+        Actor.OnDead += Actor_OnDead;
+
+        if (IsEnemy)
+        {
+            GetComponent<SpriteRenderer>().color = Color.magenta;
+        }
     }
 
-    private void ActorOnOnMoved(object sender, EventArgs e)
+    private void Actor_OnDead(object sender, EventArgs e)
+    {
+        Debug.Log("Dead" + this);
+        GetComponent<SpriteRenderer>().color = Color.black;
+    }
+
+    private void Actor_OnMoved(object sender, EventArgs e)
     {
         _moveCounter = 0;
         var worldPositionParts = HexHelper.ConvertToWorld(Actor.Node.OffsetX, Actor.Node.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1]);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1], -1);
     }
 
     // Update is called once per frame
@@ -56,6 +72,6 @@ public class ActorVM : MonoBehaviour
 
     public void OnMouseDown()
     {
-        OnSelected(this, new EventArgs());
+        OnSelected?.Invoke(this, new EventArgs());
     }
 }
