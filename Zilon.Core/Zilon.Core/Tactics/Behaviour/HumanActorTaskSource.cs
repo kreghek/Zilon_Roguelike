@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentActor = startActor;
         }
 
-        public IActorTask[] GetIntents(IMap map, IActor[] actors)
+        public IActorTask[] GetActorTasks(IMap map, IActor[] actors)
         {
             if (_currentCommand != null)
             {

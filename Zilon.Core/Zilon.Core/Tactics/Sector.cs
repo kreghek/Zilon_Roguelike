@@ -43,7 +43,7 @@ namespace Zilon.Core.Tactics
             _commands.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
-                var commands = behaviourSource.GetIntents(Map, Actors.ToArray());
+                var commands = behaviourSource.GetActorTasks(Map, Actors.ToArray());
                 if (commands != null)
                 {
                     _commands.AddRange(commands);

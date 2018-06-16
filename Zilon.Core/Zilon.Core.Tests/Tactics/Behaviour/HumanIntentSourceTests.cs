@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = behSource.GetIntents(map, new[] { actor });
+                var commands = behSource.GetActorTasks(map, new[] { actor });
 
                 if (step < 4)
                 {
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ASSERT
-            var commands = behSource.GetIntents(map, new[] { actor });
+            var commands = behSource.GetActorTasks(map, new[] { actor });
             commands.Should().NotBeNullOrEmpty();
             commands[0].Should().BeOfType<MoveTask>();
         }
@@ -186,7 +186,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behSource.AssignMoveToPointCommand(finishNode);
 
             // 2. Ждём, пока команда не отработает.
-            var commands = behSource.GetIntents(map, new[] { actor });
+            var commands = behSource.GetActorTasks(map, new[] { actor });
 
             for (var i = 0; i < 3; i++)
             {
@@ -207,7 +207,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetIntents(map, new[] { actor });
+            var factCommands = behSource.GetActorTasks(map, new[] { actor });
 
 
 
@@ -242,7 +242,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behSource.AssignMoveToPointCommand(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = behSource.GetIntents(map, new[] { actor });
+            var commands = behSource.GetActorTasks(map, new[] { actor });
 
             for (var i = 0; i < 1; i++)
             {
@@ -263,7 +263,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetIntents(map, new[] { actor });
+            var factCommands = behSource.GetActorTasks(map, new[] { actor });
 
 
 
