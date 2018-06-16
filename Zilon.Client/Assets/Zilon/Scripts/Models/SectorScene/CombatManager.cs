@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Models.CombatScene
 {
-    class CombatManager : ICombatManager
+    class CombatManager : ISectorManager
     {
         public Sector CurrentSector { get; set; }
     }

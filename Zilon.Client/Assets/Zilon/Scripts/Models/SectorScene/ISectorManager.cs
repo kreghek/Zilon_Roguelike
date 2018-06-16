@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Models.CombatScene
 {
-    interface ICombatManager
+    internal interface ISectorManager
     {
         Sector CurrentSector { get; set; }
     }

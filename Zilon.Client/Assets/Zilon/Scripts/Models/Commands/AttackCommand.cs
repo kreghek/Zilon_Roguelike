@@ -6,10 +6,10 @@ namespace Assets.Zilon.Scripts.Models.Commands
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
-    class MoveCommand : ActorCommandBase
+    class AttackCommand : ActorCommandBase
     {
 
-        public MoveCommand(ISectorManager sectorManager,
+        public AttackCommand(ISectorManager sectorManager,
             IPlayerState playerState) : 
             base(sectorManager, playerState)
         {
@@ -24,10 +24,10 @@ namespace Assets.Zilon.Scripts.Models.Commands
         protected override void ExecuteTacticCommand()
         {
             var sector = _sectorManager.CurrentSector;
-            var selectedNodeVM = _playerState.SelectedNode;
-            
-            var targetNode = selectedNodeVM.Node;
-            _playerState.TaskSource.IntentMove(targetNode);
+            var selectedActorVM = _playerState.SelectedActor;
+
+            var targetActor = selectedActorVM.Actor;
+            _playerState.TaskSource.IntentAttack(targetActor);
             sector.Update();
         }
     }

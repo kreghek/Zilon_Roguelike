@@ -1,5 +1,5 @@
 using Assets.Zilon.Scripts.Models.CombatScene;
-using Assets.Zilon.Scripts.Services.CombatScene;
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Services;
@@ -11,14 +11,11 @@ public class TestInstaller : MonoInstaller<TestInstaller>
 {
     public override void InstallBindings()
     {
-        //Container.Bind<ICombatService>().To<CombatService>().AsSingle();
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
-        Container.Bind<ICombatManager>().To<CombatManager>().AsSingle();
-        Container.Bind<IPersonCommandHandler>().To<PersonCommandHandler>().AsSingle();
+        Container.Bind<ISectorManager>().To<CombatManager>().AsSingle();
         Container.Bind<IEventManager>().To<EventManager>().AsSingle();
         Container.Bind<ICombatCommandResolver>().To<CombatCommandResolver>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
-        Container.Bind<ICombatPlayerState>().To<CombatPlayerState>().AsSingle();
-        //Container.Bind<ICommandFactory>().WithId("squad-command-factory").To<SquadCommandFactory>().AsSingle();
+        Container.Bind<IPlayerState>().To<PlayerState>().AsSingle();
     }
 }
