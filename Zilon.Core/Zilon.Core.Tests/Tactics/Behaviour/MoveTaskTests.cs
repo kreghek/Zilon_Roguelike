@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
-using System.Linq;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Persons;
+﻿using System.Linq;
+
 using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
