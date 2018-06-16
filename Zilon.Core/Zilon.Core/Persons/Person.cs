@@ -3,5 +3,7 @@
     public class Person : IPerson
     {
         public int Id { get; set; }
+
+        public float Damage { get; set; }
     }
 }

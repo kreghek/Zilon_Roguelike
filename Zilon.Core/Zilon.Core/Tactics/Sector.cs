@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
 
     public class Sector
     {
-        private List<IActorTask> _commands;
+        private readonly List<IActorTask> _commands;
         
         public IMap Map { get; }
 
@@ -21,7 +21,9 @@ namespace Zilon.Core.Tactics
         {
             if (map == null)
             {
+#pragma warning disable IDE0016 // Use 'throw' expression
                 throw new ArgumentException("Не передана карта сектора.", nameof(map));
+#pragma warning restore IDE0016 // Use 'throw' expression
             }
             
             _commands = new List<IActorTask>();
@@ -50,15 +52,22 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            
+
             // Выполняем все команды на текущий ход
             //TODO Сделать сортировку команд по инициативе актёра.
             foreach (var command in _commands)
             {
-                if (!command.IsComplete)
+                if (command.IsComplete)
                 {
-                    command.Execute();
+                    throw new InvalidOperationException("В выполняемых командах обнаружена заверщённая задача.");
                 }
+
+                if (command.Actor.IsDead)
+                {
+                    throw new InvalidOperationException("Задача назначена мертвому актёру.");
+                }
+
+                command.Execute();
             }
         }
     }

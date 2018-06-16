@@ -4,6 +4,14 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
+    /// <summary>
+    /// Интерфейс актёра.
+    /// </summary>
+    /// <remarks>
+    /// Актёр - это персонаж в бою. Характеристики актёра основаны на характеристиках
+    /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
+    /// Актёр может умереть.
+    /// </remarks>
     public interface IActor
     {
         /// <summary>
@@ -23,11 +31,6 @@ namespace Zilon.Core.Tactics
         void MoveToNode(HexNode targetNode);
 
         /// <summary>
-        /// Происходит, когда актёр переместился.
-        /// </summary>
-        event EventHandler OnMoved;
-
-        /// <summary>
         /// Текущий урон актёра.
         /// </summary>
         float Damage { get; }
@@ -41,5 +44,15 @@ namespace Zilon.Core.Tactics
         /// Состояние актёра.
         /// </summary>
         bool IsDead { get; set; }
+
+        /// <summary>
+        /// Происходит, когда актёр переместился.
+        /// </summary>
+        event EventHandler OnMoved;
+
+        /// <summary>
+        /// Происходит, если актёр умирает.
+        /// </summary>
+        event EventHandler OnDead;
     }
 }
