@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -11,13 +11,13 @@ namespace Zilon.Core.Tactics
     {
         private List<ICommand> _commands;
         
-        public CombatMap Map { get; }
+        public IMap Map { get; }
 
         public IBehaviourSource[] BehaviourSources { get; set; }
         
         public List<IActor> Actors { get; }
 
-        public Sector(CombatMap map)
+        public Sector(IMap map)
         {
             if (map == null)
             {
@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics
             Actors = new List<IActor>();
         }
 
-        public IActor AddActor(IPerson person, MapNode node)
+        public IActor AddActor(IPerson person, HexNode node)
         {
             var actor = new Actor(person, node);
             Actors.Add(actor);

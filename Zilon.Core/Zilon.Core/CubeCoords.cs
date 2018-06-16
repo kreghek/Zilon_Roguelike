@@ -1,12 +1,14 @@
-﻿namespace Zilon.Core.Math
-{
-    public struct Vector3
-    {
-        public float X { get; }
-        public float Y { get; }
-        public float Z { get; }
+﻿using System;
 
-        public Vector3(float x, float y, float z)
+namespace Zilon.Core
+{
+    public struct CubeCoords
+    {
+        public int X { get; }
+        public int Y { get; }
+        public int Z { get; }
+
+        public CubeCoords(int x, int y, int z)
         {
             X = x;
             Y = y;
@@ -15,17 +17,17 @@
 
         public override string ToString()
         {
-            return $"(X: {X:F2}, Y: {Y:F2}, Z: {Z:F2})";
+            return $"(X: {X}, Y: {Y}, Z: {Z})";
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Vector3))
+            if (!(obj is CubeCoords))
             {
                 return false;
             }
 
-            var vector = (Vector3)obj;
+            var vector = (CubeCoords)obj;
             return X == vector.X &&
                    Y == vector.Y &&
                    Z == vector.Z;
@@ -40,14 +42,24 @@
             return hashCode;
         }
 
-        public static bool operator ==(Vector3 v, Vector3 v2)
+        public static bool operator ==(CubeCoords v, CubeCoords v2)
         {
             return v.X == v2.X && v.Y == v2.Y && v.Z == v2.Z;
         }
 
-        public static bool operator !=(Vector3 v, Vector3 v2)
+        public static bool operator !=(CubeCoords v, CubeCoords v2)
         {
             return !(v == v2);
+        }
+
+        public int DistanceTo(CubeCoords cubeCoords)
+        {
+            var a = this;
+            var b = cubeCoords;
+            var distance1 = Math.Max(Math.Abs(a.X - b.X), Math.Abs(a.Y - b.Y));
+            var distance = Math.Max(distance1, Math.Abs(a.Z - b.Z));
+
+            return distance;
         }
     }
 }

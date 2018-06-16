@@ -6,14 +6,14 @@
     using Zilon.Core.PathFinding;
     using Zilon.Core.Tactics;
     using Zilon.Core.Tactics.Events;
-    using Zilon.Core.Tactics.Map;
+    using Zilon.Core.Tactics.Spatial;
 
     //TODO Этот класс разделить тоже по паттерну команды
     public class CombatCommandResolver : ICombatCommandResolver
     {
         public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа
 
-        public CommandResult MoveSquad(Sector combat, Actor actor, MapNode targetNode)
+        public CommandResult MoveSquad(Sector combat, Actor actor, HexNode targetNode)
         {
             var groupIndex = 0;
 
@@ -36,7 +36,7 @@
             };
         }
 
-        private ITacticEvent[] GetMoveToPointEvents(Sector combat, Actor actorSquad, MapNode targetNode, ref int groupIndex)
+        private ITacticEvent[] GetMoveToPointEvents(Sector combat, Actor actorSquad, HexNode targetNode, ref int groupIndex)
         {
 
             var pathFindingContext = new PathFindingContext();
@@ -90,7 +90,7 @@
             return moveEvents.ToArray();
         }
 
-        private CommandResult MoveOne(Sector combat, Actor actor, MapNode targetNode)
+        private CommandResult MoveOne(Sector combat, Actor actor, HexNode targetNode)
         {
             // Перемещение
 
@@ -130,7 +130,7 @@
             }
         }
 
-        private static ITacticEvent[] ResolveSquadMovement(MapNode targetNode, Actor actor)
+        private static ITacticEvent[] ResolveSquadMovement(HexNode targetNode, Actor actor)
         {
             var oldNode = actor.Node;
             actor.Node = targetNode;
@@ -140,7 +140,7 @@
             return new ITacticEvent[] { moveSquadEvent };
         }
 
-        private MapNode[] FindPath(PathFindingContext pathFindingContext, MapNode node, MapNode targetNode)
+        private HexNode[] FindPath(PathFindingContext pathFindingContext, HexNode node, HexNode targetNode)
         {
             return new [] { node, targetNode };
         }

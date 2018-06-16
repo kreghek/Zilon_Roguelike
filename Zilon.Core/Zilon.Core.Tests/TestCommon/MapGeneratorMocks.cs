@@ -1,8 +1,8 @@
 ﻿//using System.Collections.Generic;
 //using Moq;
-//using Zilon.Core.Math;
+//
 //using Zilon.Core.Services.CombatMap;
-//using Zilon.Core.Tactics.Map;
+//using Zilon.Core.Tactics.Spatial;
 //
 //namespace Zilon.Core.Tests.TestCommon
 //{

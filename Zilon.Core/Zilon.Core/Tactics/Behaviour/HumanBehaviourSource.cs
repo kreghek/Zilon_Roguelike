@@ -1,5 +1,5 @@
 ﻿using System;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IActor _currentActor;
         private ICommand _currentCommand;
 
-        private MapNode _targetNode;
+        private HexNode _targetNode;
         private bool _moveCommandActual = false;
 
         public HumanBehaviourSource(IActor startActor)
@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentActor = startActor;
         }
 
-        public ICommand[] GetCommands(CombatMap map, IActor[] actors)
+        public ICommand[] GetCommands(IMap map, IActor[] actors)
         {
             if (_currentCommand != null)
             {
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return null;
         }
 
-        public void AssignMoveToPointCommand(MapNode targetNode)
+        public void AssignMoveToPointCommand(HexNode targetNode)
         {
             if (targetNode == null)
             {

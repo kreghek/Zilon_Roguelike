@@ -1,13 +1,9 @@
 ﻿using NUnit.Framework;
-using Zilon.Core.Tactics.Behaviour;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Persons;
 using FluentAssertions;
+using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
@@ -18,23 +14,22 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void ExecuteTest()
         {
             // ARRANGE
-            var map = new CombatMap();
-            map.Nodes = new List<MapNode>();
+            var map = new TestMap();
 
             for (var i = 0; i < 10; i++)
             {
                 for (var j = 0; j < 10; j++)
                 {
-                    map.Nodes.Add(new MapNode() { Coordinates = new Math.Vector2(i, j) });
+                    map.Nodes.Add(new HexNode(i, j));
                 }
             }
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.Coordinates.X == 3 && n.Coordinates.Y == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.Coordinates.X == 1 && n.Coordinates.Y == 5);
+            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
+            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
 
             var expectedPath = new[] {
-                map.Nodes.SingleOrDefault(n => n.Coordinates.X == 2 && n.Coordinates.Y == 3),
-                map.Nodes.SingleOrDefault(n => n.Coordinates.X == 2 && n.Coordinates.Y == 4),
+                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
+                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 4),
                 finishNode
             };
 

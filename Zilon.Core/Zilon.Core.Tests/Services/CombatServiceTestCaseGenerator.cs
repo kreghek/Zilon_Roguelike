@@ -10,7 +10,7 @@
 //    using Zilon.Core.Players;
 //    using Zilon.Core.Services.CombatMap;
 //    using Zilon.Core.Tactics.Initialization;
-//    using Zilon.Core.Tactics.Map;
+//    using Zilon.Core.Tactics.Spatial;
 //    using Zilon.Core.Tests.TestCommon;
 //
 //    class CombatServiceTestCaseGenerator

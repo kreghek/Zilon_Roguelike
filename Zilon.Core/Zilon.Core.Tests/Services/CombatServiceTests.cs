@@ -13,7 +13,7 @@
 //    using Zilon.Core.Services;
 //    using Zilon.Core.Tactics.Events;
 //    using Zilon.Core.Tactics.Initialization;
-//    using Zilon.Core.Tactics.Map;
+//    using Zilon.Core.Tactics.Spatial;
 //    using Zilon.Core.Tests.TestCommon;
 //
 //    [TestFixture]

@@ -1,16 +1,16 @@
-﻿namespace Zilon.Core.Tactics.Map
+﻿namespace Zilon.Core.Tactics.Spatial
 {
     using System.Collections.Generic;
 
     /// <summary>
     /// Тактическая карта.
     /// </summary>
-    public interface ICombatMap
+    public interface IMap
     {
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        List<MapNode> Nodes { get; set; }
+        List<HexNode> Nodes { get; set; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
@@ -18,7 +18,7 @@
         /// <param name="targetNode"> Целевая ячейка. </param>
         /// <param name="actor"> Проверяемый актёр. </param>
         /// <returns></returns>
-        bool IsPositionAvailableFor(MapNode targetNode, Actor actor);
+        bool IsPositionAvailableFor(HexNode targetNode, Actor actor);
 
         //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="node"></param>
         /// <param name="actor"></param>
-        void ReleaseNode(MapNode node, Actor actor);
+        void ReleaseNode(HexNode node, Actor actor);
 
         //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
@@ -36,6 +36,6 @@
         /// </summary>
         /// <param name="node"></param>
         /// <param name="actor"></param>
-        void HoldNode(MapNode node, Actor actor);
+        void HoldNode(HexNode node, Actor actor);
     }
 }

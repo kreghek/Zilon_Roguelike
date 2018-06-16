@@ -1,9 +1,9 @@
-﻿using Zilon.Core.Tactics.Map;
+﻿using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Services.CombatMap
 {
     public interface IMapGenerator
     {
-        void CreateMap(ICombatMap map);
+        void CreateMap(IMap map);
     }
 }

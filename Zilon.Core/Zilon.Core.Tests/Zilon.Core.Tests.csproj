@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Commands\QuequCommandManagerTestCaseGenerator.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
+    <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CombatEvents\EventManagerTests.cs" />
     <Compile Include="Services\CombatServiceTestCaseGenerator.cs" />
@@ -83,7 +84,9 @@
     <Compile Include="Tactics\Behaviour\MoveToPointCommandTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
     <Compile Include="Tactics\Map\MapNodeTests.cs" />
+    <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
+    <Compile Include="TestCommon\TestMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

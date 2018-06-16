@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.Math;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class MoveToPointCommand: ICommand
     {
-        private MapNode _targetNode;
-        private CombatMap _map;
-        private List<MapNode> _path;
+        private readonly HexNode _targetNode;
+        private readonly IMap _map;
+        private readonly List<HexNode> _path;
         
         public IActor Actor { get; }
         public void Execute()
@@ -33,13 +32,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool IsComplete { get; set; }
 
-        public MoveToPointCommand(IActor actor, MapNode targetNode, CombatMap map)
+        public MoveToPointCommand(IActor actor, HexNode targetNode, IMap map)
         {
             Actor = actor;
             _targetNode = targetNode;
             _map = map;
 
-            _path = new List<MapNode>();
+            _path = new List<HexNode>();
 
             CreatePath();
         }
@@ -52,24 +51,20 @@ namespace Zilon.Core.Tactics.Behaviour
             _path.Clear();
 
             var directions = new[] {
-               new Vector3(+1, -1, 0), new Vector3(+1, 0, -1), new Vector3(0, +1, -1),
-               new Vector3(-1, +1, 0), new Vector3(-1, 0, +1), new Vector3(0, -1, +1)
+               new CubeCoords(+1, -1, 0), new CubeCoords(+1, 0, -1), new CubeCoords(0, +1, -1),
+               new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1)
             };
 
             var counter = 100;
             while (startNode != finishNode && counter > 0)
             {
-                var nearbyNodes = _map.GetNeiberhoods(startNode);
+                var nearbyNodes = HexNodeHelper.GetNeighbors(startNode, _map.Nodes);
 
-                var finishCubeCoords = finishNode.GetCubeCoords();
+                var finishCubeCoords = finishNode.CubeCoords;
                 var nearbyDistances = nearbyNodes.Select(n => {
-                    var cubeCoords = n.GetCubeCoords();
+                    var cubeCoords = n.CubeCoords;
 
-                    var b = cubeCoords;
-                    var a = finishCubeCoords;
-
-                    var distance1 = System.Math.Max(System.Math.Abs(a.X - b.X), System.Math.Abs(a.Y - b.Y));
-                    var distance = System.Math.Max(distance1, System.Math.Abs(a.Z - b.Z));
+                    var distance = cubeCoords.DistanceTo(finishCubeCoords);
 
                     return new {
                         Distance = distance,

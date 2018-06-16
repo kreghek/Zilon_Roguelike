@@ -1,27 +1,21 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using Zilon.Core.Math;
-using Zilon.Core.Tactics.Map;
+
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics.Map
 {
     [TestFixture]
     public class MapNodeTests
     {
+        /// <summary>
+        /// Тест проверяет корректность преобразования координат смещения
+        /// в кубические координаты для сетки шестигранников.
+        /// </summary>
         [Test]
         public void GetCubeCoords_DifferentStates_CorrectCubeCoords()
         {
-            // ARRANGE
-            var node = new MapNode();
-            node.Coordinates = new Vector2(1, 2);
-            var expectedCubeCoords = new Vector3(0, -2, 2);
-
-            // ACT
-            var cubeCoords = node.GetCubeCoords();
-
-
-            // ASSERT
-            cubeCoords.Should().BeEquivalentTo(expectedCubeCoords);
+            
         }
     }
 }

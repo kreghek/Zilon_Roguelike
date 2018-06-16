@@ -49,9 +49,10 @@
     <Compile Include="Commands\ICommandManager.cs" />
     <Compile Include="Commands\QueueCommandManager.cs" />
     <Compile Include="Commands\TacticCommandBase.cs" />
+    <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Math\Vector3.cs" />
+    <Compile Include="CubeCoords.cs" />
     <Compile Include="PathFinding\PathFindingContext.cs" />
     <Compile Include="Persons\IPerson.cs" />
     <Compile Include="Persons\Squad.cs" />
@@ -71,12 +72,15 @@
     <Compile Include="Services\ICombatCommandResolver.cs" />
     <Compile Include="Services\ICombatService.cs" />
     <Compile Include="Tactics\Actor.cs" />
+    <Compile Include="Tactics\Behaviour\AttackIntent.cs" />
     <Compile Include="Tactics\Behaviour\BotBeaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanBehaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\IBehaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\ICommand.cs" />
     <Compile Include="Tactics\Behaviour\MoveToPointCommand.cs" />
     <Compile Include="Tactics\IActor.cs" />
+    <Compile Include="Tactics\IAttackTarget.cs" />
+    <Compile Include="Tactics\Spatial\HexNode.cs" />
     <Compile Include="Tactics\Sector.cs" />
     <Compile Include="Persons\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,7 +93,6 @@
     <Compile Include="Services\ISchemeService.cs" />
     <Compile Include="Services\SchemeService.cs" />
     <Compile Include="Services\SchemeFile.cs" />
-    <Compile Include="Math\Vector2.cs" />
     <Compile Include="Tactics\Events\CommandEventBase.cs" />
     <Compile Include="Tactics\Events\CommandResult.cs" />
     <Compile Include="Tactics\Events\CommandResultType.cs" />
@@ -100,10 +103,10 @@
     <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
-    <Compile Include="Tactics\Map\CombatMap.cs" />
-    <Compile Include="Tactics\Map\ICombatMap.cs" />
-    <Compile Include="Tactics\Map\MapNode.cs" />
-    <Compile Include="Tactics\Map\NodeHelper.cs" />
+    <Compile Include="Tactics\Spatial\Map.cs" />
+    <Compile Include="Tactics\Spatial\IMap.cs" />
+    <Compile Include="Tactics\Spatial\IMapNode.cs" />
+    <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

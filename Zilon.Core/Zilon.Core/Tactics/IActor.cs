@@ -1,6 +1,6 @@
 ﻿using System;
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -14,13 +14,13 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        MapNode Node { get; }
+        HexNode Node { get; }
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"></param>
-        void MoveToNode(MapNode targetNode);
+        void MoveToNode(HexNode targetNode);
 
         /// <summary>
         /// Происходит, когда актёр переместился.

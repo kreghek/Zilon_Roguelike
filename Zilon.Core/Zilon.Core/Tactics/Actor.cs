@@ -1,12 +1,12 @@
 ﻿using System;
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
     public class Actor : IActor
     {
-        public Actor(IPerson person, MapNode node)
+        public Actor(IPerson person, HexNode node)
         {
             Person = person;
             Node = node;
@@ -20,11 +20,11 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        public MapNode Node { get; set; }
+        public HexNode Node { get; set; }
 
         public event EventHandler OnMoved;
 
-        public void MoveToNode(MapNode targetNode)
+        public void MoveToNode(HexNode targetNode)
         {
             Node = targetNode;
             OnMoved?.Invoke(this, new EventArgs());
