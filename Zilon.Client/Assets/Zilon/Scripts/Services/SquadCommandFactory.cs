@@ -1,5 +1,4 @@
 ﻿using System;
-using Assets.Zilon.Scripts.Models.CombatScene;
 using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;

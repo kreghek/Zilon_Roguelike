@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
-using Zilon.Core.Services.CombatEvents;
-using Zilon.Core.Services.CombatMap;
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -21,11 +17,6 @@ class SectorVM : MonoBehaviour
 {
     private MoveCommand _moveCommand;
     private AttackCommand _attackCommand;
-    
-    private float turnCounter;
-
-    public SchemeLocator SchemeLocator;
-    public Text Text;
     
     public MapNodeVM MapNodePrefab;
     public ActorVM ActorPrefab;

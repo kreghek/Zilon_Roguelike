@@ -1,8 +1,8 @@
 ﻿using Zilon.Core.Tactics;
 
-namespace Assets.Zilon.Scripts.Models.CombatScene
+namespace Assets.Zilon.Scripts.Models.SectorScene
 {
-    class CombatManager : ISectorManager
+    class SectorManager : ISectorManager
     {
         public Sector CurrentSector { get; set; }
     }

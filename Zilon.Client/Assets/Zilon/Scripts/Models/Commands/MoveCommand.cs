@@ -1,5 +1,4 @@
-﻿using Assets.Zilon.Scripts.Models.CombatScene;
-using Assets.Zilon.Scripts.Models.SectorScene;
+﻿using Assets.Zilon.Scripts.Models.SectorScene;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
@@ -18,6 +17,13 @@ namespace Assets.Zilon.Scripts.Models.Commands
 
         public override bool CanExecute()
         {
+            //TODO Здесь должна быть проверка
+            // 1. Может ли текущий актёр ходить.
+            // 2. Проходима ли ячейка.
+            // 3. Свободна ли ячейка.
+            // 4. Видит ли актёр указанную ячейку.
+            // 5. Возможно ли выполнение каких-либо команд над актёрами
+            // (Нельзя, если ещё выполняется текущая команда. Например, анимация перемещения.)
             return true;
         }
 

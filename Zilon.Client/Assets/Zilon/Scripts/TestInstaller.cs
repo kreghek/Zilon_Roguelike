@@ -1,4 +1,3 @@
-using Assets.Zilon.Scripts.Models.CombatScene;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Zenject;
 using Zilon.Core.Commands;
@@ -12,7 +11,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
     public override void InstallBindings()
     {
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
-        Container.Bind<ISectorManager>().To<CombatManager>().AsSingle();
+        Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<IEventManager>().To<EventManager>().AsSingle();
         Container.Bind<ICombatCommandResolver>().To<CombatCommandResolver>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
