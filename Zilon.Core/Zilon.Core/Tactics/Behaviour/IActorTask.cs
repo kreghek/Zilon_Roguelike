@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tactics.Behaviour
 {
-    public interface ICommand
+    public interface IActorTask
     {
         IActor Actor { get; }
         void Execute();

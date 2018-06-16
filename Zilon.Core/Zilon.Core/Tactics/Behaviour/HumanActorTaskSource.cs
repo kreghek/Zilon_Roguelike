@@ -3,20 +3,20 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanBehaviourSource : IBehaviourSource
+    public class HumanActorTaskSource : IActorTaskSource
     {
         private readonly IActor _currentActor;
-        private ICommand _currentCommand;
+        private IActorTask _currentCommand;
 
         private HexNode _targetNode;
         private bool _moveCommandActual = false;
 
-        public HumanBehaviourSource(IActor startActor)
+        public HumanActorTaskSource(IActor startActor)
         {
             _currentActor = startActor;
         }
 
-        public ICommand[] GetCommands(IMap map, IActor[] actors)
+        public IActorTask[] GetIntents(IMap map, IActor[] actors)
         {
             if (_currentCommand != null)
             {
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 else
                 {
                     _moveCommandActual = true;
-                    var moveCommand = new MoveToPointCommand(_currentActor, _targetNode, map);
+                    var moveCommand = new MoveTask(_currentActor, _targetNode, map);
                     _currentCommand = moveCommand;
 
                     return new[] { _currentCommand };

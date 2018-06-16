@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tactics.Behaviour
 {
-    public class AttackIntent : ICommand
+    public class AttackTask : IActorTask
     {
         private IAttackTarget _target;
 
@@ -16,7 +16,7 @@
 
         }
 
-        public AttackIntent(IActor actor, IAttackTarget target)
+        public AttackTask(IActor actor, IAttackTarget target)
         {
             _target = target;
             Actor = actor;

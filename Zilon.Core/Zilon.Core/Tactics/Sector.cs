@@ -9,11 +9,11 @@ namespace Zilon.Core.Tactics
 
     public class Sector
     {
-        private List<ICommand> _commands;
+        private List<IActorTask> _commands;
         
         public IMap Map { get; }
 
-        public IBehaviourSource[] BehaviourSources { get; set; }
+        public IActorTaskSource[] BehaviourSources { get; set; }
         
         public List<IActor> Actors { get; }
 
@@ -24,7 +24,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentException("Не передана карта сектора.", nameof(map));
             }
             
-            _commands = new List<ICommand>();
+            _commands = new List<IActorTask>();
 
             Map = map;
             Actors = new List<IActor>();
@@ -43,7 +43,7 @@ namespace Zilon.Core.Tactics
             _commands.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
-                var commands = behaviourSource.GetCommands(Map, Actors.ToArray());
+                var commands = behaviourSource.GetIntents(Map, Actors.ToArray());
                 if (commands != null)
                 {
                     _commands.AddRange(commands);

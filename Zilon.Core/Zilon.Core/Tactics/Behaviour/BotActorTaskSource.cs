@@ -7,9 +7,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class BotBeaviourSource : IBehaviourSource
+    public class BotActorTaskSource : IActorTaskSource
     {
-        public ICommand[] GetCommands(IMap map, IActor[] actors)
+        public IActorTask[] GetIntents(IMap map, IActor[] actors)
         {
             throw new NotImplementedException();
         }

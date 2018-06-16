@@ -4,7 +4,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class MoveToPointCommand: ICommand
+    public class MoveTask: IActorTask
     {
         private readonly HexNode _targetNode;
         private readonly IMap _map;
@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool IsComplete { get; set; }
 
-        public MoveToPointCommand(IActor actor, HexNode targetNode, IMap map)
+        public MoveTask(IActor actor, HexNode targetNode, IMap map)
         {
             Actor = actor;
             _targetNode = targetNode;

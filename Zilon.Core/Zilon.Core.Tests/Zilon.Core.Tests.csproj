@@ -80,11 +80,12 @@
     <Compile Include="Services\CombatServiceTestCaseGenerator.cs" />
     <Compile Include="Services\CombatServiceTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
-    <Compile Include="Tactics\Behaviour\HumanBehaviourSourceTests.cs" />
+    <Compile Include="Tactics\Behaviour\HumanIntentSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveToPointCommandTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
     <Compile Include="Tactics\Map\MapNodeTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
+    <Compile Include="TestCommon\HexNodeTestExtensions.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
     <Compile Include="TestCommon\TestMap.cs" />
   </ItemGroup>

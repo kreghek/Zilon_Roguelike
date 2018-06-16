@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var moveCommand = new MoveToPointCommand(actor, finishNode, map);
+            var moveCommand = new MoveTask(actor, finishNode, map);
 
 
             // ACT

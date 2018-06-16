@@ -1,38 +1,41 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics.Behaviour;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Persons;
+
 using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
+    /// <summary>
+    /// Тест проверяет, что источник намерений генерирует намерения после указания точки перемещение.
+    /// По окончанию задачи на перемещение должен выдавать пустые намерения.
+    /// </summary>
     [TestFixture()]
-    public class HumanBehaviourSourceTests
+    public class HumanIntentSourceTests
     {
         [Test()]
-        public void GetCommandsTest()
+        public void GetIntentsTest()
         {
             // ARRANGE
             var map = CreateTestMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
+            var startNode = map.Nodes.SelectBy(3, 3);
+            var finishNode = map.Nodes.SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 4),
+                map.Nodes.SelectBy(2, 3),
+                map.Nodes.SelectBy(2, 4),
                 finishNode
             };
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanBehaviourSource(actor);
+            var behSource = new HumanActorTaskSource(actor);
             behSource.AssignMoveToPointCommand(finishNode);
 
 
@@ -42,13 +45,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = behSource.GetCommands(map, new[] { actor });
+                var commands = behSource.GetIntents(map, new[] { actor });
 
                 if (step < 4)
                 {
                     commands.Count().Should().Be(1);
 
-                    var factCommand = commands[0] as MoveToPointCommand;
+                    var factCommand = commands[0] as MoveTask;
                     factCommand.Should().NotBeNull();
 
                     factCommand.IsComplete.Should().Be(false);
@@ -95,18 +98,19 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = CreateTestMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
+            var startNode = map.Nodes.SelectBy(3, 3);
+            var finishNode = map.Nodes.SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 4),
+                map.Nodes.SelectBy(2, 3),
+                map.Nodes.SelectBy(2, 4),
                 finishNode
             };
 
+
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanBehaviourSource(actor);
+            var behSource = new HumanActorTaskSource(actor);
 
 
 
@@ -116,9 +120,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ASSERT
-            var commands = behSource.GetCommands(map, new[] { actor });
+            var commands = behSource.GetIntents(map, new[] { actor });
             commands.Should().NotBeNullOrEmpty();
-            commands[0].Should().BeOfType<MoveToPointCommand>();
+            commands[0].Should().BeOfType<MoveTask>();
         }
 
         /// <summary>
@@ -132,18 +136,18 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = CreateTestMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
+            var startNode = map.Nodes.SelectBy(3, 3);
+            var finishNode = map.Nodes.SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 4),
+                map.Nodes.SelectBy(2, 3),
+                map.Nodes.SelectBy(2, 4),
                 finishNode
             };
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanBehaviourSource(actor);
+            var behSource = new HumanActorTaskSource(actor);
 
 
 
@@ -167,13 +171,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = CreateTestMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
-            var finishNode2 = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 2);
+            var startNode = map.Nodes.SelectBy(3, 3);
+            var finishNode = map.Nodes.SelectBy(1, 5);
+            var finishNode2 = map.Nodes.SelectBy(3, 2);
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanBehaviourSource(actor);
+            var behSource = new HumanActorTaskSource(actor);
 
 
             // ACT
@@ -182,7 +186,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behSource.AssignMoveToPointCommand(finishNode);
 
             // 2. Ждём, пока команда не отработает.
-            var commands = behSource.GetCommands(map, new[] { actor });
+            var commands = behSource.GetIntents(map, new[] { actor });
 
             for (var i = 0; i < 3; i++)
             {
@@ -203,7 +207,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetCommands(map, new[] { actor });
+            var factCommands = behSource.GetIntents(map, new[] { actor });
 
 
 
@@ -223,13 +227,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = CreateTestMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
-            var finishNode2 = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 2);
+            var startNode = map.Nodes.SelectBy(3, 3);
+            var finishNode = map.Nodes.SelectBy(1, 5);
+            var finishNode2 = map.Nodes.SelectBy(3, 2);
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanBehaviourSource(actor);
+            var behSource = new HumanActorTaskSource(actor);
 
 
             // ACT
@@ -238,7 +242,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behSource.AssignMoveToPointCommand(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = behSource.GetCommands(map, new[] { actor });
+            var commands = behSource.GetIntents(map, new[] { actor });
 
             for (var i = 0; i < 1; i++)
             {
@@ -259,7 +263,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetCommands(map, new[] { actor });
+            var factCommands = behSource.GetIntents(map, new[] { actor });
 
 
 
