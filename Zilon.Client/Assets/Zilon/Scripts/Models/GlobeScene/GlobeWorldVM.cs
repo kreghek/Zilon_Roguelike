@@ -8,14 +8,12 @@ using Zilon.Core.Services;
 
 public class GlobeWorldVM : MonoBehaviour
 {
-
     public GlobeMapVM Map;
     public SchemeLocator SchemeLocator;
     public Text Text;
 
     public GlobeWorldVM()
     {
-
     }
 
     // Use this for initialization
@@ -82,6 +80,5 @@ public class GlobeWorldVM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 }

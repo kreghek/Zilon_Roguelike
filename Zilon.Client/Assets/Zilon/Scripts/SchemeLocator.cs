@@ -27,6 +27,5 @@ public class SchemeLocator : MonoBehaviour, ISchemeLocator
         }
 
         return result.ToArray();
-
     }
 }

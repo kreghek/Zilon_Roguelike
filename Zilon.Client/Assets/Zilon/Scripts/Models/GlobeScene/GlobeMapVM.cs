@@ -148,7 +148,7 @@ public class GlobeMapVM : MonoBehaviour
         }
 
         var currentPaths = Paths.Where(path => path.Scheme.Sid1 == currentLocation.Sid ||
-                path.Scheme.Sid2 == currentLocation.Sid).ToArray();
+                                               path.Scheme.Sid2 == currentLocation.Sid).ToArray();
 
         foreach (var path in currentPaths)
         {

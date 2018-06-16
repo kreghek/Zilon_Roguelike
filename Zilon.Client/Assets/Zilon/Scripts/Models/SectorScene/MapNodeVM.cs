@@ -2,8 +2,8 @@
 using UnityEngine;
 using Zilon.Core.Tactics.Spatial;
 
-public class MapNodeVM : MonoBehaviour {
-
+public class MapNodeVM : MonoBehaviour
+{
     public HexNode Node { get; set; }
 
     public event EventHandler OnSelect;

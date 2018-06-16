@@ -7,12 +7,10 @@ namespace Assets.Zilon.Scripts.Models.Commands
     /// </summary>
     class MoveCommand : ActorCommandBase
     {
-
         public MoveCommand(ISectorManager sectorManager,
-            IPlayerState playerState) : 
+            IPlayerState playerState) :
             base(sectorManager, playerState)
         {
-            
         }
 
         public override bool CanExecute()
@@ -31,7 +29,7 @@ namespace Assets.Zilon.Scripts.Models.Commands
         {
             var sector = _sectorManager.CurrentSector;
             var selectedNodeVM = _playerState.SelectedNode;
-            
+
             var targetNode = selectedNodeVM.Node;
             _playerState.TaskSource.IntentMove(targetNode);
             sector.Update();

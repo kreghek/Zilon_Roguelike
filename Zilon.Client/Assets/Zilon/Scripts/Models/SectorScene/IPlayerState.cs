@@ -24,7 +24,7 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
         /// Пользовательский источник задач для актёров.
         /// </summary>
         HumanActorTaskSource TaskSource { get; set; }
-        
+
         /// <summary>
         /// Текущий выбранный актёр на экране.
         /// </summary>

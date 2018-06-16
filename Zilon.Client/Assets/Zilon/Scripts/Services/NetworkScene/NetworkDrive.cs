@@ -11,10 +11,10 @@ public class NetworkDrive : NetworkBehaviour
 
     string srvCommand;
     string myCommand;
-    
 
 
-    void Update () {
+    void Update()
+    {
         if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -26,12 +26,12 @@ public class NetworkDrive : NetworkBehaviour
         }
 
         if (isServer)
-        //Код исполняется только у духа
+            //Код исполняется только у духа
         {
             //Обработать мои команды
             //this.transform.Translate(0, 0, veloSvrCurr * Time.deltaTime, Space.Self);
             if (timeSvrRpcLast + periodSvrRpc < Time.time)
-            //Если пора, то выслать координаты всем моим аватарам
+                //Если пора, то выслать координаты всем моим аватарам
             {
                 //RpcUpdateUnitPosition(this.transform.position);
                 //RpcUpdateUnitOrientation(this.transform.rotation);
@@ -40,6 +40,7 @@ public class NetworkDrive : NetworkBehaviour
                     RpcSendCommand(srvCommand + " Через Сеть");
                     srvCommand = null;
                 }
+
                 timeSvrRpcLast = Time.time;
             }
         }
@@ -49,7 +50,7 @@ public class NetworkDrive : NetworkBehaviour
     void CmdDrive(string data)
     {
         if (isServer)
-        //Мой дух принимает и проверяет команду.
+            //Мой дух принимает и проверяет команду.
         {
             srvCommand = data;
             ////Проверяем моё требование на валидность.
@@ -64,7 +65,7 @@ public class NetworkDrive : NetworkBehaviour
     private void RpcSendCommand(string data)
     {
         if (isClient)
-        //Мои аватары копируют состояние моего духа.
+            //Мои аватары копируют состояние моего духа.
         {
             Debug.Log(data);
         }

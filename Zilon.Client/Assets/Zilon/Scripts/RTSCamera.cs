@@ -34,7 +34,7 @@ public class RTSCamera : MonoBehaviour
             _targetPosition -= Vector3.up * cameraSpeed;
         }
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, _targetPosition, Time.deltaTime * 5);
+        Camera.main.transform.position =
+            Vector3.Lerp(Camera.main.transform.position, _targetPosition, Time.deltaTime * 5);
     }
-
 }

@@ -9,12 +9,11 @@ public class GroupVM : MonoBehaviour
     public bool IsMoving { get; set; }
     public MapLocation CurrentLocation { get; set; }
     public event EventHandler OnSelect;
-    
+
 
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -22,7 +21,8 @@ public class GroupVM : MonoBehaviour
     {
         if (CurrentLocation != null && (CurrentLocation.transform.position - transform.position).magnitude >= 0.01f)
         {
-            transform.position = Vector3.Lerp(transform.position, CurrentLocation.transform.position, Time.deltaTime * 3);
+            transform.position =
+                Vector3.Lerp(transform.position, CurrentLocation.transform.position, Time.deltaTime * 3);
         }
     }
 

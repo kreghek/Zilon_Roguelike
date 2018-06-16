@@ -7,12 +7,10 @@ namespace Assets.Zilon.Scripts.Models.Commands
     /// </summary>
     class AttackCommand : ActorCommandBase
     {
-
         public AttackCommand(ISectorManager sectorManager,
-            IPlayerState playerState) : 
+            IPlayerState playerState) :
             base(sectorManager, playerState)
         {
-            
         }
 
         public override bool CanExecute()

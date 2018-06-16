@@ -17,18 +17,15 @@ class SectorVM : MonoBehaviour
 {
     private MoveCommand _moveCommand;
     private AttackCommand _attackCommand;
-    
+
     public MapNodeVM MapNodePrefab;
     public ActorVM ActorPrefab;
 
-    [Inject]
-    private ICommandManager _clientCommandExecutor;
+    [Inject] private ICommandManager _clientCommandExecutor;
 
-    [Inject]
-    private ISectorManager _sectorManager;
-    
-    [Inject]
-    private IPlayerState _playerState;
+    [Inject] private ISectorManager _sectorManager;
+
+    [Inject] private IPlayerState _playerState;
 
     private void FixedUpdate()
     {
@@ -44,7 +41,6 @@ class SectorVM : MonoBehaviour
 
     private void Awake()
     {
-       
         var mapGenerator = new GridMapGenerator();
         var map = new Map();
         mapGenerator.CreateMap(map);
@@ -53,19 +49,17 @@ class SectorVM : MonoBehaviour
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
         {
-            
             var mapNodeVM = Instantiate(MapNodePrefab, transform);
 
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(node.OffsetX, node.OffsetY);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
             mapNodeVM.transform.position = worldPosition;
             mapNodeVM.Node = node;
-            
-            mapNodeVM.OnSelect+= MapNodeVm_OnSelect;
+
+            mapNodeVM.OnSelect += MapNodeVm_OnSelect;
 
             nodeVMs.Add(mapNodeVM);
         }
-
 
 
         var playerActorStartNode = map.Nodes.Single(n => n.OffsetX == 0 && n.OffsetY == 0);
@@ -75,19 +69,19 @@ class SectorVM : MonoBehaviour
         var enemy1ActorVM = CreateActorVm(sector, enemy1StartNode, nodeVMs);
         enemy1ActorVM.IsEnemy = true;
         enemy1ActorVM.OnSelected += EnemyActorVm_OnSelected;
-        
+
         var enemy2StartNode = map.Nodes.Single(n => n.OffsetX == 9 && n.OffsetY == 9);
         var enemy2ActorVM = CreateActorVm(sector, enemy2StartNode, nodeVMs);
         enemy2ActorVM.IsEnemy = true;
         enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
-        sector.BehaviourSources = new IActorTaskSource[] { playerActorTaskSource };
+        sector.BehaviourSources = new IActorTaskSource[] {playerActorTaskSource};
 
         _sectorManager.CurrentSector = sector;
-        
+
         _playerState.TaskSource = playerActorTaskSource;
-        
+
         _moveCommand = new MoveCommand(_sectorManager, _playerState);
         _attackCommand = new AttackCommand(_sectorManager, _playerState);
     }
@@ -97,7 +91,7 @@ class SectorVM : MonoBehaviour
         var actorVm = sender as ActorVM;
 
         _playerState.SelectedActor = actorVm;
-        
+
         if (actorVm != null)
         {
             _clientCommandExecutor.Push(_attackCommand);
@@ -125,9 +119,9 @@ class SectorVM : MonoBehaviour
     private void MapNodeVm_OnSelect(object sender, EventArgs e)
     {
         // указываем намерение двигиться на выбранную точку (узел).
-        
+
         var nodeVM = sender as MapNodeVM;
-        
+
         _playerState.SelectedNode = nodeVM;
 
         if (nodeVM != null)

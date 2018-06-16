@@ -7,9 +7,9 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
         public ActorVM ActiveActor { get; set; }
 
         public MapNodeVM SelectedNode { get; set; }
-        
+
         public HumanActorTaskSource TaskSource { get; set; }
-        
+
         public ActorVM SelectedActor { get; set; }
     }
 }

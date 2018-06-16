@@ -10,16 +10,16 @@ public class ActorVM : MonoBehaviour
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
 
-    
+
     public bool IsEnemy;
-    
+
     private Vector3 _targetPosition;
     private float? _moveCounter;
     private Task _moveTask;
 
     public event EventHandler OnSelected;
     public IActor Actor { get; set; }
-    
+
 
     public void Start()
     {
@@ -34,7 +34,6 @@ public class ActorVM : MonoBehaviour
 
     private void Actor_OnDead(object sender, EventArgs e)
     {
-        Debug.Log("Dead" + this);
         GetComponent<SpriteRenderer>().color = Color.black;
     }
 
