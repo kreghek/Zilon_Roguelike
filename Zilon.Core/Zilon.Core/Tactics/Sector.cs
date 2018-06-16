@@ -13,7 +13,7 @@ namespace Zilon.Core.Tactics
         
         public CombatMap Map { get; }
 
-        public IBehaviourSource[] BehaviourSources { get; }
+        public IBehaviourSource[] BehaviourSources { get; set; }
         
         public List<IActor> Actors { get; }
 
@@ -44,7 +44,10 @@ namespace Zilon.Core.Tactics
             foreach (var behaviourSource in BehaviourSources)
             {
                 var commands = behaviourSource.GetCommands(Map, Actors.ToArray());
-                _commands.AddRange(commands);
+                if (commands != null)
+                {
+                    _commands.AddRange(commands);
+                }
             }
 
             

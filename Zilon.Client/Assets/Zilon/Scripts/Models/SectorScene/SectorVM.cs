@@ -12,12 +12,16 @@ using Zilon.Core.Services.CombatEvents;
 using Zilon.Core.Services.CombatMap;
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Events;
 using Zilon.Core.Tactics.Map;
 
 class SectorVM : MonoBehaviour
 {
 
+    private HumanBehaviourSource _playerBehaviourSource;
+    private Sector _sector;
+    
     private float turnCounter;
 
     public SchemeLocator SchemeLocator;
@@ -95,6 +99,7 @@ class SectorVM : MonoBehaviour
             
             var position = new Vector3(node.Position.X, node.Position.Y);
             mapNodeVM.transform.position = position;
+            mapNodeVM.Node = node;
             
             mapNodeVM.OnSelect+= MapNodeVmOnOnSelect;
         }
@@ -103,16 +108,30 @@ class SectorVM : MonoBehaviour
         
         var playerActor = sector.AddActor(playerPerson, map.Nodes.First());
 
-        var playerActorObj = Instantiate(ActorPrefab, transform);
+        var playerActorVM = Instantiate(ActorPrefab, transform);
         var actorPosition = new Vector3(playerActor.Node.Position.X, playerActor.Node.Position.Y);
-        playerActorObj.transform.position = actorPosition;
+        playerActorVM.transform.position = actorPosition;
+        playerActorVM.Actor = playerActor;
 
+        _playerBehaviourSource = new HumanBehaviourSource(playerActor);
+        sector.BehaviourSources = new IBehaviourSource[] { _playerBehaviourSource };
+
+        _sector = sector;
 
         //Map.InitCombat();
     }
 
     private void MapNodeVmOnOnSelect(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        // указываем намерение двигиться на выбранную точку (узел).
+        
+        var nodeVM = sender as MapNodeVM;
+
+        if (nodeVM != null)
+        {
+            var targetNode = nodeVM.Node;
+            _playerBehaviourSource.AssignMoveToPointCommand(targetNode);
+            _sector.Update();
+        }
     }
 }

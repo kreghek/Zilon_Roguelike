@@ -71,6 +71,7 @@
     <Compile Include="Services\ICombatCommandResolver.cs" />
     <Compile Include="Services\ICombatService.cs" />
     <Compile Include="Tactics\Actor.cs" />
+    <Compile Include="Tactics\Behaviour\BotBeaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanBehaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\IBehaviourSource.cs" />
     <Compile Include="Tactics\Behaviour\ICommand.cs" />

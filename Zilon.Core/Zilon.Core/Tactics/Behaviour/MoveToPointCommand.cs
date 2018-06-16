@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var nextNode = _path[0];
-            Actor.Node = nextNode;
+            Actor.MoveToNode(nextNode);
             _path.RemoveAt(0);
 
             if (!_path.Any())

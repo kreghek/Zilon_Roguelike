@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zilon.Core.Tactics;
 
 public class ActorVM : MonoBehaviour
 {
@@ -13,6 +14,18 @@ public class ActorVM : MonoBehaviour
     private Task _moveTask;
 
     public event EventHandler OnSelected;
+    public IActor Actor { get; set; }
+
+    public void Start()
+    {
+        Actor.OnMoved += ActorOnOnMoved;
+    }
+
+    private void ActorOnOnMoved(object sender, EventArgs e)
+    {
+        _moveCounter = 0;
+        _targetPosition = new Vector3(Actor.Node.Position.X, Actor.Node.Position.Y);
+    }
 
     // Update is called once per frame
     void Update()
@@ -25,7 +38,8 @@ public class ActorVM : MonoBehaviour
             if (_moveCounter >= END_MOVE_COUNTER)
             {
                 _moveCounter = null;
-                _moveTaskSource.TrySetResult(true);
+
+                _moveTaskSource?.TrySetResult(true);
             }
         }
     }

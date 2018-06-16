@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Map;
 
 namespace Zilon.Core.Tactics
@@ -20,5 +21,13 @@ namespace Zilon.Core.Tactics
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
         public MapNode Node { get; set; }
+
+        public event EventHandler OnMoved;
+
+        public void MoveToNode(MapNode targetNode)
+        {
+            Node = targetNode;
+            OnMoved?.Invoke(this, new EventArgs());
+        }
     }
 }

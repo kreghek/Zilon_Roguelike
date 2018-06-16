@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Map;
+﻿using System;
+using Zilon.Core.Tactics.Map;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -19,7 +20,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (_currentCommand != null)
             {
-                if (_currentCommand.IsComplete)
+                if (_moveCommandActual && _currentCommand.IsComplete)
                 {
                     _targetNode = null;
                 }
@@ -46,6 +47,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void AssignMoveToPointCommand(MapNode targetNode)
         {
+            if (targetNode == null)
+            {
+                throw new ArgumentException(nameof(targetNode));
+            }
+
             if (targetNode != _targetNode)
             {
                 _moveCommandActual = false;
