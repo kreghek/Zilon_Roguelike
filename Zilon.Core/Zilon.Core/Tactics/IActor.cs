@@ -26,5 +26,20 @@ namespace Zilon.Core.Tactics
         /// Происходит, когда актёр переместился.
         /// </summary>
         event EventHandler OnMoved;
+
+        /// <summary>
+        /// Текущий урон актёра.
+        /// </summary>
+        float Damage { get; }
+
+        /// <summary>
+        /// Текущий запас хитпоинтов.
+        /// </summary>
+        float Hp { get; }
+
+        /// <summary>
+        /// Состояние актёра.
+        /// </summary>
+        bool IsDead { get; set; }
     }
 }
