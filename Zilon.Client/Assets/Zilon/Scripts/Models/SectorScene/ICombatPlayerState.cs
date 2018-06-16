@@ -13,9 +13,9 @@
         /// </summary>
         CombatSquadVM SelectedSquad { get; set; }
 
-        /// <summary>
-        /// Выбранная локация.
-        /// </summary>
-        CombatLocationVM SelectedNode { get; set; }
+//        /// <summary>
+//        /// Выбранная локация.
+//        /// </summary>
+//        CombatLocationVM SelectedNode { get; set; }
     }
 }

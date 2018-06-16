@@ -8,7 +8,7 @@
     {
         private List<string> errors;
 
-        public Combat Combat { get; set; }
+        public Sector Combat { get; set; }
         public string[] Errors => errors?.ToArray();
 
         public bool IsValid

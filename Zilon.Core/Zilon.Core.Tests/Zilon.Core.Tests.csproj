@@ -20,6 +20,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,7 +79,9 @@
     <Compile Include="Services\CombatServiceTestCaseGenerator.cs" />
     <Compile Include="Services\CombatServiceTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
+    <Compile Include="Tactics\Behaviour\MoveToPointCommandTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
+    <Compile Include="Tactics\Map\MapNodeTests.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
   </ItemGroup>
   <ItemGroup>

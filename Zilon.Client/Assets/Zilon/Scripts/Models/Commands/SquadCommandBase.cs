@@ -12,13 +12,13 @@ namespace Assets.Zilon.Scripts.Models.Commands
     {
         protected readonly ICombatPlayerState _combatPlayerState;
         protected readonly ICombatManager _combatManager;
-        protected readonly ICombatService _combatService;
+        //protected readonly ICombatService _combatService;
 
-        public SquadCommandBase(IEventManager eventManager, ICombatManager combatManager, ICombatPlayerState combatPlayerState, ICombatService combatService): base(eventManager)
+        public SquadCommandBase(IEventManager eventManager, ICombatManager combatManager, ICombatPlayerState combatPlayerState/*, ICombatService combatService*/): base(eventManager)
         {
             _combatPlayerState = combatPlayerState;
             _combatManager = combatManager;
-            _combatService = combatService;
+            //_combatService = combatService;
         }
     }
 }

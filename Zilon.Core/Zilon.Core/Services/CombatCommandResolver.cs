@@ -13,7 +13,7 @@
     {
         public const int MOVE_COST = 1;  //TODO Задавать в схеме персонажа
 
-        public CommandResult MoveSquad(Combat combat, Actor actor, MapNode targetNode)
+        public CommandResult MoveSquad(Sector combat, Actor actor, MapNode targetNode)
         {
             var groupIndex = 0;
 
@@ -36,7 +36,7 @@
             };
         }
 
-        private ITacticEvent[] GetMoveToPointEvents(Combat combat, Actor actorSquad, MapNode targetNode, ref int groupIndex)
+        private ITacticEvent[] GetMoveToPointEvents(Sector combat, Actor actorSquad, MapNode targetNode, ref int groupIndex)
         {
 
             var pathFindingContext = new PathFindingContext();
@@ -90,7 +90,7 @@
             return moveEvents.ToArray();
         }
 
-        private CommandResult MoveOne(Combat combat, Actor actor, MapNode targetNode)
+        private CommandResult MoveOne(Sector combat, Actor actor, MapNode targetNode)
         {
             // Перемещение
 

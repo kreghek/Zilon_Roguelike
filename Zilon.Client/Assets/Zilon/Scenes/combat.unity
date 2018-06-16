@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 8
+  serializedVersion: 9
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -39,6 +39,7 @@ RenderSettings:
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -54,11 +55,10 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_TextureWidth: 1024
-    m_TextureHeight: 1024
+    m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -122,9 +122,8 @@ GameObject:
   m_Component:
   - component: {fileID: 160909241}
   - component: {fileID: 160909242}
-  - component: {fileID: 160909243}
   m_Layer: 0
-  m_Name: World
+  m_Name: Sector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,8 +138,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 435207186}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -152,23 +150,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 160909240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a75f31e0300ef3f419835ba85d9b0ad8, type: 3}
+  m_Script: {fileID: 11500000, guid: bf15af3146e78954c8b4317c9016b85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Map: {fileID: 435207187}
-  SchemeLocator: {fileID: 160909243}
-  Text: {fileID: 838207154}
---- !u!114 &160909243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 160909240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d92b3ec529b121548a5db9c68cabde6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  Map: {fileID: 0}
+  SchemeLocator: {fileID: 0}
+  Text: {fileID: 0}
+  HexPrefab: {fileID: 1820366697290750, guid: 7530a5176654a524c98e481412758610, type: 2}
+  PersonPrefab: {fileID: 1763771338883492, guid: 80a421927c97aa74dafb7098a38e3afc,
+    type: 2}
 --- !u!1 &171240410
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,54 +314,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &435207185
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 435207186}
-  - component: {fileID: 435207187}
-  m_Layer: 0
-  m_Name: Map
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &435207186
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 435207185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 160909241}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &435207187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 435207185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 425c3cd5e07c6134d89d60de6c89eb79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LocationPrefab: {fileID: 114944877699021702, guid: 183121b2968834746a4752b239b5ed13,
-    type: 2}
-  PathPrefab: {fileID: 0}
-  SquadPrefab: {fileID: 114262641652161642, guid: 93787ae385b5c3b4b9b3a2b73f0d01d9,
-    type: 2}
-  ActorPrefab: {fileID: 114287496602291752, guid: cc45db28f0f64b24eb0c59ecbb764a31,
-    type: 2}
-  Canvas: {fileID: 227365884}
 --- !u!1 &838207152
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -171.7, y: 0.000015259}
+  m_AnchoredPosition: {x: -171.7, y: 0.000015258789}
   m_SizeDelta: {x: 343.4, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &838207154
@@ -499,7 +441,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

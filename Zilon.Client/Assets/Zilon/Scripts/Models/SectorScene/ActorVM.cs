@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-//TODO Переименованить в просто Актёр, потому что актёры есть только в бою
-public class CombatActorVM : MonoBehaviour
+public class ActorVM : MonoBehaviour
 {
     private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;

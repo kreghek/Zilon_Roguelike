@@ -4,6 +4,6 @@
     {
         public CombatSquadVM SelectedSquad { get; set; }
 
-        public CombatLocationVM SelectedNode { get; set; }
+//        public CombatLocationVM SelectedNode { get; set; }
     }
 }

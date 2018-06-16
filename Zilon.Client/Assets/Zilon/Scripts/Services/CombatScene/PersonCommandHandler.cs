@@ -13,7 +13,7 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
     {
         private readonly ICommandManager commandManager;
         private readonly ICombatManager combatManager;
-        private readonly ICombatService combatService;
+        //private readonly ICombatService combatService;
         private readonly IEventManager eventManager;
         private readonly ICommandFactory _commandFactory;
         private readonly ICombatPlayerState _combatPlayerState;
@@ -21,13 +21,13 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
         public PersonCommandHandler(IEventManager eventManager,
             ICommandManager commandManager, 
             ICombatManager combatManager,
-            ICombatService combatService,
+            //ICombatService combatService,
             [Inject(Id = "squad-command-factory")] ICommandFactory commandFactory,
             ICombatPlayerState combatPlayerState)
         {
             this.commandManager = commandManager;
             this.combatManager = combatManager;
-            this.combatService = combatService;
+            //this.combatService = combatService;
             this.eventManager = eventManager;
             _commandFactory = commandFactory;
             _combatPlayerState = combatPlayerState;
@@ -35,15 +35,15 @@ namespace Assets.Zilon.Scripts.Services.CombatScene
 
         public void LocationVM_OnSelect(object sender, EventArgs e)
         {
-            if (_combatPlayerState.SelectedSquad != null)
-            {
-                var selectedNode = sender as CombatLocationVM;
-                Debug.Log($"Selected {selectedNode}");
-                _combatPlayerState.SelectedNode = selectedNode;
-
-                var moveCommand = _commandFactory.CreateCommand<MoveCommand>();
-                commandManager.Push(moveCommand);
-            }
+//            if (_combatPlayerState.SelectedSquad != null)
+//            {
+//                var selectedNode = sender as CombatLocationVM;
+//                Debug.Log($"Selected {selectedNode}");
+//                _combatPlayerState.SelectedNode = selectedNode;
+//
+////                var moveCommand = _commandFactory.CreateCommand<MoveCommand>();
+////                commandManager.Push(moveCommand);
+//            }
         }
 
         public void SquadVM_OnSelect(object sender, EventArgs e)
