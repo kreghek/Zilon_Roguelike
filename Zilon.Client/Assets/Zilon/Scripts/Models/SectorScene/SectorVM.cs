@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Zilon.Scripts.Models.CombatScene;
-using Assets.Zilon.Scripts.Models.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
-using Zilon.Core.Services;
 using Zilon.Core.Services.CombatEvents;
 using Zilon.Core.Services.CombatMap;
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Events;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 class SectorVM : MonoBehaviour
 {
 
-    private HumanBehaviourSource _playerBehaviourSource;
+    private HumanActorTaskSource _playerActorTaskSource;
     private Sector _sector;
     
     private float turnCounter;
@@ -88,20 +87,24 @@ class SectorVM : MonoBehaviour
 //        _combatManager.CurrentCombat = combat;
         
         var mapGenerator = new GridMapGenerator();
-        var map = new CombatMap();
+        var map = new Map();
         mapGenerator.CreateMap(map);
         var sector = new Sector(map);
 
+        var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
         {
             
             var mapNodeVM = Instantiate(MapNodePrefab, transform);
-            
-            var position = new Vector3(node.Position.X, node.Position.Y);
-            mapNodeVM.transform.position = position;
+
+            var nodeWorldPositionParts = HexHelper.ConvertToWorld(node.OffsetX, node.OffsetY);
+            var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
+            mapNodeVM.transform.position = worldPosition;
             mapNodeVM.Node = node;
             
             mapNodeVM.OnSelect+= MapNodeVmOnOnSelect;
+
+            nodeVMs.Add(mapNodeVM);
         }
 
         var playerPerson = new Person();
@@ -109,12 +112,14 @@ class SectorVM : MonoBehaviour
         var playerActor = sector.AddActor(playerPerson, map.Nodes.First());
 
         var playerActorVM = Instantiate(ActorPrefab, transform);
-        var actorPosition = new Vector3(playerActor.Node.Position.X, playerActor.Node.Position.Y);
+
+        var actorNodeVm = nodeVMs.Single(x => x.Node == playerActor.Node);
+        var actorPosition = actorNodeVm.transform.position;
         playerActorVM.transform.position = actorPosition;
         playerActorVM.Actor = playerActor;
 
-        _playerBehaviourSource = new HumanBehaviourSource(playerActor);
-        sector.BehaviourSources = new IBehaviourSource[] { _playerBehaviourSource };
+        _playerActorTaskSource = new HumanActorTaskSource(playerActor);
+        sector.BehaviourSources = new IActorTaskSource[] { _playerActorTaskSource };
 
         _sector = sector;
 
@@ -130,7 +135,7 @@ class SectorVM : MonoBehaviour
         if (nodeVM != null)
         {
             var targetNode = nodeVM.Node;
-            _playerBehaviourSource.AssignMoveToPointCommand(targetNode);
+            _playerActorTaskSource.AssignMoveToPointCommand(targetNode);
             _sector.Update();
         }
     }

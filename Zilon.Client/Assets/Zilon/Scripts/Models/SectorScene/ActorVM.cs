@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 
 public class ActorVM : MonoBehaviour
@@ -24,7 +25,8 @@ public class ActorVM : MonoBehaviour
     private void ActorOnOnMoved(object sender, EventArgs e)
     {
         _moveCounter = 0;
-        _targetPosition = new Vector3(Actor.Node.Position.X, Actor.Node.Position.Y);
+        var worldPositionParts = HexHelper.ConvertToWorld(Actor.Node.OffsetX, Actor.Node.OffsetY);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1]);
     }
 
     // Update is called once per frame

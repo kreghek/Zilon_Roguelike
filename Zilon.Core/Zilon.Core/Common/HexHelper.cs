@@ -13,8 +13,11 @@
 
         public static float[] ConvertToWorld(int offsetX, int offsetY)
         {
-            var rowOffset = offsetX % 2 == 0 ? 0 : 0.5f;
-            return new[] { offsetX + rowOffset, offsetY * 3f / 4 };
+            var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
+            return new[] {
+                offsetX + rowOffset,
+                offsetY * 3f / 4
+            };
         }
     }
 }

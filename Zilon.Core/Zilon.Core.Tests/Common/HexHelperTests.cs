@@ -1,17 +1,19 @@
-﻿using FluentAssertions;
+﻿using Zilon.Core.Common;
+using FluentAssertions;
 
 using NUnit.Framework;
+using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Common.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class HexHelperTests
     {
         /// <summary>
         /// Тест проверяет корректность преобразования координат смещения
         /// в кубические координаты для сетки шестигранников.
         /// </summary>
-        [Test()]
+        [Test]
         public void ConvertToCubeTest()
         {
             // ARRANGE
@@ -25,6 +27,20 @@ namespace Zilon.Core.Common.Tests
 
             // ASSERT
             factCubeCoords.Should().BeEquivalentTo(expectedCubeCoords);
+        }
+
+        [Test, TestCaseSource(typeof(HexWorldPositionTestCaseSource), nameof(HexWorldPositionTestCaseSource.TestCases))]
+        public float[] ConvertToWorldTest(int offsetX, int offsetY)
+        {
+            // ARRANGE
+            
+
+            // ACT
+            var factCubeCoords = HexHelper.ConvertToWorld(offsetX, offsetY);
+
+
+            // ASSERT
+            return factCubeCoords;
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using Zilon.Core.Tactics.Map;
+using Zilon.Core.Tactics.Spatial;
 
 public class MapNodeVM : MonoBehaviour {
 
-    public MapNode Node { get; set; }
+    public HexNode Node { get; set; }
 
     public event EventHandler OnSelect;
 
@@ -20,6 +20,6 @@ public class MapNodeVM : MonoBehaviour {
             return string.Empty;
         }
 
-        return $"Id: {Node.Id} Position: {Node.Position}";
+        return $"Id: {Node.Id} Position: ({Node.OffsetX}, {Node.OffsetY})";
     }
 }

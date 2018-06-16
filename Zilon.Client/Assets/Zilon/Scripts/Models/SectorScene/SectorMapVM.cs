@@ -9,7 +9,6 @@ using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Services;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Map;
 
 class SectorMapVM : MonoBehaviour
 {
