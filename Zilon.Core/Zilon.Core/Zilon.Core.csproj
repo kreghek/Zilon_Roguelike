@@ -53,7 +53,10 @@
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
-    <Compile Include="PathFinding\PathFindingContext.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\PathFindingContext.cs" />
     <Compile Include="Persons\IPerson.cs" />
     <Compile Include="Persons\Squad.cs" />
     <Compile Include="Players\CpuPlayer.cs" />
@@ -110,6 +113,8 @@
     <Compile Include="Tactics\Spatial\IMap.cs" />
     <Compile Include="Tactics\Spatial\IMapNode.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\SortedListExtensions.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

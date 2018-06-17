@@ -88,6 +88,8 @@
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
     <Compile Include="Tactics\Map\MapNodeTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\TestCases\TestCaseSource.cs" />
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="TestCommon\HexNodeTestExtensions.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />

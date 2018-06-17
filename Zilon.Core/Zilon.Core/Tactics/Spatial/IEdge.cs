@@ -9,5 +9,10 @@
         /// Соединённые узлы карты.
         /// </summary>
         IMapNode[] Nodes { get; }
+
+        /// <summary>
+        /// Стоимость ребра.
+        /// </summary>
+        int Cost { get; }
     }
 }

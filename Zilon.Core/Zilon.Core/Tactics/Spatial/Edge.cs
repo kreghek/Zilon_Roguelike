@@ -4,6 +4,8 @@
     {
         public IMapNode[] Nodes { get; }
 
+        public int Cost => 1;
+
         public Edge(params IMapNode[] nodes)
         {
             Nodes = nodes;

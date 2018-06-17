@@ -5,7 +5,7 @@
     /// <summary>
     /// Тактическая карта.
     /// </summary>
-    public interface IMap<TNode, TEdge> where TNode:IMapNode where TEdge:IEdge
+    public interface IMap<TNode, TEdge> where TNode : IMapNode where TEdge : IEdge
     {
         /// <summary>
         /// Список узлов карты.
