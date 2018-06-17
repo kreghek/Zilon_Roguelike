@@ -72,8 +72,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Тест проверяет, что задача на перемещение учитывает стены.
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
-        [Test]
-        [TestCaseSource(typeof(WallTestCaseSource), nameof(WallTestCaseSource.TestCases))]
+        [Test, TestCaseSource(typeof(WallTestCaseSource), nameof(WallTestCaseSource.TestCases))]
         public void ExecuteTest_MapWithWalls_ActorAvoidWalls(List<HexNode> nodes, List<Edge> edges, HexNode[] expectedPath)
         {
             // ARRANGE

@@ -17,8 +17,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
         /// <summary>
         /// Тест проверяет корректность алгоритма в сетке шестиугольников.
         /// </summary>
-        [Test]
-        [TestCaseSource(typeof(TestCaseSource), nameof(TestCaseSource.TestCases))]
+        [Test, TestCaseSource(typeof(TestCaseSource), nameof(TestCaseSource.HexTestCases))]
         public void Run_HexGrid_PathFound(List<IMapNode> nodes, List<IEdge> edges, IMapNode[] expectedPath)
         {
             // ARRAGE

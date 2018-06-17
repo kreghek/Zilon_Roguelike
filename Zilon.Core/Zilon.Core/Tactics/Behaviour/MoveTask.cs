@@ -2,6 +2,7 @@
 using System.Linq;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -51,31 +52,15 @@ namespace Zilon.Core.Tactics.Behaviour
             
             _path.Clear();
 
-            var directions = HexHelper.GetOffsetClockwise();
-
-            var counter = 100;
-            while (startNode != finishNode && counter > 0)
+            var astar = new AStar((IMap<IMapNode, IEdge>)_map, startNode, finishNode);
+            var resultState = astar.Run();
+            if (resultState == State.GoalFound)
             {
-                var nearbyNodes = HexNodeHelper.GetNeighbors(startNode, _map.Nodes);
-
-                var finishCubeCoords = finishNode.CubeCoords;
-                var nearbyDistances = nearbyNodes.Select(n => {
-                    var cubeCoords = n.CubeCoords;
-
-                    var distance = cubeCoords.DistanceTo(finishCubeCoords);
-
-                    return new {
-                        Distance = distance,
-                        Node = n
-                    };
-                }).OrderBy(x=>x.Distance);
-
-                var best = nearbyDistances.First().Node;
-
-                _path.Add(best);
-                startNode = best;
-
-                counter--;
+                var foundPath = astar.GetPath();
+                foreach (var pathNode in foundPath)
+                {
+                    _path.Add((HexNode)pathNode);
+                }
             }
         }
     }
