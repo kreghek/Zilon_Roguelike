@@ -64,7 +64,6 @@
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Services\MapGenerators\GridMapGenerator.cs" />
-    <Compile Include="Services\CombatCommandResolver.cs" />
     <Compile Include="Services\CombatEvents\CombatEventArgs.cs" />
     <Compile Include="Services\CombatEvents\IEventManager.cs" />
     <Compile Include="Services\MapGenerators\IMapGenerator.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
     <Compile Include="Tactics\Spatial\IEdge.cs" />
     <Compile Include="Tactics\Spatial\HexMap.cs" />
-    <Compile Include="Tactics\Spatial\IHexMap.cs" />
     <Compile Include="Tactics\Spatial\IMap.cs" />
     <Compile Include="Tactics\Spatial\IMapNode.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />

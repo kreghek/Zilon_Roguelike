@@ -6,7 +6,7 @@ namespace Zilon.Core.Tactics
 {
     public class Actor : IActor
     {
-        public Actor(IPerson person, HexNode node)
+        public Actor(IPerson person, IMapNode node)
         {
             Person = person;
             Node = node;
@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        public HexNode Node { get; set; }
+        public IMapNode Node { get; set; }
 
         public float Damage { get; set; }
 
@@ -36,7 +36,7 @@ namespace Zilon.Core.Tactics
             return !IsDead;
         }
 
-        public void MoveToNode(HexNode targetNode)
+        public void MoveToNode(IMapNode targetNode)
         {
             Node = targetNode;
             OnMoved?.Invoke(this, new EventArgs());

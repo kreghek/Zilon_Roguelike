@@ -4,30 +4,30 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.TestCommon
 {
-    public class TestGridGenMap : IHexMap
+    public class TestGridGenMap : IMap
     {
-        public List<HexNode> Nodes { get; set; }
+        public List<IMapNode> Nodes { get; set; }
 
-        public List<Edge> Edges { get; set; }
+        public List<IEdge> Edges { get; set; }
 
-        public void HoldNode(HexNode node, Actor actor)
+        public void HoldNode(IMapNode node, Actor actor)
         {
 
         }
 
-        public bool IsPositionAvailableFor(HexNode targetNode, Actor actor)
+        public bool IsPositionAvailableFor(IMapNode targetNode, Actor actor)
         {
             return true;
         }
 
-        public void ReleaseNode(HexNode node, Actor actor)
+        public void ReleaseNode(IMapNode node, Actor actor)
         {
 
         }
 
         public TestGridGenMap()
         {
-            Nodes = new List<HexNode>();
+            Nodes = new List<IMapNode>();
 
             for (var i = 0; i < 10; i++)
             {

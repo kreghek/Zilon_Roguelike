@@ -11,13 +11,13 @@ namespace Zilon.Core.Tactics
     {
         private readonly List<IActorTask> _commands;
         
-        public IHexMap Map { get; }
+        public IMap Map { get; }
 
         public IActorTaskSource[] BehaviourSources { get; set; }
         
         public List<IActor> Actors { get; }
 
-        public Sector(IHexMap map)
+        public Sector(IMap map)
         {
             if (map == null)
             {

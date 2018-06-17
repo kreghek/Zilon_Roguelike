@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -22,8 +23,8 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
             }
 
-            var currentCubePos = Actor.Node.CubeCoords;
-            var targetCubePos = _target.Node.CubeCoords;
+            var currentCubePos = ((HexNode)Actor.Node).CubeCoords;
+            var targetCubePos = ((HexNode)_target.Node).CubeCoords;
 
             var distance = currentCubePos.DistanceTo(targetCubePos);
 

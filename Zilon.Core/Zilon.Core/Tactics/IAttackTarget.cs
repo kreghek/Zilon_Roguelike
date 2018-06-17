@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится цель.
         /// </summary>
-        HexNode Node { get; }
+        IMapNode Node { get; }
 
         /// <summary>
         /// Принятие урона.

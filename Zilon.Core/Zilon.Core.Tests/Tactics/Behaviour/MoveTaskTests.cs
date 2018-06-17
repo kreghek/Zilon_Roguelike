@@ -26,12 +26,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // ARRANGE
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
-            var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
-                map.Nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 4),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
                 finishNode
             };
 
@@ -73,11 +73,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
         [Test, TestCaseSource(typeof(WallTestCaseSource), nameof(WallTestCaseSource.TestCases))]
-        public void ExecuteTest_MapWithWalls_ActorAvoidWalls(List<HexNode> nodes, List<Edge> edges, HexNode[] expectedPath)
+        public void ExecuteTest_MapWithWalls_ActorAvoidWalls(List<IMapNode> nodes, List<IEdge> edges, IMapNode[] expectedPath)
         {
             // ARRANGE
 
-            var mapMock = new Mock<IHexMap>();
+            var mapMock = new Mock<IMap>();
 
             mapMock.SetupProperty(x => x.Nodes, nodes);
             mapMock.SetupProperty(x => x.Edges, edges);
@@ -88,7 +88,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = expectedPath.Last();
 
 
-            var actor = new Actor(new Person(), startNode);
+            var actor = new Actor(new Person(), (HexNode)startNode);
 
             var task = new MoveTask(actor, finishNode, map);
 

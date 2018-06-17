@@ -22,13 +22,13 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        HexNode Node { get; }
+        IMapNode Node { get; }
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"></param>
-        void MoveToNode(HexNode targetNode);
+        void MoveToNode(IMapNode targetNode);
 
         /// <summary>
         /// Текущий урон актёра.

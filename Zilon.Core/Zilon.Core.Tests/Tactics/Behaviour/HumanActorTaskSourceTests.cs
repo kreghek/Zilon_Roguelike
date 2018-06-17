@@ -25,12 +25,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // ARRANGE
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SelectBy(3, 3);
-            var finishNode = map.Nodes.SelectBy(1, 5);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SelectBy(2, 3),
-                map.Nodes.SelectBy(2, 4),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
                 finishNode
             };
 
@@ -84,12 +84,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SelectBy(3, 3);
-            var finishNode = map.Nodes.SelectBy(1, 5);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.SelectBy(2, 3),
-                map.Nodes.SelectBy(2, 4),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
+                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
                 finishNode
             };
 
@@ -122,7 +122,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SelectBy(3, 3);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
             var actor = new Actor(new Person(), startNode);
 
@@ -150,9 +150,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SelectBy(3, 3);
-            var finishNode = map.Nodes.SelectBy(1, 5);
-            var finishNode2 = map.Nodes.SelectBy(3, 2);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
+            var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
             var actor = new Actor(new Person(), startNode);
 
@@ -206,9 +206,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = new TestGridGenMap();
 
-            var startNode = map.Nodes.SelectBy(3, 3);
-            var finishNode = map.Nodes.SelectBy(1, 5);
-            var finishNode2 = map.Nodes.SelectBy(3, 2);
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
+            var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
             var actor = new Actor(new Person(), startNode);
 
@@ -262,8 +262,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var map = new TestGridGenMap();
 
-            var attackerStartNode = map.Nodes.SelectBy(3, 3);
-            var targetStartNode = map.Nodes.SelectBy(2, 3);
+            var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
 
             var attackerActor = new Actor(person, attackerStartNode);
             var targetActor = new Actor(person, targetStartNode);

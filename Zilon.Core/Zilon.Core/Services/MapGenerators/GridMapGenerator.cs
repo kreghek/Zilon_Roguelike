@@ -20,28 +20,28 @@ namespace Zilon.Core.Services.MapGenerators
             _mapSize = mapSize;
         }
 
-        public void CreateMap(IHexMap map)
+        public void CreateMap(IMap map)
         {
             CreateNodes(map);
             CreateEdges(map);
         }
 
-        private void CreateEdges(IHexMap map)
+        private void CreateEdges(IMap map)
         {
             foreach (var node in map.Nodes)
             {
-                var neighbors = HexNodeHelper.GetNeighbors(node, map.Nodes);
+                var neighbors = HexNodeHelper.GetNeighbors((HexNode)node, map.Nodes.Cast<HexNode>());
 
                 foreach (var neighbor in neighbors)
                 {
-                    var currentEdge = GetExistsEdge(map, node, neighbor);
+                    var currentEdge = GetExistsEdge(map, (HexNode)node, neighbor);
 
                     if (currentEdge != null)
                     {
                         continue;
                     }
 
-                    AddEdgeToMap(map, node, neighbor);
+                    AddEdgeToMap(map, (HexNode)node, neighbor);
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace Zilon.Core.Services.MapGenerators
         /// <param name="targetMap"> Целевая карта, для которой нужно создать ребро. </param>
         /// <param name="node"> Исходное ребро карты. </param>
         /// <param name="neighbor"> Соседнее ребро карты, с которым будет соединено исходное. </param>
-        private static void AddEdgeToMap(IHexMap targetMap, HexNode node, HexNode neighbor)
+        private static void AddEdgeToMap(IMap targetMap, HexNode node, HexNode neighbor)
         {
             var edge = new Edge(node, neighbor);
             targetMap.Edges.Add(edge);
@@ -65,15 +65,15 @@ namespace Zilon.Core.Services.MapGenerators
         /// <param name="node"> Искомый узел. </param>
         /// <param name="neighbor"> Узел, с которым соединён искомый. </param>
         /// <returns> Ребро или null, если такого ребра нет на карте. </returns>
-        private static Edge GetExistsEdge(IHexMap map, HexNode node, HexNode neighbor)
+        private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
         {
-            return (from edge in map.Edges
+            return (Edge)(from edge in map.Edges
                     where edge.Nodes.Contains(node)
                     where edge.Nodes.Contains(neighbor)
                     select edge).SingleOrDefault();
         }
 
-        private void CreateNodes(IHexMap map)
+        private void CreateNodes(IMap map)
         {
             var nodeIdCounter = 1;
             for (var row = 0; row < _mapSize; row++)

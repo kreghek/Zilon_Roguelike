@@ -4,6 +4,6 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public interface IActorTaskSource
     {
-        IActorTask[] GetActorTasks(IHexMap map, IActor[] actors);
+        IActorTask[] GetActorTasks(IMap map, IActor[] actors);
     }
 }

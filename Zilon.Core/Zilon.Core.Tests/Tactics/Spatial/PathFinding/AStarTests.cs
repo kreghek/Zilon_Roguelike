@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
         public void Run_HexGrid_PathFound(List<IMapNode> nodes, List<IEdge> edges, IMapNode[] expectedPath)
         {
             // ARRAGE
-            var mapMock = new Mock<IMap<IMapNode, IEdge>>();
+            var mapMock = new Mock<IMap>();
 
             mapMock.SetupProperty(x => x.Nodes, nodes);
             mapMock.SetupProperty(x => x.Edges, edges);

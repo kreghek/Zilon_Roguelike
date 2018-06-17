@@ -24,9 +24,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.MoveTaskTestCases
 
         private static TestCaseData T1()
         {
-            var nodes = new List<HexNode>();
-            var edges = new List<Edge>();
-            var path = new List<HexNode>();
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+            var path = new List<IMapNode>();
 
             nodes.Add(new HexNode(0, 0));
             nodes.Add(new HexNode(1, 0));

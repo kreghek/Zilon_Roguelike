@@ -3,28 +3,28 @@
     using System.Collections.Generic;
 
 
-    public class HexMap : IHexMap
+    public class HexMap : IMap
     {
         public HexMap()
         {
-            Nodes = new List<HexNode>();
-            Edges = new List<Edge>();
+            Nodes = new List<IMapNode>();
+            Edges = new List<IEdge>();
         }
 
-        public List<HexNode> Nodes { get; set; }
-        public List<Edge> Edges { get; set; }
+        public List<IMapNode> Nodes { get; set; }
+        public List<IEdge> Edges { get; set; }
 
-        public bool IsPositionAvailableFor(HexNode targetNode, Actor actor)
+        public bool IsPositionAvailableFor(IMapNode targetNode, Actor actor)
         {
             return true;
         }
 
-        public void ReleaseNode(HexNode node, Actor actor)
+        public void ReleaseNode(IMapNode node, Actor actor)
         {
             
         }
 
-        public void HoldNode(HexNode node, Actor actor)
+        public void HoldNode(IMapNode node, Actor actor)
         {
             
         }

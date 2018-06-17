@@ -8,9 +8,9 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class MoveTask: IActorTask
     {
-        private readonly HexNode _targetNode;
-        private readonly IHexMap _map;
-        private readonly List<HexNode> _path;
+        private readonly IMapNode _targetNode;
+        private readonly IMap _map;
+        private readonly List<IMapNode> _path;
         
         public IActor Actor { get; }
         public void Execute()
@@ -34,13 +34,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool IsComplete { get; set; }
 
-        public MoveTask(IActor actor, HexNode targetNode, IHexMap map)
+        public MoveTask(IActor actor, IMapNode targetNode, IMap map)
         {
             Actor = actor;
             _targetNode = targetNode;
             _map = map;
 
-            _path = new List<HexNode>();
+            _path = new List<IMapNode>();
 
             CreatePath();
         }
@@ -52,7 +52,7 @@ namespace Zilon.Core.Tactics.Behaviour
             
             _path.Clear();
 
-            var astar = new AStar((IMap<IMapNode, IEdge>)_map, startNode, finishNode);
+            var astar = new AStar(_map, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {

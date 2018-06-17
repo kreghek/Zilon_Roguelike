@@ -5,7 +5,7 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class BotActorTaskSource : IActorTaskSource
     {
-        public IActorTask[] GetActorTasks(IHexMap map, IActor[] actors)
+        public IActorTask[] GetActorTasks(IMap map, IActor[] actors)
         {
             throw new NotImplementedException();
         }

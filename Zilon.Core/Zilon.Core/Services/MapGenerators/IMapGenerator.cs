@@ -4,6 +4,6 @@ namespace Zilon.Core.Services.CombatMap
 {
     public interface IMapGenerator
     {
-        void CreateMap(IHexMap map);
+        void CreateMap(IMap map);
     }
 }

@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         public IMapNode CurrentNode { get { return current; } }
 
-        private IMap<IMapNode, IEdge> _map;
+        private IMap _map;
 
         private Dictionary<IMapNode, AStarData> _dataDict;
 
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        public AStar(IMap<IMapNode, IEdge> map, IMapNode start, IMapNode goal)
+        public AStar(IMap map, IMapNode start, IMapNode goal)
         {
             var duplicateComparer = new DuplicateComparer();
             openList = new SortedList<int, IMapNode>(duplicateComparer);
@@ -194,7 +194,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             return data;
         }
 
-        private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap<IMapNode, IEdge> map)
+        private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
             var currentEdges = from edge in map.Edges
                                where edge.Nodes.Contains(current)

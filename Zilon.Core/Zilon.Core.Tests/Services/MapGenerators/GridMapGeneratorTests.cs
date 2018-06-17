@@ -16,10 +16,10 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         public void CreateMap_FixedMap_EdgesAreCorrect()
         {
             // ARRANGE
-            var nodes = new List<HexNode>();
-            var edges = new List<Edge>();
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
 
-            var mapMock = new Mock<IHexMap>();
+            var mapMock = new Mock<IMap>();
             mapMock.SetupProperty(x => x.Nodes, nodes);
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
@@ -74,18 +74,18 @@ namespace Zilon.Core.Services.MapGenerators.Tests
             act.Should().NotThrow();
         }
 
-        private static Edge GetExistsEdge(IHexMap map, HexNode node, HexNode neighbor)
+        private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
         {
-            return (from edge in map.Edges
+            return (Edge)(from edge in map.Edges
                     where edge.Nodes.Contains(node)
                     where edge.Nodes.Contains(neighbor)
                     select edge).SingleOrDefault();
         }
 
-        private void AssertEdge(IHexMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        private void AssertEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
-            var node1 = map.Nodes.SelectBy(offsetX1, offsetY1);
-            var node2 = map.Nodes.SelectBy(offsetX2, offsetY2);
+            var node1 = map.Nodes.Cast<HexNode>().SelectBy(offsetX1, offsetY1);
+            var node2 = map.Nodes.Cast<HexNode>().SelectBy(offsetX2, offsetY2);
             var edge = GetExistsEdge(map, node1, node2);
             edge.Should().NotBeNull();
         }
