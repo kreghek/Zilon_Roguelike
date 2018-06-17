@@ -51,10 +51,11 @@ class SectorVM : MonoBehaviour
         {
             var mapNodeVM = Instantiate(MapNodePrefab, transform);
 
-            var nodeWorldPositionParts = HexHelper.ConvertToWorld(node.OffsetX, node.OffsetY);
+            var hexNode = (HexNode) node;
+            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
             mapNodeVM.transform.position = worldPosition;
-            mapNodeVM.Node = node;
+            mapNodeVM.Node = hexNode;
 
             var edges = map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
             var neighbors = (from edge in edges
@@ -71,15 +72,15 @@ class SectorVM : MonoBehaviour
         }
 
 
-        var playerActorStartNode = map.Nodes.Single(n => n.OffsetX == 0 && n.OffsetY == 0);
+        var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
         var playerActorVM = CreateActorVm(sector, playerActorStartNode, nodeVMs);
 
-        var enemy1StartNode = map.Nodes.Single(n => n.OffsetX == 5 && n.OffsetY == 5);
+        var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
         var enemy1ActorVM = CreateActorVm(sector, enemy1StartNode, nodeVMs);
         enemy1ActorVM.IsEnemy = true;
         enemy1ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
-        var enemy2StartNode = map.Nodes.Single(n => n.OffsetX == 9 && n.OffsetY == 9);
+        var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
         var enemy2ActorVM = CreateActorVm(sector, enemy2StartNode, nodeVMs);
         enemy2ActorVM.IsEnemy = true;
         enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 public class ActorVM : MonoBehaviour
 {
@@ -40,7 +41,8 @@ public class ActorVM : MonoBehaviour
     private void Actor_OnMoved(object sender, EventArgs e)
     {
         _moveCounter = 0;
-        var worldPositionParts = HexHelper.ConvertToWorld(Actor.Node.OffsetX, Actor.Node.OffsetY);
+        var actorNode = (HexNode) Actor.Node;
+        var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1], -1);
     }
 
