@@ -1,7 +1,7 @@
-﻿using Zilon.Core.Common;
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using NUnit.Framework;
+
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Common.Tests
@@ -29,7 +29,9 @@ namespace Zilon.Core.Common.Tests
             factCubeCoords.Should().BeEquivalentTo(expectedCubeCoords);
         }
 
-        [Test, TestCaseSource(typeof(HexWorldPositionTestCaseSource), nameof(HexWorldPositionTestCaseSource.TestCases))]
+        [Test]
+        [TestCaseSource(typeof(HexWorldPositionTestCaseSource),
+            nameof(HexWorldPositionTestCaseSource.TestCases))]
         public float[] ConvertToWorldTest(int offsetX, int offsetY)
         {
             // ARRANGE

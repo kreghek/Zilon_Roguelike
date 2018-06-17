@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
@@ -16,7 +19,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding.TestCases
             get
             {
                 yield return SingleWall();
-                yield return EmptyGrid();
+                yield return EmptyGrid_LinePath();
             }
         }
 
@@ -40,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding.TestCases
             return new TestCaseData(nodes, edges, path.ToArray());
         }
 
-        private static TestCaseData EmptyGrid() {
+        private static TestCaseData EmptyGrid_LinePath() {
 
             var mapMock = new Mock<IMap>();
 
