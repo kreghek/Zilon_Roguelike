@@ -71,14 +71,19 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Тест проверяет, что задача на перемещение учитывает стены.
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
-        
+        [Test]
         public void ExecuteTest_MapWithWalls_ActorAvoidWalls()
         {
             // ARRANGE
 
-            var map = new TestGridGenMap();
+            var map = new TestGridGenWallMap();
 
-            var expectedPath = 
+            var expectedPath = new IMapNode[] {
+                map.Nodes.Cast<HexNode>().SelectBy(4,4),
+                map.Nodes.Cast<HexNode>().SelectBy(3,4),
+                map.Nodes.Cast<HexNode>().SelectBy(2,4),
+                map.Nodes.Cast<HexNode>().SelectBy(1,5),
+            };
 
             var startNode = expectedPath.First();
             var finishNode = expectedPath.Last();
