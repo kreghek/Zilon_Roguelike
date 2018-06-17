@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Players;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Интерфейс персонажа.
@@ -19,5 +21,14 @@
         /// Хитпоинты персонажа.
         /// </summary>
         float Hp { get; }
+
+        /// <summary>
+        /// Игрок персонажа.
+        /// </summary>
+        /// <remarks>
+        /// Может быть человек или бот.
+        /// Персонажи игрока могут быть под прямым и не прямым управлением.
+        /// </remarks>
+        IPlayer Player { get; }
     }
 }

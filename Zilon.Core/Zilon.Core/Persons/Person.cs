@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Players;
+
+namespace Zilon.Core.Persons
 {
     public class Person : IPerson
     {
@@ -7,5 +9,7 @@
         public float Damage { get; set; }
 
         public float Hp { get; set; }
+
+        public IPlayer Player { get; set; }
     }
 }

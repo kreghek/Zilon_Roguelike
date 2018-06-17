@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Models.SectorScene;
+using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -75,22 +77,31 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVM);
         }
 
+        var humanPlayer = new HumanPlayer();
+        var botPlayer = new BotPlayer();
 
         var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
-        var playerActorVM = CreateActorVm(sector, playerActorStartNode, nodeVMs);
+        var playerActorVM = CreateActorVm(humanPlayer, sector, playerActorStartNode, nodeVMs);
 
         var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
-        var enemy1ActorVM = CreateActorVm(sector, enemy1StartNode, nodeVMs);
+        var enemy1ActorVM = CreateActorVm(botPlayer, sector, enemy1StartNode, nodeVMs);
         enemy1ActorVM.IsEnemy = true;
         enemy1ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
         var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
-        var enemy2ActorVM = CreateActorVm(sector, enemy2StartNode, nodeVMs);
+        var enemy2ActorVM = CreateActorVm(botPlayer, sector, enemy2StartNode, nodeVMs);
         enemy2ActorVM.IsEnemy = true;
         enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
-        sector.BehaviourSources = new IActorTaskSource[] {playerActorTaskSource};
+        
+        var botActorTaskSource = new BotActorTaskSource(botPlayer);
+        
+        sector.BehaviourSources = new IActorTaskSource[]
+        {
+            playerActorTaskSource,
+            botActorTaskSource
+        };
 
         _sectorManager.CurrentSector = sector;
 
@@ -112,12 +123,15 @@ class SectorVM : MonoBehaviour
         }
     }
 
-    private ActorVM CreateActorVm(Sector sector, HexNode playerActorStartNode, List<MapNodeVM> nodeVMs)
+    private ActorVM CreateActorVm(IPlayer player, [NotNull] Sector sector,
+        [NotNull] HexNode playerActorStartNode,
+        [NotNull] List<MapNodeVM> nodeVMs)
     {
         var person = new Person
         {
             Hp = 1,
-            Damage = 1
+            Damage = 1,
+            Player = player
         };
         var actor = sector.AddActor(person, playerActorStartNode);
 

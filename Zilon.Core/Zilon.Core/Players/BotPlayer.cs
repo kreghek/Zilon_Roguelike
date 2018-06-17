@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Players
 {
-    public class CpuPlayer: PlayerBase
+    public class BotPlayer: PlayerBase
     {
     }
 }
