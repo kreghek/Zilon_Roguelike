@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveTask: IActorTask
     {
         private readonly HexNode _targetNode;
-        private readonly IMap _map;
+        private readonly IHexMap _map;
         private readonly List<HexNode> _path;
         
         public IActor Actor { get; }
@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool IsComplete { get; set; }
 
-        public MoveTask(IActor actor, HexNode targetNode, IMap map)
+        public MoveTask(IActor actor, HexNode targetNode, IHexMap map)
         {
             Actor = actor;
             _targetNode = targetNode;

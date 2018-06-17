@@ -80,6 +80,7 @@
     <Compile Include="Tactics\Behaviour\MoveTask.cs" />
     <Compile Include="Tactics\IActor.cs" />
     <Compile Include="Tactics\IAttackTarget.cs" />
+    <Compile Include="Tactics\Spatial\Edge.cs" />
     <Compile Include="Tactics\Spatial\HexNode.cs" />
     <Compile Include="Tactics\Sector.cs" />
     <Compile Include="Persons\Person.cs" />
@@ -103,7 +104,9 @@
     <Compile Include="Tactics\Events\TargetTriggerGroup.cs" />
     <Compile Include="Tactics\Initialization\PlayerCombatInitData.cs" />
     <Compile Include="Tactics\Initialization\CombatInitData.cs" />
-    <Compile Include="Tactics\Spatial\Map.cs" />
+    <Compile Include="Tactics\Spatial\IEdge.cs" />
+    <Compile Include="Tactics\Spatial\HexMap.cs" />
+    <Compile Include="Tactics\Spatial\IHexMap.cs" />
     <Compile Include="Tactics\Spatial\IMap.cs" />
     <Compile Include="Tactics\Spatial\IMapNode.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />

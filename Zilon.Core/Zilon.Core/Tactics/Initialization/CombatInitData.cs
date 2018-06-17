@@ -5,6 +5,6 @@
     public class CombatInitData
     {
         public PlayerCombatInitData[] Players { get; set; }
-        public Map Map { get; set; }
+        public HexMap Map { get; set; }
     }
 }

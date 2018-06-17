@@ -1,12 +1,12 @@
 ﻿namespace Zilon.Core.Tactics.Spatial
 {
     using System.Collections.Generic;
-    using System.Linq;
 
 
-    public class Map : IMap
+    public class HexMap : IMap<HexNode, Edge>
     {
         public List<HexNode> Nodes { get; set; }
+        public List<Edge> Edges { get; set; }
 
         public bool IsPositionAvailableFor(HexNode targetNode, Actor actor)
         {

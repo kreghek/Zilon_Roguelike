@@ -5,12 +5,17 @@
     /// <summary>
     /// Тактическая карта.
     /// </summary>
-    public interface IMap
+    public interface IMap<TNode, TEdge> where TNode:IMapNode where TEdge:IEdge
     {
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        List<HexNode> Nodes { get; set; }
+        List<TNode> Nodes { get; set; }
+
+        /// <summary>
+        /// Ребра карты.
+        /// </summary>
+        List<TEdge> Edges { get; set; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
@@ -18,7 +23,7 @@
         /// <param name="targetNode"> Целевая ячейка. </param>
         /// <param name="actor"> Проверяемый актёр. </param>
         /// <returns></returns>
-        bool IsPositionAvailableFor(HexNode targetNode, Actor actor);
+        bool IsPositionAvailableFor(TNode targetNode, Actor actor);
 
         //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
@@ -27,7 +32,7 @@
         /// </summary>
         /// <param name="node"></param>
         /// <param name="actor"></param>
-        void ReleaseNode(HexNode node, Actor actor);
+        void ReleaseNode(TNode node, Actor actor);
 
         //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
@@ -36,6 +41,6 @@
         /// </summary>
         /// <param name="node"></param>
         /// <param name="actor"></param>
-        void HoldNode(HexNode node, Actor actor);
+        void HoldNode(TNode node, Actor actor);
     }
 }

@@ -7,7 +7,7 @@ namespace Zilon.Core.Services.MapGenerators
 {
     public class GridMapGenerator : IMapGenerator
     {
-        public void CreateMap(IMap map)
+        public void CreateMap(IHexMap map)
         {
             var nodes = new List<HexNode>();
 
