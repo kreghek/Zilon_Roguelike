@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -28,14 +29,10 @@ namespace Zilon.Core.Tests.TestCommon
         public TestGridGenMap()
         {
             Nodes = new List<IMapNode>();
+            Edges = new List<IEdge>();
 
-            for (var i = 0; i < 10; i++)
-            {
-                for (var j = 0; j < 10; j++)
-                {
-                    Nodes.Add(new HexNode(i, j));
-                }
-            }
+            var gridGenerator = new GridMapGenerator(10);
+            gridGenerator.CreateMap(this);
         }
     }
 }

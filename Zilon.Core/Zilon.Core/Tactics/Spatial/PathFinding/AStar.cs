@@ -113,7 +113,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             while (true)
             {
                 // There are no more nodes to search, return failure.
-                if (!openList.Any())
+                if (openList.IsEmpty())
                 {
                     return State.Failed;
                 }

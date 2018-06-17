@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Tactics.Behaviour.MoveTaskTestCases;
+using Zilon.Core.Tests.Tactics.Spatial.PathFinding.TestCases;
 using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
@@ -72,7 +72,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Тест проверяет, что задача на перемещение учитывает стены.
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
-        [Test, TestCaseSource(typeof(WallTestCaseSource), nameof(WallTestCaseSource.TestCases))]
+        [Test, TestCaseSource(typeof(HexPathTestCaseSource), nameof(HexPathTestCaseSource.HexTestCases))]
         public void ExecuteTest_MapWithWalls_ActorAvoidWalls(List<IMapNode> nodes, List<IEdge> edges, IMapNode[] expectedPath)
         {
             // ARRANGE
