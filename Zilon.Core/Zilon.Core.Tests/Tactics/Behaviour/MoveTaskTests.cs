@@ -22,7 +22,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void ExecuteTest()
         {
             // ARRANGE
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
             var finishNode = map.Nodes.SingleOrDefault(n => n.OffsetX == 1 && n.OffsetY == 5);

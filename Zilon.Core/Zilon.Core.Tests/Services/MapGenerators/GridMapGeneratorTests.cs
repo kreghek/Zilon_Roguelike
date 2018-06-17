@@ -3,6 +3,8 @@ using System.Linq;
 using Zilon.Core.Tests.TestCommon;
 using Zilon.Core.Tactics.Spatial;
 using FluentAssertions;
+using System.Collections.Generic;
+using Moq;
 
 namespace Zilon.Core.Services.MapGenerators.Tests
 {
@@ -13,7 +15,14 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         public void CreateMap_FixedMap_EdgesAreCorrect()
         {
             // ARRANGE
-            var map = new TestEmptyMap();
+            var nodes = new List<HexNode>();
+            var edges = new List<Edge>();
+
+            var mapMock = new Mock<IHexMap>();
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+            var map = mapMock.Object;
+
             var mapGenerator = new GridMapGenerator(7);
 
 

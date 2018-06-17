@@ -90,8 +90,7 @@
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="TestCommon\HexNodeTestExtensions.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
-    <Compile Include="TestCommon\TestEmptyMap.cs" />
-    <Compile Include="TestCommon\TestMap.cs" />
+    <Compile Include="TestCommon\TestGridGenMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void GetActorTasksTest()
         {
             // ARRANGE
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -82,7 +82,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
 
@@ -148,7 +148,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -204,7 +204,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var startNode = map.Nodes.SelectBy(3, 3);
             var finishNode = map.Nodes.SelectBy(1, 5);
@@ -260,7 +260,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             //ARRANGE
             var person = new Person { Hp = 1, Damage = 1 };
 
-            var map = new TestMap();
+            var map = new TestGridGenMap();
 
             var attackerStartNode = map.Nodes.SelectBy(3, 3);
             var targetStartNode = map.Nodes.SelectBy(2, 3);
