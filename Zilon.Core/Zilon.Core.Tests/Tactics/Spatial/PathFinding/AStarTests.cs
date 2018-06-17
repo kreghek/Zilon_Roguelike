@@ -6,8 +6,8 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
-using Zilon.Core.Tests.Tactics.Spatial.PathFinding.TestCases;
+using Zilon.Core.Services.MapGenerators;
+using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
 {
@@ -18,17 +18,85 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
         /// Тест проверяет корректность алгоритма в сетке шестиугольников.
         /// </summary>
         [Test]
-        [TestCaseSource(typeof(HexPathTestCaseSource),
-            nameof(HexPathTestCaseSource.HexTestCases))]
-        public void Run_HexGrid_PathFound(List<IMapNode> nodes, List<IEdge> edges, IMapNode[] expectedPath)
+        public void Run_ShortGraph_PathFound()
         {
             // ARRAGE
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+            var expectedPath = new List<IMapNode>();
+
+            nodes.Add(new HexNode(0, 0));
+            nodes.Add(new HexNode(1, 0));
+            nodes.Add(new HexNode(0, 1));
+
+            edges.Add(new Edge(nodes[0], nodes[2]));
+            edges.Add(new Edge(nodes[2], nodes[1]));
+
+            expectedPath.Add(nodes[0]);
+            expectedPath.Add(nodes[2]);
+            expectedPath.Add(nodes[1]);
+
+
             var mapMock = new Mock<IMap>();
 
             mapMock.SetupProperty(x => x.Nodes, nodes);
             mapMock.SetupProperty(x => x.Edges, edges);
 
             var map = mapMock.Object;
+
+            var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
+
+
+
+            // ACT
+            var factState = astar.Run();
+
+
+
+
+            // ASSERT
+
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+
+            for (var i = 0; i < expectedPath.Count(); i++)
+            {
+                factPath[i].Should().Be(expectedPath[i]);
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность алгоритма в сетке шестиугольников.
+        /// </summary>
+        [Test]
+        public void Run_GridGraphAndLinePath_PathFound()
+        {
+            // ARRAGE
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+
+            var mapMock = new Mock<IMap>();
+
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+
+            var map = mapMock.Object;
+
+            var genertor = new GridMapGenerator();
+            genertor.CreateMap(map);
+
+            var expectedPath = new IMapNode[] {
+                nodes.Cast<HexNode>().SelectBy(1,1),
+                nodes.Cast<HexNode>().SelectBy(2,2),
+                nodes.Cast<HexNode>().SelectBy(2,3),
+                nodes.Cast<HexNode>().SelectBy(3,4),
+                nodes.Cast<HexNode>().SelectBy(3,5),
+                nodes.Cast<HexNode>().SelectBy(4,6)
+            };
+
+
+            
 
             var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
 

@@ -88,10 +88,10 @@
     <Compile Include="Tactics\Map\MapNodeTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\TestCases\HexPathTestCaseSource.cs" />
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="TestCommon\HexNodeTestExtensions.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
+    <Compile Include="TestCommon\TestGridGenWallMap.cs" />
     <Compile Include="TestCommon\TestGridGenMap.cs" />
   </ItemGroup>
   <ItemGroup>

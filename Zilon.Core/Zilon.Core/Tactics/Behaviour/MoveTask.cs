@@ -56,7 +56,7 @@ namespace Zilon.Core.Tactics.Behaviour
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {
-                var foundPath = astar.GetPath();
+                var foundPath = astar.GetPath().Skip(1).ToArray();
                 foreach (var pathNode in foundPath)
                 {
                     _path.Add((HexNode)pathNode);
