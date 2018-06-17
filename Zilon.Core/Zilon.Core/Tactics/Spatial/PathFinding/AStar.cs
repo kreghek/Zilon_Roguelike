@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         public IMapNode CurrentNode { get { return current; } }
 
-        private IMap _map;
+        private readonly IMap _map;
 
         private Dictionary<IMapNode, AStarData> _dataDict;
 

@@ -72,10 +72,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void IntentAttack(IAttackTarget target)
         {
+            //Отключаю это предупреждение, иначе получается кривой код.
+#pragma warning disable IDE0016 // Use 'throw' expression
             if (target == null)
             {
                 throw new ArgumentException(nameof(target));
             }
+#pragma warning restore IDE0016 // Use 'throw' expression
 
             _taskIsActual = false;
             _targetNode = null;

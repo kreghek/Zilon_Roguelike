@@ -20,11 +20,6 @@ namespace Zilon.Core.Tactics
         IPerson Person { get; }
 
         /// <summary>
-        /// Текущий узел карты, в котором находится актёр.
-        /// </summary>
-        IMapNode Node { get; }
-
-        /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"></param>
