@@ -79,6 +79,7 @@
     <Compile Include="Services\CombatEvents\EventManagerTests.cs" />
     <Compile Include="Services\CombatServiceTestCaseGenerator.cs" />
     <Compile Include="Services\CombatServiceTests.cs" />
+    <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="TestCommon\HexNodeTestExtensions.cs" />
     <Compile Include="TestCommon\MapGeneratorMocks.cs" />
+    <Compile Include="TestCommon\TestEmptyMap.cs" />
     <Compile Include="TestCommon\TestMap.cs" />
   </ItemGroup>
   <ItemGroup>
