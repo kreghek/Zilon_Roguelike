@@ -153,8 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf15af3146e78954c8b4317c9016b85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SchemeLocator: {fileID: 0}
-  Text: {fileID: 0}
   MapNodePrefab: {fileID: 114589536202888380, guid: 7530a5176654a524c98e481412758610,
     type: 2}
   ActorPrefab: {fileID: 114531107507698972, guid: 80a421927c97aa74dafb7098a38e3afc,

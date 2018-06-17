@@ -3,8 +3,14 @@
     using System.Collections.Generic;
 
 
-    public class HexMap : IMap<HexNode, Edge>
+    public class HexMap : IHexMap
     {
+        public HexMap()
+        {
+            Nodes = new List<HexNode>();
+            Edges = new List<Edge>();
+        }
+
         public List<HexNode> Nodes { get; set; }
         public List<Edge> Edges { get; set; }
 

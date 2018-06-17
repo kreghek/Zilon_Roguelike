@@ -52,6 +52,21 @@ namespace Zilon.Core
             return !(v == v2);
         }
 
+        public static CubeCoords operator +(CubeCoords v, CubeCoords v2)
+        {
+            return new CubeCoords(v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z);
+        }
+
+        public static CubeCoords operator *(CubeCoords v, int q)
+        {
+            return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
+        }
+
+        public static CubeCoords operator *(int q, CubeCoords v)
+        {
+            return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
+        }
+
         public int DistanceTo(CubeCoords cubeCoords)
         {
             var a = this;

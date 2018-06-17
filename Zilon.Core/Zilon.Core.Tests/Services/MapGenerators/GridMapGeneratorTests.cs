@@ -5,6 +5,7 @@ using Zilon.Core.Tactics.Spatial;
 using FluentAssertions;
 using System.Collections.Generic;
 using Moq;
+using System;
 
 namespace Zilon.Core.Services.MapGenerators.Tests
 {
@@ -48,6 +49,29 @@ namespace Zilon.Core.Services.MapGenerators.Tests
             AssertEdge(map, 6, 6, 5, 5);
             AssertEdge(map, 6, 6, 6, 5);
 
+        }
+
+        /// <summary>
+        /// Тест проверяет, что генератор сеточных карт может работать с <see cref="HexMap"/>.
+        /// <see cref="HexMap"/> используется на клиенте.
+        /// </summary>
+        [Test()]
+        public void CreateMap_HexMapType_NoExceptions()
+        {
+            // ARRANGE
+            
+            var map = new HexMap();
+
+            var mapGenerator = new GridMapGenerator(7);
+
+
+            // ACT
+            Action act = () => { mapGenerator.CreateMap(map); };
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
         }
 
         private static Edge GetExistsEdge(IHexMap map, HexNode node, HexNode neighbor)

@@ -42,7 +42,7 @@ class SectorVM : MonoBehaviour
     private void Awake()
     {
         var mapGenerator = new GridMapGenerator();
-        var map = new Map();
+        var map = new HexMap();
         mapGenerator.CreateMap(map);
         var sector = new Sector(map);
 
@@ -55,6 +55,15 @@ class SectorVM : MonoBehaviour
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
             mapNodeVM.transform.position = worldPosition;
             mapNodeVM.Node = node;
+
+            var edges = map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
+            var neighbors = (from edge in edges
+                from neighbor in edge.Nodes
+                where neighbor != node
+                select neighbor).Cast<HexNode>().ToArray();
+
+            mapNodeVM.Edges = edges;
+            mapNodeVM.Neighbors = neighbors;
 
             mapNodeVM.OnSelect += MapNodeVm_OnSelect;
 
