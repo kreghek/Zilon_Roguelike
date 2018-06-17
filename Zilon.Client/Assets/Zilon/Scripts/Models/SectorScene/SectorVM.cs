@@ -43,7 +43,7 @@ class SectorVM : MonoBehaviour
 
     private void Awake()
     {
-        var mapGenerator = new GridMapGenerator();
+        var mapGenerator = new GridMapGenerator(50);
         var map = new HexMap();
         mapGenerator.CreateMap(map);
         map.Edges.RemoveAt(10);

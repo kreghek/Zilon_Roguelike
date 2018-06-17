@@ -74,6 +74,31 @@ namespace Zilon.Core.Services.MapGenerators.Tests
             act.Should().NotThrow();
         }
 
+        /// <summary>
+        /// Тест проверяет, что генератор сеточных карт сможет сгенерировать квадратную карту 50х50.
+        /// </summary>
+        [Test]
+        [Timeout(10*1000)]
+        [Category("Long")]
+        [Category("Timeout")]
+        public void CreateMap_BigMap_NoExceptions()
+        {
+            // ARRANGE
+
+            var map = new HexMap();
+
+            var mapGenerator = new GridMapGenerator(50);
+
+
+            // ACT
+            Action act = () => { mapGenerator.CreateMap(map); };
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
         private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
         {
             return (Edge)(from edge in map.Edges
