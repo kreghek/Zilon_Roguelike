@@ -19,5 +19,20 @@
                 offsetY * 3f / 4
             };
         }
+
+        /// <summary>
+        /// Возвращает смещения по часовой стрелке.
+        /// </summary>
+        /// <returns> Массив со смещениями. </returns>
+        public static CubeCoords[] GetOffsetClockwise()
+        {
+            var offsets = new[]
+            {
+                new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
+                new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
+            };
+
+            return offsets;
+        }
     }
 }

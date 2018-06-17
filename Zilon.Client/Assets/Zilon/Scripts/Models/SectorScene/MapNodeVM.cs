@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using Zilon.Core;
+using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 public class MapNodeVM : MonoBehaviour
@@ -17,11 +17,7 @@ public class MapNodeVM : MonoBehaviour
 
     public void Start()
     {
-        var neighborCubePositions = new[]
-        {
-            new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
-            new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
-        };
+        var neighborCubePositions = HexHelper.GetOffsetClockwise();
 
         for (var i=0; i < 6; i++)
         {

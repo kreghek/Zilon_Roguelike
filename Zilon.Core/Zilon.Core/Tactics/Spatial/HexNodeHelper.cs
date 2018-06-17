@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Zilon.Core.Common;
 
     public class HexNodeHelper
     {
@@ -30,10 +31,7 @@
         {
             var currentCubeCoords = currentNode.CubeCoords;
 
-            var directions = new[] {
-               new CubeCoords(+1, -1, 0), new CubeCoords(+1, 0, -1), new CubeCoords(0, +1, -1),
-               new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1)
-            };
+            var directions = HexHelper.GetOffsetClockwise();
 
             var neiberhoodPositions = new List<CubeCoords>();
             foreach (var dir in directions)

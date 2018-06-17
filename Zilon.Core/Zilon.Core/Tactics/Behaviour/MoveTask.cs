@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -50,10 +51,7 @@ namespace Zilon.Core.Tactics.Behaviour
             
             _path.Clear();
 
-            var directions = new[] {
-               new CubeCoords(+1, -1, 0), new CubeCoords(+1, 0, -1), new CubeCoords(0, +1, -1),
-               new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1)
-            };
+            var directions = HexHelper.GetOffsetClockwise();
 
             var counter = 100;
             while (startNode != finishNode && counter > 0)
