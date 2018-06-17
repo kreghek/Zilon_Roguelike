@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Tactics.Behaviour.MoveTaskTestCases;
 using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
@@ -19,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// когда актёр достиг цели, должна отмечаться, как заверщённая.
         /// </summary>
         [Test]
-        public void ExecuteTest()
+        public void ExecuteTest_OpenGridMap_ActorReachPointAndTaskComplete()
         {
             // ARRANGE
             var map = new TestGridGenMap();
@@ -35,29 +37,72 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var moveCommand = new MoveTask(actor, finishNode, map);
+            var task = new MoveTask(actor, finishNode, map);
 
 
             // ACT
-            // ARRANGE
             for (var step = 1; step <= 3; step++)
             {
-                moveCommand.Execute();
+                task.Execute();
 
+
+
+                // ASSERT
                 if (step < 3)
                 {
-                    moveCommand.IsComplete.Should().Be(false);
+                    task.IsComplete.Should().Be(false);
                 }
                 else
                 {
-                    moveCommand.IsComplete.Should().Be(true);
+                    task.IsComplete.Should().Be(true);
                 }
 
                 actor.Node.Should().Be(expectedPath[step - 1]);
             }
 
-            moveCommand.IsComplete.Should().Be(true);
+
+
+            // ASSERT
+
+            task.IsComplete.Should().Be(true);
             actor.Node.Should().Be(finishNode);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что задача на перемещение учитывает стены.
+        /// Актёр должен идти по пути, огибажщем стены.
+        /// </summary>
+        [Test]
+        [TestCaseSource(typeof(WallTestCaseSource), nameof(WallTestCaseSource.TestCases))]
+        public void ExecuteTest_MapWithWalls_ActorAvoidWalls(List<HexNode> nodes, List<Edge> edges, HexNode[] expectedPath)
+        {
+            // ARRANGE
+
+            var mapMock = new Mock<IHexMap>();
+
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+
+            var map = mapMock.Object;
+
+            var startNode = expectedPath.First();
+            var finishNode = expectedPath.Last();
+
+
+            var actor = new Actor(new Person(), startNode);
+
+            var task = new MoveTask(actor, finishNode, map);
+
+
+            // ACT
+            for (var step = 1; step < expectedPath.Length; step++)
+            {
+                task.Execute();
+
+
+                // ASSERT
+                actor.Node.Should().Be(expectedPath[step]);
+            }
         }
     }
 }
