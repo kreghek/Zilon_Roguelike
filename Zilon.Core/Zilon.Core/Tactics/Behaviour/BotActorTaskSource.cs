@@ -45,10 +45,17 @@ namespace Zilon.Core.Tactics.Behaviour
             var taskedActors = _taskDict.Keys.ToArray();
             foreach (var taskedActor in taskedActors)
             {
+                if (taskedActor.IsDead)
+                {
+                    _taskDict.Remove(taskedActor);
+                    continue;
+                }
+
                 var task = _taskDict[taskedActor];
                 if (task.IsComplete)
                 {
                     _taskDict.Remove(taskedActor);
+                    continue;
                 }
             }
 
