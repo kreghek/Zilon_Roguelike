@@ -44,6 +44,10 @@ class SectorVM : MonoBehaviour
         var mapGenerator = new GridMapGenerator();
         var map = new HexMap();
         mapGenerator.CreateMap(map);
+        map.Edges.RemoveAt(10);
+        map.Edges.RemoveAt(20);
+        map.Edges.RemoveAt(30);
+        
         var sector = new Sector(map);
 
         var nodeVMs = new List<MapNodeVM>();
