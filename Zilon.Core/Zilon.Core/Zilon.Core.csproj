@@ -60,8 +60,6 @@
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Services\MapGenerators\GridMapGenerator.cs" />
     <Compile Include="Services\MapGenerators\IMapGenerator.cs" />
-    <Compile Include="Services\CombatService.cs" />
-    <Compile Include="Services\CommandContext.cs" />
     <Compile Include="Services\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
