@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Services.Dice;
+using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -18,10 +19,16 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Текущий счётчик простоя.
         /// </summary>
         private int _counter;
+        private IDecisionSource _decisionSource;
 
         public IdleTask(IDice dice)
         {
             _counter = dice.Roll(IDLE_MAX) + IDLE_MIN - 1;
+        }
+
+        public IdleTask(IDecisionSource decisionSource)
+        {
+            _decisionSource = decisionSource;
         }
 
         public IActor Actor { get; }

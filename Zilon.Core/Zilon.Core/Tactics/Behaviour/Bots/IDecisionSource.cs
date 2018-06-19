@@ -1,6 +1,6 @@
 ﻿using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Behaviour
+namespace Zilon.Core.Tactics.Behaviour.Bots
 {
     /// <summary>
     /// Источник решений для AI.
@@ -12,6 +12,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="map"> Карта сектора. </param>
         /// <returns> Возвращает узел указанной карты, который является точкой патрулирования. </returns>
-        IMapNode SelectPatrolPoint(IMap map);
+        IMapNode SelectPatrolPoint(IMap map, IPatrolRoute patrolRoute);
     }
 }
