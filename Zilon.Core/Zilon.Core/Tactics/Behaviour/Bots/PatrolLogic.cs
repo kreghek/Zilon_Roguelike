@@ -15,7 +15,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IActorList _actors;
         private readonly IDecisionSource _decisionSource;
         private MoveTask _moveTask;
-        private AttackTask _attackTask;
         private PatrolMode _mode;
         private IMapNode _targetPatrolPoint;
         private IAttackTarget _targetIntruder;
