@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core", "Zilon.Core\Zi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{F057B496-9EBB-49B9-8B3F-ECBF7B08CA18}"
+	ProjectSection(SolutionItems) = preProject
+		CreateAppSettings.ps1 = CreateAppSettings.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

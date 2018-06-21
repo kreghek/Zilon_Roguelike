@@ -29,6 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public IdleTask(IDecisionSource decisionSource)
         {
             _decisionSource = decisionSource;
+            _counter = _decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
         }
 
         public IActor Actor { get; }

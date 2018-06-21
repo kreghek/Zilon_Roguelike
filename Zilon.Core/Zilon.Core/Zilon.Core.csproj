@@ -49,6 +49,7 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogic.cs" />

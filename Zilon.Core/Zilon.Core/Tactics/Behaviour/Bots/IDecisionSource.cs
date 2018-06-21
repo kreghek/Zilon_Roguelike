@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Tactics.Spatial;
-
-namespace Zilon.Core.Tactics.Behaviour.Bots
+﻿namespace Zilon.Core.Tactics.Behaviour.Bots
 {
     /// <summary>
     /// Источник решений для AI.
@@ -8,10 +6,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public interface IDecisionSource
     {
         /// <summary>
-        /// Выбирает точку маршрута.
+        /// Выбирает длительность ожидания в ходах.
         /// </summary>
-        /// <param name="map"> Карта сектора. </param>
-        /// <returns> Возвращает узел указанной карты, который является точкой патрулирования. </returns>
-        IMapNode SelectPatrolPoint(IMap map, IPatrolRoute patrolRoute);
+        /// <param name="min"> Минимальное количество ходов ожидания. </param>
+        /// <param name="max"> Максимальное количество ходов ожидания. </param>
+        /// <returns> Количество ходов ожидания. </returns>
+        int SelectIdleDuration(int min, int max);
     }
 }

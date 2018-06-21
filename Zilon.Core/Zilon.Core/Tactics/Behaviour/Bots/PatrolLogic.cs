@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IActor _actor;
         private readonly IPatrolRoute _patrolRoute;
         private readonly IMap _map;
-        private readonly IActorList _actors;
+        private readonly IActorList _actorList;
         private readonly IDecisionSource _decisionSource;
         private MoveTask _moveTask;
         private PatrolMode _mode;
@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _actor = actor;
             _patrolRoute = patrolRoute;
             _map = map;
-            _actors = actors;
+            _actorList = actors;
             _decisionSource = decisionSource;
 
             _persuitCounter = PERSIUT_COUNTER;
@@ -146,7 +146,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
-            foreach (var actor in _actors)
+            foreach (var actor in _actorList.Actors)
             {
                 if (actor.Person.Player == _actor.Person.Player)
                 {

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
+  <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -79,6 +79,7 @@
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
