@@ -194,18 +194,34 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             return data;
         }
 
+        /// <summary>
+        /// Возвращает доступные соседние узлы карты с учётом обхода соседей по часовой стрелке.
+        /// </summary>
+        /// <param name="current"> Текущий узел. </param>
+        /// <param name="map"> Карта, на которой проводится проверка. </param>
+        /// <returns> Возвращает список соседних узлов, соединённых ребрами с текущим. </returns>
         private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
+            var hexCurrent = (HexNode)current;
+            var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
+            var neighbors = HexNodeHelper.GetNeighbors(hexCurrent, hexNodes);
+
             var currentEdges = from edge in map.Edges
                                where edge.Nodes.Contains(current)
                                select edge;
 
-            var neighbors = from edge in currentEdges
-                            from edgeNode in edge.Nodes
-                            where edgeNode != current
-                            select edgeNode;
+            var actualNeighbors = new List<HexNode>();
+            for (var i = 0; i < actualNeighbors.Count(); i++)
+            {
+                var testedNeighbor = neighbors[i];
+                var edge = currentEdges.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
+                if (edge == null)
+                {
+                    actualNeighbors.Add(testedNeighbor);
+                }
+            }
 
-            return neighbors.ToArray();
+            return actualNeighbors.ToArray();
         }
 
         /// <summary>

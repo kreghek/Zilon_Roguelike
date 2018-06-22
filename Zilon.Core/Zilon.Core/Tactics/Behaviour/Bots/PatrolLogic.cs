@@ -6,6 +6,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
+    //TODO Учесть, что в один ход другой актёр может занять целевой узел.
+    //TODO Учесть, что при малом расстоянии до цели нужно строить путь каждый ход
+    //Иначе не получится догнать нарушителя.
     public class PatrolLogic : IBotLogic
     {
         private const int PERSIUT_COUNTER = 3;
@@ -16,9 +19,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IDecisionSource _decisionSource;
         private MoveTask _moveTask;
         private PatrolMode _mode;
-        private IMapNode _targetPatrolPoint;
         private IAttackTarget _targetIntruder;
         private int _persuitCounter;
+        private int? _patrolPointIndex;
 
         public PatrolLogic(IActor actor, 
             IPatrolRoute patrolRoute,
@@ -50,6 +53,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 _mode = PatrolMode.Pursuit;
                 _targetIntruder = nearbyIntruder;
                 _idleTask = null;
+                _patrolPointIndex = null;
             }
 
             switch (_mode)
@@ -119,10 +123,34 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             if (_moveTask == null)
             {
-                var nearbyPatrolPoint = CalcNearbyPatrolPoint(_targetPatrolPoint);
-                _targetPatrolPoint = nearbyPatrolPoint;
+                if (_patrolPointIndex == null)
+                {
+                    var currentPatrolPointIndex = CalcCurrentPatrolPointIndex();
 
-                _moveTask = new MoveTask(_actor, nearbyPatrolPoint, _map);
+                    IMapNode nextPatrolPoint = null;
+                    if (currentPatrolPointIndex != null)
+                    {
+                        _patrolPointIndex = currentPatrolPointIndex + 1;
+                        nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
+                    }
+                    else
+                    {
+                        var actualPatrolPoints = CalcActualRoutePoints();
+                        var nearbyPatrolPoint = CalcNearbyPatrolPoint(actualPatrolPoints);
+                        nextPatrolPoint = nearbyPatrolPoint;
+                    }
+
+                    
+
+                    _moveTask = new MoveTask(_actor, nextPatrolPoint, _map);
+                }
+                else
+                {
+                    var targetPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
+
+                    _moveTask = new MoveTask(_actor, targetPatrolPoint, _map);
+                }
+                
                 return _moveTask;
             }
             else
@@ -131,6 +159,14 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 {
                     return _moveTask;
                 }
+                else
+                {
+                    _patrolPointIndex++;
+                    if (_patrolPointIndex >= _patrolRoute.Points.Count())
+                    {
+                        _patrolPointIndex = 0;
+                    }
+                }
 
                 _idleTask = new IdleTask(_decisionSource);
                 _mode = PatrolMode.Idle;
@@ -138,9 +174,46 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             }
         }
 
-        private IMapNode CalcNearbyPatrolPoint(IMapNode targetPatrolPoint)
+        private int? CalcCurrentPatrolPointIndex()
         {
-            throw new NotImplementedException();
+            int? currentIndex = null;
+            for (var i = 0; i < _patrolRoute.Points.Count(); i++)
+            {
+                var routeNode = (HexNode)_patrolRoute.Points[i];
+                var actorNode = (HexNode)_actor.Node;
+                if (HexNodeHelper.EqualCoordinates(routeNode, actorNode))
+                {
+                    currentIndex = i;
+                    break;
+                }
+            }
+
+            return currentIndex;
+        }
+
+        private HexNode[] CalcActualRoutePoints()
+        {
+            var hexNodes = _patrolRoute.Points.Cast<HexNode>();
+            var actorHexNode = (HexNode)_actor.Node;
+            var actualRoutePoints = from node in hexNodes
+                                    where !HexNodeHelper.EqualCoordinates(node, actorHexNode)
+                                    select node;
+
+            return actualRoutePoints.ToArray();
+        }
+
+        private IMapNode CalcNearbyPatrolPoint(IEnumerable<HexNode> routePoints)
+        {
+            var targets = routePoints;
+            var node = (HexNode)_actor.Node;
+            var nearbyNode = HexNodeHelper.GetNearbyCoordinates(node, targets);
+
+            if (nearbyNode == null)
+            {
+                throw new InvalidOperationException("Ближайший узел не найден.");
+            }
+
+            return nearbyNode;
         }
 
         private IActor[] CheckForIntruders()

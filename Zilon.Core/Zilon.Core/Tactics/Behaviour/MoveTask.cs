@@ -63,5 +63,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return $"{Actor} ({_targetNode})";
+        }
     }
 }

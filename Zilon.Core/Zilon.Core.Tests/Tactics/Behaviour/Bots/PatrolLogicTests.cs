@@ -93,6 +93,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
 
                 // ASSERT
+                task.Should().NotBeNull();
                 switch (round)
                 {
                     case 6:
@@ -105,6 +106,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
                         task.Should().BeOfType<MoveTask>();
                         break;
                 }
+
+                task.Execute();
 
                 if (round < expectedActorPositions.Count())
                 {
