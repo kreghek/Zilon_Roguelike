@@ -30,7 +30,9 @@ namespace Zilon.Core.Services.MapGenerators
         {
             foreach (var node in map.Nodes)
             {
-                var neighbors = HexNodeHelper.GetNeighbors((HexNode)node, map.Nodes.Cast<HexNode>());
+                var currentNode = (HexNode)node;
+                var nodes = map.Nodes.Cast<HexNode>().ToArray();
+                var neighbors = HexNodeHelper.GetNeighbors(currentNode, nodes);
 
                 foreach (var neighbor in neighbors)
                 {

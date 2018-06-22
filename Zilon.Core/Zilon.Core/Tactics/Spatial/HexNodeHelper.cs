@@ -9,29 +9,31 @@
     {
         private const float LOCATION_DISTANCE = 20;
 
-        public static HexNode[] GetNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
+        public static HexNode[] GetNeighbors(HexNode currentNode, HexNode[] nodes)
         {
             var currentCubeCoords = currentNode.CubeCoords;
 
             var directions = HexHelper.GetOffsetClockwise();
 
-            var neiberhoodPositions = new List<CubeCoords>();
-            foreach (var dir in directions)
+            var neighborCoords = new List<CubeCoords>();
+
+            for (var i = 0; i < 6; i++)
             {
+                var dir = directions[i];
                 var pos = new CubeCoords(dir.X + currentCubeCoords.X,
                     dir.Y + currentCubeCoords.Y,
                     dir.Z + currentCubeCoords.Z);
 
-                neiberhoodPositions.Add(pos);
+                neighborCoords.Add(pos);
             }
 
             var list = new List<HexNode>();
-            foreach (var node in nodes)
-            {
-                var cubeCoords = node.CubeCoords;
 
-                var isNeib = neiberhoodPositions.Any(x => x == cubeCoords);
-                if (isNeib)
+            for (var i = 0; i < 6; i++)
+            {
+                var neighborCoord = neighborCoords[i];
+                var node = nodes.SingleOrDefault(x => x.CubeCoords == neighborCoord);
+                if (node != null)
                 {
                     list.Add(node);
                 }

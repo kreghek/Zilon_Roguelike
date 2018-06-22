@@ -13,10 +13,10 @@ using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class PatrolLogicTests
     {
-        [Test()]
+        [Test]
         public void GetCurrentTask_Bypassing_ActorWalkThroughRount()
         {
             // ARRANGE

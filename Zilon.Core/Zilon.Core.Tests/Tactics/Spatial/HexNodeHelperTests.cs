@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Zilon.Core.Tactics.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
 
 using NUnit.Framework;
+using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Spatial.Tests
 {
@@ -25,26 +27,33 @@ namespace Zilon.Core.Tactics.Spatial.Tests
                 }
             }
 
-            var testedNode = nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 3);
+            var testedNode = nodes.SelectBy(3, 3);
 
             var expectedNeibours = new[] {
-                nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 2),
-                nodes.SingleOrDefault(n => n.OffsetX == 4 && n.OffsetY == 2),
+                nodes.SelectBy(2, 3),
 
-                nodes.SingleOrDefault(n => n.OffsetX == 2 && n.OffsetY == 3),
-                nodes.SingleOrDefault(n => n.OffsetX == 4 && n.OffsetY == 3),
+                nodes.SelectBy(3, 4),
+                nodes.SelectBy(4, 4),
 
-                nodes.SingleOrDefault(n => n.OffsetX == 3 && n.OffsetY == 4),
-                nodes.SingleOrDefault(n => n.OffsetX == 4 && n.OffsetY == 4)
+                nodes.SelectBy(4, 3),
+
+                nodes.SelectBy(4, 2),
+                nodes.SelectBy(3, 2)
             };
 
 
             // ACT
-            var factNeibours = HexNodeHelper.GetNeighbors(testedNode, nodes);
+            var factNeibours = HexNodeHelper.GetNeighbors(testedNode, nodes.ToArray());
 
 
 
             // ASSERT
+            for (var i = 0; i < 6; i++)
+            {
+                factNeibours[i].OffsetX.Should().Be(expectedNeibours[i].OffsetX);
+                factNeibours[i].OffsetY.Should().Be(expectedNeibours[i].OffsetY);
+            }
+
             factNeibours.Should().BeEquivalentTo(expectedNeibours);
         }
     }

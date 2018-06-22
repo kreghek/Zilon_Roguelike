@@ -68,31 +68,21 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
 
         /// <summary>
         /// Тест проверяет корректность алгоритма в сетке шестиугольников.
+        /// Точки расположены так, что есть прямой путь.
         /// </summary>
         [Test]
         public void Run_GridGraphAndLinePath_PathFound()
         {
             // ARRAGE
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-
-            var mapMock = new Mock<IMap>();
-
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-
-            var map = mapMock.Object;
-
-            var genertor = new GridMapGenerator();
-            genertor.CreateMap(map);
+            var map = CreateGridOpenMap();
 
             var expectedPath = new IMapNode[] {
-                nodes.Cast<HexNode>().SelectBy(1,1),
-                nodes.Cast<HexNode>().SelectBy(2,2),
-                nodes.Cast<HexNode>().SelectBy(2,3),
-                nodes.Cast<HexNode>().SelectBy(3,4),
-                nodes.Cast<HexNode>().SelectBy(3,5),
-                nodes.Cast<HexNode>().SelectBy(4,6)
+                map.Nodes.Cast<HexNode>().SelectBy(1,1),
+                map.Nodes.Cast<HexNode>().SelectBy(2,2),
+                map.Nodes.Cast<HexNode>().SelectBy(2,3),
+                map.Nodes.Cast<HexNode>().SelectBy(3,4),
+                map.Nodes.Cast<HexNode>().SelectBy(3,5),
+                map.Nodes.Cast<HexNode>().SelectBy(4,6)
             };
 
 
@@ -118,6 +108,72 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность обхода соседей при выборе пути.
+        /// Обход соседей должен начинаться с левого и идти по часовой стрелке.
+        /// </summary>
+        [Test]
+        public void Run_CheckNeighborBypass_ExpectedPath()
+        {
+            // ARRAGE
+            var map = CreateGridOpenMap();
+
+            var expectedPath = new IMapNode[] {
+                map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+                map.Nodes.OfType<HexNode>().SelectBy(2, 2),
+                map.Nodes.OfType<HexNode>().SelectBy(2, 3),
+                map.Nodes.OfType<HexNode>().SelectBy(3, 3),
+                map.Nodes.OfType<HexNode>().SelectBy(4, 3),
+                map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+            };
+
+
+
+
+            var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
+
+
+
+            // ACT
+            var factState = astar.Run();
+
+
+
+
+            // ASSERT
+
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+
+            for (var i = 0; i < expectedPath.Count(); i++)
+            {
+                factPath[i].Should().Be(expectedPath[i]);
+            }
+        }
+
+
+        /// <summary>
+        /// Создаёт открытую карту без препятствий.
+        /// </summary>
+        /// <returns></returns>
+        private static IMap CreateGridOpenMap()
+        {
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+
+            var mapMock = new Mock<IMap>();
+
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+
+            var map = mapMock.Object;
+
+            var genertor = new GridMapGenerator();
+            genertor.CreateMap(map);
+            return map;
         }
     }
 }

@@ -28,6 +28,9 @@
         {
             var offsets = new[]
             {
+                //new CubeCoords(-1, +1, 0), new CubeCoords(0, -1, +1), new CubeCoords(0, +1, -1),
+                //new CubeCoords(+1, 0, -1), new CubeCoords(+1, -1, 0), new CubeCoords(-1, 0, +1)
+
                 new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
                 new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
             };
