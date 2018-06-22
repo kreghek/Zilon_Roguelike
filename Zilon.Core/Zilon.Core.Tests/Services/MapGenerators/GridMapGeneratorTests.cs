@@ -81,7 +81,7 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         [Timeout(10*1000)]
         [Category("Long")]
         [Category("Timeout")]
-        public void CreateMap_BigMap_NoExceptions()
+        public void CreateMap_BigMap50_NoExceptions()
         {
             // ARRANGE
 

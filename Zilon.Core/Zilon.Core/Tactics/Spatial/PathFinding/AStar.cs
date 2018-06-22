@@ -211,11 +211,11 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                                select edge;
 
             var actualNeighbors = new List<HexNode>();
-            for (var i = 0; i < actualNeighbors.Count(); i++)
+            for (var i = 0; i < neighbors.Count(); i++)
             {
                 var testedNeighbor = neighbors[i];
                 var edge = currentEdges.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
-                if (edge == null)
+                if (edge != null)
                 {
                     actualNeighbors.Add(testedNeighbor);
                 }
