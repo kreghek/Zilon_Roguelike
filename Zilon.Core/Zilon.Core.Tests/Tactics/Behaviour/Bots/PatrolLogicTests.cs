@@ -96,14 +96,14 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
                 task.Should().NotBeNull();
                 switch (round)
                 {
-                    case 6:
-                    case 10:
-                    case 15:
-                        task.Should().BeOfType<IdleTask>();
+                    case 5:
+                    case 9:
+                    case 14:
+                        task.Should().BeOfType<IdleTask>($"На {round} итерации ожидается задача на простой.");
                         break;
 
                     default:
-                        task.Should().BeOfType<MoveTask>();
+                        task.Should().BeOfType<MoveTask>($"На {round} итерации ожидается задача на перемещение.");
                         break;
                 }
 

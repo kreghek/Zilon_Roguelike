@@ -21,11 +21,6 @@ namespace Zilon.Core.Tactics.Behaviour
         private int _counter;
         private IDecisionSource _decisionSource;
 
-        public IdleTask(IDice dice)
-        {
-            _counter = dice.Roll(IDLE_MAX) + IDLE_MIN - 1;
-        }
-
         public IdleTask(IDecisionSource decisionSource)
         {
             _decisionSource = decisionSource;
@@ -38,11 +33,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Execute()
         {
-            if (_counter > 0)
-            {
-                _counter--;
-            }
-            else
+            _counter--;
+
+            if (_counter <= 0)
             {
                 IsComplete = true;
             }

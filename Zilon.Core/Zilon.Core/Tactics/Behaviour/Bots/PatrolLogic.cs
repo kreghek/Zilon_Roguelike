@@ -55,6 +55,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 _idleTask = null;
                 _patrolPointIndex = null;
             }
+            else if (_idleTask != null && _idleTask.IsComplete)
+            {
+                _mode = PatrolMode.Bypass;
+                _targetIntruder = null;
+                _idleTask = null;
+            }
 
             switch (_mode)
             {
