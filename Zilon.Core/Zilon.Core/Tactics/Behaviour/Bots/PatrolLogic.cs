@@ -174,6 +174,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     }
                 }
 
+                _moveTask = null;
                 _idleTask = new IdleTask(_decisionSource);
                 _mode = PatrolMode.Idle;
                 return _idleTask;

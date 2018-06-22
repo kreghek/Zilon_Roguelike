@@ -31,7 +31,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
             IMapNode factActorNode = map.Nodes.OfType<HexNode>().SelectBy(1, 1);
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(factActorNode);
+            actorMock.SetupGet(x => x.Node).Returns(() => factActorNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>(node => factActorNode = node);
             actorMock.SetupGet(x => x.Person).Returns(person);
@@ -111,11 +111,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
                 if (round < expectedActorPositions.Count())
                 {
-                    factActorNode.Should().Be(expectedActorPositions[round]);
+                    factActorNode.Should().Be(expectedActorPositions[round], 
+                        $"На {round} итерации неожиданные координаты актёра.");
                 }
                 else
                 {
-                    factActorNode.Should().Be(expectedActorPositions[0]);
+                    factActorNode.Should().Be(expectedActorPositions[0],
+                        $"На {round} итерации актёр должен начать маршрут заново.");
                 }
             }
             
