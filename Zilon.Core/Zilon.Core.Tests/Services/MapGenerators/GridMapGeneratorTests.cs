@@ -78,7 +78,7 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         /// Тест проверяет, что генератор сеточных карт сможет сгенерировать квадратную карту 50х50.
         /// </summary>
         [Test]
-        [Timeout(10*1000)]
+        [Timeout(20*1000)] // Время билд-сервера (не точно, нужно проверить)
         [Category("Long")]
         [Category("Timeout")]
         public void CreateMap_BigMap50_NoExceptions()
