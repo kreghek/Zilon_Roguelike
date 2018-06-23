@@ -13,6 +13,8 @@ namespace Zilon.Core.Tactics
 
             Hp = person.Hp;
             Damage = person.Damage;
+
+            WeaponDistance = 1;
         }
 
         /// <summary>
@@ -30,6 +32,8 @@ namespace Zilon.Core.Tactics
         public float Hp { get; set; }
 
         public bool IsDead { get; set; }
+
+        public int WeaponDistance { get; }
 
         public bool CanBeDamaged()
         {

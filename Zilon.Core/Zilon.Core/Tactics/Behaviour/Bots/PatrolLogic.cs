@@ -122,7 +122,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
         {
-            throw new NotImplementedException();
+            var actorNode = (HexNode)_actor.Node;
+            var targetNode = (HexNode)targetIntruder.Node;
+            var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
+
+            var isAvailable = distance <= _actor.WeaponDistance;
+            return isAvailable;
         }
 
         private IActorTask HandleBypassMode()

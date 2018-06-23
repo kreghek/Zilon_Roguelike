@@ -31,6 +31,11 @@ namespace Zilon.Core.Tactics
         float Damage { get; }
 
         /// <summary>
+        /// Текущая дальность атаки.
+        /// </summary>
+        int WeaponDistance { get; }
+
+        /// <summary>
         /// Текущий запас хитпоинтов.
         /// </summary>
         float Hp { get; }
