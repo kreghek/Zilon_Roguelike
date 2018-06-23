@@ -8,11 +8,13 @@ using UnityEngine;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Services.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 class SectorVM : MonoBehaviour
@@ -50,7 +52,9 @@ class SectorVM : MonoBehaviour
         map.Edges.RemoveAt(20);
         map.Edges.RemoveAt(30);
         
-        var sector = new Sector(map);
+        var actorManager = new ActorList();
+        
+        var sector = new Sector(map, actorManager);
 
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
@@ -94,8 +98,29 @@ class SectorVM : MonoBehaviour
         enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
+
+        var patrolRoute1 = new IMapNode[]
+        {
+            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 2),
+            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 10)
+        };
         
-        var botActorTaskSource = new BotActorTaskSource(botPlayer);
+        var patrolRoute2 = new IMapNode[]
+        {
+            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 2),
+            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 10)
+        };
+        
+        
+        var routeDictionary = new Dictionary<IActor, IPatrolRoute>()
+        {
+            {enemy1ActorVM.Actor, patrolRoute1}
+        };
+        var dice = new Dice();
+        var dicisionSource = new DecisionSource(dice);
+        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
+            routeDictionary,
+            dicisionSource);
         
         sector.BehaviourSources = new IActorTaskSource[]
         {
