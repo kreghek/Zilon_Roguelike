@@ -49,6 +49,7 @@
     <Compile Include="Commands\ICommandManager.cs" />
     <Compile Include="Commands\QueueCommandManager.cs" />
     <Compile Include="Commands\TacticCommandBase.cs" />
+    <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />

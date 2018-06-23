@@ -1,6 +1,5 @@
 ﻿using System;
-
-using Zilon.Core.Services.Dice;
+using Zilon.Core.CommonServices.Dice;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots

@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Services.Dice
+﻿namespace Zilon.Core.CommonServices.Dice
 {
     /// <summary>
     /// Интерфейс кости.

@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Services.Dice;
-using Zilon.Core.Tactics.Behaviour.Bots;
+﻿using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
