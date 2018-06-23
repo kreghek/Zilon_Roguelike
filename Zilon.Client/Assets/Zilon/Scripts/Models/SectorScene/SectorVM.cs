@@ -99,23 +99,25 @@ class SectorVM : MonoBehaviour
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
 
-        var patrolRoute1 = new IMapNode[]
+        var patrolRoute1 = new PatrolRoute(new IMapNode[]
         {
             map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 2),
             map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 10)
-        };
+        });
         
-        var patrolRoute2 = new IMapNode[]
+        var patrolRoute2 = new PatrolRoute(new IMapNode[]
         {
             map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 2),
             map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 10)
-        };
+        });
         
         
         var routeDictionary = new Dictionary<IActor, IPatrolRoute>()
         {
-            {enemy1ActorVM.Actor, patrolRoute1}
+            {enemy1ActorVM.Actor, patrolRoute1},
+            {enemy2ActorVM.Actor, patrolRoute2}
         };
+        
         var dice = new Dice();
         var dicisionSource = new DecisionSource(dice);
         var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
