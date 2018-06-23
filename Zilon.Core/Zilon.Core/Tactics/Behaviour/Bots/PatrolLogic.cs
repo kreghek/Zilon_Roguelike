@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IActor _actor;
         private readonly IPatrolRoute _patrolRoute;
         private readonly IMap _map;
-        private readonly IActorList _actorList;
+        private readonly IActorManager _actorList;
         private readonly IDecisionSource _decisionSource;
         private MoveTask _moveTask;
         private PatrolMode _mode;
@@ -26,7 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         public PatrolLogic(IActor actor, 
             IPatrolRoute patrolRoute,
             IMap map, 
-            IActorList actors,
+            IActorManager actors,
             IDecisionSource decisionSource) {
 
             _actor = actor;

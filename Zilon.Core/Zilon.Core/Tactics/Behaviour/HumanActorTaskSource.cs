@@ -17,7 +17,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentActor = startActor;
         }
 
-        public IActorTask[] GetActorTasks(IMap map, IActor[] actors)
+        public IActorTask[] GetActorTasks(IMap map, IActorManager actorList)
         {
             if (_currentTask != null)
             {
@@ -54,6 +54,11 @@ namespace Zilon.Core.Tactics.Behaviour
             return null;
         }
 
+
+        /// <summary>
+        /// Указать намерение двигаться к указанному узлу.
+        /// </summary>
+        /// <param name="targetNode"> Целевой узел карты. </param>
         public void IntentMove(HexNode targetNode)
         {
             if (targetNode == null)

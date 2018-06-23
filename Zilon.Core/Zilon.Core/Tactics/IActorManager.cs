@@ -2,8 +2,10 @@
 
 namespace Zilon.Core.Tactics
 {
-    public interface IActorList
+    public interface IActorManager
     {
         IEnumerable<IActor> Actors { get; }
+
+        void Add(IActor actor);
     }
 }

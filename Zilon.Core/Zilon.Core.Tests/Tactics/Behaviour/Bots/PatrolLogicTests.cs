@@ -47,7 +47,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             var patrolRoute = patrolRouteMock.Object;
 
             var actors = new List<IActor> { actor };
-            var actorListMock = new Mock<IActorList>();
+            var actorListMock = new Mock<IActorManager>();
             actorListMock.SetupGet(x => x.Actors).Returns(actors);
             var actorList = actorListMock.Object;
 

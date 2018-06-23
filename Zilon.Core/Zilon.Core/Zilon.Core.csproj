@@ -49,6 +49,8 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
+    <Compile Include="Tactics\ActorList.cs" />
+    <Compile Include="Tactics\MonsterActor.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
@@ -56,7 +58,8 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
-    <Compile Include="Tactics\IActorList.cs" />
+    <Compile Include="Tactics\IActorManager.cs" />
+    <Compile Include="Tactics\ISectorMeta.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
@@ -72,7 +75,7 @@
     <Compile Include="CommonServices\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
-    <Compile Include="Tactics\Behaviour\BotActorTaskSource.cs" />
+    <Compile Include="Tactics\Behaviour\MonsterActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTask.cs" />

@@ -9,12 +9,14 @@ using NUnit.Framework;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
+using Moq;
+using System.Collections.Generic;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
     /// <summary>
-    /// Тест проверяет, что источник намерений генерирует намерения после указания точки перемещение.
-    /// По окончанию задачи на перемещение должен выдавать пустые намерения.
+    /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
+    /// По окончанию задачи на перемещение должен выдавать пустые задачи.
     /// </summary>
     [TestFixture()]
     public class HumanActorTaskSourceTests
@@ -36,8 +38,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanActorTaskSource(actor);
-            behSource.IntentMove(finishNode);
+            var behavourSource = new HumanActorTaskSource(actor);
+            behavourSource.IntentMove(finishNode);
+
+            var actorList = CreateActorList(actor);
 
 
             // ACT
@@ -46,7 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = behSource.GetActorTasks(map, new[] { actor });
+                var commands = behavourSource.GetActorTasks(map, actorList);
 
                 if (step < 4)
                 {
@@ -96,19 +100,30 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor);
+
+            var actorList = CreateActorList(actor);
 
 
 
             // ACT
-            behSource.IntentMove(startNode);
+            behaviourSource.IntentMove(startNode);
 
 
 
             // ASSERT
-            var commands = behSource.GetActorTasks(map, new[] { actor });
+            var commands = behaviourSource.GetActorTasks(map, actorList);
             commands.Should().NotBeNullOrEmpty();
             commands[0].Should().BeOfType<MoveTask>();
+        }
+
+        private static IActorManager CreateActorList(params IActor[] actors)
+        {
+            var actorListMock = new Mock<IActorManager>();
+            var actorListInner = new List<IActor>(actors);
+            actorListMock.Setup(x => x.Actors).Returns(actorListInner);
+            var actorList = actorListMock.Object;
+            return actorList;
         }
 
         /// <summary>
@@ -126,12 +141,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor);
 
 
 
             // ACT
-            Action act = () => { behSource.IntentMove(null); };
+            Action act = () => { behaviourSource.IntentMove(null); };
 
 
 
@@ -156,16 +171,17 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor);
 
+            var actorList = CreateActorList(actor);
 
             // ACT
 
             // 1. Формируем намерение.
-            behSource.IntentMove(finishNode);
+            behaviourSource.IntentMove(finishNode);
 
             // 2. Ждём, пока команда не отработает.
-            var commands = behSource.GetActorTasks(map, new[] { actor });
+            var commands = behaviourSource.GetActorTasks(map, actorList);
 
             for (var i = 0; i < 3; i++)
             {
@@ -182,11 +198,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behSource.IntentMove(finishNode2);
+            behaviourSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetActorTasks(map, new[] { actor });
+            var factCommands = behaviourSource.GetActorTasks(map, actorList);
 
 
 
@@ -212,16 +228,18 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = new Actor(new Person(), startNode);
 
-            var behSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor);
+
+            var actorList = CreateActorList(actor);
 
 
             // ACT
 
             // 1. Формируем намерение.
-            behSource.IntentMove(finishNode);
+            behaviourSource.IntentMove(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = behSource.GetActorTasks(map, new[] { actor });
+            var commands = behaviourSource.GetActorTasks(map, actorList);
 
             for (var i = 0; i < 1; i++)
             {
@@ -238,11 +256,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behSource.IntentMove(finishNode2);
+            behaviourSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behSource.GetActorTasks(map, new[] { actor });
+            var factCommands = behaviourSource.GetActorTasks(map, actorList);
 
 
 
@@ -271,6 +289,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var taskSource = new HumanActorTaskSource(attackerActor);
 
+            var actorList = CreateActorList(attackerActor, targetActor);
+
 
             // ACT
             taskSource.IntentAttack(targetActor);
@@ -278,7 +298,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ASSERT
-            var tasks = taskSource.GetActorTasks(map, new[] { attackerActor, targetActor });
+            var tasks = taskSource.GetActorTasks(map, actorList);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<AttackTask>();

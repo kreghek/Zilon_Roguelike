@@ -15,9 +15,9 @@ namespace Zilon.Core.Tactics
 
         public IActorTaskSource[] BehaviourSources { get; set; }
         
-        public List<IActor> Actors { get; }
+        public IActorManager ActorManager { get; }
 
-        public Sector(IMap map)
+        public Sector(IMap map, IActorManager actorManager)
         {
             if (map == null)
             {
@@ -29,13 +29,13 @@ namespace Zilon.Core.Tactics
             _commands = new List<IActorTask>();
 
             Map = map;
-            Actors = new List<IActor>();
+            ActorManager = actorManager;
         }
 
         public IActor AddActor(IPerson person, HexNode node)
         {
             var actor = new Actor(person, node);
-            Actors.Add(actor);
+            ActorManager.Add(actor);
             return actor;
         }
 
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics
             _commands.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
-                var commands = behaviourSource.GetActorTasks(Map, Actors.ToArray());
+                var commands = behaviourSource.GetActorTasks(Map, ActorManager);
                 if (commands != null)
                 {
                     _commands.AddRange(commands);
