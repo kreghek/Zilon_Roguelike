@@ -231,23 +231,38 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
-            foreach (var actor in _actorList.Actors)
+            foreach (var target in _actorList.Actors)
             {
-                if (actor.Owner == _actor.Owner)
+                if (target.Owner == _actor.Owner)
                 {
                     continue;
                 }
 
-                if (actor.IsDead)
+                if (target.IsDead)
                 {
                     continue;
                 }
 
-                //TODO Добавить видимость (дальность просмотра)
-                foundIntruders.Add(actor);
+                var isVisible = CheckTargetVisible(_actor, target);
+                if (!isVisible)
+                {
+                    continue;
+                }
+                
+                foundIntruders.Add(target);
             }
 
             return foundIntruders.ToArray();
+        }
+
+        private bool CheckTargetVisible(IActor actor, IAttackTarget targer)
+        {
+            var actorNode = (HexNode)actor.Node;
+            var targetNode = (HexNode)targer.Node;
+            var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
+
+            var isVisible = distance <= 5;
+            return isVisible;
         }
 
         private enum PatrolMode {
