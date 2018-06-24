@@ -6,79 +6,108 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-using Zilon.Core.Persons;
+
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 {
+    /// <summary>
+    /// Тесты для проверки корректности обхода точек одним актёром.
+    /// </summary>
     [TestFixture]
-    public class PatrolLogicTests
+    public class PatrolLogicOneActorBypassTests
     {
-        [Test]
-        public void GetCurrentTask_Bypassing_ActorWalkThroughRount()
+        private const int _expectedIdleDuration = 1;
+
+        private IMapNode _factActorNode;
+        private IMap _map;
+        private IPlayer _player;
+        private IActor _actor;
+        private IPatrolRoute _patrolRoute;
+        private IActorManager _actorList;
+        private IDecisionSource _decisionSource;
+
+        [SetUp]
+        public void SetUp()
         {
-            // ARRANGE
-            var map = new TestGridGenMap();
+            _map = new TestGridGenMap();
+
 
             var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
+            _player = playerMock.Object;
 
-            IMapNode factActorNode = map.Nodes.OfType<HexNode>().SelectBy(1, 1);
+
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(() => factActorNode);
+            actorMock.SetupGet(x => x.Node).Returns(() => _factActorNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
-                .Callback<IMapNode>(node => factActorNode = node);
-            actorMock.SetupGet(x => x.Owner).Returns(player);
-            var actor = actorMock.Object;
+                .Callback<IMapNode>(node => _factActorNode = node);
+            actorMock.SetupGet(x => x.Owner).Returns(_player);
+            _actor = actorMock.Object;
+
 
             var patrolRouteMock = new Mock<IPatrolRoute>();
             var routePoints = new IMapNode[] {
-                map.Nodes.OfType<HexNode>().SelectBy(1, 1),
-                map.Nodes.OfType<HexNode>().SelectBy(5, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(3, 5)
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5)
             };
             patrolRouteMock.SetupGet(x => x.Points).Returns(routePoints);
-            var patrolRoute = patrolRouteMock.Object;
+            _patrolRoute = patrolRouteMock.Object;
 
-            var actors = new List<IActor> { actor };
+
+            var actors = new List<IActor> { _actor };
             var actorListMock = new Mock<IActorManager>();
             actorListMock.SetupGet(x => x.Actors).Returns(actors);
-            var actorList = actorListMock.Object;
+            _actorList = actorListMock.Object;
 
 
-            const int expectedIdleDuration = 1;
             var decisionSourceMock = new Mock<IDecisionSource>();
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(expectedIdleDuration);
-            var decisionSource = decisionSourceMock.Object;
+                .Returns(_expectedIdleDuration);
+            _decisionSource = decisionSourceMock.Object;
+        }
+
+        /// <summary>
+        /// Тест проверяет, что актёр, следуемый логике патрулирования будет
+        /// корректно обходить ключевые точки.
+        /// В точка должен быть простой на 1 ход.
+        /// Изначально актёр начинает патрулирование с первой точки обхода.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_StartOnFirstPoint_ActorWalkThroughRount()
+        {
+            // ARRANGE
+
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(1, 1);
 
             var expectedActorPositions = new IMapNode[] {
-                map.Nodes.OfType<HexNode>().SelectBy(2, 2),
-                map.Nodes.OfType<HexNode>().SelectBy(2, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(3, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(4, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 2),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
 
-                map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
 
-                map.Nodes.OfType<HexNode>().SelectBy(4, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(4, 4),
-                map.Nodes.OfType<HexNode>().SelectBy(3, 5),
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 4),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5),
 
-                map.Nodes.OfType<HexNode>().SelectBy(3, 5),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5),
 
-                map.Nodes.OfType<HexNode>().SelectBy(3, 4),
-                map.Nodes.OfType<HexNode>().SelectBy(2, 3),
-                map.Nodes.OfType<HexNode>().SelectBy(2, 2),
-                map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 4),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 2),
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
 
-                map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
             };
 
 
-            var logic = new PatrolLogic(actor, patrolRoute, map, actorList, decisionSource);
+            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
 
 
 
@@ -107,16 +136,57 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
                 if (round < expectedActorPositions.Count())
                 {
-                    factActorNode.Should().Be(expectedActorPositions[round], 
+                    _factActorNode.Should().Be(expectedActorPositions[round],
                         $"На {round} итерации неожиданные координаты актёра.");
                 }
                 else
                 {
-                    factActorNode.Should().Be(expectedActorPositions[0],
+                    _factActorNode.Should().Be(expectedActorPositions[0],
                         $"На {round} итерации актёр должен начать маршрут заново.");
                 }
             }
-            
+
+        }
+
+
+        /// <summary>
+        /// Тест проверяет, что актёр, следуемый логике патрулирования будет
+        /// корректно обходить ключевые точки.
+        /// В точка должен быть простой на 1 ход.
+        /// Изначально актёр начинает патрулирование в стороне от маршрута патрулирования.
+        /// Ожидается, что актёр в первую очередь посетит ближайшую точку патрулирования
+        /// и продолжит обход в порядке точек патрулирования.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_StartOnSideOnRoute_ActorWalkThroughRount()
+        {
+            // ARRANGE
+
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
+
+            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+
+            const int expectedStepsToPatrolPoint_1_1 = 2;
+            var expectedNode = _patrolRoute.Points.First();
+
+
+
+            // ACT
+            for (var round = 0; round < expectedStepsToPatrolPoint_1_1; round++)
+            {
+                var task = logic.GetCurrentTask();
+
+                task.Execute();
+            }
+
+
+
+            // ASSERT
+            var factHexNode = (HexNode)_factActorNode;
+            var expectedHexNode = (HexNode)expectedNode;
+            factHexNode.OffsetX.Should().Be(expectedHexNode.OffsetX);
+            factHexNode.OffsetY.Should().Be(expectedHexNode.OffsetY);
         }
     }
 }

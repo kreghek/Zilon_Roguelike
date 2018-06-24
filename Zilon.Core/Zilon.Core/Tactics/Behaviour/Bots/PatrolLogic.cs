@@ -19,6 +19,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IActorManager _actorList;
         private readonly IDecisionSource _decisionSource;
         private MoveTask _moveTask;
+        private IdleTask _idleTask;
         private PatrolMode _mode;
         private IAttackTarget _targetIntruder;
         private int _persuitCounter;
@@ -39,8 +40,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
             _persuitCounter = PERSIUT_COUNTER;
         }
-
-        public IdleTask _idleTask { get; private set; }
 
         public IActorTask GetCurrentTask()
         {
