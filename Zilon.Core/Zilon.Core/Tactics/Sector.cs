@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
 
     public class Sector
     {
-        private readonly List<IActorTask> _commands;
+        private readonly List<IActorTask> _tasks;
         
         public IMap Map { get; }
 
@@ -26,41 +26,49 @@ namespace Zilon.Core.Tactics
             }
 #pragma warning restore IDE0016 // Use 'throw' expression
 
-            _commands = new List<IActorTask>();
+            _tasks = new List<IActorTask>();
 
             Map = map;
             ActorManager = actorManager;
         }
 
+        /// <summary>
+        /// Обновление состояния сектора.
+        /// </summary>
+        /// <remarks>
+        /// Выполняет ход игрового сектора.
+        /// Собирает текущие задачи для всех актёров в секторе.
+        /// Выполняет все задачи для каждого актёра.
+        /// </remarks>
         public void Update()
         {
             // Определяем команды на текущий ход
-            _commands.Clear();
+            _tasks.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
                 var commands = behaviourSource.GetActorTasks(Map, ActorManager);
                 if (commands != null)
                 {
-                    _commands.AddRange(commands);
+                    _tasks.AddRange(commands);
                 }
             }
 
 
             // Выполняем все команды на текущий ход
             //TODO Сделать сортировку команд по инициативе актёра.
-            foreach (var command in _commands)
+            foreach (var task in _tasks)
             {
-                if (command.IsComplete)
+                if (task.IsComplete)
                 {
                     throw new InvalidOperationException("В выполняемых командах обнаружена заверщённая задача.");
                 }
 
-                if (command.Actor.IsDead)
+                if (task.Actor.IsDead)
                 {
                     throw new InvalidOperationException("Задача назначена мертвому актёру.");
                 }
 
-                command.Execute();
+                task.Execute();
             }
         }
     }
