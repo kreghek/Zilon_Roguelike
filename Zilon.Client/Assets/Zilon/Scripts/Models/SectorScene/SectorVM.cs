@@ -95,11 +95,11 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        //var humanPlayer = new HumanPlayer();
+        var humanPlayer = new HumanPlayer();
         var botPlayer = new BotPlayer();
 
-//        var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
-//        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs);
+        var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
+        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs);
 
         var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
         var enemy1ActorVm = CreateActorVm(botPlayer, actorManager, enemy1StartNode, nodeVMs);
@@ -111,7 +111,7 @@ class SectorVM : MonoBehaviour
         enemy2ActorVm.IsEnemy = true;
         enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
-//        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor);
+        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor);
 
         var patrolRoute1 = new PatrolRoute(new IMapNode[]
         {
@@ -140,13 +140,13 @@ class SectorVM : MonoBehaviour
         
         sector.BehaviourSources = new IActorTaskSource[]
         {
-//            playerActorTaskSource,
+            playerActorTaskSource,
             botActorTaskSource
         };
 
         _sectorManager.CurrentSector = sector;
 
-//        _playerState.TaskSource = playerActorTaskSource;
+        _playerState.TaskSource = playerActorTaskSource;
 
         _moveCommand = new MoveCommand(_sectorManager, _playerState);
         _attackCommand = new AttackCommand(_sectorManager, _playerState);
