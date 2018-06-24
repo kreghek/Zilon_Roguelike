@@ -166,7 +166,7 @@ class SectorVM : MonoBehaviour
 
     private ActorVM CreateActorVm(IPlayer player,
         [NotNull] IActorManager actorManager,
-        [NotNull] IMapNode playerActorStartNode,
+        [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         var person = new Person
@@ -175,7 +175,7 @@ class SectorVM : MonoBehaviour
             Damage = 1
         };
         
-        var actor = new Actor(person, player, playerActorStartNode);
+        var actor = new Actor(person, player, startNode);
         
         actorManager.Add(actor);
 

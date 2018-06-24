@@ -83,7 +83,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             if (_idleTask != null)
             {
-                _idleTask = new IdleTask(_decisionSource);
+                _idleTask = new IdleTask(_actor, _decisionSource);
             }
             return _idleTask;
         }
@@ -181,7 +181,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 }
 
                 _moveTask = null;
-                _idleTask = new IdleTask(_decisionSource);
+                _idleTask = new IdleTask(_actor, _decisionSource);
                 _mode = PatrolMode.Idle;
                 return _idleTask;
             }

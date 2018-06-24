@@ -63,6 +63,11 @@ namespace Zilon.Core.Tactics
                     throw new InvalidOperationException("В выполняемых командах обнаружена заверщённая задача.");
                 }
 
+                if (task.Actor == null)
+                {
+                    throw new InvalidOperationException("В задаче потеряна связь с актёром.");
+                }
+
                 if (task.Actor.IsDead)
                 {
                     throw new InvalidOperationException("Задача назначена мертвому актёру.");
