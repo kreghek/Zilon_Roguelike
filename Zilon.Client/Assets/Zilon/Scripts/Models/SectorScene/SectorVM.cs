@@ -99,15 +99,15 @@ class SectorVM : MonoBehaviour
         var botPlayer = new BotPlayer();
 
         var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
-        var playerActorVm = CreateActorVm(humanPlayer, sector, playerActorStartNode, nodeVMs);
+        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs);
 
         var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
-        var enemy1ActorVm = CreateActorVm(botPlayer, sector, enemy1StartNode, nodeVMs);
+        var enemy1ActorVm = CreateActorVm(botPlayer, actorManager, enemy1StartNode, nodeVMs);
         enemy1ActorVm.IsEnemy = true;
         enemy1ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
         var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
-        var enemy2ActorVm = CreateActorVm(botPlayer, sector, enemy2StartNode, nodeVMs);
+        var enemy2ActorVm = CreateActorVm(botPlayer, actorManager, enemy2StartNode, nodeVMs);
         enemy2ActorVm.IsEnemy = true;
         enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
@@ -134,7 +134,7 @@ class SectorVM : MonoBehaviour
         
         var dice = new Dice();
         var dicisionSource = new DecisionSource(dice);
-        var botActorTaskSource = new MonsterActorTaskSource(humanPlayer, 
+        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
             routeDictionary,
             dicisionSource);
         
@@ -164,17 +164,20 @@ class SectorVM : MonoBehaviour
         }
     }
 
-    private ActorVM CreateActorVm(IPlayer player, [NotNull] Sector sector,
-        [NotNull] HexNode playerActorStartNode,
+    private ActorVM CreateActorVm(IPlayer player,
+        [NotNull] IActorManager actorManager,
+        [NotNull] IMapNode playerActorStartNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         var person = new Person
         {
             Hp = 1,
-            Damage = 1,
-            Player = player
+            Damage = 1
         };
-        var actor = sector.AddActor(person, playerActorStartNode);
+        
+        var actor = new Actor(person, player, playerActorStartNode);
+        
+        actorManager.Add(actor);
 
         var actorVm = Instantiate(ActorPrefab, transform);
 
