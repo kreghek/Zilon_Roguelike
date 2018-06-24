@@ -28,9 +28,9 @@ namespace Assets.Zilon.Scripts.Models.Commands
         protected override void ExecuteTacticCommand()
         {
             var sector = _sectorManager.CurrentSector;
-            var selectedNodeVM = _playerState.SelectedNode;
+            var selectedNodeVm = _playerState.SelectedNode;
 
-            var targetNode = selectedNodeVM.Node;
+            var targetNode = selectedNodeVm.Node;
             _playerState.TaskSource.IntentMove(targetNode);
             sector.Update();
         }
