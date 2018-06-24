@@ -1,9 +1,10 @@
 ﻿using System;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class AttackTask : IActorTask
+    public class AttackTask : ActorTaskBase
     {
         /// <summary>
         /// Возможная дистанция атаки.
@@ -12,11 +13,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private IAttackTarget _target;
 
-        public IActor Actor { get; }
-
-        public bool IsComplete { get; set; }
-
-        public void Execute()
+        public override void Execute()
         {
             if (!_target.CanBeDamaged())
             {
@@ -38,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour
             IsComplete = true;
         }
 
-        public AttackTask(IActor actor, IAttackTarget target)
+        public AttackTask(IActor actor, IAttackTarget target): base(actor)
         {
             if (actor == target)
             {
@@ -46,7 +43,6 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             _target = target;
-            Actor = actor;
         }
     }
 }

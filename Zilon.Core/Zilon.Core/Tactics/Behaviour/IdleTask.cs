@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class IdleTask : IActorTask
+    public class IdleTask : ActorTaskBase
     {
         /// <summary>
         /// Минимальное время простоя.
@@ -20,18 +20,13 @@ namespace Zilon.Core.Tactics.Behaviour
         private int _counter;
         private IDecisionSource _decisionSource;
 
-        public IdleTask(IActor actor, IDecisionSource decisionSource)
+        public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
         {
-            Actor = actor;
             _decisionSource = decisionSource;
             _counter = _decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
         }
 
-        public IActor Actor { get; }
-
-        public bool IsComplete { get; set; }
-
-        public void Execute()
+        public override void Execute()
         {
             _counter--;
 

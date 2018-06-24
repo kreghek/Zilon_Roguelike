@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.Common;
+
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class MoveTask: IActorTask
+    public class MoveTask: ActorTaskBase
     {
         private readonly IMapNode _targetNode;
         private readonly IMap _map;
         private readonly List<IMapNode> _path;
         
-        public IActor Actor { get; }
-        public void Execute()
+        public override void Execute()
         {
             if (!_path.Any())
             {
@@ -32,11 +31,8 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        public bool IsComplete { get; set; }
-
-        public MoveTask(IActor actor, IMapNode targetNode, IMap map)
+        public MoveTask(IActor actor, IMapNode targetNode, IMap map): base(actor)
         {
-            Actor = actor;
             _targetNode = targetNode;
             _map = map;
 
