@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
@@ -34,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
                 finishNode
             };
 
-            var actor = new Actor(new Person(), startNode);
+            var actor = CreateActor(startNode);
 
             var task = new MoveTask(actor, finishNode, map);
 
@@ -67,6 +68,14 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             actor.Node.Should().Be(finishNode);
         }
 
+        private static IActor CreateActor(HexNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            return new Actor(new Person(), player, startNode);
+        }
+
         /// <summary>
         /// Тест проверяет, что задача на перемещение учитывает стены.
         /// Актёр должен идти по пути, огибажщем стены.
@@ -89,7 +98,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = expectedPath.Last();
 
 
-            var actor = new Actor(new Person(), (HexNode)startNode);
+            var actor = CreateActor((HexNode)startNode);
 
             var task = new MoveTask(actor, finishNode, map);
 

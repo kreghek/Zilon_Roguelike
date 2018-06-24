@@ -25,12 +25,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
 
-            var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Player).Returns(player);
-            var person = personMock.Object;
-
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Owner).Returns(player);
             var actor = actorMock.Object;
 
             var actorListInner = new List<IActor> { actor };

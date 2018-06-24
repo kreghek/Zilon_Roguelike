@@ -1,14 +1,17 @@
 ﻿using System;
+
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
     public class Actor : IActor
     {
-        public Actor(IPerson person, IMapNode node)
+        public Actor(IPerson person, IPlayer owner, IMapNode node)
         {
             Person = person;
+            Owner = owner;
             Node = node;
 
             Hp = person.Hp;
@@ -34,6 +37,8 @@ namespace Zilon.Core.Tactics
         public bool IsDead { get; set; }
 
         public int WeaponDistance { get; }
+
+        public IPlayer Owner { get; }
 
         public bool CanBeDamaged()
         {

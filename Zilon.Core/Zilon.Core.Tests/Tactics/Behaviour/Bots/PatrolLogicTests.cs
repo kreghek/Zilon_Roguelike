@@ -25,16 +25,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
 
-            var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Player).Returns(player);
-            var person = personMock.Object;
-
             IMapNode factActorNode = map.Nodes.OfType<HexNode>().SelectBy(1, 1);
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(() => factActorNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>(node => factActorNode = node);
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Owner).Returns(player);
             var actor = actorMock.Object;
 
             var patrolRouteMock = new Mock<IPatrolRoute>();

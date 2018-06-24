@@ -233,7 +233,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var foundIntruders = new List<IActor>();
             foreach (var actor in _actorList.Actors)
             {
-                if (actor.Person.Player == _actor.Person.Player)
+                if (actor.Owner == _actor.Owner)
                 {
                     continue;
                 }

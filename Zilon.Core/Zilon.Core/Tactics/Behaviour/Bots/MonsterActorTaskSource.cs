@@ -28,7 +28,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var actorTasks = new List<IActorTask>();
             foreach (var actor in actorManager.Actors)
             {
-                if (actor.Person.Player != _player)
+                if (actor.Owner != _player)
                 {
                     continue;
                 }

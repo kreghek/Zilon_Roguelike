@@ -1,5 +1,6 @@
 ﻿using System;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -18,6 +19,17 @@ namespace Zilon.Core.Tactics
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         IPerson Person { get; }
+
+        /// <summary>
+        /// Владелец актёра.
+        /// </summary>
+        /// <remarks>
+        /// 1. Опредляет возможность управлять актёром.
+        /// 2. Боты по этому полю определяют противников.
+        /// Может быть человек или бот.
+        /// Персонажи игрока могут быть под прямым и не прямым управлением.
+        /// </remarks>
+        IPlayer Owner { get; }
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.

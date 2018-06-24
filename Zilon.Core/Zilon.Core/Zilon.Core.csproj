@@ -56,7 +56,6 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="Tactics\ActorList.cs" />
-    <Compile Include="Tactics\MonsterActor.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />

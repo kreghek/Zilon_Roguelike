@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Zilon.Core.Persons;
+
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -19,24 +19,17 @@ namespace Zilon.Core.Tactics
 
         public Sector(IMap map, IActorManager actorManager)
         {
+#pragma warning disable IDE0016 // Use 'throw' expression
             if (map == null)
             {
-#pragma warning disable IDE0016 // Use 'throw' expression
                 throw new ArgumentException("Не передана карта сектора.", nameof(map));
-#pragma warning restore IDE0016 // Use 'throw' expression
             }
-            
+#pragma warning restore IDE0016 // Use 'throw' expression
+
             _commands = new List<IActorTask>();
 
             Map = map;
             ActorManager = actorManager;
-        }
-
-        public IActor AddActor(IPerson person, HexNode node)
-        {
-            var actor = new Actor(person, node);
-            ActorManager.Add(actor);
-            return actor;
         }
 
         public void Update()

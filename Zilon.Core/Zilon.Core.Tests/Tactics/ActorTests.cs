@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Tests
@@ -14,18 +15,21 @@ namespace Zilon.Core.Tactics.Tests
         /// Проверяет, что актёр при потере всего здоровья выстреливает событие смерти.
         /// </summary>
         [Test()]
-        public void TakeDamageTest()
+        public void TakeDamage_FatalDamage_FiresEvent()
         {
             // ARRANGE
 
-            var person = new Person {
-                Damage = 1,
-                Hp = 1
-            };
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.Hp).Returns(1);
+            var person = personMock.Object;
 
-            var node = new HexNode(0, 0);
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
 
-            var testActor = new Actor(person, node);
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+
+            var testActor = new Actor(person, player, node);
 
 
             // ACT

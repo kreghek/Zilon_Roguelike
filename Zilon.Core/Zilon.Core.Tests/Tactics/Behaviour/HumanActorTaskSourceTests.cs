@@ -11,6 +11,7 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 using Moq;
 using System.Collections.Generic;
+using Zilon.Core.Players;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
@@ -36,7 +37,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
                 finishNode
             };
 
-            var actor = new Actor(new Person(), startNode);
+            var actor = CreateActor(startNode);
 
             var behavourSource = new HumanActorTaskSource(actor);
             behavourSource.IntentMove(finishNode);
@@ -78,6 +79,15 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             actor.Node.Should().Be(finishNode);
         }
 
+        private static IActor CreateActor(HexNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var actor = new Actor(new Person(), player, startNode);
+            return actor;
+        }
+
         /// <summary>
         /// Данный методо проверяет, чтобы всегда при выдачи команды на перемещение генерировалась хотя бы одна команда.
         /// </summary>
@@ -97,8 +107,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
                 finishNode
             };
 
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
 
-            var actor = new Actor(new Person(), startNode);
+            var actor = CreateActor(startNode);
 
             var behaviourSource = new HumanActorTaskSource(actor);
 
@@ -139,7 +151,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var actor = new Actor(new Person(), startNode);
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var actor = CreateActor(startNode);
 
             var behaviourSource = new HumanActorTaskSource(actor);
 
@@ -169,7 +184,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var actor = new Actor(new Person(), startNode);
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var actor = CreateActor(startNode);
 
             var behaviourSource = new HumanActorTaskSource(actor);
 
@@ -226,7 +244,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var actor = new Actor(new Person(), startNode);
+            var actor = CreateActor(startNode);
 
             var behaviourSource = new HumanActorTaskSource(actor);
 
@@ -276,15 +294,14 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void IntentAttackTest()
         {
             //ARRANGE
-            var person = new Person { Hp = 1, Damage = 1 };
-
             var map = new TestGridGenMap();
 
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
 
-            var attackerActor = new Actor(person, attackerStartNode);
-            var targetActor = new Actor(person, targetStartNode);
+
+            var attackerActor = CreateActor(attackerStartNode);
+            var targetActor = CreateActor(targetStartNode);
 
 
             var taskSource = new HumanActorTaskSource(attackerActor);
