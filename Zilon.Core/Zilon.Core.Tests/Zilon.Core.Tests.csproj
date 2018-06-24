@@ -84,6 +84,7 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\IdleTaskTests.cs" />
+    <Compile Include="Tactics\Behaviour\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Map\CombatMapTests.cs" />
     <Compile Include="Tactics\Map\MapNodeTests.cs" />

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 
 using Zilon.Core.Players;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Behaviour
+namespace Zilon.Core.Tactics.Behaviour.Bots
 {
     public class MonsterActorTaskSource : IActorTaskSource
     {
@@ -24,10 +23,10 @@ namespace Zilon.Core.Tactics.Behaviour
             _decisionSource = decisionSource;
         }
 
-        public IActorTask[] GetActorTasks(IMap map, IActorManager actorList)
+        public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
             var actorTasks = new List<IActorTask>();
-            foreach (var actor in actorList.Actors)
+            foreach (var actor in actorManager.Actors)
             {
                 if (actor.Person.Player != _player)
                 {
@@ -46,7 +45,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         if (_patrolRoutes.TryGetValue(actor, out IPatrolRoute partolRoute))
                         {
 
-                            var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorList, _decisionSource);
+                            var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource);
                             _logicDict[actor] = patrolLogic;
                             logic = patrolLogic;
                         }

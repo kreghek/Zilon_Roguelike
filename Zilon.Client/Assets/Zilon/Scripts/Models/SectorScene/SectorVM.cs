@@ -120,7 +120,7 @@ class SectorVM : MonoBehaviour
         
         var dice = new Dice();
         var dicisionSource = new DecisionSource(dice);
-        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
+        var botActorTaskSource = new MonsterActorTaskSource(humanPlayer, 
             routeDictionary,
             dicisionSource);
         

@@ -81,7 +81,7 @@
     <Compile Include="CommonServices\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
-    <Compile Include="Tactics\Behaviour\MonsterActorTaskSource.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTask.cs" />
