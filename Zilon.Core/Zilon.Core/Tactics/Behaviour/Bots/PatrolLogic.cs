@@ -12,6 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public class PatrolLogic : IBotLogic
     {
         private const int PERSIUT_COUNTER = 3;
+        private const int VISIBILITY_RANGE = 5;
         private readonly IActor _actor;
         private readonly IPatrolRoute _patrolRoute;
         private readonly IMap _map;
@@ -255,13 +256,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return foundIntruders.ToArray();
         }
 
-        private bool CheckTargetVisible(IActor actor, IAttackTarget targer)
+        private bool CheckTargetVisible(IActor actor, IAttackTarget target)
         {
             var actorNode = (HexNode)actor.Node;
-            var targetNode = (HexNode)targer.Node;
+            var targetNode = (HexNode)target.Node;
             var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
 
-            var isVisible = distance <= 5;
+            var isVisible = distance <= VISIBILITY_RANGE;
             return isVisible;
         }
 
