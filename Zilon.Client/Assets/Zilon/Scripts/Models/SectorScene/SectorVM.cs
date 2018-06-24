@@ -17,13 +17,25 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
+// ReSharper disable once CheckNamespace
+// ReSharper disable once ArrangeTypeModifiers
+// ReSharper disable once ClassNeverInstantiated.Global
 class SectorVM : MonoBehaviour
 {
     private MoveCommand _moveCommand;
     private AttackCommand _attackCommand;
 
-    public MapNodeVM MapNodePrefab;
-    public ActorVM ActorPrefab;
+#pragma warning disable 649
+    // ReSharper disable once NotNullMemberIsNotInitialized
+    // ReSharper disable once MemberCanBePrivate.Global
+    [NotNull] public MapNodeVM MapNodePrefab;
+#pragma warning restore 649
+
+#pragma warning disable 649
+    // ReSharper disable once NotNullMemberIsNotInitialized
+    // ReSharper disable once MemberCanBePrivate.Global
+    [NotNull] public ActorVM ActorPrefab;
+#pragma warning restore 649
 
     [Inject] private ICommandManager _clientCommandExecutor;
 
@@ -31,6 +43,7 @@ class SectorVM : MonoBehaviour
 
     [Inject] private IPlayerState _playerState;
 
+    // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
     {
         ExecuteCommands();
@@ -43,6 +56,7 @@ class SectorVM : MonoBehaviour
         command?.Execute();
     }
 
+    // ReSharper disable once UnusedMember.Local
     private void Awake()
     {
         var mapGenerator = new GridMapGenerator(15);
@@ -59,13 +73,13 @@ class SectorVM : MonoBehaviour
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
         {
-            var mapNodeVM = Instantiate(MapNodePrefab, transform);
+            var mapNodeVm = Instantiate(MapNodePrefab, transform);
 
             var hexNode = (HexNode) node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
-            mapNodeVM.transform.position = worldPosition;
-            mapNodeVM.Node = hexNode;
+            mapNodeVm.transform.position = worldPosition;
+            mapNodeVm.Node = hexNode;
 
             var edges = map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
             var neighbors = (from edge in edges
@@ -73,31 +87,31 @@ class SectorVM : MonoBehaviour
                 where neighbor != node
                 select neighbor).Cast<HexNode>().ToArray();
 
-            mapNodeVM.Edges = edges;
-            mapNodeVM.Neighbors = neighbors;
+            mapNodeVm.Edges = edges;
+            mapNodeVm.Neighbors = neighbors;
 
-            mapNodeVM.OnSelect += MapNodeVm_OnSelect;
+            mapNodeVm.OnSelect += MapNodeVm_OnSelect;
 
-            nodeVMs.Add(mapNodeVM);
+            nodeVMs.Add(mapNodeVm);
         }
 
         var humanPlayer = new HumanPlayer();
         var botPlayer = new BotPlayer();
 
         var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
-        var playerActorVM = CreateActorVm(humanPlayer, sector, playerActorStartNode, nodeVMs);
+        var playerActorVm = CreateActorVm(humanPlayer, sector, playerActorStartNode, nodeVMs);
 
         var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
-        var enemy1ActorVM = CreateActorVm(botPlayer, sector, enemy1StartNode, nodeVMs);
-        enemy1ActorVM.IsEnemy = true;
-        enemy1ActorVM.OnSelected += EnemyActorVm_OnSelected;
+        var enemy1ActorVm = CreateActorVm(botPlayer, sector, enemy1StartNode, nodeVMs);
+        enemy1ActorVm.IsEnemy = true;
+        enemy1ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
         var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
-        var enemy2ActorVM = CreateActorVm(botPlayer, sector, enemy2StartNode, nodeVMs);
-        enemy2ActorVM.IsEnemy = true;
-        enemy2ActorVM.OnSelected += EnemyActorVm_OnSelected;
+        var enemy2ActorVm = CreateActorVm(botPlayer, sector, enemy2StartNode, nodeVMs);
+        enemy2ActorVm.IsEnemy = true;
+        enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
-        var playerActorTaskSource = new HumanActorTaskSource(playerActorVM.Actor);
+        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor);
 
         var patrolRoute1 = new PatrolRoute(new IMapNode[]
         {
@@ -114,8 +128,8 @@ class SectorVM : MonoBehaviour
         
         var routeDictionary = new Dictionary<IActor, IPatrolRoute>()
         {
-            {enemy1ActorVM.Actor, patrolRoute1},
-            {enemy2ActorVM.Actor, patrolRoute2}
+            {enemy1ActorVm.Actor, patrolRoute1},
+            {enemy2ActorVm.Actor, patrolRoute2}
         };
         
         var dice = new Dice();
@@ -175,11 +189,11 @@ class SectorVM : MonoBehaviour
     {
         // указываем намерение двигиться на выбранную точку (узел).
 
-        var nodeVM = sender as MapNodeVM;
+        var nodeVm = sender as MapNodeVM;
 
-        _playerState.SelectedNode = nodeVM;
+        _playerState.SelectedNode = nodeVm;
 
-        if (nodeVM != null)
+        if (nodeVm != null)
         {
             _clientCommandExecutor.Push(_moveCommand);
         }
