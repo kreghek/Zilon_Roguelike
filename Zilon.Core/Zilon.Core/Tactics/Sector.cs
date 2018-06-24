@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics
 {
 
-    public class Sector
+    public class Sector : ISector
     {
         private readonly List<IActorTask> _tasks;
         

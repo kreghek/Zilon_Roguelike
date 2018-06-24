@@ -64,8 +64,12 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
+    <Compile Include="Tactics\Generation\Corridor.cs" />
+    <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
+    <Compile Include="Tactics\Generation\Room.cs" />
+    <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
-    <Compile Include="Tactics\ISectorMeta.cs" />
+    <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
