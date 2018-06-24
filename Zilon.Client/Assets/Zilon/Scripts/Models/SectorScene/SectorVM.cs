@@ -126,7 +126,7 @@ class SectorVM : MonoBehaviour
         });
         
         
-        var routeDictionary = new Dictionary<IActor, IPatrolRoute>()
+        var routeDictionary = new Dictionary<IActor, IPatrolRoute>
         {
             {enemy1ActorVm.Actor, patrolRoute1},
             {enemy2ActorVm.Actor, patrolRoute2}
@@ -166,7 +166,7 @@ class SectorVM : MonoBehaviour
 
     private ActorVM CreateActorVm(IPlayer player, [NotNull] Sector sector,
         [NotNull] HexNode playerActorStartNode,
-        [NotNull] List<MapNodeVM> nodeVMs)
+        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         var person = new Person
         {
