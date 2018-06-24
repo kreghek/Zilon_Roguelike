@@ -24,11 +24,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private int _persuitCounter;
         private int? _patrolPointIndex;
 
-        public PatrolLogic(IActor actor, 
+        public PatrolLogic(IActor actor,
             IPatrolRoute patrolRoute,
-            IMap map, 
+            IMap map,
             IActorManager actors,
-            IDecisionSource decisionSource) {
+            IDecisionSource decisionSource)
+        {
 
             _actor = actor;
             _patrolRoute = patrolRoute;
@@ -152,7 +153,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                         nextPatrolPoint = nearbyPatrolPoint;
                     }
 
-                    
+
 
                     _moveTask = new MoveTask(_actor, nextPatrolPoint, _map);
                 }
@@ -162,7 +163,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
                     _moveTask = new MoveTask(_actor, targetPatrolPoint, _map);
                 }
-                
+
                 return _moveTask;
             }
             else
@@ -249,7 +250,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 {
                     continue;
                 }
-                
+
                 foundIntruders.Add(target);
             }
 
@@ -266,7 +267,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return isVisible;
         }
 
-        private enum PatrolMode {
+        private enum PatrolMode
+        {
             /// <summary>
             /// Обход ключевых точек.
             /// </summary>
