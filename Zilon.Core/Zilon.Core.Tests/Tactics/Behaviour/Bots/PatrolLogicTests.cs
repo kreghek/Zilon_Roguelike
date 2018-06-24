@@ -188,5 +188,87 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             factHexNode.OffsetX.Should().Be(expectedHexNode.OffsetX);
             factHexNode.OffsetY.Should().Be(expectedHexNode.OffsetY);
         }
+
+        /// <summary>
+        /// Тест проверяет, что актёр, следуемый логике патрулирования будет
+        /// корректно обходить ключевые точки.
+        /// В точка должен быть простой на 1 ход.
+        /// Изначально актёр начинает патрулирование в стороне от маршрута патрулирования.
+        /// Ожидается, что актёр в первую очередь посетит ближайшую точку патрулирования
+        /// и продолжит обход в порядке точек патрулирования.
+        /// Отличается от предыдущего тем, что стартовая точка лежит рядов со второй точкой маршрута.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_StartOnSideOnRoute2_ActorWalkThroughRount()
+        {
+            // ARRANGE
+
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(5, 1);
+
+            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+
+            const int expectedStepsToPatrolPoint_5_3 = 2;
+            var expectedNode = _patrolRoute.Points[1];  // вторая чтока маршрута
+
+
+
+            // ACT
+            for (var round = 0; round < expectedStepsToPatrolPoint_5_3; round++)
+            {
+                var task = logic.GetCurrentTask();
+
+                task.Execute();
+            }
+
+
+
+            // ASSERT
+            var factHexNode = (HexNode)_factActorNode;
+            var expectedHexNode = (HexNode)expectedNode;
+            factHexNode.OffsetX.Should().Be(expectedHexNode.OffsetX);
+            factHexNode.OffsetY.Should().Be(expectedHexNode.OffsetY);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что актёр, следуемый логике патрулирования будет
+        /// корректно обходить ключевые точки.
+        /// В точка должен быть простой на 1 ход.
+        /// Изначально актёр начинает патрулирование в стороне от маршрута патрулирования.
+        /// Ожидается, что актёр в первую очередь посетит ближайшую точку патрулирования
+        /// и продолжит обход в порядке точек патрулирования.
+        /// Отличается от предыдущего тем, что стартовая точка лежит рядов с третьей точкой маршрута.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_StartOnSideOnRoute3_ActorWalkThroughRount()
+        {
+            // ARRANGE
+
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(2, 6);
+
+            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+
+            const int expectedStepsToPatrolPoint_3_5 = 2;
+            var expectedNode = _patrolRoute.Points[2];  // третья чтока маршрута
+
+
+
+            // ACT
+            for (var round = 0; round < expectedStepsToPatrolPoint_3_5; round++)
+            {
+                var task = logic.GetCurrentTask();
+
+                task.Execute();
+            }
+
+
+
+            // ASSERT
+            var factHexNode = (HexNode)_factActorNode;
+            var expectedHexNode = (HexNode)expectedNode;
+            factHexNode.OffsetX.Should().Be(expectedHexNode.OffsetX);
+            factHexNode.OffsetY.Should().Be(expectedHexNode.OffsetY);
+        }
     }
 }
