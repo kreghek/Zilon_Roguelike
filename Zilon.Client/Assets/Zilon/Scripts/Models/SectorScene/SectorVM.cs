@@ -174,7 +174,12 @@ class SectorVM : MonoBehaviour
             Hp = 1,
             Damage = 1
         };
-        
+
+        if (player is HumanPlayer)
+        {
+            person.Hp = 10;
+        }
+
         var actor = new Actor(person, player, startNode);
         
         actorManager.Add(actor);
