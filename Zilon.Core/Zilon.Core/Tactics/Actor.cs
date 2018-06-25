@@ -20,11 +20,13 @@ namespace Zilon.Core.Tactics
             WeaponDistance = 1;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         public IPerson Person { get; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>

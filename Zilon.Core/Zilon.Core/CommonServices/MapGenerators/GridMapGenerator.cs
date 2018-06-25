@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 
-using Zilon.Core.Services.CombatMap;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.CommonServices.MapGenerators

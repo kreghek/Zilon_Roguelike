@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Services
+﻿namespace Zilon.Core.CommonServices
 {
     public class SchemeFile
     {

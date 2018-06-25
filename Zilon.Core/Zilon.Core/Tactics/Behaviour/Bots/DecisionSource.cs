@@ -1,9 +1,11 @@
 ﻿using System;
-using Zilon.Core.CommonServices.Dice;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
+    using Zilon.Core.CommonServices.Dices;
+
     public class DecisionSource : IDecisionSource
     {
         private readonly IDice _dice;

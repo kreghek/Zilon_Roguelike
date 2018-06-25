@@ -7,6 +7,7 @@
 
     using NUnit.Framework;
 
+    using Zilon.Core.CommonServices;
     using Zilon.Core.Services;
 
     [TestFixture]

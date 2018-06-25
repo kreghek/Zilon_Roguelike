@@ -139,7 +139,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 {
                     var currentPatrolPointIndex = CalcCurrentPatrolPointIndex();
 
-                    IMapNode nextPatrolPoint = null;
+                    IMapNode nextPatrolPoint;
                     if (currentPatrolPointIndex != null)
                     {
                         _patrolPointIndex = currentPatrolPointIndex + 1;

@@ -10,7 +10,6 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.CommonServices.Dice;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;

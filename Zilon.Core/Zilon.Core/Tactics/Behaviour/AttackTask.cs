@@ -11,7 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         private const int ATTACK_DISTANCE = 1;
 
-        private IAttackTarget _target;
+        private readonly IAttackTarget _target;
 
         public override void Execute()
         {

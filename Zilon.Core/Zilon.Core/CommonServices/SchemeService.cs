@@ -1,49 +1,49 @@
-﻿namespace Zilon.Core.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.Schemes;
+
+namespace Zilon.Core.CommonServices
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Newtonsoft.Json;
-
-    using Zilon.Core.Schemes;
-
     /// <summary>
     /// Класс для работы со схемами игрового мира.
     /// </summary>
     public sealed class SchemeService : ISchemeService
     {
-        private readonly Dictionary<string, MapScheme> maps;
-        private readonly Dictionary<string, LocationScheme> locations;
-        private readonly Dictionary<string, PathScheme> paths;
+        private readonly Dictionary<string, MapScheme> _maps;
+        private readonly Dictionary<string, LocationScheme> _locations;
+        private readonly Dictionary<string, PathScheme> _paths;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
-            maps = new Dictionary<string, MapScheme>();
-            LoadSchemes(schemeLocator, "Maps", maps);
+            _maps = new Dictionary<string, MapScheme>();
+            LoadSchemes(schemeLocator, "Maps", _maps);
 
-            locations = new Dictionary<string, LocationScheme>();
-            LoadSchemes(schemeLocator, "Locations", locations);
+            _locations = new Dictionary<string, LocationScheme>();
+            LoadSchemes(schemeLocator, "Locations", _locations);
 
-            paths = new Dictionary<string, PathScheme>();
-            LoadSchemes(schemeLocator, "Paths", paths);
+            _paths = new Dictionary<string, PathScheme>();
+            LoadSchemes(schemeLocator, "Paths", _paths);
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
             if (typeof(TScheme) == typeof(MapScheme))
             {
-                return maps[sid] as TScheme;
+                return _maps[sid] as TScheme;
             }
 
             if (typeof(TScheme) == typeof(LocationScheme))
             {
-                return locations[sid] as TScheme;
+                return _locations[sid] as TScheme;
             }
 
             if (typeof(TScheme) == typeof(PathScheme))
             {
-                return paths[sid] as TScheme;
+                return _paths[sid] as TScheme;
             }
 
             throw new ArgumentException();
@@ -53,17 +53,17 @@
         {
             if (typeof(TScheme) == typeof(MapScheme))
             {
-                return maps.Values.Cast<TScheme>();
+                return _maps.Values.Cast<TScheme>();
             }
 
             if (typeof(TScheme) == typeof(LocationScheme))
             {
-                return locations.Values.Cast<TScheme>();
+                return _locations.Values.Cast<TScheme>();
             }
 
             if (typeof(TScheme) == typeof(PathScheme))
             {
-                return paths.Values.Cast<TScheme>();
+                return _paths.Values.Cast<TScheme>();
             }
 
             throw new ArgumentException();
