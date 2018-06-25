@@ -11,6 +11,8 @@ using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
 {
+    using Zilon.Core.CommonServices.MapGenerators;
+
     [TestFixture]
     public class AStarTests
     {

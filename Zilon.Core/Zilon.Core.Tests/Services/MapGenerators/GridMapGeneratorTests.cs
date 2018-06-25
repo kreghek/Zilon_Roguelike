@@ -9,6 +9,8 @@ using System;
 
 namespace Zilon.Core.Services.MapGenerators.Tests
 {
+    using Zilon.Core.CommonServices.MapGenerators;
+
     [TestFixture()]
     public class GridMapGeneratorTests
     {
