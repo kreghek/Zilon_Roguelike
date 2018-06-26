@@ -18,6 +18,24 @@
 
         /// <inheritdoc />
         /// <summary>
+        /// Наименование схемы.
+        /// </summary>
+        /// <remarks>
+        /// В конкретных реализациях схем используется по-разному.
+        /// </remarks>
+        public string Name { get; set; }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Описание схемы.
+        /// </summary>
+        /// <remarks>
+        /// Абстрактное описание. Для конкретных схем используется по-разному.
+        /// </remarks>
+        public string Description { get; set; }
+
+        /// <inheritdoc />
+        /// <summary>
         /// Признак отключенной схемы.
         /// </summary>
         /// <remarks>
