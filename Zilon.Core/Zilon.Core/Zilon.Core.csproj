@@ -83,7 +83,7 @@
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="CommonServices\MapGenerators\GridMapGenerator.cs" />
     <Compile Include="CommonServices\MapGenerators\IMapGenerator.cs" />
-    <Compile Include="CommonServices\FileSchemeLocator.cs" />
+    <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
     <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSource.cs" />
@@ -103,10 +103,10 @@
     <Compile Include="Schemes\MapScheme.cs" />
     <Compile Include="Schemes\PathScheme.cs" />
     <Compile Include="Schemes\SchemeBase.cs" />
-    <Compile Include="CommonServices\ISchemeLocator.cs" />
-    <Compile Include="CommonServices\ISchemeService.cs" />
-    <Compile Include="CommonServices\SchemeService.cs" />
-    <Compile Include="CommonServices\SchemeFile.cs" />
+    <Compile Include="Schemes\ISchemeLocator.cs" />
+    <Compile Include="Schemes\ISchemeService.cs" />
+    <Compile Include="Schemes\SchemeService.cs" />
+    <Compile Include="Schemes\SchemeFile.cs" />
     <Compile Include="Tactics\Spatial\IEdge.cs" />
     <Compile Include="Tactics\Spatial\HexMap.cs" />
     <Compile Include="Tactics\Spatial\IMap.cs" />

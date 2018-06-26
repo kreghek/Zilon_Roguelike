@@ -4,9 +4,7 @@ using System.Linq;
 
 using Newtonsoft.Json;
 
-using Zilon.Core.Schemes;
-
-namespace Zilon.Core.CommonServices
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Класс для работы со схемами игрового мира.
@@ -49,21 +47,21 @@ namespace Zilon.Core.CommonServices
             throw new ArgumentException();
         }
 
-        public IEnumerable<TScheme> GetSchemes<TScheme>() where TScheme : class, IScheme
+        public TScheme[] GetSchemes<TScheme>() where TScheme : class, IScheme
         {
             if (typeof(TScheme) == typeof(MapScheme))
             {
-                return _maps.Values.Cast<TScheme>();
+                return _maps.Values.Cast<TScheme>().ToArray();
             }
 
             if (typeof(TScheme) == typeof(LocationScheme))
             {
-                return _locations.Values.Cast<TScheme>();
+                return _locations.Values.Cast<TScheme>().ToArray();
             }
 
             if (typeof(TScheme) == typeof(PathScheme))
             {
-                return _paths.Values.Cast<TScheme>();
+                return _paths.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException();
@@ -77,7 +75,9 @@ namespace Zilon.Core.CommonServices
                 var scheme = JsonConvert.DeserializeObject<T>(file.Content);
 
                 if (scheme.Disabled)
+                {
                     continue;
+                }
 
                 scheme.Sid = file.Sid;
                 dict.Add(scheme.Sid, scheme);

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Zilon.Core.CommonServices
+namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {

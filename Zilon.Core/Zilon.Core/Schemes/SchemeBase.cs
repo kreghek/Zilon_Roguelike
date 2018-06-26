@@ -1,10 +1,12 @@
 ﻿namespace Zilon.Core.Schemes
 {
+    /// <inheritdoc />
     /// <summary>
     /// Базовая схема с базовой реализацией.
     /// </summary>
     public abstract class SchemeBase : IScheme
     {
+        /// <inheritdoc />
         /// <summary>
         /// Символьный идентификатор схемы.
         /// </summary>
@@ -14,6 +16,7 @@
         /// </remarks>
         public string Sid { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Признак отключенной схемы.
         /// </summary>

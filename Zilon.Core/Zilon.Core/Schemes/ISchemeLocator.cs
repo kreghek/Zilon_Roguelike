@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.CommonServices
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Локатор схем, возвращающий все схемы в виде текста.

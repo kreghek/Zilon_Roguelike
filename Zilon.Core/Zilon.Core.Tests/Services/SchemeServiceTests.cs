@@ -5,7 +5,7 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using Zilon.Core.CommonServices;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Services
 {
