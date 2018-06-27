@@ -11,13 +11,13 @@
         int Id { get; set; }
 
         /// <summary>
-        /// Урон персонажа.
-        /// </summary>
-        float Damage { get; }
-
-        /// <summary>
         /// Хитпоинты персонажа.
         /// </summary>
         float Hp { get; }
+
+        /// <summary>
+        /// Экипировка персонажа.
+        /// </summary>
+        Equipment[] Equipments { get; }
     }
 }

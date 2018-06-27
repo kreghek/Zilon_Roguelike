@@ -38,11 +38,6 @@ namespace Zilon.Core.Tactics
         void MoveToNode(IMapNode targetNode);
 
         /// <summary>
-        /// Текущий урон актёра.
-        /// </summary>
-        float Damage { get; }
-
-        /// <summary>
         /// Текущая дальность атаки.
         /// </summary>
         int WeaponDistance { get; }
@@ -56,6 +51,11 @@ namespace Zilon.Core.Tactics
         /// Состояние актёра.
         /// </summary>
         bool IsDead { get; set; }
+
+        /// <summary>
+        /// Текущие возможные действия актёра.
+        /// </summary>
+        ITacticalAct Acts { get; }
 
         /// <summary>
         /// Происходит, когда актёр переместился.
