@@ -14,5 +14,23 @@
         /// Ранг пробития брони.
         /// </summary>
         public int ApRank { get; set; }
+
+        /// <summary>
+        /// Ранг брони.
+        /// </summary>
+        public int ArmorRank { get; set; }
+
+        /// <summary>
+        /// Доля поглощения урона при равном ранге пробития и брони.
+        /// </summary>
+        /// <remarks>
+        /// Зависит от Мощи.
+        /// </remarks>
+        public float Absorbtion { get; set; }
+
+        /// <summary>
+        /// Действия, которые позволяет совершать предмет.
+        /// </summary>
+        public TacticalActScheme[] Acts { get; set; }
     }
 }

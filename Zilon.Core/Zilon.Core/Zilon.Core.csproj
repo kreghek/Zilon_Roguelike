@@ -59,9 +59,13 @@
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\Recipe.cs" />
     <Compile Include="Persons\Resource.cs" />
+    <Compile Include="Schemes\TacticalActImpactType.cs" />
+    <Compile Include="Schemes\TacticalActScheme.cs" />
+    <Compile Include="Schemes\TacticalActEffectType.cs" />
     <Compile Include="Schemes\PropEquipSubScheme.cs" />
     <Compile Include="Schemes\PersonScheme.cs" />
     <Compile Include="Schemes\PropScheme.cs" />
+    <Compile Include="Schemes\TacticalActUpdateSubScheme.cs" />
     <Compile Include="Tactics\ActorList.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
