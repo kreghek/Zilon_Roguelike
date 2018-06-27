@@ -186,7 +186,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
         private AStarData GetData(IMapNode node)
         {
-            if (!_dataDict.TryGetValue(node, out AStarData data))
+            if (!_dataDict.TryGetValue(node, out var data))
             {
                 data = new AStarData();
                 _dataDict.Add(node, data);
@@ -201,7 +201,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="current"> Текущий узел. </param>
         /// <param name="map"> Карта, на которой проводится проверка. </param>
         /// <returns> Возвращает список соседних узлов, соединённых ребрами с текущим. </returns>
-        private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
+        private static IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
             var hexCurrent = (HexNode)current;
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
@@ -213,7 +213,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var currentEdgeArray = currentEdges.ToArray();
 
             var actualNeighbors = new List<HexNode>();
-            for (var i = 0; i < neighbors.Count(); i++)
+            for (var i = 0; i < neighbors.Length; i++)
             {
                 var testedNeighbor = neighbors[i];
                 var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
@@ -233,22 +233,23 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <returns>Returns null if the algorithm has never been run.</returns>
         public IMapNode[] GetPath()
         {
-            if (_current != null)
+            if (_current == null)
             {
-                var next = _current;
-                var path = new List<IMapNode>();
-                while (next != null)
-                {
-                    path.Add(next);
-
-                    var nextData = GetData(next);
-
-                    next = nextData.Parent;
-                }
-                path.Reverse();
-                return path.ToArray();
+                return null;
             }
-            return null;
+
+            var next = _current;
+            var path = new List<IMapNode>();
+            while (next != null)
+            {
+                path.Add(next);
+
+                var nextData = GetData(next);
+
+                next = nextData.Parent;
+            }
+            path.Reverse();
+            return path.ToArray();
         }
     }
 

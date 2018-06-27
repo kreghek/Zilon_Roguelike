@@ -6,5 +6,9 @@
     /// </summary>
     public class PropScheme : SchemeBase
     {
+        /// <summary>
+        /// Характеристики схемы, связанные с экипировкой предмета персонажем.
+        /// </summary>
+        public PropEquipSubScheme Equip { get; set; }
     }
 }
