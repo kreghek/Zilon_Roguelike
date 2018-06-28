@@ -15,7 +15,6 @@ namespace Zilon.Core.Tactics
             Node = node;
 
             Hp = person.Hp;
-            Damage = person.Damage;
 
             WeaponDistance = 1;
         }
@@ -63,6 +62,8 @@ namespace Zilon.Core.Tactics
                 OnDead?.Invoke(this, new EventArgs());
             }
         }
+
+        public ITacticalAct Acts { get; }
 
         public event EventHandler OnMoved;
         public event EventHandler OnDead;

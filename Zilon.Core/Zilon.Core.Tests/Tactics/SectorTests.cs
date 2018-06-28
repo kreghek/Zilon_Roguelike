@@ -127,8 +127,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             var person = new Person
             {
-                Hp = 1,
-                Damage = 1
+                Hp = 1
             };
 
             var actor = new Actor(person, player, startNode);

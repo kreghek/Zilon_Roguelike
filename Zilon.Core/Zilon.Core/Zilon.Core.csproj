@@ -56,6 +56,8 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="Persons\Equipment.cs" />
+    <Compile Include="Persons\IEquipCarrier.cs" />
+    <Compile Include="Persons\ITacticalActCarrier.cs" />
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\Recipe.cs" />
     <Compile Include="Persons\Resource.cs" />
@@ -77,7 +79,7 @@
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\ISectorMeta.cs" />
-    <Compile Include="Tactics\ITacticalAct.cs" />
+    <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />

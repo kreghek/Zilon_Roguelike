@@ -1,28 +1,30 @@
-﻿using Zilon.Core.Tactics.Behaviour;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
 
+using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
-using Moq;
-using System.Collections.Generic;
-using Zilon.Core.Players;
 
+// ReSharper disable once CheckNamespace
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
     /// <summary>
     /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
     /// По окончанию задачи на перемещение должен выдавать пустые задачи.
     /// </summary>
-    [TestFixture()]
+    [TestFixture]
     public class HumanActorTaskSourceTests
     {
-        [Test()]
+        [Test]
         public void GetActorTasksTest()
         {
             // ARRANGE
@@ -39,7 +41,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = CreateActor(startNode);
 
-            var behavourSource = new HumanActorTaskSource(actor);
+            var decisionSource = DecisionSource();
+
+            var behavourSource = new HumanActorTaskSource(actor, decisionSource);
             behavourSource.IntentMove(finishNode);
 
             var actorList = CreateActorList(actor);
@@ -55,12 +59,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
                 if (step < 4)
                 {
-                    commands.Count().Should().Be(1);
+                    commands.Length.Should().Be(1);
 
                     var factCommand = commands[0] as MoveTask;
                     factCommand.Should().NotBeNull();
 
-                    factCommand.IsComplete.Should().Be(false);
+                    factCommand?.IsComplete.Should().Be(false);
 
 
                     foreach (var command in commands)
@@ -77,6 +81,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             actor.Node.Should().Be(finishNode);
+        }
+
+        private static IDecisionSource DecisionSource()
+        {
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            var decisionSource = decisionSourceMock.Object;
+            return decisionSource;
         }
 
         private static IActor CreateActor(HexNode startNode)
@@ -99,20 +110,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var map = new TestGridGenMap();
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
 
-            var expectedPath = new[] {
-                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
-                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
-                finishNode
-            };
-
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
+            var decisionSource = DecisionSource();
 
             var actor = CreateActor(startNode);
 
-            var behaviourSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
             var actorList = CreateActorList(actor);
 
@@ -151,12 +154,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
+            var decisionSource = DecisionSource();
 
             var actor = CreateActor(startNode);
 
-            var behaviourSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
 
 
@@ -184,12 +186,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
+            var decisionSource = DecisionSource();
 
             var actor = CreateActor(startNode);
 
-            var behaviourSource = new HumanActorTaskSource(actor);
+            var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
             var actorList = CreateActorList(actor);
 
@@ -246,7 +247,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = CreateActor(startNode);
 
-            var behaviourSource = new HumanActorTaskSource(actor);
+            var decisionSource = DecisionSource();
+
+            var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
             var actorList = CreateActorList(actor);
 
@@ -303,8 +306,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var attackerActor = CreateActor(attackerStartNode);
             var targetActor = CreateActor(targetStartNode);
 
+            var decisionSource = DecisionSource();
 
-            var taskSource = new HumanActorTaskSource(attackerActor);
+            var taskSource = new HumanActorTaskSource(attackerActor, decisionSource);
 
             var actorList = CreateActorList(attackerActor, targetActor);
 

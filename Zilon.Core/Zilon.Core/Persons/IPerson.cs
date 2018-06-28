@@ -14,10 +14,5 @@
         /// Хитпоинты персонажа.
         /// </summary>
         float Hp { get; }
-
-        /// <summary>
-        /// Экипировка персонажа.
-        /// </summary>
-        Equipment[] Equipments { get; }
     }
 }

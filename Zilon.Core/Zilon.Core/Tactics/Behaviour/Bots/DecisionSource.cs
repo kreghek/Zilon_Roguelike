@@ -16,5 +16,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var roll = _dice.Roll(max) + min - 1;
             return roll;
         }
+
+        public float SelectEfficient(float minEfficient, float maxEfficient)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
