@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Common;
+
+namespace Zilon.Core.Schemes
 {
     /// <inheritdoc />
     /// <summary>
@@ -15,6 +17,8 @@
         /// Эффект, который оказывает действие.
         /// </summary>
         public TacticalActEffectType Effect { get; set; }
+
+        public Range<float> Efficient { get; }
 
         /// <summary>
         /// Минимальный радиус, в котором возможно использования действия.

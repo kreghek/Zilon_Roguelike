@@ -1,8 +1,7 @@
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Zenject;
 using Zilon.Core.Commands;
-using Zilon.Core.Services.CombatMap;
-using Zilon.Core.Services.MapGenerators;
+using Zilon.Core.CommonServices.MapGenerators;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
 {

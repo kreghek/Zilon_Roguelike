@@ -73,7 +73,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
 
-            return new Actor(new Person(), player, startNode);
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+
+            return new Actor(person, player, startNode);
         }
 
         /// <summary>

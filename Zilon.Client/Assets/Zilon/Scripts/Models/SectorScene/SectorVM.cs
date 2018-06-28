@@ -9,9 +9,10 @@ using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Services.MapGenerators;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -111,7 +112,7 @@ class SectorVM : MonoBehaviour
         enemy2ActorVm.IsEnemy = true;
         enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
-        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor);
+        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, );
 
         var patrolRoute1 = new PatrolRoute(new IMapNode[]
         {
@@ -167,12 +168,12 @@ class SectorVM : MonoBehaviour
     private ActorVM CreateActorVm(IPlayer player,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
-        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
+        [NotNull] IEnumerable<MapNodeVM> nodeVMs,
+        [NotNull] TacticalActScheme defaultActScheme)
     {
         var person = new Person
         {
-            Hp = 1,
-            Damage = 1
+            Hp = 1
         };
 
         if (player is HumanPlayer)

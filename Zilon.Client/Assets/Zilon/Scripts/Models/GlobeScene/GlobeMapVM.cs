@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 using Zilon.Core.Schemes;
-using Zilon.Core.Services;
 
 /// <summary>
 /// Модель представления глобальной карты.

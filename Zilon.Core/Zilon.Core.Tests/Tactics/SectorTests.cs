@@ -122,10 +122,10 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         private IActor CreateActor([NotNull] IPlayer player,
-        [NotNull] IActorManager actorManager,
-        [NotNull] IMapNode startNode)
+            [NotNull] IActorManager actorManager,
+            [NotNull] IMapNode startNode)
         {
-            var person = new Person
+            var person = new Person(null)
             {
                 Hp = 1
             };
