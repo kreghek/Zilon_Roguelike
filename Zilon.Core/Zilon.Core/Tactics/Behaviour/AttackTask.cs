@@ -1,19 +1,14 @@
 ﻿using System;
 
+using Zilon.Core.Common;
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    using Zilon.Core.Persons;
-    using Zilon.Core.Tactics.Behaviour.Bots;
-
     public class AttackTask : ActorTaskBase
     {
-        /// <summary>
-        /// Возможная дистанция атаки.
-        /// </summary>
-        private const int ATTACK_DISTANCE = 1;
-
         private readonly IAttackTarget _target;
         private readonly IDecisionSource _decisionSource;
 
@@ -27,30 +22,42 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentCubePos = ((HexNode)Actor.Node).CubeCoords;
             var targetCubePos = ((HexNode)_target.Node).CubeCoords;
 
-            var distance = currentCubePos.DistanceTo(targetCubePos);
-
-            if (distance != ATTACK_DISTANCE)
-            {
-                throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
-            }
-
-
             if (Actor.Person is ITacticalActCarrier actCarrier)
             {
+                var act = actCarrier.DefaultAct;
+
+                var isInDistance = CheckDistance(currentCubePos, targetCubePos, act);
+                if (!isInDistance)
+                {
+                    throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                }
+
                 var minEfficient = actCarrier.DefaultAct.MinEfficient;
                 var maxEfficient = actCarrier.DefaultAct.MaxEfficient;
                 var rolledEfficient = _decisionSource.SelectEfficient(minEfficient, maxEfficient);
                 _target.TakeDamage(rolledEfficient);
             }
+            else
+            {
+                throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
+            }
 
             IsComplete = true;
         }
 
-        public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource): base(actor)
+        private bool CheckDistance(CubeCoords currentCubePos, CubeCoords targetCubePos, ITacticalAct act)
+        {
+            var range = new Range<int>(act.Scheme.MinRange, act.Scheme.MaxRange);
+            var distance = currentCubePos.DistanceTo(targetCubePos);
+            var isInDistance = range.Contains(distance);
+            return isInDistance;
+        }
+
+        public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource) : base(actor)
         {
             if (actor == target)
             {
-                throw new ArgumentException("Актур не может атаковать сом себя", nameof(target));
+                throw new ArgumentException("Актур не может атаковать сам себя", nameof(target));
             }
 
             _target = target;
