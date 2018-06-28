@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace Zilon.Core.Persons
 {
@@ -16,7 +15,7 @@ namespace Zilon.Core.Persons
 
         public ITacticalAct[] Acts { get; }
 
-        public Person([CanBeNull] Equipment equipment)
+        public Person(Equipment equipment)
         {
             if (equipment != null)
             {

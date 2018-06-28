@@ -21,7 +21,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public Range<float> Efficient { get; }
+        public Range<float> Efficient { get; set; }
 
         /// <summary>
         /// Минимальный радиус, в котором возможно использования действия.
