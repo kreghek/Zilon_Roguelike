@@ -10,7 +10,6 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.CommonServices.Dice;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -128,8 +127,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             var person = new Person
             {
-                Hp = 1,
-                Damage = 1
+                Hp = 1
             };
 
             var actor = new Actor(person, player, startNode);

@@ -1,6 +1,4 @@
-﻿using System;
-using Zilon.Core.CommonServices.Dice;
-using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -8,7 +6,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     {
         private readonly IDice _dice;
 
-        public DecisionSource(IDice dice) {
+        public DecisionSource(IDice dice)
+        {
             _dice = dice;
         }
 
@@ -18,9 +17,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return roll;
         }
 
-        public IMapNode SelectPatrolPoint(IMap map, IPatrolRoute patrolRoute)
+        public float SelectEfficient(float minEfficient, float maxEfficient)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

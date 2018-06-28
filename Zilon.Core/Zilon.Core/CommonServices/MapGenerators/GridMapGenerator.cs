@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
-using Zilon.Core.Services.CombatMap;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Services.MapGenerators
+namespace Zilon.Core.CommonServices.MapGenerators
 {
     public class GridMapGenerator : IMapGenerator
     {
         private const int DEFAULT_MAP_SIZE = 10;
-        private readonly int _mapSize = 10;
+        private readonly int _mapSize;
 
         public GridMapGenerator() : this(DEFAULT_MAP_SIZE)
         {

@@ -4,6 +4,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
+    using Zilon.Core.Persons;
+    using Zilon.Core.Tactics.Behaviour.Bots;
+
     public class AttackTask : ActorTaskBase
     {
         /// <summary>
@@ -11,7 +14,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         private const int ATTACK_DISTANCE = 1;
 
-        private IAttackTarget _target;
+        private readonly IAttackTarget _target;
+        private readonly IDecisionSource _decisionSource;
 
         public override void Execute()
         {
@@ -30,12 +34,19 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
             }
 
-            _target.TakeDamage(Actor.Damage);
+
+            if (Actor.Person is ITacticalActCarrier actCarrier)
+            {
+                var minEfficient = actCarrier.DefaultAct.MinEfficient;
+                var maxEfficient = actCarrier.DefaultAct.MaxEfficient;
+                var rolledEfficient = _decisionSource.SelectEfficient(minEfficient, maxEfficient);
+                _target.TakeDamage(rolledEfficient);
+            }
 
             IsComplete = true;
         }
 
-        public AttackTask(IActor actor, IAttackTarget target): base(actor)
+        public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource): base(actor)
         {
             if (actor == target)
             {
@@ -43,6 +54,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             _target = target;
+            _decisionSource = decisionSource;
         }
     }
 }

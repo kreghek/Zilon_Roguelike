@@ -1,10 +1,28 @@
 ﻿namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
-    public class AStarData
+    /// <summary>
+    /// Внутреняя структура для алгоритма поиска пути A*.
+    /// </summary>
+    internal class AStarData
     {
-        public IMapNode Parent;
-        public int MovementCost;
-        public int EstimateCost;
-        public int TotalCost;
+        /// <summary>
+        /// Родительский узел.
+        /// </summary>
+        public IMapNode Parent { get; set; }
+
+        /// <summary>
+        /// Стоимость перемещение.
+        /// </summary>
+        public int MovementCost { get; set; }
+
+        /// <summary>
+        /// Остаточная стоимость.
+        /// </summary>
+        public int EstimateCost { get; set; }
+
+        /// <summary>
+        /// Суммарная стоимость.
+        /// </summary>
+        public int TotalCost { get; set; }
     }
 }

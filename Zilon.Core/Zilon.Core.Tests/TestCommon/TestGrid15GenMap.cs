@@ -5,6 +5,8 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.TestCommon
 {
+    using Zilon.Core.CommonServices.MapGenerators;
+
     public class TestGrid15GenMap : IMap
     {
         public List<IMapNode> Nodes { get; set; }

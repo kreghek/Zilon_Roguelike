@@ -8,7 +8,7 @@
     /// </remarks>
     public abstract class ActorTaskBase: IActorTask
     {
-        public ActorTaskBase(IActor actor)
+        protected ActorTaskBase(IActor actor)
         {
             Actor = actor;
         }

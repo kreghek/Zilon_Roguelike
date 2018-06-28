@@ -10,12 +10,12 @@ namespace Zilon.Core.Tactics
     public class Sector : ISector
     {
         private readonly List<IActorTask> _tasks;
-        
-        public IMap Map { get; }
+
+        private readonly IMap _map;
+
+        private readonly IActorManager _actorManager;
 
         public IActorTaskSource[] BehaviourSources { get; set; }
-        
-        public IActorManager ActorManager { get; }
 
         public Sector(IMap map, IActorManager actorManager)
         {
@@ -28,8 +28,8 @@ namespace Zilon.Core.Tactics
 
             _tasks = new List<IActorTask>();
 
-            Map = map;
-            ActorManager = actorManager;
+            _map = map;
+            _actorManager = actorManager;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tactics
             _tasks.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
-                var commands = behaviourSource.GetActorTasks(Map, ActorManager);
+                var commands = behaviourSource.GetActorTasks(_map, _actorManager);
                 if (commands != null)
                 {
                     _tasks.AddRange(commands);

@@ -1,5 +1,9 @@
 ﻿namespace Zilon.Core.Schemes
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Схема ребра перехода между узлами на глобальной карте.
+    /// </summary>
     public sealed class PathScheme: SchemeBase
     {
         public string MapSid { get; set; }

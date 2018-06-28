@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
 
 namespace Zilon.Core.Commands.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class QueueCommandManagerTests
     {
         /// <summary>
@@ -12,8 +14,8 @@ namespace Zilon.Core.Commands.Tests
         /// 2. Извлекаем все команды.
         /// 3. Команды должны быть такими, какими их поместили в порядке очереди.
         /// </summary>
-        /// <param name="commands"></param>
-        [Test()]
+        [Test]
+        //TODO Входные параметры-объекты работают не стабильно. Переписать на 2 теста.
         [TestCaseSource(typeof(QuequCommandManagerTestCaseGenerator),
             nameof(QuequCommandManagerTestCaseGenerator.PopTestCases))]
         public void Pop_FakeCommands_AllCommandsExtracted(ICommand[] commands)
@@ -43,8 +45,7 @@ namespace Zilon.Core.Commands.Tests
         /// 2. Извлекаем все команды.
         /// 3. Обе команды должны быть извлечены.
         /// </summary>
-        /// <param name="commands"></param>
-        [Test()]
+        [Test]
         public void Pop_TwoCommandsWithIdleUpdate_AllCommandsExtracted()
         {
             // ARRANGE

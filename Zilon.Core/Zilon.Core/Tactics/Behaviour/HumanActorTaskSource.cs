@@ -3,17 +3,21 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
+    using Zilon.Core.Tactics.Behaviour.Bots;
+
     public class HumanActorTaskSource : IActorTaskSource
     {
         private readonly IActor _currentActor;
         private IActorTask _currentTask;
 
         private HexNode _targetNode;
-        private bool _taskIsActual = false;
+        private bool _taskIsActual;
         private IAttackTarget _attackTarget;
+        private readonly IDecisionSource _decisionSource;
 
-        public HumanActorTaskSource(IActor startActor)
+        public HumanActorTaskSource(IActor startActor, IDecisionSource decisionSource)
         {
+            _decisionSource = decisionSource;
             _currentActor = startActor;
         }
 
@@ -45,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_attackTarget != null)
             {
-                var attackTask = new AttackTask(_currentActor, _attackTarget);
+                var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
                 _currentTask = attackTask;
 
                 return new[] { _currentTask };

@@ -6,6 +6,8 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.TestCommon
 {
+    using Zilon.Core.CommonServices.MapGenerators;
+
     /// <summary>
     /// Тестовый класс карты со стенами.
     /// </summary>

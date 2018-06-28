@@ -7,8 +7,6 @@
 
     public class HexNodeHelper
     {
-        private const float LOCATION_DISTANCE = 20;
-
         public static HexNode[] GetNeighbors(HexNode currentNode, HexNode[] nodes)
         {
             var currentCubeCoords = currentNode.CubeCoords;
@@ -29,13 +27,14 @@
 
             var list = new List<HexNode>();
 
+            var nodeDictionary = nodes.ToDictionary(x => x.CubeCoords, x => x);
             for (var i = 0; i < 6; i++)
             {
                 var neighborCoord = neighborCoords[i];
-                var node = nodes.SingleOrDefault(x => x.CubeCoords == neighborCoord);
-                if (node != null)
+
+                if (nodeDictionary.TryGetValue(neighborCoord, out HexNode neighborNode))
                 {
-                    list.Add(node);
+                    list.Add(neighborNode);
                 }
             }
 
@@ -51,14 +50,16 @@
         /// <returns> Возвращает ближайший узел карты. </returns>
         public static HexNode GetNearbyCoordinates(HexNode node, IEnumerable<HexNode> targets)
         {
-            if (!targets.Any())
+            var targetArray = targets.ToArray();
+
+            if (!targetArray.Any())
             {
                 throw new ArgumentException("Набор целевых узлов не может быть пустым.", nameof(targets));
             }
 
             var minDistance = -1;
             HexNode nearbyNode = null;
-            foreach (var target in targets)
+            foreach (var target in targetArray)
             {
                 if (target == node)
                 {

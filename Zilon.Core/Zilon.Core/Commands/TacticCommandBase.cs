@@ -11,7 +11,7 @@
             ExecuteTacticCommand();
         }
 
-        public TacticCommandBase()
+        protected TacticCommandBase()
         {
             
         }

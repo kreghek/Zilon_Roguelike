@@ -93,7 +93,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(_actor, _targetIntruder);
+                var attackTask = new AttackTask(_actor, _targetIntruder, _decisionSource);
                 return attackTask;
             }
             else
@@ -139,7 +139,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 {
                     var currentPatrolPointIndex = CalcCurrentPatrolPointIndex();
 
-                    IMapNode nextPatrolPoint = null;
+                    IMapNode nextPatrolPoint;
                     if (currentPatrolPointIndex != null)
                     {
                         _patrolPointIndex = currentPatrolPointIndex + 1;

@@ -9,6 +9,8 @@ using System;
 
 namespace Zilon.Core.Services.MapGenerators.Tests
 {
+    using Zilon.Core.CommonServices.MapGenerators;
+
     [TestFixture()]
     public class GridMapGeneratorTests
     {
@@ -63,31 +65,6 @@ namespace Zilon.Core.Services.MapGenerators.Tests
             var map = new HexMap();
 
             var mapGenerator = new GridMapGenerator(7);
-
-
-            // ACT
-            Action act = () => { mapGenerator.CreateMap(map); };
-
-
-
-            // ASSERT
-            act.Should().NotThrow();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что генератор сеточных карт сможет сгенерировать квадратную карту 50х50.
-        /// </summary>
-        [Test]
-        [Timeout(20*1000)] // Время билд-сервера (не точно, нужно проверить)
-        [Category("Long")]
-        [Category("Timeout")]
-        public void CreateMap_BigMap50_NoExceptions()
-        {
-            // ARRANGE
-
-            var map = new HexMap();
-
-            var mapGenerator = new GridMapGenerator(50);
 
 
             // ACT

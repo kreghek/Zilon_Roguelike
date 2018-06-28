@@ -1,14 +1,14 @@
-﻿namespace Zilon.Core.Tests.Services
+﻿using System;
+using System.Configuration;
+
+using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Schemes;
+
+namespace Zilon.Core.Tests.Services
 {
-    using System;
-    using System.Configuration;
-
-    using FluentAssertions;
-
-    using NUnit.Framework;
-
-    using Zilon.Core.Services;
-
     [TestFixture]
     public class SchemeServiceTests
     {
@@ -27,7 +27,7 @@
             // ACT
             Action createService = () =>
             {
-                var schemeService = CreateSchemeService();
+                CreateSchemeService();
             };
 
 
@@ -36,13 +36,13 @@
             createService.Should().NotThrow();
         }
 
-        private ISchemeService CreateSchemeService()
+        private void CreateSchemeService()
         {
             var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
-            return new SchemeService(schemeLocator);
+            new SchemeService(schemeLocator);
         }
     }
 }

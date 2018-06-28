@@ -15,16 +15,17 @@ namespace Zilon.Core.Tactics
             Node = node;
 
             Hp = person.Hp;
-            Damage = person.Damage;
 
             WeaponDistance = 1;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         public IPerson Person { get; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
@@ -61,6 +62,8 @@ namespace Zilon.Core.Tactics
                 OnDead?.Invoke(this, new EventArgs());
             }
         }
+
+        public ITacticalAct Acts { get; }
 
         public event EventHandler OnMoved;
         public event EventHandler OnDead;
