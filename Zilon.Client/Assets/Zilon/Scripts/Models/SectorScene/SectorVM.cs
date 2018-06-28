@@ -99,6 +99,7 @@ class SectorVM : MonoBehaviour
         var humanPlayer = new HumanPlayer();
         var botPlayer = new BotPlayer();
 
+        var playerEquipment = new Equipment();
         var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
         var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs);
 
@@ -169,9 +170,9 @@ class SectorVM : MonoBehaviour
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs,
-        [NotNull] TacticalActScheme defaultActScheme)
+        [NotNull] Equipment equipment)
     {
-        var person = new Person
+        var person = new Person(equipment)
         {
             Hp = 1
         };

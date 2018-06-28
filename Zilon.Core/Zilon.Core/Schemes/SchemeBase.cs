@@ -42,5 +42,14 @@
         /// Если установлен, то схема игнорируется службой схем
         /// </remarks>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Строковое представление рецепта.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Sid}: {Name}";
+        }
     }
 }
