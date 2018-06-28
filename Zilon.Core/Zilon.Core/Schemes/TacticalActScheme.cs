@@ -18,6 +18,9 @@ namespace Zilon.Core.Schemes
         /// </summary>
         public TacticalActEffectType Effect { get; set; }
 
+        /// <summary>
+        /// Эффективность действия.
+        /// </summary>
         public Range<float> Efficient { get; }
 
         /// <summary>

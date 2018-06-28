@@ -43,6 +43,8 @@ class SectorVM : MonoBehaviour
     [Inject] private ISectorManager _sectorManager;
 
     [Inject] private IPlayerState _playerState;
+    
+    [Inject] private IDecisionSource _decisionSource;
 
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
@@ -99,21 +101,40 @@ class SectorVM : MonoBehaviour
         var humanPlayer = new HumanPlayer();
         var botPlayer = new BotPlayer();
 
-        var playerEquipment = new Equipment();
+        var propScheme = new PropScheme()
+        {
+            Name = "Меч",
+            Equip = new PropEquipSubScheme
+            {
+                Acts = new[]
+                {
+                    new TacticalActScheme
+                    {
+                        MinRange = 1,
+                        MaxRange = 1,
+                        Efficient = new Range<float>(1, 3)
+                    }
+                }
+            }
+        };
+        
+        var playerEquipment = new Equipment(propScheme);
         var playerActorStartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
-        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs);
+        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs, playerEquipment);
 
+        var enemy1Equipment = new Equipment(propScheme);
         var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
-        var enemy1ActorVm = CreateActorVm(botPlayer, actorManager, enemy1StartNode, nodeVMs);
+        var enemy1ActorVm = CreateActorVm(botPlayer, actorManager, enemy1StartNode, nodeVMs, enemy1Equipment);
         enemy1ActorVm.IsEnemy = true;
         enemy1ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
+        var enemy2Equipment = new Equipment(propScheme);
         var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
-        var enemy2ActorVm = CreateActorVm(botPlayer, actorManager, enemy2StartNode, nodeVMs);
+        var enemy2ActorVm = CreateActorVm(botPlayer, actorManager, enemy2StartNode, nodeVMs, enemy2Equipment);
         enemy2ActorVm.IsEnemy = true;
         enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
-        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, );
+        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor,_decisionSource);
 
         var patrolRoute1 = new PatrolRoute(new IMapNode[]
         {
