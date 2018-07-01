@@ -7,7 +7,7 @@
 
     public class HexNodeHelper
     {
-        public static HexNode[] GetNeighbors(HexNode currentNode, HexNode[] nodes)
+        public static HexNode[] GetNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
         {
             var currentCubeCoords = currentNode.CubeCoords;
 
