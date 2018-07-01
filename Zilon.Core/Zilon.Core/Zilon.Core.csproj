@@ -51,6 +51,7 @@
     <Compile Include="Commands\TacticCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="Common\HexHelper.cs" />
+    <Compile Include="Common\Range.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\Recipe.cs" />
     <Compile Include="Persons\Resource.cs" />
+    <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Schemes\TacticalActImpactType.cs" />
     <Compile Include="Schemes\TacticalActScheme.cs" />
     <Compile Include="Schemes\TacticalActEffectType.cs" />

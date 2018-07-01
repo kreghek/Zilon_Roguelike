@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Zilon.Core.Services;
+using Zilon.Core.Schemes;
 
 public class SchemeLocator : MonoBehaviour, ISchemeLocator
 {
