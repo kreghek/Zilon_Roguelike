@@ -106,7 +106,7 @@ namespace Zilon.Core.Tactics.Generation
 
                 var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, availableRooms);
 
-                if (selectedRooms == null)
+                if (selectedRooms == null || !selectedRooms.Any())
                 {
                     //Значит текущая комната тупиковая
                     Log.AppendLine($"Для комнаты {room} нет соседей (тупик).");
@@ -116,7 +116,7 @@ namespace Zilon.Core.Tactics.Generation
                 Log.AppendLine($"Для комнаты {room} выбраны соседи ");
                 foreach (var selectedRoom in selectedRooms)
                 {
-                    Log.Append(selectedRoom);
+                    Log.Append(selectedRoom.ToString() + " ");
                 }
 
                 foreach (var selectedRoom in selectedRooms)

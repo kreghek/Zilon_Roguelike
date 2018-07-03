@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Zilon.Core.CommonServices.Dices;
 
@@ -16,21 +15,22 @@ namespace Zilon.Core.Tactics.Generation
 
         public Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms)
         {
-            var list = new List<Room>();
+            var selectedRooms = new HashSet<Room>();
             for (var i = 0; i < maxNeighbors; i++)
             {
                 var hasNeighborRoll = _dice.Roll(100);
-                var hasNeighborSuccess = 100 - hasNeighborRoll;
+                var hasNeighborSuccess = 100 - hasNeighborRoll + 1;
                 if (hasNeighborSuccess < p)
                 {
+                    // Провал броска на выбор очередного соседа.
                     continue;
                 }
 
-                var rolledRoomIndex = _dice.Roll(rooms.Count());
-                list.Add(rooms[rolledRoomIndex]);
+                var rolledRoomIndex = _dice.Roll(rooms.Count()) - 1;
+                selectedRooms.Add(rooms[rolledRoomIndex]);
             }
 
-            return list.ToArray();
+            return selectedRooms.ToArray();
         }
 
         public OffsetCoords RollRoomPosition(int maxPosition)

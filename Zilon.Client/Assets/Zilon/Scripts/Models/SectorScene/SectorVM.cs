@@ -82,11 +82,13 @@ class SectorVM : MonoBehaviour
         {
             sectorGenerator.Generate(sector, map);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.Log(sectorGenerator.Log.ToString());
-            Debug.LogException(e);
+            throw;
         }
+        
+        Debug.Log(sectorGenerator.Log.ToString());
 
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
