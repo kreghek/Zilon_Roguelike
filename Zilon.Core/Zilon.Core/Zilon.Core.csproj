@@ -56,6 +56,7 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
+    <Compile Include="OffsetCoords.cs" />
     <Compile Include="Persons\Equipment.cs" />
     <Compile Include="Persons\IEquipCarrier.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Schemes\PersonScheme.cs" />
     <Compile Include="Schemes\PropScheme.cs" />
     <Compile Include="Schemes\TacticalActUpdateSubScheme.cs" />
+    <Compile Include="Size.cs" />
     <Compile Include="Tactics\ActorList.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
@@ -79,7 +81,6 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
-    <Compile Include="Tactics\Generation\Corridor.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />

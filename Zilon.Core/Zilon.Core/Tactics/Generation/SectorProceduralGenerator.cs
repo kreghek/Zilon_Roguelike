@@ -29,24 +29,23 @@ namespace Zilon.Core.Tactics.Generation
                 var attemptCounter = 3;
                 while (true)
                 {
-                    _randomSource.RollRoomPosition(roomGridSize, out int roomPositionX, out int roomPositionY);
+                    var rolledPosition = _randomSource.RollRoomPosition(roomGridSize);
 
-                    var currentRoom = roomGrid[roomPositionX, roomPositionY];
+                    var currentRoom = roomGrid[rolledPosition.X, rolledPosition.Y];
                     if (currentRoom == null)
                     {
-                        var room = new Room();
-                        room.PositionX = roomPositionX;
-                        room.PositionY = roomPositionY;
+                        var room = new Room
+                        {
+                            PositionX = rolledPosition.X,
+                            PositionY = rolledPosition.Y
+                        };
 
-                        _randomSource.RollRoomSize(ROOM_CELL_SIZE, out int roomWidth, out int roomHeight);
+                        var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE);
 
-                        room.Width = roomWidth;
-                        room.Height = roomHeight;
+                        room.Width = rolledSize.Width;
+                        room.Height = rolledSize.Height;
 
                         rooms.Add(room);
-                    }
-                    else
-                    {
                         break;
                     }
 
@@ -66,7 +65,7 @@ namespace Zilon.Core.Tactics.Generation
                     for (var y = 0; y < room.Height; y++)
                     {
                         var nodeX = x + room.PositionX * ROOM_CELL_SIZE;
-                        var nodeY = x + room.PositionY * ROOM_CELL_SIZE;
+                        var nodeY = y + room.PositionY * ROOM_CELL_SIZE;
                         var node = new HexNode(nodeX, nodeY);
                         room.Nodes.Add(node);
                         map.Nodes.Add(node);
@@ -94,55 +93,63 @@ namespace Zilon.Core.Tactics.Generation
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
-                var selectedRoom = _randomSource.RollConnectedRoom(room, rooms);
-
-                var startNode = room.Nodes.First();
-                var finishNode = selectedRoom.Nodes.First();
-
-                //Строим коридор
-                var currentX = startNode.OffsetX;
-                var currentY = startNode.OffsetY;
-                while (true)
+                var selectedRooms = _randomSource.RollConnectedRooms(room, rooms);
+                if (selectedRooms == null)
                 {
-                    if (currentX >= finishNode.OffsetX)
-                    {
-                        currentX--;
-                    }
-                    else
-                    {
-                        currentX++;
-                    }
+                    //Значит текущая комната тупиковая
+                    continue;
+                }
 
-                    if (currentY >= finishNode.OffsetY)
+                foreach (var selectedRoom in selectedRooms)
+                {
+                    var startNode = room.Nodes.First();
+                    var finishNode = selectedRoom.Nodes.First();
+
+                    //Строим коридор
+                    var currentX = startNode.OffsetX;
+                    var currentY = startNode.OffsetY;
+                    while (true)
                     {
-                        currentY--;
+                        if (currentX >= finishNode.OffsetX)
+                        {
+                            currentX--;
+                        }
+                        else
+                        {
+                            currentX++;
+                        }
+
+                        if (currentY >= finishNode.OffsetY)
+                        {
+                            currentY--;
+                        }
+                        else
+                        {
+                            currentY++;
+                        }
+
+                        var currentNode = map.Nodes.OfType<HexNode>()
+                            .SingleOrDefault(x => x.OffsetX == currentX && x.OffsetY == currentY);
+
+                        if (currentNode == null)
+                        {
+                            currentNode = new HexNode(currentX, currentY);
+                            map.Nodes.Add(currentNode);
+                        }
+
+                        var currentEdge = (from edge in map.Edges
+                                           where edge.Nodes.Contains(startNode)
+                                           where edge.Nodes.Contains(currentNode)
+                                           select edge).SingleOrDefault();
+
+                        if (currentEdge == null)
+                        {
+                            currentEdge = new Edge(startNode, currentNode);
+                            map.Edges.Add(currentEdge);
+                        }
+
+                        startNode = currentNode;
                     }
-                    else
-                    {
-                        currentY++;
-                    }
-
-                    var currentNode = map.Nodes.OfType<HexNode>()
-                        .SingleOrDefault(x => x.OffsetX == currentX && x.OffsetY == currentY);
-
-                    if (currentNode == null)
-                    {
-                        currentNode = new HexNode(currentX, currentY);
-                        map.Nodes.Add(currentNode);
-                    }
-
-                    var currentEdge = (from edge in map.Edges
-                        where edge.Nodes.Contains(startNode)
-                        where edge.Nodes.Contains(currentNode)
-                        select edge).SingleOrDefault();
-
-                    if (currentEdge == null)
-                    {
-                        currentEdge = new Edge(startNode, currentNode);
-                        map.Edges.Add(currentEdge);
-                    }
-
-                    startNode = currentNode;
                 }
             }
         }
