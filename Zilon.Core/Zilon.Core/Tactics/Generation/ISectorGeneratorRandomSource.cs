@@ -6,6 +6,6 @@ namespace Zilon.Core.Tactics.Generation
     {
         OffsetCoords RollRoomPosition(int maxPosition);
         Size RollRoomSize(int maxSize);
-        Room[] RollConnectedRooms(Room room, IList<Room> rooms);
+        Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms);
     }
 }

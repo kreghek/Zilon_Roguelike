@@ -83,6 +83,7 @@
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
+    <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\ISector.cs" />

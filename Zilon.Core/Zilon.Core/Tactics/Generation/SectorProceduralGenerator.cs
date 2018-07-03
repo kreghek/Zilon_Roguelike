@@ -9,7 +9,8 @@ namespace Zilon.Core.Tactics.Generation
     {
         private const int ROOM_COUNT = 10;
         private const int ROOM_CELL_SIZE = 10;
-
+        private const int MaxNeighbors = 1;
+        private const int NeighborProbably = 100;
         private readonly ISectorGeneratorRandomSource _randomSource;
 
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource)
@@ -93,7 +94,7 @@ namespace Zilon.Core.Tactics.Generation
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
-                var selectedRooms = _randomSource.RollConnectedRooms(room, rooms);
+                var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, rooms);
                 if (selectedRooms == null)
                 {
                     //Значит текущая комната тупиковая
