@@ -46,6 +46,8 @@ namespace Zilon.Core.Tactics.Generation
                             PositionY = rolledPosition.Y
                         };
 
+                        roomGrid[rolledPosition.X, rolledPosition.Y] = room;
+
                         var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
 
                         room.Width = rolledSize.Width + 2;
