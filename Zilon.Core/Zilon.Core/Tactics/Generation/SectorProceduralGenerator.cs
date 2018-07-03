@@ -153,6 +153,8 @@ namespace Zilon.Core.Tactics.Generation
                     }
                 }
             }
+
+            sector.StartNodes = rooms.First().Nodes.ToArray();
         }
 
         /// <summary>

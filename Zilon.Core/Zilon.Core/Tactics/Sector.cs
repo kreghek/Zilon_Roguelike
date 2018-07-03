@@ -17,6 +17,8 @@ namespace Zilon.Core.Tactics
 
         public IActorTaskSource[] BehaviourSources { get; set; }
 
+        public IMapNode[] StartNodes { get; set; }
+
         public Sector(IMap map, IActorManager actorManager)
         {
 #pragma warning disable IDE0016 // Use 'throw' expression
