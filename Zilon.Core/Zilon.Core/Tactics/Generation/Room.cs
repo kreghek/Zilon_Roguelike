@@ -11,8 +11,14 @@ namespace Zilon.Core.Tactics.Generation
         public int Height { get; set; }
         public List<HexNode> Nodes { get; set; }
 
-        public Room() {
+        public Room()
+        {
             Nodes = new List<HexNode>();
+        }
+
+        public override string ToString()
+        {
+            return $"({PositionX}, {PositionY})";
         }
     }
 }

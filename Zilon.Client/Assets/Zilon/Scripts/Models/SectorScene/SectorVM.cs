@@ -65,20 +65,28 @@ class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void Awake()
     {
-        var mapGenerator = new GridMapGenerator(15);
+//        var mapGenerator = new GridMapGenerator(15);
         var map = new HexMap();
-        mapGenerator.CreateMap(map);
-        map.Edges.RemoveAt(10);
-        map.Edges.RemoveAt(20);
-        map.Edges.RemoveAt(30);
+//        mapGenerator.CreateMap(map);
+//        map.Edges.RemoveAt(10);
+//        map.Edges.RemoveAt(20);
+//        map.Edges.RemoveAt(30);
         
         var actorManager = new ActorList();
         
         var sector = new Sector(map, actorManager);
         
         var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource);
-        
-        sectorGenerator.Generate(sector, map);
+
+        try
+        {
+            sectorGenerator.Generate(sector, map);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(sectorGenerator.Log.ToString());
+            Debug.LogException(e);
+        }
 
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in map.Nodes)
@@ -106,7 +114,7 @@ class SectorVM : MonoBehaviour
         }
 
         var humanPlayer = new HumanPlayer();
-        var botPlayer = new BotPlayer();
+//        var botPlayer = new BotPlayer();
 
         var propScheme = new PropScheme()
         {

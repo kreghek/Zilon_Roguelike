@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Generation
@@ -13,9 +14,13 @@ namespace Zilon.Core.Tactics.Generation
         private const int NeighborProbably = 100;
         private readonly ISectorGeneratorRandomSource _randomSource;
 
+        public StringBuilder Log;
+
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource)
         {
             _randomSource = randomSource;
+
+            Log = new StringBuilder();
         }
 
         public void Generate(ISector sector, IMap map)
@@ -30,7 +35,7 @@ namespace Zilon.Core.Tactics.Generation
                 var attemptCounter = 3;
                 while (true)
                 {
-                    var rolledPosition = _randomSource.RollRoomPosition(roomGridSize);
+                    var rolledPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
 
                     var currentRoom = roomGrid[rolledPosition.X, rolledPosition.Y];
                     if (currentRoom == null)
@@ -47,6 +52,9 @@ namespace Zilon.Core.Tactics.Generation
                         room.Height = rolledSize.Height;
 
                         rooms.Add(room);
+
+                        Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
+
                         break;
                     }
 
@@ -97,10 +105,18 @@ namespace Zilon.Core.Tactics.Generation
                 var availableRooms = rooms.Where(x => x != room).ToArray();
 
                 var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, availableRooms);
+
                 if (selectedRooms == null)
                 {
                     //Значит текущая комната тупиковая
+                    Log.AppendLine($"Для комнаты {room} нет соседей (тупик).");
                     continue;
+                }
+
+                Log.AppendLine($"Для комнаты {room} выбраны соседи ");
+                foreach (var selectedRoom in selectedRooms)
+                {
+                    Log.Append(selectedRoom);
                 }
 
                 foreach (var selectedRoom in selectedRooms)
