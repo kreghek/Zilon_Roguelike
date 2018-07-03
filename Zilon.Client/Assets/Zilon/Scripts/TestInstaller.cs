@@ -4,6 +4,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tactics.Generation;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
 {
@@ -15,5 +16,6 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IPlayerState>().To<PlayerState>().AsSingle();
         Container.Bind<IDice>().To<Dice>().AsSingle();
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
+        Container.Bind<ISectorGeneratorRandomSource>().To<SectorGeneratorRandomSource>().AsSingle();
     }
 }

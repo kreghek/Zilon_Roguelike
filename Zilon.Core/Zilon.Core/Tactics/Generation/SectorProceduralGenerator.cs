@@ -18,7 +18,7 @@ namespace Zilon.Core.Tactics.Generation
             _randomSource = randomSource;
         }
 
-        public void Generate(ISector sector, IMap map, IActor playerActor)
+        public void Generate(ISector sector, IMap map)
         {
             // Генерируем комнаты в сетке
             var roomGridSize = (int)Math.Ceiling(Math.Log(ROOM_COUNT, 2)) + 1;
@@ -94,7 +94,9 @@ namespace Zilon.Core.Tactics.Generation
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
-                var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, rooms);
+                var availableRooms = rooms.Where(x => x != room).ToArray();
+
+                var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, availableRooms);
                 if (selectedRooms == null)
                 {
                     //Значит текущая комната тупиковая

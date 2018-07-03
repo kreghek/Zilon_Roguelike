@@ -72,9 +72,6 @@ namespace Zilon.CoreTests.Tactics.Generation
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
 
-            var playerActorMock = new Mock<IActor>();
-            var actor = playerActorMock.Object;
-
 
             var generator = new SectorProceduralGenerator(randomSource);
 
@@ -82,7 +79,7 @@ namespace Zilon.CoreTests.Tactics.Generation
             // ACT
             Action act = ()=>
             {
-                generator.Generate(sector, map, actor);
+                generator.Generate(sector, map);
             };
 
 
