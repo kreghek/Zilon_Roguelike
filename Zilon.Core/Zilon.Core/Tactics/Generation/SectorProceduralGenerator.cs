@@ -75,14 +75,14 @@ namespace Zilon.Core.Tactics.Generation
 
                         foreach (var neighbor in neighbors)
                         {
-                            var currentEdge = GetExistsEdge(map, (HexNode)node, neighbor);
+                            var currentEdge = GetExistsEdge(map, node, neighbor);
 
                             if (currentEdge != null)
                             {
                                 continue;
                             }
 
-                            AddEdgeToMap(map, (HexNode)node, neighbor);
+                            AddEdgeToMap(map, node, neighbor);
                         }
                     }
                 }
@@ -121,6 +121,28 @@ namespace Zilon.Core.Tactics.Generation
                     {
                         currentY++;
                     }
+
+                    var currentNode = map.Nodes.OfType<HexNode>()
+                        .SingleOrDefault(x => x.OffsetX == currentX && x.OffsetY == currentY);
+
+                    if (currentNode == null)
+                    {
+                        currentNode = new HexNode(currentX, currentY);
+                        map.Nodes.Add(currentNode);
+                    }
+
+                    var currentEdge = (from edge in map.Edges
+                        where edge.Nodes.Contains(startNode)
+                        where edge.Nodes.Contains(currentNode)
+                        select edge).SingleOrDefault();
+
+                    if (currentEdge == null)
+                    {
+                        currentEdge = new Edge(startNode, currentNode);
+                        map.Edges.Add(currentEdge);
+                    }
+
+                    startNode = currentNode;
                 }
             }
         }
