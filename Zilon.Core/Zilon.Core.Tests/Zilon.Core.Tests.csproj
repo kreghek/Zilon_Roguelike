@@ -91,6 +91,7 @@
     <Compile Include="Tactics\Behaviour\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />
+    <Compile Include="Tactics\Generation\SectorProceduralGeneratorTests.cs" />
     <Compile Include="Tactics\SectorTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />

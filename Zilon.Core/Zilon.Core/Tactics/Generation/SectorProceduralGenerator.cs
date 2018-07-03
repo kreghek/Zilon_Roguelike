@@ -46,16 +46,20 @@ namespace Zilon.Core.Tactics.Generation
                             PositionY = rolledPosition.Y
                         };
 
-                        var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE);
+                        var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
 
-                        room.Width = rolledSize.Width;
-                        room.Height = rolledSize.Height;
+                        room.Width = rolledSize.Width + 2;
+                        room.Height = rolledSize.Height + 2;
 
                         rooms.Add(room);
 
                         Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
 
                         break;
+                    }
+                    else
+                    {
+                        // эта ячейка уже занята
                     }
 
                     attemptCounter--;

@@ -1,13 +1,10 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics.Generation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.CommonServices.Dices;
+﻿using FluentAssertions;
+
 using Moq;
-using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics.Generation.Tests
 {
@@ -16,7 +13,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
     {
         /// <summary>
         /// Тест проверяет, что источник рандома выбирает комнату даже при самом низком результате броска,
-        /// если указана 100 веротяностьвы бора соседа.
+        /// если указана 100 веротяность выбора соседа.
         /// </summary>
         [Test()]
         public void RollConnectedRoomsTest()

@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{F057B4
 		CreateAppSettings.ps1 = CreateAppSettings.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.CoreTests", "Zilon.CoreTests\Zilon.CoreTests.csproj", "{159EECE0-4A3E-4FB5-92F2-8EC68FE7C1A7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +26,6 @@ Global
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.Build.0 = Release|Any CPU
-		{159EECE0-4A3E-4FB5-92F2-8EC68FE7C1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{159EECE0-4A3E-4FB5-92F2-8EC68FE7C1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{159EECE0-4A3E-4FB5-92F2-8EC68FE7C1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{159EECE0-4A3E-4FB5-92F2-8EC68FE7C1A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
