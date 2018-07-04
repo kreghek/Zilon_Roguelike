@@ -164,15 +164,11 @@ namespace Zilon.Core.Tactics.Generation
                             map.Nodes.Add(currentNode);
                         }
 
-                        var currentEdge = (from edge in map.Edges
-                                           where edge.Nodes.Contains(startNode)
-                                           where edge.Nodes.Contains(currentNode)
-                                           select edge).SingleOrDefault();
+                        var currentEdge = GetExistsEdge(map, currentNode, startNode);
 
                         if (currentEdge == null)
                         {
-                            currentEdge = new Edge(startNode, currentNode);
-                            map.Edges.Add(currentEdge);
+                            AddEdgeToMap(map, startNode, currentNode);
                         }
 
                         startNode = currentNode;
