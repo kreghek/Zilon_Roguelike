@@ -81,6 +81,7 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
+    <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />

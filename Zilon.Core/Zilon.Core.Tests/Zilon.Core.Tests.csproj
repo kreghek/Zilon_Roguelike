@@ -90,6 +90,7 @@
     <Compile Include="Tactics\Behaviour\IdleTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
+    <Compile Include="Tactics\Generation\GenerationHelperTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGeneratorTests.cs" />
     <Compile Include="Tactics\SectorTests.cs" />

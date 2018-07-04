@@ -170,43 +170,31 @@ namespace Zilon.Core.Tactics.Generation
         {
             for (var i = 0; i < ROOM_COUNT; i++)
             {
-                var attemptCounter = 3;
-                while (true)
+                var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
+                var rolledPosition = GenerationHelper.GetFreeCell(roomGrid, rolledUncheckedPosition);
+
+                if (rolledPosition != null)
                 {
-                    var rolledPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
-
-                    var currentRoom = roomGrid[rolledPosition.X, rolledPosition.Y];
-                    if (currentRoom == null)
+                    var room = new Room
                     {
-                        var room = new Room
-                        {
-                            PositionX = rolledPosition.X,
-                            PositionY = rolledPosition.Y
-                        };
+                        PositionX = rolledPosition.X,
+                        PositionY = rolledPosition.Y
+                    };
 
-                        roomGrid[rolledPosition.X, rolledPosition.Y] = room;
+                    roomGrid[rolledPosition.X, rolledPosition.Y] = room;
 
-                        var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
+                    var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
 
-                        room.Width = rolledSize.Width + 2;
-                        room.Height = rolledSize.Height + 2;
+                    room.Width = rolledSize.Width + 2;
+                    room.Height = rolledSize.Height + 2;
 
-                        rooms.Add(room);
+                    rooms.Add(room);
 
-                        Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
-
-                        break;
-                    }
-                    else
-                    {
-                        // эта ячейка уже занята
-                    }
-
-                    attemptCounter--;
-                    if (attemptCounter <= 0)
-                    {
-                        throw new Exception("Не удалось выбрать ячейку для комнаты.");
-                    }
+                    Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
+                }
+                else
+                {
+                    throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
                 }
             }
         }
