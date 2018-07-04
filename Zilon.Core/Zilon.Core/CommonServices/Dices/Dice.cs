@@ -4,7 +4,17 @@ namespace Zilon.Core.CommonServices.Dices
 {
     public class Dice : IDice
     {
-        private readonly Random _random = new Random();
+        private readonly Random _random;
+
+        public Dice()
+        {
+            _random = new Random();
+        }
+
+        public Dice(int seed)
+        {
+            _random = new Random(seed);
+        }
 
         public int Roll(int n)
         {

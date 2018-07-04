@@ -5,6 +5,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using FluentAssertions;
     using Zilon.Core;
     using Zilon.Core.CommonServices.Dices;
@@ -13,6 +14,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
     [TestFixture()]
     public class SectorProceduralGeneratorTests
     {
+        public object x { get; private set; }
+
         /// <summary>
         /// Тест проверяет, что сектор из цепочки комнат строится без ошибок.
         /// </summary>
@@ -98,7 +101,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
         public void Generate_BaseRandomServices_NoExceptions()
         {
             // ARRANGE
-            var dice = new Dice();
+            var dice = new Dice(123);
             var randomSource = new SectorGeneratorRandomSource(dice);
 
             var sectorMock = new Mock<ISector>();
@@ -124,6 +127,44 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
             // ASSERT
             act.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяет, генератор не создаёт одинаковых узлов (равные координаты).
+        /// </summary>
+        [Test()]
+        public void Generate_BaseRandomServices_NoOverlapNodes()
+        {
+            // ARRANGE
+            var dice = new Dice(3245);
+            var randomSource = new SectorGeneratorRandomSource(dice);
+
+            var sectorMock = new Mock<ISector>();
+            var sector = sectorMock.Object;
+
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+            var mapMock = new Mock<IMap>();
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+            var map = mapMock.Object;
+
+
+            var generator = new SectorProceduralGenerator(randomSource);
+
+
+            // ACT
+            generator.Generate(sector, map);
+
+
+
+            // ASSERT
+            var hexNodes = nodes.Cast<HexNode>().ToArray();
+            foreach (var node in hexNodes)
+            {
+                var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
+                sameNode.Should().BeEmpty();
+            }
         }
     }
 }
