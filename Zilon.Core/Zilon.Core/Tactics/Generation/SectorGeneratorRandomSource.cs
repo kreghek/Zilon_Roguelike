@@ -6,6 +6,7 @@ namespace Zilon.Core.Tactics.Generation
 {
     public class SectorGeneratorRandomSource : ISectorGeneratorRandomSource
     {
+        private const int MAX_PROBABLY_100 = 100;
         private readonly IDice _dice;
 
         public SectorGeneratorRandomSource(IDice dice)
@@ -18,9 +19,9 @@ namespace Zilon.Core.Tactics.Generation
             var selectedRooms = new HashSet<Room>();
             for (var i = 0; i < maxNeighbors; i++)
             {
-                var hasNeighborRoll = _dice.Roll(100);
-                var hasNeighborSuccess = 100 - hasNeighborRoll + 1;
-                if (hasNeighborSuccess < p)
+                var hasNeighborRoll = _dice.Roll(MAX_PROBABLY_100);
+                var hasNeighborSuccess = MAX_PROBABLY_100 - p;
+                if (hasNeighborRoll < hasNeighborSuccess)
                 {
                     // Провал броска на выбор очередного соседа.
                     continue;

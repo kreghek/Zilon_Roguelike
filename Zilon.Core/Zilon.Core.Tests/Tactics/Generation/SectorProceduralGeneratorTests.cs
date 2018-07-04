@@ -1,14 +1,13 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Generation;
 
-namespace Zilon.CoreTests.Tactics.Generation
+namespace Zilon.Core.Tactics.Generation.Tests
 {
     using System;
     using System.Collections.Generic;
     using FluentAssertions;
     using Zilon.Core;
+    using Zilon.Core.CommonServices.Dices;
     using Zilon.Core.Tactics.Spatial;
 
     [TestFixture()]
@@ -34,7 +33,8 @@ namespace Zilon.CoreTests.Tactics.Generation
 
             var randomSourceMock = new Mock<ISectorGeneratorRandomSource>();
             randomSourceMock.Setup(x => x.RollRoomPosition(It.IsAny<int>()))
-                .Returns(() => {
+                .Returns(() =>
+                {
                     var rolled = rolledOffsetCoords[rollIndex];
                     rollIndex++;
                     return rolled;
@@ -79,7 +79,44 @@ namespace Zilon.CoreTests.Tactics.Generation
 
 
             // ACT
-            Action act = ()=>
+            Action act = () =>
+            {
+                generator.Generate(sector, map);
+            };
+
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что сектор с базовыми сервисам генерации случайностей
+        /// строится без ошибок за допустимое время.
+        /// </summary>
+        [Test()]
+        [Timeout(3 * 60 * 1000)]
+        public void Generate_BaseRandomServices_NoExceptions()
+        {
+            // ARRANGE
+            var dice = new Dice();
+            var randomSource = new SectorGeneratorRandomSource(dice);
+
+            var sectorMock = new Mock<ISector>();
+            var sector = sectorMock.Object;
+
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+            var mapMock = new Mock<IMap>();
+            mapMock.SetupProperty(x => x.Nodes, nodes);
+            mapMock.SetupProperty(x => x.Edges, edges);
+            var map = mapMock.Object;
+
+
+            var generator = new SectorProceduralGenerator(randomSource);
+
+
+            // ACT
+            Action act = () =>
             {
                 generator.Generate(sector, map);
             };
@@ -102,7 +139,8 @@ namespace Zilon.CoreTests.Tactics.Generation
         /// Выбрана комната в ячейке(4, 1) размером(2, 8).
         /// Выбрана комната в ячейке(2, 4) размером(7, 4).
         /// Выбрана комната в ячейке(4, 3) размером(5, 7).
-        /// Выбрана комната в ячейке(1, 4) размером(9, 2).        /// </summary>
+        /// Выбрана комната в ячейке(1, 4) размером(9, 2).
+        /// </summary>
         [Test()]
         [Ignore("В исходных данных для теста была обнаружена ошибка. Сначала нужно пофиксить её.")]
         public void Generate_RandomRooms_CorectNeighborInputDuringNeighborSelection()
@@ -124,7 +162,8 @@ namespace Zilon.CoreTests.Tactics.Generation
 
             var randomSourceMock = new Mock<ISectorGeneratorRandomSource>();
             randomSourceMock.Setup(x => x.RollRoomPosition(It.IsAny<int>()))
-                .Returns(() => {
+                .Returns(() =>
+                {
                     var rolled = rolledOffsetCoords[rollIndex];
                     rollIndex++;
                     return rolled;
