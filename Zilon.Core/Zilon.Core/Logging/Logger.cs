@@ -43,7 +43,7 @@
             });
 
 #if DEBUG
-            throw new Exception(message, exception);
+            throw new InvalidOperationException(message, exception);
 #endif
         }
 

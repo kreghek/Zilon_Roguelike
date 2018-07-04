@@ -27,7 +27,6 @@ namespace Zilon.Core.Tactics.Behaviour
             if (!_path.Any())
             {
                 IsComplete = true;
-                return;
             }
         }
 

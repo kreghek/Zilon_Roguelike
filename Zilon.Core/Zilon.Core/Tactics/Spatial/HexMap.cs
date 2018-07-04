@@ -21,12 +21,12 @@
 
         public void ReleaseNode(IMapNode node, Actor actor)
         {
-            
+            // Ещё нет блокировки ячейки
         }
 
         public void HoldNode(IMapNode node, Actor actor)
         {
-            
+            // Ещё нет блокировки ячейки
         }
     }
 }

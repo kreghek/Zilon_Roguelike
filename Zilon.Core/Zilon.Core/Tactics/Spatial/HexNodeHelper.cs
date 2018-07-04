@@ -5,7 +5,7 @@
     using System.Linq;
     using Zilon.Core.Common;
 
-    public class HexNodeHelper
+    public static class HexNodeHelper
     {
         public static HexNode[] GetNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
         {
@@ -32,7 +32,7 @@
             {
                 var neighborCoord = neighborCoords[i];
 
-                if (nodeDictionary.TryGetValue(neighborCoord, out HexNode neighborNode))
+                if (nodeDictionary.TryGetValue(neighborCoord, out var neighborNode))
                 {
                     list.Add(neighborNode);
                 }

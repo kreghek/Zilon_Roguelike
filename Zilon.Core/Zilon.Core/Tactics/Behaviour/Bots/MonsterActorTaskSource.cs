@@ -51,8 +51,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                         }
                         else
                         {
-                            throw new ArgumentException($"Для актёра {actor} не задан маршрут.",
-                                nameof(partolRoute));
+                            throw new InvalidOperationException($"Для актёра {actor} не задан маршрут.");
                         }
                     }
 

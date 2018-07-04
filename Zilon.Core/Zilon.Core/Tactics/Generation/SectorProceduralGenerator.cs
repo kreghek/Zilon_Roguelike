@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics.Generation
         private const int NeighborProbably = 100;
         private readonly ISectorGeneratorRandomSource _randomSource;
 
-        public StringBuilder Log;
+        public StringBuilder Log { get; set; }
 
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource)
         {
@@ -25,6 +25,8 @@ namespace Zilon.Core.Tactics.Generation
 
         public void Generate(ISector sector, IMap map)
         {
+            Log.Clear();
+
             // Генерируем комнаты в сетке
             var roomGridSize = (int)Math.Ceiling(Math.Log(ROOM_COUNT, 2)) + 1;
             var roomGrid = new Room[roomGridSize, roomGridSize];
@@ -122,7 +124,7 @@ namespace Zilon.Core.Tactics.Generation
                 Log.AppendLine($"Для комнаты {room} выбраны соседи ");
                 foreach (var selectedRoom in selectedRooms)
                 {
-                    Log.Append(selectedRoom.ToString() + " ");
+                    Log.Append(selectedRoom + " ");
                 }
 
                 foreach (var selectedRoom in selectedRooms)
@@ -178,7 +180,7 @@ namespace Zilon.Core.Tactics.Generation
                 }
             }
 
-            sector.StartNodes = rooms.First().Nodes.ToArray();
+            sector.StartNodes = rooms.First().Nodes.Cast<IMapNode>().ToArray();
         }
 
         /// <summary>

@@ -23,12 +23,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorList)
         {
-            if (_currentTask != null)
+
+            if (_taskIsActual && _currentTask?.IsComplete == true)
             {
-                if (_taskIsActual && _currentTask.IsComplete)
-                {
-                    _targetNode = null;
-                }
+                _targetNode = null;
             }
 
             if (_targetNode != null)
@@ -37,25 +35,24 @@ namespace Zilon.Core.Tactics.Behaviour
                 {
                     return new[] { _currentTask };
                 }
-                else
-                {
-                    _taskIsActual = true;
-                    var moveTask = new MoveTask(_currentActor, _targetNode, map);
-                    _currentTask = moveTask;
 
-                    return new[] { _currentTask };
-                }
-            }
 
-            if (_attackTarget != null)
-            {
-                var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
-                _currentTask = attackTask;
+                _taskIsActual = true;
+                var moveTask = new MoveTask(_currentActor, _targetNode, map);
+                _currentTask = moveTask;
 
                 return new[] { _currentTask };
             }
 
-            return null;
+            if (_attackTarget == null)
+            {
+                return null;
+            }
+
+            var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
+            _currentTask = attackTask;
+
+            return new[] { _currentTask };
         }
 
 

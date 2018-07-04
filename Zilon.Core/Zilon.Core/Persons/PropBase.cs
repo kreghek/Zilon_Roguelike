@@ -11,7 +11,7 @@ namespace Zilon.Core.Persons
         /// Конструктор.
         /// </summary>
         /// <param name="scheme"> Схема предмета. </param>
-        public PropBase(PropScheme scheme)
+        protected PropBase(PropScheme scheme)
         {
             Scheme = scheme;
         }

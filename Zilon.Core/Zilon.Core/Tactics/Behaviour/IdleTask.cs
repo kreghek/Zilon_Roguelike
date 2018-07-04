@@ -18,12 +18,10 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Текущий счётчик простоя.
         /// </summary>
         private int _counter;
-        private IDecisionSource _decisionSource;
 
         public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
         {
-            _decisionSource = decisionSource;
-            _counter = _decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
+            _counter = decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
         }
 
         public override void Execute()
