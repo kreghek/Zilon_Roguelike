@@ -54,7 +54,10 @@ namespace Zilon.Core.Tactics.Generation
 
                 var availableRooms = rooms.Where(x => x != room).ToArray();
 
-                var selectedRooms = _randomSource.RollConnectedRooms(room, MaxNeighbors, NeighborProbably, availableRooms);
+                var selectedRooms = _randomSource.RollConnectedRooms(room,
+                    MaxNeighbors,
+                    NeighborProbably,
+                    availableRooms);
 
                 if (selectedRooms == null || !selectedRooms.Any())
                 {
@@ -104,7 +107,7 @@ namespace Zilon.Core.Tactics.Generation
                     currentY++;
                 }
 
-                HexNode node = CreateCorridorNode(map, edgeHash, currentNode, currentX, currentY);
+                var node = CreateCorridorNode(map, edgeHash, currentNode, currentX, currentY);
 
                 currentNode = node;
             }
@@ -123,7 +126,7 @@ namespace Zilon.Core.Tactics.Generation
 
             var isExists = IsExistsEdge(edgeHash, node, currentNode);
 
-            if (isExists)
+            if (!isExists)
             {
                 AddEdgeToMap(map, edgeHash, currentNode, node);
             }
@@ -207,10 +210,7 @@ namespace Zilon.Core.Tactics.Generation
         /// <param name="neighbor"> Соседнее ребро карты, с которым будет соединено исходное. </param>
         private static void AddEdgeToMap(IMap targetMap, HashSet<string> edgeHash, HexNode node, HexNode neighbor)
         {
-            var nodeKey = $"({node.OffsetX},{node.OffsetY})";
-            var neighborKey = $"({neighbor.OffsetX},{neighbor.OffsetY})";
-
-            var hashKey1 = $"{nodeKey}-{neighborKey}";
+            var hashKey1 = $"{node}-{neighbor}";
             edgeHash.Add(hashKey1);
 
             var edge = new Edge(node, neighbor);
@@ -226,16 +226,13 @@ namespace Zilon.Core.Tactics.Generation
         /// <returns> Ребро или null, если такого ребра нет на карте. </returns>
         private static bool IsExistsEdge(HashSet<string> edgeHash, HexNode node, HexNode neighbor)
         {
-            var nodeKey = $"({node.OffsetX},{node.OffsetY})";
-            var neighborKey = $"({neighbor.OffsetX},{neighbor.OffsetY})";
-
-            var hashKey1 = $"{nodeKey}-{neighborKey}";
+            var hashKey1 = $"{node}-{neighbor}";
             if (edgeHash.Contains(hashKey1))
             {
                 return true;
             }
 
-            var hashKey2 = $"{neighborKey}-{nodeKey}";
+            var hashKey2 = $"{neighbor}-{node}";
             return edgeHash.Contains(hashKey2);
         }
     }
