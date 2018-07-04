@@ -14,7 +14,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
         Container.Bind<IPlayerState>().To<PlayerState>().AsSingle();
-        Container.Bind<IDice>().To<Dice>().AsSingle();
+        Container.Bind<IDice>().FromInstance(new Dice()).AsSingle();
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISectorGeneratorRandomSource>().To<SectorGeneratorRandomSource>().AsSingle();
     }
