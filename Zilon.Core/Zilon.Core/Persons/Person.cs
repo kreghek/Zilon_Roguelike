@@ -3,26 +3,28 @@ using System.Linq;
 
 namespace Zilon.Core.Persons
 {
-    public class Person : IPerson, IEquipCarrier, ITacticalActCarrier
+    public class Person : IPerson, ITacticalActCarrier
     {
         public int Id { get; set; }
 
         public float Hp { get; set; }
 
-        public Equipment[] Equipments { get; }
+        public IEquipmentCarrier EquipmentCarrier { get; }
 
-        public ITacticalAct DefaultAct { get; }
+        public ITacticalAct DefaultAct { get; set; }
 
-        public ITacticalAct[] Acts { get; }
+        public ITacticalAct[] Acts { get; set; }
 
-        public Person(Equipment equipment)
+        public Person()
         {
-            if (equipment != null)
-            {
-                Equipments = new[] { equipment };
-                Acts = CalcActs(Equipments);
-                DefaultAct = Acts.FirstOrDefault();
-            }
+            EquipmentCarrier = new EquipmentCarrier();
+            EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
+        }
+
+        private void EquipmentCarrier_EquipmentChanged(object sender, System.EventArgs e)
+        {
+            Acts = CalcActs(Equipments);
+            DefaultAct = Acts.FirstOrDefault();
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
@@ -31,10 +33,11 @@ namespace Zilon.Core.Persons
 
             foreach (var equipment in equipments)
             {
-                var actSchemes = equipment.Scheme.Equip.Acts;
+                var actSchemeSids = equipment.Scheme.Equip.ActSids;
 
-                foreach (var actScheme in actSchemes)
+                foreach (var actSchemeSid in actSchemeSids)
                 {
+
                     var act = new TacticalAct(actScheme);
                     actList.Add(act);
                 }

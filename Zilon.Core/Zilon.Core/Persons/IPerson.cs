@@ -14,5 +14,10 @@
         /// Хитпоинты персонажа.
         /// </summary>
         float Hp { get; }
+
+        /// <summary>
+        /// Носитель экипировки.
+        /// </summary>
+        IEquipmentCarrier EquipmentCarrier { get; }
     }
 }
