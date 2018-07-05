@@ -6,6 +6,8 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Generation
 {
+    using Zilon.Core.Common;
+
     public class SectorProceduralGenerator
     {
         private const int ROOM_COUNT = 10;
@@ -84,33 +86,44 @@ namespace Zilon.Core.Tactics.Generation
             var currentNode = room.Nodes.First();
             var targetNode = selectedRoom.Nodes.First();
 
-            //Строим коридор
-            var currentX = currentNode.OffsetX;
-            var currentY = currentNode.OffsetY;
-            while (currentNode != targetNode)
+            var points = CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
+
+            for (var i = 1; i < points.Length; i++)
             {
-                if (currentX >= targetNode.OffsetX)
-                {
-                    currentX--;
-                }
-                else
-                {
-                    currentX++;
-                }
+                var point = points[i];
 
-                if (currentY >= targetNode.OffsetY)
-                {
-                    currentY--;
-                }
-                else
-                {
-                    currentY++;
-                }
+                var offsetCoords = HexHelper.ConvertToOffset(point);
 
-                var node = CreateCorridorNode(map, edgeHash, currentNode, currentX, currentY);
-
+                var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;
             }
+        }
+
+        private static float Lerp(int a, int b, float t)
+        {
+            return a + (b - a) * t;
+        }
+
+        private static CubeCoords LerpCube(CubeCoords a, CubeCoords b, float t)
+        {
+            return new CubeCoords((int)Math.Round(Lerp(a.X, b.X, t)),
+                (int)Math.Round(Lerp(a.Y, b.Y, t)),
+                (int)Math.Round(Lerp(a.Z, b.Z, t)));
+        }
+
+        private static CubeCoords[] CubeDrawLine(CubeCoords a, CubeCoords b)
+        {
+            var n = a.DistanceTo(b);
+
+            var list = new List<CubeCoords>();
+
+            for (var i = 0; i < n; i++)
+            {
+                var point = LerpCube(a, b, 1.0f / n * i);
+                list.Add(point);
+            }
+
+            return list.ToArray();
         }
 
         private static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX, int currentY)

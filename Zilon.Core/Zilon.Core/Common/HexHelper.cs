@@ -4,11 +4,18 @@
     {
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
-            var x = offsetX - (offsetY - (offsetY % 2)) / 2;
+            var x = offsetX - (offsetY - offsetY % 2) / 2;
             var z = offsetY;
             var y = -x - z;
 
             return new CubeCoords(x, y, z);
+        }
+
+        public static OffsetCoords ConvertToOffset(CubeCoords cube)
+        {
+            var col = cube.X + (cube.Z - cube.Z % 2) / 2;
+            var row = cube.Z;
+            return new OffsetCoords(col, row);
         }
 
         public static float[] ConvertToWorld(int offsetX, int offsetY)
@@ -28,9 +35,6 @@
         {
             var offsets = new[]
             {
-                //new CubeCoords(-1, +1, 0), new CubeCoords(0, -1, +1), new CubeCoords(0, +1, -1),
-                //new CubeCoords(+1, 0, -1), new CubeCoords(+1, -1, 0), new CubeCoords(-1, 0, +1)
-
                 new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
                 new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
             };

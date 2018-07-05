@@ -8,8 +8,6 @@ using UnityEngine;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
