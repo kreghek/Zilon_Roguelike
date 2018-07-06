@@ -4,11 +4,11 @@ namespace Zilon.Core.Persons
 {
     public class TacticalAct : ITacticalAct
     {
-        public TacticalAct(TacticalActScheme scheme)
+        public TacticalAct(float power, TacticalActScheme scheme)
         {
             Scheme = scheme;
-            MinEfficient = scheme.Efficient.Min;
-            MaxEfficient = scheme.Efficient.Max;
+            MinEfficient = scheme.Efficient.Min * power;
+            MaxEfficient = scheme.Efficient.Max * power;
         }
 
         public TacticalActScheme Scheme { get; }

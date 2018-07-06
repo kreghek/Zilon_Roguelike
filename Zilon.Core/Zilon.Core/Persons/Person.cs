@@ -22,7 +22,6 @@ namespace Zilon.Core.Persons
         private void EquipmentCarrier_EquipmentChanged(object sender, System.EventArgs e)
         {
             Acts = CalcActs(EquipmentCarrier.Equipments);
-            DefaultAct = Acts.FirstOrDefault();
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
@@ -31,14 +30,7 @@ namespace Zilon.Core.Persons
 
             foreach (var equipment in equipments)
             {
-                var actSchemeSids = equipment.Scheme.Equip.ActSids;
-
-                foreach (var actSchemeSid in actSchemeSids)
-                {
-
-                    var act = new TacticalAct(actScheme);
-                    actList.Add(act);
-                }
+                actList.AddRange(equipment.Acts);
             }
 
             return actList.ToArray();

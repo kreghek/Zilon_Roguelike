@@ -7,6 +7,8 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
+    using System.Linq;
+
     public class AttackTask : ActorTaskBase
     {
         private readonly IAttackTarget _target;
@@ -24,7 +26,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (Actor.Person is ITacticalActCarrier actCarrier)
             {
-                var act = actCarrier.DefaultAct;
+                var act = actCarrier.Acts.FirstOrDefault();
+                if (act == null)
+                {
+                    throw new InvalidOperationException("Не найдено действий.");
+                }
 
                 var isInDistance = CheckDistance(currentCubePos, targetCubePos, act);
                 if (!isInDistance)
@@ -32,8 +38,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
                 }
 
-                var minEfficient = actCarrier.DefaultAct.MinEfficient;
-                var maxEfficient = actCarrier.DefaultAct.MaxEfficient;
+                var minEfficient = act.MinEfficient;
+                var maxEfficient = act.MaxEfficient;
                 var rolledEfficient = _decisionSource.SelectEfficient(minEfficient, maxEfficient);
                 _target.TakeDamage(rolledEfficient);
             }

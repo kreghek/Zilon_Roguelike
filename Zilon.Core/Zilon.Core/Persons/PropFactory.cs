@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-    using Zilon.Core.Schemes;
-
     public class PropFactory
     {
+        private readonly ISchemeService _schemeService;
+
+        public PropFactory(ISchemeService schemeService)
+        {
+            _schemeService = schemeService;
+        }
+
         public Equipment CreateEquipment(PropScheme scheme)
         {
             if (scheme.Equip == null)
@@ -14,6 +22,7 @@ namespace Zilon.Core.Persons
             }
 
 
+            var actList = new List<ITacticalAct>();
             var actSchemeSids = scheme.Equip.ActSids;
 
             if (scheme.Equip.ActSids != null)
@@ -21,14 +30,14 @@ namespace Zilon.Core.Persons
                 foreach (var actSchemeSid in actSchemeSids)
                 {
 
-                    var actScheme = _scheme
+                    var actScheme = _schemeService.GetScheme<TacticalActScheme>(actSchemeSid);
 
-                    var act = new TacticalAct(actScheme);
+                    var act = new TacticalAct(scheme.Equip.Power, actScheme);
                     actList.Add(act);
                 }
 
 
-                var equipment = new Equipment(scheme);
+                var equipment = new Equipment(scheme, actList.ToArray());
 
                 return equipment;
             }
