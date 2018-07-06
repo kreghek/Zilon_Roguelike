@@ -29,8 +29,8 @@
         public float Absorbtion { get; set; }
 
         /// <summary>
-        /// Действия, которые позволяет совершать предмет.
+        /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
-        public TacticalActScheme[] Acts { get; set; }
+        public string[] ActSids { get; set; }
     }
 }

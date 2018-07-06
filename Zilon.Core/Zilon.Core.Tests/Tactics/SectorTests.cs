@@ -125,7 +125,7 @@ namespace Zilon.Core.Tactics.Tests
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            var person = new Person(null)
+            var person = new Person()
             {
                 Hp = 1
             };
