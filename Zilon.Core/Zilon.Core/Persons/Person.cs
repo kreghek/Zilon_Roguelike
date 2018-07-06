@@ -11,8 +11,6 @@ namespace Zilon.Core.Persons
 
         public IEquipmentCarrier EquipmentCarrier { get; }
 
-        public ITacticalAct DefaultAct { get; set; }
-
         public ITacticalAct[] Acts { get; set; }
 
         public Person()
@@ -23,7 +21,7 @@ namespace Zilon.Core.Persons
 
         private void EquipmentCarrier_EquipmentChanged(object sender, System.EventArgs e)
         {
-            Acts = CalcActs(Equipments);
+            Acts = CalcActs(EquipmentCarrier.Equipments);
             DefaultAct = Acts.FirstOrDefault();
         }
 
@@ -45,5 +43,6 @@ namespace Zilon.Core.Persons
 
             return actList.ToArray();
         }
+
     }
 }

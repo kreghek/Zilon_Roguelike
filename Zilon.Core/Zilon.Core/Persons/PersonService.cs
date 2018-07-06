@@ -17,9 +17,9 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        public void SetEquipment(IPerson person, Equipment[] equipments)
+        public void SetEquipment(IPerson person, Equipment equipment, int slotIndex)
         {
-
+            person.EquipmentCarrier.SetEquipment(equipment, slotIndex);
         }
     }
 }

@@ -61,8 +61,10 @@
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
+    <Compile Include="Persons\MonsterPerson.cs" />
     <Compile Include="Persons\PersonService.cs" />
     <Compile Include="Persons\PropBase.cs" />
+    <Compile Include="Persons\PropFactory.cs" />
     <Compile Include="Persons\Recipe.cs" />
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
