@@ -46,6 +46,10 @@ class SectorVM : MonoBehaviour
     [Inject] private IDecisionSource _decisionSource;
 
     [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
+    
+    [Inject] private ISchemeService _schemeService;
+    
+    [Inject] private IPropFactory _propFactory;
 
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
@@ -63,18 +67,16 @@ class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void Awake()
     {
-//        var mapGenerator = new GridMapGenerator(15);
+        var humanPlayer = new HumanPlayer();
+        var botPlayer = new BotPlayer();
+        
         var map = new HexMap();
-//        mapGenerator.CreateMap(map);
-//        map.Edges.RemoveAt(10);
-//        map.Edges.RemoveAt(20);
-//        map.Edges.RemoveAt(30);
         
         var actorManager = new ActorList();
         
         var sector = new Sector(map, actorManager);
         
-        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource);
+        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer);
 
         try
         {
@@ -113,71 +115,22 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        var humanPlayer = new HumanPlayer();
-//        var botPlayer = new BotPlayer();
+        var propScheme = _schemeService.GetScheme<PropScheme>("short-sword");
 
-        var propScheme = new PropScheme()
-        {
-            Name = "Меч",
-            Equip = new PropEquipSubScheme
-            {
-                Acts = new[]
-                {
-                    new TacticalActScheme
-                    {
-                        MinRange = 1,
-                        MaxRange = 1,
-                        Efficient = new Range<float>(1, 3)
-                    }
-                }
-            }
-        };
-        
-        var playerEquipment = new Equipment(propScheme);
-        var playerActorStartNode = sector.StartNodes.First(); // map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 0 && n.OffsetY == 0);
+        var playerEquipment = _propFactory.CreateEquipment(propScheme);
+        var playerActorStartNode = sectorGenerator.StartNodes.First();
         var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs, playerEquipment);
-
-//        var enemy1Equipment = new Equipment(propScheme);
-//        var enemy1StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 5 && n.OffsetY == 5);
-//        var enemy1ActorVm = CreateActorVm(botPlayer, actorManager, enemy1StartNode, nodeVMs, enemy1Equipment);
-//        enemy1ActorVm.IsEnemy = true;
-//        enemy1ActorVm.OnSelected += EnemyActorVm_OnSelected;
-//
-//        var enemy2Equipment = new Equipment(propScheme);
-//        var enemy2StartNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == 9 && n.OffsetY == 9);
-//        var enemy2ActorVm = CreateActorVm(botPlayer, actorManager, enemy2StartNode, nodeVMs, enemy2Equipment);
-//        enemy2ActorVm.IsEnemy = true;
-//        enemy2ActorVm.OnSelected += EnemyActorVm_OnSelected;
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor,_decisionSource);
 
-//        var patrolRoute1 = new PatrolRoute(new IMapNode[]
-//        {
-//            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 2),
-//            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 2 && x.OffsetY == 10)
-//        });
-//        
-//        var patrolRoute2 = new PatrolRoute(new IMapNode[]
-//        {
-//            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 2),
-//            map.Nodes.Cast<HexNode>().SingleOrDefault(x=>x.OffsetX == 10 && x.OffsetY == 10)
-//        });
-        
-        
-//        var routeDictionary = new Dictionary<IActor, IPatrolRoute>
-//        {
-//            {enemy1ActorVm.Actor, patrolRoute1},
-//            {enemy2ActorVm.Actor, patrolRoute2}
-//        };
-        
-//        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
-//            routeDictionary,
-//            _decisionSource);
+        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
+            sectorGenerator.Patrols,
+            _decisionSource);
         
         sector.BehaviourSources = new IActorTaskSource[]
         {
             playerActorTaskSource,
-//            botActorTaskSource
+            botActorTaskSource
         };
 
         _sectorManager.CurrentSector = sector;
@@ -206,10 +159,12 @@ class SectorVM : MonoBehaviour
         [NotNull] IEnumerable<MapNodeVM> nodeVMs,
         [NotNull] Equipment equipment)
     {
-        var person = new Person(equipment)
+        var person = new Person
         {
             Hp = 1
         };
+        
+        person.EquipmentCarrier.SetEquipment(equipment, 0);
 
         if (player is HumanPlayer)
         {

@@ -3,6 +3,8 @@ using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.CommonServices.MapGenerators;
+using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Generation;
 
@@ -17,5 +19,8 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IDice>().FromInstance(new Dice()).AsSingle();
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISectorGeneratorRandomSource>().To<SectorGeneratorRandomSource>().AsSingle();
+        Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
+        Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
+        Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Persons\Equipment.cs" />
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
+    <Compile Include="Persons\IPropFactory.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
     <Compile Include="Persons\ITacticalActExtensionscs.cs" />
     <Compile Include="Persons\MonsterPerson.cs" />

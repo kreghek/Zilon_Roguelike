@@ -5,7 +5,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-    public class PropFactory
+    public class PropFactory : IPropFactory
     {
         private readonly ISchemeService _schemeService;
 
