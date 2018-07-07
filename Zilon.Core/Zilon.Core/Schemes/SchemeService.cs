@@ -52,7 +52,17 @@ namespace Zilon.Core.Schemes
                 return _paths[sid] as TScheme;
             }
 
-            throw new ArgumentException();
+            if (typeof(TScheme) == typeof(PropScheme))
+            {
+                return _props[sid] as TScheme;
+            }
+
+            if (typeof(TScheme) == typeof(TacticalActScheme))
+            {
+                return _tacticalActs[sid] as TScheme;
+            }
+
+            throw new ArgumentException("Указан неизвестный тип схемы");
         }
 
         public TScheme[] GetSchemes<TScheme>() where TScheme : class, IScheme
@@ -70,6 +80,16 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(PathScheme))
             {
                 return _paths.Values.Cast<TScheme>().ToArray();
+            }
+
+            if (typeof(TScheme) == typeof(PathScheme))
+            {
+                return _props.Values.Cast<TScheme>().ToArray();
+            }
+
+            if (typeof(TScheme) == typeof(TacticalActScheme))
+            {
+                return _tacticalActs.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException();
