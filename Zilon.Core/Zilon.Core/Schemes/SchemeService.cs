@@ -101,7 +101,8 @@ namespace Zilon.Core.Schemes
         {
             if (schemeLocator == null)
             {
-                throw new ArgumentNullException(nameof(schemeLocator));
+                throw new ArgumentNullException(nameof(schemeLocator),
+                    $"Ошибка при загрузки схем из директории {directory}.");
             }
 
             var files = schemeLocator.GetAll(directory);
