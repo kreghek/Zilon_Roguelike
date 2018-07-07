@@ -9,6 +9,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
     using FluentAssertions;
     using Zilon.Core;
     using Zilon.Core.CommonServices.Dices;
+    using Zilon.Core.Players;
     using Zilon.Core.Tactics.Spatial;
 
     [TestFixture()]
@@ -76,9 +77,9 @@ namespace Zilon.Core.Tactics.Generation.Tests
             mapMock.SetupProperty(x => x.Nodes, nodes);
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
+            var botPlayer = CreateBotPlayer();
 
-
-            var generator = new SectorProceduralGenerator(randomSource);
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
 
 
             // ACT
@@ -90,6 +91,13 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
             // ASSERT
             act.Should().NotThrow();
+        }
+
+        private static IPlayer CreateBotPlayer()
+        {
+            var botPlayerMock = new Mock<IPlayer>();
+            var botPlayer = botPlayerMock.Object;
+            return botPlayer;
         }
 
         /// <summary>
@@ -114,8 +122,10 @@ namespace Zilon.Core.Tactics.Generation.Tests
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
 
+            var botPlayer = CreateBotPlayer();
 
-            var generator = new SectorProceduralGenerator(randomSource);
+
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
 
 
             // ACT
@@ -149,8 +159,10 @@ namespace Zilon.Core.Tactics.Generation.Tests
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
 
+            var botPlayer = CreateBotPlayer();
 
-            var generator = new SectorProceduralGenerator(randomSource);
+
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
 
 
             // ACT
@@ -187,8 +199,10 @@ namespace Zilon.Core.Tactics.Generation.Tests
             mapMock.SetupProperty(x => x.Edges, edges);
             var map = mapMock.Object;
 
+            var botPlayer = CreateBotPlayer();
 
-            var generator = new SectorProceduralGenerator(randomSource);
+
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
 
 
             // ACT

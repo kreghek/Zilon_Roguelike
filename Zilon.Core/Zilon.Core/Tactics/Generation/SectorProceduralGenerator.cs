@@ -7,6 +7,9 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics.Generation
 {
     using Zilon.Core.Common;
+    using Zilon.Core.Persons;
+    using Zilon.Core.Players;
+    using Zilon.Core.Tactics.Behaviour.Bots;
 
     public class SectorProceduralGenerator
     {
@@ -15,14 +18,36 @@ namespace Zilon.Core.Tactics.Generation
         private const int MaxNeighbors = 1;
         private const int NeighborProbably = 100;
         private readonly ISectorGeneratorRandomSource _randomSource;
+        private readonly IPlayer _botPlayer;
+
+        /// <summary>
+        /// Стартовая комната. Отсюда игрок будет начинать.
+        /// </summary>
+        private Room _startRoom;
+
+        /// <summary>
+        /// Стартовые узлы.
+        /// Набор узлов, где могут располагаться актёры игрока
+        /// на начало прохождения сектора.
+        /// </summary>
+        public IMapNode[] StartNodes { get; private set; }
+
+        public List<IActor> MonsterActors { get; }
+
+        public Dictionary<IActor, IPatrolRoute> Patrols { get; }
+
 
         public StringBuilder Log { get; set; }
 
-        public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource)
+        public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
+            IPlayer botPlayer)
         {
             _randomSource = randomSource;
-
+            _botPlayer = botPlayer;
             Log = new StringBuilder();
+
+            MonsterActors = new List<IActor>();
+            Patrols = new Dictionary<IActor, IPatrolRoute>();
         }
 
         public void Generate(ISector sector, IMap map)
@@ -31,12 +56,11 @@ namespace Zilon.Core.Tactics.Generation
 
             var roomGridSize = (int)Math.Ceiling(Math.Log(ROOM_COUNT, 2)) + 1;
             var roomGrid = new Room[roomGridSize, roomGridSize];
-            var rooms = new List<Room>();
-
-            // Генерируем комнаты в сетке
             var edgeHash = new HashSet<string>();
 
-            GenerateRoomsInGrid(roomGridSize, roomGrid, rooms);
+            // Генерируем комнаты в сетке
+            var rooms = GenerateRoomsInGrid(roomGridSize, roomGrid);
+            var mainRooms = rooms.Where(x => x != _startRoom).ToArray();
 
             // Создаём узлы и рёбра комнат
             CreateRoomNodes(map, rooms, edgeHash);
@@ -44,7 +68,29 @@ namespace Zilon.Core.Tactics.Generation
             // Соединяем комнаты
             BuildRoomCorridors(map, rooms, edgeHash);
 
-            sector.StartNodes = rooms.First().Nodes.Cast<IMapNode>().ToArray();
+            CreateRoomMonsters(mainRooms);
+
+            SelectStartNodes(_startRoom);
+        }
+
+        private void SelectStartNodes(Room startRoom)
+        {
+            StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
+        }
+
+        private void CreateRoomMonsters(IEnumerable<Room> rooms)
+        {
+            foreach (var room in rooms)
+            {
+                var person = new Person();
+                var startNode = room.Nodes.FirstOrDefault();
+                var actor = new Actor(person, _botPlayer, startNode);
+                MonsterActors.Add(actor);
+
+                var finishPatrolNode = room.Nodes.Last();
+                var patrolRoute = new PatrolRoute(new[] { startNode, finishPatrolNode });
+                Patrols[actor] = patrolRoute;
+            }
         }
 
         private void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
@@ -182,8 +228,9 @@ namespace Zilon.Core.Tactics.Generation
             }
         }
 
-        private void GenerateRoomsInGrid(int roomGridSize, Room[,] roomGrid, List<Room> rooms)
+        private List<Room> GenerateRoomsInGrid(int roomGridSize, Room[,] roomGrid)
         {
+            var rooms = new List<Room>();
             for (var i = 0; i < ROOM_COUNT; i++)
             {
                 var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
@@ -206,6 +253,11 @@ namespace Zilon.Core.Tactics.Generation
 
                     rooms.Add(room);
 
+                    if (_startRoom == null)
+                    {
+                        _startRoom = room;
+                    }
+
                     Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
                 }
                 else
@@ -213,6 +265,8 @@ namespace Zilon.Core.Tactics.Generation
                     throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
                 }
             }
+
+            return rooms;
         }
 
         /// <summary>

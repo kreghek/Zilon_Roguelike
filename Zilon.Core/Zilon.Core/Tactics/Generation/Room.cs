@@ -10,6 +10,7 @@ namespace Zilon.Core.Tactics.Generation
         public int Width { get; set; }
         public int Height { get; set; }
         public List<HexNode> Nodes { get; set; }
+        public bool IsStartRoom { get; set; }
 
         public Room()
         {
