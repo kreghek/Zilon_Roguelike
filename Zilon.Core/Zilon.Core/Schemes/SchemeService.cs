@@ -75,21 +75,46 @@ namespace Zilon.Core.Schemes
             throw new ArgumentException();
         }
 
-        private void LoadSchemes<T>(ISchemeLocator schemeLocator, string directory, Dictionary<string, T> dict) where T : IScheme
+        private void LoadSchemes<T>(ISchemeLocator schemeLocator,
+            string directory,
+            Dictionary<string, T> dict) where T : IScheme
         {
+            if (schemeLocator == null)
+            {
+                throw new ArgumentNullException(nameof(schemeLocator));
+            }
+
             var files = schemeLocator.GetAll(directory);
             foreach (var file in files)
             {
-                var scheme = JsonConvert.DeserializeObject<T>(file.Content);
-
-                if (scheme.Disabled)
+                try
                 {
-                    continue;
-                }
+                    if (file == null)
+                    {
+                        throw new InvalidOperationException($"Файл схемы не может быть пустым.");
+                    }
 
-                scheme.Sid = file.Sid;
-                dict.Add(scheme.Sid, scheme);
+                    if (string.IsNullOrWhiteSpace(file.Content))
+                    {
+                        throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
+                    }
+
+                    var scheme = JsonConvert.DeserializeObject<T>(file.Content);
+
+                    if (scheme.Disabled)
+                    {
+                        continue;
+                    }
+
+                    scheme.Sid = file.Sid;
+                    dict.Add(scheme.Sid, scheme);
+                }
+                catch (Exception exception)
+                {
+                    throw new InvalidOperationException($"Ошибка при загрузке схемы {file}.", exception);
+                }
             }
+
         }
     }
 }

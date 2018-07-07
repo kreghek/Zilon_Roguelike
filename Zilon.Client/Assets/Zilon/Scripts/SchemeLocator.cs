@@ -6,6 +6,8 @@ public class SchemeLocator : MonoBehaviour, ISchemeLocator
 {
     public SchemeFile[] GetAll(string directory)
     {
+        Debug.Log($"Получение всех схем из директории {directory}.");
+        
         // Loads all TextAssets into a list.
         var schemeAssets = Resources.LoadAll<TextAsset>($"Schemes/{directory}");
 
@@ -24,6 +26,8 @@ public class SchemeLocator : MonoBehaviour, ISchemeLocator
             };
 
             result.Add(file);
+            
+            Debug.Log($"Получена схема {sid}.");
         }
 
         return result.ToArray();

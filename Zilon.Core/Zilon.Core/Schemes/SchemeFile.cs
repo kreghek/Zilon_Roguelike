@@ -7,5 +7,10 @@
     {
         public string Sid { get; set; }
         public string Content { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Sid} (Size: {Content?.Length})";
+        }
     }
 }
