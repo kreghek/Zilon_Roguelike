@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
@@ -125,10 +125,19 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             var actorNode = (HexNode)_actor.Node;
             var targetNode = (HexNode)targetIntruder.Node;
-            var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
 
-            var isAvailable = distance <= _actor.WeaponDistance;
-            return isAvailable;
+            if (_actor.Person is ITacticalActCarrier actCarrier)
+            {
+                var act = actCarrier.Acts.First();
+
+                var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
+
+                return isInDistance;
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
         }
 
         private IActorTask HandleBypassMode()

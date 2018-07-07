@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException("Не найдено действий.");
                 }
 
-                var isInDistance = CheckDistance(currentCubePos, targetCubePos, act);
+                var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
                 if (!isInDistance)
                 {
                     throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
@@ -49,14 +49,6 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             IsComplete = true;
-        }
-
-        private bool CheckDistance(CubeCoords currentCubePos, CubeCoords targetCubePos, ITacticalAct act)
-        {
-            var range = new Range<int>(act.Scheme.MinRange, act.Scheme.MaxRange);
-            var distance = currentCubePos.DistanceTo(targetCubePos);
-            var isInDistance = range.Contains(distance);
-            return isInDistance;
         }
 
         public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource) : base(actor)

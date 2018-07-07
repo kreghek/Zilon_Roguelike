@@ -82,7 +82,7 @@ namespace Zilon.Core.Tactics.Generation
         {
             foreach (var room in rooms)
             {
-                var person = new Person();
+                var person = new MonsterPerson();
                 var startNode = room.Nodes.FirstOrDefault();
                 var actor = new Actor(person, _botPlayer, startNode);
                 MonsterActors.Add(actor);

@@ -38,11 +38,6 @@ namespace Zilon.Core.Tactics
         void MoveToNode(IMapNode targetNode);
 
         /// <summary>
-        /// Текущая дальность атаки.
-        /// </summary>
-        int WeaponDistance { get; }
-
-        /// <summary>
         /// Текущий запас хитпоинтов.
         /// </summary>
         float Hp { get; }

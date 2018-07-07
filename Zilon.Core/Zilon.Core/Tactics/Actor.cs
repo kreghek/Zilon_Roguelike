@@ -15,8 +15,6 @@ namespace Zilon.Core.Tactics
             Node = node;
 
             Hp = person.Hp;
-
-            WeaponDistance = 1;
         }
 
         /// <inheritdoc />
@@ -36,8 +34,6 @@ namespace Zilon.Core.Tactics
         public float Hp { get; set; }
 
         public bool IsDead { get; set; }
-
-        public int WeaponDistance { get; }
 
         public IPlayer Owner { get; }
 
