@@ -22,9 +22,6 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once ClassNeverInstantiated.Global
 class SectorVM : MonoBehaviour
 {
-    private MoveCommand _moveCommand;
-    private AttackCommand _attackCommand;
-
 #pragma warning disable 649
     // ReSharper disable once NotNullMemberIsNotInitialized
     // ReSharper disable once MemberCanBePrivate.Global
@@ -50,6 +47,11 @@ class SectorVM : MonoBehaviour
     [Inject] private ISchemeService _schemeService;
     
     [Inject] private IPropFactory _propFactory;
+
+    [Inject(Id = "move-command")] private MoveCommand _moveCommand;
+
+    [Inject(Id = "attack-command")] private AttackCommand _attackCommand;
+
 
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
@@ -149,9 +151,6 @@ class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector = sector;
 
         _playerState.TaskSource = playerActorTaskSource;
-
-        _moveCommand = new MoveCommand(_sectorManager, _playerState);
-        _attackCommand = new AttackCommand(_sectorManager, _playerState);
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
