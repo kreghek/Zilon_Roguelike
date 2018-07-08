@@ -131,6 +131,7 @@ class SectorVM : MonoBehaviour
             actorVm.transform.position = actorPosition;
             actorVm.Actor = monsterActor;
             actorVm.IsEnemy = true;
+            actorVm.OnSelected += EnemyActorVm_OnSelected;
         }
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor,_decisionSource);
