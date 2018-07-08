@@ -61,5 +61,10 @@ namespace Zilon.Core.Tactics
         /// Происходит, если актёр умирает.
         /// </summary>
         event EventHandler OnDead;
+
+        /// <summary>
+        /// Инициатива актёра.
+        /// </summary>
+        float Initiative { get; }
     }
 }

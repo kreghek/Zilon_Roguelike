@@ -15,6 +15,7 @@ namespace Zilon.Core.Tactics
             Node = node;
 
             Hp = person.Hp;
+            Initiative = 1;
         }
 
         /// <inheritdoc />
@@ -36,6 +37,8 @@ namespace Zilon.Core.Tactics
         public bool IsDead { get; set; }
 
         public IPlayer Owner { get; }
+
+        public float Initiative { get; }
 
         public bool CanBeDamaged()
         {

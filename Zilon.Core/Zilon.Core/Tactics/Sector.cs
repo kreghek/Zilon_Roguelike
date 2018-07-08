@@ -11,6 +11,8 @@ namespace Zilon.Core.Tactics
     {
         private readonly List<IActorTask> _tasks;
 
+        private readonly TaskIniComparer _taskIniComparer;
+
         private readonly IMap _map;
 
         private readonly IActorManager _actorManager;
@@ -27,6 +29,7 @@ namespace Zilon.Core.Tactics
 #pragma warning restore IDE0016 // Use 'throw' expression
 
             _tasks = new List<IActorTask>();
+            _taskIniComparer = new TaskIniComparer();
 
             _map = map;
             _actorManager = actorManager;
@@ -55,7 +58,8 @@ namespace Zilon.Core.Tactics
 
 
             // Выполняем все команды на текущий ход
-            //TODO Сделать сортировку команд по инициативе актёра.
+            _tasks.Sort(_taskIniComparer);
+            //TODO Добавить тест, проверяющий, что задачи выполняются с учётом инициативы.
             foreach (var task in _tasks)
             {
                 if (task.IsComplete)

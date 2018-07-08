@@ -25,7 +25,6 @@
         /// <returns></returns>
         bool IsPositionAvailableFor(IMapNode targetNode, Actor actor);
 
-        //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
         /// <summary>
         /// Указывает, что текущий актёр покинул ячейки.
@@ -34,7 +33,6 @@
         /// <param name="actor"></param>
         void ReleaseNode(IMapNode node, Actor actor);
 
-        //TODO Проверить необходимость этого метода в интерфейсе.
         // Выглядит, что это внутреняя реализация.
         /// <summary>
         /// Указывает, что данная ячейка занята актёром.

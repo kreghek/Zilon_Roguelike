@@ -138,6 +138,7 @@
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\SortedListExtensions.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
+    <Compile Include="Tactics\TaskIniComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
