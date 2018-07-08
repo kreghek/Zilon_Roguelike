@@ -4,8 +4,11 @@ using Moq;
 
 using NUnit.Framework;
 
-namespace Zilon.Core.Commands.Tests
+using Zilon.Core.Commands;
+
+namespace Zilon.Core.Tests.Commands
 {
+
     [TestFixture]
     public class QueueCommandManagerTests
     {
@@ -15,12 +18,11 @@ namespace Zilon.Core.Commands.Tests
         /// 3. Команды должны быть такими, какими их поместили в порядке очереди.
         /// </summary>
         [Test]
-        //TODO Входные параметры-объекты работают не стабильно. Переписать на 2 теста.
-        [TestCaseSource(typeof(QuequCommandManagerTestCaseGenerator),
-            nameof(QuequCommandManagerTestCaseGenerator.PopTestCases))]
-        public void Pop_FakeCommands_AllCommandsExtracted(ICommand[] commands)
+        public void Pop_GetOneCommand_AllCommandsExtracted()
         {
             // ARRANGE
+            var commands = GetOneCommand();
+
             var commandManager = new QueueCommandManager();
             foreach (var command in commands)
             {
@@ -29,13 +31,40 @@ namespace Zilon.Core.Commands.Tests
 
 
             // ACT
-            for (var i = 0; i < commands.Length; i++)
+            AssertPopCommands(commands, commandManager);
+        }
+
+        /// <summary>
+        /// 1. В системе есть набор команд, размещённых в менеджере за одну итерацию.
+        /// 2. Извлекаем все команды.
+        /// 3. Команды должны быть такими, какими их поместили в порядке очереди.
+        /// </summary>
+        [Test]
+        public void Pop_FakeCommands2_AllCommandsExtracted()
+        {
+            // ARRANGE
+            var commands = GetTwoCommands();
+
+            var commandManager = new QueueCommandManager();
+            foreach (var command in commands)
+            {
+                commandManager.Push(command);
+            }
+
+
+            // ACT
+            AssertPopCommands(commands, commandManager);
+        }
+
+        private static void AssertPopCommands(ICommand[] commands, QueueCommandManager commandManager)
+        {
+            foreach (var expectedCommand in commands)
             {
                 var factCommand = commandManager.Pop();
 
 
                 // ASSERT
-                factCommand.Should().Be(commands[i]);
+                factCommand.Should().Be(expectedCommand);
             }
         }
 
@@ -76,6 +105,24 @@ namespace Zilon.Core.Commands.Tests
             factCommand1.Should().Be(command1);
             idleCommand.Should().BeNull();
             factCommand2.Should().Be(command2);
+        }
+
+        private static ICommand[] GetOneCommand()
+        {
+            return new[] { CreateFakeCommand() };
+        }
+
+        private static ICommand[] GetTwoCommands()
+        {
+            return new[] {
+                CreateFakeCommand(),
+                CreateFakeCommand()
+            };
+        }
+
+        private static ICommand CreateFakeCommand()
+        {
+            return new Mock<ICommand>().Object;
         }
     }
 }

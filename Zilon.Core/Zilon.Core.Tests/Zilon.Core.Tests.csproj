@@ -77,7 +77,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Commands\QuequCommandManagerTestCaseGenerator.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
