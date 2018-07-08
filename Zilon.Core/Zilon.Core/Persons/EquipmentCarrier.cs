@@ -9,9 +9,9 @@ namespace Zilon.Core.Persons
             Equipments = new Equipment[slotCount];
         }
 
-        public Equipment[] Equipments { get; private set; }
+        public Equipment[] Equipments { get; }
 
-        public event EventHandler<EventArgs> EquipmentChanged;
+        public event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
 
 
         public void SetEquipment(Equipment equipment, int slotIndex)
@@ -26,7 +26,7 @@ namespace Zilon.Core.Persons
             Equipment oldEquipment,
             Equipment equipment)
         {
-            EquipmentChanged?.Invoke(this, new EventArgs());
+            EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
     }
 }

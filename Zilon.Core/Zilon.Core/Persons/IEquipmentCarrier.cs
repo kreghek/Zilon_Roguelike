@@ -25,6 +25,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.
         /// </summary>
-        event EventHandler<EventArgs> EquipmentChanged;
+        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
     }
 }
