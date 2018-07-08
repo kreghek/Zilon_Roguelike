@@ -2,15 +2,31 @@
 
 namespace Zilon.Core.Persons
 {
-    class EquipmentCarrier : IEquipmentCarrier
+    internal class EquipmentCarrier : IEquipmentCarrier
     {
-        public Equipment[] Equipments => throw new NotImplementedException();
+        public EquipmentCarrier(int slotCount)
+        {
+            Equipments = new Equipment[slotCount];
+        }
+
+        public Equipment[] Equipments { get; private set; }
 
         public event EventHandler<EventArgs> EquipmentChanged;
 
+
         public void SetEquipment(Equipment equipment, int slotIndex)
         {
-            throw new NotImplementedException();
+            var oldEquipment = Equipments[slotIndex];
+            Equipments[slotIndex] = equipment;
+
+            DoEquipmentChanged(slotIndex, oldEquipment, equipment);
+        }
+
+        protected void DoEquipmentChanged(int slotIndex,
+            Equipment oldEquipment,
+            Equipment equipment)
+        {
+            EquipmentChanged?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Zilon.Core.Persons
 {
     public class Person : IPerson, ITacticalActCarrier
     {
+        const int SLOT_COUNT = 3;
+
         public int Id { get; set; }
 
         public float Hp { get; set; }
@@ -14,7 +16,7 @@ namespace Zilon.Core.Persons
 
         public Person()
         {
-            EquipmentCarrier = new EquipmentCarrier();
+            EquipmentCarrier = new EquipmentCarrier(SLOT_COUNT);
             EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
         }
 
