@@ -4,6 +4,7 @@ namespace Zilon.Core.Persons
 {
     public class Person : IPerson, ITacticalActCarrier
     {
+        //TODO Слоты должн быть в схеме персонажа
         const int SLOT_COUNT = 3;
 
         public int Id { get; set; }
@@ -31,7 +32,6 @@ namespace Zilon.Core.Persons
 
             foreach (var equipment in equipments)
             {
-                //TODO Добавить тест, проверяющий корректную обработку события смены экипировки.
                 if (equipment == null)
                 {
                     continue;
