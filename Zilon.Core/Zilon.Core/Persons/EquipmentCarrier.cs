@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Persons
 {
-    internal class EquipmentCarrier : IEquipmentCarrier
+    public class EquipmentCarrier : IEquipmentCarrier
     {
         public EquipmentCarrier(int slotCount)
         {

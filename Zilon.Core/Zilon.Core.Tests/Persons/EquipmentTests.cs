@@ -4,10 +4,12 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons.Tests
+namespace Zilon.Core.Tests.Persons
 {
+
     [TestFixture()]
     public class EquipmentTests
     {
