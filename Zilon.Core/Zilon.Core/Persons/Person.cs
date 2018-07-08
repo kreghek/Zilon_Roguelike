@@ -31,6 +31,12 @@ namespace Zilon.Core.Persons
 
             foreach (var equipment in equipments)
             {
+                //TODO Добавить тест, проверяющий корректную обработку события смены экипировки.
+                if (equipment == null)
+                {
+                    continue;
+                }
+
                 actList.AddRange(equipment.Acts);
             }
 

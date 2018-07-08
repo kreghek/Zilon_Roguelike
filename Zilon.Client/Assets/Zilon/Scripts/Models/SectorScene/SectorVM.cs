@@ -121,6 +121,18 @@ class SectorVM : MonoBehaviour
         var playerActorStartNode = sectorGenerator.StartNodes.First();
         var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs, playerEquipment);
 
+        foreach (var monsterActor in sectorGenerator.MonsterActors)   {
+            actorManager.Add(monsterActor);
+
+            var actorVm = Instantiate(ActorPrefab, transform);
+
+            var actorNodeVm = nodeVMs.Single(x => x.Node == monsterActor.Node);
+            var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
+            actorVm.transform.position = actorPosition;
+            actorVm.Actor = monsterActor;
+            actorVm.IsEnemy = true;
+        }
+
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor,_decisionSource);
 
         var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
