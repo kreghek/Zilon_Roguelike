@@ -1,3 +1,4 @@
+using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Zenject;
 using Zilon.Core.Commands;
@@ -22,5 +23,8 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
+
+        Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
     }
 }
