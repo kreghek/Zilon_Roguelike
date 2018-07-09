@@ -25,7 +25,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
         private IMap _map;
         private IPlayer _player;
         private IActor _actor;
-        private IPatrolRoute _patrolRoute;
+        private IPatrolRoute _patrolRoute3Points;
+        private IPatrolRoute _patrolRoute2DiagPoints;
         private IActorManager _actorList;
         private IDecisionSource _decisionSource;
 
@@ -46,15 +47,28 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             actorMock.SetupGet(x => x.Owner).Returns(_player);
             _actor = actorMock.Object;
 
-
-            var patrolRouteMock = new Mock<IPatrolRoute>();
-            var routePoints = new IMapNode[] {
+            // Маршрут из 3-х точек
+            var patrolRoute3PointsMock = new Mock<IPatrolRoute>();
+            var route3Points = new IMapNode[] {
                 _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
                 _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
                 _map.Nodes.OfType<HexNode>().SelectBy(3, 5)
             };
-            patrolRouteMock.SetupGet(x => x.Points).Returns(routePoints);
-            _patrolRoute = patrolRouteMock.Object;
+            patrolRoute3PointsMock
+                .SetupGet(x => x.Points)
+                .Returns(route3Points);
+            _patrolRoute3Points = patrolRoute3PointsMock.Object;
+
+            // Маршрут из 2-х точек по диагонали комнаты
+            var patrolRoute2DiagPointsMock = new Mock<IPatrolRoute>();
+            var route2DiagPoints = new IMapNode[] {
+                _map.Nodes.OfType<HexNode>().SelectBy(0, 0),
+                _map.Nodes.OfType<HexNode>().SelectBy(9, 9)
+            };
+            patrolRoute2DiagPointsMock
+                .SetupGet(x => x.Points)
+                .Returns(route2DiagPoints);
+            _patrolRoute2DiagPoints = patrolRoute2DiagPointsMock.Object;
 
 
             var actors = new List<IActor> { _actor };
@@ -107,7 +121,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             };
 
 
-            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+            var logic = new PatrolLogic(_actor, _patrolRoute3Points, _map, _actorList, _decisionSource);
 
 
 
@@ -165,10 +179,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
 
-            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+            var logic = new PatrolLogic(_actor, _patrolRoute3Points, _map, _actorList, _decisionSource);
 
             const int expectedStepsToPatrolPoint_1_1 = 2;
-            var expectedNode = _patrolRoute.Points.First();
+            var expectedNode = _patrolRoute3Points.Points.First();
 
 
 
@@ -206,10 +220,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(5, 1);
 
-            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+            var logic = new PatrolLogic(_actor, _patrolRoute3Points, _map, _actorList, _decisionSource);
 
             const int expectedStepsToPatrolPoint_5_3 = 2;
-            var expectedNode = _patrolRoute.Points[1];  // вторая чтока маршрута
+            var expectedNode = _patrolRoute3Points.Points[1];  // вторая точка маршрута
 
 
 
@@ -237,7 +251,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
         /// Изначально актёр начинает патрулирование в стороне от маршрута патрулирования.
         /// Ожидается, что актёр в первую очередь посетит ближайшую точку патрулирования
         /// и продолжит обход в порядке точек патрулирования.
-        /// Отличается от предыдущего тем, что стартовая точка лежит рядов с третьей точкой маршрута.
+        /// Отличается от предыдущего тем, что стартовая точка лежит рядом с третьей точкой маршрута.
         /// </summary>
         [Test]
         public void GetCurrentTask_StartOnSideOnRoute3_ActorWalkThroughRount()
@@ -247,10 +261,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(2, 6);
 
-            var logic = new PatrolLogic(_actor, _patrolRoute, _map, _actorList, _decisionSource);
+            var logic = new PatrolLogic(_actor, _patrolRoute3Points, _map, _actorList, _decisionSource);
 
             const int expectedStepsToPatrolPoint_3_5 = 2;
-            var expectedNode = _patrolRoute.Points[2];  // третья чтока маршрута
+            var expectedNode = _patrolRoute3Points.Points[2];  // третья точка маршрута
 
 
 
@@ -269,6 +283,41 @@ namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
             var expectedHexNode = (HexNode)expectedNode;
             factHexNode.OffsetX.Should().Be(expectedHexNode.OffsetX);
             factHexNode.OffsetY.Should().Be(expectedHexNode.OffsetY);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что актёр, следуемый логике патрулирования будет
+        /// корректно обходить ключевые точки.
+        /// В точка должен быть простой на 1 ход.
+        /// Изначально актёр начинает патрулирование с первой точки обхода.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_2PointsDiag_ReturningToStartPoint()
+        {
+            // ARRANGE
+
+            const int expectedStepsToSecondPoint = 10;
+            const int expectedWaiting = 1;
+            const int expectedReturningStep = expectedStepsToSecondPoint +
+               expectedWaiting + 1;
+
+            var expectedSecondPoint = _patrolRoute2DiagPoints.Points.Last();
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
+
+            var logic = new PatrolLogic(_actor, _patrolRoute2DiagPoints, _map, _actorList, _decisionSource);
+
+
+
+            // ACT
+            for (var round = 0; round < expectedReturningStep; round++)
+            {
+                var task = logic.GetCurrentTask();
+
+                task.Execute();
+            }
+
+            _factActorNode.Should().NotBe(expectedSecondPoint);
         }
     }
 }
