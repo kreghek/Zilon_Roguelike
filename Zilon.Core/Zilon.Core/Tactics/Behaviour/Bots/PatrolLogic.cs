@@ -12,6 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public class PatrolLogic : IBotLogic
     {
         private const int PERSIUT_COUNTER = 3;
+        //TODO Дальность видимости вынести в схему персонажа и, зтем, в пересчитанном состоянии в актёра.
         private const int VISIBILITY_RANGE = 5;
         private readonly IActor _actor;
         private readonly IPatrolRoute _patrolRoute;
