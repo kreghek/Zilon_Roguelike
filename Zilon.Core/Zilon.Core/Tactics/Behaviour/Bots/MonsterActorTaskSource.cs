@@ -40,9 +40,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 }
                 else
                 {
-                    if (!_logicDict.TryGetValue(actor, out IBotLogic logic))
+                    if (!_logicDict.TryGetValue(actor, out var logic))
                     {
-                        if (_patrolRoutes.TryGetValue(actor, out IPatrolRoute partolRoute))
+                        if (_patrolRoutes.TryGetValue(actor, out var partolRoute))
                         {
 
                             var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource);
