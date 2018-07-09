@@ -5,6 +5,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {
+    /// <inheritdoc />
     /// <summary>
     /// Сравнение задач актёров по инициативе.
     /// </summary>

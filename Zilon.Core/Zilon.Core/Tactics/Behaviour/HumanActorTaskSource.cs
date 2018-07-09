@@ -1,10 +1,10 @@
 ﻿using System;
+
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    using Zilon.Core.Tactics.Behaviour.Bots;
-
     public class HumanActorTaskSource : IActorTaskSource
     {
         private readonly IActor _currentActor;
