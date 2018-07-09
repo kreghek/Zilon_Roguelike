@@ -39,7 +39,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ARRANGE
-            person.Acts[0].Should().Be(tacticAct);
+            person.TacticalActCarrier.Acts[0].Should().Be(tacticAct);
         }
     }
 }

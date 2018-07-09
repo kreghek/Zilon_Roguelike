@@ -4,16 +4,18 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-    public class MonsterPerson: IPerson, ITacticalActCarrier
+    public class MonsterPerson : IPerson
     {
         public int Id { get; set; }
         public float Hp { get; }
         public IEquipmentCarrier EquipmentCarrier => throw new NotSupportedException("Для монстров не поддерживается явная экипировка");
 
-        public ITacticalAct[] Acts { get; }
+        public ITacticalActCarrier TacticalActCarrier { get; }
 
         public MonsterPerson()
         {
+            TacticalActCarrier = new TacticalActCarrier();
+
             var scheme = new TacticalActScheme
             {
                 Efficient = new Range<float>(1, 1),
@@ -21,7 +23,7 @@ namespace Zilon.Core.Persons
                 MaxRange = 1
             };
 
-            Acts = new TacticalAct[] {
+            TacticalActCarrier.Acts = new TacticalAct[] {
                 new TacticalAct(1, scheme)
             };
         }

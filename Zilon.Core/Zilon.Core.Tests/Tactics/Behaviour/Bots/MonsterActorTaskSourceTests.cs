@@ -6,8 +6,9 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -86,8 +87,26 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var botPlayerMock = new Mock<IPlayer>();
             var botPlayer = botPlayerMock.Object;
 
+            var botTacticalActScheme = new TacticalActScheme() {
+                MinRange = 1,
+                MaxRange = 1
+            };
+
+            var botTacticalActMock = new Mock<ITacticalAct>();
+            botTacticalActMock.SetupGet(x => x.Scheme).Returns(botTacticalActScheme);
+            var botTacticalAct = botTacticalActMock.Object;
+
+            var botTacticalCarrierMock = new Mock<ITacticalActCarrier>();
+            botTacticalCarrierMock.SetupProperty(x => x.Acts, new[] { botTacticalAct });
+            var botTacticalCarrier = botTacticalCarrierMock.Object;
+
+            var botPersonMock = new Mock<IPerson>();
+            botPersonMock.SetupGet(x => x.TacticalActCarrier).Returns(botTacticalCarrier);
+            var botPerson = botPersonMock.Object;
+
             var botActorMock = new Mock<IActor>();
             botActorMock.SetupGet(x => x.Owner).Returns(botPlayer);
+            botActorMock.SetupGet(x => x.Person).Returns(botPerson);
             var botActor = botActorMock.Object;
 
             // Создание актёра игрока

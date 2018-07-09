@@ -8,6 +8,6 @@
         /// <summary>
         /// Набор всех действий.
         /// </summary>
-        ITacticalAct[] Acts { get; }
+        ITacticalAct[] Acts { get; set; }
     }
 }

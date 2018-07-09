@@ -127,8 +127,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var actorNode = (HexNode)_actor.Node;
             var targetNode = (HexNode)targetIntruder.Node;
 
-            if (_actor.Person is ITacticalActCarrier actCarrier)
+            if (_actor.Person.TacticalActCarrier != null)
             {
+                var actCarrier = _actor.Person.TacticalActCarrier;
                 var act = actCarrier.Acts.First();
 
                 var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);

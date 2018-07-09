@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Persons
 {
-    public class Person : IPerson, ITacticalActCarrier
+    public class Person : IPerson
     {
         //TODO Слоты должн быть в схеме персонажа
         const int SLOT_COUNT = 3;
@@ -13,17 +13,19 @@ namespace Zilon.Core.Persons
 
         public IEquipmentCarrier EquipmentCarrier { get; }
 
-        public ITacticalAct[] Acts { get; set; }
+        public ITacticalActCarrier TacticalActCarrier { get; }
 
         public Person()
         {
             EquipmentCarrier = new EquipmentCarrier(SLOT_COUNT);
             EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
+
+            TacticalActCarrier = new TacticalActCarrier();
         }
 
         private void EquipmentCarrier_EquipmentChanged(object sender, System.EventArgs e)
         {
-            Acts = CalcActs(EquipmentCarrier.Equipments);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
