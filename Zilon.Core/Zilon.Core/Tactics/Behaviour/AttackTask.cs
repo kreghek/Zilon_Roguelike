@@ -24,8 +24,9 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentCubePos = ((HexNode)Actor.Node).CubeCoords;
             var targetCubePos = ((HexNode)_target.Node).CubeCoords;
 
-            if (Actor.Person is ITacticalActCarrier actCarrier)
+            if (Actor.Person.TacticalActCarrier != null)
             {
+                var actCarrier = Actor.Person.TacticalActCarrier;
                 var act = actCarrier.Acts.FirstOrDefault();
                 if (act == null)
                 {

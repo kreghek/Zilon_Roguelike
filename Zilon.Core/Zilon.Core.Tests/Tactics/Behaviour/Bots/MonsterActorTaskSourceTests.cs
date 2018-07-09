@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
@@ -25,6 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если для монстров заданы маршруты.
         /// </summary>
         [Test]
+        //TODO Убрать дублирование из тестов
         public void GetActorTasks_PatrolsInClearField_ReturnsMoveTask()
         {
             // ARRANGE
@@ -79,6 +81,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный обнаружил противника.
         /// </summary>
         [Test]
+        //TODO Убрать дублирование из тестов
         public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask()
         {
             // ARRANGE
@@ -163,6 +166,102 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             tasks[0].Execute();
             botActorNode.OffsetX.Should().Be(2);
             botActorNode.OffsetY.Should().Be(1);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что источник команд возвращает задачу на атаку,
+        /// если патрульный стоит рядом и может атаковать.
+        /// </summary>
+        [Test]
+        //TODO Убрать дублирование из тестов
+        public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
+        {
+            // ARRANGE
+
+            // создание актёра бота
+            var botPlayerMock = new Mock<IPlayer>();
+            var botPlayer = botPlayerMock.Object;
+
+            var botTacticalActScheme = new TacticalActScheme()
+            {
+                MinRange = 1,
+                MaxRange = 1
+            };
+
+            var botTacticalActMock = new Mock<ITacticalAct>();
+            botTacticalActMock.SetupGet(x => x.Scheme).Returns(botTacticalActScheme);
+            var botTacticalAct = botTacticalActMock.Object;
+
+            var botTacticalCarrierMock = new Mock<ITacticalActCarrier>();
+            botTacticalCarrierMock.SetupProperty(x => x.Acts, new[] { botTacticalAct });
+            var botTacticalCarrier = botTacticalCarrierMock.Object;
+
+            var botPersonMock = new Mock<IPerson>();
+            botPersonMock.SetupGet(x => x.TacticalActCarrier).Returns(botTacticalCarrier);
+            var botPerson = botPersonMock.Object;
+
+            var botActorMock = new Mock<IActor>();
+            botActorMock.SetupGet(x => x.Owner).Returns(botPlayer);
+            botActorMock.SetupGet(x => x.Person).Returns(botPerson);
+            var botActor = botActorMock.Object;
+
+            // Создание актёра игрока
+            var humanPlayerMock = new Mock<IPlayer>();
+            var humanPlayer = humanPlayerMock.Object;
+
+            var humanActorMock = new Mock<IActor>();
+            humanActorMock.SetupGet(x => x.Owner).Returns(humanPlayer);
+            humanActorMock.Setup(x => x.CanBeDamaged()).Returns(true);
+            var humanActor = humanActorMock.Object;
+
+            var actorListInner = new List<IActor> { humanActor, botActor };
+            var actorManagerMock = new Mock<IActorManager>();
+            actorManagerMock.SetupGet(x => x.Actors).Returns(actorListInner);
+            var actorManager = actorManagerMock.Object;
+
+            var map = new TestGridGenMap();
+
+            // Располагаем рядом игрока и бота
+            var botActorNode = map.Nodes.Cast<HexNode>().SelectBy(1, 1);
+            humanActorMock.SetupGet(x => x.Node).Returns(map.Nodes.Cast<HexNode>().SelectBy(2, 1));
+            botActorMock.SetupGet(x => x.Node).Returns(() => botActorNode);
+            botActorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
+                .Callback<IMapNode>((node) => botActorNode = (HexNode)node);
+
+            var routePoints = new IMapNode[] {
+                map.Nodes.Cast<HexNode>().SelectBy(1,1),
+                map.Nodes.Cast<HexNode>().SelectBy(9,9)
+            };
+            var routeMock = new Mock<IPatrolRoute>();
+            routeMock.SetupGet(x => x.Points).Returns(routePoints);
+            var route = routeMock.Object;
+
+            var patrolRoutes = new Dictionary<IActor, IPatrolRoute>
+            {
+                { botActor, route }
+            };
+
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            var decisionSource = decisionSourceMock.Object;
+
+            var taskSource = new MonsterActorTaskSource(botPlayer, patrolRoutes, decisionSource);
+
+
+
+            // ACT
+            var tasks = taskSource.GetActorTasks(map, actorManager);
+
+
+
+            // ASSERT
+            // бот должен начать двигаться к игроку.
+            tasks[0].Should().BeOfType<AttackTask>();
+
+            Action act = () => {
+                tasks[0].Execute();
+            };
+
+            act.Should().NotThrow();
         }
     }
 }
