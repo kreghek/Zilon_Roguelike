@@ -103,7 +103,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                if (_persuitCounter > 0)
+                //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
+                if (_persuitCounter > 0 && _moveTask != null)
                 {
                     _persuitCounter--;
                     return _moveTask;

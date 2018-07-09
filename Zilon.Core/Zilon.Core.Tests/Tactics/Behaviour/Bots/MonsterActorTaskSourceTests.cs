@@ -128,6 +128,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var botActorNode = map.Nodes.Cast<HexNode>().SelectBy(1, 1);
             humanActorMock.SetupGet(x => x.Node).Returns(map.Nodes.Cast<HexNode>().SelectBy(3, 1));
             botActorMock.SetupGet(x => x.Node).Returns(()=> botActorNode);
+            botActorMock.Setup(x=>x.MoveToNode(It.IsAny<IMapNode>()))
+                .Callback<IMapNode>((node) => botActorNode = (HexNode)node);
 
             var routePoints = new IMapNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(1,1),
