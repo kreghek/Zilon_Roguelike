@@ -86,11 +86,10 @@
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
     <Compile Include="Services\SchemeServiceTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\IdleTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\MonsterActorTaskSourceTests.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Generation\GenerationHelperTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />
