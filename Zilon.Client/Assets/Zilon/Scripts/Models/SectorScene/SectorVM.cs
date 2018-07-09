@@ -48,9 +48,9 @@ class SectorVM : MonoBehaviour
     
     [Inject] private IPropFactory _propFactory;
 
-    [Inject(Id = "move-command")] private MoveCommand _moveCommand;
+    [Inject(Id = "move-command")] private ICommand _moveCommand;
 
-    [Inject(Id = "attack-command")] private AttackCommand _attackCommand;
+    [Inject(Id = "attack-command")] private ICommand _attackCommand;
 
 
     // ReSharper disable once UnusedMember.Local
