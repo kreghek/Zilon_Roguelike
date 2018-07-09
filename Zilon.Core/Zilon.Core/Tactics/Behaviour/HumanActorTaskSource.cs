@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentActor = startActor;
         }
 
-        public IActorTask[] GetActorTasks(IMap map, IActorManager actorList)
+        public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
 
             if (_taskIsActual && _currentTask?.IsComplete == true)
