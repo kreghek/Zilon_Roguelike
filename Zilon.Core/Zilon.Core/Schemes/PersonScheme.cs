@@ -6,5 +6,6 @@
     /// </summary>
     public class PersonScheme: SchemeBase
     {
+        public int SlotCount { get; }
     }
 }
