@@ -16,6 +16,7 @@ namespace Zilon.Core.Schemes
         private readonly Dictionary<string, PathScheme> _paths;
         private readonly Dictionary<string, PropScheme> _props;
         private readonly Dictionary<string, TacticalActScheme> _tacticalActs;
+        private readonly Dictionary<string, PersonScheme> _persons;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
@@ -33,6 +34,9 @@ namespace Zilon.Core.Schemes
 
             _tacticalActs = new Dictionary<string, TacticalActScheme>();
             LoadSchemes(schemeLocator, "TacticalActs", _tacticalActs);
+
+            _persons = new Dictionary<string, PersonScheme>();
+            LoadSchemes(schemeLocator, "Persons", _persons);
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
