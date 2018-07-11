@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -16,6 +17,8 @@ namespace Zilon.Core.Tactics
         private readonly IMap _map;
 
         private readonly IActorManager _actorManager;
+
+        public event EventHandler ActorExit;
 
         public IActorTaskSource[] BehaviourSources { get; set; }
 
@@ -52,6 +55,9 @@ namespace Zilon.Core.Tactics
 
             // Выполняем все команды на текущий ход
             ExecuteActorTasks();
+
+            // Определяем, не покинули ли актёры игрока сектор.
+            DetectSectorExit();
         }
 
         /// <summary>
@@ -106,7 +112,31 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
         /// </summary>
-        private void DetectSectorExit() {
+        private void DetectSectorExit()
+        {
+            var allExit = true;
+
+            foreach (var actor in _actorManager.Actors)
+            {
+                if (actor.Owner is HumanPlayer)
+                {
+                    if (!ExitNodes.Contains(actor.Node))
+                    {
+                        allExit = false;
+                    }
+                }
+            }
+
+            if (allExit)
+            {
+                DoActorExit();
+            }
+        }
+
+        protected void DoActorExit()
+        {
+            var e = new EventArgs();
+            ActorExit?.Invoke(this, e);
         }
     }
 }

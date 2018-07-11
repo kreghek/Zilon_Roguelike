@@ -5,6 +5,7 @@ using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -69,15 +70,20 @@ class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void Awake()
     {
+        CreateSector();
+    }
+
+    private void CreateSector()
+    {
         var humanPlayer = new HumanPlayer();
         var botPlayer = new BotPlayer();
-        
+
         var map = new HexMap();
-        
+
         var actorManager = new ActorList();
-        
+
         var sector = new Sector(map, actorManager);
-        
+
         var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer);
 
         try
@@ -89,7 +95,7 @@ class SectorVM : MonoBehaviour
             Debug.Log(sectorGenerator.Log.ToString());
             throw;
         }
-        
+
         Debug.Log(sectorGenerator.Log.ToString());
 
         var nodeVMs = new List<MapNodeVM>();
@@ -127,14 +133,15 @@ class SectorVM : MonoBehaviour
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);
         var playerActorStartNode = sectorGenerator.StartNodes.First();
-        var playerActorVm = CreateActorVm(humanPlayer, 
-            personScheme, 
+        var playerActorVm = CreateActorVm(humanPlayer,
+            personScheme,
             actorManager,
             playerActorStartNode,
             nodeVMs,
             playerEquipment);
 
-        foreach (var monsterActor in sectorGenerator.MonsterActors)   {
+        foreach (var monsterActor in sectorGenerator.MonsterActors)
+        {
             actorManager.Add(monsterActor);
 
             var actorVm = Instantiate(ActorPrefab, transform);
@@ -147,12 +154,12 @@ class SectorVM : MonoBehaviour
             actorVm.OnSelected += EnemyActorVm_OnSelected;
         }
 
-        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor,_decisionSource);
+        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, _decisionSource);
 
-        var botActorTaskSource = new MonsterActorTaskSource(botPlayer, 
+        var botActorTaskSource = new MonsterActorTaskSource(botPlayer,
             sectorGenerator.Patrols,
             _decisionSource);
-        
+
         sector.BehaviourSources = new IActorTaskSource[]
         {
             playerActorTaskSource,
@@ -162,6 +169,13 @@ class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector = sector;
 
         _playerState.TaskSource = playerActorTaskSource;
+
+        sector.ActorExit += SectorOnActorExit;
+    }
+
+    private void SectorOnActorExit(object sender, EventArgs e)
+    {
+        SceneManager.LoadScene("combat");
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
