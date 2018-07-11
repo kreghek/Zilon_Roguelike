@@ -216,7 +216,7 @@ namespace Zilon.Core.Tactics.Generation
 
             var points = CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
 
-            for (var i = 1; i < points.Length; i++)
+            for (var i = 0; i < points.Length; i++)
             {
                 var point = points[i];
 
