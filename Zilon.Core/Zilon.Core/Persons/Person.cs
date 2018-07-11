@@ -2,11 +2,10 @@
 
 namespace Zilon.Core.Persons
 {
+    using Zilon.Core.Schemes;
+
     public class Person : IPerson
     {
-        //TODO Слоты должн быть в схеме персонажа
-        const int SLOT_COUNT = 3;
-
         public int Id { get; set; }
 
         public float Hp { get; set; }
@@ -15,9 +14,15 @@ namespace Zilon.Core.Persons
 
         public ITacticalActCarrier TacticalActCarrier { get; }
 
-        public Person()
+        public PersonScheme Scheme { get; }
+
+        public Person(PersonScheme scheme)
         {
-            EquipmentCarrier = new EquipmentCarrier(SLOT_COUNT);
+            if ()
+            Scheme = scheme;
+
+            var slotCount = Scheme.SlotCount;
+            EquipmentCarrier = new EquipmentCarrier(slotCount);
             EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
 
             TacticalActCarrier = new TacticalActCarrier();
