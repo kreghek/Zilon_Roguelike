@@ -18,6 +18,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -71,13 +72,17 @@ namespace Zilon.Core.Tactics.Tests
             // Подготовка игроков
             var botPlayer = new BotPlayer();
 
-
             // Подготовка актёров
+            var personScheme = new PersonScheme()
+            {
+                SlotCount = 3
+            };
+
             var enemy1StartNode = map.Nodes.Cast<HexNode>().SelectBy(5, 5);
-            var enemy1Actor = CreateActor(botPlayer, actorManager, enemy1StartNode);
+            var enemy1Actor = CreateActor(botPlayer, personScheme, actorManager, enemy1StartNode);
 
             var enemy2StartNode = map.Nodes.Cast<HexNode>().SelectBy(9, 9);
-            var enemy2Actor = CreateActor(botPlayer, actorManager, enemy2StartNode);
+            var enemy2Actor = CreateActor(botPlayer, personScheme, actorManager, enemy2StartNode);
 
 
             // Подготовка маршрутов патрулирования
@@ -123,10 +128,11 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         private IActor CreateActor([NotNull] IPlayer player,
+            [NotNull] PersonScheme personScheme,
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            var person = new Person()
+            var person = new Person(personScheme)
             {
                 Hp = 1
             };

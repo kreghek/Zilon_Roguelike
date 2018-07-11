@@ -11,9 +11,9 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public IPerson Create()
+        public IPerson Create(PersonScheme personScheme)
         {
-            var person = new Person();
+            var person = new Person(personScheme);
             return person;
         }
 

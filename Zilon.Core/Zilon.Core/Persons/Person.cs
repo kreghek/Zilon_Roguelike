@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Persons
 {
+    using System;
     using Zilon.Core.Schemes;
 
     public class Person : IPerson
@@ -18,7 +19,11 @@ namespace Zilon.Core.Persons
 
         public Person(PersonScheme scheme)
         {
-            if ()
+            if (scheme == null)
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
             Scheme = scheme;
 
             var slotCount = Scheme.SlotCount;

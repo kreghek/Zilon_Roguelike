@@ -12,11 +12,19 @@ namespace Zilon.Core.Tests.Persons
     [TestFixture]
     public class PersonTests
     {
+        /// <summary>
+        /// Тест проверяет, что персонаж корректно обрабатывает назначение экипировки.
+        /// </summary>
         [Test]
-        public void PersonTest()
+        public void SetEquipment_SetSingleEquipment_HasActs()
         {
             // ARRANGE
-            var person = new Person();
+            var personScheme = new PersonScheme
+            {
+                SlotCount = 3
+            };
+
+            var person = new Person(personScheme);
 
             var scheme = new PropScheme
             {

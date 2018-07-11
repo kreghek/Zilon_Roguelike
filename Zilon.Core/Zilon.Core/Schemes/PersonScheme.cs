@@ -9,6 +9,6 @@
         /// <summary>
         /// Количество слотов в экипировке.
         /// </summary>
-        public int SlotCount { get; }
+        public int SlotCount { get; set; }
     }
 }
