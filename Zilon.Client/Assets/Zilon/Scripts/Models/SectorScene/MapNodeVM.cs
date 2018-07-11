@@ -7,6 +7,8 @@ using Zilon.Core.Tactics.Spatial;
 public class MapNodeVM : MonoBehaviour
 {
     public GameObject[] Walls;
+    public bool IsExit;
+    public GameObject ExitMarker;
     
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }
@@ -19,21 +21,21 @@ public class MapNodeVM : MonoBehaviour
     {
         var neighborCubePositions = HexHelper.GetOffsetClockwise();
 
-        for (var i=0; i < 6; i++)
+        for (var i = 0; i < 6; i++)
         {
             var wallObj = Walls[i];
             var cubeOffsetPosition = neighborCubePositions[i];
- 
+
             var checkedCubeCoords = Node.CubeCoords + cubeOffsetPosition;
 
             var neighbor = Neighbors.SingleOrDefault(x => x.CubeCoords == checkedCubeCoords);
 
             var hasWall = neighbor == null;
-            
+
             wallObj.SetActive(hasWall);
         }
-        
-        
+
+        ExitMarker.SetActive(IsExit);
     }
 
     public void OnMouseDown()

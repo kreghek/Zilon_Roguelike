@@ -112,6 +112,11 @@ class SectorVM : MonoBehaviour
             mapNodeVm.Edges = edges;
             mapNodeVm.Neighbors = neighbors;
 
+            if (sector.ExitNodes.Contains(node))
+            {
+                mapNodeVm.IsExit = true;
+            }
+
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
 
             nodeVMs.Add(mapNodeVm);
