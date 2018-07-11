@@ -81,6 +81,7 @@
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
     <Compile Include="Persons\EquipmentTests.cs" />
+    <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PersonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
