@@ -19,6 +19,8 @@ namespace Zilon.Core.Tactics
 
         public IActorTaskSource[] BehaviourSources { get; set; }
 
+        public IMapNode[] ExitNodes { get; set; }
+
         public Sector(IMap map, IActorManager actorManager)
         {
 #pragma warning disable IDE0016 // Use 'throw' expression
@@ -46,17 +48,17 @@ namespace Zilon.Core.Tactics
         public void Update()
         {
             // Определяем команды на текущий ход
-            _tasks.Clear();
-            foreach (var behaviourSource in BehaviourSources)
-            {
-                var commands = behaviourSource.GetActorTasks(_map, _actorManager);
-                if (commands != null)
-                {
-                    _tasks.AddRange(commands);
-                }
-            }
+            CollectActorTasks();
 
             // Выполняем все команды на текущий ход
+            ExecuteActorTasks();
+        }
+
+        /// <summary>
+        /// Выполнение задач на текущий ход. Задачи берутся из внутреннего списка _tasks.
+        /// </summary>
+        private void ExecuteActorTasks()
+        {
             _tasks.Sort(_taskIniComparer);
             //TODO Добавить тест, проверяющий, что задачи выполняются с учётом инициативы.
             foreach (var task in _tasks)
@@ -82,6 +84,29 @@ namespace Zilon.Core.Tactics
 
                 task.Execute();
             }
+        }
+
+        /// <summary>
+        /// Определяем задачи актёров на текущий ход по всем зарегистрированным источникам задач.
+        /// Результат записывается во внутренний список _tasks.
+        /// </summary>
+        private void CollectActorTasks()
+        {
+            _tasks.Clear();
+            foreach (var behaviourSource in BehaviourSources)
+            {
+                var currentSourceTasks = behaviourSource.GetActorTasks(_map, _actorManager);
+                if (currentSourceTasks != null)
+                {
+                    _tasks.AddRange(currentSourceTasks);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
+        /// </summary>
+        private void DetectSectorExit() {
         }
     }
 }

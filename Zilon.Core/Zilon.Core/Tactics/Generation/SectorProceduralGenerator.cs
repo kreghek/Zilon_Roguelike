@@ -26,6 +26,11 @@ namespace Zilon.Core.Tactics.Generation
         private Room _startRoom;
 
         /// <summary>
+        /// Комната с выходом из сектора.
+        /// </summary>
+        private Room _exitRoom;
+
+        /// <summary>
         /// Стартовые узлы.
         /// Набор узлов, где могут располагаться актёры игрока
         /// на начало прохождения сектора.
@@ -71,6 +76,13 @@ namespace Zilon.Core.Tactics.Generation
             CreateRoomMonsters(mainRooms);
 
             SelectStartNodes(_startRoom);
+
+            SelectExitPoints(sector, _exitRoom);
+        }
+
+        private void SelectExitPoints(ISector sector, Room exitRoom)
+        {
+            sector.ExitNodes = new[] { exitRoom.Nodes.Last() };
         }
 
         private void SelectStartNodes(Room startRoom)
@@ -265,6 +277,8 @@ namespace Zilon.Core.Tactics.Generation
                     throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
                 }
             }
+
+            _exitRoom = rooms.Last();
 
             return rooms;
         }
