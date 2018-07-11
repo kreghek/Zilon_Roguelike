@@ -41,6 +41,7 @@ namespace Zilon.Core.Schemes
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
+            //TODO Добавить тесты на проверку каждого типа схемы - загрузка, десериализация
             if (typeof(TScheme) == typeof(MapScheme))
             {
                 return _maps[sid] as TScheme;
@@ -64,6 +65,11 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(TacticalActScheme))
             {
                 return _tacticalActs[sid] as TScheme;
+            }
+
+            if (typeof(TScheme) == typeof(PersonScheme))
+            {
+                return _persons[sid] as TScheme;
             }
 
             throw new ArgumentException("Указан неизвестный тип схемы");
@@ -94,6 +100,11 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(TacticalActScheme))
             {
                 return _tacticalActs.Values.Cast<TScheme>().ToArray();
+            }
+
+            if (typeof(TScheme) == typeof(PersonScheme))
+            {
+                return _persons.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException();

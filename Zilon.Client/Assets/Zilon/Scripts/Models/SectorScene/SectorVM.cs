@@ -118,10 +118,16 @@ class SectorVM : MonoBehaviour
         }
 
         var propScheme = _schemeService.GetScheme<PropScheme>("short-sword");
+        var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);
         var playerActorStartNode = sectorGenerator.StartNodes.First();
-        var playerActorVm = CreateActorVm(humanPlayer, actorManager, playerActorStartNode, nodeVMs, playerEquipment);
+        var playerActorVm = CreateActorVm(humanPlayer, 
+            personScheme, 
+            actorManager,
+            playerActorStartNode,
+            nodeVMs,
+            playerEquipment);
 
         foreach (var monsterActor in sectorGenerator.MonsterActors)   {
             actorManager.Add(monsterActor);
@@ -165,23 +171,16 @@ class SectorVM : MonoBehaviour
         }
     }
 
-    private ActorVM CreateActorVm(IPlayer player,
+    private ActorVM CreateActorVm([NotNull] IPlayer player,
+        [NotNull] PersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs,
         [NotNull] Equipment equipment)
     {
-        var person = new Person
-        {
-            Hp = 1
-        };
+        var person = new Person(personScheme);
         
         person.EquipmentCarrier.SetEquipment(equipment, 0);
-
-        if (player is HumanPlayer)
-        {
-            person.Hp = 10;
-        }
 
         var actor = new Actor(person, player, startNode);
         

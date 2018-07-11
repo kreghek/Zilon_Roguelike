@@ -1,4 +1,5 @@
 {
   "Name": "Пиратский Капитан",
-  "SlotCount": 7
+  "SlotCount": 7,
+  "Hp": 120
 }
