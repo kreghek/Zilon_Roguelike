@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     {
         public int Id { get; set; }
 
-        public float Hp { get; set; }
+        public float Hp => Scheme.Hp;
 
         public IEquipmentCarrier EquipmentCarrier { get; }
 

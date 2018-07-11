@@ -73,16 +73,11 @@ namespace Zilon.Core.Tactics.Tests
             var botPlayer = new BotPlayer();
 
             // Подготовка актёров
-            var personScheme = new PersonScheme()
-            {
-                SlotCount = 3
-            };
-
             var enemy1StartNode = map.Nodes.Cast<HexNode>().SelectBy(5, 5);
-            var enemy1Actor = CreateActor(botPlayer, personScheme, actorManager, enemy1StartNode);
+            var enemy1Actor = CreateMonsterActor(botPlayer, actorManager, enemy1StartNode);
 
             var enemy2StartNode = map.Nodes.Cast<HexNode>().SelectBy(9, 9);
-            var enemy2Actor = CreateActor(botPlayer, personScheme, actorManager, enemy2StartNode);
+            var enemy2Actor = CreateMonsterActor(botPlayer, actorManager, enemy2StartNode);
 
 
             // Подготовка маршрутов патрулирования
@@ -132,16 +127,27 @@ namespace Zilon.Core.Tactics.Tests
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            var person = new Person(personScheme)
-            {
-                Hp = 1
-            };
+            var person = new Person(personScheme);
 
             var actor = new Actor(person, player, startNode);
 
             actorManager.Add(actor);
 
             
+            return actor;
+        }
+
+        private IActor CreateMonsterActor([NotNull] IPlayer player,
+            [NotNull] IActorManager actorManager,
+            [NotNull] IMapNode startNode)
+        {
+            var person = new MonsterPerson();
+
+            var actor = new Actor(person, player, startNode);
+
+            actorManager.Add(actor);
+
+
             return actor;
         }
     }

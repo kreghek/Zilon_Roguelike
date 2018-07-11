@@ -6,6 +6,12 @@
     /// </summary>
     public class PersonScheme: SchemeBase
     {
+        //TODO Убрать из схем сеттеры
+        /// <summary>
+        /// Базовые хитпоинты персонажа.
+        /// </summary>
+        public int Hp { get; set; }
+
         /// <summary>
         /// Количество слотов в экипировке.
         /// </summary>
