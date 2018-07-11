@@ -92,6 +92,7 @@
     <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
+    <Compile Include="Tactics\Generation\RoomGenerator.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
