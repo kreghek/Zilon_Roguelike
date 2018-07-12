@@ -80,7 +80,7 @@ class SectorVM : MonoBehaviour
 
         var map = new HexMap();
 
-        var actorManager = new ActorList();
+        var actorManager = new ActorManager();
 
         var sector = new Sector(map, actorManager);
 
