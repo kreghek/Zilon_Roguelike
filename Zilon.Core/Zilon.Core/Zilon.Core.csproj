@@ -91,7 +91,8 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
-    <Compile Include="Tactics\Behaviour\TakePropTask.cs" />
+    <Compile Include="Tactics\Behaviour\IOpenContainerMethod.cs" />
+    <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
     <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Tactics\IPropContainer.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
+    <Compile Include="Tactics\OpenContainerEventArgs.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
