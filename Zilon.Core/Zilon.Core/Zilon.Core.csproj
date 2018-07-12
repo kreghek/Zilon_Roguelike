@@ -62,6 +62,7 @@
     <Compile Include="Persons\EquipmentChangedEventArgs.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
     <Compile Include="Persons\Inventory.cs" />
+    <Compile Include="Persons\IProp.cs" />
     <Compile Include="Persons\IPropFactory.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
     <Compile Include="Persons\ITacticalActExtensionscs.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
+    <Compile Include="Tactics\IPropManager.cs" />
+    <Compile Include="Tactics\ISectorProp.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />

@@ -18,13 +18,15 @@ namespace Zilon.Core.Tactics
 
         private readonly IActorManager _actorManager;
 
+        private readonly IPropManager _propManager;
+
         public event EventHandler ActorExit;
 
         public IActorTaskSource[] BehaviourSources { get; set; }
 
         public IMapNode[] ExitNodes { get; set; }
 
-        public Sector(IMap map, IActorManager actorManager)
+        public Sector(IMap map, IActorManager actorManager, IPropManager propManager)
         {
 #pragma warning disable IDE0016 // Use 'throw' expression
             if (map == null)
@@ -38,6 +40,7 @@ namespace Zilon.Core.Tactics
 
             _map = map;
             _actorManager = actorManager;
+            _propManager = propManager;
         }
 
         /// <summary>

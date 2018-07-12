@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовый класс для всех предметов.
     /// </summary>
-    public abstract class PropBase
+    public abstract class PropBase : IProp
     {
         /// <summary>
         /// Конструктор.
