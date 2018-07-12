@@ -91,6 +91,7 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
+    <Compile Include="Tactics\Behaviour\TakePropTask.cs" />
     <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
@@ -98,8 +99,8 @@
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
-    <Compile Include="Tactics\IPropManager.cs" />
-    <Compile Include="Tactics\ISectorProp.cs" />
+    <Compile Include="Tactics\IPropContainerManager.cs" />
+    <Compile Include="Tactics\IPropContainer.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
