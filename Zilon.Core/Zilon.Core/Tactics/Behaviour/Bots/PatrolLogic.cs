@@ -80,12 +80,23 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             }
         }
 
+        //TODO На этот метод нужен тест.
         private IActorTask HandleIdleMode()
         {
-            if (_idleTask != null)
+            if (_idleTask == null)
             {
                 _idleTask = new IdleTask(_actor, _decisionSource);
             }
+            else
+            {
+                // Ожидание окончено, нужно двигаться к следующей точке.
+                if (_idleTask.IsComplete)
+                {
+                    _idleTask = null;
+                    return HandleBypassMode();
+                }
+            }
+
             return _idleTask;
         }
 
@@ -155,6 +166,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     if (currentPatrolPointIndex != null)
                     {
                         _patrolPointIndex = currentPatrolPointIndex + 1;
+                        if (_patrolPointIndex >= _patrolRoute.Points.Count())
+                        {
+                            _patrolPointIndex = 0;
+                        }
+
                         nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
                     }
                     else

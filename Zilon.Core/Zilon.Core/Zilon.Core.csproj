@@ -80,7 +80,7 @@
     <Compile Include="Schemes\PropScheme.cs" />
     <Compile Include="Schemes\TacticalActUpdateSubScheme.cs" />
     <Compile Include="Size.cs" />
-    <Compile Include="Tactics\ActorList.cs" />
+    <Compile Include="Tactics\ActorManager.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />

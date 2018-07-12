@@ -19,6 +19,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Generation;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -41,7 +42,7 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
             var map = new TestGrid15GenMap();
 
-            var actorManager = new ActorList();
+            var actorManager = new ActorManager();
 
             var sector = new Sector(map, actorManager);
             GenerateSectorTtc1Content(sector, actorManager, map);
@@ -59,6 +60,82 @@ namespace Zilon.Core.Tactics.Tests
             // ASSERT
             // Если не было исключений, то тест считается пройденным.
             // Иначе теряем читаемый стек вызовов, оборачивая Update в делегат.
+            var monsters = actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
+
+            foreach (var monster in monsters)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет выполнение обновления состояния сектора.
+        /// Есть квадратная карта. В произвольных местах расположены два монстра.
+        /// Монстры должны выполнять логику патрулирования.
+        /// Это длится 10 ходов. Потому что 5 - это максимальная комната. Кратчайший путь 8. Ожидание - 1.
+        /// В конец монстры не должны стоять на последней точке патруллирования.
+        /// </summary>
+        [Test(Description = "Ttc2")] // Tactic test case 1
+        public void Update_ProceduralGenerator_MonstersDontFreeze()
+        {
+            // ARRANGE
+            const int expectedUpdatesCount = 10;
+            var botPlayer = new BotPlayer();
+
+            var dice = new Dice();
+            var randomSourceMock = new Mock<SectorGeneratorRandomSource>(dice)
+                .As<ISectorGeneratorRandomSource>();
+            randomSourceMock.CallBase = true;
+            randomSourceMock.Setup(x => x.RollRoomSize(It.IsAny<int>()))
+                .Returns<int>((maxSize) => new Size(3, 3));
+            var randomSource = randomSourceMock.Object;
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+
+            var map = new HexMap();
+            var actorManager = new ActorManager();
+            var sector = new Sector(map, actorManager);
+
+            generator.Generate(sector, map);
+
+            actorManager.Add(generator.MonsterActors);
+
+
+            // Подготовка источника поведения ботов
+            var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
+            decisionSourceMock.CallBase = true;
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int>((min, max) => 1);
+            var decisionSource = decisionSourceMock.Object;
+            var botTaskSource = new MonsterActorTaskSource(botPlayer, generator.Patrols, decisionSource);
+
+
+            sector.BehaviourSources = new IActorTaskSource[]
+            {
+                botTaskSource
+            };
+
+
+            // ACT
+            for (var round = 0; round <= expectedUpdatesCount; round++)
+            {
+                sector.Update();
+            }
+
+
+
+            // ASSERT
+            // Если не было исключений, то тест считается пройденным.
+            // Иначе теряем читаемый стек вызовов, оборачивая Update в делегат.
+            var monsters = actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
+
+            foreach (var monster in monsters)
+            {
+                var monsterRoute = generator.Patrols[monster];
+
+                var lastRouteNode = monsterRoute.Points.Last();
+
+                monster.Node.Should().NotBe(lastRouteNode);
+            }
         }
 
         private void GenerateSectorTtc1Content(Sector sector, IActorManager actorManager, IMap map)
@@ -133,7 +210,7 @@ namespace Zilon.Core.Tactics.Tests
 
             actorManager.Add(actor);
 
-            
+
             return actor;
         }
 

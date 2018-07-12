@@ -20,6 +20,15 @@ namespace Zilon.Core.Tactics.Behaviour
                 return;
             }
 
+            //TODO Добавить тест, исправить баг.
+            // Этой проверки быть не должно, потому что _path и так содержит
+            // цепочку узлов до целевого. И должно выполняться верхнее условие.
+            if (Actor.Node == _targetNode)
+            {
+                IsComplete = true;
+                return;
+            }
+
             var nextNode = _path[0];
             Actor.MoveToNode(nextNode);
             _path.RemoveAt(0);
