@@ -81,8 +81,10 @@ class SectorVM : MonoBehaviour
         var map = new HexMap();
 
         var actorManager = new ActorManager();
+        
+        var propContainerManager = new PropContainerManager();
 
-        var sector = new Sector(map, actorManager);
+        var sector = new Sector(map, actorManager, propContainerManager);
 
         var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer);
 
