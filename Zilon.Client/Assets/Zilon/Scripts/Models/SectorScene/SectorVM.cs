@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Zilon.Scripts.Models.Commands;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -141,6 +140,8 @@ class SectorVM : MonoBehaviour
             playerActorStartNode,
             nodeVMs,
             playerEquipment);
+
+        _playerState.ActiveActor = playerActorVm;
 
         foreach (var monsterActor in sectorGenerator.MonsterActors)
         {
