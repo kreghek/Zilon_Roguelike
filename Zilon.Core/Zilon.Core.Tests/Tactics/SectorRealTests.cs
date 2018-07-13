@@ -43,8 +43,9 @@ namespace Zilon.Core.Tactics.Tests
             var map = new TestGrid15GenMap();
 
             var actorManager = new ActorManager();
+            var propContainerManager = new PropContainerManager();
 
-            var sector = new Sector(map, actorManager);
+            var sector = new Sector(map, actorManager, propContainerManager);
             GenerateSectorTtc1Content(sector, actorManager, map);
 
 
@@ -93,7 +94,9 @@ namespace Zilon.Core.Tactics.Tests
 
             var map = new HexMap();
             var actorManager = new ActorManager();
-            var sector = new Sector(map, actorManager);
+            var propContainerManager = new PropContainerManager();
+
+            var sector = new Sector(map, actorManager, propContainerManager);
 
             generator.Generate(sector, map);
 

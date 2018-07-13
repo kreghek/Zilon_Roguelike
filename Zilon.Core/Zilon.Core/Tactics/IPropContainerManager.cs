@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий список всех предметов в секторе.
         /// </summary>
-        IEnumerable<IPropContainer> Props { get; }
+        IEnumerable<IPropContainer> Containers { get; }
 
         /// <summary>
         /// Добавляет контейнер с предметом в общий список.

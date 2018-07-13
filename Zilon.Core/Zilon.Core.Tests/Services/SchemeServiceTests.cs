@@ -1,9 +1,9 @@
-﻿using System;
-using System.Configuration;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using NUnit.Framework;
+
+using System;
+using System.Configuration;
 
 using Zilon.Core.Schemes;
 
