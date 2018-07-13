@@ -142,6 +142,7 @@ class SectorVM : MonoBehaviour
             playerActorStartNode,
             nodeVMs,
             playerEquipment);
+        playerActorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
 
         _playerState.ActiveActor = playerActorVm;
 
@@ -185,6 +186,11 @@ class SectorVM : MonoBehaviour
         _playerState.TaskSource = playerActorTaskSource;
 
         sector.ActorExit += SectorOnActorExit;
+    }
+
+    private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
+    {
+        
     }
 
     private void SectorOnActorExit(object sender, EventArgs e)

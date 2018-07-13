@@ -4,7 +4,7 @@ using Zilon.Core.Commands;
 namespace Assets.Zilon.Scripts.Models.Commands
 {
     /// <summary>
-    /// Базовая команда для всех команд, связанных с изменением состояния взвода.
+    /// Базовая команда для всех команд, связанных с изменением состояния актёра.
     /// </summary>
     abstract class ActorCommandBase : TacticCommandBase
     {
