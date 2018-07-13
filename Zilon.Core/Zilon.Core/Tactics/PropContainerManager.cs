@@ -8,6 +8,11 @@ namespace Zilon.Core.Tactics
 
         public IEnumerable<IPropContainer> Containers => _containers;
 
+        public PropContainerManager()
+        {
+            _containers = new List<IPropContainer>();
+        }
+
         public void Add(IPropContainer propContainer)
         {
             _containers.Add(propContainer);

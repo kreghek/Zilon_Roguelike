@@ -7,5 +7,10 @@ namespace Zilon.Core.Persons
         public Resource(PropScheme scheme) : base(scheme)
         {
         }
+
+        /// <summary>
+        /// Количество единиц ресурса.
+        /// </summary>
+        public int Count { get; set; }
     }
 }
