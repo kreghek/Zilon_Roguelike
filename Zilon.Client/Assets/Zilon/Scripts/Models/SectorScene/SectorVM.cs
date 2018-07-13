@@ -53,6 +53,8 @@ class SectorVM : MonoBehaviour
     [Inject(Id = "move-command")] private ICommand _moveCommand;
 
     [Inject(Id = "attack-command")] private ICommand _attackCommand;
+    
+    [Inject(Id = "open-container-command")] private ICommand _openContainerCommand;
 
 
     // ReSharper disable once UnusedMember.Local
@@ -167,6 +169,8 @@ class SectorVM : MonoBehaviour
             var containerNodeVm = nodeVMs.Single(x => x.Node == container.Node);
             var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
             containerVm.transform.position = containerPosition;
+            containerVm.Container = container;
+            containerVm.Selected += Container_Selected;
         }
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, _decisionSource);
@@ -188,9 +192,21 @@ class SectorVM : MonoBehaviour
         sector.ActorExit += SectorOnActorExit;
     }
 
+    private void Container_Selected(object sender, EventArgs e)
+    {
+        var containerVm = sender as ContainerVm;
+
+        _playerState.SelectedContainer = containerVm;
+
+        if (containerVm != null)
+        {
+            _clientCommandExecutor.Push(_openContainerCommand);
+        }
+    }
+
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
-        
+        Debug.Log("Контейнер открыт. Показываем диалог с начинкой.");
     }
 
     private void SectorOnActorExit(object sender, EventArgs e)

@@ -4,7 +4,7 @@ namespace Zilon.Core.Tactics
 {
     public class SuccessOpenContainerResult: OpenContainerResultBase
     {
-        protected SuccessOpenContainerResult(IProp[] props)
+        public SuccessOpenContainerResult(IProp[] props)
         {
             Props = props;
         }

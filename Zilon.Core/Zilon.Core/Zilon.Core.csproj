@@ -92,6 +92,7 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
+    <Compile Include="Tactics\Behaviour\HandOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
     <Compile Include="Tactics\Behaviour\IOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />

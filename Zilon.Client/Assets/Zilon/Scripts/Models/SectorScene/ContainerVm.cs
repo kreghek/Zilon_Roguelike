@@ -1,16 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using Zilon.Core.Tactics;
 
-public class ContainerVm : MonoBehaviour {
+public class ContainerVm : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
+	public event EventHandler Selected;
+
+	public IPropContainer Container { get; set; }
+
+	public void OnMouseDown()
+	{
+		DoSelected();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	private void DoSelected()
+	{
+		Selected?.Invoke(this, new EventArgs());
 	}
 }

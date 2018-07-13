@@ -13,6 +13,8 @@ namespace Zilon.Core.Tactics.Behaviour
         private HexNode _targetNode;
         private bool _taskIsActual;
         private IAttackTarget _attackTarget;
+        private IPropContainer _propContainer;
+        private IOpenContainerMethod _method;
         private readonly IDecisionSource _decisionSource;
 
         public HumanActorTaskSource(IActor startActor, IDecisionSource decisionSource)
@@ -48,9 +50,17 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 return null;
             }
+            else
+            {
+                var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
+                _currentTask = attackTask;
+            }
 
-            var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
-            _currentTask = attackTask;
+            if (_propContainer != null)
+            {
+                var openContainerTask = new OpenContainerTask(_currentActor, _propContainer, _method);
+                _currentTask = openContainerTask;
+            }
 
             return new[] { _currentTask };
         }
@@ -76,6 +86,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        //TODO Должна быть возможность указывать действие, которым можно атаковать.
+        /// <summary>
+        /// Указать намерение атаковать цель.
+        /// </summary>
+        /// <param name="target"> Целевой объект. </param>
         public void IntentAttack(IAttackTarget target)
         {
             //Отключаю это предупреждение, иначе получается кривой код.
@@ -89,6 +104,15 @@ namespace Zilon.Core.Tactics.Behaviour
             _taskIsActual = false;
             _targetNode = null;
             _attackTarget = target;
+        }
+
+        public void IntentOpenContainer(IPropContainer container, IOpenContainerMethod method)
+        {
+            _taskIsActual = false;
+            _targetNode = null;
+            _attackTarget = null;
+            _method = null;
+            _propContainer = container;
         }
     }
 }

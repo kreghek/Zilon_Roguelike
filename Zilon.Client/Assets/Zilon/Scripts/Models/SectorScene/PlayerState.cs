@@ -11,5 +11,7 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
         public HumanActorTaskSource TaskSource { get; set; }
 
         public ActorVM SelectedActor { get; set; }
+        
+        public ContainerVm SelectedContainer { get; set; }
     }
 }

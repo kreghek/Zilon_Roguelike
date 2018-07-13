@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
+﻿using System;
+using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,12 @@ public class FollowingCamera : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void Update()
     {
+        if (_playerState == null)
+        {
+            gameObject.SetActive(false);
+            throw new InvalidOperationException($"Не удалось подтянуть зависимость {nameof(_playerState)}.");
+        }
+
         if (_playerState.ActiveActor == null)
         {
             return;

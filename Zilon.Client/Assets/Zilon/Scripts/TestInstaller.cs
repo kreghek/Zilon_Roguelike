@@ -26,5 +26,6 @@ public class TestInstaller : MonoInstaller<TestInstaller>
 
         Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
     }
 }

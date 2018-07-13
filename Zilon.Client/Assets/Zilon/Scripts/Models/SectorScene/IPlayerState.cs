@@ -29,5 +29,11 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
         /// Текущий выбранный актёр на экране.
         /// </summary>
         ActorVM SelectedActor { get; set; }
+        
+        //TODO Объединить все объекты в секторе, которые можно выбирать, под единым интерфейсом.
+        /// <summary>
+        /// Текущий выбранный контейнер на экране.
+        /// </summary>
+        ContainerVm SelectedContainer { get; set; }
     }
 }
