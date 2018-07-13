@@ -100,11 +100,13 @@
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
+    <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
+    <Compile Include="Tactics\OpenContainerResult.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\SortedListExtensions.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
+    <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TaskIniComparer.cs" />
   </ItemGroup>
   <ItemGroup>

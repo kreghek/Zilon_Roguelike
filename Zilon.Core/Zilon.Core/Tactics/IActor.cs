@@ -1,6 +1,7 @@
 ﻿using System;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -38,6 +39,13 @@ namespace Zilon.Core.Tactics
         void MoveToNode(IMapNode targetNode);
 
         /// <summary>
+        /// Открытие контейнера актёром.
+        /// </summary>
+        /// <param name="container"> Целевой контейнер в секторе. </param>
+        /// <param name="method"> Метод открытия контейнера. </param>
+        void OpenContainer(IPropContainer container, IOpenContainerMethod method);
+
+        /// <summary>
         /// Текущий запас хитпоинтов.
         /// </summary>
         float Hp { get; }
@@ -61,6 +69,11 @@ namespace Zilon.Core.Tactics
         /// Происходит, если актёр умирает.
         /// </summary>
         event EventHandler OnDead;
+
+        /// <summary>
+        /// Происходит, когда актёр открывает контейнер в секторе.
+        /// </summary>
+        event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         /// <summary>
         /// Инициатива актёра.

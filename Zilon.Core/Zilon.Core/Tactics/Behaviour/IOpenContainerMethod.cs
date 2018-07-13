@@ -10,7 +10,7 @@
         /// Попытка открыть контейнер.
         /// </summary>
         /// <param name="container"> Целевой контейнер. </param>
-        /// <returns> Возвращает true, если контейнер успешно открыт. Иначе false. </returns>
-        bool TryOpen(IPropContainer container);
+        /// <returns> Возвращает результат вскрытия контейнера. </returns>
+        IOpenContainerResult TryOpen(IPropContainer container);
     }
 }

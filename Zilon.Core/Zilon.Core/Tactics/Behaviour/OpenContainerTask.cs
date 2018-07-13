@@ -43,9 +43,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Невозможно взаимодействовать с контейнером на расстоянии больше 1.");
             }
 
-            var openResult = _method.TryOpen(_container);
-
-            _container.Open();
+            Actor.OpenContainer(_container, _method);
 
             IsComplete = true;
         }

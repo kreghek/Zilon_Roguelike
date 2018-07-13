@@ -2,6 +2,7 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -62,9 +63,23 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
+        {
+            var openResult = method.TryOpen(container);
+
+            DoOpenContainer(openResult);
+        }
+
+        private void DoOpenContainer(IOpenContainerResult openResult)
+        {
+            var e = new OpenContainerEventArgs(openResult);
+            OpenedContainer?.Invoke(this, e);
+        }
+
         public ITacticalAct Acts { get; }
 
         public event EventHandler OnMoved;
         public event EventHandler OnDead;
+        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
     }
 }

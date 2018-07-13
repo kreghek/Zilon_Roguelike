@@ -10,9 +10,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Результат открытия. True - если открыт успешно. Иначе - false.
         /// </summary>
-        public bool Result { get; }
+        public IOpenContainerResult Result { get; }
 
-        public OpenContainerEventArgs(bool result)
+        public OpenContainerEventArgs(IOpenContainerResult result)
         {
             Result = result;
         }
