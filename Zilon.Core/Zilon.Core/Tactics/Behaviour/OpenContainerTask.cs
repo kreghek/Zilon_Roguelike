@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IPropContainer _container;
         private readonly IOpenContainerMethod _method;
 
-        protected OpenContainerTask(IActor actor, IPropContainer container, IOpenContainerMethod method) : base(actor)
+        public OpenContainerTask(IActor actor, IPropContainer container, IOpenContainerMethod method) : base(actor)
         {
             if (container == null)
             {

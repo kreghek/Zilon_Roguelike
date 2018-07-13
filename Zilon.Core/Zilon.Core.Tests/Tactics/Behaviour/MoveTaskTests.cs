@@ -76,6 +76,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var personMock = new Mock<IPerson>();
             var person = personMock.Object;
 
+            IMapNode currentNode = startNode;
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(() => currentNode);
+            actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
+                .Callback<IMapNode>(node => currentNode = node);
+            var actor = actorMock.Object;
+
             return new Actor(person, player, startNode);
         }
 

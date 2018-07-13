@@ -93,6 +93,7 @@
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
     <Compile Include="Tactics\Behaviour\IOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
+    <Compile Include="Tactics\Behaviour\TakePropTask.cs" />
     <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
