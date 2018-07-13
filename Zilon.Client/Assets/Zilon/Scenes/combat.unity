@@ -157,6 +157,8 @@ MonoBehaviour:
     type: 2}
   ActorPrefab: {fileID: 114531107507698972, guid: 80a421927c97aa74dafb7098a38e3afc,
     type: 2}
+  ContainerPrefab: {fileID: 114884176175482552, guid: 385924f4dfbb1804eb30c0d38a5d6c25,
+    type: 2}
 --- !u!1 &171240410
 GameObject:
   m_ObjectHideFlags: 0

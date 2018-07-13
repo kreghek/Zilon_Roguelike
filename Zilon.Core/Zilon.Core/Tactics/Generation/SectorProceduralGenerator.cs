@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -24,6 +25,8 @@ namespace Zilon.Core.Tactics.Generation
 
         public List<IActor> MonsterActors { get; }
 
+        public List<IPropContainer> Containers { get; }
+
         public Dictionary<IActor, IPatrolRoute> Patrols { get; }
 
 
@@ -37,6 +40,7 @@ namespace Zilon.Core.Tactics.Generation
             Log = new StringBuilder();
 
             MonsterActors = new List<IActor>();
+            Containers = new List<IPropContainer>();
             Patrols = new Dictionary<IActor, IPatrolRoute>();
         }
 
@@ -60,9 +64,21 @@ namespace Zilon.Core.Tactics.Generation
 
             CreateRoomMonsters(mainRooms);
 
+            CreateChests(mainRooms);
+
             SelectStartNodes(roomGenerator.StartRoom);
 
             SelectExitPoints(sector, roomGenerator.ExitRoom);
+        }
+
+        private void CreateChests(Room[] rooms)
+        {
+            foreach (var room in rooms)
+            {
+                var containerNode = room.Nodes.FirstOrDefault();
+                var container = new PropContainer(containerNode);
+                Containers.Add(container);
+            }
         }
 
         private void SelectExitPoints(ISector sector, Room exitRoom)

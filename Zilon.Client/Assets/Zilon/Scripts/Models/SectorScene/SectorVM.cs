@@ -34,6 +34,8 @@ class SectorVM : MonoBehaviour
     [NotNull] public ActorVM ActorPrefab;
 #pragma warning restore 649
 
+    public ContainerVm ContainerPrefab;
+
     [Inject] private ICommandManager _clientCommandExecutor;
 
     [Inject] private ISectorManager _sectorManager;
@@ -155,6 +157,15 @@ class SectorVM : MonoBehaviour
             actorVm.Actor = monsterActor;
             actorVm.IsEnemy = true;
             actorVm.OnSelected += EnemyActorVm_OnSelected;
+        }
+
+        foreach (var container in sectorGenerator.Containers)
+        {
+            var containerVm = Instantiate(ContainerPrefab, transform);
+            
+            var containerNodeVm = nodeVMs.Single(x => x.Node == container.Node);
+            var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
+            containerVm.transform.position = containerPosition;
         }
 
         var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, _decisionSource);
