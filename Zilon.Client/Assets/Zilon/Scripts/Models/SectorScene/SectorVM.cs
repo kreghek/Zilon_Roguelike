@@ -59,6 +59,8 @@ class SectorVM : MonoBehaviour
     [Inject(Id = "attack-command")] private ICommand _attackCommand;
     
     [Inject(Id = "open-container-command")] private ICommand _openContainerCommand;
+    
+    [Inject(Id = "show-container-modal-command")] private ICommand _showContainerModalCommand;
 
 
     // ReSharper disable once UnusedMember.Local
@@ -93,7 +95,7 @@ class SectorVM : MonoBehaviour
 
         var sector = new Sector(map, actorManager, propContainerManager);
 
-        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer);
+        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer, _schemeService);
 
         try
         {
@@ -210,7 +212,7 @@ class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
-        var containerModal = Instantiate<GameObject>(ShowContainerModalPrefab, WindowsParent.transform);
+        _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 
     private void SectorOnActorExit(object sender, EventArgs e)
