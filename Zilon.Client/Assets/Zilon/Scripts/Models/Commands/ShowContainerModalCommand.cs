@@ -1,6 +1,5 @@
 ﻿using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
-using UnityEngine;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
@@ -19,7 +18,6 @@ namespace Assets.Zilon.Scripts.Models.Commands
         
         public override void Execute()
         {
-            Debug.Log($"Открыт контейнер {_playerState.SelectedContainer}.");
             var container = _playerState.SelectedContainer.Container;
             var props = container.Props;
             ModalManager.ShowContainerModal(props);

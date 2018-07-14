@@ -8,10 +8,13 @@ public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	
 	public ModalDialog ModalPrefab;
 	
-	public GameObject ShowContainerModalPrefab;
+	public ShowContainerModalBody ShowContainerModalPrefab;
 
 	public void ShowContainerModal(IProp[] props)
 	{
-		var containerModal = Instantiate(ModalPrefab, WindowsParent.transform);
+		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
+
+		var containerModalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
+		containerModalBody.SetProps(props);
 	}
 }

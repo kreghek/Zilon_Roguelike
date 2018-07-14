@@ -250,7 +250,8 @@ MonoBehaviour:
   WindowsParent: {fileID: 809724292}
   ModalPrefab: {fileID: 114999240963392250, guid: a9f7f5629d4bd3243a95fb1d88123a2b,
     type: 2}
-  ShowContainerModalPrefab: {fileID: 0}
+  ShowContainerModalPrefab: {fileID: 114800206159058986, guid: 5d51e8eeaf5d2f54c97ebc04b148b1ef,
+    type: 2}
 --- !u!1 &227365881
 GameObject:
   m_ObjectHideFlags: 0
