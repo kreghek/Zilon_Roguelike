@@ -16,8 +16,6 @@ namespace Zilon.Core.Tactics.Generation.Tests
     [TestFixture()]
     public class SectorProceduralGeneratorTests
     {
-        public object x { get; private set; }
-
         /// <summary>
         /// Тест проверяет, что сектор из цепочки комнат строится без ошибок.
         /// </summary>

@@ -1,5 +1,4 @@
-﻿using System;
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -17,6 +16,6 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Содержимое контейнера.
         /// </summary>
-        IProp[] Props { get; }
+        IInventory Inventory { get; }
     }
 }

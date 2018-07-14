@@ -2,6 +2,7 @@
 
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -15,6 +16,8 @@ namespace Zilon.Core.Tactics.Behaviour
         private IAttackTarget _attackTarget;
         private IPropContainer _propContainer;
         private IOpenContainerMethod _method;
+        private IProp[] _propsToTake;
+
         private readonly IDecisionSource _decisionSource;
 
         public HumanActorTaskSource(IActor startActor, IDecisionSource decisionSource)
@@ -55,11 +58,26 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new[] { _currentTask };
             }
 
-            if (_propContainer != null)
+            if (_propContainer != null && _method != null)
             {
                 var openContainerTask = new OpenContainerTask(_currentActor, _propContainer, _method);
                 _currentTask = openContainerTask;
                 return new[] { _currentTask };
+            }
+
+            if (_propContainer != null && _propsToTake != null)
+            {
+                var inventory = _currentActor.Inventory;
+
+                if (inventory == null)
+                {
+                    throw new InvalidOperationException($"Для данного актёра {_currentActor} не задан инвентарь.");
+                }
+
+                var takePropTask = new TakeFromContainerTask(_currentActor,
+                    _propContainer,
+                    _propsToTake,
+                    inventory);
             }
 
             return new IActorTask[0];
@@ -82,6 +100,8 @@ namespace Zilon.Core.Tactics.Behaviour
             if (targetNode != _targetNode)
             {
                 _taskIsActual = false;
+                ClearCurrentTask();
+
                 _targetNode = targetNode;
             }
         }
@@ -101,18 +121,42 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 #pragma warning restore IDE0016 // Use 'throw' expression
 
-            _taskIsActual = false;
-            _targetNode = null;
+            ClearCurrentTask();
+
             _attackTarget = target;
         }
 
+        /// <summary>
+        /// Намерение открыть контейнер в секторе.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="method"></param>
         public void IntentOpenContainer(IPropContainer container, IOpenContainerMethod method)
+        {
+            ClearCurrentTask();
+            _method = method;
+            _propContainer = container;
+        }
+
+        /// <summary>
+        /// Hамерение взять предметы в инвентарь.
+        /// </summary>
+        /// <param name="props"></param>
+        public void IntentTakeProps(IPropContainer container, IProp[] props)
+        {
+            ClearCurrentTask();
+            _propContainer = container;
+            _propsToTake = props;
+        }
+
+        private void ClearCurrentTask()
         {
             _taskIsActual = false;
             _targetNode = null;
             _attackTarget = null;
-            _method = method;
-            _propContainer = container;
+            _method = null;
+            _propContainer = null;
+            _propsToTake = null;
         }
     }
 }

@@ -79,5 +79,13 @@ namespace Zilon.Core.Tactics
         /// Инициатива актёра.
         /// </summary>
         float Initiative { get; }
+
+        /// <summary>
+        /// Инвентарь персонажа.
+        /// </summary>
+        /// <remarks>
+        /// Для монстров равен null.
+        /// </remarks>
+        IInventory Inventory { get; }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-public class MapNodeVM : MonoBehaviour
+public class MapNodeVM : MonoBehaviour, IPointerClickHandler
 {
     public GameObject[] Walls;
     public bool IsExit;
@@ -37,8 +38,8 @@ public class MapNodeVM : MonoBehaviour
 
         ExitMarker.SetActive(IsExit);
     }
-
-    public void OnMouseDown()
+    
+    public void OnPointerClick(PointerEventData eventData)
     {
         OnSelect?.Invoke(this, new EventArgs());
     }

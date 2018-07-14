@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorVM : MonoBehaviour
+public class ActorVM : MonoBehaviour, IPointerClickHandler
 {
     private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;
@@ -71,7 +72,7 @@ public class ActorVM : MonoBehaviour
         return _moveTaskSource.Task;
     }
 
-    public void OnMouseDown()
+    public void OnPointerClick(PointerEventData eventData)
     {
         OnSelected?.Invoke(this, new EventArgs());
     }

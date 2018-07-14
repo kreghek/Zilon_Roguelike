@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Zenject;
 using Zilon.Core.Commands;
@@ -243,7 +244,8 @@ class SectorVM : MonoBehaviour
         
         person.EquipmentCarrier.SetEquipment(equipment, 0);
 
-        var actor = new Actor(person, player, startNode);
+        var inventory = new Inventory();
+        var actor = new Actor(person, player, startNode, inventory);
         
         actorManager.Add(actor);
 

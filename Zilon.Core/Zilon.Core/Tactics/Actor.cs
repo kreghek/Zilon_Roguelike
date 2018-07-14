@@ -19,6 +19,12 @@ namespace Zilon.Core.Tactics
             Initiative = 1;
         }
 
+        public Actor(IPerson person, IPlayer owner, IMapNode node, IInventory inventory):
+            this(person, owner, node)
+        {
+            Inventory = inventory;
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
@@ -78,8 +84,15 @@ namespace Zilon.Core.Tactics
 
         public ITacticalAct Acts { get; }
 
+        public IInventory Inventory { get; }
+
         public event EventHandler OnMoved;
         public event EventHandler OnDead;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        public override string ToString()
+        {
+            return $"{Person}";
+        }
     }
 }

@@ -9,6 +9,8 @@ namespace Zilon.Core.Persons
     {
         public int Id { get; set; }
 
+        public string Name { get; }
+
         public float Hp => Scheme.Hp;
 
         public IEquipmentCarrier EquipmentCarrier { get; }
@@ -53,6 +55,11 @@ namespace Zilon.Core.Persons
             }
 
             return actList.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}";
         }
 
     }

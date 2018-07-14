@@ -19,5 +19,17 @@ namespace Zilon.Core.Persons
         /// Количество единиц ресурса.
         /// </summary>
         public int Count { get; set; }
+
+        /// <summary>
+        /// Разделяет текущий сток ресурсов и формирует новый экземпляр с указанным количеством.
+        /// </summary>
+        /// <param name="count"> Коичество единиц ресурса в новой куче. </param>
+        /// <returns> Экземпляр отделённой кучи ресурсов. </returns>
+        public Resource CreateHeap(int count)
+        {
+            var resource2 = new Resource(Scheme, count);
+            Count -= count;
+            return resource2;
+        }
     }
 }
