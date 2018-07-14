@@ -36,6 +36,10 @@ class SectorVM : MonoBehaviour
 
     public ContainerVm ContainerPrefab;
 
+    public GameObject WindowsParent;
+
+    public GameObject ShowContainerModalPrefab;
+
     [Inject] private ICommandManager _clientCommandExecutor;
 
     [Inject] private ISectorManager _sectorManager;
@@ -206,7 +210,7 @@ class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
-        Debug.Log("Контейнер открыт. Показываем диалог с начинкой.");
+        var containerModal = Instantiate<GameObject>(ShowContainerModalPrefab, WindowsParent.transform);
     }
 
     private void SectorOnActorExit(object sender, EventArgs e)
