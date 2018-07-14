@@ -5,11 +5,11 @@ using Zilon.Core.Persons;
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    /// Задача на перемещение предметов из контейнера в инвентарь.
+    /// Задача на перемещние предметов из инвентаря в контейнер.
     /// </summary>
-    public class TakeFromContainerTask : ContainerTaskBase
+    public class StoreToContainerTask : ContainerTaskBase
     {
-        public TakeFromContainerTask(IActor actor,
+        public StoreToContainerTask(IActor actor,
             IPropContainer container,
             IEnumerable<IProp> props,
             IInventory inventory) : base(actor, container, props, inventory)
@@ -20,12 +20,12 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             foreach (var prop in _props)
             {
-                _inventory.Add(prop);
+                _container.Inventory.Add(prop);
             }
 
             foreach (var prop in _props)
             {
-                _container.Inventory.Remove(prop);
+                _inventory.Remove(prop);
             }
 
             IsComplete = true;
