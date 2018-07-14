@@ -110,7 +110,7 @@
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
-    <Compile Include="Tactics\PropContainer.cs" />
+    <Compile Include="Tactics\FixedPropContainer.cs" />
     <Compile Include="Tactics\PropContainerManager.cs" />
     <Compile Include="Tactics\OpenContainerResult.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />

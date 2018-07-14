@@ -10,6 +10,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
     using Zilon.Core;
     using Zilon.Core.CommonServices.Dices;
     using Zilon.Core.Players;
+    using Zilon.Core.Schemes;
     using Zilon.Core.Tactics.Spatial;
 
     [TestFixture()]
@@ -68,6 +69,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
             var randomSource = randomSourceMock.Object;
 
+            var schemeService = CreateSchemeService();
+
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
@@ -79,7 +82,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var map = mapMock.Object;
             var botPlayer = CreateBotPlayer();
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
 
 
             // ACT
@@ -91,13 +94,6 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
             // ASSERT
             act.Should().NotThrow();
-        }
-
-        private static IPlayer CreateBotPlayer()
-        {
-            var botPlayerMock = new Mock<IPlayer>();
-            var botPlayer = botPlayerMock.Object;
-            return botPlayer;
         }
 
         /// <summary>
@@ -112,6 +108,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var dice = new Dice(123);
             var randomSource = new SectorGeneratorRandomSource(dice);
 
+            var schemeService = CreateSchemeService();
+
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
@@ -125,7 +123,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
 
 
             // ACT
@@ -149,6 +147,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var dice = new Dice(3245);
             var randomSource = new SectorGeneratorRandomSource(dice);
 
+            var schemeService = CreateSchemeService();
+
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
@@ -162,7 +162,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
 
 
             // ACT
@@ -189,6 +189,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var dice = new Dice(3245);
             var randomSource = new SectorGeneratorRandomSource(dice);
 
+            var schemeService = CreateSchemeService();
+
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
@@ -202,7 +204,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
 
 
             // ACT
@@ -216,6 +218,26 @@ namespace Zilon.Core.Tactics.Generation.Tests
                 var sameEdge = edges.Where(x => x != edge && ((x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) || (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0]) ));
                 sameEdge.Should().BeEmpty($"Ребро с {edge.Nodes[0]} и {edge.Nodes[1]} уже есть.");
             }
+        }
+
+        private static ISchemeService CreateSchemeService()
+        {
+            var propScheme = new PropScheme
+            {
+                Sid = "test-prop"
+            };
+            var schemeServiceMock = new Mock<ISchemeService>();
+            schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.IsAny<string>()))
+                .Returns(propScheme);
+            var schemeService = schemeServiceMock.Object;
+            return schemeService;
+        }
+
+        private static IPlayer CreateBotPlayer()
+        {
+            var botPlayerMock = new Mock<IPlayer>();
+            var botPlayer = botPlayerMock.Object;
+            return botPlayer;
         }
     }
 }

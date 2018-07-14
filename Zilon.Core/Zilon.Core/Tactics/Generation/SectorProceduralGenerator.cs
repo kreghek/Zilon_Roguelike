@@ -5,6 +5,7 @@ using System.Text;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -15,6 +16,7 @@ namespace Zilon.Core.Tactics.Generation
         
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly IPlayer _botPlayer;
+        private readonly ISchemeService _schemeService;
 
         /// <summary>
         /// Стартовые узлы.
@@ -33,10 +35,13 @@ namespace Zilon.Core.Tactics.Generation
         public StringBuilder Log { get; set; }
 
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
-            IPlayer botPlayer)
+            IPlayer botPlayer,
+            ISchemeService schemeService)
         {
             _randomSource = randomSource;
             _botPlayer = botPlayer;
+            _schemeService = schemeService;
+
             Log = new StringBuilder();
 
             MonsterActors = new List<IActor>();
@@ -75,8 +80,11 @@ namespace Zilon.Core.Tactics.Generation
         {
             foreach (var room in rooms)
             {
+                var propScheme = _schemeService.GetScheme<PropScheme>("food-pack");
+                var resource = new Resource(propScheme, 1);
+
                 var containerNode = room.Nodes.FirstOrDefault();
-                var container = new PropContainer(containerNode);
+                var container = new FixedPropContainer(containerNode, new[] { resource });
                 Containers.Add(container);
             }
         }

@@ -20,6 +20,7 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Generation;
+using System.Configuration;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -90,7 +91,10 @@ namespace Zilon.Core.Tactics.Tests
             randomSourceMock.Setup(x => x.RollRoomSize(It.IsAny<int>()))
                 .Returns<int>((maxSize) => new Size(3, 3));
             var randomSource = randomSourceMock.Object;
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer);
+
+            var schemeService = CreateSchemeService();
+
+            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
 
             var map = new HexMap();
             var actorManager = new ActorManager();
@@ -229,6 +233,15 @@ namespace Zilon.Core.Tactics.Tests
 
 
             return actor;
+        }
+
+        private ISchemeService CreateSchemeService()
+        {
+            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+
+            var schemeLocator = new FileSchemeLocator(schemePath);
+
+            return new SchemeService(schemeLocator);
         }
     }
 }

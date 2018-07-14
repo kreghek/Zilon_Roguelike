@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -13,5 +13,10 @@ namespace Zilon.Core.Tactics
         /// Узер карты сектора, в котором находится контейнер.
         /// </summary>
         IMapNode Node { get; }
+
+        /// <summary>
+        /// Содержимое контейнера.
+        /// </summary>
+        IProp[] Props { get; }
     }
 }
