@@ -29,6 +29,9 @@ namespace Zilon.Core.Tactics.Behaviour
             if (_taskIsActual && _currentTask?.IsComplete == true)
             {
                 _targetNode = null;
+                _attackTarget = null;
+                _method = null;
+                _propContainer = null;
             }
 
             if (_targetNode != null)
@@ -38,7 +41,6 @@ namespace Zilon.Core.Tactics.Behaviour
                     return new[] { _currentTask };
                 }
 
-
                 _taskIsActual = true;
                 var moveTask = new MoveTask(_currentActor, _targetNode, map);
                 _currentTask = moveTask;
@@ -46,23 +48,21 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new[] { _currentTask };
             }
 
-            if (_attackTarget == null)
-            {
-                return null;
-            }
-            else
+            if (_attackTarget != null)
             {
                 var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
                 _currentTask = attackTask;
+                return new[] { _currentTask };
             }
 
             if (_propContainer != null)
             {
                 var openContainerTask = new OpenContainerTask(_currentActor, _propContainer, _method);
                 _currentTask = openContainerTask;
+                return new[] { _currentTask };
             }
 
-            return new[] { _currentTask };
+            return new IActorTask[0];
         }
 
 
@@ -111,7 +111,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _taskIsActual = false;
             _targetNode = null;
             _attackTarget = null;
-            _method = null;
+            _method = method;
             _propContainer = container;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Zilon.Core.Tactics.Behaviour;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,7 +47,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var behavourSource = new HumanActorTaskSource(actor, decisionSource);
             behavourSource.IntentMove(finishNode);
 
-            var actorList = CreateActorList(actor);
+            var actorManager = CreateActorManager(actor);
 
 
             // ACT
@@ -55,7 +56,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = behavourSource.GetActorTasks(map, actorList);
+                var commands = behavourSource.GetActorTasks(map, actorManager);
 
                 if (step < 4)
                 {
@@ -76,7 +77,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
                 }
                 else
                 {
-                    commands.Should().BeNull();
+                    commands.Should().BeEmpty();
                 }
             }
 
@@ -120,7 +121,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
-            var actorList = CreateActorList(actor);
+            var actorManager = CreateActorManager(actor);
 
 
 
@@ -130,18 +131,18 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ASSERT
-            var commands = behaviourSource.GetActorTasks(map, actorList);
+            var commands = behaviourSource.GetActorTasks(map, actorManager);
             commands.Should().NotBeNullOrEmpty();
             commands[0].Should().BeOfType<MoveTask>();
         }
 
-        private static IActorManager CreateActorList(params IActor[] actors)
+        private static IActorManager CreateActorManager(params IActor[] actors)
         {
-            var actorListMock = new Mock<IActorManager>();
+            var actorManagerMock = new Mock<IActorManager>();
             var actorListInner = new List<IActor>(actors);
-            actorListMock.Setup(x => x.Actors).Returns(actorListInner);
-            var actorList = actorListMock.Object;
-            return actorList;
+            actorManagerMock.Setup(x => x.Actors).Returns(actorListInner);
+            var actorManager = actorManagerMock.Object;
+            return actorManager;
         }
 
         /// <summary>
@@ -195,7 +196,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
-            var actorList = CreateActorList(actor);
+            var actorManager = CreateActorManager(actor);
 
             // ACT
 
@@ -203,7 +204,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behaviourSource.IntentMove(finishNode);
 
             // 2. Ждём, пока команда не отработает.
-            var commands = behaviourSource.GetActorTasks(map, actorList);
+            var commands = behaviourSource.GetActorTasks(map, actorManager);
 
             for (var i = 0; i < 3; i++)
             {
@@ -224,7 +225,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behaviourSource.GetActorTasks(map, actorList);
+            var factCommands = behaviourSource.GetActorTasks(map, actorManager);
 
 
 
@@ -254,7 +255,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var behaviourSource = new HumanActorTaskSource(actor, decisionSource);
 
-            var actorList = CreateActorList(actor);
+            var actorManager = CreateActorManager(actor);
 
 
             // ACT
@@ -263,7 +264,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             behaviourSource.IntentMove(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = behaviourSource.GetActorTasks(map, actorList);
+            var commands = behaviourSource.GetActorTasks(map, actorManager);
 
             for (var i = 0; i < 1; i++)
             {
@@ -284,7 +285,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behaviourSource.GetActorTasks(map, actorList);
+            var factCommands = behaviourSource.GetActorTasks(map, actorManager);
 
 
 
@@ -297,7 +298,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test()]
-        public void IntentAttackTest()
+        public void IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
             var map = new TestGridGenMap();
@@ -313,7 +314,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var taskSource = new HumanActorTaskSource(attackerActor, decisionSource);
 
-            var actorList = CreateActorList(attackerActor, targetActor);
+            var actorManager = CreateActorManager(attackerActor, targetActor);
 
 
             // ACT
@@ -322,10 +323,44 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ASSERT
-            var tasks = taskSource.GetActorTasks(map, actorList);
+            var tasks = taskSource.GetActorTasks(map, actorManager);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<AttackTask>();
+        }
+
+        [Test()]
+        public void IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
+        {
+            //ARRANGE
+            var map = new TestGridGenMap();
+
+            var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+
+            var actor = CreateActor(startNode);
+
+            var decisionSource = DecisionSource();
+
+            var taskSource = new HumanActorTaskSource(actor, decisionSource);
+
+            var actorManager = CreateActorManager(actor);
+
+            var containerMock = new Mock<IPropContainer>();
+            var container = containerMock.Object;
+
+            var methodMock = new Mock<IOpenContainerMethod>();
+            var method = methodMock.Object;
+
+            // ACT
+            taskSource.IntentOpenContainer(container, method);
+
+
+
+            // ASSERT
+            var tasks = taskSource.GetActorTasks(map, actorManager);
+
+            tasks.Should().NotBeNullOrEmpty();
+            tasks[0].Should().BeOfType<OpenContainerTask>();
         }
     }
 }
