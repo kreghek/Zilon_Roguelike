@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics
     {
         public IMapNode Node { get; private set; }
 
-        public IInventory Inventory { get; }
+        public IPropStore Inventory { get; }
 
         public FixedPropContainer(IMapNode node, IProp[] props)
         {

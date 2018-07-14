@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Zilon.Core.Persons
 {
-    public class Inventory : IInventory
+    public class Inventory : IPropStore
     {
         private readonly HashSet<IProp> _items;
 

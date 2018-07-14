@@ -3,9 +3,13 @@
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Интерфейс инвентаря. Общего или на актёра.
+    /// Интерфейс хранилища предметов.
     /// </summary>
-    public interface IInventory
+    /// <remarks>
+    /// Реализуется инвентарём актёра, контейнером с предметами,
+    /// временным хранилищем для сброса на пол.
+    /// </remarks>
+    public interface IPropStore
     {
         /// <summary>
         /// Предметы в инвентаре.

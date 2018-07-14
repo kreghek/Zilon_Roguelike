@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public TakeFromContainerTask(IActor actor,
             IPropContainer container,
             IEnumerable<IProp> props,
-            IInventory inventory) : base(actor, container, props, inventory)
+            IPropStore inventory) : base(actor, container, props, inventory)
         {
         }
 

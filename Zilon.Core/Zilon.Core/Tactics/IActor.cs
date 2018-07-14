@@ -86,6 +86,6 @@ namespace Zilon.Core.Tactics
         /// <remarks>
         /// Для монстров равен null.
         /// </remarks>
-        IInventory Inventory { get; }
+        IPropStore Inventory { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Assets.Zilon.Scripts.Models.Commands
         public override void Execute()
         {
             var container = _playerState.SelectedContainer.Container;
-            var props = container.Props;
+            var props = container.Inventory.Items;
             ModalManager.ShowContainerModal(props);
         }
 

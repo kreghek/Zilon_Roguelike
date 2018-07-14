@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public DropFromContainerTask(IActor actor,
             IPropContainer container,
             IEnumerable<IProp> props,
-            IInventory inventory,
+            IPropStore inventory,
             IPropContainerManager containerManager) : base(actor, container, props, inventory)
         {
             _containerManager = containerManager;

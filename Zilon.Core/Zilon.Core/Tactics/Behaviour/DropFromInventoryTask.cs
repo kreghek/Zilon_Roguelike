@@ -11,12 +11,12 @@ namespace Zilon.Core.Tactics.Behaviour
     public class DropFromInventoryTask : ActorTaskBase
     {
         private readonly IEnumerable<IProp> _props;
-        private readonly IInventory _inventory;
+        private readonly IPropStore _inventory;
         private readonly IPropContainerManager _containerManager;
 
         public DropFromInventoryTask(IActor actor,
             IEnumerable<IProp> props,
-            IInventory inventory,
+            IPropStore inventory,
             IPropContainerManager containerManager) : base(actor)
         {
             _props = props;

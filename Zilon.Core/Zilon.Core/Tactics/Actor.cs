@@ -19,7 +19,7 @@ namespace Zilon.Core.Tactics
             Initiative = 1;
         }
 
-        public Actor(IPerson person, IPlayer owner, IMapNode node, IInventory inventory):
+        public Actor(IPerson person, IPlayer owner, IMapNode node, IPropStore inventory):
             this(person, owner, node)
         {
             Inventory = inventory;
@@ -84,7 +84,7 @@ namespace Zilon.Core.Tactics
 
         public ITacticalAct Acts { get; }
 
-        public IInventory Inventory { get; }
+        public IPropStore Inventory { get; }
 
         public event EventHandler OnMoved;
         public event EventHandler OnDead;
