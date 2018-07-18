@@ -47,5 +47,81 @@ namespace Zilon.Core.Client.Tests
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
         }
+
+
+        /// <summary>
+        /// Тест проверяет, что при удалении 1 единицы ресурса из инвентаря с 1 единицей этого ресурса
+        /// на выходе будет пустой инвентярь.
+        /// </summary>
+        [Test]
+        public void Remove_RemoveResourceFromInventoryWithThisResource_PropContains()
+        {
+            // ARRANGE
+            const int inventoryCount = 1;
+            const int expectedCount = 1;
+
+            var testedScheme = new PropScheme { };
+
+            var realStoreMock = new Mock<IPropStore>();
+            var props = new IProp[] {
+                new Resource(testedScheme, inventoryCount)
+            };
+            realStoreMock.SetupGet(x => x.Items).Returns(props);
+            var realStore = realStoreMock.Object;
+
+            
+            var testedResource = new Resource(testedScheme, expectedCount);
+
+            var propTransferStore = new PropTransferStore(realStore);
+
+
+
+            // ACT
+            propTransferStore.Remove(testedResource);
+
+
+            // ASSERT
+            var factProps = propTransferStore.Items;
+            factProps.Should().BeEmpty();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при добавлении 1 единицы ресурса в инвентарь с 1 единицей этого ресурса
+        /// на выходе будет 2 единицы этого ресурса.
+        /// </summary>
+        [Test]
+        public void Add_AddResourceToInventoryWithThisResource_PropContains2UnitsOfResource()
+        {
+            // ARRANGE
+            const int inventoryCount = 1;
+            const int testedCount = 1;
+            const int expectedCount = inventoryCount + testedCount;
+
+            var testedScheme = new PropScheme { };
+
+            var realStoreMock = new Mock<IPropStore>();
+            var props = new IProp[] {
+                new Resource(testedScheme, inventoryCount)
+            };
+            realStoreMock.SetupGet(x => x.Items).Returns(props);
+            var realStore = realStoreMock.Object;
+
+
+            var testedResource = new Resource(testedScheme, testedCount);
+
+            var propTransferStore = new PropTransferStore(realStore);
+
+
+
+            // ACT
+            propTransferStore.Add(testedResource);
+
+
+            // ASSERT
+            var factProps = propTransferStore.Items;
+            factProps[0].Should().BeOfType<Resource>();
+            factProps[0].Scheme.Should().Be(testedScheme);
+            ((Resource)factProps[0]).Count.Should().Be(expectedCount);
+        }
     }
 }

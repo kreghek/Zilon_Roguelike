@@ -39,7 +39,7 @@ namespace Zilon.Core.Client
                         var removedResource = _propRemoved.OfType<Resource>()
                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
-                        var addedResource = _propRemoved.OfType<Resource>()
+                        var addedResource = _propAdded.OfType<Resource>()
                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
                         var addedCount = addedResource?.Count;
