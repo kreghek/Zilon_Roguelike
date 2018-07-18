@@ -6,11 +6,19 @@ namespace Zilon.Core.Client
     {
         public PropTransferMachine(IPropStore inventory, IPropStore container)
         {
-            //Floor = new 
+            Inventory = new PropTransferStore(inventory);
+            Container = new PropTransferStore(container);
+            Floor = new FloorPropContainer();
         }
 
-        public IPropStore Inventory { get; }
-        public IPropStore Container { get; }
-        public IPropStore Floor { get; }
+        public PropTransferStore Inventory { get; }
+        public PropTransferStore Container { get; }
+        public FloorPropContainer Floor { get; }
+
+        public void TransferProp(IProp prop, IPropStore sourceStore, IPropStore distStore)
+        {
+            sourceStore.Remove(prop);
+            distStore.Add(prop);
+        }
     }
 }

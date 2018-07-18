@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var prop in _props)
             {
-                _container.Inventory.Remove(prop);
+                _container.Content.Remove(prop);
             }
 
             IsComplete = true;

@@ -20,7 +20,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             foreach (var prop in _props)
             {
-                _container.Inventory.Add(prop);
+                _container.Content.Add(prop);
             }
 
             foreach (var prop in _props)

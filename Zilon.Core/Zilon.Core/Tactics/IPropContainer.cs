@@ -16,6 +16,6 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Содержимое контейнера.
         /// </summary>
-        IPropStore Inventory { get; }
+        IPropStore Content { get; }
     }
 }

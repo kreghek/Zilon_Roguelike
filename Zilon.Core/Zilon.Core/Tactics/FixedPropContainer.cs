@@ -7,15 +7,15 @@ namespace Zilon.Core.Tactics
     {
         public IMapNode Node { get; private set; }
 
-        public IPropStore Inventory { get; }
+        public IPropStore Content { get; }
 
         public FixedPropContainer(IMapNode node, IProp[] props)
         {
             Node = node;
-            Inventory = new Inventory();
+            Content = new Inventory();
             foreach (var prop in props)
             {
-                Inventory.Add(prop);
+                Content.Add(prop);
             }
         }
     }

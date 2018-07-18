@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Client
@@ -8,15 +9,13 @@ namespace Zilon.Core.Client
     public class PropTransferStore : IPropStore
     {
         private readonly IPropStore _propStore;
-        private readonly List<IProp> _propAdded;
-        private readonly List<IProp> _propRemoved;
 
         public PropTransferStore(IPropStore propStore)
         {
             _propStore = propStore;
 
-            _propAdded = new List<IProp>();
-            _propRemoved = new List<IProp>();
+            PropAdded = new List<IProp>();
+            PropRemoved = new List<IProp>();
         }
 
         public IProp[] Items
@@ -27,6 +26,10 @@ namespace Zilon.Core.Client
             }
         }
 
+        public List<IProp> PropAdded { get; }
+
+        public List<IProp> PropRemoved { get; }
+
         private IProp[] CalcItems()
         {
             var result = new List<IProp>();
@@ -36,10 +39,10 @@ namespace Zilon.Core.Client
                 switch (prop)
                 {
                     case Resource resource:
-                        var removedResource = _propRemoved.OfType<Resource>()
+                        var removedResource = PropRemoved.OfType<Resource>()
                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
-                        var addedResource = _propAdded.OfType<Resource>()
+                        var addedResource = PropAdded.OfType<Resource>()
                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
                         var addedCount = addedResource?.Count;
@@ -56,7 +59,7 @@ namespace Zilon.Core.Client
 
                     case Equipment equipment:
                     case Recipe recipe:
-                        var isRemoved = _propRemoved.Contains(prop);
+                        var isRemoved = PropRemoved.Contains(prop);
 
                         if (!isRemoved)
                         {
@@ -66,7 +69,7 @@ namespace Zilon.Core.Client
                 }
             }
 
-            foreach (var prop in _propAdded)
+            foreach (var prop in PropAdded)
             {
                 result.Add(prop);
             }
@@ -84,12 +87,12 @@ namespace Zilon.Core.Client
             {
                 case Resource resource:
 
-                    TransferResource(resource, _propRemoved, _propAdded);
+                    TransferResource(resource, PropRemoved, PropAdded);
                     break;
 
                 case Equipment equipment:
                 case Recipe recipe:
-                    TransferNoCount(prop, _propRemoved, _propAdded);
+                    TransferNoCount(prop, PropRemoved, PropAdded);
                     break;
             }
         }
@@ -133,12 +136,12 @@ namespace Zilon.Core.Client
             {
                 case Resource resource:
 
-                    TransferResource(resource, _propAdded, _propRemoved);
+                    TransferResource(resource, PropAdded, PropRemoved);
                     break;
 
                 case Equipment equipment:
                 case Recipe recipe:
-                    TransferNoCount(prop, _propAdded, _propRemoved);
+                    TransferNoCount(prop, PropAdded, PropRemoved);
                     break;
             }
         }
