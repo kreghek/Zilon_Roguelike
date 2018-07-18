@@ -68,11 +68,6 @@ namespace Zilon.Core.Client
 
             foreach (var prop in _propAdded)
             {
-                if (prop is Resource)
-                {
-                    continue;
-                }
-
                 result.Add(prop);
             }
 

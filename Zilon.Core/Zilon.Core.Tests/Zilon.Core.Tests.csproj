@@ -77,6 +77,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Client\PropTransferStoreTests.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
