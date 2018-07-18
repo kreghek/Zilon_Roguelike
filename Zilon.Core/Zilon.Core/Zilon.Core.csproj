@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\FloorPropContainer.cs" />
+    <Compile Include="Client\PropTransferMachine.cs" />
+    <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ICommandManager.cs" />
@@ -61,9 +64,10 @@
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\EquipmentChangedEventArgs.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
-    <Compile Include="Persons\IPropStore.cs" />
     <Compile Include="Persons\Inventory.cs" />
-    <Compile Include="Persons\InventoryEventArgs.cs" />
+    <Compile Include="Persons\IPropStore.cs" />
+    <Compile Include="Persons\PropStoreBase.cs" />
+    <Compile Include="Persons\PropStoreEventArgs.cs" />
     <Compile Include="Persons\IProp.cs" />
     <Compile Include="Persons\IPropFactory.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
@@ -72,7 +76,6 @@
     <Compile Include="Persons\PersonService.cs" />
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\PropFactory.cs" />
-    <Compile Include="Persons\PropTransfer.cs" />
     <Compile Include="Persons\Recipe.cs" />
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />

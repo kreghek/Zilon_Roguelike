@@ -28,8 +28,8 @@ namespace Zilon.Core.Persons
         /// <param name="prop"> Целевой предмет. </param>
         void Remove(IProp prop);
 
-        event EventHandler<InventoryEventArgs> Added;
-        event EventHandler<InventoryEventArgs> Removed;
-        event EventHandler<InventoryEventArgs> Changed;
+        event EventHandler<PropStoreEventArgs> Added;
+        event EventHandler<PropStoreEventArgs> Removed;
+        event EventHandler<PropStoreEventArgs> Changed;
     }
 }

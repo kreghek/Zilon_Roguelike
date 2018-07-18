@@ -6,11 +6,11 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Аргументы событий, связанных с инвентарём.
     /// </summary>
-    public class InventoryEventArgs
+    public class PropStoreEventArgs
     {
         public IProp[] Props { get; }
 
-        public InventoryEventArgs(IEnumerable<IProp> props)
+        public PropStoreEventArgs(IEnumerable<IProp> props)
         {
             Props = props.ToArray();
         }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-public class MapNodeVM : MonoBehaviour, IPointerClickHandler
+public class MapNodeVM : MonoBehaviour
 {
     public GameObject[] Walls;
     public bool IsExit;
@@ -39,7 +39,7 @@ public class MapNodeVM : MonoBehaviour, IPointerClickHandler
         ExitMarker.SetActive(IsExit);
     }
     
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnMouseDown()
     {
         OnSelect?.Invoke(this, new EventArgs());
     }
