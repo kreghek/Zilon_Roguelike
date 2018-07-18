@@ -1,6 +1,6 @@
 ﻿using Assets.Zilon.Scripts.Services;
 using UnityEngine;
-using Zilon.Core.Persons;
+using Zilon.Core.Client;
 
 public class SectorModalManager : MonoBehaviour, ISectorModalManager
 {
@@ -10,11 +10,11 @@ public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	
 	public ShowContainerModalBody ShowContainerModalPrefab;
 
-	public void ShowContainerModal(IProp[] props)
+	public void ShowContainerModal(PropTransferMachine transferMachine)
 	{
 		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
 
 		var containerModalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
-		containerModalBody.SetProps(props);
+		containerModalBody.SetTransferMachine(transferMachine);
 	}
 }

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Client;
 
 namespace Assets.Zilon.Scripts.Services
 {
     public interface ISectorModalManager
     {
-        void ShowContainerModal(IProp[] props);
+        void ShowContainerModal(PropTransferMachine transferMachine);
     }
 }

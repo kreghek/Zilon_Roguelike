@@ -1,5 +1,6 @@
 ﻿using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
+using Zilon.Core.Client;
 
 namespace Assets.Zilon.Scripts.Models.Commands
 {
@@ -18,9 +19,12 @@ namespace Assets.Zilon.Scripts.Models.Commands
         
         public override void Execute()
         {
+            var inventory = _playerState.ActiveActor.Actor.Inventory;
             var container = _playerState.SelectedContainer.Container;
-            var props = container.Content.Items;
-            ModalManager.ShowContainerModal(props);
+            var containerContent = container.Content;
+            var transferMachine = new PropTransferMachine(inventory, containerContent);
+            
+            ModalManager.ShowContainerModal(transferMachine);
         }
 
         public override bool CanExecute()
