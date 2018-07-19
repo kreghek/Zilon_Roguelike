@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -16,7 +17,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private IAttackTarget _attackTarget;
         private IPropContainer _propContainer;
         private IOpenContainerMethod _method;
-        private IProp[] _propsToTake;
+        private PropTransfer[] _transfers;
 
         private readonly IDecisionSource _decisionSource;
 
@@ -65,7 +66,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new[] { _currentTask };
             }
 
-            if (_propContainer != null && _propsToTake != null)
+            if (_transfers != null)
             {
                 var inventory = _currentActor.Inventory;
 
@@ -74,10 +75,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException($"Для данного актёра {_currentActor} не задан инвентарь.");
                 }
 
-                var takePropTask = new TakeFromContainerTask(_currentActor,
-                    _propContainer,
-                    _propsToTake,
-                    inventory);
+                var takePropTask = new TransferPropsTask(_currentActor, _transfers);
             }
 
             return new IActorTask[0];
@@ -142,11 +140,10 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Hамерение взять предметы в инвентарь.
         /// </summary>
         /// <param name="props"></param>
-        public void IntentTakeProps(IPropContainer container, IProp[] props)
+        public void IntentTransferProps(IEnumerable<PropTransfer> transfers)
         {
             ClearCurrentTask();
-            _propContainer = container;
-            _propsToTake = props;
+            _transfers = transfers.ToArray();
         }
 
         private void ClearCurrentTask()
@@ -156,7 +153,6 @@ namespace Zilon.Core.Tactics.Behaviour
             _attackTarget = null;
             _method = null;
             _propContainer = null;
-            _propsToTake = null;
         }
     }
 }

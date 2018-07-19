@@ -102,9 +102,10 @@
     <Compile Include="Tactics\Behaviour\IOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
     <Compile Include="Tactics\Behaviour\DropFromContainerTask.cs" />
+    <Compile Include="Tactics\Behaviour\PropTransfer.cs" />
     <Compile Include="Tactics\Behaviour\StoreToContainerTask.cs" />
     <Compile Include="Tactics\Behaviour\ContainerTaskBase.cs" />
-    <Compile Include="Tactics\Behaviour\TakeFromContainerTask.cs" />
+    <Compile Include="Tactics\Behaviour\TransferPropsTask.cs" />
     <Compile Include="Tactics\Generation\GenerationHelper.cs" />
     <Compile Include="Tactics\Generation\ISectorGeneratorRandomSource.cs" />
     <Compile Include="Tactics\Generation\Room.cs" />
