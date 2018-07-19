@@ -14,10 +14,12 @@ public class ActorVM : MonoBehaviour, IPointerClickHandler
 
 
     public bool IsEnemy;
+    public GameObject GraphicRoot;
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
     private Task _moveTask;
+    private float _rotationCounter;
 
     public event EventHandler OnSelected;
     public IActor Actor { get; set; }
@@ -62,6 +64,11 @@ public class ActorVM : MonoBehaviour, IPointerClickHandler
                 _moveTaskSource?.TrySetResult(true);
             }
         }
+
+        _rotationCounter += Time.deltaTime * 3;
+        var angle = (float)Math.Sin(_rotationCounter);
+        
+        GraphicRoot.transform.Rotate(Vector3.back, angle * 0.3f);
     }
 
     public Task<bool> MoveToPointAsync(Vector3 targetPosition)
