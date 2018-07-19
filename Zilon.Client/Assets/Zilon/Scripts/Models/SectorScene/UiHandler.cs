@@ -12,15 +12,18 @@ public class UiHandler : MonoBehaviour {
 	
 	[Inject] private ICommandManager _clientCommandExecutor;
 	
-	private NextTurnCommand _nextTurnCommand;
-
-	private void Awake()
-	{
-		_nextTurnCommand = new NextTurnCommand(_sectorManager, _playerState);	
-	}
+	[Inject(Id = "next-turn-command")] private ICommand _nextTurnCommand;
 	
+	[Inject(Id = "show-inventory-command")] private ICommand _showInventoryCommand;
+	
+
 	public void NextTurn()
 	{
 		_clientCommandExecutor.Push(_nextTurnCommand);
+	}
+
+	public void ShowInventoryButton_Handler()
+	{
+		_clientCommandExecutor.Push(_showInventoryCommand);
 	}
 }

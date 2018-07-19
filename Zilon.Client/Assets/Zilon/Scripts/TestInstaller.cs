@@ -31,8 +31,10 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
         
         // Комадны для UI.
         Container.Bind<ICommand>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
     }
 }

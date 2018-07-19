@@ -1,6 +1,9 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using Assets.Zilon.Scripts.Models.SectorScene;
+using Assets.Zilon.Scripts.Services;
 using UnityEngine;
+using Zenject;
 using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 
 public class SectorModalManager : MonoBehaviour, ISectorModalManager
 {
@@ -9,15 +12,28 @@ public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	public ModalDialog ModalPrefab;
 	
 	public ShowContainerModalBody ShowContainerModalPrefab;
+	
+	public InventoryModalBody InventoryModalPrefab;
 
 	public void ShowContainerModal(PropTransferMachine transferMachine)
 	{
 		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
 
-		var containerModalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
+		var modalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
 
-        modal.WindowHandler = containerModalBody;
+        modal.WindowHandler = modalBody;
 
-        containerModalBody.SetTransferMachine(transferMachine);
+		modalBody.SetTransferMachine(transferMachine);
+	}
+
+	public void ShowInventoryModal(IActor actor)
+	{
+		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
+
+		var modalBody = Instantiate(InventoryModalPrefab, modal.Body.transform);
+
+		modal.WindowHandler = modalBody;
+		
+		modalBody.Init(actor);
 	}
 }
