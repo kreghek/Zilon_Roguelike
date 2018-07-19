@@ -6,7 +6,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorVM : MonoBehaviour, IPointerClickHandler
+public class ActorVM : MonoBehaviour
 {
     private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;
@@ -79,8 +79,13 @@ public class ActorVM : MonoBehaviour, IPointerClickHandler
         return _moveTaskSource.Task;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         OnSelected?.Invoke(this, new EventArgs());
     }
 }

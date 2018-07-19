@@ -1,10 +1,10 @@
 {
-  "Name": "–уб¤щий удар",
+  "Name": "Выстрел",
   "Efficient": {
     "Min": 1,
-    "Max": 3
+    "Max": 2
   },
   "MinRange": 1,
-  "MaxRange": 1,
+  "MaxRange": 5,
   "HitCount": 1 
 }

@@ -140,7 +140,7 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        var propScheme = _schemeService.GetScheme<PropScheme>("short-sword");
+        var propScheme = _schemeService.GetScheme<PropScheme>("pistol");
         var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);

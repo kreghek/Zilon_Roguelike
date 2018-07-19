@@ -1,0 +1,8 @@
+{
+  "Name": "Пистолет",
+  "Equip": {
+    "Power": 1,
+    "ApRank": 4,
+    "ActSids": [ "shot" ] 
+  }
+}
