@@ -123,12 +123,9 @@ namespace Zilon.Core.Tactics
 
             foreach (var actor in _actorManager.Actors)
             {
-                if (actor.Owner is HumanPlayer)
+                if (actor.Owner is HumanPlayer && !ExitNodes.Contains(actor.Node))
                 {
-                    if (!ExitNodes.Contains(actor.Node))
-                    {
-                        allExit = false;
-                    }
+                    allExit = false;
                 }
             }
 
