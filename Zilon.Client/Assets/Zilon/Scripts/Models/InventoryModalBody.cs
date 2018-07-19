@@ -7,7 +7,7 @@ using Zilon.Core.Tactics;
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
 	public Transform InventoryItemsParent;
-	public GameObject PropItemPrefab;
+	public PropItemVm PropItemPrefab;
 
 	public void Init(IActor actor)
 	{
@@ -34,7 +34,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 		foreach (var prop in props)
 		{
-			Instantiate(PropItemPrefab, itemsParent);
+			var propItemVm = Instantiate(PropItemPrefab, itemsParent);
+			propItemVm.Init(prop);
 		}
 	}
 }

@@ -9,7 +9,7 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 {
     private PropTransferMachine _transferMachine;
 
-    public GameObject PropItemPrefab;
+    public PropItemVm PropItemPrefab;
     public Transform InventoryItemsParent;
     public Transform ContainerItemsParent;
 
@@ -37,7 +37,8 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var prop in props)
         {
-            Instantiate(PropItemPrefab, itemsParent);
+            var propItemVm = Instantiate(PropItemPrefab, itemsParent);
+            propItemVm.Init(prop);
         }
     }
 

@@ -123,6 +123,7 @@ namespace Zilon.Core.Client.Tests
 
             // ASSERT
             var factProps = propTransferStore.CalcActualItems();
+            factProps.Count().Should().Be(1);  // В инвентаре только один стак ресурсов.
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);

@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InventoryItemsParent: {fileID: 224065721898149998}
-  PropItemPrefab: {fileID: 1334817854532730, guid: 9df811c63157b584ab5d7b6f68283596,
+  PropItemPrefab: {fileID: 114613642215259830, guid: 9df811c63157b584ab5d7b6f68283596,
     type: 2}
 --- !u!114 &114775650414611974
 MonoBehaviour:
