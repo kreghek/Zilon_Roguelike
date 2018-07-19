@@ -43,7 +43,6 @@ public class MapNodeVM : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log(EventSystem.current.currentSelectedGameObject);
             return;
         }
 

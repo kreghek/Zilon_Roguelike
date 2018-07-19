@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Zilon.Scripts;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
-public class ShowContainerModalBody : MonoBehaviour
+public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 {
     private PropTransferMachine _transferMachine;
 
@@ -46,5 +47,15 @@ public class ShowContainerModalBody : MonoBehaviour
         }
 
         UpdateProps();
+    }
+
+    public void ApplyChanges()
+    {
+        Debug.Log(_transferMachine.Inventory.PropAdded);
+    }
+
+    public void CancelChanges()
+    {
+        throw new System.NotImplementedException();
     }
 }

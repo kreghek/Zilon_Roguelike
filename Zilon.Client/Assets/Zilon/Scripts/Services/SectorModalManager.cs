@@ -15,6 +15,9 @@ public class SectorModalManager : MonoBehaviour, ISectorModalManager
 		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
 
 		var containerModalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
-		containerModalBody.SetTransferMachine(transferMachine);
+
+        modal.WindowHandler = containerModalBody;
+
+        containerModalBody.SetTransferMachine(transferMachine);
 	}
 }
