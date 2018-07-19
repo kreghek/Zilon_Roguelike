@@ -20,7 +20,7 @@ namespace Zilon.Core.Client
 
         public IProp[] CalcActualItems()
         {
-                return CalcItems();
+            return CalcItems();
         }
 
         public List<IProp> PropAdded { get; }
@@ -52,7 +52,7 @@ namespace Zilon.Core.Client
                             var remainsResource = new Resource(resource.Scheme, remainsCount);
                             result.Add(remainsResource);
                         }
-                        
+
                         break;
 
                     case Equipment equipment:
@@ -69,7 +69,24 @@ namespace Zilon.Core.Client
 
             foreach (var prop in PropAdded)
             {
-                result.Add(prop);
+                switch (prop)
+                {
+                    case Resource resource:
+                        var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                        if (existsResource == null)
+                        {
+                            result.Add(prop);
+                        }
+                        break;
+
+                    case Equipment equipment:
+                    case Recipe recipe:
+                        result.Add(prop);
+                        break;
+
+                    default:
+                        throw new NotSupportedException();
+                }
             }
 
             return result.ToArray();
@@ -84,7 +101,6 @@ namespace Zilon.Core.Client
             switch (prop)
             {
                 case Resource resource:
-
                     TransferResource(resource, PropRemoved, PropAdded);
                     break;
 
