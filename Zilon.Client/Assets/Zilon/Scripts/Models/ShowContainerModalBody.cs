@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts;
+﻿using System;
+using Assets.Zilon.Scripts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -39,6 +40,19 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
         {
             var propItemVm = Instantiate(PropItemPrefab, itemsParent);
             propItemVm.Init(prop);
+            propItemVm.Click += PropItemOnClick;
+        }
+    }
+
+    private void PropItemOnClick(object sender, EventArgs e)
+    {
+        var currentItemVm = (PropItemVm)sender;
+        var parentTransform = currentItemVm.transform;
+        foreach (Transform itemTranform in parentTransform)
+        {
+            var itemVm = itemTranform.gameObject.GetComponent<PropItemVm>();
+            var isSelected = itemVm == currentItemVm;
+            itemVm.SetSelectedState(isSelected);
         }
     }
 

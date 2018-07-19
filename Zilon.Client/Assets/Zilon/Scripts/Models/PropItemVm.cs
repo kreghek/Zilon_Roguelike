@@ -5,15 +5,18 @@ using Zilon.Core.Persons;
 
 public class PropItemVm : MonoBehaviour
 {
+	private IProp _prop;
+	
 	public Text CountText;
 	public Image IconImage;
+	public Image SelectedBorder;
 
 	public Sprite FoodSprite;
 	public Sprite WeaponSprite;
-
-	public string Sid;
 	
-	private IProp _prop;
+	public string Sid;
+
+	public event EventHandler Click;
 
 	public void Init(IProp prop)
 	{
@@ -45,5 +48,15 @@ public class PropItemVm : MonoBehaviour
 			default:
 				throw new NotSupportedException();
 		}
+	}
+
+	public void SetSelectedState(bool value)
+	{
+		SelectedBorder.gameObject.SetActive(value);
+	}
+
+	public void Click_Handler()
+	{
+		Click?.Invoke(this, new EventArgs());
 	}
 }

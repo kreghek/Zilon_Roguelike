@@ -19,7 +19,6 @@ namespace Assets.Zilon.Scripts.Models.Commands
         
         public override void Execute()
         {
-           
             ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
         }
 
