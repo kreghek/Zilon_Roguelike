@@ -17,7 +17,10 @@ namespace Zilon.Core.Persons
             _items = new HashSet<IProp>();
         }
 
-        public IProp[] Items => _items.ToArray();
+        public IProp[] CalcActualItems()
+        {
+            return _items.ToArray();
+        }
 
         public void Add(IProp prop)
         {

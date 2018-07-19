@@ -7,7 +7,7 @@
     {
         public IOpenContainerResult TryOpen(IPropContainer container)
         {
-            var props = container.Content.Items;
+            var props = container.Content.CalcActualItems();
             return new SuccessOpenContainerResult(props);
         }
     }

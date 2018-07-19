@@ -25,10 +25,8 @@ namespace Zilon.Core.Client.Tests
             // ARRANGE
             const int expectedCount = 1;
 
-            var realStoreMock = new Mock<IPropStore>();
             var props = new IProp[] { };
-            realStoreMock.SetupGet(x => x.Items).Returns(props);
-            var realStore = realStoreMock.Object;
+            var realStore = CreateContainer(props);
 
             var testedScheme = new PropScheme { };
             var testedResource = new Resource(testedScheme, expectedCount);
@@ -42,10 +40,18 @@ namespace Zilon.Core.Client.Tests
 
 
             // ASSERT
-            var factProps = propTransferStore.Items;
+            var factProps = propTransferStore.CalcActualItems();
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
+        }
+
+        private static IPropStore CreateContainer(IProp[] props)
+        {
+            var realStoreMock = new Mock<IPropStore>();
+            realStoreMock.Setup(x => x.CalcActualItems()).Returns(props);
+            var realStore = realStoreMock.Object;
+            return realStore;
         }
 
 
@@ -62,14 +68,13 @@ namespace Zilon.Core.Client.Tests
 
             var testedScheme = new PropScheme { };
 
-            var realStoreMock = new Mock<IPropStore>();
             var props = new IProp[] {
                 new Resource(testedScheme, inventoryCount)
             };
-            realStoreMock.SetupGet(x => x.Items).Returns(props);
-            var realStore = realStoreMock.Object;
 
-            
+            var realStore = CreateContainer(props);
+
+
             var testedResource = new Resource(testedScheme, expectedCount);
 
             var propTransferStore = new PropTransferStore(realStore);
@@ -81,7 +86,7 @@ namespace Zilon.Core.Client.Tests
 
 
             // ASSERT
-            var factProps = propTransferStore.Items;
+            var factProps = propTransferStore.CalcActualItems();
             factProps.Should().BeEmpty();
         }
 
@@ -99,12 +104,11 @@ namespace Zilon.Core.Client.Tests
 
             var testedScheme = new PropScheme { };
 
-            var realStoreMock = new Mock<IPropStore>();
             var props = new IProp[] {
                 new Resource(testedScheme, inventoryCount)
             };
-            realStoreMock.SetupGet(x => x.Items).Returns(props);
-            var realStore = realStoreMock.Object;
+
+            var realStore = CreateContainer(props);
 
 
             var testedResource = new Resource(testedScheme, testedCount);
@@ -118,7 +122,7 @@ namespace Zilon.Core.Client.Tests
 
 
             // ASSERT
-            var factProps = propTransferStore.Items;
+            var factProps = propTransferStore.CalcActualItems();
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);

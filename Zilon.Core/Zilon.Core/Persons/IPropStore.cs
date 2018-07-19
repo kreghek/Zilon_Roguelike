@@ -14,7 +14,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Предметы в инвентаре.
         /// </summary>
-        IProp[] Items { get; }
+        IProp[] CalcActualItems();
 
         /// <summary>
         /// Добавление предмета в инвентарь.

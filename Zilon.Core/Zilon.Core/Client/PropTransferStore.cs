@@ -18,12 +18,9 @@ namespace Zilon.Core.Client
             PropRemoved = new List<IProp>();
         }
 
-        public IProp[] Items
+        public IProp[] CalcActualItems()
         {
-            get
-            {
                 return CalcItems();
-            }
         }
 
         public List<IProp> PropAdded { get; }
@@ -33,8 +30,9 @@ namespace Zilon.Core.Client
         private IProp[] CalcItems()
         {
             var result = new List<IProp>();
+            var propStoreItems = _propStore.CalcActualItems();
 
-            foreach (var prop in _propStore.Items)
+            foreach (var prop in propStoreItems)
             {
                 switch (prop)
                 {
@@ -109,7 +107,6 @@ namespace Zilon.Core.Client
 
                     if (removedRemains < 0)
                     {
-                        var addCount = Math.Abs(removedRemains);
                         var addedResource = new Resource(resource.Scheme, resource.Count);
                         oppositList.Add(addedResource);
                     }
@@ -154,7 +151,8 @@ namespace Zilon.Core.Client
                 bittenList.Remove(prop);
             }
 
-            var inOriginal = _propStore.Items.Contains(prop);
+            var propStoreItems = _propStore.CalcActualItems();
+            var inOriginal = propStoreItems.Contains(prop);
             if (!inOriginal)
             {
                 oppositList.Add(prop);
