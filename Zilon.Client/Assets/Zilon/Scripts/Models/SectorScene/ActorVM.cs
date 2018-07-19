@@ -65,10 +65,13 @@ public class ActorVM : MonoBehaviour
             }
         }
 
-        _rotationCounter += Time.deltaTime * 3;
-        var angle = (float)Math.Sin(_rotationCounter);
-        
-        GraphicRoot.transform.Rotate(Vector3.back, angle * 0.3f);
+        if (!Actor.IsDead)
+        {
+            _rotationCounter += Time.deltaTime * 3;
+            var angle = (float) Math.Sin(_rotationCounter);
+
+            GraphicRoot.transform.Rotate(Vector3.back, angle * 0.3f);
+        }
     }
 
     public Task<bool> MoveToPointAsync(Vector3 targetPosition)
