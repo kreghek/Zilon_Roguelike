@@ -41,6 +41,12 @@ public class MapNodeVM : MonoBehaviour
     
     public void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log(EventSystem.current.currentSelectedGameObject);
+            return;
+        }
+
         OnSelect?.Invoke(this, new EventArgs());
     }
 
