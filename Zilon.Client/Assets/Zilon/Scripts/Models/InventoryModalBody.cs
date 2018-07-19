@@ -17,7 +17,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	public void ApplyChanges()
 	{
-		throw new System.NotImplementedException();
+		
 	}
 
 	public void CancelChanges()
