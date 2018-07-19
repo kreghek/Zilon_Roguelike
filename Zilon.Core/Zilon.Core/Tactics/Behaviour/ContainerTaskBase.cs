@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics.Behaviour
         protected readonly IEnumerable<IProp> _props;
         protected readonly IPropStore _inventory;
 
-        public ContainerTaskBase(IActor actor,
+        protected ContainerTaskBase(IActor actor,
             IPropContainer container,
             IEnumerable<IProp> props,
             IPropStore inventory) : base(actor)
