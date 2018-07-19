@@ -49,7 +49,6 @@ public class ActorVM : MonoBehaviour
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1], -1);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_moveCounter != null)
@@ -72,14 +71,6 @@ public class ActorVM : MonoBehaviour
 
             GraphicRoot.transform.Rotate(Vector3.back, angle * 0.3f);
         }
-    }
-
-    public Task<bool> MoveToPointAsync(Vector3 targetPosition)
-    {
-        _moveTaskSource = new TaskCompletionSource<bool>();
-        _targetPosition = targetPosition;
-        _moveCounter = 0;
-        return _moveTaskSource.Task;
     }
 
     public void OnMouseDown()
