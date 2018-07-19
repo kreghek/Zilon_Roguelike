@@ -21,8 +21,11 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     private void UpdateProps()
     {
-        UpdatePropsInner(InventoryItemsParent, _transferMachine.Inventory.Items);
-        UpdatePropsInner(ContainerItemsParent, _transferMachine.Container.Items);
+        var inventoryItems = _transferMachine.Inventory.CalcActualItems();
+        UpdatePropsInner(InventoryItemsParent, inventoryItems);
+        
+        var containerItems = _transferMachine.Container.CalcActualItems();
+        UpdatePropsInner(ContainerItemsParent, containerItems);
     }
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
@@ -40,7 +43,7 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     public void TakeAllButton_Click()
     {
-        var props = _transferMachine.Container.Items.ToArray();
+        var props = _transferMachine.Container.CalcActualItems();
         foreach (var prop in props)
         {
             _transferMachine.TransferProp(prop, _transferMachine.Container, _transferMachine.Inventory);

@@ -12,7 +12,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 	public void Init(IActor actor)
 	{
 		var inventory = actor.Inventory;
-		UpdatePropsInner(InventoryItemsParent, inventory.Items);
+		UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 	}
 
 	public void ApplyChanges()
