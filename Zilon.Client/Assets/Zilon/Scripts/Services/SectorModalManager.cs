@@ -8,7 +8,7 @@ namespace Assets.Zilon.Scripts.Services
 	// ReSharper disable once ClassNeverInstantiated.Global
 	public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	{
-		private DiContainer _container;
+		[Inject] private DiContainer _container;
 
 		// ReSharper disable UnassignedField.Global
 		// ReSharper disable MemberCanBePrivate.Global
@@ -23,10 +23,6 @@ namespace Assets.Zilon.Scripts.Services
 		// ReSharper restore UnassignedField.Global
 
 		// ReSharper disable once UnusedMember.Global
-		public void Start()
-		{
-			_container = new DiContainer();
-		}
 
 		public void ShowContainerModal(PropTransferMachine transferMachine)
 		{
