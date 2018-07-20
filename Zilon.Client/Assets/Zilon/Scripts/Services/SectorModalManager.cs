@@ -8,10 +8,9 @@ namespace Assets.Zilon.Scripts.Services
 	// ReSharper disable once ClassNeverInstantiated.Global
 	public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	{
-		[Inject] private DiContainer _container;
-
 		// ReSharper disable UnassignedField.Global
 		// ReSharper disable MemberCanBePrivate.Global
+#pragma warning disable 649
 		public GameObject WindowsParent;
 
 		public ModalDialog ModalPrefab;
@@ -19,9 +18,14 @@ namespace Assets.Zilon.Scripts.Services
 		public ContainerModalBody ContainerModalPrefab;
 
 		public InventoryModalBody InventoryModalPrefab;
+		
 		// ReSharper restore MemberCanBePrivate.Global
 		// ReSharper restore UnassignedField.Global
 
+		[Inject] 
+		private DiContainer _container;		
+
+#pragma warning restore 649		
 		// ReSharper disable once UnusedMember.Global
 
 		public void ShowContainerModal(PropTransferMachine transferMachine)

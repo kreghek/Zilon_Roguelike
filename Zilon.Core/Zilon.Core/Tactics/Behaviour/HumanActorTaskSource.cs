@@ -75,7 +75,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException($"Для данного актёра {_currentActor} не задан инвентарь.");
                 }
 
-                var takePropTask = new TransferPropsTask(_currentActor, _transfers);
+                _currentTask = new TransferPropsTask(_currentActor, _transfers);
+                return new[] { _currentTask };
             }
 
             return new IActorTask[0];
