@@ -1,39 +1,74 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
-public class SectorModalManager : MonoBehaviour, ISectorModalManager
+namespace Assets.Zilon.Scripts.Services
 {
-	public GameObject WindowsParent;
-	
-	public ModalDialog ModalPrefab;
-	
-	public ShowContainerModalBody ShowContainerModalPrefab;
-	
-	public InventoryModalBody InventoryModalPrefab;
-
-	public void ShowContainerModal(PropTransferMachine transferMachine)
+	// ReSharper disable once ClassNeverInstantiated.Global
+	public class SectorModalManager : MonoBehaviour, ISectorModalManager
 	{
-		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
+		private DiContainer _container;
 
-		var modalBody = Instantiate(ShowContainerModalPrefab, modal.Body.transform);
+		// ReSharper disable UnassignedField.Global
+		// ReSharper disable MemberCanBePrivate.Global
+		public GameObject WindowsParent;
 
-        modal.WindowHandler = modalBody;
+		public ModalDialog ModalPrefab;
 
-		modalBody.SetTransferMachine(transferMachine);
-	}
+		public ContainerModalBody ContainerModalPrefab;
 
-	public void ShowInventoryModal(IActor actor)
-	{
-		var modal = Instantiate(ModalPrefab, WindowsParent.transform);
+		public InventoryModalBody InventoryModalPrefab;
+		// ReSharper restore MemberCanBePrivate.Global
+		// ReSharper restore UnassignedField.Global
 
-		var modalBody = Instantiate(InventoryModalPrefab, modal.Body.transform);
+		// ReSharper disable once UnusedMember.Global
+		public void Start()
+		{
+			_container = new DiContainer();
+		}
 
-		modal.WindowHandler = modalBody;
-		
-		modalBody.Init(actor);
+		public void ShowContainerModal(PropTransferMachine transferMachine)
+		{
+			var modalBody = CreateWindowHandler<ContainerModalBody>(ContainerModalPrefab.gameObject);
+
+			modalBody.Init(transferMachine);
+		}
+
+		public void ShowInventoryModal(IActor actor)
+		{
+			var modalBody = CreateWindowHandler<InventoryModalBody>(InventoryModalPrefab.gameObject);
+
+			modalBody.Init(actor);
+		}
+
+		private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
+		{
+			var modal = InstantiateModalDialog();
+
+			var modalBody = InstantiateModalBody<T>(prefab, modal);
+
+			modal.WindowHandler = modalBody;
+
+			return modalBody;
+		}
+
+		private ModalDialog InstantiateModalDialog()
+		{
+			var modalObj = _container.InstantiatePrefab(ModalPrefab, WindowsParent.transform);
+
+			var modal = modalObj.GetComponent<ModalDialog>();
+
+			return modal;
+		}
+
+		private T InstantiateModalBody<T>(GameObject prefab, ModalDialog modal) where T : IModalWindowHandler
+		{
+			var parent = modal.Body.transform;
+
+			var modalBody = _container.InstantiatePrefabForComponent<T>(prefab, parent);
+
+			return modalBody;
+		}
 	}
 }

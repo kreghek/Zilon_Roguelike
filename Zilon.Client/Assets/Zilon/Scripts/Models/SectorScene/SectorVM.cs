@@ -21,48 +21,47 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once CheckNamespace
 // ReSharper disable once ArrangeTypeModifiers
 // ReSharper disable once ClassNeverInstantiated.Global
+// ReSharper disable once UnusedMember.Global
 class SectorVM : MonoBehaviour
 {
 #pragma warning disable 649
-    // ReSharper disable once NotNullMemberIsNotInitialized
-    // ReSharper disable once MemberCanBePrivate.Global
+    // ReSharper disable MemberCanBePrivate.Global
+    // ReSharper disable NotNullMemberIsNotInitialized
     [NotNull] public MapNodeVM MapNodePrefab;
-#pragma warning restore 649
 
-#pragma warning disable 649
-    // ReSharper disable once NotNullMemberIsNotInitialized
-    // ReSharper disable once MemberCanBePrivate.Global
     [NotNull] public ActorVM ActorPrefab;
+    
+    [NotNull] public ContainerVm ContainerPrefab;
+
+    [NotNull] public GameObject WindowsParent;
+
+    [NotNull] public GameObject ShowContainerModalPrefab;
+
+    [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
+
+    [NotNull] [Inject] private ISectorManager _sectorManager;
+
+    [NotNull] [Inject] private IPlayerState _playerState;
+    
+    [NotNull] [Inject] private IDecisionSource _decisionSource;
+
+    [NotNull] [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
+    
+    [NotNull] [Inject] private ISchemeService _schemeService;
+    
+    [NotNull] [Inject] private IPropFactory _propFactory;
+
+    [NotNull] [Inject(Id = "move-command")] private ICommand _moveCommand;
+
+    [NotNull] [Inject(Id = "attack-command")] private ICommand _attackCommand;
+    
+    [NotNull] [Inject(Id = "open-container-command")] private ICommand _openContainerCommand;
+    
+    [NotNull] [Inject(Id = "show-container-modal-command")] private ICommand _showContainerModalCommand;
+    
+    // ReSharper restore NotNullMemberIsNotInitialized
+    // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
-
-    public ContainerVm ContainerPrefab;
-
-    public GameObject WindowsParent;
-
-    public GameObject ShowContainerModalPrefab;
-
-    [Inject] private ICommandManager _clientCommandExecutor;
-
-    [Inject] private ISectorManager _sectorManager;
-
-    [Inject] private IPlayerState _playerState;
-    
-    [Inject] private IDecisionSource _decisionSource;
-
-    [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
-    
-    [Inject] private ISchemeService _schemeService;
-    
-    [Inject] private IPropFactory _propFactory;
-
-    [Inject(Id = "move-command")] private ICommand _moveCommand;
-
-    [Inject(Id = "attack-command")] private ICommand _attackCommand;
-    
-    [Inject(Id = "open-container-command")] private ICommand _openContainerCommand;
-    
-    [Inject(Id = "show-container-modal-command")] private ICommand _showContainerModalCommand;
-
 
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()

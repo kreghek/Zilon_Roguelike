@@ -8,11 +8,9 @@ namespace Zilon.Core.Client
 {
     public class PropTransferStore : IPropStore
     {
-        private readonly IPropStore _propStore;
-
         public PropTransferStore(IPropStore propStore)
         {
-            _propStore = propStore;
+            PropStore = propStore;
 
             PropAdded = new List<IProp>();
             PropRemoved = new List<IProp>();
@@ -27,10 +25,12 @@ namespace Zilon.Core.Client
 
         public List<IProp> PropRemoved { get; }
 
+        public IPropStore PropStore { get; }
+
         private IProp[] CalcItems()
         {
             var result = new List<IProp>();
-            var propStoreItems = _propStore.CalcActualItems();
+            var propStoreItems = PropStore.CalcActualItems();
 
             foreach (var prop in propStoreItems)
             {
@@ -167,7 +167,7 @@ namespace Zilon.Core.Client
                 bittenList.Remove(prop);
             }
 
-            var propStoreItems = _propStore.CalcActualItems();
+            var propStoreItems = PropStore.CalcActualItems();
             var inOriginal = propStoreItems.Contains(prop);
             if (!inOriginal)
             {

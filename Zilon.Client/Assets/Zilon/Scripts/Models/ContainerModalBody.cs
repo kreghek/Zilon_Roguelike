@@ -1,22 +1,49 @@
 ﻿using System;
 using Assets.Zilon.Scripts;
 using System.Collections.Generic;
-using System.Linq;
+using Assets.Zilon.Scripts.Models.Commands;
+using Assets.Zilon.Scripts.Models.SectorScene;
+using JetBrains.Annotations;
 using UnityEngine;
+using Zenject;
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 
-public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
+// ReSharper disable once ClassNeverInstantiated.Global
+// ReSharper disable once CheckNamespace
+public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 {
-    private PropTransferMachine _transferMachine;
+    // ReSharper disable NotNullMemberIsNotInitialized
+    // ReSharper disable UnassignedField.Global
+    // ReSharper disable MemberCanBePrivate.Global
+#pragma warning disable 649
+    [NotNull] public PropItemVm PropItemPrefab;
+    
+    [NotNull] public Transform InventoryItemsParent;
+    
+    [NotNull] public Transform ContainerItemsParent;
+    
+    // ReSharper restore MemberCanBePrivate.Global
+    
+    [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
+    
+    [NotNull] [Inject] private IPlayerState _playerState;
+    
+    [NotNull] [Inject] private ISectorManager _sectorManger;
 
-    public PropItemVm PropItemPrefab;
-    public Transform InventoryItemsParent;
-    public Transform ContainerItemsParent;
+    [NotNull] private PropTransferMachine _transferMachine;
+    
+    [NotNull] private PropTrasferCommand _propTransferCommand;
+    
+#pragma warning restore 649    
+    // ReSharper restore UnassignedField.Global
+    // ReSharper restore NotNullMemberIsNotInitialized
 
-    public void SetTransferMachine(PropTransferMachine transferMachine)
+    public void Init(PropTransferMachine transferMachine)
     {
         _transferMachine = transferMachine;
+        _propTransferCommand = new PropTrasferCommand(_sectorManger, _playerState, _transferMachine);
         UpdateProps();
     }
 
@@ -56,6 +83,7 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
         }
     }
 
+    // ReSharper disable once UnusedMember.Global
     public void TakeAllButton_Click()
     {
         var props = _transferMachine.Container.CalcActualItems();
@@ -69,7 +97,7 @@ public class ShowContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        Debug.Log(_transferMachine.Inventory.PropAdded);
+        _clientCommandExecutor.Push(_propTransferCommand);
     }
 
     public void CancelChanges()
