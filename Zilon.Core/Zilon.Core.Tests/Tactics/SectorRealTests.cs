@@ -93,8 +93,7 @@ namespace Zilon.Core.Tactics.Tests
             var randomSource = randomSourceMock.Object;
 
             var schemeService = CreateSchemeService();
-
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
+            var generator = CreateGenerator(botPlayer, randomSource, schemeService);
 
             var map = new HexMap();
             var actorManager = new ActorManager();
@@ -143,6 +142,17 @@ namespace Zilon.Core.Tactics.Tests
 
                 monster.Node.Should().NotBe(lastRouteNode);
             }
+        }
+
+        private static SectorProceduralGenerator CreateGenerator(BotPlayer botPlayer, ISectorGeneratorRandomSource randomSource, ISchemeService schemeService)
+        {
+            var dice = new Dice();
+            var propFactory = new PropFactory(schemeService);
+            return new SectorProceduralGenerator(randomSource,
+                botPlayer,
+                schemeService,
+                dice,
+                propFactory);
         }
 
         private void GenerateSectorTtc1Content(Sector sector, IActorManager actorManager, IMap map)

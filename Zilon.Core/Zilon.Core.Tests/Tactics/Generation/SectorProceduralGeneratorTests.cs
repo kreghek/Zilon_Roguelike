@@ -9,6 +9,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
     using FluentAssertions;
     using Zilon.Core;
     using Zilon.Core.CommonServices.Dices;
+    using Zilon.Core.Persons;
     using Zilon.Core.Players;
     using Zilon.Core.Schemes;
     using Zilon.Core.Tactics.Spatial;
@@ -80,7 +81,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var map = mapMock.Object;
             var botPlayer = CreateBotPlayer();
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer);
 
 
             // ACT
@@ -92,6 +93,21 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
             // ASSERT
             act.Should().NotThrow();
+        }
+
+        private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource, ISchemeService schemeService, IPlayer botPlayer)
+        {
+            var diceMock = new Mock<IDice>();
+            var dice = diceMock.Object;
+
+            var propFactoryMock = new Mock<IPropFactory>();
+            var propFactory = propFactoryMock.Object;
+
+            return new SectorProceduralGenerator(randomSource, 
+                botPlayer, 
+                schemeService, 
+                dice,
+                propFactory);
         }
 
         /// <summary>
@@ -121,7 +137,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer);
 
 
             // ACT
@@ -160,7 +176,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer);
 
 
             // ACT
@@ -202,7 +218,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var botPlayer = CreateBotPlayer();
 
 
-            var generator = new SectorProceduralGenerator(randomSource, botPlayer, schemeService);
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer);
 
 
             // ACT
@@ -220,13 +236,24 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
         private static ISchemeService CreateSchemeService()
         {
+            var schemeServiceMock = new Mock<ISchemeService>();
+
             var propScheme = new PropScheme
             {
                 Sid = "test-prop"
             };
-            var schemeServiceMock = new Mock<ISchemeService>();
+            
             schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.IsAny<string>()))
                 .Returns(propScheme);
+
+            var trophyTableScheme = new TrophyTableScheme
+            {
+                Sid = "default",
+                Records = new TrophyTableRecordSubScheme[0]
+            };
+            schemeServiceMock.Setup(x => x.GetScheme<TrophyTableScheme>(It.IsAny<string>()))
+                .Returns(trophyTableScheme);
+
             var schemeService = schemeServiceMock.Object;
             return schemeService;
         }

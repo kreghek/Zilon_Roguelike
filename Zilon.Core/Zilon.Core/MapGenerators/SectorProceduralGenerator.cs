@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -17,6 +17,8 @@ namespace Zilon.Core.Tactics.Generation
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly IPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
+        private readonly IDice _dice;
+        private readonly IPropFactory _propFactory;
 
         /// <summary>
         /// Стартовые узлы.
@@ -36,12 +38,16 @@ namespace Zilon.Core.Tactics.Generation
 
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
             IPlayer botPlayer,
-            ISchemeService schemeService)
+            ISchemeService schemeService,
+            //TODO Убрать эти зависимости, если возможно
+            IDice dice,
+            IPropFactory propFactory)
         {
             _randomSource = randomSource;
             _botPlayer = botPlayer;
             _schemeService = schemeService;
-
+            _dice = dice;
+            _propFactory = propFactory;
             Log = new StringBuilder();
 
             MonsterActors = new List<IActor>();
@@ -86,7 +92,11 @@ namespace Zilon.Core.Tactics.Generation
                 var resource = new Resource(propScheme, 1);
 
                 var containerNode = room.Nodes.FirstOrDefault();
-                var container = new FixedPropContainer(containerNode, new[] { resource });
+                var container = new DropTablePropContainer(containerNode,
+                    new[] { defaultDropTable },
+                    _dice,
+                    _schemeService,
+                    _propFactory);
                 Containers.Add(container);
             }
         }
