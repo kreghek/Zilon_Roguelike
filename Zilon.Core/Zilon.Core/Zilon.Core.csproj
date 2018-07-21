@@ -80,6 +80,7 @@
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />
+    <Compile Include="Schemes\LocalizedStringSubScheme.cs" />
     <Compile Include="Schemes\TacticalActImpactType.cs" />
     <Compile Include="Schemes\TacticalActScheme.cs" />
     <Compile Include="Schemes\TacticalActEffectType.cs" />

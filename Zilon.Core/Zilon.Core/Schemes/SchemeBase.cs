@@ -23,7 +23,7 @@
         /// <remarks>
         /// В конкретных реализациях схем используется по-разному.
         /// </remarks>
-        public string Name { get; set; }
+        public LocalizedStringSubScheme Name { get; set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -32,7 +32,7 @@
         /// <remarks>
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
-        public string Description { get; set; }
+        public LocalizedStringSubScheme Description { get; set; }
 
         /// <inheritdoc />
         /// <summary>
