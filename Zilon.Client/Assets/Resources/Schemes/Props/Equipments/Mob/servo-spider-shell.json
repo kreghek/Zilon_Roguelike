@@ -1,0 +1,12 @@
+{
+  "Equip": {
+    "ArmorRank": 4,
+    "Absorbtion": 0.5,
+    "ActSids": [
+      "chop"
+    ]
+  },
+  "Name": {
+    "En": "Панцирь сервоарахнида"
+  }
+}

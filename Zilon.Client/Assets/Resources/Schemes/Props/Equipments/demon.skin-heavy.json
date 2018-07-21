@@ -1,0 +1,12 @@
+{
+  "Equip": {
+    "ArmorRank": 5,
+    "Absorbtion": 0.5,
+    "ActSids": [
+      "chop"
+    ]
+  },
+  "Name": {
+    "En": "Демоническая толстая шкура."
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "Equip": {
+    "ArmorRank": 4,
+    "Absorbtion": 0.5,
+    "ActSids": [
+      "chop"
+    ]
+  },
+  "Craft": {
+    "PrototypeSources": [
+      {
+        "PropSid": "lesser-draft",
+        "Count": 5
+      },
+      {
+        "PropSid": "complex-draft",
+        "Count": 1
+      }
+    ],
+    "InstrumentFunctions": [
+      {
+        "Function": 2,
+        "Level": 1
+      },
+      {
+        "Function": 8,
+        "Level": 1
+      }
+    ],
+    "Professions": [
+      {
+        "Profession": "Blacksmith",
+        "MinLevel": 2,
+        "MaxLevel": 3
+      },
+      {
+        "Profession": "Engineer",
+        "MinLevel": 1,
+        "MaxLevel": 2
+      }
+    ],
+    "Sources": [
+      {
+        "PropSid": "iron-plate",
+        "Count": 1
+      },
+      {
+        "PropSid": "detail",
+        "Count": 1
+      },
+      {
+        "PropSid": "plastic-bar",
+        "Count": 4
+      },
+      {
+        "PropSid": "fabric",
+        "Count": 12
+      }
+    ],
+    "ProductOutput": 1
+  },
+  "Name": {
+    "En": "Flak armor"
+  }
+}

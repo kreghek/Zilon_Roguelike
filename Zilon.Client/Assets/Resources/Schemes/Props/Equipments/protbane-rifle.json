@@ -1,0 +1,65 @@
+{
+  "Equip": {
+    "Power": 0.75,
+    "ApRank": 5,
+    "ActSids": [
+      "chop"
+    ]
+  },
+  "Craft": {
+    "PrototypeSources": [
+      {
+        "PropSid": "lesser-draft",
+        "Count": 5
+      },
+      {
+        "PropSid": "complex-draft",
+        "Count": 1
+      }
+    ],
+    "InstrumentFunctions": [
+      {
+        "Function": 2,
+        "Level": 1
+      },
+      {
+        "Function": 8,
+        "Level": 1
+      }
+    ],
+    "Professions": [
+      {
+        "Profession": "Blacksmith",
+        "MinLevel": 2,
+        "MaxLevel": 3
+      },
+      {
+        "Profession": "Engineer",
+        "MinLevel": 1,
+        "MaxLevel": 2
+      }
+    ],
+    "Sources": [
+      {
+        "PropSid": "gun-frame",
+        "Count": 1
+      },
+      {
+        "PropSid": "butt",
+        "Count": 1
+      },
+      {
+        "PropSid": "bullet",
+        "Count": 12
+      },
+      {
+        "PropSid": "detail",
+        "Count": 4
+      }
+    ],
+    "ProductOutput": 1
+  },
+  "Name": {
+    "En": "Protobane"
+  }
+}
