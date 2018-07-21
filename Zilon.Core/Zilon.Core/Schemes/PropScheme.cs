@@ -10,5 +10,10 @@
         /// Характеристики схемы, связанные с экипировкой предмета персонажем.
         /// </summary>
         public PropEquipSubScheme Equip { get; set; }
+
+        /// <summary>
+        /// Информации о создании/разборе предмета.
+        /// </summary>
+        public CraftSubScheme Craft { get; set; }
     }
 }

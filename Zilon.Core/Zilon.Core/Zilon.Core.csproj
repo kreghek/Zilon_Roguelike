@@ -80,7 +80,14 @@
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />
+    <Compile Include="Schemes\CraftSubScheme.cs" />
+    <Compile Include="Schemes\InstrumentFunctions.cs" />
+    <Compile Include="Schemes\InstrumentLevelFunctionSubScheme.cs" />
     <Compile Include="Schemes\LocalizedStringSubScheme.cs" />
+    <Compile Include="Schemes\ProfessionRequirementSubScheme.cs" />
+    <Compile Include="Schemes\ProfessionTypes.cs" />
+    <Compile Include="Schemes\PropSet.cs" />
+    <Compile Include="Schemes\SubSchemeBase.cs" />
     <Compile Include="Schemes\TacticalActImpactType.cs" />
     <Compile Include="Schemes\TacticalActScheme.cs" />
     <Compile Include="Schemes\TacticalActEffectType.cs" />

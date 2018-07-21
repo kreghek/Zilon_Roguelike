@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема характиристик предмета, который можно экипировать на персонажа.
     /// </summary>
-    public class PropEquipSubScheme
+    public sealed class PropEquipSubScheme: SubSchemeBase
     {
         /// <summary>
         /// Мощь. Влияет на все характиристики предмета.
