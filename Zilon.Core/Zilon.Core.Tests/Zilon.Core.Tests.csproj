@@ -95,6 +95,7 @@
     <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
+    <Compile Include="Tactics\DropTablePropContainerTests.cs" />
     <Compile Include="Tactics\Generation\GenerationHelperTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGeneratorTests.cs" />

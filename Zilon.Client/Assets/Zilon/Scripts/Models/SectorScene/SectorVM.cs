@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -46,6 +47,8 @@ class SectorVM : MonoBehaviour
     [NotNull] [Inject] private IDecisionSource _decisionSource;
 
     [NotNull] [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
+    
+    [NotNull] [Inject] private IDice _dice;
     
     [NotNull] [Inject] private ISchemeService _schemeService;
     
@@ -95,7 +98,11 @@ class SectorVM : MonoBehaviour
 
         var sector = new Sector(map, actorManager, propContainerManager);
 
-        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource, botPlayer, _schemeService);
+        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
+             botPlayer,
+             _schemeService, 
+            _dice, 
+            _propFactory);
 
         try
         {
