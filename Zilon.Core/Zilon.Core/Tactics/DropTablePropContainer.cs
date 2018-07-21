@@ -49,6 +49,7 @@ namespace Zilon.Core.Tactics
 
                 var totalWeight = recMods.Sum(x => x.Weight);
 
+                // Записи с нулевым весом всегда добавляются.
                 rolledRecords.AddRange(records.Where(x => x.Weight == 0));
 
                 for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
@@ -65,6 +66,11 @@ namespace Zilon.Core.Tactics
 
             //TODO Разобрать эту конструкцию на более примитивные.
             var props = rolledRecords.Select(x => GenerateTrophyFromTable(x, _dice, _schemeService)).ToArray();
+
+            foreach (var prop in props)
+            {
+                Content.Add(prop);
+            }
         }
 
         private TrophyTableRecordMod[] GetModRecords(IEnumerable<TrophyTableRecordSubScheme> records, 

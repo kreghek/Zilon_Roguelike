@@ -1,15 +1,15 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Tactics.Spatial;
+﻿using FluentAssertions;
+
 using Moq;
-using Zilon.Core.Schemes;
+
+using NUnit.Framework;
+
+using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -29,7 +29,8 @@ namespace Zilon.Core.Tactics.Tests
                     new TrophyTableRecordSubScheme{
                         SchemeSid = "test-prop",
                         MinCount = 1,
-                        MaxCount = 1
+                        MaxCount = 1,
+                        Weight = 1
                     }
                 }
             };
@@ -65,7 +66,9 @@ namespace Zilon.Core.Tactics.Tests
 
 
             // ASSERT
-            factProps.Count().Should
+            factProps.Count().Should().Be(1);
+            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
+            ((Resource)factProps[0]).Count.Should().Be(1);
         }
     }
 }
