@@ -1,8 +1,12 @@
 {
-  "Name": "Пистолет",
   "Equip": {
-    "Power": 1,
+    "Power": 1.0,
     "ApRank": 4,
-    "ActSids": [ "shot" ] 
+    "ActSids": [
+      "shot"
+    ]
+  },
+  "Name": {
+    "Ru": "Пистолет"
   }
 }

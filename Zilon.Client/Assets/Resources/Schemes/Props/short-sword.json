@@ -1,8 +1,12 @@
 {
-  "Name": "Короткий меч",
   "Equip": {
-    "Power": 1,
+    "Power": 1.0,
     "ApRank": 4,
-    "ActSids": [ "chop" ] 
+    "ActSids": [
+      "chop"
+    ]
+  },
+  "Name": {
+    "Ru": "Короткий меч"
   }
 }
