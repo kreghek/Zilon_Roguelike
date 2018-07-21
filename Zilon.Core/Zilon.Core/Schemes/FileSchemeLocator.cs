@@ -38,8 +38,10 @@ namespace Zilon.Core.Schemes
 
         private static string GetRelativePath(string path, string filePath, string sid)
         {
-            var relativeFilePath = filePath.Remove(0, path.Length);
-            var fileFolder = relativeFilePath.Substring(0, relativeFilePath.Length - (sid + ".json").Length);
+            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
+            var fileFolder = relativeFilePath
+                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
+                .TrimEnd('\\');
             return fileFolder;
         }
     }

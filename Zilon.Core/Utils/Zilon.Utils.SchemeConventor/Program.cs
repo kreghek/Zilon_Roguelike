@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
 using System.IO;
-using Zilon.Core.Utils.SourceSchemes;
+using OldPropScheme = Silone.Data.Schemes.PropScheme;
+using CurrentPropScheme = Zilon.Core.Schemes.PropScheme;
 
 namespace SchemeLocalizer
 {
@@ -20,25 +21,44 @@ namespace SchemeLocalizer
             var schemeLocator = new Zilon.Core.Schemes.FileSchemeLocator(binPath);
             var schemeFiles = schemeLocator.GetAll("props");
 
-            Mapper.Initialize(cfg => cfg
-            .CreateMap<PropScheme, Zilon.Core.Schemes.PropScheme>()
-            .ForMember(x => x.Name, opt1 => opt1.Ignore())
-            .ForMember(x => x.Description, opt1 => opt1.Ignore())
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<OldPropScheme, CurrentPropScheme>()
+                .ForMember(x => x.Name, opt1 => opt1.Ignore())
+                .ForMember(x => x.Description, opt1 => opt1.Ignore());
+
+                cfg.CreateMap<Silone.Data.Schemes.PropSet, Zilon.Core.Schemes.PropSet>()
+                .ForMember(x => x.Count, opt1 => opt1.MapFrom(s => s.MinCount));
+            }
+
+            
             );
 
             foreach (var schemeFile in schemeFiles)
             {
-                var scheme = JsonConvert.DeserializeObject<PropScheme>(schemeFile.Content);
+                var oldScheme = JsonConvert.DeserializeObject<OldPropScheme>(schemeFile.Content);
 
-                var targetScheme = new Zilon.Core.Schemes.PropScheme
+                var targetScheme = new CurrentPropScheme
                 {
                     Name = new Zilon.Core.Schemes.LocalizedStringSubScheme
                     {
-                        Ru = scheme.Name
+                        En = oldScheme.Name
                     }
                 };
 
-                Mapper.Map(scheme, targetScheme);
+                if (oldScheme.EquipmentSlot != Silone.Data.Schemes.EquipmentSlot.None)
+                {
+                    targetScheme.Equip = new Zilon.Core.Schemes.PropEquipSubScheme
+                    {
+                        Absorbtion = oldScheme.Absorbtion,
+                        ActSids = new[] { "chop" },
+                        ApRank = oldScheme.ArmorPenetration,
+                        ArmorRank = oldScheme.Armor,
+                        Power = oldScheme.Power
+                    };
+                }
+
+                Mapper.Map(oldScheme, targetScheme);
 
                 var targetSerialized = JsonConvert.SerializeObject(targetScheme, 
                     Formatting.Indented,
@@ -49,7 +69,12 @@ namespace SchemeLocalizer
                 var targetFilePath = Path.Combine(targetPath);
                 if (schemeFile.Path != "\\")
                 {
-                    targetFilePath = Path.Combine(targetFilePath);
+                    targetFilePath = Path.Combine(targetFilePath, schemeFile.Path);
+                }
+
+                if (!Directory.Exists(targetFilePath))
+                {
+                    Directory.CreateDirectory(targetFilePath);
                 }
                 
                 targetFilePath = Path.Combine(targetFilePath, schemeFile.Sid + ".json");
