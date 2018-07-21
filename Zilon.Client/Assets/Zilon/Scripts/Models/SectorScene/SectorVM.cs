@@ -244,7 +244,7 @@ class SectorVM : MonoBehaviour
         person.EquipmentCarrier.SetEquipment(equipment, 0);
 
         var inventory = new Inventory();
-        var foodScheme = _schemeService.GetScheme<PropScheme>("food-pack");
+        var foodScheme = _schemeService.GetScheme<PropScheme>("electronics");
         var resource = new Resource(foodScheme, 3);
         inventory.Add(resource);
         var actor = new Actor(person, player, startNode, inventory);

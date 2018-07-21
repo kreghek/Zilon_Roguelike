@@ -35,19 +35,15 @@ public class PropItemVm : MonoBehaviour
 
 		Sid = prop.Scheme.Sid;
 
-		switch (prop.Scheme.Sid)
-		{
-			case "food-pack":
-				IconImage.sprite = FoodSprite;
-				break;
-			
-			case "short-sword":
-				IconImage.sprite = WeaponSprite;
-				break;
-			
-			default:
-				throw new NotSupportedException();
-		}
+		var iconSprite = CalcIcon(prop);
+
+		IconImage.sprite = iconSprite;
+	}
+
+	private Sprite CalcIcon(IProp prop)
+	{
+		var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
+		return iconSprite;
 	}
 
 	public void SetSelectedState(bool value)
