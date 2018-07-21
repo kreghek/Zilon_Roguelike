@@ -1,5 +1,6 @@
 ﻿namespace Zilon.Core.Schemes
 {
+    //TODO Переименовать в DropTable
     /// <summary>
     /// Схема тарблицы дропа.
     /// </summary>

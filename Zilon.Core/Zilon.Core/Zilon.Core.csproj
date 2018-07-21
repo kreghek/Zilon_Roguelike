@@ -64,6 +64,7 @@
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\EquipmentChangedEventArgs.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
+    <Compile Include="Persons\ChestStore.cs" />
     <Compile Include="Persons\Inventory.cs" />
     <Compile Include="Persons\IPropStore.cs" />
     <Compile Include="Persons\PropStoreBase.cs" />
@@ -80,6 +81,9 @@
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />
+    <Compile Include="Persons\TrophyRoller.cs" />
+    <Compile Include="Persons\TrophyTableModificatorcs.cs" />
+    <Compile Include="Persons\TrophyTableRecordMod.cs" />
     <Compile Include="Schemes\CraftSubScheme.cs" />
     <Compile Include="Schemes\InstrumentFunctions.cs" />
     <Compile Include="Schemes\InstrumentLevelFunctionSubScheme.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="MapGenerators\RoomGenerator.cs" />
     <Compile Include="MapGenerators\SectorGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
+    <Compile Include="Tactics\DropTablePropContainer.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />

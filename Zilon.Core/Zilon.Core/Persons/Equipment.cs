@@ -30,5 +30,10 @@ namespace Zilon.Core.Persons
         }
 
         public ITacticalAct[] Acts { get; }
+
+        /// <summary>
+        /// Мощь/качество/уровень экипировки.
+        /// </summary>
+        public int Power { get; set; }
     }
 }

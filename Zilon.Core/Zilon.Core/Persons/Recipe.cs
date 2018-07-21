@@ -3,7 +3,6 @@
 namespace Zilon.Core.Persons
 {
     //TODO переименовать в концепт
-    //TODO Добавить ссылку на предмет, который описан в концептуальной схеме.
     /// <summary>
     /// Рецепт крафта.
     /// </summary>
@@ -22,8 +21,14 @@ namespace Zilon.Core.Persons
         /// Конструктор.
         /// </summary>
         /// <param name="scheme"> Схема рецепта. </param>
-        public Recipe(PropScheme scheme) : base(scheme)
+        public Recipe(PropScheme scheme, PropScheme prop) : base(scheme)
         {
+            Prop = prop;
         }
+
+        /// <summary>
+        /// Предмет, описанный в концептуальной схеме.
+        /// </summary>
+        public PropScheme Prop { get; set; }
     }
 }

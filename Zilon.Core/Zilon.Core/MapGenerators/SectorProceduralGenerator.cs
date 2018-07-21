@@ -78,6 +78,8 @@ namespace Zilon.Core.Tactics.Generation
 
         private void CreateChests(Room[] rooms)
         {
+            var defaultDropTable = _schemeService.GetScheme<TrophyTableScheme>("default");
+
             foreach (var room in rooms)
             {
                 var propScheme = _schemeService.GetScheme<PropScheme>("food-pack");
