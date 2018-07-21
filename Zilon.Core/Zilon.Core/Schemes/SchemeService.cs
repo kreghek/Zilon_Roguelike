@@ -17,6 +17,7 @@ namespace Zilon.Core.Schemes
         private readonly Dictionary<string, PropScheme> _props;
         private readonly Dictionary<string, TacticalActScheme> _tacticalActs;
         private readonly Dictionary<string, PersonScheme> _persons;
+        private readonly Dictionary<string, TrophyTableScheme> _trophyTables;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
@@ -37,11 +38,15 @@ namespace Zilon.Core.Schemes
 
             _persons = new Dictionary<string, PersonScheme>();
             LoadSchemes(schemeLocator, "Persons", _persons);
+
+            _trophyTables = new Dictionary<string, TrophyTableScheme>();
+            LoadSchemes(schemeLocator, "TrophyTables", _trophyTables);
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
             //TODO Добавить тесты на проверку каждого типа схемы - загрузка, десериализация
+            //TODO Подумать, как избавиться от такой кучи if.
             if (typeof(TScheme) == typeof(MapScheme))
             {
                 return _maps[sid] as TScheme;
@@ -70,6 +75,11 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(PersonScheme))
             {
                 return _persons[sid] as TScheme;
+            }
+
+            if (typeof(TScheme) == typeof(TrophyTableScheme))
+            {
+                return _trophyTables[sid] as TScheme;
             }
 
             throw new ArgumentException("Указан неизвестный тип схемы");
@@ -105,6 +115,11 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(PersonScheme))
             {
                 return _persons.Values.Cast<TScheme>().ToArray();
+            }
+
+            if (typeof(TScheme) == typeof(TrophyTableScheme))
+            {
+                return _trophyTables.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException();
