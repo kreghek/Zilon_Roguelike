@@ -132,8 +132,8 @@
     <Compile Include="Players\HumanPlayer.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
-    <Compile Include="CommonServices\MapGenerators\GridMapGenerator.cs" />
-    <Compile Include="CommonServices\MapGenerators\IMapGenerator.cs" />
+    <Compile Include="Tactics\MapGenerators\GridMapGenerator.cs" />
+    <Compile Include="Tactics\MapGenerators\IMapGenerator.cs" />
     <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />

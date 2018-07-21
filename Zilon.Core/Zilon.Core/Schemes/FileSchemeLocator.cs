@@ -25,6 +25,7 @@ namespace Zilon.Core.Schemes
                 var schemeFile = new SchemeFile
                 {
                     Sid = sid,
+                    Path = file,
                     Content = serialized
                 };
 
