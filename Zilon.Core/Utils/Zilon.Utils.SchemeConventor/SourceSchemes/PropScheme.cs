@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Utils.SourceSchemes
+﻿using Zilon.Core.Schemes;
+
+namespace Zilon.Core.Utils.SourceSchemes
 {
     /// <inheritdoc />
     /// <summary>

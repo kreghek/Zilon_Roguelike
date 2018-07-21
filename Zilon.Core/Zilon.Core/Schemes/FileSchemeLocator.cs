@@ -17,15 +17,16 @@ namespace Zilon.Core.Schemes
             var path = Path.Combine(_schemeCatalog, directory);
             var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
             var result = new List<SchemeFile>();
-            foreach (var file in files)
+            foreach (var filePath in files)
             {
-                var sid = Path.GetFileNameWithoutExtension(file);
-                var serialized = File.ReadAllText(file);
+                var sid = Path.GetFileNameWithoutExtension(filePath);
+                var serialized = File.ReadAllText(filePath);
+                string fileFolder = GetRelativePath(path, filePath, sid);
 
                 var schemeFile = new SchemeFile
                 {
                     Sid = sid,
-                    Path = file,
+                    Path = fileFolder,
                     Content = serialized
                 };
 
@@ -33,6 +34,13 @@ namespace Zilon.Core.Schemes
             }
 
             return result.ToArray();
+        }
+
+        private static string GetRelativePath(string path, string filePath, string sid)
+        {
+            var relativeFilePath = filePath.Remove(0, path.Length);
+            var fileFolder = relativeFilePath.Substring(0, relativeFilePath.Length - (sid + ".json").Length);
+            return fileFolder;
         }
     }
 }
