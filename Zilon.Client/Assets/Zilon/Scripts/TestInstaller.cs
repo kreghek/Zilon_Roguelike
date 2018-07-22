@@ -25,6 +25,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
+        Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(FindObjectOfType<SectorModalManager>()).AsSingle();

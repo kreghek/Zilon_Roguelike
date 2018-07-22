@@ -100,9 +100,6 @@ namespace Zilon.Core.Tactics
             {
                 case PropClass.Equipment:
                     //TODO Вынести в отдельный метод. Чтобы можно было использовать в крафте.
-                    //TODO Вынести это в реализацию источника рандома
-                    //var powerRange = record.MaxPower - record.MinPower;
-                    //var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower) + record.MinPower;
 
                     var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower);
 
@@ -122,10 +119,6 @@ namespace Zilon.Core.Tactics
                     return equipment;
 
                 case PropClass.Resource:
-                    //TODO Вынести это в реализацию источника рандома
-                    //var countRange = record.MaxCount - record.MinCount;
-                    //var rolledCount = _dice.Roll(countRange) + record.MinCount;
-
                     var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
                     return new Resource(scheme, rolledCount);
 
