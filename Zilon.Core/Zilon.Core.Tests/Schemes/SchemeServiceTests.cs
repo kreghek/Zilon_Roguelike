@@ -2,9 +2,11 @@
 using NUnit.Framework;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 
 namespace Zilon.Core.Schemes.Tests
 {
@@ -28,17 +30,17 @@ namespace Zilon.Core.Schemes.Tests
 
             foreach (var schemeType in schemeTypes)
             {
-
-
                 Action act = () =>
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetSchemes));
                     var generic = method.MakeGenericMethod(schemeType);
-                    var allSchemes = generic.Invoke(schemeService, null);
+                    var allSchemes = (IEnumerable<object>)generic.Invoke(schemeService, null);
+                    Console.WriteLine($"{schemeType} Count:{allSchemes.Count()}");
                 };
 
                 actList.Add(act);
             }
+
 
 
             // ASSERT
@@ -52,7 +54,6 @@ namespace Zilon.Core.Schemes.Tests
         /// Тест проверяет получение схем всех типов.
         /// </summary>
         [Test]
-        [Ignore("Не рабоатает. Всегда проходит.")]
         public void GetScheme_OneScheme_NoExceptions()
         {
             //ARRAGE
@@ -72,7 +73,8 @@ namespace Zilon.Core.Schemes.Tests
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
                     var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new[] { "default" });
+                    var scheme = generic.Invoke(schemeService, new[] { "test" });
+                    Console.WriteLine(scheme);
                 };
 
                 actList.Add(act);
@@ -82,7 +84,7 @@ namespace Zilon.Core.Schemes.Tests
             // ASSERT
             foreach (var act in actList)
             {
-                act.Should().NotThrow();
+                act.Should().Throw<TargetInvocationException>().WithInnerException<KeyNotFoundException>();
             }
         }
 
@@ -128,7 +130,7 @@ namespace Zilon.Core.Schemes.Tests
             var assembly = typeof(IScheme).Assembly;
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
-                .Where(x => x.IsAssignableFrom(typeof(IScheme)) &&
+                .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
                 x.IsClass && // Иначе выберет интерфейс IScheme
                 !x.IsAbstract).ToArray();  // Иначе выберет SchemeBase
             return schemeTypes;

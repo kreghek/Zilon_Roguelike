@@ -102,7 +102,7 @@ namespace Zilon.Core.Schemes
                 return _paths.Values.Cast<TScheme>().ToArray();
             }
 
-            if (typeof(TScheme) == typeof(PathScheme))
+            if (typeof(TScheme) == typeof(PropScheme))
             {
                 return _props.Values.Cast<TScheme>().ToArray();
             }
