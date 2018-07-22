@@ -148,7 +148,8 @@ namespace Zilon.Core.Tactics.Tests
         {
             var dice = new Dice();
             var propFactory = new PropFactory(schemeService);
-            var dropResolver = new DropResolver(dice, schemeService, propFactory);
+            var dropRandomSource = new DropResolverRandomSource(dice);
+            var dropResolver = new DropResolver(dropRandomSource, schemeService, propFactory);
             return new SectorProceduralGenerator(randomSource,
                 botPlayer,
                 schemeService,

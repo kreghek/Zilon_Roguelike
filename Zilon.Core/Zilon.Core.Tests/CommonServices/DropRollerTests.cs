@@ -22,14 +22,8 @@ namespace Zilon.Core.CommonServices.Tests
         {
             // ARRANGE
             var records = new[] {
-                new DropTableRecordSubScheme{
-                    SchemeSid = "trophy1",
-                    Weight = 16,
-                },
-                new DropTableRecordSubScheme{
-                    SchemeSid = "trophy2",
-                    Weight = 64,
-                }
+                new DropTableRecordSubScheme("trophy1", 16),
+                new DropTableRecordSubScheme("trophy2", 64)
             };
 
             var roll = 16;

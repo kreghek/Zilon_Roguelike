@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.CommonServices;
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
 {
-    //TODO Написать/перенести тесты
+    //TODO Не учитывает момента, когда записи с 0 весом выпадают всегда.
     public class DropResolver : IDropResolver
     {
         private readonly IDropResolverRandomSource _randomSource;

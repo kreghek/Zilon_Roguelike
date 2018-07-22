@@ -23,17 +23,13 @@ namespace Zilon.Core.Tactics.Tests
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
 
-            var dropTable = new DropTableScheme {
-                Rolls = 1,
-                Records = new[] {
-                    new DropTableRecordSubScheme{
-                        SchemeSid = "test-prop",
-                        MinCount = 1,
-                        MaxCount = 1,
-                        Weight = 1
-                    }
-                }
+            var dropTableRecord = new DropTableRecordSubScheme("test-prop", 1)
+            {
+                MinCount = 1,
+                MaxCount = 1
             };
+
+            var dropTable = new DropTableScheme(1, dropTableRecord);
 
             var diceMock = new Mock<IDice>();
             diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);

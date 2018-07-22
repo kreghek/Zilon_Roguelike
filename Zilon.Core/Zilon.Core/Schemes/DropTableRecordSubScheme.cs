@@ -9,6 +9,12 @@
     /// </remarks>
     public sealed class DropTableRecordSubScheme: SubSchemeBase
     {
+        public DropTableRecordSubScheme(string schemeSid, int weight)
+        {
+            SchemeSid = schemeSid;
+            Weight = weight;
+        }
+
         /// <summary>
         /// Схема предмета.
         /// </summary>

@@ -17,6 +17,11 @@ namespace Zilon.Core.CommonServices
         /// <returns> Запись из таблицы дропа. </returns>
         public static DropTableModRecord GetRecord(DropTableModRecord[] records, int roll)
         {
+            if (roll == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(roll), "Результат выбора записи в таблице дропа не может быть 0.");
+            }
+
             var pointer = 1;
 
             foreach (var record in records)
@@ -29,7 +34,7 @@ namespace Zilon.Core.CommonServices
                 pointer += record.ModifiedWeight;
             }
 
-            throw new Exception();
+            throw new ArgumentOutOfRangeException(nameof(roll), "Результат выбора записи в таблице дропа больше, чем суммарный вес таблицы дропа.");
         }
     }
 }
