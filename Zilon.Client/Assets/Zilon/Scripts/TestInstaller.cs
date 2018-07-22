@@ -7,6 +7,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Generation;
 
@@ -23,6 +24,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ISectorGeneratorRandomSource>().To<SectorGeneratorRandomSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
+        Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(FindObjectOfType<SectorModalManager>()).AsSingle();

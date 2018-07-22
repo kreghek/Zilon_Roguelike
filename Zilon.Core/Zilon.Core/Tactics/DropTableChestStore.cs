@@ -12,6 +12,7 @@ namespace Zilon.Core.Tactics
     {
         private readonly IEnumerable<DropTableScheme> _dropTables;
         private readonly IDropResolver _dropResolver;
+        private bool _contentResolved;
 
         public DropTableChestStore(IEnumerable<DropTableScheme> dropTables, IDropResolver dropResolver)
         {
@@ -21,8 +22,13 @@ namespace Zilon.Core.Tactics
 
         public override IProp[] CalcActualItems()
         {
-            var props = GenerateProps();
-            AddToContent(props);
+            //TODO Добавить тест, проверяющий, что разрешение контента присходит только один раз
+            if (!_contentResolved)
+            {
+                var props = GenerateProps();
+                AddToContent(props);
+                _contentResolved = true;
+            }
 
             return base.CalcActualItems();
         }

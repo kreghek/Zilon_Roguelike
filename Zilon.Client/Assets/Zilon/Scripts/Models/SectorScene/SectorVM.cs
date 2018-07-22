@@ -25,13 +25,14 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once UnusedMember.Global
 class SectorVM : MonoBehaviour
 {
+
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
     // ReSharper disable NotNullMemberIsNotInitialized
     [NotNull] public MapNodeVM MapNodePrefab;
 
     [NotNull] public ActorVM ActorPrefab;
-    
+
     [NotNull] public ContainerVm ContainerPrefab;
 
     [NotNull] public GameObject WindowsParent;
@@ -43,25 +44,31 @@ class SectorVM : MonoBehaviour
     [NotNull] [Inject] private ISectorManager _sectorManager;
 
     [NotNull] [Inject] private IPlayerState _playerState;
-    
+
     [NotNull] [Inject] private IDecisionSource _decisionSource;
 
     [NotNull] [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
-    
+
     [NotNull] [Inject] private IDice _dice;
-    
+
     [NotNull] [Inject] private ISchemeService _schemeService;
-    
+
     [NotNull] [Inject] private IPropFactory _propFactory;
 
-    [NotNull] [Inject(Id = "move-command")] private ICommand _moveCommand;
+    [NotNull] [Inject] private IDropResolver _dropResolver;
 
-    [NotNull] [Inject(Id = "attack-command")] private ICommand _attackCommand;
-    
-    [NotNull] [Inject(Id = "open-container-command")] private ICommand _openContainerCommand;
-    
-    [NotNull] [Inject(Id = "show-container-modal-command")] private ICommand _showContainerModalCommand;
-    
+    [NotNull] [Inject(Id = "move-command")]
+    private ICommand _moveCommand;
+
+    [NotNull] [Inject(Id = "attack-command")]
+    private ICommand _attackCommand;
+
+    [NotNull] [Inject(Id = "open-container-command")]
+    private ICommand _openContainerCommand;
+
+    [NotNull] [Inject(Id = "show-container-modal-command")]
+    private ICommand _showContainerModalCommand;
+
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
@@ -93,16 +100,15 @@ class SectorVM : MonoBehaviour
         var map = new HexMap();
 
         var actorManager = new ActorManager();
-        
+
         var propContainerManager = new PropContainerManager();
 
         var sector = new Sector(map, actorManager, propContainerManager);
 
         var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
-             botPlayer,
-             _schemeService, 
-            _dice, 
-            _propFactory);
+            botPlayer,
+            _schemeService,
+            _dropResolver);
 
         try
         {
@@ -178,7 +184,7 @@ class SectorVM : MonoBehaviour
         foreach (var container in sectorGenerator.Containers)
         {
             var containerVm = Instantiate(ContainerPrefab, transform);
-            
+
             var containerNodeVm = nodeVMs.Single(x => x.Node == container.Node);
             var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
             containerVm.transform.position = containerPosition;
@@ -247,7 +253,7 @@ class SectorVM : MonoBehaviour
         [NotNull] Equipment equipment)
     {
         var person = new Person(personScheme);
-        
+
         person.EquipmentCarrier.SetEquipment(equipment, 0);
 
         var inventory = new Inventory();
@@ -255,7 +261,7 @@ class SectorVM : MonoBehaviour
         var resource = new Resource(foodScheme, 3);
         inventory.Add(resource);
         var actor = new Actor(person, player, startNode, inventory);
-        
+
         actorManager.Add(actor);
 
         var actorVm = Instantiate(ActorPrefab, transform);
