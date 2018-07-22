@@ -60,11 +60,13 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="Tactics\DropResolver.cs" />
+    <Compile Include="Tactics\DropTableChestStore.cs" />
     <Compile Include="Persons\Equipment.cs" />
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\EquipmentChangedEventArgs.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
-    <Compile Include="Persons\ChestStore.cs" />
+    <Compile Include="Tactics\FixedChestStore.cs" />
     <Compile Include="Persons\Inventory.cs" />
     <Compile Include="Persons\IPropStore.cs" />
     <Compile Include="Persons\PropStoreBase.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\DropTablePropContainer.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
+    <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />

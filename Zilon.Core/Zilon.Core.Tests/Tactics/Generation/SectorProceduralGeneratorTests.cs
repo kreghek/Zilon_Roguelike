@@ -97,17 +97,13 @@ namespace Zilon.Core.Tactics.Generation.Tests
 
         private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource, ISchemeService schemeService, IPlayer botPlayer)
         {
-            var diceMock = new Mock<IDice>();
-            var dice = diceMock.Object;
-
-            var propFactoryMock = new Mock<IPropFactory>();
-            var propFactory = propFactoryMock.Object;
+            var dropResolverMock = new Mock<IDropResolver>();
+            var dropResolver = dropResolverMock.Object;
 
             return new SectorProceduralGenerator(randomSource, 
                 botPlayer, 
-                schemeService, 
-                dice,
-                propFactory);
+                schemeService,
+                dropResolver);
         }
 
         /// <summary>

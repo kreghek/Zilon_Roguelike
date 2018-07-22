@@ -17,8 +17,7 @@ namespace Zilon.Core.Tactics.Generation
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly IPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
-        private readonly IDice _dice;
-        private readonly IPropFactory _propFactory;
+        private readonly IDropResolver _dropResolver;
 
         /// <summary>
         /// Стартовые узлы.
@@ -39,15 +38,13 @@ namespace Zilon.Core.Tactics.Generation
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
             IPlayer botPlayer,
             ISchemeService schemeService,
-            //TODO Убрать эти зависимости, если возможно
-            IDice dice,
-            IPropFactory propFactory)
+            IDropResolver dropResolver)
         {
             _randomSource = randomSource;
             _botPlayer = botPlayer;
             _schemeService = schemeService;
-            _dice = dice;
-            _propFactory = propFactory;
+            _dropResolver = dropResolver;
+
             Log = new StringBuilder();
 
             MonsterActors = new List<IActor>();
@@ -94,9 +91,7 @@ namespace Zilon.Core.Tactics.Generation
                 var containerNode = room.Nodes.FirstOrDefault();
                 var container = new DropTablePropContainer(containerNode,
                     new[] { defaultDropTable },
-                    _dice,
-                    _schemeService,
-                    _propFactory);
+                    _dropResolver);
                 Containers.Add(container);
             }
         }

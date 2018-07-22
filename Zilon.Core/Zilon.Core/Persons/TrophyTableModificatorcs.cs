@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zilon.Core.Persons
 {
+    //TODO Исправить опечатку
     /// <summary>
     /// Модификатор таблицы дропа.
     /// </summary>

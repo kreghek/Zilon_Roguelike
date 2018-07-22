@@ -1,9 +1,9 @@
 ﻿namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Хранилище для сундуков.
+    /// Инвентарь персонажа.
     /// </summary>
-    public sealed class ChestStore : PropStoreBase
+    public class Inventory : PropStoreBase
     {
     }
 }

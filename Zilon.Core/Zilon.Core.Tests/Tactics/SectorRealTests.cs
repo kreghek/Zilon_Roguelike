@@ -148,11 +148,11 @@ namespace Zilon.Core.Tactics.Tests
         {
             var dice = new Dice();
             var propFactory = new PropFactory(schemeService);
+            var dropResolver = new DropResolver(dice, schemeService, propFactory);
             return new SectorProceduralGenerator(randomSource,
                 botPlayer,
                 schemeService,
-                dice,
-                propFactory);
+                dropResolver);
         }
 
         private void GenerateSectorTtc1Content(Sector sector, IActorManager actorManager, IMap map)

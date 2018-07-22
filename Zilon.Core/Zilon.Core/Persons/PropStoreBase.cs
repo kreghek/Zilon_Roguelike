@@ -7,7 +7,7 @@ namespace Zilon.Core.Persons
 //TODO Добавить описание
     public abstract class PropStoreBase : IPropStore
     {
-        private readonly HashSet<IProp> _items;
+        protected readonly HashSet<IProp> _items;
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
@@ -18,7 +18,7 @@ namespace Zilon.Core.Persons
             _items = new HashSet<IProp>();
         }
 
-        public IProp[] CalcActualItems()
+        public virtual IProp[] CalcActualItems()
         {
             return _items.ToArray();
         }

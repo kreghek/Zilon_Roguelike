@@ -3,7 +3,7 @@
 using Moq;
 
 using NUnit.Framework;
-
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
@@ -49,14 +49,14 @@ namespace Zilon.Core.Tactics.Tests
                 .Returns(testPropScheme);
             var schemeService = schemeServiceMock.Object;
 
-            var propFactoryMock = new Mock<IPropFactory>();
-            var propFactory = propFactoryMock.Object;
+            var dropResolverMock = new Mock<IDropResolver>();
+            dropResolverMock.Setup(x => x.GetProps(It.IsAny<IEnumerable<DropTableScheme>>()))
+                .Returns(new IProp[] { new Resource(testPropScheme, 1) });
+            var dropResolver = dropResolverMock.Object;
 
             var container = new DropTablePropContainer(node,
                 new[] { dropTable },
-                dice,
-                schemeService,
-                propFactory);
+                dropResolver);
 
 
 
