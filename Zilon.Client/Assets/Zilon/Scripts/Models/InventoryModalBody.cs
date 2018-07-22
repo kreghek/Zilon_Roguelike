@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Zilon.Scripts;
 using UnityEngine;
 using Zilon.Core.Persons;
@@ -36,6 +37,20 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 		{
 			var propItemVm = Instantiate(PropItemPrefab, itemsParent);
 			propItemVm.Init(prop);
+			propItemVm.Click += PropItemOnClick;
+		}
+	}
+
+	//TODO Дубликат с ContainerModalBody.PropItemOnClick
+	private void PropItemOnClick(object sender, EventArgs e)
+	{
+		var currentItemVm = (PropItemVm) sender;
+		var parentTransform = currentItemVm.transform.parent;
+		foreach (Transform itemTranform in parentTransform)
+		{
+			var itemVm = itemTranform.gameObject.GetComponent<PropItemVm>();
+			var isSelected = itemVm == currentItemVm;
+			itemVm.SetSelectedState(isSelected);
 		}
 	}
 }

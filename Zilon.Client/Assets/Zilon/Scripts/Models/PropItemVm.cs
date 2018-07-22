@@ -10,9 +10,6 @@ public class PropItemVm : MonoBehaviour
 	public Text CountText;
 	public Image IconImage;
 	public Image SelectedBorder;
-
-	public Sprite FoodSprite;
-	public Sprite WeaponSprite;
 	
 	public string Sid;
 

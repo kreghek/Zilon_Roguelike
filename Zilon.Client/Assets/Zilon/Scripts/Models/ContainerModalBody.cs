@@ -74,7 +74,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     private void PropItemOnClick(object sender, EventArgs e)
     {
         var currentItemVm = (PropItemVm)sender;
-        var parentTransform = currentItemVm.transform;
+        var parentTransform = currentItemVm.transform.parent;
         foreach (Transform itemTranform in parentTransform)
         {
             var itemVm = itemTranform.gameObject.GetComponent<PropItemVm>();
