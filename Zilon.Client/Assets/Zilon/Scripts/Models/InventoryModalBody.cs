@@ -15,15 +15,38 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 	
 	public Transform InventoryItemsParent;
 	public PropItemVm PropItemPrefab;
+	public Transform EquipmentSlotsParent;
+	public InventorySlotVm EquipmentSlotPrefab;
 
+	[NotNull] [Inject] private DiContainer _diContainer;
 	[NotNull] [Inject] private IInventoryState _inventoryState;
 
 	public void Start()
 	{
-		var slots = GetComponentsInChildren<InventorySlotVm>();
-		foreach (var slot in slots)
+		CreateSlots();
+	}
+
+	private void CreateSlots()
+	{
+		// TODO Это расположение брать из схемы или из профилей персонажа.
+		var positions = new[]
 		{
-			slot.Click += SlotOnClick;
+			new Vector3(-50, 16), // Weapon
+			new Vector3(50, 16), // Outhand
+			new Vector3(0, 25), // Body
+			new Vector3(0, 72), // Head
+			new Vector3(0, -25), // Legs
+			new Vector3(-50, 64), // Aux
+			new Vector3(50, 64) // Aux
+		};
+
+		for (var i = 0; i < 7; i++)
+		{
+			var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
+			slotObject.transform.localPosition = positions[i];
+			var slotVm = slotObject.GetComponent<InventorySlotVm>();
+			slotVm.SlotIndex = i;
+			slotVm.Click += SlotOnClick;
 		}
 	}
 
