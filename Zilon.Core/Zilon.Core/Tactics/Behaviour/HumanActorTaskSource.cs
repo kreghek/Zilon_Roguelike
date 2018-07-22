@@ -143,6 +143,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="props"></param>
         public void IntentTransferProps(IEnumerable<PropTransfer> transfers)
         {
+            //TODO Сделать генерацию контейнеров для сброшенных на пол пердметов.
             ClearCurrentTask();
             _transfers = transfers.ToArray();
         }

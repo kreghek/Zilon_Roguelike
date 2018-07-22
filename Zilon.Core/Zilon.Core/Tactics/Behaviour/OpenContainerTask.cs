@@ -30,6 +30,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
+            //TODO Сделать проверку, чтобы нельзя было открывать сундуки через стены.
             var actorHexNode = (HexNode)Actor.Node;
             var containerHexNode = (HexNode)_container.Node;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -16,6 +15,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
+            //TODO Сделать проверку, чтобы нельзя было атаковать через стены.
             if (!_target.CanBeDamaged())
             {
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");

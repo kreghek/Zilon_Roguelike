@@ -86,6 +86,7 @@ namespace Zilon.Core.Tactics
         /// <remarks>
         /// Для монстров равен null.
         /// </remarks>
+        //TODO Перенести в персонажа.
         IPropStore Inventory { get; }
     }
 }

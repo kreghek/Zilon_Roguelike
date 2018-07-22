@@ -113,15 +113,11 @@
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
-    <Compile Include="Tactics\Behaviour\DropFromInventoryTask.cs" />
     <Compile Include="Tactics\Behaviour\HandOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\IdleTask.cs" />
     <Compile Include="Tactics\Behaviour\IOpenContainerMethod.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
-    <Compile Include="Tactics\Behaviour\DropFromContainerTask.cs" />
     <Compile Include="Tactics\Behaviour\PropTransfer.cs" />
-    <Compile Include="Tactics\Behaviour\StoreToContainerTask.cs" />
-    <Compile Include="Tactics\Behaviour\ContainerTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\TransferPropsTask.cs" />
     <Compile Include="MapGenerators\GenerationHelper.cs" />
     <Compile Include="MapGenerators\ISectorGeneratorRandomSource.cs" />
