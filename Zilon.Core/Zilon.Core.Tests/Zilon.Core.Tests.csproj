@@ -86,8 +86,8 @@
     <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PersonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schemes\SchemeServiceTests.cs" />
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
-    <Compile Include="Services\SchemeServiceTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />

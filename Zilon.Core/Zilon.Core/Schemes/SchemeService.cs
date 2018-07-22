@@ -46,7 +46,6 @@ namespace Zilon.Core.Schemes
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
-            //TODO Добавить тесты на проверку каждого типа схемы - загрузка, десериализация
             //TODO Подумать, как избавиться от такой кучи if.
             if (typeof(TScheme) == typeof(MapScheme))
             {
@@ -83,7 +82,7 @@ namespace Zilon.Core.Schemes
                 return _trophyTables[sid] as TScheme;
             }
 
-            throw new ArgumentException("Указан неизвестный тип схемы");
+            throw new ArgumentException("Указан неизвестный тип схемы.");
         }
 
         public TScheme[] GetSchemes<TScheme>() where TScheme : class, IScheme
@@ -123,7 +122,7 @@ namespace Zilon.Core.Schemes
                 return _trophyTables.Values.Cast<TScheme>().ToArray();
             }
 
-            throw new ArgumentException();
+            throw new ArgumentException("Указан неизвестный тип схемы.");
         }
 
         private void LoadSchemes<T>(ISchemeLocator schemeLocator,
