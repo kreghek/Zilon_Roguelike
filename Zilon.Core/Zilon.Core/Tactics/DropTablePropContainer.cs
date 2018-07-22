@@ -139,7 +139,7 @@ namespace Zilon.Core.Tactics
 
                     var propScheme = _schemeService.GetScheme<PropScheme>(record.Concept);
 
-                    return new Recipe(scheme, propScheme);
+                    return new Concept(scheme, propScheme);
 
                 default:
                     throw new ArgumentException($"Неизвестный класс {propClass} объекта {scheme}.");

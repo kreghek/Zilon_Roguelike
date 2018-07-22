@@ -77,7 +77,7 @@
     <Compile Include="Persons\PersonService.cs" />
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\PropFactory.cs" />
-    <Compile Include="Persons\Recipe.cs" />
+    <Compile Include="Persons\Concept.cs" />
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />

@@ -2,26 +2,26 @@
 
 namespace Zilon.Core.Persons
 {
-    //TODO переименовать в концепт
     /// <summary>
-    /// Рецепт крафта.
+    /// Концепт предмета.
     /// </summary>
     /// <remarks>
     /// Является предметом, который можно изучить любым персонажем,
-    /// если он соответствует условиям рецепта.
+    /// если он соответствует условиям концепта.
     /// 
     /// Концепт (рецепт) является концептуальной схемой предмета (черновик, чертёж).
     /// После прототипирования концепта персонаж изучает результат и уже точно знает рецепт
     /// изготовления предмета.
     /// </remarks>
-    public class Recipe : PropBase
+    public class Concept : PropBase
     {
 
         /// <summary>
         /// Конструктор.
         /// </summary>
-        /// <param name="scheme"> Схема рецепта. </param>
-        public Recipe(PropScheme scheme, PropScheme prop) : base(scheme)
+        /// <param name="scheme"> Схема концепта. Сейчас всегда одна схема - conceptual-scheme. </param>
+        /// <param name="prop"> Схема предмета, описанного в концепте. </param>
+        public Concept(PropScheme scheme, PropScheme prop) : base(scheme)
         {
             Prop = prop;
         }
@@ -29,6 +29,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Предмет, описанный в концептуальной схеме.
         /// </summary>
-        public PropScheme Prop { get; set; }
+        public PropScheme Prop { get; }
     }
 }

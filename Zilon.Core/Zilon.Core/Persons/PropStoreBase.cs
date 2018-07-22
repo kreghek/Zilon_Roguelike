@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Zilon.Core.Persons
 {
+//TODO Добавить описание
     public abstract class PropStoreBase : IPropStore
     {
         private readonly HashSet<IProp> _items;
@@ -34,8 +35,8 @@ namespace Zilon.Core.Persons
                     StackResource(resource);
                     break;
 
-                case Recipe recipe:
-                    AddRecipe(recipe);
+                case Concept concept:
+                    AddConcept(concept);
                     break;
             }
         }
@@ -52,8 +53,8 @@ namespace Zilon.Core.Persons
                     RemoveResource(resource);
                     break;
 
-                case Recipe recipe:
-                    RemoveRecipe(recipe);
+                case Concept concept:
+                    RemoveConcept(concept);
                     break;
             }
         }
@@ -79,10 +80,10 @@ namespace Zilon.Core.Persons
             DoRemovedProp(equipment);
         }
 
-        private void AddRecipe(Recipe recipe)
+        private void AddConcept(Concept concept)
         {
-            _items.Add(recipe);
-            DoAddProp(recipe);
+            _items.Add(concept);
+            DoAddProp(concept);
         }
 
         private void AddEquipment(Equipment equipment)
@@ -108,9 +109,9 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void RemoveRecipe(Recipe recipe)
+        private void RemoveConcept(Concept concept)
         {
-            _items.Remove(recipe);
+            _items.Remove(concept);
         }
 
         private void RemoveResource(Resource resource)

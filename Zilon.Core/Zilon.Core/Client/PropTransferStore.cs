@@ -6,6 +6,9 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.Client
 {
+    /// <summary>
+    /// Хранилище, используемое для трансфера предметов.
+    /// </summary>
     public class PropTransferStore : IPropStore
     {
         public PropTransferStore(IPropStore propStore)
@@ -56,7 +59,7 @@ namespace Zilon.Core.Client
                         break;
 
                     case Equipment equipment:
-                    case Recipe recipe:
+                    case Concept concept:
                         var isRemoved = PropRemoved.Contains(prop);
 
                         if (!isRemoved)
@@ -80,7 +83,7 @@ namespace Zilon.Core.Client
                         break;
 
                     case Equipment equipment:
-                    case Recipe recipe:
+                    case Concept concept:
                         result.Add(prop);
                         break;
 
@@ -105,7 +108,7 @@ namespace Zilon.Core.Client
                     break;
 
                 case Equipment equipment:
-                case Recipe recipe:
+                case Concept concept:
                     TransferNoCount(prop, PropRemoved, PropAdded);
                     break;
             }
@@ -153,7 +156,7 @@ namespace Zilon.Core.Client
                     break;
 
                 case Equipment equipment:
-                case Recipe recipe:
+                case Concept recipe:
                     TransferNoCount(prop, PropAdded, PropRemoved);
                     break;
             }
