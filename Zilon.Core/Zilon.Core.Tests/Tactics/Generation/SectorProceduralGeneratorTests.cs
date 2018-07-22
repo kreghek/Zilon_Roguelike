@@ -246,12 +246,12 @@ namespace Zilon.Core.Tactics.Generation.Tests
             schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.IsAny<string>()))
                 .Returns(propScheme);
 
-            var trophyTableScheme = new TrophyTableScheme
+            var trophyTableScheme = new DropTableScheme
             {
                 Sid = "default",
-                Records = new TrophyTableRecordSubScheme[0]
+                Records = new DropTableRecordSubScheme[0]
             };
-            schemeServiceMock.Setup(x => x.GetScheme<TrophyTableScheme>(It.IsAny<string>()))
+            schemeServiceMock.Setup(x => x.GetScheme<DropTableScheme>(It.IsAny<string>()))
                 .Returns(trophyTableScheme);
 
             var schemeService = schemeServiceMock.Object;

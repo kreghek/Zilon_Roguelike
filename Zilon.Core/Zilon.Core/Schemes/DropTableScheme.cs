@@ -1,15 +1,14 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    //TODO Переименовать в DropTable
     /// <summary>
     /// Схема тарблицы дропа.
     /// </summary>
-    public sealed class TrophyTableScheme: SchemeBase
+    public sealed class DropTableScheme: SchemeBase
     {
         /// <summary>
         /// Записи в таблице дропа.
         /// </summary>
-        public TrophyTableRecordSubScheme[] Records { get; set; }
+        public DropTableRecordSubScheme[] Records { get; set; }
 
         /// <summary>
         /// Количество бросков на проверку выпавшей записи.

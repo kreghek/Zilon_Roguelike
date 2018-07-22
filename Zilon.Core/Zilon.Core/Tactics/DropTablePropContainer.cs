@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -8,9 +9,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
+//TODO Добавить описание
     public class DropTablePropContainer : IPropContainer
     {
-        private readonly TrophyTableScheme[] _dropTables;
+        private readonly DropTableScheme[] _dropTables;
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
@@ -20,7 +22,7 @@ namespace Zilon.Core.Tactics
         public IPropStore Content { get; }
 
         public DropTablePropContainer(IMapNode node,
-            TrophyTableScheme[] dropTables,
+            DropTableScheme[] dropTables,
             IDice dice, 
             ISchemeService schemeService,
             IPropFactory propFactory)
@@ -40,7 +42,7 @@ namespace Zilon.Core.Tactics
         {
             //TODO Модификаторы нужно будет получать из игрока, актёра, который открыл сундук и актёров, которые на это могу повлиять.
             var modificators = new TrophyTableModificatorcs[0];
-            var rolledRecords = new List<TrophyTableRecordSubScheme>();
+            var rolledRecords = new List<DropTableRecordSubScheme>();
 
             foreach (var table in _dropTables)
             {
@@ -73,7 +75,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private TrophyTableRecordMod[] GetModRecords(IEnumerable<TrophyTableRecordSubScheme> records, 
+        private TrophyTableRecordMod[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records, 
             IEnumerable<TrophyTableModificatorcs> modificators)
         {
             var resultList = new List<TrophyTableRecordMod>();
@@ -101,7 +103,7 @@ namespace Zilon.Core.Tactics
             return resultList.ToArray();
         }
 
-        private IProp GenerateTrophyFromTable(TrophyTableRecordSubScheme record, IDice dice, ISchemeService schemeService)
+        private IProp GenerateTrophyFromTable(DropTableRecordSubScheme record, IDice dice, ISchemeService schemeService)
         {
             var scheme = schemeService.GetScheme<PropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);

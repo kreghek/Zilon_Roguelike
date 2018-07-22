@@ -23,10 +23,10 @@ namespace Zilon.Core.Tactics.Tests
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
 
-            var dropTable = new TrophyTableScheme {
+            var dropTable = new DropTableScheme {
                 Rolls = 1,
                 Records = new[] {
-                    new TrophyTableRecordSubScheme{
+                    new DropTableRecordSubScheme{
                         SchemeSid = "test-prop",
                         MinCount = 1,
                         MaxCount = 1,

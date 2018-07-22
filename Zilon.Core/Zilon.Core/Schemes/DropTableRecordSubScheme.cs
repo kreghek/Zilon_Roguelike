@@ -7,7 +7,7 @@
     /// Содержит информацию о том, какой продемет может выпасть,
     /// количество/качество и с какой вероятностью.
     /// </remarks>
-    public sealed class TrophyTableRecordSubScheme: SubSchemeBase
+    public sealed class DropTableRecordSubScheme: SubSchemeBase
     {
         /// <summary>
         /// Схема предмета.

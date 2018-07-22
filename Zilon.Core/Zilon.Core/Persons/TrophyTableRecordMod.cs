@@ -2,9 +2,10 @@
 
 namespace Zilon.Core.Persons
 {
+    //TODO Добавить описание
     public sealed class TrophyTableRecordMod
     {
-        public TrophyTableRecordSubScheme Record { get; set; }
+        public DropTableRecordSubScheme Record { get; set; }
         public int Weight { get; set; }
     }
 }

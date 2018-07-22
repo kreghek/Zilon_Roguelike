@@ -99,8 +99,8 @@
     <Compile Include="Schemes\PersonScheme.cs" />
     <Compile Include="Schemes\PropScheme.cs" />
     <Compile Include="Schemes\TacticalActUpdateSubScheme.cs" />
-    <Compile Include="Schemes\TrophyTableRecord.cs" />
-    <Compile Include="Schemes\TrophyTableScheme.cs" />
+    <Compile Include="Schemes\DropTableRecordSubScheme.cs" />
+    <Compile Include="Schemes\DropTableScheme.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Tactics\ActorManager.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />

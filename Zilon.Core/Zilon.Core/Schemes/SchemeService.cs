@@ -17,7 +17,7 @@ namespace Zilon.Core.Schemes
         private readonly Dictionary<string, PropScheme> _props;
         private readonly Dictionary<string, TacticalActScheme> _tacticalActs;
         private readonly Dictionary<string, PersonScheme> _persons;
-        private readonly Dictionary<string, TrophyTableScheme> _trophyTables;
+        private readonly Dictionary<string, DropTableScheme> _trophyTables;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
@@ -39,7 +39,8 @@ namespace Zilon.Core.Schemes
             _persons = new Dictionary<string, PersonScheme>();
             LoadSchemes(schemeLocator, "Persons", _persons);
 
-            _trophyTables = new Dictionary<string, TrophyTableScheme>();
+//TODO Переименовать папку TrophyTables в DropTable
+            _trophyTables = new Dictionary<string, DropTableScheme>();
             LoadSchemes(schemeLocator, "TrophyTables", _trophyTables);
         }
 
@@ -77,7 +78,7 @@ namespace Zilon.Core.Schemes
                 return _persons[sid] as TScheme;
             }
 
-            if (typeof(TScheme) == typeof(TrophyTableScheme))
+            if (typeof(TScheme) == typeof(DropTableScheme))
             {
                 return _trophyTables[sid] as TScheme;
             }
@@ -117,7 +118,7 @@ namespace Zilon.Core.Schemes
                 return _persons.Values.Cast<TScheme>().ToArray();
             }
 
-            if (typeof(TScheme) == typeof(TrophyTableScheme))
+            if (typeof(TScheme) == typeof(DropTableScheme))
             {
                 return _trophyTables.Values.Cast<TScheme>().ToArray();
             }
