@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -11,13 +12,13 @@ namespace Zilon.Core.Tactics
     //TODO Написать/перенести тесты
     public class DropResolver : IDropResolver
     {
-        private readonly IDice _dice;
+        private readonly IDropResolverRandomSource _randomSource;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
 
-        public DropResolver(IDice dice, ISchemeService schemeService, IPropFactory propFactory)
+        public DropResolver(IDropResolverRandomSource randomSource, ISchemeService schemeService, IPropFactory propFactory)
         {
-            _dice = dice;
+            _randomSource = randomSource;
             _schemeService = schemeService;
             _propFactory = propFactory;
         }
@@ -32,7 +33,7 @@ namespace Zilon.Core.Tactics
         private IProp[] GenerateContent(DropTableScheme[] dropTables)
         {
             //TODO Модификаторы нужно будет получать из игрока, актёра, который открыл сундук и актёров, которые на это могу повлиять.
-            var modificators = new TrophyTableModificatorcs[0];
+            var modificators = new DropTableModificator[0];
             var rolledRecords = new List<DropTableRecordSubScheme>();
 
             foreach (var table in dropTables)
@@ -40,15 +41,15 @@ namespace Zilon.Core.Tactics
                 var records = table.Records;
                 var recMods = GetModRecords(records, modificators);
 
-                var totalWeight = recMods.Sum(x => x.Weight);
+                var totalWeight = recMods.Sum(x => x.ModifiedWeight);
 
                 // Записи с нулевым весом всегда добавляются.
                 rolledRecords.AddRange(records.Where(x => x.Weight == 0));
 
                 for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
                 {
-                    var roll = _dice.Roll(totalWeight);
-                    var recMod = TrophyRoller.GetRecord(recMods, roll);
+                    var rolledWeight = _randomSource.RollWeight(totalWeight);
+                    var recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
                     if (recMod.Record.SchemeSid == null)
                         continue;
@@ -58,50 +59,53 @@ namespace Zilon.Core.Tactics
             }
 
             //TODO Разобрать эту конструкцию на более примитивные.
-            var props = rolledRecords.Select(x => GenerateTrophyFromTable(x, _dice, _schemeService)).ToArray();
+            var props = rolledRecords.Select(x => GenerateTrophyFromTable(x)).ToArray();
 
             return props;
         }
 
-        private TrophyTableRecordMod[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
-            IEnumerable<TrophyTableModificatorcs> modificators)
+        private DropTableModRecord[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
+            IEnumerable<DropTableModificator> modificators)
         {
-            var resultList = new List<TrophyTableRecordMod>();
+            var resultList = new List<DropTableModRecord>();
             foreach (var record in records)
             {
                 if (record.SchemeSid == null)
                 {
-                    resultList.Add(new TrophyTableRecordMod
+                    resultList.Add(new DropTableModRecord
                     {
                         Record = record,
-                        Weight = record.Weight
+                        ModifiedWeight = record.Weight
                     });
                     continue;
                 }
 
                 var recordModificators = modificators.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
-                var totalWeightBonus = recordModificators.Sum(x => x.Bonus);
-                resultList.Add(new TrophyTableRecordMod
+                var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
+                resultList.Add(new DropTableModRecord
                 {
                     Record = record,
-                    Weight = (int)Math.Round(record.Weight + record.Weight * totalWeightBonus)
+                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 
             return resultList.ToArray();
         }
 
-        private IProp GenerateTrophyFromTable(DropTableRecordSubScheme record, IDice dice, ISchemeService schemeService)
+        private IProp GenerateTrophyFromTable(DropTableRecordSubScheme record)
         {
-            var scheme = schemeService.GetScheme<PropScheme>(record.SchemeSid);
+            var scheme = _schemeService.GetScheme<PropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);
 
             switch (propClass)
             {
                 case PropClass.Equipment:
                     //TODO Вынести в отдельный метод. Чтобы можно было использовать в крафте.
-                    var powerRange = record.MaxPower - record.MinPower;
-                    var power = dice.Roll(powerRange) + record.MinPower;
+                    //TODO Вынести это в реализацию источника рандома
+                    //var powerRange = record.MaxPower - record.MinPower;
+                    //var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower) + record.MinPower;
+
+                    var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower);
 
                     //TODO Вернуть, когда для экипировки будут бонусы
                     //var bonusPowers = new Dictionary<PropBonusType, int>();
@@ -119,8 +123,11 @@ namespace Zilon.Core.Tactics
                     return equipment;
 
                 case PropClass.Resource:
-                    var countRange = record.MaxCount - record.MinCount;
-                    var rolledCount = _dice.Roll(countRange) + record.MinCount;
+                    //TODO Вынести это в реализацию источника рандома
+                    //var countRange = record.MaxCount - record.MinCount;
+                    //var rolledCount = _dice.Roll(countRange) + record.MinCount;
+
+                    var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
                     return new Resource(scheme, rolledCount);
 
                 case PropClass.Concept:

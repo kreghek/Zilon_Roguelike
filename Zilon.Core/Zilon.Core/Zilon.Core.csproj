@@ -83,9 +83,9 @@
     <Compile Include="Persons\Resource.cs" />
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />
-    <Compile Include="Persons\TrophyRoller.cs" />
-    <Compile Include="Persons\TrophyTableModificatorcs.cs" />
-    <Compile Include="Persons\TrophyTableRecordMod.cs" />
+    <Compile Include="CommonServices\DropRoller.cs" />
+    <Compile Include="Persons\DropTableModificator.cs" />
+    <Compile Include="Persons\DropTableModRecord.cs" />
     <Compile Include="Schemes\CraftSubScheme.cs" />
     <Compile Include="Schemes\InstrumentFunctions.cs" />
     <Compile Include="Schemes\InstrumentLevelFunctionSubScheme.cs" />
@@ -131,6 +131,7 @@
     <Compile Include="Tactics\DropTablePropContainer.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
+    <Compile Include="Tactics\IDropResolverRandomSource.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />

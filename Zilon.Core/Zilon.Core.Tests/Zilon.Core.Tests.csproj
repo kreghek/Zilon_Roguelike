@@ -80,6 +80,7 @@
     <Compile Include="Client\PropTransferMachineTests.cs" />
     <Compile Include="Client\PropTransferStoreTests.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
+    <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
     <Compile Include="Persons\EquipmentTests.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
+    <Compile Include="Tactics\DropResolverTests.cs" />
     <Compile Include="Tactics\DropTablePropContainerTests.cs" />
     <Compile Include="Tactics\Generation\GenerationHelperTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />

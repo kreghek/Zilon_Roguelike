@@ -4,7 +4,9 @@ using System.Linq;
 
 namespace Zilon.Core.Persons
 {
-//TODO Добавить описание
+    /// <summary>
+    /// Базовый класс для всех хранилищь предметов.
+    /// </summary>
     public abstract class PropStoreBase : IPropStore
     {
         protected readonly HashSet<IProp> _items;
