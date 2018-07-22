@@ -11,6 +11,8 @@ using Zilon.Core.Tactics;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
+	private IActor _actor;
+	
 	public Transform InventoryItemsParent;
 	public PropItemVm PropItemPrefab;
 
@@ -38,7 +40,18 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	public void Init(IActor actor)
 	{
-		var inventory = actor.Inventory;
+		_actor = actor;
+		var inventory = _actor.Inventory;
+		UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+		
+		inventory.Added += InventoryOnContentChanged;
+		inventory.Removed += InventoryOnContentChanged;
+		inventory.Changed += InventoryOnContentChanged;
+	}
+
+	private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
+	{
+		var inventory = _actor.Inventory;
 		UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 	}
 

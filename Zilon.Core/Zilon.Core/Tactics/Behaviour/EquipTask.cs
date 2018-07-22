@@ -22,7 +22,18 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
-            Actor.Person.EquipmentCarrier.SetEquipment(_equipment, _slotIndex);
+            var equipmentCarrier = Actor.Person.EquipmentCarrier;
+
+            var currentEquipment = equipmentCarrier.Equipments[_slotIndex];
+            if (currentEquipment != null)
+            {
+                Actor.Inventory.Add(currentEquipment);
+            }
+
+            equipmentCarrier.SetEquipment(_equipment, _slotIndex);
+
+            Actor.Inventory.Remove(_equipment);
+
             IsComplete = true;
         }
     }
