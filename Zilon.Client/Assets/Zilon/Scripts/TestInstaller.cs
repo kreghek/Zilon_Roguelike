@@ -29,6 +29,9 @@ public class TestInstaller : MonoInstaller<TestInstaller>
 
         Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(FindObjectOfType<SectorModalManager>()).AsSingle();
+        
+        // Специализированные сервисы для Ui.
+        Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
 
         // Комманды актёра.
         Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
@@ -39,5 +42,8 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         // Комадны для UI.
         Container.Bind<ICommand>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
+        
+        // Специализированные команды для Ui.
+        Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
     }
 }

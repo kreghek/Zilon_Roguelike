@@ -13,6 +13,8 @@ public class PropItemVm : MonoBehaviour
 	
 	public string Sid;
 
+	public IProp Prop => _prop;
+
 	public event EventHandler Click;
 
 	public void Init(IProp prop)

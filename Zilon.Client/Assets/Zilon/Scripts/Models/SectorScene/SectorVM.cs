@@ -152,7 +152,7 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        var propScheme = _schemeService.GetScheme<PropScheme>("pistol");
+        var propScheme = _schemeService.GetScheme<PropScheme>("short-sword");
         var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);
@@ -257,9 +257,9 @@ class SectorVM : MonoBehaviour
         person.EquipmentCarrier.SetEquipment(equipment, 0);
 
         var inventory = new Inventory();
-        var foodScheme = _schemeService.GetScheme<PropScheme>("electronics");
-        var resource = new Resource(foodScheme, 3);
-        inventory.Add(resource);
+        
+        AddTestPropsInInventory(inventory);
+
         var actor = new Actor(person, player, startNode, inventory);
 
         actorManager.Add(actor);
@@ -271,6 +271,17 @@ class SectorVM : MonoBehaviour
         actorVm.transform.position = actorPosition;
         actorVm.Actor = actor;
         return actorVm;
+    }
+
+    private void AddTestPropsInInventory(Inventory inventory)
+    {
+        var foodScheme = _schemeService.GetScheme<PropScheme>("electronics");
+        var resource = new Resource(foodScheme, 3);
+        inventory.Add(resource);
+
+        var pistolScheme = _schemeService.GetScheme<PropScheme>("pistol");
+        var pistolEquipment = _propFactory.CreateEquipment(pistolScheme);
+        inventory.Add(pistolEquipment);
     }
 
     private void MapNodeVm_OnSelect(object sender, EventArgs e)

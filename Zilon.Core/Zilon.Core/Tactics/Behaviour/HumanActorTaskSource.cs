@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -12,12 +12,15 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IActor _currentActor;
         private IActorTask _currentTask;
 
+        //TODO обобщить намерения.
         private HexNode _targetNode;
         private bool _taskIsActual;
         private IAttackTarget _attackTarget;
         private IPropContainer _propContainer;
         private IOpenContainerMethod _method;
         private PropTransfer[] _transfers;
+        private Equipment _equipment;
+        private int _slotIndex;
 
         private readonly IDecisionSource _decisionSource;
 
@@ -76,6 +79,12 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
 
                 _currentTask = new TransferPropsTask(_currentActor, _transfers);
+                return new[] { _currentTask };
+            }
+
+            if (_equipment != null)
+            {
+                _currentTask = new EquipTask(_currentActor, _equipment, _slotIndex);
                 return new[] { _currentTask };
             }
 
@@ -138,7 +147,7 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Hамерение взять предметы в инвентарь.
+        /// Hамерение перенести предметы между хранилищами (инвентарь-сундук-пол).
         /// </summary>
         /// <param name="props"></param>
         public void IntentTransferProps(IEnumerable<PropTransfer> transfers)
@@ -146,6 +155,18 @@ namespace Zilon.Core.Tactics.Behaviour
             //TODO Сделать генерацию контейнеров для сброшенных на пол пердметов.
             ClearCurrentTask();
             _transfers = transfers.ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="equipment"></param>
+        /// <param name="slotIndex"></param>
+        public void IntentEquip(Equipment equipment, int slotIndex)
+        {
+            ClearCurrentTask();
+            _equipment = equipment;
+            _slotIndex = slotIndex;
         }
 
         private void ClearCurrentTask()

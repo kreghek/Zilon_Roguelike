@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using Assets.Zilon.Scripts;
+using Assets.Zilon.Scripts.Services;
+using JetBrains.Annotations;
 using UnityEngine;
+using Zenject;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -9,6 +13,28 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
 	public Transform InventoryItemsParent;
 	public PropItemVm PropItemPrefab;
+
+	[NotNull] [Inject] private IInventoryState _inventoryState;
+
+	public void Start()
+	{
+		var slots = GetComponentsInChildren<InventorySlotVm>();
+		foreach (var slot in slots)
+		{
+			slot.Click += SlotOnClick;
+		}
+	}
+
+	private void SlotOnClick(object sender, EventArgs e)
+	{
+		var slotVm = sender as InventorySlotVm;
+		if (slotVm == null)
+		{
+			throw new NotSupportedException();
+		}
+
+		slotVm.ApplyEquipment();
+	}
 
 	public void Init(IActor actor)
 	{
@@ -52,5 +78,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 			var isSelected = itemVm == currentItemVm;
 			itemVm.SetSelectedState(isSelected);
 		}
+
+		_inventoryState.SelectedProp = currentItemVm;
 	}
 }

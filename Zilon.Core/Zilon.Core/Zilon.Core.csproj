@@ -60,6 +60,7 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="Tactics\Behaviour\EquipTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
     <Compile Include="Tactics\DropResolverRandomSource.cs" />
     <Compile Include="Tactics\DropTableChestStore.cs" />
