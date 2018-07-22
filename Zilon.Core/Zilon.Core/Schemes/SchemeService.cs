@@ -17,7 +17,7 @@ namespace Zilon.Core.Schemes
         private readonly Dictionary<string, PropScheme> _props;
         private readonly Dictionary<string, TacticalActScheme> _tacticalActs;
         private readonly Dictionary<string, PersonScheme> _persons;
-        private readonly Dictionary<string, DropTableScheme> _trophyTables;
+        private readonly Dictionary<string, DropTableScheme> _dropTables;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
@@ -39,9 +39,8 @@ namespace Zilon.Core.Schemes
             _persons = new Dictionary<string, PersonScheme>();
             LoadSchemes(schemeLocator, "Persons", _persons);
 
-//TODO Переименовать папку TrophyTables в DropTable
-            _trophyTables = new Dictionary<string, DropTableScheme>();
-            LoadSchemes(schemeLocator, "TrophyTables", _trophyTables);
+            _dropTables = new Dictionary<string, DropTableScheme>();
+            LoadSchemes(schemeLocator, "DropTables", _dropTables);
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
@@ -79,7 +78,7 @@ namespace Zilon.Core.Schemes
 
             if (typeof(TScheme) == typeof(DropTableScheme))
             {
-                return _trophyTables[sid] as TScheme;
+                return _dropTables[sid] as TScheme;
             }
 
             throw new ArgumentException("Указан неизвестный тип схемы.");
@@ -119,7 +118,7 @@ namespace Zilon.Core.Schemes
 
             if (typeof(TScheme) == typeof(DropTableScheme))
             {
-                return _trophyTables.Values.Cast<TScheme>().ToArray();
+                return _dropTables.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException("Указан неизвестный тип схемы.");
