@@ -1,7 +1,6 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 
-namespace Assets.Zilon.Scripts.Services
+namespace Zilon.Core.Client
 {
     public interface ISectorModalManager
     {

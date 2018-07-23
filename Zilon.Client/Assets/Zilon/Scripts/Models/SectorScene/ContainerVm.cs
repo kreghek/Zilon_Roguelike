@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
-public class ContainerVm : MonoBehaviour
+public class ContainerVm : MonoBehaviour, IContainerViewModel
 {
 
 	public event EventHandler Selected;

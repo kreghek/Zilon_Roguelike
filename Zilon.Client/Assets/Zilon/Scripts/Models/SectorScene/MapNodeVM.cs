@@ -2,10 +2,11 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-public class MapNodeVM : MonoBehaviour
+public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 {
     public GameObject[] Walls;
     public bool IsExit;

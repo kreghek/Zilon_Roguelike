@@ -1,10 +1,10 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
+﻿using Zilon.Core.Client;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
-    class NextTurnCommand: ActorCommandBase
+    //TODO Добавить тесты
+    public class NextTurnCommand: ActorCommandBase
     {
-        
         public override bool CanExecute()
         {
             return true;

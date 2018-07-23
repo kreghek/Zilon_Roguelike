@@ -1,7 +1,6 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Tactics.Behaviour;
 
-namespace Assets.Zilon.Scripts.Models.SectorScene
+namespace Zilon.Core.Client
 {
     /// <summary>
     /// Состояние ввода игрока.

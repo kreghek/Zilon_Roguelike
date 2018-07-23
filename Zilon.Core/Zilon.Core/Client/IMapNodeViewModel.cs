@@ -4,6 +4,6 @@ namespace Zilon.Core.Client
 {
     public interface IMapNodeViewModel
     {
-        IMapNode Node { get; set; }
+        HexNode Node { get; set; }
     }
 }

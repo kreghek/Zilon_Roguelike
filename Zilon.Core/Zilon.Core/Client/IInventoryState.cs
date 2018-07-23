@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Client;
-
-namespace Assets.Zilon.Scripts.Services
+﻿namespace Zilon.Core.Client
 {
     public interface IInventoryState
     {

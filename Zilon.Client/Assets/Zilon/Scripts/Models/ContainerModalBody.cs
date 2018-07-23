@@ -1,8 +1,6 @@
 ﻿using System;
 using Assets.Zilon.Scripts;
 using System.Collections.Generic;
-using Assets.Zilon.Scripts.Models.Commands;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;

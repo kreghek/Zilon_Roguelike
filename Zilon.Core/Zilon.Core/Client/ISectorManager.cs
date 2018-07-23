@@ -1,6 +1,6 @@
 ﻿using Zilon.Core.Tactics;
 
-namespace Assets.Zilon.Scripts.Models.SectorScene
+namespace Zilon.Core.Client
 {
     /// <summary>
     /// Интерфейс, который предоставляет доступ к общей информации о текущем секторе.

@@ -1,11 +1,12 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
+﻿using Zilon.Core.Client;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
+    //TODO Добавить тесты
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
-    class AttackCommand : ActorCommandBase
+    public class AttackCommand : ActorCommandBase
     {
         public AttackCommand(ISectorManager sectorManager,
             IPlayerState playerState) :

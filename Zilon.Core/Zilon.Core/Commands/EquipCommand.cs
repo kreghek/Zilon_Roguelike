@@ -1,15 +1,15 @@
 ﻿using System;
-using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
+    //TODO Добавить тесты
     //TODO Выделить общую специализированную команду.
     /// <summary>
     /// Команда на назначение экипировки.
     /// </summary>
-    class EquipCommand : ActorCommandBase
+    public class EquipCommand : ActorCommandBase
     {
         private readonly IInventoryState _inventoryState;
         

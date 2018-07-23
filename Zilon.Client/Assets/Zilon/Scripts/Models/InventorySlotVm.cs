@@ -1,11 +1,9 @@
 ﻿using System;
-using Assets.Zilon.Scripts.Models.Commands;
-using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 

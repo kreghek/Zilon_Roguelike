@@ -1,7 +1,7 @@
 ﻿using System;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using Zenject;
+using Zilon.Core.Client;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once UnusedMember.Global
@@ -24,9 +24,10 @@ public class FollowingCamera : MonoBehaviour
         }
 
         var actorVm = _playerState.ActiveActor;
+        var actorVmMonobehaviour = (ActorVM) actorVm;
         
         transform.position = Vector3.Lerp(transform.position,
-            actorVm.transform.position + new Vector3(0, 0, -10),
+            actorVmMonobehaviour.transform.position + new Vector3(0, 0, -10),
             Time.deltaTime * 3);
     }
 }

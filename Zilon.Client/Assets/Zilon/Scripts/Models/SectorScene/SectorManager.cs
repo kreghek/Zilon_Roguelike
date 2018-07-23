@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics;
+﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Models.SectorScene
 {

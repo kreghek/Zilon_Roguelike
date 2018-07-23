@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorVM : MonoBehaviour
+public class ActorVM : MonoBehaviour, IActorViewModel
 {
     private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;

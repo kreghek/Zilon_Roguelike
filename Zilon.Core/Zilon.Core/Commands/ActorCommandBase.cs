@@ -1,8 +1,8 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
-using Zilon.Core.Commands;
+﻿using Zilon.Core.Client;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
+    //TODO Добавить тесты
     /// <summary>
     /// Базовая команда для всех команд, связанных с изменением состояния актёра.
     /// </summary>

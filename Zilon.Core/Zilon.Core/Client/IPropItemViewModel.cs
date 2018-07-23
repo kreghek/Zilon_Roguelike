@@ -4,6 +4,6 @@ namespace Zilon.Core.Client
 {
     public interface IPropItemViewModel
     {
-        IProp Prop { get; set; }
+        IProp Prop { get; }
     }
 }

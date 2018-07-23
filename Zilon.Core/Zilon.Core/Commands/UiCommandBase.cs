@@ -1,11 +1,11 @@
 ﻿using Zilon.Core.Commands;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
     /// <summary>
     /// Базовая команда для всех команд, связанных с взаимодействием с пользовательским интерфейсом.
     /// </summary>
-    abstract class UiCommandBase : ICommand
+    public abstract class UiCommandBase : ICommand
     {
         public abstract void Execute();
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using Zenject;
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour {

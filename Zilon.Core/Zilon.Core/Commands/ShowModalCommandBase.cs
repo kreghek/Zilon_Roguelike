@@ -1,12 +1,11 @@
-﻿using Assets.Zilon.Scripts.Services;
-using Zilon.Core.Commands;
+﻿using Zilon.Core.Client;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
     /// <summary>
     /// Базовая команда для всех команд, связанных с открытием модальных окон.
     /// </summary>
-    abstract class ShowModalCommandBase : ICommand
+    public abstract class ShowModalCommandBase : UiCommandBase
     {
         protected readonly ISectorModalManager ModalManager;
 
@@ -14,9 +13,5 @@ namespace Assets.Zilon.Scripts.Models.Commands
         {
             ModalManager = modalManager;
         }
-
-        public abstract void Execute();
-
-        public abstract bool CanExecute();
     }
 }

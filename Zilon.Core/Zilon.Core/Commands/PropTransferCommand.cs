@@ -1,9 +1,9 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Tactics.Behaviour;
 
-namespace Assets.Zilon.Scripts.Models.Commands
+namespace Zilon.Core.Commands
 {
+    //TODO Добавить тесты
     /// <summary>
     /// Команда на трансфер предметов между хранилищами.
     /// </summary>

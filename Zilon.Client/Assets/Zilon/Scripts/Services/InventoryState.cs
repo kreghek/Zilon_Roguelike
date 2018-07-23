@@ -1,7 +1,9 @@
-﻿namespace Assets.Zilon.Scripts.Services
+﻿using Zilon.Core.Client;
+
+namespace Assets.Zilon.Scripts.Services
 {
     public class InventoryState: IInventoryState
     {
-        public PropItemVm SelectedProp { get; set; }
+        public IPropItemViewModel SelectedProp { get; set; }
     }
 }

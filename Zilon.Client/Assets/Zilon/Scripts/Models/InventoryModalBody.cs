@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using Assets.Zilon.Scripts;
-using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 

@@ -1,9 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
-public class PropItemVm : MonoBehaviour
+public class PropItemVm : MonoBehaviour, IPropItemViewModel
 {
 	private IProp _prop;
 	

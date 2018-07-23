@@ -1,7 +1,6 @@
-﻿using Assets.Zilon.Scripts.Models.Commands;
-using Assets.Zilon.Scripts.Models.SectorScene;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 
 public class UiHandler : MonoBehaviour {

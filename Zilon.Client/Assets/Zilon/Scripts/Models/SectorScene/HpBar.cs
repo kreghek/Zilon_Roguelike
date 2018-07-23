@@ -1,7 +1,7 @@
-﻿using Assets.Zilon.Scripts.Models.SectorScene;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Zilon.Core.Client;
 
 public class HpBar : MonoBehaviour
 {
