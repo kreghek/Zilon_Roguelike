@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zilon.Core.Client;
@@ -7,22 +8,17 @@ using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorVM : MonoBehaviour, IActorViewModel
+public abstract class ActorViewModelBase : MonoBehaviour, IActorViewModel
 {
-    private TaskCompletionSource<bool> _moveTaskSource;
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
 
-
-    public bool IsEnemy;
-    public GameObject GraphicRoot;
+    public HumanoidActorGraphic GraphicRoot;
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
-    private Task _moveTask;
-    private float _rotationCounter;
 
-    public event EventHandler OnSelected;
+    public event EventHandler Selected;
     public IActor Actor { get; set; }
 
 
@@ -31,16 +27,18 @@ public class ActorVM : MonoBehaviour, IActorViewModel
         Actor.OnMoved += Actor_OnMoved;
         Actor.OnDead += Actor_OnDead;
 
-        if (IsEnemy)
-        {
-            GetComponent<SpriteRenderer>().color = Color.magenta;
-        }
+        PreProcessActor();
     }
+
+    protected abstract void PreProcessActor();
 
     private void Actor_OnDead(object sender, EventArgs e)
     {
-        GetComponent<SpriteRenderer>().color = Color.black;
+        GraphicRoot.IsDead = true;
+        ProcessDeath();
     }
+
+    protected abstract void ProcessDeath();
 
     private void Actor_OnMoved(object sender, EventArgs e)
     {
@@ -60,17 +58,7 @@ public class ActorVM : MonoBehaviour, IActorViewModel
             if (_moveCounter >= END_MOVE_COUNTER)
             {
                 _moveCounter = null;
-
-                _moveTaskSource?.TrySetResult(true);
             }
-        }
-
-        if (!Actor.IsDead)
-        {
-            _rotationCounter += Time.deltaTime * 3;
-            var angle = (float) Math.Sin(_rotationCounter);
-
-            GraphicRoot.transform.Rotate(Vector3.back, angle * 0.3f);
         }
     }
 
@@ -81,6 +69,6 @@ public class ActorVM : MonoBehaviour, IActorViewModel
             return;
         }
 
-        OnSelected?.Invoke(this, new EventArgs());
+        Selected?.Invoke(this, new EventArgs());
     }
 }

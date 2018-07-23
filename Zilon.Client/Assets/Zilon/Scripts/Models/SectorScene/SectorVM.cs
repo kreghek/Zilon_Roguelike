@@ -30,7 +30,9 @@ class SectorVM : MonoBehaviour
     // ReSharper disable NotNullMemberIsNotInitialized
     [NotNull] public MapNodeVM MapNodePrefab;
 
-    [NotNull] public ActorVM ActorPrefab;
+    [NotNull] public HumanActorViewModel HumanActorPrefab;
+    
+    [NotNull] public MonsterActorViewModel MonsterActorPrefab;
 
     [NotNull] public ContainerVm ContainerPrefab;
 
@@ -38,6 +40,7 @@ class SectorVM : MonoBehaviour
 
     [NotNull] public GameObject ShowContainerModalPrefab;
 
+    
     [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private ISectorManager _sectorManager;
@@ -80,7 +83,7 @@ class SectorVM : MonoBehaviour
 
     private void ExecuteCommands()
     {
-        var command = _clientCommandExecutor?.Pop();
+        var command = _clientCommandExecutor.Pop();
 
         command?.Execute();
     }
@@ -156,13 +159,12 @@ class SectorVM : MonoBehaviour
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);
         var playerActorStartNode = sectorGenerator.StartNodes.First();
-        var playerActorVm = CreateActorVm(humanPlayer,
+        var playerActorVm = CreateHumanActorVm(humanPlayer,
             personScheme,
             actorManager,
             playerActorStartNode,
             nodeVMs,
             playerEquipment);
-        playerActorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
 
         _playerState.ActiveActor = playerActorVm;
 
@@ -170,14 +172,13 @@ class SectorVM : MonoBehaviour
         {
             actorManager.Add(monsterActor);
 
-            var actorVm = Instantiate(ActorPrefab, transform);
+            var actorVm = Instantiate(MonsterActorPrefab, transform);
 
             var actorNodeVm = nodeVMs.Single(x => x.Node == monsterActor.Node);
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
             actorVm.transform.position = actorPosition;
             actorVm.Actor = monsterActor;
-            actorVm.IsEnemy = true;
-            actorVm.OnSelected += EnemyActorVm_OnSelected;
+            actorVm.Selected += EnemyActorVm_OnSelected;
         }
 
         foreach (var container in sectorGenerator.Containers)
@@ -234,7 +235,7 @@ class SectorVM : MonoBehaviour
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
     {
-        var actorVm = sender as ActorVM;
+        var actorVm = sender as HumanActorViewModel;
 
         _playerState.SelectedActor = actorVm;
 
@@ -244,7 +245,7 @@ class SectorVM : MonoBehaviour
         }
     }
 
-    private ActorVM CreateActorVm([NotNull] IPlayer player,
+    private HumanActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
         [NotNull] PersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
@@ -263,12 +264,15 @@ class SectorVM : MonoBehaviour
 
         actorManager.Add(actor);
 
-        var actorVm = Instantiate(ActorPrefab, transform);
+        var actorVm = Instantiate(HumanActorPrefab, transform);
 
         var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
         var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
         actorVm.transform.position = actorPosition;
         actorVm.Actor = actor;
+        
+        actorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        
         return actorVm;
     }
 
