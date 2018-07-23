@@ -45,13 +45,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\FloorPropContainer.cs" />
+    <Compile Include="Client\IActorViewModel.cs" />
+    <Compile Include="Client\IContainerViewModel.cs" />
+    <Compile Include="Client\IInventoryState.cs" />
+    <Compile Include="Client\IMapNodeViewModel.cs" />
+    <Compile Include="Client\IPlayerState.cs" />
+    <Compile Include="Client\IPropItemViewModel.cs" />
+    <Compile Include="Client\ISectorManager.cs" />
+    <Compile Include="Client\ISectorModalManager.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Commands\ActorCommandBase.cs" />
+    <Compile Include="Commands\AttackCommand.cs" />
+    <Compile Include="Commands\EquipCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ICommandManager.cs" />
+    <Compile Include="Commands\MoveCommand.cs" />
+    <Compile Include="Commands\NextTurnCommand.cs" />
+    <Compile Include="Commands\OpenContainerCommand.cs" />
+    <Compile Include="Commands\PropTransferCommand.cs" />
     <Compile Include="Commands\QueueCommandManager.cs" />
+    <Compile Include="Commands\ShowContainerModalCommand.cs" />
+    <Compile Include="Commands\ShowInventoryModalCommand.cs" />
+    <Compile Include="Commands\ShowModalCommandBase.cs" />
     <Compile Include="Commands\TacticCommandBase.cs" />
+    <Compile Include="Commands\UiCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
