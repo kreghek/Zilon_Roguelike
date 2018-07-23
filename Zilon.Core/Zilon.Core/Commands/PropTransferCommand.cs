@@ -7,7 +7,7 @@ namespace Assets.Zilon.Scripts.Models.Commands
     /// <summary>
     /// Команда на трансфер предметов между хранилищами.
     /// </summary>
-    class PropTrasferCommand : ActorCommandBase
+    public class PropTrasferCommand : ActorCommandBase
     {
         private readonly PropTransferMachine _transferMachine;
 

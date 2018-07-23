@@ -7,9 +7,9 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
     /// Состояние ввода игрока.
     /// </summary>
     /// <remarks>
-    /// Испоьзуется командами для получения ввода игрока. Хранит состояние объектов боя.
+    /// Используется командами для получения ввода игрока. Хранит состояние объектов боя.
     /// </remarks>
-    internal interface IPlayerState
+    public interface IPlayerState
     {
         /// <summary>
         /// Активный актёр.
