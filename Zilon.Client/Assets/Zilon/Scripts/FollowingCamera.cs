@@ -24,7 +24,7 @@ public class FollowingCamera : MonoBehaviour
         }
 
         var actorVm = _playerState.ActiveActor;
-        var actorVmMonobehaviour = (HumanActorViewModel) actorVm;
+        var actorVmMonobehaviour = (ActorViewModel) actorVm;
         
         transform.position = Vector3.Lerp(transform.position,
             actorVmMonobehaviour.transform.position + new Vector3(0, 0, -10),

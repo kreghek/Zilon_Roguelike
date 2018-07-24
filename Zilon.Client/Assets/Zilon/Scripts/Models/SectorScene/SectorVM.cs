@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,9 +31,11 @@ class SectorVM : MonoBehaviour
     // ReSharper disable NotNullMemberIsNotInitialized
     [NotNull] public MapNodeVM MapNodePrefab;
 
-    [NotNull] public HumanActorViewModel HumanActorPrefab;
+    [NotNull] public ActorViewModel ActorPrefab;
     
-    [NotNull] public MonsterActorViewModel MonsterActorPrefab;
+    [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
+    
+    [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
     [NotNull] public ContainerVm ContainerPrefab;
 
@@ -172,7 +175,13 @@ class SectorVM : MonoBehaviour
         {
             actorManager.Add(monsterActor);
 
-            var actorVm = Instantiate(MonsterActorPrefab, transform);
+            var actorVm = Instantiate(ActorPrefab, transform);
+            var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
+            actorVm.GraphicRoot = actorGraphic;
+            
+            var graphicController = actorVm.gameObject.AddComponent<MonsterActorGraphicController>();
+            graphicController.Actor = monsterActor;
+            graphicController.Graphic = actorGraphic;
 
             var actorNodeVm = nodeVMs.Single(x => x.Node == monsterActor.Node);
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
@@ -235,7 +244,7 @@ class SectorVM : MonoBehaviour
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
     {
-        var actorVm = sender as HumanActorViewModel;
+        var actorVm = sender as ActorViewModel;
 
         _playerState.SelectedActor = actorVm;
 
@@ -245,7 +254,7 @@ class SectorVM : MonoBehaviour
         }
     }
 
-    private HumanActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
+    private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
         [NotNull] PersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
@@ -264,7 +273,13 @@ class SectorVM : MonoBehaviour
 
         actorManager.Add(actor);
 
-        var actorVm = Instantiate(HumanActorPrefab, transform);
+        var actorVm = Instantiate(ActorPrefab, transform);
+        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
+        actorVm.GraphicRoot = actorGraphic;
+        
+        var graphicController = actorVm.gameObject.AddComponent<HumanActorGraphicController>();
+        graphicController.Actor = actor;
+        graphicController.Graphic = actorGraphic;
 
         var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
         var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);

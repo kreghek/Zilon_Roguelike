@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zilon.Core.Client;
@@ -8,12 +6,12 @@ using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public abstract class ActorViewModelBase : MonoBehaviour, IActorViewModel
+public class ActorViewModel : MonoBehaviour, IActorViewModel
 {
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
 
-    public HumanoidActorGraphic GraphicRoot;
+    public ActorGraphicBase GraphicRoot;
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
@@ -26,19 +24,12 @@ public abstract class ActorViewModelBase : MonoBehaviour, IActorViewModel
     {
         Actor.OnMoved += Actor_OnMoved;
         Actor.OnDead += Actor_OnDead;
-
-        PreProcessActor();
     }
-
-    protected abstract void PreProcessActor();
 
     private void Actor_OnDead(object sender, EventArgs e)
     {
-        GraphicRoot.IsDead = true;
-        ProcessDeath();
+        GraphicRoot.ProcessDeath();
     }
-
-    protected abstract void ProcessDeath();
 
     private void Actor_OnMoved(object sender, EventArgs e)
     {
