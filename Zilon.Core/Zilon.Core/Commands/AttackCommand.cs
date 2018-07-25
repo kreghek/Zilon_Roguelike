@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+using System.Linq;
+using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
@@ -16,6 +18,21 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
+            var selectedActorViewModel = _playerState.SelectedActor;
+            var targetNode = selectedActorViewModel.Actor.Node;
+
+            var currentNode = _playerState.ActiveActor.Actor.Node;
+
+            var connectedEdge = (from edge in _sectorManager.CurrentSector.Map.Edges
+                                 where edge.Nodes.Contains(currentNode)
+                                 where edge.Nodes.Contains(targetNode)
+                                 select edge).SingleOrDefault();
+
+            if (connectedEdge == null)
+            {
+                return false;
+            }
+
             //TODO Здесь должна быть проверка:
             // 1. Выбран ли вражеский юнит.
             // 2. Находится ли в пределах досягаемости оружия.
@@ -29,6 +46,11 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
+            if (!CanExecute())
+            {
+                throw new InvalidOperationException("Не возможно выполнение команды.");
+            }
+
             var sector = _sectorManager.CurrentSector;
             var selectedActorVM = _playerState.SelectedActor;
 

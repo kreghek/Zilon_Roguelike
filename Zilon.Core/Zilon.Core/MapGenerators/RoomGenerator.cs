@@ -17,21 +17,17 @@ namespace Zilon.Core.Tactics.Generation
 
         private readonly ISectorGeneratorRandomSource _randomSource;
 
+        public StringBuilder Log { get; }
+
         /// <summary>
         /// Стартовая комната. Отсюда игрок будет начинать.
         /// </summary>
-        private Room _startRoom;
+        public Room StartRoom { get; set; }
 
         /// <summary>
         /// Комната с выходом из сектора.
         /// </summary>
-        private Room _exitRoom;
-
-        public StringBuilder Log { get; }
-
-        public Room StartRoom { get => _startRoom; set => _startRoom = value; }
-
-        public Room ExitRoom { get => _exitRoom; set => _exitRoom = value; }
+        public Room ExitRoom { get; set; }
 
         public RoomGenerator(ISectorGeneratorRandomSource randomSource, StringBuilder log)
         {
@@ -67,9 +63,9 @@ namespace Zilon.Core.Tactics.Generation
 
                     rooms.Add(room);
 
-                    if (_startRoom == null)
+                    if (StartRoom == null)
                     {
-                        _startRoom = room;
+                        StartRoom = room;
                     }
 
                     Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
@@ -80,7 +76,7 @@ namespace Zilon.Core.Tactics.Generation
                 }
             }
 
-            _exitRoom = rooms.Last();
+            ExitRoom = rooms.Last();
 
             return rooms;
         }
@@ -214,7 +210,7 @@ namespace Zilon.Core.Tactics.Generation
             var currentNode = room.Nodes.First();
             var targetNode = selectedRoom.Nodes.First();
 
-            var points = CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
+            var points = CubeCoordHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
 
             for (var i = 0; i < points.Length; i++)
             {
@@ -225,33 +221,6 @@ namespace Zilon.Core.Tactics.Generation
                 var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;
             }
-        }
-
-        private static float Lerp(int a, int b, float t)
-        {
-            return a + (b - a) * t;
-        }
-
-        private static CubeCoords LerpCube(CubeCoords a, CubeCoords b, float t)
-        {
-            return new CubeCoords((int)Math.Round(Lerp(a.X, b.X, t)),
-                (int)Math.Round(Lerp(a.Y, b.Y, t)),
-                (int)Math.Round(Lerp(a.Z, b.Z, t)));
-        }
-
-        private static CubeCoords[] CubeDrawLine(CubeCoords a, CubeCoords b)
-        {
-            var n = a.DistanceTo(b);
-
-            var list = new List<CubeCoords>();
-
-            for (var i = 0; i < n; i++)
-            {
-                var point = LerpCube(a, b, 1.0f / n * i);
-                list.Add(point);
-            }
-
-            return list.ToArray();
         }
     }
 }

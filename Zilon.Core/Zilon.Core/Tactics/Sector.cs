@@ -26,6 +26,8 @@ namespace Zilon.Core.Tactics
 
         public IMapNode[] ExitNodes { get; set; }
 
+        public IMap Map => _map;
+
         public Sector(IMap map, 
             IActorManager actorManager, 
             IPropContainerManager propContainerManager)
