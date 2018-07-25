@@ -79,8 +79,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	public void ApplyChanges()
 	{
-		
-	}
+        var inventory = _actor.Inventory;
+        inventory.Added -= InventoryOnContentChanged;
+        inventory.Removed -= InventoryOnContentChanged;
+        inventory.Changed -= InventoryOnContentChanged;
+    }
 
 	public void CancelChanges()
 	{

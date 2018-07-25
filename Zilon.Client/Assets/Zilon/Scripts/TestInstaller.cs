@@ -1,5 +1,6 @@
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
+using UnityEngine;
 using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -27,8 +28,8 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
 
-        Container.Bind<ISchemeLocator>().FromInstance(FindObjectOfType<SchemeLocator>()).AsSingle();
-        Container.Bind<ISectorModalManager>().FromInstance(FindObjectOfType<SectorModalManager>()).AsSingle();
+        Container.Bind<ISchemeLocator>().FromInstance(GetSchemeLocator()).AsSingle();
+        Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         
         // Специализированные сервисы для Ui.
         Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
@@ -45,5 +46,19 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
+    }
+
+    private SchemeLocator GetSchemeLocator()
+    {
+        var schemeLocator = FindObjectOfType<SchemeLocator>();
+        Debug.Log(schemeLocator);
+        return schemeLocator;
+    }
+
+    private SectorModalManager GetSectorModalManager()
+    {
+        var sectorModalManager = FindObjectOfType<SectorModalManager>();
+        Debug.Log(sectorModalManager);
+        return sectorModalManager;
     }
 }
