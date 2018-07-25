@@ -72,7 +72,7 @@
     <Compile Include="Commands\TacticCommandBase.cs" />
     <Compile Include="Commands\UiCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
-    <Compile Include="Common\CubeCoordHelper.cs" />
+    <Compile Include="Common\CubeCoordsHelper.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
     <Compile Include="Logging\LogCodes.cs" />

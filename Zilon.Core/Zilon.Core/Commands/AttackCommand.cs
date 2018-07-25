@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Zilon.Core.Client;
+using Zilon.Core.Common;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
@@ -23,14 +25,31 @@ namespace Zilon.Core.Commands
 
             var currentNode = _playerState.ActiveActor.Actor.Node;
 
-            var connectedEdge = (from edge in _sectorManager.CurrentSector.Map.Edges
-                                 where edge.Nodes.Contains(currentNode)
-                                 where edge.Nodes.Contains(targetNode)
-                                 select edge).SingleOrDefault();
+            var targetHexNode = (HexNode)targetNode;
+            var currentHexNode = (HexNode)currentNode;
 
-            if (connectedEdge == null)
+            var line = CubeCoordsHelper.CubeDrawLine(currentHexNode.CubeCoords, targetHexNode.CubeCoords);
+
+            for (var i = 1; i < line.Length; i++)
             {
-                return false;
+                var prevPoint = line[i - 1];
+                var testPoint = line[i];
+
+                var prevNode = _sectorManager.CurrentSector.Map.Nodes
+                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == prevPoint);
+
+                var testNode = _sectorManager.CurrentSector.Map.Nodes
+                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == testPoint);
+
+                var connectedEdge = (from edge in _sectorManager.CurrentSector.Map.Edges
+                                     where edge.Nodes.Contains(currentNode)
+                                     where edge.Nodes.Contains(targetNode)
+                                     select edge).SingleOrDefault();
+
+                if (connectedEdge == null)
+                {
+                    return false;
+                }
             }
 
             //TODO Здесь должна быть проверка:

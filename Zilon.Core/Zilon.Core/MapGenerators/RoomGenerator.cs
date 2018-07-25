@@ -210,7 +210,7 @@ namespace Zilon.Core.Tactics.Generation
             var currentNode = room.Nodes.First();
             var targetNode = selectedRoom.Nodes.First();
 
-            var points = CubeCoordHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
+            var points = CubeCoordsHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
 
             for (var i = 0; i < points.Length; i++)
             {
