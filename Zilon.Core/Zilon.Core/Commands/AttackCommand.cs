@@ -41,9 +41,12 @@ namespace Zilon.Core.Commands
                 var testNode = _sectorManager.CurrentSector.Map.Nodes
                     .SingleOrDefault(x => ((HexNode)x).CubeCoords == testPoint);
 
-                var connectedEdge = (from edge in _sectorManager.CurrentSector.Map.Edges
-                                     where edge.Nodes.Contains(currentNode)
-                                     where edge.Nodes.Contains(targetNode)
+                var prevEdges = from edge in _sectorManager.CurrentSector.Map.Edges
+                                where edge.Nodes.Contains(prevNode)
+                                select edge;
+
+                var connectedEdge = (from edge in prevEdges
+                                     where edge.Nodes.Contains(testNode)
                                      select edge).SingleOrDefault();
 
                 if (connectedEdge == null)

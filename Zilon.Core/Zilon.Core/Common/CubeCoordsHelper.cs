@@ -33,9 +33,9 @@ namespace Zilon.Core.Common
 
             var list = new List<CubeCoords>();
 
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i <= n; i++)
             {
-                var point = LerpCube(a, b, 1.0f / n * i);
+                var point = LerpCube(a, b, (1.0f / n) * i);
                 list.Add(point);
             }
 
