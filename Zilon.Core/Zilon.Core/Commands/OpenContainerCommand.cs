@@ -1,11 +1,13 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
     //TODO Добавить тесты
     /// <summary>
-    /// Команда на перемещение взвода в указанный узел карты.
+    /// Команда открытие контейнера.
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
@@ -18,12 +20,30 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            //TODO Здесь должна быть проверка
-            return true;
+            var map = _sectorManager.CurrentSector.Map;
+
+            var currentNode = _playerState.ActiveActor.Actor.Node;
+
+            var selectedActorViewModel = _playerState.SelectedActor;
+            var targetNode = selectedActorViewModel.Actor.Node;
+
+            var canExecute = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+
+            //TODO добавить проверки:
+            // 1. Можно ли открыть контейнер.
+            // 2. Способен ли актёр открывать контейнеры.
+            // 3. Находится ли контейнера в зоне видимости.
+
+            return canExecute;
         }
 
         protected override void ExecuteTacticCommand()
         {
+            if (!CanExecute())
+            {
+                throw new InvalidOperationException("Попытка выполнить команду, которая сейчас запредена.");
+            }
+
             var sector = _sectorManager.CurrentSector;
             
             var openMethod = new HandOpenContainerMethod();

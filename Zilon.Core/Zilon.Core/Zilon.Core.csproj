@@ -155,6 +155,7 @@
     <Compile Include="Tactics\IPropContainer.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
+    <Compile Include="Tactics\MapHelper.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
     <Compile Include="Tactics\FixedPropContainer.cs" />
     <Compile Include="Tactics\PropContainerManager.cs" />
