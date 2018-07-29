@@ -80,6 +80,15 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
+    <Compile Include="Schemes\JobScope.cs" />
+    <Compile Include="Schemes\JobType.cs" />
+    <Compile Include="Schemes\LevelStat.cs" />
+    <Compile Include="Schemes\PerkConditionSubScheme.cs" />
+    <Compile Include="Schemes\PerkJob.cs" />
+    <Compile Include="Schemes\PerkLevelSubScheme.cs" />
+    <Compile Include="Schemes\PerkScheme.cs" />
+    <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Tactics\Behaviour\EquipTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
     <Compile Include="Tactics\DropResolverRandomSource.cs" />

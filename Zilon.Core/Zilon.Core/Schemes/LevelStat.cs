@@ -1,0 +1,41 @@
+﻿namespace Zilon.Core.Schemes
+{
+    /// <summary>
+    /// Структура для хранения характеристики.
+    /// </summary>
+    public sealed class PersonStat
+    {
+        /// <summary>
+        /// Базовое значение.
+        /// </summary>
+        public float Base { get; set; }
+
+        /// <summary>
+        /// Показатель увеличения характеристки в зависимости от уровеня.
+        /// </summary>
+        public float LevelInc { get; set; }
+
+        //TODO Это лучше вынести в отдельную службу/хелпер.
+        /// <summary>
+        /// Расчёт текущего хначения характеристики.
+        /// </summary>
+        /// <param name="level"> Актуальный уровень. </param>
+        /// <param name="rarityBonus"> Бонус за редкость персонажа. </param>
+        /// <param name="bonuses"> Прочие бонусы к текущей характеристике. </param>
+        /// <returns> Возвращает актуальное значение характеритсики. </returns>
+        public float GetActualValue(int level, float rarityBonus, PersonStat[] bonuses = null)
+        {
+            var bonusValue = 0f;
+
+            if (bonuses != null)
+            {
+                foreach (var bonus in bonuses)
+                {
+                    bonusValue += bonus.GetActualValue(level, 0);
+                }
+            }
+
+            return (Base + LevelInc * (level - 1)) * (1 + rarityBonus) + bonusValue;
+        }
+    }
+}
