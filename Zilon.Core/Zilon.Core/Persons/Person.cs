@@ -38,6 +38,9 @@ namespace Zilon.Core.Persons
 
             TacticalActCarrier = new TacticalActCarrier();
 
+
+            EvolutionData = new EvolutionData();
+
             CombatStats = new CombatStats() {
                 //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
                 Stats =new[]{
@@ -45,6 +48,16 @@ namespace Zilon.Core.Persons
                     new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 },
                 }
             };
+
+            CalcCombatStats(CombatStats, EvolutionData);
+        }
+
+        private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)
+        {
+            //foreach (var archievedPerk in evolutionData.ArchievedPerks)
+            //{
+                
+            //}
         }
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
