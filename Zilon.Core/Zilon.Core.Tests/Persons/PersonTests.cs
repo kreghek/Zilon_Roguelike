@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 using Zilon.Core.Common;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -30,8 +31,12 @@ namespace Zilon.Core.Tests.Persons
                 Equip = new PropEquipSubScheme()
             };
 
-            var tacticalActScheme = new TacticalActScheme {
-                Efficient = new Range<float>(1, 1)
+            var tacticalActScheme = new TacticalActScheme
+            {
+                Efficient = new Range<float>(1, 1),
+                Dependency = new[] {
+                    new TacticalActDependencySubScheme(CombatStatType.Undefined, 1)
+                }
             };
 
             var equipment = new Equipment(propScheme, new []{ tacticalActScheme });

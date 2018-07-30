@@ -75,6 +75,8 @@
     <Compile Include="Common\CubeCoordsHelper.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
+    <Compile Include="Components\CombatStatItem.cs" />
+    <Compile Include="Components\CombatStatType.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />
     <Compile Include="Schemes\PersonFaction.cs" />
+    <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
     <Compile Include="Tactics\Behaviour\EquipTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
     <Compile Include="Tactics\DropResolverRandomSource.cs" />

@@ -1,17 +1,15 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Базовая реализация набора навыков для боя.
+    /// </summary>
     public class CombatStats : ICombatStats
     {
-        public float Melee { get; }
-
-        public float Ballistic { get; }
-
-        public float Tech { get; }
-
-        public float Medic { get; }
-
-        public float Psy { get; }
-
-        public float Social { get; }
+        /// <summary>
+        /// Перечень навыков.
+        /// </summary>
+        public CombatStatItem[] Stats { get; set; }
     }
 }

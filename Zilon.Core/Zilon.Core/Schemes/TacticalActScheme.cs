@@ -61,5 +61,7 @@ namespace Zilon.Core.Schemes
         /// Куллдаун между использованиями.
         /// </summary>
         public int? Cooldown { get; set; }
+
+        public TacticalActDependencySubScheme[] Dependency { get; set; }
     }
 }

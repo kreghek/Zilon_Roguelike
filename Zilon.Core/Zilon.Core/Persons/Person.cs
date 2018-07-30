@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -37,14 +37,22 @@ namespace Zilon.Core.Persons
             EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
 
             TacticalActCarrier = new TacticalActCarrier();
+
+            CombatStats = new CombatStats() {
+                //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
+                Stats =new[]{
+                    new CombatStatItem {Stat = CombatStatType.Melee, Value = 10 },
+                    new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 },
+                }
+            };
         }
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
         }
 
-        private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
+        private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
         {
             if (equipments == null)
             {
@@ -63,7 +71,7 @@ namespace Zilon.Core.Persons
                 foreach (var actScheme in equipment.Acts)
                 {
                     var equipmentPower = CalcEquipmentEfficient(equipment);
-                    var act = new TacticalAct(equipmentPower, actScheme);
+                    var act = new TacticalAct(equipmentPower, actScheme, combatStats);
 
                     actList.Add(act);
                 }

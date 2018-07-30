@@ -8,44 +8,8 @@ namespace Zilon.Core.Persons
     public interface ICombatStats
     {
         /// <summary>
-        /// Навык рукопашного боя.
+        /// Перечень навыков.
         /// </summary>
-        float Melee { get; }
-
-        /// <summary>
-        /// Навык стрельбы.
-        /// </summary>
-        float Ballistic { get; }
-
-        /// <summary>
-        /// Знание техники.
-        /// </summary>
-        /// <remarks>
-        /// Влияет применение действий, требующих использование сложных
-        /// технических устройств.
-        /// </remarks>
-        float Tech { get; }
-
-        /// <summary>
-        /// Медицина.
-        /// </summary>
-        float Medic { get; }
-
-        /// <summary>
-        /// Псионические способности.
-        /// </summary>
-        /// <remarks>
-        /// Магия, гипноз и т.д.
-        /// </remarks>
-        float Psy { get; }
-
-        /// <summary>
-        /// Понимание социума.
-        /// </summary>
-        /// <remarks>
-        /// Влияет на действия, требующих влияние на индивидуумов общества.
-        /// Например, страх или насмешка.
-        /// </remarks>
-        float Social { get; }
+        CombatStatItem[] Stats { get; }
     }
 }

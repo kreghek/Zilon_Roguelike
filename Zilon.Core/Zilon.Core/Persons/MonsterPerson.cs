@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Common;
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -24,15 +25,26 @@ namespace Zilon.Core.Persons
         {
             TacticalActCarrier = new TacticalActCarrier();
 
-            var scheme = new TacticalActScheme
+            var tacticalActScheme = new TacticalActScheme
             {
                 Efficient = new Range<float>(1, 1),
                 MinRange = 1,
-                MaxRange = 1
+                MaxRange = 1,
+                Dependency = new[] {
+                    new TacticalActDependencySubScheme(CombatStatType.Undefined, 1)
+                }
             };
 
+            var combatStats = new CombatStats
+            {
+                Stats = new[] {
+                    new CombatStatItem{Stat = CombatStatType.Undefined, Value = 10 }
+                }
+            };
+
+            //TODO Ввести MonsterAct без зависимости от навыков
             TacticalActCarrier.Acts = new TacticalAct[] {
-                new TacticalAct(1, scheme)
+                new TacticalAct(1, tacticalActScheme, combatStats)
             };
         }
     }
