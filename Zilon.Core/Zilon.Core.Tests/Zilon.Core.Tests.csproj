@@ -87,6 +87,7 @@
     <Compile Include="Persons\EquipmentTests.cs" />
     <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PersonTests.cs" />
+    <Compile Include="Persons\TacticalActTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
