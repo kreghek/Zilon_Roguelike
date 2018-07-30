@@ -17,6 +17,8 @@ namespace Zilon.Core.Persons
 
         public ITacticalActCarrier TacticalActCarrier { get; }
 
+        public IEvolutionData EvolutionData { get; }
+
         public PersonScheme Scheme { get; }
 
         public Person(PersonScheme scheme)
