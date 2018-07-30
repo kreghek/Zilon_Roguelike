@@ -77,6 +77,8 @@
     <Compile Include="Common\Range.cs" />
     <Compile Include="Components\CombatStatItem.cs" />
     <Compile Include="Components\CombatStatType.cs" />
+    <Compile Include="Components\PersonRuleLevel.cs" />
+    <Compile Include="Components\PersonRuleType.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />
     <Compile Include="Schemes\PerkJob.cs" />
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
+    <Compile Include="Schemes\PerkRuleSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />
     <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />

@@ -12,8 +12,8 @@ namespace Zilon.Core.Schemes
     /// </remarks>
     public sealed class PerkLevelSubScheme: SubSchemeBase
     {
-        public string[] Rules { get; set; }
-        public PerkJob[] Jobs { get; set; } //TODO Вынести работы ещё и на уровень перка
+        public PerkRuleSubScheme[] Rules { get; set; }
+        public PerkJob[] Jobs { get; set; }
         public int MaxValue { get; set; }
         public PersonStat PersonLevel { get; set; }
         public PerkConditionSubScheme[] Conditions { get; set; }
