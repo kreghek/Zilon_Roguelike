@@ -21,7 +21,8 @@ namespace Zilon.Core.Persons.Tests
         {
             //ARRAGE
 
-            var tacticalActScheme = new TacticalActScheme {
+            var tacticalActScheme = new TacticalActScheme
+            {
                 Efficient = new Range<float>(1, 2),
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(default(CombatStatType), 1)
