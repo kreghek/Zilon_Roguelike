@@ -80,6 +80,7 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobProgress.cs" />

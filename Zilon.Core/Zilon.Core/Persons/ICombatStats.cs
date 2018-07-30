@@ -10,12 +10,12 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Навык рукопашного боя.
         /// </summary>
-        PersonStat Melee { get; }
+        float Melee { get; }
 
         /// <summary>
         /// Навык стрельбы.
         /// </summary>
-        PersonStat Ballistic { get; }
+        float Ballistic { get; }
 
         /// <summary>
         /// Знание техники.
@@ -24,12 +24,12 @@ namespace Zilon.Core.Persons
         /// Влияет применение действий, требующих использование сложных
         /// технических устройств.
         /// </remarks>
-        PersonStat Tech { get; }
+        float Tech { get; }
 
         /// <summary>
         /// Медицина.
         /// </summary>
-        PersonStat Medic { get; }
+        float Medic { get; }
 
         /// <summary>
         /// Псионические способности.
@@ -37,7 +37,7 @@ namespace Zilon.Core.Persons
         /// <remarks>
         /// Магия, гипноз и т.д.
         /// </remarks>
-        PersonStat Psy { get; }
+        float Psy { get; }
 
         /// <summary>
         /// Понимание социума.
@@ -46,6 +46,6 @@ namespace Zilon.Core.Persons
         /// Влияет на действия, требующих влияние на индивидуумов общества.
         /// Например, страх или насмешка.
         /// </remarks>
-        PersonStat Social { get; }
+        float Social { get; }
     }
 }
