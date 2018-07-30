@@ -54,10 +54,10 @@ namespace Zilon.Core.Persons
 
         private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)
         {
-            //foreach (var archievedPerk in evolutionData.ArchievedPerks)
-            //{
-                
-            //}
+            foreach (var archievedPerk in evolutionData.ArchievedPerks)
+            {
+                //TODO Перенести наработки по вычислению текущего апдейта перка.
+            }
         }
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
