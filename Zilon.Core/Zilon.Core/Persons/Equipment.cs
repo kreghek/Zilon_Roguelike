@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -13,23 +16,25 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Конструктор.
         /// </summary>
-        /// <param name="scheme"> Схема экипировки. </param>
+        /// <param name="propScheme"> Схема экипировки. </param>
         /// <param name="acts"> Действия, которые может дать эта экипировка. </param>
         /// <exception cref="T:System.ArgumentException">
         /// Выбрасывает, если на вход подана схема,
         /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
-        public Equipment(PropScheme scheme, ITacticalAct[] acts) : base(scheme)
+        public Equipment(PropScheme propScheme, IEnumerable<TacticalActScheme> acts) : base(propScheme)
         {
-            if (scheme.Equip == null)
+            if (propScheme.Equip == null)
             {
-                throw new ArgumentException("Не корректная схема.", nameof(scheme));
+                throw new ArgumentException("Не корректная схема.", nameof(propScheme));
             }
 
-            Acts = acts;
+            Power = 1;
+
+            Acts = acts.ToArray();
         }
 
-        public ITacticalAct[] Acts { get; }
+        public TacticalActScheme[] Acts { get; }
 
         /// <summary>
         /// Мощь/качество/уровень экипировки.

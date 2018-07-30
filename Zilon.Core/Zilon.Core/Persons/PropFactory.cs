@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons
             }
 
 
-            var actList = new List<ITacticalAct>();
+            var actSchemes = new List<TacticalActScheme>();
             var actSchemeSids = scheme.Equip.ActSids;
 
             if (scheme.Equip.ActSids != null)
@@ -32,12 +32,11 @@ namespace Zilon.Core.Persons
 
                     var actScheme = _schemeService.GetScheme<TacticalActScheme>(actSchemeSid);
 
-                    var act = new TacticalAct(scheme.Equip.Power, actScheme);
-                    actList.Add(act);
+                    actSchemes.Add(actScheme);
                 }
 
 
-                var equipment = new Equipment(scheme, actList.ToArray());
+                var equipment = new Equipment(scheme, actSchemes);
 
                 return equipment;
             }

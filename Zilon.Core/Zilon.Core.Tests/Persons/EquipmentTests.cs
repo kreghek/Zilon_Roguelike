@@ -23,7 +23,7 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new PropScheme();
 
-            var acts = new ITacticalAct[0];
+            var acts = new TacticalActScheme[0];
 
 
             // ACT

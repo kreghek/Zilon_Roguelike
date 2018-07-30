@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -26,15 +25,16 @@ namespace Zilon.Core.Tests.Persons
 
             var person = new Person(personScheme);
 
-            var scheme = new PropScheme
+            var propScheme = new PropScheme
             {
                 Equip = new PropEquipSubScheme()
             };
 
-            var tacticActMock = new Mock<ITacticalAct>();
-            var tacticAct = tacticActMock.Object;
+            var tacticalActScheme = new TacticalActScheme {
+                Efficient = new Range<float>(1, 1)
+            };
 
-            var equipment = new Equipment(scheme, new []{ tacticAct });
+            var equipment = new Equipment(propScheme, new []{ tacticalActScheme });
 
             const int expectedSlotIndex = 0;
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ARRANGE
-            person.TacticalActCarrier.Acts[0].Should().Be(tacticAct);
+            person.TacticalActCarrier.Acts[0].Scheme.Should().Be(tacticalActScheme);
         }
     }
 }

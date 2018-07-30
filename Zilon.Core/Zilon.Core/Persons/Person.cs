@@ -60,10 +60,21 @@ namespace Zilon.Core.Persons
                     continue;
                 }
 
-                actList.AddRange(equipment.Acts);
+                foreach (var actScheme in equipment.Acts)
+                {
+                    var equipmentPower = CalcEquipmentEfficient(equipment);
+                    var act = new TacticalAct(equipmentPower, actScheme);
+
+                    actList.Add(act);
+                }
             }
 
             return actList.ToArray();
+        }
+
+        private static float CalcEquipmentEfficient(Equipment equipment)
+        {
+            return equipment.Power * equipment.Scheme.Equip.Power;
         }
 
         public override string ToString()

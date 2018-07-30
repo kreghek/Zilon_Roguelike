@@ -23,10 +23,10 @@ namespace Zilon.Core.Tests.Persons
             {
                 Equip = new PropEquipSubScheme()
             };
-            var tacticalActMock = new Mock<ITacticalAct>();
-            var tacticalAct = tacticalActMock.Object;
 
-            var equipment = new Equipment(scheme, new []{ tacticalAct });
+            var tacticalActScheme = new TacticalActScheme();
+
+            var equipment = new Equipment(scheme, new []{ tacticalActScheme });
 
             const int expectedSlot = 1;
             const int expectedSlotCount = 3;
