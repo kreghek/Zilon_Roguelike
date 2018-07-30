@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема условий для перка.

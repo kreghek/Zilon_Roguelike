@@ -29,5 +29,10 @@
         /// Данные о развитие персонажа.
         /// </summary>
         IEvolutionData EvolutionData { get; }
+
+        /// <summary>
+        /// Характеристики, используемые персонажем в бою.
+        /// </summary>
+        ICombatStats CombatStats { get; }
     }
 }

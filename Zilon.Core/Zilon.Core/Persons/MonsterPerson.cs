@@ -18,6 +18,8 @@ namespace Zilon.Core.Persons
 
         public IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
 
+        public ICombatStats CombatStats => throw new NotSupportedException("Для монстров не поддерживаются отдельные характеристики");
+
         public MonsterPerson()
         {
             TacticalActCarrier = new TacticalActCarrier();

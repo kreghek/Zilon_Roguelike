@@ -1,5 +1,10 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Schemes
 {
+    /// <summary>
+    /// Подсхема для хранения данных о крафте предмета.
+    /// </summary>
     public sealed class CraftSubScheme: SubSchemeBase
     {
         /// <summary>

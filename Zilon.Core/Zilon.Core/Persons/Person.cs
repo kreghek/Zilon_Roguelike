@@ -21,6 +21,8 @@ namespace Zilon.Core.Persons
 
         public PersonScheme Scheme { get; }
 
+        public ICombatStats CombatStats { get; }
+
         public Person(PersonScheme scheme)
         {
             if (scheme == null)

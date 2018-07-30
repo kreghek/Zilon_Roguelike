@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Уровень развития перка.

@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
     /// Набор ресурсов. Используется для крафта, диалогов, прокачки перков.

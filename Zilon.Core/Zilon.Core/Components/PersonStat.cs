@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
     /// Структура для хранения характеристики.

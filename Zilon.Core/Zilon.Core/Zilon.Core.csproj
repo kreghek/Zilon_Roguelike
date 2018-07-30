@@ -80,13 +80,14 @@
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
-    <Compile Include="Schemes\LevelStat.cs" />
+    <Compile Include="Components\PersonStat.cs" />
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />
     <Compile Include="Schemes\PerkJob.cs" />
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
@@ -126,7 +127,7 @@
     <Compile Include="Schemes\LocalizedStringSubScheme.cs" />
     <Compile Include="Schemes\ProfessionRequirementSubScheme.cs" />
     <Compile Include="Schemes\ProfessionTypes.cs" />
-    <Compile Include="Schemes\PropSet.cs" />
+    <Compile Include="Components\PropSet.cs" />
     <Compile Include="Schemes\SubSchemeBase.cs" />
     <Compile Include="Schemes\TacticalActImpactType.cs" />
     <Compile Include="Schemes\TacticalActScheme.cs" />
@@ -220,5 +221,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
