@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-    using System;
-    using Zilon.Core.Schemes;
-
     public class Person : IPerson
     {
         public int Id { get; set; }
@@ -35,13 +35,18 @@ namespace Zilon.Core.Persons
             TacticalActCarrier = new TacticalActCarrier();
         }
 
-        private void EquipmentCarrier_EquipmentChanged(object sender, System.EventArgs e)
+        private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
         {
+            if (equipments == null)
+            {
+                throw new ArgumentNullException(nameof(equipments));
+            }
+
             var actList = new List<ITacticalAct>();
 
             foreach (var equipment in equipments)
