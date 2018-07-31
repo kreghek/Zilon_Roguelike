@@ -19,6 +19,7 @@ namespace Zilon.Core.Schemes
         private readonly Dictionary<string, PersonScheme> _persons;
         private readonly Dictionary<string, DropTableScheme> _dropTables;
         private readonly Dictionary<string, PerkScheme> _perks;
+        private readonly Dictionary<string, MonsterScheme> _monsters;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
@@ -45,6 +46,9 @@ namespace Zilon.Core.Schemes
 
             _perks = new Dictionary<string, PerkScheme>();
             LoadSchemes(schemeLocator, "Perks", _perks);
+
+            _monsters = new Dictionary<string, MonsterScheme>();
+            LoadSchemes(schemeLocator, "Monsters", _monsters);
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
@@ -91,6 +95,11 @@ namespace Zilon.Core.Schemes
                 return _perks[sid] as TScheme;
             }
 
+            if (typeof(TScheme) == typeof(MonsterScheme))
+            {
+                return _monsters[sid] as TScheme;
+            }
+
             throw new ArgumentException("Указан неизвестный тип схемы.");
         }
 
@@ -134,6 +143,11 @@ namespace Zilon.Core.Schemes
             if (typeof(TScheme) == typeof(PerkScheme))
             {
                 return _perks.Values.Cast<TScheme>().ToArray();
+            }
+
+            if (typeof(TScheme) == typeof(MonsterScheme))
+            {
+                return _monsters.Values.Cast<TScheme>().ToArray();
             }
 
             throw new ArgumentException("Указан неизвестный тип схемы.");

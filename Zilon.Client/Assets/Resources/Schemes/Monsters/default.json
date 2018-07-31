@@ -1,5 +1,6 @@
 {
-  "Name": {
-    "Ru": "Тест"
+  "PrimaryAct": {
+    "Efficient": {"Min": 10, "Max": 15},
+	"Range": {"Min" : 1, "Max" : 2}
   }
 }
