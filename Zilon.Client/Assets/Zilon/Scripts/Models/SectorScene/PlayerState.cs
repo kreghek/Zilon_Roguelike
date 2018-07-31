@@ -7,12 +7,8 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
     {
         public IActorViewModel ActiveActor { get; set; }
 
-        public IMapNodeViewModel SelectedNode { get; set; }
+        public ISelectableViewModel HoverViewModel { get; set; }
 
         public HumanActorTaskSource TaskSource { get; set; }
-
-        public IActorViewModel SelectedActor { get; set; }
-        
-        public IContainerViewModel SelectedContainer { get; set; }
     }
 }

@@ -222,11 +222,11 @@ class SectorVM : MonoBehaviour
 
     private void Container_Selected(object sender, EventArgs e)
     {
-        var containerVm = sender as ContainerVm;
+        var containerViewModel = sender as ContainerVm;
 
-        _playerState.SelectedContainer = containerVm;
+        _playerState.HoverViewModel = containerViewModel;
 
-        if (containerVm != null)
+        if (containerViewModel != null)
         {
             _clientCommandExecutor.Push(_openContainerCommand);
         }
@@ -246,7 +246,7 @@ class SectorVM : MonoBehaviour
     {
         var actorVm = sender as ActorViewModel;
 
-        _playerState.SelectedActor = actorVm;
+        _playerState.HoverViewModel = actorVm;
 
         if (actorVm != null)
         {
@@ -308,7 +308,7 @@ class SectorVM : MonoBehaviour
 
         var nodeVm = sender as MapNodeVM;
 
-        _playerState.SelectedNode = nodeVm;
+        _playerState.HoverViewModel = nodeVm;
 
         if (nodeVm != null)
         {
