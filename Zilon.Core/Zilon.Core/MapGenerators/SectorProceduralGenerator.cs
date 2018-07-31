@@ -107,9 +107,11 @@ namespace Zilon.Core.Tactics.Generation
 
         private void CreateRoomMonsters(IEnumerable<Room> rooms)
         {
+            var monsterScheme = _schemeService.GetScheme<MonsterScheme>("default");
+
             foreach (var room in rooms)
             {
-                var person = new MonsterPerson();
+                var person = new MonsterPerson(monsterScheme);
                 var startNode = room.Nodes.FirstOrDefault();
                 var actor = new Actor(person, _botPlayer, startNode);
                 MonsterActors.Add(actor);

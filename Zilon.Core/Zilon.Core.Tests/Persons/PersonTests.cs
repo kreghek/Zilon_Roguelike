@@ -33,7 +33,10 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Efficient = new Range<float>(1, 1),
+                Stats = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 1),
+                },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(CombatStatType.Undefined, 1)
                 }
@@ -52,7 +55,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ARRANGE
-            person.TacticalActCarrier.Acts[0].Scheme.Should().Be(tacticalActScheme);
+            person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme);
         }
     }
 }

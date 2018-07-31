@@ -1,10 +1,13 @@
 ﻿namespace Zilon.Core.Schemes
 {
+    /// <summary>
+    /// Схема монстра.
+    /// </summary>
     public class MonsterScheme: SchemeBase
     {
         /// <summary>
-        /// Действия, которые может использовать монстр.
+        /// Основное действие монстра.
         /// </summary>
-        TacticalActStatsSubScheme PrimaryAct { get; set; }
+        public TacticalActStatsSubScheme PrimaryAct { get; set; }
     }
 }

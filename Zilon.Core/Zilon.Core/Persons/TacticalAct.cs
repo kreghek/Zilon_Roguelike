@@ -1,18 +1,22 @@
 ﻿using System.Linq;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Тактическое действие актёров под управлением игрока.
+    /// </summary>
     public class TacticalAct : ITacticalAct
     {
         public TacticalAct(float equipmentPower, TacticalActScheme scheme, ICombatStats stats)
         {
-            Scheme = scheme;
-            MinEfficient = CalcEfficient(scheme.Efficient.Min, scheme, equipmentPower, stats);
-            MaxEfficient = CalcEfficient(scheme.Efficient.Max, scheme, equipmentPower, stats);
+            Stats = scheme.Stats;
+            MinEfficient = CalcEfficient(Stats.Efficient.Min, scheme, equipmentPower, stats);
+            MaxEfficient = CalcEfficient(Stats.Efficient.Max, scheme, equipmentPower, stats);
         }
 
-        public TacticalActScheme Scheme { get; }
+        public TacticalActStatsSubScheme Stats { get; }
 
         public float MinEfficient { get; }
 

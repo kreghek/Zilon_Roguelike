@@ -9,9 +9,9 @@ namespace Zilon.Core.Persons
     public interface ITacticalAct
     {
         /// <summary>
-        /// Схема действия.
+        /// Схема основных характеристик тактического действия.
         /// </summary>
-        TacticalActScheme Scheme { get; }
+        TacticalActStatsSubScheme Stats { get; }
 
         /// <summary>
         /// Минимальная эффективность действия.

@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Common;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     public static class ITacticalActExtensionscs
     {
@@ -15,7 +13,7 @@ namespace Zilon.Core.Persons
             CubeCoords currentCubePos,
             CubeCoords targetCubePos)
         {
-            var range = new Range<int>(act.Scheme.MinRange, act.Scheme.MaxRange);
+            var range = act.Stats.Range;
             var distance = currentCubePos.DistanceTo(targetCubePos);
             var isInDistance = range.Contains(distance);
             return isInDistance;

@@ -21,22 +21,12 @@ namespace Zilon.Core.Persons
 
         public ICombatStats CombatStats => throw new NotSupportedException("Для монстров не поддерживаются отдельные характеристики");
 
-        public MonsterPerson()
+        public MonsterPerson(MonsterScheme scheme)
         {
             TacticalActCarrier = new TacticalActCarrier();
 
-            var tacticalActScheme = new TacticalActScheme
-            {
-                Efficient = new Range<float>(1, 1),
-                MinRange = 1,
-                MaxRange = 1,
-                Dependency = new[] {
-                    new TacticalActDependencySubScheme(CombatStatType.Undefined, 1)
-                }
-            };
-
             TacticalActCarrier.Acts = new ITacticalAct[] {
-                new MonsterTacticalAct(tacticalActScheme, 1)
+                new MonsterTacticalAct(scheme.PrimaryAct, 1)
             };
         }
     }

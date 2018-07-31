@@ -23,7 +23,10 @@ namespace Zilon.Core.Persons.Tests
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Efficient = new Range<float>(1, 2),
+                Stats = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 2),
+                },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(default(CombatStatType), 1)
                 }

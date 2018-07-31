@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -7,20 +8,17 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class MonsterTacticalAct : ITacticalAct
     {
-        //TODO Отказаться от зависимости от схемы для монстров.
-        //Все параметры межно задавать прямо в конструкторе действия. Можно подумать над базовым действием.
-        // Параметры хранить в схемах
-        public TacticalActScheme Scheme { get; }
+        public TacticalActStatsSubScheme Stats { get; }
 
         public float MinEfficient { get; }
 
         public float MaxEfficient { get; }
 
-        public MonsterTacticalAct(TacticalActScheme scheme, float multiplier)
+        public MonsterTacticalAct(TacticalActStatsSubScheme stats, float multiplier)
         {
-            Scheme = scheme;
-            MinEfficient = CalcEfficient(scheme.Efficient.Min, multiplier);
-            MaxEfficient = CalcEfficient(scheme.Efficient.Max, multiplier);
+            Stats = stats;
+            MinEfficient = CalcEfficient(stats.Efficient.Min, multiplier);
+            MaxEfficient = CalcEfficient(stats.Efficient.Max, multiplier);
         }
 
         private float CalcEfficient(float baseEfficient,

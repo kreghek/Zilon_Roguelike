@@ -7,7 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -91,13 +91,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var botPlayerMock = new Mock<IPlayer>();
             var botPlayer = botPlayerMock.Object;
 
-            var botTacticalActScheme = new TacticalActScheme() {
-                MinRange = 1,
-                MaxRange = 1
+            var botTacticalActStatsScheme = new TacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 1)
             };
 
             var botTacticalActMock = new Mock<ITacticalAct>();
-            botTacticalActMock.SetupGet(x => x.Scheme).Returns(botTacticalActScheme);
+            botTacticalActMock.SetupGet(x => x.Stats).Returns(botTacticalActStatsScheme);
             var botTacticalAct = botTacticalActMock.Object;
 
             var botTacticalCarrierMock = new Mock<ITacticalActCarrier>();
@@ -183,14 +183,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var botPlayerMock = new Mock<IPlayer>();
             var botPlayer = botPlayerMock.Object;
 
-            var botTacticalActScheme = new TacticalActScheme()
+            var botTacticalActStatsScheme = new TacticalActStatsSubScheme()
             {
-                MinRange = 1,
-                MaxRange = 1
+                Range = new Range<int>(1, 1)
             };
 
             var botTacticalActMock = new Mock<ITacticalAct>();
-            botTacticalActMock.SetupGet(x => x.Scheme).Returns(botTacticalActScheme);
+            botTacticalActMock.SetupGet(x => x.Stats).Returns(botTacticalActStatsScheme);
             var botTacticalAct = botTacticalActMock.Object;
 
             var botTacticalCarrierMock = new Mock<ITacticalActCarrier>();

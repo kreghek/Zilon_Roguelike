@@ -1,6 +1,5 @@
-﻿using Zilon.Core.Tactics;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 using FluentAssertions;
@@ -14,13 +13,12 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tactics.Generation;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
-using Zilon.Core.Schemes;
-using Zilon.Core.Tactics.Generation;
-using System.Configuration;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -41,13 +39,15 @@ namespace Zilon.Core.Tactics.Tests
         public void Update_2MonsterActorsPatrols2RoutesDuring100SectorUpdates_NoNRE()
         {
             // ARRANGE
+            var schemeService = CreateSchemeService();
+
             var map = new TestGrid15GenMap();
 
             var actorManager = new ActorManager();
             var propContainerManager = new PropContainerManager();
 
             var sector = new Sector(map, actorManager, propContainerManager);
-            GenerateSectorTtc1Content(sector, actorManager, map);
+            GenerateSectorTtc1Content(sector, actorManager, map, schemeService);
 
 
 
@@ -63,11 +63,7 @@ namespace Zilon.Core.Tactics.Tests
             // Если не было исключений, то тест считается пройденным.
             // Иначе теряем читаемый стек вызовов, оборачивая Update в делегат.
             var monsters = actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
-
-            foreach (var monster in monsters)
-            {
-
-            }
+            monsters.Should().NotBeEmpty();
         }
 
         /// <summary>
@@ -156,7 +152,10 @@ namespace Zilon.Core.Tactics.Tests
                 dropResolver);
         }
 
-        private void GenerateSectorTtc1Content(Sector sector, IActorManager actorManager, IMap map)
+        private void GenerateSectorTtc1Content(Sector sector,
+            IActorManager actorManager,
+            IMap map,
+            ISchemeService schemeService)
         {
             // Подготовка карты
             map.Edges.RemoveAt(10);
@@ -167,12 +166,14 @@ namespace Zilon.Core.Tactics.Tests
             // Подготовка игроков
             var botPlayer = new BotPlayer();
 
+            var monsterScheme = schemeService.GetScheme<MonsterScheme>("default");
+
             // Подготовка актёров
             var enemy1StartNode = map.Nodes.Cast<HexNode>().SelectBy(5, 5);
-            var enemy1Actor = CreateMonsterActor(botPlayer, actorManager, enemy1StartNode);
+            var enemy1Actor = CreateMonsterActor(botPlayer, monsterScheme, actorManager, enemy1StartNode);
 
             var enemy2StartNode = map.Nodes.Cast<HexNode>().SelectBy(9, 9);
-            var enemy2Actor = CreateMonsterActor(botPlayer, actorManager, enemy2StartNode);
+            var enemy2Actor = CreateMonsterActor(botPlayer, monsterScheme, actorManager, enemy2StartNode);
 
 
             // Подготовка маршрутов патрулирования
@@ -233,10 +234,11 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         private IActor CreateMonsterActor([NotNull] IPlayer player,
+            [NotNull] MonsterScheme monsterScheme,
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            var person = new MonsterPerson();
+            var person = new MonsterPerson(monsterScheme);
 
             var actor = new Actor(person, player, startNode);
 

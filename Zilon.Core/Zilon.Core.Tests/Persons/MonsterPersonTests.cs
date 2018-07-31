@@ -1,8 +1,11 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
-using System;
+using Zilon.Core.Common;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons.Tests
 {
@@ -12,8 +15,17 @@ namespace Zilon.Core.Persons.Tests
         [Test()]
         public void Constructor_DefaultParams_NoException()
         {
+            // ARRANGE
+            var monsterScheme = new MonsterScheme
+            {
+                PrimaryAct = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 2)
+                }
+            };
+
             // ACT
-            Action act = () => { var monster = new MonsterPerson(); };
+            Action act = () => { var monster = new MonsterPerson(monsterScheme); };
 
 
 
