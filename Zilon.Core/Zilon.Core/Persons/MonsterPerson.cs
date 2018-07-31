@@ -35,7 +35,6 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            //TODO Ввести MonsterAct без зависимости от навыков
             TacticalActCarrier.Acts = new ITacticalAct[] {
                 new MonsterTacticalAct(tacticalActScheme, 1)
             };
