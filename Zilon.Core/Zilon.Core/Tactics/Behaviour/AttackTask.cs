@@ -8,12 +8,12 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     using System.Linq;
 
-    public class AttackTask : ActorTaskBase
+    public class AttackTask : OneTurnActorTaskBase
     {
         private readonly IAttackTarget _target;
         private readonly IDecisionSource _decisionSource;
 
-        public override void Execute()
+        protected override void ExecuteTask()
         {
             //TODO Сделать проверку, чтобы нельзя было атаковать через стены, аналогично команде на открытие/атаку.
             if (!_target.CanBeDamaged())
@@ -48,8 +48,6 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
-
-            IsComplete = true;
         }
 
         public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource) : base(actor)

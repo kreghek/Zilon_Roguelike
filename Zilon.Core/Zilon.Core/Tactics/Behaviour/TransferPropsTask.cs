@@ -6,7 +6,7 @@ namespace Zilon.Core.Tactics.Behaviour
     /// <summary>
     /// Задача на перемещение предметов относительно указанного хранилища.
     /// </summary>
-    public class TransferPropsTask : ActorTaskBase
+    public class TransferPropsTask : OneTurnActorTaskBase
     {
         private readonly PropTransfer[] _transfers;
 
@@ -17,7 +17,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _transfers = transfers.ToArray();
         }
 
-        public override void Execute()
+        protected override void ExecuteTask()
         {
             foreach (var transfer in _transfers)
             {
@@ -33,8 +33,6 @@ namespace Zilon.Core.Tactics.Behaviour
                     propStore.Remove(prop);
                 }
             }
-
-            IsComplete = true;
         }
     }
 }

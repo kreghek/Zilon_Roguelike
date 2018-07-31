@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics.Behaviour
     /// <summary>
     /// Задача актёра на подбор предмета из сектора (с земли или из контейнера) в инвентарь
     /// </summary>
-    public class OpenContainerTask : ActorTaskBase
+    public class OpenContainerTask : OneTurnActorTaskBase
     {
         private readonly IPropContainer _container;
         private readonly IOpenContainerMethod _method;
@@ -28,7 +28,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _method = method;
         }
 
-        public override void Execute()
+        protected override void ExecuteTask()
         {
             //TODO Сделать проверку, чтобы нельзя было открывать сундуки через стены.
             var actorHexNode = (HexNode)Actor.Node;
@@ -45,8 +45,6 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             Actor.OpenContainer(_container, _method);
-
-            IsComplete = true;
         }
     }
 }
