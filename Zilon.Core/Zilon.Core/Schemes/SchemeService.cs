@@ -178,6 +178,7 @@ namespace Zilon.Core.Schemes
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
+                    //TODO Для тестов сделать свою реализацию сервиса, чтобы падал, если найдены лишние члены в json
                     var scheme = JsonConvert.DeserializeObject<T>(file.Content);
 
                     if (scheme.Disabled)

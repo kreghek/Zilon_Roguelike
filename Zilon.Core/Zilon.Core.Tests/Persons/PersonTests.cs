@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ARRANGE
-            person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme);
+            person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
     using System.Linq;
     using FluentAssertions;
     using Zilon.Core;
+    using Zilon.Core.Common;
     using Zilon.Core.CommonServices.Dices;
     using Zilon.Core.Persons;
     using Zilon.Core.Players;
@@ -248,6 +249,14 @@ namespace Zilon.Core.Tactics.Generation.Tests
             };
             schemeServiceMock.Setup(x => x.GetScheme<DropTableScheme>(It.IsAny<string>()))
                 .Returns(trophyTableScheme);
+
+            var monsterScheme = new MonsterScheme {
+                PrimaryAct = new TacticalActStatsSubScheme {
+                    Efficient = new Range<float>(10, 20)
+                }
+            };
+            schemeServiceMock.Setup(x => x.GetScheme<MonsterScheme>(It.IsAny<string>()))
+                .Returns(monsterScheme);
 
             var schemeService = schemeServiceMock.Object;
             return schemeService;
