@@ -24,5 +24,7 @@ namespace Zilon.Core.Tactics
         /// Событие выстреливает, когда все наблюдаемые актёры покинули сектор.
         /// </summary>
         event EventHandler ActorExit;
+
+        IMap Map { get; }
     }
 }

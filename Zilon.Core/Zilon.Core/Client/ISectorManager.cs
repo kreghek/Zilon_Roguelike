@@ -7,6 +7,6 @@ namespace Zilon.Core.Client
     /// </summary>
     public interface ISectorManager
     {
-        Sector CurrentSector { get; set; }
+        ISector CurrentSector { get; set; }
     }
 }

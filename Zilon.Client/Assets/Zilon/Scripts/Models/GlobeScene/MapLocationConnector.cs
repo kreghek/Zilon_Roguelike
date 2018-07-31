@@ -10,18 +10,13 @@ public class MapLocationConnector : MonoBehaviour
 
     public PathScheme Scheme { get; set; }
 
-    // Use this for initialization
     void Start()
     {
-        // Add a Line Renderer to the GameObject
-        //line = this.gameObject.AddComponent<LineRenderer>();
-        // Set the width of the Line Renderer
-        line.SetWidth(0.05F, 0.05F);
-        // Set the number of vertex fo the Line Renderer
-        line.SetVertexCount(2);
+        line.startWidth = 0.05f;
+        line.endWidth = 0.05f;
+        line.positionCount = 2;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Check if the GameObjects are not null

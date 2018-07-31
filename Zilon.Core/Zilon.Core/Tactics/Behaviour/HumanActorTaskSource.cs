@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -96,7 +97,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Указать намерение двигаться к указанному узлу.
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>
-        public void IntentMove(HexNode targetNode)
+        public virtual void IntentMove(HexNode targetNode)
         {
             if (targetNode == null)
             {
@@ -119,7 +120,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Указать намерение атаковать цель.
         /// </summary>
         /// <param name="target"> Целевой объект. </param>
-        public void IntentAttack(IAttackTarget target)
+        public virtual void IntentAttack(IAttackTarget target)
         {
             //Отключаю это предупреждение, иначе получается кривой код.
 #pragma warning disable IDE0016 // Use 'throw' expression
@@ -139,7 +140,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="container"></param>
         /// <param name="method"></param>
-        public void IntentOpenContainer(IPropContainer container, IOpenContainerMethod method)
+        public virtual void IntentOpenContainer(IPropContainer container, IOpenContainerMethod method)
         {
             ClearCurrentTask();
             _method = method;
@@ -150,7 +151,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Hамерение перенести предметы между хранилищами (инвентарь-сундук-пол).
         /// </summary>
         /// <param name="props"></param>
-        public void IntentTransferProps(IEnumerable<PropTransfer> transfers)
+        public virtual void IntentTransferProps(IEnumerable<PropTransfer> transfers)
         {
             //TODO Сделать генерацию контейнеров для сброшенных на пол пердметов.
             ClearCurrentTask();
@@ -162,7 +163,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="equipment"></param>
         /// <param name="slotIndex"></param>
-        public void IntentEquip(Equipment equipment, int slotIndex)
+        public virtual void IntentEquip(Equipment equipment, int slotIndex)
         {
             ClearCurrentTask();
             _equipment = equipment;

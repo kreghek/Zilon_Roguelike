@@ -5,7 +5,6 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
 {
-    //TODO Добавить тесты
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
