@@ -17,6 +17,12 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
+            var nodeViewModel = _playerState.HoverViewModel as IMapNodeViewModel;
+            if (nodeViewModel == null)
+            {
+                return false;
+            }
+
             //TODO Здесь должна быть проверка
             // 1. Может ли текущий актёр ходить.
             // 2. Проходима ли ячейка.
@@ -30,7 +36,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var sector = _sectorManager.CurrentSector;
-            var selectedNodeVm = _playerState.SelectedNode;
+            var selectedNodeVm = _playerState.HoverViewModel as IMapNodeViewModel;
 
             var targetNode = selectedNodeVm.Node;
             _playerState.TaskSource.IntentMove((HexNode)targetNode);

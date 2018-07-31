@@ -58,7 +58,7 @@ namespace Zilon.Core.Commands.Tests
 
             var playerStateMock = new Mock<IPlayerState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
-            playerStateMock.SetupProperty(x => x.SelectedActor, targetVm);
+            playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
             var playerState = playerStateMock.Object;
 
             var command = new AttackCommand(sectorManager, playerState);

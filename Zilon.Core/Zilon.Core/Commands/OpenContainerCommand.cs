@@ -24,8 +24,13 @@ namespace Zilon.Core.Commands
 
             var currentNode = _playerState.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = _playerState.SelectedActor;
-            var targetNode = selectedActorViewModel.Actor.Node;
+            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            if (targetContainerViewModel == null)
+            {
+                return false;
+            }
+
+            var targetNode = targetContainerViewModel.Container.Node;
 
             var canExecute = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
 
@@ -48,7 +53,8 @@ namespace Zilon.Core.Commands
             
             var openMethod = new HandOpenContainerMethod();
 
-            var container = _playerState.SelectedContainer.Container;
+            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var container = targetContainerViewModel.Container;
             _playerState.TaskSource.IntentOpenContainer(container, openMethod);
             
             sector.Update();

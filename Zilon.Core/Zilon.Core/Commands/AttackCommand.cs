@@ -25,7 +25,12 @@ namespace Zilon.Core.Commands
 
             var currentNode = _playerState.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = _playerState.SelectedActor;
+            var selectedActorViewModel = _playerState.HoverViewModel as IActorViewModel;
+            if (selectedActorViewModel == null)
+            {
+                return false;
+            }
+
             var targetNode = selectedActorViewModel.Actor.Node;
 
             var canExecute = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
@@ -49,9 +54,9 @@ namespace Zilon.Core.Commands
             }
 
             var sector = _sectorManager.CurrentSector;
-            var selectedActorVM = _playerState.SelectedActor;
+            var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
 
-            var targetActor = selectedActorVM.Actor;
+            var targetActor = targetActorViewModel.Actor;
             _playerState.TaskSource.IntentAttack(targetActor);
             sector.Update();
         }

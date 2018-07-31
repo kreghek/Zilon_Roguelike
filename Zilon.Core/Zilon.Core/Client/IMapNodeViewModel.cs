@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public interface IMapNodeViewModel
+    public interface IMapNodeViewModel: ISelectableViewModel
     {
         HexNode Node { get; set; }
     }

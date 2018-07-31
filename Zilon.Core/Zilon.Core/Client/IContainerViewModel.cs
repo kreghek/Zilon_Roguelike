@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public interface IContainerViewModel
+    public interface IContainerViewModel: ISelectableViewModel
     {
         IPropContainer Container { get; set; }
     }
