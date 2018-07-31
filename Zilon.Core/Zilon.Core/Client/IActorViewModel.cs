@@ -2,8 +2,14 @@
 
 namespace Zilon.Core.Client
 {
+    /// <summary>
+    /// Интерфейс модели представления актёра для клиенской части.
+    /// </summary>
     public interface IActorViewModel
     {
+        /// <summary>
+        /// Актёр, который лежит в основе
+        /// </summary>
         IActor Actor { get; set; }
     }
 }
