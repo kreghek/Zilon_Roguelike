@@ -23,6 +23,7 @@ namespace Zilon.Core.Schemes
             InitHandler<DropTableScheme>(schemeLocator);
             InitHandler<PerkScheme>(schemeLocator);
             InitHandler<MonsterScheme>(schemeLocator);
+            InitHandler<DropTableModificatorScheme>(schemeLocator);
         }
 
         private void InitHandler<T>(ISchemeLocator schemeLocator) where T : class, IScheme

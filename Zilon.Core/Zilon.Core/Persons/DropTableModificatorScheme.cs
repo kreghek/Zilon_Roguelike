@@ -1,10 +1,11 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Schemes;
+
+namespace Zilon.Core.Schemes
 {
-    //TODO Оформить, как схему
     /// <summary>
     /// Модификатор таблицы дропа.
     /// </summary>
-    public sealed class DropTableModificator
+    public sealed class DropTableModificatorScheme: SchemeBase
     {
         /// <summary>
         /// Идентификаторы схем предметов, на которые модификатор влияет.

@@ -134,7 +134,7 @@
     <Compile Include="Persons\TacticalAct.cs" />
     <Compile Include="Persons\TacticalActCarrier.cs" />
     <Compile Include="CommonServices\DropRoller.cs" />
-    <Compile Include="Persons\DropTableModificator.cs" />
+    <Compile Include="Persons\DropTableModificatorScheme.cs" />
     <Compile Include="Persons\DropTableModRecord.cs" />
     <Compile Include="Schemes\CraftSubScheme.cs" />
     <Compile Include="Schemes\InstrumentFunctions.cs" />
