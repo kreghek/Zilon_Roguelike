@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
-            //TODO Сделать проверку, чтобы нельзя было атаковать через стены.
+            //TODO Сделать проверку, чтобы нельзя было атаковать через стены, аналогично команде на открытие/атаку.
             if (!_target.CanBeDamaged())
             {
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");

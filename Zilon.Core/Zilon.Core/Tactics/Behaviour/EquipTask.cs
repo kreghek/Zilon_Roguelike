@@ -2,11 +2,10 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    //TODO объединить все одноходовые задачи
     /// <summary>
     /// Задача на назначение экипировки в указанный слот.
     /// </summary>
-    public class EquipTask : ActorTaskBase
+    public class EquipTask : OneTurnActorTaskBase
     {
         private readonly Equipment _equipment;
         private readonly int _slotIndex;
@@ -20,7 +19,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _slotIndex = slotIndex;
         }
 
-        public override void Execute()
+        protected override void ExecuteTask()
         {
             var equipmentCarrier = Actor.Person.EquipmentCarrier;
 
@@ -33,8 +32,6 @@ namespace Zilon.Core.Tactics.Behaviour
             equipmentCarrier.SetEquipment(_equipment, _slotIndex);
 
             Actor.Inventory.Remove(_equipment);
-
-            IsComplete = true;
         }
     }
 }
