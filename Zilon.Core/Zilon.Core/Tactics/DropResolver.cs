@@ -57,8 +57,7 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            //TODO Разобрать эту конструкцию на более примитивные.
-            var props = rolledRecords.Select(x => GenerateTrophyFromTable(x)).ToArray();
+            var props = rolledRecords.Select(GenerateProp).ToArray();
 
             return props;
         }
@@ -91,7 +90,7 @@ namespace Zilon.Core.Tactics
             return resultList.ToArray();
         }
 
-        private IProp GenerateTrophyFromTable(DropTableRecordSubScheme record)
+        private IProp GenerateProp(DropTableRecordSubScheme record)
         {
             var scheme = _schemeService.GetScheme<PropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);
@@ -102,17 +101,6 @@ namespace Zilon.Core.Tactics
                     //TODO Вынести в отдельный метод. Чтобы можно было использовать в крафте.
 
                     var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower);
-
-                    //TODO Вернуть, когда для экипировки будут бонусы
-                    //var bonusPowers = new Dictionary<PropBonusType, int>();
-                    //if (scheme.Bonuses != null)
-                    //{
-                    //    foreach (var bonus in scheme.Bonuses)
-                    //    {
-                    //        var bonusPower = dice.Range(record.MinPower, record.MaxPower);
-                    //        bonusPowers.Add(bonus.Type, bonusPower);
-                    //    }
-                    //}
 
                     var equipment = _propFactory.CreateEquipment(scheme);
                     equipment.Power = power;

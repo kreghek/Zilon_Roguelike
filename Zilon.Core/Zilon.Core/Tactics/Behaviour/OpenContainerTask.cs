@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            //TODO Сделать проверку, чтобы нельзя было открывать сундуки через стены.
+            //TODO Сделать проверку, чтобы нельзя было открывать сундуки через стены аналогично команде на открытие.
             var actorHexNode = (HexNode)Actor.Node;
             var containerHexNode = (HexNode)_container.Node;
 
