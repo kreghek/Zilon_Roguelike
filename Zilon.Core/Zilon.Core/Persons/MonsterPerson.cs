@@ -35,16 +35,9 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            var combatStats = new CombatStats
-            {
-                Stats = new[] {
-                    new CombatStatItem{Stat = CombatStatType.Undefined, Value = 10 }
-                }
-            };
-
             //TODO Ввести MonsterAct без зависимости от навыков
-            TacticalActCarrier.Acts = new TacticalAct[] {
-                new TacticalAct(1, tacticalActScheme, combatStats)
+            TacticalActCarrier.Acts = new ITacticalAct[] {
+                new MonsterTacticalAct(tacticalActScheme, 1)
             };
         }
     }

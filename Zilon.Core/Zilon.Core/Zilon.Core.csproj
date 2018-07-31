@@ -91,6 +91,7 @@
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
+    <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
