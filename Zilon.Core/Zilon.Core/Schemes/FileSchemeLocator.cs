@@ -15,6 +15,11 @@ namespace Zilon.Core.Schemes
         public SchemeFile[] GetAll(string directory)
         {
             var path = Path.Combine(_schemeCatalog, directory);
+            if (!Directory.Exists(path))
+            {
+                return new SchemeFile[0];
+            }
+
             var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
             var result = new List<SchemeFile>();
             foreach (var filePath in files)

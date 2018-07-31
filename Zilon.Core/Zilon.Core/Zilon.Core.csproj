@@ -97,6 +97,7 @@
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
+    <Compile Include="Schemes\SchemeServiceHandler.cs" />
     <Compile Include="Schemes\TacticalActConstrainsSubScheme.cs" />
     <Compile Include="Schemes\TacticalActStatsSubScheme.cs" />
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />

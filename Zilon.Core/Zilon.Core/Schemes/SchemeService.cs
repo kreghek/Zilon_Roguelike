@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -11,190 +8,54 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public sealed class SchemeService : ISchemeService
     {
-        private readonly Dictionary<string, MapScheme> _maps;
-        private readonly Dictionary<string, LocationScheme> _locations;
-        private readonly Dictionary<string, PathScheme> _paths;
-        private readonly Dictionary<string, PropScheme> _props;
-        private readonly Dictionary<string, TacticalActScheme> _tacticalActs;
-        private readonly Dictionary<string, PersonScheme> _persons;
-        private readonly Dictionary<string, DropTableScheme> _dropTables;
-        private readonly Dictionary<string, PerkScheme> _perks;
-        private readonly Dictionary<string, MonsterScheme> _monsters;
+        private readonly Dictionary<Type, object> _handlerDict;
 
         public SchemeService(ISchemeLocator schemeLocator)
         {
-            _maps = new Dictionary<string, MapScheme>();
-            LoadSchemes(schemeLocator, "Maps", _maps);
+            _handlerDict = new Dictionary<Type, object>();
 
-            _locations = new Dictionary<string, LocationScheme>();
-            LoadSchemes(schemeLocator, "Locations", _locations);
+            InitHandler<MapScheme>(schemeLocator);
+            InitHandler<LocationScheme>(schemeLocator);
+            InitHandler<PathScheme>(schemeLocator);
+            InitHandler<PropScheme>(schemeLocator);
+            InitHandler<TacticalActScheme>(schemeLocator);
+            InitHandler<PersonScheme>(schemeLocator);
+            InitHandler<DropTableScheme>(schemeLocator);
+            InitHandler<PerkScheme>(schemeLocator);
+            InitHandler<MonsterScheme>(schemeLocator);
+        }
 
-            _paths = new Dictionary<string, PathScheme>();
-            LoadSchemes(schemeLocator, "Paths", _paths);
-
-            _props = new Dictionary<string, PropScheme>();
-            LoadSchemes(schemeLocator, "Props", _props);
-
-            _tacticalActs = new Dictionary<string, TacticalActScheme>();
-            LoadSchemes(schemeLocator, "TacticalActs", _tacticalActs);
-
-            _persons = new Dictionary<string, PersonScheme>();
-            LoadSchemes(schemeLocator, "Persons", _persons);
-
-            _dropTables = new Dictionary<string, DropTableScheme>();
-            LoadSchemes(schemeLocator, "DropTables", _dropTables);
-
-            _perks = new Dictionary<string, PerkScheme>();
-            LoadSchemes(schemeLocator, "Perks", _perks);
-
-            _monsters = new Dictionary<string, MonsterScheme>();
-            LoadSchemes(schemeLocator, "Monsters", _monsters);
+        private void InitHandler<T>(ISchemeLocator schemeLocator) where T : class, IScheme
+        {
+            var handler = new SchemeServiceHandler<T>(schemeLocator);
+            _handlerDict.Add(typeof(T), handler);
+            handler.LoadSchemes();
         }
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
-            //TODO Подумать, как избавиться от такой кучи if.
-            //TODO Приводить без as. Чтобы быть уверенным в фактическом типе схемы.
-            if (typeof(TScheme) == typeof(MapScheme))
+            var handler = GetHandler<TScheme>();
+            var scheme = handler.Get(sid);
+            return scheme;
+        }
+
+        private SchemeServiceHandler<TScheme> GetHandler<TScheme>() 
+            where TScheme : class, IScheme
+        {
+            if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
             {
-                return _maps[sid] as TScheme;
+                throw new ArgumentException("Указан неизвестный тип схемы.");
             }
 
-            if (typeof(TScheme) == typeof(LocationScheme))
-            {
-                return _locations[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(PathScheme))
-            {
-                return _paths[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(PropScheme))
-            {
-                return _props[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(TacticalActScheme))
-            {
-                return _tacticalActs[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(PersonScheme))
-            {
-                return _persons[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(DropTableScheme))
-            {
-                return _dropTables[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(PerkScheme))
-            {
-                return _perks[sid] as TScheme;
-            }
-
-            if (typeof(TScheme) == typeof(MonsterScheme))
-            {
-                return _monsters[sid] as TScheme;
-            }
-
-            throw new ArgumentException("Указан неизвестный тип схемы.");
+            var handler = (SchemeServiceHandler<TScheme>)handlerObj;
+            return handler;
         }
 
         public TScheme[] GetSchemes<TScheme>() where TScheme : class, IScheme
         {
-            if (typeof(TScheme) == typeof(MapScheme))
-            {
-                return _maps.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(LocationScheme))
-            {
-                return _locations.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(PathScheme))
-            {
-                return _paths.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(PropScheme))
-            {
-                return _props.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(TacticalActScheme))
-            {
-                return _tacticalActs.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(PersonScheme))
-            {
-                return _persons.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(DropTableScheme))
-            {
-                return _dropTables.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(PerkScheme))
-            {
-                return _perks.Values.Cast<TScheme>().ToArray();
-            }
-
-            if (typeof(TScheme) == typeof(MonsterScheme))
-            {
-                return _monsters.Values.Cast<TScheme>().ToArray();
-            }
-
-            throw new ArgumentException("Указан неизвестный тип схемы.");
-        }
-
-        private void LoadSchemes<T>(ISchemeLocator schemeLocator,
-            string directory,
-            Dictionary<string, T> dict) where T : IScheme
-        {
-            if (schemeLocator == null)
-            {
-                throw new ArgumentNullException(nameof(schemeLocator),
-                    $"Ошибка при загрузки схем из директории {directory}.");
-            }
-
-            var files = schemeLocator.GetAll(directory);
-            foreach (var file in files)
-            {
-                try
-                {
-                    if (file == null)
-                    {
-                        throw new InvalidOperationException($"Файл схемы не может быть пустым.");
-                    }
-
-                    if (string.IsNullOrWhiteSpace(file.Content))
-                    {
-                        throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
-                    }
-
-                    //TODO Для тестов сделать свою реализацию сервиса, чтобы падал, если найдены лишние члены в json
-                    var scheme = JsonConvert.DeserializeObject<T>(file.Content);
-
-                    if (scheme.Disabled)
-                    {
-                        continue;
-                    }
-
-                    scheme.Sid = file.Sid;
-                    dict.Add(scheme.Sid, scheme);
-                }
-                catch (Exception exception)
-                {
-                    throw new InvalidOperationException($"Ошибка при загрузке схемы {file}.", exception);
-                }
-            }
-
+            var handler = GetHandler<TScheme>();
+            var scheme = handler.GetAll();
+            return scheme;
         }
     }
 }
