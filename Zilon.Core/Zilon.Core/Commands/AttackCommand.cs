@@ -45,11 +45,6 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            if (!CanExecute())
-            {
-                throw new InvalidOperationException("Не возможно выполнение команды.");
-            }
-
             var sector = _sectorManager.CurrentSector;
             var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
 

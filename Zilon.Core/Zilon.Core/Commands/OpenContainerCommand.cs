@@ -44,11 +44,6 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            if (!CanExecute())
-            {
-                throw new InvalidOperationException("Попытка выполнить команду, которая сейчас запредена.");
-            }
-
             var sector = _sectorManager.CurrentSector;
             
             var openMethod = new HandOpenContainerMethod();

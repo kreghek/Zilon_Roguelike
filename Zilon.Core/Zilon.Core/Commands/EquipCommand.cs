@@ -1,18 +1,18 @@
 ﻿using System;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Commands
 {
     //TODO Добавить тесты
-    //TODO Выделить общую специализированную команду.
     /// <summary>
     /// Команда на назначение экипировки.
     /// </summary>
-    public class EquipCommand : ActorCommandBase
+    public class EquipCommand : SpecialActorCommandBase
     {
         private readonly IInventoryState _inventoryState;
-        
+
         public int? SlotIndex { get; set; }
 
         public EquipCommand(ISectorManager sectorManager,
@@ -42,7 +42,7 @@ namespace Zilon.Core.Commands
             {
                 return false;
             }
-            
+
             //TODO Добавить проверку на то, что выбранный предмет может быть экипирован в указанный слот.
 
             return true;
@@ -51,12 +51,12 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var sector = _sectorManager.CurrentSector;
-            
+
             if (SlotIndex == null)
             {
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
-            
+
             var propVm = _inventoryState.SelectedProp;
             var equipment = propVm.Prop as Equipment;
             if (equipment == null)

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Commands
+﻿using System;
+
+namespace Zilon.Core.Commands
 {
     /// <summary>
     /// Базовая команда для команд, связанных с изменением тактической обстановки в бою.
@@ -8,6 +10,12 @@
         public abstract bool CanExecute();
         public void Execute()
         {
+            var canExecute = CanExecute();
+            if (!canExecute)
+            {
+                throw new InvalidOperationException("Попытка выполнить команду, которую нельзя выполнять в данный момент.");
+            }
+
             ExecuteTacticCommand();
         }
 
