@@ -91,11 +91,14 @@
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
+    <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
+    <Compile Include="Schemes\TacticalActConstrainsSubScheme.cs" />
+    <Compile Include="Schemes\TacticalActStatsSubScheme.cs" />
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />
     <Compile Include="Schemes\PerkJob.cs" />
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
