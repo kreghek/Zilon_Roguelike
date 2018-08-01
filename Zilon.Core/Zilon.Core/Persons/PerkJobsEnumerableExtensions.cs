@@ -45,7 +45,7 @@ namespace Zilon.Core.Persons
                     IsComplete = jobs[i].IsComplete
                 };
 
-                if (jobs[i].Scope != JobScope.Combat)
+                if (jobs[i].Scope != JobScope.Scenario)
                 {
                     resultJobs[i].Progress = jobs[i].Progress;
                 }

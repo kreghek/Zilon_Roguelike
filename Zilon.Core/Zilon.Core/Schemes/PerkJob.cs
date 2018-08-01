@@ -206,7 +206,7 @@ namespace Zilon.Core.Schemes
         {
             var description = GetDescriptionForType(schemeJob.Type, schemeJob.Data);
 
-            if (schemeJob.Scope == JobScope.Combat)
+            if (schemeJob.Scope == JobScope.Scenario)
             {
                 description += $": {schemeJob.Progress} за бой";
             }

@@ -100,7 +100,7 @@ namespace Zilon.Core.Persons
                         {
                             totalJob.Progress = personJob.Progress + actorJob.Progress;
                         }
-                        else if (schemeJob.Scope == JobScope.Combat && personJob.Progress < actorJob.Progress)
+                        else if (schemeJob.Scope == JobScope.Scenario && personJob.Progress < actorJob.Progress)
                         {
                             totalJob.Progress = actorJob.Progress;
                         }
