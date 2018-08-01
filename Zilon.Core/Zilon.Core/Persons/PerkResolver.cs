@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Zilon.Core.Logging;
 using Zilon.Core.Schemes;
 
@@ -22,7 +20,7 @@ namespace Zilon.Core.Persons
         {
             if (activePerk.DoneLevelJobs == null)
             {
-                throw new AppException("Активный перк не содержит никаких работ.");
+                throw new AppException("Активный перк не содержит никаких работ. Текущий перк не может развиваться.");
             }
 
             if (activePerk.TargetLevelScheme == null)
@@ -48,15 +46,37 @@ namespace Zilon.Core.Persons
 
             activePerk.CurrentLevel = currentLevel;
             activePerk.CurrentSubLevel = currentSubLevel;
-            activePerk.State = PerkState.None;
             activePerk.IsLevelPaid = false;
 
             PerkHelper.CalcLevelScheme(activePerk.Scheme.Levels, currentLevel, currentSubLevel,
                 out PerkLevelSubScheme archievedLevelScheme, out PerkLevelSubScheme targetLevelScheme);
-            activePerk.ArchievedLevelScheme = archievedLevelScheme;
+
+            AddLevelIfNew(activePerk.ArchievedLevelSchemes, archievedLevelScheme);
+
             activePerk.TargetLevelScheme = targetLevelScheme;
 
             return true;
+        }
+
+        /// <summary>
+        /// Формирует список прокаченный уровней перка на основе
+        /// текущих уровней и уровня после расчёта работ.
+        /// </summary>
+        /// <param name="perkArchievedLevelSchemes"> Полученные схемы уровне перка. </param>
+        /// <param name="scopeArchievedLevelScheme"> Расчитанный уровень за итерацию. </param>
+        /// <returns></returns>
+        private static PerkLevelSubScheme[] AddLevelIfNew(PerkLevelSubScheme[] perkArchievedLevelSchemes,
+            PerkLevelSubScheme scopeArchievedLevelScheme)
+        {
+            var stack = new Stack<PerkLevelSubScheme>(perkArchievedLevelSchemes);
+
+            var topLevel = stack.Peek();
+            if (topLevel != scopeArchievedLevelScheme)
+            {
+                stack.Push(scopeArchievedLevelScheme);
+            }
+
+            return stack.ToArray();
         }
 
         /// <summary>
@@ -128,6 +148,11 @@ namespace Zilon.Core.Persons
         /// <param name="schemeJobs">Работы схемы.</param>
         /// <param name="factJobs">Фактические работы. Будут модифицированы.</param>
         /// <returns>true - если все работы перка прокачены. Иначе - false.</returns>
+        /// <remarks>
+        /// Для работ перка обновляется прогресс.
+        /// Если условия работ перка выполнены, то отмечается признак <see cref="PerkJob.IsComplete">.
+        /// !!!Если работа завершена, этот признак не должен сниматься данным методом.
+        /// </remarks>
         //TODO Сделать отдельно метод, который выставляет признак Complete для задачи и метод проверки перка на выполнение всех условий.
         public static bool UpdateJobs(IEnumerable<PerkJob> schemeJobs, IEnumerable<PerkJob> factJobs)
         {
