@@ -5,7 +5,6 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.Commands
 {
-    //TODO Добавить тесты
     /// <summary>
     /// Команда на назначение экипировки.
     /// </summary>
