@@ -10,7 +10,7 @@ namespace Zilon.Core.Commands
         protected readonly IPlayerState _playerState;
         protected readonly ISectorManager _sectorManager;
 
-        public ActorCommandBase(ISectorManager sectorManager,
+        protected ActorCommandBase(ISectorManager sectorManager,
             IPlayerState playerState)
         {
             _playerState = playerState;

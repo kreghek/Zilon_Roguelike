@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using JetBrains.Annotations;
 
@@ -10,13 +6,17 @@ using Moq;
 
 using NUnit.Framework;
 
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Generation;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 

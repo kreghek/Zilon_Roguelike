@@ -1,20 +1,22 @@
-﻿using Moq;
+﻿using FluentAssertions;
+
+using Moq;
+
 using NUnit.Framework;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
+using Zilon.Core.Players;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Generation.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentAssertions;
-    using Zilon.Core;
-    using Zilon.Core.Common;
-    using Zilon.Core.CommonServices.Dices;
-    using Zilon.Core.Persons;
-    using Zilon.Core.Players;
-    using Zilon.Core.Schemes;
-    using Zilon.Core.Tactics.Spatial;
-
     [TestFixture()]
     public class SectorProceduralGeneratorTests
     {

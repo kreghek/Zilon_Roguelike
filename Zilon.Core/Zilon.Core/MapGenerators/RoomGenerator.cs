@@ -6,7 +6,7 @@ using System.Text;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Generation
+namespace Zilon.Core.MapGenerators
 {
     public class RoomGenerator
     {
@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics.Generation
         public List<Room> GenerateRoomsInGrid()
         {
             var roomGridSize = (int)Math.Ceiling(Math.Log(ROOM_COUNT, 2)) + 1;
-            var roomGrid = new Room[roomGridSize, roomGridSize];
+            var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
             for (var i = 0; i < ROOM_COUNT; i++)
@@ -54,7 +54,7 @@ namespace Zilon.Core.Tactics.Generation
                         PositionY = rolledPosition.Y
                     };
 
-                    roomGrid[rolledPosition.X, rolledPosition.Y] = room;
+                    roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
                     var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
 

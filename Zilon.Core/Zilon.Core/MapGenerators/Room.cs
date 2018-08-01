@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Generation
+namespace Zilon.Core.MapGenerators
 {
     public class Room
     {

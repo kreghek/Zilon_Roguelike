@@ -5,10 +5,11 @@ using System.Text;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Generation
+namespace Zilon.Core.MapGenerators
 {
     public class SectorProceduralGenerator
     {

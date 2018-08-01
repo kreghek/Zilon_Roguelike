@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 
-namespace Zilon.Core.Tactics.Generation
+namespace Zilon.Core.MapGenerators
 {
     public class SectorGeneratorRandomSource : ISectorGeneratorRandomSource
     {

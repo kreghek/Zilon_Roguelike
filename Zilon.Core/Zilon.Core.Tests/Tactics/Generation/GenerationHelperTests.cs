@@ -2,6 +2,8 @@
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators;
+
 namespace Zilon.Core.Tactics.Generation.Tests
 {
     [TestFixture()]
@@ -11,8 +13,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
         public void GetFreeCellTest()
         {
             // ARRANGE
-            var rooms = new Room[10, 10];
-            rooms[3, 3] = new Room();
+            var rooms = new RoomMatrix(10);
+            rooms.SetRoom(3, 3, new Room());
             var testedCoords = new OffsetCoords(3, 3);
 
 

@@ -6,7 +6,7 @@ namespace Zilon.Core.Common
     /// <summary>
     /// Вспомогательный класс для работы с кубическими координатами.
     /// </summary>
-    public class CubeCoordsHelper
+    public static class CubeCoordsHelper
     {
         private static float Lerp(int a, int b, float t)
         {

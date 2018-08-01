@@ -85,6 +85,7 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
+    <Compile Include="MapGenerators\RoomMatrix.cs" />
     <Compile Include="OffsetCoords.cs" />
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\EvolutionData.cs" />

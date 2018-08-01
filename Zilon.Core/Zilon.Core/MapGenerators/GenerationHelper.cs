@@ -1,12 +1,12 @@
-﻿namespace Zilon.Core.Tactics.Generation
+﻿namespace Zilon.Core.MapGenerators
 {
     public static class GenerationHelper
     {
-        public static OffsetCoords GetFreeCell(Room[,] grid, OffsetCoords rolled)
+        public static OffsetCoords GetFreeCell(RoomMatrix grid, OffsetCoords rolled)
         {
-            for (var i = 0; i < grid.GetLength(0); i++)
+            for (var i = 0; i < grid.Size; i++)
             {
-                for (var j = 0; j < grid.GetLength(1); j++)
+                for (var j = 0; j < grid.Size; j++)
                 {
                     if (IsValidForRoom(grid, rolled, i, j, 1, 1))
                     {
@@ -33,22 +33,22 @@
             return null;
         }
 
-        private static bool IsValidForRoom(Room[,] grid, OffsetCoords rolled, int i, int j, int qx, int qy)
+        private static bool IsValidForRoom(RoomMatrix grid, OffsetCoords rolled, int i, int j, int qx, int qy)
         {
             var testX = rolled.X + i * qx;
             var testY = rolled.Y + j * qy;
 
-            if (testX < 0 || testX >= grid.GetLength(0))
+            if (testX < 0 || testX >= grid.Size)
             {
                 return false;
             }
 
-            if (testY < 0 || testY >= grid.GetLength(1))
+            if (testY < 0 || testY >= grid.Size)
             {
                 return false;
             }
 
-            var currentRoom = grid[testX, testY];
+            var currentRoom = grid.GetRoom(testX, testY);
             var isValid = currentRoom == null;
             return isValid;
         }

@@ -7,7 +7,7 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class SpecialActorCommandBase : ActorCommandBase
     {
-        public SpecialActorCommandBase(ISectorManager sectorManager,
+        protected SpecialActorCommandBase(ISectorManager sectorManager,
             IPlayerState playerState) : base(sectorManager, playerState)
         {
 

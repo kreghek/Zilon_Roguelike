@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zilon.Core.Tactics.Generation
+namespace Zilon.Core.MapGenerators
 {
     public interface ISectorGeneratorRandomSource
     {
