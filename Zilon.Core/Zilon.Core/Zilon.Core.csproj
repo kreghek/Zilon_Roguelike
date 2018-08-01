@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppException.cs" />
     <Compile Include="Client\FloorPropContainer.cs" />
     <Compile Include="Client\IActorViewModel.cs" />
     <Compile Include="Client\IContainerViewModel.cs" />
@@ -87,12 +88,15 @@
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="MapGenerators\RoomMatrix.cs" />
     <Compile Include="OffsetCoords.cs" />
+    <Compile Include="PerkHelper.cs" />
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
+    <Compile Include="Persons\Perk.cs" />
+    <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
