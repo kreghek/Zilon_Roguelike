@@ -223,7 +223,7 @@ namespace Zilon.Core.Tactics.Tests
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            var person = new Person(personScheme);
+            var person = new HumanPerson(personScheme);
 
             var actor = new Actor(person, player, startNode);
 

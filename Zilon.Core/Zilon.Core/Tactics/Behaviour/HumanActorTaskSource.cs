@@ -72,7 +72,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_transfers != null)
             {
-                var inventory = _currentActor.Inventory;
+                var inventory = _currentActor.Person.Inventory;
 
                 if (inventory == null)
                 {

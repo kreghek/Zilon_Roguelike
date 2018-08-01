@@ -34,5 +34,13 @@
         /// Характеристики, используемые персонажем в бою.
         /// </summary>
         ICombatStats CombatStats { get; }
+
+        /// <summary>
+        /// Инвентарь персонажа.
+        /// </summary>
+        /// <remarks>
+        /// Для монстров равен null.
+        /// </remarks>
+        IPropStore Inventory { get; }
     }
 }

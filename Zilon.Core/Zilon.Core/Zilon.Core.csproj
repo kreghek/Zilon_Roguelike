@@ -213,7 +213,7 @@
     <Compile Include="Tactics\Spatial\Edge.cs" />
     <Compile Include="Tactics\Spatial\HexNode.cs" />
     <Compile Include="Tactics\Sector.cs" />
-    <Compile Include="Persons\Person.cs" />
+    <Compile Include="Persons\HumanPerson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
     <Compile Include="Schemes\LocationScheme.cs" />

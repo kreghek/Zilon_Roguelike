@@ -17,7 +17,7 @@ namespace Zilon.Core.Commands
         
         public override void Execute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Inventory;
+            var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel.Container;
             var containerContent = container.Content;

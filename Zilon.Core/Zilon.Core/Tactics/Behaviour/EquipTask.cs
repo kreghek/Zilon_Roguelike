@@ -26,12 +26,12 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentEquipment = equipmentCarrier.Equipments[_slotIndex];
             if (currentEquipment != null)
             {
-                Actor.Inventory.Add(currentEquipment);
+                Actor.Person.Inventory.Add(currentEquipment);
             }
 
             equipmentCarrier.SetEquipment(_equipment, _slotIndex);
 
-            Actor.Inventory.Remove(_equipment);
+            Actor.Person.Inventory.Remove(_equipment);
         }
     }
 }

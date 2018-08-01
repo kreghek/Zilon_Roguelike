@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-    public class Person : IPerson
+    /// <summary>
+    /// Персонаж, находящийся под управлением игрока.
+    /// </summary>
+    public class HumanPerson : IPerson
     {
         public int Id { get; set; }
 
@@ -23,7 +27,9 @@ namespace Zilon.Core.Persons
 
         public ICombatStats CombatStats { get; }
 
-        public Person(PersonScheme scheme)
+        public IPropStore Inventory { get; }
+
+        public HumanPerson(PersonScheme scheme)
         {
             if (scheme == null)
             {
@@ -50,6 +56,11 @@ namespace Zilon.Core.Persons
             };
 
             CalcCombatStats(CombatStats, EvolutionData);
+        }
+
+        public HumanPerson(PersonScheme scheme, Inventory inventory): this(scheme)
+        {
+            Inventory = inventory;
         }
 
         private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)

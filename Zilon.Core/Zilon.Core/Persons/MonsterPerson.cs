@@ -21,6 +21,8 @@ namespace Zilon.Core.Persons
 
         public ICombatStats CombatStats => throw new NotSupportedException("Для монстров не поддерживаются отдельные характеристики");
 
+        public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
+
         public MonsterPerson(MonsterScheme scheme)
         {
             TacticalActCarrier = new TacticalActCarrier();

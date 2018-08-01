@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
 
         public IPerson Create(PersonScheme personScheme)
         {
-            var person = new Person(personScheme);
+            var person = new HumanPerson(personScheme);
             return person;
         }
 
