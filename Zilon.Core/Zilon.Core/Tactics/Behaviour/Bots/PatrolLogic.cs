@@ -19,6 +19,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IMap _map;
         private readonly IActorManager _actorList;
         private readonly IDecisionSource _decisionSource;
+        private readonly ITacticalActUsageService _actService;
         private MoveTask _moveTask;
         private IdleTask _idleTask;
         private PatrolMode _mode;
@@ -30,7 +31,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             IPatrolRoute patrolRoute,
             IMap map,
             IActorManager actors,
-            IDecisionSource decisionSource)
+            IDecisionSource decisionSource,
+            ITacticalActUsageService actService)
         {
 
             _actor = actor;
@@ -38,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _map = map;
             _actorList = actors;
             _decisionSource = decisionSource;
-
+            _actService = actService;
             _persuitCounter = PERSIUT_COUNTER;
         }
 
@@ -105,7 +107,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(_actor, _targetIntruder, _decisionSource);
+                var attackTask = new AttackTask(_actor, _targetIntruder, _actService);
                 return attackTask;
             }
             else

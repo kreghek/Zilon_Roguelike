@@ -24,10 +24,14 @@ namespace Zilon.Core.Tactics.Behaviour
         private int _slotIndex;
 
         private readonly IDecisionSource _decisionSource;
+        private readonly ITacticalActUsageService _actUsageService;
 
-        public HumanActorTaskSource(IActor startActor, IDecisionSource decisionSource)
+        public HumanActorTaskSource(IActor startActor, 
+            IDecisionSource decisionSource,
+            ITacticalActUsageService actUsageService)
         {
             _decisionSource = decisionSource;
+            _actUsageService = actUsageService;
             _currentActor = startActor;
         }
 
@@ -58,7 +62,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_attackTarget != null)
             {
-                var attackTask = new AttackTask(_currentActor, _attackTarget, _decisionSource);
+                var attackTask = new AttackTask(_currentActor, _attackTarget, _actUsageService);
                 _currentTask = attackTask;
                 return new[] { _currentTask };
             }

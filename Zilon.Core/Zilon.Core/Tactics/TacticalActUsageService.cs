@@ -9,12 +9,12 @@ namespace Zilon.Core.Tactics
     public class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly IDecisionSource _decisionSource;
-        private readonly IPerkResolver _resolver;
+        private readonly IPerkResolver _perkResolver;
 
-        public TacticalActUsageService(IDecisionSource decisionSource, IPerkResolver resolver)
+        public TacticalActUsageService(IDecisionSource decisionSource, IPerkResolver perkResolver)
         {
             _decisionSource = decisionSource;
-            _resolver = resolver;
+            _perkResolver = perkResolver;
         }
 
         public void UseOn(IActor actor, IAttackTarget target, ITacticalAct act)
@@ -47,15 +47,10 @@ namespace Zilon.Core.Tactics
                 if (!targetIsDeadLast && targetActor.IsDead)
                 {
                     var evolutionData = actor.Person.EvolutionData;
-                    if (evolutionData != null)
-                    {
-                        var defeatProgress = new DefeatActorJobProgress(targetActor);
-                        foreach (var perk in evolutionData.ActivePerks)
-                        {
-                            var isArchieved = _resolver.ApplyProgress(defeatProgress, perk);
 
-                        }
-                    }
+                    var defeatProgress = new DefeatActorJobProgress(targetActor);
+
+                    _perkResolver.ApplyProgress(defeatProgress, evolutionData);
                 }
             }
             else

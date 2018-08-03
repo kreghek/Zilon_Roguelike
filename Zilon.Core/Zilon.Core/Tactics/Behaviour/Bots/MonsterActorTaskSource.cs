@@ -12,15 +12,18 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IPlayer _player;
         private readonly Dictionary<IActor, IPatrolRoute> _patrolRoutes;
         private readonly IDecisionSource _decisionSource;
+        private readonly ITacticalActUsageService _actService;
 
         public MonsterActorTaskSource(IPlayer player,
             Dictionary<IActor, IPatrolRoute> patrolRoutes,
-            IDecisionSource decisionSource)
+            IDecisionSource decisionSource,
+            ITacticalActUsageService actService)
         {
             _logicDict = new Dictionary<IActor, IBotLogic>();
             _player = player;
             _patrolRoutes = patrolRoutes;
             _decisionSource = decisionSource;
+            _actService = actService;
         }
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
@@ -45,7 +48,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                         if (_patrolRoutes.TryGetValue(actor, out var partolRoute))
                         {
 
-                            var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource);
+                            var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource, _actService);
                             _logicDict[actor] = patrolLogic;
                             logic = patrolLogic;
                         }

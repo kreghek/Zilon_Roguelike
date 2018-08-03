@@ -6,8 +6,8 @@
         /// Применяет прогресс к текущим работам.
         /// </summary>
         /// <param name="progress"> Объект прогресса. </param>
-        /// <param name="executable"> Объект, которые выполняется при помощи работ. </param>
+        /// <param name="evolutionData"> Данные о развитии персонажа. </param>
         /// <returns> Возвращает true, если все работы выполнены. </returns>
-        bool ApplyProgress(IJobProgress progress, IJobExecutable executable);
+        void ApplyProgress(IJobProgress progress, IEvolutionData evolutionData);
     }
 }

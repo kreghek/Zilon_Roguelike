@@ -5,23 +5,26 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Прогресс работы по уничтожению цели.
+    /// </summary>
     public class DefeatActorJobProgress : IJobProgress
     {
-        public DefeatActorJobProgress(IActor actor)
+        private readonly IActor _target;
+
+        public DefeatActorJobProgress(IActor target)
         {
-            Actor = actor;
+            _target = target;
         }
 
-        public IActor Actor { get; }
-
-        public JobSubScheme[] ApplyToJobs(IEnumerable<JobSubScheme> currentJobs)
+        public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
-            var modifiedJobs = new List<JobSubScheme>();
+            var modifiedJobs = new List<IJob>();
             foreach (var job in currentJobs)
             {
-                if (job.Type == JobType.Defeats)
+                if (job.Scheme.Type == JobType.Defeats)
                 {
-                    job.Value++;
+                    job.Progress++;
                     modifiedJobs.Add(job);
                 }
             }
