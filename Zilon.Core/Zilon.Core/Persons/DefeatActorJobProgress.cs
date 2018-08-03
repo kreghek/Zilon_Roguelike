@@ -14,14 +14,14 @@ namespace Zilon.Core.Persons
 
         public IActor Actor { get; }
 
-        public PerkJob[] ApplyToJobs(IEnumerable<PerkJob> currentJobs)
+        public JobSubScheme[] ApplyToJobs(IEnumerable<JobSubScheme> currentJobs)
         {
-            var modifiedJobs = new List<PerkJob>();
+            var modifiedJobs = new List<JobSubScheme>();
             foreach (var job in currentJobs)
             {
                 if (job.Type == JobType.Defeats)
                 {
-                    job.Progress++;
+                    job.Value++;
                     modifiedJobs.Add(job);
                 }
             }

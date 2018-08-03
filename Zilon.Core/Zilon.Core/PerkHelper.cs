@@ -10,37 +10,37 @@ namespace Zilon.Core
 {
     public static class PerkHelper
     {
-        public static Perk CreatePerk(PerkScheme perkScheme, int? perkLevel, int perkSubLevel, PerkJob[] doneLevelJobs, PerkState state, bool isLevelPaid,
-            IDictionary<string, PerkScheme> perkSchemeDict, IDictionary<string, PropScheme> propSchemeDict)
-        {
-            var perk = new Perk();
+        //public static Perk CreatePerk(PerkScheme perkScheme, int? perkLevel, int perkSubLevel, JobSubScheme[] doneLevelJobs, PerkState state, bool isLevelPaid,
+        //    IDictionary<string, PerkScheme> perkSchemeDict, IDictionary<string, PropScheme> propSchemeDict)
+        //{
+        //    var perk = new Perk();
 
-            perk.Scheme = perkScheme;
+        //    perk.Scheme = perkScheme;
 
-            perk.CurrentLevel = perkLevel;
-            perk.CurrentSubLevel = perkSubLevel;
+        //    perk.CurrentLevel = perkLevel;
+        //    perk.CurrentSubLevel = perkSubLevel;
 
-            CalcLevelScheme(perkScheme.Levels, perkLevel, perkSubLevel, out PerkLevelSubScheme archievedLevelScheme, out PerkLevelSubScheme nextLevelScheme);
-            perk.ArchievedLevelScheme = archievedLevelScheme;
-            perk.TargetLevelScheme = nextLevelScheme;
-            perk.IsLevelPaid = isLevelPaid;
+        //    CalcLevelScheme(perkScheme.Levels, perkLevel, perkSubLevel, out PerkLevelSubScheme archievedLevelScheme, out PerkLevelSubScheme nextLevelScheme);
+        //    perk.ArchievedLevelScheme = archievedLevelScheme;
+        //    perk.TargetLevelScheme = nextLevelScheme;
+        //    perk.IsLevelPaid = isLevelPaid;
 
-            if (doneLevelJobs != null)
-            {
-                perk.CurrentLevelJobs = doneLevelJobs;
-            }
-            else
-            {
-                if (perk.TargetLevelScheme != null)
-                {
-                    perk.CurrentLevelJobs = perk.TargetLevelScheme.Jobs.CopyWithoutProgress();
-                }
-            }
+        //    if (doneLevelJobs != null)
+        //    {
+        //        perk.CurrentJobs = doneLevelJobs;
+        //    }
+        //    else
+        //    {
+        //        if (perk.TargetLevelScheme != null)
+        //        {
+        //            perk.CurrentJobs = perk.TargetLevelScheme.Jobs.CopyWithoutProgress();
+        //        }
+        //    }
 
-            perk.State = state;
+        //    perk.State = state;
 
-            return perk;
-        }
+        //    return perk;
+        //}
 
         public static void GetNextLevel(PerkScheme perkScheme, ref int? currentLevel, ref int currentSubLevel)
         {

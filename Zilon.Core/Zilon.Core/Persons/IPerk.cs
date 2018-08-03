@@ -11,11 +11,5 @@ namespace Zilon.Core.Persons
         /// Схема перка.
         /// </summary>
         PerkScheme Scheme { get; }
-
-        /// <summary>
-        /// Расчитывает прогресс по заданию.
-        /// </summary>
-        /// <param name="jobProgress"> Данные по прогрессу по работе. </param>
-        void AddProgress(IJobProgress jobProgress);
     }
 }

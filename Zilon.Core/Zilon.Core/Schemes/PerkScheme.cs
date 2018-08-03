@@ -8,7 +8,7 @@ namespace Zilon.Core.Schemes
     public class PerkScheme: SchemeBase
     {
         public PerkRuleSubScheme[] Rules { get; set; }
-        public PerkJob[] Jobs { get; set; }
+        public JobSubScheme[] Jobs { get; set; }
 
         public PerkConditionSubScheme[] BaseConditions { get; set; }
         public PerkConditionSubScheme[] VisibleConditions { get; set; }

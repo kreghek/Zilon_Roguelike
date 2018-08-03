@@ -82,6 +82,7 @@
     <Compile Include="Components\CombatStatType.cs" />
     <Compile Include="Components\PersonRuleLevel.cs" />
     <Compile Include="Components\PersonRuleType.cs" />
+    <Compile Include="IJob.cs" />
     <Compile Include="Logging\LogCodes.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
@@ -99,6 +100,8 @@
     <Compile Include="Persons\IPerk.cs" />
     <Compile Include="Persons\IPerkResolver.cs" />
     <Compile Include="Persons\Perk.cs" />
+    <Compile Include="Persons\PerkEventArgs.cs" />
+    <Compile Include="Persons\PerkJob.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\PerkResolverImpl.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
@@ -111,7 +114,7 @@
     <Compile Include="Schemes\TacticalActConstrainsSubScheme.cs" />
     <Compile Include="Schemes\TacticalActStatsSubScheme.cs" />
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />
-    <Compile Include="Schemes\PerkJob.cs" />
+    <Compile Include="Schemes\JobSubScheme.cs" />
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
     <Compile Include="Schemes\PerkRuleSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />

@@ -52,7 +52,8 @@ namespace Zilon.Core.Tactics
                         var defeatProgress = new DefeatActorJobProgress(targetActor);
                         foreach (var perk in evolutionData.ActivePerks)
                         {
-                            perk.AddProgress(defeatProgress);
+                            var isArchieved = _resolver.ApplyProgress(defeatProgress, perk);
+
                         }
                     }
                 }

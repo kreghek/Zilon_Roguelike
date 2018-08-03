@@ -18,7 +18,7 @@ namespace Zilon.Core.Persons
         /// </remarks>
         public static bool Resolve(Perk activePerk)
         {
-            if (activePerk.CurrentLevelJobs == null)
+            if (activePerk.CurrentJobs == null)
             {
                 throw new AppException("Активный перк не содержит никаких работ. Текущий перк не может развиваться.");
             }
@@ -28,14 +28,14 @@ namespace Zilon.Core.Persons
                 throw new AppException("Активным перком выбран перк, которые не может дальше развиваться.");
             }
 
-            var allJobsDone = UpdateJobs(activePerk.TargetLevelScheme.Jobs, activePerk.CurrentLevelJobs);
+            var allJobsDone = UpdateJobs(activePerk.TargetLevelScheme.Jobs, activePerk.CurrentJobs);
 
             if (!allJobsDone)
             {
                 return false;
             }
 
-            activePerk.CurrentLevelJobs = null;
+            activePerk.CurrentJobs = null;
 
             // Если все работы выполнены, то повышаем подуровень перка.
             // Если взяты все подуровни, то переходим к следующему уровню.
@@ -85,12 +85,12 @@ namespace Zilon.Core.Persons
         /// <param name="activePerk">Активный перк.</param>
         /// <param name="actorJobs">Работы, которые были выполнены в рамках этого перка.</param>
         /// <returns>Актеальное состояние выполненых работ перка.</returns>
-        public static PerkJob[] UpdateActivePerkProgress(Perk activePerk, PerkJob[] actorJobs)
+        public static JobSubScheme[] UpdateActivePerkProgress(Perk activePerk, JobSubScheme[] actorJobs)
         {
-            var totalPersonJobs = new List<PerkJob>();
+            var totalPersonJobs = new List<JobSubScheme>();
             foreach (var schemeJob in activePerk.TargetLevelScheme.Jobs)
             {
-                var totalJob = new PerkJob
+                var totalJob = new JobSubScheme
                 {
                     Type = schemeJob.Type,
                     Scope = schemeJob.Scope,
@@ -105,7 +105,7 @@ namespace Zilon.Core.Persons
                 }
                 var actorJob = foundActorJobs.FirstOrDefault();
 
-                var foundPersonJobs = activePerk.CurrentLevelJobs.Where(x => x.Scope == schemeJob.Scope && x.Type == schemeJob.Type).ToArray();
+                var foundPersonJobs = activePerk.CurrentJobs.Where(x => x.Scope == schemeJob.Scope && x.Type == schemeJob.Type).ToArray();
                 if (foundPersonJobs.Count() > 1)
                 {
                     Logger.TraceError(LogCodes.ErrorCommon, "Для задачи перка персонажа найдено больше одной задачи из схемы.");
@@ -118,23 +118,23 @@ namespace Zilon.Core.Persons
                     {
                         if (schemeJob.Scope == JobScope.Global)
                         {
-                            totalJob.Progress = personJob.Progress + actorJob.Progress;
+                            totalJob.Value = personJob.Progress + actorJob.Value;
                         }
-                        else if (schemeJob.Scope == JobScope.Scenario && personJob.Progress < actorJob.Progress)
+                        else if (schemeJob.Scope == JobScope.Scenario && personJob.Progress < actorJob.Value)
                         {
-                            totalJob.Progress = actorJob.Progress;
+                            totalJob.Value = actorJob.Value;
                         }
                     }
                     else
                     {
-                        totalJob.Progress = personJob.Progress;
+                        totalJob.Value = personJob.Progress;
                     }
                 }
                 else
                 {
                     if (actorJob != null)
                     {
-                        totalJob.Progress = actorJob.Progress;
+                        totalJob.Value = actorJob.Value;
                     }
                 }
             }
@@ -150,11 +150,11 @@ namespace Zilon.Core.Persons
         /// <returns>true - если все работы перка прокачены. Иначе - false.</returns>
         /// <remarks>
         /// Для работ перка обновляется прогресс.
-        /// Если условия работ перка выполнены, то отмечается признак <see cref="PerkJob.IsComplete">.
+        /// Если условия работ перка выполнены, то отмечается признак <see cref="JobSubScheme.IsComplete">.
         /// !!!Если работа завершена, этот признак не должен сниматься данным методом.
         /// </remarks>
         //TODO Сделать отдельно метод, который выставляет признак Complete для задачи и метод проверки перка на выполнение всех условий.
-        public static bool UpdateJobs(IEnumerable<PerkJob> schemeJobs, IEnumerable<PerkJob> factJobs)
+        public static bool UpdateJobs(IEnumerable<JobSubScheme> schemeJobs, IEnumerable<JobSubScheme> factJobs)
         {
             if (!schemeJobs.Any())
             {
@@ -173,7 +173,7 @@ namespace Zilon.Core.Persons
                 if (factJob == null)
                     continue;
 
-                if (factJob.Progress < schemeJob.Progress)
+                if (factJob.Value < schemeJob.Value)
                 {
                     allJobsDone = false;
                 }

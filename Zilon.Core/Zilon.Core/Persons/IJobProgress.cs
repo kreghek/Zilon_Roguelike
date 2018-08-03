@@ -14,7 +14,8 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Применяет прогресс к указанным работам.
         /// </summary>
+        /// <param name="currentJobs"> Текущий набор работ, к которым необходимо применить прогресс. </param>
         /// <returns> Возвращает набор работ, которые были изменены. </returns>
-        PerkJob[] ApplyToJobs(IEnumerable<PerkJob> currentJobs);
+        IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs);
     }
 }

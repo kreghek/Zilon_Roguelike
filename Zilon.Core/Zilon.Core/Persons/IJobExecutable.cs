@@ -7,6 +7,6 @@ namespace Zilon.Core.Persons
     /// </summary>
     public interface IJobExecutable
     {
-        PerkJob[] CurrentJobs { get; }
+        IJob[] CurrentJobs { get; }
     }
 }
