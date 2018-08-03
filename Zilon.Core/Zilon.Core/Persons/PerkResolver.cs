@@ -18,7 +18,7 @@ namespace Zilon.Core.Persons
         /// </remarks>
         public static bool Resolve(Perk activePerk)
         {
-            if (activePerk.DoneLevelJobs == null)
+            if (activePerk.CurrentLevelJobs == null)
             {
                 throw new AppException("Активный перк не содержит никаких работ. Текущий перк не может развиваться.");
             }
@@ -28,14 +28,14 @@ namespace Zilon.Core.Persons
                 throw new AppException("Активным перком выбран перк, которые не может дальше развиваться.");
             }
 
-            var allJobsDone = UpdateJobs(activePerk.TargetLevelScheme.Jobs, activePerk.DoneLevelJobs);
+            var allJobsDone = UpdateJobs(activePerk.TargetLevelScheme.Jobs, activePerk.CurrentLevelJobs);
 
             if (!allJobsDone)
             {
                 return false;
             }
 
-            activePerk.DoneLevelJobs = null;
+            activePerk.CurrentLevelJobs = null;
 
             // Если все работы выполнены, то повышаем подуровень перка.
             // Если взяты все подуровни, то переходим к следующему уровню.
@@ -105,7 +105,7 @@ namespace Zilon.Core.Persons
                 }
                 var actorJob = foundActorJobs.FirstOrDefault();
 
-                var foundPersonJobs = activePerk.DoneLevelJobs.Where(x => x.Scope == schemeJob.Scope && x.Type == schemeJob.Type).ToArray();
+                var foundPersonJobs = activePerk.CurrentLevelJobs.Where(x => x.Scope == schemeJob.Scope && x.Type == schemeJob.Type).ToArray();
                 if (foundPersonJobs.Count() > 1)
                 {
                     Logger.TraceError(LogCodes.ErrorCommon, "Для задачи перка персонажа найдено больше одной задачи из схемы.");

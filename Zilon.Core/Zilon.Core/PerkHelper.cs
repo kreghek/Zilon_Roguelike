@@ -27,13 +27,13 @@ namespace Zilon.Core
 
             if (doneLevelJobs != null)
             {
-                perk.DoneLevelJobs = doneLevelJobs;
+                perk.CurrentLevelJobs = doneLevelJobs;
             }
             else
             {
                 if (perk.TargetLevelScheme != null)
                 {
-                    perk.DoneLevelJobs = perk.TargetLevelScheme.Jobs.CopyWithoutProgress();
+                    perk.CurrentLevelJobs = perk.TargetLevelScheme.Jobs.CopyWithoutProgress();
                 }
             }
 

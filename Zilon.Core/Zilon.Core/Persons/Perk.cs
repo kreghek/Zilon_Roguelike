@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Текущее состояние перка персонажа.
     /// </summary>
-    public class Perk
+    public class Perk: IPerk
     {
         /// <summary>
         /// Схема перка.
@@ -26,7 +26,7 @@ namespace Zilon.Core.Persons
         /// Аккумулированные работы по перку.
         /// Засчитываются в зависимости от области действия работ перка.
         /// </summary>
-        public PerkJob[] DoneLevelJobs { get; set; }
+        public PerkJob[] CurrentLevelJobs { get; set; }
 
         /// <summary>
         /// Текущий уровень перка. Иначе - индекс схемы уровня.
@@ -42,5 +42,18 @@ namespace Zilon.Core.Persons
         /// Признак того, что целевой уровень перка проплачен.
         /// </summary>
         public bool IsLevelPaid { get; internal set; }
+
+        public void AddProgress(IJobProgress jobProgress)
+        {
+            switch (jobProgress)
+            {
+                case DefeatActorJobProgress: 
+            }
+
+            foreach (var job in CurrentLevelJobs)
+            {
+                switch(job.)
+            }
+        }
     }
 }

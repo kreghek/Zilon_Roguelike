@@ -1,9 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Spatial;
-
 namespace Zilon.Core.Tactics.Behaviour
 {
     using System.Linq;
@@ -11,7 +7,7 @@ namespace Zilon.Core.Tactics.Behaviour
     public class AttackTask : OneTurnActorTaskBase
     {
         private readonly IAttackTarget _target;
-        private readonly IDecisionSource _decisionSource;
+        private readonly ITacticalActUsageService _actService;
 
         protected override void ExecuteTask()
         {
@@ -20,9 +16,6 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
             }
-
-            var currentCubePos = ((HexNode)Actor.Node).CubeCoords;
-            var targetCubePos = ((HexNode)_target.Node).CubeCoords;
 
             if (Actor.Person.TacticalActCarrier != null)
             {
@@ -33,16 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException("Не найдено действий.");
                 }
 
-                var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
-                if (!isInDistance)
-                {
-                    throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
-                }
-
-                var minEfficient = act.MinEfficient;
-                var maxEfficient = act.MaxEfficient;
-                var rolledEfficient = _decisionSource.SelectEfficient(minEfficient, maxEfficient);
-                _target.TakeDamage(rolledEfficient);
+                _actService.UseOn(Actor, _target, act);
             }
             else
             {
@@ -50,15 +34,13 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        public AttackTask(IActor actor, IAttackTarget target, IDecisionSource decisionSource) : base(actor)
+        public AttackTask(IActor actor,
+            IAttackTarget target,
+            ITacticalActUsageService actService) :
+            base(actor)
         {
-            if (actor == target)
-            {
-                throw new ArgumentException("Актур не может атаковать сам себя", nameof(target));
-            }
-
             _target = target;
-            _decisionSource = decisionSource;
+            _actService = actService;
         }
     }
 }

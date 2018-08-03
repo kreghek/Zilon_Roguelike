@@ -90,13 +90,17 @@
     <Compile Include="OffsetCoords.cs" />
     <Compile Include="PerkHelper.cs" />
     <Compile Include="Persons\CombatStats.cs" />
+    <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
+    <Compile Include="Persons\IJobExecutable.cs" />
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
+    <Compile Include="Persons\IPerkResolver.cs" />
     <Compile Include="Persons\Perk.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
+    <Compile Include="Persons\PerkResolverImpl.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
@@ -189,6 +193,7 @@
     <Compile Include="Tactics\IPropContainer.cs" />
     <Compile Include="Tactics\ISector.cs" />
     <Compile Include="Persons\ITacticalAct.cs" />
+    <Compile Include="Tactics\ITacticalActUsageService.cs" />
     <Compile Include="Tactics\MapHelper.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
     <Compile Include="Tactics\FixedPropContainer.cs" />
@@ -237,6 +242,7 @@
     <Compile Include="Tactics\Spatial\PathFinding\SortedListExtensions.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
+    <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\TaskIniComparer.cs" />
   </ItemGroup>
   <ItemGroup>
