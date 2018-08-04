@@ -86,13 +86,6 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             actor.Node.Should().Be(finishNode);
         }
 
-        private ITacticalActUsageService CreateTacticalActUsageService()
-        {
-            var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
-            var tacticalActUsageService = tacticalActUsageServiceMock.Object;
-            return tacticalActUsageService;
-        }
-
         private static IDecisionSource CreateDecisionSource()
         {
             var decisionSourceMock = new Mock<IDecisionSource>();
@@ -382,6 +375,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<OpenContainerTask>();
+        }
+
+        private ITacticalActUsageService CreateTacticalActUsageService()
+        {
+            var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
+            var tacticalActUsageService = tacticalActUsageServiceMock.Object;
+            return tacticalActUsageService;
         }
     }
 }
