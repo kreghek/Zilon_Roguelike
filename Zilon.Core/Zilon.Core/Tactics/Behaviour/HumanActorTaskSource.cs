@@ -8,7 +8,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource : IActorTaskSource
+    public class HumanActorTaskSource : IHumanActorTaskSource
     {
         private readonly IActor _currentActor;
         private IActorTask _currentTask;

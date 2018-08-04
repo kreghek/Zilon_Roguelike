@@ -90,7 +90,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный стоит рядом и может атаковать.
         /// </summary>
         [Test]
-        //TODO Убрать дублирование из тестов
         public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
         {
             // ARRANGE

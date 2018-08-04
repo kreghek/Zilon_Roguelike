@@ -23,6 +23,6 @@ namespace Zilon.Core.Client
         /// <summary>
         /// Пользовательский источник задач для актёров.
         /// </summary>
-        HumanActorTaskSource TaskSource { get; set; }
+        IHumanActorTaskSource TaskSource { get; set; }
     }
 }
