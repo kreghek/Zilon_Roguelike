@@ -87,6 +87,7 @@
     <Compile Include="Client\PropTransferStoreTests.cs" />
     <Compile Include="Commands\EquipCommandTests.cs" />
     <Compile Include="Commands\AttackCommandTests.cs" />
+    <Compile Include="Commands\MoveCommandTests.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
