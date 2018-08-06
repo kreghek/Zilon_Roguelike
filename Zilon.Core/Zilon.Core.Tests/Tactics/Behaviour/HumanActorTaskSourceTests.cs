@@ -12,14 +12,12 @@ using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
 // ReSharper disable once CheckNamespace
-namespace Zilon.Core.Commands.Tests
+namespace Zilon.Core.Tactics.Behaviour.Tests
 {
     /// <summary>
     /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
