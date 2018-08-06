@@ -11,12 +11,15 @@ namespace Zilon.Core.Persons
     {
         public TacticalAct(float equipmentPower, TacticalActScheme scheme, ICombatStats stats)
         {
+            Scheme = scheme;
             Stats = scheme.Stats;
             MinEfficient = CalcEfficient(Stats.Efficient.Min, scheme, equipmentPower, stats);
             MaxEfficient = CalcEfficient(Stats.Efficient.Max, scheme, equipmentPower, stats);
         }
 
         public TacticalActStatsSubScheme Stats { get; }
+
+        public TacticalActScheme Scheme { get; }
 
         public float MinEfficient { get; }
 

@@ -63,7 +63,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 	public void Init(IActor actor)
 	{
 		_actor = actor;
-		var inventory = _actor.Inventory;
+		var inventory = _actor.Person.Inventory;
 		UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 		
 		inventory.Added += InventoryOnContentChanged;
@@ -73,13 +73,13 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
 	{
-		var inventory = _actor.Inventory;
+		var inventory = _actor.Person.Inventory;
 		UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 	}
 
 	public void ApplyChanges()
 	{
-        var inventory = _actor.Inventory;
+        var inventory = _actor.Person.Inventory;
         inventory.Added -= InventoryOnContentChanged;
         inventory.Removed -= InventoryOnContentChanged;
         inventory.Changed -= InventoryOnContentChanged;

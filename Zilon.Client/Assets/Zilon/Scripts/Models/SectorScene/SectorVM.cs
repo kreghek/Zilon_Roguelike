@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,13 +9,13 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Generation;
 using Zilon.Core.Tactics.Spatial;
 
 // ReSharper disable once CheckNamespace
@@ -61,6 +60,10 @@ class SectorVM : MonoBehaviour
     [NotNull] [Inject] private IPropFactory _propFactory;
 
     [NotNull] [Inject] private IDropResolver _dropResolver;
+
+    [Inject] private HumanActorTaskSource _humanTaskSource;
+    
+    [Inject] private MonsterActorTaskSource _monsterTaskSource;
 
     [NotNull] [Inject(Id = "move-command")]
     private ICommand _moveCommand;
@@ -201,21 +204,15 @@ class SectorVM : MonoBehaviour
             containerVm.Selected += Container_Selected;
         }
 
-        var playerActorTaskSource = new HumanActorTaskSource(playerActorVm.Actor, _decisionSource);
-
-        var botActorTaskSource = new MonsterActorTaskSource(botPlayer,
-            sectorGenerator.Patrols,
-            _decisionSource);
-
         sector.BehaviourSources = new IActorTaskSource[]
         {
-            playerActorTaskSource,
-            botActorTaskSource
+            _humanTaskSource,
+            _monsterTaskSource
         };
 
         _sectorManager.CurrentSector = sector;
 
-        _playerState.TaskSource = playerActorTaskSource;
+        _playerState.TaskSource = _humanTaskSource;
 
         sector.ActorExit += SectorOnActorExit;
     }
@@ -261,15 +258,15 @@ class SectorVM : MonoBehaviour
         [NotNull] IEnumerable<MapNodeVM> nodeVMs,
         [NotNull] Equipment equipment)
     {
-        var person = new Person(personScheme);
-
-        person.EquipmentCarrier.SetEquipment(equipment, 0);
-
         var inventory = new Inventory();
         
+        var person = new HumanPerson(personScheme, inventory);
+
+        person.EquipmentCarrier.SetEquipment(equipment, 0);
+       
         AddTestPropsInInventory(inventory);
 
-        var actor = new Actor(person, player, startNode, inventory);
+        var actor = new Actor(person, player, startNode);
 
         actorManager.Add(actor);
 

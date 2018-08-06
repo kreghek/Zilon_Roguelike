@@ -9,6 +9,6 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
 
         public ISelectableViewModel HoverViewModel { get; set; }
 
-        public HumanActorTaskSource TaskSource { get; set; }
+        public IHumanActorTaskSource TaskSource { get; set; }
     }
 }

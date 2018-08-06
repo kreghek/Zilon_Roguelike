@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 using Zilon.Core.Client;
@@ -39,7 +40,8 @@ public class ActPanelHandler : MonoBehaviour {
 			Destroy(item.gameObject);
 		}
 
-		foreach (var act in acts)
+		var actArray = acts.ToArray();
+		foreach (var act in actArray)
 		{
 			var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
 			actItemVm.Init(act);
@@ -50,6 +52,18 @@ public class ActPanelHandler : MonoBehaviour {
 	private void ActClick_Handler(object sender, EventArgs e)
 	{
 		var actItemVm = sender as ActItemVm;
-		Debug.Log(actItemVm.Act.Scheme.Sid);
+		if (actItemVm == null)
+		{
+			throw new InvalidOperationException("Не указано действие (ViewModel).");
+		}
+
+		var act = actItemVm.Act as TacticalAct;
+		if (act == null)
+		{
+			throw new InvalidOperationException("Не указано действие (Domain).");
+		}
+
+
+		Debug.Log(act.Scheme.Sid);
 	}
 }
