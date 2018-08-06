@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
-        private readonly IActor _currentActor;
+        private IActor _currentActor;
         private IActorTask _currentTask;
 
         //TODO обобщить намерения.
@@ -26,17 +26,19 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actUsageService;
 
-        public HumanActorTaskSource(IActor startActor, 
-            IDecisionSource decisionSource,
+        public HumanActorTaskSource(IDecisionSource decisionSource,
             ITacticalActUsageService actUsageService)
         {
             _decisionSource = decisionSource;
             _actUsageService = actUsageService;
-            _currentActor = startActor;
         }
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
+            if (_currentActor == null)
+            {
+                throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
+            }
 
             if (_taskIsActual && _currentTask?.IsComplete == true)
             {
@@ -94,6 +96,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return new IActorTask[0];
+        }
+
+        public void SwitchActor(IActor currentActor)
+        {
+            _currentActor = currentActor;
         }
 
 

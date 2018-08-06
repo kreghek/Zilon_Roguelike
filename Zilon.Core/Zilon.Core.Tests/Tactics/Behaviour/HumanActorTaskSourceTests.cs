@@ -1,22 +1,25 @@
-﻿using Zilon.Core.Tactics.Behaviour;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FluentAssertions;
 
-using FluentAssertions;
+using LightInject;
 
 using Moq;
 
 using NUnit.Framework;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
 // ReSharper disable once CheckNamespace
-namespace Zilon.Core.Tactics.Behaviour.Tests
+namespace Zilon.Core.Commands.Tests
 {
     /// <summary>
     /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
@@ -25,6 +28,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     [TestFixture]
     public class HumanActorTaskSourceTests
     {
+        private ServiceContainer _container;
+
         [Test]
         public void GetActorTasksTest()
         {
@@ -41,13 +46,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             };
 
             var actor = CreateActor(startNode);
-
-            var decisionSource = CreateDecisionSource();
-
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behavourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
-            behavourSource.IntentMove(finishNode);
+            var taskSource = InitTaskSource(actor);
+            taskSource.IntentMove(finishNode);
 
             var actorManager = CreateActorManager(actor);
 
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = behavourSource.GetActorTasks(map, actorManager);
+                var commands = taskSource.GetActorTasks(map, actorManager);
 
                 if (step < 4)
                 {
@@ -84,6 +84,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             actor.Node.Should().Be(finishNode);
+        }
+
+        private IHumanActorTaskSource InitTaskSource(IActor currentActor)
+        {
+            var taskSource = _container.GetInstance<IHumanActorTaskSource>();
+            taskSource.SwitchActor(currentActor);
+            return taskSource;
         }
 
         private static IDecisionSource CreateDecisionSource()
@@ -117,25 +124,21 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var decisionSource = CreateDecisionSource();
-
             var actor = CreateActor(startNode);
 
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
+            var taskSource = InitTaskSource(actor);
 
             var actorManager = CreateActorManager(actor);
 
 
 
             // ACT
-            behaviourSource.IntentMove(startNode);
+            taskSource.IntentMove(startNode);
 
 
 
             // ASSERT
-            var commands = behaviourSource.GetActorTasks(map, actorManager);
+            var commands = taskSource.GetActorTasks(map, actorManager);
             commands.Should().NotBeNullOrEmpty();
             commands[0].Should().BeOfType<MoveTask>();
         }
@@ -162,18 +165,14 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var decisionSource = CreateDecisionSource();
-
             var actor = CreateActor(startNode);
 
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
+            var taskSource = InitTaskSource(actor);
 
 
 
             // ACT
-            Action act = () => { behaviourSource.IntentMove(null); };
+            Action act = () => { taskSource.IntentMove(null); };
 
 
 
@@ -196,23 +195,19 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var decisionSource = CreateDecisionSource();
-
             var actor = CreateActor(startNode);
 
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
+            var taskSource = InitTaskSource(actor);
 
             var actorManager = CreateActorManager(actor);
 
             // ACT
 
             // 1. Формируем намерение.
-            behaviourSource.IntentMove(finishNode);
+            taskSource.IntentMove(finishNode);
 
             // 2. Ждём, пока команда не отработает.
-            var commands = behaviourSource.GetActorTasks(map, actorManager);
+            var commands = taskSource.GetActorTasks(map, actorManager);
 
             for (var i = 0; i < 3; i++)
             {
@@ -229,11 +224,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behaviourSource.IntentMove(finishNode2);
+            taskSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behaviourSource.GetActorTasks(map, actorManager);
+            var factCommands = taskSource.GetActorTasks(map, actorManager);
 
 
 
@@ -259,11 +254,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = CreateActor(startNode);
 
-            var decisionSource = CreateDecisionSource();
-
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
+            var taskSource = InitTaskSource(actor);
 
             var actorManager = CreateActorManager(actor);
 
@@ -271,10 +262,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // ACT
 
             // 1. Формируем намерение.
-            behaviourSource.IntentMove(finishNode);
+            taskSource.IntentMove(finishNode);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = behaviourSource.GetActorTasks(map, actorManager);
+            var commands = taskSource.GetActorTasks(map, actorManager);
 
             for (var i = 0; i < 1; i++)
             {
@@ -291,11 +282,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            behaviourSource.IntentMove(finishNode2);
+            taskSource.IntentMove(finishNode2);
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = behaviourSource.GetActorTasks(map, actorManager);
+            var factCommands = taskSource.GetActorTasks(map, actorManager);
 
 
 
@@ -320,22 +311,19 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var attackerActor = CreateActor(attackerStartNode);
             var targetActor = CreateActor(targetStartNode);
 
-            var decisionSource = CreateDecisionSource();
+            var taskSource = InitTaskSource(attackerActor);
 
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(attackerActor, decisionSource, tacticalActUsageService);
 
             var actorManager = CreateActorManager(attackerActor, targetActor);
 
 
             // ACT
-            behaviourSource.IntentAttack(targetActor);
+            taskSource.IntentAttack(targetActor);
 
 
 
             // ASSERT
-            var tasks = behaviourSource.GetActorTasks(map, actorManager);
+            var tasks = taskSource.GetActorTasks(map, actorManager);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<AttackTask>();
@@ -351,11 +339,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = CreateActor(startNode);
 
-            var decisionSource = CreateDecisionSource();
-
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            var behaviourSource = new HumanActorTaskSource(actor, decisionSource, tacticalActUsageService);
+            var taskSource = InitTaskSource(actor);
 
             var actorManager = CreateActorManager(actor);
 
@@ -366,15 +350,29 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var method = methodMock.Object;
 
             // ACT
-            behaviourSource.IntentOpenContainer(container, method);
+            taskSource.IntentOpenContainer(container, method);
 
 
 
             // ASSERT
-            var tasks = behaviourSource.GetActorTasks(map, actorManager);
+            var tasks = taskSource.GetActorTasks(map, actorManager);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<OpenContainerTask>();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _container = new ServiceContainer();
+
+            var decisionSource = CreateDecisionSource();
+            _container.Register(factory => decisionSource);
+
+            var tacticalActUsageService = CreateTacticalActUsageService();
+            _container.Register(factory => tacticalActUsageService);
+
+            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
         }
 
         private ITacticalActUsageService CreateTacticalActUsageService()

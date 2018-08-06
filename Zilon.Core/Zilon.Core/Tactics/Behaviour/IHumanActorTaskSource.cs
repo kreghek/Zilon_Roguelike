@@ -7,6 +7,12 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public interface IHumanActorTaskSource: IActorTaskSource
     {
+        /// <summary>
+        /// Переключает текущего ключевого актёра.
+        /// </summary>
+        /// <param name="currentActor"> Целевой клчевой актёр. </param>
+        void SwitchActor(IActor currentActor);
+
         void IntentAttack(IAttackTarget target);
         void IntentEquip(Equipment equipment, int slotIndex);
         void IntentMove(HexNode targetNode);
