@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -45,12 +43,10 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
             var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
 
             var targetActor = targetActorViewModel.Actor;
             _playerState.TaskSource.IntentAttack(targetActor);
-            sector.Update();
         }
     }
 }

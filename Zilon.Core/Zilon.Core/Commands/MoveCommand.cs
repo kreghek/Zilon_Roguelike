@@ -1,5 +1,6 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics.Spatial;
+﻿using System;
+
+using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
@@ -40,12 +41,14 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
-            var selectedNodeVm = _playerState.HoverViewModel as IMapNodeViewModel;
+            var selectedNodeVm = GetSelectedNodeViewModel();
+            if (selectedNodeVm == null)
+            {
+                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+            }
 
             var targetNode = selectedNodeVm.Node;
             _playerState.TaskSource.IntentMove(targetNode);
-            sector.Update();
         }
     }
 }

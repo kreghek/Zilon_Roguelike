@@ -12,8 +12,7 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
-            sector.Update();
+            
         }
 
         public NextTurnCommand(ISectorManager sectorManager, 

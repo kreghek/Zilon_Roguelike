@@ -26,8 +26,6 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
-
             var inventoryTransfer = new PropTransfer(_transferMachine.Inventory.PropStore,
                 _transferMachine.Inventory.PropAdded,
                 _transferMachine.Inventory.PropRemoved);
@@ -37,7 +35,6 @@ namespace Zilon.Core.Commands
                 _transferMachine.Container.PropRemoved);
 
             _playerState.TaskSource.IntentTransferProps(new[] {inventoryTransfer, containerTransfer});
-            sector.Update();
         }
     }
 }

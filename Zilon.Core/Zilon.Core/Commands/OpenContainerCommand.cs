@@ -43,15 +43,11 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
-            
             var openMethod = new HandOpenContainerMethod();
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel.Container;
             _playerState.TaskSource.IntentOpenContainer(container, openMethod);
-            
-            sector.Update();
         }
     }
 }

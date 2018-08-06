@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Client;
+
 namespace Zilon.Core.Commands
 {
     /// <summary>
@@ -7,7 +9,16 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
+        protected readonly ISectorManager _sectorManager;
+
+        /// <summary>
+        /// Признак того, что в конце команды необходимо выполнить обновление сектора.
+        /// Означает, что команда немедленно выполнить передод к следующему игровому ходу.
+        /// </summary>
+        protected bool NeedToUpdateSector { get; }
+
         public abstract bool CanExecute();
+
         public void Execute()
         {
             var canExecute = CanExecute();
@@ -17,11 +28,19 @@ namespace Zilon.Core.Commands
             }
 
             ExecuteTacticCommand();
+
+            if (NeedToUpdateSector)
+            {
+                var sector = _sectorManager.CurrentSector;
+                sector.Update();
+            }
         }
 
-        protected TacticCommandBase()
+        protected TacticCommandBase(ISectorManager sectorManager)
         {
-            
+            _sectorManager = sectorManager;
+
+            NeedToUpdateSector = true;
         }
 
         /// <summary>

@@ -49,8 +49,6 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var sector = _sectorManager.CurrentSector;
-
             if (SlotIndex == null)
             {
                 throw new InvalidOperationException("Для команды не указан слот.");
@@ -64,7 +62,6 @@ namespace Zilon.Core.Commands
             }
 
             _playerState.TaskSource.IntentEquip(equipment, SlotIndex.Value);
-            sector.Update();
         }
     }
 }
