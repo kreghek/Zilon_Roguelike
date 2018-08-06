@@ -3,15 +3,14 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
-    //TODO Добавить тесты
     /// <summary>
     /// Команда на трансфер предметов между хранилищами.
     /// </summary>
-    public class PropTrasferCommand : ActorCommandBase
+    public class PropTransferCommand : SpecialActorCommandBase
     {
         private readonly PropTransferMachine _transferMachine;
 
-        public PropTrasferCommand(ISectorManager sectorManager,
+        public PropTransferCommand(ISectorManager sectorManager,
             IPlayerState playerState,
             PropTransferMachine transferMachine) :
             base(sectorManager, playerState)

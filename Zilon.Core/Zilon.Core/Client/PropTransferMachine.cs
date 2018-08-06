@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public class PropTransferMachine
+    public sealed class PropTransferMachine
     {
         public PropTransferMachine(IPropStore inventory, IPropStore container)
         {

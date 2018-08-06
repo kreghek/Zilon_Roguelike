@@ -6,11 +6,11 @@ using Moq;
 
 using NUnit.Framework;
 
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -19,7 +19,7 @@ using Zilon.Core.Tests.TestCommon;
 namespace Zilon.Core.Commands.Tests
 {
     [TestFixture]
-    public class EquipCommandTests
+    public class PropTrasferCommandTests
     {
         private ServiceContainer _container;
 
@@ -30,8 +30,7 @@ namespace Zilon.Core.Commands.Tests
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<EquipCommand>();
-            command.SlotIndex = 0;
+            var command = _container.GetInstance<PropTransferCommand>();
 
 
 
@@ -43,14 +42,33 @@ namespace Zilon.Core.Commands.Tests
             canExecute.Should().Be(true);
         }
 
+        /// <summary>
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// </summary>
+        [Test]
+        public void ExecuteTest()
+        {
+            var command = _container.GetInstance<PropTransferCommand>();
+            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+
+
+
+            // ACT
+            command.Execute();
+
+
+            // ASSERT
+            humanTaskSourceMock.Verify(x => x.IntentTransferProps(It.IsAny<IEnumerable<PropTransfer>>()));
+        }
+
         [SetUp]
-        public void SetUp ()
+        public void SetUp()
         {
             _container = new ServiceContainer();
 
             var testMap = new TestGridGenMap();
 
-            var sectorMock =  new Mock<ISector>();
+            var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
             var sectorManagerMock = new Mock<ISectorManager>();
@@ -78,47 +96,17 @@ namespace Zilon.Core.Commands.Tests
             var playerState = playerStateMock.Object;
             _container.Register(factory => playerState);
 
+            var inventory = CreateStore();
+            var container = CreateStore();
+            var transferMachine = new PropTransferMachine(inventory, container);
 
-            var propScheme = new PropScheme
-            {
-                Equip = new PropEquipSubScheme
-                {
-
-                }
-            };
-            var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
-
-            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
-            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);
-            var equipmentViewModel = equipmentViewModelMock.Object;
-
-            var inventoryStateMock = new Mock<IInventoryState>();
-            inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
-            var inventoryState = inventoryStateMock.Object;
-            _container.Register(factory => inventoryState);
-
-            _container.Register<EquipCommand>();
+            _container.Register<PropTransferCommand>();
+            _container.Register(factory => transferMachine);
         }
 
-        /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
-        /// </summary>
-        [Test]
-        public void ExecuteTest()
-        {
-            var command = _container.GetInstance<EquipCommand>();
-            command.SlotIndex = 0;
-
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-
-
-
-            // ACT
-            command.Execute();
-
-
-            // ASSERT
-            humanTaskSourceMock.Verify(x => x.IntentEquip(It.IsAny<Equipment>(), 0));
+        private IPropStore CreateStore() {
+            var storeMock = new Mock<IPropStore>();
+            return storeMock.Object;
         }
     }
 }
