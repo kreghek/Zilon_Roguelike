@@ -1,11 +1,11 @@
 ﻿using System;
+
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
-    //TODO Добавить тесты
     /// <summary>
     /// Команда открытие контейнера.
     /// </summary>
