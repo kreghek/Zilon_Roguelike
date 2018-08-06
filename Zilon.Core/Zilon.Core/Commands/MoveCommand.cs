@@ -17,7 +17,7 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var nodeViewModel = _playerState.HoverViewModel as IMapNodeViewModel;
+            var nodeViewModel = GetSelectedNodeViewModel();
             if (nodeViewModel == null)
             {
                 return false;
@@ -33,13 +33,18 @@ namespace Zilon.Core.Commands
             return true;
         }
 
+        private IMapNodeViewModel GetSelectedNodeViewModel()
+        {
+            return _playerState.HoverViewModel as IMapNodeViewModel;
+        }
+
         protected override void ExecuteTacticCommand()
         {
             var sector = _sectorManager.CurrentSector;
             var selectedNodeVm = _playerState.HoverViewModel as IMapNodeViewModel;
 
             var targetNode = selectedNodeVm.Node;
-            _playerState.TaskSource.IntentMove((HexNode)targetNode);
+            _playerState.TaskSource.IntentMove(targetNode);
             sector.Update();
         }
     }
