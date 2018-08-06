@@ -7,8 +7,10 @@
       "Min": 1,
       "Max": 3
     },
-    "MinRange": 1,
-    "MaxRange": 1,
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
     "HitCount": 1
   },
 
