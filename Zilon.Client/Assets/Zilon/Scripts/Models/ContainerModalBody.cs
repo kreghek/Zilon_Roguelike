@@ -17,23 +17,23 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable 649
     [NotNull] public PropItemVm PropItemPrefab;
-    
+
     [NotNull] public Transform InventoryItemsParent;
-    
+
     [NotNull] public Transform ContainerItemsParent;
-    
+
     // ReSharper restore MemberCanBePrivate.Global
-    
+
     [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
-    
+
     [NotNull] [Inject] private IPlayerState _playerState;
-    
+
     [NotNull] [Inject] private ISectorManager _sectorManger;
 
     [NotNull] private PropTransferMachine _transferMachine;
-    
-    [NotNull] private PropTrasferCommand _propTransferCommand;
-    
+
+    [NotNull] private PropTransferCommand _propTransferCommand;
+
 #pragma warning restore 649    
     // ReSharper restore UnassignedField.Global
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -41,7 +41,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     public void Init(PropTransferMachine transferMachine)
     {
         _transferMachine = transferMachine;
-        _propTransferCommand = new PropTrasferCommand(_sectorManger, _playerState, _transferMachine);
+        _propTransferCommand = new PropTransferCommand(_sectorManger, _playerState, _transferMachine);
         UpdateProps();
     }
 
@@ -49,7 +49,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     {
         var inventoryItems = _transferMachine.Inventory.CalcActualItems();
         UpdatePropsInner(InventoryItemsParent, inventoryItems);
-        
+
         var containerItems = _transferMachine.Container.CalcActualItems();
         UpdatePropsInner(ContainerItemsParent, containerItems);
     }
@@ -71,7 +71,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     private void PropItemOnClick(object sender, EventArgs e)
     {
-        var currentItemVm = (PropItemVm)sender;
+        var currentItemVm = (PropItemVm) sender;
         var parentTransform = currentItemVm.transform.parent;
         foreach (Transform itemTranform in parentTransform)
         {
