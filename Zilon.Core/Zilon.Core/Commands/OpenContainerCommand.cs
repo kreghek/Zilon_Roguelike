@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -23,7 +24,7 @@ namespace Zilon.Core.Commands
 
             var currentNode = _playerState.ActiveActor.Actor.Node;
 
-            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
                 return false;
@@ -36,7 +37,7 @@ namespace Zilon.Core.Commands
             //TODO добавить проверки:
             // 1. Можно ли открыть контейнер.
             // 2. Способен ли актёр открывать контейнеры.
-            // 3. Находится ли контейнера в зоне видимости.
+            // 3. Находится ли контейнера в зоне видимости. Проверяется.
 
             return canExecute;
         }
@@ -45,9 +46,24 @@ namespace Zilon.Core.Commands
         {
             var openMethod = new HandOpenContainerMethod();
 
-            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var targetContainerViewModel = GetSelectedNodeViewModel();
+            if (targetContainerViewModel == null)
+            {
+                throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
+            }
+
             var container = targetContainerViewModel.Container;
+            if (container == null)
+            {
+                throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
+            }
+
             _playerState.TaskSource.IntentOpenContainer(container, openMethod);
+        }
+
+        private IContainerViewModel GetSelectedNodeViewModel()
+        {
+            return _playerState.HoverViewModel as IContainerViewModel;
         }
     }
 }
