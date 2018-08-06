@@ -2,7 +2,6 @@
 
 namespace Zilon.Core.Commands
 {
-    //TODO Добавить тесты
     public class NextTurnCommand: ActorCommandBase
     {
         public override bool CanExecute()
