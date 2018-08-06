@@ -1,12 +1,21 @@
 {
-"Name":{
+  "Name": {
     "Ru": "Выстрел"
   },
-  "Efficient": {
-    "Min": 1,
-    "Max": 2
+  "Stats": {
+    "Efficient": {
+      "Min": 1,
+      "Max": 2
+    },
+    "MinRange": 1,
+    "MaxRange": 5,
+    "HitCount": 1
   },
-  "MinRange": 1,
-  "MaxRange": 5,
-  "HitCount": 1 
+
+  "Dependency": [
+    {
+      "Stat": "Ballistic",
+      "Value": 1
+    }
+  ]
 }

@@ -61,9 +61,15 @@ class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private IDropResolver _dropResolver;
 
-    [Inject] private HumanActorTaskSource _humanTaskSource;
+    [NotNull] [Inject] private HumanPlayer _humanPlayer;
     
-    [Inject] private MonsterActorTaskSource _monsterTaskSource;
+    [NotNull] [Inject] private BotPlayer _monsterPlayer;
+   
+    [NotNull] [Inject] private IActorManager _actorManager;
+    
+    [NotNull] [Inject] private IPropContainerManager _propContainerManager;
+
+    [NotNull] [Inject] private ITacticalActUsageService _tacticalActUsageService;
 
     [NotNull] [Inject(Id = "move-command")]
     private ICommand _moveCommand;
@@ -102,19 +108,12 @@ class SectorVM : MonoBehaviour
 
     private void CreateSector()
     {
-        var humanPlayer = new HumanPlayer();
-        var botPlayer = new BotPlayer();
-
         var map = new HexMap();
 
-        var actorManager = new ActorManager();
-
-        var propContainerManager = new PropContainerManager();
-
-        var sector = new Sector(map, actorManager, propContainerManager);
+        var sector = new Sector(map, _actorManager, _propContainerManager);
 
         var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
-            botPlayer,
+            _monsterPlayer,
             _schemeService,
             _dropResolver);
 
@@ -165,9 +164,9 @@ class SectorVM : MonoBehaviour
 
         var playerEquipment = _propFactory.CreateEquipment(propScheme);
         var playerActorStartNode = sectorGenerator.StartNodes.First();
-        var playerActorVm = CreateHumanActorVm(humanPlayer,
+        var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
-            actorManager,
+            _actorManager,
             playerActorStartNode,
             nodeVMs,
             playerEquipment);
@@ -176,7 +175,7 @@ class SectorVM : MonoBehaviour
 
         foreach (var monsterActor in sectorGenerator.MonsterActors)
         {
-            actorManager.Add(monsterActor);
+            _actorManager.Add(monsterActor);
 
             var actorVm = Instantiate(ActorPrefab, transform);
             var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
@@ -203,16 +202,24 @@ class SectorVM : MonoBehaviour
             containerVm.Container = container;
             containerVm.Selected += Container_Selected;
         }
+        
+        var humanTaskSource = new HumanActorTaskSource(_decisionSource, _tacticalActUsageService);
+        humanTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+
+        var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
+            sectorGenerator.Patrols,
+            _decisionSource,
+            _tacticalActUsageService);
 
         sector.BehaviourSources = new IActorTaskSource[]
         {
-            _humanTaskSource,
-            _monsterTaskSource
+            humanTaskSource,
+            monsterTaskSource
         };
 
         _sectorManager.CurrentSector = sector;
 
-        _playerState.TaskSource = _humanTaskSource;
+        _playerState.TaskSource = humanTaskSource;
 
         sector.ActorExit += SectorOnActorExit;
     }
@@ -267,7 +274,7 @@ class SectorVM : MonoBehaviour
         AddTestPropsInInventory(inventory);
 
         var actor = new Actor(person, player, startNode);
-
+        
         actorManager.Add(actor);
 
         var actorVm = Instantiate(ActorPrefab, transform);

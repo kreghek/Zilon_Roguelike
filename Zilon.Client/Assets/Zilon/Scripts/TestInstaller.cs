@@ -8,9 +8,9 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
@@ -29,9 +29,12 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
-        
-        Container.Bind<HumanActorTaskSource>().AsSingle();
-        Container.Bind<MonsterActorTaskSource>().AsSingle();
+        Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
+        Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
+        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
+
+        Container.Bind<HumanPlayer>().AsSingle();
+        Container.Bind<BotPlayer>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(GetSchemeLocator()).AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();

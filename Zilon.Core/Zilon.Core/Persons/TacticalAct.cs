@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Schemes;
 
@@ -30,6 +31,11 @@ namespace Zilon.Core.Persons
             float equipmentPower, 
             ICombatStats stats)
         {
+            if (stats == null)
+            {
+                throw new ArgumentNullException(nameof(stats));
+            }
+
             var sum = 0f;
 
             foreach(var depItem in scheme.Dependency)

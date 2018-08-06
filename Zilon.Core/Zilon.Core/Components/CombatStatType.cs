@@ -1,5 +1,8 @@
-﻿namespace Zilon.Core.Components
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Components
 {
+    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum CombatStatType
     {
         /// <summary>
