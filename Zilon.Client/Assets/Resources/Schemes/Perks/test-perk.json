@@ -1,5 +1,19 @@
 {
   "Name": {
     "Ru": "Тест"
-  }
+  },
+  "Levels":[
+    {
+	  "Rules": [
+	    {
+		  "Type": "Melee"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "Defeat"
+		}
+	  ]
+	}
+  ]
 }
