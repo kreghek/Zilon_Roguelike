@@ -8,24 +8,19 @@ namespace Zilon.Core.Persons
     public interface IEvolutionData
     {
         /// <summary>
-        /// Текущие активные перки.
+        /// Текущие перки.
         /// </summary>
-        IPerk[] ActivePerks { get; }
-
-        /// <summary>
-        /// Полученные перки.
-        /// </summary>
-        IPerk[] ArchievedPerks { get; }
+        IPerk[] Perks { get; }
 
         /// <summary>
         /// Указывает, что один из активных перков считается прокачанным.
         /// </summary>
         /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
-        void ActivePerkArchieved(IPerk perk);
+        void PerkLevelUp(IPerk perk);
 
         /// <summary>
-        /// Выстреливает, когда среди достигнутых появляется новый перк.
+        /// Выстреливает, когда один из перков повышается на уровень.
         /// </summary>
-        event EventHandler<PerkEventArgs> PerkArchieved;
+        event EventHandler<PerkEventArgs> PerkLeveledUp;
     }
 }

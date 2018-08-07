@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
@@ -47,14 +47,17 @@ namespace Zilon.Core.Persons
 
             EvolutionData = new EvolutionData();
 
-            CombatStats = new CombatStats() {
-                //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
-                Stats =new[]{
-                    new CombatStatItem {Stat = CombatStatType.Melee, Value = 10 },
-                    new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 },
-                }
-            };
+            EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
+            CombatStats = new CombatStats();
+            ClearCombatStats((CombatStats)CombatStats);
+
+            CalcCombatStats(CombatStats, EvolutionData);
+        }
+
+        private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
+        {
+            ClearCombatStats((CombatStats)CombatStats);
             CalcCombatStats(CombatStats, EvolutionData);
         }
 
@@ -65,9 +68,35 @@ namespace Zilon.Core.Persons
 
         private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)
         {
-            foreach (var archievedPerk in evolutionData.ArchievedPerks)
+            var archievedPerks = evolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+            foreach (var archievedPerk in archievedPerks)
             {
-                //TODO Перенести наработки по вычислению текущего апдейта перка.
+                var currentLevel = archievedPerk.CurrentLevel;
+                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary.Value];
+
+                if (currentLevelScheme.Rules == null)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i < currentLevel.Sub; i++)
+                {
+                    foreach (var rule in currentLevelScheme.Rules)
+                    {
+                        var ruleType = rule.Type;
+                        switch (ruleType)
+                        {
+                            case PersonRuleType.Melee:
+                                var statItem = combatStats.Stats.SingleOrDefault(x => x.Stat == CombatStatType.Melee);
+                                if (statItem != null)
+                                {
+                                    statItem.Value += 1;
+                                }
+
+                                break;
+                        }
+                    }
+                }
             }
         }
 
@@ -107,6 +136,15 @@ namespace Zilon.Core.Persons
         private static float CalcEquipmentEfficient(Equipment equipment)
         {
             return equipment.Power * equipment.Scheme.Equip.Power;
+        }
+
+        private void ClearCombatStats(CombatStats combatStats)
+        {
+            //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
+            combatStats.Stats = new[]{
+                new CombatStatItem {Stat = CombatStatType.Melee, Value = 10 },
+                new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 }
+            };
         }
 
         public override string ToString()

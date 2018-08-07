@@ -102,6 +102,7 @@
     <Compile Include="Persons\Perk.cs" />
     <Compile Include="Persons\PerkEventArgs.cs" />
     <Compile Include="Persons\PerkJob.cs" />
+    <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver_Old.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />

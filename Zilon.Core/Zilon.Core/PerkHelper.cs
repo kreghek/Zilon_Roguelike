@@ -42,13 +42,16 @@ namespace Zilon.Core
         //    return perk;
         //}
 
-        public static void GetNextLevel(PerkScheme perkScheme, ref int? currentLevel, ref int currentSubLevel)
+        public static PerkLevel GetNextLevel(PerkScheme perkScheme, PerkLevel level)
         {
+            var currentLevel = level.Primary;
+            var currentSubLevel = level.Sub;
+
             if (currentLevel == null)
             {
                 currentLevel = 0;
                 currentSubLevel = 0;
-                return;
+                return new PerkLevel(0, 0);
             }
 
             var currentLevelScheme = perkScheme.Levels[currentLevel.Value];
@@ -62,6 +65,8 @@ namespace Zilon.Core
             {
                 currentSubLevel++;
             }
+
+            return new PerkLevel(currentLevel, currentSubLevel);
         }
 
         public static PerkRuleSubScheme[] GetAllPerkRules(PerkScheme perkScheme, int? perkLevel, int perkSubLevel)
@@ -182,32 +187,32 @@ namespace Zilon.Core
         //    return perks.ToArray();
         //}
 
-        /// <summary>
-        /// Рассчитывает уровень персонажа исходя из прокаченных перков.
-        /// </summary>
-        /// <param name="perks">Прокаченные перки. Внутри всё равно есть проверка на наличие уровня у перка.</param>
-        /// <returns>Уровень персонажа</returns>
-        public static float CalcPersonLevel(IEnumerable<Perk> perks)
-        {
-            var totalArchievedPersonLevel = 0f;
-            foreach (var perk in perks)
-            {
-                if (perk.CurrentLevel == null)
-                    continue;
+        ///// <summary>
+        ///// Рассчитывает уровень персонажа исходя из прокаченных перков.
+        ///// </summary>
+        ///// <param name="perks">Прокаченные перки. Внутри всё равно есть проверка на наличие уровня у перка.</param>
+        ///// <returns>Уровень персонажа</returns>
+        //public static float CalcPersonLevel(IEnumerable<Perk> perks)
+        //{
+        //    var totalArchievedPersonLevel = 0f;
+        //    foreach (var perk in perks)
+        //    {
+        //        if (perk.CurrentLevel == null)
+        //            continue;
 
-                var perkScheme = perk.Scheme;
-                for (var i = 0; i <= perk.CurrentLevel.Value; i++)
-                {
-                    var levelScheme = perkScheme.Levels[i];
+        //        var perkScheme = perk.Scheme;
+        //        for (var i = 0; i <= perk.CurrentLevel.Value; i++)
+        //        {
+        //            var levelScheme = perkScheme.Levels[i];
 
-                    var perkPersonLevel = levelScheme.PersonLevel.Base + levelScheme.PersonLevel.LevelInc * perk.CurrentSubLevel;
+        //            var perkPersonLevel = levelScheme.PersonLevel.Base + levelScheme.PersonLevel.LevelInc * perk.CurrentSubLevel;
 
-                    totalArchievedPersonLevel += perkPersonLevel;
-                }
-            }
+        //            totalArchievedPersonLevel += perkPersonLevel;
+        //        }
+        //    }
 
-            return totalArchievedPersonLevel + 1;
-        }
+        //    return totalArchievedPersonLevel + 1;
+        //}
 
         //public static Perk[] FilterAvailability(IEnumerable<Perk> perks, PerkAvailabilityContext availabilityContext)
         //{

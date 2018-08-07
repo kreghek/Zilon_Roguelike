@@ -29,14 +29,9 @@ namespace Zilon.Core.Persons
         public IJob[] CurrentJobs { get; set; }
 
         /// <summary>
-        /// Текущий уровень перка. Иначе - индекс схемы уровня.
+        /// Текущий уровень перка.
         /// </summary>
-        public int? CurrentLevel { get; set; }
-
-        /// <summary>
-        /// Подуровень. Или уровень внутри схемы уровня перка.
-        /// </summary>
-        public int CurrentSubLevel { get; set; }
+        public PerkLevel CurrentLevel { get; set; }
 
         /// <summary>
         /// Признак того, что целевой уровень перка проплачен.

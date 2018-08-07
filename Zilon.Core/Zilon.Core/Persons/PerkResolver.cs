@@ -36,7 +36,7 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            foreach (var perk in evolutionData.ActivePerks)
+            foreach (var perk in evolutionData.Perks)
             {
                 var affectedJobs = progress.ApplyToJobs(perk.CurrentJobs);
 
@@ -55,7 +55,7 @@ namespace Zilon.Core.Persons
 
                 if (allJobsAreComplete)
                 {
-                    evolutionData.ActivePerkArchieved(perk);
+                    evolutionData.PerkLevelUp(perk);
                 }
             }
         }

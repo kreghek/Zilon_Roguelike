@@ -6,7 +6,7 @@
     public enum PersonRuleType
     {
         Undefined,
-        IncreaseMelee,
-        IncreaseBallistic
+        Melee,
+        Ballistic
     }
 }
