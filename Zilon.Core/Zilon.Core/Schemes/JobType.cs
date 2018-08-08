@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Zilon.Core.Schemes
 {
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum JobType
     {
         Defeats = 1,  // Просто повергнуть кого-нибудь. Все победы - это нанесение крита, дающего OutOfControl
