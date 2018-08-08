@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    internal class SchemeServiceHandler<TScheme> where TScheme : class, IScheme
+    internal class SchemeServiceHandler<TScheme> : ISchemeServiceHandler<TScheme> where TScheme : class, IScheme
     {
         private const string SCHEME_POSTFIX = "Scheme";
 

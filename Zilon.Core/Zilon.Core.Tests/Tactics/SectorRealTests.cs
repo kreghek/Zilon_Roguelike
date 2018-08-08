@@ -258,7 +258,9 @@ namespace Zilon.Core.Tactics.Tests
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
-            return new SchemeService(schemeLocator);
+            var schemeHandlerFactory = new SchemeServiceHandlerFactory(schemeLocator);
+
+            return new SchemeService(schemeHandlerFactory);
         }
     }
 }

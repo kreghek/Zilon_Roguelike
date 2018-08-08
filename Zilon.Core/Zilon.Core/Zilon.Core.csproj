@@ -105,6 +105,8 @@
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver_Old.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
+    <Compile Include="Schemes\ISchemeServiceHandler.cs" />
+    <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
     <Compile Include="Schemes\SchemeServiceHandler.cs" />
+    <Compile Include="Schemes\SchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\TacticalActConstrainsSubScheme.cs" />
     <Compile Include="Schemes\TacticalActStatsSubScheme.cs" />
     <Compile Include="Schemes\PerkConditionSubScheme.cs" />

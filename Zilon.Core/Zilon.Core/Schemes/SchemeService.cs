@@ -9,27 +9,30 @@ namespace Zilon.Core.Schemes
     public sealed class SchemeService : ISchemeService
     {
         private readonly Dictionary<Type, object> _handlerDict;
+        private readonly ISchemeServiceHandlerFactory _schemeServiceHandlerFactory;
 
-        public SchemeService(ISchemeLocator schemeLocator)
+        public SchemeService(ISchemeServiceHandlerFactory schemeServiceHandlerFactory)
         {
+            _schemeServiceHandlerFactory = schemeServiceHandlerFactory;
+
             _handlerDict = new Dictionary<Type, object>();
 
-            InitHandler<MapScheme>(schemeLocator);
-            InitHandler<LocationScheme>(schemeLocator);
-            InitHandler<PathScheme>(schemeLocator);
-            InitHandler<PropScheme>(schemeLocator);
-            InitHandler<TacticalActScheme>(schemeLocator);
-            InitHandler<PersonScheme>(schemeLocator);
-            InitHandler<DropTableScheme>(schemeLocator);
-            InitHandler<PerkScheme>(schemeLocator);
-            InitHandler<MonsterScheme>(schemeLocator);
-            InitHandler<DropTableModificatorScheme>(schemeLocator);
+            InitHandler<MapScheme>();
+            InitHandler<LocationScheme>();
+            InitHandler<PathScheme>();
+            InitHandler<PropScheme>();
+            InitHandler<TacticalActScheme>();
+            InitHandler<PersonScheme>();
+            InitHandler<DropTableScheme>();
+            InitHandler<PerkScheme>();
+            InitHandler<MonsterScheme>();
+            InitHandler<DropTableModificatorScheme>();
         }
 
-        private void InitHandler<T>(ISchemeLocator schemeLocator) where T : class, IScheme
+        private void InitHandler<TScheme>() where TScheme : class, IScheme
         {
-            var handler = new SchemeServiceHandler<T>(schemeLocator);
-            _handlerDict.Add(typeof(T), handler);
+            var handler = _schemeServiceHandlerFactory.Create<TScheme>();
+            _handlerDict.Add(typeof(TScheme), handler);
             handler.LoadSchemes();
         }
 
