@@ -56,7 +56,6 @@ namespace Zilon.Core.Tests.TestCommon
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
-                    //TODO Для тестов сделать свою реализацию сервиса, чтобы падал, если найдены лишние члены в json
                     var settings = new JsonSerializerSettings {
                         MissingMemberHandling = MissingMemberHandling.Error
                     };

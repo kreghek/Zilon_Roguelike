@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Zilon.Core.Services.MapGenerators;
+
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -7,7 +7,7 @@ namespace Zilon.Core.Tests.TestCommon
 {
     using Zilon.Core.CommonServices.MapGenerators;
 
-    public class TestGridGenMap : IMap
+    public class TestGrid15GenMap : IMap
     {
         public List<IMapNode> Nodes { get; set; }
 
@@ -28,12 +28,12 @@ namespace Zilon.Core.Tests.TestCommon
 
         }
 
-        public TestGridGenMap()
+        public TestGrid15GenMap()
         {
             Nodes = new List<IMapNode>();
             Edges = new List<IEdge>();
 
-            var gridGenerator = new GridMapGenerator(10);
+            var gridGenerator = new GridMapGenerator(15);
             gridGenerator.CreateMap(this);
         }
     }

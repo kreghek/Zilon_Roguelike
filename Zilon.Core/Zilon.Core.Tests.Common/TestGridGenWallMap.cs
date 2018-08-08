@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.Services.MapGenerators;
+
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
