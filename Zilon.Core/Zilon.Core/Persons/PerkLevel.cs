@@ -17,5 +17,13 @@
             Primary = primary;
             Sub = sub;
         }
+
+        public static PerkLevel Zero
+        {
+            get
+            {
+                return new PerkLevel(null, 0);
+            }
+        }
     }
 }

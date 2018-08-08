@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Zilon.Core.Tactics;
+﻿using System.Linq;
 
 namespace Zilon.Core.Persons
 {
