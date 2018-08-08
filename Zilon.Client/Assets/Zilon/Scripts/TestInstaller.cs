@@ -32,6 +32,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
+        Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<BotPlayer>().AsSingle();

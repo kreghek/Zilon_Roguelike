@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons
 
         public IPropStore Inventory { get; }
 
-        public HumanPerson(PersonScheme scheme)
+        public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
             if (scheme == null)
             {
@@ -45,23 +45,34 @@ namespace Zilon.Core.Persons
             TacticalActCarrier = new TacticalActCarrier();
 
 
-            EvolutionData = new EvolutionData();
+            EvolutionData = evolutionData;
 
-            EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
+            if (EvolutionData != null)
+            {
+                EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
+            }
 
             CombatStats = new CombatStats();
             ClearCombatStats((CombatStats)CombatStats);
 
-            CalcCombatStats(CombatStats, EvolutionData);
+            if (EvolutionData != null)
+            {
+                CalcCombatStats(CombatStats, EvolutionData);
+            }
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
         {
             ClearCombatStats((CombatStats)CombatStats);
-            CalcCombatStats(CombatStats, EvolutionData);
+
+            if (EvolutionData != null)
+            {
+                CalcCombatStats(CombatStats, EvolutionData);
+            }
         }
 
-        public HumanPerson(PersonScheme scheme, Inventory inventory): this(scheme)
+        public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData, Inventory inventory):
+            this(scheme, evolutionData)
         {
             Inventory = inventory;
         }

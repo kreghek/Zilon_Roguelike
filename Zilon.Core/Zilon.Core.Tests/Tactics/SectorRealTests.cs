@@ -108,7 +108,7 @@ namespace Zilon.Core.Tactics.Tests
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int>((min, max) => 1);
             var decisionSource = decisionSourceMock.Object;
-            var perkResolver = new PerkResolver(actorManager);
+            var perkResolver = new PerkResolver();
             var tacticalActUsageService = new TacticalActUsageService(decisionSource, perkResolver);
             var botTaskSource = new MonsterActorTaskSource(botPlayer, generator.Patrols, decisionSource, tacticalActUsageService);
 
@@ -201,7 +201,7 @@ namespace Zilon.Core.Tactics.Tests
             // Подготовка дополнительных сервисов
             var dice = new Dice();
             var decisionSource = new DecisionSource(dice);
-            var perkResolver = new PerkResolver(actorManager);
+            var perkResolver = new PerkResolver();
             var tacticalActUsageService = new TacticalActUsageService(decisionSource, perkResolver);
 
 
@@ -220,21 +220,6 @@ namespace Zilon.Core.Tactics.Tests
             var patrolRoute = new PatrolRoute(mapNodes);
 
             return patrolRoute;
-        }
-
-        private IActor CreateActor([NotNull] IPlayer player,
-            [NotNull] PersonScheme personScheme,
-            [NotNull] IActorManager actorManager,
-            [NotNull] IMapNode startNode)
-        {
-            var person = new HumanPerson(personScheme);
-
-            var actor = new Actor(person, player, startNode);
-
-            actorManager.Add(actor);
-
-
-            return actor;
         }
 
         private IActor CreateMonsterActor([NotNull] IPlayer player,

@@ -267,7 +267,10 @@ class SectorVM : MonoBehaviour
     {
         var inventory = new Inventory();
         
-        var person = new HumanPerson(personScheme, inventory);
+        var evolutionData = new EvolutionData(_schemeService);
+        evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
+        
+        var person = new HumanPerson(personScheme, evolutionData, inventory);
 
         person.EquipmentCarrier.SetEquipment(equipment, 0);
        

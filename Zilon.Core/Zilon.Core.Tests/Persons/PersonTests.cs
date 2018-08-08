@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Persons
                 SlotCount = 3
             };
 
-            var person = new HumanPerson(personScheme);
+            var person = new HumanPerson(personScheme, null);
 
             var propScheme = new PropScheme
             {

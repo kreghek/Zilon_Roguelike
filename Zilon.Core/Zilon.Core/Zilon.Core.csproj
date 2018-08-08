@@ -99,12 +99,14 @@
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
     <Compile Include="Persons\IPerkResolver.cs" />
+    <Compile Include="Persons\IPersonFactory.cs" />
     <Compile Include="Persons\Perk.cs" />
     <Compile Include="Persons\PerkEventArgs.cs" />
     <Compile Include="Persons\PerkJob.cs" />
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver_Old.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
+    <Compile Include="Persons\PersonFactory.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
@@ -144,7 +146,6 @@
     <Compile Include="Persons\ITacticalActCarrier.cs" />
     <Compile Include="Persons\ITacticalActExtensionscs.cs" />
     <Compile Include="Persons\MonsterPerson.cs" />
-    <Compile Include="Persons\PersonService.cs" />
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\PropFactory.cs" />
     <Compile Include="Persons\Concept.cs" />

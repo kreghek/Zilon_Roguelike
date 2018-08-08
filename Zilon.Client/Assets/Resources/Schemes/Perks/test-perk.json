@@ -11,7 +11,8 @@
 	  ],
 	  "Jobs": [
 	    {
-		  "Type": "Defeats"
+		  "Type": "Defeats",
+		  "Value": 1
 		}
 	  ]
 	}

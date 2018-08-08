@@ -7,28 +7,6 @@ namespace Zilon.Core.Persons
 {
     public class PerkResolver : IPerkResolver
     {
-        private readonly IActorManager _actorManager;
-
-        public PerkResolver(IActorManager actorManager)
-        {
-            _actorManager = actorManager;
-
-            foreach (var actor in actorManager.Actors)
-            {
-                actor.OnDead += Actor_OnDead;
-            }
-        }
-
-        private void Actor_OnDead(object sender, EventArgs e)
-        {
-            
-        }
-
-        public void CountDefeat(IActor hitActor, ITacticalAct act)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ApplyProgress(IJobProgress progress, IEvolutionData evolutionData)
         {
             if (evolutionData == null)

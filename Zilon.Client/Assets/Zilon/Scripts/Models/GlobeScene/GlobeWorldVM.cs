@@ -4,12 +4,14 @@ using System.IO;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using Zilon.Core.Schemes;
 
 public class GlobeWorldVM : MonoBehaviour
 {
+    [Inject] private ISchemeService _schemeService;
+    
     public GlobeMapVM Map;
-    public SchemeLocator SchemeLocator;
     public Text Text;
 
     public GlobeWorldVM()
@@ -73,8 +75,7 @@ public class GlobeWorldVM : MonoBehaviour
 
     private void Awake()
     {
-        var schemeService = new SchemeService(SchemeLocator);
-        Map.CreateMapEntities(schemeService, "main");
+        Map.CreateMapEntities(_schemeService, "main");
     }
 
     // Update is called once per frame

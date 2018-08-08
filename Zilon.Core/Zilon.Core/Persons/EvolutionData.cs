@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -8,9 +11,13 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class EvolutionData : IEvolutionData
     {
-        public EvolutionData()
+        private readonly ISchemeService _schemeService;
+
+        public EvolutionData(ISchemeService schemeService)
         {
-            Perks = new IPerk[0];
+            _schemeService = schemeService;
+
+            UpdatePerks();
         }
 
         public IPerk[] Perks { get; private set; }
@@ -39,6 +46,24 @@ namespace Zilon.Core.Persons
         {
             var eventArgs = new PerkEventArgs(perk);
             PerkLeveledUp?.Invoke(this, eventArgs);
+        }
+
+        private void UpdatePerks()
+        {
+            var schemes = _schemeService.GetSchemes<PerkScheme>();
+
+            var perks = new List<IPerk>();
+
+            foreach (var perkScheme in schemes)
+            {
+                var perk = new Perk {
+                    Scheme = perkScheme,
+                    CurrentLevel = new PerkLevel(null, 0),
+                    CurrentJobs = perkScheme.Levels[0].Jobs.Select(x=>new PerkJob(x)).ToArray()
+                };
+            }
+
+            Perks = perks.ToArray();
         }
     }
 }
