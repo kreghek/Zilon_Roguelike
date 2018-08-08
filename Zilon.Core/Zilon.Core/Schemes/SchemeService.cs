@@ -43,7 +43,7 @@ namespace Zilon.Core.Schemes
             return scheme;
         }
 
-        private SchemeServiceHandler<TScheme> GetHandler<TScheme>() 
+        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>() 
             where TScheme : class, IScheme
         {
             if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
@@ -51,7 +51,7 @@ namespace Zilon.Core.Schemes
                 throw new ArgumentException("Указан неизвестный тип схемы.");
             }
 
-            var handler = (SchemeServiceHandler<TScheme>)handlerObj;
+            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
             return handler;
         }
 

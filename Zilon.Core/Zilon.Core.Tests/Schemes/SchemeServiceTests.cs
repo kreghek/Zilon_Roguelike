@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Schemes.Tests
 {
@@ -118,7 +119,7 @@ namespace Zilon.Core.Schemes.Tests
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
-            var schemeHandlerFactory = new SchemeServiceHandlerFactory(schemeLocator);
+            var schemeHandlerFactory = new StrictSchemeServiceHandlerFactory(schemeLocator);
 
             return new SchemeService(schemeHandlerFactory);
         }
