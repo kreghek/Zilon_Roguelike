@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+namespace Zilon.Core.Persons
 {
     public sealed class PerkLevel
     {
@@ -18,6 +20,7 @@
             Sub = sub;
         }
 
+        [Obsolete("Если перк не получен, то его уровень должен быть null. Этого свойства быть не должно. Primary не Nullable.")]
         public static PerkLevel Zero
         {
             get

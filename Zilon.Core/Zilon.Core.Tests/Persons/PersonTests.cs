@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
-
+using System.Linq;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
@@ -56,6 +56,51 @@ namespace Zilon.Core.Tests.Persons
 
             // ARRANGE
             person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при получении перка характеристики персонажа пересчитываются.
+        /// </summary>
+        [Test]
+        public void HumanPerson_PerkLeveledUp_StatsRecalculated() {
+
+            // ARRANGE
+            var personScheme = new PersonScheme
+            {
+                SlotCount = 3
+            };
+
+            var perkMock = new Mock<IPerk>();
+            perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
+            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme {
+                Levels = new[] {
+                    new PerkLevelSubScheme{
+                        Rules = new []{
+                            new PerkRuleSubScheme{
+                                Type = PersonRuleType.Ballistic,
+                                Level = PersonRuleLevel.Normal
+                            }
+                        }
+                    }
+                }
+            });
+            var perk = perkMock.Object;
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            evolutionDataMock.SetupGet(x => x.Perks)
+                .Returns(new IPerk[] { perk });
+            var evolutionData = evolutionDataMock.Object;
+
+
+
+            // ACT
+            var person = new HumanPerson(personScheme, evolutionData);
+
+
+
+            // ASSERT
+            var testedStat = person.CombatStats.Stats.Single(x => x.Stat == CombatStatType.Ballistic);
+            testedStat.Value.Should().Be(11);
         }
     }
 }

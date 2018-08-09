@@ -90,24 +90,34 @@ namespace Zilon.Core.Persons
                     continue;
                 }
 
-                for (var i = 0; i < currentLevel.Sub; i++)
+                for (var i = 0; i <= currentLevel.Sub; i++)
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
+                        var targetValue = 1;
+
                         var ruleType = rule.Type;
                         switch (ruleType)
                         {
                             case PersonRuleType.Melee:
-                                var statItem = combatStats.Stats.SingleOrDefault(x => x.Stat == CombatStatType.Melee);
-                                if (statItem != null)
-                                {
-                                    statItem.Value += 1;
-                                }
+                                AddStat(combatStats, CombatStatType.Melee, targetValue);
+                                break;
 
+                            case PersonRuleType.Ballistic:
+                                AddStat(combatStats, CombatStatType.Ballistic, targetValue);
                                 break;
                         }
                     }
                 }
+            }
+        }
+
+        private static void AddStat(ICombatStats combatStats, CombatStatType targetStat, int targetValue)
+        {
+            var statItem = combatStats.Stats.SingleOrDefault(x => x.Stat == targetStat);
+            if (statItem != null)
+            {
+                statItem.Value += targetValue;
             }
         }
 
