@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовая реализация данных по развитию персонажа.
     /// </summary>
-    public sealed class EvolutionData : IEvolutionData
+    public class EvolutionData : IEvolutionData
     {
         private readonly ISchemeService _schemeService;
 
@@ -20,7 +20,7 @@ namespace Zilon.Core.Persons
             UpdatePerks();
         }
 
-        public IPerk[] Perks { get; private set; }
+        public IPerk[] Perks { get; protected set; }
 
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
 

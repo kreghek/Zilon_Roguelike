@@ -14,6 +14,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.Spec;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -130,7 +131,18 @@ namespace Zilon.Core.Tactics.Tests
             var schemeService = _container.GetInstance<ISchemeService>();
             var propFactory = _container.GetInstance<IPropFactory>();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var perkScheme = schemeService.GetScheme<PerkScheme>("battle-dogmas");
+            var predefinedPerks = new IPerk[] {
+                new Perk{
+                    Scheme = perkScheme,
+                    CurrentJobs = new []{
+                        new PerkJob(perkScheme.Levels[0].Jobs[0]){
+                            Progress = 4
+                        }
+                    }
+                }
+            };
+            var evolutionData = new PresetEvolutionData(schemeService, predefinedPerks);
 
             var person = new HumanPerson(personScheme, evolutionData);
 
