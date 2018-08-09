@@ -111,10 +111,10 @@ namespace Zilon.Core.Commands.Tests
             var playerState = playerStateMock.Object;
 
 
-            _container.Register<OpenContainerCommand>();
-            _container.Register(factory => sectorManager);
-            _container.Register(factory => playerState);
-            _container.Register(factory => humanTaskSourceMock);
+            _container.Register<OpenContainerCommand>(new PerContainerLifetime());
+            _container.Register(factory => sectorManager, new PerContainerLifetime());
+            _container.Register(factory => playerState, new PerContainerLifetime());
+            _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
         }
     }
 }

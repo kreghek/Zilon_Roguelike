@@ -365,12 +365,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             _container = new ServiceContainer();
 
             var decisionSource = CreateDecisionSource();
-            _container.Register(factory => decisionSource);
 
             var tacticalActUsageService = CreateTacticalActUsageService();
-            _container.Register(factory => tacticalActUsageService);
 
-            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
+            _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());
+            _container.Register(factory => decisionSource, new PerContainerLifetime());
+            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
         }
 
         private ITacticalActUsageService CreateTacticalActUsageService()

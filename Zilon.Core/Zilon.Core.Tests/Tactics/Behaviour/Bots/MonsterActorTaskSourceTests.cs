@@ -69,7 +69,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var intruderActor = CreateActor(3, 1);
             _actorListInner.Add(intruderActor);
 
-                        
+
 
             // ACT
             var tasks = taskSource.GetActorTasks(_map, actorManager);
@@ -126,18 +126,16 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         [SetUp]
         public void SetUp()
         {
-            _map = new TestGridGenMap();
-            _actorListInner = new List<IActor>();
             _container = new ServiceContainer();
 
+            _map = new TestGridGenMap();
+            _actorListInner = new List<IActor>();
+
             _testedActor = CreateActor(1, 1);
-            _container.Register(factory => _testedActor.Owner);
 
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.SetupGet(x => x.Actors).Returns(_actorListInner);
             var actorManager = actorManagerMock.Object;
-
-            _container.Register(factory => actorManager);
 
             var routePoints = new IMapNode[] {
                 _map.Nodes.Cast<HexNode>().SelectBy(1,1),
@@ -152,18 +150,18 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
                 { _testedActor, route }
             };
 
-            _container.Register(factory => patrolRoutes);
-
             var decisionSourceMock = new Mock<IDecisionSource>();
             var decisionSource = decisionSourceMock.Object;
-            _container.Register(factory => decisionSource);
 
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
             var tacticalActUsageService = tacticalActUsageServiceMock.Object;
-            _container.Register(factory => tacticalActUsageService);
 
-
-            _container.Register<MonsterActorTaskSource>();
+            _container.Register(factory => _testedActor.Owner, new PerContainerLifetime());
+            _container.Register(factory => actorManager, new PerContainerLifetime());
+            _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());
+            _container.Register(factory => decisionSource, new PerContainerLifetime());
+            _container.Register(factory => patrolRoutes, new PerContainerLifetime());
+            _container.Register<MonsterActorTaskSource>(new PerContainerLifetime());
         }
 
         private IActor CreateActor(int nodeX, int nodeY)

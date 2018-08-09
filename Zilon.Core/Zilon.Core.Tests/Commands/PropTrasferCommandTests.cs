@@ -74,8 +74,6 @@ namespace Zilon.Core.Commands.Tests
             var sectorManagerMock = new Mock<ISectorManager>();
             sectorManagerMock.SetupProperty(x => x.CurrentSector, sector);
             var sectorManager = sectorManagerMock.Object;
-            _container.Register(factory => sectorManager);
-
 
             var actorMock = new Mock<IActor>();
             var actorNode = testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
@@ -87,24 +85,26 @@ namespace Zilon.Core.Commands.Tests
             var actorVm = actorVmMock.Object;
 
             var humanTaskSourceMock = new Mock<IHumanActorTaskSource>();
-            _container.Register(factory => humanTaskSourceMock);
             var humanTaskSource = humanTaskSourceMock.Object;
 
             var playerStateMock = new Mock<IPlayerState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
             playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
             var playerState = playerStateMock.Object;
-            _container.Register(factory => playerState);
 
             var inventory = CreateStore();
             var container = CreateStore();
             var transferMachine = new PropTransferMachine(inventory, container);
 
-            _container.Register<PropTransferCommand>();
-            _container.Register(factory => transferMachine);
+            _container.Register(factory => sectorManager, new PerContainerLifetime());
+            _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
+            _container.Register(factory => playerState, new PerContainerLifetime());
+            _container.Register(factory => transferMachine, new PerContainerLifetime());
+            _container.Register<PropTransferCommand>(new PerContainerLifetime());
         }
 
-        private IPropStore CreateStore() {
+        private IPropStore CreateStore()
+        {
             var storeMock = new Mock<IPropStore>();
             return storeMock.Object;
         }

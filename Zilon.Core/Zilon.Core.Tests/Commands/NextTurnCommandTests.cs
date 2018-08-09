@@ -101,10 +101,10 @@ namespace Zilon.Core.Commands.Tests
             var playerState = playerStateMock.Object;
 
 
-            _container.Register<NextTurnCommand>();
-            _container.Register(factory => sectorMock);
-            _container.Register(factory => sectorManager);
-            _container.Register(factory => playerState);
+            _container.Register<NextTurnCommand>(new PerContainerLifetime());
+            _container.Register(factory => sectorMock, new PerContainerLifetime());
+            _container.Register(factory => sectorManager, new PerContainerLifetime());
+            _container.Register(factory => playerState, new PerContainerLifetime());
         }
     }
 }
