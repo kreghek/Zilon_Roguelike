@@ -57,6 +57,7 @@
     <Compile Include="Client\ISelectableViewModel.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Commands\ShowPerksModalCommand.cs" />
     <Compile Include="Commands\SpecialActorCommandBase.cs" />
     <Compile Include="Commands\ActorCommandBase.cs" />
     <Compile Include="Commands\AttackCommand.cs" />

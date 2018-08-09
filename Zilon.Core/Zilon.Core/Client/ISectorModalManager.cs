@@ -7,5 +7,7 @@ namespace Zilon.Core.Client
         void ShowContainerModal(PropTransferMachine transferMachine);
         
         void ShowInventoryModal(IActor actor);
+
+        void ShowPerksModal(IActor actor);
     }
 }

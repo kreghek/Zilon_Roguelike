@@ -15,6 +15,8 @@ public class UiHandler : MonoBehaviour {
 	
 	[Inject(Id = "show-inventory-command")] private ICommand _showInventoryCommand;
 	
+	[Inject(Id = "show-perks-command")] private ICommand _showPerksCommand;
+	
 
 	public void NextTurn()
 	{
@@ -24,5 +26,10 @@ public class UiHandler : MonoBehaviour {
 	public void ShowInventoryButton_Handler()
 	{
 		_clientCommandExecutor.Push(_showInventoryCommand);
+	}
+	
+	public void ShowPerksButton_Handler()
+	{
+		_clientCommandExecutor.Push(_showPerksCommand);
 	}
 }

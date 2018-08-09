@@ -19,6 +19,8 @@ namespace Assets.Zilon.Scripts.Services
 
 		public InventoryModalBody InventoryModalPrefab;
 		
+		public PerksModalBody PerksModalPrefab;
+		
 		// ReSharper restore MemberCanBePrivate.Global
 		// ReSharper restore UnassignedField.Global
 
@@ -38,6 +40,13 @@ namespace Assets.Zilon.Scripts.Services
 		public void ShowInventoryModal(IActor actor)
 		{
 			var modalBody = CreateWindowHandler<InventoryModalBody>(InventoryModalPrefab.gameObject);
+
+			modalBody.Init(actor);
+		}
+
+		public void ShowPerksModal(IActor actor)
+		{
+			var modalBody = CreateWindowHandler<PerksModalBody>(PerksModalPrefab.gameObject);
 
 			modalBody.Init(actor);
 		}

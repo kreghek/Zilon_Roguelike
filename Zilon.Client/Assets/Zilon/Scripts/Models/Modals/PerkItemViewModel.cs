@@ -1,0 +1,24 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using Zilon.Core.Persons;
+
+public class PerkItemViewModel : MonoBehaviour {
+
+	public Text LevelText;
+	public Image IconImage;
+	public Image SelectedBorder;
+
+	public void Init(IPerk perk)
+	{
+		var iconSprite = CalcIcon(perk);
+
+		IconImage.sprite = iconSprite;
+	}
+	
+	private Sprite CalcIcon(IPerk perk)
+	{
+		Debug.Log(perk.Scheme.Sid);
+		var iconSprite = Resources.Load<Sprite>($"Icons/perks/{perk.Scheme.Sid}");
+		return iconSprite;
+	}
+}
