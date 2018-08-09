@@ -13,6 +13,16 @@ public class PerkItemViewModel : MonoBehaviour {
 		var iconSprite = CalcIcon(perk);
 
 		IconImage.sprite = iconSprite;
+
+		if (perk.CurrentLevel != null)
+		{
+			LevelText.gameObject.SetActive(true);
+			LevelText.text = $"{perk.CurrentLevel.Primary} +{perk.CurrentLevel.Sub}";
+		}
+		else
+		{
+			LevelText.gameObject.SetActive(false);
+		}
 	}
 	
 	private Sprite CalcIcon(IPerk perk)

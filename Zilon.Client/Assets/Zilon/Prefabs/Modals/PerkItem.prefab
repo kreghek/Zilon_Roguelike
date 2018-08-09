@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 222108675754702044}
   - component: {fileID: 114194164020696342}
   m_Layer: 5
-  m_Name: CountText
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d9b5d5582544944864b58730a50504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelText: {fileID: 0}
+  LevelText: {fileID: 114194164020696342}
   IconImage: {fileID: 114662497033583866}
   SelectedBorder: {fileID: 0}
 --- !u!114 &114194164020696342
@@ -177,18 +177,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114662497033583866}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Click_Handler
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114662497033583866
