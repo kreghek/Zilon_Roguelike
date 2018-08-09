@@ -13,6 +13,11 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="currentActor"> Целевой клчевой актёр. </param>
         void SwitchActor(IActor currentActor);
 
+        /// <summary>
+        /// Текущий активный ключевой актёр.
+        /// </summary>
+        IActor CurrentActor { get; }
+
         void IntentAttack(IAttackTarget target);
         void IntentEquip(Equipment equipment, int slotIndex);
         void IntentMove(HexNode targetNode);

@@ -44,15 +44,13 @@ namespace Zilon.Core
 
         public static PerkLevel GetNextLevel(PerkScheme perkScheme, PerkLevel level)
         {
-            var currentLevel = level.Primary;
-            var currentSubLevel = level.Sub;
-
-            if (currentLevel == null)
+            if (level == null)
             {
-                currentLevel = 0;
-                currentSubLevel = 0;
                 return new PerkLevel(0, 0);
             }
+
+            var currentLevel = level.Primary;
+            var currentSubLevel = level.Sub;
 
             var currentLevelScheme = perkScheme.Levels[currentLevel.Value];
 

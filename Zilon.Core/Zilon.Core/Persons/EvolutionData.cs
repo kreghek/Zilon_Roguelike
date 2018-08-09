@@ -32,9 +32,6 @@ namespace Zilon.Core.Persons
                 throw new InvalidOperationException("Указанный перк не является активным для текущего актёра.");
             }
 
-            var currentLevel = perk.CurrentLevel.Primary;
-            var currentSubLevel = perk.CurrentLevel.Sub;
-
             var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
 
             perk.CurrentLevel = nextLevel;
@@ -58,9 +55,11 @@ namespace Zilon.Core.Persons
             {
                 var perk = new Perk {
                     Scheme = perkScheme,
-                    CurrentLevel = new PerkLevel(null, 0),
+                    CurrentLevel = null,
                     CurrentJobs = perkScheme.Levels[0].Jobs.Select(x=>new PerkJob(x)).ToArray()
                 };
+
+                perks.Add(perk);
             }
 
             Perks = perks.ToArray();

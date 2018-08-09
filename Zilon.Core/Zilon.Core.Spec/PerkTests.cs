@@ -1,17 +1,16 @@
 ﻿using FluentAssertions;
 
 using JetBrains.Annotations;
+
 using LightInject;
-using Moq;
 
 using NUnit.Framework;
-using System;
+
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -26,8 +25,6 @@ namespace Zilon.Core.Tactics.Tests
     [Category("Spec")]
     public class PerkTests
     {
-        private const int IDLE_DURATION = 1;
-
         private ServiceContainer _container;
 
         /// <summary>
@@ -38,22 +35,20 @@ namespace Zilon.Core.Tactics.Tests
         {
             // ARRANGE
             GenerateSectorTtc3Content();
-
+            var sector = _container.GetInstance<ISector>();
+            var humanTaskSource = _container.GetInstance<HumanActorTaskSource>();
 
 
             // ACT
-            for (var round = 0; round <= 100; round++)
-            {
-                sector.Update();
-            }
+            sector.Update();
+
 
 
 
             // ASSERT
-            // Если не было исключений, то тест считается пройденным.
-            // Иначе теряем читаемый стек вызовов, оборачивая Update в делегат.
-            var monsters = actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
-            monsters.Should().NotBeEmpty();
+            var perk = humanTaskSource.CurrentActor.Person.EvolutionData.Perks[0];
+            perk.CurrentLevel.Primary.Should().Be(0);
+            perk.CurrentLevel.Sub.Should().Be(0);
         }
 
         private void GenerateSectorTtc3Content()
@@ -95,11 +90,19 @@ namespace Zilon.Core.Tactics.Tests
             // Подготовка источника поведения ботов
             var decisionSource = _container.GetInstance<IDecisionSource>();
             var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
+
+            var humanTaskSource = new HumanActorTaskSource(decisionSource, tacticalActUsageService);
+            humanTaskSource.SwitchActor(humanActor);
+            humanTaskSource.IntentAttack(enemy1Actor);
+
             var botTaskSource = new MonsterActorTaskSource(botPlayer, routeDictionary, decisionSource, tacticalActUsageService);
+
+            _container.Register(factory => humanTaskSource);
 
 
             ((Sector)sector).BehaviourSources = new IActorTaskSource[]
             {
+                humanTaskSource,
                 botTaskSource
             };
         }
@@ -125,6 +128,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             var actorManager = _container.GetInstance<IActorManager>();
             var schemeService = _container.GetInstance<ISchemeService>();
+            var propFactory = _container.GetInstance<IPropFactory>();
 
             var evolutionData = new EvolutionData(schemeService);
 
@@ -133,6 +137,11 @@ namespace Zilon.Core.Tactics.Tests
             var actor = new Actor(person, player, startNode);
 
             actorManager.Add(actor);
+
+            // Указываем экипировку по умолчанию.
+            var propScheme = schemeService.GetScheme<PropScheme>("short-sword");
+            var equipment = propFactory.CreateEquipment(propScheme);
+            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
 
             return actor;
         }
@@ -148,13 +157,14 @@ namespace Zilon.Core.Tactics.Tests
         public void SetUp()
         {
             _container = new ServiceContainer();
+
             RegisterSchemeService();
             RegisterMap();
             RegisterAuxServices();
 
-            _container.Register<IActorManager, ActorManager>();
-            _container.Register<IPropContainerManager, PropContainerManager>();
-            _container.Register<ISector, Sector>();
+            _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            _container.Register<ISector, Sector>(new PerContainerLifetime());
         }
 
         /// <summary>
@@ -162,10 +172,11 @@ namespace Zilon.Core.Tactics.Tests
         /// </summary>
         private void RegisterAuxServices()
         {
-            _container.Register<IDice>(factory => new Dice());
-            _container.Register<IDecisionSource, DecisionSource>();
-            _container.Register<IPerkResolver, PerkResolver>();
-            _container.Register<ITacticalActUsageService, TacticalActUsageService>();
+            _container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
+            _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
+            _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
+            _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
         }
 
         private void RegisterMap()
@@ -179,7 +190,7 @@ namespace Zilon.Core.Tactics.Tests
 
         private void RegisterSchemeService()
         {
-            _container.Register(factory =>
+            _container.Register<ISchemeLocator>(factory =>
             {
                 var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
 
@@ -188,7 +199,9 @@ namespace Zilon.Core.Tactics.Tests
                 return schemeLocator;
             }, new PerContainerLifetime());
 
-            _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
+            _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+
+            _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
         }
     }
 }

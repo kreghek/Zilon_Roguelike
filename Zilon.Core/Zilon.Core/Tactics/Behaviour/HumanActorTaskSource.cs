@@ -10,7 +10,6 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
-        private IActor _currentActor;
         private IActorTask _currentTask;
 
         //TODO обобщить намерения.
@@ -35,7 +34,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
-            if (_currentActor == null)
+            if (CurrentActor == null)
             {
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
@@ -56,7 +55,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
 
                 _taskIsActual = true;
-                var moveTask = new MoveTask(_currentActor, _targetNode, map);
+                var moveTask = new MoveTask(CurrentActor, _targetNode, map);
                 _currentTask = moveTask;
 
                 return new[] { _currentTask };
@@ -64,34 +63,34 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_attackTarget != null)
             {
-                var attackTask = new AttackTask(_currentActor, _attackTarget, _actUsageService);
+                var attackTask = new AttackTask(CurrentActor, _attackTarget, _actUsageService);
                 _currentTask = attackTask;
                 return new[] { _currentTask };
             }
 
             if (_propContainer != null && _method != null)
             {
-                var openContainerTask = new OpenContainerTask(_currentActor, _propContainer, _method);
+                var openContainerTask = new OpenContainerTask(CurrentActor, _propContainer, _method);
                 _currentTask = openContainerTask;
                 return new[] { _currentTask };
             }
 
             if (_transfers != null)
             {
-                var inventory = _currentActor.Person.Inventory;
+                var inventory = CurrentActor.Person.Inventory;
 
                 if (inventory == null)
                 {
-                    throw new InvalidOperationException($"Для данного актёра {_currentActor} не задан инвентарь.");
+                    throw new InvalidOperationException($"Для данного актёра {CurrentActor} не задан инвентарь.");
                 }
 
-                _currentTask = new TransferPropsTask(_currentActor, _transfers);
+                _currentTask = new TransferPropsTask(CurrentActor, _transfers);
                 return new[] { _currentTask };
             }
 
             if (_equipment != null)
             {
-                _currentTask = new EquipTask(_currentActor, _equipment, _slotIndex);
+                _currentTask = new EquipTask(CurrentActor, _equipment, _slotIndex);
                 return new[] { _currentTask };
             }
 
@@ -100,8 +99,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void SwitchActor(IActor currentActor)
         {
-            _currentActor = currentActor;
+            CurrentActor = currentActor;
         }
+
+        public IActor CurrentActor { get; private set; }
 
 
         /// <summary>
