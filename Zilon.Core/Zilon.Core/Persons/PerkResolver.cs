@@ -13,6 +13,12 @@ namespace Zilon.Core.Persons
 
             foreach (var perk in evolutionData.Perks)
             {
+                var isPerkLevelCap = CheckLevelCap(perk);
+                if (isPerkLevelCap)
+                {
+                    continue;
+                }
+
                 var affectedJobs = progress.ApplyToJobs(perk.CurrentJobs);
 
                 foreach (var job in affectedJobs)
@@ -31,6 +37,37 @@ namespace Zilon.Core.Persons
                 if (allJobsAreComplete)
                 {
                     evolutionData.PerkLevelUp(perk);
+                }
+            }
+        }
+
+        private bool CheckLevelCap(IPerk perk)
+        {
+            var currentLevel = perk.CurrentLevel;
+            if (currentLevel == null)
+            {
+                return false;
+            }
+
+            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
+
+            var maxLevel = perk.Scheme.Levels.Length - 1;
+            var nextLevelOutOfRange = nextLevel.Primary > maxLevel;
+
+            if (nextLevelOutOfRange)
+            {
+                return true;
+            }
+            else
+            {
+                var currentSubLevelIsMax = currentLevel.Sub >= perk.Scheme.Levels[currentLevel.Primary].MaxValue;
+                if (currentSubLevelIsMax)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
