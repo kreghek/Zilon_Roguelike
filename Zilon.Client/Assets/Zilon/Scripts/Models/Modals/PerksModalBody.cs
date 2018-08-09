@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Assets.Zilon.Scripts;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
@@ -15,6 +17,7 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler {
 	public Transform EquipmentSlotsParent;
 	public PerkItemViewModel PerkItemPrefab;
 	public InventorySlotVm EquipmentSlotPrefab;
+	public Text Stats;
 	
 	[NotNull] [Inject] private DiContainer _diContainer;
 	
@@ -51,6 +54,19 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler {
 		_actor = actor;
 		var evolutionData = _actor.Person.EvolutionData;
 		UpdatePerksInner(PerkItemsParent, evolutionData.Perks);
+		UpdateStats();
+	}
+
+	private void UpdateStats()
+	{
+		Stats.text = string.Empty;
+		
+		var stats = _actor.Person.CombatStats;
+
+		foreach (var statItem in stats.Stats)
+		{
+			Stats.text += $"{statItem.Stat}: {statItem.Value} \n";
+		}
 	}
 
 	private void UpdatePerksInner(Transform itemsParent, IPerk[] perks)
