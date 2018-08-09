@@ -92,10 +92,9 @@ namespace Zilon.Core.Tactics.Tests
             };
 
 
-            
-
-
             // Подготовка источника поведения ботов
+            var decisionSource = _container.GetInstance<IDecisionSource>();
+            var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
             var botTaskSource = new MonsterActorTaskSource(botPlayer, routeDictionary, decisionSource, tacticalActUsageService);
 
 
@@ -165,9 +164,8 @@ namespace Zilon.Core.Tactics.Tests
         {
             _container.Register<IDice>(factory => new Dice());
             _container.Register<IDecisionSource, DecisionSource>();
-            var decisionSource = new DecisionSource(dice);
-            var perkResolver = new PerkResolver();
-            var tacticalActUsageService = new TacticalActUsageService(decisionSource, perkResolver);
+            _container.Register<IPerkResolver, PerkResolver>();
+            _container.Register<ITacticalActUsageService, TacticalActUsageService>();
         }
 
         private void RegisterMap()
