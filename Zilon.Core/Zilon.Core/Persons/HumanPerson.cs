@@ -83,7 +83,7 @@ namespace Zilon.Core.Persons
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
-                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary.Value];
+                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
 
                 if (currentLevelScheme.Rules == null)
                 {

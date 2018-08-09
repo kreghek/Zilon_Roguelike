@@ -52,7 +52,7 @@ namespace Zilon.Core
             var currentLevel = level.Primary;
             var currentSubLevel = level.Sub;
 
-            var currentLevelScheme = perkScheme.Levels[currentLevel.Value];
+            var currentLevelScheme = perkScheme.Levels[currentLevel];
 
             if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
             {

@@ -66,7 +66,7 @@ namespace Zilon.Core.Commands.Tests
         {
             _container = new ServiceContainer();
 
-            var testMap = new TestGridGenMap();
+            var testMap = new TestGridGenMap(3);
 
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;

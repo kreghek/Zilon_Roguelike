@@ -55,7 +55,7 @@ namespace Zilon.Core.Persons.Tests
             perkMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
-                .Returns(PerkLevel.Zero);
+                .Returns((PerkLevel)null);
             var perk = perkMock.Object;
 
             var perks = new IPerk[] {

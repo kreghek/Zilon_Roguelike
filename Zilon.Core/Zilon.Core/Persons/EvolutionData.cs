@@ -36,6 +36,8 @@ namespace Zilon.Core.Persons
 
             perk.CurrentLevel = nextLevel;
 
+            UpdatePerks();
+
             DoPerkArchieved(perk);
         }
 
@@ -50,13 +52,27 @@ namespace Zilon.Core.Persons
             var schemes = _schemeService.GetSchemes<PerkScheme>();
 
             var perks = new List<IPerk>();
+            if (Perks != null)
+            {
+                perks.AddRange(Perks);
+            }
 
             foreach (var perkScheme in schemes)
             {
-                var perk = new Perk {
+                if (Perks != null)
+                {
+                    var existingPerk = Perks.SingleOrDefault(x => x.Scheme == perkScheme);
+                    if (existingPerk != null)
+                    {
+                        continue;
+                    }
+                }
+
+                var perk = new Perk
+                {
                     Scheme = perkScheme,
                     CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0].Jobs.Select(x=>new PerkJob(x)).ToArray()
+                    CurrentJobs = perkScheme.Levels[0].Jobs.Select(x => new PerkJob(x)).ToArray()
                 };
 
                 perks.Add(perk);
