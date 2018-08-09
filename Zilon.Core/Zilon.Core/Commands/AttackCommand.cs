@@ -1,5 +1,8 @@
-﻿using Zilon.Core.Client;
+﻿using System.Linq;
+using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
@@ -28,7 +31,11 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedActorViewModel.Actor.Node;
 
-            var canExecute = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+            var act = _playerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.FirstOrDefault();
+            var isInDistance = act.CheckDistance(((HexNode)currentNode).CubeCoords, ((HexNode)targetNode).CubeCoords);
+
+            var canExecute = targetIsOnLine && isInDistance;
 
             //TODO Добавить проверку:
             // 1. Выбран ли вражеский юнит.

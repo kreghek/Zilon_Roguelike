@@ -147,8 +147,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 var act = actCarrier.Acts.First();
 
                 var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
+                var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, actorNode, targetNode);
 
-                return isInDistance;
+                return isInDistance && targetIsOnLine;
             }
             else
             {

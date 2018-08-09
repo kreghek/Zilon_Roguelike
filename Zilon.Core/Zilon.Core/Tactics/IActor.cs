@@ -56,11 +56,6 @@ namespace Zilon.Core.Tactics
         bool IsDead { get; set; }
 
         /// <summary>
-        /// Текущие возможные действия актёра.
-        /// </summary>
-        ITacticalAct Acts { get; }
-
-        /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
         event EventHandler OnMoved;

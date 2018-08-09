@@ -76,8 +76,6 @@ namespace Zilon.Core.Tactics
             OpenedContainer?.Invoke(this, e);
         }
 
-        public ITacticalAct Acts { get; }
-
         public event EventHandler OnMoved;
         public event EventHandler OnDead;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
