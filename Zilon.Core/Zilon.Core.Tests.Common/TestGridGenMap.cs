@@ -28,12 +28,16 @@ namespace Zilon.Core.Tests.TestCommon
 
         }
 
-        public TestGridGenMap()
+        public TestGridGenMap(): this(10)
         {
+            
+        }
+
+        public TestGridGenMap(int size) {
             Nodes = new List<IMapNode>();
             Edges = new List<IEdge>();
 
-            var gridGenerator = new GridMapGenerator(10);
+            var gridGenerator = new GridMapGenerator(size);
             gridGenerator.CreateMap(this);
         }
     }

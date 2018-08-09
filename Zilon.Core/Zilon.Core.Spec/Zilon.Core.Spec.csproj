@@ -76,7 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SectorRealTests.cs" />
+    <Compile Include="PerkTests.cs" />
+    <Compile Include="SectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -23,8 +23,8 @@ using Zilon.Core.Tests.TestCommon;
 namespace Zilon.Core.Tactics.Tests
 {
     [TestFixture]
-    [Category("Real")]
-    public class SectorRealTests
+    [Category("Spec")]
+    public class SectorTests
     {
         private const int IDLE_DURATION = 1;
 

@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Spec", "Zilon.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests.Common", "Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{53AF1D62-18D8-4252-B09A-1CC50724BE92}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3B88E0E-94FE-44BE-B147-3A31C9A6F034}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0192DB6B-EAE2-430A-BC52-148EEC878151} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
+		{31887843-0523-4FFA-8B03-A7D041B95FA3} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
