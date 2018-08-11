@@ -1,10 +1,16 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
+
+using FluentAssertions;
+
 using JetBrains.Annotations;
+
 using LightInject;
+
 using Moq;
+
 using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -129,8 +135,23 @@ namespace Zilon.Core.Spec
         [Then(@"Персонажу назначена экипировка")]
         public void ThenПерсонажуНазначенаЭкипировка()
         {
-            ScenarioContext.Current.Pending();
+            var playerState = _container.GetInstance<IPlayerState>();
+
+            var actor = playerState.ActiveActor.Actor;
+            var currentEquipment = actor.Person.EquipmentCarrier.Equipments[0];
+            currentEquipment.Scheme.Sid.Should().Be("pistol");
         }
+
+        [Then(@"Текущая экипировка перенесена в инвентарь")]
+        public void ThenТекущаяЭкипировкаПеренесенаВИнвентарь()
+        {
+            var playerState = _container.GetInstance<IPlayerState>();
+
+            var actor = playerState.ActiveActor.Actor;
+            var oldEquipment = actor.Person.Inventory.CalcActualItems().SingleOrDefault(x=>x.Scheme.Sid == "short-sword");
+            oldEquipment.Should().NotBeNull();
+        }
+
 
         private void RegisterMap()
         {

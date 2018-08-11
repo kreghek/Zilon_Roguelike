@@ -87,6 +87,8 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("Я назначаю экипировку из инвентаря", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
  testRunner.Then("Персонажу назначена экипировка", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 14
+ testRunner.And("Текущая экипировка перенесена в инвентарь", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
