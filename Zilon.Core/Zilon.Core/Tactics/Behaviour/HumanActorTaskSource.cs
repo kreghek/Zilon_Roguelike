@@ -189,6 +189,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _attackTarget = null;
             _method = null;
             _propContainer = null;
+            _transfers = null;
         }
     }
 }
