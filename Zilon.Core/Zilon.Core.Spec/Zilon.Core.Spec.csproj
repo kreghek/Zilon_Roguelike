@@ -83,12 +83,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Equipment.feature.cs">
+    <Compile Include="Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Equipment.feature</DependentUpon>
+      <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
     </Compile>
-    <Compile Include="EquipmentSteps.cs" />
+    <Compile Include="Bug_EquipmentAfterContainerLoot.cs" />
     <Compile Include="PresetEvolutionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PerkTests.cs" />
@@ -99,9 +99,9 @@
     <None Include="Default.srprofile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Equipment.feature">
+    <None Include="Bug_EquipmentAfterContainerLoot.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment.feature.cs</LastGenOutput>
+      <LastGenOutput>Bug_EquipmentAfterContainerLoot.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
     <None Include="runtests.cmd" />

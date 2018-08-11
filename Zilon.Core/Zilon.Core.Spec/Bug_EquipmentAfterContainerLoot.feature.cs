@@ -17,22 +17,24 @@ namespace Zilon.Core.Spec
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Equipment", Description="\tМне нужно, чтобы была возможность назначать экипировку персонажу,\r\n\tкоторую он п" +
-        "олучает из разных источников (уже в инвентаре, сундуки, тела противников).", SourceFile="Equipment.feature", SourceLine=0)]
-    public partial class EquipmentFeature
+    [TechTalk.SpecRun.FeatureAttribute("Bug_EquipmentAfterContainerLoot", Description="\tКак игроку\r\n\tМне нужно, чтобы экипировка из разных источников (уже в инвентаре, " +
+        "сундуки, тела противников)\r\n\tмогла быть назначены персонажу\r\n\tДля того, чтобы на" +
+        "делять персонажа различными действиями и бунусами, которые даёт экипировка.", SourceFile="Bug_EquipmentAfterContainerLoot.feature", SourceLine=0)]
+    public partial class Bug_EquipmentAfterContainerLootFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Equipment.feature"
+#line 1 "Bug_EquipmentAfterContainerLoot.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Equipment", "\tМне нужно, чтобы была возможность назначать экипировку персонажу,\r\n\tкоторую он п" +
-                    "олучает из разных источников (уже в инвентаре, сундуки, тела противников).", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Bug_EquipmentAfterContainerLoot", "\tКак игроку\r\n\tМне нужно, чтобы экипировка из разных источников (уже в инвентаре, " +
+                    "сундуки, тела противников)\r\n\tмогла быть назначены персонажу\r\n\tДля того, чтобы на" +
+                    "делять персонажа различными действиями и бунусами, которые даёт экипировка.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,31 +65,37 @@ namespace Zilon.Core.Spec
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Брать ресурсы из сундука и назначать экипировку, которая уже в инвентаре, персона" +
-            "жу.", new string[] {
-                "mytag"}, SourceLine=5)]
-        public virtual void БратьРесурсыИзСундукаИНазначатьЭкипировкуКотораяУжеВИнвентареПерсонажу_()
+        [TechTalk.SpecRun.ScenarioAttribute("Берём ресурсы из сундука. После этого назначаем экипировку, которая уже была в ин" +
+            "вентаре, персонажу.", new string[] {
+                "props",
+                "equipment",
+                "dev0",
+                "bug"}, SourceLine=7)]
+        public virtual void БерёмРесурсыИзСундука_ПослеЭтогоНазначаемЭкипировкуКотораяУжеБылаВИнвентареПерсонажу_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Брать ресурсы из сундука и назначать экипировку, которая уже в инвентаре, персона" +
-                    "жу.", new string[] {
-                        "mytag"});
-#line 6
-this.ScenarioSetup(scenarioInfo);
-#line 7
- testRunner.Given("Персонаж стоит возле сундука с ресурсами", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Берём ресурсы из сундука. После этого назначаем экипировку, которая уже была в ин" +
+                    "вентаре, персонажу.", new string[] {
+                        "props",
+                        "equipment",
+                        "dev0",
+                        "bug"});
 #line 8
- testRunner.When("Я открываю сундук", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+this.ScenarioSetup(scenarioInfo);
 #line 9
- testRunner.And("Я открываю окно с содержимым сундука", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("Персонаж стоит возле сундука с ресурсами", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 10
- testRunner.And("Я переношу содержимое себе в инвентарь", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("Я открываю сундук", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.And("Я открываю окна инвентаря", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Я открываю окно с содержимым сундука", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Я назначаю экипировку из инвентаря", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Я переношу содержимое себе в инвентарь", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.Then("Персонажу назначена экипировка", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("Я открываю окна инвентаря", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
+ testRunner.And("Я назначаю экипировку из инвентаря", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 15
+ testRunner.Then("Персонажу назначена экипировка", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 16
  testRunner.And("Текущая экипировка перенесена в инвентарь", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

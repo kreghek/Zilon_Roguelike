@@ -26,7 +26,7 @@ using Zilon.Core.Tests.TestCommon;
 namespace Zilon.Core.Spec
 {
     [Binding]
-    public class EquipmentSteps
+    public class Bug_EquipmentAfterContainerLoot
     {
         private ServiceContainer _container;
         private IContainerViewModel _targetChest;
