@@ -81,7 +81,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (inventory == null)
                 {
-                    throw new InvalidOperationException($"Для данного актёра {CurrentActor} не задан инвентарь.");
+                    throw new InvalidOperationException($"Для данного персонажа {CurrentActor.Person} не задан инвентарь.");
                 }
 
                 _currentTask = new TransferPropsTask(CurrentActor, _transfers);

@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,13 +52,16 @@
     <Compile Include="Client\IContainerViewModel.cs" />
     <Compile Include="Client\IInventoryState.cs" />
     <Compile Include="Client\IMapNodeViewModel.cs" />
+    <Compile Include="Client\InventoryState.cs" />
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="Client\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
+    <Compile Include="Client\PlayerState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Client\SectorManager.cs" />
     <Compile Include="Commands\ShowPerksModalCommand.cs" />
     <Compile Include="Commands\SpecialActorCommandBase.cs" />
     <Compile Include="Commands\ActorCommandBase.cs" />
@@ -256,6 +261,7 @@
     <Compile Include="Tactics\TaskIniComparer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

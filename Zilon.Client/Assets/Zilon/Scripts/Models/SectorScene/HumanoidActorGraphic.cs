@@ -1,5 +1,4 @@
 ﻿using System;
-using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 
 public class HumanoidActorGraphic : ActorGraphicBase

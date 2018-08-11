@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
 
-using System.Collections;
+using NUnit.Framework;
 
 namespace Zilon.Core.Tests.Common.TestCases
 {

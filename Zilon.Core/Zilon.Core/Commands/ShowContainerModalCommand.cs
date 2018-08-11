@@ -9,8 +9,8 @@ namespace Zilon.Core.Commands
     {
         private readonly IPlayerState _playerState;
 
-        public ShowContainerModalCommand(ISectorModalManager sectorManager, IPlayerState playerState) :
-            base(sectorManager)
+        public ShowContainerModalCommand(ISectorModalManager modalManager, IPlayerState playerState) :
+            base(modalManager)
         {
             _playerState = playerState;
         }

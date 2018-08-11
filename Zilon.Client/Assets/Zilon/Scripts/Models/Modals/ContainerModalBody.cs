@@ -41,6 +41,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     public void Init(PropTransferMachine transferMachine)
     {
         _transferMachine = transferMachine;
+        //TODO Сделать регистрацию команды в контейнере аналогично EquipCommand
         _propTransferCommand = new PropTransferCommand(_sectorManger, _playerState, _transferMachine);
         UpdateProps();
     }

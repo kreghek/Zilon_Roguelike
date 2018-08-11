@@ -1,4 +1,3 @@
-using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using Zenject;

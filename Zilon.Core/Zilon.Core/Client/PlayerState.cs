@@ -1,9 +1,8 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Tactics.Behaviour;
 
-namespace Assets.Zilon.Scripts.Models.SectorScene
+namespace Zilon.Core.Client
 {
-    internal class PlayerState : IPlayerState
+    public class PlayerState: IPlayerState
     {
         public IActorViewModel ActiveActor { get; set; }
 
