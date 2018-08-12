@@ -20,7 +20,7 @@ namespace Zilon.Core.Persons
             UpdatePerks();
         }
 
-        public IPerk[] Perks { get; protected set; }
+        public IPerk[] Perks { get; private set; }
 
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
 
