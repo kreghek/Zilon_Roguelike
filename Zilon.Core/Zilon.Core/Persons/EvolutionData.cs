@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовая реализация данных по развитию персонажа.
     /// </summary>
-    public class EvolutionData : IEvolutionData
+    public sealed class EvolutionData : IEvolutionData
     {
         private readonly ISchemeService _schemeService;
 

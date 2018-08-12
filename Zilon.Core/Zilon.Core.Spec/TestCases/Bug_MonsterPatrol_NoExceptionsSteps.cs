@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+
 using FluentAssertions;
+
 using JetBrains.Annotations;
+
 using LightInject;
-using Moq;
+
 using TechTalk.SpecFlow;
 
 using Zilon.Core.CommonServices.Dices;

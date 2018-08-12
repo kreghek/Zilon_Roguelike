@@ -101,9 +101,13 @@
       <DependentUpon>Bug_MonsterPatrol_NoFreeze.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Bug_MonsterPatrol_NoFreezeSteps.cs" />
-    <Compile Include="PresetEvolutionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PerkTests.cs" />
+    <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Perks_DefeatPerksAreLevelUpSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -129,6 +133,10 @@
     </None>
     <None Include="SpecRunTestProfile_2011_09.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
