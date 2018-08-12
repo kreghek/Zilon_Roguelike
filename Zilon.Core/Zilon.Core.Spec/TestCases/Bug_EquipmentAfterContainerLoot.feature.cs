@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Zilon.Core.Spec
+namespace Zilon.Core.Spec.TestCases
 {
     using TechTalk.SpecFlow;
     
@@ -19,7 +19,7 @@ namespace Zilon.Core.Spec
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [TechTalk.SpecRun.FeatureAttribute("Bug_EquipmentAfterContainerLoot", Description="\tКак игроку\r\n\tМне нужно, чтобы экипировка из разных источников (уже в инвентаре, " +
         "сундуки, тела противников)\r\n\tмогла быть назначены персонажу\r\n\tДля того, чтобы на" +
-        "делять персонажа различными действиями и бунусами, которые даёт экипировка.", SourceFile="Bug_EquipmentAfterContainerLoot.feature", SourceLine=0)]
+        "делять персонажа различными действиями и бунусами, которые даёт экипировка.", SourceFile="TestCases\\Bug_EquipmentAfterContainerLoot.feature", SourceLine=0)]
     public partial class Bug_EquipmentAfterContainerLootFeature
     {
         

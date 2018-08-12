@@ -83,42 +83,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bug_EquipmentAfterContainerLoot.feature.cs">
+    <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bug_EquipmentAfterContainerLoot.cs" />
-    <Compile Include="Bug_MonsterPatrol_NoExceptions.feature.cs">
+    <Compile Include="TestCases\Bug_EquipmentAfterContainerLootSteps.cs" />
+    <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoExceptions.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bug_MonsterPatrol_NoExceptionsSteps.cs" />
-    <Compile Include="Bug_MonsterPatrol_NoFreeze.feature.cs">
+    <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptionsSteps.cs" />
+    <Compile Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoFreeze.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bug_MonsterPatrol_NoFreeze.cs" />
+    <Compile Include="TestCases\Bug_MonsterPatrol_NoFreezeSteps.cs" />
     <Compile Include="PresetEvolutionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PerkTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Bug_MonsterPatrol_NoExceptions.feature">
+    <None Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Bug_MonsterPatrol_NoExceptions.feature.cs</LastGenOutput>
     </None>
     <None Include="Default.srprofile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Bug_EquipmentAfterContainerLoot.feature">
+    <None Include="TestCases\Bug_EquipmentAfterContainerLoot.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Bug_EquipmentAfterContainerLoot.feature.cs</LastGenOutput>
     </None>
-    <None Include="Bug_MonsterPatrol_NoFreeze.feature">
+    <None Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Bug_MonsterPatrol_NoFreeze.feature.cs</LastGenOutput>
     </None>

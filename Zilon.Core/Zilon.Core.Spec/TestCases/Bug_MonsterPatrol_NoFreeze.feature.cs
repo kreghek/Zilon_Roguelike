@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Zilon.Core.Spec
+namespace Zilon.Core.Spec.TestCases
 {
     using TechTalk.SpecFlow;
     
@@ -18,7 +18,7 @@ namespace Zilon.Core.Spec
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [TechTalk.SpecRun.FeatureAttribute("Bug_MonsterPatrol_NoFreeze", Description="\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы монстры патруллировали ком" +
-        "наты, не застревая на концах маршрута.", SourceFile="Bug_MonsterPatrol_NoFreeze.feature", SourceLine=0)]
+        "наты, не застревая на концах маршрута.", SourceFile="TestCases\\Bug_MonsterPatrol_NoFreeze.feature", SourceLine=0)]
     public partial class Bug_MonsterPatrol_NoFreezeFeature
     {
         

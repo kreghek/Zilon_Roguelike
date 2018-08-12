@@ -22,7 +22,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Spec
 {
     [Binding]
-    public class Bug_MonsterPatrol_NoFreeze
+    public class Bug_MonsterPatrol_NoFreezeSteps
     {
         private ServiceContainer _container;
         private IPlayer _botPlayer;
