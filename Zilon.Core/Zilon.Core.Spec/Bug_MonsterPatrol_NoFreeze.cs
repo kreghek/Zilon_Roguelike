@@ -1,10 +1,14 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
+
 using FluentAssertions;
+
 using LightInject;
+
 using Moq;
+
 using TechTalk.SpecFlow;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
@@ -21,7 +25,7 @@ namespace Zilon.Core.Spec
     public class Bug_MonsterPatrol_NoFreeze
     {
         private ServiceContainer _container;
-        private BotPlayer _botPlayer;
+        private IPlayer _botPlayer;
         private SectorProceduralGenerator _generator;
         private Sector _sector;
 
@@ -54,20 +58,20 @@ namespace Zilon.Core.Spec
         [Given(@"Время простоя монстров в ключевой точке всегда (.*)")]
         public void GivenВремяПростояМонстровВКлючевойТочкеВсегда(int idleDuration)
         {
+            // Подготовка сервися для указания простоя из параметров
             var dice = _container.GetInstance<IDice>();
-
-            // Подготовка источника поведения ботов
 
             var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
             decisionSourceMock.CallBase = true;
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns<int, int>((min, max) => 1);
+                .Returns<int, int>((min, max) => idleDuration);
             var decisionSource = decisionSourceMock.Object;
-            var perkResolver = new PerkResolver();
-            var tacticalActUsageService = new TacticalActUsageService(decisionSource, perkResolver);
+
+            _container.Register(factory => decisionSource, new PerContainerLifetime());
+
+            // Подготовка источника поведения ботов
+            var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
             var botTaskSource = new MonsterActorTaskSource(_botPlayer, _generator.Patrols, decisionSource, tacticalActUsageService);
-
-
             _sector.BehaviourSources = new IActorTaskSource[]
             {
                 botTaskSource
@@ -120,12 +124,14 @@ namespace Zilon.Core.Spec
         private void RegisterAuxServices()
         {
             _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
-            _container.Register<IActorManager, ActorManager>();
-            _container.Register<IPropContainerManager, PropContainerManager>();
+            _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
 
-            _container.Register<IDropResolver, DropResolver>();
-            _container.Register<IDropResolverRandomSource, DropResolverRandomSource>();
-            _container.Register<IPropFactory, PropFactory>();
+            _container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
+            _container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
+            _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
+            _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
         }
 
         private void RegisterSchemeService()
@@ -144,7 +150,7 @@ namespace Zilon.Core.Spec
             _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
         }
 
-        private SectorProceduralGenerator CreateGenerator(BotPlayer botPlayer)
+        private SectorProceduralGenerator CreateGenerator(IPlayer botPlayer)
         {
             var dropResolver = _container.GetInstance<IDropResolver>();
             var randomSource = _container.GetInstance<ISectorGeneratorRandomSource>();

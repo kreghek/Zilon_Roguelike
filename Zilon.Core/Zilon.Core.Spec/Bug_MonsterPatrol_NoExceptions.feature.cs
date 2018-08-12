@@ -17,22 +17,22 @@ namespace Zilon.Core.Spec
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Bug_MonsterPatrol_NoFreeze", Description="\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы монстры патруллировали ком" +
-        "наты, не застревая на концах маршрута.", SourceFile="Bug_MonsterPatrol_NoFreeze.feature", SourceLine=0)]
-    public partial class Bug_MonsterPatrol_NoFreezeFeature
+    [TechTalk.SpecRun.FeatureAttribute("Bug_MonsterPatrol_NoExceptions", Description="\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы не было ошибок, когда монс" +
+        "тры патрулируют комнаты.", SourceFile="Bug_MonsterPatrol_NoExceptions.feature", SourceLine=0)]
+    public partial class Bug_MonsterPatrol_NoExceptionsFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Bug_MonsterPatrol_NoFreeze.feature"
+#line 1 "Bug_MonsterPatrol_NoExceptions.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Bug_MonsterPatrol_NoFreeze", "\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы монстры патруллировали ком" +
-                    "наты, не застревая на концах маршрута.", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Bug_MonsterPatrol_NoExceptions", "\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы не было ошибок, когда монс" +
+                    "тры патрулируют комнаты.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,26 +63,28 @@ namespace Zilon.Core.Spec
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Монстры выполняют логику патрулирования в произвольных комнатах.", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Монстры выполняют логику патрулирования в фиксированной комнате с параллельными м" +
+            "аршрутами.", new string[] {
                 "monsters",
                 "dev0",
                 "bug"}, SourceLine=6)]
-        public virtual void МонстрыВыполняютЛогикуПатрулированияВПроизвольныхКомнатах_()
+        public virtual void МонстрыВыполняютЛогикуПатрулированияВФиксированнойКомнатеСПараллельнымиМаршрутами_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Монстры выполняют логику патрулирования в произвольных комнатах.", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Монстры выполняют логику патрулирования в фиксированной комнате с параллельными м" +
+                    "аршрутами.", new string[] {
                         "monsters",
                         "dev0",
                         "bug"});
 #line 7
 this.ScenarioSetup(scenarioInfo);
 #line 8
- testRunner.Given("Произвольные комнаты всегда размером 5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Одна большая комната с несколькими стенами", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Время простоя монстров в ключевой точке всегда 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Два монстра с параллельными маршрутами", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("Обновляем состояние сектора 10 раз", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Обновляем состояние однокомнатного сектора 100 раз", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.Then("Текущее местоположение монстров не должно совпадать с конечной точкой маршрута", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Не было выброшено исключений", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

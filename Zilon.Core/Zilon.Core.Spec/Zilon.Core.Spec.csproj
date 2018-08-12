@@ -89,6 +89,12 @@
       <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
     </Compile>
     <Compile Include="Bug_EquipmentAfterContainerLoot.cs" />
+    <Compile Include="Bug_MonsterPatrol_NoExceptions.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Bug_MonsterPatrol_NoExceptions.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Bug_MonsterPatrol_NoExceptionsSteps.cs" />
     <Compile Include="Bug_MonsterPatrol_NoFreeze.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -98,10 +104,13 @@
     <Compile Include="PresetEvolutionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PerkTests.cs" />
-    <Compile Include="SectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Bug_MonsterPatrol_NoExceptions.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Bug_MonsterPatrol_NoExceptions.feature.cs</LastGenOutput>
+    </None>
     <None Include="Default.srprofile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
