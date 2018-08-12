@@ -42,5 +42,10 @@
         /// Для монстров равен null.
         /// </remarks>
         IPropStore Inventory { get; }
+
+        /// <summary>
+        /// Данные по выживанию персонажа.
+        /// </summary>
+        ISurvivalData Survival { get; }
     }
 }

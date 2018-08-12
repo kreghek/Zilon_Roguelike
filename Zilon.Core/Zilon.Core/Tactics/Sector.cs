@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -63,8 +64,24 @@ namespace Zilon.Core.Tactics
             // Выполняем все команды на текущий ход
             ExecuteActorTasks();
 
+            UpdateSurvivals();
+
             // Определяем, не покинули ли актёры игрока сектор.
             DetectSectorExit();
+        }
+
+        private void UpdateSurvivals()
+        {
+            foreach (var actor in _actorManager.Actors)
+            {
+                var survival = actor.Person.Survival;
+                if (survival == null)
+                {
+                    continue;
+                }
+
+                survival.Update();
+            }
         }
 
         /// <summary>

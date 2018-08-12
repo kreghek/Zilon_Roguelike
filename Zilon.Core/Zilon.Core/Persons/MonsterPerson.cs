@@ -21,6 +21,11 @@ namespace Zilon.Core.Persons
 
         public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
 
+        /// <summary>
+        /// Монстры не нуждаются в данных о выживании. Условно, у них всегда всего хватает.
+        /// </summary>
+        public ISurvivalData Survival => null;
+
         public MonsterPerson(MonsterScheme scheme)
         {
             TacticalActCarrier = new TacticalActCarrier

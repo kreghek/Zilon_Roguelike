@@ -29,6 +29,8 @@ namespace Zilon.Core.Persons
 
         public IPropStore Inventory { get; }
 
+        public ISurvivalData Survival { get; }
+
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
             if (scheme == null)
@@ -59,6 +61,8 @@ namespace Zilon.Core.Persons
             {
                 CalcCombatStats(CombatStats, EvolutionData);
             }
+
+            Survival = new SurvivalData();
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
