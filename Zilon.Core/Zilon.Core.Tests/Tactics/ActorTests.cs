@@ -37,7 +37,7 @@ namespace Zilon.Core.Tactics.Tests
             {
                 testActor.TakeDamage(1);
 
-                monitor.Should().Raise(nameof(Actor.OnDead));
+                monitor.Should().Raise(nameof(Actor.Dead));
             }
         }
     }

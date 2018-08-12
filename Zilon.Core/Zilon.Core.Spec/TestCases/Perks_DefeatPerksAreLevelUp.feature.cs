@@ -64,11 +64,13 @@ namespace Zilon.Core.Spec.TestCases
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Один актёр убивает другого", new string[] {
-                "mytag"}, SourceLine=6)]
+                "perks",
+                "dev0"}, SourceLine=6)]
         public virtual void ОдинАктёрУбиваетДругого()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Один актёр убивает другого", new string[] {
-                        "mytag"});
+                        "perks",
+                        "dev0"});
 #line 7
 this.ScenarioSetup(scenarioInfo);
 #line 8

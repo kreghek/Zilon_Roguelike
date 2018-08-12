@@ -26,6 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException("Не найдено действий.");
                 }
 
+                Actor.UseAct(_target, act);
                 _actService.UseOn(Actor, _target, act);
             }
             else

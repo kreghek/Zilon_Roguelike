@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public class Actor : IActor
+    public sealed class Actor : IActor
     {
         public Actor(IPerson person, IPlayer owner, IMapNode node)
         {
@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics
         public void MoveToNode(IMapNode targetNode)
         {
             Node = targetNode;
-            OnMoved?.Invoke(this, new EventArgs());
+            Moved?.Invoke(this, new EventArgs());
         }
 
         public void TakeDamage(float value)
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tactics
             if (Hp <= 0)
             {
                 IsDead = true;
-                OnDead?.Invoke(this, new EventArgs());
+                Dead?.Invoke(this, new EventArgs());
             }
         }
 
@@ -76,9 +76,22 @@ namespace Zilon.Core.Tactics
             OpenedContainer?.Invoke(this, e);
         }
 
-        public event EventHandler OnMoved;
-        public event EventHandler OnDead;
+        public event EventHandler Moved;
+        public event EventHandler Dead;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        public event EventHandler<UsedActEventArgs> UsedAct;
+
+        public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        {
+            DoUseAct(target, tacticalAct);
+        }
+
+        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        {
+            var args = new UsedActEventArgs(target, tacticalAct);
+            UsedAct?.Invoke(this, args);
+        }
 
         public override string ToString()
         {

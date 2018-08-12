@@ -23,10 +23,11 @@ namespace Zilon.Core.Persons
 
         public MonsterPerson(MonsterScheme scheme)
         {
-            TacticalActCarrier = new TacticalActCarrier();
-
-            TacticalActCarrier.Acts = new ITacticalAct[] {
-                new MonsterTacticalAct(scheme.PrimaryAct, 1)
+            TacticalActCarrier = new TacticalActCarrier
+            {
+                Acts = new ITacticalAct[] {
+                    new MonsterTacticalAct(scheme.PrimaryAct, 1)
+                }
             };
         }
     }

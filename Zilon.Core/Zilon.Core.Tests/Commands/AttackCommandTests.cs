@@ -50,8 +50,9 @@ namespace Zilon.Core.Commands.Tests
         /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
-        public void ExecuteTest()
+        public void Execute_CanAttack_AttackIntended()
         {
+            // ARRANGE
             var command = _container.GetInstance<AttackCommand>();
             var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
             var playerState = _container.GetInstance<IPlayerState>();

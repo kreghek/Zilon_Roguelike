@@ -57,14 +57,19 @@ namespace Zilon.Core.Tactics
         bool IsDead { get; set; }
 
         /// <summary>
+        /// Инициатива актёра.
+        /// </summary>
+        float Initiative { get; }
+
+        /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler OnMoved;
+        event EventHandler Moved;
 
         /// <summary>
         /// Происходит, если актёр умирает.
         /// </summary>
-        event EventHandler OnDead;
+        event EventHandler Dead;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.
@@ -72,8 +77,15 @@ namespace Zilon.Core.Tactics
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         /// <summary>
-        /// Инициатива актёра.
+        /// Приенение действия к указанной цели.
         /// </summary>
-        float Initiative { get; }
+        /// <param name="target"> Цель действия. </param>
+        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
+        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+
+        /// <summary>
+        /// Происходит, когда актёр выполняет действие.
+        /// </summary>
+        event EventHandler<UsedActEventArgs> UsedAct;
     }
 }
