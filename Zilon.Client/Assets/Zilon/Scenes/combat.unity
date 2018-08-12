@@ -157,13 +157,12 @@ MonoBehaviour:
     type: 2}
   ActorPrefab: {fileID: 114531107507698972, guid: 80a421927c97aa74dafb7098a38e3afc,
     type: 2}
+  BulletPrefab: {fileID: 114496793570677664, guid: dd293436751d2c748acfc0cae8f2b6bd,
+    type: 2}
   HumanoidGraphicPrefab: {fileID: 114666758840654916, guid: 7f822e7910e8df74ebd825ddc939cc9c,
     type: 2}
   MonoGraphicPrefab: {fileID: 0}
   ContainerPrefab: {fileID: 114884176175482552, guid: 385924f4dfbb1804eb30c0d38a5d6c25,
-    type: 2}
-  WindowsParent: {fileID: 809724292}
-  ShowContainerModalPrefab: {fileID: 1298123690866902, guid: a9f7f5629d4bd3243a95fb1d88123a2b,
     type: 2}
 --- !u!1 &171240410
 GameObject:

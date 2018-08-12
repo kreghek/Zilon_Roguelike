@@ -32,15 +32,13 @@ class SectorVM : MonoBehaviour
 
     [NotNull] public ActorViewModel ActorPrefab;
     
+    [NotNull] public BulletDrive BulletPrefab;
+    
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
     
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
     [NotNull] public ContainerVm ContainerPrefab;
-
-    [NotNull] public GameObject WindowsParent;
-
-    [NotNull] public GameObject ShowContainerModalPrefab;
 
     
     [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
@@ -316,13 +314,20 @@ class SectorVM : MonoBehaviour
         if (distance > 1)
         {
             // Создаём снараяд
-            CreateBullet(actorHexNode, targetHexNode);
+            CreateBullet(actor, e.Target);
         }
     }
 
-    private void CreateBullet(HexNode actorHexNode, HexNode targetHexNode)
+    private void CreateBullet(IActor actor, IAttackTarget target)
     {
-        Debug.Log("Создан снаряд");
+        var viewModels = GetComponentsInChildren<IActorViewModel>();
+
+        var actorViewModel = viewModels.Single(x => x.Actor == actor);
+        var targetViewModel =viewModels.Single(x => x.Actor == target);
+        
+        var bullet = Instantiate(BulletPrefab, transform);
+        bullet.StartObject = ((MonoBehaviour)actorViewModel).gameObject;
+        bullet.FinishObject = ((MonoBehaviour)targetViewModel).gameObject;
     }
 
     private void AddTestPropsInInventory(Inventory inventory)
