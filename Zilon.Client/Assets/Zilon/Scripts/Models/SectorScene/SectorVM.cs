@@ -189,7 +189,9 @@ class SectorVM : MonoBehaviour
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
             actorVm.transform.position = actorPosition;
             actorVm.Actor = monsterActor;
+
             actorVm.Selected += EnemyActorVm_OnSelected;
+            monsterActor.UsedAct += ActorOnUsedAct;
         }
 
         foreach (var container in sectorGenerator.Containers)
@@ -294,8 +296,33 @@ class SectorVM : MonoBehaviour
         actorVm.Actor = actor;
         
         actorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actorVm.Actor.UsedAct += ActorOnUsedAct;
         
         return actorVm;
+    }
+
+    private void ActorOnUsedAct(object sender, UsedActEventArgs e)
+    {
+        var actor = sender as IActor;
+        if (actor == null)
+        {
+            throw new NotSupportedException("Не поддерживается обработка событий использования действия.");
+        }
+
+        var actorHexNode = actor.Node as HexNode;
+        var targetHexNode = e.Target.Node as HexNode;
+
+        var distance = actorHexNode.CubeCoords.DistanceTo(targetHexNode.CubeCoords);
+        if (distance > 1)
+        {
+            // Создаём снараяд
+            CreateBullet(actorHexNode, targetHexNode);
+        }
+    }
+
+    private void CreateBullet(HexNode actorHexNode, HexNode targetHexNode)
+    {
+        Debug.Log("Создан снаряд");
     }
 
     private void AddTestPropsInInventory(Inventory inventory)

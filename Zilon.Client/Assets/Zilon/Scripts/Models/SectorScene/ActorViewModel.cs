@@ -22,16 +22,16 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     public void Start()
     {
-        Actor.OnMoved += Actor_OnMoved;
-        Actor.OnDead += Actor_OnDead;
+        Actor.Moved += Actor_Moved;
+        Actor.Dead += Actor_Dead;
     }
 
-    private void Actor_OnDead(object sender, EventArgs e)
+    private void Actor_Dead(object sender, EventArgs e)
     {
         GraphicRoot.ProcessDeath();
     }
 
-    private void Actor_OnMoved(object sender, EventArgs e)
+    private void Actor_Moved(object sender, EventArgs e)
     {
         _moveCounter = 0;
         var actorNode = (HexNode) Actor.Node;
