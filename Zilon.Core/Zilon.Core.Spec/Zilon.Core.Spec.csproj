@@ -108,6 +108,18 @@
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUpSteps.cs" />
+    <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_HungerIncrease.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Survival_HungerIncreaseSteps.cs" />
+    <Compile Include="TestCases\Survival_ThirstIncrease.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_ThirstIncrease.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Survival_ThirstIncreaseSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -137,6 +149,14 @@
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Survival_HungerIncrease.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_HungerIncrease.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Survival_ThirstIncrease.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_ThirstIncrease.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
