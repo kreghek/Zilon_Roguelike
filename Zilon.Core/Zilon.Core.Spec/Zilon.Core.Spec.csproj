@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SpecRun.Runner.1.8.0-rc003\build\SpecRun.Runner.props" Condition="Exists('..\packages\SpecRun.Runner.1.8.0-rc003\build\SpecRun.Runner.props')" />
   <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -59,8 +60,8 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="SpecRun.SpecFlowPlugin, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpecRun.SpecFlow.2-3-0.1.7.2\lib\net45\SpecRun.SpecFlowPlugin.dll</HintPath>
+    <Reference Include="SpecRun.SpecFlowPlugin, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecRun.SpecFlow.2-4-0.1.8.0-rc003\lib\net45\SpecRun.SpecFlowPlugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -76,17 +77,20 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TechTalk.SpecFlow, Version=2.3.2.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpecFlow.2.3.2\lib\net45\TechTalk.SpecFlow.dll</HintPath>
+    <Reference Include="TechTalk.SpecFlow, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecFlow.2.4.0-preview20180814\lib\net45\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
-    <Reference Include="TechTalk.SpecRun, Version=1.7.2.0, Culture=neutral, PublicKeyToken=d0fc5cc18b3b389b, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpecRun.SpecFlow.2-3-0.1.7.2\lib\net45\TechTalk.SpecRun.dll</HintPath>
+    <Reference Include="TechTalk.SpecRun, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d0fc5cc18b3b389b, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecRun.SpecFlow.2-4-0.1.8.0-rc003\lib\net45\TechTalk.SpecRun.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="TechTalk.SpecRun.Common, Version=1.7.2.0, Culture=neutral, PublicKeyToken=d0fc5cc18b3b389b, processorArchitecture=MSIL">
-      <HintPath>..\packages\SpecRun.SpecFlow.2-3-0.1.7.2\lib\net45\TechTalk.SpecRun.Common.dll</HintPath>
+    <Reference Include="TechTalk.SpecRun.Common, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d0fc5cc18b3b389b, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecRun.SpecFlow.2-4-0.1.8.0-rc003\lib\net45\TechTalk.SpecRun.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpecFlowFeature1Steps.cs" />
     <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -112,6 +116,11 @@
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUpSteps.cs" />
+    <Compile Include="TestCases\SpecFlowFeature1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SpecFlowFeature1.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,14 +138,21 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Default.srprofile">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="runtests.cmd" />
     <None Include="specflow.exe.config" />
+    <None Include="SpecRunTestProfile.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SpecRunTestProfile_2011_09.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="TeamCity.SpecFlow.Reporting.psm1" />
     <None Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Bug_MonsterPatrol_NoExceptions.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Default.srprofile">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestCases\Bug_EquipmentAfterContainerLoot.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -147,16 +163,13 @@
       <LastGenOutput>Bug_MonsterPatrol_NoFreeze.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <None Include="runtests.cmd" />
-    <None Include="SpecRunTestProfile.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="SpecRunTestProfile_2011_09.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\SpecFlowFeature1.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SpecFlowFeature1.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_HungerIncrease.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -179,12 +192,13 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\SpecFlow.2.3.2\build\SpecFlow.targets" Condition="Exists('..\packages\SpecFlow.2.3.2\build\SpecFlow.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\SpecFlow.2.3.2\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.2.3.2\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.2.4.0-preview20180814\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.2.4.0-preview20180814\build\SpecFlow.targets'))" />
+    <Error Condition="!Exists('..\packages\SpecRun.Runner.1.8.0-rc003\build\SpecRun.Runner.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecRun.Runner.1.8.0-rc003\build\SpecRun.Runner.props'))" />
   </Target>
+  <Import Project="..\packages\SpecFlow.2.4.0-preview20180814\build\SpecFlow.targets" Condition="Exists('..\packages\SpecFlow.2.4.0-preview20180814\build\SpecFlow.targets')" />
 </Project>
