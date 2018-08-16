@@ -63,6 +63,17 @@ namespace Zilon.Core.Spec.Contexts
             moveCommand.Execute();
         }
 
+        public void AddResourceToActor(string resourceSid, int count, IActor actor)
+        {
+            var schemeService = _container.GetInstance<ISchemeService>();
+
+            var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
+
+            var resource = new Resource(resourceScheme, count);
+
+            actor.Person.Inventory.Add(resource);
+        }
+
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)
