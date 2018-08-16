@@ -88,6 +88,7 @@ namespace Zilon.Core.Spec.Contexts
         private void RegisterCommands()
         {
             _container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
+            _container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
         }
 
         private void RegisterTaskSources()

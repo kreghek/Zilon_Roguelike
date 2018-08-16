@@ -23,5 +23,6 @@ namespace Zilon.Core.Tactics.Behaviour
         void IntentMove(HexNode targetNode);
         void IntentOpenContainer(IPropContainer container, IOpenContainerMethod method);
         void IntentTransferProps(IEnumerable<PropTransfer> transfers);
+        void IntentUseSelf(IProp usableProp);
     }
 }

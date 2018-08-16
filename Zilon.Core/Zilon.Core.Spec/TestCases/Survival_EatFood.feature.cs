@@ -86,9 +86,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And("В инвентаре у актёра есть еда: kalin-cheese количество: 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When("Актёр съедает еду", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Актёр съедает еду: kalin-cheese", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then("Значение сытости повысилось на 10 единиц", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Значение сытости повысилось на 10 единиц и уменьшилось на 1 из-за голода", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 13
  testRunner.And("Еда kalin-cheese отсутствует в инвентаре персонажа", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden

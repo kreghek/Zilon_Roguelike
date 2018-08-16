@@ -43,10 +43,10 @@ namespace Zilon.Core.Spec.Steps
             _context.MoveOnceActiveActor(new OffsetCoords(1, 0));
         }
 
-        [When(@"Актёр съедает еду")]
-        public void WhenАктёрСъедаетЕду()
+        [When(@"Актёр съедает еду: (.*)")]
+        public void WhenАктёрСъедаетЕду(string propSid)
         {
-            ScenarioContext.Current.Pending();
+            _context.UsePropByActiveActor(propSid);
         }
 
         [Then(@"Значение сытости уменьшилось на (.*) единицу")]
@@ -67,8 +67,8 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Survival.Thirst.Should().Be(expectedThirst);
         }
 
-        [Then(@"Значение сытости повысилось на (.*) единиц")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(int p0)
+        [Then(@"Значение сытости повысилось на (.*) единиц и уменьшилось на (.*) из-за голода")]
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(int satietyValue, int hungerRate)
         {
             ScenarioContext.Current.Pending();
         }

@@ -62,6 +62,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Client\SectorManager.cs" />
+    <Compile Include="Commands\UseSelfCommand.cs" />
     <Compile Include="Commands\ShowPerksModalCommand.cs" />
     <Compile Include="Commands\SpecialActorCommandBase.cs" />
     <Compile Include="Commands\ActorCommandBase.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Common\Range.cs" />
     <Compile Include="Components\CombatStatItem.cs" />
     <Compile Include="Components\CombatStatType.cs" />
+    <Compile Include="Components\ConsumeCommonRule.cs" />
     <Compile Include="Components\PersonRuleLevel.cs" />
     <Compile Include="Components\PersonRuleType.cs" />
     <Compile Include="IJob.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
+    <Compile Include="Schemes\PropUseSubScheme.cs" />
     <Compile Include="Schemes\SchemeServiceHandler.cs" />
     <Compile Include="Schemes\SchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\TacticalActConstrainsSubScheme.cs" />

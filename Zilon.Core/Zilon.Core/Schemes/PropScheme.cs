@@ -12,6 +12,11 @@
         public PropEquipSubScheme Equip { get; set; }
 
         /// <summary>
+        /// Информация об использовании предмета.
+        /// </summary>
+        public PropUseSubScheme Use { get; set; }
+
+        /// <summary>
         /// Информации о создании/разборе предмета.
         /// </summary>
         public CraftSubScheme Craft { get; set; }

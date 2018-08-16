@@ -74,6 +74,23 @@ namespace Zilon.Core.Spec.Contexts
             actor.Person.Inventory.Add(resource);
         }
 
+        public void UsePropByActiveActor(string propSid)
+        {
+            var useSelfCommand = _container.GetInstance<ICommand>("use-self");
+            var inventoryState = _container.GetInstance<IInventoryState>();
+            var actor = GetActiveActor();
+
+            var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+
+            var viewModel = new TestPropItemViewModel()
+            {
+                Prop = selectedProp
+            };
+            inventoryState.SelectedProp = viewModel;
+
+            useSelfCommand.Execute();
+        }
+
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)

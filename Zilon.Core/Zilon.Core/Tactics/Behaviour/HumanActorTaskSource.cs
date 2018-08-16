@@ -191,5 +191,10 @@ namespace Zilon.Core.Tactics.Behaviour
             _propContainer = null;
             _transfers = null;
         }
+
+        public void IntentUseSelf(IProp usableProp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
