@@ -17,38 +17,37 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Survival_EatFoodFeature")]
-    public partial class Survival_EatFoodFeatureFeature
+    [TechTalk.SpecRun.FeatureAttribute("Survival_EatFood", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+        "нужно, чтобы при употреблении еды повышалась сытость персонажа", SourceFile="TestCases\\Survival_EatFood.feature", SourceLine=0)]
+    public partial class Survival_EatFoodFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Survival_EatFoodFeature.feature"
+#line 1 "Survival_EatFood.feature"
 #line hidden
         
-        [NUnit.Framework.OneTimeSetUpAttribute()]
+        [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_EatFoodFeature", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_EatFood", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
                     "нужно, чтобы при употреблении еды повышалась сытость персонажа", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.OneTimeTearDownAttribute()]
+        [TechTalk.SpecRun.FeatureCleanup()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [TechTalk.SpecRun.ScenarioCleanup()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -57,7 +56,6 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -70,10 +68,9 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Употребление еды")]
-        [NUnit.Framework.CategoryAttribute("survival")]
-        [NUnit.Framework.CategoryAttribute("dev0")]
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление еды", new string[] {
+                "survival",
+                "dev0"}, SourceLine=6)]
         public virtual void УпотреблениеЕды()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Употребление еды", null, new string[] {
@@ -94,6 +91,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("Значение сытости повысилось на 10 единиц", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.TestRunCleanup()]
+        public virtual void TestRunCleanup()
+        {
+            TechTalk.SpecFlow.TestRunnerManager.GetTestRunner().OnTestRunEnd();
         }
     }
 }
