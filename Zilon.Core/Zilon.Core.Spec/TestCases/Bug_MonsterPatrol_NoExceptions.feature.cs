@@ -17,8 +17,8 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Bug_MonsterPatrol_NoExceptions")]
+    [TechTalk.SpecRun.FeatureAttribute("Bug_MonsterPatrol_NoExceptions", Description="\tЧтобы было интереснее\r\n\tКак игроку\r\n\tМне нужно, чтобы не было ошибок, когда монс" +
+        "тры патрулируют комнаты.", SourceFile="TestCases\\Bug_MonsterPatrol_NoExceptions.feature", SourceLine=0)]
     public partial class Bug_MonsterPatrol_NoExceptionsFeature
     {
         
@@ -27,7 +27,7 @@ namespace Zilon.Core.Spec.TestCases
 #line 1 "Bug_MonsterPatrol_NoExceptions.feature"
 #line hidden
         
-        [NUnit.Framework.OneTimeSetUpAttribute()]
+        [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
@@ -36,19 +36,18 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.OneTimeTearDownAttribute()]
+        [TechTalk.SpecRun.FeatureCleanup()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [TechTalk.SpecRun.ScenarioCleanup()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -57,7 +56,6 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -70,12 +68,11 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Монстры выполняют логику патрулирования в фиксированной комнате с параллельными м" +
-            "аршрутами.")]
-        [NUnit.Framework.CategoryAttribute("monsters")]
-        [NUnit.Framework.CategoryAttribute("dev0")]
-        [NUnit.Framework.CategoryAttribute("bug")]
+        [TechTalk.SpecRun.ScenarioAttribute("Монстры выполняют логику патрулирования в фиксированной комнате с параллельными м" +
+            "аршрутами.", new string[] {
+                "monsters",
+                "dev0",
+                "bug"}, SourceLine=6)]
         public virtual void МонстрыВыполняютЛогикуПатрулированияВФиксированнойКомнатеСПараллельнымиМаршрутами_()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Монстры выполняют логику патрулирования в фиксированной комнате с параллельными м" +
@@ -96,6 +93,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("Не было выброшено исключений", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.TestRunCleanup()]
+        public virtual void TestRunCleanup()
+        {
+            TechTalk.SpecFlow.TestRunnerManager.GetTestRunner().OnTestRunEnd();
         }
     }
 }

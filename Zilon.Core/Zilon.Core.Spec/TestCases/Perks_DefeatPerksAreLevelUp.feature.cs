@@ -17,8 +17,8 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Perks_DefeatPerksAreLevelUp")]
+    [TechTalk.SpecRun.FeatureAttribute("Perks_DefeatPerksAreLevelUp", Description="\tЧтобы была возможность развивать персонажей\r\n\tКак игроку\r\n\tМне нужно, чтобы перк" +
+        " на убийство прокачивался после выполнения всех работ", SourceFile="TestCases\\Perks_DefeatPerksAreLevelUp.feature", SourceLine=0)]
     public partial class Perks_DefeatPerksAreLevelUpFeature
     {
         
@@ -27,7 +27,7 @@ namespace Zilon.Core.Spec.TestCases
 #line 1 "Perks_DefeatPerksAreLevelUp.feature"
 #line hidden
         
-        [NUnit.Framework.OneTimeSetUpAttribute()]
+        [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
@@ -36,19 +36,18 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.OneTimeTearDownAttribute()]
+        [TechTalk.SpecRun.FeatureCleanup()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [TechTalk.SpecRun.ScenarioCleanup()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -57,7 +56,6 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -70,10 +68,9 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Один актёр убивает другого")]
-        [NUnit.Framework.CategoryAttribute("perks")]
-        [NUnit.Framework.CategoryAttribute("dev0")]
+        [TechTalk.SpecRun.ScenarioAttribute("Один актёр убивает другого", new string[] {
+                "perks",
+                "dev0"}, SourceLine=6)]
         public virtual void ОдинАктёрУбиваетДругого()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Один актёр убивает другого", null, new string[] {
@@ -94,6 +91,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("перк на убийство должен быть прокачен", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.TestRunCleanup()]
+        public virtual void TestRunCleanup()
+        {
+            TechTalk.SpecFlow.TestRunnerManager.GetTestRunner().OnTestRunEnd();
         }
     }
 }

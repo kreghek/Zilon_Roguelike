@@ -17,8 +17,9 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Bug_EquipmentAfterContainerLoot")]
+    [TechTalk.SpecRun.FeatureAttribute("Bug_EquipmentAfterContainerLoot", Description="\tКак игроку\r\n\tМне нужно, чтобы экипировка из разных источников (уже в инвентаре, " +
+        "сундуки, тела противников)\r\n\tмогла быть назначены персонажу\r\n\tДля того, чтобы на" +
+        "делять персонажа различными действиями и бунусами, которые даёт экипировка.", SourceFile="TestCases\\Bug_EquipmentAfterContainerLoot.feature", SourceLine=0)]
     public partial class Bug_EquipmentAfterContainerLootFeature
     {
         
@@ -27,7 +28,7 @@ namespace Zilon.Core.Spec.TestCases
 #line 1 "Bug_EquipmentAfterContainerLoot.feature"
 #line hidden
         
-        [NUnit.Framework.OneTimeSetUpAttribute()]
+        [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
@@ -37,19 +38,18 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.OneTimeTearDownAttribute()]
+        [TechTalk.SpecRun.FeatureCleanup()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [TechTalk.SpecRun.ScenarioCleanup()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -58,7 +58,6 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -71,13 +70,12 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Берём ресурсы из сундука. После этого назначаем экипировку, которая уже была в ин" +
-            "вентаре, персонажу.")]
-        [NUnit.Framework.CategoryAttribute("props")]
-        [NUnit.Framework.CategoryAttribute("equipment")]
-        [NUnit.Framework.CategoryAttribute("dev0")]
-        [NUnit.Framework.CategoryAttribute("bug")]
+        [TechTalk.SpecRun.ScenarioAttribute("Берём ресурсы из сундука. После этого назначаем экипировку, которая уже была в ин" +
+            "вентаре, персонажу.", new string[] {
+                "props",
+                "equipment",
+                "dev0",
+                "bug"}, SourceLine=7)]
         public virtual void БерёмРесурсыИзСундука_ПослеЭтогоНазначаемЭкипировкуКотораяУжеБылаВИнвентареПерсонажу_()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Берём ресурсы из сундука. После этого назначаем экипировку, которая уже была в ин" +
@@ -107,6 +105,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("Текущая экипировка перенесена в инвентарь", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.TestRunCleanup()]
+        public virtual void TestRunCleanup()
+        {
+            TechTalk.SpecFlow.TestRunnerManager.GetTestRunner().OnTestRunEnd();
         }
     }
 }

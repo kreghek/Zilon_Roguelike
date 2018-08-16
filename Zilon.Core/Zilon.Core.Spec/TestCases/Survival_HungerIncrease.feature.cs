@@ -17,8 +17,8 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Survival_HungerIncrease")]
+    [TechTalk.SpecRun.FeatureAttribute("Survival_HungerIncrease", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+        "нужно, чтобы каждый ход значение сытости персонажа падало", SourceFile="TestCases\\Survival_HungerIncrease.feature", SourceLine=0)]
     public partial class Survival_HungerIncreaseFeature
     {
         
@@ -27,7 +27,7 @@ namespace Zilon.Core.Spec.TestCases
 #line 1 "Survival_HungerIncrease.feature"
 #line hidden
         
-        [NUnit.Framework.OneTimeSetUpAttribute()]
+        [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
@@ -36,19 +36,18 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.OneTimeTearDownAttribute()]
+        [TechTalk.SpecRun.FeatureCleanup()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [TechTalk.SpecRun.ScenarioCleanup()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -57,7 +56,6 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -70,10 +68,9 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Увеличение голода каждый ход")]
-        [NUnit.Framework.CategoryAttribute("survival")]
-        [NUnit.Framework.CategoryAttribute("dev0")]
+        [TechTalk.SpecRun.ScenarioAttribute("Увеличение голода каждый ход", new string[] {
+                "survival",
+                "dev0"}, SourceLine=6)]
         public virtual void УвеличениеГолодаКаждыйХод()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Увеличение голода каждый ход", null, new string[] {
@@ -92,6 +89,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("Значение сытости уменьшилось на 1 единицу", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.TestRunCleanup()]
+        public virtual void TestRunCleanup()
+        {
+            TechTalk.SpecFlow.TestRunnerManager.GetTestRunner().OnTestRunEnd();
         }
     }
 }
