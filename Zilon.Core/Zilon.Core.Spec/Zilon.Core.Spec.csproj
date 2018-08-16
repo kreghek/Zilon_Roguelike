@@ -90,7 +90,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpecFlowFeature1Steps.cs" />
     <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
