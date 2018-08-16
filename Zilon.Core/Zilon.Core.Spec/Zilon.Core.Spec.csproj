@@ -115,11 +115,6 @@
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUpSteps.cs" />
-    <Compile Include="TestCases\SpecFlowFeature1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SpecFlowFeature1.feature</DependentUpon>
-    </Compile>
     <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -165,10 +160,6 @@
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\SpecFlowFeature1.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SpecFlowFeature1.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_HungerIncrease.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
