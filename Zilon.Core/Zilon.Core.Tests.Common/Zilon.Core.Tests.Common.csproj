@@ -50,6 +50,7 @@
     <Compile Include="TestGrid15GenMap.cs" />
     <Compile Include="TestGridGenMap.cs" />
     <Compile Include="TestGridGenWallMap.cs" />
+    <Compile Include="TestNodeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">

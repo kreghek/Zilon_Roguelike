@@ -90,53 +90,54 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\FeatureContextBase.cs" />
     <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Bug_EquipmentAfterContainerLootSteps.cs" />
+    <Compile Include="Steps\Bug_EquipmentAfterContainerLootSteps.cs" />
     <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoExceptions.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptionsSteps.cs" />
+    <Compile Include="Steps\Bug_MonsterPatrol_NoExceptionsSteps.cs" />
     <Compile Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoFreeze.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Bug_MonsterPatrol_NoFreezeSteps.cs" />
+    <Compile Include="Steps\Bug_MonsterPatrol_NoFreezeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Perks_DefeatPerksAreLevelUpSteps.cs" />
+    <Compile Include="Steps\Perks_DefeatPerksAreLevelUpSteps.cs" />
+    <Compile Include="Contexts\SurvivalContext.cs" />
     <Compile Include="TestCases\Survival_DrinkWater.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Survival_DrinkWater.feature</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="TestCases\Survival_EatFood.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Survival_EatFood.feature</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Survival_HungerIncrease.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Survival_HungerIncreaseSteps.cs" />
+    <Compile Include="Steps\SurvivalSteps.cs" />
     <Compile Include="TestCases\Survival_ThirstIncrease.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Survival_ThirstIncrease.feature</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="TestCases\Survival_ThirstIncreaseSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -198,6 +199,7 @@
       <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
