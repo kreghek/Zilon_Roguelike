@@ -50,6 +50,7 @@ namespace Zilon.Core.Commands.Tests
         /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
+        [Ignore("Не рабочий. Некорректно проверят вызов Intent")]
         public void Execute_CanAttack_AttackIntended()
         {
             // ARRANGE

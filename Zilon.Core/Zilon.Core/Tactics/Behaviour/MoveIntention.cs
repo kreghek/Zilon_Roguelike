@@ -8,13 +8,14 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveIntention : IIntention
     {
         private readonly IMap _map;
-        private readonly IMapNode _targetNode;
 
         public MoveIntention(IMapNode targetNode, IMap map)
         {
-            _targetNode = targetNode;
+            TargetNode = targetNode;
             _map = map;
         }
+
+        public IMapNode TargetNode { get; }
 
         public IActorTask CreateActorTask(IActorTask currentTask, IActor actor)
         {
@@ -24,7 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 return CreateTaskInner(actor);
             }
 
-            if (currentMoveTask.TargetNode == _targetNode)
+            if (currentMoveTask.TargetNode == TargetNode)
             {
                 return currentMoveTask;
             }
@@ -34,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            return new MoveTask(actor, _targetNode, _map);
+            return new MoveTask(actor, TargetNode, _map);
         }
     }
 }
