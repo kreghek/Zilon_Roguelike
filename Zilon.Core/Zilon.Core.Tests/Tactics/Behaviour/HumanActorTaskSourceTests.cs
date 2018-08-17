@@ -1,4 +1,8 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using FluentAssertions;
 
 using LightInject;
 
@@ -6,18 +10,16 @@ using Moq;
 
 using NUnit.Framework;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.TestCommon;
 
-// ReSharper disable once CheckNamespace
-namespace Zilon.Core.Tactics.Behaviour.Tests
+//TODO Провести реорганизацию тестов. Потому что они не актуальны после ввода абстракции намерений
+namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     /// <summary>
     /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
@@ -57,28 +59,28 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var commands = taskSource.GetActorTasks(map, actorManager);
+                var tasks = taskSource.GetActorTasks(map, actorManager);
 
                 if (step < 4)
                 {
-                    commands.Length.Should().Be(1);
+                    tasks.Length.Should().Be(1);
 
-                    var factCommand = commands[0] as MoveTask;
-                    factCommand.Should().NotBeNull();
+                    var factTask = tasks[0] as MoveTask;
+                    factTask.Should().NotBeNull();
 
-                    factCommand?.IsComplete.Should().Be(false);
+                    factTask?.IsComplete.Should().Be(false);
 
 
-                    foreach (var command in commands)
+                    foreach (var task in tasks)
                     {
-                        command.Execute();
+                        task.Execute();
                     }
 
                     actor.Node.Should().Be(expectedPath[step - 1]);
                 }
                 else
                 {
-                    commands.Should().BeEmpty();
+                    tasks.Should().BeEmpty();
                 }
             }
 

@@ -35,6 +35,12 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
+            var currentTaskIsComplete = _currentTask?.IsComplete;
+            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value)
+            {
+                return new IActorTask[] { _currentTask };
+            }
+
             if (CurrentActor == null)
             {
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
@@ -45,12 +51,12 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new IActorTask[0];
             }
 
-            var currentActorTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
+            _currentTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
             _currentIntesion = null;
 
-            if (currentActorTask != null)
+            if (_currentTask != null)
             {
-                return new IActorTask[] { currentActorTask };
+                return new IActorTask[] { _currentTask };
             }
             else
             {
