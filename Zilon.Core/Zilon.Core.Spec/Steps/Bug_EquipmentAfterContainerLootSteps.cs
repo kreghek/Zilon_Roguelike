@@ -242,10 +242,7 @@ namespace Zilon.Core.Spec
 
 
             // Подготовка источника поведения ботов
-            var decisionSource = _container.GetInstance<IDecisionSource>();
-            var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
-
-            var humanTaskSource = new HumanActorTaskSource(decisionSource, tacticalActUsageService);
+            var humanTaskSource = new HumanActorTaskSource();
             humanTaskSource.SwitchActor(humanActor);
             playerState.TaskSource = humanTaskSource;
 

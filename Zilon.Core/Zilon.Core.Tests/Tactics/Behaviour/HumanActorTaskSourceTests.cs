@@ -333,7 +333,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actorManager = CreateActorManager(attackerActor, targetActor);
 
-            var attackIntention = new AttackIntention(targetActor, usageService);
+            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService));
 
 
 
@@ -369,7 +369,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var methodMock = new Mock<IOpenContainerMethod>();
             var method = methodMock.Object;
 
-            var intention = new OpenContainerIntention(container, method);
+            var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method));
 
 
 

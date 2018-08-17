@@ -83,7 +83,7 @@ namespace Zilon.Core.Spec.TestCases
             var decisionSource = _container.GetInstance<IDecisionSource>();
             var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
 
-            _humanTaskSource = new HumanActorTaskSource(decisionSource, tacticalActUsageService);
+            _humanTaskSource = new HumanActorTaskSource();
             _humanTaskSource.SwitchActor(_humanActor);
 
             var botTaskSource = new MonsterActorTaskSource(botPlayer, routeDictionary, decisionSource, tacticalActUsageService);
@@ -105,7 +105,10 @@ namespace Zilon.Core.Spec.TestCases
         [When(@"Я атакую вражеского актёра")]
         public void WhenЯАтакуюВражескогоАктёра()
         {
-            _humanTaskSource.IntentAttack(_enemy1Actor);
+            var useService = _container.GetInstance<ITacticalActUsageService>();
+
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, _enemy1Actor, useService));
+            _humanTaskSource.Intent(intention);
 
             var sector = _container.GetInstance<ISector>();
             sector.Update();
