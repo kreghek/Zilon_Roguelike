@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         private ServiceContainer _container;
 
         [Test]
-        public void GetActorTasksTest()
+        public void GetActorTasks_SelectNodeAndUpdates_ActorMovedBeforeEmptyTasks()
         {
             // ARRANGE
             var map = new TestGridGenMap();
@@ -112,10 +112,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         }
 
         /// <summary>
-        /// Данный методо проверяет, чтобы всегда при выдачи команды на перемещение генерировалась хотя бы одна команда.
+        /// Данный метод проверяет, чтобы всегда при выдачи команды на перемещение генерировалась хотя бы одна команда.
         /// </summary>
+        /// <remarks>
+        /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
+        /// </remarks>
         [Test()]
-        public void AssignMoveToPointCommandTest()
+        public void Intent_TargetToStartPoint_GenerateMoveCommand()
         {
             // ARRANGE
 
@@ -157,8 +160,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// Тест проверяет, чтобы метод назначения задачи на перемещение проверял аргумент.
         /// Аргумент не должен быть null. Класс поведенения не знает, как в этом случае поступать.
         /// </summary>
+        /// <remarks>
+        /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
+        /// </remarks>
         [Test()]
-        public void AssignMoveToPointCommand_SetNullTarget_Exception()
+        public void Intent_SetNullTarget_ThrownException()
         {
             // ARRANGE
 
@@ -181,12 +187,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             act.Should().Throw<ArgumentException>();
         }
 
+        //TODO Этот тест - это проверка намерения. Сделать отдельный тест.
         /// <summary>
         /// Тест проверяет, после окончания команды на перемещение и назнаения новой команды всё рабоает корректно.
         /// То есть новая команда возвращается при запросе.
         /// </summary>
         [Test()]
-        public void AssignMoveToPointCommand_AssignAfterTaskComplete_NoNullCommand()
+        public void Intent_AssignAfterTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -202,10 +209,13 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actorManager = CreateActorManager(actor);
 
+            var moveIntention = new MoveIntention(finishNode, map);
+            var moveIntention2 = new MoveIntention(finishNode2, map);
+
             // ACT
 
             // 1. Формируем намерение.
-            taskSource.IntentMove(finishNode);
+            taskSource.Intent(moveIntention);
 
             // 2. Ждём, пока команда не отработает.
             var commands = taskSource.GetActorTasks(map, actorManager);
@@ -225,7 +235,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            taskSource.IntentMove(finishNode2);
+            taskSource.Intent(moveIntention2);
 
 
             // 4. Запрашиваем текущие команды.
@@ -243,7 +253,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// то новое намерение отменяет текущее.
         /// </summary>
         [Test()]
-        public void AssignMoveToPointCommand_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
+        public void Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -259,11 +269,14 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actorManager = CreateActorManager(actor);
 
+            var moveIntention = new MoveIntention(finishNode, map);
+            var moveIntention2 = new MoveIntention(finishNode2, map);
+
 
             // ACT
 
             // 1. Формируем намерение.
-            taskSource.IntentMove(finishNode);
+            taskSource.Intent(moveIntention);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
             var commands = taskSource.GetActorTasks(map, actorManager);
@@ -283,7 +296,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             }
 
             // 3. Формируем ещё одно намерение.
-            taskSource.IntentMove(finishNode2);
+            taskSource.Intent(moveIntention2);
 
 
             // 4. Запрашиваем текущие команды.
@@ -319,7 +332,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ACT
-            taskSource.IntentAttack(targetActor);
+            //taskSource.IntentAttack(targetActor);
+            taskSource.Intent(null);
 
 
 
@@ -351,7 +365,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var method = methodMock.Object;
 
             // ACT
-            taskSource.IntentOpenContainer(container, method);
+            //taskSource.IntentOpenContainer(container, method);
+            taskSource.Intent(null);
 
 
 

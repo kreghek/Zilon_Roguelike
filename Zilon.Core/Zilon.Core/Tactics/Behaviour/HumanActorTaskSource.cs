@@ -46,7 +46,16 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var currentActorTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
-            return new IActorTask[] { currentActorTask };
+            _currentIntesion = null;
+
+            if (currentActorTask != null)
+            {
+                return new IActorTask[] { currentActorTask };
+            }
+            else
+            {
+                return new IActorTask[0];
+            }
 
             //if (_taskIsActual && _currentTask?.IsComplete == true)
             //{
@@ -116,6 +125,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intension)
         {
+            //TODO Чтобы отменять текущие намерения, нужно указывать CancelIntention.
+            // Становление null для намерения происходит только изнутри, после создания задачи.
+            if (intension == null)
+            {
+                throw new ArgumentException(nameof(intension));
+            }
+
             _currentIntesion = intension;
         }
 
