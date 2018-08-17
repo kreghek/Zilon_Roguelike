@@ -318,6 +318,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
+            var usageService = _container.GetInstance<ITacticalActUsageService>();
+
             var map = new TestGridGenMap();
 
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
@@ -329,13 +331,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(attackerActor);
 
-
             var actorManager = CreateActorManager(attackerActor, targetActor);
+
+            var attackIntention = new AttackIntention(targetActor, usageService);
+
 
 
             // ACT
-            //taskSource.IntentAttack(targetActor);
-            taskSource.Intent(null);
+            taskSource.Intent(attackIntention);
 
 
 
