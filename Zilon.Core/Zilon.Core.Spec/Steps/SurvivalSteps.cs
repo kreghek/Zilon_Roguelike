@@ -8,9 +8,6 @@ namespace Zilon.Core.Spec.Steps
     [Binding]
     public class SurvivalSteps
     {
-        const int _maxSatiety = 100;
-        const int _maxThirst = 100;
-
         private readonly SurvivalContext _context;
 
         public SurvivalSteps(SurvivalContext context)
@@ -49,20 +46,16 @@ namespace Zilon.Core.Spec.Steps
             _context.UsePropByActiveActor(propSid);
         }
 
-        [Then(@"Значение сытости уменьшилось на (.*) единицу")]
-        public void ThenЗначениеСытостиУменьшилосьНаЕдиницу(int p0)
+        [Then(@"Значение сытости уменьшилось на (.*) единицу и стало (.*)")]
+        public void ThenЗначениеСытостиУменьшилосьНаЕдиницу(int hungerRate, int expectedSatiety)
         {
-            var expectedSatiety = _maxSatiety - p0;
-
             var actor = _context.GetActiveActor();
             actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
         }
 
-        [Then(@"Значение воды уменьшилось на (.*) единицу")]
-        public void ThenЗначениеВодыУменьшилосьНаЕдиницу(int p0)
+        [Then(@"Значение воды уменьшилось на (.*) единицу и стало (.*)")]
+        public void ThenЗначениеВодыУменьшилосьНаЕдиницу(int thirstRate, int expectedThirst)
         {
-            var expectedThirst = _maxThirst - p0;
-
             var actor = _context.GetActiveActor();
             actor.Person.Survival.Thirst.Should().Be(expectedThirst);
         }

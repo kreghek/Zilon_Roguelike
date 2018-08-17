@@ -117,6 +117,11 @@
     </Compile>
     <Compile Include="Steps\Perks_DefeatPerksAreLevelUpSteps.cs" />
     <Compile Include="Contexts\SurvivalContext.cs" />
+    <Compile Include="TestCases\Survival_BecomeStrongThrist.feature.cs">
+      <DependentUpon>Survival_BecomeStrongThrist.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Survival_DrinkWater.feature.cs">
       <DependentUpon>Survival_DrinkWater.feature</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -127,16 +132,31 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="TestCases\Survival_BecomeHunger.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_BecomeHunger.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Survival_HungerIncrease.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
+    <Compile Include="TestCases\Survival_BecomeStrongHunger.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_BecomeStrongHunger.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_ThirstIncrease.feature.cs">
       <DependentUpon>Survival_ThirstIncrease.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="TestCases\Survival_BecomeThrist.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_BecomeThrist.feature</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +192,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Survival_BecomeStrongThrist.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_BecomeStrongThrist.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Survival_DrinkWater.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_DrinkWater.feature.cs</LastGenOutput>
@@ -180,13 +204,25 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_EatFood.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Survival_BecomeHunger.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_BecomeHunger.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Survival_HungerIncrease.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_HungerIncrease.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Survival_BecomeStrongHunger.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_BecomeStrongHunger.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Survival_ThirstIncrease.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_ThirstIncrease.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Survival_BecomeThrist.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_BecomeThrist.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

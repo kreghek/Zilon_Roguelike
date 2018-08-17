@@ -17,22 +17,22 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Survival_ThirstIncrease", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
-        "нужно, чтобы каждый ход значение воды персонажа падало", SourceFile="TestCases\\Survival_ThirstIncrease.feature", SourceLine=0)]
-    public partial class Survival_ThirstIncreaseFeature
+    [TechTalk.SpecRun.FeatureAttribute("Survival_BecomeHunger", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+        "нужно, чтобы каждый ход значение сытости персонажа падало", SourceFile="TestCases\\Survival_BecomeHunger.feature", SourceLine=0)]
+    public partial class Survival_BecomeHungerFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Survival_ThirstIncrease.feature"
+#line 1 "Survival_BecomeHunger.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_ThirstIncrease", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
-                    "нужно, чтобы каждый ход значение воды персонажа падало", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_BecomeHunger", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+                    "нужно, чтобы каждый ход значение сытости персонажа падало", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,12 +68,12 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Увеличение жажды каждый ход", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Наступил голод", new string[] {
                 "survival",
                 "dev0"}, SourceLine=6)]
-        public virtual void УвеличениеЖаждыКаждыйХод()
+        public virtual void НаступилГолод()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Увеличение жажды каждый ход", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Наступил голод", null, new string[] {
                         "survival",
                         "dev0"});
 #line 7
@@ -84,9 +84,11 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And("Есть персонаж игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("Я перемещаю персонажа на одну клетку", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Я перемещаю персонажа по круговому маршруту 100 раз", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.Then("Значение воды уменьшилось на 1 единицу и стало 99", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Значение сытости стало 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 12
+ testRunner.And("Персонаж получает эффект Голод", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
