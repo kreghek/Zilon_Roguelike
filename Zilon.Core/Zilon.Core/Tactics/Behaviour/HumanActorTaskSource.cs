@@ -21,6 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private PropTransfer[] _transfers;
         private Equipment _equipment;
         private int _slotIndex;
+        private IIntension _currentIntesion;
 
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actUsageService;
@@ -39,62 +40,70 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
 
-            if (_taskIsActual && _currentTask?.IsComplete == true)
+            if (_currentIntesion == null)
             {
-                _targetNode = null;
-                _attackTarget = null;
-                _method = null;
-                _propContainer = null;
+                return new IActorTask[0];
             }
 
-            if (_targetNode != null)
-            {
-                if (_taskIsActual)
-                {
-                    return new[] { _currentTask };
-                }
+            var currentActorTask = _currentIntesion.CreateActorTask(_currentIntesion, CurrentActor);
+            return new IActorTask[] { currentActorTask };
 
-                _taskIsActual = true;
-                var moveTask = new MoveTask(CurrentActor, _targetNode, map);
-                _currentTask = moveTask;
+            //if (_taskIsActual && _currentTask?.IsComplete == true)
+            //{
+            //    _targetNode = null;
+            //    _attackTarget = null;
+            //    _method = null;
+            //    _propContainer = null;
+            //}
 
-                return new[] { _currentTask };
-            }
+            //if (_targetNode != null)
+            //{
+            //    if (_taskIsActual)
+            //    {
+            //        return new[] { _currentTask };
+            //    }
 
-            if (_attackTarget != null)
-            {
-                var attackTask = new AttackTask(CurrentActor, _attackTarget, _actUsageService);
-                _currentTask = attackTask;
-                return new[] { _currentTask };
-            }
+            //    _taskIsActual = true;
+            //    var moveTask = new MoveTask(CurrentActor, _targetNode, map);
+            //    _currentTask = moveTask;
 
-            if (_propContainer != null && _method != null)
-            {
-                var openContainerTask = new OpenContainerTask(CurrentActor, _propContainer, _method);
-                _currentTask = openContainerTask;
-                return new[] { _currentTask };
-            }
+            //    return new[] { _currentTask };
+            //}
 
-            if (_transfers != null)
-            {
-                var inventory = CurrentActor.Person.Inventory;
+            //if (_attackTarget != null)
+            //{
+            //    var attackTask = new AttackTask(CurrentActor, _attackTarget, _actUsageService);
+            //    _currentTask = attackTask;
+            //    return new[] { _currentTask };
+            //}
 
-                if (inventory == null)
-                {
-                    throw new InvalidOperationException($"Для данного персонажа {CurrentActor.Person} не задан инвентарь.");
-                }
+            //if (_propContainer != null && _method != null)
+            //{
+            //    var openContainerTask = new OpenContainerTask(CurrentActor, _propContainer, _method);
+            //    _currentTask = openContainerTask;
+            //    return new[] { _currentTask };
+            //}
 
-                _currentTask = new TransferPropsTask(CurrentActor, _transfers);
-                return new[] { _currentTask };
-            }
+            //if (_transfers != null)
+            //{
+            //    var inventory = CurrentActor.Person.Inventory;
 
-            if (_equipment != null)
-            {
-                _currentTask = new EquipTask(CurrentActor, _equipment, _slotIndex);
-                return new[] { _currentTask };
-            }
+            //    if (inventory == null)
+            //    {
+            //        throw new InvalidOperationException($"Для данного персонажа {CurrentActor.Person} не задан инвентарь.");
+            //    }
 
-            return new IActorTask[0];
+            //    _currentTask = new TransferPropsTask(CurrentActor, _transfers);
+            //    return new[] { _currentTask };
+            //}
+
+            //if (_equipment != null)
+            //{
+            //    _currentTask = new EquipTask(CurrentActor, _equipment, _slotIndex);
+            //    return new[] { _currentTask };
+            //}
+
+            //return new IActorTask[0];
         }
 
         public void SwitchActor(IActor currentActor)
@@ -104,6 +113,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActor CurrentActor { get; private set; }
 
+
+        public void Intent(IIntension intension)
+        {
+            _currentIntesion = intension;
+        }
 
         /// <summary>
         /// Указать намерение двигаться к указанному узлу.

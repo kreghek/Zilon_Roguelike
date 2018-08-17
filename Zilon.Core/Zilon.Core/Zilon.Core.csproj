@@ -138,6 +138,7 @@
     <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
+    <Compile Include="Tactics\Behaviour\IIntension.cs" />
     <Compile Include="Tactics\Behaviour\OneTurnActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\EquipTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
