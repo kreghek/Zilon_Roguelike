@@ -65,7 +65,8 @@ namespace Zilon.Core.Commands.Tests
 
             // ASSERT
             var target = ((IActorViewModel)playerState.HoverViewModel).Actor;
-            humanTaskSourceMock.Verify(x => x.IntentAttack(target));
+            //humanTaskSourceMock.Verify(x => x.IntentAttack(target));
+            humanTaskSourceMock.Verify(x => x.Intent(null));
         }
 
         [SetUp]

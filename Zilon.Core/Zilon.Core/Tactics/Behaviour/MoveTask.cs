@@ -8,10 +8,11 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class MoveTask: ActorTaskBase
     {
-        private readonly IMapNode _targetNode;
         private readonly IMap _map;
         private readonly List<IMapNode> _path;
-        
+
+        public IMapNode TargetNode { get; }
+
         public override void Execute()
         {
             if (!_path.Any())
@@ -23,7 +24,7 @@ namespace Zilon.Core.Tactics.Behaviour
             //TODO Добавить тест, исправить баг.
             // Этой проверки быть не должно, потому что _path и так содержит
             // цепочку узлов до целевого. И должно выполняться верхнее условие.
-            if (Actor.Node == _targetNode)
+            if (Actor.Node == TargetNode)
             {
                 IsComplete = true;
                 return;
@@ -41,7 +42,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public MoveTask(IActor actor, IMapNode targetNode, IMap map): base(actor)
         {
-            _targetNode = targetNode;
+            TargetNode = targetNode;
             _map = map;
 
             _path = new List<IMapNode>();
@@ -52,7 +53,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private void CreatePath()
         {
             var startNode = Actor.Node;
-            var finishNode = _targetNode;
+            var finishNode = TargetNode;
             
             _path.Clear();
 
@@ -70,7 +71,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override string ToString()
         {
-            return $"{Actor} ({_targetNode})";
+            return $"{Actor} ({TargetNode})";
         }
     }
 }

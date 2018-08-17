@@ -47,7 +47,8 @@ namespace Zilon.Core.Commands
             var propVm = _inventoryState.SelectedProp;
             var usableProp = propVm.Prop;
 
-            _playerState.TaskSource.IntentUseSelf(usableProp);
+            //_playerState.TaskSource.IntentUseSelf(usableProp);
+            _playerState.TaskSource.Intent(null);
         }
     }
 }

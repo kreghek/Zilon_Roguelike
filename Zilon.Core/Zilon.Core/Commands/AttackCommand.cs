@@ -3,6 +3,7 @@
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
@@ -54,7 +55,8 @@ namespace Zilon.Core.Commands
             var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
 
             var targetActor = targetActorViewModel.Actor;
-            _playerState.TaskSource.IntentAttack(targetActor);
+            //_playerState.TaskSource.IntentAttack(targetActor);
+            _playerState.TaskSource.Intent(null);
         }
     }
 }

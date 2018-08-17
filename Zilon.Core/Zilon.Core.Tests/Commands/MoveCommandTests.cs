@@ -60,7 +60,8 @@ namespace Zilon.Core.Commands.Tests
 
             // ASSERT
             var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
-            humanTaskSourceMock.Verify(x => x.IntentMove(target));
+            //humanTaskSourceMock.Verify(x => x.IntentMove(target));
+            humanTaskSourceMock.Verify(x => x.Intent(null));
         }
 
         [SetUp]

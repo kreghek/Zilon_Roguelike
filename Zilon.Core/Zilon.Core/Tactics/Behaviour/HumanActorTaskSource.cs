@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private PropTransfer[] _transfers;
         private Equipment _equipment;
         private int _slotIndex;
-        private IIntension _currentIntesion;
+        private IIntention _currentIntesion;
 
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actUsageService;
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new IActorTask[0];
             }
 
-            var currentActorTask = _currentIntesion.CreateActorTask(_currentIntesion, CurrentActor);
+            var currentActorTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
             return new IActorTask[] { currentActorTask };
 
             //if (_taskIsActual && _currentTask?.IsComplete == true)
@@ -114,7 +114,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public IActor CurrentActor { get; private set; }
 
 
-        public void Intent(IIntension intension)
+        public void Intent(IIntention intension)
         {
             _currentIntesion = intension;
         }

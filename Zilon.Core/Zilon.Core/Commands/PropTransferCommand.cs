@@ -33,7 +33,8 @@ namespace Zilon.Core.Commands
                 _transferMachine.Container.PropAdded,
                 _transferMachine.Container.PropRemoved);
 
-            _playerState.TaskSource.IntentTransferProps(new[] {inventoryTransfer, containerTransfer});
+            //_playerState.TaskSource.IntentTransferProps(new[] {inventoryTransfer, containerTransfer});
+            _playerState.TaskSource.Intent(null);
         }
     }
 }

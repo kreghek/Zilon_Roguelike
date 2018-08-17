@@ -58,7 +58,8 @@ namespace Zilon.Core.Commands.Tests
 
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.IntentTransferProps(It.IsAny<IEnumerable<PropTransfer>>()));
+            //humanTaskSourceMock.Verify(x => x.IntentTransferProps(It.IsAny<IEnumerable<PropTransfer>>()));
+            humanTaskSourceMock.Verify(x => x.Intent(null));
         }
 
         [SetUp]

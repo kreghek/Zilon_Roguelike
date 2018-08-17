@@ -116,7 +116,8 @@ namespace Zilon.Core.Commands.Tests
 
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.IntentEquip(It.IsAny<Equipment>(), 0));
+            //humanTaskSourceMock.Verify(x => x.IntentEquip(It.IsAny<Equipment>(), 0));
+            humanTaskSourceMock.Verify(x => x.Intent(null));
         }
     }
 }

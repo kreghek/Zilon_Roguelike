@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Client;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
@@ -47,7 +48,10 @@ namespace Zilon.Core.Commands
             }
 
             var targetNode = selectedNodeVm.Node;
-            _playerState.TaskSource.IntentMove(targetNode);
+            var targetMap = _sectorManager.CurrentSector.Map;
+
+            var moveIntetion = new MoveIntention(targetNode, targetMap);
+            _playerState.TaskSource.Intent(moveIntetion);
         }
     }
 }

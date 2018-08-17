@@ -61,7 +61,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
             }
 
-            _playerState.TaskSource.IntentEquip(equipment, SlotIndex.Value);
+            //_playerState.TaskSource.IntentEquip(equipment, SlotIndex.Value);
+            _playerState.TaskSource.Intent(null);
         }
     }
 }

@@ -45,7 +45,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actor = CreateActor(startNode);
             var taskSource = InitTaskSource(actor);
-            taskSource.IntentMove(finishNode);
+            var moveIntetion = new MoveIntention(finishNode, map);
+            taskSource.Intent(moveIntetion);
 
             var actorManager = CreateActorManager(actor);
 
@@ -128,10 +129,12 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var actorManager = CreateActorManager(actor);
 
+            var moveIntention = new MoveIntention(startNode, map);
+
 
 
             // ACT
-            taskSource.IntentMove(startNode);
+            taskSource.Intent(moveIntention);
 
 
 
@@ -170,7 +173,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
             // ACT
-            Action act = () => { taskSource.IntentMove(null); };
+            Action act = () => { taskSource.Intent(null); };
 
 
 
