@@ -1,16 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Zenject;
+using Zilon.Core.Client;
+using Zilon.Core.Persons;
 
-public class PersonEffectHandler : MonoBehaviour {
+public class PersonEffectHandler : MonoBehaviour
+{
+	[Inject] private IPlayerState _playerState;
 
-	// Use this for initialization
-	void Start () {
+	public Transform EffectParent;
+	public EffectViewModel EffectPrefab;
+
+	void Start()
+	{
+		UpdateEffects();
 		
+		var person = _playerState.ActiveActor.Actor.Person;
+		person.Survival.StatCrossKeyValue += (sender, args) => { UpdateEffects(); };
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	private void UpdateEffects()
+	{
+		foreach (Transform childTrasform in EffectParent)
+		{
+			Destroy(childTrasform.gameObject);
+		}
 		
+		var person = _playerState.ActiveActor.Actor.Person;
+
+		var effects = person.Effects;
+
+		foreach (var effect in effects)
+		{
+			var survivalHazardEffect = effect as SurvivalStatHazardEffect;
+			if (survivalHazardEffect != null)
+			{
+				var effectViewModel = Instantiate(EffectPrefab, EffectParent);
+				effectViewModel.Title = $"{survivalHazardEffect.Level} {survivalHazardEffect.Type}";
+			}
+		}
 	}
 }
