@@ -101,7 +101,7 @@
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
-    <Compile Include="Persons\HungerEffect.cs" />
+    <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobExecutable.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Persons\PersonFactory.cs" />
     <Compile Include="Persons\SurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
-    <Compile Include="Persons\SurvivalStatKeyPointType.cs" />
+    <Compile Include="Persons\SurvivalStatHazardLevel.cs" />
     <Compile Include="Persons\SurvivalStat.cs" />
     <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
     <Compile Include="Persons\SurvivalStatType.cs" />

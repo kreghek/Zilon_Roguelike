@@ -1,9 +1,9 @@
 ﻿namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Типы ключевых точек для значений выживания.
+    /// Уровень угрозы на параметр выживания.
     /// </summary>
-    public enum SurvivalStatKeyPointType
+    public enum SurvivalStatHazardLevel
     {
         Undefined,
         Lesser,

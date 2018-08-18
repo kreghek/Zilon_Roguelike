@@ -2,6 +2,6 @@
 {
     public interface IPersonEffect
     {
-        string Name { get; set; }
+        void Update();
     }
 }

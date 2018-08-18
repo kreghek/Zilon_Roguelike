@@ -35,7 +35,7 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoint.Type == SurvivalStatKeyPointType.Lesser &&
+                    args.KeyPoint.Level == SurvivalStatHazardLevel.Lesser &&
                     args.KeyPoint.Value == 0);
             }
         }

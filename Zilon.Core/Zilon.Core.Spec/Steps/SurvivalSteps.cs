@@ -133,7 +133,47 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            var effect = actor.Person.Effects.SingleOrDefault(x => x.Name == effectName);
+            SurvivalStatType stat;
+            SurvivalStatHazardLevel level;
+
+            switch (effectName)
+            {
+                case "Слабый голод":
+                    level = SurvivalStatHazardLevel.Lesser;
+                    stat = SurvivalStatType.Satiety;
+                    break;
+
+                case "Голод":
+                    level = SurvivalStatHazardLevel.Strong;
+                    stat = SurvivalStatType.Satiety;
+                    break;
+
+                case "Голодание":
+                    level = SurvivalStatHazardLevel.Max;
+                    stat = SurvivalStatType.Satiety;
+                    break;
+
+                case "Слабая жажда":
+                    level = SurvivalStatHazardLevel.Lesser;
+                    stat = SurvivalStatType.Water;
+                    break;
+
+                case "Жажда":
+                    level = SurvivalStatHazardLevel.Strong;
+                    stat = SurvivalStatType.Water;
+                    break;
+
+                case "Обезвоживание":
+                    level = SurvivalStatHazardLevel.Max;
+                    stat = SurvivalStatType.Water;
+                    break;
+
+                default:
+                    throw new NotSupportedException("Неизветный тип ожидаемого эффекта.");
+            }
+
+            var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x => x.Type == stat && x.Level == level);
             effect.Should().NotBeNull();
         }
 

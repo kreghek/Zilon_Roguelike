@@ -90,15 +90,15 @@ namespace Zilon.Core.Persons
                 Value = 50,
                 KeyPoints = new[]{
                         new SurvivalStatKeyPoint{
-                            Type = SurvivalStatKeyPointType.Lesser,
+                            Level = SurvivalStatHazardLevel.Lesser,
                             Value = 0
                         },
                         new SurvivalStatKeyPoint{
-                            Type = SurvivalStatKeyPointType.Strong,
+                            Level = SurvivalStatHazardLevel.Strong,
                             Value = -25
                         },
                         new SurvivalStatKeyPoint{
-                            Type = SurvivalStatKeyPointType.Max,
+                            Level = SurvivalStatHazardLevel.Max,
                             Value = -50
                         }
                     }

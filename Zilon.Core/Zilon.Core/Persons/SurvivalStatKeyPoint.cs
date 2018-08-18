@@ -2,7 +2,7 @@
 {
     public class SurvivalStatKeyPoint
     {
-        public SurvivalStatKeyPointType Type { get; set; }
+        public SurvivalStatHazardLevel Level { get; set; }
         public int Value { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
@@ -35,12 +36,7 @@ namespace Zilon.Core.Persons
 
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
-            if (scheme == null)
-            {
-                throw new ArgumentNullException(nameof(scheme));
-            }
-
-            Scheme = scheme;
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             var slotCount = Scheme.SlotCount;
             EquipmentCarrier = new EquipmentCarrier(slotCount);
@@ -137,21 +133,31 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            switch (e.KeyPoint.Type)
+            var statType = e.Stat.Type;
+
+            var currentTypeEffect = Effects.OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x=>x.Type == statType);
+
+            // Эффект уже существует.
+            // Изменим его тип.
+            if (currentTypeEffect != null)
             {
-                case SurvivalStatKeyPointType.Lesser:
-                    if (e.Stat.Type == SurvivalStatType.Satiety)
+                if (e.Stat.Value >= e.KeyPoint.Value)
+                {
+                    currentTypeEffect.Level = e.KeyPoint.Level;
+                }
+                else
+                {
+                    if (e.KeyPoint.Level == SurvivalStatHazardLevel.Lesser)
                     {
-                        if (e.Stat.Value >= e.KeyPoint.Value)
-                        {
-                            var currentEffect = Effects.SingleOrDefault(x => x.Name == "Слабый голод");
-                            if (currentEffect == null)
-                            {
-                                Effects.Add(new HungerEffect { Name = "Слабый голод" });
-                            }
-                        }
+                        Effects.Remove(currentTypeEffect);
                     }
-                    break;
+                }
+            }
+            else
+            {
+                currentTypeEffect = new SurvivalStatHazardEffect(statType, e.KeyPoint.Level);
+                Effects.Add(currentTypeEffect);
             }
         }
 
