@@ -13,10 +13,14 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class AttackCommand : ActorCommandBase
     {
+        private readonly ITacticalActUsageService _tacticalActUsageService;
+
         public AttackCommand(ISectorManager sectorManager,
-            IPlayerState playerState) :
+            IPlayerState playerState,
+            ITacticalActUsageService tacticalActUsageService) :
             base(sectorManager, playerState)
         {
+            _tacticalActUsageService = tacticalActUsageService;
         }
 
         public override bool CanExecute()
@@ -55,8 +59,8 @@ namespace Zilon.Core.Commands
             var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
 
             var targetActor = targetActorViewModel.Actor;
-            //_playerState.TaskSource.IntentAttack(targetActor);
-            _playerState.TaskSource.Intent(null);
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService));
+            _playerState.TaskSource.Intent(intention);
         }
     }
 }

@@ -50,7 +50,6 @@ namespace Zilon.Core.Commands.Tests
         /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
-        [Ignore("Не рабочий. Некорректно проверят вызов Intent")]
         public void Execute_CanAttack_AttackIntended()
         {
             // ARRANGE
@@ -66,8 +65,17 @@ namespace Zilon.Core.Commands.Tests
 
             // ASSERT
             var target = ((IActorViewModel)playerState.HoverViewModel).Actor;
-            //humanTaskSourceMock.Verify(x => x.IntentAttack(target));
-            humanTaskSourceMock.Verify(x => x.Intent(null));
+
+            humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
+                CheckAttackIntention(intention, playerState, target)
+            )));
+        }
+
+        private static bool CheckAttackIntention(IIntention intention, IPlayerState playerState, IActor target)
+        {
+            var attackIntention = (Intention<AttackTask>)intention;
+            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return attackTask.Target == target;
         }
 
         [SetUp]
@@ -132,11 +140,15 @@ namespace Zilon.Core.Commands.Tests
             playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
             var playerState = playerStateMock.Object;
 
+            var usageServiceMock = new Mock<ITacticalActUsageService>();
+            var usageService = usageServiceMock.Object;
+
 
             _container.Register<AttackCommand>(new PerContainerLifetime());
             _container.Register(factory => sectorManager, new PerContainerLifetime());
             _container.Register(factory => playerState, new PerContainerLifetime());
             _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
+            _container.Register(factory => usageService, new PerContainerLifetime());
         }
     }
 }

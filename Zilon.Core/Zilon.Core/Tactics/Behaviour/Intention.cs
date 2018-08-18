@@ -4,16 +4,16 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class Intention<TActorTask> : IIntention where TActorTask : IActorTask
     {
-        private readonly Func<IActor, TActorTask> _taskFactory;
-
         public Intention(Func<IActor, TActorTask> taskFactory)
         {
-            _taskFactory = taskFactory;
+            TaskFactory = taskFactory;
         }
+
+        public Func<IActor, TActorTask> TaskFactory { get; }
 
         public IActorTask CreateActorTask(IActorTask currentTask, IActor actor)
         {
-            var task = _taskFactory(actor);
+            var task = TaskFactory(actor);
             return task;
         }
     }
