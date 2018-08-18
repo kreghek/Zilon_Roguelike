@@ -8,10 +8,13 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
+namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 {
     /// <summary>
     /// Тесты для проверки корректности обхода точек одним актёром.

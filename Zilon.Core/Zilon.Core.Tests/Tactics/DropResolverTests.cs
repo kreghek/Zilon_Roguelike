@@ -1,15 +1,16 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+
+using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
 
-using System.Linq;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics.Tests
+namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
     public class DropResolverTests
@@ -21,7 +22,8 @@ namespace Zilon.Core.Tactics.Tests
 
             const string testPropSchemeSid = "test-resource";
 
-            var testResourceScheme = new PropScheme {
+            var testResourceScheme = new PropScheme
+            {
                 Sid = testPropSchemeSid
             };
 

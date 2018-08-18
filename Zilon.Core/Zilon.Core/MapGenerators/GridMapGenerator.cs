@@ -2,7 +2,7 @@
 
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.CommonServices.MapGenerators
+namespace Zilon.Core.MapGenerators
 {
     public class GridMapGenerator : IMapGenerator
     {

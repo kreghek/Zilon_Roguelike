@@ -9,10 +9,12 @@ using NUnit.Framework;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Tactics.Behaviour.Tests
+namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     [TestFixture()]
     public class AttackTaskTests

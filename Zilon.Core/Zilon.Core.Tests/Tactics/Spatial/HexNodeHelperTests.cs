@@ -4,14 +4,15 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Tactics.Spatial.Tests
+namespace Zilon.Core.Tests.Tactics.Spatial
 {
-    [TestFixture()]
+    [TestFixture]
     public class HexNodeHelperTests
     {
-        [Test()]
+        [Test]
         public void GetNeighborsTest()
         {
             // ARRANGE

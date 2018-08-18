@@ -8,13 +8,12 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Services.MapGenerators.Tests
+namespace Zilon.Core.Tests.Services.MapGenerators
 {
-    using Zilon.Core.CommonServices.MapGenerators;
-    using Zilon.Core.Tests.Common;
-
     [TestFixture()]
     public class GridMapGeneratorTests
     {
@@ -65,7 +64,7 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         public void CreateMap_HexMapType_NoExceptions()
         {
             // ARRANGE
-            
+
             var map = new HexMap();
 
             var mapGenerator = new GridMapGenerator(7);
@@ -83,9 +82,9 @@ namespace Zilon.Core.Services.MapGenerators.Tests
         private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
         {
             return (Edge)(from edge in map.Edges
-                    where edge.Nodes.Contains(node)
-                    where edge.Nodes.Contains(neighbor)
-                    select edge).SingleOrDefault();
+                          where edge.Nodes.Contains(node)
+                          where edge.Nodes.Contains(neighbor)
+                          select edge).SingleOrDefault();
         }
 
         private void AssertEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)

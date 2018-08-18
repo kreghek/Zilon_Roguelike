@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -18,7 +19,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Commands.Tests
+namespace Zilon.Core.Tests.Commands
 {
     //TODO Добавить тест, который проверяет, что нельзя атаковать сквозь стены.
     [TestFixture]

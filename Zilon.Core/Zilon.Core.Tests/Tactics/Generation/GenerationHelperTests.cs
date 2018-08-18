@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using Zilon.Core.MapGenerators;
 
-namespace Zilon.Core.Tactics.Generation.Tests
+namespace Zilon.Core.Tests.Tactics.Generation
 {
     [TestFixture()]
     public class GenerationHelperTests

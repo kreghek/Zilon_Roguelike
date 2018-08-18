@@ -1,17 +1,21 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Schemes;
-using Moq;
-using FluentAssertions;
+﻿using FluentAssertions;
 
-namespace Zilon.Core.Persons.Tests
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
+
+namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture()]
+    [TestFixture]
     public class EvolutionDataTests
     {
         /// <summary>
         /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
         /// </summary>
-        [Test()]
+        [Test]
         public void PerkLevelUpTest()
         {
             // ARRANGE

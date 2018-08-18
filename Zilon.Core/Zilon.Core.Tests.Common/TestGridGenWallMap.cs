@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Common
 {
-    using Zilon.Core.CommonServices.MapGenerators;
-
     /// <summary>
     /// Тестовый класс карты со стенами.
     /// </summary>

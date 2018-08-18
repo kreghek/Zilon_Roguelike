@@ -1,14 +1,16 @@
 ﻿using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Client.Tests
+namespace Zilon.Core.Tests.Client
 {
     [TestFixture()]
     public class PropTransferMachineTests

@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -16,7 +17,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Commands.Tests
+namespace Zilon.Core.Tests.Commands
 {
     [TestFixture]
     public class EquipCommandTests

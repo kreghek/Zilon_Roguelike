@@ -1,11 +1,16 @@
-﻿using NUnit.Framework;
-using System.Linq;
-using Moq;
-using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
+﻿using System.Linq;
+
 using FluentAssertions;
 
-namespace Zilon.Core.Client.Tests
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Client;
+using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
+
+namespace Zilon.Core.Tests.Client
 {
     [TestFixture]
     public class PropTransferStoreTests

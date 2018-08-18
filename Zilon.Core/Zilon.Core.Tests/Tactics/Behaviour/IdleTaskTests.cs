@@ -4,9 +4,11 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
-namespace Zilon.Core.Tactics.Behaviour.Tests
+namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     [TestFixture]
     public class IdleTaskTests

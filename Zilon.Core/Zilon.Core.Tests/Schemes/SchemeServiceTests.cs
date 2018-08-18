@@ -8,9 +8,10 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
+using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Schemes.Tests
+namespace Zilon.Core.Tests.Schemes
 {
     [TestFixture]
     public class SchemeServiceTests

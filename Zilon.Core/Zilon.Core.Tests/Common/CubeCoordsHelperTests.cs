@@ -1,11 +1,13 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
-using System.Linq;
+using Zilon.Core.Common;
 using Zilon.Core.Tests.Common.TestCases;
 
-namespace Zilon.Core.Common.Tests
+namespace Zilon.Core.Tests.Common
 {
     [TestFixture]
     public class CubeCoordsHelperTests

@@ -7,11 +7,13 @@ using Moq;
 
 using NUnit.Framework;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
-{
-    using Zilon.Core.CommonServices.MapGenerators;
-    using Zilon.Core.Tests.Common;
+using Zilon.Core.MapGenerators;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tactics.Spatial.PathFinding;
+using Zilon.Core.Tests.Common;
 
+namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
+{
     [TestFixture]
     public class AStarTests
     {
@@ -87,7 +89,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
             };
 
 
-            
+
 
             var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
 

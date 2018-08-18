@@ -1,12 +1,13 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+
+using Moq;
 
 using NUnit.Framework;
 
-using System.Collections.Generic;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons.Tests
+namespace Zilon.Core.Tests.Persons
 {
     [TestFixture()]
     public class PerkResolverTests

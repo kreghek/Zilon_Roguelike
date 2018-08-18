@@ -2,9 +2,10 @@
 
 using NUnit.Framework;
 
+using Zilon.Core.Common;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
-namespace Zilon.Core.Common.Tests
+namespace Zilon.Core.Tests.Common
 {
     [TestFixture]
     public class HexHelperTests

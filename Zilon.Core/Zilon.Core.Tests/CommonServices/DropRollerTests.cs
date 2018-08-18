@@ -1,13 +1,14 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
-using System.Linq;
-
+using Zilon.Core.CommonServices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.CommonServices.Tests
+namespace Zilon.Core.Tests.CommonServices
 {
     [TestFixture]
     public class DropRollerTests

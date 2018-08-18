@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 
-namespace Zilon.Core.Tactics.Generation.Tests
+namespace Zilon.Core.Tests.Tactics.Generation
 {
     [TestFixture()]
     public class SectorGeneratorRandomSourceTests
@@ -28,7 +28,8 @@ namespace Zilon.Core.Tactics.Generation.Tests
             var rollIndex = 0;
 
             var diceMock = new Mock<IDice>();
-            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => {
+            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n =>
+            {
                 var result = 0;
                 if (rollIndex == 0)
                 {
@@ -40,7 +41,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
                     // это бросок на выбор комнаты
                     result = 1;
                 }
-                
+
 
                 rollIndex++;
 
@@ -48,7 +49,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             });
             var dice = diceMock.Object;
 
-            
+
             var randomSource = new SectorGeneratorRandomSource(dice);
 
             var currentRoom = new Room();
@@ -60,7 +61,7 @@ namespace Zilon.Core.Tactics.Generation.Tests
             // ACT
             var factRooms = randomSource.RollConnectedRooms(currentRoom,
                 maxNeighbor,
-                neighborProbably, 
+                neighborProbably,
                 availableRooms);
 
 
