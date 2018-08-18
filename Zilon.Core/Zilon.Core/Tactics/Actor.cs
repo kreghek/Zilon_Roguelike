@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -102,7 +103,7 @@ namespace Zilon.Core.Tactics
         {
             var useData = usedProp.Scheme.Use;
 
-            foreach(var rule in useData.CommonRules)
+            foreach (var rule in useData.CommonRules)
             {
                 switch (rule)
                 {
@@ -110,7 +111,17 @@ namespace Zilon.Core.Tactics
                         Person.Survival.ReplenishSatiety(10);
                         break;
                 }
+            }
 
+            if (useData.Consumable)
+            {
+                switch (usedProp)
+                {
+                    case Resource resource:
+                        var removeResource = new Resource(resource.Scheme, 1);
+                        Person.Inventory.Remove(removeResource);
+                        break;
+                }
             }
         }
     }
