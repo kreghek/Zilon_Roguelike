@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Spec.Contexts;
@@ -60,16 +61,20 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Survival.Thirst.Should().Be(expectedThirst);
         }
 
-        [Then(@"Значение сытости повысилось на (.*) единиц и уменьшилось на (.*) из-за голода")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(int satietyValue, int hungerRate)
+        [Then(@"Значение сытости повысилось на (.*) единиц и уменьшилось на (.*) из-за голода и стало (.*)")]
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(int satietyValue, int hungerRate, int expectedSatiety)
         {
-            ScenarioContext.Current.Pending();
+            var actor = _context.GetActiveActor();
+            actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
         }
 
         [Then(@"Еда (.*) отсутствует в инвентаре персонажа")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
-            ScenarioContext.Current.Pending();
+            var actor = _context.GetActiveActor();
+            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
+            testedProp.Should().BeNull();
         }
 
     }

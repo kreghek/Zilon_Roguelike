@@ -7,8 +7,8 @@
     {
         public SurvivalData()
         {
-            Satiety = 100;
-            Thirst = 100;
+            Satiety = 50;
+            Thirst = 50;
         }
 
         public int Satiety { get; private set; }
