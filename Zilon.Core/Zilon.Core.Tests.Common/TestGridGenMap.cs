@@ -10,7 +10,7 @@ namespace Zilon.Core.Tests.Common
             
         }
 
-        public TestGridGenMap(int size): base() {
+        public TestGridGenMap(int size) {
 
             var gridGenerator = new GridMapGenerator(size);
             gridGenerator.CreateMap(this);

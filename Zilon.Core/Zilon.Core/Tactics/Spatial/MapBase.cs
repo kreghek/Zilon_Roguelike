@@ -11,7 +11,7 @@ namespace Zilon.Core.Tactics.Spatial
         public List<IMapNode> Nodes { get; }
         public List<IEdge> Edges { get; }
 
-        public MapBase()
+        protected MapBase()
         {
             Nodes = new List<IMapNode>();
             Edges = new List<IEdge>();
