@@ -39,7 +39,7 @@ namespace Zilon.Core.Spec.Steps
             var actorManager = _container.GetInstance<IActorManager>();
             var propContainerManager = _container.GetInstance<IPropContainerManager>();
 
-            var map = new TestGrid15GenMap();
+            var map = new TestGridGenMap(15);
             // Подготовка карты
             map.Edges.RemoveAt(10);
             map.Edges.RemoveAt(20);

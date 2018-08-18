@@ -47,7 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPropItemViewModel.cs" />
     <Compile Include="StrictSchemeServiceHandlerFactory.cs" />
-    <Compile Include="TestGrid15GenMap.cs" />
     <Compile Include="TestGridGenMap.cs" />
     <Compile Include="TestGridGenWallMap.cs" />
     <Compile Include="TestNodeViewModel.cs" />
