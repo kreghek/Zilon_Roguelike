@@ -85,9 +85,6 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var room in rooms)
             {
-                var propScheme = _schemeService.GetScheme<PropScheme>("food-pack");
-                var resource = new Resource(propScheme, 1);
-
                 var containerNode = room.Nodes.FirstOrDefault();
                 var container = new DropTablePropContainer(containerNode,
                     new[] { defaultDropTable },

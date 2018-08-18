@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    public interface ISchemeServiceHandler<TScheme> where TScheme : class, IScheme
+    public interface ISchemeServiceHandler<out TScheme> where TScheme : class, IScheme
     {
         TScheme Get(string sid);
         TScheme[] GetAll();

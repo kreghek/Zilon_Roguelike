@@ -46,7 +46,6 @@
     <Compile Include="HexNodeTestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPropItemViewModel.cs" />
-    <Compile Include="StrictSchemeServiceHandler.cs" />
     <Compile Include="StrictSchemeServiceHandlerFactory.cs" />
     <Compile Include="TestGrid15GenMap.cs" />
     <Compile Include="TestGridGenMap.cs" />

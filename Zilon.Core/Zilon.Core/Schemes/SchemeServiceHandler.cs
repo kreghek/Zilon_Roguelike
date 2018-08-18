@@ -6,13 +6,15 @@ using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    internal class SchemeServiceHandler<TScheme> : ISchemeServiceHandler<TScheme> where TScheme : class, IScheme
+    public class SchemeServiceHandler<TScheme> : ISchemeServiceHandler<TScheme> where TScheme : class, IScheme
     {
         private const string SCHEME_POSTFIX = "Scheme";
 
         private readonly Dictionary<string, TScheme> _dict;
         private readonly ISchemeLocator _locator;
         private readonly string _directory;
+
+        public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
         public SchemeServiceHandler(ISchemeLocator locator)
         {
@@ -54,8 +56,15 @@ namespace Zilon.Core.Schemes
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
-                    //TODO Для тестов сделать свою реализацию сервиса, чтобы падал, если найдены лишние члены в json
-                    var scheme = JsonConvert.DeserializeObject<TScheme>(file.Content);
+                    TScheme scheme;
+                    if (JsonSerializerSettings != null)
+                    {
+                        scheme = JsonConvert.DeserializeObject<TScheme>(file.Content, JsonSerializerSettings);
+                    }
+                    else
+                    {
+                        scheme = JsonConvert.DeserializeObject<TScheme>(file.Content);
+                    }
 
                     if (scheme.Disabled)
                     {

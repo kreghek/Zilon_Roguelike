@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using Newtonsoft.Json;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.TestCommon
 {
@@ -13,7 +15,15 @@ namespace Zilon.Core.Tests.TestCommon
 
         ISchemeServiceHandler<TScheme> ISchemeServiceHandlerFactory.Create<TScheme>()
         {
-            var handler = new StrictSchemeServiceHandler<TScheme>(_schemeLocator);
+            var handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
+
+            var settings = new JsonSerializerSettings
+            {
+                MissingMemberHandling = MissingMemberHandling.Error
+            };
+
+            handler.JsonSerializerSettings = settings;
+
             return handler;
         }
     }
