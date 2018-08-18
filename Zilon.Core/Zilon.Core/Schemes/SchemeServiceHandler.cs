@@ -56,15 +56,7 @@ namespace Zilon.Core.Schemes
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
-                    TScheme scheme;
-                    if (JsonSerializerSettings != null)
-                    {
-                        scheme = JsonConvert.DeserializeObject<TScheme>(file.Content, JsonSerializerSettings);
-                    }
-                    else
-                    {
-                        scheme = JsonConvert.DeserializeObject<TScheme>(file.Content);
-                    }
+                    TScheme scheme = ParseSchemeFromFile(file);
 
                     if (scheme.Disabled)
                     {
@@ -79,6 +71,17 @@ namespace Zilon.Core.Schemes
                     throw new InvalidOperationException($"Ошибка при загрузке схемы {file}.", exception);
                 }
             }
+        }
+
+        private TScheme ParseSchemeFromFile(SchemeFile file)
+        {
+            // Если явно указаны настройки десеиализации, то используем их.
+            if (JsonSerializerSettings == null)
+            {
+                return JsonConvert.DeserializeObject<TScheme>(file.Content);
+            }
+
+            return JsonConvert.DeserializeObject<TScheme>(file.Content, JsonSerializerSettings);
         }
 
         public TScheme Get(string sid)

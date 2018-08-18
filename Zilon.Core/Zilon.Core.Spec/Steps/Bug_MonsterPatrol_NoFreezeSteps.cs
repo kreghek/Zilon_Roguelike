@@ -19,7 +19,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Spec
+namespace Zilon.Core.Spec.Steps
 {
     [Binding]
     public class Bug_MonsterPatrol_NoFreezeSteps

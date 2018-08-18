@@ -3,7 +3,7 @@
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tests.TestCommon
+namespace Zilon.Core.Tests.Common
 {
     using Zilon.Core.CommonServices.MapGenerators;
 

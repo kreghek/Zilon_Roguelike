@@ -1,10 +1,5 @@
 ﻿using NUnit.Framework;
-using Zilon.Core.Client;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;

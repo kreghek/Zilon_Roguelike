@@ -4,6 +4,7 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
+    //TODO Нужен тест, который проверяет, что событие на использование выстреливает и значения этого объекта корректны.
     /// <summary>
     /// Аргументы события при использовании действия на цель.
     /// </summary>
@@ -21,8 +22,8 @@ namespace Zilon.Core.Tactics
 
         public UsedActEventArgs(IAttackTarget target, ITacticalAct tacticalAct)
         {
-            Target = target ?? throw new System.ArgumentNullException(nameof(target));
-            TacticalAct = tacticalAct ?? throw new System.ArgumentNullException(nameof(tacticalAct));
+            Target = target ?? throw new ArgumentNullException(nameof(target));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
         }
     }
 }

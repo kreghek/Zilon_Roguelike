@@ -6,12 +6,11 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-using Zilon.Core.Services.MapGenerators;
-using Zilon.Core.Tests.TestCommon;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding.Tests
 {
     using Zilon.Core.CommonServices.MapGenerators;
+    using Zilon.Core.Tests.Common;
 
     [TestFixture]
     public class AStarTests

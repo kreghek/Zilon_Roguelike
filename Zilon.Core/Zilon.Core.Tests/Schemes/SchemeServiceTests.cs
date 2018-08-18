@@ -1,13 +1,14 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Zilon.Core.Tests.TestCommon;
+
+using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Schemes.Tests
 {

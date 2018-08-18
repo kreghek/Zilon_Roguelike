@@ -1,11 +1,11 @@
-﻿using Moq;
+﻿using System.Linq;
+
+using Moq;
 
 using NUnit.Framework;
 
-using System.Linq;
-
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {

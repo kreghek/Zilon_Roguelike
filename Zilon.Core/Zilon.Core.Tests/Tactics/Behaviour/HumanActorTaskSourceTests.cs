@@ -16,7 +16,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 //TODO Провести реорганизацию тестов. Потому что они не актуальны после ввода абстракции намерений
 namespace Zilon.Core.Tests.Tactics.Behaviour

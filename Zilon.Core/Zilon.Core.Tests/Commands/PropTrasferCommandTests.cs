@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+
+using FluentAssertions;
 
 using LightInject;
 
@@ -6,15 +8,12 @@ using Moq;
 
 using NUnit.Framework;
 
-using System.Collections.Generic;
-using System.Linq;
-
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Commands.Tests
 {

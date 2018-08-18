@@ -1,15 +1,19 @@
-﻿using NUnit.Framework;
-using System.Linq;
-using Zilon.Core.Tests.TestCommon;
-using Zilon.Core.Tactics.Spatial;
-using FluentAssertions;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using FluentAssertions;
+
 using Moq;
-using System;
+
+using NUnit.Framework;
+
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Services.MapGenerators.Tests
 {
     using Zilon.Core.CommonServices.MapGenerators;
+    using Zilon.Core.Tests.Common;
 
     [TestFixture()]
     public class GridMapGeneratorTests

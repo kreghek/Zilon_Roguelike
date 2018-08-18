@@ -10,7 +10,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {

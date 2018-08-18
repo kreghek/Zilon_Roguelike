@@ -18,9 +18,9 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.TestCases
+namespace Zilon.Core.Spec.Steps
 {
     [Binding]
     public class Perks_DefeatPerksAreLevelUpSteps

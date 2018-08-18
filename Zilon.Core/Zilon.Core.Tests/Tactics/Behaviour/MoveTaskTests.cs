@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
@@ -48,14 +49,9 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
 
                 // ASSERT
-                if (step < 3)
-                {
-                    task.IsComplete.Should().Be(false);
-                }
-                else
-                {
-                    task.IsComplete.Should().Be(true);
-                }
+                var expectedIsComplete = step >= 3;
+                task.IsComplete.Should().Be(expectedIsComplete);
+
 
                 actor.Node.Should().Be(expectedPath[step - 1]);
             }

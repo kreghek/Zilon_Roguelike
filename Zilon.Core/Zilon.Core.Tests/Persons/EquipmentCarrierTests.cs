@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using Zilon.Core.Persons;

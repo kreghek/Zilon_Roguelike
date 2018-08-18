@@ -2,7 +2,7 @@
 
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Tests.TestCommon
+namespace Zilon.Core.Tests.Common
 {
     public class StrictSchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
     {

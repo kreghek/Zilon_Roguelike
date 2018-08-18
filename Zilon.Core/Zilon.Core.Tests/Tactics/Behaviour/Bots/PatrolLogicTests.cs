@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.TestCommon;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots.Tests
 {

@@ -67,36 +67,36 @@ namespace Zilon.Core
             return new PerkLevel(currentLevel, currentSubLevel);
         }
 
-        public static PerkRuleSubScheme[] GetAllPerkRules(PerkScheme perkScheme, int? perkLevel, int perkSubLevel)
-        {
-            if (perkLevel == null)
-                return new PerkRuleSubScheme[0];
+        //public static PerkRuleSubScheme[] GetAllPerkRules(PerkScheme perkScheme, int? perkLevel, int perkSubLevel)
+        //{
+        //    if (perkLevel == null)
+        //        return new PerkRuleSubScheme[0];
 
-            var ruleList = new List<PerkRuleSubScheme>();
-            for (var i = 0; i <= perkLevel.Value; i++)
-            {
-                var archievedSubLevel = 0;
-                if (perkLevel.Value < i)
-                {
-                    archievedSubLevel = perkScheme.Levels[i].MaxValue;
-                }
-                else
-                {
-                    archievedSubLevel = Math.Min(perkSubLevel, perkScheme.Levels[i].MaxValue);
-                }
+        //    var ruleList = new List<PerkRuleSubScheme>();
+        //    for (var i = 0; i <= perkLevel.Value; i++)
+        //    {
+        //        var archievedSubLevel = 0;
+        //        if (perkLevel.Value < i)
+        //        {
+        //            archievedSubLevel = perkScheme.Levels[i].MaxValue;
+        //        }
+        //        else
+        //        {
+        //            archievedSubLevel = Math.Min(perkSubLevel, perkScheme.Levels[i].MaxValue);
+        //        }
 
-                var levelRules = perkScheme.Levels[i].Rules;
-                if (levelRules != null)
-                {
-                    for (var j = 0; j <= archievedSubLevel; j++)
-                    {
-                        ruleList.AddRange(levelRules);
-                    }
-                }
-            }
+        //        var levelRules = perkScheme.Levels[i].Rules;
+        //        if (levelRules != null)
+        //        {
+        //            for (var j = 0; j <= archievedSubLevel; j++)
+        //            {
+        //                ruleList.AddRange(levelRules);
+        //            }
+        //        }
+        //    }
 
-            return ruleList.ToArray();
-        }
+        //    return ruleList.ToArray();
+        //}
 
         //public static string DetectPerkChangesClass(PerkScheme perkScheme, int? currentLevel)
         //{
@@ -114,56 +114,56 @@ namespace Zilon.Core
         //    return null;
         //}
 
-        /// <summary>
-        /// Вычисляет прокаченную и целевую схему уровня перка.
-        /// </summary>
-        /// <param name="levelSchemes"> Все схемы уровня в порядке достижения. </param>
-        /// <param name="level"> Текущий уровень перка. </param>
-        /// <param name="subLevel"> Текущий подуровень перка. </param>
-        /// <param name="archievedLevelScheme">
-        /// Схема уровня перка, которая считается полученной на текущем уровне.
-        /// </param>
-        /// <param name="nextLevelScheme">
-        /// Схема уровня перка, которая будет следующей после достигнутой.
-        /// </param>
-        public static void CalcLevelScheme(PerkLevelSubScheme[] levelSchemes,
-            int? level,
-            int subLevel,
-            out PerkLevelSubScheme archievedLevelScheme,
-            out PerkLevelSubScheme nextLevelScheme)
-        {
-            //Если уровень не определён, то перк ни на сколько не прокачен.
-            // Значит берём первую схему уровня.
-            if (level == null)
-            {
-                archievedLevelScheme = null;
-                nextLevelScheme = levelSchemes[0];
-                return;
-            }
+        ///// <summary>
+        ///// Вычисляет прокаченную и целевую схему уровня перка.
+        ///// </summary>
+        ///// <param name="levelSchemes"> Все схемы уровня в порядке достижения. </param>
+        ///// <param name="level"> Текущий уровень перка. </param>
+        ///// <param name="subLevel"> Текущий подуровень перка. </param>
+        ///// <param name="archievedLevelScheme">
+        ///// Схема уровня перка, которая считается полученной на текущем уровне.
+        ///// </param>
+        ///// <param name="nextLevelScheme">
+        ///// Схема уровня перка, которая будет следующей после достигнутой.
+        ///// </param>
+        //public static void CalcLevelScheme(PerkLevelSubScheme[] levelSchemes,
+        //    int? level,
+        //    int subLevel,
+        //    out PerkLevelSubScheme archievedLevelScheme,
+        //    out PerkLevelSubScheme nextLevelScheme)
+        //{
+        //    //Если уровень не определён, то перк ни на сколько не прокачен.
+        //    // Значит берём первую схему уровня.
+        //    if (level == null)
+        //    {
+        //        archievedLevelScheme = null;
+        //        nextLevelScheme = levelSchemes[0];
+        //        return;
+        //    }
 
-            // Извлекаем текущую схему уровня согласно текущему уровню..
-            archievedLevelScheme = levelSchemes[level.Value];
+        //    // Извлекаем текущую схему уровня согласно текущему уровню..
+        //    archievedLevelScheme = levelSchemes[level.Value];
 
-            // Если все уровни перка прокачены, то возвращаем null.
-            // Это означает, что дальнейшей прокачки нет. LevelCap
-            if (level.Value + 1 < levelSchemes.Length)
-            {
-                // Если не все подуровни прокачены, то оставляем текущую схему подуровня.
-                // Иначе возвращаем схему следующего уровеня перка.
-                if (archievedLevelScheme.MaxValue > subLevel)
-                {
-                    nextLevelScheme = archievedLevelScheme;
-                }
-                else
-                {
-                    nextLevelScheme = levelSchemes[level.Value + 1];
-                }
-            }
-            else
-            {
-                nextLevelScheme = null;
-            }
-        }
+        //    // Если все уровни перка прокачены, то возвращаем null.
+        //    // Это означает, что дальнейшей прокачки нет. LevelCap
+        //    if (level.Value + 1 < levelSchemes.Length)
+        //    {
+        //        // Если не все подуровни прокачены, то оставляем текущую схему подуровня.
+        //        // Иначе возвращаем схему следующего уровеня перка.
+        //        if (archievedLevelScheme.MaxValue > subLevel)
+        //        {
+        //            nextLevelScheme = archievedLevelScheme;
+        //        }
+        //        else
+        //        {
+        //            nextLevelScheme = levelSchemes[level.Value + 1];
+        //        }
+        //    }
+        //    else
+        //    {
+        //        nextLevelScheme = null;
+        //    }
+        //}
 
         //public static Perk[] GetAllPerks(IEnumerable<PerkScheme> targetPerkSchemes, IDictionary<string, PerkScheme> perkSchemeDict,
         //     IDictionary<string, PropScheme> propSchemeDict)

@@ -1,10 +1,4 @@
 ﻿using NUnit.Framework;
-using Zilon.Core.Persons;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zilon.Core.Schemes;
 using Moq;
 using FluentAssertions;
