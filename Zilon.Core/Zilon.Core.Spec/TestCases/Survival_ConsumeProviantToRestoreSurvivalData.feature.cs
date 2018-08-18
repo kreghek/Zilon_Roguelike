@@ -17,21 +17,21 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Survival_UseProp", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
-        "нужно, чтобы при употреблении еды повышалась сытость персонажа", SourceFile="TestCases\\Survival_UseProp.feature", SourceLine=0)]
-    public partial class Survival_UsePropFeature
+    [TechTalk.SpecRun.FeatureAttribute("Survival_ConsumeProviantToRestoreSurvivalData", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+        "нужно, чтобы при употреблении еды повышалась сытость персонажа", SourceFile="TestCases\\Survival_ConsumeProviantToRestoreSurvivalData.feature", SourceLine=0)]
+    public partial class Survival_ConsumeProviantToRestoreSurvivalDataFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Survival_UseProp.feature"
+#line 1 "Survival_ConsumeProviantToRestoreSurvivalData.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_UseProp", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_ConsumeProviantToRestoreSurvivalData", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
                     "нужно, чтобы при употреблении еды повышалась сытость персонажа", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УпотреблениеЕды(string propSid, string propCount, string stat, string propValue, string statRate, string expectedStatValue, string[] exampleTags)
+        public virtual void УпотреблениеПровиантаДляВосстановленияПоказателейВыживания(string propSid, string propCount, string stat, string propValue, string statRate, string expectedStatValue, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -77,7 +77,7 @@ namespace Zilon.Core.Spec.TestCases
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Употребление еды", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Употребление провианта для восстановления показателей выживания", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -98,23 +98,23 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление еды, cheese", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление провианта для восстановления показателей выживания, cheese", new string[] {
                 "survival",
                 "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеЕды_Cheese()
+        public virtual void УпотреблениеПровиантаДляВосстановленияПоказателейВыживания_Cheese()
         {
 #line 7
-this.УпотреблениеЕды("cheese", "1", "сытость", "10", "1", "59", ((string[])(null)));
+this.УпотреблениеПровиантаДляВосстановленияПоказателейВыживания("cheese", "1", "сытость", "10", "1", "59", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление еды, water", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление провианта для восстановления показателей выживания, water", new string[] {
                 "survival",
                 "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеЕды_Water()
+        public virtual void УпотреблениеПровиантаДляВосстановленияПоказателейВыживания_Water()
         {
 #line 7
-this.УпотреблениеЕды("water", "1", "вода", "10", "1", "59", ((string[])(null)));
+this.УпотреблениеПровиантаДляВосстановленияПоказателейВыживания("water", "1", "вода", "10", "1", "59", ((string[])(null)));
 #line hidden
         }
         

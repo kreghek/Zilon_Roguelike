@@ -38,10 +38,18 @@ namespace Zilon.Core.Spec.Steps
             _context.AddResourceToActor(propSid, count, actor);
         }
 
-        [When(@"Я перемещаю персонажа на одну клетку")]
-        public void WhenЯПеремещаюПерсонажаНаОднуКлетку()
+        [When(@"Я перемещаю персонажа на (.*) клетку")]
+        public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
-            _context.MoveOnceActiveActor(new OffsetCoords(1, 0));
+            var targetCoords = new[] {
+                new OffsetCoords(1, 0),
+                new OffsetCoords(0, 0)
+            };
+
+            for (var i = 0; i < moveCount; i++)
+            {
+                _context.MoveOnceActiveActor(targetCoords[i % 2]);
+            }
         }
 
         [When(@"Актёр использует предмет (.*) на себя")]
@@ -50,26 +58,30 @@ namespace Zilon.Core.Spec.Steps
             _context.UsePropByActiveActor(propSid);
         }
 
-        [Then(@"Значение сытости уменьшилось на (.*) единицу и стало (.*)")]
-        public void ThenЗначениеСытостиУменьшилосьНаЕдиницу(int hungerRate, int expectedSatiety)
+        [Then(@"Значение (сытость|вода) уменьшилось на (.*) единицу и стало (.*)")]
+        public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
             var actor = _context.GetActiveActor();
-            actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+
+            switch (stat)
+            {
+                case "сытость":
+                    actor.Person.Survival.Satiety.Should().Be(expectedValue);
+                    break;
+                case "вода":
+                    actor.Person.Survival.Thirst.Should().Be(expectedValue);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        [Then(@"Значение воды уменьшилось на (.*) единицу и стало (.*)")]
-        public void ThenЗначениеВодыУменьшилосьНаЕдиницу(int thirstRate, int expectedThirst)
-        {
-            var actor = _context.GetActiveActor();
-            actor.Person.Survival.Thirst.Should().Be(expectedThirst);
-        }
-
-        [Then(@"Значение (.*) повысилось на (.*) единиц и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string type, int satietyValue, int hungerRate, int expectedSatiety)
+        [Then(@"Значение (сытость|вода) повысилось на (.*) единиц и уменьшилось на (.*) за игровой цикл и стало (.*)")]
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedSatiety)
         {
             var actor = _context.GetActiveActor();
 
-            switch (type)
+            switch (stat)
             {
                 case "сытость":
                     actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
@@ -84,6 +96,26 @@ namespace Zilon.Core.Spec.Steps
             }
         }
 
+        [Then(@"Значение (сытость|вода) стало (.*)")]
+        public void ThenЗначениеStatСтало(string stat, int expectedSatiety)
+        {
+            var actor = _context.GetActiveActor();
+            switch (stat)
+            {
+                case "сытость":
+                    actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+                    break;
+
+                case "вода":
+                    actor.Person.Survival.Thirst.Should().Be(expectedSatiety);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+        }
+
+
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
@@ -91,6 +123,12 @@ namespace Zilon.Core.Spec.Steps
             var propsInInventory = actor.Person.Inventory.CalcActualItems();
             var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
             testedProp.Should().BeNull();
+        }
+
+        [Then(@"Актёр получает эффект (.*)")]
+        public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
+        {
+            ScenarioContext.Current.Pending();
         }
 
     }

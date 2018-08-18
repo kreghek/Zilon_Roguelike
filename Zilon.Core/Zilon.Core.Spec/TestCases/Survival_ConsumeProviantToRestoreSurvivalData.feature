@@ -1,10 +1,10 @@
-﻿Feature: Survival_UseProp
+﻿Feature: Survival_ConsumeProviantToRestoreSurvivalData
 	Чтобы ввести микроменеджмент ресурсов и состояния персонажей
 	Как игроку
 	Мне нужно, чтобы при употреблении еды повышалась сытость персонажа
 
 @survival @dev0
-Scenario Outline: Употребление еды
+Scenario Outline: Употребление провианта для восстановления показателей выживания
 	Given Есть произвольная карта
 	And Есть актёр игрока
 	And В инвентаре у актёра есть еда: <propSid> количество: <propCount>

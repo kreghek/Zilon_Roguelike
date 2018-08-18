@@ -117,41 +117,21 @@
     </Compile>
     <Compile Include="Steps\Perks_DefeatPerksAreLevelUpSteps.cs" />
     <Compile Include="Contexts\SurvivalContext.cs" />
-    <Compile Include="TestCases\Survival_BecomeStrongThrist.feature.cs">
-      <DependentUpon>Survival_BecomeStrongThrist.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Survival_UseProp.feature.cs">
-      <DependentUpon>Survival_UseProp.feature</DependentUpon>
+    <Compile Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature.cs">
+      <DependentUpon>Survival_ConsumeProviantToRestoreSurvivalData.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="TestCases\Survival_BecomeHunger.feature.cs">
+    <Compile Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_BecomeHunger.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Survival_HungerIncrease.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_HungerIncrease.feature</DependentUpon>
+      <DependentUpon>Survival_DecreaseSurvivalDataOnGameTurn.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
-    <Compile Include="TestCases\Survival_BecomeStrongHunger.feature.cs">
+    <Compile Include="TestCases\Survival_GainSurvivalEffect.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_BecomeStrongHunger.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Survival_ThirstIncrease.feature.cs">
-      <DependentUpon>Survival_ThirstIncrease.feature</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="TestCases\Survival_BecomeThrist.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_BecomeThrist.feature</DependentUpon>
+      <DependentUpon>Survival_GainSurvivalEffect.feature</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -187,33 +167,17 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_BecomeStrongThrist.feature">
+    <None Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_BecomeStrongThrist.feature.cs</LastGenOutput>
+      <LastGenOutput>Survival_ConsumeProviantToRestoreSurvivalData.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_UseProp.feature">
+    <None Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_UseProp.feature.cs</LastGenOutput>
+      <LastGenOutput>Survival_DecreaseSurvivalDataOnGameTurn.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_BecomeHunger.feature">
+    <None Include="TestCases\Survival_GainSurvivalEffect.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_BecomeHunger.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_HungerIncrease.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_HungerIncrease.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_BecomeStrongHunger.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_BecomeStrongHunger.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_ThirstIncrease.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_ThirstIncrease.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_BecomeThrist.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_BecomeThrist.feature.cs</LastGenOutput>
+      <LastGenOutput>Survival_GainSurvivalEffect.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
