@@ -10,7 +10,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Тип характеристики.
         /// </summary>
-        public SurvivalStatTypes Type { get; set; }
+        public SurvivalStatType Type { get; set; }
 
         /// <summary>
         /// Текущее значение.
@@ -26,5 +26,7 @@ namespace Zilon.Core.Persons
         /// Скорость снижения характеристики за ход.
         /// </summary>
         public int Rate { get; set; }
+
+        public SurvivalStatKeyPoint[] KeyPoints { get; set; }
     }
 }

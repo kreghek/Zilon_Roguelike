@@ -3,7 +3,7 @@
     /// <summary>
     /// Типы характеристик для модуля выживания.
     /// </summary>
-    public enum SurvivalStatTypes
+    public enum SurvivalStatType
     {
         /// <summary>
         /// Не определена.

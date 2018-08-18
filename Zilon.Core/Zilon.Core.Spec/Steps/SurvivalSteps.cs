@@ -67,11 +67,11 @@ namespace Zilon.Core.Spec.Steps
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -87,11 +87,11 @@ namespace Zilon.Core.Spec.Steps
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -106,11 +106,11 @@ namespace Zilon.Core.Spec.Steps
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -138,7 +138,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
 
-        private int? GetSurvivalValue(IActor actor, SurvivalStatTypes type)
+        private int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
             var stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;

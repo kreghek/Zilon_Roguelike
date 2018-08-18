@@ -25,7 +25,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="type"> Тип характеритсики, которая будет восстанавливаться. </param>
         /// <param name="value"> Значение, на которое увеличивается текущий запас. </param>
-        void RestoreStat(SurvivalStatTypes type, int value);
+        void RestoreStat(SurvivalStatType type, int value);
 
         /// <summary>
         /// Событие, которое происходит, если значение характеристики пересекает ключевое значение (мин/макс/четверти/0).

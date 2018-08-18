@@ -13,18 +13,8 @@ namespace Zilon.Core.Persons
         public SurvivalData()
         {
             Stats = new[] {
-                new SurvivalStat{
-                    Type = SurvivalStatTypes.Satiety,
-                    Range = new Range<int>(-100, 100),
-                    Rate = 1,
-                    Value = 50
-                },
-                new SurvivalStat{
-                    Type = SurvivalStatTypes.Water,
-                    Range = new Range<int>(-100, 100),
-                    Rate = 1,
-                    Value = 50
-                }
+                CreateStat(SurvivalStatType.Satiety),
+                CreateStat(SurvivalStatType.Water)
             };
         }
 
@@ -32,18 +22,36 @@ namespace Zilon.Core.Persons
 
         public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
 
-        public void RestoreStat(SurvivalStatTypes type, int value)
+        public void RestoreStat(SurvivalStatType type, int value)
         {
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
+                var oldValue = stat.Value;
+
                 stat.Value += value;
 
                 if (stat.Value >= stat.Range.Max)
                 {
                     stat.Value = stat.Range.Max;
                 }
+
+                var diff = new Range<int>(oldValue, stat.Value);
+
+                foreach (var keyPoint in stat.KeyPoints)
+                {
+                    if (diff.Contains(keyPoint.Value))
+                    {
+                        DoStatCrossKeyPoint(stat, keyPoint);
+                    }
+                }
             }
+        }
+
+        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint keyPoint)
+        {
+            var args = new SurvivalStatChangedEventArgs(stat, keyPoint);
+            StatCrossKeyValue?.Invoke(this, args);
         }
 
         public void Update()
@@ -57,6 +65,32 @@ namespace Zilon.Core.Persons
                     stat.Value = stat.Range.Min;
                 }
             }
+        }
+
+        private static SurvivalStat CreateStat(SurvivalStatType type)
+        {
+            var stat = new SurvivalStat
+            {
+                Type = type,
+                Range = new Range<int>(-100, 100),
+                Rate = 1,
+                Value = 50,
+                KeyPoints = new[]{
+                        new SurvivalStatKeyPoint{
+                            Type = SurvivalStatKeyPointType.Lesser,
+                            Value = 0
+                        },
+                        new SurvivalStatKeyPoint{
+                            Type = SurvivalStatKeyPointType.Strong,
+                            Value = -25
+                        },
+                        new SurvivalStatKeyPoint{
+                            Type = SurvivalStatKeyPointType.Max,
+                            Value = -50
+                        }
+                    }
+            };
+            return stat;
         }
     }
 }
