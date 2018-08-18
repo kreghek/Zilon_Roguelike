@@ -179,8 +179,9 @@ namespace Zilon.Core.Spec.Steps
             if (stat != SurvivalStatType.Undefined)
             {
                 var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == stat && x.Level == level);
+                .SingleOrDefault(x => x.Type == stat);
                 effect.Should().NotBeNull();
+                effect.Level.Should().Be(level);
             }
             else
             {

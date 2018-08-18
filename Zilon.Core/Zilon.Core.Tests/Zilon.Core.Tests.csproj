@@ -99,6 +99,7 @@
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
+    <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
     <Compile Include="Persons\EquipmentTests.cs" />
     <Compile Include="Persons\EvolutionDataTests.cs" />

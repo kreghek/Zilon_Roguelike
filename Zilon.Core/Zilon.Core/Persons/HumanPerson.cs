@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -133,32 +134,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            var statType = e.Stat.Type;
-
-            var currentTypeEffect = Effects.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x=>x.Type == statType);
-
-            // Эффект уже существует.
-            // Изменим его тип.
-            if (currentTypeEffect != null)
-            {
-                if (e.Stat.Value >= e.KeyPoint.Value)
-                {
-                    currentTypeEffect.Level = e.KeyPoint.Level;
-                }
-                else
-                {
-                    if (e.KeyPoint.Level == SurvivalStatHazardLevel.Lesser)
-                    {
-                        Effects.Remove(currentTypeEffect);
-                    }
-                }
-            }
-            else
-            {
-                currentTypeEffect = new SurvivalStatHazardEffect(statType, e.KeyPoint.Level);
-                Effects.Add(currentTypeEffect);
-            }
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoint);
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)

@@ -98,6 +98,7 @@
     <Compile Include="MapGenerators\RoomMatrix.cs" />
     <Compile Include="OffsetCoords.cs" />
     <Compile Include="PerkHelper.cs" />
+    <Compile Include="Persons\Auxiliary\PersonEffectHelper.cs" />
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
