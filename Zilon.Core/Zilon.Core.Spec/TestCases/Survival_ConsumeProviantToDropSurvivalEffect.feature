@@ -9,15 +9,16 @@ Scenario Outline: Поглощение провианта, чтобы снима
 	And Есть актёр игрока
 	And Актёр значение <stat> равное <statValue>
 	And Актёр имеет эффект <startEffect>
+	And В инвентаре у актёра есть еда: <propSid> количество: <propCount>
 	When Актёр использует предмет <propSid> на себя
 	Then Значение <stat> стало <expectedValue>
 	And Актёр под эффектом <effect>
 
 Examples: 
-| stat    | statValue | startEffect   | propSid | expectedValue | effect        |
-| сытость | 0         | Слабый голод  | cheese  | 9             | нет           |
-| сытость | -25       | Голод         | cheese  | -16           | Голод         |
-| сытость | -50       | Голодание     | cheese  | -41           | Голодание     |
-| вода    | 0         | Слабая жажда  | water   | 0             | Слабая жажда  |
-| вода    | -25       | Жажда         | water   | -16           | Жажда         |
-| вода    | -50       | Обезвоживание | water   | -41           | Обезвоживание |
+| stat    | statValue | startEffect   | propSid | propCount | expectedValue | effect       |
+| сытость | 0         | Слабый голод  | cheese  | 1         | 9             | нет          |
+| сытость | -25       | Голод         | cheese  | 1         | -16           | Слабый голод |
+| сытость | -50       | Голодание     | cheese  | 1         | -41           | Голод        |
+| вода    | 0         | Слабая жажда  | water   | 1         | 9             | нет          |
+| вода    | -25       | Жажда         | water   | 1         | -16           | Слабая жажда |
+| вода    | -50       | Обезвоживание | water   | 1         | -41           | Жажда        |

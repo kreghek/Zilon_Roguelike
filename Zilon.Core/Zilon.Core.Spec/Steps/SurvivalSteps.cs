@@ -39,6 +39,45 @@ namespace Zilon.Core.Spec.Steps
             _context.AddResourceToActor(propSid, count, actor);
         }
 
+        [Given(@"Актёр значение (.*) равное (.*)")]
+        public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
+        {
+            var actor = _context.GetActiveActor();
+
+            SurvivalStat stat;
+
+            switch (statName)
+            {
+                case "сытость":
+                    stat = actor.Person.Survival.Stats.SingleOrDefault(x=>x.Type == SurvivalStatType.Satiety);
+                    break;
+
+                case "вода":
+                    stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Water);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+
+            stat.Value = statValue;
+        }
+
+        [Given(@"Актёр имеет эффект (.*)")]
+        public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
+        {
+            var actor = _context.GetActiveActor();
+
+            GetEffectStatAndLevelByName(startEffect,
+                out SurvivalStatType stat,
+                out SurvivalStatHazardLevel level);
+
+            var effect = new SurvivalStatHazardEffect(stat, level);
+
+            actor.Person.Effects.Add(effect);
+        }
+
+
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
@@ -133,11 +172,33 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            SurvivalStatType stat;
-            SurvivalStatHazardLevel level;
+            GetEffectStatAndLevelByName(effectName, 
+                out SurvivalStatType stat, 
+                out SurvivalStatHazardLevel level);
 
+            if (stat != SurvivalStatType.Undefined)
+            {
+                var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x => x.Type == stat && x.Level == level);
+                effect.Should().NotBeNull();
+            }
+            else
+            {
+                var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault();
+                effect.Should().BeNull();
+            }
+        }
+
+        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
+        {
             switch (effectName)
             {
+                case "нет":
+                    level = SurvivalStatHazardLevel.Undefined;
+                    stat = SurvivalStatType.Undefined;
+                    break;
+
                 case "Слабый голод":
                     level = SurvivalStatHazardLevel.Lesser;
                     stat = SurvivalStatType.Satiety;
@@ -171,12 +232,7 @@ namespace Zilon.Core.Spec.Steps
                 default:
                     throw new NotSupportedException("Неизветный тип ожидаемого эффекта.");
             }
-
-            var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == stat && x.Level == level);
-            effect.Should().NotBeNull();
         }
-
 
         private int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {

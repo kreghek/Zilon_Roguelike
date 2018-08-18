@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_(string stat, string statValue, string startEffect, string propSid, string expectedValue, string effect, string[] exampleTags)
+        public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_(string stat, string statValue, string startEffect, string propSid, string propCount, string expectedValue, string effect, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -90,10 +90,12 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And(string.Format("Актёр имеет эффект {0}", startEffect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And(string.Format("В инвентаре у актёра есть еда: {0} количество: {1}", propSid, propCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
+ testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 15
  testRunner.And(string.Format("Актёр под эффектом {0}", effect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -102,66 +104,66 @@ this.ScenarioInitialize(scenarioInfo);
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant0()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "0", "Слабый голод", "cheese", "9", "нет", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "0", "Слабый голод", "cheese", "1", "9", "нет", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant1()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "-25", "Голод", "cheese", "-16", "Голод", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "-25", "Голод", "cheese", "1", "-16", "Слабый голод", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 2", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant2()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "-50", "Голодание", "cheese", "-41", "Голодание", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("сытость", "-50", "Голодание", "cheese", "1", "-41", "Голод", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 3", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant3()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "0", "Слабая жажда", "water", "0", "Слабая жажда", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "0", "Слабая жажда", "water", "1", "9", "нет", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 4", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant4()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "-25", "Жажда", "water", "-16", "Жажда", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "-25", "Жажда", "water", "1", "-16", "Слабая жажда", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
             " 5", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant5()
         {
 #line 7
-this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "-50", "Обезвоживание", "water", "-41", "Обезвоживание", ((string[])(null)));
+this.ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_("вода", "-50", "Обезвоживание", "water", "1", "-41", "Жажда", ((string[])(null)));
 #line hidden
         }
         
