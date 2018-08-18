@@ -23,8 +23,8 @@
         /// <summary>
         /// Случайно выбирает количество единиц ресурса в указанном диапазоне.
         /// </summary>
-        /// <param name="minPower"> Минимальное количество единиц ресурса. </param>
-        /// <param name="maxPower"> Максимальное количество единиц ресурса. </param>
+        /// <param name="minCount"> Минимальное количество единиц ресурса. </param>
+        /// <param name="maxCount"> Максимальное количество единиц ресурса. </param>
         /// <returns> Выбранное количество единиц ресурса. </returns>
         int RollResourceCount(int minCount, int maxCount);
     }

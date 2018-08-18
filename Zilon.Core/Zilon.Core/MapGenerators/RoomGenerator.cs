@@ -134,7 +134,7 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Возвращает ребро, соединяющее указанные узлы.
         /// </summary>
-        /// <param name="map"> Карта, в которой проверяются ребра. </param>
+        /// <param name="edgeHash"> Хеш ребер карты. </param>
         /// <param name="node"> Искомый узел. </param>
         /// <param name="neighbor"> Узел, с которым соединён искомый. </param>
         /// <returns> Ребро или null, если такого ребра нет на карте. </returns>
