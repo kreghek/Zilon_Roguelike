@@ -84,11 +84,14 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And("Есть актёр игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And("В инвентаре у актёра есть вода: вода", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("В инвентаре у актёра есть еда: water количество: 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When("Актёр использует предмет", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Актёр использует предмет water на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then("Значение воды повысилось на 10 единиц", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Значение воды повысилось на 10 единиц и уменьшилось на 1 за игровой цикл и стало " +
+                    "59", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 13
+ testRunner.And("Предмет water отсутствует в инвентаре актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

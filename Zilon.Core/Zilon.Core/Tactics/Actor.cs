@@ -110,6 +110,10 @@ namespace Zilon.Core.Tactics
                     case ConsumeCommonRule.Satiety:
                         Person.Survival.ReplenishSatiety(10);
                         break;
+
+                    case ConsumeCommonRule.Thrist:
+                        Person.Survival.ReplenishThirst(10);
+                        break;
                 }
             }
 

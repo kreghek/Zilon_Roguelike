@@ -82,16 +82,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.Given("Есть произвольная карта", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Есть персонаж игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
  testRunner.And("В инвентаре у актёра есть еда: cheese количество: 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When("Актёр съедает еду: cheese", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Актёр использует предмет cheese на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then("Значение сытости повысилось на 10 единиц и уменьшилось на 1 из-за голода и стало " +
-                    "59", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Значение сытости повысилось на 10 единиц и уменьшилось на 1 за игровой цикл и ста" +
+                    "ло 59", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 13
- testRunner.And("Еда cheese отсутствует в инвентаре персонажа", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Предмет cheese отсутствует в инвентаре актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

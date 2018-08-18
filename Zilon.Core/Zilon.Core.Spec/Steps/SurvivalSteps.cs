@@ -22,7 +22,7 @@ namespace Zilon.Core.Spec.Steps
             _context.CreateSector();
         }
 
-        [Given(@"Есть персонаж игрока")]
+        [Given(@"Есть актёр игрока")]
         public void GivenЕстьПерсонажИгрока()
         {
             _context.AddHumanActor(new OffsetCoords(0, 0));
@@ -41,7 +41,7 @@ namespace Zilon.Core.Spec.Steps
             _context.MoveOnceActiveActor(new OffsetCoords(1, 0));
         }
 
-        [When(@"Актёр съедает еду: (.*)")]
+        [When(@"Актёр использует предмет (.*) на себя")]
         public void WhenАктёрСъедаетЕду(string propSid)
         {
             _context.UsePropByActiveActor(propSid);
@@ -61,14 +61,24 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Survival.Thirst.Should().Be(expectedThirst);
         }
 
-        [Then(@"Значение сытости повысилось на (.*) единиц и уменьшилось на (.*) из-за голода и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(int satietyValue, int hungerRate, int expectedSatiety)
+        [Then(@"Значение (.*) повысилось на (.*) единиц и уменьшилось на (.*) за игровой цикл и стало (.*)")]
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string type, int satietyValue, int hungerRate, int expectedSatiety)
         {
             var actor = _context.GetActiveActor();
-            actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+
+            switch (type)
+            {
+                case "сытости":
+                    actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+                    break;
+
+                case "воды":
+                    actor.Person.Survival.Thirst.Should().Be(expectedSatiety);
+                    break;
+            }
         }
 
-        [Then(@"Еда (.*) отсутствует в инвентаре персонажа")]
+        [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
             var actor = _context.GetActiveActor();

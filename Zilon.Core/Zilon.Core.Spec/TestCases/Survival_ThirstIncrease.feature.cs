@@ -86,7 +86,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.When("Я перемещаю персонажа на одну клетку", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.Then("Значение воды уменьшилось на 1 единицу и стало 99", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Значение воды уменьшилось на 1 единицу и стало 49", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
