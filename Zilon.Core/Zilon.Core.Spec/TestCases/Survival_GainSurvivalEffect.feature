@@ -9,7 +9,7 @@ Scenario Outline: Наступление выживальных состояни
 	And Есть актёр игрока
 	When Я перемещаю персонажа на <moveDistance> клетку
 	Then Значение <stat> стало <expectedValue>
-	And Актёр получает эффект <effect>
+	And Актёр под эффектом <effect>
 
 	Examples: 
 	| moveDistance | stat    | expectedValue | effect        |

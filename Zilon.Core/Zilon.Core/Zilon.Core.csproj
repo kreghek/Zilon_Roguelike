@@ -107,6 +107,7 @@
     <Compile Include="Persons\IJobProgress.cs" />
     <Compile Include="Persons\IPerk.cs" />
     <Compile Include="Persons\IPerkResolver.cs" />
+    <Compile Include="Persons\IPersonEffect.cs" />
     <Compile Include="Persons\IPersonFactory.cs" />
     <Compile Include="Persons\ISurvivalData.cs" />
     <Compile Include="Persons\Perk.cs" />

@@ -128,6 +128,11 @@
       <DependentUpon>Survival_DecreaseSurvivalDataOnGameTurn.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
+    <Compile Include="TestCases\Survival_ConsumeProviantToDropSurvivalEffect.feature.cs">
+      <DependentUpon>Survival_ConsumeProviantToDropSurvivalEffect.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Survival_GainSurvivalEffect.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,6 +179,10 @@
     <None Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_DecreaseSurvivalDataOnGameTurn.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Survival_ConsumeProviantToDropSurvivalEffect.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_ConsumeProviantToDropSurvivalEffect.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_GainSurvivalEffect.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

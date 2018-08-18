@@ -58,7 +58,7 @@ namespace Zilon.Core.Spec.Steps
             _context.UsePropByActiveActor(propSid);
         }
 
-        [Then(@"Значение (сытость|вода) уменьшилось на (.*) единицу и стало (.*)")]
+        [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
         public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
             var actor = _context.GetActiveActor();
@@ -76,7 +76,7 @@ namespace Zilon.Core.Spec.Steps
             }
         }
 
-        [Then(@"Значение (сытость|вода) повысилось на (.*) единиц и уменьшилось на (.*) за игровой цикл и стало (.*)")]
+        [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
         public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedSatiety)
         {
             var actor = _context.GetActiveActor();
@@ -125,9 +125,12 @@ namespace Zilon.Core.Spec.Steps
             testedProp.Should().BeNull();
         }
 
-        [Then(@"Актёр получает эффект (.*)")]
+        [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
         {
+            var actor = _context.GetActiveActor();
+            
+
             ScenarioContext.Current.Pending();
         }
 

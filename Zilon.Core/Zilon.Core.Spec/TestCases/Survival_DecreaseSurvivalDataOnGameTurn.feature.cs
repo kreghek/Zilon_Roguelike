@@ -90,7 +90,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.Then(string.Format("Значение {0} уменьшилось на {1} единицу и стало {2}", stat, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("Значение {0} уменьшилось на {1} и стало {2}", stat, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

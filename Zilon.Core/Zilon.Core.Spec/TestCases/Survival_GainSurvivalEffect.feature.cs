@@ -90,7 +90,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 12
- testRunner.And(string.Format("Актёр получает эффект {0}", effect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Актёр под эффектом {0}", effect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

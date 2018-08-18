@@ -8,7 +8,7 @@ Scenario Outline: Падение показателей выживания ка�
 	Given Есть произвольная карта
 	And Есть актёр игрока
 	When Я перемещаю персонажа на <moveDistance> клетку
-	Then Значение <stat> уменьшилось на <statRate> единицу и стало <expectedStatValue>
+	Then Значение <stat> уменьшилось на <statRate> и стало <expectedStatValue>
 
 Examples: 
 | moveDistance | stat    | statRate | expectedStatValue |

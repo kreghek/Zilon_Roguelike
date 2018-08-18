@@ -90,8 +90,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then(string.Format("Значение {0} повысилось на {1} единиц и уменьшилось на {2} за игровой цикл и стал" +
-                        "о {3}", stat, propValue, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("Значение {0} повысилось на {1} и уменьшилось на {2} за игровой цикл и стало {3}", stat, propValue, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 13
  testRunner.And(string.Format("Предмет {0} отсутствует в инвентаре актёра", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
