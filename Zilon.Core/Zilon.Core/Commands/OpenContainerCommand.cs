@@ -58,8 +58,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            //_playerState.TaskSource.IntentOpenContainer(container, openMethod);
-            _playerState.TaskSource.Intent(null);
+            var intetion = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, openMethod));
+            _playerState.TaskSource.Intent(intetion);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()

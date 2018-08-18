@@ -13,6 +13,6 @@
         /// </summary>
         IActor CurrentActor { get; }
 
-        void Intent(IIntention intension);
+        void Intent(IIntention intention);
     }
 }

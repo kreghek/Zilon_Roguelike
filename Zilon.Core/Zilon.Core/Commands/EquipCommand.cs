@@ -2,6 +2,7 @@
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
@@ -61,8 +62,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
             }
 
-            //_playerState.TaskSource.IntentEquip(equipment, SlotIndex.Value);
-            _playerState.TaskSource.Intent(null);
+            var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
+            _playerState.TaskSource.Intent(intention);
         }
     }
 }
