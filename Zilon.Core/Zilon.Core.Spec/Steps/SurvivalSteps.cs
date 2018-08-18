@@ -191,6 +191,14 @@ namespace Zilon.Core.Spec.Steps
             }
         }
 
+        [Then(@"Актёр имеет задас hp (.*)")]
+        public void ThenАктёрИмеетЗадасHp(int expectedHp)
+        {
+            var actor = _context.GetActiveActor();
+            actor.Hp.Should().Be(expectedHp);
+        }
+
+
         private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
         {
             switch (effectName)
