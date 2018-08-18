@@ -23,8 +23,8 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(y));
             }
 
-            var xIni = x.Actor.Initiative;
-            var yIni = y.Actor.Initiative;
+            var xIni = x.Actor.State.Initiative;
+            var yIni = y.Actor.State.Initiative;
 
             return xIni.CompareTo(yIni);
         }

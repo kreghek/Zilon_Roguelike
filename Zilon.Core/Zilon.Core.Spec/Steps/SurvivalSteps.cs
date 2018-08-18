@@ -195,7 +195,7 @@ namespace Zilon.Core.Spec.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = _context.GetActiveActor();
-            actor.Hp.Should().Be(expectedHp);
+            actor.State.Hp.Should().Be(expectedHp);
         }
 
 

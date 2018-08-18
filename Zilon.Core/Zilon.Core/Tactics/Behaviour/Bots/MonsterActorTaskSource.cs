@@ -36,7 +36,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     continue;
                 }
 
-                if (actor.IsDead)
+                if (actor.State.IsDead)
                 {
                     _logicDict.Remove(actor);
                     _patrolRoutes.Remove(actor);

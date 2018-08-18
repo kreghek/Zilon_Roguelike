@@ -103,7 +103,7 @@ namespace Zilon.Core.Tactics
                     throw new InvalidOperationException("В задаче потеряна связь с актёром.");
                 }
 
-                if (task.Actor.IsDead)
+                if (task.Actor.State.IsDead)
                 {
                     // Произошло, если сначала актёру выдали задачу, но он ниже по инициативе и помер.
                     continue;

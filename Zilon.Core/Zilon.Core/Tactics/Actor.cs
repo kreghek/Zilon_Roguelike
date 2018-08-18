@@ -16,8 +16,7 @@ namespace Zilon.Core.Tactics
             Owner = owner;
             Node = node;
 
-            Hp = person.Hp;
-            Initiative = 1;
+            State = new ActorState(person.Hp);
         }
 
         /// <inheritdoc />
@@ -25,6 +24,8 @@ namespace Zilon.Core.Tactics
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         public IPerson Person { get; }
+
+        public IActorState State { get; }
 
         /// <inheritdoc />
         /// <summary>
@@ -34,34 +35,17 @@ namespace Zilon.Core.Tactics
 
         public float Damage { get; set; }
 
-        public float Hp { get; set; }
-
-        public bool IsDead { get; set; }
-
         public IPlayer Owner { get; }
-
-        public float Initiative { get; }
 
         public bool CanBeDamaged()
         {
-            return !IsDead;
+            return !State.IsDead;
         }
 
         public void MoveToNode(IMapNode targetNode)
         {
             Node = targetNode;
             Moved?.Invoke(this, new EventArgs());
-        }
-
-        public void TakeDamage(float value)
-        {
-            Hp -= value;
-
-            if (Hp <= 0)
-            {
-                IsDead = true;
-                Dead?.Invoke(this, new EventArgs());
-            }
         }
 
         public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
@@ -127,6 +111,11 @@ namespace Zilon.Core.Tactics
                         break;
                 }
             }
+        }
+
+        public void TakeDamage(float value)
+        {
+            State.TakeDamage(value);
         }
     }
 }

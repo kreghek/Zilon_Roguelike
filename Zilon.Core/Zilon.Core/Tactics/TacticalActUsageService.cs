@@ -40,11 +40,11 @@ namespace Zilon.Core.Tactics
 
             if (target is IActor targetActor)
             {
-                var targetIsDeadLast = targetActor.IsDead;
+                var targetIsDeadLast = targetActor.State.IsDead;
 
                 targetActor.TakeDamage(rolledEfficient);
 
-                if (!targetIsDeadLast && targetActor.IsDead)
+                if (!targetIsDeadLast && targetActor.State.IsDead)
                 {
                     var evolutionData = actor.Person.EvolutionData;
 

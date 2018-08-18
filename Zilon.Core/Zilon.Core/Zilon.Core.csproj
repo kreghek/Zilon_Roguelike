@@ -145,6 +145,7 @@
     <Compile Include="Schemes\PerkScheme.cs" />
     <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
+    <Compile Include="Tactics\ActorState.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IIntention.cs" />
     <Compile Include="Tactics\Behaviour\Intention.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\DropTablePropContainer.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
+    <Compile Include="Tactics\IActorState.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IDropResolverRandomSource.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />

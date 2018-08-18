@@ -34,6 +34,11 @@ namespace Zilon.Core.Tactics
         IPlayer Owner { get; }
 
         /// <summary>
+        /// Текущее состояние актёра.
+        /// </summary>
+        IActorState State { get; }
+
+        /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"></param>
@@ -47,29 +52,9 @@ namespace Zilon.Core.Tactics
         void OpenContainer(IPropContainer container, IOpenContainerMethod method);
 
         /// <summary>
-        /// Текущий запас хитпоинтов.
-        /// </summary>
-        float Hp { get; }
-
-        /// <summary>
-        /// Состояние актёра.
-        /// </summary>
-        bool IsDead { get; set; }
-
-        /// <summary>
-        /// Инициатива актёра.
-        /// </summary>
-        float Initiative { get; }
-
-        /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
         event EventHandler Moved;
-
-        /// <summary>
-        /// Происходит, если актёр умирает.
-        /// </summary>
-        event EventHandler Dead;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.
@@ -82,6 +67,7 @@ namespace Zilon.Core.Tactics
         /// <param name="target"> Цель действия. </param>
         /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+
         void UseProp(IProp usedProp);
 
         /// <summary>
