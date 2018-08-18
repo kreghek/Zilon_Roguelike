@@ -162,54 +162,22 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             if (_moveTask == null)
             {
-                if (_patrolPointIndex == null)
-                {
-                    var currentPatrolPointIndex = CalcCurrentPatrolPointIndex();
-
-                    IMapNode nextPatrolPoint;
-                    if (currentPatrolPointIndex != null)
-                    {
-                        _patrolPointIndex = currentPatrolPointIndex + 1;
-                        if (_patrolPointIndex >= _patrolRoute.Points.Count())
-                        {
-                            _patrolPointIndex = 0;
-                        }
-
-                        nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
-                    }
-                    else
-                    {
-                        var actualPatrolPoints = CalcActualRoutePoints();
-                        var nearbyPatrolPoint = CalcNearbyPatrolPoint(actualPatrolPoints);
-                        nextPatrolPoint = nearbyPatrolPoint;
-                    }
-
-
-
-                    _moveTask = new MoveTask(_actor, nextPatrolPoint, _map);
-                }
-                else
-                {
-                    var targetPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
-
-                    _moveTask = new MoveTask(_actor, targetPatrolPoint, _map);
-                }
-
-                return _moveTask;
+                return CreateBypassMoveTask();
             }
             else
             {
                 if (!_moveTask.IsComplete)
                 {
+                    // Если команда на перемещение к целевой точке патруля не закончена, тогда продолжаем её.
                     return _moveTask;
                 }
-                else
+
+                // Команда на перемещение к целевой точке патруля закончена.
+                // Нужно выбрать следующую целевую точку и создать команду на простой.
+                _patrolPointIndex++;
+                if (_patrolPointIndex >= _patrolRoute.Points.Count())
                 {
-                    _patrolPointIndex++;
-                    if (_patrolPointIndex >= _patrolRoute.Points.Count())
-                    {
-                        _patrolPointIndex = 0;
-                    }
+                    _patrolPointIndex = 0;
                 }
 
                 _moveTask = null;
@@ -217,6 +185,74 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 _mode = PatrolMode.Idle;
                 return _idleTask;
             }
+        }
+
+        /// <summary>
+        /// Создаёт задачу на перемещение для обхода патрульных точек.
+        /// </summary>
+        /// <returns> Возвращает команду на перемещение. </returns>
+        private IActorTask CreateBypassMoveTask()
+        {
+            // Если ещё не известна целевая точка патруля
+            if (_patrolPointIndex == null)
+            {
+                var currentPatrolPointIndex = CalcCurrentPatrolPointIndex();
+
+                IMapNode nextPatrolPoint;
+                if (currentPatrolPointIndex != null)
+                {
+                    // Актёр уже стоит в одной из точек патруля.
+                    nextPatrolPoint = GetNextPatrolPointFromPatrolPoint(currentPatrolPointIndex.Value);
+                }
+                else
+                {
+                    // Актёр не на контрольной точке.
+                    // Возвращаемся на маршрут патруля.
+
+                    nextPatrolPoint = GetNextPatrolPointFromField();
+                }
+
+                _moveTask = new MoveTask(_actor, nextPatrolPoint, _map);
+            }
+            else
+            {
+                var targetPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
+
+                _moveTask = new MoveTask(_actor, targetPatrolPoint, _map);
+            }
+
+            return _moveTask;
+        }
+
+        /// <summary>
+        /// Рассчёт следующей контрольной точки, если актёр стоит в поле (не на маршруте патруля).
+        /// </summary>
+        /// <returns> Возвращает узел карты, представляющий следующую контрольную точку патруля. </returns>
+        private IMapNode GetNextPatrolPointFromField()
+        {
+            IMapNode nextPatrolPoint;
+            var actualPatrolPoints = CalcActualRoutePoints();
+            var nearbyPatrolPoint = CalcNearbyPatrolPoint(actualPatrolPoints);
+            nextPatrolPoint = nearbyPatrolPoint;
+            return nextPatrolPoint;
+        }
+
+        /// <summary>
+        /// Рассчёт следующей контрольной точке патруля из указанной.
+        /// </summary>
+        /// <param name="currentPatrolPointIndex"> Текущая точка патруля. </param>
+        /// <returns> Возвращает узел карты, представляющий следующую контрольную точку патруля. </returns>
+        private IMapNode GetNextPatrolPointFromPatrolPoint(int currentPatrolPointIndex)
+        {
+            IMapNode nextPatrolPoint;
+            _patrolPointIndex = currentPatrolPointIndex + 1;
+            if (_patrolPointIndex >= _patrolRoute.Points.Count())
+            {
+                _patrolPointIndex = 0;
+            }
+
+            nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
+            return nextPatrolPoint;
         }
 
         private int? CalcCurrentPatrolPointIndex()
@@ -236,6 +272,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return currentIndex;
         }
 
+        /// <summary>
+        /// Получение точек патруля, которые можно обходить.
+        /// </summary>
+        /// <returns> Набор узлов карты. </returns>
         private HexNode[] CalcActualRoutePoints()
         {
             var hexNodes = _patrolRoute.Points.Cast<HexNode>();
