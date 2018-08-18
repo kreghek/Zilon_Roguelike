@@ -1,4 +1,9 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.Common;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Базовая реализация данных о выживании.
@@ -7,36 +12,51 @@
     {
         public SurvivalData()
         {
-            Satiety = 50;
-            Thirst = 50;
+            Stats = new[] {
+                new SurvivalStat{
+                    Type = SurvivalStatTypes.Satiety,
+                    Range = new Range<int>(-100, 100),
+                    Rate = 1,
+                    Value = 50
+                },
+                new SurvivalStat{
+                    Type = SurvivalStatTypes.Water,
+                    Range = new Range<int>(-100, 100),
+                    Rate = 1,
+                    Value = 50
+                }
+            };
         }
 
-        public int Satiety { get; private set; }
+        public SurvivalStat[] Stats { get; }
 
-        public int Thirst { get; private set; }
+        public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
 
-        public void ReplenishSatiety(int value)
+        public void RestoreStat(SurvivalStatTypes type, int value)
         {
-            Satiety += value;
-            if (Satiety >= 100)
+            var stat = Stats.SingleOrDefault(x => x.Type == type);
+            if (stat != null)
             {
-                Satiety = 100;
-            }
-        }
+                stat.Value += value;
 
-        public void ReplenishThirst(int value)
-        {
-            Thirst += value;
-            if (Thirst >= 100)
-            {
-                Thirst = 100;
+                if (stat.Value >= stat.Range.Max)
+                {
+                    stat.Value = stat.Range.Max;
+                }
             }
         }
 
         public void Update()
         {
-            Satiety--;
-            Thirst--;
+            foreach (var stat in Stats)
+            {
+                stat.Value -= stat.Rate;
+
+                if (stat.Value <= stat.Range.Min)
+                {
+                    stat.Value = stat.Range.Min;
+                }
+            }
         }
     }
 }

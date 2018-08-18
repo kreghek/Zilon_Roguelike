@@ -4,8 +4,9 @@ using System.Linq;
 using FluentAssertions;
 
 using TechTalk.SpecFlow;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -66,29 +67,31 @@ namespace Zilon.Core.Spec.Steps
             switch (stat)
             {
                 case "сытость":
-                    actor.Person.Survival.Satiety.Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
                     break;
+
                 case "вода":
-                    actor.Person.Survival.Thirst.Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
                     break;
+
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
         }
 
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedSatiety)
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedValue)
         {
             var actor = _context.GetActiveActor();
 
             switch (stat)
             {
                 case "сытость":
-                    actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
                     break;
 
                 case "вода":
-                    actor.Person.Survival.Thirst.Should().Be(expectedSatiety);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -97,17 +100,17 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Then(@"Значение (сытость|вода) стало (.*)")]
-        public void ThenЗначениеStatСтало(string stat, int expectedSatiety)
+        public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
             var actor = _context.GetActiveActor();
             switch (stat)
             {
                 case "сытость":
-                    actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Satiety).Should().Be(expectedValue);
                     break;
 
                 case "вода":
-                    actor.Person.Survival.Thirst.Should().Be(expectedSatiety);
+                    GetSurvivalValue(actor, SurvivalStatTypes.Water).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -134,5 +137,11 @@ namespace Zilon.Core.Spec.Steps
             ScenarioContext.Current.Pending();
         }
 
+
+        private int? GetSurvivalValue(IActor actor, SurvivalStatTypes type)
+        {
+            var stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == type);
+            return stat?.Value;
+        }
     }
 }

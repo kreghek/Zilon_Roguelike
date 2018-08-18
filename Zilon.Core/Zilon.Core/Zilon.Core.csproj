@@ -118,6 +118,9 @@
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\PersonFactory.cs" />
     <Compile Include="Persons\SurvivalData.cs" />
+    <Compile Include="Persons\SurvivalStat.cs" />
+    <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
+    <Compile Include="Persons\SurvivalStatTypes.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />

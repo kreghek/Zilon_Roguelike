@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Данные персонажа по выживанию.
@@ -9,14 +11,9 @@
     public interface ISurvivalData
     {
         /// <summary>
-        /// Текущий запас сытости.
+        /// Текущие характеристики.
         /// </summary>
-        int Satiety { get; }
-
-        /// <summary>
-        /// Текущий запас воды.
-        /// </summary>
-        int Thirst { get; }
+        SurvivalStat[] Stats { get; }
 
         /// <summary>
         /// Обновление состояния данных о выживании.
@@ -24,15 +21,15 @@
         void Update();
 
         /// <summary>
-        /// Пополнение запаса сытости.
+        /// Пополнение запаса характеристики.
         /// </summary>
+        /// <param name="type"> Тип характеритсики, которая будет восстанавливаться. </param>
         /// <param name="value"> Значение, на которое увеличивается текущий запас. </param>
-        void ReplenishSatiety(int value);
+        void RestoreStat(SurvivalStatTypes type, int value);
 
         /// <summary>
-        /// Пополнение запаса воды.
+        /// Событие, которое происходит, если значение характеристики пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        /// <param name="value"> Значение, на которое увеличивается текущий запас. </param>
-        void ReplenishThirst(int value);
+        event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
     }
 }

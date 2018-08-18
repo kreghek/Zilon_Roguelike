@@ -13,13 +13,11 @@ Scenario Outline: Поглощение провианта, чтобы снима
 	Then Значение <stat> стало <expectedValue>
 	And Актёр под эффектом <effect>
 
-	Examples: 
-	| stat    | statValue | startEffect   | propSid | expectedValue | effect        |
-	| сытость | 0         | Слабый голод  | cheese  | 9             | нет           |
-	| сытость | -25       | Голод         | cheese  | -16           | Голод         |
-	| сытость | -50       | Голодание     | cheese  | -41           | Голодание     |
-	| вода    | 0         | Слабая жажда  | water   | 0             | Слабая жажда  |
-	| вода    | -25       | Жажда         | water   | -16           | Жажда         |
-	| вода    | -50       | Обезвоживание | water   | -41           | Обезвоживание |
-
-	
+Examples: 
+| stat    | statValue | startEffect   | propSid | expectedValue | effect        |
+| сытость | 0         | Слабый голод  | cheese  | 9             | нет           |
+| сытость | -25       | Голод         | cheese  | -16           | Голод         |
+| сытость | -50       | Голодание     | cheese  | -41           | Голодание     |
+| вода    | 0         | Слабая жажда  | water   | 0             | Слабая жажда  |
+| вода    | -25       | Жажда         | water   | -16           | Жажда         |
+| вода    | -50       | Обезвоживание | water   | -41           | Обезвоживание |
