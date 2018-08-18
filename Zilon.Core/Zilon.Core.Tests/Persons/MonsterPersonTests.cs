@@ -26,7 +26,9 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ACT
-            Action act = () => { var monster = new MonsterPerson(monsterScheme); };
+            Action act = () => {
+                var monster = new MonsterPerson(monsterScheme);
+            };
 
 
 

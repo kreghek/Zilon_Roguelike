@@ -26,9 +26,9 @@ namespace Zilon.Core.Persons
 
         public float MaxEfficient { get; }
 
-        private float CalcEfficient(float baseEfficient, 
-            TacticalActScheme scheme, 
-            float equipmentPower, 
+        private float CalcEfficient(float baseEfficient,
+            TacticalActScheme scheme,
+            float equipmentPower,
             ICombatStats stats)
         {
             if (stats == null)
@@ -38,9 +38,9 @@ namespace Zilon.Core.Persons
 
             var sum = 0f;
 
-            foreach(var depItem in scheme.Dependency)
+            foreach (var dependecyItem in scheme.Dependency)
             {
-                var factStat = stats.Stats.SingleOrDefault(x => x.Stat == depItem.Stat);
+                var factStat = stats.Stats.SingleOrDefault(x => x.Stat == dependecyItem.Stat);
                 if (factStat == null)
                 {
                     continue;
@@ -48,9 +48,8 @@ namespace Zilon.Core.Persons
 
                 var factStatValue = factStat.Value / 10f;
 
-                var depShare = factStatValue * depItem.Value;
-                var depEfficient = baseEfficient * equipmentPower * factStatValue;
-                sum += depEfficient;
+                var dependencyEfficient = baseEfficient * equipmentPower * factStatValue;
+                sum += dependencyEfficient;
             }
 
             return sum;

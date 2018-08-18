@@ -53,8 +53,6 @@ namespace Zilon.Core.Spec.Steps
         {
             var schemeService = _container.GetInstance<ISchemeService>();
             var actorManager = _container.GetInstance<IActorManager>();
-            var propContainerManager = _container.GetInstance<IPropContainerManager>();
-            var dice = _container.GetInstance<IDice>();
             var tacticalActUsageService = _container.GetInstance<ITacticalActUsageService>();
             var decisionSource = _container.GetInstance<IDecisionSource>();
 

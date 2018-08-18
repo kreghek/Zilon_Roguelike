@@ -81,6 +81,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .Callback<IMapNode>(node => currentNode = node);
             var actor = actorMock.Object;
 
+            //TODO Веротяно здесь нужно использовать мок.
             return new Actor(person, player, startNode);
         }
 

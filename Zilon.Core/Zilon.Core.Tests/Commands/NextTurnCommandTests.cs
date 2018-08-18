@@ -48,13 +48,11 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что при выполнении команды вызывается обновление состояния сектора.
         /// </summary>
         [Test]
-        [Ignore("Не рабочий. Некорректно проверят вызов Intent")]
         public void ExecuteTest()
         {
+            // ARRANGE
             var command = _container.GetInstance<NextTurnCommand>();
             var sectorMock = _container.GetInstance<Mock<ISector>>();
-            var playerState = _container.GetInstance<IPlayerState>();
-
 
 
             // ACT

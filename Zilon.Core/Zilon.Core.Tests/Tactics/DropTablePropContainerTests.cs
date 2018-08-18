@@ -7,7 +7,6 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -15,10 +14,14 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture()]
+    [TestFixture]
     public class DropTablePropContainerTests
     {
-        [Test()]
+        /// <summary>
+        /// Тест проверяет генерацию предметов в контейнере,
+        /// если по таблице дропа гарантированно должен выпасть указанный предмет.
+        /// </summary>
+        [Test]
         public void DropTablePropContainerTest()
         {
             // ARRANGE
@@ -33,19 +36,12 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropTable = new DropTableScheme(1, dropTableRecord);
 
-            var diceMock = new Mock<IDice>();
-            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);
-            var dice = diceMock.Object;
-
             var schemeServiceMock = new Mock<ISchemeService>();
 
-            var testPropScheme = new PropScheme {
+            var testPropScheme = new PropScheme
+            {
                 Sid = "test-prop"
             };
-
-            schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.IsAny<string>()))
-                .Returns(testPropScheme);
-            var schemeService = schemeServiceMock.Object;
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.GetProps(It.IsAny<IEnumerable<DropTableScheme>>()))

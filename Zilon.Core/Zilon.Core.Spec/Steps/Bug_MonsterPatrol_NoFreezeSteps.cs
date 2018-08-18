@@ -38,8 +38,6 @@ namespace Zilon.Core.Spec.Steps
             RegisterSchemeService();
             RegisterSectorGenerationServices(roomSize);
 
-            var dice = _container.GetInstance<IDice>();
-
             _botPlayer = new BotPlayer();
 
             _generator = CreateGenerator(_botPlayer);

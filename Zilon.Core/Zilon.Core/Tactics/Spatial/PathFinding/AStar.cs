@@ -6,7 +6,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
     /// <summary>
     /// Interface to setup and run the AStar algorithm.
     /// </summary>
-    public class AStar
+    public sealed class AStar
     {
         /// <summary>
         /// The open list.
@@ -178,7 +178,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             return State.Searching;
         }
 
-        protected virtual int CalcEstimateCost(IMapNode node) {
+        private int CalcEstimateCost(IMapNode node)
+        {
             var hexGoal = (HexNode)_goal;
             var hexNode = (HexNode)node;
             return hexGoal.CubeCoords.DistanceTo(hexNode.CubeCoords);

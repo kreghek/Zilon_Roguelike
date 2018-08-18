@@ -41,8 +41,6 @@ namespace Zilon.Core.Tests.Common
                 var hasNeighbor = false;
                 foreach (var offset in neibourOffsets)
                 {
-                    var neibour = coord + offset;
-
                     var neighborCoords = line.Where(x => x == coord);
                     if (neighborCoords.Any())
                     {
