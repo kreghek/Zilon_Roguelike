@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -25,6 +25,8 @@ namespace Zilon.Core.Persons
         /// Монстры не нуждаются в данных о выживании. Условно, у них всегда всего хватает.
         /// </summary>
         public ISurvivalData Survival => null;
+
+        public List<IPersonEffect> Effects => throw new NotImplementedException();
 
         public MonsterPerson(MonsterScheme scheme)
         {

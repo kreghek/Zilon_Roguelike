@@ -101,6 +101,7 @@
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
+    <Compile Include="Persons\HungerEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobExecutable.cs" />

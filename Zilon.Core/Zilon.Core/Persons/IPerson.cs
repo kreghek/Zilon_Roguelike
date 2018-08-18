@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Интерфейс персонажа.
@@ -47,5 +49,7 @@
         /// Данные по выживанию персонажа.
         /// </summary>
         ISurvivalData Survival { get; }
+
+        List<IPersonEffect> Effects { get; }
     }
 }

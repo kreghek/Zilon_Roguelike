@@ -31,6 +31,8 @@ namespace Zilon.Core.Persons
 
         public ISurvivalData Survival { get; }
 
+        public List<IPersonEffect> Effects { get; }
+
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
             if (scheme == null)
@@ -62,17 +64,10 @@ namespace Zilon.Core.Persons
                 CalcCombatStats(CombatStats, EvolutionData);
             }
 
+            Effects = new List<IPersonEffect>();
+
             Survival = new SurvivalData();
-        }
-
-        private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
-        {
-            ClearCombatStats((CombatStats)CombatStats);
-
-            if (EvolutionData != null)
-            {
-                CalcCombatStats(CombatStats, EvolutionData);
-            }
+            Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData, Inventory inventory):
@@ -128,6 +123,36 @@ namespace Zilon.Core.Persons
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+        }
+
+        private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
+        {
+            ClearCombatStats((CombatStats)CombatStats);
+
+            if (EvolutionData != null)
+            {
+                CalcCombatStats(CombatStats, EvolutionData);
+            }
+        }
+
+        private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
+        {
+            switch (e.KeyPoint.Type)
+            {
+                case SurvivalStatKeyPointType.Lesser:
+                    if (e.Stat.Type == SurvivalStatType.Satiety)
+                    {
+                        if (e.Stat.Value >= e.KeyPoint.Value)
+                        {
+                            var currentEffect = Effects.SingleOrDefault(x => x.Name == "Слабый голод");
+                            if (currentEffect == null)
+                            {
+                                Effects.Add(new HungerEffect { Name = "Слабый голод" });
+                            }
+                        }
+                    }
+                    break;
+            }
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)

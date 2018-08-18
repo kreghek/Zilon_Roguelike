@@ -132,9 +132,9 @@ namespace Zilon.Core.Spec.Steps
         public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
         {
             var actor = _context.GetActiveActor();
-            
 
-            ScenarioContext.Current.Pending();
+            var effect = actor.Person.Effects.SingleOrDefault(x => x.Name == effectName);
+            effect.Should().NotBeNull();
         }
 
 
