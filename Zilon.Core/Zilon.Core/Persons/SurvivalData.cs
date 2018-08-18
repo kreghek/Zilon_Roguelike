@@ -58,11 +58,24 @@ namespace Zilon.Core.Persons
         {
             foreach (var stat in Stats)
             {
+                var oldValue = stat.Value;
+
+
                 stat.Value -= stat.Rate;
 
                 if (stat.Value <= stat.Range.Min)
                 {
                     stat.Value = stat.Range.Min;
+                }
+
+                var diff = new Range<int>(stat.Value, oldValue);
+
+                foreach (var keyPoint in stat.KeyPoints)
+                {
+                    if (diff.Contains(keyPoint.Value))
+                    {
+                        DoStatCrossKeyPoint(stat, keyPoint);
+                    }
                 }
             }
         }
