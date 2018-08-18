@@ -91,6 +91,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
             // ASSERT
             var factEffect = currentEffects.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+
             factEffect.Level.Should().Be(SurvivalStatHazardLevel.Lesser);
         }
     }

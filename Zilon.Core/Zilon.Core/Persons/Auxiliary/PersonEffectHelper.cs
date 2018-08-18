@@ -37,6 +37,19 @@ namespace Zilon.Core.Persons.Auxiliary
                     {
                         currentEffects.Remove(currentTypeEffect);
                     }
+                    else
+                    {
+                        switch (keyPoint.Level)
+                        {
+                            case SurvivalStatHazardLevel.Strong:
+                                currentTypeEffect.Level = SurvivalStatHazardLevel.Lesser;
+                                break;
+
+                            case SurvivalStatHazardLevel.Max:
+                                currentTypeEffect.Level = SurvivalStatHazardLevel.Strong;
+                                break;
+                        }
+                    }
                 }
             }
             else
