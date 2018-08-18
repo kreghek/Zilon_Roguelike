@@ -120,6 +120,7 @@ namespace Zilon.Core.MapGenerators
         /// Создаёт на карте ребро, соединяющее два узла этой карты.
         /// </summary>
         /// <param name="targetMap"> Целевая карта, для которой нужно создать ребро. </param>
+        /// <param name="edgeHash"> Хеш ребер карты. </param>
         /// <param name="node"> Исходное ребро карты. </param>
         /// <param name="neighbor"> Соседнее ребро карты, с которым будет соединено исходное. </param>
         private static void AddEdgeToMap(IMap targetMap, HashSet<string> edgeHash, HexNode node, HexNode neighbor)

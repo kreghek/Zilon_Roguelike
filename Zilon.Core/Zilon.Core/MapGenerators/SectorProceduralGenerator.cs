@@ -33,7 +33,7 @@ namespace Zilon.Core.MapGenerators
         public Dictionary<IActor, IPatrolRoute> Patrols { get; }
 
 
-        public StringBuilder Log { get; set; }
+        public StringBuilder Log { get; }
 
         public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
             IPlayer botPlayer,

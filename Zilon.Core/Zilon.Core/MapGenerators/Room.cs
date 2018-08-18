@@ -10,7 +10,7 @@ namespace Zilon.Core.MapGenerators
         public int PositionY { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public List<HexNode> Nodes { get; set; }
+        public List<HexNode> Nodes { get; }
         public bool IsStartRoom { get; set; }
 
         public Room()

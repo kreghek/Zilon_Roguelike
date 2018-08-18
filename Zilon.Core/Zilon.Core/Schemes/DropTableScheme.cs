@@ -8,7 +8,7 @@
         /// <summary>
         /// Записи в таблице дропа.
         /// </summary>
-        public DropTableRecordSubScheme[] Records { get; set; }
+        public DropTableRecordSubScheme[] Records { get; }
 
         /// <summary>
         /// Количество бросков на проверку выпавшей записи.

@@ -18,7 +18,7 @@
         /// <summary>
         /// Схема предмета.
         /// </summary>
-        public string SchemeSid { get; set; }
+        public string SchemeSid { get; }
 
         /// <summary>
         /// Вес записи в таблице дропа.
@@ -26,7 +26,7 @@
         /// <remarks>
         /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
-        public int Weight { get; set; }
+        public int Weight { get; }
 
         /// <summary>
         /// Минимальная мощь экипировки.
