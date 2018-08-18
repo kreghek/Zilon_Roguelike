@@ -203,7 +203,7 @@ class SectorVM : MonoBehaviour
             containerVm.Selected += Container_Selected;
         }
         
-        var humanTaskSource = new HumanActorTaskSource(_decisionSource, _tacticalActUsageService);
+        var humanTaskSource = new HumanActorTaskSource();
         humanTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
 
         var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,

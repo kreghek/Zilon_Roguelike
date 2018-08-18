@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersonEffectsHandler : MonoBehaviour {
+public class PersonEffectHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

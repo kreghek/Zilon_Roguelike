@@ -4,7 +4,6 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.CommonServices.MapGenerators;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
