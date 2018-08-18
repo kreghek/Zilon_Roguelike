@@ -21,13 +21,7 @@ namespace Zilon.Core.Tests.Services.MapGenerators
         public void CreateMap_FixedMap_EdgesAreCorrect()
         {
             // ARRANGE
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-            var map = mapMock.Object;
+            var map = CreateFakeMap();
 
             var mapGenerator = new GridMapGenerator(7);
 
@@ -93,6 +87,20 @@ namespace Zilon.Core.Tests.Services.MapGenerators
             var node2 = map.Nodes.Cast<HexNode>().SelectBy(offsetX2, offsetY2);
             var edge = GetExistsEdge(map, node1, node2);
             edge.Should().NotBeNull();
+        }
+
+        private static IMap CreateFakeMap()
+        {
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+
+            var mapMock = new Mock<IMap>();
+            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
+            mapMock.SetupGet(x => x.Edges).Returns(edges);
+
+            var map = mapMock.Object;
+
+            return map;
         }
     }
 }

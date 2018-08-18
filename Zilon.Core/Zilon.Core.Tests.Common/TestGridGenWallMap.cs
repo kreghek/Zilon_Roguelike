@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+
 using Zilon.Core.MapGenerators;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Common
@@ -9,32 +8,10 @@ namespace Zilon.Core.Tests.Common
     /// <summary>
     /// Тестовый класс карты со стенами.
     /// </summary>
-    public class TestGridGenWallMap : IMap
+    public class TestGridGenWallMap : MapBase
     {
-        public List<IMapNode> Nodes { get; set; }
-
-        public List<IEdge> Edges { get; set; }
-
-        public void HoldNode(IMapNode node, Actor actor)
+        public TestGridGenWallMap(): base()
         {
-
-        }
-
-        public bool IsPositionAvailableFor(IMapNode targetNode, Actor actor)
-        {
-            return true;
-        }
-
-        public void ReleaseNode(IMapNode node, Actor actor)
-        {
-
-        }
-
-        public TestGridGenWallMap()
-        {
-            Nodes = new List<IMapNode>();
-            Edges = new List<IEdge>();
-
             var gridGenerator = new GridMapGenerator(10);
             gridGenerator.CreateMap(this);
 

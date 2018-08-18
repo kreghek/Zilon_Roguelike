@@ -10,12 +10,12 @@
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        List<IMapNode> Nodes { get; set; }
+        List<IMapNode> Nodes { get; }
 
         /// <summary>
         /// Ребра карты.
         /// </summary>
-        List<IEdge> Edges { get; set; }
+        List<IEdge> Edges { get; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.

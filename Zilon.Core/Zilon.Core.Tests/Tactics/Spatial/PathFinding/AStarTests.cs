@@ -42,8 +42,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var mapMock = new Mock<IMap>();
 
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
+            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
+            mapMock.SetupGet(x => x.Edges).Returns(edges);
 
             var map = mapMock.Object;
 
@@ -169,8 +169,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var mapMock = new Mock<IMap>();
 
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
+            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
+            mapMock.SetupGet(x => x.Edges).Returns(edges);
 
             var map = mapMock.Object;
 

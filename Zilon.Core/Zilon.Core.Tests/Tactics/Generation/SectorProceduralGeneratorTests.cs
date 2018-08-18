@@ -77,12 +77,8 @@ namespace Zilon.Core.Tests.Tactics.Generation
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-            var map = mapMock.Object;
+            var map = CreateFakeMap();
+
             var botPlayer = CreateBotPlayer();
 
             var generator = CreateGenerator(randomSource, schemeService, botPlayer);
@@ -127,12 +123,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-            var map = mapMock.Object;
+            var map = CreateFakeMap();
 
             var botPlayer = CreateBotPlayer();
 
@@ -166,12 +157,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-            var map = mapMock.Object;
+            var map = CreateFakeMap();
 
             var botPlayer = CreateBotPlayer();
 
@@ -185,7 +171,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
 
 
             // ASSERT
-            var hexNodes = nodes.Cast<HexNode>().ToArray();
+            var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
             foreach (var node in hexNodes)
             {
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
@@ -208,12 +194,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupProperty(x => x.Nodes, nodes);
-            mapMock.SetupProperty(x => x.Edges, edges);
-            var map = mapMock.Object;
+            var map = CreateFakeMap();
 
             var botPlayer = CreateBotPlayer();
 
@@ -227,11 +208,22 @@ namespace Zilon.Core.Tests.Tactics.Generation
 
 
             // ASSERT
-            foreach (var edge in edges)
+            foreach (var edge in map.Edges)
             {
-                var sameEdge = edges.Where(x => x != edge && ((x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) || (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0]) ));
+                var sameEdge = map.Edges.Where(x => x != edge && ((x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) || (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0])));
                 sameEdge.Should().BeEmpty($"Ребро с {edge.Nodes[0]} и {edge.Nodes[1]} уже есть.");
             }
+        }
+
+        private static IMap CreateFakeMap()
+        {
+            var nodes = new List<IMapNode>();
+            var edges = new List<IEdge>();
+            var mapMock = new Mock<IMap>();
+            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
+            mapMock.SetupGet(x => x.Edges).Returns(edges);
+            var map = mapMock.Object;
+            return map;
         }
 
         private static ISchemeService CreateSchemeService()
