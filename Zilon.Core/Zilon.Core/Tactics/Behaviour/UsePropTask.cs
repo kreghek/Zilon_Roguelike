@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly IProp _usedProp;
 
-        protected UsePropTask(IActor actor,
+        public UsePropTask(IActor actor,
             IProp usedProp) : base(actor)
         {
             _usedProp = usedProp;

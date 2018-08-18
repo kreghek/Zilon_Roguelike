@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Client;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
@@ -47,8 +48,8 @@ namespace Zilon.Core.Commands
             var propVm = _inventoryState.SelectedProp;
             var usableProp = propVm.Prop;
 
-            //_playerState.TaskSource.IntentUseSelf(usableProp);
-            _playerState.TaskSource.Intent(null);
+            var intention = new Intention<UsePropTask>(a => new UsePropTask(a, usableProp));
+            _playerState.TaskSource.Intent(intention);
         }
     }
 }

@@ -4,6 +4,8 @@
     "Ru": "Калинский сыр"
   },
   "Use": {
-
+    "CommonRules": [
+      "Satiety"
+    ]
   }
 }
