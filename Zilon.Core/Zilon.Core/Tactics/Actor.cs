@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
@@ -96,6 +96,22 @@ namespace Zilon.Core.Tactics
         public override string ToString()
         {
             return $"{Person}";
+        }
+
+        public void UseProp(IProp usedProp)
+        {
+            var useData = usedProp.Scheme.Use;
+
+            foreach(var rule in useData.CommonRules)
+            {
+                switch (rule)
+                {
+                    case ConsumeCommonRule.Satiety:
+                        Person.Survival.ReplenishSatiety(10);
+                        break;
+                }
+
+            }
         }
     }
 }

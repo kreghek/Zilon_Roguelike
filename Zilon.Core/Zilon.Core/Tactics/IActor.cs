@@ -82,6 +82,7 @@ namespace Zilon.Core.Tactics
         /// <param name="target"> Цель действия. </param>
         /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+        void UseProp(IProp usedProp);
 
         /// <summary>
         /// Происходит, когда актёр выполняет действие.
