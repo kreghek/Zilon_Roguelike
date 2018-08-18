@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+
 using FluentAssertions;
+
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Spec.Contexts;
@@ -68,13 +71,16 @@ namespace Zilon.Core.Spec.Steps
 
             switch (type)
             {
-                case "сытости":
+                case "сытость":
                     actor.Person.Survival.Satiety.Should().Be(expectedSatiety);
                     break;
 
-                case "воды":
+                case "вода":
                     actor.Person.Survival.Thirst.Should().Be(expectedSatiety);
                     break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
         }
 

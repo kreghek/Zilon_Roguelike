@@ -122,13 +122,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="TestCases\Survival_DrinkWater.feature.cs">
-      <DependentUpon>Survival_DrinkWater.feature</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="TestCases\Survival_EatFood.feature.cs">
-      <DependentUpon>Survival_EatFood.feature</DependentUpon>
+    <Compile Include="TestCases\Survival_UseProp.feature.cs">
+      <DependentUpon>Survival_UseProp.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -196,13 +191,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_BecomeStrongThrist.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_DrinkWater.feature">
+    <None Include="TestCases\Survival_UseProp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_DrinkWater.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_EatFood.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_EatFood.feature.cs</LastGenOutput>
+      <LastGenOutput>Survival_UseProp.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_BecomeHunger.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

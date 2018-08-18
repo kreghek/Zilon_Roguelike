@@ -82,9 +82,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.Given("Есть произвольная карта", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Есть персонаж игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("Я перемещаю персонажа по круговому маршруту 125 раз", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Я перемещаю персонажа по круговому маршруту 75 раз", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
  testRunner.Then("Значение сытости стало -25", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 12

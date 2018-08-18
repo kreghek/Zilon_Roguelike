@@ -82,7 +82,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.Given("Есть произвольная карта", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Есть персонаж игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
  testRunner.When("Я перемещаю персонажа на одну клетку", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
