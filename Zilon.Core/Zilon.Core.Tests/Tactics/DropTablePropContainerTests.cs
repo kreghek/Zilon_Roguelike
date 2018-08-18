@@ -36,8 +36,6 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropTable = new DropTableScheme(1, dropTableRecord);
 
-            var schemeServiceMock = new Mock<ISchemeService>();
-
             var testPropScheme = new PropScheme
             {
                 Sid = "test-prop"

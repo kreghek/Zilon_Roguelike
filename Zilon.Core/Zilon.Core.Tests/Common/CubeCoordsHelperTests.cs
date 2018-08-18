@@ -37,16 +37,9 @@ namespace Zilon.Core.Tests.Common
                 // Проверяем, что у каждой точки линии есть соседи,
                 // т.е. нет изолированных разорванных точк.
                 var neibourOffsets = HexHelper.GetOffsetClockwise();
+                var neighborCoords = line.Where(x => x == coord);
 
-                var hasNeighbor = false;
-                foreach (var offset in neibourOffsets)
-                {
-                    var neighborCoords = line.Where(x => x == coord);
-                    if (neighborCoords.Any())
-                    {
-                        hasNeighbor = true;
-                    }
-                }
+                var hasNeighbor = neighborCoords.Any();
 
                 hasNeighbor.Should().Be(true);
             }
