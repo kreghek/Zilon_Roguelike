@@ -77,6 +77,8 @@ namespace Zilon.Core.Persons
 
         private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)
         {
+            var bonusDict = new Dictionary<CombatStatType, float>();
+
             var archievedPerks = evolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
             foreach (var archievedPerk in archievedPerks)
             {
@@ -92,17 +94,15 @@ namespace Zilon.Core.Persons
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
-                        var targetValue = 1;
-
                         var ruleType = rule.Type;
                         switch (ruleType)
                         {
                             case PersonRuleType.Melee:
-                                AddStat(combatStats, CombatStatType.Melee, targetValue);
+                                AddStatToDict(bonusDict, CombatStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
                                 break;
 
                             case PersonRuleType.Ballistic:
-                                AddStat(combatStats, CombatStatType.Ballistic, targetValue);
+                                AddStatToDict(bonusDict, CombatStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
                                 break;
                         }
                     }
@@ -111,20 +111,66 @@ namespace Zilon.Core.Persons
 
             foreach (var effect in Effects.Items)
             {
-                if (effect is ICombatStatEffect combatStatEffect)
+                foreach (var rule in effect.Rules)
                 {
-                    combatStatEffect.ApplyOnce(CombatStats);
+                    AddStatToDict(bonusDict, rule.StatType, rule.Level, PersonRuleDirection.Negative);
+                }
+            }
+
+            foreach (var bonusItem in bonusDict)
+            {
+                var stat = CombatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                if (stat != null)
+                {
+                    stat.Value += stat.Value * bonusItem.Value;
+
+                    if (stat.Value <= 1)
+                    {
+                        stat.Value = 1;
+                    }
                 }
             }
         }
 
-        private static void AddStat(ICombatStats combatStats, CombatStatType targetStat, int targetValue)
+        private static void AddStatToDict(Dictionary<CombatStatType, float> bonusDict,
+            CombatStatType targetStatType,
+            PersonRuleLevel level,
+            PersonRuleDirection direction)
         {
-            var statItem = combatStats.Stats.SingleOrDefault(x => x.Stat == targetStat);
-            if (statItem != null)
+            bonusDict.TryGetValue(targetStatType, out float value);
+
+            var q = 0f;
+            switch (level)
             {
-                statItem.Value += targetValue;
+                case PersonRuleLevel.Lesser:
+                    q = 0.1f;
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    q = 0.3f;
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    q = 0.5f;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
             }
+
+            switch (direction)
+            {
+                case PersonRuleDirection.Negative:
+                    q *= -1;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {direction}.");
+            }
+
+            value += q;
+
+            bonusDict[targetStatType] = value;
         }
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
@@ -144,7 +190,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects.Items, e.Stat, e.KeyPoint);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoint);
         }
 
 

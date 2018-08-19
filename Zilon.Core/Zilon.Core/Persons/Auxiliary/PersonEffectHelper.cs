@@ -15,13 +15,13 @@ namespace Zilon.Core.Persons.Auxiliary
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
         /// <param name="keyPoint"> Ключевая точка, которую учавствует в изменении характеристики. </param>
-        public static void UpdateSurvivalEffect(IList<IPersonEffect> currentEffects,
+        public static void UpdateSurvivalEffect(EffectCollection currentEffects,
             SurvivalStat stat,
             SurvivalStatKeyPoint keyPoint)
         {
             var statType = stat.Type;
 
-            var currentTypeEffect = currentEffects.OfType<SurvivalStatHazardEffect>()
+            var currentTypeEffect = currentEffects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == statType);
 
             // Эффект уже существует.

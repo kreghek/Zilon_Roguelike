@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         {
             //ARRANGE
 
-            var currentEffects = new List<IPersonEffect>();
+            var currentEffects = new EffectCollection();
 
             var testedEffect = new SurvivalStatHazardEffect(SurvivalStatType.Satiety, SurvivalStatHazardLevel.Lesser);
 
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
 
             // ASSERT
-            var factEffect = currentEffects.OfType<SurvivalStatHazardEffect>()
+            var factEffect = currentEffects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             factEffect.Should().BeNull();
         }
@@ -54,12 +54,12 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка эффекта выше уровнем,
         /// то эффект снижает уровень.
         /// </summary>
-        [Test()]
+        [Test]
         public void UpdateSurvivalEffect_HasStrongEffectAndValueMoreThatKetValue_HasLesserEffect()
         {
             //ARRANGE
 
-            var currentEffects = new List<IPersonEffect>();
+            var currentEffects = new EffectCollection();
 
             var testedEffect = new SurvivalStatHazardEffect(SurvivalStatType.Satiety, SurvivalStatHazardLevel.Lesser);
 
@@ -89,7 +89,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
 
             // ASSERT
-            var factEffect = currentEffects.OfType<SurvivalStatHazardEffect>()
+            var factEffect = currentEffects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
 
             factEffect.Level.Should().Be(SurvivalStatHazardLevel.Lesser);

@@ -88,6 +88,7 @@
     <Compile Include="Components\CombatStatItem.cs" />
     <Compile Include="Components\CombatStatType.cs" />
     <Compile Include="Components\ConsumeCommonRule.cs" />
+    <Compile Include="Components\PersonRuleDirection.cs" />
     <Compile Include="Components\PersonRuleLevel.cs" />
     <Compile Include="Components\PersonRuleType.cs" />
     <Compile Include="IJob.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EffectCollection.cs" />
     <Compile Include="Persons\EffectEventArgs.cs" />
+    <Compile Include="Persons\EffectRule.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\IActorStateEffect.cs" />
     <Compile Include="Persons\ICombatStatEffect.cs" />
