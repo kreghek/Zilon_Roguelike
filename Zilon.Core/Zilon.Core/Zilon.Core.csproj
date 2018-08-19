@@ -103,6 +103,7 @@
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\IActorStateEffect.cs" />
+    <Compile Include="Persons\ICombatStatEffect.cs" />
     <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
