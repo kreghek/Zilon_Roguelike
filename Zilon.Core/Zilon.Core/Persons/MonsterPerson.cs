@@ -26,7 +26,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ISurvivalData Survival => null;
 
-        public List<IPersonEffect> Effects => throw new NotImplementedException();
+        public List<IPersonEffect> Effects { get; }
 
         public MonsterPerson(MonsterScheme scheme)
         {
@@ -36,6 +36,8 @@ namespace Zilon.Core.Persons
                     new MonsterTacticalAct(scheme.PrimaryAct, 1)
                 }
             };
+
+            Effects = new List<IPersonEffect>();
         }
     }
 }
