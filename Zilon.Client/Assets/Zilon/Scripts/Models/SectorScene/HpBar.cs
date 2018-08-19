@@ -18,7 +18,7 @@ public class HpBar : MonoBehaviour
 
 		var actorVm = _playerState.ActiveActor;
 
-		var hpPercentage = CalcPercentage(actorVm.Actor.Hp, actorVm.Actor.Person.Hp);
+		var hpPercentage = CalcPercentage(actorVm.Actor.State.Hp, actorVm.Actor.Person.Hp);
 
 		BarImage.fillAmount = hpPercentage;
 	}

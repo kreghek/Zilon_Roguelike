@@ -23,7 +23,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void Start()
     {
         Actor.Moved += Actor_Moved;
-        Actor.Dead += Actor_Dead;
+        Actor.State.Dead += Actor_Dead;
     }
 
     private void Actor_Dead(object sender, EventArgs e)
