@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string startEffect, string equipmentSid, string tacticalActSid, string minEfficient, string maxEfficient, string[] exampleTags)
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string startEffect, string equipmentSid, string tacticalActSid, string minEfficient, string maxEfficient, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -77,7 +77,8 @@ namespace Zilon.Core.Spec.TestCases
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Угрозы выживания снижают эффективность тактических действий у актёра игрока.", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+                    "у актёра игрока.", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -95,69 +96,69 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 0", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 0", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant0()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant0()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Слабый голод", "short-sword", "chop", "9", "14", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Слабый голод", "short-sword", "chop", "9", "14", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 1", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 1", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant1()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant1()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Голод", "short-sword", "chop", "7", "11", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Голод", "short-sword", "chop", "7", "11", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 2", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 2", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant2()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant2()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Голодание", "short-sword", "chop", "5", "8", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Голодание", "short-sword", "chop", "5", "8", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 3", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 3", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant3()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant3()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Слабая жажда", "short-sword", "chop", "9", "14", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Слабая жажда", "short-sword", "chop", "9", "14", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 4", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 4", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant4()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant4()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Жажда", "short-sword", "chop", "7", "11", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Жажда", "short-sword", "chop", "7", "11", ((string[])(null)));
 #line hidden
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания снижают эффективность тактических действий у актёра игрока., Var" +
-            "iant 5", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (имеются изначально) снижают эффективность тактических действий " +
+            "у актёра игрока., Variant 5", new string[] {
                 "survival",
                 "dev0"}, SourceLine=15)]
-        public virtual void УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant5()
+        public virtual void УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока__Variant5()
         {
 #line 7
-this.УгрозыВыживанияСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Обезвоживание", "short-sword", "chop", "5", "8", ((string[])(null)));
+this.УгрозыВыживанияИмеютсяИзначальноСнижаютЭффективностьТактическихДействийУАктёраИгрока_("2", "captain", "0", "0", "Обезвоживание", "short-sword", "chop", "5", "8", ((string[])(null)));
 #line hidden
         }
         

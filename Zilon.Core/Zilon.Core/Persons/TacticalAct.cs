@@ -52,7 +52,7 @@ namespace Zilon.Core.Persons
                 sum += dependencyEfficient;
             }
 
-            return sum;
+            return (float)Math.Ceiling(sum);
         }
     }
 }

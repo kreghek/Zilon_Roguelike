@@ -156,6 +156,8 @@ namespace Zilon.Core.Persons
             {
                 CalcCombatStats(CombatStats, EvolutionData);
             }
+
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
