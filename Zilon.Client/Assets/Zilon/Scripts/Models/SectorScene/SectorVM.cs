@@ -330,7 +330,7 @@ class SectorVM : MonoBehaviour
         bullet.FinishObject = ((MonoBehaviour)targetViewModel).gameObject;
     }
 
-    private void AddTestPropsInInventory(Inventory inventory)
+    private void AddTestPropsInInventory(IPropStore inventory)
     {
         var foodScheme = _schemeService.GetScheme<PropScheme>("cheese");
         var resource = new Resource(foodScheme, 3);

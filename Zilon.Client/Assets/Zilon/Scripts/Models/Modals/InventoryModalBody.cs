@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -22,6 +23,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	[NotNull] [Inject] private DiContainer _diContainer;
 	[NotNull] [Inject] private IInventoryState _inventoryState;
+	[NotNull] [Inject] private ICommandManager _commandManager;
+	[NotNull] [Inject(Id = "use-self-command")] private ICommand _useSelfCommand;
 
 	public void Start()
 	{
@@ -120,12 +123,20 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 			itemVm.SetSelectedState(isSelected);
 		}
 
+		// этот фрагмент - не дубликат
 		var canUseProp = currentItemVm.Prop.Scheme.Use != null;
 		UseButton.SetActive(canUseProp);
 
 		var propTitle = currentItemVm.Prop.Scheme.Name.Ru ?? currentItemVm.Prop.Scheme.Name.En;
 		DetailText.text = propTitle;
+		// --- этот фрагмент - не дубликат
 		
 		_inventoryState.SelectedProp = currentItemVm;
+	}
+
+	public void UseButton_Handler()
+	{
+		Debug.Log($"Used: {_inventoryState.SelectedProp.Prop.Scheme.Sid}");
+		_commandManager.Push(_useSelfCommand);
 	}
 }
