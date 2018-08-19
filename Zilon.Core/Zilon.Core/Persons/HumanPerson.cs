@@ -166,6 +166,9 @@ namespace Zilon.Core.Persons
 
             switch (direction)
             {
+                case PersonRuleDirection.Positive:
+                    // Бонус изначально расчитывается, как положительный. Ничего не делаем.
+                    break;
                 case PersonRuleDirection.Negative:
                     q *= -1;
                     break;
