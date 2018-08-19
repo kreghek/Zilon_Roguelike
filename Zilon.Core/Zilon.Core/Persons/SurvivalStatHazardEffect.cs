@@ -16,7 +16,10 @@ namespace Zilon.Core.Persons
 
         public void Apply(IActorState actorState)
         {
-            actorState.TakeDamage(5);
+            if (Level == SurvivalStatHazardLevel.Max)
+            {
+                actorState.TakeDamage(5);
+            }
         }
 
         public void Update()
