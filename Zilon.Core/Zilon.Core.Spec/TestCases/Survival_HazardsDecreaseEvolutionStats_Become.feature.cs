@@ -91,8 +91,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then(string.Format("Актёр под эффектом {0}", expectedEffect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 13
  testRunner.Then(string.Format("Актёр имеет характристику модуля сражения {0} равную {1}", combatStat, combatStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,66 +99,33 @@ this.ScenarioInitialize(scenarioInfo);
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant0()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "50", "Слабый голод", "melee", "9", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "50", "Слабый голод", "melee", "8", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant1()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "75", "Голод", "melee", "7", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "75", "Голод", "melee", "4", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 2", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant2()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "100", "Голодание", "melee", "5", ((string[])(null)));
-#line hidden
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
-            " актёра игрока., Variant 3", new string[] {
-                "survival",
-                "dev0"}, SourceLine=16)]
-        public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant3()
-        {
-#line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "50", "Слабая жажда", "melee", "9", ((string[])(null)));
-#line hidden
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
-            " актёра игрока., Variant 4", new string[] {
-                "survival",
-                "dev0"}, SourceLine=16)]
-        public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant4()
-        {
-#line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "75", "Жажда", "melee", "7", ((string[])(null)));
-#line hidden
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
-            " актёра игрока., Variant 5", new string[] {
-                "survival",
-                "dev0"}, SourceLine=16)]
-        public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant5()
-        {
-#line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "100", "Обезвоживание", "melee", "5", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "100", "Голодание", "melee", "1", ((string[])(null)));
 #line hidden
         }
         

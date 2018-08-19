@@ -128,5 +128,10 @@ namespace Zilon.Core.Persons
                 },
             };
         }
+
+        public override string ToString()
+        {
+            return $"{Level} {Type}";
+        }
     }
 }

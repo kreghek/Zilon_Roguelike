@@ -42,6 +42,7 @@ namespace Zilon.Core.Persons
             Effects = new EffectCollection();
             Effects.Added += Effects_CollectionChanged;
             Effects.Removed += Effects_CollectionChanged;
+            Effects.Changed += Effects_CollectionChanged;
 
             var slotCount = Scheme.SlotCount;
             EquipmentCarrier = new EquipmentCarrier(slotCount);
@@ -129,6 +130,11 @@ namespace Zilon.Core.Persons
                         stat.Value = 1;
                     }
                 }
+            }
+
+            foreach (var statItem in CombatStats.Stats)
+            {
+                statItem.Value = (float)Math.Round(statItem.Value, 1);
             }
         }
 
