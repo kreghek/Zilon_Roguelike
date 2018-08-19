@@ -1,6 +1,8 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Tactics;
+
+namespace Zilon.Core.Persons
 {
-    public class SurvivalStatHazardEffect : IPersonEffect
+    public class SurvivalStatHazardEffect : IPersonEffect, IActorStateEffect
     {
         public SurvivalStatHazardEffect(SurvivalStatType type, SurvivalStatHazardLevel level)
         {
@@ -12,9 +14,14 @@
 
         public SurvivalStatHazardLevel Level { get; set; }
 
+        public void Apply(IActorState actorState)
+        {
+            actorState.TakeDamage(5);
+        }
+
         public void Update()
         {
-            throw new System.NotImplementedException();
+            // На персонажа нет влияния
         }
     }
 }

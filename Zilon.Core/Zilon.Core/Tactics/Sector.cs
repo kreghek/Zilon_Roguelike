@@ -66,8 +66,26 @@ namespace Zilon.Core.Tactics
 
             UpdateSurvivals();
 
+            UpdateActorEffects();
+
             // Определяем, не покинули ли актёры игрока сектор.
             DetectSectorExit();
+        }
+
+        private void UpdateActorEffects()
+        {
+            foreach (var actor in _actorManager.Actors)
+            {
+                var effects = actor.Person.Effects;
+                foreach (var effect in effects)
+                {
+                    var actorEffect = effect as IActorStateEffect;
+                    if (actorEffect != null)
+                    {
+                        actorEffect.Apply(actor.State);
+                    }
+                }
+            }
         }
 
         private void UpdateSurvivals()
