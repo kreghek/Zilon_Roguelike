@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Zilon.Scripts;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
@@ -16,6 +17,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 	public PropItemVm PropItemPrefab;
 	public Transform EquipmentSlotsParent;
 	public InventorySlotVm EquipmentSlotPrefab;
+	public GameObject UseButton;
+	public Text DetailText;
 
 	[NotNull] [Inject] private DiContainer _diContainer;
 	[NotNull] [Inject] private IInventoryState _inventoryState;
@@ -87,7 +90,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
 	public void CancelChanges()
 	{
-		throw new System.NotImplementedException();
+		throw new NotImplementedException();
 	}
 	
 	private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
@@ -117,6 +120,12 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 			itemVm.SetSelectedState(isSelected);
 		}
 
+		var canUseProp = currentItemVm.Prop.Scheme.Use != null;
+		UseButton.SetActive(canUseProp);
+
+		var propTitle = currentItemVm.Prop.Scheme.Name.Ru ?? currentItemVm.Prop.Scheme.Name.En;
+		DetailText.text = propTitle;
+		
 		_inventoryState.SelectedProp = currentItemVm;
 	}
 }

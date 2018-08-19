@@ -392,8 +392,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 652807816}
   - {fileID: 619487361}
+  - {fileID: 652807816}
   m_Father: {fileID: 227365885}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -660,7 +660,7 @@ RectTransform:
   - {fileID: 284634006}
   - {fileID: 2057190881}
   m_Father: {fileID: 269743641}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2356,6 +2356,10 @@ Prefab:
     - target: {fileID: 1298123690866902, guid: a9f7f5629d4bd3243a95fb1d88123a2b, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298123690866902, guid: a9f7f5629d4bd3243a95fb1d88123a2b, type: 2}
+      propertyPath: m_Name
+      value: Inventory_ModalDialog
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9f7f5629d4bd3243a95fb1d88123a2b, type: 2}

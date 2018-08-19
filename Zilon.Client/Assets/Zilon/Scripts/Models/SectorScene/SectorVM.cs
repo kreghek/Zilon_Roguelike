@@ -332,7 +332,7 @@ class SectorVM : MonoBehaviour
 
     private void AddTestPropsInInventory(Inventory inventory)
     {
-        var foodScheme = _schemeService.GetScheme<PropScheme>("electronics");
+        var foodScheme = _schemeService.GetScheme<PropScheme>("cheese");
         var resource = new Resource(foodScheme, 3);
         inventory.Add(resource);
 
