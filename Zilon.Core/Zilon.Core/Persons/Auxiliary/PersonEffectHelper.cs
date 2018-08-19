@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Zilon.Core.Persons.Auxiliary
@@ -48,6 +49,9 @@ namespace Zilon.Core.Persons.Auxiliary
                             case SurvivalStatHazardLevel.Max:
                                 currentTypeEffect.Level = SurvivalStatHazardLevel.Strong;
                                 break;
+
+                            default:
+                                throw new InvalidOperationException("Уровень эффекта, который не обрабатывается.");
                         }
                     }
                 }
