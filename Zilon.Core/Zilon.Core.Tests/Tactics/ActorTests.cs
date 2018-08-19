@@ -11,13 +11,13 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture()]
+    [TestFixture]
     public class ActorTests
     {
         /// <summary>
         /// Проверяет, что актёр при потере всего здоровья выстреливает событие смерти.
         /// </summary>
-        [Test()]
+        [Test]
         public void TakeDamage_FatalDamage_FiresEvent()
         {
             // ARRANGE
@@ -36,11 +36,14 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            using (var monitor = testActor.Monitor())
+            using (var monitor = testActor.State.Monitor())
             {
                 testActor.TakeDamage(1);
 
-                monitor.Should().Raise(nameof(Actor.Dead));
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IActor.State.Dead));
             }
         }
     }
