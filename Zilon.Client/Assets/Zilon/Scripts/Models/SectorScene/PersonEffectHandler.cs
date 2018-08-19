@@ -29,7 +29,7 @@ public class PersonEffectHandler : MonoBehaviour
 
 		var effects = person.Effects;
 
-		foreach (var effect in effects)
+		foreach (var effect in effects.Items)
 		{
 			var survivalHazardEffect = effect as SurvivalStatHazardEffect;
 			if (survivalHazardEffect != null)

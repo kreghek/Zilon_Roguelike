@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -30,6 +30,7 @@ namespace Zilon.Core.Persons
 
         public MonsterPerson(MonsterScheme scheme)
         {
+            Hp = 27;
             TacticalActCarrier = new TacticalActCarrier
             {
                 Acts = new ITacticalAct[] {

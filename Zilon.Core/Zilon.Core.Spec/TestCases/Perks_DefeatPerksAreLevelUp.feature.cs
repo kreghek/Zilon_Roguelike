@@ -88,6 +88,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.When("Я атакую вражеского актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
+ testRunner.And("Я атакую вражеского актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 13
  testRunner.Then("перк на убийство должен быть прокачен", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
