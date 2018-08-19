@@ -117,15 +117,5 @@ namespace Zilon.Core.Spec.Contexts
 
             return actor;
         }
-
-        private Equipment CreateEquipment(string propSid)
-        {
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var propFactory = _container.GetInstance<IPropFactory>();
-
-            var propScheme = schemeService.GetScheme<PropScheme>(propSid);
-            var equipment = propFactory.CreateEquipment(propScheme);
-            return equipment;
-        }
     }
 }

@@ -25,7 +25,7 @@ namespace Zilon.Core.Persons
             Items.Remove(effect);
 
             var args = new EffectEventArgs(effect);
-            Added?.Invoke(this, args);
+            Removed?.Invoke(this, args);
         }
 
         public event EventHandler<EffectEventArgs> Added;
