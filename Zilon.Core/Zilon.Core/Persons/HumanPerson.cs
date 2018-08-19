@@ -33,11 +33,15 @@ namespace Zilon.Core.Persons
 
         public ISurvivalData Survival { get; }
 
-        public List<IPersonEffect> Effects { get; }
+        public EffectCollection Effects { get; }
 
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+
+            Effects = new EffectCollection();
+            Effects.Added += Effects_CollectionChanged;
+            Effects.Removed += Effects_CollectionChanged;
 
             var slotCount = Scheme.SlotCount;
             EquipmentCarrier = new EquipmentCarrier(slotCount);
@@ -60,8 +64,6 @@ namespace Zilon.Core.Persons
             {
                 CalcCombatStats(CombatStats, EvolutionData);
             }
-
-            Effects = new List<IPersonEffect>();
 
             Survival = new SurvivalData();
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
@@ -106,6 +108,14 @@ namespace Zilon.Core.Persons
                     }
                 }
             }
+
+            foreach (var effect in Effects.Items)
+            {
+                if (effect is ICombatStatEffect combatStatEffect)
+                {
+                    combatStatEffect.ApplyOnce(CombatStats);
+                }
+            }
         }
 
         private static void AddStat(ICombatStats combatStats, CombatStatType targetStat, int targetValue)
@@ -134,7 +144,18 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoint);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects.Items, e.Stat, e.KeyPoint);
+        }
+
+
+        private void Effects_CollectionChanged(object sender, EffectEventArgs e)
+        {
+            ClearCombatStats((CombatStats)CombatStats);
+
+            if (EvolutionData != null)
+            {
+                CalcCombatStats(CombatStats, EvolutionData);
+            }
         }
 
         private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)

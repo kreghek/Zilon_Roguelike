@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 
 using TechTalk.SpecFlow;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
@@ -21,16 +22,34 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Есть произвольная карта")]
+        [Obsolete]
         public void GivenЕстьПроизвольнаяКарта()
         {
-            _context.CreateSector();
+            //TODO Убрать этот метод, актуализировать шаги.
+            _context.CreateSector(2);
         }
 
+        [Given(@"Есть карта размером (.*)")]
+        public void GivenЕстьКартаРазмером(int mapSize)
+        {
+            _context.CreateSector(mapSize);
+        }
+
+
         [Given(@"Есть актёр игрока")]
+        [Obsolete]
         public void GivenЕстьПерсонажИгрока()
         {
-            _context.AddHumanActor(new OffsetCoords(0, 0));
+            //TODO Убрать этот метод, актуализировать шаги.
+            _context.AddHumanActor("captain", new OffsetCoords(0, 0));
         }
+
+        [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
+        {
+            _context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
+        }
+
 
         [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
         public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
@@ -178,14 +197,14 @@ namespace Zilon.Core.Spec.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
+                var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == stat);
                 effect.Should().NotBeNull();
                 effect.Level.Should().Be(level);
             }
             else
             {
-                var effect = actor.Person.Effects.OfType<SurvivalStatHazardEffect>()
+                var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault();
                 effect.Should().BeNull();
             }
@@ -197,6 +216,27 @@ namespace Zilon.Core.Spec.Steps
             var actor = _context.GetActiveActor();
             actor.State.Hp.Should().Be(expectedHp);
         }
+
+        [Then(@"Актёр имеет характристику модуля сражения (.*) равную (.*)")]
+        public void ThenАктёрИмеетХарактристикуМодуляСраженияMeleeРавную(string combatStatName, int combatStatValue)
+        {
+            var actor = _context.GetActiveActor();
+
+            CombatStatType statType;
+            switch (combatStatName)
+            {
+                case "melee":
+                    statType = CombatStatType.Melee;
+                    break;
+
+                default:
+                    throw new NotSupportedException("Неизвестный тип характеристики модуля сражения.");
+            }
+
+            var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x=>x.Stat == statType);
+            combatStat.Value.Should().Be(combatStatValue);
+        }
+
 
 
         private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)

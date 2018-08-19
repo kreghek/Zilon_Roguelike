@@ -26,7 +26,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ISurvivalData Survival => null;
 
-        public List<IPersonEffect> Effects { get; }
+        public EffectCollection Effects { get; }
 
         public MonsterPerson(MonsterScheme scheme)
         {
@@ -37,7 +37,7 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            Effects = new List<IPersonEffect>();
+            Effects = new EffectCollection();
         }
     }
 }

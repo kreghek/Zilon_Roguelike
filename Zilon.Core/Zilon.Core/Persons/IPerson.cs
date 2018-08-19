@@ -50,6 +50,6 @@ namespace Zilon.Core.Persons
         /// </summary>
         ISurvivalData Survival { get; }
 
-        List<IPersonEffect> Effects { get; }
+        EffectCollection Effects { get; }
     }
 }

@@ -77,7 +77,7 @@ namespace Zilon.Core.Tactics
             foreach (var actor in _actorManager.Actors)
             {
                 var effects = actor.Person.Effects;
-                foreach (var effect in effects)
+                foreach (var effect in effects.Items)
                 {
                     var actorEffect = effect as IActorStateEffect;
                     if (actorEffect != null)

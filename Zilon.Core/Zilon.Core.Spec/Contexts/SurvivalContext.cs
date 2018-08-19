@@ -20,22 +20,22 @@ namespace Zilon.Core.Spec.Contexts
 {
     public class SurvivalContext : FeatureContextBase
     {
-        public void CreateSector()
+        public void CreateSector(int mapSize)
         {
-            var map = new TestGridGenMap(2);
+            var map = new TestGridGenMap(mapSize);
 
             _container.Register<IMap>(factory => map);
             _container.Register<ISector, Sector>();
         }
 
-        public void AddHumanActor(OffsetCoords startCoords)
+        public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
             var playerState = _container.GetInstance<IPlayerState>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var map = _container.GetInstance<IMap>();
             var humanTaskSource = _container.GetInstance<IHumanActorTaskSource>();
 
-            var personScheme = schemeService.GetScheme<PersonScheme>("captain");
+            var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);

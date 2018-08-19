@@ -101,6 +101,8 @@
     <Compile Include="Persons\Auxiliary\PersonEffectHelper.cs" />
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
+    <Compile Include="Persons\EffectCollection.cs" />
+    <Compile Include="Persons\EffectEventArgs.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\IActorStateEffect.cs" />
     <Compile Include="Persons\ICombatStatEffect.cs" />
