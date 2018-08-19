@@ -44,6 +44,17 @@ namespace Zilon.Core.Spec.Contexts
             return actor;
         }
 
+        public Equipment CreateEquipment(string propSid)
+        {
+            var schemeService = _container.GetInstance<ISchemeService>();
+            var propFactory = _container.GetInstance<IPropFactory>();
+
+            var propScheme = schemeService.GetScheme<PropScheme>(propSid);
+
+            var equipment = propFactory.CreateEquipment(propScheme);
+            return equipment;
+        }
+
         private void RegisterSchemeService()
         {
             _container.Register<ISchemeLocator>(factory =>

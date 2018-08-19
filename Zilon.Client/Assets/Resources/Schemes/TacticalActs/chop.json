@@ -4,8 +4,8 @@
   },
   "Stats": {
     "Efficient": {
-      "Min": 1,
-      "Max": 3
+      "Min": 10,
+      "Max": 15
     },
     "Range": {
       "Min": 1,

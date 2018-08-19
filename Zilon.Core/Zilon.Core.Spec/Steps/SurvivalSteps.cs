@@ -96,6 +96,17 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Effects.Add(effect);
         }
 
+        [Given(@"Актёр игрока экипирован (.*)")]
+        public void GivenАктёрИгрокаЭкипированEquipmentSid(string equipmentSid)
+        {
+            var actor = _context.GetActiveActor();
+            
+            var equipment = _context.CreateEquipment(equipmentSid);
+
+            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
+        }
+
+
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
@@ -236,6 +247,19 @@ namespace Zilon.Core.Spec.Steps
             var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x=>x.Stat == statType);
             combatStat.Value.Should().Be(combatStatValue);
         }
+
+        [Then(@"Тактическое умение (.*) имеет эффективность Min: (.*) Max: (.*)")]
+        public void ThenТактическоеУмениеИмеетЭффективностьMinMax(string tacticalActSid, int minEfficient, int maxEfficient)
+        {
+            var actor = _context.GetActiveActor();
+
+            var tacticalAct = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
+                .SingleOrDefault(x => x.Scheme.Sid == tacticalActSid);
+
+            tacticalAct.MinEfficient.Should().Be(minEfficient);
+            tacticalAct.MaxEfficient.Should().Be(maxEfficient);
+        }
+
 
 
 
