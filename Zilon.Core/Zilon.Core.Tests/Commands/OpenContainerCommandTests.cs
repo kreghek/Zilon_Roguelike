@@ -51,7 +51,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var command = _container.GetInstance<OpenContainerCommand>();
             var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            //var playerState = _container.GetInstance<IPlayerState>();
 
 
 
