@@ -18,7 +18,7 @@ namespace Zilon.Core.Commands
         /// Признак того, что в конце команды необходимо выполнить обновление сектора.
         /// Означает, что команда немедленно выполнить передод к следующему игровому ходу.
         /// </summary>
-        protected bool NeedToUpdateSector { get; }
+        private bool NeedToUpdateSector { get; }
 
         public abstract bool CanExecute();
 

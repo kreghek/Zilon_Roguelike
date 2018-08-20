@@ -22,12 +22,12 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Стартовая комната. Отсюда игрок будет начинать.
         /// </summary>
-        public Room StartRoom { get; set; }
+        public Room StartRoom { get; private set; }
 
         /// <summary>
         /// Комната с выходом из сектора.
         /// </summary>
-        public Room ExitRoom { get; set; }
+        public Room ExitRoom { get; private set; }
 
         public RoomGenerator(ISectorGeneratorRandomSource randomSource, StringBuilder log)
         {
@@ -206,17 +206,15 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        public void ConnectRoomsWithCorridor(IMap map, HashSet<string> edgeHash, Room room, Room selectedRoom)
+        private void ConnectRoomsWithCorridor(IMap map, HashSet<string> edgeHash, Room room, Room selectedRoom)
         {
             var currentNode = room.Nodes.First();
             var targetNode = selectedRoom.Nodes.First();
 
             var points = CubeCoordsHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
 
-            for (var i = 0; i < points.Length; i++)
+            foreach (var point in points)
             {
-                var point = points[i];
-
                 var offsetCoords = HexHelper.ConvertToOffset(point);
 
                 var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);

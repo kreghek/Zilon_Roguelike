@@ -5,7 +5,7 @@ namespace Zilon.Core.Tactics
 {
     public class FixedPropContainer : IPropContainer
     {
-        public IMapNode Node { get; private set; }
+        public IMapNode Node { get; }
 
         public IPropStore Content { get; }
 

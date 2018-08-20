@@ -14,9 +14,9 @@ namespace Zilon.Core.Tactics
             Initiative = 1;
         }
 
-        public float Hp { get; set; }
+        public float Hp { get; private set; }
 
-        public bool IsDead { get; set; }
+        public bool IsDead { get; private set; }
 
         public float Initiative { get; }
 

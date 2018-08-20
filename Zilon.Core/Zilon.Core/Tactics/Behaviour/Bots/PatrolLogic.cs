@@ -230,10 +230,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// <returns> Возвращает узел карты, представляющий следующую контрольную точку патруля. </returns>
         private IMapNode GetNextPatrolPointFromField()
         {
-            IMapNode nextPatrolPoint;
             var actualPatrolPoints = CalcActualRoutePoints();
             var nearbyPatrolPoint = CalcNearbyPatrolPoint(actualPatrolPoints);
-            nextPatrolPoint = nearbyPatrolPoint;
+            var nextPatrolPoint = nearbyPatrolPoint;
             return nextPatrolPoint;
         }
 
@@ -244,14 +243,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// <returns> Возвращает узел карты, представляющий следующую контрольную точку патруля. </returns>
         private IMapNode GetNextPatrolPointFromPatrolPoint(int currentPatrolPointIndex)
         {
-            IMapNode nextPatrolPoint;
             _patrolPointIndex = currentPatrolPointIndex + 1;
             if (_patrolPointIndex >= _patrolRoute.Points.Count())
             {
                 _patrolPointIndex = 0;
             }
 
-            nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
+            var nextPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
             return nextPatrolPoint;
         }
 

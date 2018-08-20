@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons
             DoEquipmentChanged(slotIndex, oldEquipment, equipment);
         }
 
-        protected void DoEquipmentChanged(int slotIndex,
+        private void DoEquipmentChanged(int slotIndex,
             Equipment oldEquipment,
             Equipment equipment)
         {

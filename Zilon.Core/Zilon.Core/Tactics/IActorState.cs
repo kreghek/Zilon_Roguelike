@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Состояние актёра.
         /// </summary>
-        bool IsDead { get; set; }
+        bool IsDead { get; }
 
         /// <summary>
         /// Инициатива актёра.

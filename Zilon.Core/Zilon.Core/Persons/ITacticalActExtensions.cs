@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Persons
 {
-    public static class ITacticalActExtensionscs
+    public static class ITacticalActExtensions
     {
         /// <summary>
         /// Проверяет, допустимая ли дистанция для совершения действия.

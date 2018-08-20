@@ -61,17 +61,17 @@ namespace Zilon.Core.Persons
             }
         }
 
-        protected void DoChangedProp(IProp prop)
+        private void DoChangedProp(IProp prop)
         {
             Changed?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
         }
 
-        protected void DoRemovedProp(IProp prop)
+        private void DoRemovedProp(IProp prop)
         {
             Removed?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
         }
 
-        protected void DoAddProp(IProp prop)
+        private void DoAddProp(IProp prop)
         {
             Added?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
         }

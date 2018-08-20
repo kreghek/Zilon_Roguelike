@@ -13,14 +13,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public Edge(params IMapNode[] nodes)
         {
-#pragma warning disable IDE0016 // Use 'throw' expression
-            if (nodes == null)
-            {
-                throw new ArgumentNullException(nameof(nodes), "Не указаны узлы, соединённые ребром.");
-            }
-#pragma warning restore IDE0016 // Use 'throw' expression
-
-            Nodes = nodes;
+            Nodes = nodes ?? throw new ArgumentNullException(nameof(nodes), "Не указаны узлы, соединённые ребром.");
         }
     }
 }

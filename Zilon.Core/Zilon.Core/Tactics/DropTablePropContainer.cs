@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public class DropTablePropContainer : IPropContainer
     {
-        public IMapNode Node { get; private set; }
+        public IMapNode Node { get; }
 
         public IPropStore Content { get; }
 

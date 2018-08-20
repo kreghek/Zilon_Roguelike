@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
@@ -29,21 +30,15 @@ namespace Zilon.Core.Tactics
 
         public IMap Map => _map;
 
-        public Sector(IMap map, 
-            IActorManager actorManager, 
+        public Sector(IMap map,
+            IActorManager actorManager,
             IPropContainerManager propContainerManager)
         {
-#pragma warning disable IDE0016 // Use 'throw' expression
-            if (map == null)
-            {
-                throw new ArgumentException("Не передана карта сектора.", nameof(map));
-            }
-#pragma warning restore IDE0016 // Use 'throw' expression
-
             _tasks = new List<IActorTask>();
             _taskIniComparer = new TaskIniComparer();
 
-            _map = map;
+            _map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
+
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
         }
@@ -79,8 +74,7 @@ namespace Zilon.Core.Tactics
                 var effects = actor.Person.Effects;
                 foreach (var effect in effects.Items)
                 {
-                    var actorEffect = effect as IActorStateEffect;
-                    if (actorEffect != null)
+                    if (effect is IActorStateEffect actorEffect)
                     {
                         actorEffect.Apply(actor.State);
                     }
@@ -169,7 +163,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        protected void DoActorExit()
+        private void DoActorExit()
         {
             var e = new EventArgs();
             ActorExit?.Invoke(this, e);

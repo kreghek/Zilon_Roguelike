@@ -38,6 +38,7 @@ namespace Zilon.Core.Persons
         public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+            Name = scheme.Sid;
 
             Effects = new EffectCollection();
             Effects.Added += Effects_CollectionChanged;

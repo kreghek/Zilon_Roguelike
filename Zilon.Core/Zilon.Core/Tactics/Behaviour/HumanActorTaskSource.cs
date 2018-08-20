@@ -50,14 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            //TODO Чтобы отменять текущие намерения, нужно указывать CancelIntention.
-            // Становление null для намерения происходит только изнутри, после создания задачи.
-            if (intention == null)
-            {
-                throw new ArgumentException(nameof(intention));
-            }
-
-            _currentIntesion = intention;
+            _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
         }
     }
 }

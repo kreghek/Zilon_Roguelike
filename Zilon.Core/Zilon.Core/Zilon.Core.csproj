@@ -173,7 +173,7 @@
     <Compile Include="Persons\IProp.cs" />
     <Compile Include="Persons\IPropFactory.cs" />
     <Compile Include="Persons\ITacticalActCarrier.cs" />
-    <Compile Include="Persons\ITacticalActExtensionscs.cs" />
+    <Compile Include="Persons\ITacticalActExtensions.cs" />
     <Compile Include="Persons\MonsterPerson.cs" />
     <Compile Include="Persons\PropBase.cs" />
     <Compile Include="Persons\PropFactory.cs" />

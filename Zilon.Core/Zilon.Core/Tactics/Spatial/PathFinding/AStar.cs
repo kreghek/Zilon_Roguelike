@@ -34,21 +34,6 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         private IMapNode _goal;
 
         /// <summary>
-        /// Gets the current amount of steps that the algorithm has performed.
-        /// </summary>
-        public int Steps { get; private set; }
-
-        /// <summary>
-        /// Gets the current state of the open list.
-        /// </summary>
-        public IEnumerable<IMapNode> OpenList => _openList.Values;
-
-        /// <summary>
-        /// Gets the current state of the closed list.
-        /// </summary>
-        public IEnumerable<IMapNode> ClosedList => _closedList.Values;
-
-        /// <summary>
         /// Gets the current node that the AStar algorithm is at.
         /// </summary>
         public IMapNode CurrentNode => _current;
@@ -76,7 +61,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        public void Reset(IMapNode start, IMapNode goal)
+        private void Reset(IMapNode start, IMapNode goal)
         {
             _openList.Clear();
             _closedList.Clear();
@@ -87,7 +72,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
             var currentData = GetData(_current);
             _openList.Add(_current, currentData);
-            
+
         }
 
         /// <summary>
@@ -109,9 +94,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// Moves the AStar algorithm forward one step.
         /// </summary>
         /// <returns>Returns the state the alorithm is in after the step, either Failed, GoalFound or still Searching.</returns>
-        public State Step()
+        private State Step()
         {
-            Steps++;
             while (true)
             {
                 // There are no more nodes to search, return failure.
@@ -139,7 +123,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var currentData = GetData(_current);
 
             _openList.Remove(currentData.TotalCost);
-            
+
             _closedList.Add(_current, currentData);
 
             // Found the goal, stop searching.
@@ -158,14 +142,14 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                 // If the child has already been searched (closed list) or is on
                 // the open list to be searched then do not modify its movement cost
                 // or estimated cost since they have already been set previously.
-                if (OpenList.Contains(child) || ClosedList.Contains(child))
+                if (_openList.ContainsValue(child) || _closedList.ContainsValue(child))
                 {
                     continue;
                 }
 
                 var childData = GetData(child);
                 currentData = GetData(_current);
-                
+
 
                 childData.Parent = _current;
                 childData.MovementCost = currentData.MovementCost + 1;
@@ -214,9 +198,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var currentEdgeArray = currentEdges.ToArray();
 
             var actualNeighbors = new List<HexNode>();
-            for (var i = 0; i < neighbors.Length; i++)
+            foreach (var testedNeighbor in neighbors)
             {
-                var testedNeighbor = neighbors[i];
                 var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
                 if (edge != null)
                 {

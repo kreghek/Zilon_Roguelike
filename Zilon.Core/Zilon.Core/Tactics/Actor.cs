@@ -62,7 +62,7 @@ namespace Zilon.Core.Tactics
         }
 
         public event EventHandler Moved;
- 
+
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         public event EventHandler<UsedActEventArgs> UsedAct;

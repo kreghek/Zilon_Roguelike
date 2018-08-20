@@ -14,18 +14,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public OpenContainerTask(IActor actor, IPropContainer container, IOpenContainerMethod method) : base(actor)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
-
-            _container = container;
-            _method = method;
+            _container = container ?? throw new ArgumentNullException(nameof(container));
+            _method = method ?? throw new ArgumentNullException(nameof(method));
         }
 
         protected override void ExecuteTask()
