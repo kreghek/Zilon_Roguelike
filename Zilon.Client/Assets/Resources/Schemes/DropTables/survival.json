@@ -1,0 +1,33 @@
+{
+  "Rolls": 5,
+  "Records": [
+    {
+      "SchemeSid": "cheese",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "packed-food",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "water",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "water",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": null,
+      "Weight": 70
+    }
+  ]
+}

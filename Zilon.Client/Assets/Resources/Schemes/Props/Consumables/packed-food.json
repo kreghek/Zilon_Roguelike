@@ -1,5 +1,11 @@
 {
   "Name": {
     "En": "Сухой паёк"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      "Satiety"
+    ]
   }
 }
