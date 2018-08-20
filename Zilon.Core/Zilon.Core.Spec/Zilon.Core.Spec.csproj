@@ -122,6 +122,11 @@
     </Compile>
     <Compile Include="Steps\PerksDefeatPerksAreLevelUpSteps.cs" />
     <Compile Include="Contexts\SurvivalContext.cs" />
+    <Compile Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_ConsumeMedicineToRestoreHp.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature.cs">
       <DependentUpon>Survival_ConsumeProviantToRestoreSurvivalData.feature</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -200,6 +205,10 @@
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_ConsumeMedicineToRestoreHp.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

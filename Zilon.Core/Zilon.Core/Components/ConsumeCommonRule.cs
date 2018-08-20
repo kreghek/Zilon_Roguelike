@@ -15,6 +15,11 @@
         /// <summary>
         /// Влияние на жажду персонажа.
         /// </summary>
-        Thrist
+        Thrist,
+
+        /// <summary>
+        /// Влияет на здоровье.
+        /// </summary>
+        Health
     }
 }

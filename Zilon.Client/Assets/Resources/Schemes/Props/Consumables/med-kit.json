@@ -1,5 +1,11 @@
 {
   "Name": {
     "En": "Медпакет"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      "Health"
+    ]
   }
 }

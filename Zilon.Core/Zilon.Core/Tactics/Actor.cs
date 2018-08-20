@@ -98,6 +98,9 @@ namespace Zilon.Core.Tactics
                     case ConsumeCommonRule.Thrist:
                         Person.Survival.RestoreStat(SurvivalStatType.Water, 10);
                         break;
+
+                    case ConsumeCommonRule.Health:
+                        break;
                 }
             }
 
