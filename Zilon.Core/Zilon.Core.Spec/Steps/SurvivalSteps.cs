@@ -79,6 +79,11 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
+            if (stat == null)
+            {
+                throw new InvalidOperationException($"Не найдена характеристика модуля выживания: {statName}.");
+            }
+
             stat.Value = statValue;
         }
 
@@ -210,6 +215,12 @@ namespace Zilon.Core.Spec.Steps
             {
                 var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == stat);
+
+                if (effect == null)
+                {
+                    throw new InvalidOperationException("Не найден эффект угрозы выживания.");
+                }
+
                 effect.Should().NotBeNull();
                 effect.Level.Should().Be(level);
             }
@@ -218,6 +229,11 @@ namespace Zilon.Core.Spec.Steps
                 var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault();
                 effect.Should().BeNull();
+
+                if (effect == null)
+                {
+                    throw new InvalidOperationException("Не найден эффект угрозы выживания.");
+                }
             }
         }
 
@@ -241,10 +257,16 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 default:
-                    throw new NotSupportedException("Неизвестный тип характеристики модуля сражения.");
+                    throw new NotSupportedException($"Неизвестный тип характеристики модуля сражения {combatStatName}.");
             }
 
             var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x=>x.Stat == statType);
+
+            if (combatStat == null)
+            {
+                throw new InvalidOperationException($"Не найдена характеристика модуля сражения {statType}.");
+            }
+
             combatStat.Value.Should().Be(combatStatValue);
         }
 

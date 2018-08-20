@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+
 using FluentAssertions;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -26,7 +27,8 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat {
+            var stat = new SurvivalStat
+            {
                 Type = SurvivalStatType.Satiety,
                 Value = 1,
                 KeyPoints = new[] {

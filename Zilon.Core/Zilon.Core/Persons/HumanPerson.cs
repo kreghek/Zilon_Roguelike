@@ -63,7 +63,7 @@ namespace Zilon.Core.Persons
 
             if (EvolutionData != null)
             {
-                CalcCombatStats(CombatStats, EvolutionData);
+                CalcCombatStats(CombatStats, EvolutionData, Effects);
             }
 
             Survival = new SurvivalData();
@@ -76,7 +76,7 @@ namespace Zilon.Core.Persons
             Inventory = inventory;
         }
 
-        private void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData)
+        private static void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData, EffectCollection effects)
         {
             var bonusDict = new Dictionary<CombatStatType, float>();
 
@@ -110,7 +110,7 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            foreach (var effect in Effects.Items)
+            foreach (var effect in effects.Items)
             {
                 foreach (var rule in effect.Rules)
                 {
@@ -120,7 +120,7 @@ namespace Zilon.Core.Persons
 
             foreach (var bonusItem in bonusDict)
             {
-                var stat = CombatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                var stat = combatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
                 if (stat != null)
                 {
                     stat.Value += stat.Value * bonusItem.Value;
@@ -132,7 +132,7 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            foreach (var statItem in CombatStats.Stats)
+            foreach (var statItem in combatStats.Stats)
             {
                 statItem.Value = (float)Math.Round(statItem.Value, 1);
             }
@@ -145,7 +145,7 @@ namespace Zilon.Core.Persons
         {
             bonusDict.TryGetValue(targetStatType, out float value);
 
-            var q = 0f;
+            float q;
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
@@ -173,6 +173,7 @@ namespace Zilon.Core.Persons
                     q *= -1;
                     break;
 
+                case PersonRuleDirection.Undefined:
                 default:
                     throw new NotSupportedException($"Неизветный уровень угрозы выживания {direction}.");
             }
@@ -193,7 +194,7 @@ namespace Zilon.Core.Persons
 
             if (EvolutionData != null)
             {
-                CalcCombatStats(CombatStats, EvolutionData);
+                CalcCombatStats(CombatStats, EvolutionData, Effects);
             }
         }
 
@@ -209,7 +210,7 @@ namespace Zilon.Core.Persons
 
             if (EvolutionData != null)
             {
-                CalcCombatStats(CombatStats, EvolutionData);
+                CalcCombatStats(CombatStats, EvolutionData, Effects);
             }
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
