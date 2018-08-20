@@ -28,5 +28,9 @@ namespace Zilon.Core.Tactics
         event EventHandler Dead;
 
         void TakeDamage(float value);
+
+        void SetHpForce(int hp);
+
+        void RestoreHp(float value, float max);
     }
 }

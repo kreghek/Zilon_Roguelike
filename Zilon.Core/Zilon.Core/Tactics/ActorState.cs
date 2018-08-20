@@ -22,6 +22,16 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler Dead;
 
+        public void SetHpForce(int hp)
+        {
+            if (hp == 0)
+            {
+                throw new ArgumentException(nameof(hp));
+            }
+
+            Hp = hp;
+        }
+
         public void TakeDamage(float value)
         {
             Hp -= value;
@@ -30,6 +40,16 @@ namespace Zilon.Core.Tactics
             {
                 IsDead = true;
                 Dead?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public void RestoreHp(float value, float max)
+        {
+            Hp += value;
+
+            if (Hp > max)
+            {
+                Hp = max;
             }
         }
     }

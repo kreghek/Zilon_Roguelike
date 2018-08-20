@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string equipmentSid, string moveDistance, string expectedEffect, string combatStat, string combatStatValue, string[] exampleTags)
+        public virtual void УпотреблениеМедикаметовДляВосстановленияHp_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string startHp, string propSid, string propCount, string expectedHpValue, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -86,46 +86,26 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке ({1}, {2})", personSid, actorNodeX, actorNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And("Актёр имеет Hp: 100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Актёр игрока имеет Hp: {0}", startHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And("В инвентаре у актёра есть еда: <propSid> количество: <propCount>", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("В инвентаре у актёра есть еда: {0} количество: {1}", propSid, propCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.When("Актёр использует предмет <propSid> на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("Значение Hp повысилось равно <expectedHpValue>", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("Значение Hp равно {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 14
- testRunner.And("Предмет <propSid> отсутствует в инвентаре актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Предмет {0} отсутствует в инвентаре актёра", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., Variant 0", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 2", new string[] {
                 "survival",
                 "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__Variant0()
+        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__2()
         {
 #line 7
-this.УпотреблениеМедикаметовДляВосстановленияHp_("2", "captain", "0", "0", "short-sword", "50", "Слабый голод", "melee", "8", ((string[])(null)));
-#line hidden
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., Variant 1", new string[] {
-                "survival",
-                "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__Variant1()
-        {
-#line 7
-this.УпотреблениеМедикаметовДляВосстановленияHp_("2", "captain", "0", "0", "short-sword", "75", "Голод", "melee", "4", ((string[])(null)));
-#line hidden
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., Variant 2", new string[] {
-                "survival",
-                "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__Variant2()
-        {
-#line 7
-this.УпотреблениеМедикаметовДляВосстановленияHp_("2", "captain", "0", "0", "short-sword", "100", "Голодание", "melee", "1", ((string[])(null)));
+this.УпотреблениеМедикаметовДляВосстановленияHp_("2", "captain", "0", "0", "100", "med-kit", "1", "110", ((string[])(null)));
 #line hidden
         }
         

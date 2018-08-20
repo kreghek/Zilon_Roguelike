@@ -112,6 +112,14 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
         }
 
+        [Given(@"Актёр игрока имеет Hp: (.*)")]
+        public void GivenАктёрИмеетHp(int startHp)
+        {
+            var actor = _context.GetActiveActor();
+            actor.State.SetHpForce(startHp);
+        }
+
+
 
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
@@ -274,6 +282,15 @@ namespace Zilon.Core.Spec.Steps
             tacticalAct.MinEfficient.Should().Be(minEfficient);
             tacticalAct.MaxEfficient.Should().Be(maxEfficient);
         }
+
+        [Then(@"Значение Hp равно (.*)")]
+        public void ThenЗначениеHpРавно(int p0)
+        {
+            var actor = _context.GetActiveActor();
+
+            actor.State.Hp.Should().Be(p0);
+        }
+
 
 
 

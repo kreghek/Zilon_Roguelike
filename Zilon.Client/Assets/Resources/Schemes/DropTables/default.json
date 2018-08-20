@@ -1,303 +1,41 @@
 {
-  "Rolls": 2,
+  "Rolls": 1,
   "Records": [
     {
-      "SchemeSid": "bullet-shell",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "bullet",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "cloth",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "coal",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "copper",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "detail",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "deuterium-water",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "diorite",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 16
-    },
-    {
-      "SchemeSid": "electronic-display",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "electronics",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "fabric",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "fire-eye",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "glass",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "gold",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "iron-bar",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "iron-ore",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "iron-plate",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "jink",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "machinegun-frame",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 2
-    },
-    {
-      "SchemeSid": "nitre",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "normal-salt",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "plastic-bar",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "powder",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "butt",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "gun-frame",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "silver",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "steel-bar",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "strong-fuel",
-      "MinCount": 1,
-      "MaxCount": 3,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "termos",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "religion-encyclica",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "zirkular-engineer",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "magnesite",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "manganese",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "niobium",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "opalus",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "plumbum",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "tantalum",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "titanium",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-    {
-      "SchemeSid": "zincum",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-
-
-    {
-      "SchemeSid": "med-kit",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 30
-    },
-    {
-      "SchemeSid": "packed-food",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 30
-    },
-
-    {
-      "SchemeSid": "aurichalcum",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 3
-    },
-
-    {
-      "SchemeSid": "bata-metal",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 3
-    },
-
-    {
-      "SchemeSid": "power-core",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 3
-    },
-
-    {
-      "SchemeSid": "assault-rifle-artefact1",
+      "SchemeSid": "battle-axe",
       "MinPower": 1,
-      "MaxPower": 3,
-      "Weight": 1
+      "MaxPower": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "gold-armor",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
     },
 
     {
-      "SchemeSid": "assault-rifle-artefact2",
+      "SchemeSid": "gold-helmet",
       "MinPower": 1,
-      "MaxPower": 3,
-      "Weight": 1
+      "MaxPower": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "pistol",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "short-sword",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
     },
 
     {
       "SchemeSid": null,
-      "Weight": 35000
+      "Weight": 350
     }
   ]
 }

@@ -17,13 +17,13 @@
       "SchemeSid": "water",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 3
+      "Weight": 6
     },
     {
-      "SchemeSid": "water",
+      "SchemeSid": "med-kit",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 3
+      "Weight": 6
     },
     {
       "SchemeSid": null,
