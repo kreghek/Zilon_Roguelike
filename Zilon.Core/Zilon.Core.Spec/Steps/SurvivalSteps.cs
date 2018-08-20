@@ -200,7 +200,7 @@ namespace Zilon.Core.Spec.Steps
             var actor = _context.GetActiveActor();
 
             var propsInInventory = actor.Person.Inventory.CalcActualItems();
-            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeNull();
         }
