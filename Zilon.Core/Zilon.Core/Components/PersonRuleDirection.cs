@@ -2,8 +2,6 @@
 {
     public enum PersonRuleDirection
     {
-        Undefined,
-
         Positive = 1,
 
         Negative = -1

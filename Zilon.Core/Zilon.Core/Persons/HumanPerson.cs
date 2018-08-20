@@ -173,7 +173,6 @@ namespace Zilon.Core.Persons
                     q *= -1;
                     break;
 
-                case PersonRuleDirection.Undefined:
                 default:
                     throw new NotSupportedException($"Неизветный уровень угрозы выживания {direction}.");
             }
