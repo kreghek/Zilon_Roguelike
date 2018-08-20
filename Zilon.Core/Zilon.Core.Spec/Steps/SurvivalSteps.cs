@@ -7,50 +7,18 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Spec.Steps
 {
     [Binding]
-    public class SurvivalSteps
+    public class SurvivalSteps : GenericStepsBase<CommonGameActionsContext>
     {
-        private readonly SurvivalContext _context;
-
-        public SurvivalSteps(SurvivalContext context)
+        public SurvivalSteps(CommonGameActionsContext context) : base(context)
         {
-            _context = context;
         }
-
-        [Given(@"Есть произвольная карта")]
-        [Obsolete]
-        public void GivenЕстьПроизвольнаяКарта()
-        {
-            //TODO Убрать этот метод, актуализировать шаги.
-            _context.CreateSector(2);
-        }
-
-        [Given(@"Есть карта размером (.*)")]
-        public void GivenЕстьКартаРазмером(int mapSize)
-        {
-            _context.CreateSector(mapSize);
-        }
-
-
-        [Given(@"Есть актёр игрока")]
-        [Obsolete]
-        public void GivenЕстьПерсонажИгрока()
-        {
-            //TODO Убрать этот метод, актуализировать шаги.
-            _context.AddHumanActor("captain", new OffsetCoords(0, 0));
-        }
-
-        [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
-        {
-            _context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
-        }
-
 
         [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
         public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
@@ -58,6 +26,47 @@ namespace Zilon.Core.Spec.Steps
             var actor = _context.GetActiveActor();
             _context.AddResourceToActor(propSid, count, actor);
         }
+
+        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп) - (.*)\)")]
+        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
+            string provisionStat, 
+            int provisitonEfficient)
+        {
+            var actor = _context.GetActiveActor();
+
+            ConsumeCommonRule consumeRule;
+
+            switch (provisionStat)
+            {
+                case "сытость":
+                    consumeRule = ConsumeCommonRule.Satiety;
+                    break;
+
+                case "вода":
+                    consumeRule = ConsumeCommonRule.Thrist;
+                    break;
+
+                case "хп":
+                    consumeRule = ConsumeCommonRule.Health;
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+
+            var propScheme = new PropScheme {
+                Sid = propSid,
+                Use = new PropUseSubScheme
+                {
+                    Consumable = true,
+                    CommonRules = new[] { consumeRule },
+                    Value = provisitonEfficient
+                }
+            };
+
+            _context.AddResourceToActor(propScheme, 1, actor);
+        }
+
 
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
@@ -101,25 +110,6 @@ namespace Zilon.Core.Spec.Steps
 
             actor.Person.Effects.Add(effect);
         }
-
-        [Given(@"Актёр игрока экипирован (.*)")]
-        public void GivenАктёрИгрокаЭкипированEquipmentSid(string equipmentSid)
-        {
-            var actor = _context.GetActiveActor();
-
-            var equipment = _context.CreateEquipment(equipmentSid);
-
-            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
-        }
-
-        [Given(@"Актёр игрока имеет Hp: (.*)")]
-        public void GivenАктёрИмеетHp(int startHp)
-        {
-            var actor = _context.GetActiveActor();
-            actor.State.SetHpForce(startHp);
-        }
-
-
 
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
@@ -201,18 +191,6 @@ namespace Zilon.Core.Spec.Steps
             }
         }
 
-
-        [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
-        public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
-        {
-            var actor = _context.GetActiveActor();
-
-            var propsInInventory = actor.Person.Inventory.CalcActualItems();
-            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
-
-            testedProp.Should().BeNull();
-        }
-
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
         {
@@ -236,13 +214,6 @@ namespace Zilon.Core.Spec.Steps
                 var effects = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>();
                 effects.Should().BeEmpty();
             }
-        }
-
-        [Then(@"Актёр имеет задас hp (.*)")]
-        public void ThenАктёрИмеетЗадасHp(int expectedHp)
-        {
-            var actor = _context.GetActiveActor();
-            actor.State.Hp.Should().Be(expectedHp);
         }
 
         [Then(@"Актёр имеет характристику модуля сражения (.*) равную (.*)")]
@@ -282,17 +253,6 @@ namespace Zilon.Core.Spec.Steps
             tacticalAct.MinEfficient.Should().Be(minEfficient);
             tacticalAct.MaxEfficient.Should().Be(maxEfficient);
         }
-
-        [Then(@"Значение Hp равно (.*)")]
-        public void ThenЗначениеHpРавно(int p0)
-        {
-            var actor = _context.GetActiveActor();
-
-            actor.State.Hp.Should().Be(p0);
-        }
-
-
-
 
 
         private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)

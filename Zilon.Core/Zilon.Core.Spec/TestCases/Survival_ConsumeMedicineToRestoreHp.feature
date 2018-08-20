@@ -5,14 +5,14 @@
 
 @survival @dev0
 Scenario Outline: Употребление медикаметов для восстановления Hp.
-	Given Есть карта размером <mapSize>
-	And Есть актёр игрока класса <personSid> в ячейке (<actorNodeX>, <actorNodeY>)
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
 	And Актёр игрока имеет Hp: <startHp>
 	And В инвентаре у актёра есть еда: <propSid> количество: <propCount>
 	When Актёр использует предмет <propSid> на себя
-	Then Значение Hp равно <expectedHpValue>
+	Then Актёр игрока имеет запас hp <expectedHpValue>
 	And Предмет <propSid> отсутствует в инвентаре актёра
 
 Examples: 
-	| mapSize | personSid | actorNodeX | actorNodeY | startHp | propSid | propCount | expectedHpValue |
-	| 2       | captain   | 0          | 0          | 100     | med-kit | 1         | 110             | 
+	| startHp | propSid | propCount | expectedHpValue |
+	| 10      | med-kit | 1         | 60              | 

@@ -91,6 +91,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\FeatureContextBase.cs" />
+    <Compile Include="Steps\CommonSteps.cs" />
+    <Compile Include="Steps\MoveSteps.cs" />
+    <Compile Include="Steps\GenericStepsBase.cs" />
     <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,13 +118,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Fight_ShootingDecreaseBullets.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Move_CantMoveThroughMonsters.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Move_CantMoveThroughMonsters.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\PerksDefeatPerksAreLevelUpSteps.cs" />
-    <Compile Include="Contexts\SurvivalContext.cs" />
+    <Compile Include="Contexts\CommonGameActionsContext.cs" />
     <Compile Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +209,10 @@
     <None Include="TestCases\Fight_ShootingDecreaseBullets.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Fight_ShootingDecreaseBullets.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Move_CantMoveThroughMonsters.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Move_CantMoveThroughMonsters.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

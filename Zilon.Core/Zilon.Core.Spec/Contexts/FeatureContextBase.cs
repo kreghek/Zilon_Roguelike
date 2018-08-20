@@ -1,6 +1,11 @@
 ﻿using System.Configuration;
+using System.Linq;
+
+using JetBrains.Annotations;
 
 using LightInject;
+
+using Moq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -11,6 +16,8 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Contexts
 {
@@ -36,6 +43,14 @@ namespace Zilon.Core.Spec.Contexts
             InitClientServices();
         }
 
+        public void CreateSector(int mapSize)
+        {
+            var map = new TestGridGenMap(mapSize);
+
+            Container.Register<IMap>(factory => map);
+            Container.Register<ISector, Sector>();
+        }
+
         public IActor GetActiveActor()
         {
             var playerState = Container.GetInstance<IPlayerState>();
@@ -52,6 +67,72 @@ namespace Zilon.Core.Spec.Contexts
 
             var equipment = propFactory.CreateEquipment(propScheme);
             return equipment;
+        }
+
+        public void AddHumanActor(string personSid, OffsetCoords startCoords)
+        {
+            var playerState = Container.GetInstance<IPlayerState>();
+            var schemeService = Container.GetInstance<ISchemeService>();
+            var map = Container.GetInstance<IMap>();
+            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
+
+            var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
+
+            // Подготовка актёров
+            var humanStartNode = map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var humanActor = CreateHumanActor(HumanPlayer, personScheme, humanStartNode);
+
+            humanTaskSource.SwitchActor(humanActor);
+
+            var humanActroViewModelMock = new Mock<IActorViewModel>();
+            humanActroViewModelMock.SetupGet(x => x.Actor).Returns(humanActor);
+            var humanActroViewModel = humanActroViewModelMock.Object;
+            playerState.ActiveActor = humanActroViewModel;
+        }
+
+        public void AddResourceToActor(string resourceSid, int count, IActor actor)
+        {
+            var schemeService = Container.GetInstance<ISchemeService>();
+
+            var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
+
+            AddResourceToActor(resourceScheme, 1, actor);
+        }
+
+        public void AddResourceToActor(PropScheme resourceScheme, int count, IActor actor)
+        {
+            var resource = new Resource(resourceScheme, count);
+
+            actor.Person.Inventory.Add(resource);
+        }
+
+
+        private IActor CreateHumanActor([NotNull] IPlayer player,
+            [NotNull] PersonScheme personScheme,
+            [NotNull] IMapNode startNode)
+        {
+            var actorManager = Container.GetInstance<IActorManager>();
+            var schemeService = Container.GetInstance<ISchemeService>();
+
+            var evolutionData = new EvolutionData(schemeService);
+
+            var inventory = new Inventory();
+
+            var person = new HumanPerson(personScheme, evolutionData, inventory);
+
+            var actor = new Actor(person, player, startNode);
+
+            actorManager.Add(actor);
+
+            // Указываем экипировку по умолчанию.
+            var equipment = CreateEquipment("short-sword");
+            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
+
+            // Второе оружие в инвернтаре
+            var pistolEquipment = CreateEquipment("pistol");
+            inventory.Add(pistolEquipment);
+
+            return actor;
         }
 
         private void RegisterSchemeService()

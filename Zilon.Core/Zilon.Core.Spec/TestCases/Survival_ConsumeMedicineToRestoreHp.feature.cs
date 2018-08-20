@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string startHp, string propSid, string propCount, string expectedHpValue, string[] exampleTags)
+        public virtual void УпотреблениеМедикаметовДляВосстановленияHp_(string startHp, string propSid, string propCount, string expectedHpValue, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -82,9 +82,9 @@ namespace Zilon.Core.Spec.TestCases
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given(string.Format("Есть карта размером {0}", mapSize), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке ({1}, {2})", personSid, actorNodeX, actorNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
  testRunner.And(string.Format("Актёр игрока имеет Hp: {0}", startHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
@@ -92,20 +92,20 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then(string.Format("Значение Hp равно {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("Актёр игрока имеет запас hp {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 14
  testRunner.And(string.Format("Предмет {0} отсутствует в инвентаре актёра", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 2", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 10", new string[] {
                 "survival",
                 "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__2()
+        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__10()
         {
 #line 7
-this.УпотреблениеМедикаметовДляВосстановленияHp_("2", "captain", "0", "0", "100", "med-kit", "1", "110", ((string[])(null)));
+this.УпотреблениеМедикаметовДляВосстановленияHp_("10", "med-kit", "1", "60", ((string[])(null)));
 #line hidden
         }
         

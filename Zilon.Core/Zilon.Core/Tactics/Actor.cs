@@ -87,20 +87,26 @@ namespace Zilon.Core.Tactics
         {
             var useData = usedProp.Scheme.Use;
 
+            var efficient = 50;
+            if (useData.Value > 0)
+            {
+                efficient = useData.Value;
+            }
+
             foreach (var rule in useData.CommonRules)
             {
                 switch (rule)
                 {
                     case ConsumeCommonRule.Satiety:
-                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, 50);
+                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, efficient);
                         break;
 
                     case ConsumeCommonRule.Thrist:
-                        Person.Survival.RestoreStat(SurvivalStatType.Water, 50);
+                        Person.Survival.RestoreStat(SurvivalStatType.Water, efficient);
                         break;
 
                     case ConsumeCommonRule.Health:
-                        State.RestoreHp(50, Person.Hp);
+                        State.RestoreHp(efficient, Person.Hp);
                         break;
                 }
             }

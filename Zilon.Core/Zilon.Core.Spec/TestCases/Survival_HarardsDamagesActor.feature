@@ -5,11 +5,11 @@
 
 @survival @dev0
 Scenario Outline: Эффекты угроз выживания наносят урон актёру.
-	Given Есть произвольная карта
-	And Есть актёр игрока
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
 	And Актёр имеет эффект <startEffect>
 	When Я перемещаю персонажа на <moveDistance> клетку
-	Then Актёр имеет задас hp <expectedHpValue>
+	Then Актёр игрока имеет запас hp <expectedHpValue>
 
 	Examples: 
 	| startEffect   | moveDistance | expectedHpValue |

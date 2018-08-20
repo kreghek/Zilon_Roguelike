@@ -16,5 +16,8 @@ namespace Zilon.Core.Schemes
         /// Общие правила влияния.
         /// </summary>
         public ConsumeCommonRule[] CommonRules { get; set; }
+
+        //TODO Убрать, когда будут мысли, как можно задавать конкретные числа для правил
+        public int Value { get; set; }
     }
 }

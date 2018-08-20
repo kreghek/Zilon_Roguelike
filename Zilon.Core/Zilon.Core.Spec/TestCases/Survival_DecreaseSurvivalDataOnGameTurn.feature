@@ -5,8 +5,8 @@
 
 @survival @dev0
 Scenario Outline: Падение показателей выживания каждый игровой ход
-	Given Есть произвольная карта
-	And Есть актёр игрока
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
 	When Я перемещаю персонажа на <moveDistance> клетку
 	Then Значение <stat> уменьшилось на <statRate> и стало <expectedStatValue>
 
