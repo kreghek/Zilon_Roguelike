@@ -157,17 +157,14 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        var propScheme = _schemeService.GetScheme<PropScheme>("short-sword");
         var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
 
-        var playerEquipment = _propFactory.CreateEquipment(propScheme);
         var playerActorStartNode = sectorGenerator.StartNodes.First();
         var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
             playerActorStartNode,
-            nodeVMs,
-            playerEquipment);
+            nodeVMs);
 
         _playerState.ActiveActor = playerActorVm;
 
@@ -262,8 +259,7 @@ class SectorVM : MonoBehaviour
         [NotNull] PersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
-        [NotNull] IEnumerable<MapNodeVM> nodeVMs,
-        [NotNull] Equipment equipment)
+        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         var inventory = new Inventory();
         
@@ -271,10 +267,6 @@ class SectorVM : MonoBehaviour
         evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
         
         var person = new HumanPerson(personScheme, evolutionData, inventory);
-
-        person.EquipmentCarrier.SetEquipment(equipment, 0);
-       
-        AddTestPropsInInventory(inventory);
 
         var actor = new Actor(person, player, startNode);
         
@@ -328,17 +320,6 @@ class SectorVM : MonoBehaviour
         var bullet = Instantiate(BulletPrefab, transform);
         bullet.StartObject = ((MonoBehaviour)actorViewModel).gameObject;
         bullet.FinishObject = ((MonoBehaviour)targetViewModel).gameObject;
-    }
-
-    private void AddTestPropsInInventory(IPropStore inventory)
-    {
-        var foodScheme = _schemeService.GetScheme<PropScheme>("cheese");
-        var resource = new Resource(foodScheme, 3);
-        inventory.Add(resource);
-
-        var pistolScheme = _schemeService.GetScheme<PropScheme>("pistol");
-        var pistolEquipment = _propFactory.CreateEquipment(pistolScheme);
-        inventory.Add(pistolEquipment);
     }
 
     private void MapNodeVm_OnSelect(object sender, EventArgs e)

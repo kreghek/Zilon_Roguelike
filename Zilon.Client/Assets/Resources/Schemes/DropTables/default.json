@@ -5,37 +5,37 @@
       "SchemeSid": "battle-axe",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 3
+      "Weight": 10
     },
     {
       "SchemeSid": "gold-armor",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 3
+      "Weight": 10
     },
 
     {
       "SchemeSid": "gold-helmet",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 3
+      "Weight": 10
     },
     {
       "SchemeSid": "pistol",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 3
+      "Weight": 10
     },
     {
       "SchemeSid": "short-sword",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 3
+      "Weight": 10
     },
 
     {
       "SchemeSid": null,
-      "Weight": 350
+      "Weight": 200
     }
   ]
 }
