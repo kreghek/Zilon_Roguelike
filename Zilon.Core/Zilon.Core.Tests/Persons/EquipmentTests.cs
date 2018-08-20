@@ -27,7 +27,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            Action act = () => {
+            Action act = () =>
+            {
                 var equipment = new Equipment(scheme, acts);
             };
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -98,7 +99,10 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"У актёра игрока прогресс перка на убийство (.*) из (.*)")]
         public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int p0, int p1)
         {
-            var perk = _humanActor.Person.EvolutionData.Perks.SingleOrDefault(x => x.Scheme.Sid == "battle-dogmas");
+            const string perkSid = "battle-dogmas";
+
+            var perk = _humanActor.Person.EvolutionData.Perks.Single(x => x.Scheme.Sid == perkSid);
+
             perk.CurrentJobs[0].Progress = p0;
         }
         

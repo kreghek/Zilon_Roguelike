@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -61,15 +62,17 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         {
             //ARRANGE
 
+            const SurvivalStatType expectedSurvivalHazardType = SurvivalStatType.Satiety;
+
             var currentEffects = new EffectCollection();
 
-            var testedEffect = new SurvivalStatHazardEffect(SurvivalStatType.Satiety, SurvivalStatHazardLevel.Lesser);
+            var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType, SurvivalStatHazardLevel.Lesser);
 
             currentEffects.Add(testedEffect);
 
             var stat = new SurvivalStat
             {
-                Type = SurvivalStatType.Satiety,
+                Type = expectedSurvivalHazardType,
                 Value = -5,
                 KeyPoints = new[] {
                     new SurvivalStatKeyPoint{
@@ -91,8 +94,9 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
 
             // ASSERT
-            var factEffect = currentEffects.Items.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var factEffect = currentEffects.Items
+                .OfType<SurvivalStatHazardEffect>()
+                .Single(x => x.Type == expectedSurvivalHazardType);
 
             factEffect.Level.Should().Be(SurvivalStatHazardLevel.Lesser);
         }

@@ -23,10 +23,10 @@ namespace Zilon.Core.Tests.Client
             // ARRANGE
             const int expectedCount = 1;
 
-            var props = new IProp[] { };
+            var props = new IProp[0];
             var realStore = CreateContainer(props);
 
-            var testedScheme = new PropScheme { };
+            var testedScheme = new PropScheme();
             var testedResource = new Resource(testedScheme, expectedCount);
 
             var propTransferStore = new PropTransferStore(realStore);
@@ -64,7 +64,7 @@ namespace Zilon.Core.Tests.Client
             const int inventoryCount = 1;
             const int expectedCount = 1;
 
-            var testedScheme = new PropScheme { };
+            var testedScheme = new PropScheme();
 
             var props = new IProp[] {
                 new Resource(testedScheme, inventoryCount)
@@ -100,7 +100,7 @@ namespace Zilon.Core.Tests.Client
             const int testedCount = 1;
             const int expectedCount = inventoryCount + testedCount;
 
-            var testedScheme = new PropScheme { };
+            var testedScheme = new PropScheme();
 
             var props = new IProp[] {
                 new Resource(testedScheme, inventoryCount)

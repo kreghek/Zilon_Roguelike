@@ -16,14 +16,14 @@ namespace Zilon.Core.Spec.Contexts
 {
     public abstract class FeatureContextBase
     {
-        protected readonly ServiceContainer _container;
+        protected readonly ServiceContainer Container;
 
-        protected HumanPlayer _humanPlayer;
+        protected HumanPlayer HumanPlayer;
 
         protected FeatureContextBase()
         {
-            _container = new ServiceContainer();
-            _container.SetDefaultLifetime<PerContainerLifetime>();
+            Container = new ServiceContainer();
+            Container.SetDefaultLifetime<PerContainerLifetime>();
 
             RegisterSchemeService();
             RegisterSectorService();
@@ -38,15 +38,15 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetActiveActor()
         {
-            var playerState = _container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<IPlayerState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
 
         public Equipment CreateEquipment(string propSid)
         {
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var propFactory = _container.GetInstance<IPropFactory>();
+            var schemeService = Container.GetInstance<ISchemeService>();
+            var propFactory = Container.GetInstance<IPropFactory>();
 
             var propScheme = schemeService.GetScheme<PropScheme>(propSid);
 
@@ -56,7 +56,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterSchemeService()
         {
-            _container.Register<ISchemeLocator>(factory =>
+            Container.Register<ISchemeLocator>(factory =>
             {
                 var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
 
@@ -65,15 +65,15 @@ namespace Zilon.Core.Spec.Contexts
                 return schemeLocator;
             }, new PerContainerLifetime());
 
-            _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+            Container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
 
-            _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+            Container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
         }
 
         private void RegisterSectorService()
         {
-            _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
-            _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());            
+            Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
         }
 
         /// <summary>
@@ -81,40 +81,40 @@ namespace Zilon.Core.Spec.Contexts
         /// </summary>
         private void RegisterAuxServices()
         {
-            _container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
-            _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
-            _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
+            Container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
+            Container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
+            Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
+            Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices()
         {
-            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
-            _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
+            Container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
         private void RegisterCommands()
         {
-            _container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
-            _container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
+            Container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
+            Container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
         }
 
         private void RegisterTaskSources()
         {
-            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
+            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
         }
 
         private void InitPlayers()
         {
-            _humanPlayer = new HumanPlayer();
+            HumanPlayer = new HumanPlayer();
         }
 
         private void InitClientServices()
         {
-            var humanTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
+            var playerState = Container.GetInstance<IPlayerState>();
 
             playerState.TaskSource = humanTaskSource;
         }

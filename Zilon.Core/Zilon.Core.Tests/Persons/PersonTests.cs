@@ -1,7 +1,11 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+
+using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
-using System.Linq;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
@@ -42,7 +46,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var equipment = new Equipment(propScheme, new []{ tacticalActScheme });
+            var equipment = new Equipment(propScheme, new[] { tacticalActScheme });
 
             const int expectedSlotIndex = 0;
 
@@ -62,7 +66,8 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при получении перка характеристики персонажа пересчитываются.
         /// </summary>
         [Test]
-        public void HumanPerson_PerkLeveledUp_StatsRecalculated() {
+        public void HumanPerson_PerkLeveledUp_StatsRecalculated()
+        {
 
             // ARRANGE
             var personScheme = new PersonScheme
@@ -72,7 +77,8 @@ namespace Zilon.Core.Tests.Persons
 
             var perkMock = new Mock<IPerk>();
             perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
-            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme {
+            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme
+            {
                 Levels = new[] {
                     new PerkLevelSubScheme{
                         Rules = new []{
@@ -88,7 +94,7 @@ namespace Zilon.Core.Tests.Persons
 
             var evolutionDataMock = new Mock<IEvolutionData>();
             evolutionDataMock.SetupGet(x => x.Perks)
-                .Returns(new IPerk[] { perk });
+                .Returns(new[] { perk });
             var evolutionData = evolutionDataMock.Object;
 
 

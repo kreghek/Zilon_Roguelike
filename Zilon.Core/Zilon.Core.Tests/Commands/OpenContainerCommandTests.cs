@@ -61,7 +61,7 @@ namespace Zilon.Core.Tests.Commands
 
 
             // ASSERT
-            var target = ((IContainerViewModel)playerState.HoverViewModel).Container;
+            //var target = ((IContainerViewModel)playerState.HoverViewModel).Container;
             //humanTaskSourceMock.Verify(x => x.IntentOpenContainer(target, It.IsAny<IOpenContainerMethod>()));
             humanTaskSourceMock.Verify(x => x.Intent(null));
         }

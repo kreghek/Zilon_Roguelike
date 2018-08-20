@@ -24,22 +24,22 @@ namespace Zilon.Core.Spec.Contexts
         {
             var map = new TestGridGenMap(mapSize);
 
-            _container.Register<IMap>(factory => map);
-            _container.Register<ISector, Sector>();
+            Container.Register<IMap>(factory => map);
+            Container.Register<ISector, Sector>();
         }
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = _container.GetInstance<IPlayerState>();
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var map = _container.GetInstance<IMap>();
-            var humanTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var playerState = Container.GetInstance<IPlayerState>();
+            var schemeService = Container.GetInstance<ISchemeService>();
+            var map = Container.GetInstance<IMap>();
+            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
 
             var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(HumanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -51,20 +51,24 @@ namespace Zilon.Core.Spec.Contexts
 
         public void MoveOnceActiveActor(OffsetCoords targetCoords)
         {
-            var playerState = _container.GetInstance<IPlayerState>();
-            var moveCommand = _container.GetInstance<ICommand>("move");
-            var map = _container.GetInstance<IMap>();
+            var playerState = Container.GetInstance<IPlayerState>();
+            var moveCommand = Container.GetInstance<ICommand>("move");
+            var map = Container.GetInstance<IMap>();
 
             var targetNode = map.Nodes.Cast<HexNode>().SelectBy(targetCoords.X, targetCoords.Y);
-            var nodeViewModel = new TestNodeViewModel();
-            nodeViewModel.Node = targetNode;
+            var nodeViewModel = new TestNodeViewModel
+            {
+                Node = targetNode
+            };
+
             playerState.HoverViewModel = nodeViewModel;
+
             moveCommand.Execute();
         }
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
-            var schemeService = _container.GetInstance<ISchemeService>();
+            var schemeService = Container.GetInstance<ISchemeService>();
 
             var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
 
@@ -75,8 +79,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public void UsePropByActiveActor(string propSid)
         {
-            var useSelfCommand = _container.GetInstance<ICommand>("use-self");
-            var inventoryState = _container.GetInstance<IInventoryState>();
+            var useSelfCommand = Container.GetInstance<ICommand>("use-self");
+            var inventoryState = Container.GetInstance<IInventoryState>();
             var actor = GetActiveActor();
 
             var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
@@ -94,8 +98,8 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)
         {
-            var actorManager = _container.GetInstance<IActorManager>();
-            var schemeService = _container.GetInstance<ISchemeService>();
+            var actorManager = Container.GetInstance<IActorManager>();
+            var schemeService = Container.GetInstance<ISchemeService>();
 
             var evolutionData = new EvolutionData(schemeService);
 

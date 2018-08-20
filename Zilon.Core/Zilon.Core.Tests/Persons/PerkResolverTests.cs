@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.Persons
 
             var progressMock = new Mock<IJobProgress>();
             progressMock.Setup(x => x.ApplyToJobs(It.IsAny<IEnumerable<IJob>>()))
-                .Returns(new IJob[] { perkJob });
+                .Returns(new[] { perkJob });
             var progress = progressMock.Object;
 
             var perkMock = new Mock<IPerk>();
@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns((PerkLevel)null);
             var perk = perkMock.Object;
 
-            var perks = new IPerk[] {
+            var perks = new[] {
                 perk
             };
             var evolutionDataMock = new Mock<IEvolutionData>();
@@ -111,7 +111,7 @@ namespace Zilon.Core.Tests.Persons
 
             var progressMock = new Mock<IJobProgress>();
             progressMock.Setup(x => x.ApplyToJobs(It.IsAny<IEnumerable<IJob>>()))
-                .Returns(new IJob[] { perkJob });
+                .Returns(new[] { perkJob });
             var progress = progressMock.Object;
 
             var perkMock = new Mock<IPerk>();
@@ -121,7 +121,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(new PerkLevel(0, 0));
             var perk = perkMock.Object;
 
-            var perks = new IPerk[] {
+            var perks = new[] {
                 perk
             };
             var evolutionDataMock = new Mock<IEvolutionData>();

@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 
 using TechTalk.SpecFlow;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
@@ -68,7 +69,7 @@ namespace Zilon.Core.Spec.Steps
             switch (statName)
             {
                 case "сытость":
-                    stat = actor.Person.Survival.Stats.SingleOrDefault(x=>x.Type == SurvivalStatType.Satiety);
+                    stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
                     break;
 
                 case "вода":
@@ -105,7 +106,7 @@ namespace Zilon.Core.Spec.Steps
         public void GivenАктёрИгрокаЭкипированEquipmentSid(string equipmentSid)
         {
             var actor = _context.GetActiveActor();
-            
+
             var equipment = _context.CreateEquipment(equipmentSid);
 
             actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
@@ -197,8 +198,10 @@ namespace Zilon.Core.Spec.Steps
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
             var actor = _context.GetActiveActor();
+
             var propsInInventory = actor.Person.Inventory.CalcActualItems();
-            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
+            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+
             testedProp.Should().BeNull();
         }
 
@@ -207,19 +210,15 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            GetEffectStatAndLevelByName(effectName, 
-                out SurvivalStatType stat, 
+            GetEffectStatAndLevelByName(effectName,
+                out SurvivalStatType stat,
                 out SurvivalStatHazardLevel level);
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == stat);
-
-                if (effect == null)
-                {
-                    throw new InvalidOperationException("Не найден эффект угрозы выживания.");
-                }
+                var effect = actor.Person.Effects.Items
+                    .OfType<SurvivalStatHazardEffect>()
+                    .Single(x => x.Type == stat);
 
                 effect.Should().NotBeNull();
                 effect.Level.Should().Be(level);
@@ -254,7 +253,7 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException($"Неизвестный тип характеристики модуля сражения {combatStatName}.");
             }
 
-            var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x=>x.Stat == statType);
+            var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x => x.Stat == statType);
 
             if (combatStat == null)
             {
@@ -270,7 +269,7 @@ namespace Zilon.Core.Spec.Steps
             var actor = _context.GetActiveActor();
 
             var tacticalAct = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
-                .SingleOrDefault(x => x.Scheme.Sid == tacticalActSid);
+                .Single(x => x.Scheme.Sid == tacticalActSid);
 
             tacticalAct.MinEfficient.Should().Be(minEfficient);
             tacticalAct.MaxEfficient.Should().Be(maxEfficient);

@@ -77,10 +77,7 @@ namespace Zilon.Core.Tests.Commands
 
             var propScheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme
-                {
-
-                }
+                Equip = new PropEquipSubScheme()
             };
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 
