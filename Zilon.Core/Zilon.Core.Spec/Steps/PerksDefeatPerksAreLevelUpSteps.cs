@@ -23,7 +23,7 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Spec.Steps
 {
     [Binding]
-    public class Perks_DefeatPerksAreLevelUpSteps
+    public class PerksDefeatPerksAreLevelUpSteps
     {
         private ServiceContainer _container;
         private IActor _humanActor;

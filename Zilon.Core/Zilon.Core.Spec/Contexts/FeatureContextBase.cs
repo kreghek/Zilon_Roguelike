@@ -19,7 +19,6 @@ namespace Zilon.Core.Spec.Contexts
         protected readonly ServiceContainer _container;
 
         protected HumanPlayer _humanPlayer;
-        protected BotPlayer _botPlayer;
 
         protected FeatureContextBase()
         {
@@ -110,7 +109,6 @@ namespace Zilon.Core.Spec.Contexts
         private void InitPlayers()
         {
             _humanPlayer = new HumanPlayer();
-            _botPlayer = new BotPlayer();
         }
 
         private void InitClientServices()

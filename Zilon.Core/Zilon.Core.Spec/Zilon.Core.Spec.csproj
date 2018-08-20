@@ -96,19 +96,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
     </Compile>
-    <Compile Include="Steps\Bug_EquipmentAfterContainerLootSteps.cs" />
+    <Compile Include="Steps\BugEquipmentAfterContainerLootSteps.cs" />
     <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoExceptions.feature</DependentUpon>
     </Compile>
-    <Compile Include="Steps\Bug_MonsterPatrol_NoExceptionsSteps.cs" />
+    <Compile Include="Steps\BugMonsterPatrolNoExceptionsSteps.cs" />
     <Compile Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Bug_MonsterPatrol_NoFreeze.feature</DependentUpon>
     </Compile>
-    <Compile Include="Steps\Bug_MonsterPatrol_NoFreezeSteps.cs" />
+    <Compile Include="Steps\BugMonsterPatrolNoFreezeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCases\Fight_ShootingDecreaseBullets.feature.cs">
       <AutoGen>True</AutoGen>
@@ -120,7 +120,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
-    <Compile Include="Steps\Perks_DefeatPerksAreLevelUpSteps.cs" />
+    <Compile Include="Steps\PerksDefeatPerksAreLevelUpSteps.cs" />
     <Compile Include="Contexts\SurvivalContext.cs" />
     <Compile Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature.cs">
       <DependentUpon>Survival_ConsumeProviantToRestoreSurvivalData.feature</DependentUpon>
