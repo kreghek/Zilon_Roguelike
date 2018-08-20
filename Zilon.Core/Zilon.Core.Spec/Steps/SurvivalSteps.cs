@@ -226,14 +226,8 @@ namespace Zilon.Core.Spec.Steps
             }
             else
             {
-                var effect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault();
-                effect.Should().BeNull();
-
-                if (effect == null)
-                {
-                    throw new InvalidOperationException("Не найден эффект угрозы выживания.");
-                }
+                var effects = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>();
+                effects.Should().BeEmpty();
             }
         }
 
