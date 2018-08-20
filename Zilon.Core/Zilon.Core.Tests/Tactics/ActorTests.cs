@@ -43,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IActor.State.Dead));
+                monitor.Should().Raise(nameof(testActor.State.Dead));
             }
         }
     }
