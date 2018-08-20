@@ -86,7 +86,14 @@ namespace Zilon.Core.Schemes
 
         public TScheme Get(string sid)
         {
-            return _dict[sid];
+            try
+            {
+                return _dict[sid];
+            }
+            catch (KeyNotFoundException exception)
+            {
+                throw new InvalidOperationException($"Не найдена схема Sid: {sid}.", exception);
+            }
         }
 
         public TScheme[] GetAll()

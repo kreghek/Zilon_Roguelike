@@ -21,6 +21,13 @@ namespace Zilon.Core.Spec.Steps
             _context.CreateSector(mapSize);
         }
 
+        [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
+        public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
+        {
+            _context.AddWall(x1, y1, x2, y2);
+        }
+
+
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {

@@ -13,9 +13,9 @@ namespace Zilon.Core.Spec.Contexts
     {
         public void MoveOnceActiveActor(OffsetCoords targetCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
-            var moveCommand = Container.GetInstance<ICommand>("move");
-            var map = Container.GetInstance<IMap>();
+            var playerState = _container.GetInstance<IPlayerState>();
+            var moveCommand = _container.GetInstance<ICommand>("move");
+            var map = _container.GetInstance<IMap>();
 
             var targetNode = map.Nodes.Cast<HexNode>().SelectBy(targetCoords.X, targetCoords.Y);
             var nodeViewModel = new TestNodeViewModel
@@ -30,8 +30,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public void UsePropByActiveActor(string propSid)
         {
-            var useSelfCommand = Container.GetInstance<ICommand>("use-self");
-            var inventoryState = Container.GetInstance<IInventoryState>();
+            var useSelfCommand = _container.GetInstance<ICommand>("use-self");
+            var inventoryState = _container.GetInstance<IInventoryState>();
             var actor = GetActiveActor();
 
             var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);

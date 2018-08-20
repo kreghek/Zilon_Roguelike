@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 using JetBrains.Annotations;
@@ -23,14 +24,14 @@ namespace Zilon.Core.Spec.Contexts
 {
     public abstract class FeatureContextBase
     {
-        protected readonly ServiceContainer Container;
+        protected readonly ServiceContainer _container;
 
         protected HumanPlayer HumanPlayer;
 
         protected FeatureContextBase()
         {
-            Container = new ServiceContainer();
-            Container.SetDefaultLifetime<PerContainerLifetime>();
+            _container = new ServiceContainer();
+            _container.SetDefaultLifetime<PerContainerLifetime>();
 
             RegisterSchemeService();
             RegisterSectorService();
@@ -47,21 +48,30 @@ namespace Zilon.Core.Spec.Contexts
         {
             var map = new TestGridGenMap(mapSize);
 
-            Container.Register<IMap>(factory => map);
-            Container.Register<ISector, Sector>();
+            _container.Register<IMap>(factory => map);
+            _container.Register<ISector, Sector>();
+        }
+
+        public void AddWall(int x1, int y1, int x2, int y2)
+        {
+            var sector = _container.GetInstance<ISector>();
+
+            var map = sector.Map;
+
+            RemoveEdge(map.Edges, x1, y1, x2, y2);
         }
 
         public IActor GetActiveActor()
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = _container.GetInstance<IPlayerState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
 
         public Equipment CreateEquipment(string propSid)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var propFactory = Container.GetInstance<IPropFactory>();
+            var schemeService = _container.GetInstance<ISchemeService>();
+            var propFactory = _container.GetInstance<IPropFactory>();
 
             var propScheme = schemeService.GetScheme<PropScheme>(propSid);
 
@@ -71,10 +81,10 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var map = Container.GetInstance<IMap>();
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
+            var playerState = _container.GetInstance<IPlayerState>();
+            var schemeService = _container.GetInstance<ISchemeService>();
+            var map = _container.GetInstance<IMap>();
+            var humanTaskSource = _container.GetInstance<IHumanActorTaskSource>();
 
             var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
 
@@ -92,7 +102,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
+            var schemeService = _container.GetInstance<ISchemeService>();
 
             var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
 
@@ -111,8 +121,8 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)
         {
-            var actorManager = Container.GetInstance<IActorManager>();
-            var schemeService = Container.GetInstance<ISchemeService>();
+            var actorManager = _container.GetInstance<IActorManager>();
+            var schemeService = _container.GetInstance<ISchemeService>();
 
             var evolutionData = new EvolutionData(schemeService);
 
@@ -137,7 +147,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterSchemeService()
         {
-            Container.Register<ISchemeLocator>(factory =>
+            _container.Register<ISchemeLocator>(factory =>
             {
                 var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
 
@@ -146,15 +156,15 @@ namespace Zilon.Core.Spec.Contexts
                 return schemeLocator;
             }, new PerContainerLifetime());
 
-            Container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+            _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
 
-            Container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+            _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
         }
 
         private void RegisterSectorService()
         {
-            Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
-            Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
         }
 
         /// <summary>
@@ -162,29 +172,29 @@ namespace Zilon.Core.Spec.Contexts
         /// </summary>
         private void RegisterAuxServices()
         {
-            Container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
-            Container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
-            Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
+            _container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
+            _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
+            _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
+            _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices()
         {
-            Container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
-            Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
+            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
         private void RegisterCommands()
         {
-            Container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
-            Container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
+            _container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
+            _container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
         }
 
         private void RegisterTaskSources()
         {
-            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
+            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
         }
 
         private void InitPlayers()
@@ -194,10 +204,33 @@ namespace Zilon.Core.Spec.Contexts
 
         private void InitClientServices()
         {
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var humanTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var playerState = _container.GetInstance<IPlayerState>();
 
             playerState.TaskSource = humanTaskSource;
+        }
+
+        private IEdge GetEdge(List<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        {
+            var foundFromStart = from edge in edges
+                                 from node in edge.Nodes
+                                 let hexNode = (HexNode)node
+                                 where hexNode.OffsetX == offsetX1 && hexNode.OffsetY == offsetY1
+                                 select edge;
+
+            var foundToEnd = from edge in foundFromStart
+                             from node in edge.Nodes
+                             let hexNode = (HexNode)node
+                             where hexNode.OffsetX == offsetX2 && hexNode.OffsetY == offsetY2
+                             select edge;
+
+            return foundToEnd.SingleOrDefault();
+        }
+
+        private void RemoveEdge(List<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        {
+            var edge = GetEdge(edges, offsetX1, offsetY1, offsetX2, offsetY2);
+            edges.Remove(edge);
         }
     }
 }
