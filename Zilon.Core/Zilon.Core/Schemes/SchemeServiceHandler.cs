@@ -92,7 +92,7 @@ namespace Zilon.Core.Schemes
             }
             catch (KeyNotFoundException exception)
             {
-                throw new InvalidOperationException($"Не найдена схема Sid: {sid}.", exception);
+                throw new InvalidOperationException($"Не найдена схема {_directory} Sid: {sid}.", exception);
             }
         }
 

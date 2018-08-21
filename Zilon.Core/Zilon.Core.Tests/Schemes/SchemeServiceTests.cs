@@ -87,7 +87,9 @@ namespace Zilon.Core.Tests.Schemes
             // ASSERT
             foreach (var act in actList)
             {
-                act.Should().Throw<TargetInvocationException>().WithInnerException<KeyNotFoundException>();
+                act.Should().Throw<TargetInvocationException>()
+                    .WithInnerException<InvalidOperationException>()
+                    .WithInnerException<KeyNotFoundException>();
             }
         }
 
