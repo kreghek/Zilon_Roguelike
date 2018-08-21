@@ -57,6 +57,12 @@ namespace Zilon.Core.Spec.Steps
             _context.AddMonsterActor(monsterSid, new OffsetCoords(x, y));
         }
 
+        [When(@"Я выбираю ячейку \((.*), (.*)\)")]
+        public void WhenЯВыбираюЯчейку(int x, int y)
+        {
+            _context.HoverNode(x, y);
+        }
+
 
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
