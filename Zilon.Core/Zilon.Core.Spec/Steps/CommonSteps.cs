@@ -51,6 +51,13 @@ namespace Zilon.Core.Spec.Steps
             actor.State.SetHpForce(startHp);
         }
 
+        [Given(@"Есть монстр класса (.*) в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int x, int y)
+        {
+            _context.AddMonsterActor(monsterSid, new OffsetCoords(x, y));
+        }
+
+
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {

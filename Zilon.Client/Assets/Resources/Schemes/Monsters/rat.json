@@ -1,0 +1,6 @@
+{
+  "PrimaryAct": {
+    "Efficient": {"Min": 1, "Max": 5},
+	"Range": {"Min" : 1, "Max" : 1}
+  }
+}

@@ -27,6 +27,7 @@ namespace Zilon.Core.Spec.Contexts
         protected readonly ServiceContainer _container;
 
         protected HumanPlayer HumanPlayer;
+        protected BotPlayer BotPlayer;
 
         protected FeatureContextBase()
         {
@@ -100,6 +101,17 @@ namespace Zilon.Core.Spec.Contexts
             playerState.ActiveActor = humanActroViewModel;
         }
 
+        public void AddMonsterActor(string monsterSid, OffsetCoords startCoords)
+        {
+            var schemeService = _container.GetInstance<ISchemeService>();
+            var sector = _container.GetInstance<ISector>();
+
+            var monsterScheme = schemeService.GetScheme<MonsterScheme>(monsterSid);
+            var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+
+            var monster = CreateMonsterActor(BotPlayer, monsterScheme, monsterStartNode);
+        }
+
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
             var schemeService = _container.GetInstance<ISchemeService>();
@@ -121,7 +133,7 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)
         {
-            var actorManager = _container.GetInstance<IActorManager>();
+            
             var schemeService = _container.GetInstance<ISchemeService>();
 
             var evolutionData = new EvolutionData(schemeService);
@@ -132,15 +144,36 @@ namespace Zilon.Core.Spec.Contexts
 
             var actor = new Actor(person, player, startNode);
 
+            return actor;
+        }
+
+        private IActor CreateMonsterActor([NotNull] IPlayer player,
+            [NotNull] MonsterScheme monsterScheme,
+            [NotNull] IMapNode startNode)
+        {
+
+            var schemeService = _container.GetInstance<ISchemeService>();
+
+            var evolutionData = new EvolutionData(schemeService);
+
+            var inventory = new Inventory();
+
+            var person = new MonsterPerson(monsterScheme);
+
+            var actor = new Actor(person, player, startNode);
+
+            return actor;
+        }
+
+        private IActor CreateActor([NotNull] IPlayer player,
+            [NotNull] IPerson person,
+            [NotNull] IMapNode startNode)
+        {
+            var actorManager = _container.GetInstance<IActorManager>();
+
+            var actor = new Actor(person, player, startNode);
+
             actorManager.Add(actor);
-
-            // Указываем экипировку по умолчанию.
-            var equipment = CreateEquipment("short-sword");
-            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
-
-            // Второе оружие в инвернтаре
-            var pistolEquipment = CreateEquipment("pistol");
-            inventory.Add(pistolEquipment);
 
             return actor;
         }
@@ -200,6 +233,7 @@ namespace Zilon.Core.Spec.Contexts
         private void InitPlayers()
         {
             HumanPlayer = new HumanPlayer();
+            BotPlayer = new BotPlayer();
         }
 
         private void InitClientServices()
