@@ -26,8 +26,8 @@ namespace Zilon.Core.Spec.Contexts
     {
         protected readonly ServiceContainer _container;
 
-        protected HumanPlayer HumanPlayer;
-        protected BotPlayer BotPlayer;
+        private HumanPlayer _humanPlayer;
+        private BotPlayer _botPlayer;
 
         protected FeatureContextBase()
         {
@@ -91,7 +91,7 @@ namespace Zilon.Core.Spec.Contexts
 
             // Подготовка актёров
             var humanStartNode = map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(HumanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -109,7 +109,7 @@ namespace Zilon.Core.Spec.Contexts
             var monsterScheme = schemeService.GetScheme<MonsterScheme>(monsterSid);
             var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
-            var monster = CreateMonsterActor(BotPlayer, monsterScheme, monsterStartNode);
+            var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
         }
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
@@ -118,7 +118,7 @@ namespace Zilon.Core.Spec.Contexts
 
             var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
 
-            AddResourceToActor(resourceScheme, 1, actor);
+            AddResourceToActor(resourceScheme, count, actor);
         }
 
         public void AddResourceToActor(PropScheme resourceScheme, int count, IActor actor)
@@ -232,8 +232,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private void InitPlayers()
         {
-            HumanPlayer = new HumanPlayer();
-            BotPlayer = new BotPlayer();
+            _humanPlayer = new HumanPlayer();
+            _botPlayer = new BotPlayer();
         }
 
         private void InitClientServices()
