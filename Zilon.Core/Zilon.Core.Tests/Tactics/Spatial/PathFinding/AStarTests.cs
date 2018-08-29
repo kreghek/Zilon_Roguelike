@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;
 using Zilon.Core.Tests.Common;
@@ -44,10 +45,14 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);
             mapMock.SetupGet(x => x.Edges).Returns(edges);
+            mapMock.Setup(x => x.IsPositionAvailableFor(It.IsAny<IMapNode>(), It.IsAny<IActor>()))
+                .Returns(true);
 
             var map = mapMock.Object;
 
-            var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
+            var context = CreatePathFindingContext();
+
+            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -67,6 +72,13 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }
+        }
+
+        private static IPathFindingContext CreatePathFindingContext()
+        {
+            var contextMock = new Mock<IPathFindingContext>();
+            var context = contextMock.Object;
+            return context;
         }
 
         /// <summary>
@@ -89,9 +101,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             };
 
 
+            var context = CreatePathFindingContext();
 
-
-            var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
+            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -133,9 +145,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             };
 
 
+            var context = CreatePathFindingContext();
 
-
-            var astar = new AStar(map, expectedPath.First(), expectedPath.Last());
+            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -171,6 +183,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);
             mapMock.SetupGet(x => x.Edges).Returns(edges);
+            mapMock.Setup(x => x.IsPositionAvailableFor(It.IsAny<IMapNode>(), It.IsAny<IActor>()))
+                .Returns(true);
 
             var map = mapMock.Object;
 

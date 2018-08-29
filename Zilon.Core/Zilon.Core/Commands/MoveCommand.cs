@@ -76,7 +76,9 @@ namespace Zilon.Core.Commands
 
             _path.Clear();
 
-            var astar = new AStar(map, startNode, finishNode);
+            var context = new PathFindingContext(_playerState.ActiveActor.Actor);
+
+            var astar = new AStar(map, context, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {
