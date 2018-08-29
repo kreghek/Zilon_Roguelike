@@ -16,6 +16,15 @@ namespace Zilon.Core.Spec.Steps
         {
         }
 
+        [Then(@"Команда на перемещение может выполняться")]
+        public void ThenКомандаНаПеремещениеМожетВыполняться()
+        {
+            var moveCommand = _context.Container.GetInstance<ICommand>("move");
+
+            moveCommand.CanExecute().Should().BeTrue();
+        }
+
+
         [Then(@"Команда на перемещение не может выполняться")]
         public void ThenКомандаНаПеремещениеНеМожетВыполняться()
         {
