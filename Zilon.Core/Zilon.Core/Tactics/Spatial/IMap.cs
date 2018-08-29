@@ -10,35 +10,35 @@
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        List<IMapNode> Nodes { get; }
+        IList<IMapNode> Nodes { get; }
 
         /// <summary>
         /// Ребра карты.
         /// </summary>
-        List<IEdge> Edges { get; }
+        IList<IEdge> Edges { get; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
         /// </summary>
         /// <param name="targetNode"> Целевая ячейка. </param>
         /// <param name="actor"> Проверяемый актёр. </param>
-        /// <returns></returns>
-        bool IsPositionAvailableFor(IMapNode targetNode, Actor actor);
+        /// <returns>true, если указанный узел проходим для актёра. Иначе - false. </returns>
+        bool IsPositionAvailableFor(IMapNode targetNode, IActor actor);
 
-        // Выглядит, что это внутреняя реализация.
+        //TODO Выглядит, что это внутреняя реализация. (Чего?)
         /// <summary>
-        /// Указывает, что текущий актёр покинул ячейки.
+        /// Указывает, что узел карты освобождён одним из блоков.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="actor"></param>
-        void ReleaseNode(IMapNode node, Actor actor);
+        /// <param name="node"> Узел, который будет освобождён указанным блоком. </param>
+        /// <param name="block"> Блок, который освобождает узел. </param>
+        void ReleaseNode(IMapNode node, IPassMapBlocker blocker);
 
-        // Выглядит, что это внутреняя реализация.
+        //TODO Выглядит, что это внутреняя реализация. (Чего? Какой сущности?)
         /// <summary>
-        /// Указывает, что данная ячейка занята актёром.
+        /// Указывает, что узел карты занят блоком.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="actor"></param>
-        void HoldNode(IMapNode node, Actor actor);
+        /// <param name="node"> Узел, который будет занят указанным блоком. </param>
+        /// <param name="block"> Блок, который занимает узел. </param>
+        void HoldNode(IMapNode node, IPassMapBlocker blocker);
     }
 }

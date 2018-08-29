@@ -238,6 +238,7 @@
     <Compile Include="Tactics\FixedPropContainer.cs" />
     <Compile Include="Tactics\PropContainerManager.cs" />
     <Compile Include="Tactics\OpenContainerResult.cs" />
+    <Compile Include="Tactics\Spatial\IPassMapBlocker.cs" />
     <Compile Include="Tactics\Spatial\MapBase.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />

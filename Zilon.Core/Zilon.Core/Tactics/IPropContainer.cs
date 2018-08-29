@@ -6,7 +6,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Интерфейт предмета в секторе.
     /// </summary>
-    public interface IPropContainer
+    public interface IPropContainer: IPassMapBlocker
     {
         /// <summary>
         /// Узер карты сектора, в котором находится контейнер.

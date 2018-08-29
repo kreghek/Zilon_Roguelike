@@ -7,27 +7,32 @@ namespace Zilon.Core.Tactics.Spatial
     /// </summary>
     public abstract class MapBase: IMap
     {
+        private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers =
+            new Dictionary<IMapNode, IList<IPassMapBlocker>>();
 
-        public List<IMapNode> Nodes { get; }
-        public List<IEdge> Edges { get; }
+
+        public IList<IMapNode> Nodes { get; }
+        public IList<IEdge> Edges { get; }
 
         protected MapBase()
         {
             Nodes = new List<IMapNode>();
             Edges = new List<IEdge>();
+
+            _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
         }
 
-        public bool IsPositionAvailableFor(IMapNode targetNode, Actor actor)
+        public bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
         {
             return true;
         }
 
-        public void ReleaseNode(IMapNode node, Actor actor)
+        public void ReleaseNode(IMapNode node, IPassMapBlocker blocker)
         {
             // Ещё нет блокировки ячейки
         }
 
-        public void HoldNode(IMapNode node, Actor actor)
+        public void HoldNode(IMapNode node, IPassMapBlocker blocker)
         {
             // Ещё нет блокировки ячейки
         }

@@ -244,7 +244,7 @@ namespace Zilon.Core.Spec.Contexts
             playerState.TaskSource = humanTaskSource;
         }
 
-        private IEdge GetEdge(List<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        private IEdge GetEdge(IList<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
             var foundFromStart = from edge in edges
                                  from node in edge.Nodes
@@ -261,7 +261,7 @@ namespace Zilon.Core.Spec.Contexts
             return foundToEnd.SingleOrDefault();
         }
 
-        private void RemoveEdge(List<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        private void RemoveEdge(IList<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
             var edge = GetEdge(edges, offsetX1, offsetY1, offsetX2, offsetY2);
             edges.Remove(edge);
