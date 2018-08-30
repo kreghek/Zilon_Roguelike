@@ -86,6 +86,7 @@ namespace Zilon.Core.Spec.Contexts
             var schemeService = Container.GetInstance<ISchemeService>();
             var map = Container.GetInstance<IMap>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
+            var actorManager = Container.GetInstance<IActorManager>();
 
             var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
 
@@ -94,6 +95,8 @@ namespace Zilon.Core.Spec.Contexts
             var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
+
+            actorManager.Add(humanActor);
 
             var humanActroViewModelMock = new Mock<IActorViewModel>();
             humanActroViewModelMock.SetupGet(x => x.Actor).Returns(humanActor);
@@ -105,11 +108,14 @@ namespace Zilon.Core.Spec.Contexts
         {
             var schemeService = Container.GetInstance<ISchemeService>();
             var sector = Container.GetInstance<ISector>();
+            var actorManager = Container.GetInstance<IActorManager>();
 
             var monsterScheme = schemeService.GetScheme<MonsterScheme>(monsterSid);
             var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
             var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
+
+            actorManager.Add(monster);
         }
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
