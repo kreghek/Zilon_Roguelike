@@ -26,6 +26,9 @@ namespace Zilon.Core.Tactics
         /// <param name="actors"> Перечень актёров. </param>
         void Add(IEnumerable<IActor> actors);
 
+        /// <summary>
+        /// Событие выстреливает, когда в менеджере добавляются новые актёры.
+        /// </summary>
         event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
     }
 }

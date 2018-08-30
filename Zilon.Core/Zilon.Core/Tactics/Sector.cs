@@ -41,14 +41,7 @@ namespace Zilon.Core.Tactics
             _propContainerManager = propContainerManager;
 
             _actorManager.Added += ActorManager_Added;
-        }
-
-        private void ActorManager_Added(object sender, ManagerItemsChangedArgs<IActor> e)
-        {
-            foreach (var actor in e.Items)
-            {
-                Map.HoldNode(actor.Node, actor);
-            }
+            _propContainerManager.Added += PropContainerManager_Added;
         }
 
         /// <summary>
@@ -168,6 +161,23 @@ namespace Zilon.Core.Tactics
             if (allExit)
             {
                 DoActorExit();
+            }
+        }
+
+
+        private void PropContainerManager_Added(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+        {
+            foreach (var container in e.Items)
+            {
+                Map.HoldNode(container.Node, container);
+            }
+        }
+
+        private void ActorManager_Added(object sender, ManagerItemsChangedArgs<IActor> e)
+        {
+            foreach (var actor in e.Items)
+            {
+                Map.HoldNode(actor.Node, actor);
             }
         }
 

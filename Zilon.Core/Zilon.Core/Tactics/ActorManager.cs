@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics
         {
             _items.Add(actor);
 
-            DoAdd(actor);
+            DoAdded(actor);
         }
 
         /// <summary>
@@ -43,13 +43,13 @@ namespace Zilon.Core.Tactics
         {
             _items.AddRange(actors);
 
-            DoAdd(actors.ToArray());
+            DoAdded(actors.ToArray());
         }
 
 
-        private void DoAdd(params IActor[] actor)
+        private void DoAdded(params IActor[] actors)
         {
-            var args = new ManagerItemsChangedArgs<IActor>(actor);
+            var args = new ManagerItemsChangedArgs<IActor>(actors);
             Added?.Invoke(this, args);
         }
     }

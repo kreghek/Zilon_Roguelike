@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.Tactics
 {
@@ -23,5 +24,10 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="propContainers"> Перечень контейнеров предметов. </param>
         void Add(IEnumerable<IPropContainer> propContainers);
+
+        /// <summary>
+        /// Событие выстреливает, когда в менеджере добавляются новые контейнеры.
+        /// </summary>
+        event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Added;
     }
 }
