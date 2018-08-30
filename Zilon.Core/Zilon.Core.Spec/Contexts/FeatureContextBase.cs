@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -153,7 +154,7 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] PersonScheme personScheme,
             [NotNull] IMapNode startNode)
         {
-            
+
             var schemeService = Container.GetInstance<ISchemeService>();
 
             var evolutionData = new EvolutionData(schemeService);
@@ -227,8 +228,18 @@ namespace Zilon.Core.Spec.Contexts
         /// </summary>
         private void RegisterAuxServices()
         {
-            Container.Register<IDice>(factory => new Dice(), new PerContainerLifetime());
-            Container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
+            var dice = new Dice();
+            Container.Register<IDice>(factory => dice, new PerContainerLifetime());
+
+
+            var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
+            decisionSourceMock.CallBase = true;
+            decisionSourceMock.Setup(x => x.SelectEfficient(It.IsAny<float>(), It.IsAny<float>()))
+                .Returns<float, float>((min, max) => (float)Math.Round((max - min) / 2 + min, 1));
+            var decisionSource = decisionSourceMock.Object;
+
+            Container.Register(factory => decisionSource, new PerContainerLifetime());
+
             Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());

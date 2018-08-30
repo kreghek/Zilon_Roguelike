@@ -2,12 +2,9 @@
 
 using FluentAssertions;
 
-using LightInject;
-
 using TechTalk.SpecFlow;
-using Zilon.Core.Persons;
+
 using Zilon.Core.Spec.Contexts;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -48,7 +45,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Актёр игрока имеет Hp: (.*)")]
-        public void GivenАктёрИмеетHp(int startHp)
+        public void GivenАктёрИмеетHp(float startHp)
         {
             var actor = _context.GetActiveActor();
             actor.State.SetHpForce(startHp);
@@ -61,7 +58,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
-        public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
+        public void GivenМонстрIdИмеетHp(int monsterId, float monsterHp)
         {
             var monster = _context.GetMonsterById(monsterId);
 
@@ -87,14 +84,14 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Then(@"Актёр игрока имеет запас hp (.*)")]
-        public void ThenАктёрИмеетЗадасHp(int expectedHp)
+        public void ThenАктёрИмеетЗадасHp(float expectedHp)
         {
             var actor = _context.GetActiveActor();
             actor.State.Hp.Should().Be(expectedHp);
         }
 
         [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
-        public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
+        public void ThenМонстрIdИмеетHp(int monsterId, float expectedMonsterHp)
         {
             var monster = _context.GetMonsterById(monsterId);
 

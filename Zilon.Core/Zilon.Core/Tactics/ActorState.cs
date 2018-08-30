@@ -22,7 +22,7 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler Dead;
 
-        public void SetHpForce(int hp)
+        public void SetHpForce(float hp)
         {
             if (hp == 0)
             {

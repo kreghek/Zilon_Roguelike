@@ -4,7 +4,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 {
     public class DecisionSource : IDecisionSource
     {
-        private const int FLOAT_MULTY = 100;
+        private const int FLOAT_MULTY = 10;
         private readonly IDice _dice;
 
         public DecisionSource(IDice dice)

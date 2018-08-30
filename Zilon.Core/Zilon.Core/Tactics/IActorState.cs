@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics
 
         void TakeDamage(float value);
 
-        void SetHpForce(int hp);
+        void SetHpForce(float hp);
 
         void RestoreHp(float value, float max);
     }
