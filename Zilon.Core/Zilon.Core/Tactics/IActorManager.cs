@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.Tactics
 {
@@ -24,5 +25,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actors"> Перечень актёров. </param>
         void Add(IEnumerable<IActor> actors);
+
+        event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
     }
 }

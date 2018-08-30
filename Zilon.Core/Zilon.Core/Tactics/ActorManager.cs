@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.Tactics
 {
@@ -9,6 +11,8 @@ namespace Zilon.Core.Tactics
     public class ActorManager : IActorManager
     {
         private readonly List<IActor> _items;
+
+        public event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
 
         /// <summary>
         /// Текущий список всех актёров.
@@ -27,6 +31,8 @@ namespace Zilon.Core.Tactics
         public void Add(IActor actor)
         {
             _items.Add(actor);
+
+            DoAdd(actor);
         }
 
         /// <summary>
@@ -36,6 +42,15 @@ namespace Zilon.Core.Tactics
         public void Add(IEnumerable<IActor> actors)
         {
             _items.AddRange(actors);
+
+            DoAdd(actors.ToArray());
+        }
+
+
+        private void DoAdd(params IActor[] actor)
+        {
+            var args = new ManagerItemsChangedArgs<IActor>(actor);
+            Added?.Invoke(this, args);
         }
     }
 }

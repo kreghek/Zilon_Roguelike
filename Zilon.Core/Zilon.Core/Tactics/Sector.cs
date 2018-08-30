@@ -16,8 +16,6 @@ namespace Zilon.Core.Tactics
 
         private readonly TaskIniComparer _taskIniComparer;
 
-        private readonly IMap _map;
-
         private readonly IActorManager _actorManager;
 
         private readonly IPropContainerManager _propContainerManager;
@@ -28,7 +26,7 @@ namespace Zilon.Core.Tactics
 
         public IMapNode[] ExitNodes { get; set; }
 
-        public IMap Map => _map;
+        public IMap Map { get; }
 
         public Sector(IMap map,
             IActorManager actorManager,
@@ -37,7 +35,7 @@ namespace Zilon.Core.Tactics
             _tasks = new List<IActorTask>();
             _taskIniComparer = new TaskIniComparer();
 
-            _map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
+            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -134,7 +132,7 @@ namespace Zilon.Core.Tactics
             _tasks.Clear();
             foreach (var behaviourSource in BehaviourSources)
             {
-                var currentSourceTasks = behaviourSource.GetActorTasks(_map, _actorManager);
+                var currentSourceTasks = behaviourSource.GetActorTasks(Map, _actorManager);
                 if (currentSourceTasks != null)
                 {
                     _tasks.AddRange(currentSourceTasks);
