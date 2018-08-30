@@ -2,9 +2,12 @@
 
 using FluentAssertions;
 
-using TechTalk.SpecFlow;
+using LightInject;
 
+using TechTalk.SpecFlow;
+using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -51,10 +54,18 @@ namespace Zilon.Core.Spec.Steps
             actor.State.SetHpForce(startHp);
         }
 
-        [Given(@"Есть монстр класса (.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int x, int y)
+        [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
-            _context.AddMonsterActor(monsterSid, new OffsetCoords(x, y));
+            _context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
+        }
+
+        [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
+        public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
+        {
+            var monster = _context.GetMonsterById(monsterId);
+
+            monster.State.SetHpForce(monsterHp);
         }
 
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
@@ -81,5 +92,14 @@ namespace Zilon.Core.Spec.Steps
             var actor = _context.GetActiveActor();
             actor.State.Hp.Should().Be(expectedHp);
         }
+
+        [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
+        public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
+        {
+            var monster = _context.GetMonsterById(monsterId);
+
+            monster.State.Hp.Should().Be(expectedMonsterHp);
+        }
+
     }
 }

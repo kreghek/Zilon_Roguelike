@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using LightInject;
+
 using Moq;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;

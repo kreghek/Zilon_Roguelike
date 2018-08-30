@@ -88,7 +88,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Есть монстр класса rat в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть монстр класса rat Id:100 в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
  testRunner.When("Я выбираю ячейку (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14

@@ -107,7 +107,7 @@ namespace Zilon.Core.Spec.Contexts
             playerState.ActiveActor = humanActroViewModel;
         }
 
-        public void AddMonsterActor(string monsterSid, OffsetCoords startCoords)
+        public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
         {
             var schemeService = Container.GetInstance<ISchemeService>();
             var sector = Container.GetInstance<ISector>();
@@ -117,6 +117,7 @@ namespace Zilon.Core.Spec.Contexts
             var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
             var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
+            monster.Person.Id = monsterId;
 
             actorManager.Add(monster);
         }
@@ -135,6 +136,16 @@ namespace Zilon.Core.Spec.Contexts
             var resource = new Resource(resourceScheme, count);
 
             actor.Person.Inventory.Add(resource);
+        }
+
+        public IActor GetMonsterById(int id)
+        {
+            var actorManager = Container.GetInstance<IActorManager>();
+
+            var monster = actorManager.Actors
+                .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
+
+            return monster;
         }
 
 
@@ -167,9 +178,9 @@ namespace Zilon.Core.Spec.Contexts
 
             var inventory = new Inventory();
 
-            var person = new MonsterPerson(monsterScheme);
+            var monsterPerson = new MonsterPerson(monsterScheme);
 
-            var actor = new Actor(person, player, startNode);
+            var actor = new Actor(monsterPerson, player, startNode);
 
             return actor;
         }
@@ -232,6 +243,7 @@ namespace Zilon.Core.Spec.Contexts
         {
             Container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
             Container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
+            Container.Register<ICommand, AttackCommand>("attack", new PerContainerLifetime());
         }
 
         private void RegisterTaskSources()
