@@ -212,9 +212,20 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                     continue;
                 }
 
-                if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+                if (_context.TargetNode == null)
                 {
-                    continue;
+
+                    if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (_context.TargetNode != testedNeighbor && !map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+                    {
+                        continue;
+                    }
                 }
 
                 actualNeighbors.Add(testedNeighbor);
@@ -239,7 +250,10 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var path = new List<IMapNode>();
             while (next != null)
             {
-                path.Add(next);
+                if (_map.IsPositionAvailableFor(next, _context.Actor))
+                {
+                    path.Add(next);
+                }
 
                 var nextData = GetData(next);
 

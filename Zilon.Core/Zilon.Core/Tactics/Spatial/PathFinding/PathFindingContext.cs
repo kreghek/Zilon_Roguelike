@@ -8,8 +8,11 @@
         public PathFindingContext(IActor actor)
         {
             Actor = actor;
+            TargetNode = null;
         }
 
         public IActor Actor { get; }
+
+        public IMapNode TargetNode { get; set; }
     }
 }
