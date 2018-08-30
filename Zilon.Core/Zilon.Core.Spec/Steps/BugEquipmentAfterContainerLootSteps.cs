@@ -266,7 +266,9 @@ namespace Zilon.Core.Spec.Steps
 
             var inventory = new Inventory();
 
-            var person = new HumanPerson(personScheme, evolutionData, inventory);
+            var defaultActScheme = schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
+
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
             var actor = new Actor(person, player, startNode);
 

@@ -13,6 +13,8 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : IPerson
     {
+        TacticalActScheme _defaultActScheme;
+
         public int Id { get; set; }
 
         public string Name { get; }
@@ -35,9 +37,10 @@ namespace Zilon.Core.Persons
 
         public EffectCollection Effects { get; }
 
-        public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData)
+        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultActScheme, IEvolutionData evolutionData)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+            _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
             Name = scheme.Sid;
 
             Effects = new EffectCollection();
@@ -71,8 +74,8 @@ namespace Zilon.Core.Persons
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
-        public HumanPerson(PersonScheme scheme, IEvolutionData evolutionData, Inventory inventory):
-            this(scheme, evolutionData)
+        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory):
+            this(scheme, defaultScheme, evolutionData)
         {
             Inventory = inventory;
         }
@@ -216,7 +219,7 @@ namespace Zilon.Core.Persons
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
         }
 
-        private static ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
+        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
         {
             if (equipments == null)
             {
@@ -224,6 +227,9 @@ namespace Zilon.Core.Persons
             }
 
             var actList = new List<ITacticalAct>();
+
+            var defaultAct = new TacticalAct(1, _defaultActScheme, combatStats);
+            actList.Add(defaultAct);
 
             foreach (var equipment in equipments)
             {

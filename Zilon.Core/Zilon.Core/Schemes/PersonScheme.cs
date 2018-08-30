@@ -16,5 +16,10 @@
         /// Количество слотов в экипировке.
         /// </summary>
         public int SlotCount { get; set; }
+
+        /// <summary>
+        /// Действие персонажа по умолчанию.
+        /// </summary>
+        public string DefaultAct { get; set; }
     }
 }

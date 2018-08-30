@@ -190,7 +190,9 @@ namespace Zilon.Core.Spec.Steps
 
             var evolutionData = new EvolutionData(schemeService);
 
-            var person = new HumanPerson(personScheme, evolutionData);
+            var defaultActScheme = schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
+
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData);
 
             var actor = new Actor(person, player, startNode);
 
