@@ -38,7 +38,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 finishNode
             };
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var task = new MoveTask(actor, finishNode, map);
 
@@ -66,7 +66,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actor.Node.Should().Be(finishNode);
         }
 
-        private static IActor CreateActor(HexNode startNode)
+        private static IActor CreateActor(IMap map, HexNode startNode)
         {
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
@@ -82,7 +82,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actor = actorMock.Object;
 
             //TODO Веротяно здесь нужно использовать мок.
-            return new Actor(person, player, startNode);
+
+            var actor2 = new Actor(person, player, startNode);
+            map.HoldNode(startNode, actor2);
+            return actor2;
         }
 
         /// <summary>
@@ -107,7 +110,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var finishNode = expectedPath.Last();
 
 
-            var actor = CreateActor((HexNode)startNode);
+            var actor = CreateActor(map, (HexNode)startNode);
 
             var task = new MoveTask(actor, finishNode, map);
 

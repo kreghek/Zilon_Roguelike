@@ -100,6 +100,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(1, 1);
 
+            _map.HoldNode(_factActorNode, _actor);
+
             var expectedActorPositions = new IMapNode[] {
                 _map.Nodes.OfType<HexNode>().SelectBy(2, 2),
                 _map.Nodes.OfType<HexNode>().SelectBy(2, 3),
@@ -188,6 +190,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
 
+            _map.HoldNode(_factActorNode, _actor);
+
             var tacticalActUsageService = CreateTacticalActUsageService();
 
             var logic = new PatrolLogic(_actor,
@@ -236,6 +240,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(5, 1);
 
+            _map.HoldNode(_factActorNode, _actor);
+
             var tacticalActUsageService = CreateTacticalActUsageService();
 
             var logic = new PatrolLogic(_actor,
@@ -283,6 +289,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(2, 6);
+
+            _map.HoldNode(_factActorNode, _actor);
 
             var tacticalActUsageService = CreateTacticalActUsageService();
 
@@ -334,6 +342,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var expectedSecondPoint = _patrolRoute2DiagPoints.Points.Last();
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
+
+            _map.HoldNode(_factActorNode, _actor);
 
             var tacticalActUsageService = CreateTacticalActUsageService();
 

@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 finishNode
             };
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
             var taskSource = InitTaskSource(actor);
             var moveIntetion = new MoveIntention(finishNode, map);
             taskSource.Intent(moveIntetion);
@@ -101,7 +101,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return decisionSource;
         }
 
-        private static IActor CreateActor(HexNode startNode)
+        private static IActor CreateActor(IMap map, HexNode startNode)
         {
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
@@ -110,6 +110,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
 
             var actor = new Actor(person, player, startNode);
+
+            map.HoldNode(startNode, actor);
+
             return actor;
         }
 
@@ -128,7 +131,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
 
@@ -174,7 +177,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
 
@@ -205,7 +208,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
 
@@ -265,7 +268,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
             var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
 
@@ -326,8 +329,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
 
 
-            var attackerActor = CreateActor(attackerStartNode);
-            var targetActor = CreateActor(targetStartNode);
+            var attackerActor = CreateActor(map, attackerStartNode);
+            var targetActor = CreateActor(map, targetStartNode);
 
             var taskSource = InitTaskSource(attackerActor);
 
@@ -357,7 +360,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 
-            var actor = CreateActor(startNode);
+            var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
 

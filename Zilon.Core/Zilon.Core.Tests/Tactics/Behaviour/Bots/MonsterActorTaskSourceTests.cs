@@ -67,8 +67,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             // Располагаем рядом игрока и бота
             var intruderActor = CreateActor(3, 1);
-            _actorListInner.Add(intruderActor);
-
 
 
             // ACT
@@ -99,7 +97,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             // Располагаем рядом игрока и бота
             var intruderActor = CreateActor(2, 1);
-            _actorListInner.Add(intruderActor);
 
 
 
@@ -187,6 +184,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var actor = actorMock.Object;
 
             _actorListInner.Add(actor);
+            _map.HoldNode(actorNode, actor);
 
             return actor;
         }
