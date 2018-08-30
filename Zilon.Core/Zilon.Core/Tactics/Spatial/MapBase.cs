@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     /// <summary>
     /// Базовая реализация карты.
     /// </summary>
-    public abstract class MapBase: IMap
+    public abstract class MapBase : IMap
     {
         private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers =
             new Dictionary<IMapNode, IList<IPassMapBlocker>>();
@@ -24,17 +26,43 @@ namespace Zilon.Core.Tactics.Spatial
 
         public bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
         {
-            return true;
+            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
+            {
+                return true;
+            }
+
+            if (!blockers.Any())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void ReleaseNode(IMapNode node, IPassMapBlocker blocker)
         {
-            // Ещё нет блокировки ячейки
+            if (!_nodeBlockers.TryGetValue(node, out IList<IPassMapBlocker> blockers))
+            {
+                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован.");
+            }
+
+            if (!blockers.Contains(blocker))
+            {
+                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
+            }
+
+            blockers.Remove(blocker);
         }
 
         public void HoldNode(IMapNode node, IPassMapBlocker blocker)
         {
-            // Ещё нет блокировки ячейки
+            if (!_nodeBlockers.TryGetValue(node, out IList<IPassMapBlocker> blockers))
+            {
+                blockers = new List<IPassMapBlocker>(1);
+                _nodeBlockers.Add(node, blockers);
+            }
+
+            blockers.Add(blocker);
         }
     }
 }
