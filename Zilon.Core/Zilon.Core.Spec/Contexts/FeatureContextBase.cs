@@ -32,7 +32,6 @@ namespace Zilon.Core.Spec.Contexts
         protected FeatureContextBase()
         {
             Container = new ServiceContainer();
-            Container.SetDefaultLifetime<PerContainerLifetime>();
 
             RegisterSchemeService();
             RegisterSectorService();
@@ -49,8 +48,12 @@ namespace Zilon.Core.Spec.Contexts
         {
             var map = new TestGridGenMap(mapSize);
 
-            Container.Register<IMap>(factory => map);
-            Container.Register<ISector, Sector>();
+            Container.Register<IMap>(factory => map, new PerContainerLifetime());
+            Container.Register<ISector, Sector>(new PerContainerLifetime());
+
+            // Это нужно для того, чтобы объкт был создан и выполнился код из конструктора.
+            // Там обработка на события внутренних сервисов.
+            var sector = Container.GetInstance<ISector>();
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
@@ -84,14 +87,14 @@ namespace Zilon.Core.Spec.Contexts
         {
             var playerState = Container.GetInstance<IPlayerState>();
             var schemeService = Container.GetInstance<ISchemeService>();
-            var map = Container.GetInstance<IMap>();
+            var sector = Container.GetInstance<ISector>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
 
             var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
 
             // Подготовка актёров
-            var humanStartNode = map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var humanStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
@@ -233,7 +236,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterTaskSources()
         {
-            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>();
+            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
         }
 
         private void InitPlayers()
