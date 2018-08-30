@@ -1,7 +1,8 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Пиратский Капитан"
   },
   "SlotCount": 7,
-  "Hp": 120
+  "Hp": 120,
+  "DefaultAct": "hand-hit"
 }
