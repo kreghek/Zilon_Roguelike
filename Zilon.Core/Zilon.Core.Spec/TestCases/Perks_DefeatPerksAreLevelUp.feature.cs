@@ -68,28 +68,30 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Один актёр убивает другого", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Актёр игрока прокачивает перк на убийство", new string[] {
                 "perks",
                 "dev0"}, SourceLine=6)]
-        public virtual void ОдинАктёрУбиваетДругого()
+        public virtual void АктёрИгрокаПрокачиваетПеркНаУбийство()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Один актёр убивает другого", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Актёр игрока прокачивает перк на убийство", null, new string[] {
                         "perks",
                         "dev0"});
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given("Квадратная карта", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Есть карта размером 10", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Два актёра на расстоянии атаки", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
  testRunner.And("У актёра игрока прогресс перка на убийство 4 из 5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When("Я атакую вражеского актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Есть монстр класса rat Id:1000 в ячейке (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Я атакую вражеского актёра", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Монстр Id:1000 имеет Hp 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
+ testRunner.When("Актёр игрока атакует монстра Id:1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 14
  testRunner.Then("перк на убийство должен быть прокачен", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

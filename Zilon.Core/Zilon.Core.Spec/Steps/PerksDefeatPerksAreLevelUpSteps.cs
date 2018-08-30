@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -31,6 +32,7 @@ namespace Zilon.Core.Spec.Steps
         private HumanActorTaskSource _humanTaskSource;
 
         [Given(@"Квадратная карта")]
+        [Obsolete()]
         public void GivenКвадратнаяКарта()
         {
             _container = new ServiceContainer();
@@ -44,6 +46,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Два актёра на расстоянии атаки")]
+        [Obsolete("Не используется. Удалить, когда будут упразднены все ссылки на этот шаг.")]
         public void GivenДваАктёраНаРасстоянииАтаки()
         {
             var schemeService = _container.GetInstance<ISchemeService>();
@@ -106,6 +109,7 @@ namespace Zilon.Core.Spec.Steps
         }
         
         [When(@"Я атакую вражеского актёра")]
+        [Obsolete]
         public void WhenЯАтакуюВражескогоАктёра()
         {
             var useService = _container.GetInstance<ITacticalActUsageService>();
