@@ -39,6 +39,16 @@ namespace Zilon.Core.Tactics
 
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
+
+            _actorManager.Added += ActorManager_Added;
+        }
+
+        private void ActorManager_Added(object sender, ManagerItemsChangedArgs<IActor> e)
+        {
+            foreach (var actor in e.Items)
+            {
+                Map.HoldNode(actor.Node, actor);
+            }
         }
 
         /// <summary>
