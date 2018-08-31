@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
@@ -31,6 +32,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var nextNode = _path[0];
+
+            if (!_map.IsPositionAvailableFor(nextNode, Actor))
+            {
+                throw new InvalidOperationException("Попытка переместиться в заблокированную ячейку.");
+            }
 
             _map.ReleaseNode(Actor.Node, Actor);
             Actor.MoveToNode(nextNode);

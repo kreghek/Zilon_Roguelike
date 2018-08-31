@@ -95,7 +95,14 @@ class SectorVM : MonoBehaviour
     {
         var command = _clientCommandExecutor.Pop();
 
-        command?.Execute();
+        try
+        {
+            command?.Execute();
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+        }
     }
 
     // ReSharper disable once UnusedMember.Local
