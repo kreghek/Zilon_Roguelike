@@ -265,8 +265,10 @@ class SectorVM : MonoBehaviour
         
         var evolutionData = new EvolutionData(_schemeService);
         evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
+
+        var defaultActScheme = _schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
         
-        var person = new HumanPerson(personScheme, evolutionData, inventory);
+        var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
         var actor = new Actor(person, player, startNode);
         
