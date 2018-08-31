@@ -6,14 +6,21 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class GameManager
+    public sealed class GameManager : IGameManager
     {
         private readonly List<IActor> _actors = new List<IActor>();
-        private readonly IActorTaskSource[] _actorTaskSources;
-        private readonly ISector sector;
-        private IActorManager _actorManager;
+        private readonly ISector _sector;
+        private readonly IActorManager _actorManager;
 
-        public async void RequestNextActorTaskAsync()
+        public GameManager(ISector sector, IActorManager actorManager)
+        {
+            _sector = sector;
+            _actorManager = actorManager;
+        }
+
+        public IActorTaskSource[] ActorTaskSources { get; set; }
+
+        public async Task RequestNextActorTaskAsync()
         {
             var actor = _actors.FirstOrDefault();
 
@@ -23,7 +30,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                sector.Update();
+                _sector.Update();
                 _actors.AddRange(_actorManager.Actors); // отсортировать по инициативе
 
                 actor = _actors.FirstOrDefault();
@@ -35,10 +42,20 @@ namespace Zilon.Core.Tactics
         {
             _actors.Remove(actor);
 
-            foreach (var taskSource in _actorTaskSources)
+            if (ActorTaskSources == null)
             {
-                Task task = taskSource.GetActorTasks(actor);
-                await task;
+                return;
+            }
+
+            foreach (var taskSource in ActorTaskSources)
+            {
+                var task = taskSource.GetActorTasks(actor);
+                var actorTasks = await task;
+
+                foreach (var actorTask in actorTasks)
+                {
+                    actorTask.Execute();
+                }
             }
         }
     }

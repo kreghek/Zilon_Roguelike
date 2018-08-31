@@ -15,6 +15,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="actorManager"> Менеджер актёров. </param>
         /// <returns></returns>
         IActorTask[] GetActorTasks(IMap map, IActorManager actorManager);
-        Task GetActorTasks(IActor actor);
+        Task<IActorTask[]> GetActorTasks(IActor actor);
     }
 }

@@ -66,7 +66,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return actorTasks.ToArray();
         }
 
-        public Task GetActorTasks(IActor actor)
+        Task<IActorTask[]> IActorTaskSource.GetActorTasks(IActor actor)
         {
             throw new NotImplementedException();
         }

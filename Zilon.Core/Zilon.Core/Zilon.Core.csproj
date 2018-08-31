@@ -157,6 +157,7 @@
     <Compile Include="Tactics\Behaviour\MoveIntention.cs" />
     <Compile Include="Tactics\Behaviour\OneTurnActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\EquipTask.cs" />
+    <Compile Include="Tactics\Behaviour\TmpTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\UsePropTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
     <Compile Include="Tactics\DropResolverRandomSource.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Tactics\IActorState.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IDropResolverRandomSource.cs" />
+    <Compile Include="Tactics\IGameManager.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />

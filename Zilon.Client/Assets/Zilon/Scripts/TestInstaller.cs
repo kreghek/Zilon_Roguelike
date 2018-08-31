@@ -1,3 +1,4 @@
+using System;
 using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using Zenject;
@@ -10,11 +11,13 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tactics.Spatial;
 
 public class TestInstaller : MonoInstaller<TestInstaller>
 {
     public override void InstallBindings()
     {
+        Container.Bind<IGameManager>().To<GameManager>().AsSingle();
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
@@ -31,10 +34,12 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
+        
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<BotPlayer>().AsSingle();
 
+        
         Container.Bind<ISchemeLocator>().FromInstance(GetSchemeLocator()).AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         
@@ -55,6 +60,11 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
+        
+        
+        
+        var sector = CreateSector();
+        Container.Bind<ISector>().FromInstance(sector).AsSingle();
     }
 
     private SchemeLocator GetSchemeLocator()
@@ -69,5 +79,40 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         var sectorModalManager = FindObjectOfType<SectorModalManager>();
         Debug.Log(sectorModalManager);
         return sectorModalManager;
+    }
+
+    private ISector CreateSector()
+    {
+        var _actorManager = Container.Resolve<IActorManager>();
+        var _propContainerManager = Container.Resolve<IPropContainerManager>();
+        var _sectorGeneratorRandomSource = Container.Resolve<ISectorGeneratorRandomSource>();
+        var _monsterPlayer = Container.Resolve<BotPlayer>();
+        var _schemeService = Container.Resolve<ISchemeService>();
+        var _dropResolver = Container.Resolve<IDropResolver>();
+        
+        var map = new HexMap();
+
+        var sector = new Sector(map, _actorManager, _propContainerManager);
+
+        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
+            _monsterPlayer,
+            _schemeService,
+            _dropResolver);
+
+        SectorVM.sectorGenerator = sectorGenerator;
+
+        try
+        {
+            sectorGenerator.Generate(sector, map);
+        }
+        catch (Exception)
+        {
+            Debug.Log(sectorGenerator.Log.ToString());
+            throw;
+        }
+
+        Debug.Log(sectorGenerator.Log.ToString());
+
+        return sector;
     }
 }

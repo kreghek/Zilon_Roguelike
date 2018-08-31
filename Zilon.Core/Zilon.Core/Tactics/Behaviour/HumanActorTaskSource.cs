@@ -53,7 +53,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
         }
 
-        public Task GetActorTasks(IActor actor)
+        Task<IActorTask[]> IActorTaskSource.GetActorTasks(IActor actor)
         {
             throw new NotImplementedException();
         }

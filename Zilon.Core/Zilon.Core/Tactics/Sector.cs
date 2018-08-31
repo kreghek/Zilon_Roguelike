@@ -54,11 +54,11 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         public void Update()
         {
-            // Определяем команды на текущий ход
-            CollectActorTasks();
+            //// Определяем команды на текущий ход
+            //CollectActorTasks();
 
-            // Выполняем все команды на текущий ход
-            ExecuteActorTasks();
+            //// Выполняем все команды на текущий ход
+            //ExecuteActorTasks();
 
             UpdateSurvivals();
 

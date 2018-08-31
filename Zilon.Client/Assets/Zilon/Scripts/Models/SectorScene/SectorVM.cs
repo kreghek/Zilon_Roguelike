@@ -68,6 +68,8 @@ class SectorVM : MonoBehaviour
     [NotNull] [Inject] private IPropContainerManager _propContainerManager;
 
     [NotNull] [Inject] private ITacticalActUsageService _tacticalActUsageService;
+    
+    [NotNull] [Inject] private ISector _sector;
 
     [NotNull] [Inject(Id = "move-command")]
     private ICommand _moveCommand;
@@ -81,29 +83,31 @@ class SectorVM : MonoBehaviour
     [NotNull] [Inject(Id = "show-container-modal-command")]
     private ICommand _showContainerModalCommand;
 
+    public static SectorProceduralGenerator sectorGenerator;
+
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    private void FixedUpdate()
-    {
-        ExecuteCommands();
-    }
-
-    private void ExecuteCommands()
-    {
-        var command = _clientCommandExecutor.Pop();
-
-        try
-        {
-            command?.Execute();
-        }
-        catch (Exception exception)
-        {
-            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-        }
-    }
+//    private void FixedUpdate()
+//    {
+//        ExecuteCommands();
+//    }
+//
+//    private void ExecuteCommands()
+//    {
+//        var command = _clientCommandExecutor.Pop();
+//
+//        try
+//        {
+//            command?.Execute();
+//        }
+//        catch (Exception exception)
+//        {
+//            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+//        }
+//    }
 
     // ReSharper disable once UnusedMember.Local
     private void Awake()
@@ -113,29 +117,10 @@ class SectorVM : MonoBehaviour
 
     private void CreateSector()
     {
-        var map = new HexMap();
-
-        var sector = new Sector(map, _actorManager, _propContainerManager);
-
-        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
-            _monsterPlayer,
-            _schemeService,
-            _dropResolver);
-
-        try
-        {
-            sectorGenerator.Generate(sector, map);
-        }
-        catch (Exception)
-        {
-            Debug.Log(sectorGenerator.Log.ToString());
-            throw;
-        }
-
-        Debug.Log(sectorGenerator.Log.ToString());
+        
 
         var nodeVMs = new List<MapNodeVM>();
-        foreach (var node in map.Nodes)
+        foreach (var node in _sector.Map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
 
@@ -145,7 +130,7 @@ class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
 
-            var edges = map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
+            var edges = _sector.Map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
             var neighbors = (from edge in edges
                 from neighbor in edge.Nodes
                 where neighbor != node
@@ -154,7 +139,7 @@ class SectorVM : MonoBehaviour
             mapNodeVm.Edges = edges;
             mapNodeVm.Neighbors = neighbors;
 
-            if (sector.ExitNodes.Contains(node))
+            if (_sector.ExitNodes.Contains(node))
             {
                 mapNodeVm.IsExit = true;
             }
@@ -166,7 +151,7 @@ class SectorVM : MonoBehaviour
 
         var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
 
-        var playerActorStartNode = sectorGenerator.StartNodes.First();
+        var playerActorStartNode = _sector.Map.Nodes.First();//sectorGenerator.StartNodes.First();
         var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -215,17 +200,17 @@ class SectorVM : MonoBehaviour
             _decisionSource,
             _tacticalActUsageService);
 
-        sector.BehaviourSources = new IActorTaskSource[]
-        {
-            humanTaskSource,
-            monsterTaskSource
-        };
+//        _sector.BehaviourSources = new IActorTaskSource[]
+//        {
+//            humanTaskSource,
+//            monsterTaskSource
+//        };
 
-        _sectorManager.CurrentSector = sector;
+        _sectorManager.CurrentSector = _sector;
 
         _playerState.TaskSource = humanTaskSource;
 
-        sector.ActorExit += SectorOnActorExit;
+        _sector.ActorExit += SectorOnActorExit;
     }
 
     private void Container_Selected(object sender, EventArgs e)
