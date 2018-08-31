@@ -223,6 +223,7 @@
     <Compile Include="MapGenerators\SectorGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\DropTablePropContainer.cs" />
+    <Compile Include="Tactics\GameManager.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IActorState.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
