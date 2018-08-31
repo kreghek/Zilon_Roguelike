@@ -230,7 +230,7 @@ namespace Zilon.Core.Persons
             var actList = new List<ITacticalAct>();
 
             var defaultAct = new TacticalAct(1, _defaultActScheme, combatStats);
-            actList.Add(defaultAct);
+            actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
             {
@@ -244,7 +244,7 @@ namespace Zilon.Core.Persons
                     var equipmentPower = CalcEquipmentEfficient(equipment);
                     var act = new TacticalAct(equipmentPower, actScheme, combatStats);
 
-                    actList.Add(act);
+                    actList.Insert(0, act);
                 }
             }
 

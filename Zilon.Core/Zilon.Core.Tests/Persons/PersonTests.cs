@@ -29,9 +29,13 @@ namespace Zilon.Core.Tests.Persons
             };
 
             var defaultActScheme = new TacticalActScheme {
-                //Dependency = new[] {
-                //    new TacticalActDependencySubScheme(CombatStatType.Melee, 1)
-                //}
+                Stats = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 1)
+                },
+                Dependency = new[] {
+                    new TacticalActDependencySubScheme(CombatStatType.Melee, 1)
+                }
             };
 
             var person = new HumanPerson(personScheme, defaultActScheme, null);
@@ -81,7 +85,16 @@ namespace Zilon.Core.Tests.Persons
                 SlotCount = 3
             };
 
-            var defaultActScheme = new TacticalActScheme();
+            var defaultActScheme = new TacticalActScheme
+            {
+                Stats = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 1)
+                },
+                Dependency = new[] {
+                    new TacticalActDependencySubScheme(CombatStatType.Melee, 1)
+                }
+            };
 
             var perkMock = new Mock<IPerk>();
             perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
