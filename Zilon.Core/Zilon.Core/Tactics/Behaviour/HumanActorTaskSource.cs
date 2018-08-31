@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading.Tasks;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -51,6 +51,11 @@ namespace Zilon.Core.Tactics.Behaviour
         public void Intent(IIntention intention)
         {
             _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
+        }
+
+        public Task GetActorTasks(IActor actor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

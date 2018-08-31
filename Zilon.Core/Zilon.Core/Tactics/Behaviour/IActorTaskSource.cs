@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using System.Threading.Tasks;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -14,5 +15,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="actorManager"> Менеджер актёров. </param>
         /// <returns></returns>
         IActorTask[] GetActorTasks(IMap map, IActorManager actorManager);
+        Task GetActorTasks(IActor actor);
     }
 }

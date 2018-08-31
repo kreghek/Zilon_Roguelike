@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 
@@ -64,6 +64,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             }
 
             return actorTasks.ToArray();
+        }
+
+        public Task GetActorTasks(IActor actor)
+        {
+            throw new NotImplementedException();
         }
     }
 }
