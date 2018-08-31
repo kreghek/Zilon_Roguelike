@@ -14,7 +14,7 @@ using Zilon.Core.Tactics;
 namespace Zilon.Core.Spec.Steps
 {
     [Binding]
-    public class SurvivalSteps : GenericStepsBase<CommonGameActionsContext>
+    public sealed class SurvivalSteps : GenericStepsBase<CommonGameActionsContext>
     {
         public SurvivalSteps(CommonGameActionsContext context) : base(context)
         {

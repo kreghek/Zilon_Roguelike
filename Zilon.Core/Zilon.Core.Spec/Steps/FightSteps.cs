@@ -10,9 +10,9 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Spec.Steps
 {
     [Binding]
-    public class FightSteps : GenericStepsBase<CommonGameActionsContext>
+    public sealed class FightSteps : GenericStepsBase<CommonGameActionsContext>
     {
-        protected FightSteps(CommonGameActionsContext context) : base(context)
+        public FightSteps(CommonGameActionsContext context) : base(context)
         {
         }
 
