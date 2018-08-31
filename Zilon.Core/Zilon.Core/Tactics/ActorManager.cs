@@ -52,5 +52,10 @@ namespace Zilon.Core.Tactics
             var args = new ManagerItemsChangedArgs<IActor>(actors);
             Added?.Invoke(this, args);
         }
+
+        public void Remove(IActor actor)
+        {
+            _items.Remove(actor);
+        }
     }
 }

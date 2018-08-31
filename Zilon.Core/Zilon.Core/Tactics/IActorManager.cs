@@ -30,5 +30,7 @@ namespace Zilon.Core.Tactics
         /// Событие выстреливает, когда в менеджере добавляются новые актёры.
         /// </summary>
         event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
+
+        void Remove(IActor actor);
     }
 }

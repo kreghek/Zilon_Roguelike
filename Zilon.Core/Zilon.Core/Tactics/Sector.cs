@@ -178,7 +178,17 @@ namespace Zilon.Core.Tactics
             foreach (var actor in e.Items)
             {
                 Map.HoldNode(actor.Node, actor);
+
+                actor.State.Dead += ActorState_Dead;
             }
+        }
+
+        private void ActorState_Dead(object sender, EventArgs e)
+        {
+            var actor = _actorManager.Actors.Single(x => x.State == sender);
+            Map.ReleaseNode(actor.Node, actor);
+            _actorManager.Remove(actor);
+            actor.State.Dead -= ActorState_Dead;
         }
 
         private void DoActorExit()
