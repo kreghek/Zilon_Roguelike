@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -65,6 +65,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public Task<IActorTask[]> GetActorTasks(IActor actor)
         {
+            if (actor.Owner is BotPlayer)
+            {
+                return Task.FromResult<IActorTask[]>(new IActorTask[0]);
+            }
+
             if (currentTask == null || currentTask.IsComplete)
             {
                 currentTask = new IdleTask(actor, _decisionSource);

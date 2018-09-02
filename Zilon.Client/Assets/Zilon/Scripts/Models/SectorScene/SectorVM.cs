@@ -71,6 +71,8 @@ class SectorVM : MonoBehaviour
     
     [NotNull] [Inject] private ISector _sector;
 
+    [Inject] private IHumanActorTaskSource _humanActorTaskSource;
+
     [NotNull] [Inject(Id = "move-command")]
     private ICommand _moveCommand;
 
@@ -192,13 +194,13 @@ class SectorVM : MonoBehaviour
             containerVm.Selected += Container_Selected;
         }
         
-        var humanTaskSource = new HumanActorTaskSource();
-        humanTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+        //var humanTaskSource = new HumanActorTaskSource();
+        //humanTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
 
-        var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
-            sectorGenerator.Patrols,
-            _decisionSource,
-            _tacticalActUsageService);
+        //var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
+        //    sectorGenerator.Patrols,
+        //    _decisionSource,
+        //    _tacticalActUsageService);
 
 //        _sector.BehaviourSources = new IActorTaskSource[]
 //        {
@@ -208,7 +210,7 @@ class SectorVM : MonoBehaviour
 
         _sectorManager.CurrentSector = _sector;
 
-        _playerState.TaskSource = humanTaskSource;
+        _playerState.TaskSource = _humanActorTaskSource;
 
         _sector.ActorExit += SectorOnActorExit;
     }

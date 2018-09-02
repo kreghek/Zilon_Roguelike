@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -34,6 +35,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
+        Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         
 
         Container.Bind<HumanPlayer>().AsSingle();

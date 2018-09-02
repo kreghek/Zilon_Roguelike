@@ -10,6 +10,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 public class GameManagerHandler : MonoBehaviour
 {
 
+    [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 	[Inject] private IGameManager _gameManager;
 	[Inject] private IDecisionSource _decisionSource;
 	
@@ -18,8 +19,8 @@ public class GameManagerHandler : MonoBehaviour
 	{
 		_gameManager.ActorTaskSources = new[]
 		{
-			new TmpTaskSource(_decisionSource)
-		};
+            _humanActorTaskSource
+        };
 	}
 	
 	// Update is called once per frame
