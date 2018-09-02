@@ -49,8 +49,7 @@ namespace Zilon.Core.Tactics
 
             foreach (var taskSource in ActorTaskSources)
             {
-                var task = taskSource.GetActorTasks(actor);
-                var actorTasks = await task;
+                var actorTasks = await taskSource.GetActorTasks(actor); ;
 
                 foreach (var actorTask in actorTasks)
                 {
