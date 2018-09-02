@@ -59,23 +59,42 @@ namespace Zilon.Core.Tactics.Behaviour
         public void Intent(IIntention intention)
         {
             _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
+
+            if (completionSource != null)
+            {
+                _currentTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
+
+                if (_currentTask != null)
+                {
+                    completionSource.SetResult(new IActorTask[] { _currentTask });
+                }
+                else
+                {
+                    completionSource.SetResult(new IActorTask[0]);
+                }
+            }
         }
 
         private IActorTask currentTask;
 
+        public TaskCompletionSource<IActorTask[]> completionSource;
+
         public Task<IActorTask[]> GetActorTasks(IActor actor)
         {
-            if (actor.Owner is BotPlayer)
+            if (CurrentActor == null)
             {
-                return Task.FromResult<IActorTask[]>(new IActorTask[0]);
+                throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
 
-            if (currentTask == null || currentTask.IsComplete)
+            if (actor != CurrentActor)
             {
-                currentTask = new IdleTask(actor, _decisionSource);
+                return Task.FromResult(new IActorTask[0]);
             }
 
-            return Task.FromResult(new IActorTask[] { currentTask });
+            completionSource = new TaskCompletionSource<IActorTask[]>();
+
+            var asyncTask = completionSource.Task;
+            return asyncTask;
         }
     }
 }

@@ -92,24 +92,24 @@ class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-//    private void FixedUpdate()
-//    {
-//        ExecuteCommands();
-//    }
-//
-//    private void ExecuteCommands()
-//    {
-//        var command = _clientCommandExecutor.Pop();
-//
-//        try
-//        {
-//            command?.Execute();
-//        }
-//        catch (Exception exception)
-//        {
-//            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-//        }
-//    }
+    private void FixedUpdate()
+    {
+        ExecuteCommands();
+    }
+
+    private void ExecuteCommands()
+    {
+        var command = _clientCommandExecutor.Pop();
+
+        try
+        {
+            command?.Execute();
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+        }
+    }
 
     // ReSharper disable once UnusedMember.Local
     private void Awake()
@@ -193,9 +193,9 @@ class SectorVM : MonoBehaviour
             containerVm.Container = container;
             containerVm.Selected += Container_Selected;
         }
-        
+
         //var humanTaskSource = new HumanActorTaskSource();
-        //humanTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
 
         //var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
         //    sectorGenerator.Patrols,
