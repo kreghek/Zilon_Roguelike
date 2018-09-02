@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Zilon.Core.Players;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -13,62 +13,106 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly Dictionary<IActor, IPatrolRoute> _patrolRoutes;
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actService;
+        private readonly ISector _sector;
+        private readonly IActorManager _actorManager;
 
         public MonsterActorTaskSource(IPlayer player,
             Dictionary<IActor, IPatrolRoute> patrolRoutes,
             IDecisionSource decisionSource,
-            ITacticalActUsageService actService)
+            ITacticalActUsageService actService,
+            ISector sector,
+            IActorManager actorManager)
         {
             _logicDict = new Dictionary<IActor, IBotLogic>();
             _player = player;
             _patrolRoutes = patrolRoutes;
             _decisionSource = decisionSource;
             _actService = actService;
+            _sector = sector;
+            _actorManager = actorManager;
         }
 
-        public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
+        //public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
+        //{
+        //    var actorTasks = new List<IActorTask>();
+        //    foreach (var actor in actorManager.Actors)
+        //    {
+        //        if (actor.Owner != _player)
+        //        {
+        //            continue;
+        //        }
+
+        //        if (actor.State.IsDead)
+        //        {
+        //            _logicDict.Remove(actor);
+        //            _patrolRoutes.Remove(actor);
+        //        }
+        //        else
+        //        {
+        //            if (!_logicDict.TryGetValue(actor, out var logic))
+        //            {
+        //                if (_patrolRoutes.TryGetValue(actor, out var partolRoute))
+        //                {
+
+        //                    var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource, _actService);
+        //                    _logicDict[actor] = patrolLogic;
+        //                    logic = patrolLogic;
+        //                }
+        //                else
+        //                {
+        //                    throw new InvalidOperationException($"Для актёра {actor} не задан маршрут.");
+        //                }
+        //            }
+
+        //            var currentTask = logic.GetCurrentTask();
+        //            actorTasks.Add(currentTask);
+        //        }
+        //    }
+
+        //    return actorTasks.ToArray();
+        //}
+
+        public Task<IActorTask[]> GetActorTasks(IActor actor)
         {
-            var actorTasks = new List<IActorTask>();
-            foreach (var actor in actorManager.Actors)
+            if (actor.Owner != _player)
             {
-                if (actor.Owner != _player)
-                {
-                    continue;
-                }
-
-                if (actor.State.IsDead)
-                {
-                    _logicDict.Remove(actor);
-                    _patrolRoutes.Remove(actor);
-                }
-                else
-                {
-                    if (!_logicDict.TryGetValue(actor, out var logic))
-                    {
-                        if (_patrolRoutes.TryGetValue(actor, out var partolRoute))
-                        {
-
-                            var patrolLogic = new PatrolLogic(actor, partolRoute, map, actorManager, _decisionSource, _actService);
-                            _logicDict[actor] = patrolLogic;
-                            logic = patrolLogic;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException($"Для актёра {actor} не задан маршрут.");
-                        }
-                    }
-
-                    var currentTask = logic.GetCurrentTask();
-                    actorTasks.Add(currentTask);
-                }
+                return Task.FromResult(new IActorTask[0]);
             }
 
-            return actorTasks.ToArray();
-        }
+            var actorTasks = new List<IActorTask>();
+            if (actor.State.IsDead)
+            {
+                _logicDict.Remove(actor);
+                _patrolRoutes.Remove(actor);
+            }
+            else
+            {
+                if (!_logicDict.TryGetValue(actor, out var logic))
+                {
+                    if (_patrolRoutes.TryGetValue(actor, out var partolRoute))
+                    {
 
-        Task<IActorTask[]> IActorTaskSource.GetActorTasks(IActor actor)
-        {
-            throw new NotImplementedException();
+                        var patrolLogic = new PatrolLogic(actor,
+                            partolRoute,
+                            _sector.Map,
+                            _actorManager,
+                            _decisionSource,
+                            _actService);
+
+                        _logicDict[actor] = patrolLogic;
+                        logic = patrolLogic;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"Для актёра {actor} не задан маршрут.");
+                    }
+                }
+
+                var currentTask = logic.GetCurrentTask();
+                actorTasks.Add(currentTask);
+            }
+
+            return Task.FromResult(actorTasks.ToArray());
         }
     }
 }

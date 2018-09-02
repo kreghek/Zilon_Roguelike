@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -8,6 +10,12 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private IActorTask _currentTask;
         private IIntention _currentIntesion;
+        private readonly IDecisionSource _decisionSource;
+
+        public HumanActorTaskSource(IDecisionSource decisionSource)
+        {
+            _decisionSource = decisionSource;
+        }
 
         public IActorTask[] GetActorTasks(IMap map, IActorManager actorManager)
         {
@@ -53,9 +61,16 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
         }
 
-        Task<IActorTask[]> IActorTaskSource.GetActorTasks(IActor actor)
+        private IActorTask currentTask;
+
+        public Task<IActorTask[]> GetActorTasks(IActor actor)
         {
-            throw new NotImplementedException();
+            if (currentTask == null || currentTask.IsComplete)
+            {
+                currentTask = new IdleTask(actor, _decisionSource);
+            }
+
+            return Task.FromResult(new IActorTask[] { currentTask });
         }
     }
 }

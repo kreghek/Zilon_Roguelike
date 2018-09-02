@@ -157,7 +157,6 @@
     <Compile Include="Tactics\Behaviour\MoveIntention.cs" />
     <Compile Include="Tactics\Behaviour\OneTurnActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\EquipTask.cs" />
-    <Compile Include="Tactics\Behaviour\TmpTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\UsePropTask.cs" />
     <Compile Include="Tactics\DropResolver.cs" />
     <Compile Include="Tactics\DropResolverRandomSource.cs" />
