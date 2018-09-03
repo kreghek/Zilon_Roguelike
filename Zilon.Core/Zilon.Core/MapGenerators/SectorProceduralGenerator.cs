@@ -13,43 +13,30 @@ namespace Zilon.Core.MapGenerators
 {
     public class SectorProceduralGenerator
     {
-        
+        private readonly IActorManager _actorManager;
+        private readonly IPropContainerManager _propContainerManager;
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly IPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
 
-        /// <summary>
-        /// Стартовые узлы.
-        /// Набор узлов, где могут располагаться актёры игрока
-        /// на начало прохождения сектора.
-        /// </summary>
-        public IMapNode[] StartNodes { get; private set; }
-
-        public List<IActor> MonsterActors { get; }
-
-        public List<IPropContainer> Containers { get; }
-
-        public Dictionary<IActor, IPatrolRoute> Patrols { get; }
-
-
         public StringBuilder Log { get; }
 
-        public SectorProceduralGenerator(ISectorGeneratorRandomSource randomSource,
+        public SectorProceduralGenerator(IActorManager actorManager,
+            IPropContainerManager propContainerManager,
+            ISectorGeneratorRandomSource randomSource,
             IPlayer botPlayer,
             ISchemeService schemeService,
             IDropResolver dropResolver)
         {
+            _actorManager = actorManager;
+            _propContainerManager = propContainerManager;
             _randomSource = randomSource;
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _dropResolver = dropResolver;
 
             Log = new StringBuilder();
-
-            MonsterActors = new List<IActor>();
-            Containers = new List<IPropContainer>();
-            Patrols = new Dictionary<IActor, IPatrolRoute>();
         }
 
         public void Generate(ISector sector, IMap map)
@@ -70,11 +57,11 @@ namespace Zilon.Core.MapGenerators
             // Соединяем комнаты
             roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
-            CreateRoomMonsters(mainRooms);
+            CreateRoomMonsters(sector, mainRooms);
 
             CreateChests(mainRooms);
 
-            SelectStartNodes(roomGenerator.StartRoom);
+            SelectStartNodes(sector, roomGenerator.StartRoom);
 
             SelectExitPoints(sector, roomGenerator.ExitRoom);
         }
@@ -90,7 +77,7 @@ namespace Zilon.Core.MapGenerators
                 var container = new DropTablePropContainer(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
                     _dropResolver);
-                Containers.Add(container);
+                _propContainerManager.Add(container);
             }
         }
 
@@ -99,12 +86,12 @@ namespace Zilon.Core.MapGenerators
             sector.ExitNodes = new[] { exitRoom.Nodes.Last() };
         }
 
-        private void SelectStartNodes(Room startRoom)
+        private void SelectStartNodes(ISector sector, Room startRoom)
         {
-            StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
+            sector.StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
         }
 
-        private void CreateRoomMonsters(IEnumerable<Room> rooms)
+        private void CreateRoomMonsters(ISector sector, IEnumerable<Room> rooms)
         {
             var monsterScheme = _schemeService.GetScheme<MonsterScheme>("default");
 
@@ -113,11 +100,11 @@ namespace Zilon.Core.MapGenerators
                 var person = new MonsterPerson(monsterScheme);
                 var startNode = room.Nodes.FirstOrDefault();
                 var actor = new Actor(person, _botPlayer, startNode);
-                MonsterActors.Add(actor);
+                _actorManager.Add(actor);
 
                 var finishPatrolNode = room.Nodes.Last();
                 var patrolRoute = new PatrolRoute(new[] { startNode, finishPatrolNode });
-                Patrols[actor] = patrolRoute;
+                sector.PatrolRoutes[actor] = patrolRoute;
             }
         }
     }

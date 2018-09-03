@@ -5,6 +5,7 @@ using System.Linq;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -22,11 +23,13 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler ActorExit;
 
-        public IActorTaskSource[] BehaviourSources { get; set; }
-
         public IMapNode[] ExitNodes { get; set; }
 
         public IMap Map { get; }
+
+        public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
+
+        public IMapNode[] StartNodes { get; set; }
 
         public Sector(IMap map,
             IActorManager actorManager,
@@ -34,6 +37,7 @@ namespace Zilon.Core.Tactics
         {
             _tasks = new List<IActorTask>();
             _taskIniComparer = new TaskIniComparer();
+            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
