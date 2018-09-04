@@ -19,6 +19,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask CreateActorTask(IActorTask currentTask, IActor actor)
         {
+            if (actor.Node == TargetNode)
+            {
+                return null;
+            }
+
             var currentMoveTask = currentTask as MoveTask;
             if (currentMoveTask == null)
             {

@@ -58,7 +58,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
             // ARRANGE
 
-            // 3 шага одна и та же команда, на 4 шаг - null-комманда
+            // 3 шага одна и та же задача, на 4 шаг - пустая комманда
             for (var step = 1; step <= 4; step++)
             {
                 
