@@ -1,24 +1,12 @@
 ﻿using System;
 
-using Zilon.Core.Client;
-
 namespace Zilon.Core.Commands
 {
-    //TODO Убрать отсюда переход на следующий ход.
-    // За это должна отвечать одна команда NextTurn.
-    // Остальные команды просто парные с ней.
     /// <summary>
     /// Базовая команда для команд, связанных с изменением тактической обстановки в бою.
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
-        protected readonly ISectorManager _sectorManager;
-
-        /// <summary>
-        /// Признак того, что в конце команды необходимо выполнить обновление сектора.
-        /// Означает, что команда немедленно выполнить передод к следующему игровому ходу.
-        /// </summary>
-        private bool NeedToUpdateSector { get; }
 
         public abstract bool CanExecute();
 
@@ -31,19 +19,6 @@ namespace Zilon.Core.Commands
             }
 
             ExecuteTacticCommand();
-
-            if (NeedToUpdateSector)
-            {
-                var sector = _sectorManager.CurrentSector;
-                sector.Update();
-            }
-        }
-
-        protected TacticCommandBase(ISectorManager sectorManager)
-        {
-            _sectorManager = sectorManager;
-
-            NeedToUpdateSector = true;
         }
 
         /// <summary>

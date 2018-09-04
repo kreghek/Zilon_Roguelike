@@ -14,9 +14,8 @@ namespace Zilon.Core.Commands
             
         }
 
-        public NextTurnCommand(ISectorManager sectorManager, 
-            IPlayerState playerState) :
-            base(sectorManager, playerState)
+        public NextTurnCommand(IPlayerState playerState) :
+            base(playerState)
         {
         }
     }

@@ -9,8 +9,7 @@ namespace Zilon.Core.Commands
     {
         protected readonly IPlayerState _playerState;
 
-        protected ActorCommandBase(ISectorManager sectorManager,
-            IPlayerState playerState) : base(sectorManager)
+        protected ActorCommandBase(IPlayerState playerState) : base()
         {
             _playerState = playerState;
         }

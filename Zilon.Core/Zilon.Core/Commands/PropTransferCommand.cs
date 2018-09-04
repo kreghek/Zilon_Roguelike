@@ -13,7 +13,7 @@ namespace Zilon.Core.Commands
         public PropTransferCommand(ISectorManager sectorManager,
             IPlayerState playerState,
             PropTransferMachine transferMachine) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
             _transferMachine = transferMachine;
         }

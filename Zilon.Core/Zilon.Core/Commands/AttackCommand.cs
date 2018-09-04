@@ -13,13 +13,15 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class AttackCommand : ActorCommandBase
     {
+        private readonly ISectorManager _sectorManager;
         private readonly ITacticalActUsageService _tacticalActUsageService;
 
         public AttackCommand(ISectorManager sectorManager,
             IPlayerState playerState,
             ITacticalActUsageService tacticalActUsageService) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _sectorManager = sectorManager;
             _tacticalActUsageService = tacticalActUsageService;
         }
 

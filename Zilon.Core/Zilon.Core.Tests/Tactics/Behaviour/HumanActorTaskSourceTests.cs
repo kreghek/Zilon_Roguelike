@@ -31,65 +31,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     {
         private ServiceContainer _container;
 
-        [Test]
-        public async Task GetActorTasks_SelectNodeAndUpdates_ActorMovedBeforeEmptyTasks()
-        {
-            // ARRANGE
-            var map = new TestGridGenMap();
-
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
-
-            var expectedPath = new[] {
-                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
-                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
-                finishNode
-            };
-
-            var actor = CreateActor(map, startNode);
-            var taskSource = InitTaskSource(actor);
-            var moveIntetion = new MoveIntention(finishNode, map);
-            
-
-            var actorManager = CreateActorManager(actor);
-
-
-
-            // ACT
-            // ARRANGE
-
-            // 3 шага одна и та же задача, на 4 шаг - пустая комманда
-            for (var step = 1; step <= 4; step++)
-            {
-                
-                var tasks = await SetHumanIntention(actor, taskSource, moveIntetion);
-
-                if (step < 4)
-                {
-                    tasks.Length.Should().Be(1);
-
-                    var factTask = tasks[0] as MoveTask;
-                    factTask.Should().NotBeNull();
-
-                    factTask?.IsComplete.Should().Be(false);
-
-
-                    foreach (var task in tasks)
-                    {
-                        task.Execute();
-                    }
-
-                    actor.Node.Should().Be(expectedPath[step - 1]);
-                }
-                else
-                {
-                    tasks.Should().BeEmpty();
-                }
-            }
-
-            actor.Node.Should().Be(finishNode);
-        }
-
         private IHumanActorTaskSource InitTaskSource(IActor currentActor)
         {
             var taskSource = _container.GetInstance<IHumanActorTaskSource>();

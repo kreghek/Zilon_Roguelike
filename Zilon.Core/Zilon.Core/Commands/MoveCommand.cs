@@ -14,12 +14,14 @@ namespace Zilon.Core.Commands
     public class MoveCommand : ActorCommandBase
     {
         private readonly List<IMapNode> _path;
+        private readonly ISectorManager _sectorManager;
 
         public MoveCommand(ISectorManager sectorManager,
             IPlayerState playerState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
             _path = new List<IMapNode>();
+            _sectorManager = sectorManager;
         }
 
         public override bool CanExecute()
