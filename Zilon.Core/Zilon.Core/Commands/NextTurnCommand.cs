@@ -1,9 +1,13 @@
 ﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Commands
 {
-    public class NextTurnCommand: ActorCommandBase
+    public class NextTurnCommand : ActorCommandBase
     {
+        private readonly IDecisionSource _decisionSource;
+
         public override bool CanExecute()
         {
             return true;
@@ -11,12 +15,14 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            
+            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, _decisionSource));
+            _playerState.TaskSource.Intent(intention);
         }
 
-        public NextTurnCommand(IPlayerState playerState) :
+        public NextTurnCommand(IDecisionSource decisionSource, IPlayerState playerState) :
             base(playerState)
         {
+            _decisionSource = decisionSource;
         }
     }
 }

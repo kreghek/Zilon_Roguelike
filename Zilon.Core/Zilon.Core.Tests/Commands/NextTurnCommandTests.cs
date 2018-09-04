@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -51,7 +52,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = _container.GetInstance<NextTurnCommand>();
-            var sectorMock = _container.GetInstance<Mock<ISector>>();
+            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
 
 
             // ACT
@@ -59,7 +60,7 @@ namespace Zilon.Core.Tests.Commands
 
 
             // ASSERT
-            sectorMock.Verify(x => x.Update(), Times.Once);
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);
         }
 
         [SetUp]
@@ -95,11 +96,16 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
             var playerState = playerStateMock.Object;
 
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
+            var decisionSource = decisionSourceMock.Object;
+
 
             _container.Register<NextTurnCommand>(new PerContainerLifetime());
-            _container.Register(factory => sectorMock, new PerContainerLifetime());
             _container.Register(factory => sectorManager, new PerContainerLifetime());
             _container.Register(factory => playerState, new PerContainerLifetime());
+            _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
+            _container.Register(factory => decisionSource, new PerContainerLifetime());
         }
     }
 }
