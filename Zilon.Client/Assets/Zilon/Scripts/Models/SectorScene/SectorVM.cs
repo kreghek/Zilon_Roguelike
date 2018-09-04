@@ -128,7 +128,7 @@ class SectorVM : MonoBehaviour
 
             var hexNode = (HexNode) node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
-            var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1]);
+            var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
 

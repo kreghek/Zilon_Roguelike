@@ -36,7 +36,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         _moveCounter = 0;
         var actorNode = (HexNode) Actor.Node;
         var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1], -1);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
     }
 
     void Update()
