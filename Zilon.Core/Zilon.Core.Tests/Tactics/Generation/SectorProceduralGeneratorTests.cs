@@ -14,6 +14,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics.Generation
@@ -74,8 +75,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
 
             var schemeService = CreateSchemeService();
 
-            var sectorMock = new Mock<ISector>();
-            var sector = sectorMock.Object;
+            var sector = CreateSector();
 
             var map = CreateFakeMap();
 
@@ -131,8 +131,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
 
             var schemeService = CreateSchemeService();
 
-            var sectorMock = new Mock<ISector>();
-            var sector = sectorMock.Object;
+            var sector = CreateSector();
 
             var map = CreateFakeMap();
 
@@ -165,8 +164,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
 
             var schemeService = CreateSchemeService();
 
-            var sectorMock = new Mock<ISector>();
-            var sector = sectorMock.Object;
+            var sector = CreateSector();
 
             var map = CreateFakeMap();
 
@@ -201,9 +199,7 @@ namespace Zilon.Core.Tests.Tactics.Generation
             var randomSource = new SectorGeneratorRandomSource(dice);
 
             var schemeService = CreateSchemeService();
-
-            var sectorMock = new Mock<ISector>();
-            var sector = sectorMock.Object;
+            var sector = CreateSector();
 
             var map = CreateFakeMap();
 
@@ -224,6 +220,15 @@ namespace Zilon.Core.Tests.Tactics.Generation
                 var sameEdge = map.Edges.Where(x => x != edge && ((x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) || (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0])));
                 sameEdge.Should().BeEmpty($"Ребро с {edge.Nodes[0]} и {edge.Nodes[1]} уже есть.");
             }
+        }
+
+        private static ISector CreateSector()
+        {
+            var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
+            var sector = sectorMock.Object;
+            return sector;
         }
 
         private static IMap CreateFakeMap()
