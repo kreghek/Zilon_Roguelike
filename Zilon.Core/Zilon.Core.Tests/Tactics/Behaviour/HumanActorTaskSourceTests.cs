@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -31,7 +32,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         private ServiceContainer _container;
 
         [Test]
-        public void GetActorTasks_SelectNodeAndUpdates_ActorMovedBeforeEmptyTasks()
+        public async Task GetActorTasks_SelectNodeAndUpdates_ActorMovedBeforeEmptyTasks()
         {
             // ARRANGE
             var map = new TestGridGenMap();
@@ -48,9 +49,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actor = CreateActor(map, startNode);
             var taskSource = InitTaskSource(actor);
             var moveIntetion = new MoveIntention(finishNode, map);
-            taskSource.Intent(moveIntetion);
+            
 
             var actorManager = CreateActorManager(actor);
+
 
 
             // ACT
@@ -59,7 +61,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // 3 шага одна и та же команда, на 4 шаг - null-комманда
             for (var step = 1; step <= 4; step++)
             {
-                var tasks = taskSource.GetActorTasks(map, actorManager);
+                
+                var asyncTask = taskSource.GetActorTasksAsync(actor);
+                taskSource.Intent(moveIntetion);
+                var tasks = await asyncTask;
 
                 if (step < 4)
                 {
@@ -117,13 +122,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Данный метод проверяет, чтобы всегда при выдачи команды на перемещение генерировалась хотя бы одна команда.
+        /// Данный метод проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
         /// </summary>
         /// <remarks>
         /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
         /// </remarks>
         [Test()]
-        public void Intent_TargetToStartPoint_GenerateMoveCommand()
+        public async Task Intent_TargetToStartPoint_GenerateMoveCommand()
         {
             // ARRANGE
 
@@ -147,9 +152,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            var commands = taskSource.GetActorTasks(map, actorManager);
-            commands.Should().NotBeNullOrEmpty();
-            commands[0].Should().BeOfType<MoveTask>();
+            var tasks = await taskSource.GetActorTasksAsync(actor);
+            tasks.Should().NotBeNullOrEmpty();
+            tasks[0].Should().BeOfType<MoveTask>();
         }
 
         private static IActorManager CreateActorManager(params IActor[] actors)
@@ -198,7 +203,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// То есть новая команда возвращается при запросе.
         /// </summary>
         [Test()]
-        public void Intent_AssignAfterTaskComplete_NoNullCommand()
+        public async Task Intent_AssignAfterTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -219,38 +224,43 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ACT
 
-            // 1. Формируем намерение.
+
+            // 1. Ждём, пока задача не отработает.
+            var tempAsyncTasks = taskSource.GetActorTasksAsync(actor);
+
+            // 2. Формируем намерение.
             taskSource.Intent(moveIntention);
 
-            // 2. Ждём, пока команда не отработает.
-            var commands = taskSource.GetActorTasks(map, actorManager);
+            var tasks = await tempAsyncTasks;
 
             for (var i = 0; i < 3; i++)
             {
-                foreach (var command in commands)
+                foreach (var task in tasks)
                 {
 
-                    command.Execute();
+                    task.Execute();
                 }
             }
 
-            foreach (var command in commands)
+            foreach (var task in tasks)
             {
-                command.IsComplete.Should().Be(true);
+                task.IsComplete.Should().Be(true);
             }
 
-            // 3. Формируем ещё одно намерение.
+
+            // 3. Запрашиваем текущие команды.
+            var factAsyncTask = taskSource.GetActorTasksAsync(actor);
+
+            // 4. Формируем ещё одно намерение.
             taskSource.Intent(moveIntention2);
 
-
-            // 4. Запрашиваем текущие команды.
-            var factCommands = taskSource.GetActorTasks(map, actorManager);
+            var factTasks = await factAsyncTask;
 
 
 
 
             // ASSERT
-            factCommands.Should().NotBeNullOrEmpty();
+            factTasks.Should().NotBeNullOrEmpty();
         }
 
         /// <summary>
@@ -258,7 +268,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// то новое намерение отменяет текущее.
         /// </summary>
         [Test()]
-        public void Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
+        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -284,20 +294,20 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             taskSource.Intent(moveIntention);
 
             // 2. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var commands = taskSource.GetActorTasks(map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(actor);
 
             for (var i = 0; i < 1; i++)
             {
-                foreach (var command in commands)
+                foreach (var task in tasks)
                 {
 
-                    command.Execute();
+                    task.Execute();
                 }
             }
 
-            foreach (var command in commands)
+            foreach (var task in tasks)
             {
-                command.IsComplete.Should().Be(false);
+                task.IsComplete.Should().Be(false);
             }
 
             // 3. Формируем ещё одно намерение.
@@ -305,7 +315,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // 4. Запрашиваем текущие команды.
-            var factCommands = taskSource.GetActorTasks(map, actorManager);
+            var factCommands = await taskSource.GetActorTasksAsync(actor);
 
 
 
@@ -318,7 +328,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test()]
-        public void IntentAttack_SetTarget_ReturnsAttackTask()
+        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
             var usageService = _container.GetInstance<ITacticalActUsageService>();
@@ -346,14 +356,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            var tasks = taskSource.GetActorTasks(map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(attackerActor);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<AttackTask>();
         }
 
         [Test()]
-        public void IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
+        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
         {
             //ARRANGE
             var map = new TestGridGenMap();
@@ -382,7 +392,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            var tasks = taskSource.GetActorTasks(map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(actor);
 
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<OpenContainerTask>();

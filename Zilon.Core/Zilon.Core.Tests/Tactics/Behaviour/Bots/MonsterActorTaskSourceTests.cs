@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -35,7 +36,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если для монстров заданы маршруты.
         /// </summary>
         [Test]
-        public void GetActorTasks_PatrolsInClearField_ReturnsMoveTask()
+        public async Task GetActorTasks_PatrolsInClearField_ReturnsMoveTask()
         {
             // ARRANGE
 
@@ -45,7 +46,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = taskSource.GetActorTasks(_map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
 
 
 
@@ -58,7 +59,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный обнаружил противника.
         /// </summary>
         [Test]
-        public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask()
+        public async Task GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask()
         {
             // ARRANGE
 
@@ -70,7 +71,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = taskSource.GetActorTasks(_map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
 
 
 
@@ -88,7 +89,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный стоит рядом и может атаковать.
         /// </summary>
         [Test]
-        public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
+        public async Task GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
         {
             // ARRANGE
 
@@ -101,7 +102,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = taskSource.GetActorTasks(_map, actorManager);
+            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
 
 
 
@@ -126,6 +127,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             _container = new ServiceContainer();
 
             _map = new TestGridGenMap();
+
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(_map);
+            var sector = sectorMock.Object;
+
             _actorListInner = new List<IActor>();
 
             _testedActor = CreateActor(1, 1);
@@ -146,6 +152,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             {
                 { _testedActor, route }
             };
+            sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
 
             var decisionSourceMock = new Mock<IDecisionSource>();
             var decisionSource = decisionSourceMock.Object;
@@ -157,7 +164,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             _container.Register(factory => actorManager, new PerContainerLifetime());
             _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());
             _container.Register(factory => decisionSource, new PerContainerLifetime());
-            _container.Register(factory => patrolRoutes, new PerContainerLifetime());
             _container.Register<MonsterActorTaskSource>(new PerContainerLifetime());
         }
 

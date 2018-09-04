@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _actorManager = actorManager;
         }
 
-        public Task<IActorTask[]> GetActorTasks(IActor actor)
+        public Task<IActorTask[]> GetActorTasksAsync(IActor actor)
         {
             if (actor.Owner != _player)
             {

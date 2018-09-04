@@ -79,7 +79,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public TaskCompletionSource<IActorTask[]> completionSource;
 
-        public Task<IActorTask[]> GetActorTasks(IActor actor)
+        public Task<IActorTask[]> GetActorTasksAsync(IActor actor)
         {
             if (CurrentActor == null)
             {

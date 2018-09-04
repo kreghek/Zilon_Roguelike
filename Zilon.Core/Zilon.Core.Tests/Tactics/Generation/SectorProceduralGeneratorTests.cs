@@ -95,12 +95,23 @@ namespace Zilon.Core.Tests.Tactics.Generation
             act.Should().NotThrow();
         }
 
-        private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource, ISchemeService schemeService, IPlayer botPlayer)
+        private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource,
+            ISchemeService schemeService,
+            IBotPlayer botPlayer)
         {
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
 
-            return new SectorProceduralGenerator(randomSource, 
+            var actorManagerMock = new Mock<IActorManager>();
+            var actorManager = actorManagerMock.Object;
+
+            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManager = propContainerManagerMock.Object;
+
+            return new SectorProceduralGenerator(
+                actorManager,
+                propContainerManager,
+                randomSource,
                 botPlayer, 
                 schemeService,
                 dropResolver);
@@ -257,9 +268,9 @@ namespace Zilon.Core.Tests.Tactics.Generation
             return schemeService;
         }
 
-        private static IPlayer CreateBotPlayer()
+        private static IBotPlayer CreateBotPlayer()
         {
-            var botPlayerMock = new Mock<IPlayer>();
+            var botPlayerMock = new Mock<IBotPlayer>();
             var botPlayer = botPlayerMock.Object;
             return botPlayer;
         }
