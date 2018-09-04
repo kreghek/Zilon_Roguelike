@@ -160,6 +160,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
             var tacticalActUsageService = tacticalActUsageServiceMock.Object;
 
+            _container.Register(factory => sector);
             _container.Register(factory => _testedActor.Owner, new PerContainerLifetime());
             _container.Register(factory => actorManager, new PerContainerLifetime());
             _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());
