@@ -36,10 +36,11 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
+        Container.Bind<SectorProceduralGenerator>().AsSingle();
         
 
         Container.Bind<HumanPlayer>().AsSingle();
-        Container.Bind<BotPlayer>().AsSingle();
+        Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
         
         Container.Bind<ISchemeLocator>().FromInstance(GetSchemeLocator()).AsSingle();
@@ -87,19 +88,11 @@ public class TestInstaller : MonoInstaller<TestInstaller>
     {
         var _actorManager = Container.Resolve<IActorManager>();
         var _propContainerManager = Container.Resolve<IPropContainerManager>();
-        var _sectorGeneratorRandomSource = Container.Resolve<ISectorGeneratorRandomSource>();
-        var _monsterPlayer = Container.Resolve<BotPlayer>();
-        var _schemeService = Container.Resolve<ISchemeService>();
-        var _dropResolver = Container.Resolve<IDropResolver>();
+        var sectorGenerator = Container.Resolve<SectorProceduralGenerator>();
         
         var map = new HexMap();
 
         var sector = new Sector(map, _actorManager, _propContainerManager);
-
-        var sectorGenerator = new SectorProceduralGenerator(_sectorGeneratorRandomSource,
-            _monsterPlayer,
-            _schemeService,
-            _dropResolver);
 
         SectorVM.sectorGenerator = sectorGenerator;
 

@@ -61,7 +61,7 @@ class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private HumanPlayer _humanPlayer;
     
-    [NotNull] [Inject] private BotPlayer _monsterPlayer;
+    [NotNull] [Inject] private IBotPlayer _monsterPlayer;
    
     [NotNull] [Inject] private IActorManager _actorManager;
     
@@ -162,10 +162,9 @@ class SectorVM : MonoBehaviour
 
         _playerState.ActiveActor = playerActorVm;
 
-        foreach (var monsterActor in sectorGenerator.MonsterActors)
+        var monsters = _actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
+        foreach (var monsterActor in monsters)
         {
-            _actorManager.Add(monsterActor);
-
             var actorVm = Instantiate(ActorPrefab, transform);
             var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
             actorVm.GraphicRoot = actorGraphic;
@@ -183,7 +182,7 @@ class SectorVM : MonoBehaviour
             monsterActor.UsedAct += ActorOnUsedAct;
         }
 
-        foreach (var container in sectorGenerator.Containers)
+        foreach (var container in _propContainerManager.Containers)
         {
             var containerVm = Instantiate(ContainerPrefab, transform);
 
