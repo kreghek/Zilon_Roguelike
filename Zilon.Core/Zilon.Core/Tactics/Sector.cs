@@ -89,7 +89,8 @@ namespace Zilon.Core.Tactics
 
         private void UpdateSurvivals()
         {
-            foreach (var actor in _actorManager.Actors)
+            var actors = _actorManager.Actors.ToArray();
+            foreach (var actor in actors)
             {
                 var survival = actor.Person.Survival;
                 if (survival == null)

@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
@@ -19,7 +20,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
-        public async Task WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
+        public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
             var attackCommand = _context.Container.GetInstance<ICommand>("attack");
             var playerState = _context.Container.GetInstance<IPlayerState>();
@@ -32,16 +33,7 @@ namespace Zilon.Core.Spec.Steps
 
             playerState.HoverViewModel = monsterViewModel;
 
-            var asyncTask = playerState.TaskSource.GetActorTasksAsync(playerState.ActiveActor.Actor);
-
             attackCommand.Execute();
-
-
-            var tasks = await asyncTask;
-            foreach (var task in tasks)
-            {
-                task.Execute();
-            }
         }
 
     }

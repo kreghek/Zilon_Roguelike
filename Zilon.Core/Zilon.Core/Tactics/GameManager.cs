@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics
 {
     public sealed class GameManager : IGameManager
     {
-        private readonly List<IActor> _actors = new List<IActor>();
+        private readonly List<IActor> _actors;
         private readonly ISector _sector;
         private readonly IActorManager _actorManager;
 
@@ -16,6 +16,8 @@ namespace Zilon.Core.Tactics
         {
             _sector = sector;
             _actorManager = actorManager;
+
+            _actors = new List<IActor>(actorManager.Actors);
         }
 
         public IActorTaskSource[] ActorTaskSources { get; set; }

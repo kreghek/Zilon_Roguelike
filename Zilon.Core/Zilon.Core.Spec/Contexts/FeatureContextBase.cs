@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-
+using System.Threading;
 using JetBrains.Annotations;
 
 using LightInject;
@@ -36,6 +36,7 @@ namespace Zilon.Core.Spec.Contexts
 
             RegisterSchemeService();
             RegisterSectorService();
+            RegisterGameManager();
             RegisterAuxServices();
             RegisterTaskSources();
             RegisterClientServices();
@@ -55,6 +56,26 @@ namespace Zilon.Core.Spec.Contexts
             // Это нужно для того, чтобы объкт был создан и выполнился код из конструктора.
             // Там обработка на события внутренних сервисов.
             var sector = Container.GetInstance<ISector>();
+
+            RunGameManager();
+        }
+
+        private void RunGameManager()
+        {
+            var gameManager = Container.GetInstance<IGameManager>();
+            var playerState = Container.GetInstance<IPlayerState>();
+
+            ThreadPool.QueueUserWorkItem(async state => {
+                while (true)
+                {
+                    if (playerState.ActiveActor == null)
+                    {
+                        continue;
+                    }
+
+                    await gameManager.RequestNextActorTaskAsync();
+                }
+            });
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
@@ -221,6 +242,11 @@ namespace Zilon.Core.Spec.Contexts
         {
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+        }
+
+        private void RegisterGameManager()
+        {
+            Container.Register<IGameManager, GameManager>();
         }
 
         /// <summary>
