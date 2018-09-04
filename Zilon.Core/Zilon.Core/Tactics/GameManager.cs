@@ -9,6 +9,7 @@ namespace Zilon.Core.Tactics
     public sealed class GameManager : IGameManager
     {
         private readonly List<IActor> _actors;
+        private readonly List<IActor> _processedActors;
         private readonly ISector _sector;
         private readonly IActorManager _actorManager;
 
@@ -17,7 +18,8 @@ namespace Zilon.Core.Tactics
             _sector = sector;
             _actorManager = actorManager;
 
-            _actors = new List<IActor>(actorManager.Actors);
+            _actors = new List<IActor>();
+            RefillActorList();
         }
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
@@ -33,7 +35,8 @@ namespace Zilon.Core.Tactics
             else
             {
                 _sector.Update();
-                _actors.AddRange(_actorManager.Actors); // отсортировать по инициативе
+
+                RefillActorList();
 
                 actor = _actors.FirstOrDefault();
                 await ProcessActorAsync(actor);
@@ -58,6 +61,14 @@ namespace Zilon.Core.Tactics
                     actorTask.Execute();
                 }
             }
+        }
+
+        private void RefillActorList()
+        {
+            var availableActors = _actorManager.Actors.Where(x => !x.State.IsDead).ToArray();
+
+            // отсортировать по инициативе
+            _actors.AddRange(availableActors); 
         }
     }
 }

@@ -8,6 +8,7 @@ Scenario Outline: Эффекты угроз выживания наносят у
 	Given Есть карта размером 2
 	And Есть актёр игрока класса captain в ячейке (0, 0)
 	And Актёр имеет эффект <startEffect>
+	And Запущен игровой цикл
 	When Я перемещаю персонажа на <moveDistance> клетку
 	Then Актёр игрока имеет запас hp <expectedHpValue>
 

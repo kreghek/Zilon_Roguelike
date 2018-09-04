@@ -68,12 +68,12 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Запрет на перемещение актёра игрока сквозь моснтров", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Разрешение на перемещение в пустом поле", new string[] {
                 "move",
                 "dev0"}, SourceLine=6)]
-        public virtual void ЗапретНаПеремещениеАктёраИгрокаСквозьМоснтров()
+        public virtual void РазрешениеНаПеремещениеВПустомПоле()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Запрет на перемещение актёра игрока сквозь моснтров", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Разрешение на перемещение в пустом поле", null, new string[] {
                         "move",
                         "dev0"});
 #line 7

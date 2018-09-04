@@ -90,10 +90,12 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And(string.Format("В инвентаре у актёра есть еда: {0} количество: {1}", propSid, propCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.Then(string.Format("Актёр игрока имеет запас hp {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
+ testRunner.Then(string.Format("Актёр игрока имеет запас hp {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 15
  testRunner.And(string.Format("Предмет {0} отсутствует в инвентаре актёра", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +103,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 10", new string[] {
                 "survival",
-                "dev0"}, SourceLine=17)]
+                "dev0"}, SourceLine=18)]
         public virtual void УпотреблениеМедикаметовДляВосстановленияHp__10()
         {
 #line 7

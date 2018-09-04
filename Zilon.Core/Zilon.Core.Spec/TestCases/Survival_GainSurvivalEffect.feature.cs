@@ -86,10 +86,12 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
+ testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 13
  testRunner.And(string.Format("Актёр под эффектом {0}", effect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -97,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant0()
         {
 #line 7
@@ -107,7 +109,7 @@ this.НаступлениеВыживальныхСостоянийЖаждаГ�
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant1()
         {
 #line 7
@@ -117,7 +119,7 @@ this.НаступлениеВыживальныхСостоянийЖаждаГ�
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 2", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant2()
         {
 #line 7
@@ -127,7 +129,7 @@ this.НаступлениеВыживальныхСостоянийЖаждаГ�
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 3", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant3()
         {
 #line 7
@@ -137,7 +139,7 @@ this.НаступлениеВыживальныхСостоянийЖаждаГ�
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 4", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant4()
         {
 #line 7
@@ -147,7 +149,7 @@ this.НаступлениеВыживальныхСостоянийЖаждаГ�
         
         [TechTalk.SpecRun.ScenarioAttribute("Наступление выживальных состояний (жажда/голод/утомление), Variant 5", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void НаступлениеВыживальныхСостоянийЖаждаГолодУтомление_Variant5()
         {
 #line 7

@@ -156,6 +156,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Survival_ConsumeMedicineToRestoreHp.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Survival_ConsumeProviantToDropSurvivalHazardEffect.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Survival_ConsumeProviantToDropSurvivalHazardEffect.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature.cs">
       <DependentUpon>Survival_ConsumeProviantToRestoreSurvivalData.feature</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -167,11 +172,6 @@
       <DependentUpon>Survival_DecreaseSurvivalDataOnGameTurn.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
-    <Compile Include="TestCases\Survival_ConsumeProviantToDropSurvivalEffect.feature.cs">
-      <DependentUpon>Survival_ConsumeProviantToDropSurvivalEffect.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="TestCases\Survival_HazardsDecreaseEvolutionStats_Become.feature.cs">
       <DependentUpon>Survival_HazardsDecreaseEvolutionStats_Become.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -257,6 +257,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_ConsumeMedicineToRestoreHp.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Survival_ConsumeProviantToDropSurvivalHazardEffect.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Survival_ConsumeProviantToDropSurvivalHazardEffect.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_ConsumeProviantToRestoreSurvivalData.feature.cs</LastGenOutput>
@@ -264,10 +268,6 @@
     <None Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_DecreaseSurvivalDataOnGameTurn.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_ConsumeProviantToDropSurvivalEffect.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_ConsumeProviantToDropSurvivalEffect.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_HazardsDecreaseEvolutionStats_Become.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

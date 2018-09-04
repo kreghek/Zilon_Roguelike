@@ -56,11 +56,9 @@ namespace Zilon.Core.Spec.Contexts
             // Это нужно для того, чтобы объкт был создан и выполнился код из конструктора.
             // Там обработка на события внутренних сервисов.
             var sector = Container.GetInstance<ISector>();
-
-            RunGameManager();
         }
 
-        private void RunGameManager()
+        public void RunGameLoop()
         {
             var gameManager = Container.GetInstance<IGameManager>();
             var playerState = Container.GetInstance<IPlayerState>();
@@ -68,11 +66,6 @@ namespace Zilon.Core.Spec.Contexts
             ThreadPool.QueueUserWorkItem(async state => {
                 while (true)
                 {
-                    if (playerState.ActiveActor == null)
-                    {
-                        continue;
-                    }
-
                     await gameManager.RequestNextActorTaskAsync();
                 }
             });

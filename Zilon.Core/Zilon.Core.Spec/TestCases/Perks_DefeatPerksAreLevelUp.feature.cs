@@ -90,8 +90,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.And("Монстр Id:1000 имеет Hp 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.When("Актёр игрока атакует монстра Id:1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
+ testRunner.When("Актёр игрока атакует монстра Id:1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 15
  testRunner.Then("перк на убийство должен быть прокачен", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

@@ -21,6 +21,13 @@ namespace Zilon.Core.Spec.Steps
             _context.CreateSector(mapSize);
         }
 
+        [Given(@"Запущен игровой цикл")]
+        public void GivenЗапущенИгровойЦикл()
+        {
+            _context.RunGameLoop();
+        }
+
+
         [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
         public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
         {

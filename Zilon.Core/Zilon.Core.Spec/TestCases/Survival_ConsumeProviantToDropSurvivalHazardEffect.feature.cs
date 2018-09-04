@@ -17,22 +17,24 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Survival_ConsumeProviantToDropSurvivalEffect", Description="\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
-        "нужно, чтобы каждый ход значение сытости персонажа падало", SourceFile="TestCases\\Survival_ConsumeProviantToDropSurvivalEffect.feature", SourceLine=0)]
-    public partial class Survival_ConsumeProviantToDropSurvivalEffectFeature
+    [TechTalk.SpecRun.FeatureAttribute("Survival_ConsumeProviantToDropSurvivalHazardEffect", Description="\tЧтобы эмулировать восстановление сил персонажа при угрозах выживания\r\n\tКак разра" +
+        "ботчику\r\n\tМне нужно, чтобы при употреблении провинта разного типа (еда/вода)\r\n\tс" +
+        "брасывались соответствующие угрозы выживания при насыщении персонажа", SourceFile="TestCases\\Survival_ConsumeProviantToDropSurvivalHazardEffect.feature", SourceLine=0)]
+    public partial class Survival_ConsumeProviantToDropSurvivalHazardEffectFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Survival_ConsumeProviantToDropSurvivalEffect.feature"
+#line 1 "Survival_ConsumeProviantToDropSurvivalHazardEffect.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_ConsumeProviantToDropSurvivalEffect", "\tЧтобы ввести микроменеджмент ресурсов и состояния персонажей\r\n\tКак игроку\r\n\tМне " +
-                    "нужно, чтобы каждый ход значение сытости персонажа падало", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Survival_ConsumeProviantToDropSurvivalHazardEffect", "\tЧтобы эмулировать восстановление сил персонажа при угрозах выживания\r\n\tКак разра" +
+                    "ботчику\r\n\tМне нужно, чтобы при употреблении провинта разного типа (еда/вода)\r\n\tс" +
+                    "брасывались соответствующие угрозы выживания при насыщении персонажа", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -70,14 +72,7 @@ namespace Zilon.Core.Spec.TestCases
         
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод_(string stat, string statValue, string startEffect, string propSid, string provisionStat, string provisionEfficient, string propCount, string expectedValue, string effect, string[] exampleTags)
         {
-            string[] @__tags = new string[] {
-                    "survival",
-                    "dev0"};
-            if ((exampleTags != null))
-            {
-                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
-            }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод).", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод).", null, exampleTags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -92,19 +87,19 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.And(string.Format("В инвентаре у актёра есть фейковый провиант {0} ({1} - {2})", propSid, provisionStat, provisionEfficient), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
- testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
+ testRunner.Then(string.Format("Значение {0} стало {1}", stat, expectedValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 16
  testRunner.And(string.Format("Актёр под эффектом {0}", effect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 0", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 0", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant0()
         {
 #line 7
@@ -113,9 +108,7 @@ this.ПоглощениеПровиантаЧтобыСниматьВыжива�
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 1", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 1", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant1()
         {
 #line 7
@@ -124,9 +117,7 @@ this.ПоглощениеПровиантаЧтобыСниматьВыжива�
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 2", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 2", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant2()
         {
 #line 7
@@ -135,9 +126,7 @@ this.ПоглощениеПровиантаЧтобыСниматьВыжива�
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 3", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 3", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant3()
         {
 #line 7
@@ -146,9 +135,7 @@ this.ПоглощениеПровиантаЧтобыСниматьВыжива�
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 4", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 4", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant4()
         {
 #line 7
@@ -157,9 +144,7 @@ this.ПоглощениеПровиантаЧтобыСниматьВыжива�
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод)., Variant" +
-            " 5", new string[] {
-                "survival",
-                "dev0"}, SourceLine=18)]
+            " 5", SourceLine=19)]
         public virtual void ПоглощениеПровиантаЧтобыСниматьВыживальныеСостоянияЖаждаГолод__Variant5()
         {
 #line 7
