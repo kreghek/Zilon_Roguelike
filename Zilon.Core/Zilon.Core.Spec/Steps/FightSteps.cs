@@ -1,4 +1,6 @@
-﻿using LightInject;
+﻿using System.Threading.Tasks;
+
+using LightInject;
 
 using TechTalk.SpecFlow;
 
@@ -17,7 +19,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
-        public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
+        public async Task WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
             var attackCommand = _context.Container.GetInstance<ICommand>("attack");
             var playerState = _context.Container.GetInstance<IPlayerState>();
@@ -30,7 +32,16 @@ namespace Zilon.Core.Spec.Steps
 
             playerState.HoverViewModel = monsterViewModel;
 
+            var asyncTask = playerState.TaskSource.GetActorTasksAsync(playerState.ActiveActor.Actor);
+
             attackCommand.Execute();
+
+
+            var tasks = await asyncTask;
+            foreach (var task in tasks)
+            {
+                task.Execute();
+            }
         }
 
     }
