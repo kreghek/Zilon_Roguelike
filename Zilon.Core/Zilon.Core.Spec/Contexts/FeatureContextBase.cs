@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
-
+using Nito.AsyncEx;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -63,7 +63,7 @@ namespace Zilon.Core.Spec.Contexts
             var gameManager = Container.GetInstance<IGameManager>();
             var playerState = Container.GetInstance<IPlayerState>();
 
-            ThreadPool.QueueUserWorkItem(async state => {
+            AsyncContext.Run(async () => {
                 while (true)
                 {
                     await gameManager.RequestNextActorTaskAsync();
