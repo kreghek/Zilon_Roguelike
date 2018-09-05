@@ -62,7 +62,6 @@ namespace Zilon.Core.Spec.Contexts
         public void RunGameLoop()
         {
             var gameManager = Container.GetInstance<IGameManager>();
-            var playerState = Container.GetInstance<IPlayerState>();
 
             ThreadPool.QueueUserWorkItem(async state => {
                 while (true)

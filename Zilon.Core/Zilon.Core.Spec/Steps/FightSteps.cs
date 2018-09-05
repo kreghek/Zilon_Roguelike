@@ -1,13 +1,10 @@
-﻿using System.Threading.Tasks;
-
-using LightInject;
+﻿using LightInject;
 
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Spec.Contexts;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
