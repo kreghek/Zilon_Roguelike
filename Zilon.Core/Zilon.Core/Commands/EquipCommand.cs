@@ -2,6 +2,7 @@
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -15,9 +16,11 @@ namespace Zilon.Core.Commands
 
         public int? SlotIndex { get; set; }
 
-        public EquipCommand(IPlayerState playerState,
+        public EquipCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            IPlayerState playerState,
             IInventoryState inventoryState) :
-            base(playerState)
+            base(gameLoop, sectorManager, playerState)
         {
             _inventoryState = inventoryState;
         }

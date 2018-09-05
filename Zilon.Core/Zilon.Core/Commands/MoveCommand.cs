@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;
@@ -14,14 +16,13 @@ namespace Zilon.Core.Commands
     public class MoveCommand : ActorCommandBase
     {
         private readonly List<IMapNode> _path;
-        private readonly ISectorManager _sectorManager;
 
-        public MoveCommand(ISectorManager sectorManager,
+        public MoveCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
             IPlayerState playerState) :
-            base(playerState)
+            base(gameLoop, sectorManager, playerState)
         {
             _path = new List<IMapNode>();
-            _sectorManager = sectorManager;
         }
 
         public override bool CanExecute()

@@ -1,6 +1,5 @@
-﻿using System;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -13,9 +12,11 @@ namespace Zilon.Core.Commands
     {
         private readonly IInventoryState _inventoryState;
 
-        public UseSelfCommand(IPlayerState playerState,
+        public UseSelfCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            IPlayerState playerState,
             IInventoryState inventoryState) :
-            base(playerState)
+            base(gameLoop, sectorManager, playerState)
         {
             _inventoryState = inventoryState;
         }

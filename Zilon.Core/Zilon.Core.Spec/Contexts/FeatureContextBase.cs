@@ -59,18 +59,6 @@ namespace Zilon.Core.Spec.Contexts
             var sector = Container.GetInstance<ISector>();
         }
 
-        public void RunGameLoop()
-        {
-            var gameManager = Container.GetInstance<IGameManager>();
-
-            ThreadPool.QueueUserWorkItem(async state => {
-                while (true)
-                {
-                    await gameManager.RequestNextActorTaskAsync();
-                }
-            });
-        }
-
         public void AddWall(int x1, int y1, int x2, int y2)
         {
             var sector = Container.GetInstance<ISector>();
@@ -239,7 +227,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterGameManager()
         {
-            Container.Register<IGameManager, GameManager>();
+            Container.Register<IGameLoop, GameLoop>();
         }
 
         /// <summary>

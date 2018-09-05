@@ -11,13 +11,12 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
-        private readonly ISectorManager _sectorManager;
-
-        public OpenContainerCommand(ISectorManager sectorManager,
+        public OpenContainerCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
             IPlayerState playerState) :
-            base(playerState)
+            base(gameLoop, sectorManager, playerState)
         {
-            _sectorManager = sectorManager;
+
         }
 
         public override bool CanExecute()

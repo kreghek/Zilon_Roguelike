@@ -90,10 +90,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, monsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 13
  testRunner.When(string.Format("Актёр игрока атакует монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 16
+#line 15
  testRunner.Then(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, expectedMonsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Удары \"руками\"., captain", new string[] {
                 "fight",
-                "dev0"}, SourceLine=19)]
+                "dev0"}, SourceLine=18)]
         public virtual void УдарыРуками__Captain()
         {
 #line 7

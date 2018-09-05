@@ -9,7 +9,6 @@ Scenario Outline: Удары "руками".
 	And Есть актёр игрока класса <personSid> в ячейке (0, 0)
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
 	And Монстр Id:<monsterId> имеет Hp <monsterHp>
-	And Запущен игровой цикл
 	When Актёр игрока атакует монстра Id:<monsterId>
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия

@@ -44,14 +44,37 @@ namespace Zilon.Core.Tests.Commands
             canExecute.Should().Be(true);
         }
 
+        /// <summary>
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// </summary>
+        [Test]
+        [Ignore("Не рабочий. Некорректно проверят вызов Intent")]
+        public void ExecuteTest()
+        {
+            var command = _container.GetInstance<EquipCommand>();
+            command.SlotIndex = 0;
+
+            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+
+
+
+            // ACT
+            command.Execute();
+
+
+            // ASSERT
+            //humanTaskSourceMock.Verify(x => x.IntentEquip(It.IsAny<Equipment>(), 0));
+            humanTaskSourceMock.Verify(x => x.Intent(null));
+        }
+
         [SetUp]
-        public void SetUp ()
+        public void SetUp()
         {
             _container = new ServiceContainer();
 
             var testMap = new TestGridGenMap(3);
 
-            var sectorMock =  new Mock<ISector>();
+            var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
             var sectorManagerMock = new Mock<ISectorManager>();
@@ -89,34 +112,15 @@ namespace Zilon.Core.Tests.Commands
             inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
             var inventoryState = inventoryStateMock.Object;
 
+            var gameLoopMock = new Mock<IGameLoop>();
+            var gameLoop = gameLoopMock.Object;
+
             _container.Register(factory => sectorManager, new PerContainerLifetime());
             _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
             _container.Register(factory => playerState, new PerContainerLifetime());
             _container.Register(factory => inventoryState, new PerContainerLifetime());
             _container.Register<EquipCommand>(new PerContainerLifetime());
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
-        /// </summary>
-        [Test]
-        [Ignore("Не рабочий. Некорректно проверят вызов Intent")]
-        public void ExecuteTest()
-        {
-            var command = _container.GetInstance<EquipCommand>();
-            command.SlotIndex = 0;
-
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-
-
-
-            // ACT
-            command.Execute();
-
-
-            // ASSERT
-            //humanTaskSourceMock.Verify(x => x.IntentEquip(It.IsAny<Equipment>(), 0));
-            humanTaskSourceMock.Verify(x => x.Intent(null));
+            _container.Register(factory => gameLoop, new PerContainerLifetime());
         }
     }
 }

@@ -32,6 +32,5 @@ namespace Zilon.Core.Spec.Steps
 
             attackCommand.Execute();
         }
-
     }
 }

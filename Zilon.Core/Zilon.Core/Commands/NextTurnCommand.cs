@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
@@ -19,8 +20,11 @@ namespace Zilon.Core.Commands
             _playerState.TaskSource.Intent(intention);
         }
 
-        public NextTurnCommand(IDecisionSource decisionSource, IPlayerState playerState) :
-            base(playerState)
+        public NextTurnCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            IPlayerState playerState,
+            IDecisionSource decisionSource) :
+            base(gameLoop, sectorManager, playerState)
         {
             _decisionSource = decisionSource;
         }

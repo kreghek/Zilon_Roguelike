@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -10,10 +11,11 @@ namespace Zilon.Core.Commands
     {
         private readonly PropTransferMachine _transferMachine;
 
-        public PropTransferCommand(ISectorManager sectorManager,
+        public PropTransferCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
             IPlayerState playerState,
             PropTransferMachine transferMachine) :
-            base(playerState)
+            base(gameLoop, sectorManager, playerState)
         {
             _transferMachine = transferMachine;
         }

@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
 {
@@ -7,7 +8,9 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class SpecialActorCommandBase : ActorCommandBase
     {
-        protected SpecialActorCommandBase(IPlayerState playerState) : base(playerState)
+        protected SpecialActorCommandBase(IGameLoop gameloop,
+            ISectorManager sectorManager,
+            IPlayerState playerState) : base(gameloop, sectorManager, playerState)
         {
 
         }

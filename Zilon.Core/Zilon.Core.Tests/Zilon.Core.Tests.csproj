@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Client\PropTransferMachineTests.cs" />
     <Compile Include="Client\PropTransferStoreTests.cs" />
+    <Compile Include="Commands\CommandTestBase.cs" />
     <Compile Include="Commands\EquipCommandTests.cs" />
     <Compile Include="Commands\AttackCommandTests.cs" />
     <Compile Include="Commands\MoveCommandTests.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
 {
@@ -7,6 +8,14 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
+        private readonly IGameLoop _gameLoop;
+
+        protected virtual bool UpdateGameLoop => true;
+
+        public TacticCommandBase(IGameLoop gameLoop)
+        {
+            _gameLoop = gameLoop;
+        }
 
         public abstract bool CanExecute();
 
@@ -19,6 +28,11 @@ namespace Zilon.Core.Commands
             }
 
             ExecuteTacticCommand();
+
+            if (UpdateGameLoop)
+            {
+                _gameLoop.Update();
+            }
         }
 
         /// <summary>
