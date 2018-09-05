@@ -255,7 +255,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // На клиенте ожидание окончания асинхронной задачи и разрешение её при помощи намерения
             // будет происходить параллельно.
 
-            var asyncTask = taskSource.GetActorTasksAsync(actor);
+            var asyncTask = taskSource.GetActorTasks(actor);
 
             taskSource.Intent(intention);
 

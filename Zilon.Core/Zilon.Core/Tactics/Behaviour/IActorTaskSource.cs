@@ -19,6 +19,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// 3. Источник задач для актёров игрока, которые не находятся
         /// под прямым управлением игрока (напарники по группе, неактивные ключевые актёры).
         /// </remarks>
-        Task<IActorTask[]> GetActorTasksAsync(IActor actor);
+        IActorTask[] GetActorTasks(IActor actor);
     }
 }

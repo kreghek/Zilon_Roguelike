@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using Zilon.Core.Tactics.Behaviour.Bots;
 
@@ -26,41 +25,38 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            _currentIntesion = intention ?? throw new ArgumentException(nameof(intention));
-
-            if (completionSource != null)
-            {
-                _currentTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
-
-                if (_currentTask != null)
-                {
-                    completionSource.SetResult(new IActorTask[] { _currentTask });
-                }
-                else
-                {
-                    completionSource.SetResult(new IActorTask[0]);
-                }
-            }
+            _currentIntesion = intention;
         }
 
-        public TaskCompletionSource<IActorTask[]> completionSource;
-
-        public Task<IActorTask[]> GetActorTasksAsync(IActor actor)
+        public IActorTask[] GetActorTasks(IActor actor)
         {
+            var currentTaskIsComplete = _currentTask?.IsComplete;
+            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value)
+            {
+                return new IActorTask[] { _currentTask };
+            }
+
             if (CurrentActor == null)
             {
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
 
-            if (actor != CurrentActor)
+            if (_currentIntesion == null)
             {
-                return Task.FromResult(new IActorTask[0]);
+                return new IActorTask[0];
             }
 
-            completionSource = new TaskCompletionSource<IActorTask[]>();
+            _currentTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
+            _currentIntesion = null;
 
-            var asyncTask = completionSource.Task;
-            return asyncTask;
+            if (_currentTask != null)
+            {
+                return new IActorTask[] { _currentTask };
+            }
+            else
+            {
+                return new IActorTask[0];
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using Zilon.Core.Players;
 
@@ -29,11 +28,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _actorManager = actorManager;
         }
 
-        public Task<IActorTask[]> GetActorTasksAsync(IActor actor)
+        public IActorTask[] GetActorTasks(IActor actor)
         {
             if (actor.Owner != _player)
             {
-                return Task.FromResult(new IActorTask[0]);
+                return new IActorTask[0];
             }
 
             var actorTasks = new List<IActorTask>();
@@ -69,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 actorTasks.Add(currentTask);
             }
 
-            return Task.FromResult(actorTasks.ToArray());
+            return actorTasks.ToArray();
         }
     }
 }
