@@ -36,7 +36,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если для монстров заданы маршруты.
         /// </summary>
         [Test]
-        public async Task GetActorTasks_PatrolsInClearField_ReturnsMoveTask()
+        public void GetActorTasks_PatrolsInClearField_ReturnsMoveTask()
         {
             // ARRANGE
 
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
+            var tasks = taskSource.GetActorTasks(_testedActor);
 
 
 
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный обнаружил противника.
         /// </summary>
         [Test]
-        public async Task GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask()
+        public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask()
         {
             // ARRANGE
 
@@ -71,7 +71,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
+            var tasks = taskSource.GetActorTasks(_testedActor);
 
 
 
@@ -89,7 +89,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// если патрульный стоит рядом и может атаковать.
         /// </summary>
         [Test]
-        public async Task GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
+        public void GetActorTasks_PatrolsTryToAttackEnemy_ReturnsAttackTask()
         {
             // ARRANGE
 
@@ -102,7 +102,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            var tasks = await taskSource.GetActorTasksAsync(_testedActor);
+            var tasks = taskSource.GetActorTasks(_testedActor);
 
 
 

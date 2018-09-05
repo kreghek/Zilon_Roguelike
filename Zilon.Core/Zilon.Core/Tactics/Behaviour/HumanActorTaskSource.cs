@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            _currentIntesion = intention;
+            _currentIntesion = intention ?? throw new ArgumentNullException(nameof(intention));
         }
 
         public IActorTask[] GetActorTasks(IActor actor)

@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
         /// </remarks>
         [Test()]
-        public async Task Intent_TargetToStartPoint_GenerateMoveCommand()
+        public void Intent_TargetToStartPoint_GenerateMoveCommand()
         {
             // ARRANGE
 
@@ -86,7 +86,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ACT
-            var tasks = await SetHumanIntention(actor, taskSource, moveIntention);
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
 
 
 
@@ -141,7 +141,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// То есть новая команда возвращается при запросе.
         /// </summary>
         [Test()]
-        public async Task Intent_AssignAfterTaskComplete_NoNullCommand()
+        public void Intent_AssignAfterTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -165,7 +165,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // 1. Ждём, пока задача на перемещение не отработает.
             // В конце текущая задача актёра будет IsComplete.
-            var tasks = await SetHumanIntention(actor, taskSource, moveIntention);
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
 
             for (var i = 0; i < 3; i++)
             {
@@ -183,7 +183,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // 2. Указываем намерение на ещё одну задачу.
-            var factTasks = await SetHumanIntention(actor, taskSource, moveIntention2);
+            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
 
 
 
@@ -197,7 +197,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// то новое намерение отменяет текущее.
         /// </summary>
         [Test()]
-        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
+        public void Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
@@ -220,7 +220,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
 
             // 1. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-            var tasks = await SetHumanIntention(actor, taskSource, moveIntention);
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
 
             for (var i = 0; i < 1; i++)
             {
@@ -238,7 +238,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // 2. Указываем другое намерение до того, как текущая задача на перемещение выполнена до конца.
-            var factTasks = await SetHumanIntention(actor, taskSource, moveIntention2);
+            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
 
 
 
@@ -246,20 +246,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             factTasks.Should().NotBeNullOrEmpty();
         }
 
-        private static async Task<IActorTask[]> SetHumanIntention(IActor actor,
+        private static IActorTask[] SetHumanIntention(IActor actor,
             IHumanActorTaskSource taskSource,
             IIntention intention)
         {
-            // Сначала извлекаем асинхронную задачу.
-            // А затем намерение. Иначе предыдущая задача повесит текущий поток.
-            // На клиенте ожидание окончания асинхронной задачи и разрешение её при помощи намерения
-            // будет происходить параллельно.
-
-            var asyncTask = taskSource.GetActorTasks(actor);
-
             taskSource.Intent(intention);
 
-            var tasks = await asyncTask;
+            var tasks = taskSource.GetActorTasks(actor); ;
             return tasks;
         }
 
@@ -267,7 +260,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test()]
-        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
+        public void IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
             var usageService = _container.GetInstance<ITacticalActUsageService>();
@@ -290,7 +283,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ACT
-            var tasks = await SetHumanIntention(attackerActor, taskSource, attackIntention);
+            var tasks = SetHumanIntention(attackerActor, taskSource, attackIntention);
 
 
 
@@ -303,7 +296,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
         /// </summary>
         [Test()]
-        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
+        public void IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
         {
             //ARRANGE
             var map = new TestGridGenMap();
@@ -327,7 +320,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ACT
-            var tasks = await SetHumanIntention(actor, taskSource, intention);
+            var tasks = SetHumanIntention(actor, taskSource, intention);
 
 
 

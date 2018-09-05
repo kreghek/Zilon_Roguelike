@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Players;
@@ -9,7 +8,6 @@ namespace Zilon.Core.Tactics
 {
     public sealed class GameLoop : IGameLoop
     {
-        private readonly List<IActor> _processedActors;
         private readonly ISector _sector;
         private readonly IActorManager _actorManager;
 
