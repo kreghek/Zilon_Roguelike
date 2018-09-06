@@ -90,10 +90,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And(string.Format("Актёр имеет эффект {0}", startEffect), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 12
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 13
+#line 12
  testRunner.Then(string.Format("Актёр игрока имеет запас hp {0}", expectedHpValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Голодание", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__Голодание()
         {
 #line 7
@@ -111,7 +109,7 @@ this.ЭффектыУгрозВыживанияНаносятУронАктёр�
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Обезвоживание", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__Обезвоживание()
         {
 #line 7
@@ -121,7 +119,7 @@ this.ЭффектыУгрозВыживанияНаносятУронАктёр�
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Слабый голод", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__СлабыйГолод()
         {
 #line 7
@@ -131,7 +129,7 @@ this.ЭффектыУгрозВыживанияНаносятУронАктёр�
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Голод", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__Голод()
         {
 #line 7
@@ -141,7 +139,7 @@ this.ЭффектыУгрозВыживанияНаносятУронАктёр�
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Слабая жажда", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__СлабаяЖажда()
         {
 #line 7
@@ -151,7 +149,7 @@ this.ЭффектыУгрозВыживанияНаносятУронАктёр�
         
         [TechTalk.SpecRun.ScenarioAttribute("Эффекты угроз выживания наносят урон актёру., Жажда", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭффектыУгрозВыживанияНаносятУронАктёру__Жажда()
         {
 #line 7

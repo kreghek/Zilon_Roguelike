@@ -89,10 +89,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And(string.Format("Актёр игрока экипирован {0}", equipmentSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 12
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 13
+#line 12
  testRunner.Then(string.Format("Актёр имеет характристику модуля сражения {0} равную {1}", combatStat, combatStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant0()
         {
 #line 7
@@ -112,7 +110,7 @@ this.УгрозыВыживанияПоявляютсяВПроцессеСни�
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant1()
         {
 #line 7
@@ -123,7 +121,7 @@ this.УгрозыВыживанияПоявляютсяВПроцессеСни�
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 2", new string[] {
                 "survival",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant2()
         {
 #line 7

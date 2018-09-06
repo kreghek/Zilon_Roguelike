@@ -88,10 +88,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 11
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 12
+#line 11
  testRunner.Then(string.Format("Значение {0} уменьшилось на {1} и стало {2}", stat, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -99,7 +97,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Падение показателей выживания каждый игровой ход, Variant 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=14)]
         public virtual void ПадениеПоказателейВыживанияКаждыйИгровойХод_Variant0()
         {
 #line 7
@@ -109,7 +107,7 @@ this.ПадениеПоказателейВыживанияКаждыйИгро�
         
         [TechTalk.SpecRun.ScenarioAttribute("Падение показателей выживания каждый игровой ход, Variant 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=14)]
         public virtual void ПадениеПоказателейВыживанияКаждыйИгровойХод_Variant1()
         {
 #line 7

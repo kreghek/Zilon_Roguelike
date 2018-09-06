@@ -88,12 +88,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And(string.Format("В инвентаре у актёра есть еда: {0} количество: {1}", propSid, propCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And("Запущен игровой цикл", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 12
  testRunner.When(string.Format("Актёр использует предмет {0} на себя", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 13
+#line 12
  testRunner.Then(string.Format("Значение {0} повысилось на {1} и уменьшилось на {2} за игровой цикл и стало {3}", stat, propValue, statRate, expectedStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 14
+#line 13
  testRunner.And(string.Format("Предмет {0} отсутствует в инвентаре актёра", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Употребление провианта для восстановления показателей выживания, cheese", new string[] {
                 "survival",
-                "dev0"}, SourceLine=18)]
+                "dev0"}, SourceLine=17)]
         public virtual void УпотреблениеПровиантаДляВосстановленияПоказателейВыживания_Cheese()
         {
 #line 7
@@ -111,7 +109,7 @@ this.УпотреблениеПровиантаДляВосстановлени�
         
         [TechTalk.SpecRun.ScenarioAttribute("Употребление провианта для восстановления показателей выживания, water", new string[] {
                 "survival",
-                "dev0"}, SourceLine=18)]
+                "dev0"}, SourceLine=17)]
         public virtual void УпотреблениеПровиантаДляВосстановленияПоказателейВыживания_Water()
         {
 #line 7

@@ -10,7 +10,6 @@ Scenario Outline: Поглощение провианта, чтобы снима
 	And Актёр значение <stat> равное <statValue>
 	And Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat> - <provisionEfficient>)
-	And Запущен игровой цикл
 	When Актёр использует предмет <propSid> на себя
 	Then Значение <stat> стало <expectedValue>
 	And Актёр под эффектом <effect>
