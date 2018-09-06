@@ -8,13 +8,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public class MonsterActorTaskSource : IActorTaskSource
     {
         private readonly Dictionary<IActor, IBotLogic> _logicDict;
-        private readonly IPlayer _player;
+        private readonly IBotPlayer _player;
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actService;
         private readonly ISector _sector;
         private readonly IActorManager _actorManager;
 
-        public MonsterActorTaskSource(IPlayer player,
+        public MonsterActorTaskSource(IBotPlayer player,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService,
             ISector sector,

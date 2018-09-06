@@ -7,6 +7,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once CheckNamespace
@@ -30,6 +31,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] [Inject] private ISectorManager _sectorManger;
 
+    [NotNull] [Inject] private IGameLoop _gameLoop;
+
     [NotNull] private PropTransferMachine _transferMachine;
 
     [NotNull] private PropTransferCommand _propTransferCommand;
@@ -42,7 +45,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     {
         _transferMachine = transferMachine;
         //TODO Сделать регистрацию команды в контейнере аналогично EquipCommand
-        _propTransferCommand = new PropTransferCommand(_sectorManger, _playerState, _transferMachine);
+        // для этого машину состояний нужно вынести в отдельное свойство или инжектить, как персистент
+        _propTransferCommand = new PropTransferCommand(_gameLoop, _sectorManger, _playerState, _transferMachine);
         UpdateProps();
     }
 

@@ -11,15 +11,10 @@ namespace Zilon.Core.Tactics
         private readonly ISector _sector;
         private readonly IActorManager _actorManager;
 
-        private IActor[] _actorsQueue;
-
         public GameLoop(ISector sector, IActorManager actorManager)
         {
             _sector = sector;
             _actorManager = actorManager;
-
-            _actorsQueue = new IActor[0];
-            RefillActorList();
         }
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
@@ -31,14 +26,16 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException("Не заданы источники команд");
             }
 
+            var actorsQueue = CalcActorList();
+
             //TODO Учитывать, что могут быть другие персонажи актёра (псы, участники взвода/группы)
-            var firstIsHumanPlayer = _actorsQueue.FirstOrDefault().Owner is HumanPlayer;
-            if (!firstIsHumanPlayer)
+            var firstIsHumanPlayer = actorsQueue.FirstOrDefault()?.Owner is HumanPlayer;
+            if (!firstIsHumanPlayer && actorsQueue.Any(x => x.Owner is HumanPlayer))
             {
                 throw new InvalidOperationException("Первым должен быть персонаж, которым управляет актёр");
             }
 
-            foreach (var actor in _actorsQueue)
+            foreach (var actor in actorsQueue)
             {
                 if (actor.State.IsDead)
                 {
@@ -50,7 +47,7 @@ namespace Zilon.Core.Tactics
 
             _sector.Update();
 
-            RefillActorList();
+            CalcActorList();
         }
 
         private void ProcessActor(IActor actor)
@@ -66,15 +63,15 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void RefillActorList()
+        private IActor[] CalcActorList()
         {
             // Персонаж, которым в данный момент управляет актёр, должен обрабатываться первым.
             var sortedActors = _actorManager.Actors.Where(x => !x.State.IsDead)
-                .OrderByDescending(x=>x.Owner is HumanPlayer)
+                .OrderByDescending(x => x.Owner is HumanPlayer)
                 .ToArray();
 
             // отсортировать по инициативе
-            _actorsQueue = sortedActors; 
+            return sortedActors;
         }
     }
 }

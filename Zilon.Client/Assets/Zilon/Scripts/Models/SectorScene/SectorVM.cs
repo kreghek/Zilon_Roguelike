@@ -8,21 +8,19 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once ArrangeTypeModifiers
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once UnusedMember.Global
-class SectorVM : MonoBehaviour
+internal class SectorVM : MonoBehaviour
 {
 
 #pragma warning disable 649
@@ -31,59 +29,54 @@ class SectorVM : MonoBehaviour
     [NotNull] public MapNodeVM MapNodePrefab;
 
     [NotNull] public ActorViewModel ActorPrefab;
-    
+
     [NotNull] public BulletDrive BulletPrefab;
-    
+
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
-    
+
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
     [NotNull] public ContainerVm ContainerPrefab;
 
-    
+    [NotNull] [Inject] private IGameLoop _gameLoop;
+
     [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private ISectorManager _sectorManager;
 
     [NotNull] [Inject] private IPlayerState _playerState;
 
-    [NotNull] [Inject] private IDecisionSource _decisionSource;
-
-    [NotNull] [Inject] private ISectorGeneratorRandomSource _sectorGeneratorRandomSource;
-
-    [NotNull] [Inject] private IDice _dice;
-
     [NotNull] [Inject] private ISchemeService _schemeService;
 
-    [NotNull] [Inject] private IPropFactory _propFactory;
+    [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
-    [NotNull] [Inject] private IDropResolver _dropResolver;
+    [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
 
-    [NotNull] [Inject] private HumanPlayer _humanPlayer;
-    
-    [NotNull] [Inject] private IBotPlayer _monsterPlayer;
-   
     [NotNull] [Inject] private IActorManager _actorManager;
-    
+
     [NotNull] [Inject] private IPropContainerManager _propContainerManager;
 
-    [NotNull] [Inject] private ITacticalActUsageService _tacticalActUsageService;
-    
     [NotNull] [Inject] private ISector _sector;
 
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
-    [NotNull] [Inject(Id = "move-command")]
-    private ICommand _moveCommand;
+    [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
 
-    [NotNull] [Inject(Id = "attack-command")]
-    private ICommand _attackCommand;
+    [NotNull]
+    [Inject(Id = "move-command")]
+    private readonly ICommand _moveCommand;
 
-    [NotNull] [Inject(Id = "open-container-command")]
-    private ICommand _openContainerCommand;
+    [NotNull]
+    [Inject(Id = "attack-command")]
+    private readonly ICommand _attackCommand;
 
-    [NotNull] [Inject(Id = "show-container-modal-command")]
-    private ICommand _showContainerModalCommand;
+    [NotNull]
+    [Inject(Id = "open-container-command")]
+    private readonly ICommand _openContainerCommand;
+
+    [NotNull]
+    [Inject(Id = "show-container-modal-command")]
+    private readonly ICommand _showContainerModalCommand;
 
     public static SectorProceduralGenerator sectorGenerator;
 
@@ -114,19 +107,53 @@ class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void Awake()
     {
-        CreateSector();
+        InitServices();
+
+        var nodeViewModels = InitNodeViewModels();
+
+        InitPlayerActor(nodeViewModels);
+        CreateMonsterViewModels(nodeViewModels);
+        CreateContainerViewModels(nodeViewModels);
     }
 
-    private void CreateSector()
+    private void InitServices()
     {
-        
+        _sectorManager.CurrentSector = _sector;
 
+        _playerState.TaskSource = _humanActorTaskSource;
+
+        _gameLoop.ActorTaskSources = new[] {
+            _humanActorTaskSource,
+            _monsterActorTaskSource
+        };
+
+        _sector.ActorExit += SectorOnActorExit;
+    }
+
+    private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
+    {
+        var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
+
+        var playerActorStartNode = _sector.Map.Nodes.First();//sectorGenerator.StartNodes.First();
+        var playerActorVm = CreateHumanActorVm(_humanPlayer,
+            personScheme,
+            _actorManager,
+            playerActorStartNode,
+            nodeViewModels);
+
+        //Лучше централизовать переключение текущего актёра только в playerState
+        _playerState.ActiveActor = playerActorVm;
+        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+    }
+
+    private List<MapNodeVM> InitNodeViewModels()
+    {
         var nodeVMs = new List<MapNodeVM>();
         foreach (var node in _sector.Map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
 
-            var hexNode = (HexNode) node;
+            var hexNode = (HexNode)node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
@@ -134,9 +161,9 @@ class SectorVM : MonoBehaviour
 
             var edges = _sector.Map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
             var neighbors = (from edge in edges
-                from neighbor in edge.Nodes
-                where neighbor != node
-                select neighbor).Cast<HexNode>().ToArray();
+                             from neighbor in edge.Nodes
+                             where neighbor != node
+                             select neighbor).Cast<HexNode>().ToArray();
 
             mapNodeVm.Edges = edges;
             mapNodeVm.Neighbors = neighbors;
@@ -151,29 +178,45 @@ class SectorVM : MonoBehaviour
             nodeVMs.Add(mapNodeVm);
         }
 
-        var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
+        return nodeVMs;
 
-        var playerActorStartNode = _sector.Map.Nodes.First();//sectorGenerator.StartNodes.First();
-        var playerActorVm = CreateHumanActorVm(_humanPlayer,
-            personScheme,
-            _actorManager,
-            playerActorStartNode,
-            nodeVMs);
 
-        _playerState.ActiveActor = playerActorVm;
 
+
+
+
+
+        //var humanTaskSource = new HumanActorTaskSource();
+
+
+        //var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
+        //    sectorGenerator.Patrols,
+        //    _decisionSource,
+        //    _tacticalActUsageService);
+
+        //        _sector.BehaviourSources = new IActorTaskSource[]
+        //        {
+        //            humanTaskSource,
+        //            monsterTaskSource
+        //        };
+
+
+    }
+
+    private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    {
         var monsters = _actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorVm = Instantiate(ActorPrefab, transform);
             var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
             actorVm.GraphicRoot = actorGraphic;
-            
+
             var graphicController = actorVm.gameObject.AddComponent<MonsterActorGraphicController>();
             graphicController.Actor = monsterActor;
             graphicController.Graphic = actorGraphic;
 
-            var actorNodeVm = nodeVMs.Single(x => x.Node == monsterActor.Node);
+            var actorNodeVm = nodeViewModels.Single(x => x.Node == monsterActor.Node);
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
             actorVm.transform.position = actorPosition;
             actorVm.Actor = monsterActor;
@@ -181,37 +224,20 @@ class SectorVM : MonoBehaviour
             actorVm.Selected += EnemyActorVm_OnSelected;
             monsterActor.UsedAct += ActorOnUsedAct;
         }
+    }
 
+    private void CreateContainerViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    {
         foreach (var container in _propContainerManager.Containers)
         {
             var containerVm = Instantiate(ContainerPrefab, transform);
 
-            var containerNodeVm = nodeVMs.Single(x => x.Node == container.Node);
+            var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
             var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
             containerVm.transform.position = containerPosition;
             containerVm.Container = container;
             containerVm.Selected += Container_Selected;
         }
-
-        //var humanTaskSource = new HumanActorTaskSource();
-        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
-
-        //var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
-        //    sectorGenerator.Patrols,
-        //    _decisionSource,
-        //    _tacticalActUsageService);
-
-//        _sector.BehaviourSources = new IActorTaskSource[]
-//        {
-//            humanTaskSource,
-//            monsterTaskSource
-//        };
-
-        _sectorManager.CurrentSector = _sector;
-
-        _playerState.TaskSource = _humanActorTaskSource;
-
-        _sector.ActorExit += SectorOnActorExit;
     }
 
     private void Container_Selected(object sender, EventArgs e)
@@ -255,22 +281,22 @@ class SectorVM : MonoBehaviour
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         var inventory = new Inventory();
-        
+
         var evolutionData = new EvolutionData(_schemeService);
         evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
 
         var defaultActScheme = _schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
-        
+
         var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
         var actor = new Actor(person, player, startNode);
-        
+
         actorManager.Add(actor);
 
         var actorVm = Instantiate(ActorPrefab, transform);
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
         actorVm.GraphicRoot = actorGraphic;
-        
+
         var graphicController = actorVm.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;
         graphicController.Graphic = actorGraphic;
@@ -279,10 +305,10 @@ class SectorVM : MonoBehaviour
         var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
         actorVm.transform.position = actorPosition;
         actorVm.Actor = actor;
-        
+
         actorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actorVm.Actor.UsedAct += ActorOnUsedAct;
-        
+
         return actorVm;
     }
 
@@ -310,8 +336,8 @@ class SectorVM : MonoBehaviour
         var viewModels = GetComponentsInChildren<IActorViewModel>();
 
         var actorViewModel = viewModels.Single(x => x.Actor == actor);
-        var targetViewModel =viewModels.Single(x => x.Actor == target);
-        
+        var targetViewModel = viewModels.Single(x => x.Actor == target);
+
         var bullet = Instantiate(BulletPrefab, transform);
         bullet.StartObject = ((MonoBehaviour)actorViewModel).gameObject;
         bullet.FinishObject = ((MonoBehaviour)targetViewModel).gameObject;

@@ -1,7 +1,11 @@
 using System;
+
 using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -18,7 +22,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<IGameManager>().To<GameManager>().AsSingle();
+        Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<IMapGenerator>().To<GridMapGenerator>().AsSingle();
@@ -36,6 +40,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
         Container.Bind<SectorProceduralGenerator>().AsSingle();
         
 

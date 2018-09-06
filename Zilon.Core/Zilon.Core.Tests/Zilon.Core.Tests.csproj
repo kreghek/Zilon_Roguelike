@@ -122,6 +122,7 @@
     <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
     <Compile Include="Tactics\DropResolverTests.cs" />
     <Compile Include="Tactics\DropTablePropContainerTests.cs" />
+    <Compile Include="Tactics\GameLoopTests.cs" />
     <Compile Include="Tactics\Generation\GenerationHelperTests.cs" />
     <Compile Include="Tactics\Generation\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="Tactics\Generation\SectorProceduralGeneratorTests.cs" />
