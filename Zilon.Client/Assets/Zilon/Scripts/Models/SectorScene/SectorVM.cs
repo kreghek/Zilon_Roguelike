@@ -179,28 +179,6 @@ internal class SectorVM : MonoBehaviour
         }
 
         return nodeVMs;
-
-
-
-
-
-
-
-        //var humanTaskSource = new HumanActorTaskSource();
-
-
-        //var monsterTaskSource = new MonsterActorTaskSource(_monsterPlayer,
-        //    sectorGenerator.Patrols,
-        //    _decisionSource,
-        //    _tacticalActUsageService);
-
-        //        _sector.BehaviourSources = new IActorTaskSource[]
-        //        {
-        //            humanTaskSource,
-        //            monsterTaskSource
-        //        };
-
-
     }
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
@@ -211,6 +189,7 @@ internal class SectorVM : MonoBehaviour
             var actorVm = Instantiate(ActorPrefab, transform);
             var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
             actorVm.GraphicRoot = actorGraphic;
+            actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
 
             var graphicController = actorVm.gameObject.AddComponent<MonsterActorGraphicController>();
             graphicController.Actor = monsterActor;
@@ -295,6 +274,7 @@ internal class SectorVM : MonoBehaviour
 
         var actorVm = Instantiate(ActorPrefab, transform);
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
+        actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
         actorVm.GraphicRoot = actorGraphic;
 
         var graphicController = actorVm.gameObject.AddComponent<HumanActorGraphicController>();
