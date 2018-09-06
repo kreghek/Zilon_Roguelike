@@ -24,9 +24,6 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public class AttackCommandTests: CommandTestBase
     {
-        private ServiceContainer _container;
-
-
         /// <summary>
         /// Тест проверяет, что можно атаковать, если не мешают стены.
         /// </summary>
@@ -164,10 +161,7 @@ namespace Zilon.Core.Tests.Commands
             var targetVm = targetVmMock.Object;
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
 
-            var usageServiceMock = new Mock<ITacticalActUsageService>();
-            var usageService = usageServiceMock.Object;
-
-            _container.Register(factory => usageService, new PerContainerLifetime());
+            _container.Register<AttackCommand>(new PerContainerLifetime());
         }
     }
 }

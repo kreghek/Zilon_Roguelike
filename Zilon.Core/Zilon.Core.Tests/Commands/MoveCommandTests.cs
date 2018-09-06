@@ -18,11 +18,8 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture()]
-    public class MoveCommandTests
+    public class MoveCommandTests: CommandTestBase
     {
-        private ServiceContainer _container;
-
-
         /// <summary>
         /// Тест проверяет, что можно перемещаться в пустые узлы карты.
         /// </summary>
@@ -63,51 +60,16 @@ namespace Zilon.Core.Tests.Commands
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target)));
         }
 
-        [SetUp]
-        public void SetUp()
+        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
         {
-            _container = new ServiceContainer();
-
-            var testMap = new TestGridGenMap(3);
-
-            var sectorMock = new Mock<ISector>();
-            sectorMock.SetupGet(x => x.Map).Returns(testMap);
-            var sector = sectorMock.Object;
-
-            var sectorManagerMock = new Mock<ISectorManager>();
-            sectorManagerMock.SetupProperty(x => x.CurrentSector, sector);
-            var sectorManager = sectorManagerMock.Object;
-
-
-            var actorMock = new Mock<IActor>();
-            var actorNode = testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
-            actorMock.SetupGet(x => x.Node).Returns(actorNode);
-            var actor = actorMock.Object;
-
-            var actorVmMock = new Mock<IActorViewModel>();
-            actorVmMock.SetupProperty(x => x.Actor, actor);
-            var actorVm = actorVmMock.Object;
-
-
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
             var targetVmMock = new Mock<IMapNodeViewModel>();
             targetVmMock.SetupProperty(x => x.Node, targetNode);
             var targetVm = targetVmMock.Object;
 
-            var humanTaskSourceMock = new Mock<IHumanActorTaskSource>();
-            var humanTaskSource = humanTaskSourceMock.Object;
-
-            var playerStateMock = new Mock<IPlayerState>();
-            playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
-            playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
-            var playerState = playerStateMock.Object;
-
 
             _container.Register<MoveCommand>(new PerContainerLifetime());
-            _container.Register(factory => sectorManager, new PerContainerLifetime());
-            _container.Register(factory => playerState, new PerContainerLifetime());
-            _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
         }
     }
 }
