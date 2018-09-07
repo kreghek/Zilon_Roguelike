@@ -73,7 +73,8 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var room in rooms)
             {
-                var containerNode = room.Nodes.FirstOrDefault();
+                var absNodeIndex = room.Nodes.Count();
+                var containerNode = room.Nodes[absNodeIndex / 2];
                 var container = new DropTablePropContainer(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
                     _dropResolver);
