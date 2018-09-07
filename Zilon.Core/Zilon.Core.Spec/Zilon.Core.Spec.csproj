@@ -130,6 +130,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Cheast_DuplicateDrop.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Cheast_TakeResources.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cheast_TakeResources.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Cheast_TakeWeapon.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -263,6 +268,10 @@
     <None Include="TestCases\Cheast_DuplicateDrop.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Cheast_DuplicateDrop.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Cheast_TakeResources.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Cheast_TakeResources.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Cheast_TakeWeapon.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
