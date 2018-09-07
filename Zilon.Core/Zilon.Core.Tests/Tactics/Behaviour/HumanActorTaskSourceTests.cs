@@ -252,7 +252,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             taskSource.Intent(intention);
 
-            var tasks = taskSource.GetActorTasks(actor); ;
+            var tasks = taskSource.GetActorTasks(actor);
             return tasks;
         }
 

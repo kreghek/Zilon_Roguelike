@@ -12,7 +12,7 @@ namespace Zilon.Core.Commands
 
         protected virtual bool UpdateGameLoop => true;
 
-        public TacticCommandBase(IGameLoop gameLoop)
+        protected TacticCommandBase(IGameLoop gameLoop)
         {
             _gameLoop = gameLoop;
         }

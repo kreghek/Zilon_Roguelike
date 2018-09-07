@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : IPerson
     {
-        TacticalActScheme _defaultActScheme;
+        private readonly TacticalActScheme _defaultActScheme;
 
         public int Id { get; set; }
 
