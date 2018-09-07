@@ -125,6 +125,16 @@
     </Compile>
     <Compile Include="Steps\BugMonsterPatrolNoFreezeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCases\Cheast_DuplicateDrop.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cheast_DuplicateDrop.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Cheast_TakeWeapon.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cheast_TakeWeapon.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Equipment_ChangeHandsToEquipment.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -250,6 +260,14 @@
       <LastGenOutput>Bug_MonsterPatrol_NoFreeze.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="TestCases\Cheast_DuplicateDrop.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Cheast_DuplicateDrop.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Cheast_TakeWeapon.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Cheast_TakeWeapon.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Equipment_ChangeHandsToEquipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Equipment_ChangeHandsToEquipment.feature.cs</LastGenOutput>
