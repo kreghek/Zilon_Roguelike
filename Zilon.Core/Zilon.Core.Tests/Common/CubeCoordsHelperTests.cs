@@ -14,7 +14,6 @@ namespace Zilon.Core.Tests.Common
     {
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
-        [Ignore("Не достоверный. См коммент !!!")]
         public void CubeDrawLineTest(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
         {
             // ARRANGE
@@ -37,10 +36,20 @@ namespace Zilon.Core.Tests.Common
 
                 // Проверяем, что у каждой точки линии есть соседи,
                 // т.е. нет изолированных разорванных точк.
-                // !!! Похоже, то часть проверки, которую не дописал. var neibourOffsets = HexHelper.GetOffsetClockwise();
-                var neighborCoords = line.Where(x => x == coord);
+                var neibourOffsets = HexHelper.GetOffsetClockwise();
+                var hasNeighbor = false;
 
-                var hasNeighbor = neighborCoords.Any();
+                foreach (var neibourOffset in neibourOffsets)
+                {
+                    var neighborCoords = line.Where(x => x == coord + neibourOffset);
+
+                    var hasNeighborInThisDirection = neighborCoords.Any();
+
+                    if (hasNeighborInThisDirection)
+                    {
+                        hasNeighbor = true;
+                    }
+                }
 
                 hasNeighbor.Should().Be(true);
             }

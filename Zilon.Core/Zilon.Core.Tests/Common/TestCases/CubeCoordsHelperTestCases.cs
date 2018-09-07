@@ -12,6 +12,7 @@ namespace Zilon.Core.Tests.Common.TestCases
             {
                 yield return new TestCaseData(0, 0, 5, 7);
                 yield return new TestCaseData(0, 0, 15, 17);
+                yield return new TestCaseData(0, 4, 6, 0);
             }
         }
     }
