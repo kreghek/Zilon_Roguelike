@@ -145,6 +145,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Move_CanMoveAfterExceptionOnAttack.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Move_CanMoveThroughKilledMonsters.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -250,6 +255,10 @@
     <None Include="TestCases\Move_CanMove.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CanMove.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Move_CanMoveAfterExceptionOnAttack.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Move_CanMoveThroughKilledMonsters.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
