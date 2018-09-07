@@ -140,6 +140,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Fight_ShootingDecreaseBullets.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Monster_NotThrowWhenKill.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Monster_NotThrowWhenKill.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Move_CanMove.feature.cs">
       <DependentUpon>Move_CanMove.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -149,6 +154,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Move_CanMoveAfterExceptionOnAttack.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Move_CanMoveOnlyInNeighborNode.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Move_CanMoveThroughKilledMonsters.feature.cs">
       <AutoGen>True</AutoGen>
@@ -252,6 +262,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Fight_ShootingDecreaseBullets.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Monster_NotThrowWhenKill.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Monster_NotThrowWhenKill.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Move_CanMove.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CanMove.feature.cs</LastGenOutput>
@@ -259,6 +273,10 @@
     <None Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CanMoveAfterExceptionOnAttack.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Move_CanMoveOnlyInNeighborNode.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Move_CanMoveThroughKilledMonsters.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
