@@ -121,6 +121,7 @@
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
     <Compile Include="Tactics\DropResolverTests.cs" />
+    <Compile Include="Tactics\DropTableChestStoreTests.cs" />
     <Compile Include="Tactics\DropTablePropContainerTests.cs" />
     <Compile Include="Tactics\GameLoopTests.cs" />
     <Compile Include="MapGenerators\GenerationHelperTests.cs" />
