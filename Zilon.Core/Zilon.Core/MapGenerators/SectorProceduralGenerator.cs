@@ -84,7 +84,7 @@ namespace Zilon.Core.MapGenerators
 
         private void SelectExitPoints(ISector sector, Room exitRoom)
         {
-            sector.ExitNodes = new[] { exitRoom.Nodes.Last() };
+            sector.ExitNodes = new[] { exitRoom.Nodes[exitRoom.Nodes.Count() - 2] };
         }
 
         private void SelectStartNodes(ISector sector, Room startRoom)
