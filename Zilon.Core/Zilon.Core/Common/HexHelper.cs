@@ -4,7 +4,7 @@
     {
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
-            var x = offsetX - (offsetY - offsetY % 2) / 2;
+            var x = offsetX - (offsetY - (offsetY & 1)) / 2;
             var z = offsetY;
             var y = -x - z;
 
@@ -13,7 +13,7 @@
 
         public static OffsetCoords ConvertToOffset(CubeCoords cube)
         {
-            var col = cube.X + (cube.Z - cube.Z % 2) / 2;
+            var col = cube.X + (cube.Z - (cube.Z & 1)) / 2;
             var row = cube.Z;
             return new OffsetCoords(col, row);
         }

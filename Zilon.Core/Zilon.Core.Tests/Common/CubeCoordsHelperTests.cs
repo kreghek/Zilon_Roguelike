@@ -41,9 +41,10 @@ namespace Zilon.Core.Tests.Common
 
                 foreach (var neibourOffset in neibourOffsets)
                 {
-                    var neighborCoords = line.Where(x => x == coord + neibourOffset);
+                    var neighborCoord = coord + neibourOffset;
+                    var foundCoords = line.Where(x => x == neighborCoord);
 
-                    var hasNeighborInThisDirection = neighborCoords.Any();
+                    var hasNeighborInThisDirection = foundCoords.Any();
 
                     if (hasNeighborInThisDirection)
                     {

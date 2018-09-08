@@ -15,15 +15,18 @@ namespace Zilon.Core.Tests.Common
         /// в кубические координаты для сетки шестигранников.
         /// </summary>
         [Test]
-        public void ConvertToCubeTest()
+        [TestCaseSource(typeof(ConvertOffsetToCubeTestCaseSource),
+            nameof(ConvertOffsetToCubeTestCaseSource.TestCases))]
+        public void ConvertToCubeTest(int offsetX, int offsetY, int cubeX, int cubeY, int cubeZ)
         {
             // ARRANGE
-            var offsetX = 1;
-            var offsetY = 2;
-            var expectedCubeCoords = new CubeCoords(0, -2, 2);
+            var expectedCubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
+
+
 
             // ACT
             var factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
+
 
 
             // ASSERT
@@ -31,12 +34,33 @@ namespace Zilon.Core.Tests.Common
         }
 
         [Test]
+        [TestCaseSource(typeof(ConvertOffsetToCubeTestCaseSource),
+            nameof(ConvertOffsetToCubeTestCaseSource.TestCases))]
+        public void ConvertToOffsetTest(int offsetX, int offsetY, int cubeX, int cubeY, int cubeZ)
+        {
+            // ARRANGE
+            var cubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
+            var expectedOffset = new OffsetCoords(offsetX, offsetY);
+
+
+
+            // ACT
+            var factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
+
+
+
+            // ASSERT
+            factOffsetCoords.Should().BeEquivalentTo(expectedOffset);
+        }
+
+
+        [Test]
         [TestCaseSource(typeof(HexWorldPositionTestCaseSource),
             nameof(HexWorldPositionTestCaseSource.TestCases))]
         public float[] ConvertToWorldTest(int offsetX, int offsetY)
         {
             // ARRANGE
-            
+
 
             // ACT
             var factCubeCoords = HexHelper.ConvertToWorld(offsetX, offsetY);

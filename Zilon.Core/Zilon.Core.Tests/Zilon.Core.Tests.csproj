@@ -128,6 +128,7 @@
     <Compile Include="MapGenerators\SectorProceduralGeneratorTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />
+    <Compile Include="Tactics\Spatial\TestCases\ConvertOffsetToCubeTestCaseSource.cs" />
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
   </ItemGroup>
   <ItemGroup>
