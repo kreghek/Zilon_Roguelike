@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -17,5 +18,15 @@ namespace Zilon.Core.Tactics
         /// Содержимое контейнера.
         /// </summary>
         IPropStore Content { get; }
+
+        /// <summary>
+        /// Признак того, что контейнер открыт.
+        /// </summary>
+        /// <remarks>
+        /// Открытые контейнеры в дальнейшем можно открывать "руками".
+        /// </remarks>
+        bool IsOpened { get; set; }
+
+        event EventHandler IsOpenChanged;
     }
 }

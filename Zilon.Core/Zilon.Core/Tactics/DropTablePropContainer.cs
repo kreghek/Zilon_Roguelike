@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -9,9 +11,20 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public class DropTablePropContainer : IPropContainer
     {
+        private bool _isOpened;
+
         public IMapNode Node { get; }
 
         public IPropStore Content { get; }
+        public bool IsOpened
+        {
+            get => _isOpened;
+            set
+            {
+                _isOpened = value;
+                DoSetIsOpened();
+            }
+        }
 
         public DropTablePropContainer(IMapNode node,
             DropTableScheme[] dropTables,
@@ -19,6 +32,13 @@ namespace Zilon.Core.Tactics
         {
             Node = node;
             Content = new DropTableChestStore(dropTables, dropResolver);
+        }
+
+        public event EventHandler IsOpenChanged;
+
+        private void DoSetIsOpened()
+        {
+            IsOpenChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
