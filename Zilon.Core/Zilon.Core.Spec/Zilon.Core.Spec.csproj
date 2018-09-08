@@ -200,6 +200,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Move_CantMoveThroughMonsters.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Move_ChangeTaskInCurrentMovingNotCompleted.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -339,6 +344,10 @@
     <None Include="TestCases\Move_CantMoveThroughMonsters.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CantMoveThroughMonsters.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
