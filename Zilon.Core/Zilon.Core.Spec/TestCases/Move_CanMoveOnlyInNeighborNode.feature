@@ -1,11 +1,16 @@
 ﻿Feature: Move_CanMoveOnlyInNeighborNode
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+	Чтобы перемещение было логичным и естественным
+	Как разработчику
+	Мне нужно, чтобы персонажи перемещались только в соседние узлы за один ход
+	и не перескакивали через несколько узлов.
+	Даже если игрок указал не соседний узел.
 
-@mytag
-Scenario: Можно перемещаться только в соседние узлы. То есть этот тест толжен проверять выброс ошибки, если выбран не соседний узел.
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+@move @dev0
+Scenario: Перемещение актёра по узла каждый ход.
+	Given Есть карта размером 2
+	And Между ячейками (0, 0) и (1, 0) есть стена
+	And Между ячейками (1, 0) и (0, 1) есть стена
+	And Есть актёр игрока класса captain в ячейке (0, 0)
+	When Я выбираю ячейку (1, 0)
+	And Выполняется команда на перемещение
+	Then Актёр находится в ячейке (0, 1)

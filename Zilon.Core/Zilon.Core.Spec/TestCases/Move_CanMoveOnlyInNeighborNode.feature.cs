@@ -17,8 +17,9 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Move_CanMoveOnlyInNeighborNode", Description="\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-        "f two numbers", SourceFile="TestCases\\Move_CanMoveOnlyInNeighborNode.feature", SourceLine=0)]
+    [TechTalk.SpecRun.FeatureAttribute("Move_CanMoveOnlyInNeighborNode", Description="\tЧтобы перемещение было логичным и естественным\r\n\tКак разработчику\r\n\tМне нужно, ч" +
+        "тобы персонажи перемещались только в соседние узлы за один ход\r\n\tи не перескакив" +
+        "али через несколько узлов.\r\n\tДаже если игрок указал не соседний узел.", SourceFile="TestCases\\Move_CanMoveOnlyInNeighborNode.feature", SourceLine=0)]
     public partial class Move_CanMoveOnlyInNeighborNodeFeature
     {
         
@@ -31,8 +32,9 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Move_CanMoveOnlyInNeighborNode", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-                    "f two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Move_CanMoveOnlyInNeighborNode", "\tЧтобы перемещение было логичным и естественным\r\n\tКак разработчику\r\n\tМне нужно, ч" +
+                    "тобы персонажи перемещались только в соседние узлы за один ход\r\n\tи не перескакив" +
+                    "али через несколько узлов.\r\n\tДаже если игрок указал не соседний узел.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,25 +70,31 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Можно перемещаться только в соседние узлы. То есть этот тест толжен проверять выб" +
-            "рос ошибки, если выбран не соседний узел.", new string[] {
-                "mytag"}, SourceLine=6)]
-        public virtual void МожноПеремещатьсяТолькоВСоседниеУзлы_ТоЕстьЭтотТестТолженПроверятьВыбросОшибкиЕслиВыбранНеСоседнийУзел_()
+        [TechTalk.SpecRun.ScenarioAttribute("Перемещение актёра по узла каждый ход.", new string[] {
+                "move",
+                "dev0"}, SourceLine=8)]
+        public virtual void ПеремещениеАктёраПоУзлаКаждыйХод_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Можно перемещаться только в соседние узлы. То есть этот тест толжен проверять выб" +
-                    "рос ошибки, если выбран не соседний узел.", null, new string[] {
-                        "mytag"});
-#line 7
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Перемещение актёра по узла каждый ход.", null, new string[] {
+                        "move",
+                        "dev0"});
+#line 9
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 8
- testRunner.Given("I have entered 50 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 9
- testRunner.And("I have entered 70 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("I press add", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 11
- testRunner.Then("the result should be 120 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("Между ячейками (0, 0) и (1, 0) есть стена", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
+ testRunner.And("Между ячейками (1, 0) и (0, 1) есть стена", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 13
+ testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 14
+ testRunner.When("Я выбираю ячейку (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 15
+ testRunner.And("Выполняется команда на перемещение", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 16
+ testRunner.Then("Актёр находится в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
