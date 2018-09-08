@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 
 using LightInject;
 
@@ -40,6 +41,21 @@ namespace Zilon.Core.Spec.Steps
             var moveCommand = _context.Container.GetInstance<ICommand>("move");
             moveCommand.Execute();
         }
+
+        [When(@"Выполняется команда на перемещение с ошибкой")]
+        public void WhenВыполняетсяКомандаНаПеремещениеСОшибкой()
+        {
+            try
+            {
+                var moveCommand = _context.Container.GetInstance<ICommand>("move");
+                moveCommand.Execute();
+            }
+            catch (InvalidOperationException exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+        }
+
 
         [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
         public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)

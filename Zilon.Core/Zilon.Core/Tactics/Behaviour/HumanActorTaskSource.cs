@@ -36,7 +36,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var currentTaskIsComplete = _currentTask?.IsComplete;
-            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value)
+            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntesion != null)
             {
                 return new IActorTask[] { _currentTask };
             }

@@ -170,10 +170,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature.cs">
+    <Compile Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveAfterExceptionOnAttack.feature</DependentUpon>
+      <DependentUpon>Move_CanMoveAfterExceptionDuringTaskExecution.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature.cs">
       <DependentUpon>Move_CanMoveOnlyInNeighborNode_WithMonsters.feature</DependentUpon>
@@ -316,9 +316,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CanMove.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature">
+    <None Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveAfterExceptionOnAttack.feature.cs</LastGenOutput>
+      <LastGenOutput>Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
