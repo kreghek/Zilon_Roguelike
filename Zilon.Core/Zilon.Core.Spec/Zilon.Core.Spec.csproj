@@ -175,6 +175,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Move_CanMoveAfterExceptionOnAttack.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature.cs">
+      <DependentUpon>Move_CanMoveOnlyInNeighborNode2.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -309,6 +314,10 @@
     <None Include="TestCases\Move_CanMoveAfterExceptionOnAttack.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Move_CanMoveAfterExceptionOnAttack.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Move_CanMoveOnlyInNeighborNode2.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
