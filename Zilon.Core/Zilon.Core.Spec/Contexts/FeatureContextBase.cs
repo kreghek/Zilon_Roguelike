@@ -37,7 +37,7 @@ namespace Zilon.Core.Spec.Contexts
 
             RegisterSchemeService();
             RegisterSectorService();
-            RegisterGameManager();
+            RegisterGameLoop();
             RegisterAuxServices();
             RegisterTaskSources();
             RegisterClientServices();
@@ -225,9 +225,9 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
         }
 
-        private void RegisterGameManager()
+        private void RegisterGameLoop()
         {
-            Container.Register<IGameLoop, GameLoop>();
+            Container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
         }
 
         /// <summary>
@@ -268,13 +268,15 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterTaskSources()
         {
+            Container.Register<IBotPlayer, BotPlayer>();
             Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
+            Container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 
         private void InitPlayers()
         {
             _humanPlayer = new HumanPlayer();
-            _botPlayer = new BotPlayer();
+            _botPlayer = (BotPlayer)Container.GetInstance<IBotPlayer>();
         }
 
         private void InitClientServices()

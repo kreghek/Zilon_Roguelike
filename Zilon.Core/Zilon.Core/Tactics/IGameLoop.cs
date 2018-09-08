@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {

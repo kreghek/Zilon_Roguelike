@@ -30,6 +30,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
+            if (actor != CurrentActor)
+            {
+                return new IActorTask[0];
+            }
+
             var currentTaskIsComplete = _currentTask?.IsComplete;
             if (currentTaskIsComplete != null && !currentTaskIsComplete.Value)
             {
