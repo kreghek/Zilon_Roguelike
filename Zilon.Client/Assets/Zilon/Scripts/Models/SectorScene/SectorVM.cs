@@ -187,11 +187,11 @@ internal class SectorVM : MonoBehaviour
         foreach (var monsterActor in monsters)
         {
             var actorVm = Instantiate(ActorPrefab, transform);
-            var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
+            var actorGraphic = Instantiate(MonoGraphicPrefab, actorVm.transform);
             actorVm.GraphicRoot = actorGraphic;
-            actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
+            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
 
-            var graphicController = actorVm.gameObject.AddComponent<MonsterActorGraphicController>();
+            var graphicController = actorVm.gameObject.AddComponent<MonsterSingleActorGraphicController>();
             graphicController.Actor = monsterActor;
             graphicController.Graphic = actorGraphic;
 

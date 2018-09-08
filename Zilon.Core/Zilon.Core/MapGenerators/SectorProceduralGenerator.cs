@@ -94,7 +94,7 @@ namespace Zilon.Core.MapGenerators
 
         private void CreateRoomMonsters(ISector sector, IEnumerable<Room> rooms)
         {
-            var monsterScheme = _schemeService.GetScheme<MonsterScheme>("default");
+            var monsterScheme = _schemeService.GetScheme<MonsterScheme>("rat");
 
             foreach (var room in rooms)
             {

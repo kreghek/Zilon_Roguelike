@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+
 using Zilon.Core.Tactics;
 
-public class MonsterActorGraphicController : MonoBehaviour
+public class MonsterCompositeActorGraphicController : MonoBehaviour
 {
     public IActor Actor { get; set; }
     public ActorGraphicBase Graphic;

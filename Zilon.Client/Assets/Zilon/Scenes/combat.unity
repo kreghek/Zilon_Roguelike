@@ -161,7 +161,8 @@ MonoBehaviour:
     type: 2}
   HumanoidGraphicPrefab: {fileID: 114666758840654916, guid: 7f822e7910e8df74ebd825ddc939cc9c,
     type: 2}
-  MonoGraphicPrefab: {fileID: 0}
+  MonoGraphicPrefab: {fileID: 114996966571026226, guid: 922e148277128b8438390520a146d41a,
+    type: 2}
   ContainerPrefab: {fileID: 114884176175482552, guid: 385924f4dfbb1804eb30c0d38a5d6c25,
     type: 2}
 --- !u!1 &171240410
