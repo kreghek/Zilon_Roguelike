@@ -46,8 +46,6 @@ namespace Zilon.Core.Tactics
             }
 
             _sector.Update();
-
-            CalcActorList();
         }
 
         private void ProcessActor(IActor actor)

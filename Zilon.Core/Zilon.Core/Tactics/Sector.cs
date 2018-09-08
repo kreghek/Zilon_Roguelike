@@ -58,12 +58,6 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         public void Update()
         {
-            //// Определяем команды на текущий ход
-            //CollectActorTasks();
-
-            //// Выполняем все команды на текущий ход
-            //ExecuteActorTasks();
-
             UpdateSurvivals();
 
             UpdateActorEffects();
@@ -130,23 +124,6 @@ namespace Zilon.Core.Tactics
                 task.Execute();
             }
         }
-
-        /// <summary>
-        /// Определяем задачи актёров на текущий ход по всем зарегистрированным источникам задач.
-        /// Результат записывается во внутренний список _tasks.
-        /// </summary>
-        //private void CollectActorTasks()
-        //{
-        //    _tasks.Clear();
-        //    foreach (var behaviourSource in BehaviourSources)
-        //    {
-        //        var currentSourceTasks = behaviourSource.GetActorTasks(Map, _actorManager);
-        //        if (currentSourceTasks != null)
-        //        {
-        //            _tasks.AddRange(currentSourceTasks);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
