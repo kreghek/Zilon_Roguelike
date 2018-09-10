@@ -60,7 +60,14 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Для актёра {actor} не задан маршрут.");
+                        var idleLogic = new RoamingLogic(actor,
+                            _sector.Map,
+                            _actorManager,
+                            _decisionSource,
+                            _actService);
+
+                        _logicDict[actor] = idleLogic;
+                        logic = idleLogic;
                     }
                 }
 
