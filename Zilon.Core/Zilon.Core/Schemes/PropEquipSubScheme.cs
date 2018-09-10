@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема характиристик предмета, который можно экипировать на персонажа.
@@ -34,8 +36,8 @@
         public string[] ActSids { get; set; }
 
         /// <summary>
-        /// Теги экипировки.
+        /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
-        public string[] Tags { get; set; }
+        public PersonSlotSubScheme[] Slots { get; set; }
     }
 }

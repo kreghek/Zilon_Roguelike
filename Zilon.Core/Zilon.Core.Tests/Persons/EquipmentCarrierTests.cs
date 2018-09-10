@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 
 using NUnit.Framework;
-
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -19,20 +19,25 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme {
-                    ActSids = new[] { "weapon" }
+                Equip = new PropEquipSubScheme
+                {
+                    Slots = new[] {
+                        new PersonSlotSubScheme{
+                            Types = EquipmentSlotTypes.Hand
+                        }
+                    }
                 }
             };
 
-            var slotSchemes = new [] {
+            var slotSchemes = new[] {
                 new PersonSlotSubScheme{
-                    AvailableTags = new[]{ "weapon" }
+                    Types = EquipmentSlotTypes.Hand
                 }
             };
 
             var tacticalActScheme = new TacticalActScheme();
 
-            var equipment = new Equipment(scheme, new []{ tacticalActScheme });
+            var equipment = new Equipment(scheme, new[] { tacticalActScheme });
 
             const int changedSlot = 0;
 

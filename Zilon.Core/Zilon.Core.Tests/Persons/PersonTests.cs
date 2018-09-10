@@ -23,9 +23,15 @@ namespace Zilon.Core.Tests.Persons
         public void SetEquipment_SetSingleEquipment_HasActs()
         {
             // ARRANGE
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
             var personScheme = new PersonScheme
             {
-                SlotCount = 3
+                Slots = slotSchemes
             };
 
             var defaultActScheme = new TacticalActScheme {
@@ -78,11 +84,17 @@ namespace Zilon.Core.Tests.Persons
         [Test]
         public void HumanPerson_PerkLeveledUp_StatsRecalculated()
         {
-
             // ARRANGE
+
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
             var personScheme = new PersonScheme
             {
-                SlotCount = 3
+                Slots = slotSchemes
             };
 
             var defaultActScheme = new TacticalActScheme

@@ -4,5 +4,10 @@
   },
   "SlotCount": 7,
   "Hp": 120,
-  "DefaultAct": "hand-hit"
+  "DefaultAct": "hand-hit",
+  "Slots": [
+    {
+      "Types": 
+    }
+  ]
 }

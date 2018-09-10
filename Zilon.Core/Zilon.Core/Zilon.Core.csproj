@@ -83,6 +83,7 @@
     <Compile Include="Commands\UiCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
+    <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
     <Compile Include="Components\CombatStatItem.cs" />

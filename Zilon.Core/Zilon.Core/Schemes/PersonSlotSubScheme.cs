@@ -1,7 +1,12 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Zilon.Core.Components;
+
+namespace Zilon.Core.Schemes
 {
     public class PersonSlotSubScheme: SubSchemeBase
     {
-        public string[] AvailableTags { get; set; }
+        /// <summary>
+        /// Типы слота.
+        /// </summary>
+        public EquipmentSlotTypes Types { get; set; }
     }
 }
