@@ -22,6 +22,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        public int Id { get; set; }
+
         private void DoSetIsOpened()
         {
             IsOpenChanged?.Invoke(this, EventArgs.Empty);

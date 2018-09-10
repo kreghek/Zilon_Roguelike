@@ -64,6 +64,14 @@ namespace Zilon.Core.Spec.Steps
             monster.State.SetHpForce(monsterHp);
         }
 
+        [Given(@"Есть сундук в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьСундукВЯчейке(int offsetX, int offsetY)
+        {
+            var coords = new OffsetCoords(offsetX, offsetY);
+            _context.AddChest(coords);
+        }
+
+
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {

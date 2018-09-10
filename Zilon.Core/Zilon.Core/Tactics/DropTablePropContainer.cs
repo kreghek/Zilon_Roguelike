@@ -26,6 +26,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        public int Id { get; set; }
+
         public DropTablePropContainer(IMapNode node,
             DropTableScheme[] dropTables,
             IDropResolver dropResolver)

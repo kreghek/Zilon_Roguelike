@@ -88,7 +88,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.When("Я выбираю сундук в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("У актёра в инвентаре есть", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("У актёра в инвентаре есть pistol", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

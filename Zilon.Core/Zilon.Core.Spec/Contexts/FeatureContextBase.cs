@@ -125,6 +125,15 @@ namespace Zilon.Core.Spec.Contexts
             actorManager.Add(monster);
         }
 
+        public IPropContainer AddChest(OffsetCoords nodeCoords)
+        {
+            var sector = Container.GetInstance<ISector>();
+            var node = sector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
+            var chest = new FixedPropContainer(node, new IProp[0]);
+
+            return chest;
+        }
+
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
             var schemeService = Container.GetInstance<ISchemeService>();
