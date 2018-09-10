@@ -1,11 +1,13 @@
 ﻿Feature: Monster_NotThrowWhenKill
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+	Чтобы монстры не поддерживали развитие
+	Как разработчкиу
+	Мне нужно, чтобы при убийстве игрока монстром не вываливалось исключение.
 
-@mytag
+@monsters @dev0 @perks
 Scenario: Для монстров не поддерживается развитие. Для них не должно выбрасываться исключение при попытке прокачать перки.
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And Есть монстр класса rat Id:100 в ячейке (1, 0)
+	And Актёр игрока имеет Hp: 1
+	When Актёр игрока атакует монстра Id:100
+	Then Актёр игрока мертв

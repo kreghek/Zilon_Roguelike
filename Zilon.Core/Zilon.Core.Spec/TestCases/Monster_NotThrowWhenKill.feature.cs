@@ -17,8 +17,8 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Monster_NotThrowWhenKill", Description="\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-        "f two numbers", SourceFile="TestCases\\Monster_NotThrowWhenKill.feature", SourceLine=0)]
+    [TechTalk.SpecRun.FeatureAttribute("Monster_NotThrowWhenKill", Description="\tЧтобы монстры не поддерживали развитие\r\n\tКак разработчкиу\r\n\tМне нужно, чтобы при" +
+        " убийстве игрока монстром не вываливалось исключение.", SourceFile="TestCases\\Monster_NotThrowWhenKill.feature", SourceLine=0)]
     public partial class Monster_NotThrowWhenKillFeature
     {
         
@@ -31,8 +31,8 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Monster_NotThrowWhenKill", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-                    "f two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Monster_NotThrowWhenKill", "\tЧтобы монстры не поддерживали развитие\r\n\tКак разработчкиу\r\n\tМне нужно, чтобы при" +
+                    " убийстве игрока монстром не вываливалось исключение.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -70,23 +70,31 @@ namespace Zilon.Core.Spec.TestCases
         
         [TechTalk.SpecRun.ScenarioAttribute("Для монстров не поддерживается развитие. Для них не должно выбрасываться исключен" +
             "ие при попытке прокачать перки.", new string[] {
-                "mytag"}, SourceLine=6)]
+                "monsters",
+                "dev0",
+                "perks"}, SourceLine=6)]
         public virtual void ДляМонстровНеПоддерживаетсяРазвитие_ДляНихНеДолжноВыбрасыватьсяИсключениеПриПопыткеПрокачатьПерки_()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Для монстров не поддерживается развитие. Для них не должно выбрасываться исключен" +
                     "ие при попытке прокачать перки.", null, new string[] {
-                        "mytag"});
+                        "monsters",
+                        "dev0",
+                        "perks"});
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given("I have entered 50 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("I have entered 70 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("I press add", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Есть монстр класса rat Id:100 в ячейке (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then("the result should be 120 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("Актёр игрока имеет Hp: 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
+ testRunner.When("Актёр игрока атакует монстра Id:100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 13
+ testRunner.Then("Актёр игрока мертв", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

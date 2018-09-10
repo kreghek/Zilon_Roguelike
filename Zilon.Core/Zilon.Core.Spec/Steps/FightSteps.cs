@@ -1,4 +1,5 @@
-﻿using LightInject;
+﻿using FluentAssertions;
+using LightInject;
 
 using TechTalk.SpecFlow;
 
@@ -32,5 +33,14 @@ namespace Zilon.Core.Spec.Steps
 
             attackCommand.Execute();
         }
+
+        [Then(@"Актёр игрока мертв")]
+        public void ThenАктёрИгрокаМертв()
+        {
+            var actor = _context.GetActiveActor();
+
+            actor.State.IsDead.Should().BeTrue();
+        }
+
     }
 }

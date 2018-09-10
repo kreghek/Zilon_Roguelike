@@ -268,7 +268,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterTaskSources()
         {
-            Container.Register<IBotPlayer, BotPlayer>();
+            Container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
             Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             Container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
