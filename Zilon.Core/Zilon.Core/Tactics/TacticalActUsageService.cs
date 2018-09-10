@@ -46,11 +46,14 @@ namespace Zilon.Core.Tactics
 
                 if (!targetIsDeadLast && targetActor.State.IsDead)
                 {
-                    var evolutionData = actor.Person.EvolutionData;
+                    if (!(actor.Person is MonsterPerson))
+                    {
+                        var evolutionData = actor.Person.EvolutionData;
 
-                    var defeatProgress = new DefeatActorJobProgress(targetActor);
+                        var defeatProgress = new DefeatActorJobProgress(targetActor);
 
-                    _perkResolver.ApplyProgress(defeatProgress, evolutionData);
+                        _perkResolver.ApplyProgress(defeatProgress, evolutionData);
+                    }
                 }
             }
             else
