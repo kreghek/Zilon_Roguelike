@@ -1,11 +1,17 @@
 ﻿Feature: Move_ChangeTaskInCurrentMovingNotCompleted
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+	Чтобы была возможность реагировать на изменения обстановки
+	Как игроку
+	Мне нужно, чтобы если текущая задача на перемещение отменялась,
+	если выполнить другое дейтствие.
 
-@mytag
-Scenario: Указали вперед 3 клетки, указали двигаться в другом направлении или что-нибудь съели.
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+@move @dev0
+Scenario: Смена текущего задания актёра.
+	Given Есть карта размером 2
+	And Между ячейками (0, 0) и (1, 0) есть стена
+	And Между ячейками (1, 0) и (0, 1) есть стена
+	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And В инвентаре у актёра есть фейковый провиант fake-food (сытость - 10)
+	When Я выбираю ячейку (1, 0)
+	And Выполняется команда на перемещение
+	And Актёр использует предмет fake-food на себя
+	Then Актёр находится в ячейке (0, 1)

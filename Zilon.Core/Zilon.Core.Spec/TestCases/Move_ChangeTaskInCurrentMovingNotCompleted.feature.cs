@@ -17,8 +17,9 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Move_ChangeTaskInCurrentMovingNotCompleted", Description="\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-        "f two numbers", SourceFile="TestCases\\Move_ChangeTaskInCurrentMovingNotCompleted.feature", SourceLine=0)]
+    [TechTalk.SpecRun.FeatureAttribute("Move_ChangeTaskInCurrentMovingNotCompleted", Description="\tЧтобы была возможность реагировать на изменения обстановки\r\n\tКак игроку\r\n\tМне ну" +
+        "жно, чтобы если текущая задача на перемещение отменялась,\r\n\tесли выполнить друго" +
+        "е дейтствие.", SourceFile="TestCases\\Move_ChangeTaskInCurrentMovingNotCompleted.feature", SourceLine=0)]
     public partial class Move_ChangeTaskInCurrentMovingNotCompletedFeature
     {
         
@@ -31,8 +32,9 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Move_ChangeTaskInCurrentMovingNotCompleted", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-                    "f two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Move_ChangeTaskInCurrentMovingNotCompleted", "\tЧтобы была возможность реагировать на изменения обстановки\r\n\tКак игроку\r\n\tМне ну" +
+                    "жно, чтобы если текущая задача на перемещение отменялась,\r\n\tесли выполнить друго" +
+                    "е дейтствие.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,25 +70,35 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Указали вперед 3 клетки, указали двигаться в другом направлении или что-нибудь съ" +
-            "ели.", new string[] {
-                "mytag"}, SourceLine=6)]
-        public virtual void УказалиВперед3КлеткиУказалиДвигатьсяВДругомНаправленииИлиЧто_НибудьСъели_()
+        [TechTalk.SpecRun.ScenarioAttribute("Смена текущего задания актёра.", new string[] {
+                "move",
+                "dev0"}, SourceLine=7)]
+        public virtual void СменаТекущегоЗаданияАктёра_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Указали вперед 3 клетки, указали двигаться в другом направлении или что-нибудь съ" +
-                    "ели.", null, new string[] {
-                        "mytag"});
-#line 7
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Смена текущего задания актёра.", null, new string[] {
+                        "move",
+                        "dev0"});
+#line 8
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 8
- testRunner.Given("I have entered 50 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("I have entered 70 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 10
- testRunner.When("I press add", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Между ячейками (0, 0) и (1, 0) есть стена", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then("the result should be 120 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("Между ячейками (1, 0) и (0, 1) есть стена", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
+ testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 13
+ testRunner.And("В инвентаре у актёра есть фейковый провиант fake-food (сытость - 10)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 14
+ testRunner.When("Я выбираю ячейку (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 15
+ testRunner.And("Выполняется команда на перемещение", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 16
+ testRunner.And("Актёр использует предмет fake-food на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 17
+ testRunner.Then("Актёр находится в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
