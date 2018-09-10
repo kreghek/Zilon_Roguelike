@@ -5,6 +5,13 @@ using FluentAssertions;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
+using LightInject;
+using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -64,11 +71,26 @@ namespace Zilon.Core.Spec.Steps
             monster.State.SetHpForce(monsterHp);
         }
 
-        [Given(@"Есть сундук в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьСундукВЯчейке(int offsetX, int offsetY)
+        [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьСундукВЯчейке(int id,  int offsetX, int offsetY)
         {
             var coords = new OffsetCoords(offsetX, offsetY);
-            _context.AddChest(coords);
+            _context.AddChest(id, coords);
+        }
+
+        [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
+        public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
+        {
+            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+            var propFactory = _context.Container.GetInstance<IPropFactory>();
+            var schemeService = _context.Container.GetInstance<ISchemeService>();
+
+            var container = containerManager.Containers.Single(x => x.Id == id);
+
+            var propScheme = schemeService.GetScheme<PropScheme>(equipmentSid);
+            var equipment = propFactory.CreateEquipment(propScheme);
+
+            container.Content.Add(equipment);
         }
 
 
@@ -77,6 +99,67 @@ namespace Zilon.Core.Spec.Steps
         {
             _context.HoverNode(x, y);
         }
+
+        [When(@"Я выбираю сундук Id:(.*)")]
+        public void WhenЯВыбираюСундукId(int id)
+        {
+            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+            var playerState = _context.Container.GetInstance<IPlayerState>();
+
+            var container = containerManager.Containers.Single(x => x.Id == id);
+
+            var chestViewMdel = new TestContainerViewModel
+            {
+                Container = container
+            };
+
+            playerState.HoverViewModel = chestViewMdel;
+        }
+
+        [When(@"Я забираю из сундука экипировку (.*)")]
+        public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
+        {
+            var playerState = _context.Container.GetInstance<IPlayerState>();
+            var propTransferCommand = _context.Container.GetInstance<ICommand>("prop-transfer");
+
+            var actor = _context.GetActiveActor();
+            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            ((PropTransferCommand)propTransferCommand).TransferMachine = transferMachine;
+
+            var equipment = container.Content.CalcActualItems().Single(x=>x.Scheme.Sid == equipmentSchemeSid);
+
+            transferMachine.TransferProp(equipment, container.Content, actor.Person.Inventory);
+
+            propTransferCommand.Execute();
+        }
+
+        [Then(@"У актёра в инвентаре есть (.*)")]
+        public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
+        {
+            var actor = _context.GetActiveActor();
+
+            var inventoryItems = actor.Person.Inventory.CalcActualItems();
+            var foundEquipment = inventoryItems.SingleOrDefault(x=>x.Scheme.Sid == equipmentSchemeSid);
+
+            foundEquipment.Should().NotBeNull();
+        }
+
+        [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
+        public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
+        {
+            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+
+            var container = containerManager.Containers.Single(x => x.Id == id);
+            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+
+            prop.Should().BeNull();
+        }
+
+
+
+
 
 
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]

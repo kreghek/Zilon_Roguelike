@@ -9,16 +9,14 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class PropTransferCommand : SpecialActorCommandBase
     {
-        private readonly PropTransferMachine _transferMachine;
-
         public PropTransferCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState,
-            PropTransferMachine transferMachine) :
+            IPlayerState playerState) :
             base(gameLoop, sectorManager, playerState)
         {
-            _transferMachine = transferMachine;
         }
+
+        public PropTransferMachine TransferMachine { get; set; }
 
         public override bool CanExecute()
         {
@@ -27,13 +25,13 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var inventoryTransfer = new PropTransfer(_transferMachine.Inventory.PropStore,
-                _transferMachine.Inventory.PropAdded,
-                _transferMachine.Inventory.PropRemoved);
+            var inventoryTransfer = new PropTransfer(TransferMachine.Inventory.PropStore,
+                TransferMachine.Inventory.PropAdded,
+                TransferMachine.Inventory.PropRemoved);
 
-            var containerTransfer = new PropTransfer(_transferMachine.Container.PropStore,
-                _transferMachine.Container.PropAdded,
-                _transferMachine.Container.PropRemoved);
+            var containerTransfer = new PropTransfer(TransferMachine.Container.PropStore,
+                TransferMachine.Container.PropAdded,
+                TransferMachine.Container.PropRemoved);
 
             var intention = new Intention<TransferPropsTask>(a => new TransferPropsTask(a, new[] { inventoryTransfer, containerTransfer }));
             _playerState.TaskSource.Intent(intention);

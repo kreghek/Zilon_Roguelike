@@ -125,11 +125,18 @@ namespace Zilon.Core.Spec.Contexts
             actorManager.Add(monster);
         }
 
-        public IPropContainer AddChest(OffsetCoords nodeCoords)
+        public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
+            var containerManager = Container.GetInstance<IPropContainerManager>();
+
             var sector = Container.GetInstance<ISector>();
             var node = sector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropContainer(node, new IProp[0]);
+            var chest = new FixedPropContainer(node, new IProp[0])
+            {
+                Id = id
+            };
+
+            containerManager.Add(chest);
 
             return chest;
         }
@@ -273,6 +280,8 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
             Container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
             Container.Register<ICommand, AttackCommand>("attack", new PerContainerLifetime());
+
+            Container.Register<ICommand, PropTransferCommand>("prop-transfer");
         }
 
         private void RegisterTaskSources()
