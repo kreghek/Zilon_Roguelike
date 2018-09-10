@@ -140,10 +140,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Cheast_TakeResources.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Cheast_TakeWeapon.feature.cs">
+    <Compile Include="TestCases\Chest_TakeWeapon.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cheast_TakeWeapon.feature</DependentUpon>
+      <DependentUpon>Chest_TakeWeapon.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Equipment_ChangeHandsToEquipment.feature.cs">
       <AutoGen>True</AutoGen>
@@ -297,9 +297,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Cheast_TakeResources.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Cheast_TakeWeapon.feature">
+    <None Include="TestCases\Chest_TakeWeapon.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Cheast_TakeWeapon.feature.cs</LastGenOutput>
+      <LastGenOutput>Chest_TakeWeapon.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Equipment_ChangeHandsToEquipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

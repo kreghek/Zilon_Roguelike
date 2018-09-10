@@ -17,22 +17,22 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Cheast_TakeWeapon", Description="\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-        "f two numbers", SourceFile="TestCases\\Cheast_TakeWeapon.feature", SourceLine=0)]
-    public partial class Cheast_TakeWeaponFeature
+    [TechTalk.SpecRun.FeatureAttribute("Chest_TakeWeapon", Description="\tЧтобы была возможность забирать предметы\r\n\tAs a math idiot\r\n\tI want to be told t" +
+        "he sum of two numbers", SourceFile="TestCases\\Chest_TakeWeapon.feature", SourceLine=0)]
+    public partial class Chest_TakeWeaponFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Cheast_TakeWeapon.feature"
+#line 1 "Chest_TakeWeapon.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Cheast_TakeWeapon", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-                    "f two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Chest_TakeWeapon", "\tЧтобы была возможность забирать предметы\r\n\tAs a math idiot\r\n\tI want to be told t" +
+                    "he sum of two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,12 +68,18 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Если забираем из сундука орудие, то не должно выбрасываться исключений.", new string[] {
-                "mytag"}, SourceLine=6)]
-        public virtual void ЕслиЗабираемИзСундукаОрудиеТоНеДолжноВыбрасыватьсяИсключений_()
+        [TechTalk.SpecRun.ScenarioAttribute("Если забираем из сундука оружие, то оно должно быть перемещено из сундука в инвен" +
+            "тарь.", new string[] {
+                "chest",
+                "dev0",
+                "loot"}, SourceLine=6)]
+        public virtual void ЕслиЗабираемИзСундукаОружиеТоОноДолжноБытьПеремещеноИзСундукаВИнвентарь_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Если забираем из сундука орудие, то не должно выбрасываться исключений.", null, new string[] {
-                        "mytag"});
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Если забираем из сундука оружие, то оно должно быть перемещено из сундука в инвен" +
+                    "тарь.", null, new string[] {
+                        "chest",
+                        "dev0",
+                        "loot"});
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
