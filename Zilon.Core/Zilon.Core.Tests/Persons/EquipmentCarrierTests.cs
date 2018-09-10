@@ -14,28 +14,35 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при установке экипировки выстреливает событие на изменение экипировки.
         /// </summary>
         [Test]
-        public void SetEquipmentTest()
+        public void SetEquipment_ChangeEquipment_EventRaised()
         {
             // ARRANGE
             var scheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme()
+                Equip = new PropEquipSubScheme {
+                    ActSids = new[] { "weapon" }
+                }
+            };
+
+            var slotSchemes = new [] {
+                new PersonSlotSubScheme{
+                    AvailableTags = new[]{ "weapon" }
+                }
             };
 
             var tacticalActScheme = new TacticalActScheme();
 
             var equipment = new Equipment(scheme, new []{ tacticalActScheme });
 
-            const int expectedSlot = 1;
-            const int expectedSlotCount = 3;
+            const int changedSlot = 0;
 
-            var carrier = new EquipmentCarrier(expectedSlotCount);
+            var carrier = new EquipmentCarrier(slotSchemes);
 
 
             // ACT
             using (var monitor = carrier.Monitor())
             {
-                carrier.SetEquipment(equipment, expectedSlot);
+                carrier.SetEquipment(equipment, changedSlot);
 
 
 

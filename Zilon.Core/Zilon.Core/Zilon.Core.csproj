@@ -139,6 +139,7 @@
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
+    <Compile Include="Schemes\PersonSlotSubScheme.cs" />
     <Compile Include="Schemes\PropUseSubScheme.cs" />
     <Compile Include="Schemes\SchemeServiceHandler.cs" />
     <Compile Include="Schemes\SchemeServiceHandlerFactory.cs" />

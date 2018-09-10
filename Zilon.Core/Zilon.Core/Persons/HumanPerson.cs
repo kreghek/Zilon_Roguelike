@@ -48,8 +48,7 @@ namespace Zilon.Core.Persons
             Effects.Removed += Effects_CollectionChanged;
             Effects.Changed += Effects_CollectionChanged;
 
-            var slotCount = Scheme.SlotCount;
-            EquipmentCarrier = new EquipmentCarrier(slotCount);
+            EquipmentCarrier = new EquipmentCarrier(Scheme.Slots);
             EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
 
             TacticalActCarrier = new TacticalActCarrier();

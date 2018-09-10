@@ -1,15 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
     public class EquipmentCarrier : IEquipmentCarrier
     {
-        public EquipmentCarrier(int slotCount)
+        public EquipmentCarrier(IEnumerable<PersonSlotSubScheme> slots)
         {
-            Equipments = new Equipment[slotCount];
+            Slots = slots;
+
+            Equipments = new Equipment[Slots.Count()];
         }
 
         public Equipment[] Equipments { get; }
+
+        public IEnumerable<PersonSlotSubScheme> Slots { get; }
 
         public event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
 

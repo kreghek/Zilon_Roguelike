@@ -13,13 +13,13 @@
         public int Hp { get; set; }
 
         /// <summary>
-        /// Количество слотов в экипировке.
-        /// </summary>
-        public int SlotCount { get; set; }
-
-        /// <summary>
         /// Действие персонажа по умолчанию.
         /// </summary>
         public string DefaultAct { get; set; }
+
+        /// <summary>
+        /// Слоты экипировки.
+        /// </summary>
+        public PersonSlotSubScheme[] Slots { get; set; }
     }
 }

@@ -32,5 +32,10 @@
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
         public string[] ActSids { get; set; }
+
+        /// <summary>
+        /// Теги экипировки.
+        /// </summary>
+        public string[] Tags { get; set; }
     }
 }
