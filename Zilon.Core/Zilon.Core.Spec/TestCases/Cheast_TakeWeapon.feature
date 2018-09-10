@@ -5,7 +5,9 @@
 
 @mytag
 Scenario: Если забираем из сундука орудие, то не должно выбрасываться исключений.
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And Есть сундук в ячейке (0, 1)
+	And Сундук содержит экипировку pistol
+	When Я выбираю сундук в ячейке (0, 1)
+	Then У актёра в инвентаре есть 
