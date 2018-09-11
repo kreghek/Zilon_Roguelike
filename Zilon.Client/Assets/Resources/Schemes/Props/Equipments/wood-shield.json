@@ -1,9 +1,9 @@
 {
   "Equip": {
-    
+    "SlotTypes": [ "Hand" ]
   },
   "Name": {
     "En": "Wood shield",
-	"Ru": "Деревянный щит",
+	  "Ru": "Деревянный щит"
   }
 }

@@ -1,9 +1,9 @@
 {
   "Equip": {
-    
+    "SlotTypes": [ "Body" ]
   },
   "Name": {
     "En": "Gold Armor",
-	"Ru": "Золотая броня",
+	  "Ru": "Золотая броня"
   }
 }

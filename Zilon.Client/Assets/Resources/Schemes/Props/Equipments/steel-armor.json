@@ -1,9 +1,9 @@
 {
   "Equip": {
-    
+    "SlotTypes": [ "Body" ]
   },
   "Name": {
     "En": "Steel Armor",
-	"Ru": "Стальная броня",
+	  "Ru": "Стальная броня"
   }
 }

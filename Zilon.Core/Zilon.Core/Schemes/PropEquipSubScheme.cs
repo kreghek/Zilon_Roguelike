@@ -38,6 +38,6 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
-        public PersonSlotSubScheme[] Slots { get; set; }
+        public EquipmentSlotTypes[] SlotTypes { get; set; }
     }
 }

@@ -2,12 +2,29 @@
   "Name": {
     "Ru": "Пиратский Капитан"
   },
-  "SlotCount": 7,
   "Hp": 120,
   "DefaultAct": "hand-hit",
   "Slots": [
     {
-      "Types": 
+      "Types": "Head"
+    },
+    {
+      "Types": "Body"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
     }
   ]
 }

@@ -21,10 +21,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Equip = new PropEquipSubScheme
                 {
-                    Slots = new[] {
-                        new PersonSlotSubScheme{
-                            Types = EquipmentSlotTypes.Hand
-                        }
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Hand                        
                     }
                 }
             };

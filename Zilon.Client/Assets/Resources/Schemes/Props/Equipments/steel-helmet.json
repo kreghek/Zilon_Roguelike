@@ -1,9 +1,9 @@
 {
   "Equip": {
-    
+    "SlotTypes": [ "Head" ]
   },
   "Name": {
     "En": "Steel helmet",
-	"Ru": "Стальная каска",
+	  "Ru": "Стальная каска"
   }
 }

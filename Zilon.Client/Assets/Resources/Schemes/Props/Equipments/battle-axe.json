@@ -4,7 +4,8 @@
     "ApRank": 4,
     "ActSids": [
       "chop"
-    ]
+    ],
+    "SlotTypes": [ "Hand" ]
   },
   "Name": {
     "Ru": "Боевой топор"
