@@ -17,8 +17,9 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Equipment_ChangeHandsToEquipment", Description="\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-        "f two numbers", SourceFile="TestCases\\Equipment_ChangeHandsToEquipment.feature", SourceLine=0)]
+    [TechTalk.SpecRun.FeatureAttribute("Equipment_ChangeHandsToEquipment", Description="\tЧтобы была возможность улучшать навыки и характеристики персонажа при помощи пре" +
+        "дметов\r\n\tКак разработчику\r\n\tМне нужно, чтобы была возможность экипировать предме" +
+        "ты.", SourceFile="TestCases\\Equipment_ChangeHandsToEquipment.feature", SourceLine=0)]
     public partial class Equipment_ChangeHandsToEquipmentFeature
     {
         
@@ -31,8 +32,9 @@ namespace Zilon.Core.Spec.TestCases
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Equipment_ChangeHandsToEquipment", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to be told the sum o" +
-                    "f two numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Equipment_ChangeHandsToEquipment", "\tЧтобы была возможность улучшать навыки и характеристики персонажа при помощи пре" +
+                    "дметов\r\n\tКак разработчику\r\n\tМне нужно, чтобы была возможность экипировать предме" +
+                    "ты.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,25 +70,43 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Add two numbers", new string[] {
-                "mytag"}, SourceLine=6)]
-        public virtual void AddTwoNumbers()
+        public virtual void ЭкипировкаПредметаВПодходящийСлот_(string personSid, string propSid, string slotIndex, string testedSlotIndex, string paramType, string paramValue, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add two numbers", null, new string[] {
-                        "mytag"});
+            string[] @__tags = new string[] {
+                    "equipment",
+                    "dev0"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Экипировка предмета в подходящий слот.", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given("I have entered 50 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("I have entered 70 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Есть актёр игрока класса {personSid} в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.When("I press add", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("В инвентаре у актёра игрока есть предмет: {propSid}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then("the result should be 120 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("Экипирую предмет {propSid} в слот Index: {slotIndex}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 12
+ testRunner.Then("В слоте Index: {testedSlotIndex} актёра игрока есть {propSid}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 13
+ testRunner.And("Параметр {paramType} равен {paramValue}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.ScenarioAttribute("Экипировка предмета в подходящий слот., captain", new string[] {
+                "equipment",
+                "dev0"}, SourceLine=16)]
+        public virtual void ЭкипировкаПредметаВПодходящийСлот__Captain()
+        {
+#line 7
+this.ЭкипировкаПредметаВПодходящийСлот_("captain", "short-sword", "2", "2", "-", "0", ((string[])(null)));
+#line hidden
         }
         
         [TechTalk.SpecRun.TestRunCleanup()]

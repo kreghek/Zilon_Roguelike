@@ -105,6 +105,7 @@
     <Compile Include="Steps\FightSteps.cs" />
     <Compile Include="Steps\MoveSteps.cs" />
     <Compile Include="Steps\GenericStepsBase.cs" />
+    <Compile Include="Steps\EquipmentSteps.cs" />
     <Compile Include="Steps\PerkSteps.cs" />
     <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
       <AutoGen>True</AutoGen>
