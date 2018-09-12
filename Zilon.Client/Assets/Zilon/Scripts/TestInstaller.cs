@@ -68,7 +68,7 @@ public class TestInstaller : MonoInstaller<TestInstaller>
         
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
-        Container.Bind<ICommand>().WithId("prop-transfer-command").To<EquipCommand>().AsTransient();
+        Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
 
 
