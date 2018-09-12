@@ -282,6 +282,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ICommand, AttackCommand>("attack", new PerContainerLifetime());
 
             Container.Register<ICommand, PropTransferCommand>("prop-transfer");
+            Container.Register<ICommand, EquipCommand>("equip");
         }
 
         private void RegisterTaskSources()

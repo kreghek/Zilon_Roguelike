@@ -86,22 +86,20 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.Given("Есть карта размером 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And("Есть актёр игрока класса {personSid} в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке (0, 0)", personSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And("В инвентаре у актёра игрока есть предмет: {propSid}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("В инвентаре у актёра игрока есть предмет: {0}", propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When("Экипирую предмет {propSid} в слот Index: {slotIndex}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid, slotIndex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then("В слоте Index: {testedSlotIndex} актёра игрока есть {propSid}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 13
- testRunner.And("Параметр {paramType} равен {paramValue}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then(string.Format("В слоте Index: {0} актёра игрока есть {1}", testedSlotIndex, propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Экипировка предмета в подходящий слот., captain", new string[] {
                 "equipment",
-                "dev0"}, SourceLine=16)]
+                "dev0"}, SourceLine=15)]
         public virtual void ЭкипировкаПредметаВПодходящийСлот__Captain()
         {
 #line 7
