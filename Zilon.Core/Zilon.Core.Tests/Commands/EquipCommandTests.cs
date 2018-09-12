@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
@@ -16,7 +17,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture]
-    public class EquipCommandTests: CommandTestBase
+    public class EquipCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно использовать экипировку.
@@ -63,7 +64,12 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme()
+                Equip = new PropEquipSubScheme
+                {
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
             };
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -11,6 +12,8 @@ namespace Zilon.Core.Persons
         /// Экипировка персонажа.
         /// </summary>
         Equipment[] Equipments { get; }
+
+        PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>
         /// Устанавливает экипировку.

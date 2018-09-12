@@ -45,7 +45,12 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            //TODO Добавить проверку на то, что выбранный предмет может быть экипирован в указанный слот.
+            var equipmentCarrier = _playerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var slot = equipmentCarrier.Slots[SlotIndex.Value];
+            if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0)
+            {
+                return false;
+            }
 
             return true;
         }

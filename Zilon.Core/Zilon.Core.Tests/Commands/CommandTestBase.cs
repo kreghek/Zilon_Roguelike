@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -49,8 +50,15 @@ namespace Zilon.Core.Tests.Commands
                 .Returns(new[] { act });
             var actCarrier = actCarrierMock.Object;
 
+            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
+            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
+                Types = EquipmentSlotTypes.Hand
+            } });
+            var equipmentCarrier = equipmentCarrierMock.Object;
+
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
+            personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
