@@ -48,7 +48,10 @@ namespace Zilon.Core.Tests.Persons
 
             var propScheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme()
+                Equip = new PropEquipSubScheme
+                {
+                    SlotTypes = new[] { EquipmentSlotTypes.Hand }
+                }
             };
 
             var tacticalActScheme = new TacticalActScheme

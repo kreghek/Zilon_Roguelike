@@ -40,16 +40,6 @@ namespace Zilon.Core.Spec.Steps
             _context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
         }
 
-        [Given(@"Актёр игрока экипирован (.*)")]
-        public void GivenАктёрИгрокаЭкипированEquipmentSid(string equipmentSid)
-        {
-            var actor = _context.GetActiveActor();
-
-            var equipment = _context.CreateEquipment(equipmentSid);
-
-            actor.Person.EquipmentCarrier.SetEquipment(equipment, 0);
-        }
-
         [Given(@"Актёр игрока имеет Hp: (.*)")]
         public void GivenАктёрИмеетHp(float startHp)
         {

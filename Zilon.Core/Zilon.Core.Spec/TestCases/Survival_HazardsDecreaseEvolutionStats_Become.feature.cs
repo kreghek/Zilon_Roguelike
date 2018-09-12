@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string equipmentSid, string moveDistance, string expectedEffect, string combatStat, string combatStatValue, string[] exampleTags)
+        public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_(string mapSize, string personSid, string actorNodeX, string actorNodeY, string moveDistance, string expectedEffect, string combatStat, string combatStatValue, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "survival",
@@ -87,10 +87,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке ({1}, {2})", personSid, actorNodeX, actorNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And(string.Format("Актёр игрока экипирован {0}", equipmentSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 11
  testRunner.When(string.Format("Я перемещаю персонажа на {0} клетку", moveDistance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 12
+#line 11
  testRunner.Then(string.Format("Актёр имеет характристику модуля сражения {0} равную {1}", combatStat, combatStatValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -99,33 +97,33 @@ this.ScenarioInitialize(scenarioInfo);
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 0", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=14)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant0()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "50", "Слабый голод", "melee", "8", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "50", "Слабый голод", "melee", "8", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 1", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=14)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant1()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "75", "Голод", "melee", "4", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "75", "Голод", "melee", "4", ((string[])(null)));
 #line hidden
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Угрозы выживания (появляются в процессе) снижают характеристики модуля сражения у" +
             " актёра игрока., Variant 2", new string[] {
                 "survival",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=14)]
         public virtual void УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока__Variant2()
         {
 #line 7
-this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "short-sword", "100", "Голодание", "melee", "1", ((string[])(null)));
+this.УгрозыВыживанияПоявляютсяВПроцессеСнижаютХарактеристикиМодуляСраженияУАктёраИгрока_("2", "captain", "0", "0", "100", "Голодание", "melee", "1", ((string[])(null)));
 #line hidden
         }
         
