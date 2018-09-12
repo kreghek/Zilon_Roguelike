@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224078330946872594}
+  - component: {fileID: 114866487175043370}
   m_Layer: 5
   m_Name: Slots
   m_TagString: Untagged
@@ -273,7 +274,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!114 &114343818933022924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,6 +379,29 @@ MonoBehaviour:
     type: 2}
   UseButton: {fileID: 1444495300405186}
   DetailText: {fileID: 114337422663080910}
+--- !u!114 &114866487175043370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1219181801756710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 1
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 32, y: 32}
+  m_Spacing: {x: 5, y: 5}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!114 &114948973419901976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,8 +500,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.61000174, y: -10.260001}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 3.22, y: 10.02}
+  m_SizeDelta: {x: 181.11, y: 59.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224096438798811152
 RectTransform:
@@ -494,8 +518,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.3, y: 4.2}
-  m_SizeDelta: {x: 113.86, y: 118.08}
+  m_AnchoredPosition: {x: 0.3, y: 0.76}
+  m_SizeDelta: {x: 77.14, y: 158.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224151832935429538
 RectTransform:

@@ -33,7 +33,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] [Inject] private IGameLoop _gameLoop;
 
-    [NotNull] [Inject(Id = "prop-transfer")] private ICommand _propTransferCommand;
+    [NotNull] [Inject(Id = "prop-transfer-command")] private ICommand _propTransferCommand;
 
     [NotNull] private PropTransferMachine _transferMachine;
 
