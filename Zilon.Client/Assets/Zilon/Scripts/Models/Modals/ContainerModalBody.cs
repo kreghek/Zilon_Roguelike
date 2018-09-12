@@ -33,9 +33,9 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] [Inject] private IGameLoop _gameLoop;
 
-    [NotNull] private PropTransferMachine _transferMachine;
+    [NotNull] [Inject(Id = "prop-transfer")] private ICommand _propTransferCommand;
 
-    [NotNull] private PropTransferCommand _propTransferCommand;
+    [NotNull] private PropTransferMachine _transferMachine;
 
 #pragma warning restore 649    
     // ReSharper restore UnassignedField.Global
@@ -44,9 +44,9 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     public void Init(PropTransferMachine transferMachine)
     {
         _transferMachine = transferMachine;
-        //TODO Сделать регистрацию команды в контейнере аналогично EquipCommand
-        // для этого машину состояний нужно вынести в отдельное свойство или инжектить, как персистент
-        _propTransferCommand = new PropTransferCommand(_gameLoop, _sectorManger, _playerState, _transferMachine);
+
+        ((PropTransferCommand)_propTransferCommand).TransferMachine = transferMachine;
+        
         UpdateProps();
     }
 
