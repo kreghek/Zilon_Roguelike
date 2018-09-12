@@ -63,7 +63,14 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Параметр (.*) равен (.*)")]
         public void ThenПараметрParamStatTypeРавенParamStatValue(string paramType, int paramValue)
         {
-            ScenarioContext.Current.Pending();
+            if (paramType == "-")
+            {
+                return;
+            }
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
 

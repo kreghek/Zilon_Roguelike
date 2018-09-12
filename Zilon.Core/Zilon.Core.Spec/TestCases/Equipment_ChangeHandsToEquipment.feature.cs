@@ -93,13 +93,15 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid, slotIndex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
  testRunner.Then(string.Format("В слоте Index: {0} актёра игрока есть {1}", testedSlotIndex, propSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 13
+ testRunner.And(string.Format("Параметр {0} равен {1}", paramType, paramValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Экипировка предмета в подходящий слот., captain", new string[] {
                 "equipment",
-                "dev0"}, SourceLine=15)]
+                "dev0"}, SourceLine=16)]
         public virtual void ЭкипировкаПредметаВПодходящийСлот__Captain()
         {
 #line 7

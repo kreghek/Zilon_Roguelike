@@ -10,6 +10,7 @@ Scenario Outline: Экипировка предмета в подходящий 
 	And В инвентаре у актёра игрока есть предмет: <propSid>
 	When Экипирую предмет <propSid> в слот Index: <slotIndex>
 	Then В слоте Index: <testedSlotIndex> актёра игрока есть <propSid>
+	And Параметр <paramType> равен <paramValue>
 
 	Examples: 
 	| personSid | propSid     | slotIndex | testedSlotIndex | paramType | paramValue |
