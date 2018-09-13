@@ -30,7 +30,7 @@
         /// Указывает, что узел карты освобождён одним из блоков.
         /// </summary>
         /// <param name="node"> Узел, который будет освобождён указанным блоком. </param>
-        /// <param name="block"> Блок, который освобождает узел. </param>
+        /// <param name="blocker"> Блокер, который освобождает узел. </param>
         void ReleaseNode(IMapNode node, IPassMapBlocker blocker);
 
         //TODO Выглядит, что это внутреняя реализация. (Чего? Какой сущности?)
@@ -38,7 +38,7 @@
         /// Указывает, что узел карты занят блоком.
         /// </summary>
         /// <param name="node"> Узел, который будет занят указанным блоком. </param>
-        /// <param name="block"> Блок, который занимает узел. </param>
+        /// <param name="blocker"> Блокер, который занимает узел. </param>
         void HoldNode(IMapNode node, IPassMapBlocker blocker);
     }
 }
