@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -41,7 +40,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             // ARRANGE
 
             var taskSource = _container.GetInstance<MonsterActorTaskSource>();
-            var actorManager = _container.GetInstance<IActorManager>();
 
 
 
@@ -64,7 +62,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             // ARRANGE
 
             var taskSource = _container.GetInstance<MonsterActorTaskSource>();
-            var actorManager = _container.GetInstance<IActorManager>();
 
             // Располагаем рядом игрока и бота
             var intruderActor = CreateBotActor(3, 1);

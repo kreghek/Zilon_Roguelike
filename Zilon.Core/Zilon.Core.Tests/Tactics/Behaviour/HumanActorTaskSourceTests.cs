@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -78,8 +77,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
-
-            var actorManager = CreateActorManager(actor);
 
             var moveIntention = new MoveIntention(startNode, map);
 

@@ -188,16 +188,12 @@ namespace Zilon.Core.Spec.Contexts
             return actor;
         }
 
-        private IActor CreateMonsterActor([NotNull] IPlayer player,
+        private IActor CreateMonsterActor([NotNull] IBotPlayer player,
             [NotNull] MonsterScheme monsterScheme,
             [NotNull] IMapNode startNode)
         {
 
             var schemeService = Container.GetInstance<ISchemeService>();
-
-            var evolutionData = new EvolutionData(schemeService);
-
-            var inventory = new Inventory();
 
             var monsterPerson = new MonsterPerson(monsterScheme);
 
