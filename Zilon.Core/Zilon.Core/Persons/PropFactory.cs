@@ -45,5 +45,12 @@ namespace Zilon.Core.Persons
                 return new Equipment(scheme, null);
             }
         }
+
+        public Resource CreateResource(PropScheme scheme, int count)
+        {
+            var resource = new Resource(scheme, count);
+
+            return resource;
+        }
     }
 }

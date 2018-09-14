@@ -83,6 +83,21 @@ namespace Zilon.Core.Spec.Steps
             container.Content.Add(equipment);
         }
 
+        [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
+        public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
+        {
+            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+            var propFactory = _context.Container.GetInstance<IPropFactory>();
+            var schemeService = _context.Container.GetInstance<ISchemeService>();
+
+            var container = containerManager.Containers.Single(x => x.Id == id);
+
+            var propScheme = schemeService.GetScheme<PropScheme>(resourceSid);
+            var resource = propFactory.CreateResource(propScheme, count);
+
+            container.Content.Add(resource);
+        }
+
 
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
@@ -125,6 +140,40 @@ namespace Zilon.Core.Spec.Steps
             propTransferCommand.Execute();
         }
 
+        [When(@"Я забираю из сундука рерурс (.*) в количестве (.*)")]
+        public void WhenЯЗабираюИзСундукаРерурсWaterВКоличестве(string resourceSid, int count)
+        {
+            var propFactory = _context.Container.GetInstance<IPropFactory>();
+            var playerState = _context.Container.GetInstance<IPlayerState>();
+            var propTransferCommand = _context.Container.GetInstance<ICommand>("prop-transfer");
+
+            var actor = _context.GetActiveActor();
+            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            ((PropTransferCommand)propTransferCommand).TransferMachine = transferMachine;
+
+            var resource = container.Content.CalcActualItems()
+                .OfType<Resource>()
+                .Single(x => x.Scheme.Sid == resourceSid);
+
+            Resource takenResource;
+            if (resource.Count > count)
+            {
+                takenResource = propFactory.CreateResource(resource.Scheme, count);
+            }
+            else
+            {
+                takenResource = resource;
+            }
+            
+
+            transferMachine.TransferProp(takenResource, container.Content, actor.Person.Inventory);
+
+            propTransferCommand.Execute();
+        }
+
+
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
@@ -146,6 +195,18 @@ namespace Zilon.Core.Spec.Steps
 
             prop.Should().BeNull();
         }
+
+        [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
+        public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
+        {
+            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+
+            var container = containerManager.Containers.Single(x => x.Id == containerId);
+            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+
+            prop.Should().BeNull();
+        }
+
 
 
 

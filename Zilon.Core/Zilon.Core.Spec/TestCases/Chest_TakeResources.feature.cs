@@ -17,24 +17,24 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Chest_TakeWeapon", Description="\tЧтобы была возможность забирать предметы\r\n\tКак разработчик\r\n\tМне нужно, чтобы ес" +
-        "ли пользователь забирает из сундука предмет экипировки,\r\n\tто он исчезает из сунд" +
-        "ука и появляется в инвентаре актёра.", SourceFile="TestCases\\Chest_TakeWeapon.feature", SourceLine=0)]
-    public partial class Chest_TakeWeaponFeature
+    [TechTalk.SpecRun.FeatureAttribute("Chest_TakeResources", Description="\tЧтобы была возможность забирать предметы\r\n\tКак разработчик\r\n\tМне нужно, чтобы ес" +
+        "ли пользователь забирает из сундука русурсы,\r\n\tто они исчезают из сундука и появ" +
+        "ляются в инвентаре актёра.", SourceFile="TestCases\\Chest_TakeResources.feature", SourceLine=0)]
+    public partial class Chest_TakeResourcesFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Chest_TakeWeapon.feature"
+#line 1 "Chest_TakeResources.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Chest_TakeWeapon", "\tЧтобы была возможность забирать предметы\r\n\tКак разработчик\r\n\tМне нужно, чтобы ес" +
-                    "ли пользователь забирает из сундука предмет экипировки,\r\n\tто он исчезает из сунд" +
-                    "ука и появляется в инвентаре актёра.", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Chest_TakeResources", "\tЧтобы была возможность забирать предметы\r\n\tКак разработчик\r\n\tМне нужно, чтобы ес" +
+                    "ли пользователь забирает из сундука русурсы,\r\n\tто они исчезают из сундука и появ" +
+                    "ляются в инвентаре актёра.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -70,15 +70,15 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Если забираем из сундука оружие, то оно должно быть перемещено из сундука в инвен" +
-            "тарь.", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Если забираем из сундука ресурсы, то оно должно быть перемещено из сундука в инве" +
+            "нтарь.", new string[] {
                 "chest",
                 "dev0",
                 "loot"}, SourceLine=7)]
-        public virtual void ЕслиЗабираемИзСундукаОружиеТоОноДолжноБытьПеремещеноИзСундукаВИнвентарь_()
+        public virtual void ЕслиЗабираемИзСундукаРесурсыТоОноДолжноБытьПеремещеноИзСундукаВИнвентарь_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Если забираем из сундука оружие, то оно должно быть перемещено из сундука в инвен" +
-                    "тарь.", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Если забираем из сундука ресурсы, то оно должно быть перемещено из сундука в инве" +
+                    "нтарь.", null, new string[] {
                         "chest",
                         "dev0",
                         "loot"});
@@ -92,15 +92,15 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And("Есть сундук Id:500 в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Сундук содержит Id:500 экипировку pistol", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Сундук содержит Id:500 ресурс water в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
  testRunner.When("Я выбираю сундук Id:500", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
- testRunner.And("Я забираю из сундука экипировку pistol", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Я забираю из сундука рерурс water в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 15
- testRunner.Then("У актёра в инвентаре есть pistol", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("У актёра в инвентаре есть water", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 16
- testRunner.And("В сундуке Id:500 нет экипировки pistol", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("В сундуке Id:500 нет предмета water", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

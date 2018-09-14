@@ -136,10 +136,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Cheast_OnceOpenedContainersCanBeOpenedByHand.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Cheast_TakeResources.feature.cs">
+    <Compile Include="TestCases\Chest_TakeResources.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cheast_TakeResources.feature</DependentUpon>
+      <DependentUpon>Chest_TakeResources.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Chest_TakeWeapon.feature.cs">
       <AutoGen>True</AutoGen>
@@ -294,9 +294,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Cheast_OnceOpenedContainersCanBeOpenedByHand.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Cheast_TakeResources.feature">
+    <None Include="TestCases\Chest_TakeResources.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Cheast_TakeResources.feature.cs</LastGenOutput>
+      <LastGenOutput>Chest_TakeResources.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Chest_TakeWeapon.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
