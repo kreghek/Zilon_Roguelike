@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -58,6 +59,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private ISector _sector;
 
+    [NotNull] [Inject] private IHumanPersonManager _personManager;
+
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
@@ -77,8 +80,6 @@ internal class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "show-container-modal-command")]
     private readonly ICommand _showContainerModalCommand;
-
-    public static SectorProceduralGenerator sectorGenerator;
 
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
@@ -259,16 +260,21 @@ internal class SectorVM : MonoBehaviour
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        var inventory = new Inventory();
+        if (_personManager.Person == null)
+        {
+            var inventory = new Inventory();
 
-        var evolutionData = new EvolutionData(_schemeService);
-        evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
+            var evolutionData = new EvolutionData(_schemeService);
+            //evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
 
-        var defaultActScheme = _schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
+            var defaultActScheme = _schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
 
-        var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
-        var actor = new Actor(person, player, startNode);
+            _personManager.Person = person;
+        }
+
+        var actor = new Actor(_personManager.Person, player, startNode);
 
         actorManager.Add(actor);
 

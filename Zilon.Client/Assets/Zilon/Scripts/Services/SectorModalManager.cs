@@ -25,12 +25,12 @@ namespace Assets.Zilon.Scripts.Services
 		// ReSharper restore UnassignedField.Global
 
 		[Inject] 
-		private DiContainer _container;		
+		private DiContainer _container;
 
-#pragma warning restore 649		
-		// ReSharper disable once UnusedMember.Global
+#pragma warning restore 649
+        // ReSharper disable once UnusedMember.Global
 
-		public void ShowContainerModal(PropTransferMachine transferMachine)
+        public void ShowContainerModal(PropTransferMachine transferMachine)
 		{
 			var modalBody = CreateWindowHandler<ContainerModalBody>(ContainerModalPrefab.gameObject);
 
