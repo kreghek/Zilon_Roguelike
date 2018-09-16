@@ -10,13 +10,22 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
-        public Actor(IPerson person, IPlayer owner, IMapNode node)
+        public Actor(IPerson person, IPlayer owner, IMapNode node) : this(person, owner, node, null)
+        {
+
+        }
+
+        public Actor(IPerson person, IPlayer owner, IMapNode node, IActorState state)
         {
             Person = person;
             Owner = owner;
             Node = node;
+            State = state;
 
-            State = new ActorState(person.Hp);
+            if (state == null)
+            {
+                State = new ActorState(person.Hp);
+            }
         }
 
         /// <inheritdoc />

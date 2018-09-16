@@ -274,7 +274,8 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode);
+        var actor = new Actor(_personManager.Person, player, startNode, _personManager.ActorState);
+        _personManager.ActorState = actor.State;
 
         actorManager.Add(actor);
 
