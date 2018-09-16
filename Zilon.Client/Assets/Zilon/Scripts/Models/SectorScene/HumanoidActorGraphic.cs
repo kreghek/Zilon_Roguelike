@@ -1,5 +1,8 @@
 ﻿using System;
+
 using UnityEngine;
+
+using Zilon.Core.Components;
 
 public class HumanoidActorGraphic : ActorGraphicBase
 {
@@ -25,24 +28,26 @@ public class HumanoidActorGraphic : ActorGraphicBase
         }
     }
 
-    public override VisualPropHolder GetVisualProp(int slotIndex)
-    {
-        switch (slotIndex)
-        {
-            case 0: // оружие
-                return VisualHolders[0];
+    //public override VisualPropHolder GetVisualProp(EquipmentSlotTypes types)
+    //{
 
-            case 1: // щит
-                return VisualHolders[1];
 
-            case 2: // тело
-                return VisualHolders[2];
+    //    //switch (slotIndex)
+    //    //{
+    //    //    case 0: // оружие
+    //    //        return VisualHolders[0];
 
-            case 3: // голова
-                return VisualHolders[3];
+    //    //    case 1: // щит
+    //    //        return VisualHolders[1];
+
+    //    //    case 2: // тело
+    //    //        return VisualHolders[2];
+
+    //    //    case 3: // голова
+    //    //        return VisualHolders[3];
             
-            default:
-                throw new ArgumentException(nameof(slotIndex));
-        }
-    }
+    //    //    default:
+    //    //        throw new ArgumentException(nameof(slotIndex));
+    //    //}
+    //}
 }

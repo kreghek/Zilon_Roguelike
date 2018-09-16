@@ -31,7 +31,14 @@ namespace Zilon.Core.Persons
 
             Power = 1;
 
-            Acts = acts.ToArray();
+            if (acts != null)
+            {
+                Acts = acts.ToArray();
+            }
+            else
+            {
+                Acts = new TacticalActScheme[0];
+            }
         }
 
         public TacticalActScheme[] Acts { get; }

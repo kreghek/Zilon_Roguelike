@@ -26,8 +26,8 @@ public class MonoActorGraphic : ActorGraphicBase
         }
     }
 
-    public override VisualPropHolder GetVisualProp(int slotIndex)
-    {
-        return VisualPropHolder;
-    }
+    //public override VisualPropHolder GetVisualProp(int slotIndex)
+    //{
+    //    return VisualPropHolder;
+    //}
 }

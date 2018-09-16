@@ -272,6 +272,12 @@ internal class SectorVM : MonoBehaviour
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
             _personManager.Person = person;
+
+            AddEquipmentToActor(inventory, "battle-axe");
+            AddEquipmentToActor(inventory, "short-sword");
+            AddEquipmentToActor(inventory, "steel-helmet");
+            AddEquipmentToActor(inventory, "steel-armor");
+            AddEquipmentToActor(inventory, "pistol");
         }
 
         var actor = new Actor(_personManager.Person, player, startNode, _personManager.ActorState);
@@ -297,6 +303,13 @@ internal class SectorVM : MonoBehaviour
         actorVm.Actor.UsedAct += ActorOnUsedAct;
 
         return actorVm;
+    }
+
+    private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
+    {
+        var equipmentScheme = _schemeService.GetScheme<PropScheme>(equipmentSid);
+        var equipment = _propFactory.CreateEquipment(equipmentScheme);
+        inventory.Add(equipment);
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)

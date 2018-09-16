@@ -14,7 +14,8 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
 
     private void SetVisualProp(string propSid, int slotIndex)
     {
-        var holder = Graphic.GetVisualProp(slotIndex);
+        var monoGraphics = (MonoActorGraphic)Graphic;
+        var holder = monoGraphics.VisualPropHolder; // Graphic.GetVisualProp(slotIndex);
         var visualPropResource = Resources.Load<VisualProp>($"VisualProps/{propSid}");
         Instantiate(visualPropResource, holder.transform);
     }
