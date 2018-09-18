@@ -41,6 +41,7 @@ public class HumanActorGraphicController : MonoBehaviour
             if (visualHolder != null)
             {
                 _visualSlots[slotIndex] = visualHolder;
+                visualHolderList.Remove(visualHolder);
             }
         }
     }
@@ -75,34 +76,9 @@ public class HumanActorGraphicController : MonoBehaviour
 
                 if (visualPropResource != null)
                 {
-                    var visualProp = Instantiate(visualPropResource, holder.transform);
+                    Instantiate(visualPropResource, holder.transform);
                 }
-            }
-
-
-
-            //VisualProp visualPropResource = null;
-            //var equipment = equipmentCarrier.Equipments[slotIndex];
-            //if (equipment != null)
-            //{
-            //    visualPropResource = Resources.Load<VisualProp>($"VisualProps/{equipment.Scheme.Sid}");
-            //}
-            
-            //if (visualPropResource == null)
-            //{
-            //    switch (slotIndex)
-            //    {
-            //        case 2:
-            //            visualPropResource = Resources.Load<VisualProp>($"VisualProps/steel-armor");
-            //            break;
-                    
-            //        case 3:
-            //            visualPropResource = Resources.Load<VisualProp>($"VisualProps/steel-helmet");
-            //            break;
-            //    }
-            //}
-
-            
+            }            
         }
     }
 }
