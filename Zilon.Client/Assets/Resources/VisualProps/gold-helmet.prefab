@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212820596295346468}
   - component: {fileID: 114349857767384294}
   m_Layer: 0
-  m_Name: gold-shield
+  m_Name: gold-helmet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

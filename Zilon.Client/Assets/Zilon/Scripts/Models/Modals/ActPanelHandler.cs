@@ -18,7 +18,7 @@ public class ActPanelHandler : MonoBehaviour {
 		var actorVm = _playerState.ActiveActor;
 		var actor = actorVm.Actor;
 		
-		actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+		//actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
 		
 		var acts = actor.Person.TacticalActCarrier.Acts;
 		UpdateActs(acts);
