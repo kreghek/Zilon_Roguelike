@@ -18,6 +18,7 @@ using Zilon.Core.Tactics;
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
     private IActor _actor;
+    private readonly IList<InventorySlotVm> _slotViewModels;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
@@ -32,6 +33,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
+    public InventoryModalBody()
+    {
+        _slotViewModels = new List<InventorySlotVm>();
+    }
+
     public void Start()
     {
         CreateSlots();
@@ -45,9 +51,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         for (var i = 0; i < slots.Length; i++)
         {
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
-            var slotVm = slotObject.GetComponent<InventorySlotVm>();
-            slotVm.SlotIndex = i;
-            slotVm.Click += SlotOnClick;
+            var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
+            slotViewModel.SlotIndex = i;
+            slotViewModel.Click += SlotOnClick;
+
+            _slotViewModels.Add(slotViewModel);
         }
     }
 
@@ -85,6 +93,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         inventory.Added -= InventoryOnContentChanged;
         inventory.Removed -= InventoryOnContentChanged;
         inventory.Changed -= InventoryOnContentChanged;
+
+        foreach (var slotViewModels in _slotViewModels)
+        {
+            slotViewModels.ClearEventHandlers();
+        }
     }
 
     public void CancelChanges()

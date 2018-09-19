@@ -81,4 +81,10 @@ public class InventorySlotVm : MonoBehaviour
 
         currentSector.Update();
     }
+
+    public void ClearEventHandlers()
+    {
+        var actor = _playerState.ActiveActor.Actor;
+        actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+    }
 }

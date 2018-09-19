@@ -239,6 +239,8 @@ internal class SectorVM : MonoBehaviour
 
     private void SectorOnActorExit(object sender, EventArgs e)
     {
+        _playerState.ActiveActor = null;
+        _humanActorTaskSource.SwitchActor(null);
         SceneManager.LoadScene("combat");
     }
 
