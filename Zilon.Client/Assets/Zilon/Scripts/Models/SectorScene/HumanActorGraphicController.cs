@@ -8,23 +8,25 @@ using Zilon.Core.Tactics;
 
 public class HumanActorGraphicController : MonoBehaviour
 {
-    private readonly Dictionary<int, VisualPropHolder> _visualSlots;
+    private Dictionary<int, VisualPropHolder> _visualSlots;
 
     public IActor Actor { get; set; }
     public ActorGraphicBase Graphic;
 
-    public HumanActorGraphicController()
-    {
-        _visualSlots = new Dictionary<int, VisualPropHolder>();
-    }
-
     public void Start()
     {
+        _visualSlots = new Dictionary<int, VisualPropHolder>();
+
         ProjectSlotsToVisual();
 
         UpdateEquipment();
 
         Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+    }
+
+    public void OnDestroy()
+    {
+        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ProjectSlotsToVisual()

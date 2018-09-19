@@ -9,6 +9,10 @@ using Zilon.Core.Persons;
 
 public class InventorySlotVm : MonoBehaviour
 {
+    public static int Count;
+
+    public int CurrentCount;
+
     [NotNull] [Inject] private ISectorManager _sectorManager;
     [NotNull] [Inject] private ICommandManager _comamndManager;
     [NotNull] [Inject] private IInventoryState _inventoryState;
@@ -23,12 +27,20 @@ public class InventorySlotVm : MonoBehaviour
 
     public void Start()
     {
+        CurrentCount = Count;
+        Count++;
+
         ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
 
         UpdateSlotIcon();
 
         var actor = _playerState.ActiveActor.Actor;
         actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+    }
+
+    public void OnDestroy()
+    {
+        ClearEventHandlers();
     }
 
     private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
@@ -74,15 +86,15 @@ public class InventorySlotVm : MonoBehaviour
     public void ApplyEquipment()
     {
         Debug.Log($"Slot {SlotIndex} equiped {_inventoryState.SelectedProp.Prop}");
-        var currentSector = _sectorManager.CurrentSector;
+        //var currentSector = _sectorManager.CurrentSector;
 
-        _equipCommand.Execute();
+        //_equipCommand.Execute();
         _comamndManager.Push(_equipCommand);
 
-        currentSector.Update();
+        //currentSector.Update();
     }
 
-    public void ClearEventHandlers()
+    private void ClearEventHandlers()
     {
         var actor = _playerState.ActiveActor.Actor;
         actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
