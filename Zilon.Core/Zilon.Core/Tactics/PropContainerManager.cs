@@ -9,6 +9,7 @@ namespace Zilon.Core.Tactics
         private readonly List<IPropContainer> _containers;
 
         public event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Added;
+        public event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Remove;
 
         public IEnumerable<IPropContainer> Containers => _containers;
 

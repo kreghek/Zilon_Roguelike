@@ -29,5 +29,10 @@ namespace Zilon.Core.Tactics
         /// Событие выстреливает, когда в менеджере добавляются новые контейнеры.
         /// </summary>
         event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Added;
+
+        /// <summary>
+        /// Событие выстреливает, когда из менеджера удаляются контейнеры.
+        /// </summary>
+        event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Remove;
     }
 }

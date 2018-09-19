@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -23,6 +27,8 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once UnusedMember.Global
 internal class SectorVM : MonoBehaviour
 {
+
+    private readonly List<MapNodeVM> _nodeViewModels;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -81,6 +87,11 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-container-modal-command")]
     private readonly ICommand _showContainerModalCommand;
 
+    public SectorVM()
+    {
+        _nodeViewModels = new List<MapNodeVM>();
+    }
+
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
@@ -111,14 +122,24 @@ internal class SectorVM : MonoBehaviour
         InitServices();
 
         var nodeViewModels = InitNodeViewModels();
+        _nodeViewModels.AddRange(nodeViewModels);
 
         InitPlayerActor(nodeViewModels);
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
     }
 
+    private void PropContainerManager_Added(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+    {
+        foreach (var container in e.Items)
+        {
+            CreateContainerViewModel(_nodeViewModels, container);
+        }
+    }
+
     private void InitServices()
     {
+        _propContainerManager.Added += PropContainerManager_Added;
         _sectorManager.CurrentSector = _sector;
 
         _playerState.TaskSource = _humanActorTaskSource;
@@ -129,6 +150,12 @@ internal class SectorVM : MonoBehaviour
         };
 
         _sector.ActorExit += SectorOnActorExit;
+    }
+
+    public void OnDestroy()
+    {
+        _propContainerManager.Added -= PropContainerManager_Added;
+        _sector.ActorExit -= SectorOnActorExit;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
@@ -210,14 +237,19 @@ internal class SectorVM : MonoBehaviour
     {
         foreach (var container in _propContainerManager.Containers)
         {
-            var containerVm = Instantiate(ContainerPrefab, transform);
-
-            var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
-            var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
-            containerVm.transform.position = containerPosition;
-            containerVm.Container = container;
-            containerVm.Selected += Container_Selected;
+            CreateContainerViewModel(nodeViewModels, container);
         }
+    }
+
+    private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
+    {
+        var containerVm = Instantiate(ContainerPrefab, transform);
+
+        var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
+        var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
+        containerVm.transform.position = containerPosition;
+        containerVm.Container = container;
+        containerVm.Selected += Container_Selected;
     }
 
     private void Container_Selected(object sender, EventArgs e)

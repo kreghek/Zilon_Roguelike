@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Интерфейт предмета в секторе.
     /// </summary>
-    public interface IPropContainer : IPassMapBlocker
+    public interface IPropContainer: IPassMapBlocker
     {
         /// <summary>
         /// Идентфикиатор контейнера.
@@ -43,5 +43,13 @@ namespace Zilon.Core.Tactics
         /// Используется клиентом для изменения визуального вида открырых сундуков.
         /// </remarks>
         event EventHandler IsOpenChanged;
+
+        /// <summary>
+        /// Блокер проходимости карты.
+        /// </summary>
+        /// <remarks>
+        /// Это значение задаётся, если контейнер должен блокировать проходимость.
+        /// </remarks>
+        bool IsMapBlock { get; }
     }
 }

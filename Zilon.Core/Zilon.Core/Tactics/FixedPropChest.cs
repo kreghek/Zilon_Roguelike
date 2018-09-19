@@ -5,7 +5,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public class FixedPropContainer : IPropContainer
+    public class FixedPropChest : IPropContainer
     {
         private bool _isOpened;
 
@@ -24,12 +24,14 @@ namespace Zilon.Core.Tactics
 
         public int Id { get; set; }
 
+        public bool IsMapBlock => true;
+
         private void DoSetIsOpened()
         {
             IsOpenChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public FixedPropContainer(IMapNode node, IProp[] props)
+        public FixedPropChest(IMapNode node, IProp[] props)
         {
             Node = node;
             Content = new Inventory();

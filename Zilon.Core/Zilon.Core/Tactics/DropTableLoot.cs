@@ -7,28 +7,27 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Контейнер со дропом, основанном на таблицах дропа.
+    /// реализация контейнера для выпавшего из монстра лута.
     /// </summary>
-    public class DropTablePropContainer : IPropContainer
+    public class DropTableLoot: IPropContainer
     {
-        private bool _isOpened;
-
         public IMapNode Node { get; }
 
         public IPropStore Content { get; }
         public bool IsOpened
         {
-            get => _isOpened;
-            set
+            get => true; set
             {
-                _isOpened = value;
-                DoSetIsOpened();
+                // Пустая реализация, потому что 
+                // контейнеры лута всегда открыты.
             }
         }
 
         public int Id { get; set; }
 
-        public DropTablePropContainer(IMapNode node,
+        public bool IsMapBlock => false;
+
+        public DropTableLoot(IMapNode node,
             DropTableScheme[] dropTables,
             IDropResolver dropResolver)
         {

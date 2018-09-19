@@ -7,6 +7,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -67,10 +68,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         var _actorManager = Container.Resolve<IActorManager>();
         var _propContainerManager = Container.Resolve<IPropContainerManager>();
         var sectorGenerator = Container.Resolve<SectorProceduralGenerator>();
+        var dropResolver = Container.Resolve<IDropResolver>();
+        var schemeService = Container.Resolve<ISchemeService>();
 
         var map = new HexMap();
 
-        var sector = new Sector(map, _actorManager, _propContainerManager);
+        var sector = new Sector(map, _actorManager, _propContainerManager, dropResolver, schemeService);
 
         try
         {

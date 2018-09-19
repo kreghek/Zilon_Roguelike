@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -13,13 +14,13 @@ namespace Zilon.Core.Tactics
 
     public class Sector : ISector
     {
-        private readonly List<IActorTask> _tasks;
-
-        private readonly TaskIniComparer _taskIniComparer;
-
         private readonly IActorManager _actorManager;
-
         private readonly IPropContainerManager _propContainerManager;
+        private readonly IDropResolver _dropResolver;
+        private readonly ISchemeService _schemeService;
+
+        private readonly List<IActorTask> _tasks;
+        private readonly TaskIniComparer _taskIniComparer;
 
         public event EventHandler ActorExit;
 
@@ -33,7 +34,9 @@ namespace Zilon.Core.Tactics
 
         public Sector(IMap map,
             IActorManager actorManager,
-            IPropContainerManager propContainerManager)
+            IPropContainerManager propContainerManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService)
         {
             _tasks = new List<IActorTask>();
             _taskIniComparer = new TaskIniComparer();
@@ -43,9 +46,11 @@ namespace Zilon.Core.Tactics
 
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-
+            _dropResolver = dropResolver;
+            _schemeService = schemeService;
             _actorManager.Added += ActorManager_Added;
             _propContainerManager.Added += PropContainerManager_Added;
+            _propContainerManager.Remove += PropContainerManager_Remove;
         }
 
         /// <summary>
@@ -151,7 +156,21 @@ namespace Zilon.Core.Tactics
         {
             foreach (var container in e.Items)
             {
-                Map.HoldNode(container.Node, container);
+                if (container.IsMapBlock)
+                {
+                    Map.HoldNode(container.Node, container);
+                }
+            }
+        }
+
+        private void PropContainerManager_Remove(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+        {
+            foreach (var container in e.Items)
+            {
+                if (container.IsMapBlock)
+                {
+                    Map.ReleaseNode(container.Node, container);
+                }
             }
         }
 
@@ -171,6 +190,38 @@ namespace Zilon.Core.Tactics
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
             actor.State.Dead -= ActorState_Dead;
+
+            if (actor.Person is MonsterPerson monsterPerson)
+            {
+                var monsterScheme = monsterPerson.Scheme;
+
+                var dropSchemes = GetMonsterDropTables(monsterScheme);
+
+                var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+
+                if (loot.Content.CalcActualItems().Any())
+                {
+                    _propContainerManager.Add(loot);
+                }
+            }
+        }
+
+        private DropTableScheme[] GetMonsterDropTables(MonsterScheme monsterScheme)
+        {
+            if (monsterScheme.DropTableSids == null)
+            {
+                return new DropTableScheme[0];
+            }
+
+            var dropTableCount = monsterScheme.DropTableSids.Length;
+            var schemes = new DropTableScheme[dropTableCount];
+            for (var i = 0; i < dropTableCount; i++)
+            {
+                var sid = monsterScheme.DropTableSids[i];
+                schemes[i] = _schemeService.GetScheme<DropTableScheme>(sid);
+            }
+
+            return schemes;
         }
 
         private void DoActorExit()

@@ -27,10 +27,13 @@ namespace Zilon.Core.Persons
         public ISurvivalData Survival => null;
 
         public EffectCollection Effects { get; }
+        public MonsterScheme Scheme { get; }
 
         public MonsterPerson(MonsterScheme scheme)
         {
-            Hp = 27;
+            Scheme = scheme;
+
+            Hp = scheme.Hp;
             TacticalActCarrier = new TacticalActCarrier
             {
                 Acts = new ITacticalAct[] {
@@ -38,7 +41,7 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            Effects = new EffectCollection();
+            Effects = new EffectCollection();            
         }
     }
 }

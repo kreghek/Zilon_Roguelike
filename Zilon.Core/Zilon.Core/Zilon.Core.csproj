@@ -169,6 +169,7 @@
     <Compile Include="Persons\EquipmentCarrier.cs" />
     <Compile Include="Persons\EquipmentChangedEventArgs.cs" />
     <Compile Include="Persons\IEquipmentCarrier.cs" />
+    <Compile Include="Tactics\DropTableLoot.cs" />
     <Compile Include="Tactics\FixedChestStore.cs" />
     <Compile Include="Persons\Inventory.cs" />
     <Compile Include="Persons\IPropStore.cs" />
@@ -226,7 +227,7 @@
     <Compile Include="MapGenerators\RoomGenerator.cs" />
     <Compile Include="MapGenerators\SectorGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
-    <Compile Include="Tactics\DropTablePropContainer.cs" />
+    <Compile Include="Tactics\DropTablePropChest.cs" />
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IActorState.cs" />
@@ -242,7 +243,7 @@
     <Compile Include="Tactics\ManagerItemsChangedArgs.cs" />
     <Compile Include="Tactics\MapHelper.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
-    <Compile Include="Tactics\FixedPropContainer.cs" />
+    <Compile Include="Tactics\FixedPropChest.cs" />
     <Compile Include="Tactics\PropContainerManager.cs" />
     <Compile Include="Tactics\OpenContainerResult.cs" />
     <Compile Include="Tactics\Spatial\IPassMapBlocker.cs" />
