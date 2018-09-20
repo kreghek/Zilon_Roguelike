@@ -92,8 +92,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And("Актёр игрока имеет Hp: 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.When("Актёр игрока атакует монстра Id:100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Монстр Id:100 имеет Hp 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
+ testRunner.When("Актёр игрока атакует монстра Id:100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 14
  testRunner.Then("Актёр игрока мертв", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
