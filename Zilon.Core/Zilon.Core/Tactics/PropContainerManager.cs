@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
         private readonly List<IPropContainer> _containers;
 
         public event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Added;
-        public event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Remove;
+        public event EventHandler<ManagerItemsChangedArgs<IPropContainer>> Removed;
 
         public IEnumerable<IPropContainer> Containers => _containers;
 
@@ -30,10 +30,31 @@ namespace Zilon.Core.Tactics
             DoAdded(propContainers.ToArray());
         }
 
+        public void Remove(IPropContainer propContainer)
+        {
+            _containers.Remove(propContainer);
+            DoRemoved(propContainer);
+        }
+
+        public void Remove(IEnumerable<IPropContainer> propContainers)
+        {
+            foreach (var container in propContainers)
+            {
+                _containers.Remove(container);
+            }
+            DoRemoved(propContainers.ToArray());
+        }
+
         private void DoAdded(params IPropContainer[] containers)
         {
             var args = new ManagerItemsChangedArgs<IPropContainer>(containers);
             Added?.Invoke(this, args);
+        }
+
+        private void DoRemoved(params IPropContainer[] containers)
+        {
+            var args = new ManagerItemsChangedArgs<IPropContainer>(containers);
+            Removed?.Invoke(this, args);
         }
     }
 }

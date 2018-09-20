@@ -6,7 +6,6 @@
     /// </summary>
     public class PersonScheme: SchemeBase
     {
-        //TODO Убрать из схем сеттеры
         /// <summary>
         /// Базовые хитпоинты персонажа.
         /// </summary>

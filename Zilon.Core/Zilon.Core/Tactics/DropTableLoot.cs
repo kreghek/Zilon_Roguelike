@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// реализация контейнера для выпавшего из монстра лута.
+    /// Реализация контейнера для выпавшего из монстра лута.
     /// </summary>
     public class DropTableLoot: IPropContainer
     {
@@ -16,7 +16,8 @@ namespace Zilon.Core.Tactics
         public IPropStore Content { get; }
         public bool IsOpened
         {
-            get => true; set
+            get => true;
+            set
             {
                 // Пустая реализация, потому что 
                 // контейнеры лута всегда открыты.
@@ -36,10 +37,5 @@ namespace Zilon.Core.Tactics
         }
 
         public event EventHandler IsOpenChanged;
-
-        private void DoSetIsOpened()
-        {
-            IsOpenChanged?.Invoke(this, EventArgs.Empty);
-        }
     }
 }
