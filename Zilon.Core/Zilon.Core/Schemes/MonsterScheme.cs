@@ -8,7 +8,7 @@
         /// <summary>
         /// Хитпоинты монстра.
         /// </summary>
-        public int Hp { get; }
+        public int Hp { get; set; }
 
         /// <summary>
         /// Основное действие монстра.
