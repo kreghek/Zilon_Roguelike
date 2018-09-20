@@ -5,22 +5,22 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема характиристик предмета, который можно экипировать на персонажа.
     /// </summary>
-    public sealed class PropEquipSubScheme : SubSchemeBase, IPropEquipSubScheme
+    public interface IPropEquipSubScheme
     {
         /// <summary>
         /// Мощь. Влияет на все характиристики предмета.
         /// </summary>
-        public float Power { get; private set; }
+        float Power { get; }
 
         /// <summary>
         /// Ранг пробития брони.
         /// </summary>
-        public int ApRank { get; private set; }
+        int ApRank { get; }
 
         /// <summary>
         /// Ранг брони.
         /// </summary>
-        public int ArmorRank { get; private set; }
+        int ArmorRank { get; }
 
         /// <summary>
         /// Доля поглощения урона при равном ранге пробития и брони.
@@ -28,16 +28,16 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Зависит от Мощи.
         /// </remarks>
-        public float Absorbtion { get; private set; }
+        float Absorbtion { get; }
 
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
-        public string[] ActSids { get; private set; }
+        string[] ActSids { get; }
 
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
-        public EquipmentSlotTypes[] SlotTypes { get; private set; }
+        EquipmentSlotTypes[] SlotTypes { get; }
     }
 }

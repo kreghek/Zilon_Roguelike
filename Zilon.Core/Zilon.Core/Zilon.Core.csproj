@@ -132,6 +132,7 @@
     <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
     <Compile Include="Persons\SurvivalStatType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
+    <Compile Include="Schemes\IPropEquipSubScheme.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />

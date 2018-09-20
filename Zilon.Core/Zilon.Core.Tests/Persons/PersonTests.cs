@@ -10,6 +10,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -48,7 +49,7 @@ namespace Zilon.Core.Tests.Persons
 
             var propScheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme
+                Equip = new TestPropEquipSubScheme
                 {
                     SlotTypes = new[] { EquipmentSlotTypes.Hand }
                 }

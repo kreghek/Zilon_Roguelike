@@ -13,6 +13,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -64,7 +65,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new PropScheme
             {
-                Equip = new PropEquipSubScheme
+                Equip = new TestPropEquipSubScheme
                 {
                     SlotTypes = new[] {
                         EquipmentSlotTypes.Hand

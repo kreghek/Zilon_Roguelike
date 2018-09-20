@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <inheritdoc />
     /// <summary>
@@ -6,10 +9,22 @@
     /// </summary>
     public class PropScheme : SchemeBase
     {
+        public PropScheme()
+        {
+        }
+
+        [JsonConstructor]
+        public PropScheme(PropEquipSubScheme equip, PropUseSubScheme use, CraftSubScheme craft)
+        {
+            Equip = equip;
+            Use = use;
+            Craft = craft;
+        }
+
         /// <summary>
         /// Характеристики схемы, связанные с экипировкой предмета персонажем.
         /// </summary>
-        public PropEquipSubScheme Equip { get; set; }
+        public IPropEquipSubScheme Equip { get; set; }
 
         /// <summary>
         /// Информация об использовании предмета.
