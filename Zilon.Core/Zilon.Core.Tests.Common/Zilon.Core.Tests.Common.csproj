@@ -46,6 +46,7 @@
     <Compile Include="HexNodeTestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\TestPropEquipSubScheme.cs" />
+    <Compile Include="Schemes\TestPropUseSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
     <Compile Include="TestContainerViewModel.cs" />
     <Compile Include="TestPropItemViewModel.cs" />

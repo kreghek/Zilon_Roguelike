@@ -29,7 +29,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Информация об использовании предмета.
         /// </summary>
-        public PropUseSubScheme Use { get; set; }
+        public IPropUseSubScheme Use { get; set; }
 
         /// <summary>
         /// Информации о создании/разборе предмета.

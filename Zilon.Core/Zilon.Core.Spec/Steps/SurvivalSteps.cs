@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -56,7 +57,7 @@ namespace Zilon.Core.Spec.Steps
 
             var propScheme = new PropScheme {
                 Sid = propSid,
-                Use = new PropUseSubScheme
+                Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
                     CommonRules = new[] { consumeRule },
