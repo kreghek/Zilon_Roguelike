@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Components;
+﻿using Newtonsoft.Json;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -10,16 +11,19 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Мощь. Влияет на все характиристики предмета.
         /// </summary>
+        [JsonProperty]
         public float Power { get; private set; }
 
         /// <summary>
         /// Ранг пробития брони.
         /// </summary>
+        [JsonProperty]
         public int ApRank { get; private set; }
 
         /// <summary>
         /// Ранг брони.
         /// </summary>
+        [JsonProperty]
         public int ArmorRank { get; private set; }
 
         /// <summary>
@@ -28,16 +32,19 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Зависит от Мощи.
         /// </remarks>
+        [JsonProperty]
         public float Absorbtion { get; private set; }
 
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
+        [JsonProperty]
         public string[] ActSids { get; private set; }
 
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
+        [JsonProperty]
         public EquipmentSlotTypes[] SlotTypes { get; private set; }
     }
 }
