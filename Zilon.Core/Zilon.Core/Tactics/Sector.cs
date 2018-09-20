@@ -50,7 +50,7 @@ namespace Zilon.Core.Tactics
             _schemeService = schemeService;
             _actorManager.Added += ActorManager_Added;
             _propContainerManager.Added += PropContainerManager_Added;
-            _propContainerManager.Remove += PropContainerManager_Remove;
+            _propContainerManager.Removed += PropContainerManager_Remove;
         }
 
         /// <summary>
