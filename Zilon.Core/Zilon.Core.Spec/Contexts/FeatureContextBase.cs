@@ -131,7 +131,7 @@ namespace Zilon.Core.Spec.Contexts
 
             var sector = Container.GetInstance<ISector>();
             var node = sector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropContainer(node, new IProp[0])
+            var chest = new FixedPropChest(node, new IProp[0])
             {
                 Id = id
             };

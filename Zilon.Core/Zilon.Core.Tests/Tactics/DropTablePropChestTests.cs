@@ -15,7 +15,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
-    public class DropTablePropContainerTests
+    public class DropTablePropChestTests
     {
         /// <summary>
         /// Тест проверяет генерацию предметов в контейнере,
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.Tactics
                 .Returns(new IProp[] { new Resource(testPropScheme, 1) });
             var dropResolver = dropResolverMock.Object;
 
-            var container = new DropTablePropContainer(node,
+            var container = new DropTablePropChest(node,
                 new[] { dropTable },
                 dropResolver);
 

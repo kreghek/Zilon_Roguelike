@@ -31,7 +31,7 @@ namespace Zilon.Core.Tests.Client
             };
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
-            var container = new FixedPropContainer(node, containerProps);
+            var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
