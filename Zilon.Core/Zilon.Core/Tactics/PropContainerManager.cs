@@ -26,7 +26,8 @@ namespace Zilon.Core.Tactics
 
         public void Add(IEnumerable<IPropContainer> propContainers)
         {
-            _containers.AddRange(propContainers);
+            var propContainersArray = propContainers.ToArray();
+            _containers.AddRange(propContainersArray);
             DoAdded(propContainers.ToArray());
         }
 
@@ -38,11 +39,12 @@ namespace Zilon.Core.Tactics
 
         public void Remove(IEnumerable<IPropContainer> propContainers)
         {
-            foreach (var container in propContainers)
+            var propContainersArray = propContainers.ToArray();
+            foreach (var container in propContainersArray)
             {
                 _containers.Remove(container);
             }
-            DoRemoved(propContainers.ToArray());
+            DoRemoved(propContainersArray);
         }
 
         private void DoAdded(params IPropContainer[] containers)
