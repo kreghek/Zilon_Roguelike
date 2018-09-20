@@ -262,6 +262,8 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
+            Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
+            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices()
