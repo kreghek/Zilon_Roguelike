@@ -1,4 +1,4 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
@@ -13,6 +13,7 @@ namespace Zilon.Core.Schemes
         {
         }
 
+        [UsedImplicitly]
         [JsonConstructor]
         public PropScheme(PropEquipSubScheme equip, PropUseSubScheme use, CraftSubScheme craft)
         {
@@ -34,6 +35,6 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Информации о создании/разборе предмета.
         /// </summary>
-        public CraftSubScheme Craft { get; set; }
+        public CraftSubScheme Craft { get; }
     }
 }
