@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Удаляет актёра из общего списка.
         /// </summary>
-        /// <param name="actor"> Целевой актёр. </param>
+        /// <param name="actors"> Целевой актёр. </param>
         void Remove(IEnumerable<IActor> actors);
 
         /// <summary>
