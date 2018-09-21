@@ -12,8 +12,6 @@ namespace Zilon.Core.Tactics
     {
         private readonly List<IActor> _items;
 
-        public event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
-
         /// <summary>
         /// Текущий список всех актёров.
         /// </summary>
@@ -46,6 +44,27 @@ namespace Zilon.Core.Tactics
             DoAdded(actors.ToArray());
         }
 
+        public void Remove(IActor actor)
+        {
+            _items.Remove(actor);
+
+            DoRemoved(actor);
+        }
+
+        public void Remove(IEnumerable<IActor> actors)
+        {
+            var actorArray = actors.ToArray();
+            foreach (var actor in actorArray)
+            {
+                _items.Remove(actor);
+            }
+
+            DoRemoved(actorArray);
+        }
+
+        public event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
+        public event EventHandler<ManagerItemsChangedArgs<IActor>> Removed;
+
 
         private void DoAdded(params IActor[] actors)
         {
@@ -53,9 +72,10 @@ namespace Zilon.Core.Tactics
             Added?.Invoke(this, args);
         }
 
-        public void Remove(IActor actor)
+        private void DoRemoved(params IActor[] actors)
         {
-            _items.Remove(actor);
+            var args = new ManagerItemsChangedArgs<IActor>(actors);
+            Removed?.Invoke(this, args);
         }
     }
 }

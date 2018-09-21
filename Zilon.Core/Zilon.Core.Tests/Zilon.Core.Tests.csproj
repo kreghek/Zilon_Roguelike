@@ -112,6 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
+    <Compile Include="Tactics\ActorManagerTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
     <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />

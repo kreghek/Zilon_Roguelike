@@ -27,10 +27,25 @@ namespace Zilon.Core.Tactics
         void Add(IEnumerable<IActor> actors);
 
         /// <summary>
+        /// Удаляет актёра из общего списка.
+        /// </summary>
+        /// <param name="actor"> Целевой актёр. </param>
+        void Remove(IActor actor);
+
+        /// <summary>
+        /// Удаляет актёра из общего списка.
+        /// </summary>
+        /// <param name="actor"> Целевой актёр. </param>
+        void Remove(IEnumerable<IActor> actors);
+
+        /// <summary>
         /// Событие выстреливает, когда в менеджере добавляются новые актёры.
         /// </summary>
         event EventHandler<ManagerItemsChangedArgs<IActor>> Added;
 
-        void Remove(IActor actor);
+        /// <summary>
+        /// Событие выстреливает, когда из менеджера удаляются актёры.
+        /// </summary>
+        event EventHandler<ManagerItemsChangedArgs<IActor>> Removed;
     }
 }
