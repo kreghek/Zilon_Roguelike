@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.CommonServices.Dices
 {
-    public static class IDiceExtansions
+    public static class IDiceExtensions
     {
         /// <summary>
         /// Получение случайного числа в указаном диапазоне [min, max].
