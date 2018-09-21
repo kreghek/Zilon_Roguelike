@@ -86,6 +86,7 @@
     <Compile Include="Commands\TacticCommandBase.cs" />
     <Compile Include="Commands\UiCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
+    <Compile Include="CommonServices\Dices\IDiceExtansions.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
     <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
