@@ -8,8 +8,9 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics.Tests
+namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
     public class DropTableChestStoreTests

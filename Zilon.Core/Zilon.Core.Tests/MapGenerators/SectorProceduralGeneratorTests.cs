@@ -10,13 +10,14 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.MapGenerators.Tests
+namespace Zilon.Core.Tests.MapGenerators
 {
     [TestFixture()]
     public class SectorProceduralGeneratorTests

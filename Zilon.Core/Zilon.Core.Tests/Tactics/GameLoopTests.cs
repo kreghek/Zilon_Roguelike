@@ -8,15 +8,19 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
-namespace Zilon.Core.Tactics.Tests
+namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture()]
+    [TestFixture]
     public class GameLoopTests
     {
-        [Test()]
-        public void UpdateTest()
+        /// <summary>
+        /// Тест проверяет, то не выбрасывается исключений при обновлении игрового цикла.
+        /// </summary>
+        [Test]
+        public void Update_PlayerAndMonster_NotThrowException()
         {
             // ASSERT
             var sectorMock = new Mock<ISector>();
@@ -35,8 +39,10 @@ namespace Zilon.Core.Tactics.Tests
             var botActor = CreateActor(botPlayer);
             actorInnerList.Add(botActor);
 
-            var gameLoop = new GameLoop(sector, actorManager);
-            gameLoop.ActorTaskSources = new IActorTaskSource[0];
+            var gameLoop = new GameLoop(sector, actorManager)
+            {
+                ActorTaskSources = new IActorTaskSource[0]
+            };
 
 
 

@@ -2,7 +2,9 @@
 
 using NUnit.Framework;
 
-namespace Zilon.Core.MapGenerators.Tests
+using Zilon.Core.MapGenerators;
+
+namespace Zilon.Core.Tests.MapGenerators
 {
     [TestFixture()]
     public class GenerationHelperTests

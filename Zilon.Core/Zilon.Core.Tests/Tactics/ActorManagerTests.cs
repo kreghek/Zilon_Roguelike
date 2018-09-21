@@ -7,7 +7,9 @@ using Moq;
 
 using NUnit.Framework;
 
-namespace Zilon.Core.Tactics.Tests
+using Zilon.Core.Tactics;
+
+namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
     public class ActorManagerTests
