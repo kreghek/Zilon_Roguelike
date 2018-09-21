@@ -12,13 +12,5 @@
         /// <param name="max"> Максимальное количество ходов ожидания. </param>
         /// <returns> Количество ходов ожидания. </returns>
         int SelectIdleDuration(int min, int max);
-
-        /// <summary>
-        /// Выбирает значение эффективности действия.
-        /// </summary>
-        /// <param name="minEfficient"></param>
-        /// <param name="maxEfficient"></param>
-        /// <returns></returns>
-        float SelectEfficient(float minEfficient, float maxEfficient);
     }
 }

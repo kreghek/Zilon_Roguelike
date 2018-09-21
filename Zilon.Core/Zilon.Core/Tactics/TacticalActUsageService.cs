@@ -1,19 +1,18 @@
 ﻿using System;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
     public class TacticalActUsageService : ITacticalActUsageService
     {
-        private readonly IDecisionSource _decisionSource;
+        private readonly IActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
 
-        public TacticalActUsageService(IDecisionSource decisionSource, IPerkResolver perkResolver)
+        public TacticalActUsageService(IActUsageRandomSource actUsageRandomSource, IPerkResolver perkResolver)
         {
-            _decisionSource = decisionSource;
+            _actUsageRandomSource = actUsageRandomSource;
             _perkResolver = perkResolver;
         }
 
@@ -36,7 +35,7 @@ namespace Zilon.Core.Tactics
 
             var minEfficient = act.MinEfficient;
             var maxEfficient = act.MaxEfficient;
-            var rolledEfficient = _decisionSource.SelectEfficient(minEfficient, maxEfficient);
+            var rolledEfficient = _actUsageRandomSource.SelectEfficient(minEfficient, maxEfficient);
 
             if (target is IActor targetActor)
             {
