@@ -13,7 +13,7 @@ namespace Zilon.Core.CommonServices.Dices
         /// <returns> Возвращает случайное число в указанном диапазоне [min, max]. </returns>
         public static int Roll(this IDice dice, int min, int max)
         {
-            if (min < max)
+            if (min > max)
             {
                 throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.", nameof(max));
             }

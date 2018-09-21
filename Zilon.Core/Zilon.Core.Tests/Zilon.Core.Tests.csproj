@@ -96,6 +96,7 @@
     <Compile Include="Commands\OpenContainerCommandTests.cs" />
     <Compile Include="Commands\PropTrasferCommandTests.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
+    <Compile Include="CommonServices\Dices\IDiceExtensionsTests.cs" />
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
