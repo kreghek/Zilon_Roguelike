@@ -97,8 +97,6 @@
     <Compile Include="Components\PersonRuleLevel.cs" />
     <Compile Include="Components\PersonRuleType.cs" />
     <Compile Include="IJob.cs" />
-    <Compile Include="Logging\LogCodes.cs" />
-    <Compile Include="Logging\Logger.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
     <Compile Include="MapGenerators\RoomMatrix.cs" />
