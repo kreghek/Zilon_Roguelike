@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -24,14 +25,19 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler ActorExit;
 
+        [ExcludeFromCodeCoverage]
         public IMapNode[] ExitNodes { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public IMap Map { get; }
 
+        [ExcludeFromCodeCoverage]
         public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
+        [ExcludeFromCodeCoverage]
         public IMapNode[] StartNodes { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public Sector(IMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
