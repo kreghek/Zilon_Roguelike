@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -9,11 +10,15 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Реализация контейнера для выпавшего из монстра лута.
     /// </summary>
-    public class DropTableLoot: IPropContainer
+    public class DropTableLoot : IPropContainer
     {
+        [ExcludeFromCodeCoverage]
         public IMapNode Node { get; }
 
+        [ExcludeFromCodeCoverage]
         public IPropStore Content { get; }
+
+        [ExcludeFromCodeCoverage]
         public bool IsOpened
         {
             get => true;
@@ -24,10 +29,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public int Id { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public bool IsMapBlock => false;
 
+        [ExcludeFromCodeCoverage]
         public DropTableLoot(IMapNode node,
             DropTableScheme[] dropTables,
             IDropResolver dropResolver)
