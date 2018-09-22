@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics
     /// </summary>
     /// <typeparam name="TSectorEntity">
     /// Тип сущности сектора.
-    /// Сейчас это либо <see cref="IPropContainer"> либо <see cref="IPropContainer">.
+    /// Сейчас это либо <see cref="IActor">IActor</see> либо <see cref="IPropContainer">IPropContainer</see>.
     /// </typeparam>
     public interface ISectorEntityManager<TSectorEntity> where TSectorEntity: class
     {
