@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
 
 using Zilon.Core.Schemes;
 
@@ -8,6 +10,7 @@ namespace Zilon.Core.Tests.Common
     {
         private readonly ISchemeLocator _schemeLocator;
 
+        [ExcludeFromCodeCoverage]
         public StrictSchemeServiceHandlerFactory(ISchemeLocator schemeLocator)
         {
             _schemeLocator = schemeLocator;

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Структура для хранения работы.
@@ -11,21 +13,25 @@
         /// <summary>
         /// Тип работы.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public JobType Type { get; set; }
 
         /// <summary>
         /// Объём работы.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public int Value { get; set; }
 
         /// <summary>
         /// Область действия работы.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public JobScope Scope { get; set; }
 
         /// <summary>
         /// Дополнительные данные по работе.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public string[] Data { get; set; }
 
         ////TODO Вынести весь этот подсчёт в отдельный сервис в пакете Persons

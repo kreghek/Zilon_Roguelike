@@ -1,9 +1,12 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     /// <inheritdoc />
     /// <summary>
     /// Базовая схема с базовой реализацией.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class SchemeBase : IScheme
     {
         /// <inheritdoc />

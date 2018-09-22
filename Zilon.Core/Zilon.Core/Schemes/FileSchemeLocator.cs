@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Zilon.Core.Schemes
@@ -7,6 +8,7 @@ namespace Zilon.Core.Schemes
     {
         private readonly string _schemeCatalog;
 
+        [ExcludeFromCodeCoverage]
         public FileSchemeLocator(string schemeCatalog)
         {
             _schemeCatalog = schemeCatalog;
