@@ -10,15 +10,11 @@ namespace Zilon.Core.Tactics
         public ActorState(float hp)
         {
             Hp = hp;
-
-            Initiative = 1;
         }
 
         public float Hp { get; private set; }
 
         public bool IsDead { get; private set; }
-
-        public float Initiative { get; }
 
         public event EventHandler Dead;
 

@@ -21,7 +21,6 @@ namespace Zilon.Core.Tactics
         private readonly ISchemeService _schemeService;
 
         private readonly List<IActorTask> _tasks;
-        private readonly TaskIniComparer _taskIniComparer;
 
         public event EventHandler ActorExit;
 
@@ -45,7 +44,6 @@ namespace Zilon.Core.Tactics
             ISchemeService schemeService)
         {
             _tasks = new List<IActorTask>();
-            _taskIniComparer = new TaskIniComparer();
             PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
@@ -104,35 +102,6 @@ namespace Zilon.Core.Tactics
                 }
 
                 survival.Update();
-            }
-        }
-
-        /// <summary>
-        /// Выполнение задач на текущий ход. Задачи берутся из внутреннего списка _tasks.
-        /// </summary>
-        private void ExecuteActorTasks()
-        {
-            _tasks.Sort(_taskIniComparer);
-            //TODO Добавить тест, проверяющий, что задачи выполняются с учётом инициативы.
-            foreach (var task in _tasks)
-            {
-                if (task.IsComplete)
-                {
-                    throw new InvalidOperationException("В выполняемых командах обнаружена заверщённая задача.");
-                }
-
-                if (task.Actor == null)
-                {
-                    throw new InvalidOperationException("В задаче потеряна связь с актёром.");
-                }
-
-                if (task.Actor.State.IsDead)
-                {
-                    // Произошло, если сначала актёру выдали задачу, но он ниже по инициативе и помер.
-                    continue;
-                }
-
-                task.Execute();
             }
         }
 

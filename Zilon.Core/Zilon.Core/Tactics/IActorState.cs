@@ -18,11 +18,6 @@ namespace Zilon.Core.Tactics
         bool IsDead { get; }
 
         /// <summary>
-        /// Инициатива актёра.
-        /// </summary>
-        float Initiative { get; }
-
-        /// <summary>
         /// Происходит, если актёр умирает.
         /// </summary>
         event EventHandler Dead;

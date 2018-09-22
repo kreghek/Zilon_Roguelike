@@ -300,7 +300,6 @@
     <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
-    <Compile Include="Tactics\TaskIniComparer.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
