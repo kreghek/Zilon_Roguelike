@@ -3,7 +3,7 @@
     /// <summary>
     /// Модификатор таблицы дропа.
     /// </summary>
-    public sealed class DropTableModificatorScheme: SchemeBase
+    public sealed class DropTableModificatorScheme : SchemeBase
     {
         /// <summary>
         /// Идентификаторы схем предметов, на которые модификатор влияет.

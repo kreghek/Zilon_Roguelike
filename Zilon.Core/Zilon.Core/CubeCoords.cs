@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core
 {
@@ -15,6 +16,7 @@ namespace Zilon.Core
             Z = z;
         }
 
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"(X: {X}, Y: {Y}, Z: {Z})";

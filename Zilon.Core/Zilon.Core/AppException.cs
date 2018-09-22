@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core
 {
+    [ExcludeFromCodeCoverage]
     [Serializable]
-    public class AppException : Exception
+    public sealed class AppException : Exception
     {
         public AppException() { }
         public AppException(string message) : base(message) { }

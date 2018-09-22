@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Components
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Components
 {
     /// <summary>
     /// Набор ресурсов. Используется для крафта, диалогов, прокачки перков.
@@ -8,6 +10,7 @@
         public string PropSid { get; set; }
         public int Count { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public PropSet Clone()
         {
             return new PropSet
