@@ -21,9 +21,10 @@ namespace Zilon.Core.Tactics
             var min = (int)(minEfficient * FLOAT_MULTY);
             var max = (int)(maxEfficient * FLOAT_MULTY);
 
-            var roll = _dice.Roll(max) + min - 1;
+            var roll = _dice.Roll(min, max);
+            var rollFloat = (float)roll; // иначе будет деление int и пропадут дроби.
 
-            return (float)roll / FLOAT_MULTY;
+            return rollFloat / FLOAT_MULTY;
         }
     }
 }

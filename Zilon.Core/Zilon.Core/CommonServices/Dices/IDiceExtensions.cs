@@ -24,7 +24,7 @@ namespace Zilon.Core.CommonServices.Dices
             }
 
             var range = max - min;
-            var roll = dice.Roll(range);
+            var roll = dice.Roll(range + 1);
 
             return roll - 1 + min;
         }
