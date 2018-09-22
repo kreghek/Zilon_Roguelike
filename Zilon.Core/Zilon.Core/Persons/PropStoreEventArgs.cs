@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Zilon.Core.Persons
@@ -10,6 +11,7 @@ namespace Zilon.Core.Persons
     {
         public IProp[] Props { get; }
 
+        [ExcludeFromCodeCoverage]
         public PropStoreEventArgs(IEnumerable<IProp> props)
         {
             Props = props.ToArray();

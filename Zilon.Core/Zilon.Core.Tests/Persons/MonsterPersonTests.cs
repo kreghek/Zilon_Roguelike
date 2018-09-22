@@ -66,5 +66,116 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             monster.Hp.Should().Be(expectedHp);
         }
+
+        /// <summary>
+        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Развитие).
+        /// </summary>
+        [Test]
+        public void EvolutionData_ThrowNotSupported()
+        {
+            // ARRANGE
+            var monster = CreateMonster();
+
+            Action<MonsterPerson> requestPropertyAct = m =>
+            {
+                var tmp = m.EvolutionData;
+            };
+
+            //ACT
+            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
+
+
+            // ASSERT
+            UnsupportedMonsterComponent(act);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Боевые характеристики).
+        /// </summary>
+        [Test]
+        public void CombatStats_ThrowNotSupported()
+        {
+            // ARRANGE
+            var monster = CreateMonster();
+
+            Action<MonsterPerson> requestPropertyAct = m =>
+            {
+                var tmp = m.CombatStats;
+            };
+
+            //ACT
+            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
+
+
+            // ASSERT
+            UnsupportedMonsterComponent(act);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Инвентарь).
+        /// </summary>
+        [Test]
+        public void Inventory_ThrowNotSupported()
+        {
+            // ARRANGE
+            var monster = CreateMonster();
+
+            Action<MonsterPerson> requestPropertyAct = m =>
+            {
+                var tmp = m.Inventory;
+            };
+
+            //ACT
+            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
+
+
+            // ASSERT
+            UnsupportedMonsterComponent(act);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что для монстров данные о выживании равны null.
+        /// Это нужно, когда сектор обновляет состояния выживания. Чтобы избежать сравнение типов, там есть проверка на null.
+        /// </summary>
+        [Test]
+        public void Survival_ReturnsNull()
+        {
+            // ARRANGE
+            var monster = CreateMonster();
+
+            //ACT
+            var factSurvival = monster.Survival;
+
+
+            // ASSERT
+            factSurvival.Should().BeNull();
+        }
+
+        private static MonsterPerson CreateMonster()
+        {
+            var monsterScheme = new MonsterScheme
+            {
+                PrimaryAct = new TacticalActStatsSubScheme
+                {
+                    Efficient = new Range<float>(1, 1)
+                }
+            };
+            var monster = new MonsterPerson(monsterScheme);
+            return monster;
+        }
+
+        private Action ActUnsupportedMonsterComponent(MonsterPerson monster, Action<MonsterPerson> requestPropertyAct)
+        {
+            Action act = () => {
+                requestPropertyAct(monster);
+            };
+
+            return act;
+        }
+
+        private void UnsupportedMonsterComponent(Action act)
+        {
+            act.Should().Throw<NotSupportedException>();
+        }
     }
 }

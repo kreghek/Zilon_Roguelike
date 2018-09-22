@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
 
@@ -9,6 +10,7 @@ namespace Zilon.Core.Persons
     {
         private readonly ISchemeService _schemeService;
 
+        [ExcludeFromCodeCoverage]
         public PropFactory(ISchemeService schemeService)
         {
             _schemeService = schemeService;

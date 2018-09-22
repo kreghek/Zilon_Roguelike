@@ -119,7 +119,6 @@
     <Compile Include="Persons\IPerk.cs" />
     <Compile Include="Persons\IPerkResolver.cs" />
     <Compile Include="Persons\IPersonEffect.cs" />
-    <Compile Include="Persons\IPersonFactory.cs" />
     <Compile Include="Persons\ISurvivalData.cs" />
     <Compile Include="Persons\Perk.cs" />
     <Compile Include="Persons\PerkEventArgs.cs" />
@@ -127,7 +126,6 @@
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver_Old.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
-    <Compile Include="Persons\PersonFactory.cs" />
     <Compile Include="Persons\SurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
     <Compile Include="Persons\SurvivalStatHazardLevel.cs" />

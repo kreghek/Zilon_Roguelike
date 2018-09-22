@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -21,6 +23,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="scheme"> Схема концепта. Сейчас всегда одна схема - conceptual-scheme. </param>
         /// <param name="prop"> Схема предмета, описанного в концепте. </param>
+        [ExcludeFromCodeCoverage]
         public Concept(PropScheme scheme, PropScheme prop) : base(scheme)
         {
             Prop = prop;
