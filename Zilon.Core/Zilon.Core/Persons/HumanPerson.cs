@@ -74,7 +74,7 @@ namespace Zilon.Core.Persons
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
-        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory):
+        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory) :
             this(scheme, defaultScheme, evolutionData)
         {
             Inventory = inventory;

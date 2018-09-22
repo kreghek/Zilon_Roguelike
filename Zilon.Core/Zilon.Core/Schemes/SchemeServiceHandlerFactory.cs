@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public class SchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
+    public sealed class SchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
     {
         private readonly ISchemeLocator _schemeLocator;
 
@@ -12,7 +12,8 @@ namespace Zilon.Core.Schemes
             _schemeLocator = schemeLocator;
         }
 
-        ISchemeServiceHandler<TScheme> ISchemeServiceHandlerFactory.Create<TScheme>()
+        [ExcludeFromCodeCoverage]
+        public ISchemeServiceHandler<TScheme> Create<TScheme>() where TScheme : class, IScheme
         {
             var handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
             return handler;
