@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actorManagerMock = new Mock<IActorManager>();
             var actorInnerList = new List<IActor>();
-            actorManagerMock.SetupGet(x => x.Actors).Returns(actorInnerList);
+            actorManagerMock.SetupGet(x => x.Items).Returns(actorInnerList);
             var actorManager = actorManagerMock.Object;
 
             var humanPlayer = new HumanPlayer();

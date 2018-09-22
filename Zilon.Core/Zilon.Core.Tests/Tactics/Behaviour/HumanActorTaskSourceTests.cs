@@ -96,7 +96,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             var actorManagerMock = new Mock<IActorManager>();
             var actorListInner = new List<IActor>(actors);
-            actorManagerMock.Setup(x => x.Actors).Returns(actorListInner);
+            actorManagerMock.Setup(x => x.Items).Returns(actorListInner);
             var actorManager = actorManagerMock.Object;
             return actorManager;
         }

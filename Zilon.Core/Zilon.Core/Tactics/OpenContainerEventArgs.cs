@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.Tactics
 {
@@ -10,8 +11,10 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Результат открытия. True - если открыт успешно. Иначе - false.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public IOpenContainerResult Result { get; }
 
+        [ExcludeFromCodeCoverage]
         public OpenContainerEventArgs(IOpenContainerResult result)
         {
             Result = result;

@@ -64,7 +64,7 @@ namespace Zilon.Core.Tactics
         private IActor[] CalcActorList()
         {
             // Персонаж, которым в данный момент управляет актёр, должен обрабатываться первым.
-            var sortedActors = _actorManager.Actors.Where(x => !x.State.IsDead)
+            var sortedActors = _actorManager.Items.Where(x => !x.State.IsDead)
                 .OrderByDescending(x => x.Owner is HumanPlayer)
                 .ToArray();
 

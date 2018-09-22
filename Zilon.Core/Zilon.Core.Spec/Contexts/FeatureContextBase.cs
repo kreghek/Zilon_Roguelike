@@ -161,7 +161,7 @@ namespace Zilon.Core.Spec.Contexts
         {
             var actorManager = Container.GetInstance<IActorManager>();
 
-            var monster = actorManager.Actors
+            var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
 
             return monster;

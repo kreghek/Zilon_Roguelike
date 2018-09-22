@@ -302,7 +302,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
-            foreach (var target in _actorList.Actors)
+            foreach (var target in _actorList.Items)
             {
                 if (target.Owner == _actor.Owner)
                 {

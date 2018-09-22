@@ -134,7 +134,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             _testedActor = CreateBotActor(1, 1);
 
             var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.SetupGet(x => x.Actors).Returns(_actorListInner);
+            actorManagerMock.SetupGet(x => x.Items).Returns(_actorListInner);
             var actorManager = actorManagerMock.Object;
 
             var routePoints = new IMapNode[] {

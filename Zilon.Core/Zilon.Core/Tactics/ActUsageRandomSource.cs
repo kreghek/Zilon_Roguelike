@@ -1,4 +1,6 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics
 {
@@ -8,6 +10,7 @@ namespace Zilon.Core.Tactics
 
         private readonly IDice _dice;
 
+        [ExcludeFromCodeCoverage]
         public ActUsageRandomSource(IDice dice)
         {
             _dice = dice;

@@ -76,7 +76,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             var actors = new List<IActor> { _actor };
             var actorListMock = new Mock<IActorManager>();
-            actorListMock.SetupGet(x => x.Actors).Returns(actors);
+            actorListMock.SetupGet(x => x.Items).Returns(actors);
             _actorList = actorListMock.Object;
 
 

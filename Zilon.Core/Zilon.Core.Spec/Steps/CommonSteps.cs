@@ -75,7 +75,7 @@ namespace Zilon.Core.Spec.Steps
             var propFactory = _context.Container.GetInstance<IPropFactory>();
             var schemeService = _context.Container.GetInstance<ISchemeService>();
 
-            var container = containerManager.Containers.Single(x => x.Id == id);
+            var container = containerManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<PropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
@@ -90,7 +90,7 @@ namespace Zilon.Core.Spec.Steps
             var propFactory = _context.Container.GetInstance<IPropFactory>();
             var schemeService = _context.Container.GetInstance<ISchemeService>();
 
-            var container = containerManager.Containers.Single(x => x.Id == id);
+            var container = containerManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<PropScheme>(resourceSid);
             var resource = propFactory.CreateResource(propScheme, count);
@@ -111,7 +111,7 @@ namespace Zilon.Core.Spec.Steps
             var containerManager = _context.Container.GetInstance<IPropContainerManager>();
             var playerState = _context.Container.GetInstance<IPlayerState>();
 
-            var container = containerManager.Containers.Single(x => x.Id == id);
+            var container = containerManager.Items.Single(x => x.Id == id);
 
             var chestViewMdel = new TestContainerViewModel
             {
@@ -190,7 +190,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var containerManager = _context.Container.GetInstance<IPropContainerManager>();
 
-            var container = containerManager.Containers.Single(x => x.Id == id);
+            var container = containerManager.Items.Single(x => x.Id == id);
             var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
 
             prop.Should().BeNull();
@@ -201,7 +201,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var containerManager = _context.Container.GetInstance<IPropContainerManager>();
 
-            var container = containerManager.Containers.Single(x => x.Id == containerId);
+            var container = containerManager.Items.Single(x => x.Id == containerId);
             var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
             prop.Should().BeNull();

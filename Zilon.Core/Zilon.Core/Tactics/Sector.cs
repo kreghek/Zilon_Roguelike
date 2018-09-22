@@ -77,7 +77,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateActorEffects()
         {
-            foreach (var actor in _actorManager.Actors)
+            foreach (var actor in _actorManager.Items)
             {
                 var effects = actor.Person.Effects;
                 foreach (var effect in effects.Items)
@@ -92,7 +92,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateSurvivals()
         {
-            var actors = _actorManager.Actors.ToArray();
+            var actors = _actorManager.Items.ToArray();
             foreach (var actor in actors)
             {
                 var survival = actor.Person.Survival;
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tactics
         {
             var allExit = true;
 
-            foreach (var actor in _actorManager.Actors)
+            foreach (var actor in _actorManager.Items)
             {
                 if (actor.Owner is HumanPlayer && !ExitNodes.Contains(actor.Node))
                 {
@@ -161,7 +161,7 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = _actorManager.Actors.Single(x => x.State == sender);
+            var actor = _actorManager.Items.Single(x => x.State == sender);
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
             actor.State.Dead -= ActorState_Dead;
