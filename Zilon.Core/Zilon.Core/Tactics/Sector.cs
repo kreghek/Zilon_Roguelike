@@ -6,7 +6,6 @@ using System.Linq;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -19,8 +18,6 @@ namespace Zilon.Core.Tactics
         private readonly IPropContainerManager _propContainerManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
-
-        private readonly List<IActorTask> _tasks;
 
         public event EventHandler ActorExit;
 
@@ -43,11 +40,6 @@ namespace Zilon.Core.Tactics
             IDropResolver dropResolver,
             ISchemeService schemeService)
         {
-            _tasks = new List<IActorTask>();
-            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
-
-            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
-
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
             _dropResolver = dropResolver;
@@ -55,6 +47,10 @@ namespace Zilon.Core.Tactics
             _actorManager.Added += ActorManager_Added;
             _propContainerManager.Added += PropContainerManager_Added;
             _propContainerManager.Removed += PropContainerManager_Remove;
+
+            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
+
+            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
         }
 
         /// <summary>
