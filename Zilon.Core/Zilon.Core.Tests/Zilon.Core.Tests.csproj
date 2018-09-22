@@ -132,6 +132,7 @@
     <Compile Include="MapGenerators\GenerationHelperTests.cs" />
     <Compile Include="MapGenerators\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="MapGenerators\SectorProceduralGeneratorTests.cs" />
+    <Compile Include="Tactics\SectorTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
     <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />
     <Compile Include="Tactics\Spatial\TestCases\ConvertOffsetToCubeTestCaseSource.cs" />

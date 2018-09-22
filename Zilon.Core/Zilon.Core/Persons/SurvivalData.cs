@@ -82,12 +82,11 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat
+            var stat = new SurvivalStat(50)
             {
                 Type = type,
                 Range = new Range<int>(-100, 100),
                 Rate = 1,
-                Value = 50,
                 KeyPoints = new[]{
                         new SurvivalStatKeyPoint{
                             Level = SurvivalStatHazardLevel.Lesser,

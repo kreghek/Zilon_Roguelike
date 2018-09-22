@@ -7,6 +7,11 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class SurvivalStat
     {
+        public SurvivalStat(int startValue)
+        {
+            Value = startValue;
+        }
+
         /// <summary>
         /// Тип характеристики.
         /// </summary>

@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics.Tests
+namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
     public class ActUsageRandomSourceTests
