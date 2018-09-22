@@ -31,9 +31,10 @@ namespace Zilon.Core.Tactics
 
         public void Add(IEnumerable<TSectorEntity> entities)
         {
-            _items.AddRange(entities);
+            var itemArray = entities.ToArray();
+            _items.AddRange(itemArray);
 
-            DoAdded(entities.ToArray());
+            DoAdded(itemArray);
         }
 
         public void Remove(TSectorEntity entity)
@@ -45,13 +46,13 @@ namespace Zilon.Core.Tactics
 
         public void Remove(IEnumerable<TSectorEntity> entities)
         {
-            var actorArray = entities.ToArray();
-            foreach (var actor in actorArray)
+            var entityArray = entities.ToArray();
+            foreach (var entity in entityArray)
             {
-                _items.Remove(actor);
+                _items.Remove(entity);
             }
 
-            DoRemoved(actorArray);
+            DoRemoved(entityArray);
         }
 
         public event EventHandler<ManagerItemsChangedArgs<TSectorEntity>> Added;
