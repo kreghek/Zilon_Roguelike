@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Базовый класс для всех задач актёра.
@@ -8,12 +10,16 @@
     /// </remarks>
     public abstract class ActorTaskBase: IActorTask
     {
+        [ExcludeFromCodeCoverage]
         protected ActorTaskBase(IActor actor)
         {
             Actor = actor;
         }
 
-        public IActor Actor { get; }
+        [ExcludeFromCodeCoverage]
+        protected IActor Actor { get; }
+
+        [ExcludeFromCodeCoverage]
         public virtual bool IsComplete { get; set; }
 
         public abstract void Execute();
