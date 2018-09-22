@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -13,9 +14,12 @@ namespace Zilon.Core.Tactics
     {
         private bool _isOpened;
 
+        [ExcludeFromCodeCoverage]
         public IMapNode Node { get; }
 
+        [ExcludeFromCodeCoverage]
         public IPropStore Content { get; }
+
         public bool IsOpened
         {
             get => _isOpened;
@@ -26,8 +30,10 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public int Id { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public bool IsMapBlock => true;
 
         public DropTablePropChest(IMapNode node,
