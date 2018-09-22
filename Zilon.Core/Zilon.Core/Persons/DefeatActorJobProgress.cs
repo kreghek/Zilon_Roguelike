@@ -10,12 +10,12 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class DefeatActorJobProgress : IJobProgress
     {
-        private readonly IActor _target;
-
         public DefeatActorJobProgress(IActor target)
         {
-            _target = target;
+            Target = target;
         }
+
+        public IActor Target { get; }
 
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
