@@ -5,12 +5,12 @@ namespace Zilon.Core
 {
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public sealed class AppException : Exception
+    public class AppException : Exception
     {
         public AppException() { }
         public AppException(string message) : base(message) { }
         public AppException(string message, Exception inner) : base(message, inner) { }
-        public AppException(
+        protected AppException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
