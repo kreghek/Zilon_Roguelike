@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
@@ -7,6 +9,7 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class TacticalActRoll
     {
+        [ExcludeFromCodeCoverage]
         public TacticalActRoll(ITacticalAct tacticalAct, float efficient)
         {
             TacticalAct = tacticalAct;
