@@ -255,7 +255,7 @@ namespace Zilon.Core.Spec.Contexts
             decisionSourceMock.CallBase = true;
             var decisionSource = decisionSourceMock.Object;
 
-            var actUsageRandomSourceMock = new Mock<ActUsageRandomSource>(dice).As<IActUsageRandomSource>();
+            var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.SelectEfficient(It.IsAny<float>(), It.IsAny<float>()))
                 .Returns<float, float>((min, max) => (float)Math.Round((max - min) / 2 + min, 1));
             var actUsageRandomSource = actUsageRandomSourceMock.Object;

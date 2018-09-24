@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics
             diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns(1);
             var dice = diceMock.Object;
 
-            var service = new ActUsageRandomSource(dice);
+            var service = new TacticalActUsageRandomSource(dice);
 
 
 
@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Tactics
             diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);
             var dice = diceMock.Object;
 
-            var service = new ActUsageRandomSource(dice);
+            var service = new TacticalActUsageRandomSource(dice);
 
 
 

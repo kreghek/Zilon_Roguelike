@@ -4,14 +4,14 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics
 {
-    public class ActUsageRandomSource : IActUsageRandomSource
+    public class TacticalActUsageRandomSource : ITacticalActUsageRandomSource
     {
         private const int FLOAT_MULTY = 10;
 
         private readonly IDice _dice;
 
         [ExcludeFromCodeCoverage]
-        public ActUsageRandomSource(IDice dice)
+        public TacticalActUsageRandomSource(IDice dice)
         {
             _dice = dice;
         }

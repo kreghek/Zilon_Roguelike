@@ -13,7 +13,7 @@ namespace Zilon.Core.Tests.Tactics
     [TestFixture]
     public class TacticalActUsageServiceTests
     {
-        private IActUsageRandomSource _actUsageRandomSource;
+        private ITacticalActUsageRandomSource _actUsageRandomSource;
         private Mock<IPerkResolver> _perkResolverMock;
         private IPerkResolver _perkResolver;
         private ITacticalAct _act;
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tests.Tactics
         [SetUp]
         public void SetUp()
         {
-            var actUsageRandomSourceMock = new Mock<IActUsageRandomSource>();
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             _actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             _perkResolverMock = new Mock<IPerkResolver>();

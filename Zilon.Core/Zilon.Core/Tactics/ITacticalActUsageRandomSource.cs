@@ -3,7 +3,7 @@
     /// <summary>
     /// Источник случайных значений для совершаемых действий.
     /// </summary>
-    public interface IActUsageRandomSource
+    public interface ITacticalActUsageRandomSource
     {
         /// <summary>
         /// Выбирает значение эффективности действия в указанном диапазоне.

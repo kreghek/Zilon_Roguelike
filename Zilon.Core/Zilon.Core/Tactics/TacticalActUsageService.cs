@@ -7,10 +7,10 @@ namespace Zilon.Core.Tactics
 {
     public class TacticalActUsageService : ITacticalActUsageService
     {
-        private readonly IActUsageRandomSource _actUsageRandomSource;
+        private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
 
-        public TacticalActUsageService(IActUsageRandomSource actUsageRandomSource, IPerkResolver perkResolver)
+        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource, IPerkResolver perkResolver)
         {
             _actUsageRandomSource = actUsageRandomSource;
             _perkResolver = perkResolver;
@@ -33,32 +33,77 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
             }
 
-            var minEfficient = act.MinEfficient;
-            var maxEfficient = act.MaxEfficient;
-            var rolledEfficient = _actUsageRandomSource.SelectEfficient(minEfficient, maxEfficient);
+            var rolledEfficient = GetActEfficient(act);
 
             if (target is IActor targetActor)
             {
-                var targetIsDeadLast = targetActor.State.IsDead;
-
-                targetActor.TakeDamage(rolledEfficient);
-
-                if (!targetIsDeadLast && targetActor.State.IsDead)
-                {
-                    if (!(actor.Person is MonsterPerson))
-                    {
-                        var evolutionData = actor.Person.EvolutionData;
-
-                        var defeatProgress = new DefeatActorJobProgress(targetActor);
-
-                        _perkResolver.ApplyProgress(defeatProgress, evolutionData);
-                    }
-                }
+                UseOnActor(actor, rolledEfficient, targetActor);
             }
             else
             {
-                target.TakeDamage(rolledEfficient);
+                UseOnChest(target, rolledEfficient);
             }
+        }
+
+        /// <summary>
+        /// Возвращает случайное значение эффективность действия.
+        /// </summary>
+        /// <param name="act"> Соверщённое действие. </param>
+        /// <returns> Возвращает выпавшее значение эффективности. </returns>
+        private float GetActEfficient(ITacticalAct act)
+        {
+            var minEfficient = act.MinEfficient;
+            var maxEfficient = act.MaxEfficient;
+            var rolledEfficient = _actUsageRandomSource.SelectEfficient(minEfficient, maxEfficient);
+            return rolledEfficient;
+        }
+
+        /// <summary>
+        /// Применяет действие на предмет, на который можно подействовать (сундук/дверь).
+        /// </summary>
+        /// <param name="target"> Цель использования действия. </param>
+        /// <param name="rolledEfficient"> Эффективность действия. </param>
+        private static void UseOnChest(IAttackTarget target, float rolledEfficient)
+        {
+            target.TakeDamage(rolledEfficient);
+        }
+
+        /// <summary>
+        /// Применяет действие на актёра.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="rolledEfficient"> Эффективность действия. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        private void UseOnActor(IActor actor, float rolledEfficient, IActor targetActor)
+        {
+            var targetIsDeadLast = targetActor.State.IsDead;
+
+            targetActor.TakeDamage(rolledEfficient);
+
+            if (!targetIsDeadLast && targetActor.State.IsDead)
+            {
+                CountTargetActorDefeat(actor, targetActor);
+            }
+        }
+
+        /// <summary>
+        /// Расчитывает убийство целевого актёра.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        private void CountTargetActorDefeat(IActor actor, IActor targetActor)
+        {
+            if (actor.Person is MonsterPerson)
+            {
+                // Монстры не могут прокачиваться.
+                return;
+            }
+
+            var evolutionData = actor.Person.EvolutionData;
+
+            var defeatProgress = new DefeatActorJobProgress(targetActor);
+
+            _perkResolver.ApplyProgress(defeatProgress, evolutionData);
         }
     }
 }
