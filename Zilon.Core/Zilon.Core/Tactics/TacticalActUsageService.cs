@@ -33,15 +33,15 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
             }
 
-            var rolledEfficient = GetActEfficient(act);
+            var tacticalActRoll = GetActEfficient(act);
 
             if (target is IActor targetActor)
             {
-                UseOnActor(actor, rolledEfficient, targetActor);
+                UseOnActor(actor, targetActor, tacticalActRoll);
             }
             else
             {
-                UseOnChest(target, rolledEfficient);
+                UseOnChest(target, tacticalActRoll);
             }
         }
 
@@ -50,35 +50,38 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="act"> Соверщённое действие. </param>
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
-        private float GetActEfficient(ITacticalAct act)
+        private TacticalActRoll GetActEfficient(ITacticalAct act)
         {
             var minEfficient = act.MinEfficient;
             var maxEfficient = act.MaxEfficient;
             var rolledEfficient = _actUsageRandomSource.SelectEfficient(minEfficient, maxEfficient);
-            return rolledEfficient;
+
+            var roll = new TacticalActRoll(act, rolledEfficient);
+
+            return roll;
         }
 
         /// <summary>
         /// Применяет действие на предмет, на который можно подействовать (сундук/дверь).
         /// </summary>
         /// <param name="target"> Цель использования действия. </param>
-        /// <param name="rolledEfficient"> Эффективность действия. </param>
-        private static void UseOnChest(IAttackTarget target, float rolledEfficient)
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private static void UseOnChest(IAttackTarget target, TacticalActRoll tacticalActRoll)
         {
-            target.TakeDamage(rolledEfficient);
+            target.TakeDamage(tacticalActRoll.Efficient);
         }
 
         /// <summary>
         /// Применяет действие на актёра.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
-        /// <param name="rolledEfficient"> Эффективность действия. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
-        private void UseOnActor(IActor actor, float rolledEfficient, IActor targetActor)
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private void UseOnActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
             var targetIsDeadLast = targetActor.State.IsDead;
 
-            targetActor.TakeDamage(rolledEfficient);
+            targetActor.TakeDamage(tacticalActRoll.Efficient);
 
             if (!targetIsDeadLast && targetActor.State.IsDead)
             {

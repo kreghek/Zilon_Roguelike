@@ -234,6 +234,7 @@
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IActorState.cs" />
+    <Compile Include="Tactics\TacticalActRoll.cs" />
     <Compile Include="Tactics\TacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
