@@ -211,7 +211,7 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var monsters = _actorManager.Actors.Where(x => x.Person is MonsterPerson).ToArray();
+        var monsters = _actorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorVm = Instantiate(ActorPrefab, transform);
@@ -235,7 +235,7 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateContainerViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        foreach (var container in _propContainerManager.Containers)
+        foreach (var container in _propContainerManager.Items)
         {
             CreateContainerViewModel(nodeViewModels, container);
         }
