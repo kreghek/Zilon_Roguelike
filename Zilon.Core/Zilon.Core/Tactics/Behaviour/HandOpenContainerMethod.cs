@@ -8,7 +8,7 @@
         public IOpenContainerResult TryOpen(IPropContainer container)
         {
             var props = container.Content.CalcActualItems();
-            container.IsOpened = true;
+            container.Open();
             return new SuccessOpenContainerResult(props);
         }
     }

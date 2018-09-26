@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
@@ -9,47 +8,23 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Реализация сундука с фиксированным лутом.
     /// </summary>
-    public class FixedPropChest : IPropContainer
+    public class FixedPropChest : ChestBase
     {
-        private bool _isOpened;
+        public override bool IsMapBlock => true;
 
         [ExcludeFromCodeCoverage]
-        public IMapNode Node { get; }
-
-        [ExcludeFromCodeCoverage]
-        public IPropStore Content { get; }
-
-        public bool IsOpened
+        public FixedPropChest(IMapNode node, IProp[] props) : this(node, props, 0)
         {
-            get => _isOpened;
-            set
-            {
-                _isOpened = value;
-                DoSetIsOpened();
-            }
+
         }
 
-        [ExcludeFromCodeCoverage]
-        public int Id { get; set; }
 
-        [ExcludeFromCodeCoverage]
-        public bool IsMapBlock => true;
-
-        private void DoSetIsOpened()
+        public FixedPropChest(IMapNode node, IProp[] props, int id) : base(node, new Inventory(), id)
         {
-            IsOpenChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public FixedPropChest(IMapNode node, IProp[] props)
-        {
-            Node = node;
-            Content = new Inventory();
             foreach (var prop in props)
             {
                 Content.Add(prop);
             }
         }
-
-        public event EventHandler IsOpenChanged;
     }
 }

@@ -34,7 +34,7 @@ namespace Zilon.Core.Tactics
         /// <remarks>
         /// Открытые контейнеры в дальнейшем можно открывать "руками".
         /// </remarks>
-        bool IsOpened { get; set; }
+        bool IsOpened { get; }
 
         /// <summary>
         /// Событие выстреливает, когда сундук открывается.
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tactics
         /// <remarks>
         /// Используется клиентом для изменения визуального вида открырых сундуков.
         /// </remarks>
-        event EventHandler IsOpenChanged;
+        event EventHandler Opened;
 
         /// <summary>
         /// Блокер проходимости карты.
@@ -51,5 +51,10 @@ namespace Zilon.Core.Tactics
         /// Это значение задаётся, если контейнер должен блокировать проходимость.
         /// </remarks>
         bool IsMapBlock { get; }
+
+        /// <summary>
+        /// Открытие контейнера.
+        /// </summary>
+        void Open();
     }
 }
