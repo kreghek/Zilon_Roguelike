@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
@@ -16,6 +17,7 @@ namespace Zilon.Core.Commands
 
         public int? SlotIndex { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public EquipCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             IPlayerState playerState,

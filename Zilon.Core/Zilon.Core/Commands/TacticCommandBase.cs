@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -12,6 +13,7 @@ namespace Zilon.Core.Commands
 
         protected virtual bool UpdateGameLoop => true;
 
+        [ExcludeFromCodeCoverage]
         protected TacticCommandBase(IGameLoop gameLoop)
         {
             _gameLoop = gameLoop;

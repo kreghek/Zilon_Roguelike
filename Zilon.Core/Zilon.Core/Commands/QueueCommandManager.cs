@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.Commands
 {
@@ -6,6 +7,7 @@ namespace Zilon.Core.Commands
     {
         private readonly Queue<ICommand> _queue;
 
+        [ExcludeFromCodeCoverage]
         public QueueCommandManager()
         {
             _queue = new Queue<ICommand>();

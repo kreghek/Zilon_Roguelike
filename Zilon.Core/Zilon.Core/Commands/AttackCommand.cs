@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
@@ -15,6 +16,7 @@ namespace Zilon.Core.Commands
     {
         private readonly ITacticalActUsageService _tacticalActUsageService;
 
+        [ExcludeFromCodeCoverage]
         public AttackCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             IPlayerState playerState,

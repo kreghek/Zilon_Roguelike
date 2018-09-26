@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
@@ -9,6 +11,7 @@ namespace Zilon.Core.Commands
     {
         protected readonly ISectorModalManager ModalManager;
 
+        [ExcludeFromCodeCoverage]
         protected ShowModalCommandBase(ISectorModalManager modalManager)
         {
             ModalManager = modalManager;

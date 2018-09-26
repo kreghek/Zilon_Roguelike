@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -11,6 +13,7 @@ namespace Zilon.Core.Commands
         protected readonly ISectorManager _sectorManager;
         protected readonly IPlayerState _playerState;
 
+        [ExcludeFromCodeCoverage]
         protected ActorCommandBase(IGameLoop gameLoop, ISectorManager sectorManager, IPlayerState playerState) : base(gameLoop)
         {
             _sectorManager = sectorManager;

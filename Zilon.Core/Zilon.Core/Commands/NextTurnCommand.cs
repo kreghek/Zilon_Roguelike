@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -20,6 +22,7 @@ namespace Zilon.Core.Commands
             _playerState.TaskSource.Intent(intention);
         }
 
+        [ExcludeFromCodeCoverage]
         public NextTurnCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             IPlayerState playerState,

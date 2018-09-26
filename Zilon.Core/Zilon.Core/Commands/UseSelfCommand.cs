@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -12,6 +14,7 @@ namespace Zilon.Core.Commands
     {
         private readonly IInventoryState _inventoryState;
 
+        [ExcludeFromCodeCoverage]
         public UseSelfCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             IPlayerState playerState,

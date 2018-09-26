@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
@@ -11,6 +12,7 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
+        [ExcludeFromCodeCoverage]
         public OpenContainerCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             IPlayerState playerState) :

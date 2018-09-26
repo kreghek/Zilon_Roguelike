@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
@@ -9,6 +11,7 @@ namespace Zilon.Core.Commands
     {
         private readonly IPlayerState _playerState;
 
+        [ExcludeFromCodeCoverage]
         public ShowPerksModalCommand(ISectorModalManager sectorManager, IPlayerState playerState) :
             base(sectorManager)
         {
