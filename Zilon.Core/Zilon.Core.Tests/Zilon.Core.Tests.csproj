@@ -116,6 +116,7 @@
     <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
     <Compile Include="Tactics\PropContainerManagerTests.cs" />
     <Compile Include="Tactics\ActorManagerTests.cs" />
     <Compile Include="Tactics\ActorTests.cs" />
