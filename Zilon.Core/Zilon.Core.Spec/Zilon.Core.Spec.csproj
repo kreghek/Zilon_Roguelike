@@ -263,16 +263,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Default.srprofile" />
-    <None Include="runtests.cmd" />
-    <None Include="specflow.exe.config" />
-    <None Include="SpecRunTestProfile.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="SpecRunTestProfile_2011_09.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="TeamCity.SpecFlow.Reporting.psm1" />
     <None Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Bug_MonsterPatrol_NoExceptions.feature.cs</LastGenOutput>
