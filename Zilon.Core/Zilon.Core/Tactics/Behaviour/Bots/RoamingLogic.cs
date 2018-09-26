@@ -25,6 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private IdleTask _roamingTask;
         private IdleTask _idleTask;
+        private MoveTask _moveTask;
         private IdleMode _mode;
         private IAttackTarget _targetIntruder;
         private int _persuitCounter;
@@ -116,16 +117,16 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Эффект потери цели.
 
                 //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
-                if (_persuitCounter > 0 && _roamingTask != null)
+                if (_persuitCounter > 0 && _moveTask != null)
                 {
                     _persuitCounter--;
-                    return _roamingTask;
+                    return _moveTask;
                 }
                 else
                 {
                     RefreshPersuiteCounter();
-                    _roamingTask = new IdleTask(_actor, _decisionSource);
-                    return _roamingTask;
+                    _moveTask = new MoveTask(_actor, _targetIntruder.Node, _map);
+                    return _moveTask;
                 }
             }
         }

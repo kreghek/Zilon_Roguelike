@@ -1,28 +1,26 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics.Behaviour.Bots;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Common;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
-using Moq;
-using Zilon.Core.Tactics;
-using Zilon.Core.Players;
-using FluentAssertions;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 {
     [TestFixture()]
     public class RoamingLogicTests
     {
-        [Test()]
-        public void GetCurrentTaskTest()
-        {
-            Assert.Fail();
-        }
-
         private const int _expectedIdleDuration = 1;
 
         private IMapNode _factActorNode;
@@ -53,6 +51,21 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
                 .Callback<IMapNode>(node => _factActorNode = node);
             actorMock.SetupGet(x => x.Owner).Returns(_player);
             _actor = actorMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+            actorMock.SetupGet(x => x.Person).Returns(person);
+
+            var tacticalActCarrierMock = new Mock<ITacticalActCarrier>();
+            var tacticalActCarrier = tacticalActCarrierMock.Object;
+            personMock.SetupGet(x => x.TacticalActCarrier).Returns(tacticalActCarrier);
+
+            var actMock = new Mock<ITacticalAct>();
+            actMock.SetupGet(x => x.Stats).Returns(new TacticalActStatsSubScheme {
+                Range = new Range<int>(1, 1)
+            });
+            var act = actMock.Object;
+            tacticalActCarrierMock.SetupGet(x => x.Acts).Returns(new[] { act });
 
             var intruderMock = new Mock<IActor>();
             intruderMock.SetupGet(x => x.Owner).Returns(enemyPlayer);
