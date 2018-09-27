@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -7,17 +9,18 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public sealed class UsePropTask : OneTurnActorTaskBase
     {
-        private readonly IProp _usedProp;
-
+        [ExcludeFromCodeCoverage]
         public UsePropTask(IActor actor,
             IProp usedProp) : base(actor)
         {
-            _usedProp = usedProp;
+            UsedProp = usedProp;
         }
+
+        public IProp UsedProp { get; }
 
         protected override void ExecuteTask()
         {
-            Actor.UseProp(_usedProp);
+            Actor.UseProp(UsedProp);
         }
     }
 }

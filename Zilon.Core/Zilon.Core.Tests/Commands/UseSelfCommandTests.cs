@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+
 using LightInject;
 
 using Moq;
@@ -9,8 +10,8 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Commands;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Commands
@@ -35,6 +36,39 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.Should().Be(true);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока использование предмета.
+        /// </summary>
+        [Test]
+        public void Execute_CanUse_UsageIntended()
+        {
+            // ARRANGE
+            var command = _container.GetInstance<UseSelfCommand>();
+            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var inventoryState = _container.GetInstance<IInventoryState>();
+            var playerState = _container.GetInstance<IPlayerState>();
+
+
+
+            // ACT
+            command.Execute();
+
+
+            // ASSERT
+            var selectedProp = inventoryState.SelectedProp.Prop;
+
+            humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
+                CheckUsePropIntention(intention, playerState, selectedProp)
+            )));
+        }
+
+        private static bool CheckUsePropIntention(IIntention intention, IPlayerState playerState, IProp usedProp)
+        {
+            var usePropIntention = (Intention<UsePropTask>)intention;
+            var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return usePropTask.UsedProp == usedProp;
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
