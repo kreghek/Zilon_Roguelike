@@ -8,7 +8,7 @@ namespace Zilon.Core.Commands
 {
     //TODO Объединить команды, связанные с инвентярём (UseSelf и Equip)
     /// <summary>
-    /// Команда на перемещение взвода в указанный узел карты.
+    /// Команда на использование предмета.
     /// </summary>
     public class UseSelfCommand : ActorCommandBase
     {
