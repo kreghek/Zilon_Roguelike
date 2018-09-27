@@ -25,7 +25,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
-        Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();        
+      
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();

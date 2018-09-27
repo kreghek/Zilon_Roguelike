@@ -19,7 +19,7 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
     public void Start()
     {
         SpriteRenderer.sprite = ClosedSprite;
-        Container.IsOpenChanged += Container_IsOpenChanged;
+        Container.Opened += Container_Opened;
     }
 
     public void OnMouseDown()
@@ -33,17 +33,8 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
     }
 
 
-    private void Container_IsOpenChanged(object sender, EventArgs e)
+    private void Container_Opened(object sender, EventArgs e)
     {
-        if (Container.IsOpened)
-        {
-            Debug.Log($"Сундук {sender} открыт");
-            SpriteRenderer.sprite = OpenedSprite;
-        }
-        else
-        {
-            Debug.Log($"Сундук {sender} закрыт");
-            SpriteRenderer.sprite = ClosedSprite;
-        }
+        SpriteRenderer.sprite = OpenedSprite;
     }
 }
