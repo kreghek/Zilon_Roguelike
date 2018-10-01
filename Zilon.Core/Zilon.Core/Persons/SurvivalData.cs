@@ -47,13 +47,7 @@ namespace Zilon.Core.Persons
                 }
             }
         }
-
-        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint keyPoint)
-        {
-            var args = new SurvivalStatChangedEventArgs(stat, keyPoint);
-            StatCrossKeyValue?.Invoke(this, args);
-        }
-
+        
         public void Update()
         {
             foreach (var stat in Stats)
@@ -103,6 +97,12 @@ namespace Zilon.Core.Persons
                     }
             };
             return stat;
+        }
+
+        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint keyPoint)
+        {
+            var args = new SurvivalStatChangedEventArgs(stat, keyPoint);
+            StatCrossKeyValue?.Invoke(this, args);
         }
     }
 }
