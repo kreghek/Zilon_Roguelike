@@ -27,24 +27,7 @@ namespace Zilon.Core.Persons
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
-                var oldValue = stat.Value;
-
-                stat.Value += value;
-
-                if (stat.Value >= stat.Range.Max)
-                {
-                    stat.Value = stat.Range.Max;
-                }
-
-                var diff = new Range<int>(oldValue, stat.Value);
-
-                foreach (var keyPoint in stat.KeyPoints)
-                {
-                    if (diff.Contains(keyPoint.Value))
-                    {
-                        DoStatCrossKeyPoint(stat, keyPoint);
-                    }
-                }
+                ChangeStatInner(stat, value);
             }
         }
         
@@ -52,24 +35,35 @@ namespace Zilon.Core.Persons
         {
             foreach (var stat in Stats)
             {
-                var oldValue = stat.Value;
 
+                ChangeStatInner(stat, -stat.Rate);
+            }
+        }
 
-                stat.Value -= stat.Rate;
+        private void ChangeStatInner(SurvivalStat stat, int value)
+        {
+            var oldValue = stat.Value;
 
-                if (stat.Value <= stat.Range.Min)
+            stat.Value += value;
+
+            // TODO Это можно вынести в сеттер 
+            if (stat.Value >= stat.Range.Max)
+            {
+                stat.Value = stat.Range.Max;
+            }
+
+            if (stat.Value <= stat.Range.Min)
+            {
+                stat.Value = stat.Range.Min;
+            }
+
+            var diff = RangeHelper.CreateNormalized<int>(oldValue, stat.Value);
+
+            foreach (var keyPoint in stat.KeyPoints)
+            {
+                if (diff.Contains(keyPoint.Value))
                 {
-                    stat.Value = stat.Range.Min;
-                }
-
-                var diff = new Range<int>(stat.Value, oldValue);
-
-                foreach (var keyPoint in stat.KeyPoints)
-                {
-                    if (diff.Contains(keyPoint.Value))
-                    {
-                        DoStatCrossKeyPoint(stat, keyPoint);
-                    }
+                    DoStatCrossKeyPoint(stat, keyPoint);
                 }
             }
         }
