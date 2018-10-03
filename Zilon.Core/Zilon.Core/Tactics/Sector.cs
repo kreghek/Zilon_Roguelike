@@ -123,7 +123,7 @@ namespace Zilon.Core.Tactics
         }
 
 
-        private void PropContainerManager_Added(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+        private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
         {
             foreach (var container in e.Items)
             {
@@ -134,7 +134,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void PropContainerManager_Remove(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+        private void PropContainerManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
         {
             foreach (var container in e.Items)
             {
@@ -145,7 +145,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ActorManager_Added(object sender, ManagerItemsChangedArgs<IActor> e)
+        private void ActorManager_Added(object sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             foreach (var actor in e.Items)
             {

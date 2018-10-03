@@ -236,6 +236,7 @@
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\IActorState.cs" />
+    <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\TacticalActRoll.cs" />
     <Compile Include="Tactics\TacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
@@ -249,7 +250,6 @@
     <Compile Include="Persons\ITacticalAct.cs" />
     <Compile Include="Tactics\ISectorEntityManager.cs" />
     <Compile Include="Tactics\ITacticalActUsageService.cs" />
-    <Compile Include="Tactics\ManagerItemsChangedArgs.cs" />
     <Compile Include="Tactics\MapHelper.cs" />
     <Compile Include="Tactics\OpenContainerEventArgs.cs" />
     <Compile Include="Tactics\FixedPropChest.cs" />

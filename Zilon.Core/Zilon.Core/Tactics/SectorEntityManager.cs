@@ -55,19 +55,19 @@ namespace Zilon.Core.Tactics
             DoRemoved(entityArray);
         }
 
-        public event EventHandler<ManagerItemsChangedArgs<TSectorEntity>> Added;
-        public event EventHandler<ManagerItemsChangedArgs<TSectorEntity>> Removed;
+        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
+        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
 
 
         private void DoAdded(params TSectorEntity[] entities)
         {
-            var args = new ManagerItemsChangedArgs<TSectorEntity>(entities);
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
             Added?.Invoke(this, args);
         }
 
         private void DoRemoved(params TSectorEntity[] entities)
         {
-            var args = new ManagerItemsChangedArgs<TSectorEntity>(entities);
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
             Removed?.Invoke(this, args);
         }
     }

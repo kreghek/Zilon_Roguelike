@@ -44,11 +44,11 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда в менеджере добавляются сущности.
         /// </summary>
-        event EventHandler<ManagerItemsChangedArgs<TSectorEntity>> Added;
+        event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
 
         /// <summary>
         /// Событие выстреливает, когда из менеджера удаляются сущности.
         /// </summary>
-        event EventHandler<ManagerItemsChangedArgs<TSectorEntity>> Removed;
+        event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
     }
 }
