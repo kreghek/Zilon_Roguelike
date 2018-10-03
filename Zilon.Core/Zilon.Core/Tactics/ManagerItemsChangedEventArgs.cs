@@ -2,9 +2,9 @@
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class ManagerItemsChangedArgs<TItem> : EventArgs
+    public sealed class ManagerItemsChangedEventArgs<TItem> : EventArgs
     {
-        public ManagerItemsChangedArgs(params TItem[] items)
+        public ManagerItemsChangedEventArgs(params TItem[] items)
         {
             Items = items ?? throw new ArgumentNullException(nameof(items));
         }

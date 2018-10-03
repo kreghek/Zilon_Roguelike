@@ -43,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics.Base
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.Tactics.Base
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -105,7 +105,7 @@ namespace Zilon.Core.Tests.Tactics.Base
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
             }
         }
 
@@ -140,7 +140,7 @@ namespace Zilon.Core.Tests.Tactics.Base
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -151,7 +151,7 @@ namespace Zilon.Core.Tests.Tactics.Base
         /// <returns> Возвращает экземпляр конкретного менеджера сущностей сектора. </returns>
         protected abstract ISectorEntityManager<TSectorEntity> CreateManager();
 
-        private bool CheckEventArgs(ManagerItemsChangedArgs<TSectorEntity> e, int actorCount, IList<TSectorEntity> actorList)
+        private bool CheckEventArgs(ManagerItemsChangedEventArgs<TSectorEntity> e, int actorCount, IList<TSectorEntity> actorList)
         {
             var isCountEquals = e.Items.Length == actorCount;
             var actorsInEventItems = actorList.All(actor => e.Items.Contains(actor));
