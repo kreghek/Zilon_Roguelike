@@ -238,12 +238,12 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// Gets the path of the last solution of the AStar algorithm.
         /// Will return a partial path if the algorithm has not finished yet.
         /// </summary>
-        /// <returns>Returns null if the algorithm has never been run.</returns>
+        /// <returns>Returns empty if the algorithm has never been run.</returns>
         public IMapNode[] GetPath()
         {
             if (CurrentNode == null)
             {
-                return null;
+                return new IMapNode[0];
             }
 
             var next = CurrentNode;
