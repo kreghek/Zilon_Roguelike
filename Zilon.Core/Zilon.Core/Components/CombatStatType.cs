@@ -6,7 +6,7 @@ namespace Zilon.Core.Components
     public enum CombatStatType
     {
         /// <summary>
-        /// Неопределённый навык. Используется тольуо монстрами.
+        /// Неопределённый навык. Используется только монстрами.
         /// </summary>
         Undefined,
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.Components
         /// </summary>
         /// <remarks>
         /// Влияет на действия, требующих влияние на индивидуумов общества.
-        /// Например, страх или насмешка.
+        /// Например, страх или провакация.
         /// </remarks>
         Social
     }

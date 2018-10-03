@@ -107,6 +107,7 @@
     <Compile Include="Persons\Auxiliary\PersonEffectHelper.cs" />
     <Compile Include="Persons\CombatStats.cs" />
     <Compile Include="Persons\DefeatActorJobProgress.cs" />
+    <Compile Include="Persons\DefenceType.cs" />
     <Compile Include="Persons\EffectCollection.cs" />
     <Compile Include="Persons\EffectEventArgs.cs" />
     <Compile Include="Persons\EffectRule.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Persons\SurvivalStat.cs" />
     <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
     <Compile Include="Persons\SurvivalStatType.cs" />
+    <Compile Include="Persons\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IPropEquipSubScheme.cs" />
     <Compile Include="Schemes\IPropUseSubScheme.cs" />
