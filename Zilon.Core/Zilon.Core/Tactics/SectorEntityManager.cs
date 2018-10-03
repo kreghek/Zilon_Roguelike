@@ -44,7 +44,7 @@ namespace Zilon.Core.Tactics
             DoRemoved(entity);
         }
 
-        public void Remove(IEnumerable<TSectorEntity> entities)
+        public void Remove(IEnumerable<TSectorEntity> actors)
         {
             var entityArray = entities.ToArray();
             foreach (var entity in entityArray)

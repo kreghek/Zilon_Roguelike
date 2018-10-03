@@ -38,8 +38,8 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Удаляет актёра из общего списка.
         /// </summary>
-        /// <param name="actors"> Набор целевых сущностей. </param>
-        void Remove(IEnumerable<TSectorEntity> actors);
+        /// <param name="entities"> Набор целевых сущностей. </param>
+        void Remove(IEnumerable<TSectorEntity> entities);
 
         /// <summary>
         /// Событие выстреливает, когда в менеджере добавляются сущности.
