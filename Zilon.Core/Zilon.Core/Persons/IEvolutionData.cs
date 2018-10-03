@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons
 {
@@ -7,6 +8,11 @@ namespace Zilon.Core.Persons
     /// </summary>
     public interface IEvolutionData
     {
+        /// <summary>
+        /// Перечень навыков.
+        /// </summary>
+        SkillStatItem[] Stats { get; }
+
         /// <summary>
         /// Текущие перки.
         /// </summary>

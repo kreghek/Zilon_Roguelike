@@ -16,6 +16,12 @@ namespace Zilon.Core.Tactics
             _dice = dice;
         }
 
+        public int RollToHit()
+        {
+            var roll = _dice.Roll(6);
+            return roll;
+        }
+
         public float SelectEfficient(float minEfficient, float maxEfficient)
         {
             var min = (int)(minEfficient * FLOAT_MULTY);

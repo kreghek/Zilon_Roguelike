@@ -10,12 +10,12 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class TacticalAct : ITacticalAct
     {
-        public TacticalAct(float equipmentPower, TacticalActScheme scheme, ICombatStats stats)
+        public TacticalAct(float equipmentPower, TacticalActScheme scheme)
         {
             Scheme = scheme;
             Stats = scheme.Stats;
-            MinEfficient = CalcEfficient(Stats.Efficient.Min, scheme, equipmentPower, stats);
-            MaxEfficient = CalcEfficient(Stats.Efficient.Max, scheme, equipmentPower, stats);
+            //MinEfficient = CalcEfficient(Stats.Efficient.Min, scheme, equipmentPower, stats);
+            //MaxEfficient = CalcEfficient(Stats.Efficient.Max, scheme, equipmentPower, stats);
         }
 
         public TacticalActStatsSubScheme Stats { get; }
@@ -26,33 +26,33 @@ namespace Zilon.Core.Persons
 
         public float MaxEfficient { get; }
 
-        private float CalcEfficient(float baseEfficient,
-            TacticalActScheme scheme,
-            float equipmentPower,
-            ICombatStats stats)
-        {
-            if (stats == null)
-            {
-                throw new ArgumentNullException(nameof(stats));
-            }
+        //private float CalcEfficient(float baseEfficient,
+        //    TacticalActScheme scheme,
+        //    float equipmentPower,
+        //    ICombatStats stats)
+        //{
+        //    if (stats == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(stats));
+        //    }
 
-            var sum = 0f;
+        //    var sum = 0f;
 
-            foreach (var dependecyItem in scheme.Dependency)
-            {
-                var factStat = stats.Stats.SingleOrDefault(x => x.Stat == dependecyItem.Stat);
-                if (factStat == null)
-                {
-                    continue;
-                }
+        //    foreach (var dependecyItem in scheme.Dependency)
+        //    {
+        //        var factStat = stats.Stats.SingleOrDefault(x => x.Stat == dependecyItem.Stat);
+        //        if (factStat == null)
+        //        {
+        //            continue;
+        //        }
 
-                var factStatValue = factStat.Value / 10f;
+        //        var factStatValue = factStat.Value / 10f;
 
-                var dependencyEfficient = baseEfficient * equipmentPower * factStatValue;
-                sum += dependencyEfficient;
-            }
+        //        var dependencyEfficient = baseEfficient * equipmentPower * factStatValue;
+        //        sum += dependencyEfficient;
+        //    }
 
-            return (float)Math.Ceiling(sum);
-        }
+        //    return (float)Math.Ceiling(sum);
+        //}
     }
 }

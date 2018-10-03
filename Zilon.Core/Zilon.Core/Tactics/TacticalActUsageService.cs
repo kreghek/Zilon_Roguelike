@@ -1,5 +1,7 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
@@ -81,12 +83,43 @@ namespace Zilon.Core.Tactics
         {
             var targetIsDeadLast = targetActor.State.IsDead;
 
-            targetActor.TakeDamage(tacticalActRoll.Efficient);
+            var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
+            DefenceType defenceType = GetDefence(offenceType);
+            var currentDefences = targetActor.Person.CombatStats.DefenceStats.Defences
+                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
 
-            if (!targetIsDeadLast && targetActor.State.IsDead)
+            PersonDefenceItem prefferedDefenceItem = CalcPrefferedDefence(currentDefences);
+
+            if (prefferedDefenceItem != null)
             {
-                CountTargetActorDefeat(actor, targetActor);
+                var successToHitRoll = CalcSuccessRoll(prefferedDefenceItem);
+                var factToHitRoll = _actUsageRandomSource.RollToHit();
+
+                if (factToHitRoll >= successToHitRoll)
+                {
+                    targetActor.TakeDamage(tacticalActRoll.Efficient);
+
+                    if (!targetIsDeadLast && targetActor.State.IsDead)
+                    {
+                        CountTargetActorDefeat(actor, targetActor);
+                    }
+                }
             }
+        }
+
+        private int CalcSuccessRoll(PersonDefenceItem prefferedDefenceItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        private PersonDefenceItem CalcPrefferedDefence(IEnumerable<PersonDefenceItem> currentDefences)
+        {
+            throw new NotImplementedException();
+        }
+
+        private DefenceType GetDefence(OffenseType offenceType)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

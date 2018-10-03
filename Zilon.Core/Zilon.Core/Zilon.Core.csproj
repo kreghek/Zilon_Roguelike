@@ -92,8 +92,8 @@
     <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
-    <Compile Include="Components\CombatStatItem.cs" />
-    <Compile Include="Components\CombatStatType.cs" />
+    <Compile Include="Components\SkillStatItem.cs" />
+    <Compile Include="Components\SkillStatType.cs" />
     <Compile Include="Components\ConsumeCommonRule.cs" />
     <Compile Include="Components\PersonRuleDirection.cs" />
     <Compile Include="Components\PersonRuleLevel.cs" />

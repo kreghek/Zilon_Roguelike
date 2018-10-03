@@ -17,7 +17,7 @@ namespace Zilon.Core.Persons
 
         public IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
 
-        public ICombatStats CombatStats => throw new NotSupportedException("Для монстров не поддерживаются отдельные характеристики");
+        public ICombatStats CombatStats { get; }
 
         public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
 
@@ -38,6 +38,13 @@ namespace Zilon.Core.Persons
             {
                 Acts = new ITacticalAct[] {
                     new MonsterTacticalAct(scheme.PrimaryAct, 1)
+                }
+            };
+
+            CombatStats = new CombatStats {
+                DefenceStats = new PersonDefenceStats {
+                    //TODO Брать из схемы
+                    Defences = new PersonDefenceItem[0]
                 }
             };
 

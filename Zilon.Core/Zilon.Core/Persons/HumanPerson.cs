@@ -62,13 +62,13 @@ namespace Zilon.Core.Persons
             }
 
             CombatStats = new CombatStats();
-            ClearCombatStats((CombatStats)CombatStats);
+            ClearCalculatedStats((CombatStats)CombatStats);
 
             if (EvolutionData != null)
             {
                 CalcCombatStats(CombatStats, EvolutionData, Effects);
             }
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
             Survival = new SurvivalData();
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
@@ -82,7 +82,7 @@ namespace Zilon.Core.Persons
 
         private static void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData, EffectCollection effects)
         {
-            var bonusDict = new Dictionary<CombatStatType, float>();
+            var bonusDict = new Dictionary<SkillStatType, float>();
 
             var archievedPerks = evolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
             foreach (var archievedPerk in archievedPerks)
@@ -103,11 +103,11 @@ namespace Zilon.Core.Persons
                         switch (ruleType)
                         {
                             case PersonRuleType.Melee:
-                                AddStatToDict(bonusDict, CombatStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                                AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
                                 break;
 
                             case PersonRuleType.Ballistic:
-                                AddStatToDict(bonusDict, CombatStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                                AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
                                 break;
                         }
                     }
@@ -122,28 +122,28 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            foreach (var bonusItem in bonusDict)
-            {
-                var stat = combatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
-                if (stat != null)
-                {
-                    stat.Value += stat.Value * bonusItem.Value;
+            //foreach (var bonusItem in bonusDict)
+            //{
+            //    var stat = combatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+            //    if (stat != null)
+            //    {
+            //        stat.Value += stat.Value * bonusItem.Value;
 
-                    if (stat.Value <= 1)
-                    {
-                        stat.Value = 1;
-                    }
-                }
-            }
+            //        if (stat.Value <= 1)
+            //        {
+            //            stat.Value = 1;
+            //        }
+            //    }
+            //}
 
-            foreach (var statItem in combatStats.Stats)
-            {
-                statItem.Value = (float)Math.Round(statItem.Value, 1);
-            }
+            //foreach (var statItem in combatStats.Stats)
+            //{
+            //    statItem.Value = (float)Math.Round(statItem.Value, 1);
+            //}
         }
 
-        private static void AddStatToDict(Dictionary<CombatStatType, float> bonusDict,
-            CombatStatType targetStatType,
+        private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
+            SkillStatType targetStatType,
             PersonRuleLevel level,
             PersonRuleDirection direction)
         {
@@ -188,12 +188,12 @@ namespace Zilon.Core.Persons
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
         {
-            ClearCombatStats((CombatStats)CombatStats);
+            ClearCalculatedStats((CombatStats)CombatStats);
 
             if (EvolutionData != null)
             {
@@ -209,17 +209,17 @@ namespace Zilon.Core.Persons
 
         private void Effects_CollectionChanged(object sender, EffectEventArgs e)
         {
-            ClearCombatStats((CombatStats)CombatStats);
+            ClearCalculatedStats((CombatStats)CombatStats);
 
             if (EvolutionData != null)
             {
                 CalcCombatStats(CombatStats, EvolutionData, Effects);
             }
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
-        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
+        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
         {
             if (equipments == null)
             {
@@ -228,7 +228,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = new TacticalAct(1, _defaultActScheme, combatStats);
+            var defaultAct = new TacticalAct(1, _defaultActScheme);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -241,7 +241,7 @@ namespace Zilon.Core.Persons
                 foreach (var actScheme in equipment.Acts)
                 {
                     var equipmentPower = CalcEquipmentEfficient(equipment);
-                    var act = new TacticalAct(equipmentPower, actScheme, combatStats);
+                    var act = new TacticalAct(equipmentPower, actScheme);
 
                     actList.Insert(0, act);
                 }
@@ -255,13 +255,10 @@ namespace Zilon.Core.Persons
             return equipment.Power * equipment.Scheme.Equip.Power;
         }
 
-        private void ClearCombatStats(CombatStats combatStats)
+        private void ClearCalculatedStats(CombatStats combatStats)
         {
-            //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
-            combatStats.Stats = new[]{
-                new CombatStatItem {Stat = CombatStatType.Melee, Value = 10 },
-                new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 }
-            };
+            //TODO Тут возвращать в базовое состояние характеристики, способные развиваться (Навыки, Уровни классов обороны)
+            
         }
 
         public override string ToString()

@@ -2,6 +2,6 @@
 {
     public class PersonDefenceStats : IPersonDefenceStats
     {
-        public PersonDefenceItem[] Defences { get; }
+        public PersonDefenceItem[] Defences { get; set; }
     }
 }

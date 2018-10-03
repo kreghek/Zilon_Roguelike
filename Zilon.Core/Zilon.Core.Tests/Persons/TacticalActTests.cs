@@ -29,21 +29,15 @@ namespace Zilon.Core.Tests.Persons
                     Efficient = new Range<float>(1, 2),
                 },
                 Dependency = new[] {
-                    new TacticalActDependencySubScheme(default(CombatStatType), 1)
+                    new TacticalActDependencySubScheme(default(SkillStatType), 1)
                 }
             };
-
-            var combatStatsMock = new Mock<ICombatStats>();
-            combatStatsMock.SetupGet(x => x.Stats)
-                .Returns(new[] {
-                    new CombatStatItem{ Stat = default(CombatStatType), Value = 10 }
-                });
-            var combatStats = combatStatsMock.Object;
 
 
 
             // ACT
-            var tacticalAct = new TacticalAct(1, tacticalActScheme, combatStats);
+            var tacticalAct = new TacticalAct(1, tacticalActScheme);
+
 
 
             // ASSERT

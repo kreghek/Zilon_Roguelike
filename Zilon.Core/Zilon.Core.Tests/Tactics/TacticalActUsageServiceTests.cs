@@ -107,8 +107,12 @@ namespace Zilon.Core.Tests.Tactics
             // ARRANGE
             var offenceType = OffenseType.Tactical;
             var defenceType = DefenceType.TacticalDefence;
+            var defenceLevel = PersonRuleLevel.Normal;
             var fakeDiceRoll = 5; // 5+ - успех
 
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
+            actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeDiceRoll);
+            var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver);
 
@@ -124,6 +128,20 @@ namespace Zilon.Core.Tests.Tactics
             monsterStateMock.SetupGet(x => x.IsDead).Returns(false);
             var monsterState = monsterStateMock.Object;
             monsterMock.SetupGet(x => x.State).Returns(monsterState);
+
+            var monsterPersonMock = new Mock<IPerson>();
+            var monsterPerson = monsterPersonMock.Object;
+            monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
+
+            var monsterCombatStatsMock = new Mock<ICombatStats>();
+            var monsterCombatStats = monsterCombatStatsMock.Object;
+            monsterPersonMock.SetupGet(x => x.CombatStats).Returns(monsterCombatStats);
+
+            var monsterDefenceStatsMock = new Mock<IPersonDefenceStats>();
+            monsterDefenceStatsMock.SetupGet(x => x.Defences)
+                .Returns(new[] { new PersonDefenceItem(defenceType, defenceLevel) });
+            var monsterDefenceStats = monsterDefenceStatsMock.Object;
+            monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
 
             // Настройка дествия
             var actScheme = new TacticalActStatsSubScheme {

@@ -13,5 +13,7 @@
         /// <returns> Возвращает случайное значение эффективности использования
         /// действия в указанном диапазоне эффективности. </returns>
         float SelectEfficient(float minEfficient, float maxEfficient);
+
+        int RollToHit();
     }
 }
