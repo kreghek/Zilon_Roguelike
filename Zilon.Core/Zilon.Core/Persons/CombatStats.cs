@@ -11,5 +11,10 @@ namespace Zilon.Core.Persons
         /// Перечень навыков.
         /// </summary>
         public CombatStatItem[] Stats { get; set; }
+
+        /// <summary>
+        /// Навыки обороны против наступательных действий.
+        /// </summary>
+        public IPersonDefenceStats DefenceStats { get; }
     }
 }

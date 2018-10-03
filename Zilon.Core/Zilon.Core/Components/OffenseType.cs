@@ -1,6 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Components
 {
-    public enum DefenceType
+    public enum OffenseType
     {
         /// <summary>
         /// Неопределённое.
@@ -14,11 +14,11 @@
         Fury,
         Shadow,
         Tricky,
-        Force,
+        Concentrated,
         Rapid,
 
         /// <summary>
-        /// Даёт бонус против всех типов наступления. Кроме божественного.
+        /// Божественный. Бонусы других классов защиты не дают явного бонуса. Кроме божественной защиты.
         /// </summary>
         Divine
     }

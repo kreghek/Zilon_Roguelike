@@ -5,9 +5,9 @@ namespace Zilon.Core.Schemes
     public class TacticalActStatsSubScheme: SubSchemeBase
     {
         /// <summary>
-        /// Тип воздействия.
+        /// Характеристики атакующей способности действия.
         /// </summary>
-        public TacticalActImpactType Impact { get; set; }
+        public ITacticalActOffenceSubScheme Offence { get; set; }
 
         /// <summary>
         /// Эффект, который оказывает действие.
