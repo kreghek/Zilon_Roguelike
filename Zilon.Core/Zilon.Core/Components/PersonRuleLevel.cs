@@ -8,26 +8,26 @@
         /// <summary>
         /// Правило не влияет.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// Малое влияние правила.
         /// </summary>
-        Lesser,
+        Lesser = 10,
 
         /// <summary>
         /// Обычное влияние правила.
         /// </summary>
-        Normal,
+        Normal = 20,
 
         /// <summary>
         /// Великое влияние правила.
         /// </summary>
-        Grand,
+        Grand = 30,
 
         /// <summary>
         /// Абсолютное правило.
         /// </summary>
-        Absolute
+        Absolute = 100
     }
 }

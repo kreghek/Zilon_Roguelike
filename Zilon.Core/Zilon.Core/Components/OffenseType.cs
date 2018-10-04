@@ -10,16 +10,16 @@
         /// </remarks>
         Undefined,
 
-        Tactical,
-        Fury,
-        Shadow,
-        Tricky,
-        Concentrated,
-        Rapid,
+        Tactical = 10,
+        Fury = 20,
+        Shadow = 30,
+        Tricky = 40,
+        Concentrated = 50,
+        Rapid = 60,
 
         /// <summary>
         /// Божественный. Бонусы других классов защиты не дают явного бонуса. Кроме божественной защиты.
         /// </summary>
-        Divine
+        Divine = 100
     }
 }

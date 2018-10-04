@@ -114,7 +114,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeDiceRoll);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
