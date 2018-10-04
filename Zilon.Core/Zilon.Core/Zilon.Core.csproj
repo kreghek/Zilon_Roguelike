@@ -139,6 +139,8 @@
     <Compile Include="Persons\SurvivalStatType.cs" />
     <Compile Include="Components\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
+    <Compile Include="Schemes\IMonsterDefenceItemSubScheme.cs" />
+    <Compile Include="Schemes\IMonsterDefenceScheme.cs" />
     <Compile Include="Schemes\IPropEquipSubScheme.cs" />
     <Compile Include="Schemes\IPropUseSubScheme.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />

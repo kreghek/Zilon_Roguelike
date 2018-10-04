@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Schemes;
 
@@ -41,14 +42,19 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            CombatStats = new CombatStats {
-                DefenceStats = new PersonDefenceStats {
-                    //TODO Брать из схемы
-                    Defences = new PersonDefenceItem[0]
+            var defences = scheme.Defence?.Defences?
+                .Select(x => new PersonDefenceItem(x.Defence, x.Level))
+                .ToArray();
+
+            CombatStats = new CombatStats
+            {
+                DefenceStats = new PersonDefenceStats
+                {
+                    Defences = defences
                 }
             };
 
-            Effects = new EffectCollection();            
+            Effects = new EffectCollection();
         }
     }
 }
