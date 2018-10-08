@@ -61,9 +61,9 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler {
 	{
 		Stats.text = string.Empty;
 		
-		var stats = _actor.Person.CombatStats;
+		var stats = _actor.Person.EvolutionData.Stats;
 
-		foreach (var statItem in stats.Stats)
+		foreach (var statItem in stats)
 		{
 			Stats.text += $"{statItem.Stat}: {statItem.Value} \n";
 		}
