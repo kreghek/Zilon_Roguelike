@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -10,21 +11,12 @@ namespace Zilon.Core.Persons
     {
         public TacticalActStatsSubScheme Stats { get; }
 
-        public float MinEfficient { get; }
+        public Roll Efficient { get; }
 
-        public float MaxEfficient { get; }
-
-        public MonsterTacticalAct(TacticalActStatsSubScheme stats, float multiplier)
+        public MonsterTacticalAct(TacticalActStatsSubScheme stats)
         {
             Stats = stats;
-            MinEfficient = CalcEfficient(stats.Efficient.Min, multiplier);
-            MaxEfficient = CalcEfficient(stats.Efficient.Max, multiplier);
-        }
-
-        private float CalcEfficient(float baseEfficient,
-            float multiplier)
-        {
-            return baseEfficient * multiplier;
+            Efficient = Stats.Efficient;
         }
     }
 }

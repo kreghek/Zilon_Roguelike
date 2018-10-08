@@ -17,7 +17,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public Range<float> Efficient { get; set; }
+        public Roll Efficient { get; set; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.

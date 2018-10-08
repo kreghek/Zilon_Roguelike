@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics
+﻿using Zilon.Core.Common;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Источник случайных значений для совершаемых действий.
@@ -6,13 +8,11 @@
     public interface ITacticalActUsageRandomSource
     {
         /// <summary>
-        /// Выбирает значение эффективности действия в указанном диапазоне.
+        /// Выбирает значение эффективности действия по указанным характеристикам броска.
         /// </summary>
-        /// <param name="minEfficient"></param>
-        /// <param name="maxEfficient"></param>
-        /// <returns> Возвращает случайное значение эффективности использования
-        /// действия в указанном диапазоне эффективности. </returns>
-        float SelectEfficient(float minEfficient, float maxEfficient);
+        /// <param name="roll"> Характеристики броска. </param>
+        /// <returns> Возвращает случайное значение эффективности использования. </returns>
+        float RollEfficient(Roll roll);
 
         int RollToHit();
     }

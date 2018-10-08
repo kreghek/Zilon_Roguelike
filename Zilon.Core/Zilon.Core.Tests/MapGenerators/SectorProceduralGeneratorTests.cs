@@ -263,7 +263,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var monsterScheme = new MonsterScheme {
                 PrimaryAct = new TacticalActStatsSubScheme {
-                    Efficient = new Range<float>(10, 20)
+                    Efficient = new Roll(3, 1)
                 }
             };
             schemeServiceMock.Setup(x => x.GetScheme<MonsterScheme>(It.IsAny<string>()))

@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 PrimaryAct = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 2)
+                    Efficient = new Roll(3, 1)
                 }
             };
 
@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Persons
                 Hp = expectedHp,
                 PrimaryAct = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 2)
+                    Efficient = new Roll(3, 1)
                 }
             };
 
@@ -79,28 +79,6 @@ namespace Zilon.Core.Tests.Persons
             Action<MonsterPerson> requestPropertyAct = m =>
             {
                 var tmp = m.EvolutionData;
-            };
-
-            //ACT
-            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
-
-
-            // ASSERT
-            UnsupportedMonsterComponent(act);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Боевые характеристики).
-        /// </summary>
-        [Test]
-        public void CombatStats_ThrowNotSupported()
-        {
-            // ARRANGE
-            var monster = CreateMonster();
-
-            Action<MonsterPerson> requestPropertyAct = m =>
-            {
-                var tmp = m.CombatStats;
             };
 
             //ACT
@@ -157,7 +135,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 PrimaryAct = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 1)
+                    Efficient = new Roll(3, 1)
                 }
             };
             var monster = new MonsterPerson(monsterScheme);

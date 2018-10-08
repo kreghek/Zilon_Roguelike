@@ -38,7 +38,7 @@ namespace Zilon.Core.Persons
             TacticalActCarrier = new TacticalActCarrier
             {
                 Acts = new ITacticalAct[] {
-                    new MonsterTacticalAct(scheme.PrimaryAct, 1)
+                    new MonsterTacticalAct(scheme.PrimaryAct)
                 }
             };
 

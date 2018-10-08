@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using Zilon.Core.Common;
@@ -26,7 +24,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 Stats = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 2),
+                    Efficient = new Roll(3, 1),
                 },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(default(SkillStatType), 1)
@@ -36,13 +34,13 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            var tacticalAct = new TacticalAct(1, tacticalActScheme);
+            var tacticalAct = new TacticalAct(tacticalActScheme);
 
 
 
             // ASSERT
-            tacticalAct.MinEfficient.Should().Be(1);
-            tacticalAct.MaxEfficient.Should().Be(2);
+            tacticalAct.Efficient.Dice.Should().Be(3);
+            tacticalAct.Efficient.Count.Should().Be(1);
         }
     }
 }

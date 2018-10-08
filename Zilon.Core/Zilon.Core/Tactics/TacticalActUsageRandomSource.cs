@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics
 {
     public class TacticalActUsageRandomSource : ITacticalActUsageRandomSource
     {
-        private const int FLOAT_MULTY = 10;
-
         private readonly IDice _dice;
 
         [ExcludeFromCodeCoverage]
@@ -22,15 +21,16 @@ namespace Zilon.Core.Tactics
             return roll;
         }
 
-        public float SelectEfficient(float minEfficient, float maxEfficient)
+        public float RollEfficient(Roll roll)
         {
-            var min = (int)(minEfficient * FLOAT_MULTY);
-            var max = (int)(maxEfficient * FLOAT_MULTY);
+            var sum = 0;
+            for (var i = 0; i < roll.Count; i++)
+            {
+                var currentRoll = _dice.Roll(roll.Dice);
+                sum += currentRoll;
+            }
 
-            var roll = _dice.Roll(min, max);
-            var rollFloat = (float)roll; // иначе будет деление int и пропадут дроби.
-
-            return rollFloat / FLOAT_MULTY;
+            return sum;
         }
     }
 }

@@ -54,9 +54,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
         private TacticalActRoll GetActEfficient(ITacticalAct act)
         {
-            var minEfficient = act.MinEfficient;
-            var maxEfficient = act.MaxEfficient;
-            var rolledEfficient = _actUsageRandomSource.SelectEfficient(minEfficient, maxEfficient);
+            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
             var roll = new TacticalActRoll(act, rolledEfficient);
 

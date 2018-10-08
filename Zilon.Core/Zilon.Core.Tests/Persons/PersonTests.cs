@@ -38,7 +38,7 @@ namespace Zilon.Core.Tests.Persons
             var defaultActScheme = new TacticalActScheme {
                 Stats = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 1)
+                    Efficient = new Roll(3, 1)
                 },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 Stats = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 1),
+                    Efficient = new Roll(3, 1),
                 },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(SkillStatType.Undefined, 1)
@@ -106,7 +106,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 Stats = new TacticalActStatsSubScheme
                 {
-                    Efficient = new Range<float>(1, 1)
+                    Efficient = new Roll(3, 1)
                 },
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
