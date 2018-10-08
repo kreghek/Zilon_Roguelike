@@ -9,8 +9,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// </summary>
     public abstract class MapBase : IMap
     {
-        private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers =
-            new Dictionary<IMapNode, IList<IPassMapBlocker>>();
+        private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers;
 
 
         public IList<IMapNode> Nodes { get; }
