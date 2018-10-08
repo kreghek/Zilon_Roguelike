@@ -1,9 +1,32 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+
+using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Schemes
 {
-    public class TacticalActStatsSubScheme: SubSchemeBase
+    public class TacticalActStatsSubScheme : SubSchemeBase
     {
+        [UsedImplicitly]
+        [JsonConstructor]
+        public TacticalActStatsSubScheme(TacticalActOffenceSubScheme offence,
+            TacticalActEffectType effect,
+            Roll efficient,
+            Range<int> range,
+            int hitCount,
+            bool isMelee)
+        {
+            Offence = offence ?? throw new ArgumentNullException(nameof(offence));
+            Effect = effect;
+            Efficient = efficient ?? throw new ArgumentNullException(nameof(efficient));
+            Range = range ?? throw new ArgumentNullException(nameof(range));
+            HitCount = hitCount;
+            IsMelee = isMelee;
+        }
+
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>

@@ -62,7 +62,7 @@ namespace Zilon.Core.Persons
             }
 
             CombatStats = new CombatStats();
-            ClearCalculatedStats((CombatStats)CombatStats);
+            ClearCalculatedStats();
 
             if (EvolutionData != null)
             {
@@ -193,7 +193,7 @@ namespace Zilon.Core.Persons
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
         {
-            ClearCalculatedStats((CombatStats)CombatStats);
+            ClearCalculatedStats();
 
             if (EvolutionData != null)
             {
@@ -209,7 +209,7 @@ namespace Zilon.Core.Persons
 
         private void Effects_CollectionChanged(object sender, EffectEventArgs e)
         {
-            ClearCalculatedStats((CombatStats)CombatStats);
+            ClearCalculatedStats();
 
             if (EvolutionData != null)
             {
@@ -249,10 +249,12 @@ namespace Zilon.Core.Persons
             return actList.ToArray();
         }
 
-        private void ClearCalculatedStats(CombatStats combatStats)
+        private void ClearCalculatedStats()
         {
-            //TODO Тут возвращать в базовое состояние характеристики, способные развиваться (Навыки, Уровни классов обороны)
-            
+            foreach (var stat in EvolutionData.Stats)
+            {
+                stat.Value = 10;
+            }
         }
 
         public override string ToString()

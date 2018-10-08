@@ -11,7 +11,11 @@
       "Min": 1,
       "Max": 5
     },
-    "HitCount": 1
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    }
   },
 
   "Dependency": [

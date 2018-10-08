@@ -103,6 +103,15 @@ namespace Zilon.Core.Tactics
                     }
                 }
             }
+            else
+            {
+                targetActor.TakeDamage(tacticalActRoll.Efficient);
+
+                if (!targetIsDeadLast && targetActor.State.IsDead)
+                {
+                    CountTargetActorDefeat(actor, targetActor);
+                }
+            }
         }
 
         /// <summary>

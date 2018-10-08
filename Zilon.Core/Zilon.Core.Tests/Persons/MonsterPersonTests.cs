@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -22,10 +23,7 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monsterScheme = new MonsterScheme
             {
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
             // ACT
@@ -51,10 +49,7 @@ namespace Zilon.Core.Tests.Persons
             var monsterScheme = new MonsterScheme
             {
                 Hp = expectedHp,
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
             // ACT
@@ -133,10 +128,7 @@ namespace Zilon.Core.Tests.Persons
         {
             var monsterScheme = new MonsterScheme
             {
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
             var monster = new MonsterPerson(monsterScheme);
             return monster;

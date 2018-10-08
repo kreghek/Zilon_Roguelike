@@ -2,10 +2,10 @@
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -22,10 +22,7 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1),
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(default(SkillStatType), 1)
                 }

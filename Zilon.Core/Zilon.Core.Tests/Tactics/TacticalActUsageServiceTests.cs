@@ -2,10 +2,8 @@
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -90,9 +88,8 @@ namespace Zilon.Core.Tests.Tactics
             var monster = monsterMock.Object;
 
             // Настройка дествия
-            var actScheme = new TacticalActStatsSubScheme
+            var actScheme = new TestTacticalActStatsSubScheme
             {
-                Range = new Range<int>(1, 1),
                 Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType
@@ -168,9 +165,8 @@ namespace Zilon.Core.Tests.Tactics
             var evolutionData = evolutionDataMock.Object;
             personMock.SetupGet(x => x.EvolutionData).Returns(evolutionData);
 
-            var actScheme = new TacticalActStatsSubScheme
+            var actScheme = new TestTacticalActStatsSubScheme
             {
-                Range = new Range<int>(1, 1),
                 Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical

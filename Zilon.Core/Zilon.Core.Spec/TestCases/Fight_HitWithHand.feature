@@ -11,9 +11,9 @@ Scenario Outline: Удары "руками".
 	And Монстр Id:<monsterId> имеет Hp <monsterHp>
 	When Актёр игрока атакует монстра Id:<monsterId>
 	# При нанесении урона будет взято среднее значение между максимальной и
-	# минимальной эффективностью действия
+	# минимальной эффективностью действия. Для 1D3 это будет 1 (int от 1.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
 
 Examples: 
 | personSid | monsterSid | monsterId | monsterNodeX | monsterNodeY | monsterHp | expectedMonsterHp |
-| captain   | rat        | 1000      | 0            | 1            | 100       | 92.5              |
+| captain   | rat        | 1000      | 0            | 1            | 100       | 99                |

@@ -50,7 +50,7 @@ namespace Zilon.Core.Persons
             {
                 DefenceStats = new PersonDefenceStats
                 {
-                    Defences = defences
+                    Defences = defences ?? new PersonDefenceItem[0]
                 }
             };
 

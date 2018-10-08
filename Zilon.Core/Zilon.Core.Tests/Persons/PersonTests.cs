@@ -6,10 +6,10 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
@@ -36,10 +36,7 @@ namespace Zilon.Core.Tests.Persons
             };
 
             var defaultActScheme = new TacticalActScheme {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1)
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
                 }
@@ -57,10 +54,7 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1),
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
                     new TacticalActDependencySubScheme(SkillStatType.Undefined, 1)
                 }
@@ -103,10 +97,7 @@ namespace Zilon.Core.Tests.Persons
 
             var defaultActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(3, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme()
             };
 
             var perkMock = new Mock<IPerk>();

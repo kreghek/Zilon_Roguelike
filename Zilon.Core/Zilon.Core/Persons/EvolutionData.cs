@@ -18,6 +18,11 @@ namespace Zilon.Core.Persons
         {
             _schemeService = schemeService;
 
+            Stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 },
+                new SkillStatItem{Stat = SkillStatType.Melee, Value = 10 }
+            };
+
             UpdatePerks();
         }
 

@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -30,7 +29,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var testMap = new TestGridGenMap(3);
 
             var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(new TacticalActStatsSubScheme
+            actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
             });
