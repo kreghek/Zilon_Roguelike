@@ -46,17 +46,6 @@ namespace Zilon.Core.Persons
 
             stat.Value += value;
 
-            // TODO Это можно вынести в сеттер 
-            if (stat.Value >= stat.Range.Max)
-            {
-                stat.Value = stat.Range.Max;
-            }
-
-            if (stat.Value <= stat.Range.Min)
-            {
-                stat.Value = stat.Range.Min;
-            }
-
             var diff = RangeHelper.CreateNormalized<int>(oldValue, stat.Value);
 
             foreach (var keyPoint in stat.KeyPoints)

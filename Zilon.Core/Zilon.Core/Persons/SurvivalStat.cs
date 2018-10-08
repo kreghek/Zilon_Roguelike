@@ -20,7 +20,28 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Текущее значение.
         /// </summary>
-        public int Value { get; set; }
+        public int Value
+        {
+            get
+            {
+                return Value;
+            }
+            set
+            {
+                if (value >= Range.Max)
+                {
+                    Value = Range.Max;
+                }
+                else if (value <= Range.Min)
+                {
+                    Value = Range.Min;
+                }
+                else
+                {
+                    Value = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Минимальное/максимальное значение.

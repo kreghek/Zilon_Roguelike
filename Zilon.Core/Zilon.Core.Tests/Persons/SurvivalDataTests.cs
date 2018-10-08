@@ -12,6 +12,24 @@ namespace Zilon.Core.Tests.Persons
     public class SurvivalDataTests
     {
         /// <summary>
+        /// This test is to show the value variable is being range checked.
+        /// </summary>
+        [Test]
+        public void Update_TestStatValueItemSetter()
+        {
+            //ARRANGE
+            var survivalData = new SurvivalData();
+            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            //ACT
+            stat.Value = 0;
+            stat.Value.Should().Be(0);
+            stat.Value = stat.Range.Min - 2;
+            stat.Value.Should().Be(stat.Range.Min);
+            stat.Value = stat.Range.Max + 2;
+            stat.Value.Should().Be(stat.Range.Min);
+        }
+
+        /// <summary>
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
         [Test]
