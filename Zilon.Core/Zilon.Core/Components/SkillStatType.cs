@@ -3,7 +3,7 @@
 namespace Zilon.Core.Components
 {
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum CombatStatType
+    public enum SkillStatType
     {
         /// <summary>
         /// Неопределённый навык. Используется только монстрами.

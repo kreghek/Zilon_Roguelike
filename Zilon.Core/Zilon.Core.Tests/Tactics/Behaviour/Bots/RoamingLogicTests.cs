@@ -7,10 +7,8 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -61,9 +59,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             personMock.SetupGet(x => x.TacticalActCarrier).Returns(tacticalActCarrier);
 
             var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(new TacticalActStatsSubScheme {
-                Range = new Range<int>(1, 1)
-            });
+            actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme());
             var act = actMock.Object;
             tacticalActCarrierMock.SetupGet(x => x.Acts).Returns(new[] { act });
 

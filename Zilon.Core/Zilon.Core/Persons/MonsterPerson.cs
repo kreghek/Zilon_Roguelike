@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Schemes;
 
@@ -17,7 +18,7 @@ namespace Zilon.Core.Persons
 
         public IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
 
-        public ICombatStats CombatStats => throw new NotSupportedException("Для монстров не поддерживаются отдельные характеристики");
+        public ICombatStats CombatStats { get; }
 
         public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
 
@@ -37,11 +38,23 @@ namespace Zilon.Core.Persons
             TacticalActCarrier = new TacticalActCarrier
             {
                 Acts = new ITacticalAct[] {
-                    new MonsterTacticalAct(scheme.PrimaryAct, 1)
+                    new MonsterTacticalAct(scheme.PrimaryAct)
                 }
             };
 
-            Effects = new EffectCollection();            
+            var defences = scheme.Defence?.Defences?
+                .Select(x => new PersonDefenceItem(x.Defence, x.Level))
+                .ToArray();
+
+            CombatStats = new CombatStats
+            {
+                DefenceStats = new PersonDefenceStats
+                {
+                    Defences = defences ?? new PersonDefenceItem[0]
+                }
+            };
+
+            Effects = new EffectCollection();
         }
     }
 }

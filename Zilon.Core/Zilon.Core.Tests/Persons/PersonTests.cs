@@ -6,10 +6,10 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
@@ -36,16 +36,16 @@ namespace Zilon.Core.Tests.Persons
             };
 
             var defaultActScheme = new TacticalActScheme {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 1)
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
-                    new TacticalActDependencySubScheme(CombatStatType.Melee, 1)
+                    new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
                 }
             };
 
-            var person = new HumanPerson(personScheme, defaultActScheme, null);
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData);
 
             var propScheme = new PropScheme
             {
@@ -57,12 +57,9 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 1),
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
-                    new TacticalActDependencySubScheme(CombatStatType.Undefined, 1)
+                    new TacticalActDependencySubScheme(SkillStatType.Undefined, 1)
                 }
             };
 
@@ -103,13 +100,7 @@ namespace Zilon.Core.Tests.Persons
 
             var defaultActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 1)
-                },
-                Dependency = new[] {
-                    new TacticalActDependencySubScheme(CombatStatType.Melee, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme()
             };
 
             var perkMock = new Mock<IPerk>();
@@ -129,9 +120,13 @@ namespace Zilon.Core.Tests.Persons
             });
             var perk = perkMock.Object;
 
+            var stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 }
+            };
+
             var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks)
-                .Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionData = evolutionDataMock.Object;
 
 
@@ -142,7 +137,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ASSERT
-            var testedStat = person.CombatStats.Stats.Single(x => x.Stat == CombatStatType.Ballistic);
+            var testedStat = person.EvolutionData.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
             testedStat.Value.Should().Be(11);
         }
     }

@@ -195,11 +195,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
         private static IPerson CreatePerson()
         {
-            var tacticalActStatsScheme = new TacticalActStatsSubScheme()
-            {
-                Range = new Range<int>(1, 1)
-            };
-
+            var tacticalActStatsScheme = new TestTacticalActStatsSubScheme();
             var tacticalActMock = new Mock<ITacticalAct>();
             tacticalActMock.SetupGet(x => x.Stats).Returns(tacticalActStatsScheme);
             var tacticalAct = tacticalActMock.Object;

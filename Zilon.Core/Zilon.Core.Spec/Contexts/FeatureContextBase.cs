@@ -12,6 +12,7 @@ using Moq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -253,8 +254,8 @@ namespace Zilon.Core.Spec.Contexts
             var decisionSource = decisionSourceMock.Object;
 
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.SelectEfficient(It.IsAny<float>(), It.IsAny<float>()))
-                .Returns<float, float>((min, max) => (float)Math.Round((max - min) / 2 + min, 1));
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
+                .Returns<Roll>(roll => (roll.Dice / 2) * roll.Count);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             Container.Register(factory => decisionSource, new PerContainerLifetime());

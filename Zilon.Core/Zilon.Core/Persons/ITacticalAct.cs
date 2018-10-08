@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Schemes;
+﻿using Zilon.Core.Common;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -14,13 +15,8 @@ namespace Zilon.Core.Persons
         TacticalActStatsSubScheme Stats { get; }
 
         /// <summary>
-        /// Минимальная эффективность действия.
+        /// Эффективность действия.
         /// </summary>
-        float MinEfficient { get; }
-
-        /// <summary>
-        /// Максимальная эффективность действия.
-        /// </summary>
-        float MaxEfficient { get; }
+        Roll Efficient { get; }
     }
 }

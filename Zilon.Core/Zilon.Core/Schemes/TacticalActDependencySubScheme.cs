@@ -7,10 +7,10 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class TacticalActDependencySubScheme : SubSchemeBase
     {
-        public CombatStatType Stat { get; }
+        public SkillStatType Stat { get; }
         public float Value { get; }
 
-        public TacticalActDependencySubScheme(CombatStatType stat, float value)
+        public TacticalActDependencySubScheme(SkillStatType stat, float value)
         {
             Stat = stat;
             Value = value;

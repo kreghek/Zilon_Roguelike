@@ -129,7 +129,7 @@ internal class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
     }
 
-    private void PropContainerManager_Added(object sender, ManagerItemsChangedArgs<IPropContainer> e)
+    private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
     {
         foreach (var container in e.Items)
         {

@@ -4,14 +4,18 @@
   },
   "Stats": {
     "Efficient": {
-      "Min": 10,
-      "Max": 15
+      "Dice": 6,
+      "Count": 1
     },
     "Range": {
       "Min": 1,
       "Max": 1
     },
-    "HitCount": 1
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact":  "Kinetic"
+    }
   },
 
   "Dependency": [

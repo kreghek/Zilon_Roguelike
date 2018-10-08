@@ -1,13 +1,17 @@
 {
-  "Hp": 27,
+  "Hp": 2,
   "PrimaryAct": {
     "Efficient": {
-      "Min": 1,
-      "Max": 5
+      "Dice": 3,
+      "Count": 1
     },
     "Range": {
       "Min": 1,
       "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
     }
   },
   "DropTableSids": [ "survival" ]

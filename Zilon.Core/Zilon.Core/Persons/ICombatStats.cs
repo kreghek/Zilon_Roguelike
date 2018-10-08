@@ -8,8 +8,8 @@ namespace Zilon.Core.Persons
     public interface ICombatStats
     {
         /// <summary>
-        /// Перечень навыков.
+        /// Навыки оборонятся против наступательных действий.
         /// </summary>
-        CombatStatItem[] Stats { get; }
+        IPersonDefenceStats DefenceStats { get; }
     }
 }

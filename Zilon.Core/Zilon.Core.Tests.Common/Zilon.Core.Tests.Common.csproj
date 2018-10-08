@@ -49,11 +49,13 @@
     <Compile Include="Schemes\TestPropUseSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
     <Compile Include="TestContainerViewModel.cs" />
+    <Compile Include="TestTacticalActOffenceSubScheme.cs" />
     <Compile Include="TestPropItemViewModel.cs" />
     <Compile Include="StrictSchemeServiceHandlerFactory.cs" />
     <Compile Include="TestGridGenMap.cs" />
     <Compile Include="TestGridGenWallMap.cs" />
     <Compile Include="TestNodeViewModel.cs" />
+    <Compile Include="TestTacticalActStatsSubScheme.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">

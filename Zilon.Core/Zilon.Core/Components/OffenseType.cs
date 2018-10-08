@@ -1,5 +1,9 @@
-﻿namespace Zilon.Core.Persons
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Zilon.Core.Components
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum OffenseType
     {
         /// <summary>
@@ -10,16 +14,16 @@
         /// </remarks>
         Undefined,
 
-        Tactical,
-        Fury,
-        Shadow,
-        Tricky,
-        Force,
-        Rapid,
+        Tactical = 10,
+        Fury = 20,
+        Shadow = 30,
+        Tricky = 40,
+        Concentrated = 50,
+        Rapid = 60,
 
         /// <summary>
         /// Божественный. Бонусы других классов защиты не дают явного бонуса. Кроме божественной защиты.
         /// </summary>
-        Divine
+        Divine = 100
     }
 }

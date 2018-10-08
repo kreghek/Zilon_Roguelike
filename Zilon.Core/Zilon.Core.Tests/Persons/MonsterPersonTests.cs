@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -22,10 +23,7 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monsterScheme = new MonsterScheme
             {
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 2)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
             // ACT
@@ -51,10 +49,7 @@ namespace Zilon.Core.Tests.Persons
             var monsterScheme = new MonsterScheme
             {
                 Hp = expectedHp,
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 2)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
             // ACT
@@ -79,28 +74,6 @@ namespace Zilon.Core.Tests.Persons
             Action<MonsterPerson> requestPropertyAct = m =>
             {
                 var tmp = m.EvolutionData;
-            };
-
-            //ACT
-            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
-
-
-            // ASSERT
-            UnsupportedMonsterComponent(act);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Боевые характеристики).
-        /// </summary>
-        [Test]
-        public void CombatStats_ThrowNotSupported()
-        {
-            // ARRANGE
-            var monster = CreateMonster();
-
-            Action<MonsterPerson> requestPropertyAct = m =>
-            {
-                var tmp = m.CombatStats;
             };
 
             //ACT
@@ -155,10 +128,7 @@ namespace Zilon.Core.Tests.Persons
         {
             var monsterScheme = new MonsterScheme
             {
-                PrimaryAct = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 1)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
             var monster = new MonsterPerson(monsterScheme);
             return monster;

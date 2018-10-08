@@ -39,10 +39,11 @@ namespace Zilon.Core.Tests.Commands
             var sectorManager = sectorManagerMock.Object;
 
             var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(new TacticalActStatsSubScheme
+            var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
-            });
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             var act = actMock.Object;
 
             var actCarrierMock = new Mock<ITacticalActCarrier>();

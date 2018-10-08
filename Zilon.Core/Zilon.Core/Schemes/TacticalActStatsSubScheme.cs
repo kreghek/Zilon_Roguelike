@@ -1,13 +1,36 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+
+using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Schemes
 {
-    public class TacticalActStatsSubScheme: SubSchemeBase
+    public class TacticalActStatsSubScheme : SubSchemeBase
     {
+        [UsedImplicitly]
+        [JsonConstructor]
+        public TacticalActStatsSubScheme(TacticalActOffenceSubScheme offence,
+            TacticalActEffectType effect,
+            Roll efficient,
+            Range<int> range,
+            int hitCount,
+            bool isMelee)
+        {
+            Offence = offence ?? throw new ArgumentNullException(nameof(offence));
+            Effect = effect;
+            Efficient = efficient ?? throw new ArgumentNullException(nameof(efficient));
+            Range = range ?? throw new ArgumentNullException(nameof(range));
+            HitCount = hitCount;
+            IsMelee = isMelee;
+        }
+
         /// <summary>
-        /// Тип воздействия.
+        /// Характеристики атакующей способности действия.
         /// </summary>
-        public TacticalActImpactType Impact { get; set; }
+        public ITacticalActOffenceSubScheme Offence { get; set; }
 
         /// <summary>
         /// Эффект, который оказывает действие.
@@ -17,7 +40,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public Range<float> Efficient { get; set; }
+        public Roll Efficient { get; set; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.

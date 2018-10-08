@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -17,8 +18,18 @@ namespace Zilon.Core.Persons
         {
             _schemeService = schemeService;
 
+            Stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 },
+                new SkillStatItem{Stat = SkillStatType.Melee, Value = 10 }
+            };
+
             UpdatePerks();
         }
+
+        /// <summary>
+        /// Перечень навыков.
+        /// </summary>
+        public SkillStatItem[] Stats { get; set; }
 
         public IPerk[] Perks { get; private set; }
 

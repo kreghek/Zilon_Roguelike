@@ -10,19 +10,21 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Хитпоинты монстра.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public int Hp { get; set; }
 
         /// <summary>
         /// Основное действие монстра.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public TacticalActStatsSubScheme PrimaryAct { get; set; }
+
+        /// <summary>
+        /// Способности к обороне монстра против атакующих действий противника.
+        /// </summary>
+        public IMonsterDefenceScheme Defence { get; }
 
         /// <summary>
         /// Список идентификаторов таблиц дропа.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public string[] DropTableSids { get; set; }
     }
 }

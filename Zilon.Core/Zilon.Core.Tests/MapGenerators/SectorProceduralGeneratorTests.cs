@@ -16,6 +16,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -262,9 +263,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 .Returns(trophyTableScheme);
 
             var monsterScheme = new MonsterScheme {
-                PrimaryAct = new TacticalActStatsSubScheme {
-                    Efficient = new Range<float>(10, 20)
-                }
+                PrimaryAct = new TestTacticalActStatsSubScheme()
             };
             schemeServiceMock.Setup(x => x.GetScheme<MonsterScheme>(It.IsAny<string>()))
                 .Returns(monsterScheme);

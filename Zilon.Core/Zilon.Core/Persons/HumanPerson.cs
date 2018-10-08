@@ -39,8 +39,11 @@ namespace Zilon.Core.Persons
 
         public HumanPerson(PersonScheme scheme, TacticalActScheme defaultActScheme, IEvolutionData evolutionData)
         {
-            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
+
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+            EvolutionData = evolutionData ?? throw new ArgumentNullException(nameof(evolutionData));
+
             Name = scheme.Sid;
 
             Effects = new EffectCollection();
@@ -53,22 +56,14 @@ namespace Zilon.Core.Persons
 
             TacticalActCarrier = new TacticalActCarrier();
 
+            EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
-            EvolutionData = evolutionData;
-
-            if (EvolutionData != null)
-            {
-                EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
-            }
 
             CombatStats = new CombatStats();
-            ClearCombatStats((CombatStats)CombatStats);
-
-            if (EvolutionData != null)
-            {
-                CalcCombatStats(CombatStats, EvolutionData, Effects);
-            }
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            ClearCalculatedStats();
+            CalcCombatStats();
+            
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
             Survival = new SurvivalData();
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
@@ -80,41 +75,44 @@ namespace Zilon.Core.Persons
             Inventory = inventory;
         }
 
-        private static void CalcCombatStats(ICombatStats combatStats, IEvolutionData evolutionData, EffectCollection effects)
+        private void CalcCombatStats()
         {
-            var bonusDict = new Dictionary<CombatStatType, float>();
+            var bonusDict = new Dictionary<SkillStatType, float>();
 
-            var archievedPerks = evolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
-            foreach (var archievedPerk in archievedPerks)
+            if (EvolutionData.Perks != null)
             {
-                var currentLevel = archievedPerk.CurrentLevel;
-                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
-
-                if (currentLevelScheme.Rules == null)
+                var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+                foreach (var archievedPerk in archievedPerks)
                 {
-                    continue;
-                }
+                    var currentLevel = archievedPerk.CurrentLevel;
+                    var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
 
-                for (var i = 0; i <= currentLevel.Sub; i++)
-                {
-                    foreach (var rule in currentLevelScheme.Rules)
+                    if (currentLevelScheme.Rules == null)
                     {
-                        var ruleType = rule.Type;
-                        switch (ruleType)
-                        {
-                            case PersonRuleType.Melee:
-                                AddStatToDict(bonusDict, CombatStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
-                                break;
+                        continue;
+                    }
 
-                            case PersonRuleType.Ballistic:
-                                AddStatToDict(bonusDict, CombatStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
-                                break;
+                    for (var i = 0; i <= currentLevel.Sub; i++)
+                    {
+                        foreach (var rule in currentLevelScheme.Rules)
+                        {
+                            var ruleType = rule.Type;
+                            switch (ruleType)
+                            {
+                                case PersonRuleType.Melee:
+                                    AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                                    break;
+
+                                case PersonRuleType.Ballistic:
+                                    AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                                    break;
+                            }
                         }
                     }
                 }
             }
 
-            foreach (var effect in effects.Items)
+            foreach (var effect in Effects.Items)
             {
                 foreach (var rule in effect.Rules)
                 {
@@ -122,28 +120,31 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            foreach (var bonusItem in bonusDict)
+            if (EvolutionData.Stats != null)
             {
-                var stat = combatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
-                if (stat != null)
+                foreach (var bonusItem in bonusDict)
                 {
-                    stat.Value += stat.Value * bonusItem.Value;
-
-                    if (stat.Value <= 1)
+                    var stat = EvolutionData.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                    if (stat != null)
                     {
-                        stat.Value = 1;
+                        stat.Value += stat.Value * bonusItem.Value;
+
+                        if (stat.Value <= 1)
+                        {
+                            stat.Value = 1;
+                        }
                     }
                 }
-            }
 
-            foreach (var statItem in combatStats.Stats)
-            {
-                statItem.Value = (float)Math.Round(statItem.Value, 1);
+                foreach (var statItem in EvolutionData.Stats)
+                {
+                    statItem.Value = (float)Math.Round(statItem.Value, 1);
+                }
             }
         }
 
-        private static void AddStatToDict(Dictionary<CombatStatType, float> bonusDict,
-            CombatStatType targetStatType,
+        private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
+            SkillStatType targetStatType,
             PersonRuleLevel level,
             PersonRuleDirection direction)
         {
@@ -188,17 +189,14 @@ namespace Zilon.Core.Persons
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
         {
-            ClearCombatStats((CombatStats)CombatStats);
+            ClearCalculatedStats();
 
-            if (EvolutionData != null)
-            {
-                CalcCombatStats(CombatStats, EvolutionData, Effects);
-            }
+            CalcCombatStats();
         }
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
@@ -209,17 +207,17 @@ namespace Zilon.Core.Persons
 
         private void Effects_CollectionChanged(object sender, EffectEventArgs e)
         {
-            ClearCombatStats((CombatStats)CombatStats);
+            ClearCalculatedStats();
 
             if (EvolutionData != null)
             {
-                CalcCombatStats(CombatStats, EvolutionData, Effects);
+                CalcCombatStats();
             }
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments, CombatStats);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 
-        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments, ICombatStats combatStats)
+        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
         {
             if (equipments == null)
             {
@@ -228,7 +226,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = new TacticalAct(1, _defaultActScheme, combatStats);
+            var defaultAct = new TacticalAct(_defaultActScheme);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -240,8 +238,7 @@ namespace Zilon.Core.Persons
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var equipmentPower = CalcEquipmentEfficient(equipment);
-                    var act = new TacticalAct(equipmentPower, actScheme, combatStats);
+                    var act = new TacticalAct(actScheme);
 
                     actList.Insert(0, act);
                 }
@@ -250,18 +247,12 @@ namespace Zilon.Core.Persons
             return actList.ToArray();
         }
 
-        private static float CalcEquipmentEfficient(Equipment equipment)
+        private void ClearCalculatedStats()
         {
-            return equipment.Power * equipment.Scheme.Equip.Power;
-        }
-
-        private void ClearCombatStats(CombatStats combatStats)
-        {
-            //TODO Статы рассчитывать на основании схемы персонажа, перков, экипировки
-            combatStats.Stats = new[]{
-                new CombatStatItem {Stat = CombatStatType.Melee, Value = 10 },
-                new CombatStatItem {Stat = CombatStatType.Ballistic, Value = 10 }
-            };
+            foreach (var stat in EvolutionData.Stats)
+            {
+                stat.Value = 10;
+            }
         }
 
         public override string ToString()

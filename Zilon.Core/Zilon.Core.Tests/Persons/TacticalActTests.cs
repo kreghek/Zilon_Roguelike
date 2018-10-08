@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -24,31 +22,22 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TacticalActScheme
             {
-                Stats = new TacticalActStatsSubScheme
-                {
-                    Efficient = new Range<float>(1, 2),
-                },
+                Stats = new TestTacticalActStatsSubScheme(),
                 Dependency = new[] {
-                    new TacticalActDependencySubScheme(default(CombatStatType), 1)
+                    new TacticalActDependencySubScheme(default(SkillStatType), 1)
                 }
             };
-
-            var combatStatsMock = new Mock<ICombatStats>();
-            combatStatsMock.SetupGet(x => x.Stats)
-                .Returns(new[] {
-                    new CombatStatItem{ Stat = default(CombatStatType), Value = 10 }
-                });
-            var combatStats = combatStatsMock.Object;
 
 
 
             // ACT
-            var tacticalAct = new TacticalAct(1, tacticalActScheme, combatStats);
+            var tacticalAct = new TacticalAct(tacticalActScheme);
+
 
 
             // ASSERT
-            tacticalAct.MinEfficient.Should().Be(1);
-            tacticalAct.MaxEfficient.Should().Be(2);
+            tacticalAct.Efficient.Dice.Should().Be(3);
+            tacticalAct.Efficient.Count.Should().Be(1);
         }
     }
 }

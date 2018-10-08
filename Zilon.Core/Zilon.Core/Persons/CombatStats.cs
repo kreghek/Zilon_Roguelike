@@ -1,15 +1,21 @@
-﻿using Zilon.Core.Components;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Базовая реализация набора навыков для боя.
     /// </summary>
     public class CombatStats : ICombatStats
     {
+        public CombatStats()
+        {
+            DefenceStats = new PersonDefenceStats
+            {
+                Defences = new PersonDefenceItem[0]
+            };
+        }
+
         /// <summary>
-        /// Перечень навыков.
+        /// Навыки обороны против наступательных действий.
         /// </summary>
-        public CombatStatItem[] Stats { get; set; }
+        public IPersonDefenceStats DefenceStats { get; set; }
     }
 }

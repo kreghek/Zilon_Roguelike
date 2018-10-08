@@ -72,27 +72,27 @@ namespace Zilon.Core.Persons
             return new[] {
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Ballistic
+                    StatType = SkillStatType.Ballistic
                 },
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Medic
+                    StatType = SkillStatType.Medic
                 },
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Melee
+                    StatType = SkillStatType.Melee
                 },
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Psy
+                    StatType = SkillStatType.Psy
                 },
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Social
+                    StatType = SkillStatType.Social
                 },
                 new EffectRule{
                     Level = ruleLevel,
-                    StatType = CombatStatType.Tech
+                    StatType = SkillStatType.Tech
                 },
             };
         }
