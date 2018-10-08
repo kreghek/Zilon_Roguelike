@@ -122,24 +122,24 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            //foreach (var bonusItem in bonusDict)
-            //{
-            //    var stat = combatStats.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
-            //    if (stat != null)
-            //    {
-            //        stat.Value += stat.Value * bonusItem.Value;
+            foreach (var bonusItem in bonusDict)
+            {
+                var stat = evolutionData.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                if (stat != null)
+                {
+                    stat.Value += stat.Value * bonusItem.Value;
 
-            //        if (stat.Value <= 1)
-            //        {
-            //            stat.Value = 1;
-            //        }
-            //    }
-            //}
+                    if (stat.Value <= 1)
+                    {
+                        stat.Value = 1;
+                    }
+                }
+            }
 
-            //foreach (var statItem in combatStats.Stats)
-            //{
-            //    statItem.Value = (float)Math.Round(statItem.Value, 1);
-            //}
+            foreach (var statItem in evolutionData.Stats)
+            {
+                statItem.Value = (float)Math.Round(statItem.Value, 1);
+            }
         }
 
         private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,

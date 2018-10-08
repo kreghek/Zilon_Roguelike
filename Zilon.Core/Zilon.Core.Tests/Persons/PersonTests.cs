@@ -86,7 +86,6 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при получении перка характеристики персонажа пересчитываются.
         /// </summary>
         [Test]
-        [Ignore("Нуждается в переработке")]
         public void HumanPerson_PerkLeveledUp_StatsRecalculated()
         {
             // ARRANGE
@@ -107,9 +106,6 @@ namespace Zilon.Core.Tests.Persons
                 Stats = new TacticalActStatsSubScheme
                 {
                     Efficient = new Roll(3, 1)
-                },
-                Dependency = new[] {
-                    new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
                 }
             };
 
@@ -130,9 +126,13 @@ namespace Zilon.Core.Tests.Persons
             });
             var perk = perkMock.Object;
 
+            var stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 }
+            };
+
             var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks)
-                .Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionData = evolutionDataMock.Object;
 
 
@@ -143,8 +143,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ASSERT
-            //var testedStat = person.CombatStats.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
-            //testedStat.Value.Should().Be(11);
+            var testedStat = person.EvolutionData.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
+            testedStat.Value.Should().Be(11);
         }
     }
 }
