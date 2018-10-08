@@ -2,8 +2,8 @@
   "Hp": 27,
   "PrimaryAct": {
     "Efficient": {
-      "Min": 1,
-      "Max": 5
+      "Dice": 3,
+      "Count": 1
     },
     "Range": {
       "Min": 1,

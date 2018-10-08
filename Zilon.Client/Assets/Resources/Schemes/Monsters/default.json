@@ -1,6 +1,12 @@
 {
   "PrimaryAct": {
-    "Efficient": {"Min": 3, "Max": 6},
-	"Range": {"Min" : 1, "Max" : 1}
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    }
   }
 }
