@@ -42,7 +42,10 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var person = new HumanPerson(personScheme, defaultActScheme, null);
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData);
 
             var propScheme = new PropScheme
             {
