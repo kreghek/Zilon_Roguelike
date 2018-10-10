@@ -7,9 +7,10 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class SurvivalStat
     {
-        public SurvivalStat(int startValue)
+        public SurvivalStat(int startValue, int min, int max)
         {
-            Value = startValue;
+            _value = startValue;
+            Range = new Range<int>(min,max);
         }
 
         /// <summary>
@@ -17,10 +18,32 @@ namespace Zilon.Core.Persons
         /// </summary>
         public SurvivalStatType Type { get; set; }
 
+        private int _value;
         /// <summary>
         /// Текущее значение.
         /// </summary>
-        public int Value { get; set; }
+        public int Value
+        {
+            get
+            {
+                return this._value;
+            }
+            set
+            {
+                if (value >= Range.Max)
+                {
+                    _value = Range.Max;
+                }
+                else if (value <= Range.Min)
+                {
+                    _value = Range.Min;
+                }
+                else
+                {
+                    _value = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Минимальное/максимальное значение.

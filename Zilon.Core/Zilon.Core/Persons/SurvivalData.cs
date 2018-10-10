@@ -46,17 +46,6 @@ namespace Zilon.Core.Persons
 
             stat.Value += value;
 
-            // TODO Это можно вынести в сеттер 
-            if (stat.Value >= stat.Range.Max)
-            {
-                stat.Value = stat.Range.Max;
-            }
-
-            if (stat.Value <= stat.Range.Min)
-            {
-                stat.Value = stat.Range.Min;
-            }
-
             var diff = RangeHelper.CreateNormalized<int>(oldValue, stat.Value);
 
             foreach (var keyPoint in stat.KeyPoints)
@@ -70,10 +59,9 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat(50)
+            var stat = new SurvivalStat(50,-100,100)
             {
                 Type = type,
-                Range = new Range<int>(-100, 100),
                 Rate = 1,
                 KeyPoints = new[]{
                         new SurvivalStatKeyPoint{
