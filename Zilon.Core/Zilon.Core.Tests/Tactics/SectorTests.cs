@@ -68,9 +68,8 @@ namespace Zilon.Core.Tests.Tactics
 
             _survivalDataMock = new Mock<ISurvivalData>();
             var survivalStats = new SurvivalStat[] {
-                new SurvivalStat(0){
+                new SurvivalStat(0,-10,10){
                     Type = SurvivalStatType.Satiety,
-                    Range = new Range<int>(-10, 10),
                     Rate = 1,
                     KeyPoints = new SurvivalStatKeyPoint[0]
                 }

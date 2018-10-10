@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(1)
+            var stat = new SurvivalStat(1,-10, 10)
             {
                 Type = SurvivalStatType.Satiety,
                 KeyPoints = new[] {
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(-5)
+            var stat = new SurvivalStat(-5, -10, 10)
             {
                 Type = expectedSurvivalHazardType,
                 KeyPoints = new[] {
