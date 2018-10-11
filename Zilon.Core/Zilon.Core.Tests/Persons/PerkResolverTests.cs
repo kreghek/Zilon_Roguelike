@@ -39,7 +39,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(perkScheme.Levels[0].Jobs[0]);
             var isComplete = false;
             perkJobMock.SetupGet(x => x.IsComplete).Returns(() => isComplete);
-            perkJobMock.SetupSet(x => x.IsComplete).Callback(x => isComplete = x);
+            perkJobMock.SetupSet(x => x.IsComplete = isComplete);
             var perkJob = perkJobMock.Object;
 
 
@@ -105,7 +105,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(perkScheme.Levels[0].Jobs[0]);
             var isComplete = false;
             perkJobMock.SetupGet(x => x.IsComplete).Returns(() => isComplete);
-            perkJobMock.SetupSet(x => x.IsComplete).Callback(x => isComplete = x);
+            perkJobMock.SetupSet(x => x.IsComplete = isComplete);
             var perkJob = perkJobMock.Object;
 
 
