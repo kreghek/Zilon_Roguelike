@@ -8,11 +8,6 @@ namespace Zilon.Core.Schemes
     public interface IPropEquipSubScheme
     {
         /// <summary>
-        /// Мощь. Влияет на все характиристики предмета.
-        /// </summary>
-        float Power { get; }
-
-        /// <summary>
         /// Ранг пробития брони.
         /// </summary>
         int ApRank { get; }

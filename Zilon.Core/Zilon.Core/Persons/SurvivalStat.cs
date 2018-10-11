@@ -25,21 +25,14 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int Value
         {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                var boundedValue = Range.GetBounded(value);
-                _value = boundedValue;
-            }
+            get => _value;
+            set => _value = Range.GetBounded(value);
         }
 
         /// <summary>
         /// Минимальное/максимальное значение.
         /// </summary>
-        public Range<int> Range { get; set; }
+        public Range<int> Range { get; }
 
         /// <summary>
         /// Скорость снижения характеристики за ход.

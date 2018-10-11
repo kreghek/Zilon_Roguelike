@@ -35,12 +35,12 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Эффект, который оказывает действие.
         /// </summary>
-        public TacticalActEffectType Effect { get; set; }
+        public TacticalActEffectType Effect { get; }
 
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public Roll Efficient { get; set; }
+        public Roll Efficient { get; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.
@@ -50,7 +50,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Количество ударов при совершении действия.
         /// </summary>
-        public int HitCount { get; set; }
+        public int HitCount { get; }
 
         /// <summary>
         /// Является ли действие рукопашным.
@@ -59,6 +59,6 @@ namespace Zilon.Core.Schemes
         /// Рукопашные действия переводят актёра в режим рукопашного боя.
         /// Во время рукопашного режима можно использовать только рукопашные действия.
         /// </remarks>
-        public bool IsMelee { get; set; }
+        public bool IsMelee { get; }
     }
 }

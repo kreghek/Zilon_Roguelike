@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Перечень навыков.
         /// </summary>
-        public SkillStatItem[] Stats { get; set; }
+        public SkillStatItem[] Stats { get; }
 
         public IPerk[] Perks { get; private set; }
 
