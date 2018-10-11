@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
-using Zilon.Core.Common;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;

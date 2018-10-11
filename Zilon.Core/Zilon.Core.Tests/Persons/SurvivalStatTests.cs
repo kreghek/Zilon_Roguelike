@@ -1,7 +1,5 @@
-﻿using System.Linq;
+﻿using NUnit.Framework;
 
-using FluentAssertions;
-using NUnit.Framework;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tests.Persons
@@ -11,34 +9,42 @@ namespace Zilon.Core.Tests.Persons
     {
         /// <summary>
         /// This is the range being checked.
-        /// </ summary>
+        /// </summary>
         [TestCase(0, -2, 2, 1, ExpectedResult = 1)]
         [TestCase(0, -2, 2, -2, ExpectedResult = -2)]
         public int ValueSetter_ValueInsideRange_ValueHaventBeCorrected(int start, int min, int max, int newValue)
         {
             // ARRANGE
-            var survivalStat = new SurvivalStat(start, min, max)
-            {
-                // ACT
-                Value = newValue
-            };
+            var survivalStat = new SurvivalStat(start, min, max);
+
+
+
+            // ACT
+            survivalStat.Value = newValue;
+
+
+
             // ASSERT
             return survivalStat.Value;
         }
 
         /// <summary>
         /// This is the range being checked.
-        /// </ summary>
+        /// </summary>
         [TestCase(0, -2, 2, 3, ExpectedResult = 2)]
         [TestCase(0, -2, 2, -3, ExpectedResult = -2)]
         public int ValueSetter_ValueOutsideRange_ValueShiftedIntoRange(int start, int min, int max, int newValue)
         {
             // ARRANGE
-            var survivalStat = new SurvivalStat(start, min, max)
-            {
-                // ACT
-                Value = newValue
-            };
+            var survivalStat = new SurvivalStat(start, min, max);
+
+
+
+            // ACT
+            survivalStat.Value = newValue;
+
+
+
             // ASSERT
             return survivalStat.Value;
         }
