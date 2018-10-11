@@ -31,18 +31,8 @@ namespace Zilon.Core.Persons
             }
             set
             {
-                if (value >= Range.Max)
-                {
-                    _value = Range.Max;
-                }
-                else if (value <= Range.Min)
-                {
-                    _value = Range.Min;
-                }
-                else
-                {
-                    _value = value;
-                }
+                var boundedValue = Range.GetBounded(value);
+                _value = boundedValue;
             }
         }
 

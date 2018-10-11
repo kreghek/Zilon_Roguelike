@@ -101,6 +101,7 @@
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
+    <Compile Include="Common\RangeExtensionsTests.cs" />
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Persons\PerkResolverTests.cs" />
     <Compile Include="Persons\PersonTests.cs" />
     <Compile Include="Persons\SurvivalDataTests.cs" />
-    <Compile Include="Persons\SurvivalStatTests.cs" />
     <Compile Include="Persons\TacticalActTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />

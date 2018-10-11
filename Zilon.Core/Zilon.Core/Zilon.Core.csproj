@@ -88,6 +88,7 @@
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensions.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
+    <Compile Include="Common\RangeExtensions.cs" />
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Components\EquipmentSlotTypes.cs" />
