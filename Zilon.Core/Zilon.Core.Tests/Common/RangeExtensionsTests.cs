@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 
-namespace Zilon.Core.Common.Tests
+using Zilon.Core.Common;
+
+namespace Zilon.Core.Tests.Common
 {
     [TestFixture]
     public class RangeExtensionsTests
