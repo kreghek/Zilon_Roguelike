@@ -11,5 +11,8 @@ namespace Zilon.Core.Schemes
 
         [JsonProperty]
         public TacticalActImpactType Impact { get; private set; }
+
+        [JsonProperty]
+        public int ApRank { get; private set; }
     }
 }

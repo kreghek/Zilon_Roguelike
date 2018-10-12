@@ -7,5 +7,6 @@ namespace Zilon.Core.Tests.Common
     {
         public OffenseType Type { get; set; }
         public TacticalActImpactType Impact { get; set; }
+        public int ApRank { get; }
     }
 }

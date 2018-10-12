@@ -165,8 +165,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetActApRank(ITacticalAct tacticalAct)
         {
-            //tacticalAct.Stats.Efficient
-            return 10;
+            return tacticalAct.Stats.Offence.ApRank;
         }
 
         /// <summary>
