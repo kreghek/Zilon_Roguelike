@@ -17,8 +17,7 @@ namespace Zilon.Core.Tactics
 
         public int RollToHit()
         {
-            var roll = _dice.Roll(6);
-            return roll;
+            return RollD6();
         }
 
         public int RollEfficient(Roll roll)
@@ -31,6 +30,17 @@ namespace Zilon.Core.Tactics
             }
 
             return sum;
+        }
+
+        public int RollToAp()
+        {
+            return RollD6();
+        }
+
+        private int RollD6()
+        {
+            var roll = _dice.Roll(6);
+            return roll;
         }
     }
 }

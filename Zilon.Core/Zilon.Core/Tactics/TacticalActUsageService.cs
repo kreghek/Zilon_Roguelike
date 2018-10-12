@@ -144,7 +144,8 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int RollArmorSave(IActor targetActor)
         {
-            return 3;
+            var factRoll = _actUsageRandomSource.RollToAp();
+            return factRoll;
         }
 
         /// <summary>
