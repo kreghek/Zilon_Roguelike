@@ -12,13 +12,10 @@ namespace Zilon.Core.Persons
         {
             Scheme = scheme;
             Stats = scheme.Stats;
-            Efficient = scheme.Stats.Efficient;
         }
 
         public TacticalActStatsSubScheme Stats { get; }
 
         public TacticalActScheme Scheme { get; }
-
-        public Roll Efficient { get; }
     }
 }

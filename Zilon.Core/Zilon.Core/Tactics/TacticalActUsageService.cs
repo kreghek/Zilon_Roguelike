@@ -54,7 +54,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
         private TacticalActRoll GetActEfficient(ITacticalAct act)
         {
-            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
+            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Stats.Efficient);
 
             var roll = new TacticalActRoll(act, rolledEfficient);
 
@@ -165,6 +165,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetActApRank(ITacticalAct tacticalAct)
         {
+            //tacticalAct.Stats.Efficient
             return 10;
         }
 

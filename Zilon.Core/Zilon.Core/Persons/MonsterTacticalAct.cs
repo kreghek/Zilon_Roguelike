@@ -1,6 +1,4 @@
-﻿using System;
-using Zilon.Core.Common;
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -11,12 +9,9 @@ namespace Zilon.Core.Persons
     {
         public TacticalActStatsSubScheme Stats { get; }
 
-        public Roll Efficient { get; }
-
         public MonsterTacticalAct(TacticalActStatsSubScheme stats)
         {
             Stats = stats;
-            Efficient = Stats.Efficient;
         }
     }
 }

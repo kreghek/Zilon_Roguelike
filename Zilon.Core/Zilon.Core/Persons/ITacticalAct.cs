@@ -13,10 +13,5 @@ namespace Zilon.Core.Persons
         /// Схема основных характеристик тактического действия.
         /// </summary>
         TacticalActStatsSubScheme Stats { get; }
-
-        /// <summary>
-        /// Эффективность действия.
-        /// </summary>
-        Roll Efficient { get; }
     }
 }
