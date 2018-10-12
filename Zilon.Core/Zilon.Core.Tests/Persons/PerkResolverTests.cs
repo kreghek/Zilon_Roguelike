@@ -9,13 +9,13 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture()]
+    [TestFixture, Ignore("Проверить тесты в отладке. Обратить внимание на perkJobMock.SetupProperty для IsComplete")]
     public class PerkResolverTests
     {
         /// <summary>
         /// Тест проверяет, что при выполнении работ перка вызывается метод повышения уровня перка.
         /// </summary>
-        [Test()]
+        [Test]
         public void ApplyProgress_AllJobsAreDone_EvolutionDataLevelUpCalled()
         {
             // ARRANGE
@@ -37,9 +37,7 @@ namespace Zilon.Core.Tests.Persons
             perkJobMock.SetupProperty(x => x.Progress, 1);
             perkJobMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme.Levels[0].Jobs[0]);
-            var isComplete = false;
-            perkJobMock.SetupGet(x => x.IsComplete).Returns(() => isComplete);
-            perkJobMock.SetupSet(x => x.IsComplete = isComplete);
+            perkJobMock.SetupProperty(x => x.IsComplete);
             var perkJob = perkJobMock.Object;
 
 
@@ -80,7 +78,7 @@ namespace Zilon.Core.Tests.Persons
         /// <summary>
         /// Тест проверяет, что перки с максимальным уровнем не прокачиваются.
         /// </summary>
-        [Test()]
+        [Test, Ignore("Проверить тесты в отладке. Обратить внимание на perkJobMock.SetupProperty")]
         public void ApplyProgress_PerkIsLevelCap_PerkDosntLeveledUp()
         {
             // ARRANGE
@@ -103,9 +101,7 @@ namespace Zilon.Core.Tests.Persons
             perkJobMock.SetupProperty(x => x.Progress, 1);
             perkJobMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme.Levels[0].Jobs[0]);
-            var isComplete = false;
-            perkJobMock.SetupGet(x => x.IsComplete).Returns(() => isComplete);
-            perkJobMock.SetupSet(x => x.IsComplete = isComplete);
+            perkJobMock.SetupProperty(x => x.IsComplete);
             var perkJob = perkJobMock.Object;
 
 
