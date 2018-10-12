@@ -103,7 +103,8 @@ namespace Zilon.Core.Tactics
                     var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
-                        actEfficientArmorBlocked -= GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                        var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                        actEfficientArmorBlocked -= armorAbsorbtion;
                     }
                 }
 
@@ -161,7 +162,7 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Если разница в 1 ранг или меньше, то 2.
+        /// При равных рангах броня пробивается на 4+.
         /// За каждые два ранга превосходства действия над бронёй - увеличение на 1.
         /// </remarks>
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
@@ -172,19 +173,19 @@ namespace Zilon.Core.Tactics
 
             if (preferredArmor == null)
             {
-                return 2;
+                return 4;
             }
 
             var apRankDiff = usedTacticalAct.Stats.Offence.ApRank - preferredArmor.ArmorRank;
 
-            var successRoll = 2;
+            var successRoll = 6;
             if (apRankDiff <= 1)
             {
                 return successRoll;
             }
             else
             {
-                return successRoll + (apRankDiff - 1) / 2;
+                return successRoll - (apRankDiff - 1) / 2;
             }
         }
 
@@ -195,7 +196,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int RollArmorSave(IActor targetActor)
         {
-            var factRoll = _actUsageRandomSource.RollToAp();
+            var factRoll = _actUsageRandomSource.RollArmorSave();
             return factRoll;
         }
 

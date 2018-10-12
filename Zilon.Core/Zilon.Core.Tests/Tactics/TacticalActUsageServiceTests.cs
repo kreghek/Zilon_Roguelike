@@ -163,7 +163,60 @@ namespace Zilon.Core.Tests.Tactics
 
             // ASSERT
             monsterMock.Verify(x => x.TakeDamage(It.IsAny<float>()), Times.Once);
-            actUsageRandomSourceMock.Verify(x => x.RollToAp(), Times.Never);
+            actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Never);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что броня поглощает урон.
+        /// </summary>
+        [Test]
+        public void UseOn_ArmorSavePassed_ActEfficientDecrease()
+        {
+            // ARRANGE
+            var offenceType = OffenseType.Tactical;
+            var fakeToHitDiceRoll = 2; // успех в ToHit 2+
+            var fakeToHitDiceRoll = 6; // успех в ToHit 2+
+
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
+            actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeToHitDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeToHitDiceRoll);
+            var actUsageRandomSource = actUsageRandomSourceMock.Object;
+
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            var actor = actorMock.Object;
+
+            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 9) };
+            var monsterMock = CreateMonsterMock(armors: armors);
+            var monster = monsterMock.Object;
+
+            // Настройка дествия
+            var actScheme = new TestTacticalActStatsSubScheme
+            {
+                Offence = new TestTacticalActOffenceSubScheme
+                {
+                    Type = offenceType,
+                    ApRank = 10,
+                    Impact = ImpactType.Kinetic
+                }
+            };
+
+            var actMock = new Mock<ITacticalAct>();
+            actMock.SetupGet(x => x.Stats).Returns(actScheme);
+            var act = actMock.Object;
+
+
+
+            // ACT
+            actUsageService.UseOn(actor, monster, act);
+
+
+
+            // ASSERT
+            monsterMock.Verify(x => x.TakeDamage(It.IsAny<float>()), Times.Once);
+            actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Never);
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,

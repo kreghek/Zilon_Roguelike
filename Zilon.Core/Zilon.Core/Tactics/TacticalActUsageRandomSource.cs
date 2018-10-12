@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics
             return sum;
         }
 
-        public int RollToAp()
+        public int RollArmorSave()
         {
             return RollD6();
         }

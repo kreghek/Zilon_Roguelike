@@ -21,9 +21,9 @@ namespace Zilon.Core.Tactics
         int RollToHit();
 
         /// <summary>
-        /// Бросок проверки на пробитие.
+        /// Бросок проверки на защиту бронёй.
         /// </summary>
         /// <returns> Возвращает результат броска D6. </returns>
-        int RollToAp();
+        int RollArmorSave();
     }
 }
