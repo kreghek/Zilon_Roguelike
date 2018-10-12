@@ -100,7 +100,7 @@ namespace Zilon.Core.Tactics
                 if (actApRank <= armorRank)
                 {
                     var factArmorSaveRoll = RollArmorSave(targetActor);
-                    var successArmorSaveRoll = GetSuccessArmoSave(targetActor);
+                    var successArmorSaveRoll = GetSuccessArmorSave(targetActor);
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
                         actEfficientArmorBlocked -= GetArmorAbsorbtion(targetActor);
@@ -124,7 +124,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetArmorAbsorbtion(IActor targetActor)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private int GetSuccessArmoSave(IActor targetActor)
+        private int GetSuccessArmorSave(IActor targetActor)
         {
-            throw new NotImplementedException();
+            return 2;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int RollArmorSave(IActor targetActor)
         {
-            throw new NotImplementedException();
+            return 3;
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetArmorRank(IActor targetActor)
         {
-            throw new NotImplementedException();
+            return 10;
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetActApRank(ITacticalAct tacticalAct)
         {
-            throw new NotImplementedException();
+            return 10;
         }
 
         /// <summary>
