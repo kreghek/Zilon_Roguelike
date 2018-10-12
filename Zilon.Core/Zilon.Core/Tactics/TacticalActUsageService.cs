@@ -100,10 +100,10 @@ namespace Zilon.Core.Tactics
                 if (actApRank <= armorRank)
                 {
                     var factArmorSaveRoll = RollArmorSave(targetActor);
-                    var successArmorSaveRoll = GetSuccessArmorSave(targetActor);
+                    var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
-                        actEfficientArmorBlocked -= GetArmorAbsorbtion(targetActor);
+                        actEfficientArmorBlocked -= GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
                     }
                 }
 
@@ -122,9 +122,37 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private static int GetArmorAbsorbtion(IActor targetActor)
+        private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            return 1;
+            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
+
+            if (preferredArmor == null)
+            {
+                return 0;
+            }
+
+            switch (preferredArmor.AbsorbtionLevel)
+            {
+                case PersonRuleLevel.None:
+                    return 0;
+
+                case PersonRuleLevel.Lesser:
+                    return 1;
+
+                case PersonRuleLevel.Normal:
+                    return 2;
+
+                case PersonRuleLevel.Grand:
+                    return 5;
+
+                case PersonRuleLevel.Absolute:
+                    return 10;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
+            }
         }
 
         /// <summary>
@@ -132,9 +160,32 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private static int GetSuccessArmorSave(IActor targetActor)
+        /// <remarks>
+        /// Если разница в 1 ранг или меньше, то 2.
+        /// За каждые два ранга превосходства действия над бронёй - увеличение на 1.
+        /// </remarks>
+        private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            return 2;
+            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
+
+            if (preferredArmor == null)
+            {
+                return 2;
+            }
+
+            var apRankDiff = usedTacticalAct.Stats.Offence.ApRank - preferredArmor.ArmorRank;
+
+            var successRoll = 2;
+            if (apRankDiff <= 1)
+            {
+                return successRoll;
+            }
+            else
+            {
+                return successRoll + (apRankDiff - 1) / 2;
+            }
         }
 
         /// <summary>
