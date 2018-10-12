@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public class TacticalActUsageService : ITacticalActUsageService
+    public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
@@ -92,13 +92,79 @@ namespace Zilon.Core.Tactics
 
             if (factToHitRoll >= successToHitRoll)
             {
-                targetActor.TakeDamage(tacticalActRoll.Efficient);
+                var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
+                var armorRank = GetArmorRank(targetActor);
+
+                var actEfficientArmorBlocked = tacticalActRoll.Efficient;
+
+                if (actApRank <= armorRank)
+                {
+                    var factArmorSaveRoll = RollArmorSave(targetActor);
+                    var successArmorSaveRoll = GetSuccessArmoSave(targetActor);
+                    if (factArmorSaveRoll >= successArmorSaveRoll)
+                    {
+                        actEfficientArmorBlocked -= GetArmorAbsorbtion(targetActor);
+                    }
+                }
+
+                targetActor.TakeDamage(actEfficientArmorBlocked);
 
                 if (!targetIsDeadLast && targetActor.State.IsDead)
                 {
                     CountTargetActorDefeat(actor, targetActor);
                 }
             }
+        }
+
+        /// <summary>
+        /// Возвращает показатель поглощения брони цели.
+        /// Это величина, на которуб будет снижен урон.
+        /// </summary>
+        /// <param name="targetActor"></param>
+        /// <returns></returns>
+        private int GetArmorAbsorbtion(IActor targetActor)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Рассчитывает успешный спас-бросок за броню цели.
+        /// </summary>
+        /// <param name="targetActor"></param>
+        /// <returns></returns>
+        private int GetSuccessArmoSave(IActor targetActor)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Возвращает результат спас-броска на броню.
+        /// </summary>
+        /// <param name="targetActor"></param>
+        /// <returns></returns>
+        private int RollArmorSave(IActor targetActor)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Возвращает ранг брони цели.
+        /// </summary>
+        /// <param name="targetActor"></param>
+        /// <returns></returns>
+        private int GetArmorRank(IActor targetActor)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Возвращает ранг пробития действия.
+        /// </summary>
+        /// <param name="tacticalAct"></param>
+        /// <returns></returns>
+        private int GetActApRank(ITacticalAct tacticalAct)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

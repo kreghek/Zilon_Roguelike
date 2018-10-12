@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="roll"> Характеристики броска. </param>
         /// <returns> Возвращает случайное значение эффективности использования. </returns>
-        float RollEfficient(Roll roll);
+        int RollEfficient(Roll roll);
 
         int RollToHit();
     }

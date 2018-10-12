@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics
             return roll;
         }
 
-        public float RollEfficient(Roll roll)
+        public int RollEfficient(Roll roll)
         {
             var sum = 0;
             for (var i = 0; i < roll.Count; i++)
