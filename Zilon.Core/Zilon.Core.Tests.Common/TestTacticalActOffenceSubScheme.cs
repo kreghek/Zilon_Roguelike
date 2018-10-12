@@ -6,7 +6,7 @@ namespace Zilon.Core.Tests.Common
     public class TestTacticalActOffenceSubScheme : SubSchemeBase, ITacticalActOffenceSubScheme
     {
         public OffenseType Type { get; set; }
-        public TacticalActImpactType Impact { get; set; }
-        public int ApRank { get; }
+        public ImpactType Impact { get; set; }
+        public int ApRank { get; set; }
     }
 }

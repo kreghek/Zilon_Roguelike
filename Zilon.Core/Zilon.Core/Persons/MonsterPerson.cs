@@ -28,6 +28,7 @@ namespace Zilon.Core.Persons
         public ISurvivalData Survival => null;
 
         public EffectCollection Effects { get; }
+
         public MonsterScheme Scheme { get; }
 
         public MonsterPerson(MonsterScheme scheme)
@@ -48,10 +49,9 @@ namespace Zilon.Core.Persons
 
             CombatStats = new CombatStats
             {
-                DefenceStats = new PersonDefenceStats
-                {
-                    Defences = defences ?? new PersonDefenceItem[0]
-                }
+                DefenceStats = new PersonDefenceStats(
+                    defences ?? new PersonDefenceItem[0],
+                    new PersonArmorItem[0])
             };
 
             Effects = new EffectCollection();

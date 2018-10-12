@@ -15,7 +15,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Тип воздействия.
         /// </summary>
-        TacticalActImpactType Impact { get; }
+        ImpactType Impact { get; }
 
         /// <summary>
         /// Ранг пробития брони.

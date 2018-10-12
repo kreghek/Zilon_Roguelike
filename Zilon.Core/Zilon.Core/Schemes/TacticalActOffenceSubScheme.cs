@@ -10,7 +10,7 @@ namespace Zilon.Core.Schemes
         public OffenseType Type { get; private set; }
 
         [JsonProperty]
-        public TacticalActImpactType Impact { get; private set; }
+        public ImpactType Impact { get; private set; }
 
         [JsonProperty]
         public int ApRank { get; private set; }

@@ -93,7 +93,7 @@ namespace Zilon.Core.Tactics
             if (factToHitRoll >= successToHitRoll)
             {
                 var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
-                var armorRank = GetArmorRank(targetActor);
+                var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
 
                 var actEfficientArmorBlocked = tacticalActRoll.Efficient;
 
@@ -122,7 +122,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private int GetArmorAbsorbtion(IActor targetActor)
+        private static int GetArmorAbsorbtion(IActor targetActor)
         {
             return 1;
         }
@@ -132,7 +132,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private int GetSuccessArmorSave(IActor targetActor)
+        private static int GetSuccessArmorSave(IActor targetActor)
         {
             return 2;
         }
@@ -153,9 +153,18 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"></param>
         /// <returns></returns>
-        private int GetArmorRank(IActor targetActor)
+        private static int GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            return 10;
+            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
+
+            if (preferredArmor == null)
+            {
+                return 0;
+            }
+
+            return preferredArmor.ArmorRank;
         }
 
         /// <summary>

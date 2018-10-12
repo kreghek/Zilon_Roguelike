@@ -116,6 +116,7 @@
     <Compile Include="Persons\EvolutionData.cs" />
     <Compile Include="Persons\IActorStateEffect.cs" />
     <Compile Include="Persons\IPersonDefenceStats.cs" />
+    <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
     <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
@@ -213,7 +214,7 @@
     <Compile Include="Schemes\ProfessionTypes.cs" />
     <Compile Include="Components\PropSet.cs" />
     <Compile Include="Schemes\SubSchemeBase.cs" />
-    <Compile Include="Schemes\TacticalActImpactType.cs" />
+    <Compile Include="Common\ImpactType.cs" />
     <Compile Include="Schemes\TacticalActScheme.cs" />
     <Compile Include="Schemes\TacticalActEffectType.cs" />
     <Compile Include="Schemes\PropEquipSubScheme.cs" />

@@ -7,10 +7,7 @@
     {
         public CombatStats()
         {
-            DefenceStats = new PersonDefenceStats
-            {
-                Defences = new PersonDefenceItem[0]
-            };
+            DefenceStats = new PersonDefenceStats(new PersonDefenceItem[0], new PersonArmorItem[0]);
         }
 
         /// <summary>
