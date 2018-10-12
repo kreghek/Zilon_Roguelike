@@ -9,7 +9,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture, Ignore("Проверить тесты в отладке. Обратить внимание на perkJobMock.SetupProperty для IsComplete")]
+    [TestFixture]
     public class PerkResolverTests
     {
         /// <summary>
@@ -78,7 +78,7 @@ namespace Zilon.Core.Tests.Persons
         /// <summary>
         /// Тест проверяет, что перки с максимальным уровнем не прокачиваются.
         /// </summary>
-        [Test, Ignore("Проверить тесты в отладке. Обратить внимание на perkJobMock.SetupProperty")]
+        [Test]
         public void ApplyProgress_PerkIsLevelCap_PerkDosntLeveledUp()
         {
             // ARRANGE
