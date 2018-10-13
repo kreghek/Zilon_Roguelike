@@ -35,11 +35,8 @@ namespace Zilon.Core.Tests.Persons
                 Slots = slotSchemes
             };
 
-            var defaultActScheme = new TacticalActScheme {
-                Stats = new TestTacticalActStatsSubScheme(),
-                Dependency = new[] {
-                    new TacticalActDependencySubScheme(SkillStatType.Melee, 1)
-                }
+            var defaultActScheme = new TestTacticalActScheme {
+                Stats = new TestTacticalActStatsSubScheme()
             };
 
             var evolutionDataMock = new Mock<IEvolutionData>();
@@ -55,12 +52,9 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var tacticalActScheme = new TacticalActScheme
+            var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme(),
-                Dependency = new[] {
-                    new TacticalActDependencySubScheme(SkillStatType.Undefined, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme()
             };
 
             var equipment = new Equipment(propScheme, new[] { tacticalActScheme });
@@ -98,7 +92,7 @@ namespace Zilon.Core.Tests.Persons
                 Slots = slotSchemes
             };
 
-            var defaultActScheme = new TacticalActScheme
+            var defaultActScheme = new TestTacticalActScheme
             {
                 Stats = new TestTacticalActStatsSubScheme()
             };

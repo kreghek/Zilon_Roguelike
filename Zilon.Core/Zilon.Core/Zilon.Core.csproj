@@ -149,6 +149,8 @@
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\ITacticalActOffenceSubScheme.cs" />
+    <Compile Include="Schemes\ITacticalActScheme.cs" />
+    <Compile Include="Schemes\ITacticalActStatsSubScheme.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
     <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />

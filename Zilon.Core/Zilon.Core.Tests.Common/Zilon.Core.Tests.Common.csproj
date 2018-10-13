@@ -55,6 +55,7 @@
     <Compile Include="TestGridGenMap.cs" />
     <Compile Include="TestGridGenWallMap.cs" />
     <Compile Include="TestNodeViewModel.cs" />
+    <Compile Include="TestTacticalActScheme.cs" />
     <Compile Include="TestTacticalActStatsSubScheme.cs" />
   </ItemGroup>
   <ItemGroup>

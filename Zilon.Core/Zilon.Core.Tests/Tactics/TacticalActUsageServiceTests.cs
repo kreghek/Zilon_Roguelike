@@ -2,7 +2,7 @@
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -175,11 +175,13 @@ namespace Zilon.Core.Tests.Tactics
             // ARRANGE
             var offenceType = OffenseType.Tactical;
             var fakeToHitDiceRoll = 2; // успех в ToHit 2+
-            var fakeToHitDiceRoll = 6; // успех в ToHit 2+
+            var fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
+            var fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeToHitDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeToHitDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeArmorSaveDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);

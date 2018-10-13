@@ -1,15 +1,14 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
     /// <summary>
     /// Схема действия.
     /// </summary>
-    public class TacticalActScheme: SchemeBase
+    public class TacticalActScheme : SchemeBase, ITacticalActScheme
     {
         /// <summary>
         /// Основные характеристики действия.
         /// </summary>
-        public TacticalActStatsSubScheme Stats { get; set; }
+        public ITacticalActStatsSubScheme Stats { get; }
 
         /// <summary>
         /// Ограничения на использование действия.

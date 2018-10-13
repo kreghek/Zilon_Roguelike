@@ -7,9 +7,9 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class MonsterTacticalAct : ITacticalAct
     {
-        public TacticalActStatsSubScheme Stats { get; }
+        public ITacticalActStatsSubScheme Stats { get; }
 
-        public MonsterTacticalAct(TacticalActStatsSubScheme stats)
+        public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
             Stats = stats;
         }
