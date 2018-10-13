@@ -47,7 +47,7 @@ namespace Zilon.Core.Tests.Tactics
             var monsterIsDead = false;
             monsterStateMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterStateMock.Setup(x => x.TakeDamage(It.IsAny<float>())).Callback(() => monsterIsDead = true);
-            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>())).Callback<float>(damage => monsterState.TakeDamage(damage));
+            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>())).Callback<int>(damage => monsterState.TakeDamage(damage));
 
 
 

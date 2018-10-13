@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Интерфейс подсхемы для одного типа обороны монстра.
     /// </summary>
-    public interface IMonsterDefenceItemSubScheme
+    public interface IMonsterDefenceItemSubScheme: ISchemeSubScheme
     {
         /// <summary>
         /// Тип обороны.

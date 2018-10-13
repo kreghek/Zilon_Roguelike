@@ -4,7 +4,7 @@
     /// <summary>
     /// Схема персонажа.
     /// </summary>
-    public class PersonScheme: SchemeBase
+    public class PersonScheme : SchemeBase, IPersonScheme
     {
         /// <summary>
         /// Базовые хитпоинты персонажа.

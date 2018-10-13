@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -31,9 +33,9 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
-        public MonsterPerson(IMonsterScheme scheme)
+        public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
-            Scheme = scheme;
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
             TacticalActCarrier = new TacticalActCarrier

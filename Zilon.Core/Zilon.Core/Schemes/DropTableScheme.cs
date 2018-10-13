@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема тарблицы дропа.
     /// </summary>
-    public sealed class DropTableScheme : SchemeBase
+    public sealed class DropTableScheme : SchemeBase, IDropTableScheme
     {
         /// <summary>
         /// Записи в таблице дропа.

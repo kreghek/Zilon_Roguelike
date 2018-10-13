@@ -1,4 +1,4 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 
 namespace Zilon.Core.Schemes
 {
@@ -7,12 +7,15 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class MonsterScheme : SchemeBase, IMonsterScheme
     {
-        public MonsterScheme(int hp, TacticalActStatsSubScheme primaryAct, MonsterDefenceScheme defence, string[] dropTableSids)
+        public MonsterScheme(int hp,
+            [CanBeNull] TacticalActStatsSubScheme primaryAct,
+            [CanBeNull] MonsterDefenceSubScheme defence,
+            string[] dropTableSids)
         {
             Hp = hp;
-            PrimaryAct = primaryAct ?? throw new ArgumentNullException(nameof(primaryAct));
-            Defence = defence ?? throw new ArgumentNullException(nameof(defence));
-            DropTableSids = dropTableSids ?? throw new ArgumentNullException(nameof(dropTableSids));
+            PrimaryAct = primaryAct;
+            Defence = defence;
+            DropTableSids = dropTableSids;
         }
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Способности к обороне монстра против атакующих действий противника.
         /// </summary>
-        public IMonsterDefenceScheme Defence { get; }
+        public IMonsterDefenceSubScheme Defence { get; }
 
         /// <summary>
         /// Список идентификаторов таблиц дропа.

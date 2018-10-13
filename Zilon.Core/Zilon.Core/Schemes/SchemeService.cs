@@ -17,21 +17,22 @@ namespace Zilon.Core.Schemes
 
             _handlerDict = new Dictionary<Type, object>();
 
-            InitHandler<MapScheme>();
-            InitHandler<LocationScheme>();
-            InitHandler<PathScheme>();
-            InitHandler<PropScheme>();
-            InitHandler<TacticalActScheme>();
-            InitHandler<PersonScheme>();
-            InitHandler<DropTableScheme>();
-            InitHandler<PerkScheme>();
-            InitHandler<IMonsterScheme>();
-            InitHandler<DropTableModificatorScheme>();
+            InitHandler<IMapScheme, MapScheme>();
+            InitHandler<ILocationScheme, LocationScheme>();
+            InitHandler<IPathScheme, PathScheme>();
+            InitHandler<IPropScheme, PropScheme>();
+            InitHandler<ITacticalActScheme, TacticalActScheme>();
+            InitHandler<IPersonScheme, PersonScheme>();
+            InitHandler<IDropTableScheme, DropTableScheme>();
+            InitHandler<IPerkScheme, PerkScheme>();
+            InitHandler<IMonsterScheme, MonsterScheme>();
+            InitHandler<IDropTableModificatorScheme, DropTableModificatorScheme>();
         }
 
-        private void InitHandler<TScheme>() where TScheme : class, IScheme
+        private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
+            where TSchemeImpl: class, TScheme
         {
-            var handler = _schemeServiceHandlerFactory.Create<TScheme>();
+            var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
             _handlerDict.Add(typeof(TScheme), handler);
             handler.LoadSchemes();
         }

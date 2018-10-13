@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема перка.
     /// </summary>
-    public class PerkScheme: SchemeBase
+    public class PerkScheme : SchemeBase, IPerkScheme
     {
         public PerkRuleSubScheme[] Rules { get; set; }
         public JobSubScheme[] Jobs { get; set; }

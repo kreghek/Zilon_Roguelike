@@ -7,7 +7,8 @@
     /// <remarks>
     /// Карта - это совокупность узлов и ребёр перехода между узлами.
     /// </remarks>
-    public class MapScheme: SchemeBase
+    public class MapScheme : SchemeBase, IMapScheme
     {
+        public int Fake { get; }
     }
 }
