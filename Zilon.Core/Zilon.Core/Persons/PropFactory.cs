@@ -16,7 +16,7 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public Equipment CreateEquipment(PropScheme scheme)
+        public Equipment CreateEquipment(IPropScheme scheme)
         {
             if (scheme.Equip == null)
             {
@@ -48,7 +48,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public Resource CreateResource(PropScheme scheme, int count)
+        public Resource CreateResource(IPropScheme scheme, int count)
         {
             var resource = new Resource(scheme, count);
 

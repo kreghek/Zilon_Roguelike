@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
 {
     public class Resource : PropBase
     {
-        public Resource(PropScheme scheme, int count) : base(scheme)
+        public Resource(IPropScheme scheme, int count) : base(scheme)
         {
             if (count <= 0)
             {

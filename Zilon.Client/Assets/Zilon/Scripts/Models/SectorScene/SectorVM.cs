@@ -341,7 +341,7 @@ internal class SectorVM : MonoBehaviour
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
     {
-        var equipmentScheme = _schemeService.GetScheme<PropScheme>(equipmentSid);
+        var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
         var equipment = _propFactory.CreateEquipment(equipmentScheme);
         inventory.Add(equipment);
     }

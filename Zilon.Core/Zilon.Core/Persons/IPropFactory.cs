@@ -12,7 +12,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="scheme"> Схема экипировки. </param>
         /// <returns> Возвращает экземпляр созданной экипировки. </returns>
-        Equipment CreateEquipment(PropScheme scheme);
+        Equipment CreateEquipment(IPropScheme scheme);
 
         /// <summary>
         ///  Создаёт ресурс на основе схемы.
@@ -20,6 +20,6 @@ namespace Zilon.Core.Persons
         /// <param name="scheme"> Схема ресурса. </param>
         /// <param name="count"> Количество ресурса. </param>
         /// <returns> Возвращает экземпляр созданного ресурса. </returns>
-        Resource CreateResource(PropScheme scheme, int count);
+        Resource CreateResource(IPropScheme scheme, int count);
     }
 }

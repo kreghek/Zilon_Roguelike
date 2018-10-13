@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons
         /// Выбрасывает, если на вход подана схема,
         /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
-        public Equipment(PropScheme propScheme, IEnumerable<ITacticalActScheme> acts) : base(propScheme)
+        public Equipment(IPropScheme propScheme, IEnumerable<ITacticalActScheme> acts) : base(propScheme)
         {
             if (propScheme.Equip == null)
             {

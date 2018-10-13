@@ -11,7 +11,7 @@ namespace Zilon.Core.Persons
         /// Конструктор.
         /// </summary>
         /// <param name="scheme"> Схема предмета. </param>
-        protected PropBase(PropScheme scheme)
+        protected PropBase(IPropScheme scheme)
         {
             Scheme = scheme;
         }
@@ -19,7 +19,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема предмета.
         /// </summary>
-        public PropScheme Scheme { get; }
+        public IPropScheme Scheme { get; }
 
         public override string ToString()
         {
