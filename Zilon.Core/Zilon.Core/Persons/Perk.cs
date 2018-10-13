@@ -10,7 +10,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема перка.
         /// </summary>
-        public PerkScheme Scheme { get; set; }
+        public IPerkScheme Scheme { get; set; }
 
         /// <summary>
         /// Схема уровеня перка, которая прокачивается.

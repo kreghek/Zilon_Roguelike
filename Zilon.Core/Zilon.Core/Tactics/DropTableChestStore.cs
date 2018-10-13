@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class DropTableChestStore : PropStoreBase
     {
-        private readonly IEnumerable<DropTableScheme> _dropTables;
+        private readonly IEnumerable<IDropTableScheme> _dropTables;
         private readonly IDropResolver _dropResolver;
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private bool _contentResolved;
 
-        public DropTableChestStore(IEnumerable<DropTableScheme> dropTables, IDropResolver dropResolver)
+        public DropTableChestStore(IEnumerable<IDropTableScheme> dropTables, IDropResolver dropResolver)
         {
             _dropTables = dropTables;
             _dropResolver = dropResolver;

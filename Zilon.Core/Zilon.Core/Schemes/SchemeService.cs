@@ -39,6 +39,12 @@ namespace Zilon.Core.Schemes
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
+            var schemeType = typeof(TScheme);
+            if (!schemeType.IsInterface)
+            {
+                throw new ArgumentException("Тип схемы должен быть интерфейсом, унаследованным от IScheme");
+            }
+
             var handler = GetHandler<TScheme>();
             var scheme = handler.Get(sid);
             return scheme;
@@ -58,6 +64,12 @@ namespace Zilon.Core.Schemes
 
         public TScheme[] GetSchemes<TScheme>() where TScheme : class, IScheme
         {
+            var schemeType = typeof(TScheme);
+            if (!schemeType.IsInterface)
+            {
+                throw new ArgumentException("Тип схемы должен быть интерфейсом, унаследованным от IScheme");
+            }
+
             var handler = GetHandler<TScheme>();
             var scheme = handler.GetAll();
             return scheme;

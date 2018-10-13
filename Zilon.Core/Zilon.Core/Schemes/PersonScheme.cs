@@ -1,6 +1,5 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
     /// <summary>
     /// Схема персонажа.
     /// </summary>

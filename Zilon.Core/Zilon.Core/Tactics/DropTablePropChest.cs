@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
 
         [ExcludeFromCodeCoverage]
         public DropTablePropChest(IMapNode node,
-            DropTableScheme[] dropTables,
+            IDropTableScheme[] dropTables,
             IDropResolver dropResolver):base(node, new DropTableChestStore(dropTables, dropResolver))
         {
 

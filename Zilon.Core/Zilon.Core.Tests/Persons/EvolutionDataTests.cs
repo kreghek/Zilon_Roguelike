@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
             var schemeServiceMock = new Mock<ISchemeService>();
-            schemeServiceMock.Setup(x => x.GetSchemes<PerkScheme>())
+            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
                 .Returns(new[] {
                     new PerkScheme{
                         Levels = new[]{

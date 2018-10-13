@@ -22,17 +22,17 @@ namespace Zilon.Core.Tactics
             _propFactory = propFactory;
         }
 
-        public IProp[] GetProps(IEnumerable<DropTableScheme> dropTables)
+        public IProp[] GetProps(IEnumerable<IDropTableScheme> dropTables)
         {
             var materializedDropTables = dropTables.ToArray();
             var props = GenerateContent(materializedDropTables);
             return props;
         }
 
-        private IProp[] GenerateContent(DropTableScheme[] dropTables)
+        private IProp[] GenerateContent(IDropTableScheme[] dropTables)
         {
             //TODO Модификаторы нужно будет получать из игрока, актёра, который открыл сундук и актёров, которые на это могу повлиять.
-            var modificators = new DropTableModificatorScheme[0];
+            var modificators = new IDropTableModificatorScheme[0];
             var rolledRecords = new List<DropTableRecordSubScheme>();
 
             foreach (var table in dropTables)
@@ -63,7 +63,7 @@ namespace Zilon.Core.Tactics
         }
 
         private DropTableModRecord[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
-            IEnumerable<DropTableModificatorScheme> modificators)
+            IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var resultList = new List<DropTableModRecord>();
             foreach (var record in records)

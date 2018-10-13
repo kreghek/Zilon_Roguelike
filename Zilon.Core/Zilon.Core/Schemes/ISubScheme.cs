@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    public interface ISchemeSubScheme
+    public interface ISubScheme
     {
     }
 }

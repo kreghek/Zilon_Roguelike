@@ -20,13 +20,13 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture()]
+    [TestFixture]
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
         /// Тест проверяет, что сектор из цепочки комнат строится без ошибок.
         /// </summary>
-        [Test()]
+        [Test]
         public void Generate_SimpleSnakeMaze_NoExceptions()
         {
             // ARRANGE

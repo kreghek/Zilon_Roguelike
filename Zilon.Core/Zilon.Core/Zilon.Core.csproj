@@ -132,7 +132,6 @@
     <Compile Include="Persons\PerkEventArgs.cs" />
     <Compile Include="Persons\PerkJob.cs" />
     <Compile Include="Persons\PerkLevel.cs" />
-    <Compile Include="Persons\PerkResolver_Old.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\SurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Components\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IDropTableModificatorScheme.cs" />
+    <Compile Include="Schemes\IDropTableRecordSubScheme.cs" />
     <Compile Include="Schemes\IDropTableScheme.cs" />
     <Compile Include="Schemes\ILocationScheme.cs" />
     <Compile Include="Schemes\IMapScheme.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Schemes\IPropUseSubScheme.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
-    <Compile Include="Schemes\ISchemeSubScheme.cs" />
+    <Compile Include="Schemes\ISubScheme.cs" />
     <Compile Include="Schemes\ITacticalActOffenceSubScheme.cs" />
     <Compile Include="Schemes\ITacticalActScheme.cs" />
     <Compile Include="Schemes\ITacticalActStatsSubScheme.cs" />

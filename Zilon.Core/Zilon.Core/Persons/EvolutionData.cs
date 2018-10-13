@@ -60,7 +60,7 @@ namespace Zilon.Core.Persons
 
         private void UpdatePerks()
         {
-            var schemes = _schemeService.GetSchemes<PerkScheme>();
+            var schemes = _schemeService.GetSchemes<IPerkScheme>();
 
             var perks = new List<IPerk>();
             if (Perks != null)

@@ -160,9 +160,9 @@ internal class SectorVM : MonoBehaviour
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var personScheme = _schemeService.GetScheme<PersonScheme>("captain");
+        var personScheme = _schemeService.GetScheme<IPersonScheme>("captain");
 
-        var playerActorStartNode = _sector.Map.Nodes.First();//sectorGenerator.StartNodes.First();
+        var playerActorStartNode = _sector.Map.Nodes.First();
         var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -289,7 +289,7 @@ internal class SectorVM : MonoBehaviour
     }
 
     private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
-        [NotNull] PersonScheme personScheme,
+        [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
@@ -301,7 +301,7 @@ internal class SectorVM : MonoBehaviour
             var evolutionData = new EvolutionData(_schemeService);
             //evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
 
-            var defaultActScheme = _schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 

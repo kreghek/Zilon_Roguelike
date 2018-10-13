@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public interface ITacticalActStatsSubScheme: ISchemeSubScheme
+    public interface ITacticalActStatsSubScheme: ISubScheme
     {
         /// <summary>
         /// Характеристики атакующей способности действия.

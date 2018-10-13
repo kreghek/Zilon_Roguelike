@@ -68,8 +68,8 @@ namespace Zilon.Core.MapGenerators
 
         private void CreateChests(Room[] rooms)
         {
-            var defaultDropTable = _schemeService.GetScheme<DropTableScheme>("default");
-            var survivalDropTable = _schemeService.GetScheme<DropTableScheme>("survival");
+            var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
+            var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
 
             foreach (var room in rooms)
             {

@@ -10,7 +10,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема перка.
         /// </summary>
-        PerkScheme Scheme { get; }
+        IPerkScheme Scheme { get; }
 
         /// <summary>
         /// Текущий уровень перка. Иначе - индекс схемы уровня.
