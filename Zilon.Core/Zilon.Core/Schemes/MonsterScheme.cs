@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
 
 namespace Zilon.Core.Schemes
 {
@@ -7,6 +7,14 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class MonsterScheme : SchemeBase
     {
+        public MonsterScheme(int hp, TacticalActStatsSubScheme primaryAct, MonsterDefenceScheme defence, string[] dropTableSids)
+        {
+            Hp = hp;
+            PrimaryAct = primaryAct ?? throw new ArgumentNullException(nameof(primaryAct));
+            Defence = defence ?? throw new ArgumentNullException(nameof(defence));
+            DropTableSids = dropTableSids ?? throw new ArgumentNullException(nameof(dropTableSids));
+        }
+
         /// <summary>
         /// Хитпоинты монстра.
         /// </summary>
