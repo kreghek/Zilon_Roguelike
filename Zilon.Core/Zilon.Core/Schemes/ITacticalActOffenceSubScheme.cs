@@ -15,6 +15,15 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Тип воздействия.
         /// </summary>
-        TacticalActImpactType Impact { get; }
+        ImpactType Impact { get; }
+
+        /// <summary>
+        /// Ранг пробития брони.
+        /// </summary>
+        /// <remarks>
+        /// Если ранк пробития больше, чем ранк брони цели,
+        /// то цень не пробрасывает спас-бросок за броню.
+        /// </remarks>
+        int ApRank { get; }
     }
 }

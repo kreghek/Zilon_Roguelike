@@ -10,6 +10,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема предмета.
         /// </summary>
-        PropScheme Scheme { get; }
+        IPropScheme Scheme { get; }
     }
 }

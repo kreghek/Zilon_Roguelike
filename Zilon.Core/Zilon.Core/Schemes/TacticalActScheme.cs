@@ -1,24 +1,29 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
     /// <summary>
     /// Схема действия.
     /// </summary>
-    public class TacticalActScheme: SchemeBase
+    public class TacticalActScheme : SchemeBase, ITacticalActScheme
     {
+        [JsonConstructor]
+        public TacticalActScheme(TacticalActStatsSubScheme stats, TacticalActConstrainsSubScheme constrains)
+        {
+            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            Constrains = constrains;
+        }
+
         /// <summary>
         /// Основные характеристики действия.
         /// </summary>
-        public TacticalActStatsSubScheme Stats { get; set; }
+        public ITacticalActStatsSubScheme Stats { get; }
 
         /// <summary>
         /// Ограничения на использование действия.
         /// </summary>
-        public TacticalActConstrainsSubScheme Constrains { get; set; }
-
-        /// <summary>
-        /// Зависимости действия от характеристик.
-        /// </summary>
-        public TacticalActDependencySubScheme[] Dependency { get; set; }
+        public ITacticalActConstrainsSubScheme Constrains { get; }
     }
 }

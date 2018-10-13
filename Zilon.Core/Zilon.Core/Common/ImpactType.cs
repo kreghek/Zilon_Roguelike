@@ -6,7 +6,7 @@ namespace Zilon.Core.Schemes
     /// Тип воздействия.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum TacticalActImpactType
+    public enum ImpactType
     {
         /// <summary>
         /// Не опеределено

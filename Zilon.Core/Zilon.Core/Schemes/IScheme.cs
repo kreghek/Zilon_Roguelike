@@ -24,7 +24,7 @@
         /// <remarks>
         /// Если установлен, то схема игнорируется службой схем.
         /// </remarks>
-        bool Disabled { get; set; }
+        bool Disabled { get; }
 
         /// <summary>
         /// Наименование схемы.
@@ -32,7 +32,7 @@
         /// <remarks>
         /// В конкретных реализациях схем используется по-разному.
         /// </remarks>
-        LocalizedStringSubScheme Name { get; set; }
+        LocalizedStringSubScheme Name { get; }
 
         /// <summary>
         /// Описание схемы.
@@ -40,7 +40,7 @@
         /// <remarks>
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
-        LocalizedStringSubScheme Description { get; set; }
+        LocalizedStringSubScheme Description { get; }
 
     }
 }

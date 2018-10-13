@@ -12,8 +12,18 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="roll"> Характеристики броска. </param>
         /// <returns> Возвращает случайное значение эффективности использования. </returns>
-        float RollEfficient(Roll roll);
+        int RollEfficient(Roll roll);
 
+        /// <summary>
+        /// Бросок проверки на попадание действием.
+        /// </summary>
+        /// <returns> Возвращает результат броска D6. </returns>
         int RollToHit();
+
+        /// <summary>
+        /// Бросок проверки на защиту бронёй.
+        /// </summary>
+        /// <returns> Возвращает результат броска D6. </returns>
+        int RollArmorSave();
     }
 }

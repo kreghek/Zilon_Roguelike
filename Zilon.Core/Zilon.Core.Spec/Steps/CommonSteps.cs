@@ -77,7 +77,7 @@ namespace Zilon.Core.Spec.Steps
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
-            var propScheme = schemeService.GetScheme<PropScheme>(equipmentSid);
+            var propScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
 
             container.Content.Add(equipment);
@@ -92,7 +92,7 @@ namespace Zilon.Core.Spec.Steps
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
-            var propScheme = schemeService.GetScheme<PropScheme>(resourceSid);
+            var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
             var resource = propFactory.CreateResource(propScheme, count);
 
             container.Content.Add(resource);

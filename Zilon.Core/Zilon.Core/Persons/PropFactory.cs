@@ -16,7 +16,7 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public Equipment CreateEquipment(PropScheme scheme)
+        public Equipment CreateEquipment(IPropScheme scheme)
         {
             if (scheme.Equip == null)
             {
@@ -24,7 +24,7 @@ namespace Zilon.Core.Persons
             }
 
 
-            var actSchemes = new List<TacticalActScheme>();
+            var actSchemes = new List<ITacticalActScheme>();
             var actSchemeSids = scheme.Equip.ActSids;
 
             if (scheme.Equip.ActSids != null)
@@ -32,7 +32,7 @@ namespace Zilon.Core.Persons
                 foreach (var actSchemeSid in actSchemeSids)
                 {
 
-                    var actScheme = _schemeService.GetScheme<TacticalActScheme>(actSchemeSid);
+                    var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
 
                     actSchemes.Add(actScheme);
                 }
@@ -48,7 +48,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public Resource CreateResource(PropScheme scheme, int count)
+        public Resource CreateResource(IPropScheme scheme, int count)
         {
             var resource = new Resource(scheme, count);
 

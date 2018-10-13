@@ -22,16 +22,16 @@ namespace Zilon.Core.Persons
         /// Конструктор.
         /// </summary>
         /// <param name="scheme"> Схема концепта. Сейчас всегда одна схема - conceptual-scheme. </param>
-        /// <param name="prop"> Схема предмета, описанного в концепте. </param>
+        /// <param name="conceptProp"> Схема предмета, описанного в концепте. </param>
         [ExcludeFromCodeCoverage]
-        public Concept(PropScheme scheme, PropScheme prop) : base(scheme)
+        public Concept(IPropScheme scheme, IPropScheme conceptProp) : base(scheme)
         {
-            Prop = prop;
+            ConceptProp = conceptProp;
         }
 
         /// <summary>
         /// Предмет, описанный в концептуальной схеме.
         /// </summary>
-        public PropScheme Prop { get; }
+        public IPropScheme ConceptProp { get; }
     }
 }

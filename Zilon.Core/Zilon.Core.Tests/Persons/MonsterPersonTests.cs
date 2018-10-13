@@ -4,10 +4,8 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using Zilon.Core.Common;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
-using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -21,7 +19,7 @@ namespace Zilon.Core.Tests.Persons
         public void Constructor_DefaultParams_NoException()
         {
             // ARRANGE
-            var monsterScheme = new MonsterScheme
+            var monsterScheme = new TestMonsterScheme
             {
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
@@ -46,7 +44,7 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
             const int expectedHp = 100;
-            var monsterScheme = new MonsterScheme
+            var monsterScheme = new TestMonsterScheme
             {
                 Hp = expectedHp,
                 PrimaryAct = new TestTacticalActStatsSubScheme()
@@ -126,7 +124,7 @@ namespace Zilon.Core.Tests.Persons
 
         private static MonsterPerson CreateMonster()
         {
-            var monsterScheme = new MonsterScheme
+            var monsterScheme = new TestMonsterScheme
             {
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };

@@ -22,17 +22,17 @@ namespace Zilon.Core.Tactics
             _propFactory = propFactory;
         }
 
-        public IProp[] GetProps(IEnumerable<DropTableScheme> dropTables)
+        public IProp[] GetProps(IEnumerable<IDropTableScheme> dropTables)
         {
             var materializedDropTables = dropTables.ToArray();
             var props = GenerateContent(materializedDropTables);
             return props;
         }
 
-        private IProp[] GenerateContent(DropTableScheme[] dropTables)
+        private IProp[] GenerateContent(IDropTableScheme[] dropTables)
         {
             //TODO Модификаторы нужно будет получать из игрока, актёра, который открыл сундук и актёров, которые на это могу повлиять.
-            var modificators = new DropTableModificatorScheme[0];
+            var modificators = new IDropTableModificatorScheme[0];
             var rolledRecords = new List<DropTableRecordSubScheme>();
 
             foreach (var table in dropTables)
@@ -63,7 +63,7 @@ namespace Zilon.Core.Tactics
         }
 
         private DropTableModRecord[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
-            IEnumerable<DropTableModificatorScheme> modificators)
+            IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var resultList = new List<DropTableModRecord>();
             foreach (var record in records)
@@ -92,7 +92,7 @@ namespace Zilon.Core.Tactics
 
         private IProp GenerateProp(DropTableRecordSubScheme record)
         {
-            var scheme = _schemeService.GetScheme<PropScheme>(record.SchemeSid);
+            var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);
 
             switch (propClass)
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tactics
 
                 case PropClass.Concept:
 
-                    var propScheme = _schemeService.GetScheme<PropScheme>(record.Concept);
+                    var propScheme = _schemeService.GetScheme<IPropScheme>(record.Concept);
 
                     return new Concept(scheme, propScheme);
 
@@ -121,7 +121,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static PropClass GetPropClass(PropScheme scheme)
+        private static PropClass GetPropClass(IPropScheme scheme)
         {
             if (scheme.Equip != null)
                 return PropClass.Equipment;

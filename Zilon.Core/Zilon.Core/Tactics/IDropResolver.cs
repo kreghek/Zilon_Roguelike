@@ -15,6 +15,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="dropTables"> Таблицы дропа. </param>
         /// <returns> Возвращает сгенерированные готовые предметы. </returns>
-        IProp[] GetProps(IEnumerable<DropTableScheme> dropTables);
+        IProp[] GetProps(IEnumerable<IDropTableScheme> dropTables);
     }
 }

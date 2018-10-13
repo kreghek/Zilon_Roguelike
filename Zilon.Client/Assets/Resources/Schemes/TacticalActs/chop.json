@@ -16,9 +16,5 @@
       "Type": "Tactical",
       "Impact":  "Kinetic"
     }
-  },
-
-  "Dependency": [
-    {"Stat": "Melee", "Value":1}
-  ]
+  }
 }

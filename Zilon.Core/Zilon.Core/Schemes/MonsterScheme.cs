@@ -1,12 +1,23 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using JetBrains.Annotations;
 
 namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема монстра.
     /// </summary>
-    public class MonsterScheme : SchemeBase
+    public class MonsterScheme : SchemeBase, IMonsterScheme
     {
+        public MonsterScheme(int hp,
+            [CanBeNull] TacticalActStatsSubScheme primaryAct,
+            [CanBeNull] MonsterDefenceSubScheme defence,
+            string[] dropTableSids)
+        {
+            Hp = hp;
+            PrimaryAct = primaryAct;
+            Defence = defence;
+            DropTableSids = dropTableSids;
+        }
+
         /// <summary>
         /// Хитпоинты монстра.
         /// </summary>
@@ -15,12 +26,12 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Основное действие монстра.
         /// </summary>
-        public TacticalActStatsSubScheme PrimaryAct { get; set; }
+        public ITacticalActStatsSubScheme PrimaryAct { get; set; }
 
         /// <summary>
         /// Способности к обороне монстра против атакующих действий противника.
         /// </summary>
-        public IMonsterDefenceScheme Defence { get; }
+        public IMonsterDefenceSubScheme Defence { get; }
 
         /// <summary>
         /// Список идентификаторов таблиц дропа.

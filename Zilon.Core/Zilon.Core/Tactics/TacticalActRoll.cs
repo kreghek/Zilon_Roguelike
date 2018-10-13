@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
     public sealed class TacticalActRoll
     {
         [ExcludeFromCodeCoverage]
-        public TacticalActRoll(ITacticalAct tacticalAct, float efficient)
+        public TacticalActRoll(ITacticalAct tacticalAct, int efficient)
         {
             TacticalAct = tacticalAct;
             Efficient = efficient;
@@ -24,6 +24,6 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public float Efficient { get; }
+        public int Efficient { get; }
     }
 }

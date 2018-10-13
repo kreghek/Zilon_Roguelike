@@ -35,7 +35,7 @@ namespace Zilon.Core.Tests.Tactics
             var randomSource = randomSourceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
-            schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
+            schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
                 .Returns(testResourceScheme);
             var schemeService = schemeServiceMock.Object;
 

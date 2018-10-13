@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    public class SchemeServiceHandler<TScheme> : ISchemeServiceHandler<TScheme> where TScheme : class, IScheme
+    public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl> where TSchemeImpl : class, IScheme
     {
         private const string SCHEME_POSTFIX = "Scheme";
 
-        private readonly Dictionary<string, TScheme> _dict;
+        private readonly Dictionary<string, TSchemeImpl> _dict;
         private readonly ISchemeLocator _locator;
         private readonly string _directory;
 
@@ -31,7 +31,7 @@ namespace Zilon.Core.Schemes
                     $"Ошибка при загрузки схем из директории {_directory}.");
             }
 
-            _dict = new Dictionary<string, TScheme>();
+            _dict = new Dictionary<string, TSchemeImpl>();
         }
 
         public SchemeServiceHandler(ISchemeLocator locator, string directory) : this(locator)
@@ -56,7 +56,7 @@ namespace Zilon.Core.Schemes
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
-                    TScheme scheme = ParseSchemeFromFile(file);
+                    TSchemeImpl scheme = ParseSchemeFromFile(file);
 
                     if (scheme.Disabled)
                     {
@@ -73,18 +73,18 @@ namespace Zilon.Core.Schemes
             }
         }
 
-        private TScheme ParseSchemeFromFile(SchemeFile file)
+        private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
         {
             // Если явно указаны настройки десеиализации, то используем их.
             if (JsonSerializerSettings == null)
             {
-                return JsonConvert.DeserializeObject<TScheme>(file.Content);
+                return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
             }
 
-            return JsonConvert.DeserializeObject<TScheme>(file.Content, JsonSerializerSettings);
+            return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
         }
 
-        public TScheme Get(string sid)
+        public TSchemeImpl Get(string sid)
         {
             try
             {
@@ -96,16 +96,22 @@ namespace Zilon.Core.Schemes
             }
         }
 
-        public TScheme[] GetAll()
+        public TSchemeImpl[] GetAll()
         {
-            return _dict.Values.Cast<TScheme>().ToArray();
+            return _dict.Values.Cast<TSchemeImpl>().ToArray();
         }
 
         private string CalcDirectory()
         {
-            var type = typeof(TScheme);
+            var type = typeof(TSchemeImpl);
             var typeName = type.Name;
             var schemeName = typeName.Substring(0, typeName.Length - SCHEME_POSTFIX.Length);
+
+            if (type.IsInterface)
+            {
+                schemeName = schemeName.Remove(0, 1);
+            }
+
             var directory = schemeName + "s";
             return directory;
         }

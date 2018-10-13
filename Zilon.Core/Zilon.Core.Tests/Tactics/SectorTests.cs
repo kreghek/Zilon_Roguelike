@@ -41,8 +41,10 @@ namespace Zilon.Core.Tests.Tactics
             var schemeServiceMock = new Mock<ISchemeService>();
             var schemeService = schemeServiceMock.Object;
 
-            var sector = new Sector(map, actorManager, propContainerManager, dropResolver, schemeService);
-            sector.ExitNodes = new IMapNode[0];
+            var sector = new Sector(map, actorManager, propContainerManager, dropResolver, schemeService)
+            {
+                ExitNodes = new IMapNode[0]
+            };
 
             var actor = CreateActorMock();
             innerActorList.Add(actor);

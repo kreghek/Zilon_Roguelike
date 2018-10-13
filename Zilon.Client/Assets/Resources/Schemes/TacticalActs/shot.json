@@ -16,12 +16,5 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     }
-  },
-
-  "Dependency": [
-    {
-      "Stat": "Ballistic",
-      "Value": 1
-    }
-  ]
+  }
 }

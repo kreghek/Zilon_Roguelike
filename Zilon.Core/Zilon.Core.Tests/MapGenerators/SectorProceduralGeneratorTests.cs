@@ -17,16 +17,17 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture()]
+    [TestFixture]
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
         /// Тест проверяет, что сектор из цепочки комнат строится без ошибок.
         /// </summary>
-        [Test()]
+        [Test]
         public void Generate_SimpleSnakeMaze_NoExceptions()
         {
             // ARRANGE
@@ -247,25 +248,27 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var schemeServiceMock = new Mock<ISchemeService>();
 
-            var propScheme = new PropScheme
+            var propScheme = new TestPropScheme
             {
                 Sid = "test-prop"
             };
             
-            schemeServiceMock.Setup(x => x.GetScheme<PropScheme>(It.IsAny<string>()))
+            schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.IsAny<string>()))
                 .Returns(propScheme);
 
-            var trophyTableScheme = new DropTableScheme(0, new DropTableRecordSubScheme[0])
+            var trophyTableScheme = new TestDropTableScheme(0, new DropTableRecordSubScheme[0])
             {
                 Sid = "default"
             };
-            schemeServiceMock.Setup(x => x.GetScheme<DropTableScheme>(It.IsAny<string>()))
+            schemeServiceMock.Setup(x => x.GetScheme<IDropTableScheme>(It.IsAny<string>()))
                 .Returns(trophyTableScheme);
 
-            var monsterScheme = new MonsterScheme {
+            var monsterScheme = new TestMonsterScheme
+            {
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
-            schemeServiceMock.Setup(x => x.GetScheme<MonsterScheme>(It.IsAny<string>()))
+
+            schemeServiceMock.Setup(x => x.GetScheme<IMonsterScheme>(It.IsAny<string>()))
                 .Returns(monsterScheme);
 
             var schemeService = schemeServiceMock.Object;

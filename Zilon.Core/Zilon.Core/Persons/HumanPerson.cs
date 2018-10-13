@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : IPerson
     {
-        private readonly TacticalActScheme _defaultActScheme;
+        private readonly ITacticalActScheme _defaultActScheme;
 
         public int Id { get; set; }
 
@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons
 
         public IEvolutionData EvolutionData { get; }
 
-        public PersonScheme Scheme { get; }
+        public IPersonScheme Scheme { get; }
 
         public ICombatStats CombatStats { get; }
 
@@ -37,7 +37,7 @@ namespace Zilon.Core.Persons
 
         public EffectCollection Effects { get; }
 
-        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultActScheme, IEvolutionData evolutionData)
+        public HumanPerson(IPersonScheme scheme, ITacticalActScheme defaultActScheme, IEvolutionData evolutionData)
         {
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
 
@@ -69,7 +69,7 @@ namespace Zilon.Core.Persons
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
-        public HumanPerson(PersonScheme scheme, TacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory) :
+        public HumanPerson(IPersonScheme scheme, ITacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory) :
             this(scheme, defaultScheme, evolutionData)
         {
             Inventory = inventory;

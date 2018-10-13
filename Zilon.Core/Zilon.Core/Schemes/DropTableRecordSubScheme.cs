@@ -7,7 +7,7 @@
     /// Содержит информацию о том, какой продемет может выпасть,
     /// количество/качество и с какой вероятностью.
     /// </remarks>
-    public sealed class DropTableRecordSubScheme: SubSchemeBase
+    public sealed class DropTableRecordSubScheme : SubSchemeBase, IDropTableRecordSubScheme
     {
         public DropTableRecordSubScheme(string schemeSid, int weight)
         {

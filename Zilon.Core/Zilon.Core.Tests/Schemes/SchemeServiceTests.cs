@@ -138,8 +138,7 @@ namespace Zilon.Core.Tests.Schemes
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                x.IsClass && // Иначе выберет интерфейс IScheme
-                !x.IsAbstract).ToArray();  // Иначе выберет SchemeBase
+                x.IsInterface && x != typeof(IScheme)).ToArray(); 
             return schemeTypes;
         }
     }

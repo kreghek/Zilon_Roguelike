@@ -8,7 +8,7 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Schemes
 {
-    public class TacticalActStatsSubScheme : SubSchemeBase
+    public class TacticalActStatsSubScheme : SubSchemeBase, ITacticalActStatsSubScheme
     {
         [UsedImplicitly]
         [JsonConstructor]

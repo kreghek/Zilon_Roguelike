@@ -177,7 +177,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private DropTableScheme[] GetMonsterDropTables(MonsterScheme monsterScheme)
+        private IDropTableScheme[] GetMonsterDropTables(IMonsterScheme monsterScheme)
         {
             if (monsterScheme.DropTableSids == null)
             {
@@ -185,11 +185,11 @@ namespace Zilon.Core.Tactics
             }
 
             var dropTableCount = monsterScheme.DropTableSids.Length;
-            var schemes = new DropTableScheme[dropTableCount];
+            var schemes = new IDropTableScheme[dropTableCount];
             for (var i = 0; i < dropTableCount; i++)
             {
                 var sid = monsterScheme.DropTableSids[i];
-                schemes[i] = _schemeService.GetScheme<DropTableScheme>(sid);
+                schemes[i] = _schemeService.GetScheme<IDropTableScheme>(sid);
             }
 
             return schemes;

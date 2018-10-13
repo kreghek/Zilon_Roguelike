@@ -7,7 +7,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема предмета. Общая для всех предметов в игре.
     /// </summary>
-    public class PropScheme : SchemeBase
+    public class PropScheme : SchemeBase, IPropScheme
     {
         public PropScheme()
         {

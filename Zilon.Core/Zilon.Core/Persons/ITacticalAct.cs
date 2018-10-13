@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Common;
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -12,11 +11,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема основных характеристик тактического действия.
         /// </summary>
-        TacticalActStatsSubScheme Stats { get; }
-
-        /// <summary>
-        /// Эффективность действия.
-        /// </summary>
-        Roll Efficient { get; }
+        ITacticalActStatsSubScheme Stats { get; }
     }
 }

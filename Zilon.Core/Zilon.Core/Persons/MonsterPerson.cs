@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -28,11 +30,12 @@ namespace Zilon.Core.Persons
         public ISurvivalData Survival => null;
 
         public EffectCollection Effects { get; }
-        public MonsterScheme Scheme { get; }
 
-        public MonsterPerson(MonsterScheme scheme)
+        public IMonsterScheme Scheme { get; }
+
+        public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
-            Scheme = scheme;
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
             TacticalActCarrier = new TacticalActCarrier
@@ -48,10 +51,9 @@ namespace Zilon.Core.Persons
 
             CombatStats = new CombatStats
             {
-                DefenceStats = new PersonDefenceStats
-                {
-                    Defences = defences ?? new PersonDefenceItem[0]
-                }
+                DefenceStats = new PersonDefenceStats(
+                    defences ?? new PersonDefenceItem[0],
+                    new PersonArmorItem[0])
             };
 
             Effects = new EffectCollection();

@@ -4,7 +4,7 @@
     /// <summary>
     /// Схема ребра перехода между узлами на глобальной карте.
     /// </summary>
-    public sealed class PathScheme: SchemeBase
+    public sealed class PathScheme : SchemeBase, IPathScheme
     {
         public string MapSid { get; set; }
         public string Sid1 { get; set; }
