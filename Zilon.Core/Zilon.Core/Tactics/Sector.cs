@@ -177,7 +177,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private DropTableScheme[] GetMonsterDropTables(MonsterScheme monsterScheme)
+        private DropTableScheme[] GetMonsterDropTables(IMonsterScheme monsterScheme)
         {
             if (monsterScheme.DropTableSids == null)
             {

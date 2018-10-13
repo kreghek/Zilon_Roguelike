@@ -106,6 +106,12 @@ namespace Zilon.Core.Schemes
             var type = typeof(TScheme);
             var typeName = type.Name;
             var schemeName = typeName.Substring(0, typeName.Length - SCHEME_POSTFIX.Length);
+
+            if (type.IsInterface)
+            {
+                schemeName = schemeName.Remove(0, 1);
+            }
+
             var directory = schemeName + "s";
             return directory;
         }

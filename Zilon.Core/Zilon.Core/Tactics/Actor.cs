@@ -132,7 +132,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void TakeDamage(float value)
+        public void TakeDamage(int value)
         {
             State.TakeDamage(value);
         }

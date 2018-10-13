@@ -49,6 +49,7 @@
     <Compile Include="Schemes\TestPropUseSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
     <Compile Include="TestContainerViewModel.cs" />
+    <Compile Include="TestMonsterScheme.cs" />
     <Compile Include="TestTacticalActOffenceSubScheme.cs" />
     <Compile Include="TestPropItemViewModel.cs" />
     <Compile Include="StrictSchemeServiceHandlerFactory.cs" />

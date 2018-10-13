@@ -47,7 +47,7 @@ namespace Zilon.Core.Tests.Tactics
             var monsterIsDead = false;
             monsterStateMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterStateMock.Setup(x => x.TakeDamage(It.IsAny<float>())).Callback(() => monsterIsDead = true);
-            monsterMock.Setup(x => x.TakeDamage(It.IsAny<float>())).Callback<float>(damage => monsterState.TakeDamage(damage));
+            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>())).Callback<float>(damage => monsterState.TakeDamage(damage));
 
 
 
@@ -111,7 +111,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            monsterMock.Verify(x => x.TakeDamage(It.IsAny<float>()), Times.Once);
+            monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            monsterMock.Verify(x => x.TakeDamage(It.IsAny<float>()), Times.Once);
+            monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Never);
         }
 
@@ -173,10 +173,11 @@ namespace Zilon.Core.Tests.Tactics
         public void UseOn_ArmorSavePassed_ActEfficientDecrease()
         {
             // ARRANGE
-            var offenceType = OffenseType.Tactical;
-            var fakeToHitDiceRoll = 2; // успех в ToHit 2+
-            var fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
-            var fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
+            const OffenseType offenceType = OffenseType.Tactical;
+            const int fakeToHitDiceRoll = 2; // успех в ToHit 2+
+            const int fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
+            const int fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
+            const int expectedActEfficient = fakeActEfficientRoll - 1;  // -1 даёт текущая броня
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeToHitDiceRoll);
@@ -190,7 +191,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 9) };
+            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10) };
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -217,8 +218,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            monsterMock.Verify(x => x.TakeDamage(It.IsAny<float>()), Times.Once);
-            actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Never);
+            actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
+            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
@@ -245,6 +246,8 @@ namespace Zilon.Core.Tests.Tactics
             monsterDefenceStatsMock.SetupGet(x => x.Armors).Returns(armors ?? new PersonArmorItem[0]);
             var monsterDefenceStats = monsterDefenceStatsMock.Object;
             monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
+
+            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>())).Verifiable();
 
             return monsterMock;
         }

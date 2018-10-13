@@ -29,9 +29,9 @@ namespace Zilon.Core.Persons
 
         public EffectCollection Effects { get; }
 
-        public MonsterScheme Scheme { get; }
+        public IMonsterScheme Scheme { get; }
 
-        public MonsterPerson(MonsterScheme scheme)
+        public MonsterPerson(IMonsterScheme scheme)
         {
             Scheme = scheme;
 

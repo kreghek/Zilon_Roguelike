@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема монстра.
     /// </summary>
-    public class MonsterScheme : SchemeBase
+    public class MonsterScheme : SchemeBase, IMonsterScheme
     {
         public MonsterScheme(int hp, TacticalActStatsSubScheme primaryAct, MonsterDefenceScheme defence, string[] dropTableSids)
         {

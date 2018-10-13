@@ -41,7 +41,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
-        /// <param name="targetNode"></param>
+        /// <param name="targetNode"> Целевой узел карты. </param>
         void MoveToNode(IMapNode targetNode);
 
         /// <summary>

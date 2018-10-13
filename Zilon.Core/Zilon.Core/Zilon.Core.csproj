@@ -144,6 +144,7 @@
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IMonsterDefenceItemSubScheme.cs" />
     <Compile Include="Schemes\IMonsterDefenceScheme.cs" />
+    <Compile Include="Schemes\IMonsterScheme.cs" />
     <Compile Include="Schemes\IPropEquipSubScheme.cs" />
     <Compile Include="Schemes\IPropUseSubScheme.cs" />
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />

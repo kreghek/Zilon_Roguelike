@@ -262,10 +262,12 @@ namespace Zilon.Core.Tests.MapGenerators
             schemeServiceMock.Setup(x => x.GetScheme<DropTableScheme>(It.IsAny<string>()))
                 .Returns(trophyTableScheme);
 
-            var monsterScheme = new MonsterScheme {
+            var monsterScheme = new TestMonsterScheme
+            {
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
-            schemeServiceMock.Setup(x => x.GetScheme<MonsterScheme>(It.IsAny<string>()))
+
+            schemeServiceMock.Setup(x => x.GetScheme<IMonsterScheme>(It.IsAny<string>()))
                 .Returns(monsterScheme);
 
             var schemeService = schemeServiceMock.Object;

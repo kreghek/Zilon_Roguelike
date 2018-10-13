@@ -25,7 +25,7 @@ namespace Zilon.Core.Schemes
             InitHandler<PersonScheme>();
             InitHandler<DropTableScheme>();
             InitHandler<PerkScheme>();
-            InitHandler<MonsterScheme>();
+            InitHandler<IMonsterScheme>();
             InitHandler<DropTableModificatorScheme>();
         }
 
