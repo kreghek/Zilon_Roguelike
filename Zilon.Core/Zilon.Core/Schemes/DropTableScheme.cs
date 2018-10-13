@@ -10,13 +10,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Записи в таблице дропа.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public DropTableRecordSubScheme[] Records { get; }
 
         /// <summary>
         /// Количество бросков на проверку выпавшей записи.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public int Rolls { get; }
 
         [ExcludeFromCodeCoverage]

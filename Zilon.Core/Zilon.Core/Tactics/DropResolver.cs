@@ -92,7 +92,7 @@ namespace Zilon.Core.Tactics
 
         private IProp GenerateProp(DropTableRecordSubScheme record)
         {
-            var scheme = _schemeService.GetScheme<PropScheme>(record.SchemeSid);
+            var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);
 
             switch (propClass)
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tactics
 
                 case PropClass.Concept:
 
-                    var propScheme = _schemeService.GetScheme<PropScheme>(record.Concept);
+                    var propScheme = _schemeService.GetScheme<IPropScheme>(record.Concept);
 
                     return new Concept(scheme, propScheme);
 
@@ -121,7 +121,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static PropClass GetPropClass(PropScheme scheme)
+        private static PropClass GetPropClass(IPropScheme scheme)
         {
             if (scheme.Equip != null)
                 return PropClass.Equipment;

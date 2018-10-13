@@ -1,7 +1,7 @@
 ﻿using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Tests.Common
+namespace Zilon.Core.Tests.Common.Schemes
 {
     public class TestTacticalActOffenceSubScheme : SubSchemeBase, ITacticalActOffenceSubScheme
     {

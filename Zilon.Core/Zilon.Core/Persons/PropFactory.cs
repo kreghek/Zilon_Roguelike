@@ -24,7 +24,7 @@ namespace Zilon.Core.Persons
             }
 
 
-            var actSchemes = new List<TacticalActScheme>();
+            var actSchemes = new List<ITacticalActScheme>();
             var actSchemeSids = scheme.Equip.ActSids;
 
             if (scheme.Equip.ActSids != null)
@@ -32,7 +32,7 @@ namespace Zilon.Core.Persons
                 foreach (var actSchemeSid in actSchemeSids)
                 {
 
-                    var actScheme = _schemeService.GetScheme<TacticalActScheme>(actSchemeSid);
+                    var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
 
                     actSchemes.Add(actScheme);
                 }

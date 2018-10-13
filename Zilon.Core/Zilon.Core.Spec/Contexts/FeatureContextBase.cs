@@ -81,7 +81,7 @@ namespace Zilon.Core.Spec.Contexts
             var schemeService = Container.GetInstance<ISchemeService>();
             var propFactory = Container.GetInstance<IPropFactory>();
 
-            var propScheme = schemeService.GetScheme<PropScheme>(propSid);
+            var propScheme = schemeService.GetScheme<IPropScheme>(propSid);
 
             var equipment = propFactory.CreateEquipment(propScheme);
             return equipment;
@@ -95,7 +95,7 @@ namespace Zilon.Core.Spec.Contexts
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
 
-            var personScheme = schemeService.GetScheme<PersonScheme>(personSid);
+            var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
@@ -117,7 +117,7 @@ namespace Zilon.Core.Spec.Contexts
             var sector = Container.GetInstance<ISector>();
             var actorManager = Container.GetInstance<IActorManager>();
 
-            var monsterScheme = schemeService.GetScheme<MonsterScheme>(monsterSid);
+            var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
             var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
@@ -143,12 +143,12 @@ namespace Zilon.Core.Spec.Contexts
         {
             var schemeService = Container.GetInstance<ISchemeService>();
 
-            var resourceScheme = schemeService.GetScheme<PropScheme>(resourceSid);
+            var resourceScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
 
             AddResourceToActor(resourceScheme, count, actor);
         }
 
-        public void AddResourceToActor(PropScheme resourceScheme, int count, IActor actor)
+        public void AddResourceToActor(IPropScheme resourceScheme, int count, IActor actor)
         {
             var resource = new Resource(resourceScheme, count);
 
@@ -167,7 +167,7 @@ namespace Zilon.Core.Spec.Contexts
 
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
-            [NotNull] PersonScheme personScheme,
+            [NotNull] IPersonScheme personScheme,
             [NotNull] IMapNode startNode)
         {
 
@@ -177,7 +177,7 @@ namespace Zilon.Core.Spec.Contexts
 
             var inventory = new Inventory();
 
-            var defaultActScheme = schemeService.GetScheme<TacticalActScheme>(personScheme.DefaultAct);
+            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
 
@@ -187,7 +187,7 @@ namespace Zilon.Core.Spec.Contexts
         }
 
         private IActor CreateMonsterActor([NotNull] IBotPlayer player,
-            [NotNull] MonsterScheme monsterScheme,
+            [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IMapNode startNode)
         {
 
