@@ -34,7 +34,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var tacticalActScheme = new TacticalActScheme();
+            var tacticalActScheme = new TestTacticalActScheme();
 
             var equipment = new Equipment(scheme, new[] { tacticalActScheme });
 

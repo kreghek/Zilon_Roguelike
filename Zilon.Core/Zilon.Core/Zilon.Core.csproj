@@ -158,6 +158,7 @@
     <Compile Include="Schemes\ISchemeServiceHandler.cs" />
     <Compile Include="Schemes\ISchemeServiceHandlerFactory.cs" />
     <Compile Include="Schemes\ISubScheme.cs" />
+    <Compile Include="Schemes\ITacticalActConstrainsSubScheme.cs" />
     <Compile Include="Schemes\ITacticalActOffenceSubScheme.cs" />
     <Compile Include="Schemes\ITacticalActScheme.cs" />
     <Compile Include="Schemes\ITacticalActStatsSubScheme.cs" />

@@ -8,7 +8,7 @@
         /// <summary>
         /// Ограничения на использование действия.
         /// </summary>
-        TacticalActConstrainsSubScheme Constrains { get; }
+        ITacticalActConstrainsSubScheme Constrains { get; }
 
         /// <summary>
         /// Основные характеристики действия.

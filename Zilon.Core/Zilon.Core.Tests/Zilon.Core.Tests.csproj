@@ -104,6 +104,7 @@
     <Compile Include="Common\RangeExtensionsTests.cs" />
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
     <Compile Include="Persons\EquipmentTests.cs" />

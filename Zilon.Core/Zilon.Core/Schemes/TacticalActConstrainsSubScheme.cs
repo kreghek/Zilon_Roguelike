@@ -6,7 +6,7 @@
     /// <remarks>
     /// Используется только актёрами под прямым управлением игрока.
     /// </remarks>
-    public class TacticalActConstrainsSubScheme: SubSchemeBase
+    public class TacticalActConstrainsSubScheme : SubSchemeBase, ITacticalActConstrainsSubScheme
     {
         /// <summary>
         /// Количество использований.
