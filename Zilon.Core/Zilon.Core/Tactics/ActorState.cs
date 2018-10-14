@@ -48,10 +48,5 @@ namespace Zilon.Core.Tactics
                 Hp = max;
             }
         }
-
-        public void RestoreHp(float value, float max)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
