@@ -7,18 +7,22 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public class ActorState : IActorState
     {
-        public ActorState(float hp)
+        public ActorState(int hp)
         {
             Hp = hp;
         }
 
-        public float Hp { get; private set; }
+        public int Hp { get; private set; }
 
         public bool IsDead { get; private set; }
 
+        public int Ap { get; }
+
+        public int Mp { get; }
+
         public event EventHandler Dead;
 
-        public void SetHpForce(float hp)
+        public void SetHpForce(int hp)
         {
             if (hp == 0)
             {
@@ -28,7 +32,7 @@ namespace Zilon.Core.Tactics
             Hp = hp;
         }
 
-        public void TakeDamage(float value)
+        public void TakeDamage(int value)
         {
             Hp -= value;
 
@@ -39,7 +43,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void RestoreHp(float value, float max)
+        public void RestoreHp(int value, int max)
         {
             Hp += value;
 
@@ -47,6 +51,11 @@ namespace Zilon.Core.Tactics
             {
                 Hp = max;
             }
+        }
+
+        public void RestoreHp(float value, float max)
+        {
+            throw new NotImplementedException();
         }
     }
 }

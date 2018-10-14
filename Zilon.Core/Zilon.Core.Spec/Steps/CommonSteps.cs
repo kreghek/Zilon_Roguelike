@@ -41,7 +41,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Актёр игрока имеет Hp: (.*)")]
-        public void GivenАктёрИмеетHp(float startHp)
+        public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = _context.GetActiveActor();
             actor.State.SetHpForce(startHp);
@@ -54,7 +54,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
-        public void GivenМонстрIdИмеетHp(int monsterId, float monsterHp)
+        public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
         {
             var monster = _context.GetMonsterById(monsterId);
 
@@ -225,14 +225,14 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Then(@"Актёр игрока имеет запас hp (.*)")]
-        public void ThenАктёрИмеетЗадасHp(float expectedHp)
+        public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = _context.GetActiveActor();
             actor.State.Hp.Should().Be(expectedHp);
         }
 
         [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
-        public void ThenМонстрIdИмеетHp(int monsterId, float expectedMonsterHp)
+        public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = _context.GetMonsterById(monsterId);
 
