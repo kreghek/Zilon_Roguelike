@@ -56,7 +56,6 @@
     <Compile Include="TestPropItemViewModel.cs" />
     <Compile Include="StrictSchemeServiceHandlerFactory.cs" />
     <Compile Include="TestGridGenMap.cs" />
-    <Compile Include="TestGridGenWallMap.cs" />
     <Compile Include="TestNodeViewModel.cs" />
     <Compile Include="Schemes\TestTacticalActScheme.cs" />
     <Compile Include="Schemes\TestTacticalActStatsSubScheme.cs" />

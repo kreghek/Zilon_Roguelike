@@ -97,7 +97,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = new TestGridGenWallMap();
+            var map = new TestGridGenMap();
+            map.RemoveEdge(3, 3, 3, 4);
+            map.RemoveEdge(3, 3, 2, 3);
 
             var expectedPath = new IMapNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(4,4),
