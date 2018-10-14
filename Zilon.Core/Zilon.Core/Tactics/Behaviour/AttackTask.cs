@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    using System.Linq;
-    using Zilon.Core.Persons;
-    using Zilon.Core.Tactics.Spatial;
-
     public class AttackTask : OneTurnActorTaskBase
     {
         private readonly ITacticalActUsageService _actService;
@@ -15,7 +15,6 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            //TODO Сделать проверку, чтобы нельзя было атаковать через стены, аналогично команде на открытие/атаку.
             if (!Target.CanBeDamaged())
             {
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");

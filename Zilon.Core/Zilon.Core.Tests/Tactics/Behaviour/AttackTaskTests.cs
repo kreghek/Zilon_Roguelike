@@ -31,7 +31,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void AttackTask_Execute_RaiseUsedAct()
         {
             // ARRANGE
-            
+
 
 
             using (var monitor = _actor.Monitor())
