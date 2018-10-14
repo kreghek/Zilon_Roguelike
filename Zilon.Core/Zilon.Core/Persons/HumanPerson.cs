@@ -19,7 +19,7 @@ namespace Zilon.Core.Persons
 
         public string Name { get; }
 
-        public float Hp => Scheme.Hp;
+        public int Hp { get; }
 
         public IEquipmentCarrier EquipmentCarrier { get; }
 
@@ -45,6 +45,7 @@ namespace Zilon.Core.Persons
             EvolutionData = evolutionData ?? throw new ArgumentNullException(nameof(evolutionData));
 
             Name = scheme.Sid;
+            Hp = scheme.Hp;
 
             Effects = new EffectCollection();
             Effects.Added += Effects_CollectionChanged;

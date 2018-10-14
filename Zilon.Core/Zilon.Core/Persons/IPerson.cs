@@ -13,7 +13,7 @@
         /// <summary>
         /// Хитпоинты персонажа.
         /// </summary>
-        float Hp { get; }
+        int Hp { get; }
 
         /// <summary>
         /// Носитель экипировки.
