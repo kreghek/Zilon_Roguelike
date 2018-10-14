@@ -10,6 +10,8 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
+        //TODO Добавить фабрику актёров. Для монстов и для игрока.
+        // этот конструктор убрать и передавать IActorState снаружи.
         public Actor(IPerson person, IPlayer owner, IMapNode node) : this(person, owner, node, null)
         {
 
@@ -24,7 +26,7 @@ namespace Zilon.Core.Tactics
 
             if (state == null)
             {
-                State = new ActorState(person.Hp);
+                State = new ActorState(person, person.Hp);
             }
         }
 
@@ -115,7 +117,7 @@ namespace Zilon.Core.Tactics
                         break;
 
                     case ConsumeCommonRule.Health:
-                        State.RestoreHp(efficient, Person.Hp);
+                        State.RestoreHp(efficient);
                         break;
                 }
             }

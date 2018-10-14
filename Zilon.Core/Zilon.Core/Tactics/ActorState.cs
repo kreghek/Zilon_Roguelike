@@ -1,15 +1,22 @@
 ﻿using System;
 
+using Zilon.Core.Persons;
+
 namespace Zilon.Core.Tactics
 {
+    //TODO Пересмотреть необходимость этого типа. Вероятно его можно объединить с ISurvivalData (который станет PersonState).
     /// <summary>
     /// Базовая реализация состояния актёра.
     /// </summary>
     public class ActorState : IActorState
     {
-        public ActorState(int hp)
+        private readonly IPerson _person;
+
+        public ActorState(IPerson person, int initialHp)
         {
-            Hp = hp;
+            _person = person;
+
+            Hp = initialHp;
         }
 
         public int Hp { get; private set; }
@@ -39,13 +46,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void RestoreHp(int value, int max)
+        public void RestoreHp(int value)
         {
             Hp += value;
 
-            if (Hp > max)
+            if (Hp > _person.Hp)
             {
-                Hp = max;
+                Hp = _person.Hp;
             }
         }
     }

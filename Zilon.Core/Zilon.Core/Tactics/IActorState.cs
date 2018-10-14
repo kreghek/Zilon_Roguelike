@@ -38,7 +38,6 @@ namespace Zilon.Core.Tactics
         /// Восстановить очки здоровья.
         /// </summary>
         /// <param name="value"> Количество восстановленных очков здоровья. </param>
-        /// <param name="max"> Максимальное количество очков здоровья. </param>
-        void RestoreHp(int value, int max);
+        void RestoreHp(int value);
     }
 }
