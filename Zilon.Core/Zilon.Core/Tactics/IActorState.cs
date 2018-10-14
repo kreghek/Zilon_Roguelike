@@ -13,16 +13,6 @@ namespace Zilon.Core.Tactics
         int Hp { get; }
 
         /// <summary>
-        /// Текущий запас очков действия.
-        /// </summary>
-        int Ap { get; }
-
-        /// <summary>
-        /// Текущий запас очков манёвра.
-        /// </summary>
-        int Mp { get; }
-
-        /// <summary>
         /// Состояние актёра.
         /// </summary>
         bool IsDead { get; }

@@ -16,10 +16,6 @@ namespace Zilon.Core.Tactics
 
         public bool IsDead { get; private set; }
 
-        public int Ap { get; }
-
-        public int Mp { get; }
-
         public event EventHandler Dead;
 
         public void SetHpForce(int hp)
