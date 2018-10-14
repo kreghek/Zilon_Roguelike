@@ -16,10 +16,8 @@ namespace Zilon.Core.Tactics.Behaviour
             Actor = actor;
         }
 
-        [ExcludeFromCodeCoverage]
         protected IActor Actor { get; }
 
-        [ExcludeFromCodeCoverage]
         public virtual bool IsComplete { get; set; }
 
         public abstract void Execute();

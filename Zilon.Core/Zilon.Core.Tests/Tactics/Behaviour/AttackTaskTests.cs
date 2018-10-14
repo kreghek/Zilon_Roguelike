@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -16,18 +17,80 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture()]
+    [TestFixture]
     public class AttackTaskTests
     {
+        private AttackTask _attackTask;
+        private IActor _actor;
+        private TestGridGenMap _testMap;
+
         /// <summary>
         /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
         /// </summary>
-        [Test()]
-        public void AttackTaskTest()
+        [Test]
+        public void AttackTask_Execute_RaiseUsedAct()
         {
             // ARRANGE
+            
+
+
+            using (var monitor = _actor.Monitor())
+            {
+                // ACT
+                _attackTask.Execute();
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IActor.UsedAct));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при атаке, если не мешают стены, не выбрасывается исключение.
+        /// </summary>
+        [Test]
+        public void AttackTask_NoWall_NotThrowsInvalidOperationException()
+        {
+            Action act = () =>
+            {
+                // ACT
+                _attackTask.Execute();
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow<InvalidOperationException>();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
+        /// </summary>
+        [Test]
+        public void AttackTask_Wall_ThrowsInvalidOperationException()
+        {
+            // ARRANGE
+            _testMap.RemoveEdge(0, 0, 1, 0);
+
+
+            Action act = () =>
+            {
+                // ACT
+                _attackTask.Execute();
+            };
+
+
+
+            // ASSERT
+            act.Should().Throw<InvalidOperationException>();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            var testMap = new TestGridGenMap(3);
+            _testMap = new TestGridGenMap(3);
 
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
@@ -46,16 +109,16 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
-            var actorNode = testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
+            var actorNode = _testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
                 .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
-            var actor = actorMock.Object;
+            _actor = actorMock.Object;
 
 
             var targetMock = new Mock<IActor>();
-            var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
+            var targetNode = _testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
             targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
             var target = targetMock.Object;
@@ -65,19 +128,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // Создаём саму команду
-            var attackTask = new AttackTask(actor, target, actService);
-
-
-            using (var monitor = actor.Monitor())
-            {
-                // ACT
-                attackTask.Execute();
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(IActor.UsedAct));
-            }
+            _attackTask = new AttackTask(_actor, target, actService, _testMap);
         }
     }
 }

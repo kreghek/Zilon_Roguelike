@@ -275,7 +275,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actorManager = CreateActorManager(attackerActor, targetActor);
 
-            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService));
+            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService, map));
 
 
 
