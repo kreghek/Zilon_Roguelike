@@ -46,7 +46,7 @@ namespace Zilon.Core.Persons
             };
 
             var defences = scheme.Defence?.Defences?
-                .Select(x => new PersonDefenceItem(x.Defence, x.Level))
+                .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 
             CombatStats = new CombatStats

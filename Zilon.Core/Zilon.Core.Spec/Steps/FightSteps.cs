@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+
 using LightInject;
 
 using TechTalk.SpecFlow;
@@ -6,6 +7,7 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
@@ -41,6 +43,17 @@ namespace Zilon.Core.Spec.Steps
 
             actor.State.IsDead.Should().BeTrue();
         }
+
+        [Then(@"Монстр Id:(.*) успешно обороняется")]
+        public void ThenМонстрIdУспешноОбороняется(int monsterId)
+        {
+            var monster = _context.GetMonsterById(monsterId);
+            using (var monitor = monster.Monitor())
+            {
+                monitor.Should().Raise(nameof(IActor.OnDefence));
+            }
+        }
+
 
     }
 }

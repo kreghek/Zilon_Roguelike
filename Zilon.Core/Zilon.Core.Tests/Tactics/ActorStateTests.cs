@@ -1,13 +1,11 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Persons;
+﻿using FluentAssertions;
+
 using Moq;
-using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics
 {

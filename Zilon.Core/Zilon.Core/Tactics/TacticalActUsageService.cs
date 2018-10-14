@@ -115,6 +115,10 @@ namespace Zilon.Core.Tactics
                     CountTargetActorDefeat(actor, targetActor);
                 }
             }
+            else
+            {
+                targetActor.ProcessDefence();
+            }
         }
 
         /// <summary>

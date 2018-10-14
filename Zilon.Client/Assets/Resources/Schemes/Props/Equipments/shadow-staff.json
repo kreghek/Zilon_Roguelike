@@ -3,11 +3,12 @@
     "Power": 1.0,
     "ApRank": 4,
     "ActSids": [
-      "slash"
+      "inner-flame"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Короткий меч"
+    "En": "Shadow Staff",
+    "Ru": "Теневой посох"
   }
 }

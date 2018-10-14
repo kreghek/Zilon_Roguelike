@@ -77,6 +77,7 @@ namespace Zilon.Core.Tactics
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         public event EventHandler<UsedActEventArgs> UsedAct;
+        public event EventHandler OnDefence;
 
         public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
         {
@@ -137,6 +138,11 @@ namespace Zilon.Core.Tactics
         public void TakeDamage(int value)
         {
             State.TakeDamage(value);
+        }
+
+        public void ProcessDefence()
+        {
+            OnDefence?.Invoke(this, new EventArgs());
         }
     }
 }

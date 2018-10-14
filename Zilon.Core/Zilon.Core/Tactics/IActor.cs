@@ -74,5 +74,16 @@ namespace Zilon.Core.Tactics
         /// Происходит, когда актёр выполняет действие.
         /// </summary>
         event EventHandler<UsedActEventArgs> UsedAct;
+
+        //TODO Избавиться от этого метода.
+        /// <summary>
+        /// Вызывается службой действий в случае успешной обороны.
+        /// </summary>
+        void ProcessDefence();
+
+        /// <summary>
+        /// Событие выстреливает, когда персонаж успешно отражает наступление.
+        /// </summary>
+        event EventHandler OnDefence;
     }
 }

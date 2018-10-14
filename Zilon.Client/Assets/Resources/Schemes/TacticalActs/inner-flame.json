@@ -1,6 +1,6 @@
 {
   "Name": {
-    "Ru": "Безумный удар топором"
+    "Ru": "Внетреннее пламя"
   },
   "Stats": {
     "Efficient": {
@@ -13,8 +13,8 @@
     },
     "HitCount": 1,
     "Offence": {
-      "Type": "Fury",
-      "Impact":  "Kinetic"
+      "Type": "Shadow",
+      "Impact":  "Psy"
     }
   }
 }
