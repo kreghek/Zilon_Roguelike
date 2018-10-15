@@ -4,7 +4,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
-    public class SurvivalStatHazardEffect : IPersonEffect, IActorStateEffect
+    public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
         private SurvivalStatHazardLevel _level;
 
@@ -35,11 +35,11 @@ namespace Zilon.Core.Persons
 
         public event EventHandler Changed;
 
-        public void Apply(IActorState actorState)
+        public void Apply(ISurvivalData survivalData)
         {
             if (Level == SurvivalStatHazardLevel.Max)
             {
-                actorState.TakeDamage(5);
+                survivalData.DecreaseStat(SurvivalStatType.Health, 1);
             }
         }
 

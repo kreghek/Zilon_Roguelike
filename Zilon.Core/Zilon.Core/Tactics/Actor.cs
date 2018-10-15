@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -10,24 +10,11 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
-        //TODO Добавить фабрику актёров. Для монстов и для игрока.
-        // этот конструктор убрать и передавать IActorState снаружи.
-        public Actor(IPerson person, IPlayer owner, IMapNode node) : this(person, owner, node, null)
-        {
-
-        }
-
-        public Actor(IPerson person, IPlayer owner, IMapNode node, IActorState state)
+        public Actor(IPerson person, IPlayer owner, IMapNode node)
         {
             Person = person;
             Owner = owner;
             Node = node;
-            State = state;
-
-            if (state == null)
-            {
-                State = new ActorState(person, person.Hp);
-            }
         }
 
         /// <inheritdoc />
@@ -36,9 +23,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public IPerson Person { get; }
 
-        public IActorState State { get; }
-
-        /// <inheritdoc />
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
@@ -50,7 +34,7 @@ namespace Zilon.Core.Tactics
 
         public bool CanBeDamaged()
         {
-            return !State.IsDead;
+            return !Person.Survival.IsDead;
         }
 
         public void MoveToNode(IMapNode targetNode)
@@ -118,7 +102,7 @@ namespace Zilon.Core.Tactics
                         break;
 
                     case ConsumeCommonRule.Health:
-                        State.RestoreHp(efficient);
+                        Person.Survival.RestoreStat(SurvivalStatType.Health, efficient);
                         break;
                 }
             }
@@ -137,7 +121,7 @@ namespace Zilon.Core.Tactics
 
         public void TakeDamage(int value)
         {
-            State.TakeDamage(value);
+            Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
         }
 
         public void ProcessDefence()

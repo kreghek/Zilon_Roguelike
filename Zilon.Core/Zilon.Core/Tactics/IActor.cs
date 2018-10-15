@@ -34,11 +34,6 @@ namespace Zilon.Core.Tactics
         IPlayer Owner { get; }
 
         /// <summary>
-        /// Текущее состояние актёра.
-        /// </summary>
-        IActorState State { get; }
-
-        /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>

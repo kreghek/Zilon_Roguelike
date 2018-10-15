@@ -11,11 +11,6 @@
         int Id { get; set; }
 
         /// <summary>
-        /// Хитпоинты персонажа.
-        /// </summary>
-        int Hp { get; }
-
-        /// <summary>
         /// Носитель экипировки.
         /// </summary>
         IEquipmentCarrier EquipmentCarrier { get; }

@@ -170,15 +170,15 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var player = playerMock.Object;
             var person = CreatePerson();
 
-            var actorStateMock = new Mock<IActorState>();
-            var actorState = actorStateMock.Object;
+            var survivalDataMock = new Mock<ISurvivalData>();
+            var survivalData = survivalDataMock.Object;
 
             var actorNode = _map.Nodes.Cast<HexNode>().SelectBy(nodeX, nodeY);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Owner).Returns(player);
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.SetupGet(x => x.State).Returns(actorState);
+            actorMock.SetupGet(x => x.State).Returns(survivalData);
             actorMock.SetupGet(x => x.Node).Returns(() => actorNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>((node) => actorNode = (HexNode)node);

@@ -8,7 +8,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовая реализация данных о выживании.
     /// </summary>
-    public class SurvivalData : ISurvivalData
+    public sealed class SurvivalData : ISurvivalData
     {
         public SurvivalData()
         {
@@ -19,8 +19,10 @@ namespace Zilon.Core.Persons
         }
 
         public SurvivalStat[] Stats { get; }
+        public bool IsDead { get; private set; }
 
         public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
+        public event EventHandler Dead;
 
         public void RestoreStat(SurvivalStatType type, int value)
         {
@@ -30,12 +32,29 @@ namespace Zilon.Core.Persons
                 ChangeStatInner(stat, value);
             }
         }
-        
+
+        public void DecreaseStat(SurvivalStatType type, int value)
+        {
+            var stat = Stats.SingleOrDefault(x => x.Type == type);
+            if (stat != null)
+            {
+                ChangeStatInner(stat, -value);
+            }
+        }
+
+        public void SetStatForce(SurvivalStatType type, int value)
+        {
+            var stat = Stats.SingleOrDefault(x => x.Type == type);
+            if (stat != null)
+            {
+                stat.Value = value;
+            }
+        }
+
         public void Update()
         {
             foreach (var stat in Stats)
             {
-
                 ChangeStatInner(stat, -stat.Rate);
             }
         }
@@ -46,7 +65,7 @@ namespace Zilon.Core.Persons
 
             stat.Value += value;
 
-            var diff = RangeHelper.CreateNormalized<int>(oldValue, stat.Value);
+            var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
 
             foreach (var keyPoint in stat.KeyPoints)
             {
@@ -55,11 +74,31 @@ namespace Zilon.Core.Persons
                     DoStatCrossKeyPoint(stat, keyPoint);
                 }
             }
+
+            CheckHp(stat);
+        }
+
+        private void CheckHp(SurvivalStat stat)
+        {
+            if (stat.Type == SurvivalStatType.Health)
+            {
+                var hp = stat.Value;
+                if (hp <= 0)
+                {
+                    IsDead = true;
+                    DoDead();
+                }
+            }
+        }
+
+        private void DoDead()
+        {
+            Dead?.Invoke(this, new EventArgs());
         }
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat(50,-100,100)
+            var stat = new SurvivalStat(50, -100, 100)
             {
                 Type = type,
                 Rate = 1,

@@ -11,7 +11,12 @@
         Undefined,
 
         /// <summary>
-        /// Сыгость.
+        /// Хитпоинты.
+        /// </summary>
+        Health,
+
+        /// <summary>
+        /// Сытость.
         /// </summary>
         Satiety,
 

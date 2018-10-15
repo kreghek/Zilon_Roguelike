@@ -44,7 +44,7 @@ namespace Zilon.Core.Spec.Steps
         public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = _context.GetActiveActor();
-            actor.State.SetHpForce(startHp);
+            actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
@@ -58,7 +58,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var monster = _context.GetMonsterById(monsterId);
 
-            monster.State.SetHpForce(monsterHp);
+            monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
