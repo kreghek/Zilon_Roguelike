@@ -207,12 +207,6 @@ namespace Zilon.Core.Spec.Steps
             prop.Should().BeNull();
         }
 
-
-
-
-
-
-
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {

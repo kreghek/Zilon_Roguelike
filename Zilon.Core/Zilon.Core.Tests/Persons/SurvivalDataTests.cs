@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -18,6 +19,8 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
+            var personScheme = new TestPersonScheme();
+
             var survivalData = new SurvivalData();
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);

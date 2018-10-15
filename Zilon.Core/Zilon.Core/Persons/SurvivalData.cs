@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -10,9 +11,12 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalData : ISurvivalData
     {
-        public SurvivalData()
+        public SurvivalData(IPersonScheme personScheme)
         {
             Stats = new[] {
+                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                    Type = SurvivalStatType.Health
+                },
                 CreateStat(SurvivalStatType.Satiety),
                 CreateStat(SurvivalStatType.Water)
             };
