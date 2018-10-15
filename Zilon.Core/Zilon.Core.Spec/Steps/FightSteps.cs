@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 
 using LightInject;
 
@@ -27,7 +28,8 @@ namespace Zilon.Core.Spec.Steps
 
             var monster = _context.GetMonsterById(monsterId);
 
-            var monsterViewModel = new TestActorViewModel {
+            var monsterViewModel = new TestActorViewModel
+            {
                 Actor = monster
             };
 
@@ -47,13 +49,12 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Монстр Id:(.*) успешно обороняется")]
         public void ThenМонстрIdУспешноОбороняется(int monsterId)
         {
+            var visual = _context.VisualEvents.Last();
+
+            visual.EventName.Should().Be(nameof(IActor.OnDefence));
+
             var monster = _context.GetMonsterById(monsterId);
-            using (var monitor = monster.Monitor())
-            {
-                monitor.Should().Raise(nameof(IActor.OnDefence));
-            }
+            visual.Actor.Should().BeSameAs(monster);
         }
-
-
     }
 }
