@@ -30,6 +30,5 @@ namespace Zilon.Core.Props
 
         event EventHandler<PropStoreEventArgs> Added;
         event EventHandler<PropStoreEventArgs> Removed;
-        event EventHandler<PropStoreEventArgs> Changed;
     }
 }
