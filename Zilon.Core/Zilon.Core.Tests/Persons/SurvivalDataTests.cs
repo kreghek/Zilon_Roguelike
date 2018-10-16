@@ -12,6 +12,8 @@ namespace Zilon.Core.Tests.Persons
     [TestFixture]
     public class SurvivalDataTests
     {
+        private TestPersonScheme _personScheme;
+
         /// <summary>
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
@@ -19,9 +21,7 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var personScheme = new TestPersonScheme();
-
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -1;
@@ -79,7 +79,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues2()
         {
             // ARRANGE
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -25;
@@ -113,54 +113,56 @@ namespace Zilon.Core.Tests.Persons
             const int restoreHpValue = 2;
             const int expectedHp = personHp;
 
-            var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Hp).Returns(personHp);
-            var person = personMock.Object;
+            _personScheme.Hp = personHp;
 
-            var actorState = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
+
+            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            stat.Value = initialHp;
 
 
 
             // ACT
-            actorState.RestoreHp(restoreHpValue);
+            survivalData.RestoreStat(SurvivalStatType.Health, restoreHpValue);
 
 
 
             // ASSERT
-            actorState.Hp.Should().Be(expectedHp);
+            var factStat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            factStat.Value.Should().Be(expectedHp);
         }
 
         /// <summary>
-        /// Проверяет, что актёр при потере всего здоровья выстреливает событие смерти.
+        /// Проверяет, что при потере всего здоровья выстреливает событие смерти.
         /// </summary>
         [Test]
         public void TakeDamage_FatalDamage_FiresEvent()
         {
             // ARRANGE
 
-            var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Hp).Returns(1);
-            var person = personMock.Object;
+            const int personHp = 1;
+            const int damageValue = 2;
 
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
+            _personScheme.Hp = personHp;
 
-            var nodeMock = new Mock<IMapNode>();
-            var node = nodeMock.Object;
-
-            var testActor = new Actor(person, player, node);
+            var survivalData = new SurvivalData(_personScheme);
 
 
             // ACT
-            using (var monitor = testActor.State.Monitor())
+            using (var monitor = survivalData.Monitor())
             {
-                testActor.TakeDamage(1);
+                survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
 
 
 
                 // ASSERT
-                monitor.Should().Raise(nameof(testActor.State.Dead));
+                monitor.Should().Raise(nameof(SurvivalData.Dead));
             }
+        }
+
+        public void SetUp()
+        {
+            _personScheme = new TestPersonScheme();
         }
     }
 }

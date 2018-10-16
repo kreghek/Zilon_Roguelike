@@ -170,15 +170,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var player = playerMock.Object;
             var person = CreatePerson();
 
-            var survivalDataMock = new Mock<ISurvivalData>();
-            var survivalData = survivalDataMock.Object;
-
             var actorNode = _map.Nodes.Cast<HexNode>().SelectBy(nodeX, nodeY);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Owner).Returns(player);
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.SetupGet(x => x.State).Returns(survivalData);
             actorMock.SetupGet(x => x.Node).Returns(() => actorNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>((node) => actorNode = (HexNode)node);
@@ -203,9 +199,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             tacticalCarrierMock.SetupProperty(x => x.Acts, new[] { tacticalAct });
             var tacticalCarrier = tacticalCarrierMock.Object;
 
+            var survivalDataMock = new Mock<ISurvivalData>();
+            var survivalData = survivalDataMock.Object;
+
 
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.TacticalActCarrier).Returns(tacticalCarrier);
+            personMock.SetupGet(x => x.Survival).Returns(survivalData);
             var person = personMock.Object;
             return person;
         }

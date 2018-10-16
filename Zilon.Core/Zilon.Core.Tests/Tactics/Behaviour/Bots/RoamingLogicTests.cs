@@ -64,17 +64,21 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var act = actMock.Object;
             tacticalActCarrierMock.SetupGet(x => x.Acts).Returns(new[] { act });
 
+
+            var intruderPersonMock = new Mock<IPerson>();
+            var intruderPerson = intruderPersonMock.Object;
+
+            var intruderSurvivalMock = new Mock<ISurvivalData>();
+            intruderSurvivalMock.SetupGet(x => x.IsDead).Returns(false);
+            var intruderSurvival = intruderSurvivalMock.Object;
+            intruderPersonMock.SetupGet(x => x.Survival).Returns(intruderSurvival);
+
             var intruderMock = new Mock<IActor>();
             intruderMock.SetupGet(x => x.Owner).Returns(enemyPlayer);
             intruderMock.SetupGet(x => x.Node).Returns(() => _factIntruderNode);
             intruderMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>(node => _factIntruderNode = node);
             _intruder = intruderMock.Object;
-
-            var intruderStateMock = new Mock<IActorState>();
-            intruderStateMock.SetupGet(x => x.IsDead).Returns(false);
-            var intruderState = intruderStateMock.Object;
-            intruderMock.SetupGet(x => x.State).Returns(intruderState);
 
             var actors = new List<IActor> { _actor, _intruder };
             var actorListMock = new Mock<IActorManager>();

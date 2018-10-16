@@ -61,10 +61,6 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Owner).Returns(player);
             var actor = actorMock.Object;
 
-            var stateMock = new Mock<IActorState>();
-            var state = stateMock.Object;
-            actorMock.SetupGet(x => x.State).Returns(state);
-
             return actor;
         }
     }
