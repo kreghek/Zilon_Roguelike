@@ -240,6 +240,38 @@ namespace Zilon.Core.Tests.Props
             ((Resource)items[0]).Count.Should().Be(expectedResourceCount);
         }
 
+        /// <summary>
+        /// Тест проверяет, что при добавлении экипировки выстреливает событие на добаление.
+        /// </summary>
+        [Test]
+        public void Add_Equipment_EventRaise()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+
+            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+
+            var propStore = CreatePropStore();
+
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Add(equipment);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Added));
+
+            }
+        }
+
         private static PropStoreBase CreatePropStore()
         {
             var propStoreMock = new Mock<PropStoreBase>
