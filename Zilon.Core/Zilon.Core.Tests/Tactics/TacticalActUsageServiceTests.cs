@@ -256,7 +256,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterIsDead = false;
             var monsterSurvivalDataMock = new Mock<ISurvivalData>();
-            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(monsterIsDead);
+            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterSurvivalDataMock
                 .Setup(x => x.DecreaseStat(
                     It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
@@ -318,7 +318,8 @@ namespace Zilon.Core.Tests.Tactics
                 Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic
+                    Impact = ImpactType.Kinetic,
+                    ApRank = 10
                 }
             };
 

@@ -160,6 +160,7 @@ namespace Zilon.Core.Tests.Persons
             }
         }
 
+        [SetUp]
         public void SetUp()
         {
             _personScheme = new TestPersonScheme();

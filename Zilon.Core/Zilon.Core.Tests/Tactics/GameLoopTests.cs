@@ -6,7 +6,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -60,6 +60,14 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Owner).Returns(player);
             var actor = actorMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+            actorMock.SetupGet(x => x.Person).Returns(person);
+
+            var survivalDataMock = new Mock<ISurvivalData>();
+            var survivalData = survivalDataMock.Object;
+            personMock.SetupGet(x => x.Survival).Returns(survivalData);
 
             return actor;
         }

@@ -69,6 +69,16 @@ namespace Zilon.Core.Persons
 
             stat.Value += value;
 
+            if (stat.KeyPoints != null)
+            {
+                CheckStatKeyPoints(stat, oldValue);
+            }
+
+            CheckHp(stat);
+        }
+
+        private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
+        {
             var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
 
             foreach (var keyPoint in stat.KeyPoints)
@@ -78,8 +88,6 @@ namespace Zilon.Core.Persons
                     DoStatCrossKeyPoint(stat, keyPoint);
                 }
             }
-
-            CheckHp(stat);
         }
 
         private void CheckHp(SurvivalStat stat)
