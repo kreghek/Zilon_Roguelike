@@ -3,11 +3,12 @@
     "Power": 1.0,
     "ApRank": 4,
     "ActSids": [
-      "slash"
+      "burst"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Короткий меч"
+    "En": "Minigun",
+    "Ru": "Ручной пулемёт"
   }
 }

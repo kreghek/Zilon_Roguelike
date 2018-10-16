@@ -21,14 +21,39 @@ namespace Zilon.Core.Persons
         void Update();
 
         /// <summary>
+        /// Снижение характеристики.
+        /// </summary>
+        /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
+        /// <param name="value"> Значение, на которое снижается текущий запас. </param>
+        void DecreaseStat(SurvivalStatType type, int value);
+
+        /// <summary>
         /// Пополнение запаса характеристики.
         /// </summary>
-        /// <param name="type"> Тип характеритсики, которая будет восстанавливаться. </param>
-        /// <param name="value"> Значение, на которое увеличивается текущий запас. </param>
+        /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
+        /// <param name="value"> Значение, на которое восстанавливается текущий запас. </param>
         void RestoreStat(SurvivalStatType type, int value);
 
         /// <summary>
-        /// Событие, которое происходит, если значение характеристики пересекает ключевое значение (мин/макс/четверти/0).
+        /// Форсированно установить запас здоровья.
+        /// </summary>
+        /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
+        /// <param name="value"> Целевое значение запаса характеристики. </param>
+        void SetStatForce(SurvivalStatType type, int value);
+
+        /// <summary>
+        /// Признак того, что персонаж мёртв.
+        /// </summary>
+        bool IsDead { get; }
+
+        /// <summary>
+        /// Происходит, если персонаж умирает.
+        /// </summary>
+        event EventHandler Dead;
+
+        /// <summary>
+        /// Событие, которое происходит, если значение характеристики
+        /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
         event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
     }

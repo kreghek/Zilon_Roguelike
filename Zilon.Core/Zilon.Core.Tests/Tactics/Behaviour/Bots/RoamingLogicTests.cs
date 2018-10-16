@@ -31,62 +31,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         private IDecisionSource _decisionSource;
         private IActor _intruder;
 
-        [SetUp]
-        public void SetUp()
-        {
-            _map = new TestGridGenMap();
-
-
-            var playerMock = new Mock<IPlayer>();
-            _player = playerMock.Object;
-
-            var enemyPlayerMock = new Mock<IPlayer>();
-            var enemyPlayer = enemyPlayerMock.Object;
-
-
-            var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(() => _factActorNode);
-            actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
-                .Callback<IMapNode>(node => _factActorNode = node);
-            actorMock.SetupGet(x => x.Owner).Returns(_player);
-            _actor = actorMock.Object;
-
-            var personMock = new Mock<IPerson>();
-            var person = personMock.Object;
-            actorMock.SetupGet(x => x.Person).Returns(person);
-
-            var tacticalActCarrierMock = new Mock<ITacticalActCarrier>();
-            var tacticalActCarrier = tacticalActCarrierMock.Object;
-            personMock.SetupGet(x => x.TacticalActCarrier).Returns(tacticalActCarrier);
-
-            var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme());
-            var act = actMock.Object;
-            tacticalActCarrierMock.SetupGet(x => x.Acts).Returns(new[] { act });
-
-            var intruderMock = new Mock<IActor>();
-            intruderMock.SetupGet(x => x.Owner).Returns(enemyPlayer);
-            intruderMock.SetupGet(x => x.Node).Returns(() => _factIntruderNode);
-            intruderMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
-                .Callback<IMapNode>(node => _factIntruderNode = node);
-            _intruder = intruderMock.Object;
-
-            var intruderStateMock = new Mock<IActorState>();
-            intruderStateMock.SetupGet(x => x.IsDead).Returns(false);
-            var intruderState = intruderStateMock.Object;
-            intruderMock.SetupGet(x => x.State).Returns(intruderState);
-
-            var actors = new List<IActor> { _actor, _intruder };
-            var actorListMock = new Mock<IActorManager>();
-            actorListMock.SetupGet(x => x.Items).Returns(actors);
-            _actorList = actorListMock.Object;
-
-            var decisionSourceMock = new Mock<IDecisionSource>();
-            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_expectedIdleDuration);
-            _decisionSource = decisionSourceMock.Object;
-        }
-
         /// <summary>
         /// Тест проверяет, что актёр, следуемый логике произвольного брожения будет
         /// приближаться к противнику, если тот в зоне обнаружения.
@@ -127,6 +71,67 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             // ASSERT
             _factActorNode.Should().Be(expectedActorNode);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _map = new TestGridGenMap();
+
+
+            var playerMock = new Mock<IPlayer>();
+            _player = playerMock.Object;
+
+            var enemyPlayerMock = new Mock<IPlayer>();
+            var enemyPlayer = enemyPlayerMock.Object;
+
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(() => _factActorNode);
+            actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
+                .Callback<IMapNode>(node => _factActorNode = node);
+            actorMock.SetupGet(x => x.Owner).Returns(_player);
+            _actor = actorMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+            actorMock.SetupGet(x => x.Person).Returns(person);
+
+            var tacticalActCarrierMock = new Mock<ITacticalActCarrier>();
+            var tacticalActCarrier = tacticalActCarrierMock.Object;
+            personMock.SetupGet(x => x.TacticalActCarrier).Returns(tacticalActCarrier);
+
+            var actMock = new Mock<ITacticalAct>();
+            actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme());
+            var act = actMock.Object;
+            tacticalActCarrierMock.SetupGet(x => x.Acts).Returns(new[] { act });
+
+
+            var intruderPersonMock = new Mock<IPerson>();
+            var intruderPerson = intruderPersonMock.Object;
+
+            var intruderSurvivalMock = new Mock<ISurvivalData>();
+            intruderSurvivalMock.SetupGet(x => x.IsDead).Returns(false);
+            var intruderSurvival = intruderSurvivalMock.Object;
+            intruderPersonMock.SetupGet(x => x.Survival).Returns(intruderSurvival);
+
+            var intruderMock = new Mock<IActor>();
+            intruderMock.SetupGet(x => x.Owner).Returns(enemyPlayer);
+            intruderMock.SetupGet(x => x.Node).Returns(() => _factIntruderNode);
+            intruderMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
+                .Callback<IMapNode>(node => _factIntruderNode = node);
+            intruderMock.SetupGet(x => x.Person).Returns(intruderPerson);
+            _intruder = intruderMock.Object;
+
+            var actors = new List<IActor> { _actor, _intruder };
+            var actorListMock = new Mock<IActorManager>();
+            actorListMock.SetupGet(x => x.Items).Returns(actors);
+            _actorList = actorListMock.Object;
+
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(_expectedIdleDuration);
+            _decisionSource = decisionSourceMock.Object;
         }
 
         private ITacticalActUsageService CreateTacticalActUsageService()

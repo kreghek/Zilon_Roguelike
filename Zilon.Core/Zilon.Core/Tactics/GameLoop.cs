@@ -37,7 +37,7 @@ namespace Zilon.Core.Tactics
 
             foreach (var actor in actorsQueue)
             {
-                if (actor.State.IsDead)
+                if (actor.Person.Survival.IsDead)
                 {
                     continue;
                 }
@@ -64,7 +64,7 @@ namespace Zilon.Core.Tactics
         private IActor[] CalcActorList()
         {
             // Персонаж, которым в данный момент управляет актёр, должен обрабатываться первым.
-            var sortedActors = _actorManager.Items.Where(x => !x.State.IsDead)
+            var sortedActors = _actorManager.Items.Where(x => !x.Person.Survival.IsDead)
                 .OrderByDescending(x => x.Owner is HumanPlayer)
                 .ToArray();
 

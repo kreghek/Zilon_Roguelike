@@ -66,7 +66,7 @@ namespace Zilon.Core.Persons
             
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
-            Survival = new SurvivalData();
+            Survival = new SurvivalData(scheme);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 

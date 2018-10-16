@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
+
 using LightInject;
 
 using TechTalk.SpecFlow;
@@ -6,6 +8,7 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
@@ -25,7 +28,8 @@ namespace Zilon.Core.Spec.Steps
 
             var monster = _context.GetMonsterById(monsterId);
 
-            var monsterViewModel = new TestActorViewModel {
+            var monsterViewModel = new TestActorViewModel
+            {
                 Actor = monster
             };
 
@@ -39,8 +43,18 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            actor.State.IsDead.Should().BeTrue();
+            actor.Person.Survival.IsDead.Should().BeTrue();
         }
 
+        [Then(@"Монстр Id:(.*) успешно обороняется")]
+        public void ThenМонстрIdУспешноОбороняется(int monsterId)
+        {
+            var visual = _context.VisualEvents.Last();
+
+            visual.EventName.Should().Be(nameof(IActor.OnDefence));
+
+            var monster = _context.GetMonsterById(monsterId);
+            visual.Actor.Should().BeSameAs(monster);
+        }
     }
 }

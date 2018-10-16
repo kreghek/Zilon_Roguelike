@@ -78,9 +78,9 @@ namespace Zilon.Core.Tactics
                 var effects = actor.Person.Effects;
                 foreach (var effect in effects.Items)
                 {
-                    if (effect is IActorStateEffect actorEffect)
+                    if (effect is ISurvivalStatEffect actorEffect)
                     {
-                        actorEffect.Apply(actor.State);
+                        actorEffect.Apply(actor.Person.Survival);
                     }
                 }
             }
@@ -151,16 +151,16 @@ namespace Zilon.Core.Tactics
             {
                 Map.HoldNode(actor.Node, actor);
 
-                actor.State.Dead += ActorState_Dead;
+                actor.Person.Survival.Dead += ActorState_Dead;
             }
         }
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = _actorManager.Items.Single(x => x.State == sender);
+            var actor = _actorManager.Items.Single(x => x.Person.Survival == sender);
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
-            actor.State.Dead -= ActorState_Dead;
+            actor.Person.Survival.Dead -= ActorState_Dead;
 
             if (actor.Person is MonsterPerson monsterPerson)
             {

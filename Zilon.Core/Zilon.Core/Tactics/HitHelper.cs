@@ -24,7 +24,7 @@ namespace Zilon.Core.Tactics
                 return 2;
             }
 
-            var successToHit = CalcSuccessRoll(defenceItem.Level);
+            var successToHit = CalcSuccessToHitRollInner(defenceItem.Level);
 
             return successToHit;
         }
@@ -63,7 +63,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="level"> Уровень обороны, для которой вычисляется нижный порог броска D6. </param>
         /// <returns> Минимальный погод броска D6. </returns>
-        private static int CalcSuccessRoll(PersonRuleLevel level)
+        private static int CalcSuccessToHitRollInner(PersonRuleLevel level)
         {
             switch (level)
             {

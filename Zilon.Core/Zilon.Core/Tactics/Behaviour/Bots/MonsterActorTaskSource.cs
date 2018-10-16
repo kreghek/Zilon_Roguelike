@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Zilon.Core.Players;
 
@@ -36,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             }
 
             var actorTasks = new List<IActorTask>();
-            if (actor.State.IsDead)
+            if (actor.Person.Survival.IsDead)
             {
                 _logicDict.Remove(actor);
                 _sector.PatrolRoutes.Remove(actor);

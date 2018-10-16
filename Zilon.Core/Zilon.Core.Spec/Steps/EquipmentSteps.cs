@@ -9,6 +9,7 @@ using Zilon.Core.Spec.Contexts;
 using LightInject;
 using Zilon.Core.Client;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -29,6 +30,21 @@ namespace Zilon.Core.Spec.Steps
 
             actor.Person.Inventory.Add(equipment);
         }
+
+        [Given(@"Актёр игрока экипирован предметом (.*) в слот Index: (.*)")]
+        public void GivenАктёрИгрокаЭкипированНет(string propSid, int slotIndex)
+        {
+            if (propSid == "нет")
+            {
+                return;
+            }
+
+            var equipment = _context.CreateEquipment(propSid);
+
+            var actor = _context.GetActiveActor();
+            actor.Person.EquipmentCarrier.SetEquipment(equipment, slotIndex);
+        }
+
 
         [When(@"Экипирую предмет (.*) в слот Index: (.*)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)

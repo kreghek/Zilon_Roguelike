@@ -1,6 +1,6 @@
 {
   "Name": {
-    "Ru": "Безумный удар топором"
+    "Ru": "Рубящий удар"
   },
   "Stats": {
     "Efficient": {
@@ -13,7 +13,7 @@
     },
     "HitCount": 1,
     "Offence": {
-      "Type": "Fury",
+      "Type": "Tactical",
       "Impact":  "Kinetic"
     }
   }

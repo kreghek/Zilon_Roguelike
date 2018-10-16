@@ -1,16 +1,19 @@
 ﻿using System.Linq;
 
 using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
     [TestFixture]
     public class SurvivalDataTests
     {
+        private TestPersonScheme _personScheme;
+
         /// <summary>
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
@@ -18,7 +21,7 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
@@ -47,7 +50,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -1;
@@ -76,7 +79,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues2()
         {
             // ARRANGE
-            var survivalData = new SurvivalData();
+            var survivalData = new SurvivalData(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -25;
@@ -96,6 +99,71 @@ namespace Zilon.Core.Tests.Persons
                     args.KeyPoint.Level == SurvivalStatHazardLevel.Strong &&
                     args.KeyPoint.Value == -25);
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при восстановлении Хп текущее значение не выходит за рамки максимального.
+        /// </summary>
+        [Test]
+        public void RestoreHp_RestoreHp_HpNotGreaterThatMaxPersonHp()
+        {
+            // ARRANGE
+            const int initialHp = 2;
+            const int personHp = 3;
+            const int restoreHpValue = 2;
+            const int expectedHp = personHp;
+
+            _personScheme.Hp = personHp;
+
+            var survivalData = new SurvivalData(_personScheme);
+
+            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            stat.Value = initialHp;
+
+
+
+            // ACT
+            survivalData.RestoreStat(SurvivalStatType.Health, restoreHpValue);
+
+
+
+            // ASSERT
+            var factStat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            factStat.Value.Should().Be(expectedHp);
+        }
+
+        /// <summary>
+        /// Проверяет, что при потере всего здоровья выстреливает событие смерти.
+        /// </summary>
+        [Test]
+        public void TakeDamage_FatalDamage_FiresEvent()
+        {
+            // ARRANGE
+
+            const int personHp = 1;
+            const int damageValue = 2;
+
+            _personScheme.Hp = personHp;
+
+            var survivalData = new SurvivalData(_personScheme);
+
+
+            // ACT
+            using (var monitor = survivalData.Monitor())
+            {
+                survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(SurvivalData.Dead));
+            }
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _personScheme = new TestPersonScheme();
         }
     }
 }

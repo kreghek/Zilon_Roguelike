@@ -79,7 +79,7 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private void UseOnActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            var targetIsDeadLast = targetActor.State.IsDead;
+            var targetIsDeadLast = targetActor.Person.Survival.IsDead;
 
             var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
             var defenceType = HitHelper.GetDefence(offenceType);
@@ -110,10 +110,14 @@ namespace Zilon.Core.Tactics
 
                 targetActor.TakeDamage(actEfficientArmorBlocked);
 
-                if (!targetIsDeadLast && targetActor.State.IsDead)
+                if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
                 {
                     CountTargetActorDefeat(actor, targetActor);
                 }
+            }
+            else
+            {
+                targetActor.ProcessDefence();
             }
         }
 

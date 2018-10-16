@@ -32,6 +32,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public ServiceContainer Container { get; }
 
+        public List<VisualEventInfo> VisualEvents { get; }
+
         protected FeatureContextBase()
         {
             Container = new ServiceContainer();
@@ -46,6 +48,8 @@ namespace Zilon.Core.Spec.Contexts
 
             InitPlayers();
             InitClientServices();
+
+            VisualEvents = new List<VisualEventInfo>();
         }
 
         public void CreateSector(int mapSize)
@@ -66,7 +70,7 @@ namespace Zilon.Core.Spec.Contexts
 
             var map = sector.Map;
 
-            RemoveEdge(map.Edges, x1, y1, x2, y2);
+            map.RemoveEdge(x1, y1, x2, y2);
         }
 
         public IActor GetActiveActor()
@@ -123,7 +127,14 @@ namespace Zilon.Core.Spec.Contexts
             var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
+            monster.OnDefence += Monster_OnDefence;
+
             actorManager.Add(monster);
+        }
+
+        private void Monster_OnDefence(object sender, EventArgs e)
+        {
+            VisualEvents.Add(new VisualEventInfo((IActor)sender, e, nameof(IActor.OnDefence)));
         }
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
@@ -255,7 +266,11 @@ namespace Zilon.Core.Spec.Contexts
 
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                .Returns<Roll>(roll => (roll.Dice / 2) * roll.Count);
+                .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
+            actUsageRandomSourceMock.Setup(x => x.RollToHit())
+                .Returns(4);
+            actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
+                .Returns(4);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             Container.Register(factory => decisionSource, new PerContainerLifetime());
@@ -306,27 +321,20 @@ namespace Zilon.Core.Spec.Contexts
             playerState.TaskSource = humanTaskSource;
         }
 
-        private IEdge GetEdge(IList<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        public class VisualEventInfo
         {
-            var foundFromStart = from edge in edges
-                                 from node in edge.Nodes
-                                 let hexNode = (HexNode)node
-                                 where hexNode.OffsetX == offsetX1 && hexNode.OffsetY == offsetY1
-                                 select edge;
+            public VisualEventInfo(IActor actor, EventArgs eventArgs, string eventName)
+            {
+                Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+                EventArgs = eventArgs ?? throw new ArgumentNullException(nameof(eventArgs));
+                EventName = eventName ?? throw new ArgumentNullException(nameof(eventName));
+            }
 
-            var foundToEnd = from edge in foundFromStart
-                             from node in edge.Nodes
-                             let hexNode = (HexNode)node
-                             where hexNode.OffsetX == offsetX2 && hexNode.OffsetY == offsetY2
-                             select edge;
+            public IActor Actor { get; }
 
-            return foundToEnd.SingleOrDefault();
-        }
+            public EventArgs EventArgs { get; }
 
-        private void RemoveEdge(IList<IEdge> edges, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
-        {
-            var edge = GetEdge(edges, offsetX1, offsetY1, offsetX2, offsetY2);
-            edges.Remove(edge);
+            public string EventName { get; }
         }
     }
 }

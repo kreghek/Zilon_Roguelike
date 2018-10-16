@@ -10,7 +10,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Тип обороны.
         /// </summary>
-        DefenceType Defence { get; }
+        DefenceType Type { get; }
 
         /// <summary>
         /// Уровень обороны.

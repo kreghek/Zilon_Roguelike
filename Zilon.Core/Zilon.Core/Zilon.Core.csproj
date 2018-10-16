@@ -114,11 +114,12 @@
     <Compile Include="Persons\EffectEventArgs.cs" />
     <Compile Include="Persons\EffectRule.cs" />
     <Compile Include="Persons\EvolutionData.cs" />
-    <Compile Include="Persons\IActorStateEffect.cs" />
+    <Compile Include="Persons\ISurvivalStatEffect.cs" />
     <Compile Include="Persons\IPersonDefenceStats.cs" />
     <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
+    <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
@@ -184,7 +185,6 @@
     <Compile Include="Schemes\PerkScheme.cs" />
     <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
-    <Compile Include="Tactics\ActorState.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogic.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IIntention.cs" />
@@ -262,7 +262,6 @@
     <Compile Include="Tactics\DropTablePropChest.cs" />
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
-    <Compile Include="Tactics\IActorState.cs" />
     <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\HitHelper.cs" />
     <Compile Include="Tactics\MapExtensions.cs" />

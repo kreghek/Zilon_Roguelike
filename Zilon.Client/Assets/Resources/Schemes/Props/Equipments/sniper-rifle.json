@@ -3,11 +3,12 @@
     "Power": 1.0,
     "ApRank": 4,
     "ActSids": [
-      "slash"
+      "aimed-shot"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Короткий меч"
+    "En": "Sniper Rifle",
+    "Ru": "Снайперская винтовка"
   }
 }

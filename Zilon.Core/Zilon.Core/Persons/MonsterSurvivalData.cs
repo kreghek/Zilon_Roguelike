@@ -7,18 +7,16 @@ using Zilon.Core.Schemes;
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Базовая реализация данных о выживании.
+    /// Данные о выживании для монстра.
     /// </summary>
-    public sealed class SurvivalData : ISurvivalData
+    public sealed class MonsterSurvivalData : ISurvivalData
     {
-        public SurvivalData(IPersonScheme personScheme)
+        public MonsterSurvivalData(IMonsterScheme monsterScheme)
         {
             Stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
                     Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
+                }
             };
         }
 
@@ -106,30 +104,6 @@ namespace Zilon.Core.Persons
         private void DoDead()
         {
             Dead?.Invoke(this, new EventArgs());
-        }
-
-        private static SurvivalStat CreateStat(SurvivalStatType type)
-        {
-            var stat = new SurvivalStat(50, -100, 100)
-            {
-                Type = type,
-                Rate = 1,
-                KeyPoints = new[]{
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Lesser,
-                            Value = 0
-                        },
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Strong,
-                            Value = -25
-                        },
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Max,
-                            Value = -50
-                        }
-                    }
-            };
-            return stat;
         }
 
         private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint keyPoint)
