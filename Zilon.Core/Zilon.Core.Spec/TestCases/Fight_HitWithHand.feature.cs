@@ -103,7 +103,7 @@ this.ScenarioInitialize(scenarioInfo);
         public virtual void УдарыРуками__Captain()
         {
 #line 7
-this.УдарыРуками_("captain", "rat", "1000", "0", "1", "100", "99", ((string[])(null)));
+this.УдарыРуками_("captain", "rat", "1000", "0", "1", "2", "1", ((string[])(null)));
 #line hidden
         }
         
