@@ -222,15 +222,16 @@ namespace Zilon.Core.Spec.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = _context.GetActiveActor();
-            actor.State.Hp.Should().Be(expectedHp);
+            var hpStat = actor.Person.Survival.Stats.Single(x=>x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should().Be(expectedHp);
         }
 
         [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = _context.GetMonsterById(monsterId);
-
-            monster.State.Hp.Should().Be(expectedMonsterHp);
+            var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should().Be(expectedMonsterHp);
         }
 
     }

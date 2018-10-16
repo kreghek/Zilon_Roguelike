@@ -43,7 +43,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            actor.State.IsDead.Should().BeTrue();
+            actor.Person.Survival.IsDead.Should().BeTrue();
         }
 
         [Then(@"Монстр Id:(.*) успешно обороняется")]

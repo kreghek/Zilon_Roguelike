@@ -24,10 +24,7 @@ namespace Zilon.Core.Persons
 
         public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
 
-        /// <summary>
-        /// Монстры не нуждаются в данных о выживании. Условно, у них всегда всего хватает.
-        /// </summary>
-        public ISurvivalData Survival => null;
+        public ISurvivalData Survival { get; }
 
         public EffectCollection Effects { get; }
 
@@ -55,6 +52,8 @@ namespace Zilon.Core.Persons
                     defences ?? new PersonDefenceItem[0],
                     new PersonArmorItem[0])
             };
+
+            Survival = new MonsterSurvivalData(scheme);
 
             Effects = new EffectCollection();
         }
