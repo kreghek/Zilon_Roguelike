@@ -3,6 +3,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

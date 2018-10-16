@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Props;
+
 namespace Zilon.Core.Persons
 {
     public class EquipmentChangedEventArgs : EventArgs

@@ -1,5 +1,5 @@
 ﻿using Zilon.Core.Client;
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tests.Common
 {

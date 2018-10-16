@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Базовый класс для всех хранилищь предметов.

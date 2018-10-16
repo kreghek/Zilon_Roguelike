@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Persons;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Client
 {

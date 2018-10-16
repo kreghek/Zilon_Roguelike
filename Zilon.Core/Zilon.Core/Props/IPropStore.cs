@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Интерфейс хранилища предметов.

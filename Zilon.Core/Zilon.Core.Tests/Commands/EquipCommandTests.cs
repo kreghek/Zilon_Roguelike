@@ -9,7 +9,7 @@ using NUnit.Framework;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;

@@ -1,4 +1,6 @@
 ﻿using System;
+
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

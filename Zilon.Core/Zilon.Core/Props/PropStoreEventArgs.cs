@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Аргументы событий, связанных с инвентарём.

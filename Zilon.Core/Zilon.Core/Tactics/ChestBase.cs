@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics

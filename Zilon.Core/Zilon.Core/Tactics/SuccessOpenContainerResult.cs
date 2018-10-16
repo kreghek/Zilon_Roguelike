@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics
 {
@@ -12,7 +12,6 @@ namespace Zilon.Core.Tactics
             Props = props;
         }
 
-        [ExcludeFromCodeCoverage]
         public IProp[] Props { get; }
     }
 }
