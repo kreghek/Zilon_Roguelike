@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using Moq;
 
@@ -14,6 +13,10 @@ namespace Zilon.Core.Tests.Props
     [TestFixture]
     public class PropStoreBaseTests
     {
+        private static TestPropScheme _resourceScheme;
+        private static TestPropScheme _equipmentScheme;
+        private static TestPropScheme _conceptScheme;
+
         /// <summary>
         /// Тест проверяет, что при добавлении экипировки она помещается в контейнер.
         /// </summary>
@@ -23,11 +26,7 @@ namespace Zilon.Core.Tests.Props
             // ARRANGE
             const int expectedItemCount = 1;
 
-            var propScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
-            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+            var equipment = CreateEquipment();
 
             var propStore = CreatePropStore();
 
@@ -54,11 +53,7 @@ namespace Zilon.Core.Tests.Props
             const int expectedItemCount = 1;
             const int resourceInitCount = 1;
 
-            var propScheme = new TestPropScheme
-            {
-                
-            };
-            var resource = new Resource(propScheme, resourceInitCount);
+            var resource = CreateResource( resourceInitCount);
 
             var propStore = CreatePropStore();
 
@@ -88,12 +83,8 @@ namespace Zilon.Core.Tests.Props
             const int resourceInitCount2 = 3;
             const int expectedResourceCount = resourceInitCount1 + resourceInitCount2;
 
-            var propScheme = new TestPropScheme
-            {
-
-            };
-            var resource1 = new Resource(propScheme, resourceInitCount1);
-            var resource2 = new Resource(propScheme, resourceInitCount2);
+            var resource1 = CreateResource(resourceInitCount1);
+            var resource2 = CreateResource(resourceInitCount2);
 
             var propStore = CreatePropStore();
 
@@ -108,7 +99,7 @@ namespace Zilon.Core.Tests.Props
             // ASSERT
             var items = propStore.CalcActualItems();
             items.Should().HaveCount(expectedItemCount);
-            items[0].Scheme.Sid.Should().Be(propScheme.Sid);
+            items[0].Scheme.Sid.Should().Be(_resourceScheme.Sid);
             items[0].Should().BeOfType<Resource>();
             ((Resource)items[0]).Count.Should().Be(expectedResourceCount);
         }
@@ -122,14 +113,7 @@ namespace Zilon.Core.Tests.Props
             // ARRANGE
             const int expectedItemCount = 1;
 
-            var craftPropScheme = new TestPropScheme
-            {
-            };
-
-            var propScheme = new TestPropScheme
-            {
-            };
-            var concent = new Concept(propScheme, craftPropScheme);
+            var concent = CreateConcept();
 
             var propStore = CreatePropStore();
 
@@ -154,11 +138,7 @@ namespace Zilon.Core.Tests.Props
         public void Remove_Equipment_PropStoreIsEmpty()
         {
             // ARRANGE
-            var propScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
-            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+            var equipment = CreateEquipment();
 
             var propStore = CreatePropStore();
             propStore.Add(equipment);
@@ -184,10 +164,7 @@ namespace Zilon.Core.Tests.Props
             // ARRANGE
             const int resourceInitCount = 1;
 
-            var propScheme = new TestPropScheme
-            {
-            };
-            var resource = new Resource(propScheme, resourceInitCount);
+            var resource =CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
             propStore.Add(resource);
@@ -217,15 +194,12 @@ namespace Zilon.Core.Tests.Props
             const int expectedItemCount = 1;
             const int expectedResourceCount = resourceInitCount - resourceToRemoveCount;
 
-            var propScheme = new TestPropScheme
-            {
-            };
-            var resource = new Resource(propScheme, resourceInitCount);
+            var resource = CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
             propStore.Add(resource);
 
-            var resourceToRemove = new Resource(propScheme, resourceToRemoveCount);
+            var resourceToRemove = CreateResource(resourceToRemoveCount);
 
 
 
@@ -247,14 +221,7 @@ namespace Zilon.Core.Tests.Props
         public void Remove_Concent_PropStoreIsEmpty()
         {
             // ARRANGE
-            var craftPropScheme = new TestPropScheme
-            {
-            };
-
-            var propScheme = new TestPropScheme
-            {
-            };
-            var concent = new Concept(propScheme, craftPropScheme);
+            var concent = CreateConcept();
 
             var propStore = CreatePropStore();
 
@@ -278,12 +245,8 @@ namespace Zilon.Core.Tests.Props
         public void Add_Equipment_EventRaise()
         {
             // ARRANGE
-            var propScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
 
-            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+            var equipment = CreateEquipment();
 
             var propStore = CreatePropStore();
 
@@ -310,14 +273,7 @@ namespace Zilon.Core.Tests.Props
         public void Add_Concent_EventRaise()
         {
             // ARRANGE
-            var craftPropScheme = new TestPropScheme
-            {
-            };
-
-            var propScheme = new TestPropScheme
-            {
-            };
-            var concent = new Concept(propScheme, craftPropScheme);
+            var concent = CreateConcept();
 
             var propStore = CreatePropStore();
 
@@ -344,11 +300,8 @@ namespace Zilon.Core.Tests.Props
         {
             // ARRANGE
             const int resourceInitCount = 3;
-            var propScheme = new TestPropScheme
-            {
-            };
 
-            var resource = new Resource(propScheme, resourceInitCount);
+            var resource = CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
 
@@ -375,11 +328,7 @@ namespace Zilon.Core.Tests.Props
         public void Remove_Equipment_EventRaise()
         {
             // ARRANGE
-            var propScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
-            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+            var equipment = CreateEquipment();
 
             var propStore = CreatePropStore();
             propStore.Add(equipment);
@@ -407,11 +356,7 @@ namespace Zilon.Core.Tests.Props
         {
             // ARRANGE
             const int resourceInitCount = 1;
-
-            var propScheme = new TestPropScheme
-            {
-            };
-            var resource = new Resource(propScheme, resourceInitCount);
+            var resource = CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
             propStore.Add(resource);
@@ -438,14 +383,7 @@ namespace Zilon.Core.Tests.Props
         public void Remove_Concent_EventRaise()
         {
             // ARRANGE
-            var craftPropScheme = new TestPropScheme
-            {
-            };
-
-            var propScheme = new TestPropScheme
-            {
-            };
-            var concent = new Concept(propScheme, craftPropScheme);
+            var concent = CreateConcept();
 
             var propStore = CreatePropStore();
 
@@ -472,6 +410,35 @@ namespace Zilon.Core.Tests.Props
             items.Should().BeEmpty();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            _equipmentScheme = new TestPropScheme
+            {
+                Sid = "equipment",
+                Name = new LocalizedStringSubScheme {
+                    Ru = "Тестовая экипировка"
+                },
+                Equip = new TestPropEquipSubScheme()
+            };
+
+            _resourceScheme = new TestPropScheme {
+                Sid = "resource",
+                Name = new LocalizedStringSubScheme
+                {
+                    Ru = "Тестовый ресурс"
+                },
+            };
+
+            _conceptScheme = new TestPropScheme {
+                Sid = "concept",
+                Name = new LocalizedStringSubScheme
+                {
+                    Ru = "Тестовый чертёж"
+                },
+            };
+        }
+
         private static PropStoreBase CreatePropStore()
         {
             var propStoreMock = new Mock<PropStoreBase>
@@ -481,6 +448,25 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = propStoreMock.Object;
             return propStore;
+        }
+
+        private static Equipment CreateEquipment()
+        {
+            var equipment = new Equipment(_equipmentScheme, new ITacticalActScheme[0]);
+            return equipment;
+        }
+
+        private static Resource CreateResource(int resourceInitCount)
+        {
+            var resource = new Resource(_resourceScheme, resourceInitCount);
+            return resource;
+        }
+
+        private static Concept CreateConcept()
+        {
+            var concent = new Concept(_conceptScheme, _equipmentScheme);
+
+            return concent;
         }
     }
 }

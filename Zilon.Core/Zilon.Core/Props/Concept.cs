@@ -15,9 +15,8 @@ namespace Zilon.Core.Props
     /// После прототипирования концепта персонаж изучает результат и уже точно знает рецепт
     /// изготовления предмета.
     /// </remarks>
-    public class Concept : PropBase
+    public sealed class Concept : PropBase
     {
-
         /// <summary>
         /// Конструктор.
         /// </summary>

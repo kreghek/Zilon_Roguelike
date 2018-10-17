@@ -10,13 +10,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Английский вариант.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public string En { get; set; }
 
         /// <summary>
         /// Русский вариант.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public string Ru { get; set; }
 
         [ExcludeFromCodeCoverage]
