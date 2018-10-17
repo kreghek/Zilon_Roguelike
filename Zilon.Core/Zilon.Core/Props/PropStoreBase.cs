@@ -107,6 +107,7 @@ namespace Zilon.Core.Props
         private void RemoveConcept(Concept concept)
         {
             _items.Remove(concept);
+            DoRemovedProp(concept);
         }
 
         private void RemoveResource(Resource resource)

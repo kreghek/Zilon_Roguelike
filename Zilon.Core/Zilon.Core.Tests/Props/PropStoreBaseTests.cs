@@ -117,7 +117,7 @@ namespace Zilon.Core.Tests.Props
         /// Тест проверяет, что при добавлении чертежа он помещается в контейнер.
         /// </summary>
         [Test]
-        public void Add_Concent_EquipmentInItems()
+        public void Add_Concent_ConceptInItems()
         {
             // ARRANGE
             const int expectedItemCount = 1;
@@ -241,6 +241,37 @@ namespace Zilon.Core.Tests.Props
         }
 
         /// <summary>
+        /// Тест проверяет, что при удалении чертежа хранилище остаётся пустым.
+        /// </summary>
+        [Test]
+        public void Remove_Concent_PropStoreIsEmpty()
+        {
+            // ARRANGE
+            var craftPropScheme = new TestPropScheme
+            {
+            };
+
+            var propScheme = new TestPropScheme
+            {
+            };
+            var concent = new Concept(propScheme, craftPropScheme);
+
+            var propStore = CreatePropStore();
+
+            propStore.Add(concent);
+
+
+            // ACT
+            propStore.Remove(concent);
+
+
+
+            // ASSERT
+            var items = propStore.CalcActualItems();
+            items.Should().BeEmpty();
+        }
+
+        /// <summary>
         /// Тест проверяет, что при добавлении экипировки выстреливает событие на добаление.
         /// </summary>
         [Test]
@@ -270,6 +301,175 @@ namespace Zilon.Core.Tests.Props
                 monitor.Should().Raise(nameof(IPropStore.Added));
 
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при добавлении чертежа выстреливает событие на добавление.
+        /// </summary>
+        [Test]
+        public void Add_Concent_EventRaise()
+        {
+            // ARRANGE
+            var craftPropScheme = new TestPropScheme
+            {
+            };
+
+            var propScheme = new TestPropScheme
+            {
+            };
+            var concent = new Concept(propScheme, craftPropScheme);
+
+            var propStore = CreatePropStore();
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Add(concent);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Added));
+
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при добавлении экипировки выстреливает событие на добаление.
+        /// </summary>
+        [Test]
+        public void Add_Resource_EventRaise()
+        {
+            // ARRANGE
+            const int resourceInitCount = 3;
+            var propScheme = new TestPropScheme
+            {
+            };
+
+            var resource = new Resource(propScheme, resourceInitCount);
+
+            var propStore = CreatePropStore();
+
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Add(resource);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Added));
+
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при удалении экипировки выстреивает событие на удаление.
+        /// </summary>
+        [Test]
+        public void Remove_Equipment_EventRaise()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+            var equipment = new Equipment(propScheme, new ITacticalActScheme[0]);
+
+            var propStore = CreatePropStore();
+            propStore.Add(equipment);
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Remove(equipment);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Removed));
+
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при удалении ресурса выстреивает событие на удаление.
+        /// </summary>
+        [Test]
+        public void Remove_Resource_EventRaise()
+        {
+            // ARRANGE
+            const int resourceInitCount = 1;
+
+            var propScheme = new TestPropScheme
+            {
+            };
+            var resource = new Resource(propScheme, resourceInitCount);
+
+            var propStore = CreatePropStore();
+            propStore.Add(resource);
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Remove(resource);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Removed));
+
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при удалении чертежа хранилище остаётся пустым.
+        /// </summary>
+        [Test]
+        public void Remove_Concent_EventRaise()
+        {
+            // ARRANGE
+            var craftPropScheme = new TestPropScheme
+            {
+            };
+
+            var propScheme = new TestPropScheme
+            {
+            };
+            var concent = new Concept(propScheme, craftPropScheme);
+
+            var propStore = CreatePropStore();
+
+            propStore.Add(concent);
+
+
+            // ACT
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Remove(concent);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Removed));
+
+            }
+
+
+
+            // ASSERT
+            var items = propStore.CalcActualItems();
+            items.Should().BeEmpty();
         }
 
         private static PropStoreBase CreatePropStore()
