@@ -26,6 +26,17 @@ namespace Zilon.Core.Tactics
             for (var i = 0; i < roll.Count; i++)
             {
                 var currentRoll = _dice.Roll(roll.Dice);
+
+                if (roll.Modifiers != null)
+                {
+                    currentRoll += roll.Modifiers.ResultBuff;
+                }
+
+                if (currentRoll <= 0)
+                {
+                    currentRoll = 1;
+                }
+
                 sum += currentRoll;
             }
 

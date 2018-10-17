@@ -21,16 +21,12 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler ActorExit;
 
-        [ExcludeFromCodeCoverage]
         public IMapNode[] ExitNodes { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public IMap Map { get; }
 
-        [ExcludeFromCodeCoverage]
         public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
-        [ExcludeFromCodeCoverage]
         public IMapNode[] StartNodes { get; set; }
 
         [ExcludeFromCodeCoverage]
