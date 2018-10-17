@@ -91,9 +91,11 @@
     <Compile Include="Common\RangeExtensions.cs" />
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
+    <Compile Include="Common\RollModifiers.cs" />
     <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
+    <Compile Include="Components\RollEffectType.cs" />
     <Compile Include="Components\SkillStatItem.cs" />
     <Compile Include="Components\SkillStatType.cs" />
     <Compile Include="Components\ConsumeCommonRule.cs" />

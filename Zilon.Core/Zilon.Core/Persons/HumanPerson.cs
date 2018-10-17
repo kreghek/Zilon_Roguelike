@@ -118,7 +118,7 @@ namespace Zilon.Core.Persons
             {
                 foreach (var rule in effect.Rules)
                 {
-                    AddStatToDict(bonusDict, rule.StatType, rule.Level, PersonRuleDirection.Negative);
+                    AddStatToDict(bonusDict, rule.StatType.Value, rule.Level, PersonRuleDirection.Negative);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = new TacticalAct(_defaultActScheme);
+            var defaultAct = CreateTacticalAct(_defaultActScheme, Effects);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -240,13 +240,18 @@ namespace Zilon.Core.Persons
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var act = new TacticalAct(actScheme);
+                    var act = CreateTacticalAct(actScheme, Effects);
 
                     actList.Insert(0, act);
                 }
             }
 
             return actList.ToArray();
+        }
+
+        private ITacticalAct CreateTacticalAct(ITacticalActScheme scheme, EffectCollection effects)
+        {
+            return new TacticalAct(scheme, scheme.Stats.Efficient);
         }
 
         private void ClearCalculatedStats()
