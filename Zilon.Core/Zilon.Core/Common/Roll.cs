@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Newtonsoft.Json;
+
 namespace Zilon.Core.Common
 {
     public class Roll
@@ -10,6 +12,7 @@ namespace Zilon.Core.Common
             
         }
 
+        [JsonConstructor]
         [ExcludeFromCodeCoverage]
         public Roll(int dice, int count, RollModifiers modifiers)
         {
