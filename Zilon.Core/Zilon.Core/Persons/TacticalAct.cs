@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Schemes;
+﻿using Zilon.Core.Common;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -7,14 +8,18 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class TacticalAct : ITacticalAct
     {
-        public TacticalAct(ITacticalActScheme scheme)
+        public TacticalAct(ITacticalActScheme scheme, Roll efficient)
         {
-            Scheme = scheme;
-            Stats = scheme.Stats;
+            Scheme = scheme ?? throw new System.ArgumentNullException(nameof(scheme));
+
+            Stats = scheme.Stats ?? throw new System.ArgumentNullException(nameof(scheme));
+
+            Efficient = efficient ?? throw new System.ArgumentNullException(nameof(efficient));
         }
 
         public ITacticalActStatsSubScheme Stats { get; }
 
         public ITacticalActScheme Scheme { get; }
+        public Roll Efficient { get; }
     }
 }
