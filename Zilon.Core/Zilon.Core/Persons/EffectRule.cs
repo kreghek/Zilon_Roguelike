@@ -4,16 +4,13 @@ namespace Zilon.Core.Persons
 {
     public sealed class EffectRule
     {
-        public EffectRule(SkillStatType? statType, RollEffectType? roll, PersonRuleLevel level)
+        public EffectRule(RollEffectType? rollType, PersonRuleLevel level)
         {
-            StatType = statType;
-            Roll = roll;
+            RollType = rollType;
             Level = level;
         }
 
-        public SkillStatType? StatType { get; }
-
-        public RollEffectType? Roll { get; }
+        public RollEffectType? RollType { get; }
 
         public PersonRuleLevel Level { get; }
     }

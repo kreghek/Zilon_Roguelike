@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zilon.Core.Components;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
@@ -50,57 +50,25 @@ namespace Zilon.Core.Persons
 
         private EffectRule[] CalcRules()
         {
-            PersonRuleLevel ruleLevel;
+            var rules = new List<EffectRule>();
+
             switch (Level)
             {
                 case SurvivalStatHazardLevel.Lesser:
-                    ruleLevel = PersonRuleLevel.Lesser;
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
                     break;
 
                 case SurvivalStatHazardLevel.Strong:
-                    ruleLevel = PersonRuleLevel.Normal;
-                    break;
-
                 case SurvivalStatHazardLevel.Max:
-                    ruleLevel = PersonRuleLevel.Grand;
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
                     break;
 
                 default:
                     throw new NotSupportedException("Неизветный уровень угрозы выживания.");
             }
 
-            return new[] {
-                new EffectRule(
-                    statType:SkillStatType.Ballistic,
-                    roll: null,
-                    level: ruleLevel
-                ),
-                new EffectRule(
-                    statType:SkillStatType.Medic,
-                    roll: null,
-                    level: ruleLevel
-                ),
-                new EffectRule(
-                    statType:SkillStatType.Melee,
-                    roll: null,
-                    level: ruleLevel
-                ),
-                new EffectRule(
-                    statType:SkillStatType.Psy,
-                    roll: null,
-                    level: ruleLevel
-                ),
-                new EffectRule(
-                    statType:SkillStatType.Social,
-                    roll: null,
-                    level: ruleLevel
-                ),
-                new EffectRule(
-                    statType:SkillStatType.Tech,
-                    roll: null,
-                    level: ruleLevel
-                )
-            };
+            return rules.ToArray();
         }
 
         public override string ToString()

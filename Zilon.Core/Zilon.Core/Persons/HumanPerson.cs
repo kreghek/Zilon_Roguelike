@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Props;
@@ -64,7 +65,7 @@ namespace Zilon.Core.Persons
             CombatStats = new CombatStats();
             ClearCalculatedStats();
             CalcCombatStats();
-            
+
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
             Survival = new SurvivalData(scheme);
@@ -113,15 +114,6 @@ namespace Zilon.Core.Persons
                     }
                 }
             }
-
-            foreach (var effect in Effects.Items)
-            {
-                foreach (var rule in effect.Rules)
-                {
-                    AddStatToDict(bonusDict, rule.StatType.Value, rule.Level, PersonRuleDirection.Negative);
-                }
-            }
-
             if (EvolutionData.Stats != null)
             {
                 foreach (var bonusItem in bonusDict)
@@ -251,7 +243,27 @@ namespace Zilon.Core.Persons
 
         private ITacticalAct CreateTacticalAct(ITacticalActScheme scheme, EffectCollection effects)
         {
-            return new TacticalAct(scheme, scheme.Stats.Efficient);
+            var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
+                .OrderByDescending(x => x.Level).FirstOrDefault();
+
+            if (greaterSurvivalEffect == null)
+            {
+                return new TacticalAct(scheme, scheme.Stats.Efficient);
+            }
+            else
+            {
+                var effecientBuffRule = greaterSurvivalEffect.Rules
+                    .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+
+                var efficientRoll = scheme.Stats.Efficient;
+                if (effecientBuffRule != null)
+                {
+                    var modifiers = new RollModifiers(-1);
+                    efficientRoll = new Roll(efficientRoll.Dice, efficientRoll.Count, modifiers);
+                }
+
+                return new TacticalAct(scheme, efficientRoll);
+            }
         }
 
         private void ClearCalculatedStats()

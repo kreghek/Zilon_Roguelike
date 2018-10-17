@@ -57,8 +57,8 @@ namespace Zilon.Core.Persons.Auxiliary
             }
             else
             {
-                currentTypeEffect = new SurvivalStatHazardEffect(statType, keyPoint.Level);
-                currentEffects.Add(currentTypeEffect);
+                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType, keyPoint.Level);
+                currentEffects.Add(newCurrentTypeEffect);
             }
         }
     }

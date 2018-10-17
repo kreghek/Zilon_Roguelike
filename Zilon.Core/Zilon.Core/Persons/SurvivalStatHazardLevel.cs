@@ -5,9 +5,9 @@
     /// </summary>
     public enum SurvivalStatHazardLevel
     {
-        Undefined,
-        Lesser,
-        Strong,
-        Max
+        Undefined = 0,
+        Lesser = 10,
+        Strong = 20,
+        Max = 30
     }
 }

@@ -6,7 +6,7 @@
 
         ToHit,
 
-        ToWound,
+        Efficient,
 
         ArmorSave
     }
