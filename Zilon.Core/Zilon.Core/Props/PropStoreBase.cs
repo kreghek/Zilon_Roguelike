@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Базовый класс для всех хранилищь предметов.
@@ -13,7 +13,6 @@ namespace Zilon.Core.Persons
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
-        public event EventHandler<PropStoreEventArgs> Changed;
 
         protected PropStoreBase()
         {
@@ -61,11 +60,6 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void DoChangedProp(IProp prop)
-        {
-            Changed?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
-        }
-
         private void DoRemovedProp(IProp prop)
         {
             Removed?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
@@ -107,7 +101,6 @@ namespace Zilon.Core.Persons
             else
             {
                 currentResource.Count += resource.Count;
-                DoChangedProp(currentResource);
             }
         }
 
@@ -136,10 +129,6 @@ namespace Zilon.Core.Persons
             {
                 _items.Remove(currentResource);
                 DoRemovedProp(currentResource);
-            }
-            else
-            {
-                DoChangedProp(currentResource);
             }
         }
     }

@@ -104,24 +104,6 @@ namespace Zilon.Core.Tests.Persons
             UnsupportedMonsterComponent(act);
         }
 
-        /// <summary>
-        /// Тест проверяет, что для монстров данные о выживании равны null.
-        /// Это нужно, когда сектор обновляет состояния выживания. Чтобы избежать сравнение типов, там есть проверка на null.
-        /// </summary>
-        [Test]
-        public void Survival_ReturnsNull()
-        {
-            // ARRANGE
-            var monster = CreateMonster();
-
-            //ACT
-            var factSurvival = monster.Survival;
-
-
-            // ASSERT
-            factSurvival.Should().BeNull();
-        }
-
         private static MonsterPerson CreateMonster()
         {
             var monsterScheme = new TestMonsterScheme

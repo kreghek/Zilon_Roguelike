@@ -2,6 +2,7 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 

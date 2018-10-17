@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {

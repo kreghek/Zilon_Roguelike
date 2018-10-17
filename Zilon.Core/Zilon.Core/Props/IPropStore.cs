@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Интерфейс хранилища предметов.
@@ -30,6 +30,5 @@ namespace Zilon.Core.Persons
 
         event EventHandler<PropStoreEventArgs> Added;
         event EventHandler<PropStoreEventArgs> Removed;
-        event EventHandler<PropStoreEventArgs> Changed;
     }
 }

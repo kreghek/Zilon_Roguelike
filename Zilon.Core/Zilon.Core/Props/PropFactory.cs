@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     public class PropFactory : IPropFactory
     {

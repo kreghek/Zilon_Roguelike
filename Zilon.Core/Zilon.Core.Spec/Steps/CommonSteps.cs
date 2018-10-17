@@ -2,16 +2,18 @@
 
 using FluentAssertions;
 
+using LightInject;
+
 using TechTalk.SpecFlow;
 
-using Zilon.Core.Spec.Contexts;
-using Zilon.Core.Tactics;
-using LightInject;
-using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
+using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
 {

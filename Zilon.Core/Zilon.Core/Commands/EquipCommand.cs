@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 

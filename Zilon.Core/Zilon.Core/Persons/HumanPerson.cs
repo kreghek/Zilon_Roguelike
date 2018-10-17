@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons.Auxiliary;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

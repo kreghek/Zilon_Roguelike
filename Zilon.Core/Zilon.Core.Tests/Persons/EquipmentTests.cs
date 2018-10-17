@@ -4,7 +4,7 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Persons

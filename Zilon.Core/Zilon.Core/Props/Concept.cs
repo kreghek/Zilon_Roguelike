@@ -2,7 +2,7 @@
 
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Концепт предмета.
