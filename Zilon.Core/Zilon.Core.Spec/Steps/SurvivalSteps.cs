@@ -244,19 +244,6 @@ namespace Zilon.Core.Spec.Steps
             //combatStat.Value.Should().Be(combatStatValue);
         }
 
-        [Then(@"Тактическое умение (.*) имеет эффективность Min: (.*) Max: (.*)")]
-        public void ThenТактическоеУмениеИмеетЭффективностьMinMax(string tacticalActSid, int minEfficient, int maxEfficient)
-        {
-            var actor = _context.GetActiveActor();
-
-            var tacticalAct = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
-                .Single(x => x.Scheme.Sid == tacticalActSid);
-
-            //tacticalAct.MinEfficient.Should().Be(minEfficient);
-            //tacticalAct.MaxEfficient.Should().Be(maxEfficient);
-            ScenarioContext.Current.Pending();
-        }
-
 
         private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
         {

@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
@@ -56,5 +57,17 @@ namespace Zilon.Core.Spec.Steps
             var monster = _context.GetMonsterById(monsterId);
             visual.Actor.Should().BeSameAs(monster);
         }
+
+        [Then(@"Тактическое умение (.*) имеет дебафф на эффективность")]
+        public void ThenТактическоеУмениеChopИмеетДебаффНаЭффективность(string tacticalActSid)
+        {
+            var actor = _context.GetActiveActor();
+
+            var act = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
+                .Single(x => x.Scheme.Sid == tacticalActSid);
+
+            act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
+        }
+
     }
 }
