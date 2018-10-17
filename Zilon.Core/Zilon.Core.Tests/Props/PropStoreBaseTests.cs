@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Props
             const int expectedItemCount = 1;
             const int resourceInitCount = 1;
 
-            var resource = CreateResource( resourceInitCount);
+            var resource = CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
 
@@ -164,7 +164,7 @@ namespace Zilon.Core.Tests.Props
             // ARRANGE
             const int resourceInitCount = 1;
 
-            var resource =CreateResource(resourceInitCount);
+            var resource = CreateResource(resourceInitCount);
 
             var propStore = CreatePropStore();
             propStore.Add(resource);
@@ -416,13 +416,15 @@ namespace Zilon.Core.Tests.Props
             _equipmentScheme = new TestPropScheme
             {
                 Sid = "equipment",
-                Name = new LocalizedStringSubScheme {
+                Name = new LocalizedStringSubScheme
+                {
                     Ru = "Тестовая экипировка"
                 },
                 Equip = new TestPropEquipSubScheme()
             };
 
-            _resourceScheme = new TestPropScheme {
+            _resourceScheme = new TestPropScheme
+            {
                 Sid = "resource",
                 Name = new LocalizedStringSubScheme
                 {
@@ -430,7 +432,8 @@ namespace Zilon.Core.Tests.Props
                 },
             };
 
-            _conceptScheme = new TestPropScheme {
+            _conceptScheme = new TestPropScheme
+            {
                 Sid = "concept",
                 Name = new LocalizedStringSubScheme
                 {
