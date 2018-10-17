@@ -227,7 +227,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = new TacticalAct(_defaultActScheme);
+            var defaultAct = CreateTacticalAct(Effects);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -246,6 +246,11 @@ namespace Zilon.Core.Persons
             }
 
             return actList.ToArray();
+        }
+
+        private ITacticalAct CreateTacticalAct(EffectCollection effects)
+        {
+            return new TacticalAct(_defaultActScheme);
         }
 
         private void ClearCalculatedStats()

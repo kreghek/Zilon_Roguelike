@@ -16,4 +16,4 @@ Scenario Outline: Удары "руками".
 
 Examples: 
 | personSid | monsterSid | monsterId | monsterNodeX | monsterNodeY | monsterHp | expectedMonsterHp |
-| captain   | rat        | 1000      | 0            | 1            | 100       | 99                |
+| captain   | rat        | 1000      | 0            | 1            | 2         | 1                 |
