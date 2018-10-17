@@ -124,11 +124,14 @@ namespace Zilon.Core.Props
                 throw new InvalidOperationException($"Попытка удалить {resource.Count} ресурсов {resource.Scheme} больше чем есть в инвентаре.");
             }
 
-            currentResource.Count -= resource.Count;
-            if (currentResource.Count == 0)
+            if (currentResource.Count == resource.Count)
             {
                 _items.Remove(currentResource);
                 DoRemovedProp(currentResource);
+            }
+            else
+            {
+                currentResource.Count -= resource.Count;
             }
         }
     }

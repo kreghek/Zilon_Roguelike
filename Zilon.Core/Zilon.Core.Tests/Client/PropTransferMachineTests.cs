@@ -13,10 +13,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Client
 {
-    [TestFixture()]
+    [TestFixture]
     public class PropTransferMachineTests
     {
-        [Test()]
+        [Test]
         public void TransferPropTest()
         {
             // ARRANGE

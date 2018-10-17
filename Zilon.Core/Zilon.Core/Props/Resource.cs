@@ -29,7 +29,7 @@ namespace Zilon.Core.Props
             }
             set
             {
-                if (_count <= 0)
+                if (value <= 0)
                 {
                     throw new ArgumentException("Величина не может быть меньше или равна 0.");
                 }
