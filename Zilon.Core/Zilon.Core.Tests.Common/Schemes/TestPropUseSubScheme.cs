@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Components;
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
@@ -7,6 +6,5 @@ namespace Zilon.Core.Tests.Common.Schemes
     {
         public bool Consumable { get; set; }
         public ConsumeCommonRule[] CommonRules { get; set; }
-        public int Value { get; set; }
     }
 }

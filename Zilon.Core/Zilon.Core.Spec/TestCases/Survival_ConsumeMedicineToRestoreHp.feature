@@ -15,4 +15,4 @@ Scenario Outline: Употребление медикаметов для вос�
 
 Examples: 
 	| startHp | propSid | propCount | expectedHpValue |
-	| 10      | med-kit | 1         | 60              | 
+	| 1       | med-kit | 1         | 5               | 

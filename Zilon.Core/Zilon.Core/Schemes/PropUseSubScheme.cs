@@ -20,9 +20,5 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public ConsumeCommonRule[] CommonRules { get; private set; }
-
-        //TODO Убрать, когда будут мысли, как можно задавать конкретные числа для правил
-        [JsonProperty]
-        public int Value { get; private set; }
     }
 }

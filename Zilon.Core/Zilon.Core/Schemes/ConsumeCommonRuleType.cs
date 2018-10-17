@@ -1,9 +1,9 @@
-﻿namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Общие правила влияния поглощения предмета.
     /// </summary>
-    public enum ConsumeCommonRule
+    public enum ConsumeCommonRuleType
     {
         Undefined,
 

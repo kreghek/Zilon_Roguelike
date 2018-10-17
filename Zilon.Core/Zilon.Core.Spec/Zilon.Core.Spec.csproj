@@ -238,18 +238,8 @@
       <DependentUpon>Survival_DecreaseSurvivalDataOnGameTurn.feature</DependentUpon>
     </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
-    <Compile Include="TestCases\Survival_HazardsDecreaseEvolutionStats_Become.feature.cs">
-      <DependentUpon>Survival_HazardsDecreaseEvolutionStats_Become.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="TestCases\Survival_HazardsDecreaseActEfficient.feature.cs">
       <DependentUpon>Survival_HazardsDecreaseActEfficient.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Survival_HazardsDecreaseEvolutionStats.feature.cs">
-      <DependentUpon>Survival_HazardsDecreaseEvolutionStats.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -369,17 +359,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_DecreaseSurvivalDataOnGameTurn.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_HazardsDecreaseEvolutionStats_Become.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_HazardsDecreaseEvolutionStats_Become.feature.cs</LastGenOutput>
-    </None>
     <None Include="TestCases\Survival_HazardsDecreaseActEfficient.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_HazardsDecreaseActEfficient.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_HazardsDecreaseEvolutionStats.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_HazardsDecreaseEvolutionStats.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_HarardsDamagesActor.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

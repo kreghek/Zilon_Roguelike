@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Components;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Подсхема предмета для хранения характеристик при применении предмета.
@@ -16,8 +14,5 @@ namespace Zilon.Core.Schemes
         /// Общие правила влияния.
         /// </summary>
         ConsumeCommonRule[] CommonRules { get; }
-
-        //TODO Убрать, когда будут мысли, как можно задавать конкретные числа для правил
-        int Value { get; }
     }
 }

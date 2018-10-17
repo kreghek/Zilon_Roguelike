@@ -99,13 +99,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 10", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Употребление медикаметов для восстановления Hp., 1", new string[] {
                 "survival",
                 "dev0"}, SourceLine=17)]
-        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__10()
+        public virtual void УпотреблениеМедикаметовДляВосстановленияHp__1()
         {
 #line 7
-this.УпотреблениеМедикаметовДляВосстановленияHp_("10", "med-kit", "1", "60", ((string[])(null)));
+this.УпотреблениеМедикаметовДляВосстановленияHp_("1", "med-kit", "1", "5", ((string[])(null)));
 #line hidden
         }
         

@@ -35,20 +35,20 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = _context.GetActiveActor();
 
-            ConsumeCommonRule consumeRule;
+            ConsumeCommonRuleType consumeRuleType;
 
             switch (provisionStat)
             {
                 case "сытость":
-                    consumeRule = ConsumeCommonRule.Satiety;
+                    consumeRuleType = ConsumeCommonRuleType.Satiety;
                     break;
 
                 case "вода":
-                    consumeRule = ConsumeCommonRule.Thrist;
+                    consumeRuleType = ConsumeCommonRuleType.Thrist;
                     break;
 
                 case "хп":
-                    consumeRule = ConsumeCommonRule.Health;
+                    consumeRuleType = ConsumeCommonRuleType.Health;
                     break;
 
                 default:
@@ -60,8 +60,9 @@ namespace Zilon.Core.Spec.Steps
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new[] { consumeRule },
-                    Value = provisitonEfficient
+                    CommonRules = new[] {
+                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser)
+                    }
                 }
             };
 
@@ -216,34 +217,6 @@ namespace Zilon.Core.Spec.Steps
                 effects.Should().BeEmpty();
             }
         }
-
-        [Then(@"Актёр имеет характристику модуля сражения (.*) равную (.*)")]
-        public void ThenАктёрИмеетХарактристикуМодуляСраженияMeleeРавную(string combatStatName, int combatStatValue)
-        {
-            ScenarioContext.Current.Pending();
-            //var actor = _context.GetActiveActor();
-
-            //SkillStatType statType;
-            //switch (combatStatName)
-            //{
-            //    case "melee":
-            //        statType = SkillStatType.Melee;
-            //        break;
-
-            //    default:
-            //        throw new NotSupportedException($"Неизвестный тип характеристики модуля сражения {combatStatName}.");
-            //}
-
-            //var combatStat = actor.Person.CombatStats.Stats.SingleOrDefault(x => x.Stat == statType);
-
-            //if (combatStat == null)
-            //{
-            //    throw new InvalidOperationException($"Не найдена характеристика модуля сражения {statType}.");
-            //}
-
-            //combatStat.Value.Should().Be(combatStatValue);
-        }
-
 
         private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
         {

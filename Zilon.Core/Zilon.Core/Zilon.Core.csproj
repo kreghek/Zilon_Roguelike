@@ -92,13 +92,14 @@
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Common\RollModifiers.cs" />
+    <Compile Include="Schemes\ConsumeCommonRule.cs" />
     <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
     <Compile Include="Common\Range.cs" />
     <Compile Include="Components\RollEffectType.cs" />
     <Compile Include="Components\SkillStatItem.cs" />
     <Compile Include="Components\SkillStatType.cs" />
-    <Compile Include="Components\ConsumeCommonRule.cs" />
+    <Compile Include="Schemes\ConsumeCommonRuleType.cs" />
     <Compile Include="Components\PersonRuleDirection.cs" />
     <Compile Include="Components\PersonRuleLevel.cs" />
     <Compile Include="Components\PersonRuleType.cs" />

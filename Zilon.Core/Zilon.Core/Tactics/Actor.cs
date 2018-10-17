@@ -4,6 +4,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -84,26 +85,20 @@ namespace Zilon.Core.Tactics
         {
             var useData = usedProp.Scheme.Use;
 
-            var efficient = 50;
-            if (useData.Value > 0)
-            {
-                efficient = useData.Value;
-            }
-
             foreach (var rule in useData.CommonRules)
             {
-                switch (rule)
+                switch (rule.Type)
                 {
-                    case ConsumeCommonRule.Satiety:
-                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, efficient);
+                    case ConsumeCommonRuleType.Satiety:
+                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, 50);
                         break;
 
-                    case ConsumeCommonRule.Thrist:
-                        Person.Survival.RestoreStat(SurvivalStatType.Water, efficient);
+                    case ConsumeCommonRuleType.Thrist:
+                        Person.Survival.RestoreStat(SurvivalStatType.Water, 50);
                         break;
 
-                    case ConsumeCommonRule.Health:
-                        Person.Survival.RestoreStat(SurvivalStatType.Health, efficient);
+                    case ConsumeCommonRuleType.Health:
+                        Person.Survival.RestoreStat(SurvivalStatType.Health, 4);
                         break;
                 }
             }
