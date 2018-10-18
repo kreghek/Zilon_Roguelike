@@ -90,11 +90,11 @@ namespace Zilon.Core.Tactics
                 switch (rule.Type)
                 {
                     case ConsumeCommonRuleType.Satiety:
-                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, 50);
+                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, 51);
                         break;
 
                     case ConsumeCommonRuleType.Thrist:
-                        Person.Survival.RestoreStat(SurvivalStatType.Water, 50);
+                        Person.Survival.RestoreStat(SurvivalStatType.Water, 51);
                         break;
 
                     case ConsumeCommonRuleType.Health:

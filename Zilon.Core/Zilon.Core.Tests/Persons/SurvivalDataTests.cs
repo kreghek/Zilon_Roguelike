@@ -83,9 +83,9 @@ namespace Zilon.Core.Tests.Persons
             var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = -25;
+            stat.Value = stat.KeyPoints[1].Value;
             var stat2 = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Water);
-            stat2.Value = -25;
+            stat2.Value = stat2.KeyPoints[1].Value;
 
             // ACT
             using (var monitor = survivalData.Monitor())
@@ -98,7 +98,7 @@ namespace Zilon.Core.Tests.Persons
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
                     args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
-                    args.KeyPoints.FirstOrDefault().Value == -25);
+                    args.KeyPoints.FirstOrDefault().Value == stat2.KeyPoints[1].Value);
             }
         }
 

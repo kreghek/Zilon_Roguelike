@@ -25,6 +25,8 @@ namespace Zilon.Core.Persons
 
         public void RestoreStat(SurvivalStatType type, int value)
         {
+            ValidateStatChangeValue(value);
+
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
@@ -34,6 +36,8 @@ namespace Zilon.Core.Persons
 
         public void DecreaseStat(SurvivalStatType type, int value)
         {
+            ValidateStatChangeValue(value);
+
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
@@ -48,6 +52,9 @@ namespace Zilon.Core.Persons
             {
                 stat.Value = value;
             }
+
+            //TODO Сделать расчёт и установку эффекта угроз выживания
+            // После убрать явную установку эффекта в спецификации Survival_ConsumeProviantToDropSurvivalHazard
         }
 
         public void Update()
@@ -81,6 +88,19 @@ namespace Zilon.Core.Persons
             };
 
             return new SurvivalData(stats);
+        }
+
+        private void ValidateStatChangeValue(int value)
+        {
+            if (value == 0)
+            {
+                return;
+            }
+
+            if (value < 0)
+            {
+                throw new ArgumentException("Величина не может быть меньше 0.", nameof(value));
+            }
         }
 
         private void ChangeStatInner(SurvivalStat stat, int value)
@@ -142,13 +162,13 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat(50, -100, 100)
+            var stat = new SurvivalStat(50, -150, 100)
             {
                 Type = type,
                 Rate = 1,
                 KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -50),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -25),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -100),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -50),
                         new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0)
                     }
             };

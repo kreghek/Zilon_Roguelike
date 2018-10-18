@@ -73,29 +73,21 @@ namespace Zilon.Core.Spec.Steps
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
             var actor = _context.GetActiveActor();
-
-            SurvivalStat stat;
+            var survival = actor.Person.Survival;
 
             switch (statName)
             {
                 case "сытость":
-                    stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+                    survival.SetStatForce(SurvivalStatType.Satiety, statValue);
                     break;
 
                 case "вода":
-                    stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Water);
+                    survival.SetStatForce(SurvivalStatType.Water, statValue);
                     break;
 
                 default:
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
-
-            if (stat == null)
-            {
-                throw new InvalidOperationException($"Не найдена характеристика модуля выживания: {statName}.");
-            }
-
-            stat.Value = statValue;
         }
 
         [Given(@"Актёр имеет эффект (.*)")]
@@ -177,19 +169,22 @@ namespace Zilon.Core.Spec.Steps
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
             var actor = _context.GetActiveActor();
+            int? survivalStatValue;
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Satiety);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Water);
                     break;
 
                 default:
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
+
+            survivalStatValue.Should().Be(expectedValue);
         }
 
         [Then(@"Актёр под эффектом (.*)")]
