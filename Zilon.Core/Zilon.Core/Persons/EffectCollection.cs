@@ -17,23 +17,36 @@ namespace Zilon.Core.Persons
             Items.Add(effect);
 
             effect.Changed += Effect_Changed;
-
-            var args = new EffectEventArgs(effect);
-            Added?.Invoke(this, args);
+            DoAdd(effect);
         }
 
         private void Effect_Changed(object sender, EventArgs e)
         {
             var effect = sender as IPersonEffect;
-            var args = new EffectEventArgs(effect);
-            Changed?.Invoke(this, args);
+            DoChanged(effect);
         }
 
         public void Remove(IPersonEffect effect)
         {
             Items.Remove(effect);
             effect.Changed -= Effect_Changed;
+            DoRemoved(effect);
+        }
 
+        private void DoAdd(IPersonEffect effect)
+        {
+            var args = new EffectEventArgs(effect);
+            Added?.Invoke(this, args);
+        }
+
+        private void DoChanged(IPersonEffect effect)
+        {
+            var args = new EffectEventArgs(effect);
+            Changed?.Invoke(this, args);
+        }
+
+        private void DoRemoved(IPersonEffect effect)
+        {
             var args = new EffectEventArgs(effect);
             Removed?.Invoke(this, args);
         }
