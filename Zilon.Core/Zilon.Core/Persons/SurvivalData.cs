@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -11,15 +12,9 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalData : ISurvivalData
     {
-        public SurvivalData(IPersonScheme personScheme)
+        public SurvivalData(SurvivalStat[] stats)
         {
-            Stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
-                    Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
-            };
+            Stats = stats;
         }
 
         public SurvivalStat[] Stats { get; }
@@ -58,9 +53,34 @@ namespace Zilon.Core.Persons
         public void Update()
         {
             foreach (var stat in Stats)
+
             {
                 ChangeStatInner(stat, -stat.Rate);
             }
+        }
+
+        public static SurvivalData CreateHumanPersonSurvival(IPersonScheme personScheme)
+        {
+            var stats = new[] {
+                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                    Type = SurvivalStatType.Health
+                },
+                CreateStat(SurvivalStatType.Satiety),
+                CreateStat(SurvivalStatType.Water)
+            };
+
+            return new SurvivalData(stats);
+        }
+
+        public static SurvivalData CreateMonsterPersonSurvival(IMonsterScheme monsterScheme)
+        {
+            var stats = new[] {
+               new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
+                    Type = SurvivalStatType.Health
+                }
+            };
+
+            return new SurvivalData(stats);
         }
 
         private void ChangeStatInner(SurvivalStat stat, int value)
@@ -81,13 +101,22 @@ namespace Zilon.Core.Persons
         {
             var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
 
-            foreach (var keyPoint in stat.KeyPoints)
+            var orientedKeyPoints = stat.KeyPoints;
+            if (!diff.IsAcs)
+            {
+                orientedKeyPoints = stat.KeyPoints.Reverse().ToArray();
+            }
+
+            var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
+            foreach (var keyPoint in orientedKeyPoints)
             {
                 if (diff.Contains(keyPoint.Value))
                 {
-                    DoStatCrossKeyPoint(stat, keyPoint);
+                    crossedKeyPoints.Add(keyPoint);
                 }
             }
+
+            DoStatCrossKeyPoint(stat, crossedKeyPoints);
         }
 
         private void CheckHp(SurvivalStat stat)
@@ -115,26 +144,17 @@ namespace Zilon.Core.Persons
                 Type = type,
                 Rate = 1,
                 KeyPoints = new[]{
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Lesser,
-                            Value = 0
-                        },
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Strong,
-                            Value = -25
-                        },
-                        new SurvivalStatKeyPoint{
-                            Level = SurvivalStatHazardLevel.Max,
-                            Value = -50
-                        }
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -25),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -50)
                     }
             };
             return stat;
         }
 
-        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint keyPoint)
+        private void DoStatCrossKeyPoint(SurvivalStat stat, IEnumerable<SurvivalStatKeyPoint> keyPoints)
         {
-            var args = new SurvivalStatChangedEventArgs(stat, keyPoint);
+            var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
             StatCrossKeyValue?.Invoke(this, args);
         }
     }

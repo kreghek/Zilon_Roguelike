@@ -54,7 +54,7 @@ namespace Zilon.Core.Persons
                     new PersonArmorItem[0])
             };
 
-            Survival = new MonsterSurvivalData(scheme);
+            Survival = SurvivalData.CreateMonsterPersonSurvival(scheme);
 
             Effects = new EffectCollection();
         }

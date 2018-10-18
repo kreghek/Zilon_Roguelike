@@ -31,17 +31,14 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
             {
                 Type = SurvivalStatType.Satiety,
                 KeyPoints = new[] {
-                    new SurvivalStatKeyPoint{
-                        Level = SurvivalStatHazardLevel.Lesser,
-                        Value = 0
-                    }
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0)
                 }
             };
 
 
 
             // ACT
-            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, stat.KeyPoints[0]);
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, new[] { stat.KeyPoints[0] });
 
 
 
@@ -72,21 +69,15 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
             {
                 Type = expectedSurvivalHazardType,
                 KeyPoints = new[] {
-                    new SurvivalStatKeyPoint{
-                        Level = SurvivalStatHazardLevel.Lesser,
-                        Value = 0
-                    },
-                    new SurvivalStatKeyPoint{
-                        Level = SurvivalStatHazardLevel.Strong,
-                        Value = -10
-                    }
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -10)
                 }
             };
 
 
 
             // ACT
-            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, stat.KeyPoints[1]);
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, new[] { stat.KeyPoints[1] });
 
 
 

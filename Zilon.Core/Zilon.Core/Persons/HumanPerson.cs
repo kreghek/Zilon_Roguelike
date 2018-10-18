@@ -68,7 +68,7 @@ namespace Zilon.Core.Persons
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
-            Survival = new SurvivalData(scheme);
+            Survival = SurvivalData.CreateHumanPersonSurvival(scheme);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
@@ -195,7 +195,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoint);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoints);
         }
 
 

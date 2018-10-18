@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.Persons
 {
@@ -7,12 +8,13 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class SurvivalStatChangedEventArgs: EventArgs
     {
-        public SurvivalStatChangedEventArgs(SurvivalStat stat, SurvivalStatKeyPoint keyPoint) {
+        public SurvivalStatChangedEventArgs(SurvivalStat stat,
+            IEnumerable<SurvivalStatKeyPoint> keyPoints) {
             Stat = stat;
-            KeyPoint = keyPoint;
+            KeyPoints = keyPoints;
         }
 
         public SurvivalStat Stat { get; }
-        public SurvivalStatKeyPoint KeyPoint { get; }
+        public IEnumerable<SurvivalStatKeyPoint> KeyPoints { get; }
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensions.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
+    <Compile Include="Common\OrientedRange.cs" />
     <Compile Include="Common\RangeExtensions.cs" />
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
-    <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />

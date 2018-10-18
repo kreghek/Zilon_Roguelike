@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Zilon.Core.Persons.Auxiliary
@@ -13,15 +14,18 @@ namespace Zilon.Core.Persons.Auxiliary
         /// </summary>
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
-        /// <param name="keyPoint"> Ключевая точка, которую учавствует в изменении характеристики. </param>
+        /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик. </param>
         public static void UpdateSurvivalEffect(EffectCollection currentEffects,
             SurvivalStat stat,
-            SurvivalStatKeyPoint keyPoint)
+            IEnumerable<SurvivalStatKeyPoint> keyPoints)
         {
             var statType = stat.Type;
 
-            var currentTypeEffect = currentEffects.Items.OfType<SurvivalStatHazardEffect>()
+            var currentTypeEffect = currentEffects.Items
+                .OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == statType);
+
+            var keyPoint = keyPoints.First();
 
             // Эффект уже существует.
             // Изменим его тип.

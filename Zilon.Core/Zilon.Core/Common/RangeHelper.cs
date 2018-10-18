@@ -11,34 +11,28 @@ namespace Zilon.Core.Common
         /// Создаёт диапазон без учёта порядка указания минимального и максимального значения.
         /// </summary>
         /// <typeparam name="T"> Тип значений диапазона. </typeparam>
-        /// <param name="values"> Два значения диапазона. Без учёта порядка. Если указано не 2 числа, то будет выбрашено исключение. </param>
+        /// <param name="a"> Крайнее значение диапазона. </param>
+        /// <param name="b"> Крайнее значение диапазона. </param>
         /// <returns> Создаст диапазон, где минимальное из указанных значений будет минимальным в диапазоне. </returns>
-        public static Range<T> CreateNormalized<T>(params T[] values) where T : IComparable
+        public static OrientedRange<T> CreateNormalized<T>(T a, T b) where T : IComparable
         {
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-
-            if (values.Length != 2)
-            {
-                throw new ArgumentException("Нужно указывать строго 2 значения.", nameof(values));
-            }
-
             T min;
             T max;
-            if (values[0].CompareTo(values[1]) <= -1)
+            bool isAsc;
+            if (a.CompareTo(b) <= -1)
             {
-                min = values[0];
-                max = values[1];
+                min = a;
+                max = b;
+                isAsc = true;
             }
             else
             {
-                min = values[1];
-                max = values[0];
+                min = b;
+                max = a;
+                isAsc = false;
             }
 
-            return new Range<T>(min, max);
+            return new OrientedRange<T>(min, max, isAsc);
         }
     }
 }

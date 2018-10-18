@@ -21,7 +21,8 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var survivalData = new SurvivalData(_personScheme);
+            //TODO Создавать сразу с готовыми значениями стат
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
@@ -38,8 +39,8 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoint.Level == SurvivalStatHazardLevel.Lesser &&
-                    args.KeyPoint.Value == 0);
+                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
+                    args.KeyPoints.FirstOrDefault().Value == 0);
             }
         }
 
@@ -50,7 +51,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues()
         {
             // ARRANGE
-            var survivalData = new SurvivalData(_personScheme);
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -1;
@@ -67,8 +68,8 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoint.Level == SurvivalStatHazardLevel.Lesser &&
-                    args.KeyPoint.Value == 0);
+                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
+                    args.KeyPoints.FirstOrDefault().Value == 0);
             }
         }
 
@@ -79,7 +80,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues2()
         {
             // ARRANGE
-            var survivalData = new SurvivalData(_personScheme);
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -25;
@@ -96,8 +97,8 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoint.Level == SurvivalStatHazardLevel.Strong &&
-                    args.KeyPoint.Value == -25);
+                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
+                    args.KeyPoints.FirstOrDefault().Value == -25);
             }
         }
 
@@ -115,7 +116,7 @@ namespace Zilon.Core.Tests.Persons
 
             _personScheme.Hp = personHp;
 
-            var survivalData = new SurvivalData(_personScheme);
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
@@ -145,7 +146,7 @@ namespace Zilon.Core.Tests.Persons
 
             _personScheme.Hp = personHp;
 
-            var survivalData = new SurvivalData(_personScheme);
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
 
             // ACT
