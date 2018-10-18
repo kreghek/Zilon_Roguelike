@@ -6,7 +6,10 @@
   "Use": {
     "Consumable": true,
     "CommonRules": [
-      "Thrist"
+      {
+        "Type": "Thrist",
+        "Level": "Lesser"
+      }
     ]
   }
 }

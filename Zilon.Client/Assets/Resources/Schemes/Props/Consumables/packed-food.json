@@ -1,11 +1,15 @@
 {
   "Name": {
-    "En": "Сухой паёк"
+    "Ru": "Сухой паёк",
+    "En": "Packed food"
   },
   "Use": {
     "Consumable": true,
     "CommonRules": [
-      "Satiety"
+      {
+        "Type": "Satiety",
+        "Level": "Lesser"
+      }
     ]
   }
 }

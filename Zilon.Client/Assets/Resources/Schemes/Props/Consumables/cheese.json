@@ -6,7 +6,10 @@
   "Use": {
     "Consumable": true,
     "CommonRules": [
-      "Satiety"
+      {
+        "Type": "Satiety",
+        "Level": "Lesser"
+      }
     ]
   }
 }

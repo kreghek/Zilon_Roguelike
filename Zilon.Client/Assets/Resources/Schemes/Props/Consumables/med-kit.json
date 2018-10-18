@@ -5,7 +5,10 @@
   "Use": {
     "Consumable": true,
     "CommonRules": [
-      "Health"
+      {
+        "Type": "Health",
+        "Level": "Lesser"
+      }
     ]
   }
 }
