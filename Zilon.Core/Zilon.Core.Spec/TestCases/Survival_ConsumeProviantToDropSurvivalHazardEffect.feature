@@ -9,16 +9,16 @@ Scenario Outline: Поглощение провианта, чтобы снима
 	And Есть актёр игрока класса captain в ячейке (0, 0)
 	And Актёр значение <stat> равное <statValue>
 	And Актёр имеет эффект <startEffect>
-	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat> - <provisionEfficient>)
+	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat>)
 	When Актёр использует предмет <propSid> на себя
 	Then Значение <stat> стало <expectedValue>
 	And Актёр под эффектом <effect>
 
 Examples: 
-| stat    | statValue | startEffect   | propSid    | provisionStat | provisionEfficient | propCount | expectedValue | effect       |
-| сытость | 0         | Слабый голод  | fake-food  | сытость       | 10                 | 1         | 9             | нет          |
-| сытость | -25       | Голод         | fake-food  | сытость       | 10                 | 1         | -16           | Слабый голод |
-| сытость | -50       | Голодание     | fake-food  | сытость       | 10                 | 1         | -41           | Голод        |
-| вода    | 0         | Слабая жажда  | fake-water | вода          | 10                 | 1         | 9             | нет          |
-| вода    | -25       | Жажда         | fake-water | вода          | 10                 | 1         | -16           | Слабая жажда |
-| вода    | -50       | Обезвоживание | fake-water | вода          | 10                 | 1         | -41           | Жажда        |
+| stat    | statValue | startEffect   | propSid    | provisionStat | propCount | expectedValue | effect       |
+| сытость | 0         | Слабый голод  | fake-food  | сытость       | 1         | 49            | нет          |
+| сытость | -25       | Голод         | fake-food  | сытость       | 1         | 24            | Слабый голод |
+| сытость | -50       | Голодание     | fake-food  | сытость       | 1         | -1            | Голод        |
+| вода    | 0         | Слабая жажда  | fake-water | вода          | 1         | 49            | нет          |
+| вода    | -25       | Жажда         | fake-water | вода          | 1         | 24            | Слабая жажда |
+| вода    | -50       | Обезвоживание | fake-water | вода          | 1         | -1            | Жажда        |

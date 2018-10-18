@@ -28,10 +28,9 @@ namespace Zilon.Core.Spec.Steps
             _context.AddResourceToActor(propSid, count, actor);
         }
 
-        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп) - (.*)\)")]
+        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
         public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
-            string provisionStat, 
-            int provisitonEfficient)
+            string provisionStat)
         {
             var actor = _context.GetActiveActor();
 
