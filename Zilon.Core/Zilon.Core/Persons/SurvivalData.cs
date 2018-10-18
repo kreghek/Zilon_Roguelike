@@ -116,7 +116,10 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            DoStatCrossKeyPoint(stat, crossedKeyPoints);
+            if (crossedKeyPoints.Any())
+            {
+                DoStatCrossKeyPoint(stat, crossedKeyPoints);
+            }
         }
 
         private void CheckHp(SurvivalStat stat)
@@ -144,9 +147,9 @@ namespace Zilon.Core.Persons
                 Type = type,
                 Rate = 1,
                 KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -50),
                         new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -25),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -50)
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0)
                     }
             };
             return stat;

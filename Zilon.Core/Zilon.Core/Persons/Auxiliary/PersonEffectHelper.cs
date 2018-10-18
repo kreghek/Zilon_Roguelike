@@ -25,7 +25,7 @@ namespace Zilon.Core.Persons.Auxiliary
                 .OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == statType);
 
-            var keyPoint = keyPoints.First();
+            var keyPoint = keyPoints.Last();
 
             // Эффект уже существует.
             // Изменим его тип.
