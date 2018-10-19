@@ -7,17 +7,26 @@ namespace Zilon.Core.Components
     /// </summary>
     public sealed class PersonStat
     {
+        public PersonStat(float baseValue): this(baseValue, 0)
+        {
+            
+        }
+
+        public PersonStat(float baseValue, float levelInc)
+        {
+            Base = baseValue;
+            LevelInc = levelInc;
+        }
+
         /// <summary>
         /// Базовое значение.
         /// </summary>
-        [ExcludeFromCodeCoverage]
-        public float Base { get; set; }
+        public float Base { get; }
 
         /// <summary>
         /// Показатель увеличения характеристки в зависимости от уровеня.
         /// </summary>
-        [ExcludeFromCodeCoverage]
-        public float LevelInc { get; set; }
+        public float LevelInc { get; }
 
         /// <summary>
         /// Расчёт текущего значения характеристики.
