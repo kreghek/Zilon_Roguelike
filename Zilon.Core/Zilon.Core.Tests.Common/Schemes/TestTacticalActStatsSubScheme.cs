@@ -5,9 +5,9 @@ namespace Zilon.Core.Tests.Common.Schemes
 {
     public class TestTacticalActStatsSubScheme : SubSchemeBase, ITacticalActStatsSubScheme
     {
-        public TestTacticalActStatsSubScheme() : base()
+        public TestTacticalActStatsSubScheme()
         {
-            Offence = new TacticalActOffenceSubScheme();
+            Offense = new TacticalActOffenceSubScheme();
             Effect = TacticalActEffectType.Damage;
             Efficient = new Roll(3, 1);
             Range = new Range<int>(1, 1);
@@ -19,7 +19,7 @@ namespace Zilon.Core.Tests.Common.Schemes
         public Roll Efficient { get; set; }
         public int HitCount { get; }
         public bool IsMelee { get; }
-        public ITacticalActOffenceSubScheme Offence { get; set; }
+        public ITacticalActOffenceSubScheme Offense { get; set; }
         public Range<int> Range { get; set; }
     }
 }

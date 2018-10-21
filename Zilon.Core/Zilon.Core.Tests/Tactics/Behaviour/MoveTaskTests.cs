@@ -79,9 +79,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actorMock.SetupGet(x => x.Node).Returns(() => currentNode);
             actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
                 .Callback<IMapNode>(node => currentNode = node);
+            // ReSharper disable once UnusedVariable
             var actor = actorMock.Object;
 
-            //TODO Веротяно здесь нужно использовать мок.
+            //TODO Вероятно здесь нужно использовать мок.
+            // Исправить и убрать отключение инспекции для actor.
 
             var actor2 = new Actor(person, player, startNode);
             map.HoldNode(startNode, actor2);

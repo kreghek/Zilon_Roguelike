@@ -25,7 +25,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.GetProps(It.IsAny<DropTableScheme[]>()))
-                .Returns(new[] { CreateFakeResource(scheme), CreateFakeResource(scheme) });
+                .Returns(new IProp[] { CreateFakeResource(scheme), CreateFakeResource(scheme) });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
@@ -43,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест прверяет, что контент сундуков разрешается только при первом обращении.
+        /// Тест проверяет, что контент сундуков разрешается только при первом обращении.
         /// </summary>
         [Test]
         public void CalcActualItems_GetContentItems_ResolveContentOnce()
@@ -54,7 +54,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.GetProps(It.IsAny<DropTableScheme[]>()))
-                .Returns(new[] { CreateFakeResource(scheme) });
+                .Returns(new IProp[] { CreateFakeResource(scheme) });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);

@@ -4,15 +4,15 @@ using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    public class MonsterDefenceSubScheme : IMonsterDefenceSubScheme
+    public class MonsterDefenceSubScheme : IMonsterDefenseSubScheme
     {
         [JsonConstructor]
         public MonsterDefenceSubScheme([CanBeNull] MonsterDefenceItemSubScheme[] defences)
         {
             // ReSharper disable once CoVariantArrayConversion
-            Defences = defences;
+            Defenses = defences;
         }
 
-        public IMonsterDefenceItemSubScheme[] Defences { get; }
+        public IMonsterDefenceItemSubScheme[] Defenses { get; }
     }
 }

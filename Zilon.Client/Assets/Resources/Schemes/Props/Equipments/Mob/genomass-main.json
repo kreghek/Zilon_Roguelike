@@ -3,7 +3,7 @@
     "Power": 1.0,
     "ApRank": 4,
     "ArmorRank": 4,
-    "Absorbtion": 0.75,
+    "Absorption": 1,
     "ActSids": [
       "chop"
     ]

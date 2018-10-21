@@ -3,18 +3,20 @@
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Схема характиристик предмета, который можно экипировать на персонажа.
+    /// Схема характеристик предмета, который можно экипировать на персонажа.
     /// </summary>
     public interface IPropEquipSubScheme
     {
         /// <summary>
         /// Ранг пробития брони.
         /// </summary>
+        // ReSharper disable once UnusedMemberInSuper.Global
         int ApRank { get; }
 
         /// <summary>
         /// Ранг брони.
         /// </summary>
+        // ReSharper disable once UnusedMemberInSuper.Global
         int ArmorRank { get; }
 
         /// <summary>
@@ -23,7 +25,8 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Зависит от Мощи.
         /// </remarks>
-        float Absorbtion { get; }
+        // ReSharper disable once UnusedMemberInSuper.Global
+        float Absorption { get; }
 
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.

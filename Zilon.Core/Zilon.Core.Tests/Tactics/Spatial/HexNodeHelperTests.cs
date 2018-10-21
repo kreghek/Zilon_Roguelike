@@ -29,7 +29,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial
 
             var testedNode = nodes.SelectBy(3, 3);
 
-            var expectedNeibours = new[] {
+            var expectedNeighbors = new[] {
                 nodes.SelectBy(2, 3),
 
                 nodes.SelectBy(3, 4),
@@ -43,18 +43,19 @@ namespace Zilon.Core.Tests.Tactics.Spatial
 
 
             // ACT
-            var factNeibours = HexNodeHelper.GetNeighbors(testedNode, nodes.ToArray());
+            var factNeighbors = HexNodeHelper.GetNeighbors(testedNode, nodes.ToArray());
 
 
 
             // ASSERT
             for (var i = 0; i < 6; i++)
             {
-                factNeibours[i].OffsetX.Should().Be(expectedNeibours[i].OffsetX);
-                factNeibours[i].OffsetY.Should().Be(expectedNeibours[i].OffsetY);
+                factNeighbors[i].OffsetX.Should().Be(expectedNeighbors[i].OffsetX);
+                factNeighbors[i].OffsetY.Should().Be(expectedNeighbors[i].OffsetY);
             }
 
-            factNeibours.Should().BeEquivalentTo(expectedNeibours);
+            // ReSharper disable once CoVariantArrayConversion
+            factNeighbors.Should().BeEquivalentTo(expectedNeighbors);
         }
     }
 }

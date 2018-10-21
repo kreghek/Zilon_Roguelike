@@ -7,7 +7,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>
-        ITacticalActOffenceSubScheme Offence { get; }
+        ITacticalActOffenceSubScheme Offense { get; }
 
         /// <summary>
         /// Эффект, который оказывает действие.

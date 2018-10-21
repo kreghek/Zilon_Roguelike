@@ -2,7 +2,7 @@
 {
     public interface IMonsterScheme: IScheme
     {
-        IMonsterDefenceSubScheme Defence { get; }
+        IMonsterDefenseSubScheme Defense { get; }
         string[] DropTableSids { get; }
         int Hp { get; }
         ITacticalActStatsSubScheme PrimaryAct { get; }

@@ -19,7 +19,7 @@ namespace Zilon.Core.Schemes
             int hitCount,
             bool isMelee)
         {
-            Offence = offence ?? throw new ArgumentNullException(nameof(offence));
+            Offense = offence ?? throw new ArgumentNullException(nameof(offence));
             Effect = effect;
             Efficient = efficient ?? throw new ArgumentNullException(nameof(efficient));
             Range = range ?? throw new ArgumentNullException(nameof(range));
@@ -30,7 +30,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>
-        public ITacticalActOffenceSubScheme Offence { get; set; }
+        public ITacticalActOffenceSubScheme Offense { get; set; }
 
         /// <summary>
         /// Эффект, который оказывает действие.

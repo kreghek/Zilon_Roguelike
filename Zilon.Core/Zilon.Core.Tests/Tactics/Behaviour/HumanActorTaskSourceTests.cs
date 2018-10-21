@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
@@ -92,18 +91,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             tasks[0].Should().BeOfType<MoveTask>();
         }
 
-        private static IActorManager CreateActorManager(params IActor[] actors)
-        {
-            var actorManagerMock = new Mock<IActorManager>();
-            var actorListInner = new List<IActor>(actors);
-            actorManagerMock.Setup(x => x.Items).Returns(actorListInner);
-            var actorManager = actorManagerMock.Object;
-            return actorManager;
-        }
-
         /// <summary>
         /// Тест проверяет, чтобы метод назначения задачи на перемещение проверял аргумент.
-        /// Аргумент не должен быть null. Класс поведенения не знает, как в этом случае поступать.
+        /// Аргумент не должен быть null. Класс поведения не знает, как в этом случае поступать.
         /// </summary>
         /// <remarks>
         /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
@@ -134,7 +124,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         //TODO Этот тест - это проверка намерения. Сделать отдельный тест.
         /// <summary>
-        /// Тест проверяет, после окончания команды на перемещение и назнаения новой команды всё рабоает корректно.
+        /// Тест проверяет, что после окончания команды на перемещение и назначения новой команды всё работает корректно.
         /// То есть новая команда возвращается при запросе.
         /// </summary>
         [Test()]
@@ -152,10 +142,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(actor);
 
-            var actorManager = CreateActorManager(actor);
-
             var moveIntention = new MoveIntention(finishNode, map);
             var moveIntention2 = new MoveIntention(finishNode2, map);
+
+
 
             // ACT
 
@@ -208,10 +198,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(actor);
 
-            var actorManager = CreateActorManager(actor);
-
             var moveIntention = new MoveIntention(finishNode, map);
             var moveIntention2 = new MoveIntention(finishNode2, map);
+
 
 
             // ACT
@@ -273,8 +262,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(attackerActor);
 
-            var actorManager = CreateActorManager(attackerActor, targetActor);
-
             var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService, map));
 
 
@@ -303,8 +290,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actor = CreateActor(map, startNode);
 
             var taskSource = InitTaskSource(actor);
-
-            var actorManager = CreateActorManager(actor);
 
             var containerMock = new Mock<IPropContainer>();
             var container = containerMock.Object;

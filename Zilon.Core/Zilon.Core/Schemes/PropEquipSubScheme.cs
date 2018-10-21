@@ -33,7 +33,7 @@ namespace Zilon.Core.Schemes
         /// Зависит от Мощи.
         /// </remarks>
         [JsonProperty]
-        public float Absorbtion { get; private set; }
+        public float Absorption { get; private set; }
 
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.

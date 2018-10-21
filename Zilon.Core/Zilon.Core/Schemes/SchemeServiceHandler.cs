@@ -34,11 +34,6 @@ namespace Zilon.Core.Schemes
             _dict = new Dictionary<string, TSchemeImpl>();
         }
 
-        public SchemeServiceHandler(ISchemeLocator locator, string directory) : this(locator)
-        {
-            _directory = directory;
-        }
-
         public void LoadSchemes()
         {
             var files = _locator.GetAll(_directory);
@@ -51,7 +46,7 @@ namespace Zilon.Core.Schemes
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
                     }
 
-                    TSchemeImpl scheme = ParseSchemeFromFile(file);
+                    var scheme = ParseSchemeFromFile(file);
 
                     if (scheme.Disabled)
                     {

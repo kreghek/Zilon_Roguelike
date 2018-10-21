@@ -14,7 +14,7 @@ namespace Zilon.Core.Schemes
         {
             Hp = hp;
             PrimaryAct = primaryAct;
-            Defence = defence;
+            Defense = defence;
             DropTableSids = dropTableSids;
         }
 
@@ -31,7 +31,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Способности к обороне монстра против атакующих действий противника.
         /// </summary>
-        public IMonsterDefenceSubScheme Defence { get; }
+        public IMonsterDefenseSubScheme Defense { get; }
 
         /// <summary>
         /// Список идентификаторов таблиц дропа.

@@ -3,8 +3,8 @@
     /// <summary>
     /// Интерфейс схемы для одного типа обороны монстра.
     /// </summary>
-    public interface IMonsterDefenceSubScheme
+    public interface IMonsterDefenseSubScheme
     {
-        IMonsterDefenceItemSubScheme[] Defences { get; }
+        IMonsterDefenceItemSubScheme[] Defenses { get; }
     }
 }
