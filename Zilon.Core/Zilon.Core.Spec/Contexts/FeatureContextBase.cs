@@ -60,7 +60,7 @@ namespace Zilon.Core.Spec.Contexts
 
             // Это нужно для того, чтобы объкт был создан и выполнился код из конструктора.
             // Там обработка на события внутренних сервисов.
-            var sector = Container.GetInstance<ISector>();
+            Container.GetInstance<ISector>();
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
@@ -201,24 +201,9 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IMapNode startNode)
         {
 
-            var schemeService = Container.GetInstance<ISchemeService>();
-
             var monsterPerson = new MonsterPerson(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
-
-            return actor;
-        }
-
-        private IActor CreateActor([NotNull] IPlayer player,
-            [NotNull] IPerson person,
-            [NotNull] IMapNode startNode)
-        {
-            var actorManager = Container.GetInstance<IActorManager>();
-
-            var actor = new Actor(person, player, startNode);
-
-            actorManager.Add(actor);
 
             return actor;
         }

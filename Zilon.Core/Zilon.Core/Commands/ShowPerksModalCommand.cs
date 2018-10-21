@@ -1,9 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Команда на отображение модала для отображения контента контейнера.
     /// </summary>
@@ -11,6 +14,7 @@ namespace Zilon.Core.Commands
     {
         private readonly IPlayerState _playerState;
 
+        [PublicAPI]
         [ExcludeFromCodeCoverage]
         public ShowPerksModalCommand(ISectorModalManager sectorManager, IPlayerState playerState) :
             base(sectorManager)

@@ -1,10 +1,11 @@
-﻿namespace Zilon.Core.Tactics.Spatial
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+using Zilon.Core.Common;
+
+namespace Zilon.Core.Tactics.Spatial
+{
     public static class HexNodeHelper
     {
         public static HexNode[] GetNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
@@ -43,7 +44,7 @@
 
 
         /// <summary>
-        /// Ищет ближайший узел карты в сетке шестиугольников без учёта ребёр.
+        /// Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
         /// </summary>
         /// <param name="node"> Опорный узел. </param>
         /// <param name="targets"> Целевые узлы, среди которых будет поиск. </param>

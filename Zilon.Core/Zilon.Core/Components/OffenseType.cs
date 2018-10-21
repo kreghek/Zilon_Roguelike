@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Zilon.Core.Components
 {
+    [PublicAPI]
     [JsonConverter(typeof(StringEnumConverter))]
     public enum OffenseType
     {

@@ -80,6 +80,7 @@ namespace Zilon.Core.Persons
                 {
                     Scheme = perkScheme,
                     CurrentLevel = null,
+                    // ReSharper disable once CoVariantArrayConversion
                     CurrentJobs = perkScheme.Levels[0].Jobs.Select(x => new PerkJob(x)).ToArray()
                 };
 

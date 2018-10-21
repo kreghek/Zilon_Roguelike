@@ -11,7 +11,6 @@ namespace Zilon.Core.MapGenerators
         public int Width { get; set; }
         public int Height { get; set; }
         public List<HexNode> Nodes { get; }
-        public bool IsStartRoom { get; set; }
 
         public Room()
         {

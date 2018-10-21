@@ -9,6 +9,7 @@ namespace Zilon.Core.Schemes
         [JsonConstructor]
         public MonsterDefenceSubScheme([CanBeNull] MonsterDefenceItemSubScheme[] defences)
         {
+            // ReSharper disable once CoVariantArrayConversion
             Defences = defences;
         }
 

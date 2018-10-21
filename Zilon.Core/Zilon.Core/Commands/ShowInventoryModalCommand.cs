@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
@@ -11,6 +13,7 @@ namespace Zilon.Core.Commands
     {
         private readonly IPlayerState _playerState;
 
+        [PublicAPI]
         [ExcludeFromCodeCoverage]
         public ShowInventoryModalCommand(ISectorModalManager modalManager, IPlayerState playerState) :
             base(modalManager)

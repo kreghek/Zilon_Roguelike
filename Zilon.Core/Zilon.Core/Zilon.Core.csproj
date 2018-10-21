@@ -73,7 +73,6 @@
     <Compile Include="Commands\AttackCommand.cs" />
     <Compile Include="Commands\EquipCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ICommandManager.cs" />
     <Compile Include="Commands\MoveCommand.cs" />
     <Compile Include="Commands\NextTurnCommand.cs" />

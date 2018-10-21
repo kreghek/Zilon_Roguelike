@@ -1,13 +1,16 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
     /// <inheritdoc />
     /// <summary>
-    /// Команда на отображение модала для отображения контента контейнера.
+    /// Команда на отображение модального окна для отображения контента контейнера.
     /// </summary>
+    [PublicAPI]
     public class ShowContainerModalCommand : ShowModalCommandBase
     {
         private readonly IPlayerState _playerState;

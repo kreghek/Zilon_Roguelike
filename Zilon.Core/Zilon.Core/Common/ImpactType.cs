@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Common
 {
@@ -6,6 +8,7 @@ namespace Zilon.Core.Common
     /// Тип воздействия.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [PublicAPI]
     public enum ImpactType
     {
         /// <summary>

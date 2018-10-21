@@ -2,16 +2,20 @@
 
 using FluentAssertions;
 
-using TechTalk.SpecFlow;
-using Zilon.Core.Commands;
-using Zilon.Core.Spec.Contexts;
+using JetBrains.Annotations;
 
 using LightInject;
+
+using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
+using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
 {
+    [UsedImplicitly]
     [Binding]
     public sealed class EquipmentSteps : GenericStepsBase<CommonGameActionsContext>
     {
@@ -20,6 +24,7 @@ namespace Zilon.Core.Spec.Steps
 
         }
 
+        [UsedImplicitly]
         [Given(@"В инвентаре у актёра игрока есть предмет: (.*)")]
         public void GivenВИнвентареУАктёраИгрокаЕстьПредметPropSid(string propSid)
         {
@@ -30,6 +35,7 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Inventory.Add(equipment);
         }
 
+        [UsedImplicitly]
         [Given(@"Актёр игрока экипирован предметом (.*) в слот Index: (.*)")]
         public void GivenАктёрИгрокаЭкипированНет(string propSid, int slotIndex)
         {
@@ -45,6 +51,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
 
+        [UsedImplicitly]
         [When(@"Экипирую предмет (.*) в слот Index: (.*)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
         {
@@ -67,6 +74,7 @@ namespace Zilon.Core.Spec.Steps
             equipCommand.Execute();
         }
 
+        [UsedImplicitly]
         [Then(@"В слоте Index: (.*) актёра игрока есть (.*)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)
         {
@@ -74,20 +82,5 @@ namespace Zilon.Core.Spec.Steps
 
             actor.Person.EquipmentCarrier.Equipments[slotIndex].Scheme.Sid.Should().Be(propSid);
         }
-
-        [Then(@"Параметр (.*) равен (.*)")]
-        public void ThenПараметрParamStatTypeРавенParamStatValue(string paramType, int paramValue)
-        {
-            if (paramType == "-")
-            {
-                return;
-            }
-            else
-            {
-                ScenarioContext.Current.Pending();
-            }
-        }
-
-
     }
 }

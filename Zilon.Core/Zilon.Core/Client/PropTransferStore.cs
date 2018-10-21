@@ -106,8 +106,8 @@ namespace Zilon.Core.Client
                     TransferResource(resource, PropRemoved, PropAdded);
                     break;
 
-                case Equipment equipment:
-                case Concept concept:
+                case Equipment _:
+                case Concept _:
                     TransferNoCount(prop, PropRemoved, PropAdded);
                     break;
             }
@@ -154,8 +154,8 @@ namespace Zilon.Core.Client
                     TransferResource(resource, PropAdded, PropRemoved);
                     break;
 
-                case Equipment equipment:
-                case Concept recipe:
+                case Equipment _:
+                case Concept _:
                     TransferNoCount(prop, PropAdded, PropRemoved);
                     break;
             }
