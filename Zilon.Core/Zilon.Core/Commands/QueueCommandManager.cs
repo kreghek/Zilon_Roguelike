@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Zilon.Core.Commands
 {
@@ -15,8 +16,10 @@ namespace Zilon.Core.Commands
 
         public ICommand Pop()
         {
-            if (_queue.Count == 0)
+            if (!_queue.Any())
+            {
                 return null;
+            }
 
             return _queue.Dequeue();
         }

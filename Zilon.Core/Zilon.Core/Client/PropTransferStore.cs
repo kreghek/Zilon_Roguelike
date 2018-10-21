@@ -119,15 +119,17 @@ namespace Zilon.Core.Client
             if (removedResource != null)
             {
                 var removedRemains = removedResource.Count - resource.Count;
-                if (removedRemains <= 0)
+                if (removedRemains > 0)
                 {
-                    bittenList.Remove(removedResource);
+                    return;
+                }
 
-                    if (removedRemains < 0)
-                    {
-                        var addedResource = new Resource(resource.Scheme, resource.Count);
-                        oppositList.Add(addedResource);
-                    }
+                bittenList.Remove(removedResource);
+
+                if (removedRemains < 0)
+                {
+                    var addedResource = new Resource(resource.Scheme, resource.Count);
+                    oppositList.Add(addedResource);
                 }
             }
             else

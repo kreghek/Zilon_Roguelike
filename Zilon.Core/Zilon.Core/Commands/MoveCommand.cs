@@ -36,10 +36,7 @@ namespace Zilon.Core.Commands
             }
 
             CreatePath();
-            if (!_path.Any())
-            {
-                return false;
-            }
+            return _path.Any();
 
             //TODO Здесь должна быть проверка
             // 1. Может ли текущий актёр ходить.
@@ -48,7 +45,6 @@ namespace Zilon.Core.Commands
             // 4. Видит ли актёр указанную ячейку.
             // 5. Возможно ли выполнение каких-либо команд над актёрами
             // (Нельзя, если ещё выполняется текущая команда. Например, анимация перемещения.)
-            return true;
         }
 
         protected override void ExecuteTacticCommand()
@@ -85,13 +81,15 @@ namespace Zilon.Core.Commands
 
             var astar = new AStar(map, context, startNode, finishNode);
             var resultState = astar.Run();
-            if (resultState == State.GoalFound)
+            if (resultState != State.GoalFound)
             {
-                var foundPath = astar.GetPath().Skip(1).ToArray();
-                foreach (var pathNode in foundPath)
-                {
-                    _path.Add((HexNode)pathNode);
-                }
+                return;
+            }
+
+            var foundPath = astar.GetPath().Skip(1).ToArray();
+            foreach (var pathNode in foundPath)
+            {
+                _path.Add((HexNode)pathNode);
             }
         }
     }

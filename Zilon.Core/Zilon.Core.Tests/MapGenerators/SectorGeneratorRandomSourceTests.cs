@@ -9,21 +9,21 @@ using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture()]
+    [TestFixture]
     public class SectorGeneratorRandomSourceTests
     {
         /// <summary>
         /// Тест проверяет, что источник рандома выбирает комнату даже при самом низком результате броска,
-        /// если указана 100 веротяность выбора соседа.
+        /// если указана 100 вероятность выбора соседа.
         /// </summary>
-        [Test()]
+        [Test]
         public void RollConnectedRoomsTest()
         {
             // ARRANGE
 
-            var maxNeighbor = 1;
+            const int maxNeighbor = 1;
 
-            var neighborProbably = 100;
+            const int neighborProbably = 100;
 
             var rollIndex = 0;
 
