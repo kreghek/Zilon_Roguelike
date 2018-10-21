@@ -27,6 +27,7 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
+                // ReSharper disable once UnusedVariable
                 var monster = new MonsterPerson(monsterScheme);
             };
 
@@ -37,7 +38,7 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что монстру корректно присвается значение Hp.
+        /// Тест проверяет, что монстру корректно присваивается значение Hp.
         /// </summary>
         [Test]
         public void Constructor_HpInScheme_ActorHpEqualsSchemeHp()
@@ -61,7 +62,7 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что для монстров выбрасывается сообщение на неподдерживаемые компоненты (Развитие).
+        /// Тест проверяет, что для монстров выбрасывается сообщение на не поддерживаемые компоненты (Развитие).
         /// </summary>
         [Test]
         public void EvolutionData_ThrowNotSupported()
@@ -69,8 +70,10 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monster = CreateMonster();
 
+            // ReSharper disable once ConvertToLocalFunction
             Action<MonsterPerson> requestPropertyAct = m =>
             {
+                // ReSharper disable once UnusedVariable
                 var tmp = m.EvolutionData;
             };
 
@@ -91,8 +94,10 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monster = CreateMonster();
 
+            // ReSharper disable once ConvertToLocalFunction
             Action<MonsterPerson> requestPropertyAct = m =>
             {
+                // ReSharper disable once UnusedVariable
                 var tmp = m.Inventory;
             };
 
@@ -116,6 +121,7 @@ namespace Zilon.Core.Tests.Persons
 
         private Action ActUnsupportedMonsterComponent(MonsterPerson monster, Action<MonsterPerson> requestPropertyAct)
         {
+            // ReSharper disable once ConvertToLocalFunction
             Action act = () => {
                 requestPropertyAct(monster);
             };

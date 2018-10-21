@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using FluentAssertions;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -17,13 +18,13 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
         [Test]
-        public void Update_StatNearKeyPoint_RaiseEventWithCorrentValues()
+        public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
             //TODO Создавать сразу с готовыми значениями стат
             var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
-            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
 
 
@@ -47,12 +48,12 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
         [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues()
+        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
             var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
-            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -1;
 
 
@@ -76,14 +77,14 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
         [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrentValues2()
+        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues2()
         {
             // ARRANGE
             var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
-            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = stat.KeyPoints[1].Value;
-            var stat2 = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Water);
+            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Water);
             stat2.Value = stat2.KeyPoints[1].Value;
 
             // ACT
@@ -117,7 +118,7 @@ namespace Zilon.Core.Tests.Persons
 
             var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
-            var stat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
 
 
@@ -128,7 +129,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ASSERT
-            var factStat = survivalData.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             factStat.Value.Should().Be(expectedHp);
         }
 

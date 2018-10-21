@@ -101,7 +101,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actCarrierMock = new Mock<ITacticalActCarrier>();
             actCarrierMock.SetupGet(x => x.Acts)
-                .Returns(new ITacticalAct[] { act });
+                .Returns(new[] { act });
             var actCarrier = actCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();

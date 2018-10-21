@@ -75,9 +75,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new PropScheme
             {
-                Use = new TestPropUseSubScheme {
-                    
-                }
+                Use = new TestPropUseSubScheme()
             };
             var usableResource = new Resource(propScheme, 1);
 

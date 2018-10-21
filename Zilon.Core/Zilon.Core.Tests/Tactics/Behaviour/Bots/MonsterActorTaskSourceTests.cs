@@ -63,7 +63,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var taskSource = _container.GetInstance<MonsterActorTaskSource>();
 
             // Располагаем рядом игрока и бота
-            var intruderActor = CreateBotActor(3, 1);
+            CreateBotActor(3, 1);
 
 
             // ACT
@@ -90,10 +90,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             // ARRANGE
 
             var taskSource = _container.GetInstance<MonsterActorTaskSource>();
-            var actorManager = _container.GetInstance<IActorManager>();
 
             // Располагаем рядом игрока и бота
-            var intruderActor = CreateBotActor(2, 1);
+            CreateBotActor(2, 1);
 
 
 

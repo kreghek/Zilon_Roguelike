@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
     [TestFixture()]
     public class RoamingLogicTests
     {
-        private const int _expectedIdleDuration = 1;
+        private const int ExpectedIdleDuration = 1;
 
         private IMapNode _factActorNode;
         private IMapNode _factIntruderNode;
@@ -130,7 +130,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             var decisionSourceMock = new Mock<IDecisionSource>();
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_expectedIdleDuration);
+                .Returns(ExpectedIdleDuration);
             _decisionSource = decisionSourceMock.Object;
         }
 

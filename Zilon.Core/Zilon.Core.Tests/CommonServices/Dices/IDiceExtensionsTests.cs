@@ -9,7 +9,7 @@ using Zilon.Core.CommonServices.Dices;
 namespace Zilon.Core.Tests.CommonServices.Dices
 {
     [TestFixture]
-    public class IDiceExtensionsTests
+    public class DiceExtensionsTests
     {
         /// <summary>
         ///  Тест проверяет, что при минимальном броске будет минимальное значение диапазона.

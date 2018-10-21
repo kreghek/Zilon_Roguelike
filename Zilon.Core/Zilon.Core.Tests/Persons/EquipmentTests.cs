@@ -29,6 +29,7 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
+                // ReSharper disable once UnusedVariable
                 var equipment = new Equipment(scheme, acts);
             };
 

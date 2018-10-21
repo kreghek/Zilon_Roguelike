@@ -22,14 +22,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
     [TestFixture]
     public class PatrolLogicOneActorBypassTests
     {
-        private const int _expectedIdleDuration = 1;
+        private const int ExpectedIdleDuration = 1;
 
         private IMapNode _factActorNode;
         private IMap _map;
         private IPlayer _player;
         private IActor _actor;
         private IPatrolRoute _patrolRoute3Points;
-        private IPatrolRoute _patrolRoute2DiagPoints;
+        private IPatrolRoute _patrolRoute2DiagonalPoints;
         private IActorManager _actorList;
         private IDecisionSource _decisionSource;
 
@@ -63,15 +63,15 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             _patrolRoute3Points = patrolRoute3PointsMock.Object;
 
             // Маршрут из 2-х точек по диагонали комнаты
-            var patrolRoute2DiagPointsMock = new Mock<IPatrolRoute>();
-            var route2DiagPoints = new IMapNode[] {
+            var patrolRoute2DiagonalPointsMock = new Mock<IPatrolRoute>();
+            var route2DiagonalPoints = new IMapNode[] {
                 _map.Nodes.OfType<HexNode>().SelectBy(0, 0),
                 _map.Nodes.OfType<HexNode>().SelectBy(9, 9)
             };
-            patrolRoute2DiagPointsMock
+            patrolRoute2DiagonalPointsMock
                 .SetupGet(x => x.Points)
-                .Returns(route2DiagPoints);
-            _patrolRoute2DiagPoints = patrolRoute2DiagPointsMock.Object;
+                .Returns(route2DiagonalPoints);
+            _patrolRoute2DiagonalPoints = patrolRoute2DiagonalPointsMock.Object;
 
 
             var actors = new List<IActor> { _actor };
@@ -82,7 +82,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             var decisionSourceMock = new Mock<IDecisionSource>();
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_expectedIdleDuration);
+                .Returns(ExpectedIdleDuration);
             _decisionSource = decisionSourceMock.Object;
         }
 
@@ -93,7 +93,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// Изначально актёр начинает патрулирование с первой точки обхода.
         /// </summary>
         [Test]
-        public void GetCurrentTask_StartOnFirstPoint_ActorWalkThroughRount()
+        public void GetCurrentTask_StartOnFirstPoint_ActorWalkThroughRound()
         {
             // ARRANGE
 
@@ -183,10 +183,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// и продолжит обход в порядке точек патрулирования.
         /// </summary>
         [Test]
-        public void GetCurrentTask_StartOnSideOnRoute_ActorWalkThroughRount()
+        public void GetCurrentTask_StartOnSideOnRoute_ActorWalkThroughRound()
         {
             // ARRANGE
-
+            const int expectedStepsToPatrolPointX1Y1 = 2;
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
 
@@ -201,13 +201,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
                 _decisionSource,
                 tacticalActUsageService);
 
-            const int expectedStepsToPatrolPoint_1_1 = 2;
             var expectedNode = _patrolRoute3Points.Points.First();
 
 
 
             // ACT
-            for (var round = 0; round < expectedStepsToPatrolPoint_1_1; round++)
+            for (var round = 0; round < expectedStepsToPatrolPointX1Y1; round++)
             {
                 var task = logic.GetCurrentTask();
 
@@ -233,10 +232,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// Отличается от предыдущего тем, что стартовая точка лежит рядов со второй точкой маршрута.
         /// </summary>
         [Test]
-        public void GetCurrentTask_StartOnSideOnRoute2_ActorWalkThroughRount()
+        public void GetCurrentTask_StartOnSideOnRoute2_ActorWalkThroughRound()
         {
             // ARRANGE
-
+            const int expectedStepsToPatrolPointX5Y3 = 2;
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(5, 1);
 
@@ -251,13 +250,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
                 _decisionSource,
                 tacticalActUsageService);
 
-            const int expectedStepsToPatrolPoint_5_3 = 2;
             var expectedNode = _patrolRoute3Points.Points[1];  // вторая точка маршрута
 
 
 
             // ACT
-            for (var round = 0; round < expectedStepsToPatrolPoint_5_3; round++)
+            for (var round = 0; round < expectedStepsToPatrolPointX5Y3; round++)
             {
                 var task = logic.GetCurrentTask();
 
@@ -283,10 +281,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// Отличается от предыдущего тем, что стартовая точка лежит рядом с третьей точкой маршрута.
         /// </summary>
         [Test]
-        public void GetCurrentTask_StartOnSideOnRoute3_ActorWalkThroughRount()
+        public void GetCurrentTask_StartOnSideOnRoute3_ActorWalkThroughRound()
         {
             // ARRANGE
-
+            const int expectedStepsToPatrolPointX3Y5 = 2;
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(2, 6);
 
@@ -301,13 +299,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
                 _decisionSource,
                 tacticalActUsageService);
 
-            const int expectedStepsToPatrolPoint_3_5 = 2;
             var expectedNode = _patrolRoute3Points.Points[2];  // третья точка маршрута
 
 
 
             // ACT
-            for (var round = 0; round < expectedStepsToPatrolPoint_3_5; round++)
+            for (var round = 0; round < expectedStepsToPatrolPointX3Y5; round++)
             {
                 var task = logic.GetCurrentTask();
 
@@ -330,7 +327,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// Изначально актёр начинает патрулирование с первой точки обхода.
         /// </summary>
         [Test]
-        public void GetCurrentTask_2PointsDiag_ReturningToStartPoint()
+        public void GetCurrentTask_2PointsDiagonal_ReturningToStartPoint()
         {
             // ARRANGE
 
@@ -339,7 +336,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             const int expectedReturningStep = expectedStepsToSecondPoint +
                expectedWaiting + 1;
 
-            var expectedSecondPoint = _patrolRoute2DiagPoints.Points.Last();
+            var expectedSecondPoint = _patrolRoute2DiagonalPoints.Points.Last();
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(0, 0);
 

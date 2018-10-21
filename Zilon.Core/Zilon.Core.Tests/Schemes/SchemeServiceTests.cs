@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.Schemes
         [Test]
         public void GetSchemes_AllSchemes_NoExceptions()
         {
-            //ARRAGE
+            //ARRANGE
             var schemeTypes = ExtractSchemeTypes();
 
             var schemeService = CreateSchemeService();
@@ -33,9 +33,15 @@ namespace Zilon.Core.Tests.Schemes
 
             foreach (var schemeType in schemeTypes)
             {
+                // ReSharper disable once ConvertToLocalFunction
                 Action act = () =>
                 {
-                    var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetSchemes));
+                    var method = typeof(SchemeService).GetMethod(nameof(ISchemeService.GetSchemes));
+                    if (method == null)
+                    {
+                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetSchemes)}.");
+                    }
+
                     var generic = method.MakeGenericMethod(schemeType);
                     var allSchemes = (IEnumerable<object>)generic.Invoke(schemeService, null);
                     Console.WriteLine($"{schemeType} Count:{allSchemes.Count()}");
@@ -59,7 +65,7 @@ namespace Zilon.Core.Tests.Schemes
         [Test]
         public void GetScheme_OneScheme_NoExceptions()
         {
-            //ARRAGE
+            //ARRANGE
             var schemeTypes = ExtractSchemeTypes();
 
             var schemeService = CreateSchemeService();
@@ -70,13 +76,16 @@ namespace Zilon.Core.Tests.Schemes
 
             foreach (var schemeType in schemeTypes)
             {
-
-
+                // ReSharper disable once ConvertToLocalFunction
                 Action act = () =>
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
+                    if (method == null)
+                    {
+                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetScheme)}.");
+                    }
                     var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new[] { "test" });
+                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
                     Console.WriteLine(scheme);
                 };
 
@@ -138,7 +147,7 @@ namespace Zilon.Core.Tests.Schemes
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                x.IsInterface && x != typeof(IScheme)).ToArray(); 
+                x.IsInterface && x != typeof(IScheme)).ToArray();
             return schemeTypes;
         }
     }
