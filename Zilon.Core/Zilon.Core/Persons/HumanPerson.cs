@@ -248,12 +248,15 @@ namespace Zilon.Core.Persons
 
             if (greaterSurvivalEffect == null)
             {
-                return new TacticalAct(scheme, scheme.Stats.Efficient);
+                return new TacticalAct(scheme, scheme.Stats.Efficient, new Roll(6, 1));
             }
             else
             {
                 var effecientBuffRule = greaterSurvivalEffect.Rules
                     .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+
+                var toHitBuffRule = greaterSurvivalEffect.Rules
+                    .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
 
                 var efficientRoll = scheme.Stats.Efficient;
                 if (effecientBuffRule != null)
@@ -262,7 +265,14 @@ namespace Zilon.Core.Persons
                     efficientRoll = new Roll(efficientRoll.Dice, efficientRoll.Count, modifiers);
                 }
 
-                return new TacticalAct(scheme, efficientRoll);
+                var toHitRoll = new Roll(6, 1);
+                if (toHitBuffRule != null)
+                {
+                    var modifiers = new RollModifiers(-1);
+                    toHitRoll = new Roll(6, 1, modifiers);
+                }
+
+                return new TacticalAct(scheme, efficientRoll, toHitRoll);
             }
         }
 

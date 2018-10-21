@@ -18,5 +18,10 @@ namespace Zilon.Core.Persons
         /// Актуальные данные об эффективности действия.
         /// </summary>
         Roll Efficient { get; }
+
+        /// <summary>
+        /// Актуальные данные о применении действия.
+        /// </summary>
+        Roll ToHit { get; }
     }
 }

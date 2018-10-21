@@ -10,11 +10,13 @@ namespace Zilon.Core.Persons
     {
         public ITacticalActStatsSubScheme Stats { get; }
         public Roll Efficient { get; }
+        public Roll ToHit { get; }
 
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
             Stats = stats;
             Efficient = stats.Efficient;
+            ToHit = new Roll(6, 1);
         }
     }
 }
