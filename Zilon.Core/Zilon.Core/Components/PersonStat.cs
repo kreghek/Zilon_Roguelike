@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
     /// Структура для хранения характеристики.
@@ -24,7 +22,7 @@ namespace Zilon.Core.Components
         public float Base { get; }
 
         /// <summary>
-        /// Показатель увеличения характеристки в зависимости от уровеня.
+        /// Показатель увеличения характеристики в зависимости от уровня.
         /// </summary>
         public float LevelInc { get; }
 

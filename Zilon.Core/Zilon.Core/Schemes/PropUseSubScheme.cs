@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 
-using Zilon.Core.Components;
-
 namespace Zilon.Core.Schemes
 {
     /// <summary>

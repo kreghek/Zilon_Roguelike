@@ -1,7 +1,6 @@
-﻿using Zilon.Core.Commands;
-
-namespace Zilon.Core.Commands
+﻿namespace Zilon.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Базовая команда для всех команд, связанных с взаимодействием с пользовательским интерфейсом.
     /// </summary>

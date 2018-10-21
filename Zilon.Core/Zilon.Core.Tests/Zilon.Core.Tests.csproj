@@ -123,7 +123,6 @@
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
     <Compile Include="Tactics\PropContainerManagerTests.cs" />
     <Compile Include="Tactics\ActorManagerTests.cs" />
-    <Compile Include="Tactics\ActorTests.cs" />
     <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />

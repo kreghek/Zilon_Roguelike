@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using LightInject;
 
@@ -10,11 +8,9 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {

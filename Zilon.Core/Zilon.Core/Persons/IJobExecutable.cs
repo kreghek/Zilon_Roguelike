@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Schemes;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Интерфейс для сущностей, выполнение которых зависит от работ (перки, квесты).

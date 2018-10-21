@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;

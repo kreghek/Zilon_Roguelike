@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Components;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Характеристики, используемые персонажем в бою.

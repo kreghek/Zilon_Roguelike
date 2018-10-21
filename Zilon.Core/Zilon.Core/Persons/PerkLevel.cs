@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     public sealed class PerkLevel
     {

@@ -9,7 +9,6 @@ using Zilon.Core.Spec.Contexts;
 using LightInject;
 using Zilon.Core.Client;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.Persons;
 
 namespace Zilon.Core.Spec.Steps
 {
