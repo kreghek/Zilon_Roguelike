@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Команда на отображение модала для отображения контента контейнера.
     /// </summary>
@@ -20,7 +22,7 @@ namespace Zilon.Core.Commands
         public override void Execute()
         {
             var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
-            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
             var container = targetContainerViewModel.Container;
             var containerContent = container.Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
@@ -30,7 +32,13 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            return true;
+            var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
+
+            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var container = targetContainerViewModel?.Container;
+            var containerContent = container?.Content;
+
+            return inventory != null && containerContent != null;
         }
     }
 }

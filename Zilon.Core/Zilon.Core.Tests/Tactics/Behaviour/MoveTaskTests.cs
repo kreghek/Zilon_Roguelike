@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ACT
-            for (var step = 1; step <= expectedPath.Count(); step++)
+            for (var step = 1; step <= expectedPath.Length; step++)
             {
                 task.Execute();
 

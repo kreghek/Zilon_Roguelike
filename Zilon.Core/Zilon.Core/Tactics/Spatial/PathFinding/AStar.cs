@@ -37,6 +37,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// Creates a new AStar algorithm instance with the provided start and goal nodes.
         /// </summary>
         /// <param name="map">Карта, на которой выполнять поиск.</param>
+        /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
         public AStar(IMap map, IPathFindingContext context, IMapNode start, IMapNode goal)
@@ -203,7 +204,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                                select edge;
             var currentEdgeArray = currentEdges.ToArray();
 
-            var actualNeighbors = new List<HexNode>();
+            var actualNeighbors = new List<IMapNode>();
             foreach (var testedNeighbor in neighbors)
             {
                 var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));

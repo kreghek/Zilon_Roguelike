@@ -1,9 +1,10 @@
 ﻿using JetBrains.Annotations;
+
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="IPropScheme" />
     /// <summary>
     /// Схема предмета. Общая для всех предметов в игре.
     /// </summary>

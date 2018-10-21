@@ -59,7 +59,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            factProps.Count().Should().Be(1);
+            factProps.Length.Should().Be(1);
             factProps[0].Scheme.Should().BeSameAs(testResourceScheme);
             ((Resource)factProps[0]).Count.Should().Be(1);
         }

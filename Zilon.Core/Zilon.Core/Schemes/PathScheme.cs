@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="IPathScheme" />
     /// <summary>
     /// Схема ребра перехода между узлами на глобальной карте.
     /// </summary>

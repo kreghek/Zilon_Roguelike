@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
     public class MonsterDefenceSubScheme : IMonsterDefenceSubScheme
     {
         [JsonConstructor]
-        public MonsterDefenceSubScheme(MonsterDefenceItemSubScheme[] defences)
+        public MonsterDefenceSubScheme([CanBeNull] MonsterDefenceItemSubScheme[] defences)
         {
             Defences = defences;
         }

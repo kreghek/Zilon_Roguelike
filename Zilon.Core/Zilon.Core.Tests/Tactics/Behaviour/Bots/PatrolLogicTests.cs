@@ -137,7 +137,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
 
             // ACT
-            for (var round = 0; round < expectedActorPositions.Count() + 1; round++)
+            for (var round = 0; round < expectedActorPositions.Length + 1; round++)
             {
                 var task = logic.GetCurrentTask();
 
@@ -159,7 +159,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
                 task.Execute();
 
-                if (round < expectedActorPositions.Count())
+                if (round < expectedActorPositions.Length)
                 {
                     _factActorNode.Should().Be(expectedActorPositions[round],
                         $"На {round} итерации неожиданные координаты актёра.");

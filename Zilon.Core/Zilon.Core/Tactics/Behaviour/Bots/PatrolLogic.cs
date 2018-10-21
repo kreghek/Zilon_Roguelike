@@ -244,7 +244,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IMapNode GetNextPatrolPointFromPatrolPoint(int currentPatrolPointIndex)
         {
             _patrolPointIndex = currentPatrolPointIndex + 1;
-            if (_patrolPointIndex >= _patrolRoute.Points.Count())
+            if (_patrolPointIndex >= _patrolRoute.Points.Length)
             {
                 _patrolPointIndex = 0;
             }
@@ -256,7 +256,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private int? CalcCurrentPatrolPointIndex()
         {
             int? currentIndex = null;
-            for (var i = 0; i < _patrolRoute.Points.Count(); i++)
+            for (var i = 0; i < _patrolRoute.Points.Length; i++)
             {
                 var routeNode = (HexNode)_patrolRoute.Points[i];
                 var actorNode = (HexNode)_actor.Node;

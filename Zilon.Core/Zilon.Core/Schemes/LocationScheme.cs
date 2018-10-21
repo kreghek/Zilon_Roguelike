@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="ILocationScheme" />
     /// <summary>
     /// Схема узла на глобальной карте.
     /// </summary>

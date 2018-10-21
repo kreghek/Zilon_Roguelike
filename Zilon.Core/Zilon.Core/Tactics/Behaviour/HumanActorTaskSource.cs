@@ -1,19 +1,11 @@
 ﻿using System;
 
-using Zilon.Core.Tactics.Behaviour.Bots;
-
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
         private IActorTask _currentTask;
-        private IIntention _currentIntesion;
-        private readonly IDecisionSource _decisionSource;
-
-        public HumanActorTaskSource(IDecisionSource decisionSource)
-        {
-            _decisionSource = decisionSource;
-        }
+        private IIntention _currentIntention;
 
         public void SwitchActor(IActor currentActor)
         {
@@ -25,7 +17,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            _currentIntesion = intention ?? throw new ArgumentNullException(nameof(intention));
+            _currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
         }
 
         public IActorTask[] GetActorTasks(IActor actor)
@@ -36,9 +28,9 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var currentTaskIsComplete = _currentTask?.IsComplete;
-            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntesion == null)
+            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntention == null)
             {
-                return new IActorTask[] { _currentTask };
+                return new[] { _currentTask };
             }
 
             if (CurrentActor == null)
@@ -46,22 +38,20 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
 
-            if (_currentIntesion == null)
+            if (_currentIntention == null)
             {
                 return new IActorTask[0];
             }
 
-            _currentTask = _currentIntesion.CreateActorTask(_currentTask, CurrentActor);
-            _currentIntesion = null;
+            _currentTask = _currentIntention.CreateActorTask(_currentTask, CurrentActor);
+            _currentIntention = null;
 
             if (_currentTask != null)
             {
-                return new IActorTask[] { _currentTask };
+                return new[] { _currentTask };
             }
-            else
-            {
-                return new IActorTask[0];
-            }
+
+            return new IActorTask[0];
         }
     }
 }

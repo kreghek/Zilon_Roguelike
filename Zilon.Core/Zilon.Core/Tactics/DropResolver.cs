@@ -66,6 +66,8 @@ namespace Zilon.Core.Tactics
         private DropTableModRecord[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
             IEnumerable<IDropTableModificatorScheme> modificators)
         {
+            var modificatorsArray = modificators.ToArray();
+
             var resultList = new List<DropTableModRecord>();
             foreach (var record in records)
             {
@@ -79,7 +81,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                var recordModificators = modificators.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
+                var recordModificators = modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {

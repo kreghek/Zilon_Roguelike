@@ -28,7 +28,7 @@ namespace Zilon.Core.MapGenerators
                     continue;
                 }
 
-                var rolledRoomIndex = _dice.Roll(rooms.Count()) - 1;
+                var rolledRoomIndex = _dice.Roll(rooms.Count) - 1;
                 selectedRooms.Add(rooms[rolledRoomIndex]);
             }
 

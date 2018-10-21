@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var factPath = astar.GetPath();
 
-            for (var i = 0; i < expectedPath.Count(); i++)
+            for (var i = 0; i < expectedPath.Count; i++)
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }
@@ -119,7 +119,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var factPath = astar.GetPath();
 
-            for (var i = 0; i < expectedPath.Count(); i++)
+            for (var i = 0; i < expectedPath.Length; i++)
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }
@@ -163,7 +163,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var factPath = astar.GetPath();
 
-            for (var i = 0; i < expectedPath.Count(); i++)
+            for (var i = 0; i < expectedPath.Length; i++)
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }

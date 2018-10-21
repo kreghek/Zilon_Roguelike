@@ -58,8 +58,8 @@ namespace Zilon.Core.Client
 
                         break;
 
-                    case Equipment equipment:
-                    case Concept concept:
+                    case Equipment _:
+                    case Concept _:
                         var isRemoved = PropRemoved.Contains(prop);
 
                         if (!isRemoved)
@@ -74,7 +74,7 @@ namespace Zilon.Core.Client
             {
                 switch (prop)
                 {
-                    case Resource resource:
+                    case Resource _:
                         var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
                         if (existsResource == null)
                         {
@@ -82,8 +82,8 @@ namespace Zilon.Core.Client
                         }
                         break;
 
-                    case Equipment equipment:
-                    case Concept concept:
+                    case Equipment _:
+                    case Concept _:
                         result.Add(prop);
                         break;
 
@@ -97,7 +97,6 @@ namespace Zilon.Core.Client
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
-        public event EventHandler<PropStoreEventArgs> Changed;
 
         public void Add(IProp prop)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
 
 using Zilon.Core.Components;
@@ -15,7 +16,8 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="defenceItem"> Проверяемая оборона. </param>
         /// <returns> Возвращает число, указывающее минимальный бросок на пробитие обороны. </returns>
-        public static int CalcSuccessToHit([CanBeNull] PersonDefenceItem defenceItem) {
+        public static int CalcSuccessToHit([CanBeNull] PersonDefenceItem defenceItem)
+        {
 
             // При броске в 1 - неудачная нападение, даже если нет обороны.
             // Приравнивается к обороне уровня None
@@ -34,16 +36,17 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="currentDefences"> Текущие обороны. </param>
         /// <returns> Возвращает объект предпочтительной обороны. </returns>
-        public static PersonDefenceItem CalcPrefferedDefence(IEnumerable<PersonDefenceItem> currentDefences)
+        public static PersonDefenceItem CalcPreferredDefense(IEnumerable<PersonDefenceItem> currentDefences)
         {
-            if (!currentDefences.Any())
+            var currentDefensesArray = currentDefences.ToArray();
+            if (!currentDefensesArray.Any())
             {
                 return null;
             }
 
-            var sortedDefences = currentDefences.OrderByDescending(x => x.Level);
-            var prefferedDefence = sortedDefences.First();
-            return prefferedDefence;
+            var sortedDefenses = currentDefensesArray.OrderByDescending(x => x.Level);
+            var preferredDeference = sortedDefenses.First();
+            return preferredDeference;
         }
 
         /// <summary>

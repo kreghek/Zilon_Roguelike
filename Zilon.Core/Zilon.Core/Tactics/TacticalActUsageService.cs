@@ -86,7 +86,7 @@ namespace Zilon.Core.Tactics
             var currentDefences = targetActor.Person.CombatStats.DefenceStats.Defences
                 .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
 
-            var prefferedDefenceItem = HitHelper.CalcPrefferedDefence(currentDefences);
+            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(currentDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
             var factToHitRoll = _actUsageRandomSource.RollToHit();
 
@@ -99,7 +99,7 @@ namespace Zilon.Core.Tactics
 
                 if (actApRank <= armorRank)
                 {
-                    var factArmorSaveRoll = RollArmorSave(targetActor);
+                    var factArmorSaveRoll = RollArmorSave();
                     var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
@@ -123,10 +123,11 @@ namespace Zilon.Core.Tactics
 
         /// <summary>
         /// Возвращает показатель поглощения брони цели.
-        /// Это величина, на которуб будет снижен урон.
+        /// Это величина, на которую будет снижен урон.
         /// </summary>
-        /// <param name="targetActor"></param>
-        /// <returns></returns>
+        /// <param name="targetActor"> Целевой актёр, для которого проверяется поглощение урона. </param>
+        /// <param name="usedTacticalAct"> Действие, которое будет использовано для нанесения урона. </param>
+        /// <returns> Возвращает показатель поглощения брони цели. </returns>
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
@@ -163,8 +164,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Рассчитывает успешный спас-бросок за броню цели.
         /// </summary>
-        /// <param name="targetActor"></param>
-        /// <returns></returns>
+        /// <param name="targetActor"> Целевой актёр, для которого проверяется спас-бросок за броню. </param>
+        /// <param name="usedTacticalAct"> Действие, для которого будет проверятся спас-бросок за броню. </param>
+        /// <returns> Величина успешного спас-броска за броню. </returns>
         /// <remarks>
         /// При равных рангах броня пробивается на 4+.
         /// За каждые два ранга превосходства действия над бронёй - увеличение на 1.
@@ -196,9 +198,8 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Возвращает результат спас-броска на броню.
         /// </summary>
-        /// <param name="targetActor"></param>
         /// <returns></returns>
-        private int RollArmorSave(IActor targetActor)
+        private int RollArmorSave()
         {
             var factRoll = _actUsageRandomSource.RollArmorSave();
             return factRoll;
@@ -207,8 +208,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Возвращает ранг брони цели.
         /// </summary>
-        /// <param name="targetActor"></param>
-        /// <returns></returns>
+        /// <param name="targetActor"> Актёр, для которого выбирается ранг брони. </param>
+        /// <param name="usedTacticalAct"> Действие, от которого требуется броня. </param>
+        /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
         private static int GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;

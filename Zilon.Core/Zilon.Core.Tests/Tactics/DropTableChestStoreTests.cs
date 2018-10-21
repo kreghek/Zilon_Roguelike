@@ -40,7 +40,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            props.Count().Should().Be(1);
+            props.Length.Should().Be(1);
             ((Resource)props[0]).Count.Should().Be(2);
         }
 

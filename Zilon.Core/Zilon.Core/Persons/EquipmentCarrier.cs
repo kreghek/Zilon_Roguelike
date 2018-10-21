@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -14,7 +13,7 @@ namespace Zilon.Core.Persons
         {
             Slots = slots.ToArray();
 
-            Equipments = new Equipment[Slots.Count()];
+            Equipments = new Equipment[Slots.Length];
         }
 
         public Equipment[] Equipments { get; }
@@ -43,31 +42,11 @@ namespace Zilon.Core.Persons
             }
             else
             {
-                Equipments[slotIndex] = equipment;
+                Equipments[slotIndex] = null;
             }
             
 
             DoEquipmentChanged(slotIndex, oldEquipment, equipment);
-        }
-
-        private int FindFreeSlotIndex(EquipmentSlotTypes requiredSlotTypes)
-        {
-            for (var i = 0; i < Slots.Count(); i++)
-            {
-                var slot = Slots[i];
-
-                if (Equipments[i] != null)
-                {
-                    continue;
-                }
-
-                if ((slot.Types & requiredSlotTypes) > 0)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
         }
 
         private void DoEquipmentChanged(int slotIndex,

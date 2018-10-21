@@ -73,7 +73,7 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var room in rooms)
             {
-                var absNodeIndex = room.Nodes.Count();
+                var absNodeIndex = room.Nodes.Count;
                 var containerNode = room.Nodes[absNodeIndex / 2];
                 var container = new DropTablePropChest(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
@@ -84,7 +84,7 @@ namespace Zilon.Core.MapGenerators
 
         private void SelectExitPoints(ISector sector, Room exitRoom)
         {
-            sector.ExitNodes = new[] { exitRoom.Nodes[exitRoom.Nodes.Count() - 2] };
+            sector.ExitNodes = new IMapNode[] { exitRoom.Nodes[exitRoom.Nodes.Count - 2] };
         }
 
         private void SelectStartNodes(ISector sector, Room startRoom)
@@ -104,7 +104,7 @@ namespace Zilon.Core.MapGenerators
                 _actorManager.Add(actor);
 
                 var finishPatrolNode = room.Nodes.Last();
-                var patrolRoute = new PatrolRoute(new[] { startNode, finishPatrolNode });
+                var patrolRoute = new PatrolRoute(new IMapNode[] { startNode, finishPatrolNode });
                 sector.PatrolRoutes[actor] = patrolRoute;
             }
         }
