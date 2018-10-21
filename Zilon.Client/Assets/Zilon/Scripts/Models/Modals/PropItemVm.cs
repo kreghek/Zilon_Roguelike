@@ -1,26 +1,26 @@
 ﻿using System;
+
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zilon.Core.Client;
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 
 public class PropItemVm : MonoBehaviour, IPropItemViewModel
 {
-	private IProp _prop;
-	
-	public Text CountText;
+    public Text CountText;
 	public Image IconImage;
 	public Image SelectedBorder;
 	
 	public string Sid;
 
-	public IProp Prop => _prop;
+    public IProp Prop { get; private set; }
 
-	public event EventHandler Click;
+    public event EventHandler Click;
 
 	public void Init(IProp prop)
 	{
-		_prop = prop;
+		Prop = prop;
 
 		var resource = prop as Resource;
 		if (resource != null)

@@ -23,10 +23,10 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void Start()
     {
         Actor.Moved += Actor_Moved;
-        Actor.State.Dead += Actor_Dead;
+        Actor.Person.Survival.Dead += Survival_Dead;
     }
 
-    private void Actor_Dead(object sender, EventArgs e)
+    private void Survival_Dead(object sender, EventArgs e)
     {
         GraphicRoot.ProcessDeath();
 

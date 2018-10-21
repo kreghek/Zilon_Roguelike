@@ -16,6 +16,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -299,7 +300,6 @@ internal class SectorVM : MonoBehaviour
             var inventory = new Inventory();
 
             var evolutionData = new EvolutionData(_schemeService);
-            //evolutionData.PerkLeveledUp += (sender, args) => Debug.Log("LevelUp");
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
@@ -314,8 +314,7 @@ internal class SectorVM : MonoBehaviour
             AddEquipmentToActor(inventory, "pistol");
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode, _personManager.ActorState);
-        _personManager.ActorState = actor.State;
+        var actor = new Actor(_personManager.Person, player, startNode);
 
         actorManager.Add(actor);
 

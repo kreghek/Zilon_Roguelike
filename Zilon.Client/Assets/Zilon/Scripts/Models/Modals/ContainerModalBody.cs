@@ -1,12 +1,17 @@
 ﻿using System;
-using Assets.Zilon.Scripts;
 using System.Collections.Generic;
+
+using Assets.Zilon.Scripts;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 // ReSharper disable once ClassNeverInstantiated.Global

@@ -6,6 +6,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -25,7 +26,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
-      
+
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
@@ -33,5 +34,5 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
-     }
+    }
 }

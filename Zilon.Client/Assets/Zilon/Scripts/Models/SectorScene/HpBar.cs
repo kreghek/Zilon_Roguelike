@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 
 public class HpBar : MonoBehaviour
 {
@@ -17,8 +19,13 @@ public class HpBar : MonoBehaviour
 		}
 
 		var actorVm = _playerState.ActiveActor;
+        var person = actorVm.Actor.Person;
 
-		var hpPercentage = CalcPercentage(actorVm.Actor.State.Hp, actorVm.Actor.Person.Hp);
+
+        var hpStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+
+
+        var hpPercentage = CalcPercentage(hpStat.Value, hpStat.Range.Max);
 
 		BarImage.fillAmount = hpPercentage;
 	}
