@@ -37,7 +37,7 @@ namespace Zilon.Core.Props
             }
             else
             {
-                Acts = new TacticalActScheme[0];
+                Acts = new ITacticalActScheme[0];
             }
         }
 

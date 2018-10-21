@@ -177,7 +177,7 @@ namespace Zilon.Core.Tactics
         {
             if (monsterScheme.DropTableSids == null)
             {
-                return new DropTableScheme[0];
+                return new IDropTableScheme[0];
             }
 
             var dropTableCount = monsterScheme.DropTableSids.Length;

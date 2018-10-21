@@ -18,7 +18,7 @@
 
         public override bool Equals(object obj)
         {
-            var coords = obj as OffsetCoords;
+            var coords = (OffsetCoords) obj;
             return coords != null &&
                    X == coords.X &&
                    Y == coords.Y;

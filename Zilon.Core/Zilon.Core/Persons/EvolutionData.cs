@@ -70,13 +70,10 @@ namespace Zilon.Core.Persons
 
             foreach (var perkScheme in schemes)
             {
-                if (Perks != null)
+                var existingPerk = Perks?.SingleOrDefault(x => x.Scheme == perkScheme);
+                if (existingPerk != null)
                 {
-                    var existingPerk = Perks.SingleOrDefault(x => x.Scheme == perkScheme);
-                    if (existingPerk != null)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 var perk = new Perk
