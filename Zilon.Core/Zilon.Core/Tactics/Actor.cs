@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -12,12 +11,10 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
-        public Actor(IPerson person, IPlayer owner, IMapNode node)
-        {
-            Person = person;
-            Owner = owner;
-            Node = node;
-        }
+        public event EventHandler Moved;
+        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        public event EventHandler<UsedActEventArgs> UsedAct;
+        public event EventHandler OnDefence;
 
         /// <inheritdoc />
         /// <summary>
@@ -33,6 +30,13 @@ namespace Zilon.Core.Tactics
         public float Damage { get; set; }
 
         public IPlayer Owner { get; }
+
+        public Actor(IPerson person, IPlayer owner, IMapNode node)
+        {
+            Person = person;
+            Owner = owner;
+            Node = node;
+        }
 
         public bool CanBeDamaged()
         {
@@ -52,28 +56,9 @@ namespace Zilon.Core.Tactics
             DoOpenContainer(openResult);
         }
 
-        private void DoOpenContainer(IOpenContainerResult openResult)
-        {
-            var e = new OpenContainerEventArgs(openResult);
-            OpenedContainer?.Invoke(this, e);
-        }
-
-        public event EventHandler Moved;
-
-        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
-
-        public event EventHandler<UsedActEventArgs> UsedAct;
-        public event EventHandler OnDefence;
-
         public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
         {
             DoUseAct(target, tacticalAct);
-        }
-
-        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
-        {
-            var args = new UsedActEventArgs(target, tacticalAct);
-            UsedAct?.Invoke(this, args);
         }
 
         public override string ToString()
@@ -123,6 +108,18 @@ namespace Zilon.Core.Tactics
         public void ProcessDefence()
         {
             OnDefence?.Invoke(this, new EventArgs());
+        }
+
+        private void DoOpenContainer(IOpenContainerResult openResult)
+        {
+            var e = new OpenContainerEventArgs(openResult);
+            OpenedContainer?.Invoke(this, e);
+        }
+
+        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        {
+            var args = new UsedActEventArgs(target, tacticalAct);
+            UsedAct?.Invoke(this, args);
         }
     }
 }
