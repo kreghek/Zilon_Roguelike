@@ -24,15 +24,15 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
         public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
         {
-            var actor = _context.GetActiveActor();
-            _context.AddResourceToActor(propSid, count, actor);
+            var actor = Context.GetActiveActor();
+            Context.AddResourceToActor(propSid, count, actor);
         }
 
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
         public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
             string provisionStat)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             ConsumeCommonRuleType consumeRuleType;
 
@@ -65,14 +65,14 @@ namespace Zilon.Core.Spec.Steps
                 }
             };
 
-            _context.AddResourceToActor(propScheme, 1, actor);
+            Context.AddResourceToActor(propScheme, 1, actor);
         }
 
 
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             var survival = actor.Person.Survival;
 
             switch (statName)
@@ -93,7 +93,7 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(startEffect,
                 out SurvivalStatType stat,
@@ -115,20 +115,20 @@ namespace Zilon.Core.Spec.Steps
 
             for (var i = 0; i < moveCount; i++)
             {
-                _context.MoveOnceActiveActor(targetCoords[i % 2]);
+                Context.MoveOnceActiveActor(targetCoords[i % 2]);
             }
         }
 
         [When(@"Актёр использует предмет (.*) на себя")]
         public void WhenАктёрСъедаетЕду(string propSid)
         {
-            _context.UsePropByActiveActor(propSid);
+            Context.UsePropByActiveActor(propSid);
         }
 
         [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
         public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -148,7 +148,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
         public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedValue)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -168,7 +168,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Значение (сытость|вода) стало (.*)")]
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             int? survivalStatValue;
             switch (stat)
             {
@@ -190,7 +190,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(effectName,
                 out SurvivalStatType stat,

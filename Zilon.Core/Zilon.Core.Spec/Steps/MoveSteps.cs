@@ -21,7 +21,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Команда на перемещение может выполняться")]
         public void ThenКомандаНаПеремещениеМожетВыполняться()
         {
-            var moveCommand = _context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.Container.GetInstance<ICommand>("move");
 
             moveCommand.CanExecute().Should().BeTrue();
         }
@@ -30,7 +30,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Команда на перемещение не может выполняться")]
         public void ThenКомандаНаПеремещениеНеМожетВыполняться()
         {
-            var moveCommand = _context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.Container.GetInstance<ICommand>("move");
 
             moveCommand.CanExecute().Should().BeFalse();
         }
@@ -38,7 +38,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Выполняется команда на перемещение")]
         public void WhenВыполняетсяКомандаНаПеремещение()
         {
-            var moveCommand = _context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.Container.GetInstance<ICommand>("move");
             moveCommand.Execute();
         }
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.Spec.Steps
         {
             try
             {
-                var moveCommand = _context.Container.GetInstance<ICommand>("move");
+                var moveCommand = Context.Container.GetInstance<ICommand>("move");
                 moveCommand.Execute();
             }
             catch (InvalidOperationException exception)
@@ -60,7 +60,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
         public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var node = actor.Node;
 

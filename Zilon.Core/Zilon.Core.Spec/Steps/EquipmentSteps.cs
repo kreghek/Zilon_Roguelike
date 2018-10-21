@@ -28,9 +28,9 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"В инвентаре у актёра игрока есть предмет: (.*)")]
         public void GivenВИнвентареУАктёраИгрокаЕстьПредметPropSid(string propSid)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
-            var equipment = _context.CreateEquipment(propSid);
+            var equipment = Context.CreateEquipment(propSid);
 
             actor.Person.Inventory.Add(equipment);
         }
@@ -44,9 +44,9 @@ namespace Zilon.Core.Spec.Steps
                 return;
             }
 
-            var equipment = _context.CreateEquipment(propSid);
+            var equipment = Context.CreateEquipment(propSid);
 
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             actor.Person.EquipmentCarrier.SetEquipment(equipment, slotIndex);
         }
 
@@ -55,12 +55,12 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Экипирую предмет (.*) в слот Index: (.*)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
         {
-            var equipCommand = _context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = _context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
+            var inventoryState = Context.Container.GetInstance<IInventoryState>();
 
             ((EquipCommand)equipCommand).SlotIndex = slotIndex;
 
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var targetEquipment = actor.Person.Inventory.CalcActualItems().Single(x=>x.Scheme.Sid == propSid);
 
@@ -78,7 +78,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"В слоте Index: (.*) актёра игрока есть (.*)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             actor.Person.EquipmentCarrier.Equipments[slotIndex].Scheme.Sid.Should().Be(propSid);
         }

@@ -27,38 +27,38 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Есть карта размером (.*)")]
         public void GivenЕстьКартаРазмером(int mapSize)
         {
-            _context.CreateSector(mapSize);
+            Context.CreateSector(mapSize);
         }
 
         [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
         public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
         {
-            _context.AddWall(x1, y1, x2, y2);
+            Context.AddWall(x1, y1, x2, y2);
         }
 
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
-            _context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
+            Context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
         }
 
         [Given(@"Актёр игрока имеет Hp: (.*)")]
         public void GivenАктёрИмеетHp(int startHp)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
-            _context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
+            Context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
         }
 
         [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
         {
-            var monster = _context.GetMonsterById(monsterId);
+            var monster = Context.GetMonsterById(monsterId);
 
             monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
         }
@@ -67,15 +67,15 @@ namespace Zilon.Core.Spec.Steps
         public void GivenЕстьСундукВЯчейке(int id,  int offsetX, int offsetY)
         {
             var coords = new OffsetCoords(offsetX, offsetY);
-            _context.AddChest(id, coords);
+            Context.AddChest(id, coords);
         }
 
         [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
         public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
         {
-            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
-            var propFactory = _context.Container.GetInstance<IPropFactory>();
-            var schemeService = _context.Container.GetInstance<ISchemeService>();
+            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
+            var propFactory = Context.Container.GetInstance<IPropFactory>();
+            var schemeService = Context.Container.GetInstance<ISchemeService>();
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
@@ -88,9 +88,9 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
         public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
-            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
-            var propFactory = _context.Container.GetInstance<IPropFactory>();
-            var schemeService = _context.Container.GetInstance<ISchemeService>();
+            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
+            var propFactory = Context.Container.GetInstance<IPropFactory>();
+            var schemeService = Context.Container.GetInstance<ISchemeService>();
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
@@ -104,14 +104,14 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {
-            _context.HoverNode(x, y);
+            Context.HoverNode(x, y);
         }
 
         [When(@"Я выбираю сундук Id:(.*)")]
         public void WhenЯВыбираюСундукId(int id)
         {
-            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
-            var playerState = _context.Container.GetInstance<IPlayerState>();
+            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
+            var playerState = Context.Container.GetInstance<IPlayerState>();
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
@@ -126,10 +126,10 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я забираю из сундука экипировку (.*)")]
         public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
         {
-            var playerState = _context.Container.GetInstance<IPlayerState>();
-            var propTransferCommand = _context.Container.GetInstance<ICommand>("prop-transfer");
+            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var propTransferCommand = Context.Container.GetInstance<ICommand>("prop-transfer");
 
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
@@ -145,11 +145,11 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я забираю из сундука рерурс (.*) в количестве (.*)")]
         public void WhenЯЗабираюИзСундукаРерурсWaterВКоличестве(string resourceSid, int count)
         {
-            var propFactory = _context.Container.GetInstance<IPropFactory>();
-            var playerState = _context.Container.GetInstance<IPlayerState>();
-            var propTransferCommand = _context.Container.GetInstance<ICommand>("prop-transfer");
+            var propFactory = Context.Container.GetInstance<IPropFactory>();
+            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var propTransferCommand = Context.Container.GetInstance<ICommand>("prop-transfer");
 
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
@@ -179,7 +179,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var inventoryItems = actor.Person.Inventory.CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x=>x.Scheme.Sid == equipmentSchemeSid);
@@ -190,7 +190,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
         public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
         {
-            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
 
             var container = containerManager.Items.Single(x => x.Id == id);
             var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
@@ -201,7 +201,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
         public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
         {
-            var containerManager = _context.Container.GetInstance<IPropContainerManager>();
+            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
             var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
@@ -212,7 +212,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var propsInInventory = actor.Person.Inventory.CalcActualItems();
             var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
@@ -223,7 +223,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Актёр игрока имеет запас hp (.*)")]
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             var hpStat = actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedHp);
         }
@@ -231,7 +231,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
-            var monster = _context.GetMonsterById(monsterId);
+            var monster = Context.GetMonsterById(monsterId);
             var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }

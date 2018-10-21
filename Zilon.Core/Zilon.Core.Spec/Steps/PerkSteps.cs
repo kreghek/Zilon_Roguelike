@@ -21,7 +21,7 @@ namespace Zilon.Core.Spec.Steps
         {
             const string perkSid = "battle-dogmas";
 
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var perk = actor.Person.EvolutionData.Perks.Single(x => x.Scheme.Sid == perkSid);
 
@@ -31,7 +31,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"перк на убийство должен быть прокачен")]
         public void ThenПеркНаУбийствоДолженБытьПрокачен()
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var perk = actor.Person.EvolutionData.Perks[0];
 

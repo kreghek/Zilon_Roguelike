@@ -24,10 +24,10 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
         public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
-            var attackCommand = _context.Container.GetInstance<ICommand>("attack");
-            var playerState = _context.Container.GetInstance<IPlayerState>();
+            var attackCommand = Context.Container.GetInstance<ICommand>("attack");
+            var playerState = Context.Container.GetInstance<IPlayerState>();
 
-            var monster = _context.GetMonsterById(monsterId);
+            var monster = Context.GetMonsterById(monsterId);
 
             var monsterViewModel = new TestActorViewModel
             {
@@ -42,7 +42,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Актёр игрока мертв")]
         public void ThenАктёрИгрокаМертв()
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             actor.Person.Survival.IsDead.Should().BeTrue();
         }
@@ -50,18 +50,18 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Монстр Id:(.*) успешно обороняется")]
         public void ThenМонстрIdУспешноОбороняется(int monsterId)
         {
-            var visual = _context.VisualEvents.Last();
+            var visual = Context.VisualEvents.Last();
 
             visual.EventName.Should().Be(nameof(IActor.OnDefence));
 
-            var monster = _context.GetMonsterById(monsterId);
+            var monster = Context.GetMonsterById(monsterId);
             visual.Actor.Should().BeSameAs(monster);
         }
 
         [Then(@"Тактическое умение (.*) имеет дебафф на эффективность")]
         public void ThenТактическоеУмениеChopИмеетДебаффНаЭффективность(string tacticalActSid)
         {
-            var actor = _context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             var act = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
                 .Single(x => x.Scheme.Sid == tacticalActSid);
