@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<AttackCommand>();
+            var command = Container.GetInstance<AttackCommand>();
 
 
 
@@ -46,9 +46,9 @@ namespace Zilon.Core.Tests.Commands
         public void Execute_CanAttack_AttackIntended()
         {
             // ARRANGE
-            var command = _container.GetInstance<AttackCommand>();
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var command = Container.GetInstance<AttackCommand>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var playerState = Container.GetInstance<IPlayerState>();
 
 
 
@@ -83,7 +83,7 @@ namespace Zilon.Core.Tests.Commands
             var targetVm = targetVmMock.Object;
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
 
-            _container.Register<AttackCommand>(new PerContainerLifetime());
+            Container.Register<AttackCommand>(new PerContainerLifetime());
         }
     }
 }

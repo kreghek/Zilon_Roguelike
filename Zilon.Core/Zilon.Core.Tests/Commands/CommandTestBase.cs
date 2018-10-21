@@ -22,12 +22,12 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public abstract class CommandTestBase
     {
-        protected ServiceContainer _container;
+        protected ServiceContainer Container;
 
         [SetUp]
         public void SetUp()
         {
-            _container = new ServiceContainer();
+            Container = new ServiceContainer();
 
             var testMap = new TestGridGenMap(3);
 
@@ -87,11 +87,11 @@ namespace Zilon.Core.Tests.Commands
             var usageServiceMock = new Mock<ITacticalActUsageService>();
             var usageService = usageServiceMock.Object;
 
-            _container.Register(factory => sectorManager, new PerContainerLifetime());
-            _container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
-            _container.Register(factory => playerState, new PerContainerLifetime());
-            _container.Register(factory => gameLoop, new PerContainerLifetime());
-            _container.Register(factory => usageService, new PerContainerLifetime());
+            Container.Register(factory => sectorManager, new PerContainerLifetime());
+            Container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
+            Container.Register(factory => playerState, new PerContainerLifetime());
+            Container.Register(factory => gameLoop, new PerContainerLifetime());
+            Container.Register(factory => usageService, new PerContainerLifetime());
 
             RegisterSpecificServices(testMap, playerStateMock);
         }

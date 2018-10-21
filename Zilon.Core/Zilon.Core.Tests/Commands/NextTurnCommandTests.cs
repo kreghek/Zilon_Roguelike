@@ -25,7 +25,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<NextTurnCommand>();
+            var command = Container.GetInstance<NextTurnCommand>();
 
 
 
@@ -44,8 +44,8 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<NextTurnCommand>();
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var command = Container.GetInstance<NextTurnCommand>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
 
 
             // ACT
@@ -62,8 +62,8 @@ namespace Zilon.Core.Tests.Commands
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
             var decisionSource = decisionSourceMock.Object;
 
-            _container.Register(factory => decisionSource, new PerContainerLifetime());
-            _container.Register<NextTurnCommand>(new PerContainerLifetime());
+            Container.Register(factory => decisionSource, new PerContainerLifetime());
+            Container.Register<NextTurnCommand>(new PerContainerLifetime());
         }
     }
 }

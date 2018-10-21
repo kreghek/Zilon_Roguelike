@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<MoveCommand>();
+            var command = Container.GetInstance<MoveCommand>();
 
 
 
@@ -44,9 +44,9 @@ namespace Zilon.Core.Tests.Commands
         [Test]
         public void ExecuteTest()
         {
-            var command = _container.GetInstance<MoveCommand>();
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var command = Container.GetInstance<MoveCommand>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var playerState = Container.GetInstance<IPlayerState>();
 
 
 
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Commands
 
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
 
-            _container.Register<MoveCommand>(new PerContainerLifetime());
+            Container.Register<MoveCommand>(new PerContainerLifetime());
         }
     }
 }

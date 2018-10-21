@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<PropTransferCommand>();
+            var command = Container.GetInstance<PropTransferCommand>();
 
 
 
@@ -42,8 +42,8 @@ namespace Zilon.Core.Tests.Commands
         [Test]
         public void ExecuteTest()
         {
-            var command = _container.GetInstance<PropTransferCommand>();
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var command = Container.GetInstance<PropTransferCommand>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
 
 
 
@@ -62,8 +62,8 @@ namespace Zilon.Core.Tests.Commands
             var container = CreateStore();
             var transferMachine = new PropTransferMachine(inventory, container);
 
-            _container.Register(factory => transferMachine, new PerContainerLifetime());
-            _container.Register<PropTransferCommand>(new PerContainerLifetime());
+            Container.Register(factory => transferMachine, new PerContainerLifetime());
+            Container.Register<PropTransferCommand>(new PerContainerLifetime());
         }
 
         private IPropStore CreateStore()

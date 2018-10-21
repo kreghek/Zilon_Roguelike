@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<UseSelfCommand>();
+            var command = Container.GetInstance<UseSelfCommand>();
 
 
 
@@ -45,10 +45,10 @@ namespace Zilon.Core.Tests.Commands
         public void Execute_CanUse_UsageIntended()
         {
             // ARRANGE
-            var command = _container.GetInstance<UseSelfCommand>();
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var inventoryState = _container.GetInstance<IInventoryState>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var command = Container.GetInstance<UseSelfCommand>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var inventoryState = Container.GetInstance<IInventoryState>();
+            var playerState = Container.GetInstance<IPlayerState>();
 
 
 
@@ -89,9 +89,9 @@ namespace Zilon.Core.Tests.Commands
             inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
             var inventoryState = inventoryStateMock.Object;
 
-            _container.Register(factory => inventoryState, new PerContainerLifetime());
+            Container.Register(factory => inventoryState, new PerContainerLifetime());
 
-            _container.Register<UseSelfCommand>(new PerContainerLifetime());
+            Container.Register<UseSelfCommand>(new PerContainerLifetime());
         }
     }
 }

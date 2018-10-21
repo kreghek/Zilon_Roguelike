@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = _container.GetInstance<EquipCommand>();
+            var command = Container.GetInstance<EquipCommand>();
             command.SlotIndex = 0;
 
 
@@ -46,10 +46,10 @@ namespace Zilon.Core.Tests.Commands
         [Test]
         public void ExecuteTest()
         {
-            var command = _container.GetInstance<EquipCommand>();
+            var command = Container.GetInstance<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = _container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
 
 
 
@@ -82,8 +82,8 @@ namespace Zilon.Core.Tests.Commands
             inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
             var inventoryState = inventoryStateMock.Object;
 
-            _container.Register(factory => inventoryState, new PerContainerLifetime());
-            _container.Register<EquipCommand>(new PerContainerLifetime());
+            Container.Register(factory => inventoryState, new PerContainerLifetime());
+            Container.Register<EquipCommand>(new PerContainerLifetime());
         }
     }
 }
