@@ -5,23 +5,23 @@ using System.Linq;
 namespace Zilon.Core.Props
 {
     /// <summary>
-    /// Базовый класс для всех хранилищь предметов.
+    /// Базовый класс для всех хранилищ предметов.
     /// </summary>
     public abstract class PropStoreBase : IPropStore
     {
-        protected readonly HashSet<IProp> _items;
+        protected readonly HashSet<IProp> Items;
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
 
         protected PropStoreBase()
         {
-            _items = new HashSet<IProp>();
+            Items = new HashSet<IProp>();
         }
 
         public virtual IProp[] CalcActualItems()
         {
-            return _items.ToArray();
+            return Items.ToArray();
         }
 
         public void Add(IProp prop)
@@ -72,30 +72,30 @@ namespace Zilon.Core.Props
 
         private void RemoveEquipment(Equipment equipment)
         {
-            _items.Remove(equipment);
+            Items.Remove(equipment);
             DoRemovedProp(equipment);
         }
 
         private void AddConcept(Concept concept)
         {
-            _items.Add(concept);
+            Items.Add(concept);
             DoAddProp(concept);
         }
 
         private void AddEquipment(Equipment equipment)
         {
-            _items.Add(equipment);
+            Items.Add(equipment);
             DoAddProp(equipment);
         }
 
         private void StackResource(Resource resource)
         {
-            var currentResource = _items.OfType<Resource>()
+            var currentResource = Items.OfType<Resource>()
                 .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             if (currentResource == null)
             {
-                _items.Add(resource);
+                Items.Add(resource);
                 DoAddProp(resource);
             }
             else
@@ -106,13 +106,13 @@ namespace Zilon.Core.Props
 
         private void RemoveConcept(Concept concept)
         {
-            _items.Remove(concept);
+            Items.Remove(concept);
             DoRemovedProp(concept);
         }
 
         private void RemoveResource(Resource resource)
         {
-            var currentResource = _items.OfType<Resource>()
+            var currentResource = Items.OfType<Resource>()
                 .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             if (currentResource == null)
@@ -127,7 +127,7 @@ namespace Zilon.Core.Props
 
             if (currentResource.Count == resource.Count)
             {
-                _items.Remove(currentResource);
+                Items.Remove(currentResource);
                 DoRemovedProp(currentResource);
             }
             else

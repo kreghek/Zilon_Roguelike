@@ -7,12 +7,12 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Минимальное время простоя.
         /// </summary>
-        private const int IDLE_MIN = 2;
+        private const int IdleMin = 2;
 
         /// <summary>
-        /// Максимальне время простоя.
+        /// Максимальное время простоя.
         /// </summary>
-        private const int IDLE_MAX = 5;
+        private const int IdleMax = 5;
 
         /// <summary>
         /// Текущий счётчик простоя.
@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
         {
-            _counter = decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
+            _counter = decisionSource.SelectIdleDuration(IdleMin, IdleMax);
         }
 
         public override void Execute()

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Zilon.Core.Schemes
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Тип воздействия.

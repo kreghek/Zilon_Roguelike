@@ -29,9 +29,9 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _sectorManager.CurrentSector.Map;
+            var map = SectorManager.CurrentSector.Map;
 
-            var currentNode = _playerState.ActiveActor.Actor.Node;
+            var currentNode = PlayerState.ActiveActor.Actor.Node;
 
             var selectedActorViewModel = GetSelectedActorViewModel();
             if (selectedActorViewModel == null)
@@ -42,7 +42,7 @@ namespace Zilon.Core.Commands
             var targetNode = selectedActorViewModel.Actor.Node;
 
             var targetIsOnLine = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
-            var act = _playerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.FirstOrDefault();
+            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.FirstOrDefault();
             var isInDistance = act.CheckDistance(((HexNode)currentNode).CubeCoords, ((HexNode)targetNode).CubeCoords);
 
             var canExecute = targetIsOnLine && isInDistance;
@@ -60,17 +60,17 @@ namespace Zilon.Core.Commands
 
         private IActorViewModel GetSelectedActorViewModel()
         {
-            return _playerState.HoverViewModel as IActorViewModel;
+            return PlayerState.HoverViewModel as IActorViewModel;
         }
 
         protected override void ExecuteTacticCommand()
         {
-            var map = _sectorManager.CurrentSector.Map;
-            var targetActorViewModel = (IActorViewModel)_playerState.HoverViewModel;
+            var map = SectorManager.CurrentSector.Map;
+            var targetActorViewModel = (IActorViewModel)PlayerState.HoverViewModel;
 
             var targetActor = targetActorViewModel.Actor;
             var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService, map));
-            _playerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention);
         }
     }
 }

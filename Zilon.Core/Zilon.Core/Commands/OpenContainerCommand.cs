@@ -23,9 +23,9 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _sectorManager.CurrentSector.Map;
+            var map = SectorManager.CurrentSector.Map;
 
-            var currentNode = _playerState.ActiveActor.Actor.Node;
+            var currentNode = PlayerState.ActiveActor.Actor.Node;
 
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
@@ -62,12 +62,12 @@ namespace Zilon.Core.Commands
             }
 
             var intetion = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, openMethod));
-            _playerState.TaskSource.Intent(intetion);
+            PlayerState.TaskSource.Intent(intetion);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()
         {
-            return _playerState.HoverViewModel as IContainerViewModel;
+            return PlayerState.HoverViewModel as IContainerViewModel;
         }
     }
 }

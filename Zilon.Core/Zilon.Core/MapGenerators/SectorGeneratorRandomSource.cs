@@ -7,7 +7,7 @@ namespace Zilon.Core.MapGenerators
 {
     public class SectorGeneratorRandomSource : ISectorGeneratorRandomSource
     {
-        private const int MAX_PROBABLY_100 = 100;
+        private const int MaxProbably = 100;
         private readonly IDice _dice;
 
         public SectorGeneratorRandomSource(IDice dice)
@@ -20,8 +20,8 @@ namespace Zilon.Core.MapGenerators
             var selectedRooms = new HashSet<Room>();
             for (var i = 0; i < maxNeighbors; i++)
             {
-                var hasNeighborRoll = _dice.Roll(MAX_PROBABLY_100);
-                var hasNeighborSuccess = MAX_PROBABLY_100 - p;
+                var hasNeighborRoll = _dice.Roll(MaxProbably);
+                var hasNeighborSuccess = MaxProbably - p;
                 if (hasNeighborRoll < hasNeighborSuccess)
                 {
                     // Провал броска на выбор очередного соседа.

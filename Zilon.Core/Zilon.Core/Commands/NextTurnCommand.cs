@@ -19,7 +19,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var intention = new Intention<IdleTask>(actor => new IdleTask(actor, _decisionSource));
-            _playerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention);
         }
 
         [ExcludeFromCodeCoverage]

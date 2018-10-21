@@ -13,9 +13,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     //TODO Объединить с логикой патрулирования.
     public class RoamingLogic : IBotLogic
     {
-        private const int PERSIUT_COUNTER = 3;
+        private const int PursuitCounter = 3;
         //TODO Дальность видимости вынести в схему персонажа и, зтем, в пересчитанном состоянии в актёра.
-        private const int VISIBILITY_RANGE = 5;
+        private const int VisibilityRange = 5;
 
         private readonly IActor _actor;
         private readonly IMap _map;
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _actorList = actors;
             _decisionSource = decisionSource;
             _actService = actService;
-            _persuitCounter = PERSIUT_COUNTER;
+            _persuitCounter = PursuitCounter;
         }
 
         public IActorTask GetCurrentTask()
@@ -72,7 +72,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     return HandleBypassMode();
 
                 case IdleMode.Pursuit:
-                    return HandlePersiutMode();
+                    return HandlePursuitMode();
 
                 case IdleMode.Idle:
                     return HandleIdleMode();
@@ -102,7 +102,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return _idleTask;
         }
 
-        private IActorTask HandlePersiutMode()
+        private IActorTask HandlePursuitMode()
         {
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
@@ -124,16 +124,16 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 }
                 else
                 {
-                    RefreshPersuiteCounter();
+                    RefreshPursuitCounter();
                     _moveTask = new MoveTask(_actor, _targetIntruder.Node, _map);
                     return _moveTask;
                 }
             }
         }
 
-        private void RefreshPersuiteCounter()
+        private void RefreshPursuitCounter()
         {
-            _persuitCounter = PERSIUT_COUNTER;
+            _persuitCounter = PursuitCounter;
         }
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
@@ -189,20 +189,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return _roamingTask;
         }
 
-        private IMapNode CalcNearbyPatrolPoint(IEnumerable<HexNode> routePoints)
-        {
-            var targets = routePoints;
-            var node = (HexNode)_actor.Node;
-            var nearbyNode = HexNodeHelper.GetNearbyCoordinates(node, targets);
-
-            if (nearbyNode == null)
-            {
-                throw new InvalidOperationException("Ближайший узел не найден.");
-            }
-
-            return nearbyNode;
-        }
-
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
@@ -236,7 +222,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var targetNode = (HexNode)target.Node;
             var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
 
-            var isVisible = distance <= VISIBILITY_RANGE;
+            var isVisible = distance <= VisibilityRange;
             return isVisible;
         }
 

@@ -40,7 +40,7 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipmentCarrier = _playerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
             var slot = equipmentCarrier.Slots[SlotIndex.Value];
             if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0)
             {
@@ -73,7 +73,7 @@ namespace Zilon.Core.Commands
             }
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
-            _playerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention);
         }
     }
 }

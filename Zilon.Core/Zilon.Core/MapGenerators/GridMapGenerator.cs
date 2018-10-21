@@ -6,10 +6,10 @@ namespace Zilon.Core.MapGenerators
 {
     public class GridMapGenerator : IMapGenerator
     {
-        private const int DEFAULT_MAP_SIZE = 10;
+        private const int DefaultMapSize = 10;
         private readonly int _mapSize;
 
-        public GridMapGenerator() : this(DEFAULT_MAP_SIZE)
+        public GridMapGenerator() : this(DefaultMapSize)
         {
         }
 

@@ -60,28 +60,28 @@ namespace Zilon.Core.Commands
             }
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = _sectorManager.CurrentSector.Map;
+            var targetMap = SectorManager.CurrentSector.Map;
 
             var moveIntetion = new MoveIntention(targetNode, targetMap);
-            _playerState.TaskSource.Intent(moveIntetion);
+            PlayerState.TaskSource.Intent(moveIntetion);
         }
 
         private IMapNodeViewModel GetSelectedNodeViewModel()
         {
-            return _playerState.HoverViewModel as IMapNodeViewModel;
+            return PlayerState.HoverViewModel as IMapNodeViewModel;
         }
 
         private void CreatePath()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
 
-            var startNode = _playerState.ActiveActor.Actor.Node;
+            var startNode = PlayerState.ActiveActor.Actor.Node;
             var finishNode = nodeViewModel.Node;
-            var map = _sectorManager.CurrentSector.Map;
+            var map = SectorManager.CurrentSector.Map;
 
             _path.Clear();
 
-            var context = new PathFindingContext(_playerState.ActiveActor.Actor);
+            var context = new PathFindingContext(PlayerState.ActiveActor.Actor);
 
             var astar = new AStar(map, context, startNode, finishNode);
             var resultState = astar.Run();

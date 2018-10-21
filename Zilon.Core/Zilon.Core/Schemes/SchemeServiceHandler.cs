@@ -8,7 +8,7 @@ namespace Zilon.Core.Schemes
 {
     public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl> where TSchemeImpl : class, IScheme
     {
-        private const string SCHEME_POSTFIX = "Scheme";
+        private const string SchemePostfix = "Scheme";
 
         private readonly Dictionary<string, TSchemeImpl> _dict;
         private readonly ISchemeLocator _locator;
@@ -46,11 +46,6 @@ namespace Zilon.Core.Schemes
             {
                 try
                 {
-                    if (file == null)
-                    {
-                        throw new InvalidOperationException($"Файл схемы не может быть пустым.");
-                    }
-
                     if (string.IsNullOrWhiteSpace(file.Content))
                     {
                         throw new InvalidOperationException($"Пустой контент схемы {file.Sid}.");
@@ -75,7 +70,7 @@ namespace Zilon.Core.Schemes
 
         private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
         {
-            // Если явно указаны настройки десеиализации, то используем их.
+            // Если явно указаны настройки десериализации, то используем их.
             if (JsonSerializerSettings == null)
             {
                 return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
@@ -98,14 +93,14 @@ namespace Zilon.Core.Schemes
 
         public TSchemeImpl[] GetAll()
         {
-            return _dict.Values.Cast<TSchemeImpl>().ToArray();
+            return _dict.Values.ToArray();
         }
 
         private string CalcDirectory()
         {
             var type = typeof(TSchemeImpl);
             var typeName = type.Name;
-            var schemeName = typeName.Substring(0, typeName.Length - SCHEME_POSTFIX.Length);
+            var schemeName = typeName.Substring(0, typeName.Length - SchemePostfix.Length);
 
             if (type.IsInterface)
             {

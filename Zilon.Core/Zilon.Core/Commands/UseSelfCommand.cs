@@ -52,7 +52,7 @@ namespace Zilon.Core.Commands
             var usableProp = propVm.Prop;
 
             var intention = new Intention<UsePropTask>(a => new UsePropTask(a, usableProp));
-            _playerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention);
         }
     }
 }

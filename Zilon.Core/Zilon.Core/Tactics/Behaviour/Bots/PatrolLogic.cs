@@ -12,9 +12,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     //Иначе не получится догнать нарушителя.
     public class PatrolLogic : IBotLogic
     {
-        private const int PERSIUT_COUNTER = 3;
-        //TODO Дальность видимости вынести в схему персонажа и, зтем, в пересчитанном состоянии в актёра.
-        private const int VISIBILITY_RANGE = 5;
+        private const int PursuitCounter = 3;
+        //TODO Дальность видимости вынести в схему персонажа и, затем, в пересчитанном состоянии в актёра.
+        private const int VisibilityRange = 5;
         private readonly IActor _actor;
         private readonly IPatrolRoute _patrolRoute;
         private readonly IMap _map;
@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IdleTask _idleTask;
         private PatrolMode _mode;
         private IAttackTarget _targetIntruder;
-        private int _persuitCounter;
+        private int _pursuitCounter;
         private int? _patrolPointIndex;
 
         public PatrolLogic(IActor actor,
@@ -42,13 +42,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _actorList = actors;
             _decisionSource = decisionSource;
             _actService = actService;
-            _persuitCounter = PERSIUT_COUNTER;
+            _pursuitCounter = PursuitCounter;
         }
 
         public IActorTask GetCurrentTask()
         {
             // На каждом шаге осматриваем окрестности
-            // напредмет нарушителей.
+            // на предмет нарушителей.
             var intruders = CheckForIntruders();
 
             var nearbyIntruder = intruders.FirstOrDefault();
@@ -73,13 +73,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     return HandleBypassMode();
 
                 case PatrolMode.Pursuit:
-                    return HandlePersiutMode();
+                    return HandlePersuitMode();
 
                 case PatrolMode.Idle:
                     return HandleIdleMode();
 
                 default:
-                    throw new InvalidOperationException($"Неизвестный режим патруллирования {_mode}");
+                    throw new InvalidOperationException($"Неизвестный режим патрулирования {_mode}");
             }
         }
 
@@ -103,7 +103,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return _idleTask;
         }
 
-        private IActorTask HandlePersiutMode()
+        private IActorTask HandlePersuitMode()
         {
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
@@ -118,23 +118,23 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Эффект потери цели.
 
                 //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
-                if (_persuitCounter > 0 && _moveTask != null)
+                if (_pursuitCounter > 0 && _moveTask != null)
                 {
-                    _persuitCounter--;
+                    _pursuitCounter--;
                     return _moveTask;
                 }
                 else
                 {
-                    RefreshPersuiteCounter();
+                    RefreshPursuitCounter();
                     _moveTask = new MoveTask(_actor, _targetIntruder.Node, _map);
                     return _moveTask;
                 }
             }
         }
 
-        private void RefreshPersuiteCounter()
+        private void RefreshPursuitCounter()
         {
-            _persuitCounter = PERSIUT_COUNTER;
+            _pursuitCounter = PursuitCounter;
         }
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
@@ -175,7 +175,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Команда на перемещение к целевой точке патруля закончена.
                 // Нужно выбрать следующую целевую точку и создать команду на простой.
                 _patrolPointIndex++;
-                if (_patrolPointIndex >= _patrolRoute.Points.Count())
+                if (_patrolPointIndex >= _patrolRoute.Points.Length)
                 {
                     _patrolPointIndex = 0;
                 }
@@ -237,7 +237,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         }
 
         /// <summary>
-        /// Рассчёт следующей контрольной точке патруля из указанной.
+        /// Расчёт следующей контрольной точке патруля из указанной.
         /// </summary>
         /// <param name="currentPatrolPointIndex"> Текущая точка патруля. </param>
         /// <returns> Возвращает узел карты, представляющий следующую контрольную точку патруля. </returns>
@@ -260,11 +260,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             {
                 var routeNode = (HexNode)_patrolRoute.Points[i];
                 var actorNode = (HexNode)_actor.Node;
-                if (HexNodeHelper.EqualCoordinates(routeNode, actorNode))
+                if (!HexNodeHelper.EqualCoordinates(routeNode, actorNode))
                 {
-                    currentIndex = i;
-                    break;
+                    continue;
                 }
+
+                currentIndex = i;
+                break;
             }
 
             return currentIndex;
@@ -332,7 +334,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var targetNode = (HexNode)target.Node;
             var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
 
-            var isVisible = distance <= VISIBILITY_RANGE;
+            var isVisible = distance <= VisibilityRange;
             return isVisible;
         }
 

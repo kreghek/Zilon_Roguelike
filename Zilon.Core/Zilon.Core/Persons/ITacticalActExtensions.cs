@@ -1,11 +1,11 @@
 ﻿namespace Zilon.Core.Persons
 {
-    public static class ITacticalActExtensions
+    public static class TacticalActExtensions
     {
         /// <summary>
         /// Проверяет, допустимая ли дистанция для совершения действия.
         /// </summary>
-        /// <param name="act"> Преверяемое действие. </param>
+        /// <param name="act"> Проверяемое действие. </param>
         /// <param name="currentCubePos"> Узел, из которого совершается действие. </param>
         /// <param name="targetCubePos"> Целевой узел. </param>
         /// <returns>Возвращает true, если дистанция допустима.</returns>

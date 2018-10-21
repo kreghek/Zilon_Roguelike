@@ -31,15 +31,15 @@ namespace Zilon.Core.Common
             var ry = Math.Round(y);
             var rz = Math.Round(z);
 
-            var x_diff = Math.Abs(rx - x);
-            var y_diff = Math.Abs(ry - y);
-            var z_diff = Math.Abs(rz - z);
+            var xDiff = Math.Abs(rx - x);
+            var yDiff = Math.Abs(ry - y);
+            var zDiff = Math.Abs(rz - z);
 
-            if (x_diff > y_diff && x_diff > z_diff)
+            if (xDiff > yDiff && xDiff > zDiff)
             {
                 rx = -ry - rz;
             }
-            else if (y_diff > z_diff)
+            else if (yDiff > zDiff)
             {
                 ry = -rx - rz;
             }
