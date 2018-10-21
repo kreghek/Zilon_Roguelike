@@ -29,22 +29,15 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            if (SlotIndex == null)
-            {
-                throw new InvalidOperationException("Для команды не указан слот.");
-            }
-
-            var propVm = _inventoryState.SelectedProp;
-            if (propVm == null)
-            {
-                return false;
-            }
-
-            var equipment = propVm.Prop as Equipment;
-
+            var equipment = GetEquipment();
             if (equipment == null)
             {
                 return false;
+            }
+
+            if (SlotIndex == null)
+            {
+                throw new InvalidOperationException("Для команды не указан слот.");
             }
 
             var equipmentCarrier = _playerState.ActiveActor.Actor.Person.EquipmentCarrier;
@@ -55,6 +48,14 @@ namespace Zilon.Core.Commands
             }
 
             return true;
+        }
+
+        private Equipment GetEquipment()
+        {
+            var propVm = _inventoryState.SelectedProp;
+            var equipment = propVm?.Prop as Equipment;
+
+            return equipment;
         }
 
         protected override void ExecuteTacticCommand()

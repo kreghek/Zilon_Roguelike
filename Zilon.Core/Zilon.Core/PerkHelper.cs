@@ -42,7 +42,6 @@ namespace Zilon.Core
         {
             var levelRemains = totalLevel;
             var currentLevelPointer = 0;
-            var currentLevelCapability = 0;
             do
             {
                 if (currentLevelPointer >= perkScheme.Levels.Length)
@@ -56,7 +55,8 @@ namespace Zilon.Core
                 level = currentLevelPointer + 1;
                 subLevel = Math.Min(levelRemains, levelScheme.MaxValue);
                 currentLevelPointer++;
-                currentLevelCapability = levelScheme.MaxValue;
+
+                var currentLevelCapability = levelScheme.MaxValue;
                 levelRemains -= currentLevelCapability;
             } while (levelRemains >= 0);
         }

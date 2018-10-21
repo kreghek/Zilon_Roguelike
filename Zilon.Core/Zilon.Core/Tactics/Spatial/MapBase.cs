@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics.Spatial
                 return true;
             }
 
-            if (!blockers.Any(x => x != actor))
+            if (blockers.All(x => x == actor))
             {
                 return true;
             }

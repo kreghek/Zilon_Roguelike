@@ -10,8 +10,8 @@ namespace Zilon.Core.MapGenerators
 {
     public class RoomGenerator
     {
-        private const int ROOM_COUNT = 10;
-        private const int ROOM_CELL_SIZE = 10;
+        private const int RoomCount = 10;
+        private const int RoomCellSize = 10;
         private const int MaxNeighbors = 1;
         private const int NeighborProbably = 100;
 
@@ -37,11 +37,11 @@ namespace Zilon.Core.MapGenerators
 
         public List<Room> GenerateRoomsInGrid()
         {
-            var roomGridSize = (int)Math.Ceiling(Math.Log(ROOM_COUNT, 2)) + 1;
+            var roomGridSize = (int)Math.Ceiling(Math.Log(RoomCount, 2)) + 1;
             var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
-            for (var i = 0; i < ROOM_COUNT; i++)
+            for (var i = 0; i < RoomCount; i++)
             {
                 var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
                 var rolledPosition = GenerationHelper.GetFreeCell(roomGrid, rolledUncheckedPosition);
@@ -56,7 +56,7 @@ namespace Zilon.Core.MapGenerators
 
                     roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                    var rolledSize = _randomSource.RollRoomSize(ROOM_CELL_SIZE - 2);
+                    var rolledSize = _randomSource.RollRoomSize(RoomCellSize - 2);
 
                     room.Width = rolledSize.Width + 2;
                     room.Height = rolledSize.Height + 2;
@@ -95,8 +95,8 @@ namespace Zilon.Core.MapGenerators
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * ROOM_CELL_SIZE;
-                    var nodeY = y + room.PositionY * ROOM_CELL_SIZE;
+                    var nodeX = x + room.PositionX * RoomCellSize;
+                    var nodeY = y + room.PositionY * RoomCellSize;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
                     map.Nodes.Add(node);

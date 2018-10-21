@@ -9,6 +9,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
@@ -32,7 +33,7 @@ namespace Zilon.Core.Commands
 
             var currentNode = _playerState.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = _playerState.HoverViewModel as IActorViewModel;
+            var selectedActorViewModel = GetSelectedActorViewModel();
             if (selectedActorViewModel == null)
             {
                 return false;
@@ -55,6 +56,11 @@ namespace Zilon.Core.Commands
             // 6. Возможно ли выполнение каких-либо команд над актёрами
             // (Нельзя, если ещё выполняется текущая команда. Например, анимация перемещения.)
             return canExecute;
+        }
+
+        private IActorViewModel GetSelectedActorViewModel()
+        {
+            return _playerState.HoverViewModel as IActorViewModel;
         }
 
         protected override void ExecuteTacticCommand()

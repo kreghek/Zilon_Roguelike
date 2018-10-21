@@ -9,6 +9,11 @@
     /// </remarks>
     public class MapScheme : SchemeBase, IMapScheme
     {
+        public MapScheme(int fake)
+        {
+            Fake = fake;
+        }
+
         public int Fake { get; }
     }
 }

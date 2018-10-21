@@ -23,10 +23,7 @@ namespace Zilon.Core.Props
         /// </summary>
         public int Count
         {
-            get
-            {
-                return _count;
-            }
+            get => _count;
             set
             {
                 if (value <= 0)
