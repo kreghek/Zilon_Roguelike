@@ -58,7 +58,7 @@ namespace Zilon.Core
                 currentLevelPointer++;
                 currentLevelCapability = levelScheme.MaxValue;
                 levelRemains -= currentLevelCapability;
-            } while (levelRemains >= currentLevelCapability);
+            } while (levelRemains >= 0);
         }
 
         /// <summary>
