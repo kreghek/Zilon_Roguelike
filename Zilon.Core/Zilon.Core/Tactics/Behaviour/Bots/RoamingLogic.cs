@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
 
@@ -26,10 +26,15 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         protected override MoveTask CreateBypassMoveTask()
         {
-            //_roamingTask = new IdleTask(_actor, _decisionSource);
+            var currentActorNode = (HexNode)_actor.Node;
+            var currentActorCoords = currentActorNode.CubeCoords;
+            //TODO Сделать привязку монстра к текущей комнате.
+            var avaialbleNodes = _map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
+            var targetNode = _decisionSource.SelectTargetRoamingNode(avaialbleNodes);
 
-            //return _roamingTask;
-            throw new NotImplementedException();
+            var moveTask = new MoveTask(_actor, targetNode, _map);
+
+            return moveTask;
         }
 
         protected override void ProcessIntruderDetected()
