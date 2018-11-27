@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Persons
                         Levels = new[]{
                             new PerkLevelSubScheme{
                                 MaxValue = 2,
-                                Jobs = new JobSubScheme[0]
+                                Jobs = new IJobSubScheme[0]
                             }
                         }
                     }

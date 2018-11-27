@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Persons
             {
                 Levels = new[] {
                     new PerkLevelSubScheme{
-                        Jobs = new[]{
+                        Jobs = new IJobSubScheme[]{
                             new TestJobSubScheme{
                                 Type = JobType.Defeats,
                                 Value = 1
@@ -88,7 +88,7 @@ namespace Zilon.Core.Tests.Persons
                 Levels = new[] {
                     new PerkLevelSubScheme{
                         MaxValue = 0,
-                        Jobs = new[]{
+                        Jobs = new IJobSubScheme[]{
                             new TestJobSubScheme{
                                 Type = JobType.Defeats,
                                 Value = 1
