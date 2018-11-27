@@ -10,14 +10,14 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class PerkJob : IJob
     {
-        public JobSubScheme Scheme { get; }
+        public IJobSubScheme Scheme { get; }
 
         public int Progress { get; set; }
 
         public bool IsComplete { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public PerkJob(JobSubScheme scheme)
+        public PerkJob(IJobSubScheme scheme)
         {
             Scheme = scheme;
         }

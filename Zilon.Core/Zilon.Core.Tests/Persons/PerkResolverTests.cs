@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -24,7 +25,7 @@ namespace Zilon.Core.Tests.Persons
                 Levels = new[] {
                     new PerkLevelSubScheme{
                         Jobs = new[]{
-                            new JobSubScheme{
+                            new TestJobSubScheme{
                                 Type = JobType.Defeats,
                                 Value = 1
                             }
@@ -88,7 +89,7 @@ namespace Zilon.Core.Tests.Persons
                     new PerkLevelSubScheme{
                         MaxValue = 0,
                         Jobs = new[]{
-                            new JobSubScheme{
+                            new TestJobSubScheme{
                                 Type = JobType.Defeats,
                                 Value = 1
                             }

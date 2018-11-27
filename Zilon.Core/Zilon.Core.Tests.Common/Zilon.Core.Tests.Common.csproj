@@ -46,6 +46,7 @@
     <Compile Include="HexNodeTestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\TestDropTableScheme.cs" />
+    <Compile Include="Schemes\TestJobSubScheme.cs" />
     <Compile Include="Schemes\TestPerkScheme.cs" />
     <Compile Include="Schemes\TestPersonScheme.cs" />
     <Compile Include="Schemes\TestPropEquipSubScheme.cs" />

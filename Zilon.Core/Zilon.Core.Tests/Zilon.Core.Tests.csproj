@@ -107,6 +107,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
+    <Compile Include="Persons\DefeatActorJobProgressTests.cs" />
     <Compile Include="Persons\EquipmentCarrierTests.cs" />
     <Compile Include="Persons\EquipmentTests.cs" />
     <Compile Include="Persons\EvolutionDataTests.cs" />

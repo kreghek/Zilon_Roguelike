@@ -10,7 +10,7 @@ namespace Zilon.Core
         /// <summary>
         /// Схема текущей работы.
         /// </summary>
-        JobSubScheme Scheme { get; }
+        IJobSubScheme Scheme { get; }
 
         /// <summary>
         /// Текущий прогресс по работе.
