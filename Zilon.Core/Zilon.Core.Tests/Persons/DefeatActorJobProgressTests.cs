@@ -3,10 +3,13 @@
 using Moq;
 
 using NUnit.Framework;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tests.Common.Schemes;
 
-namespace Zilon.Core.Persons.Tests
+namespace Zilon.Core.Tests.Persons
 {
     [TestFixture]
     public class DefeatActorJobProgressTests
@@ -23,9 +26,11 @@ namespace Zilon.Core.Persons.Tests
 
             var jobMock = new Mock<IJob>();
             jobMock.SetupProperty(x => x.Progress, startProgress);
-            jobMock.SetupGet(x=>x.Scheme).Returns(new JobSubScheme {
-
-            })
+            jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
+            {
+                Type = JobType.Defeats,
+                Value = 10
+            });
             var job = jobMock.Object;
 
             var progress = new DefeatActorJobProgress(actor);

@@ -6,27 +6,27 @@
     /// <remarks>
     /// Используется для хранения требуемых работ перка или квеста.
     /// </remarks>
-    public sealed class JobSubScheme
+    public sealed class JobSubScheme : IJobSubScheme
     {
         /// <summary>
         /// Тип работы.
         /// </summary>
-        public JobType Type { get; set; }
+        public JobType Type { get; private set; }
 
         /// <summary>
         /// Объём работы.
         /// </summary>
-        public int Value { get; set; }
+        public int Value { get; private set; }
 
         /// <summary>
         /// Область действия работы.
         /// </summary>
-        public JobScope Scope { get; set; }
+        public JobScope Scope { get; private set; }
 
         /// <summary>
         /// Дополнительные данные по работе.
         /// </summary>
-        public string[] Data { get; set; }
+        public string[] Data { get; private set; }
 
         //TODO Вернуть получение наименования работ для клиента. Доработать с учётом локализации.
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
+﻿using Newtonsoft.Json;
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
@@ -14,22 +13,17 @@ namespace Zilon.Core.Schemes
     /// </remarks>
     public sealed class PerkLevelSubScheme : SubSchemeBase
     {
-        [ExcludeFromCodeCoverage]
         public PerkRuleSubScheme[] Rules { get; set; }
 
-        [ExcludeFromCodeCoverage]
-        public JobSubScheme[] Jobs { get; set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<JobSubScheme[]>))]
+        public IJobSubScheme[] Jobs { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public int MaxValue { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public PersonStat PersonLevel { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public PerkConditionSubScheme[] Conditions { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public PropSet[] Sources { get; set; }
     }
 }

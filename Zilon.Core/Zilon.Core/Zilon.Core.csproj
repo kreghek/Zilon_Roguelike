@@ -92,6 +92,7 @@
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Common\RollModifiers.cs" />
+    <Compile Include="Schemes\ConcreteTypeConverter.cs" />
     <Compile Include="Schemes\ConsumeCommonRule.cs" />
     <Compile Include="Components\EquipmentSlotTypes.cs" />
     <Compile Include="Common\HexHelper.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Schemes\IDropTableModificatorScheme.cs" />
     <Compile Include="Schemes\IDropTableRecordSubScheme.cs" />
     <Compile Include="Schemes\IDropTableScheme.cs" />
+    <Compile Include="Schemes\IJobSubScheme.cs" />
     <Compile Include="Schemes\ILocationScheme.cs" />
     <Compile Include="Schemes\IMapScheme.cs" />
     <Compile Include="Schemes\IMonsterDefenceItemSubScheme.cs" />
