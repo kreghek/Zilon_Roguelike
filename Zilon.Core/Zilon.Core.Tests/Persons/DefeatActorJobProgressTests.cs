@@ -70,6 +70,32 @@ namespace Zilon.Core.Tests.Persons
             otherJob.Progress.Should().Be(expectedOtherProgress);
         }
 
+        /// <summary>
+        /// Тест проверяет, что применение прогресса возвращает работы, которые были изменены.
+        /// </summary>
+        [Test]
+        public void ApplyToJobs_OneDefeatJob_ReturnsChangedJobs()
+        {
+            // ARRANGE
+            const int startProgress = 1;
+
+            var actor = CreateActor();
+            var job = CreateJob(startProgress, JobType.Defeats);
+            var progress = CreateJobProgress(actor);
+
+
+
+
+            // ACT
+            var changedJobs = progress.ApplyToJobs(new IJob[] { job });
+
+
+
+            // ASSERT
+            changedJobs.Should().HaveCount(1);
+            changedJobs[0].Should().Be(job);
+        }
+
 
         private static IActor CreateActor()
         {
@@ -92,7 +118,7 @@ namespace Zilon.Core.Tests.Persons
             return job;
         }
 
-        private static DefeatActorJobProgress CreateJobProgress(IActor actor)
+        private static IJobProgress CreateJobProgress(IActor actor)
         {
             return new DefeatActorJobProgress(actor);
         }
