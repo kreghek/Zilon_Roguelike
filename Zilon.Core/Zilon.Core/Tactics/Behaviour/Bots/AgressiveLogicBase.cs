@@ -172,7 +172,14 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             {
                 if (!_moveTask.IsComplete)
                 {
-                    // Если команда на перемещение к целевой точке патруля не закончена, тогда продолжаем её.
+                    // Если команда на перемещение к целевой точке патруля не закончена,
+                    // тогда продолжаем её.
+                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                    if (!_moveTask.CanExecute())
+                    {
+                        _moveTask = CreateBypassMoveTask();
+                    }
+
                     return _moveTask;
                 }
 

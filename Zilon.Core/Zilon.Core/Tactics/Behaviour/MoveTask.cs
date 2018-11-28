@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class MoveTask: ActorTaskBase
+    public class MoveTask : ActorTaskBase
     {
         private readonly IMap _map;
         private readonly List<IMapNode> _path;
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (!_map.IsPositionAvailableFor(nextNode, Actor))
             {
-                throw new InvalidOperationException("Попытка переместиться в заблокированную ячейку.");
+                throw new InvalidOperationException($"Попытка переместиться в заблокированную ячейку {nextNode}.");
             }
 
             _map.ReleaseNode(Actor.Node, Actor);
@@ -50,7 +50,14 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        public MoveTask(IActor actor, IMapNode targetNode, IMap map): base(actor)
+        public override bool CanExecute()
+        {
+            var nextNode = _path[0];
+
+            return _map.IsPositionAvailableFor(nextNode, Actor);
+        }
+
+        public MoveTask(IActor actor, IMapNode targetNode, IMap map) : base(actor)
         {
             TargetNode = targetNode;
             _map = map;
@@ -64,7 +71,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             var startNode = Actor.Node;
             var finishNode = TargetNode;
-            
+
             _path.Clear();
 
             var context = new PathFindingContext(Actor)
