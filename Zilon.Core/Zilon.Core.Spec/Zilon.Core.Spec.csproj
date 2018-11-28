@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Contexts\FeatureContextBase.cs" />
     <Compile Include="Steps\CommonSteps.cs" />
+    <Compile Include="Steps\MonsterSteps.cs" />
+    <Compile Include="Steps\PredefinedMapSteps.cs" />
     <Compile Include="Steps\FightSteps.cs" />
     <Compile Include="Steps\MoveSteps.cs" />
     <Compile Include="Steps\GenericStepsBase.cs" />
@@ -165,6 +167,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Fight_ShootingDecreaseBullets.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TestCases\Monster_Movement.feature.cs">
+      <DependentUpon>Monster_Movement.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="TestCases\Monster_NotThrowWhenKill.feature.cs">
       <AutoGen>True</AutoGen>
@@ -302,6 +309,10 @@
     <None Include="TestCases\Fight_ShootingDecreaseBullets.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Fight_ShootingDecreaseBullets.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Monster_Movement.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Monster_Movement.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Monster_NotThrowWhenKill.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

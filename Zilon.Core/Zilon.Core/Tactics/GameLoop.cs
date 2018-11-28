@@ -66,6 +66,7 @@ namespace Zilon.Core.Tactics
             // Персонаж, которым в данный момент управляет актёр, должен обрабатываться первым.
             var sortedActors = _actorManager.Items.Where(x => !x.Person.Survival.IsDead)
                 .OrderByDescending(x => x.Owner is HumanPlayer)
+                .ThenBy(x=>x.Person.Id)
                 .ToArray();
 
             // отсортировать по инициативе

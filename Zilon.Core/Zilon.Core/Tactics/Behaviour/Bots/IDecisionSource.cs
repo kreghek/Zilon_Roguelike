@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Tactics.Behaviour.Bots
+﻿using System.Collections.Generic;
+using Zilon.Core.Tactics.Spatial;
+
+namespace Zilon.Core.Tactics.Behaviour.Bots
 {
     /// <summary>
     /// Источник решений для AI.
@@ -12,5 +15,7 @@
         /// <param name="max"> Максимальное количество ходов ожидания. </param>
         /// <returns> Количество ходов ожидания. </returns>
         int SelectIdleDuration(int min, int max);
+
+        IMapNode SelectTargetRoamingNode(IEnumerable<IMapNode> mapNodes);
     }
 }

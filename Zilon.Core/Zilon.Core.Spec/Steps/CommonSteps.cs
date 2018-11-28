@@ -100,6 +100,14 @@ namespace Zilon.Core.Spec.Steps
             container.Content.Add(resource);
         }
 
+        [When(@"Следующая итерация сектора")]
+        public void WhenСледующаяИтерацияСектора()
+        {
+            //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
+            var gameLoop = Context.Container.GetInstance<IGameLoop>();
+            gameLoop.Update();
+        }
+
 
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)

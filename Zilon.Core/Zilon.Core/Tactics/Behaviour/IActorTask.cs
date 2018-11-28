@@ -2,6 +2,7 @@
 {
     public interface IActorTask
     {
+        bool CanExecute();
         void Execute();
         bool IsComplete { get; }
     }

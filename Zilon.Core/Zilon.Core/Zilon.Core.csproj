@@ -189,6 +189,7 @@
     <Compile Include="Schemes\PerkScheme.cs" />
     <Compile Include="Schemes\PersonFaction.cs" />
     <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\AgressiveLogicBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogic.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IIntention.cs" />

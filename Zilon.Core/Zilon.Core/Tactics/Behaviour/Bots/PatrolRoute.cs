@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     {
         public IMapNode[] Points { get; }
 
-        public PatrolRoute(IMapNode[] points)
+        public PatrolRoute(params IMapNode[] points)
         {
             Points = points;
         }

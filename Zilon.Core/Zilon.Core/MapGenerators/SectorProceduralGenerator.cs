@@ -98,15 +98,29 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var room in rooms)
             {
-                var person = new MonsterPerson(monsterScheme);
-                var startNode = room.Nodes.FirstOrDefault();
-                var actor = new Actor(person, _botPlayer, startNode);
-                _actorManager.Add(actor);
+                // В каждую комнату генерируем по 2 монстра
+                // первый ходит по маршруту
+
+                var startNode1 = room.Nodes.FirstOrDefault();
+                var actor1 = CreateMonster(monsterScheme, startNode1);
 
                 var finishPatrolNode = room.Nodes.Last();
-                var patrolRoute = new PatrolRoute(new IMapNode[] { startNode, finishPatrolNode });
-                sector.PatrolRoutes[actor] = patrolRoute;
+                var patrolRoute = new PatrolRoute(new IMapNode[] { startNode1, finishPatrolNode });
+                sector.PatrolRoutes[actor1] = patrolRoute;
+
+                // второй произвольно бродит
+
+                var startNode2 = room.Nodes.Skip(3).FirstOrDefault();
+                CreateMonster(monsterScheme, startNode2);
             }
+        }
+
+        private IActor CreateMonster(IMonsterScheme monsterScheme, HexNode startNode)
+        {
+            var person = new MonsterPerson(monsterScheme);
+            var actor = new Actor(person, _botPlayer, startNode);
+            _actorManager.Add(actor);
+            return actor;
         }
     }
 }
