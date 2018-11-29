@@ -15,27 +15,31 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private const int PursuitCounter = 3;
         //TODO Дальность видимости вынести в схему персонажа и, затем, в пересчитанном состоянии в актёра.
         private const int VisibilityRange = 5;
-        protected readonly IActor _actor;
-        protected readonly IMap _map;
-        protected readonly IActorManager _actorList;
-        protected readonly IDecisionSource _decisionSource;
+
+        protected readonly IActor Actor;
+        protected readonly IMap Map;
+        protected readonly IDecisionSource DecisionSource;
+
+        private readonly IActorManager _actorList;
         private readonly ITacticalActUsageService _actService;
+
         private MoveTask _moveTask;
         private IdleTask _idleTask;
         private Mode _mode;
         private IAttackTarget _targetIntruder;
         private int _pursuitCounter;
 
-        public AgressiveLogicBase(IActor actor,
+        protected AgressiveLogicBase(IActor actor,
             IMap map,
             IActorManager actors,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService)
         {
-            _actor = actor;
-            _map = map;
+            Actor = actor;
+            Map = map;
+            DecisionSource = decisionSource;
+
             _actorList = actors;
-            _decisionSource = decisionSource;
             _actService = actService;
             _pursuitCounter = PursuitCounter;
         }
@@ -91,7 +95,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             if (_idleTask == null)
             {
-                _idleTask = new IdleTask(_actor, _decisionSource);
+                _idleTask = new IdleTask(Actor, DecisionSource);
             }
             else
             {
@@ -111,7 +115,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(_actor, _targetIntruder, _actService, _map);
+                var attackTask = new AttackTask(Actor, _targetIntruder, _actService, Map);
                 return attackTask;
             }
             else
@@ -129,7 +133,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 else
                 {
                     RefreshPursuitCounter();
-                    _moveTask = new MoveTask(_actor, _targetIntruder.Node, _map);
+                    _moveTask = new MoveTask(Actor, _targetIntruder.Node, Map);
                     return _moveTask;
                 }
             }
@@ -142,16 +146,16 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
         {
-            var actorNode = (HexNode)_actor.Node;
+            var actorNode = (HexNode)Actor.Node;
             var targetNode = (HexNode)targetIntruder.Node;
 
-            if (_actor.Person.TacticalActCarrier != null)
+            if (Actor.Person.TacticalActCarrier != null)
             {
-                var actCarrier = _actor.Person.TacticalActCarrier;
+                var actCarrier = Actor.Person.TacticalActCarrier;
                 var act = actCarrier.Acts.First();
 
                 var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
-                var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, actorNode, targetNode);
+                var targetIsOnLine = MapHelper.CheckNodeAvailability(Map, actorNode, targetNode);
 
                 return isInDistance && targetIsOnLine;
             }
@@ -188,7 +192,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 ProcessMovementComplete();
 
                 _moveTask = null;
-                _idleTask = new IdleTask(_actor, _decisionSource);
+                _idleTask = new IdleTask(Actor, DecisionSource);
                 _mode = Mode.Idle;
                 return _idleTask;
             }
@@ -217,7 +221,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var foundIntruders = new List<IActor>();
             foreach (var target in _actorList.Items)
             {
-                if (target.Owner == _actor.Owner)
+                if (target.Owner == Actor.Owner)
                 {
                     continue;
                 }
@@ -227,7 +231,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     continue;
                 }
 
-                var isVisible = CheckTargetVisible(_actor, target);
+                var isVisible = CheckTargetVisible(Actor, target);
                 if (!isVisible)
                 {
                     continue;

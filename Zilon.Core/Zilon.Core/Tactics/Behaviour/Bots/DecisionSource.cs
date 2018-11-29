@@ -27,17 +27,32 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         [ExcludeFromCodeCoverage]
         public IMapNode SelectTargetRoamingNode(IEnumerable<IMapNode> mapNodes)
         {
-            var roll = _dice.Roll(mapNodes.Count()) - 1;
-
             // Небольшая оптимизация для коллекций, которые поддерживают доступ по индексу,
             // чтобы не обходить всю коллекцию до указанного элемента.
             if (mapNodes is IList<IMapNode> mapNodesList)
             {
-                return mapNodesList[roll];
+                return SelectRandomListImpl(mapNodesList);
             }
 
             // Медленный вариант доступа.
-            return mapNodes.ElementAt(roll);
+            return SelectRandomEnumerableImpl(mapNodes);
+        }
+
+        private IMapNode SelectRandomEnumerableImpl(IEnumerable<IMapNode> mapNodes)
+        {
+            var roll = _dice.Roll(mapNodes.Count());
+            return mapNodes.ElementAt(RollToIndex(roll));
+        }
+
+        private IMapNode SelectRandomListImpl(IList<IMapNode> mapNodesList)
+        {
+            var roll = _dice.Roll(mapNodesList.Count);
+            return mapNodesList[RollToIndex(roll)];
+        }
+
+        private int RollToIndex(int roll)
+        {
+            return roll - 1;
         }
     }
 }

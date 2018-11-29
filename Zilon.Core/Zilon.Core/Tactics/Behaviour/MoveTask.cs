@@ -50,7 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        public override bool CanExecute()
+        public bool CanExecute()
         {
             var nextNode = _path[0];
 

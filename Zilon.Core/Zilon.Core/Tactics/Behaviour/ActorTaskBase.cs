@@ -21,10 +21,5 @@ namespace Zilon.Core.Tactics.Behaviour
         public virtual bool IsComplete { get; set; }
 
         public abstract void Execute();
-
-        public virtual bool CanExecute()
-        {
-            return true;
-        }
     }
 }

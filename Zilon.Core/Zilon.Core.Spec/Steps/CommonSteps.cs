@@ -2,6 +2,8 @@
 
 using FluentAssertions;
 
+using JetBrains.Annotations;
+
 using LightInject;
 
 using TechTalk.SpecFlow;
@@ -17,31 +19,37 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
 {
+    [UsedImplicitly]
     [Binding]
     public class CommonSteps: GenericStepsBase<CommonGameActionsContext>
     {
+        [UsedImplicitly]
         public CommonSteps(CommonGameActionsContext context) : base(context)
         {
         }
 
+        [UsedImplicitly]
         [Given(@"Есть карта размером (.*)")]
         public void GivenЕстьКартаРазмером(int mapSize)
         {
             Context.CreateSector(mapSize);
         }
 
+        [UsedImplicitly]
         [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
         public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
         {
             Context.AddWall(x1, y1, x2, y2);
         }
 
+        [UsedImplicitly]
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
             Context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
         }
 
+        [UsedImplicitly]
         [Given(@"Актёр игрока имеет Hp: (.*)")]
         public void GivenАктёрИмеетHp(int startHp)
         {
@@ -49,12 +57,14 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
         }
 
+        [UsedImplicitly]
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
             Context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
         }
 
+        [UsedImplicitly]
         [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
         {
@@ -63,6 +73,7 @@ namespace Zilon.Core.Spec.Steps
             monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
+        [UsedImplicitly]
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьСундукВЯчейке(int id,  int offsetX, int offsetY)
         {
@@ -70,6 +81,7 @@ namespace Zilon.Core.Spec.Steps
             Context.AddChest(id, coords);
         }
 
+        [UsedImplicitly]
         [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
         public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
         {
@@ -85,6 +97,7 @@ namespace Zilon.Core.Spec.Steps
             container.Content.Add(equipment);
         }
 
+        [UsedImplicitly]
         [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
         public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
@@ -100,6 +113,7 @@ namespace Zilon.Core.Spec.Steps
             container.Content.Add(resource);
         }
 
+        [UsedImplicitly]
         [When(@"Следующая итерация сектора")]
         public void WhenСледующаяИтерацияСектора()
         {
@@ -108,13 +122,14 @@ namespace Zilon.Core.Spec.Steps
             gameLoop.Update();
         }
 
-
+        [UsedImplicitly]
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {
             Context.HoverNode(x, y);
         }
 
+        [UsedImplicitly]
         [When(@"Я выбираю сундук Id:(.*)")]
         public void WhenЯВыбираюСундукId(int id)
         {
@@ -131,6 +146,7 @@ namespace Zilon.Core.Spec.Steps
             playerState.HoverViewModel = chestViewMdel;
         }
 
+        [UsedImplicitly]
         [When(@"Я забираю из сундука экипировку (.*)")]
         public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
         {
@@ -150,6 +166,7 @@ namespace Zilon.Core.Spec.Steps
             propTransferCommand.Execute();
         }
 
+        [UsedImplicitly]
         [When(@"Я забираю из сундука рерурс (.*) в количестве (.*)")]
         public void WhenЯЗабираюИзСундукаРерурсWaterВКоличестве(string resourceSid, int count)
         {
@@ -184,6 +201,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
 
+        [UsedImplicitly]
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
@@ -195,6 +213,7 @@ namespace Zilon.Core.Spec.Steps
             foundEquipment.Should().NotBeNull();
         }
 
+        [UsedImplicitly]
         [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
         public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
         {
@@ -206,6 +225,7 @@ namespace Zilon.Core.Spec.Steps
             prop.Should().BeNull();
         }
 
+        [UsedImplicitly]
         [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
         public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
         {
@@ -217,6 +237,7 @@ namespace Zilon.Core.Spec.Steps
             prop.Should().BeNull();
         }
 
+        [UsedImplicitly]
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
@@ -228,6 +249,7 @@ namespace Zilon.Core.Spec.Steps
             testedProp.Should().BeNull();
         }
 
+        [UsedImplicitly]
         [Then(@"Актёр игрока имеет запас hp (.*)")]
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
@@ -236,6 +258,7 @@ namespace Zilon.Core.Spec.Steps
             hpStat.Value.Should().Be(expectedHp);
         }
 
+        [UsedImplicitly]
         [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {

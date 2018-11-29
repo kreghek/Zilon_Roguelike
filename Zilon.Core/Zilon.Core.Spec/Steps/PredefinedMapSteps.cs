@@ -1,4 +1,7 @@
 ﻿using System.Linq;
+
+using JetBrains.Annotations;
+
 using LightInject;
 
 using TechTalk.SpecFlow;
@@ -11,6 +14,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
 {
+    [UsedImplicitly]
     [Binding]
     public sealed class PredefinedMapSteps : GenericStepsBase<CommonGameActionsContext>
     {
@@ -18,6 +22,7 @@ namespace Zilon.Core.Spec.Steps
         {
         }
 
+        [UsedImplicitly]
         [Given(@"Есть предопределённая карта (.+)")]
         public void GivenЕстьПредопределённаяКартаSid(string predefinedMapSid)
         {

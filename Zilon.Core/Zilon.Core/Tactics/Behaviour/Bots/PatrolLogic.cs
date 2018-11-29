@@ -53,13 +53,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     nextPatrolPoint = GetNextPatrolPointFromField();
                 }
 
-                moveTask = new MoveTask(_actor, nextPatrolPoint, _map);
+                moveTask = new MoveTask(Actor, nextPatrolPoint, Map);
             }
             else
             {
                 var targetPatrolPoint = _patrolRoute.Points[_patrolPointIndex.Value];
 
-                moveTask = new MoveTask(_actor, targetPatrolPoint, _map);
+                moveTask = new MoveTask(Actor, targetPatrolPoint, Map);
             }
 
             return moveTask;
@@ -106,7 +106,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             for (var i = 0; i < _patrolRoute.Points.Length; i++)
             {
                 var routeNode = (HexNode)_patrolRoute.Points[i];
-                var actorNode = (HexNode)_actor.Node;
+                var actorNode = (HexNode)Actor.Node;
                 if (!HexNodeHelper.EqualCoordinates(routeNode, actorNode))
                 {
                     continue;
@@ -126,7 +126,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private HexNode[] CalcActualRoutePoints()
         {
             var hexNodes = _patrolRoute.Points.Cast<HexNode>();
-            var actorHexNode = (HexNode)_actor.Node;
+            var actorHexNode = (HexNode)Actor.Node;
             var actualRoutePoints = from node in hexNodes
                                     where !HexNodeHelper.EqualCoordinates(node, actorHexNode)
                                     select node;
@@ -137,7 +137,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IMapNode CalcNearbyPatrolPoint(IEnumerable<HexNode> routePoints)
         {
             var targets = routePoints;
-            var node = (HexNode)_actor.Node;
+            var node = (HexNode)Actor.Node;
             var nearbyNode = HexNodeHelper.GetNearbyCoordinates(node, targets);
 
             if (nearbyNode == null)

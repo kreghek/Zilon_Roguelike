@@ -26,13 +26,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         protected override MoveTask CreateBypassMoveTask()
         {
-            var currentActorNode = (HexNode)_actor.Node;
+            var currentActorNode = (HexNode)Actor.Node;
             var currentActorCoords = currentActorNode.CubeCoords;
             //TODO Сделать привязку монстра к текущей комнате.
-            var avaialbleNodes = _map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
-            var targetNode = _decisionSource.SelectTargetRoamingNode(avaialbleNodes);
+            var avaialbleNodes = Map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
+            var targetNode = DecisionSource.SelectTargetRoamingNode(avaialbleNodes);
 
-            var moveTask = new MoveTask(_actor, targetNode, _map);
+            var moveTask = new MoveTask(Actor, targetNode, Map);
 
             return moveTask;
         }

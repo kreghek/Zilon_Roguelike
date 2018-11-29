@@ -105,7 +105,7 @@ namespace Zilon.Core.MapGenerators
                 var actor1 = CreateMonster(monsterScheme, startNode1);
 
                 var finishPatrolNode = room.Nodes.Last();
-                var patrolRoute = new PatrolRoute(new IMapNode[] { startNode1, finishPatrolNode });
+                var patrolRoute = new PatrolRoute(startNode1, finishPatrolNode);
                 sector.PatrolRoutes[actor1] = patrolRoute;
 
                 // второй произвольно бродит
