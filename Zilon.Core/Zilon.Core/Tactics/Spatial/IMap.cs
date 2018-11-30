@@ -20,7 +20,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Регионы карты.
         /// </summary>
-        MapRegion[] MapRegions { get; }
+        IList<MapRegion> Regions { get; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.

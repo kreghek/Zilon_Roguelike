@@ -52,21 +52,7 @@ namespace Zilon.Core.MapGenerators
                 _dropResolver,
                 _schemeService);
 
-            var roomGenerator = new RoomGenerator(_randomSource, Log);
-
-            Log.Clear();
-
-            var edgeHash = new HashSet<string>();
-
-            // Генерируем комнаты в сетке
-            var rooms = roomGenerator.GenerateRoomsInGrid();
-            var mainRooms = rooms.Where(x => x != roomGenerator.StartRoom).ToArray();
-
-            // Создаём узлы и рёбра комнат
-            roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
-
-            // Соединяем комнаты
-            roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
+            var mainRooms = map.Regions.Where
 
             CreateRoomMonsters(sector, mainRooms);
 

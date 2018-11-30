@@ -92,6 +92,7 @@
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Common\RollModifiers.cs" />
+    <Compile Include="MapGenerators\DungeonMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
     <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
     <Compile Include="Tactics\Spatial\MapRegion.cs" />

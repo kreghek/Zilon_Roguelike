@@ -14,12 +14,13 @@ namespace Zilon.Core.Tactics.Spatial
 
         public IList<IMapNode> Nodes { get; }
         public IList<IEdge> Edges { get; }
-        public MapRegion[] MapRegions { get; }
+        public IList<MapRegion> Regions { get; }
 
         protected MapBase()
         {
             Nodes = new List<IMapNode>();
             Edges = new List<IEdge>();
+            Regions = new List<MapRegion>();
 
             _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
         }
