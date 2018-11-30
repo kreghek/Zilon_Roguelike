@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -62,6 +62,16 @@ namespace Zilon.Core.MapGenerators
             {
                 var region = new MapRegion(room.Nodes.ToArray());
                 map.Regions.Add(region);
+
+                if (room == roomGenerator.StartRoom)
+                {
+                    map.StartRegion = region;
+                }
+
+                if (room == roomGenerator.ExitRoom)
+                {
+                    map.ExitRegion = region;
+                }
             }
 
             return map;

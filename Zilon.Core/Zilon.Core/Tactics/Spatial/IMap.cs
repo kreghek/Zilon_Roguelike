@@ -22,6 +22,10 @@ namespace Zilon.Core.Tactics.Spatial
         /// </summary>
         IList<MapRegion> Regions { get; }
 
+        MapRegion StartRegion { get; set; }
+
+        MapRegion ExitRegion { get; set; }
+
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
         /// </summary>

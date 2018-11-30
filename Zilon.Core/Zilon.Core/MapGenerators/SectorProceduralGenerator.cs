@@ -52,11 +52,10 @@ namespace Zilon.Core.MapGenerators
                 _dropResolver,
                 _schemeService);
 
-            var mainRooms = map.Regions.Where
+            var monsterRegions = map.Regions.Where(x => x == map.StartRegion);
+            CreateRoomMonsters(sector, monsterRegions);
 
-            CreateRoomMonsters(sector, mainRooms);
-
-            CreateChests(mainRooms);
+            CreateChests(monsterRegions);
 
             SelectStartNodes(sector, roomGenerator.StartRoom);
 
@@ -65,14 +64,14 @@ namespace Zilon.Core.MapGenerators
             return sector;
         }
 
-        private void CreateChests(Room[] rooms)
+        private void CreateChests(IEnumerable<MapRegion> rooms)
         {
             var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
             var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
 
             foreach (var room in rooms)
             {
-                var absNodeIndex = room.Nodes.Count;
+                var absNodeIndex = room.Nodes.Count();
                 var containerNode = room.Nodes[absNodeIndex / 2];
                 var container = new DropTablePropChest(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
@@ -91,25 +90,26 @@ namespace Zilon.Core.MapGenerators
             sector.StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
         }
 
-        private void CreateRoomMonsters(ISector sector, IEnumerable<Room> rooms)
+        private void CreateRoomMonsters(ISector sector, IEnumerable<MapRegion> regions)
         {
             var monsterScheme = _schemeService.GetScheme<IMonsterScheme>("rat");
 
-            foreach (var room in rooms)
+            //TODO Учесть вероятность, что монстр может инстанцироваться на сундук
+            foreach (var region in regions)
             {
                 // В каждую комнату генерируем по 2 монстра
                 // первый ходит по маршруту
 
-                var startNode1 = room.Nodes.FirstOrDefault();
+                var startNode1 = (HexNode)region.Nodes.FirstOrDefault();
                 var actor1 = CreateMonster(monsterScheme, startNode1);
 
-                var finishPatrolNode = room.Nodes.Last();
+                var finishPatrolNode = region.Nodes.Last();
                 var patrolRoute = new PatrolRoute(startNode1, finishPatrolNode);
                 sector.PatrolRoutes[actor1] = patrolRoute;
 
                 // второй произвольно бродит
 
-                var startNode2 = room.Nodes.Skip(3).FirstOrDefault();
+                var startNode2 = (HexNode)region.Nodes.Skip(3).FirstOrDefault();
                 CreateMonster(monsterScheme, startNode2);
             }
         }
