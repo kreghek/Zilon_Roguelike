@@ -1,7 +1,7 @@
-﻿namespace Zilon.Core.Tactics.Spatial
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Zilon.Core.Tactics.Spatial
+{
     /// <summary>
     /// Тактическая карта.
     /// </summary>
@@ -16,6 +16,11 @@
         /// Ребра карты.
         /// </summary>
         IList<IEdge> Edges { get; }
+
+        /// <summary>
+        /// Регионы карты.
+        /// </summary>
+        MapRegion[] MapRegions { get; }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.

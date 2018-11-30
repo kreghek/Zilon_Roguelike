@@ -14,6 +14,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public IList<IMapNode> Nodes { get; }
         public IList<IEdge> Edges { get; }
+        public MapRegion[] MapRegions { get; }
 
         protected MapBase()
         {
