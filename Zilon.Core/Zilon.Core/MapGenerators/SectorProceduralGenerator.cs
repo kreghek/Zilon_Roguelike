@@ -11,7 +11,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class SectorProceduralGenerator
+    public class SectorProceduralGenerator : ISectorProceduralGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
@@ -19,6 +19,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
+        private readonly IMapFactory _mapFactory;
 
         public StringBuilder Log { get; }
 
@@ -27,7 +28,8 @@ namespace Zilon.Core.MapGenerators
             ISectorGeneratorRandomSource randomSource,
             IBotPlayer botPlayer,
             ISchemeService schemeService,
-            IDropResolver dropResolver)
+            IDropResolver dropResolver,
+            IMapFactory mapFactory)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -35,12 +37,21 @@ namespace Zilon.Core.MapGenerators
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _dropResolver = dropResolver;
+            _mapFactory = mapFactory;
 
             Log = new StringBuilder();
         }
 
-        public void Generate(ISector sector, IMap map)
+        public ISector Generate()
         {
+            var map = _mapFactory.Create();
+
+            var sector = new Sector(map,
+                _actorManager,
+                _propContainerManager,
+                _dropResolver,
+                _schemeService);
+
             var roomGenerator = new RoomGenerator(_randomSource, Log);
 
             Log.Clear();
@@ -64,6 +75,8 @@ namespace Zilon.Core.MapGenerators
             SelectStartNodes(sector, roomGenerator.StartRoom);
 
             SelectExitPoints(sector, roomGenerator.ExitRoom);
+
+            return sector;
         }
 
         private void CreateChests(Room[] rooms)
