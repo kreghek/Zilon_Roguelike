@@ -10,9 +10,9 @@ namespace Zilon.Core.MapGenerators
 {
     public class RoomGenerator
     {
-        private const int RoomCount = 10;
-        private const int RoomCellSize = 10;
-        private const int MaxNeighbors = 1;
+        private const int RoomCount = 20;
+        private const int RoomCellSize = 20;
+        private const int MaxNeighbors = 2;
         private const int NeighborProbably = 100;
 
         private readonly ISectorGeneratorRandomSource _randomSource;
