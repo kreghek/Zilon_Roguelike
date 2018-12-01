@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     {
         private AttackTask _attackTask;
         private IActor _actor;
-        private TestGridGenMap _testMap;
+        private IMap _testMap;
 
         /// <summary>
         /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
@@ -90,7 +90,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void SetUp()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            _testMap = new TestGridGenMap(3);
+            _testMap = SquareMapFactory.Create(3);
 
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme

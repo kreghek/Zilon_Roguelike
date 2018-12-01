@@ -101,6 +101,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\FeatureContextBase.cs" />
+    <Compile Include="Mocks\FuncMapFactory.cs" />
+    <Compile Include="Mocks\TestEmptySectorGenerator.cs" />
     <Compile Include="Steps\CommonSteps.cs" />
     <Compile Include="Steps\MonsterSteps.cs" />
     <Compile Include="Steps\PredefinedMapSteps.cs" />

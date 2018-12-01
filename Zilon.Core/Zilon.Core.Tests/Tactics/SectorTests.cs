@@ -41,10 +41,11 @@ namespace Zilon.Core.Tests.Tactics
             var schemeServiceMock = new Mock<ISchemeService>();
             var schemeService = schemeServiceMock.Object;
 
-            var sector = new Sector(map, actorManager, propContainerManager, dropResolver, schemeService)
-            {
-                ExitNodes = new IMapNode[0]
-            };
+            var sector = new Sector(map,
+                actorManager,
+                propContainerManager,
+                dropResolver,
+                schemeService);
 
             var actor = CreateActorMock();
             innerActorList.Add(actor);
@@ -57,7 +58,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            _survivalDataMock.Verify(x=>x.Update(), Times.Once);
+            _survivalDataMock.Verify(x => x.Update(), Times.Once);
         }
 
         private IActor CreateActorMock()

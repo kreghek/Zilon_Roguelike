@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void Execute_ValidLength_ActorOpenedContainer()
         {
             // ARRANGE
-            var map = new TestGridGenMap();
+            var map = SquareMapFactory.Create(10);
 
             var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 

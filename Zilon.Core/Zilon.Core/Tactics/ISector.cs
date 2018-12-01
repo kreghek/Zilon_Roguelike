@@ -9,11 +9,6 @@ namespace Zilon.Core.Tactics
     public interface ISector
     {
         /// <summary>
-        /// Точки выхода из сектора.
-        /// </summary>
-        IMapNode[] ExitNodes { get; set; }
-
-        /// <summary>
         /// Обновление состояние сектора.
         /// </summary>
         /// <remarks>

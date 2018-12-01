@@ -18,9 +18,15 @@ namespace Zilon.Core.Spec.Contexts
         {
             var playerState = Container.GetInstance<IPlayerState>();
             var moveCommand = Container.GetInstance<ICommand>("move");
-            var map = Container.GetInstance<IMap>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
 
-            var targetNode = map.Nodes.Cast<HexNode>().SelectBy(targetCoords.X, targetCoords.Y);
+            var targetNode = sectorManager
+                .CurrentSector
+                .Map
+                .Nodes
+                .Cast<HexNode>()
+                .SelectBy(targetCoords.X, targetCoords.Y);
+
             var nodeViewModel = new TestNodeViewModel
             {
                 Node = targetNode
@@ -51,9 +57,9 @@ namespace Zilon.Core.Spec.Contexts
         internal void HoverNode(int x, int y)
         {
             var playerState = Container.GetInstance<IPlayerState>();
-            var sector = Container.GetInstance<ISector>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
 
-            var map = sector.Map;
+            var map = sectorManager.CurrentSector.Map;
             var selectedNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == x && n.OffsetY == y);
 
             var nodeViewModelMock = new Mock<IMapNodeViewModel>();

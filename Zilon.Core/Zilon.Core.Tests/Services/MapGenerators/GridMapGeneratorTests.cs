@@ -8,26 +8,26 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Tests.Services.MapGenerators
+namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture()]
-    public class GridMapGeneratorTests
+    [TestFixture]
+    public class SquareMapFactoryTests
     {
-        [Test()]
-        public void CreateMap_FixedMap_EdgesAreCorrect()
+        /// <summary>
+        /// Тест проверяет, что для карты создаётся корректный набор ребёр между узлами.
+        /// </summary>
+        [Test]
+        public void Create_FixedMap_EdgesAreCorrect()
         {
             // ARRANGE
-            var map = CreateFakeMap();
 
-            var mapGenerator = new GridMapGenerator(7);
 
 
             // ACT
-            mapGenerator.CreateMap(map);
+            var map = SquareMapFactory.Create(7);
 
 
 
@@ -55,17 +55,16 @@ namespace Zilon.Core.Tests.Services.MapGenerators
         /// <see cref="HexMap"/> используется на клиенте.
         /// </summary>
         [Test()]
-        public void CreateMap_HexMapType_NoExceptions()
+        public void Create_HexMapType_NoExceptions()
         {
             // ARRANGE
 
-            var map = new HexMap();
-
-            var mapGenerator = new GridMapGenerator(7);
-
 
             // ACT
-            Action act = () => { mapGenerator.CreateMap(map); };
+            Action act = () =>
+            {
+                var map = SquareMapFactory.Create(7);
+            };
 
 
 

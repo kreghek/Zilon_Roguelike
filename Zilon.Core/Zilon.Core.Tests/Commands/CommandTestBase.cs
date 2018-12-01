@@ -29,14 +29,14 @@ namespace Zilon.Core.Tests.Commands
         {
             Container = new ServiceContainer();
 
-            var testMap = new TestGridGenMap(3);
+            var testMap = SquareMapFactory.Create(3);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
             var sector = sectorMock.Object;
 
             var sectorManagerMock = new Mock<ISectorManager>();
-            sectorManagerMock.SetupProperty(x => x.CurrentSector, sector);
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
             var sectorManager = sectorManagerMock.Object;
 
             var actMock = new Mock<ITacticalAct>();

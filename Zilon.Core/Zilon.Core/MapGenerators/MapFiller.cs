@@ -4,27 +4,15 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class GridMapGenerator : IMapGenerator
+    public static class MapFiller
     {
-        private const int DefaultMapSize = 10;
-        private readonly int _mapSize;
-
-        public GridMapGenerator() : this(DefaultMapSize)
+        public static void FillSquareMap(IMap map, int mapSize)
         {
-        }
-
-        public GridMapGenerator(int mapSize)
-        {
-            _mapSize = mapSize;
-        }
-
-        public void CreateMap(IMap map)
-        {
-            CreateNodes(map);
+            CreateNodes(map, mapSize);
             CreateEdges(map);
         }
 
-        private void CreateEdges(IMap map)
+        private static void CreateEdges(IMap map)
         {
             foreach (var node in map.Nodes)
             {
@@ -68,17 +56,17 @@ namespace Zilon.Core.MapGenerators
         private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
         {
             return (Edge)(from edge in map.Edges
-                    where edge.Nodes.Contains(node)
-                    where edge.Nodes.Contains(neighbor)
-                    select edge).SingleOrDefault();
+                          where edge.Nodes.Contains(node)
+                          where edge.Nodes.Contains(neighbor)
+                          select edge).SingleOrDefault();
         }
 
-        private void CreateNodes(IMap map)
+        private static void CreateNodes(IMap map, int mapSize)
         {
             var nodeIdCounter = 1;
-            for (var row = 0; row < _mapSize; row++)
+            for (var row = 0; row < mapSize; row++)
             {
-                for (var col = 0; col < _mapSize; col++)
+                for (var col = 0; col < mapSize; col++)
                 {
                     var node = new HexNode(col, row)
                     {
@@ -89,6 +77,5 @@ namespace Zilon.Core.MapGenerators
                 }
             }
         }
-
     }
 }

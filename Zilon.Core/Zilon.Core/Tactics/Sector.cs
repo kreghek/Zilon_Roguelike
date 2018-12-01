@@ -21,8 +21,6 @@ namespace Zilon.Core.Tactics
 
         public event EventHandler ActorExit;
 
-        public IMapNode[] ExitNodes { get; set; }
-
         public IMap Map { get; }
 
         public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
@@ -106,7 +104,7 @@ namespace Zilon.Core.Tactics
 
             foreach (var actor in _actorManager.Items)
             {
-                if (actor.Owner is HumanPlayer && !ExitNodes.Contains(actor.Node))
+                if (actor.Owner is HumanPlayer && Map.ExitNodes?.Contains(actor.Node) == false)
                 {
                     allExit = false;
                 }

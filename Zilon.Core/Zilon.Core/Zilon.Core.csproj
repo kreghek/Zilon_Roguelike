@@ -59,13 +59,15 @@
     <Compile Include="Client\InventoryState.cs" />
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
-    <Compile Include="Client\ISectorManager.cs" />
+    <Compile Include="MapGenerators\MapFiller.cs" />
+    <Compile Include="MapGenerators\SquareMapFactory.cs" />
+    <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
     <Compile Include="Client\PlayerState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
-    <Compile Include="Client\SectorManager.cs" />
+    <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\UseSelfCommand.cs" />
     <Compile Include="Commands\ShowPerksModalCommand.cs" />
     <Compile Include="Commands\SpecialActorCommandBase.cs" />
@@ -92,7 +94,9 @@
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Common\RollModifiers.cs" />
+    <Compile Include="MapGenerators\DungeonMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
+    <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
     <Compile Include="Tactics\Spatial\MapRegion.cs" />
     <Compile Include="Schemes\ConcreteTypeConverter.cs" />
     <Compile Include="Schemes\ConsumeCommonRule.cs" />
@@ -303,8 +307,6 @@
     <Compile Include="Players\HumanPlayer.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayerBase.cs" />
-    <Compile Include="MapGenerators\GridMapGenerator.cs" />
-    <Compile Include="MapGenerators\IMapGenerator.cs" />
     <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />

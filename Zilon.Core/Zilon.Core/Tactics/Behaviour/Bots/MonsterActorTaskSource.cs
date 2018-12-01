@@ -10,20 +10,20 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private readonly IBotPlayer _player;
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actService;
-        private readonly ISector _sector;
+        private readonly ISectorManager _sectorManager;
         private readonly IActorManager _actorManager;
 
         public MonsterActorTaskSource(IBotPlayer player,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService,
-            ISector sector,
+            ISectorManager sectorManager,
             IActorManager actorManager)
         {
             _logicDict = new Dictionary<IActor, IBotLogic>();
             _player = player;
             _decisionSource = decisionSource;
             _actService = actService;
-            _sector = sector;
+            _sectorManager = sectorManager;
             _actorManager = actorManager;
         }
 
@@ -38,18 +38,18 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             if (actor.Person.Survival.IsDead)
             {
                 _logicDict.Remove(actor);
-                _sector.PatrolRoutes.Remove(actor);
+                _sectorManager.CurrentSector.PatrolRoutes.Remove(actor);
             }
             else
             {
                 if (!_logicDict.TryGetValue(actor, out var logic))
                 {
-                    if (_sector.PatrolRoutes.TryGetValue(actor, out var partolRoute))
+                    if (_sectorManager.CurrentSector.PatrolRoutes.TryGetValue(actor, out var partolRoute))
                     {
 
                         var patrolLogic = new PatrolLogic(actor,
                             partolRoute,
-                            _sector.Map,
+                            _sectorManager.CurrentSector.Map,
                             _actorManager,
                             _decisionSource,
                             _actService);
@@ -60,7 +60,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     else
                     {
                         var idleLogic = new RoamingLogic(actor,
-                            _sector.Map,
+                            _sectorManager.CurrentSector.Map,
                             _actorManager,
                             _decisionSource,
                             _actService);

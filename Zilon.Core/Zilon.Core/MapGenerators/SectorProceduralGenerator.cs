@@ -11,7 +11,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class SectorProceduralGenerator
+    public class SectorProceduralGenerator : ISectorProceduralGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
@@ -19,6 +19,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
+        private readonly IMapFactory _mapFactory;
 
         public StringBuilder Log { get; }
 
@@ -27,7 +28,8 @@ namespace Zilon.Core.MapGenerators
             ISectorGeneratorRandomSource randomSource,
             IBotPlayer botPlayer,
             ISchemeService schemeService,
-            IDropResolver dropResolver)
+            IDropResolver dropResolver,
+            IMapFactory mapFactory)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -35,45 +37,37 @@ namespace Zilon.Core.MapGenerators
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _dropResolver = dropResolver;
+            _mapFactory = mapFactory;
 
             Log = new StringBuilder();
         }
 
-        public void Generate(ISector sector, IMap map)
+        public ISector Generate()
         {
-            var roomGenerator = new RoomGenerator(_randomSource, Log);
+            var map = _mapFactory.Create();
 
-            Log.Clear();
+            var sector = new Sector(map,
+                _actorManager,
+                _propContainerManager,
+                _dropResolver,
+                _schemeService);
 
-            var edgeHash = new HashSet<string>();
+            var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
+            CreateRoomMonsters(sector, monsterRegions);
 
-            // Генерируем комнаты в сетке
-            var rooms = roomGenerator.GenerateRoomsInGrid();
-            var mainRooms = rooms.Where(x => x != roomGenerator.StartRoom).ToArray();
+            CreateChests(monsterRegions);
 
-            // Создаём узлы и рёбра комнат
-            roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
-
-            // Соединяем комнаты
-            roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
-
-            CreateRoomMonsters(sector, mainRooms);
-
-            CreateChests(mainRooms);
-
-            SelectStartNodes(sector, roomGenerator.StartRoom);
-
-            SelectExitPoints(sector, roomGenerator.ExitRoom);
+            return sector;
         }
 
-        private void CreateChests(Room[] rooms)
+        private void CreateChests(IEnumerable<MapRegion> rooms)
         {
             var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
             var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
 
             foreach (var room in rooms)
             {
-                var absNodeIndex = room.Nodes.Count;
+                var absNodeIndex = room.Nodes.Count();
                 var containerNode = room.Nodes[absNodeIndex / 2];
                 var container = new DropTablePropChest(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
@@ -82,35 +76,26 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private void SelectExitPoints(ISector sector, Room exitRoom)
-        {
-            sector.ExitNodes = new IMapNode[] { exitRoom.Nodes[exitRoom.Nodes.Count - 2] };
-        }
-
-        private void SelectStartNodes(ISector sector, Room startRoom)
-        {
-            sector.StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
-        }
-
-        private void CreateRoomMonsters(ISector sector, IEnumerable<Room> rooms)
+        private void CreateRoomMonsters(ISector sector, IEnumerable<MapRegion> regions)
         {
             var monsterScheme = _schemeService.GetScheme<IMonsterScheme>("rat");
 
-            foreach (var room in rooms)
+            //TODO Учесть вероятность, что монстр может инстанцироваться на сундук
+            foreach (var region in regions)
             {
                 // В каждую комнату генерируем по 2 монстра
                 // первый ходит по маршруту
 
-                var startNode1 = room.Nodes.FirstOrDefault();
+                var startNode1 = (HexNode)region.Nodes.FirstOrDefault();
                 var actor1 = CreateMonster(monsterScheme, startNode1);
 
-                var finishPatrolNode = room.Nodes.Last();
+                var finishPatrolNode = region.Nodes.Last();
                 var patrolRoute = new PatrolRoute(startNode1, finishPatrolNode);
                 sector.PatrolRoutes[actor1] = patrolRoute;
 
                 // второй произвольно бродит
 
-                var startNode2 = room.Nodes.Skip(3).FirstOrDefault();
+                var startNode2 = (HexNode)region.Nodes.Skip(3).FirstOrDefault();
                 CreateMonster(monsterScheme, startNode2);
             }
         }

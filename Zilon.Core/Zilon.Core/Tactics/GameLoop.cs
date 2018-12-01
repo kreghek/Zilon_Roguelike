@@ -8,12 +8,12 @@ namespace Zilon.Core.Tactics
 {
     public sealed class GameLoop : IGameLoop
     {
-        private readonly ISector _sector;
+        private readonly ISectorManager _sectorManager;
         private readonly IActorManager _actorManager;
 
-        public GameLoop(ISector sector, IActorManager actorManager)
+        public GameLoop(ISectorManager sectorManager, IActorManager actorManager)
         {
-            _sector = sector;
+            _sectorManager = sectorManager;
             _actorManager = actorManager;
         }
 
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics
                 ProcessActor(actor);
             }
 
-            _sector.Update();
+            _sectorManager.CurrentSector.Update();
         }
 
         private void ProcessActor(IActor actor)
