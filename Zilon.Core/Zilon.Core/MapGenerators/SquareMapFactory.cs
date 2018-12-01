@@ -19,6 +19,7 @@ namespace Zilon.Core.Tests.Common
             var map = new HexMap();
             MapFiller.FillSquareMap(map, _mapSize);
             map.StartNodes = map.Nodes.Take(1).ToArray();
+            map.ExitNodes = new IMapNode[] { map.Nodes.Last() };
             return map;
         }
 

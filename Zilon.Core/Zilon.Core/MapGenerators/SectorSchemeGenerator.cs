@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -30,7 +27,8 @@ namespace Zilon.Core.MapGenerators
             ISectorGeneratorRandomSource randomSource,
             IBotPlayer botPlayer,
             ISchemeService schemeService,
-            IPropFactory propFactory)
+            IPropFactory propFactory,
+            IDropResolver dropResolver)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -38,6 +36,8 @@ namespace Zilon.Core.MapGenerators
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _propFactory = propFactory;
+            _dropResolver = dropResolver;
+
             Log = new StringBuilder();
         }
 
@@ -59,7 +59,6 @@ namespace Zilon.Core.MapGenerators
         private void CreateChests(IMap map)
         {
             var swordScheme = _schemeService.GetScheme<IPropScheme>("short-sword");
-
 
             var equipment = _propFactory.CreateEquipment(swordScheme);
 
