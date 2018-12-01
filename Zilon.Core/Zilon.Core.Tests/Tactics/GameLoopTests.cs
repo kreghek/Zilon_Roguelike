@@ -26,6 +26,10 @@ namespace Zilon.Core.Tests.Tactics
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
 
+            var sectorManagerMock = new Mock<ISectorManager>();
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
+            var sectorManager = sectorManagerMock.Object;
+
             var actorManagerMock = new Mock<IActorManager>();
             var actorInnerList = new List<IActor>();
             actorManagerMock.SetupGet(x => x.Items).Returns(actorInnerList);
@@ -39,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics
             var botActor = CreateActor(botPlayer);
             actorInnerList.Add(botActor);
 
-            var gameLoop = new GameLoop(sector, actorManager)
+            var gameLoop = new GameLoop(sectorManager, actorManager)
             {
                 ActorTaskSources = new IActorTaskSource[0]
             };

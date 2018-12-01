@@ -127,6 +127,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             sectorMock.SetupGet(x => x.Map).Returns(_map);
             var sector = sectorMock.Object;
 
+            var sectorManagerMock = new Mock<ISectorManager>();
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
+            var sectorManager = sectorManagerMock.Object;
+
             _actorListInner = new List<IActor>();
 
             _testedActor = CreateBotActor(1, 1);
@@ -155,7 +159,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
             var tacticalActUsageService = tacticalActUsageServiceMock.Object;
 
-            _container.Register(factory => sector);
+            _container.Register(factory => sectorManager, new PerContainerLifetime());
             _container.Register(factory => (IBotPlayer)_testedActor.Owner, new PerContainerLifetime());
             _container.Register(factory => actorManager, new PerContainerLifetime());
             _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());

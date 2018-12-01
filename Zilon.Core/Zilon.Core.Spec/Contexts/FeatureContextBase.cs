@@ -68,9 +68,9 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddWall(int x1, int y1, int x2, int y2)
         {
-            var sector = Container.GetInstance<ISector>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
 
-            var map = sector.Map;
+            var map = sectorManager.CurrentSector.Map;
 
             map.RemoveEdge(x1, y1, x2, y2);
         }
@@ -142,9 +142,9 @@ namespace Zilon.Core.Spec.Contexts
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
             var containerManager = Container.GetInstance<IPropContainerManager>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
 
-            var sector = Container.GetInstance<ISector>();
-            var node = sector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
+            var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
 
             containerManager.Add(chest);
