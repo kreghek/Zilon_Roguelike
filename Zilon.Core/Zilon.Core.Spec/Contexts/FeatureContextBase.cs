@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -226,6 +227,10 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterSectorService()
         {
+            Container.Register<ISectorGeneratorRandomSource, SectorGeneratorRandomSource>(new PerContainerLifetime());
+            Container.Register<IMapFactory, DungeonMapFactory>(new PerContainerLifetime());
+            Container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
         }
@@ -270,7 +275,6 @@ namespace Zilon.Core.Spec.Contexts
         private void RegisterClientServices()
         {
             Container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
-            Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
