@@ -21,9 +21,67 @@ namespace Zilon.Core.Tests.MapGenerators
     [TestFixture]
     public class SectorProceduralGeneratorTests
     {
+        /// <summary>
+        /// Тест проверяет, что для различных карт генератор сектора работает без ошибок.
+        /// </summary>
+        [Test]
+        public void Create_DifferentMaps_NoExceptions()
+        {
+            // ARRANGE
+            var randomSource = new TestSnakeRandomSource();
+            var mapFactory = new DungeonMapFactory(randomSource);
+
+            var schemeService = CreateSchemeService();
+            var botPlayer = CreateBotPlayer();
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer, mapFactory);
+
+
+
+            // ACT
+            Action act = () => {
+                var sector = generator.Generate();
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что для различных карт генератор сектора работает без ошибок.
+        /// </summary>
+        [Test]
+        [TestCase(123, 3257, 636, 1, 100000)]
+        public void Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
+        {
+            // ARRANGE
+            var dice = new Dice(diceSeed);
+            var randomSource = new SectorGeneratorRandomSource(dice);
+            var mapFactory = new DungeonMapFactory(randomSource);
+
+            var schemeService = CreateSchemeService();
+            var botPlayer = CreateBotPlayer();
+            var generator = CreateGenerator(randomSource, schemeService, botPlayer, mapFactory);
+
+
+
+            // ACT
+            Action act = () =>
+            {
+                var sector = generator.Generate();
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
         private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource,
             ISchemeService schemeService,
-            IBotPlayer botPlayer)
+            IBotPlayer botPlayer,
+            IMapFactory mapFactory)
         {
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
@@ -40,7 +98,8 @@ namespace Zilon.Core.Tests.MapGenerators
                 randomSource,
                 botPlayer, 
                 schemeService,
-                dropResolver);
+                dropResolver,
+                mapFactory);
         }
 
 

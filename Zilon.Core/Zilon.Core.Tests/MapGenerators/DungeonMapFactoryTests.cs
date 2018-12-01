@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.MapGenerators.Tests
+namespace Zilon.Core.Tests.MapGenerators
 {
     [TestFixture]
     public class DungeonMapFactoryTests
@@ -20,49 +20,8 @@ namespace Zilon.Core.MapGenerators.Tests
         [Test]
         public void Create_SimpleSnakeMaze_NoExceptions()
         {
-            var expectedRolls = 10;
+            var randomSource = new TestSnakeRandomSource();
 
-            var rollIndex = 0;
-            var rolledOffsetCoords = new[] {
-                new OffsetCoords(0, 0),new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
-                new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
-                new OffsetCoords(0, 2),new OffsetCoords(1, 2)
-            };
-
-            var rolledSize = new Size(3, 3);
-
-            var randomSourceMock = new Mock<ISectorGeneratorRandomSource>();
-            randomSourceMock.Setup(x => x.RollRoomPosition(It.IsAny<int>()))
-                .Returns(() =>
-                {
-                    var rolled = rolledOffsetCoords[rollIndex];
-                    rollIndex++;
-                    return rolled;
-                });
-
-            randomSourceMock.Setup(x => x.RollRoomSize(It.IsAny<int>()))
-                .Returns(rolledSize);
-
-            var rolledConnectedRoomIndexes = new[] {
-                new[]{ 1 }, new[]{ 2 },new[]{ 3 },new[]{ 4 },
-                new[]{ 5 },new[]{ 6 },new[]{ 7 },new[]{ 8 },
-                new[]{ 9 }
-            };
-            randomSourceMock.Setup(x => x.RollConnectedRooms(It.IsAny<Room>(), 1, 100, It.IsAny<IList<Room>>()))
-                .Returns<Room, int, int, IList<Room>>((room, max, p, rooms) =>
-                {
-                    if (rollIndex < expectedRolls - 1)
-                    {
-                        var connectedRoomIndex = rolledConnectedRoomIndexes[rollIndex][0];
-                        return new[] { rooms[connectedRoomIndex] };
-                    }
-                    else
-                    {
-                        return new Room[0];
-                    }
-                });
-
-            var randomSource = randomSourceMock.Object;
 
             var factory = new DungeonMapFactory(randomSource);
 
