@@ -24,7 +24,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
-        Container.Bind<SectorProceduralGenerator>().AsSingle();
+        Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
 
@@ -50,10 +50,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
         Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
-
-
-        var sector = CreateSector();
-        Container.Bind<ISector>().FromInstance(sector).AsSingle();
     }
 
 
@@ -65,30 +61,30 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     }
 
 
-    private ISector CreateSector()
-    {
-        var _actorManager = Container.Resolve<IActorManager>();
-        var _propContainerManager = Container.Resolve<IPropContainerManager>();
-        var sectorGenerator = Container.Resolve<SectorProceduralGenerator>();
-        var dropResolver = Container.Resolve<IDropResolver>();
-        var schemeService = Container.Resolve<ISchemeService>();
+    //private ISector CreateSector()
+    //{
+    //    var _actorManager = Container.Resolve<IActorManager>();
+    //    var _propContainerManager = Container.Resolve<IPropContainerManager>();
+    //    var sectorGenerator = Container.Resolve<SectorProceduralGenerator>();
+    //    var dropResolver = Container.Resolve<IDropResolver>();
+    //    var schemeService = Container.Resolve<ISchemeService>();
 
-        var map = new HexMap();
+    //    var map = new HexMap();
 
-        var sector = new Sector(map, _actorManager, _propContainerManager, dropResolver, schemeService);
+    //    var sector = new Sector(map, _actorManager, _propContainerManager, dropResolver, schemeService);
 
-        try
-        {
-            sectorGenerator.Generate(sector, map);
-        }
-        catch
-        {
-            Debug.Log(sectorGenerator.Log.ToString());
-            throw;
-        }
+    //    try
+    //    {
+    //        sectorGenerator.Generate(sector, map);
+    //    }
+    //    catch
+    //    {
+    //        Debug.Log(sectorGenerator.Log.ToString());
+    //        throw;
+    //    }
 
-        Debug.Log(sectorGenerator.Log.ToString());
+    //    Debug.Log(sectorGenerator.Log.ToString());
 
-        return sector;
-    }
+    //    return sector;
+    //}
 }
