@@ -196,7 +196,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Edges = edges;
             mapNodeVm.Neighbors = neighbors;
 
-            if (_sectorManager.CurrentSector.Map.ExitNodes.Contains(node))
+            if (_sectorManager.CurrentSector.Map.ExitNodes?.Contains(node) == true)
             {
                 mapNodeVm.IsExit = true;
             }
