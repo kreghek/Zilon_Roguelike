@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 
+using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -47,8 +50,8 @@ namespace Zilon.Core.Tests.Tactics
                 dropResolver,
                 schemeService);
 
-            var actor = CreateActorMock();
-            innerActorList.Add(actor);
+            var actorMock = CreateActorMock();
+            innerActorList.Add(actorMock.Object);
 
 
 
@@ -61,7 +64,55 @@ namespace Zilon.Core.Tests.Tactics
             _survivalDataMock.Verify(x => x.Update(), Times.Once);
         }
 
-        private IActor CreateActorMock()
+        /// <summary>
+        /// Тест проверяет, что если для сектора не заданы узлы выхода, то событие выхода не срабатывает.
+        /// </summary>
+        [Test]
+        public void Update_NoExits_EventNotRaised()
+        {
+            // ARRANGE
+            var mapMock = new Mock<IMap>();
+            var map = mapMock.Object;
+
+            var innerActorList = new List<IActor>();
+            var actorManagerMock = new Mock<IActorManager>();
+            actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
+            var actorManager = actorManagerMock.Object;
+
+            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManager = propContainerManagerMock.Object;
+
+            var dropResolverMock = new Mock<IDropResolver>();
+            var dropResolver = dropResolverMock.Object;
+
+            var schemeServiceMock = new Mock<ISchemeService>();
+            var schemeService = schemeServiceMock.Object;
+
+            var sector = new Sector(map,
+                actorManager,
+                propContainerManager,
+                dropResolver,
+                schemeService);
+
+            var actorMock = CreateActorMock();
+            actorMock.SetupGet(x => x.Owner).Returns(new Mock<HumanPlayer>().Object);
+            innerActorList.Add(actorMock.Object);
+
+
+
+            // ACT
+            using (var monitor = sector.Monitor())
+            {
+                sector.Update();
+
+
+
+                // ASSERT
+                monitor.Should().NotRaise(nameof(sector.ActorExit));
+            }
+        }
+
+        private Mock<IActor> CreateActorMock()
         {
             var actorMock = new Mock<IActor>();
 
@@ -86,7 +137,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
 
-            return actorMock.Object;
+            return actorMock;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Инвентарь персонажа.
     /// </summary>
-    public class Inventory : PropStoreBase
+    public sealed class Inventory : PropStoreBase
     {
     }
 }

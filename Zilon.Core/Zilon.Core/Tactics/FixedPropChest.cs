@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
 
@@ -20,7 +19,7 @@ namespace Zilon.Core.Tactics
         }
 
 
-        public FixedPropChest(IMapNode node, IProp[] props, int id) : base(node, new Inventory(), id)
+        public FixedPropChest(IMapNode node, IProp[] props, int id) : base(node, new ChestStore(), id)
         {
             foreach (var prop in props)
             {

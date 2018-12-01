@@ -165,18 +165,13 @@ namespace Zilon.Core.Client
 
         private void TransferNoCount(IProp prop, IList<IProp> bittenList, IList<IProp> oppositList)
         {
-            var isRemoved = bittenList.Contains(prop);
-            if (isRemoved)
+            var isBitten = bittenList.Contains(prop);
+            if (isBitten)
             {
                 bittenList.Remove(prop);
             }
 
-            var propStoreItems = PropStore.CalcActualItems();
-            var inOriginal = propStoreItems.Contains(prop);
-            if (!inOriginal)
-            {
-                oppositList.Add(prop);
-            }
+            oppositList.Add(prop);
         }
     }
 }
