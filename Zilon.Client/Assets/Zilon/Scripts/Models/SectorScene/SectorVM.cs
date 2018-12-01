@@ -64,8 +64,6 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private IPropContainerManager _propContainerManager;
 
-    [NotNull] [Inject] private ISector _sector;
-
     [NotNull] [Inject] private IHumanPersonManager _personManager;
 
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
@@ -140,8 +138,9 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
+        _sectorManager.CreateSector();
+
         _propContainerManager.Added += PropContainerManager_Added;
-        _sectorManager.CurrentSector = _sector;
 
         _playerState.TaskSource = _humanActorTaskSource;
 
@@ -150,20 +149,20 @@ internal class SectorVM : MonoBehaviour
             _monsterActorTaskSource
         };
 
-        _sector.ActorExit += SectorOnActorExit;
+        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
     }
 
     public void OnDestroy()
     {
         _propContainerManager.Added -= PropContainerManager_Added;
-        _sector.ActorExit -= SectorOnActorExit;
+        _sectorManager.CurrentSector.ActorExit -= SectorOnActorExit;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("captain");
 
-        var playerActorStartNode = _sector.Map.Nodes.First();
+        var playerActorStartNode = _sectorManager.CurrentSector.Map.Nodes.First();
         var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -178,7 +177,7 @@ internal class SectorVM : MonoBehaviour
     private List<MapNodeVM> InitNodeViewModels()
     {
         var nodeVMs = new List<MapNodeVM>();
-        foreach (var node in _sector.Map.Nodes)
+        foreach (var node in _sectorManager.CurrentSector.Map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
 
@@ -188,7 +187,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
 
-            var edges = _sector.Map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
+            var edges = _sectorManager.CurrentSector.Map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
             var neighbors = (from edge in edges
                              from neighbor in edge.Nodes
                              where neighbor != node
@@ -197,7 +196,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Edges = edges;
             mapNodeVm.Neighbors = neighbors;
 
-            if (_sector.ExitNodes.Contains(node))
+            if (_sectorManager.CurrentSector.Map.ExitNodes.Contains(node))
             {
                 mapNodeVm.IsExit = true;
             }

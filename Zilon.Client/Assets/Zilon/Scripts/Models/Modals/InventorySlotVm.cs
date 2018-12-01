@@ -1,11 +1,16 @@
 ﻿using System;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour
 {
