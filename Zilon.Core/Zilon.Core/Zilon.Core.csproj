@@ -62,6 +62,7 @@
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\SquareMapFactory.cs" />
+    <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
