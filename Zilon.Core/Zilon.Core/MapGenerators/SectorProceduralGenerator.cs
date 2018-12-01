@@ -52,7 +52,7 @@ namespace Zilon.Core.MapGenerators
                 _dropResolver,
                 _schemeService);
 
-            var monsterRegions = map.Regions.Where(x => x == map.StartRegion);
+            var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
             CreateRoomMonsters(sector, monsterRegions);
 
             CreateChests(monsterRegions);
