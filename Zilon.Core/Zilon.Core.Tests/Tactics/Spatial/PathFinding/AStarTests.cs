@@ -176,21 +176,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// <returns></returns>
         private static IMap CreateGridOpenMap()
         {
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
-
-            var mapMock = new Mock<IMap>();
-
-            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-            mapMock.SetupGet(x => x.Edges).Returns(edges);
-            mapMock.Setup(x => x.IsPositionAvailableFor(It.IsAny<IMapNode>(), It.IsAny<IActor>()))
-                .Returns(true);
-
-            var map = mapMock.Object;
-
-            var genertor = new GridMapGenerator();
-            genertor.CreateMap(map);
-            return map;
+            return SquareMapFactory.Create(10);
         }
     }
 }

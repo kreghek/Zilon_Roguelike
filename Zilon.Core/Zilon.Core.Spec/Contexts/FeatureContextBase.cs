@@ -58,7 +58,7 @@ namespace Zilon.Core.Spec.Contexts
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
             mapFactory.SetFunc(() => {
-                var map = new TestGridGenMap(mapSize);
+                var map = SquareMapFactory.Create(mapSize);
                 return map;
             });
 

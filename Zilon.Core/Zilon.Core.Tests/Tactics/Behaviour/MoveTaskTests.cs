@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void ExecuteTest_OpenGridMap_ActorReachPointAndTaskComplete()
         {
             // ARRANGE
-            var map = new TestGridGenMap();
+            var map = SquareMapFactory.Create(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -99,7 +99,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = new TestGridGenMap();
+            var map = SquareMapFactory.Create(10);
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 

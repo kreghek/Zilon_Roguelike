@@ -36,7 +36,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         [SetUp]
         public void SetUp()
         {
-            _map = new TestGridGenMap();
+            _map = SquareMapFactory.Create(10);
 
 
             var playerMock = new Mock<IPlayer>();

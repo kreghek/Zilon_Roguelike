@@ -121,7 +121,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         {
             _container = new ServiceContainer();
 
-            _map = new TestGridGenMap();
+            _map = SquareMapFactory.Create(10);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(_map);
