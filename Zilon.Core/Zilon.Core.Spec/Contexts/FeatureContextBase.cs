@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+
 using JetBrains.Annotations;
 
 using LightInject;
@@ -17,6 +18,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Spec.Mocks;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -54,14 +56,14 @@ namespace Zilon.Core.Spec.Contexts
 
         public void CreateSector(int mapSize)
         {
-            var map = new TestGridGenMap(mapSize);
+            var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
+            mapFactory.SetFunc(() => {
+                var map = new TestGridGenMap(mapSize);
+                return map;
+            });
 
-            Container.Register<IMap>(factory => map, new PerContainerLifetime());
-            Container.Register<ISector, Sector>(new PerContainerLifetime());
-
-            // Это нужно для того, чтобы объкт был создан и выполнился код из конструктора.
-            // Там обработка на события внутренних сервисов.
-            Container.GetInstance<ISector>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
+            sectorManager.CreateSector();
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
@@ -95,14 +97,14 @@ namespace Zilon.Core.Spec.Contexts
         {
             var playerState = Container.GetInstance<IPlayerState>();
             var schemeService = Container.GetInstance<ISchemeService>();
-            var sector = Container.GetInstance<ISector>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
-            var humanStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
@@ -118,11 +120,11 @@ namespace Zilon.Core.Spec.Contexts
         public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
         {
             var schemeService = Container.GetInstance<ISchemeService>();
-            var sector = Container.GetInstance<ISector>();
+            var sectorManager = Container.GetInstance<ISectorManager>();
             var actorManager = Container.GetInstance<IActorManager>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
-            var monsterStartNode = sector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
             var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
@@ -227,9 +229,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterSectorService()
         {
-            Container.Register<ISectorGeneratorRandomSource, SectorGeneratorRandomSource>(new PerContainerLifetime());
-            Container.Register<IMapFactory, DungeonMapFactory>(new PerContainerLifetime());
-            Container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            Container.Register<IMapFactory, FuncMapFactory>(new PerContainerLifetime());
+            Container.Register<ISectorProceduralGenerator, TestEmptySectorGenerator>(new PerContainerLifetime());
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
