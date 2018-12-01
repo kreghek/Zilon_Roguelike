@@ -52,7 +52,11 @@ namespace Zilon.Core.Tests.MapGenerators
         /// Тест проверяет, что для различных карт генератор сектора работает без ошибок.
         /// </summary>
         [Test]
-        [TestCase(123, 3257, 636, 1, 100000)]
+        [TestCase(1)]
+        [TestCase(123)]
+        [TestCase(3257)]
+        [TestCase(636)]
+        [TestCase(100000)]
         public void Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
