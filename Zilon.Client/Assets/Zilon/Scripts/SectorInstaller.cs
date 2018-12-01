@@ -24,7 +24,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
-        Container.Bind<ISectorProceduralGenerator>().To<SectorSchemeGenerator>().AsSingle();
+        Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
         Container.Bind<IMapFactory>().To<DungeonMapFactory>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
