@@ -105,6 +105,7 @@
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MapGenerators\DungeonMapFactoryTests.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\DefeatActorJobProgressTests.cs" />

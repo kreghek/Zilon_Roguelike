@@ -57,10 +57,6 @@ namespace Zilon.Core.MapGenerators
 
             CreateChests(monsterRegions);
 
-            SelectStartNodes(sector, roomGenerator.StartRoom);
-
-            SelectExitPoints(sector, roomGenerator.ExitRoom);
-
             return sector;
         }
 
@@ -78,16 +74,6 @@ namespace Zilon.Core.MapGenerators
                     _dropResolver);
                 _propContainerManager.Add(container);
             }
-        }
-
-        private void SelectExitPoints(ISector sector, Room exitRoom)
-        {
-            sector.ExitNodes = new IMapNode[] { exitRoom.Nodes[exitRoom.Nodes.Count - 2] };
-        }
-
-        private void SelectStartNodes(ISector sector, Room startRoom)
-        {
-            sector.StartNodes = startRoom.Nodes.Cast<IMapNode>().ToArray();
         }
 
         private void CreateRoomMonsters(ISector sector, IEnumerable<MapRegion> regions)

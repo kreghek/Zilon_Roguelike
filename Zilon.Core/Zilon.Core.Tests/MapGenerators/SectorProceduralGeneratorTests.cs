@@ -74,10 +74,6 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var schemeService = CreateSchemeService();
 
-            var sector = CreateSector();
-
-            var map = CreateFakeMap();
-
             var botPlayer = CreateBotPlayer();
 
             var generator = CreateGenerator(randomSource, schemeService, botPlayer);
@@ -86,7 +82,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Action act = () =>
             {
-                generator.Generate(sector, map);
+                var sector = generator.Generate();
             };
 
 

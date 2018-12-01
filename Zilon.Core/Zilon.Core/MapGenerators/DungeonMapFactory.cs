@@ -2,44 +2,26 @@
 using System.Linq;
 using System.Text;
 
-using Zilon.Core.Players;
-using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
     public class DungeonMapFactory : IMapFactory
     {
-        private readonly IActorManager _actorManager;
-        private readonly IPropContainerManager _propContainerManager;
         private readonly ISectorGeneratorRandomSource _randomSource;
-        private readonly IBotPlayer _botPlayer;
-        private readonly ISchemeService _schemeService;
-        private readonly IDropResolver _dropResolver;
 
         public StringBuilder Log { get; }
 
-        public DungeonMapFactory(IActorManager actorManager,
-            IPropContainerManager propContainerManager,
-            ISectorGeneratorRandomSource randomSource,
-            IBotPlayer botPlayer,
-            ISchemeService schemeService,
-            IDropResolver dropResolver)
+        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource)
         {
-            _actorManager = actorManager;
-            _propContainerManager = propContainerManager;
             _randomSource = randomSource;
-            _botPlayer = botPlayer;
-            _schemeService = schemeService;
-            _dropResolver = dropResolver;
 
             Log = new StringBuilder();
         }
 
         public IMap Create()
         {
-            var map = new HexMap();
+            var map = CreateMapInstance();
 
             var roomGenerator = new RoomGenerator(_randomSource, Log);
 
@@ -66,15 +48,29 @@ namespace Zilon.Core.MapGenerators
                 if (room == roomGenerator.StartRoom)
                 {
                     map.StartRegion = region;
+                    map.StartNodes = region
+                        .Nodes
+                        .Take(1)
+                        .ToArray();
                 }
 
                 if (room == roomGenerator.ExitRoom)
                 {
                     map.ExitRegion = region;
+                    map.ExitNodes = region
+                        .Nodes
+                        .Skip(region.Nodes.Count() - 2)
+                        .Take(1)
+                        .ToArray();
                 }
             }
 
             return map;
+        }
+
+        private static IMap CreateMapInstance()
+        {
+            return new HexMap();
         }
     }
 }
