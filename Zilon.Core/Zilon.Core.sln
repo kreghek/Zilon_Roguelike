@@ -25,6 +25,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{04A0FDB6-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmark", "Zilon.Core.Benchmark\Zilon.Core.Benchmark.csproj", "{66CE455F-3F1F-4DC2-BCAE-F8243686FF54}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{67CFF0E1-4DD5-4EFF-991D-3B745796992A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.TestBenchmark", "Zilon.TestBenchmark\Zilon.TestBenchmark.csproj", "{0A6B541A-935E-4FE6-99B0-A69F571B7E32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{66CE455F-3F1F-4DC2-BCAE-F8243686FF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CE455F-3F1F-4DC2-BCAE-F8243686FF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66CE455F-3F1F-4DC2-BCAE-F8243686FF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6B541A-935E-4FE6-99B0-A69F571B7E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6B541A-935E-4FE6-99B0-A69F571B7E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6B541A-935E-4FE6-99B0-A69F571B7E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6B541A-935E-4FE6-99B0-A69F571B7E32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +67,8 @@ Global
 		{0192DB6B-EAE2-430A-BC52-148EEC878151} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{31887843-0523-4FFA-8B03-A7D041B95FA3} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
+		{66CE455F-3F1F-4DC2-BCAE-F8243686FF54} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
+		{0A6B541A-935E-4FE6-99B0-A69F571B7E32} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
