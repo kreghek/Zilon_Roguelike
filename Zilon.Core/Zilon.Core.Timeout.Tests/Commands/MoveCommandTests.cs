@@ -1,25 +1,25 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Commands;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
 using LightInject;
-using Zilon.Core.Tactics;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
-using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.Schemes;
-using Zilon.Core.Props;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Tests.Common;
-using Zilon.Core.Common;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
-using JetBrains.Annotations;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Commands.Tests
 {
@@ -39,6 +39,7 @@ namespace Zilon.Core.Commands.Tests
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var commandManger = _container.GetInstance<ICommandManager>();
 
             sectorManager.CreateSector();
 
@@ -56,8 +57,6 @@ namespace Zilon.Core.Commands.Tests
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
 
-
-
             var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
             var nextNodes = HexNodeHelper.GetNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
             var moveTargetNode = nextNodes.First();
@@ -65,6 +64,25 @@ namespace Zilon.Core.Commands.Tests
             playerState.HoverViewModel = new TestNodeViewModel {
                 Node = moveTargetNode
             };
+
+            commandManger.Push(moveCommand);
+
+            ICommand command = null;
+            do
+            {
+                command = commandManger.Pop();
+
+                try
+                {
+                    command?.Execute();
+                }
+                catch (Exception exception)
+                {
+                    throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                }
+            } while (command != null);
+
+            
         }
 
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
@@ -98,8 +116,11 @@ namespace Zilon.Core.Commands.Tests
             return actorViewModel;
         }
 
+        [SetUp]
         public void SetUp()
         {
+            _container = new ServiceContainer();
+
             _container.Register<IDice>(factory => new Dice(), new PerContainerLifetime()); // инстанцируем явно из-за 2-х конструкторов.
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             _container.Register<ISectorGeneratorRandomSource, SectorGeneratorRandomSource>(new PerContainerLifetime());
@@ -113,7 +134,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
 
-            _container.Register<ISchemeLocator, FileSchemeLocator>(new PerContainerLifetime());
+            _container.Register<ISchemeLocator>( factory => CreateSchemeLocator(), new PerContainerLifetime());
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
@@ -149,6 +170,13 @@ namespace Zilon.Core.Commands.Tests
             // Специализированные команды для Ui.
             _container.Register<ICommand, EquipCommand>(serviceName: "show-container-modal-command");
             _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
+        }
+
+        private FileSchemeLocator CreateSchemeLocator()
+        {
+            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemeLocator = new FileSchemeLocator(schemePath);
+            return schemeLocator;
         }
     }
 }
