@@ -8,7 +8,13 @@ namespace Zilon.Core.Tactics.Spatial
 {
     public static class HexNodeHelper
     {
-        public static HexNode[] GetNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
+        /// <summary>
+        /// Возвращает географически соседние узлы. Т.е. не учитывается, соединены ли узлы рёбрами.
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
+        public static HexNode[] GetSpatialNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
         {
             var currentCubeCoords = currentNode.CubeCoords;
 

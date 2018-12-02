@@ -58,7 +58,7 @@ namespace Zilon.Core.Commands.Tests
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
 
             var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-            var nextNodes = HexNodeHelper.GetNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
+            var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
             var moveTargetNode = nextNodes.First();
 
             playerState.HoverViewModel = new TestNodeViewModel {

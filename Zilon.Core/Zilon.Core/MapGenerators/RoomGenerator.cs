@@ -101,7 +101,7 @@ namespace Zilon.Core.MapGenerators
                     room.Nodes.Add(node);
                     map.Nodes.Add(node);
 
-                    var neighbors = HexNodeHelper.GetNeighbors(node, room.Nodes);
+                    var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
 
                     foreach (var neighbor in neighbors)
                     {
@@ -129,7 +129,7 @@ namespace Zilon.Core.MapGenerators
             edgeHash.Add(hashKey1);
 
             var edge = new Edge(node, neighbor);
-            targetMap.Edges.Add(edge);
+            targetMap.AddEdge(node, neighbor);
         }
 
         /// <summary>

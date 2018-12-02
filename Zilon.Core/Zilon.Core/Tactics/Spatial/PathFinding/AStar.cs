@@ -197,7 +197,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         {
             var hexCurrent = (HexNode)current;
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
-            var neighbors = HexNodeHelper.GetNeighbors(hexCurrent, hexNodes);
+            var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
 
             var currentEdges = from edge in map.Edges
                                where edge.Nodes.Contains(current)

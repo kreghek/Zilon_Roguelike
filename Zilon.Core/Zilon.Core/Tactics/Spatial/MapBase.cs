@@ -11,9 +11,7 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers;
 
-
         public IList<IMapNode> Nodes { get; }
-        public IList<IEdge> Edges { get; }
         public IList<MapRegion> Regions { get; }
         public MapRegion StartRegion { get; set; }
         public MapRegion ExitRegion { get; set; }
@@ -23,7 +21,6 @@ namespace Zilon.Core.Tactics.Spatial
         protected MapBase()
         {
             Nodes = new List<IMapNode>();
-            Edges = new List<IEdge>();
             Regions = new List<MapRegion>();
 
             _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
@@ -68,6 +65,18 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             blockers.Add(blocker);
+        }
+
+        public abstract IEnumerable<IMapNode> GetNext(IMapNode node);
+
+        public void AddEdge(IMapNode node1, IMapNode node2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveEdge(IMapNode node1, IMapNode node2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

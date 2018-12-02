@@ -8,26 +8,24 @@ namespace Zilon.Core.Tactics
     {
         public static void RemoveEdge(this IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
-            var edge = GetEdge(map, offsetX1, offsetY1, offsetX2, offsetY2);
-            map.Edges.Remove(edge);
-        }
-
-        private static IEdge GetEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
-        {
-            var foundFromStart = from edge in map.Edges
-                                 from node in edge.Nodes
+            var foundFromStart = from node in map.Nodes
                                  let hexNode = (HexNode)node
                                  where hexNode.OffsetX == offsetX1 && hexNode.OffsetY == offsetY1
-                                 select edge;
+                                 select node;
 
-            var foundToEnd = from edge in foundFromStart
-                             from node in edge.Nodes
-                             let hexNode = (HexNode)node
+            var foundToEnd = from node in foundFromStart
+                             from neighborNode in map.GetNext(node)
+                             let hexNode = (HexNode)neighborNode
                              where hexNode.OffsetX == offsetX2 && hexNode.OffsetY == offsetY2
-                             select edge;
+                             select new
+                             {
+                                 start = node,
+                                 end = neighborNode
+                             };
 
-            return foundToEnd.SingleOrDefault();
+            var foundNode = foundToEnd.Single();
+
+            map.RemoveEdge(foundNode.start, foundNode.end);
         }
-
     }
 }

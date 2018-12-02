@@ -13,9 +13,25 @@ namespace Zilon.Core.Tactics.Spatial
         IList<IMapNode> Nodes { get; }
 
         /// <summary>
-        /// Ребра карты.
+        /// Возвращает узлы, напрямую соединённые с указанным узлом.
         /// </summary>
-        IList<IEdge> Edges { get; }
+        /// <param name="node"> Опорный узел, относительно которого выбираются соседние узлы. </param>
+        /// <returns> Возвращает набор соседних узлов. </returns>
+        IEnumerable<IMapNode> GetNext(IMapNode node);
+
+        /// <summary>
+        /// Создаёт ребро между двумя узлами графа карты.
+        /// </summary>
+        /// <param name="node1"> Узел графа карты. </param>
+        /// <param name="node2"> Узел графа карты. </param>
+        void AddEdge(IMapNode node1, IMapNode node2);
+
+        /// <summary>
+        /// Удаляет ребро между двумя узлами графа карты.
+        /// </summary>
+        /// <param name="node1"> Узел графа карты. </param>
+        /// <param name="node2"> Узел графа карты. </param>
+        void RemoveEdge(IMapNode node1, IMapNode node2);
 
         /// <summary>
         /// Регионы карты.
