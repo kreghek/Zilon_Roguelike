@@ -27,15 +27,7 @@ namespace Zilon.Core.Tactics
                 var testNode = map.Nodes
                     .SingleOrDefault(x => ((HexNode)x).CubeCoords == testPoint);
 
-                var prevEdges = from edge in map.Edges
-                                where edge.Nodes.Contains(prevNode)
-                                select edge;
-
-                var connectedEdge = (from edge in prevEdges
-                                     where edge.Nodes.Contains(testNode)
-                                     select edge).SingleOrDefault();
-
-                if (connectedEdge == null)
+                if (!map.GetNext(prevNode).Contains(testNode))
                 {
                     return false;
                 }
