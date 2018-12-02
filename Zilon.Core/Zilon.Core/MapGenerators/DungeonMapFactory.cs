@@ -77,7 +77,7 @@ namespace Zilon.Core.MapGenerators
 
         private static IMap CreateMapInstance()
         {
-            return new HexMap();
+            return new HexMap(200);
         }
     }
 }

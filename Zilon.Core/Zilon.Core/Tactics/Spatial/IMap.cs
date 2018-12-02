@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        IList<IMapNode> Nodes { get; }
+        IEnumerable<IMapNode> Nodes { get; }
 
         /// <summary>
         /// Возвращает узлы, напрямую соединённые с указанным узлом.
@@ -18,6 +18,12 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="node"> Опорный узел, относительно которого выбираются соседние узлы. </param>
         /// <returns> Возвращает набор соседних узлов. </returns>
         IEnumerable<IMapNode> GetNext(IMapNode node);
+
+        /// <summary>
+        /// Добавляет новый узел графа.
+        /// </summary>
+        /// <param name="node"></param>
+        void AddNode(IMapNode node);
 
         /// <summary>
         /// Создаёт ребро между двумя узлами графа карты.

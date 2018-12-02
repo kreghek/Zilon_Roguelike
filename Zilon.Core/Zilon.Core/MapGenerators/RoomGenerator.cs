@@ -99,7 +99,7 @@ namespace Zilon.Core.MapGenerators
                     var nodeY = y + room.PositionY * _settings.RoomCellSize;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
-                    map.Nodes.Add(node);
+                    map.AddNode(node);
 
                     var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
 
@@ -159,7 +159,7 @@ namespace Zilon.Core.MapGenerators
             if (node == null)
             {
                 node = new HexNode(currentX, currentY);
-                map.Nodes.Add(node);
+                map.AddNode(node);
             }
 
             var isExists = IsExistsEdge(edgeHash, node, currentNode);

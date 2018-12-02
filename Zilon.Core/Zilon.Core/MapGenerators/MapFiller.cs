@@ -43,7 +43,7 @@ namespace Zilon.Core.MapGenerators
                         Id = nodeIdCounter++
                     };
 
-                    map.Nodes.Add(node);
+                    map.AddNode(node);
                 }
             }
         }
