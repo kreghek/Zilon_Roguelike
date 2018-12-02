@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Players;
@@ -29,7 +29,13 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var randomSource = new TestSnakeRandomSource();
-            var mapFactory = new DungeonMapFactory(randomSource);
+            var roomGeneratorSettings = new RoomGeneratorSettings
+            {
+                RoomCount = 10,
+                RoomCellSize = 10,
+                MaxNeighbors = 1
+            };
+            var mapFactory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();

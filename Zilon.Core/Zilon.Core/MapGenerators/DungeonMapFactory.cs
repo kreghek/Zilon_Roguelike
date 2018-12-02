@@ -9,12 +9,19 @@ namespace Zilon.Core.MapGenerators
     public class DungeonMapFactory : IMapFactory
     {
         private readonly ISectorGeneratorRandomSource _randomSource;
+        private readonly RoomGeneratorSettings _settings;
 
         public StringBuilder Log { get; }
 
-        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource)
+        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource) :
+            this(randomSource, new RoomGeneratorSettings())
         {
-            _randomSource = randomSource;
+        }
+
+        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource, RoomGeneratorSettings settings)
+        {
+            _randomSource = randomSource ?? throw new System.ArgumentNullException(nameof(randomSource));
+            _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
 
             Log = new StringBuilder();
         }
@@ -23,7 +30,7 @@ namespace Zilon.Core.MapGenerators
         {
             var map = CreateMapInstance();
 
-            var roomGenerator = new RoomGenerator(_randomSource, Log);
+            var roomGenerator = new RoomGenerator(_randomSource, _settings, Log);
 
             Log.Clear();
 

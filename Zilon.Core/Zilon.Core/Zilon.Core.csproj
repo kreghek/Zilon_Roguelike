@@ -60,6 +60,7 @@
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
+    <Compile Include="MapGenerators\RoomGeneratorSettings.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\SquareMapFactory.cs" />
     <Compile Include="Props\ChestStore.cs" />

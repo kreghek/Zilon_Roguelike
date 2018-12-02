@@ -23,7 +23,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var randomSource = new TestSnakeRandomSource();
 
 
-            var factory = new DungeonMapFactory(randomSource);
+            var roomGeneratorSettings = new RoomGeneratorSettings
+            {
+                RoomCount = 10,
+                RoomCellSize = 10,
+                MaxNeighbors = 1
+            };
+
+            var factory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
 
 
 
