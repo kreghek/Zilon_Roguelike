@@ -23,7 +23,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var randomSource = new TestSnakeRandomSource();
 
 
-            var factory = new DungeonMapFactory(randomSource);
+            var roomGeneratorSettings = new RoomGeneratorSettings
+            {
+                RoomCount = 10,
+                RoomCellSize = 10,
+                MaxNeighbors = 1
+            };
+
+            var factory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
 
 
 
@@ -89,37 +96,6 @@ namespace Zilon.Core.Tests.MapGenerators
             {
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
                 sameNode.Should().BeEmpty();
-            }
-        }
-
-        /// <summary>
-        /// Тест проверяет, генератор не создаёт одинаковых ребер (равные соединённые узлы).
-        /// </summary>
-        [Test]
-        public void Create_RealRandom_NoOverlapEdges()
-        {
-            // ARRANGE
-            var dice = new Dice(3245);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
-
-
-
-            // ACT
-            var map = factory.Create();
-
-
-
-            // ARRANGE
-            foreach (var edge in map.Edges)
-            {
-                var sameEdge = map.Edges.Where(x => x != edge &&
-                    (
-                        (x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) ||
-                        (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0])
-                    )
-                );
-                sameEdge.Should().BeEmpty($"Ребро с {edge.Nodes[0]} и {edge.Nodes[1]} уже есть.");
             }
         }
 

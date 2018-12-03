@@ -58,7 +58,7 @@ namespace Zilon.Core.MapGenerators
             var equipment = _propFactory.CreateEquipment(swordScheme);
 
             var absNodeIndex = map.Nodes.Count();
-            var containerNode = map.Nodes[absNodeIndex / 2];
+            var containerNode = map.Nodes.ElementAt(absNodeIndex / 2);
             var container = new FixedPropChest(containerNode, new IProp[] { equipment });
             _propContainerManager.Add(container);
         }

@@ -198,23 +198,11 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
             var hexCurrent = (HexNode)current;
-            var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
-            var neighbors = HexNodeHelper.GetNeighbors(hexCurrent, hexNodes);
-
-            var currentEdges = from edge in map.Edges
-                               where edge.Nodes.Contains(current)
-                               select edge;
-            var currentEdgeArray = currentEdges.ToArray();
+            var neighbors = map.GetNext(hexCurrent);
 
             var actualNeighbors = new List<IMapNode>();
             foreach (var testedNeighbor in neighbors)
             {
-                var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
-                if (edge == null)
-                {
-                    continue;
-                }
-
                 if (_context.TargetNode == null)
                 {
 

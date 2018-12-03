@@ -8,17 +8,24 @@ namespace Zilon.Core.MapGenerators
     public class DungeonMapFactory : IMapFactory
     {
         private readonly ISectorGeneratorRandomSource _randomSource;
+        private readonly RoomGeneratorSettings _settings;
 
-        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource)
+        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource) :
+            this(randomSource, new RoomGeneratorSettings())
         {
-            _randomSource = randomSource;
+        }
+
+        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource, RoomGeneratorSettings settings)
+        {
+            _randomSource = randomSource ?? throw new System.ArgumentNullException(nameof(randomSource));
+            _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
         }
 
         public IMap Create()
         {
             var map = CreateMapInstance();
 
-            var roomGenerator = new RoomGenerator(_randomSource);
+            var roomGenerator = new RoomGenerator(_randomSource, _settings);
 
             var edgeHash = new HashSet<string>();
 
@@ -33,9 +40,11 @@ namespace Zilon.Core.MapGenerators
             roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
             // Указание регионов карты
+            var regionId = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(room.Nodes.ToArray());
+                var region = new MapRegion(regionId, room.Nodes.ToArray());
+                regionId++;
                 map.Regions.Add(region);
 
                 if (room == roomGenerator.StartRoom)
@@ -63,7 +72,7 @@ namespace Zilon.Core.MapGenerators
 
         private static IMap CreateMapInstance()
         {
-            return new HexMap();
+            return new HexMap(200);
         }
     }
 }

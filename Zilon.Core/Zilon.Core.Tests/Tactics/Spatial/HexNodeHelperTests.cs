@@ -43,7 +43,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial
 
 
             // ACT
-            var factNeighbors = HexNodeHelper.GetNeighbors(testedNode, nodes.ToArray());
+            var factNeighbors = HexNodeHelper.GetSpatialNeighbors(testedNode, nodes.ToArray());
 
 
 

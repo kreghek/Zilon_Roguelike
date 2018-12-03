@@ -11,19 +11,15 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers;
 
-
-        public IList<IMapNode> Nodes { get; }
-        public IList<IEdge> Edges { get; }
         public IList<MapRegion> Regions { get; }
         public MapRegion StartRegion { get; set; }
         public MapRegion ExitRegion { get; set; }
         public IMapNode[] StartNodes { get; set; }
         public IMapNode[] ExitNodes { get; set; }
+        public abstract IEnumerable<IMapNode> Nodes { get; }
 
         protected MapBase()
         {
-            Nodes = new List<IMapNode>();
-            Edges = new List<IEdge>();
             Regions = new List<MapRegion>();
 
             _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
@@ -31,6 +27,16 @@ namespace Zilon.Core.Tactics.Spatial
 
         public bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
         {
+            if (targetNode == null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            if (actor == null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
             {
                 return true;
@@ -69,5 +75,13 @@ namespace Zilon.Core.Tactics.Spatial
 
             blockers.Add(blocker);
         }
+
+        public abstract IEnumerable<IMapNode> GetNext(IMapNode node);
+
+        public abstract void AddEdge(IMapNode node1, IMapNode node2);
+
+        public abstract void RemoveEdge(IMapNode node1, IMapNode node2);
+
+        public abstract void AddNode(IMapNode node);
     }
 }

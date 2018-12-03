@@ -162,7 +162,7 @@ internal class SectorVM : MonoBehaviour
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("captain");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.Nodes.First();
+        var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
         var playerActorVm = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -176,8 +176,9 @@ internal class SectorVM : MonoBehaviour
 
     private List<MapNodeVM> InitNodeViewModels()
     {
+        var map = _sectorManager.CurrentSector.Map;
         var nodeVMs = new List<MapNodeVM>();
-        foreach (var node in _sectorManager.CurrentSector.Map.Nodes)
+        foreach (var node in map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
 
@@ -186,17 +187,9 @@ internal class SectorVM : MonoBehaviour
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
+            mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
 
-            var edges = _sectorManager.CurrentSector.Map.Edges.Where(x => x.Nodes.Contains(node)).ToArray();
-            var neighbors = (from edge in edges
-                             from neighbor in edge.Nodes
-                             where neighbor != node
-                             select neighbor).Cast<HexNode>().ToArray();
-
-            mapNodeVm.Edges = edges;
-            mapNodeVm.Neighbors = neighbors;
-
-            if (_sectorManager.CurrentSector.Map.ExitNodes?.Contains(node) == true)
+            if (map.ExitNodes?.Contains(node) == true)
             {
                 mapNodeVm.IsExit = true;
             }

@@ -23,14 +23,16 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -60,6 +62,7 @@
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
+    <Compile Include="MapGenerators\RoomGeneratorSettings.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\SquareMapFactory.cs" />
     <Compile Include="Props\ChestStore.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="MapGenerators\DungeonMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
     <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
+    <Compile Include="Tactics\Spatial\GraphMap.cs" />
     <Compile Include="Tactics\Spatial\MapRegion.cs" />
     <Compile Include="Schemes\ConcreteTypeConverter.cs" />
     <Compile Include="Schemes\ConsumeCommonRule.cs" />

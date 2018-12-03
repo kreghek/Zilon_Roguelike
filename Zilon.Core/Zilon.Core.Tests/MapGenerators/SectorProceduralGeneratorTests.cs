@@ -29,7 +29,13 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var randomSource = new TestSnakeRandomSource();
-            var mapFactory = new DungeonMapFactory(randomSource);
+            var roomGeneratorSettings = new RoomGeneratorSettings
+            {
+                RoomCount = 10,
+                RoomCellSize = 10,
+                MaxNeighbors = 1
+            };
+            var mapFactory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
@@ -120,10 +126,8 @@ namespace Zilon.Core.Tests.MapGenerators
         private static IMap CreateFakeMap()
         {
             var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
             var mapMock = new Mock<IMap>();
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-            mapMock.SetupGet(x => x.Edges).Returns(edges);
             var map = mapMock.Object;
             return map;
         }

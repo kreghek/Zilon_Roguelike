@@ -16,7 +16,7 @@ namespace Zilon.Core.Tests.Common
 
         public IMap Create()
         {
-            var map = new HexMap();
+            var map = new GraphMap();
             MapFiller.FillSquareMap(map, _mapSize);
             map.StartNodes = map.Nodes.Take(1).ToArray();
             map.ExitNodes = new[] { map.Nodes.Last() };

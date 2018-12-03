@@ -9,12 +9,8 @@ namespace Zilon.Core.MapGenerators
 {
     public class RoomGenerator
     {
-        private const int RoomCount = 10;
-        private const int RoomCellSize = 10;
-        private const int MaxNeighbors = 1;
-        private const int NeighborProbably = 100;
-
         private readonly ISectorGeneratorRandomSource _randomSource;
+        private readonly RoomGeneratorSettings _settings;
 
         /// <summary>
         /// Стартовая комната. Отсюда игрок будет начинать.
@@ -26,18 +22,21 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         public Room ExitRoom { get; private set; }
 
-        public RoomGenerator(ISectorGeneratorRandomSource randomSource)
+        public RoomGenerator(ISectorGeneratorRandomSource randomSource,
+            RoomGeneratorSettings settings)
         {
             _randomSource = randomSource;
+            _settings = settings;
+
         }
 
         public List<Room> GenerateRoomsInGrid()
         {
-            var roomGridSize = (int)Math.Ceiling(Math.Log(RoomCount, 2)) + 1;
+            var roomGridSize = (int)Math.Ceiling(Math.Log(_settings.RoomCount, 2)) + 1;
             var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
-            for (var i = 0; i < RoomCount; i++)
+            for (var i = 0; i < _settings.RoomCount; i++)
             {
                 var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
                 var rolledPosition = GenerationHelper.GetFreeCell(roomGrid, rolledUncheckedPosition);
@@ -52,7 +51,7 @@ namespace Zilon.Core.MapGenerators
 
                     roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                    var rolledSize = _randomSource.RollRoomSize(RoomCellSize - 2);
+                    var rolledSize = _randomSource.RollRoomSize(_settings.RoomCellSize - 2);
 
                     room.Width = rolledSize.Width + 2;
                     room.Height = rolledSize.Height + 2;
@@ -85,19 +84,19 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private static void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)
+        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)
         {
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * RoomCellSize;
-                    var nodeY = y + room.PositionY * RoomCellSize;
+                    var nodeX = x + room.PositionX * _settings.RoomCellSize;
+                    var nodeY = y + room.PositionY * _settings.RoomCellSize;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
-                    map.Nodes.Add(node);
+                    map.AddNode(node);
 
-                    var neighbors = HexNodeHelper.GetNeighbors(node, room.Nodes);
+                    var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
 
                     foreach (var neighbor in neighbors)
                     {
@@ -125,7 +124,7 @@ namespace Zilon.Core.MapGenerators
             edgeHash.Add(hashKey1);
 
             var edge = new Edge(node, neighbor);
-            targetMap.Edges.Add(edge);
+            targetMap.AddEdge(node, neighbor);
         }
 
         /// <summary>
@@ -155,7 +154,7 @@ namespace Zilon.Core.MapGenerators
             if (node == null)
             {
                 node = new HexNode(currentX, currentY);
-                map.Nodes.Add(node);
+                map.AddNode(node);
             }
 
             var isExists = IsExistsEdge(edgeHash, node, currentNode);
@@ -178,8 +177,8 @@ namespace Zilon.Core.MapGenerators
                 var availableRooms = rooms.Where(x => x != room).ToArray();
 
                 var selectedRooms = _randomSource.RollConnectedRooms(room,
-                    MaxNeighbors,
-                    NeighborProbably,
+                    _settings.MaxNeighbors,
+                    _settings.NeighborProbably,
                     availableRooms);
 
                 if (selectedRooms == null || !selectedRooms.Any())
