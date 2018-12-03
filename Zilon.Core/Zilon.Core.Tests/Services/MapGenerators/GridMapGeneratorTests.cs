@@ -72,30 +72,26 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static Edge GetExistsEdge(IMap map, HexNode node, HexNode neighbor)
+        private static bool HasEdge(IMap map, HexNode node, HexNode neighbor)
         {
-            return (Edge)(from edge in map.Edges
-                          where edge.Nodes.Contains(node)
-                          where edge.Nodes.Contains(neighbor)
-                          select edge).SingleOrDefault();
+            var neighbors = map.GetNext(node);
+            return neighbors.Contains(neighbor);
         }
 
         private void AssertEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
             var node1 = map.Nodes.Cast<HexNode>().SelectBy(offsetX1, offsetY1);
             var node2 = map.Nodes.Cast<HexNode>().SelectBy(offsetX2, offsetY2);
-            var edge = GetExistsEdge(map, node1, node2);
-            edge.Should().NotBeNull();
+            var hasEdge = HasEdge(map, node1, node2);
+            hasEdge.Should().BeTrue();
         }
 
         private static IMap CreateFakeMap()
         {
             var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
 
             var mapMock = new Mock<IMap>();
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-            mapMock.SetupGet(x => x.Edges).Returns(edges);
 
             var map = mapMock.Object;
 

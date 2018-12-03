@@ -125,10 +125,8 @@ namespace Zilon.Core.Tests.MapGenerators
         private static IMap CreateFakeMap()
         {
             var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
             var mapMock = new Mock<IMap>();
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-            mapMock.SetupGet(x => x.Edges).Returns(edges);
             var map = mapMock.Object;
             return map;
         }

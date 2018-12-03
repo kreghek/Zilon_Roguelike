@@ -138,27 +138,6 @@ namespace Zilon.Core.Tactics.Spatial
                     yield return currentNeibour;
                 }
             }
-
-            //var hexCurrent = (HexNode)node;
-            //var hexNodes = Nodes.Cast<HexNode>().ToArray();
-            //var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
-
-            //var currentEdges = from edge in _edges
-            //                   where edge.Nodes.Contains(node)
-            //                   select edge;
-            //var currentEdgeArray = currentEdges.ToArray();
-
-            //var actualNeighbors = new List<IMapNode>();
-            //foreach (var testedNeighbor in neighbors)
-            //{
-            //    var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
-            //    if (edge == null)
-            //    {
-            //        continue;
-            //    }
-
-            //    yield return testedNeighbor;
-            //}
         }
 
         public override void RemoveEdge(IMapNode node1, IMapNode node2)

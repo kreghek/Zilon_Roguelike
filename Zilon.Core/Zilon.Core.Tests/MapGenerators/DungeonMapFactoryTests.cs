@@ -99,37 +99,6 @@ namespace Zilon.Core.Tests.MapGenerators
             }
         }
 
-        /// <summary>
-        /// Тест проверяет, генератор не создаёт одинаковых ребер (равные соединённые узлы).
-        /// </summary>
-        [Test]
-        public void Create_RealRandom_NoOverlapEdges()
-        {
-            // ARRANGE
-            var dice = new Dice(3245);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
-
-
-
-            // ACT
-            var map = factory.Create();
-
-
-
-            // ARRANGE
-            foreach (var edge in map.Edges)
-            {
-                var sameEdge = map.Edges.Where(x => x != edge && 
-                    (
-                        (x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) ||
-                        (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0])
-                    )
-                );
-                sameEdge.Should().BeEmpty($"Ребро с {edge.Nodes[0]} и {edge.Nodes[1]} уже есть.");
-            }
-        }
-
         private static IMapFactory CreateFactory(ISectorGeneratorRandomSource randomSource)
         {
             return new DungeonMapFactory(randomSource);

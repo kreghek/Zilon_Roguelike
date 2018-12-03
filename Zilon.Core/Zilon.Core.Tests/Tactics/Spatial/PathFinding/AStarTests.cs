@@ -7,7 +7,6 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;
@@ -72,13 +71,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             {
                 factPath[i].Should().Be(expectedPath[i]);
             }
-        }
-
-        private static IPathFindingContext CreatePathFindingContext()
-        {
-            var contextMock = new Mock<IPathFindingContext>();
-            var context = contextMock.Object;
-            return context;
         }
 
         /// <summary>
@@ -169,6 +161,14 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             }
         }
 
+
+
+        private static IPathFindingContext CreatePathFindingContext()
+        {
+            var contextMock = new Mock<IPathFindingContext>();
+            var context = contextMock.Object;
+            return context;
+        }
 
         /// <summary>
         /// Создаёт открытую карту без препятствий.
