@@ -159,6 +159,11 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         {
             var contextMock = new Mock<IPathFindingContext>();
             var context = contextMock.Object;
+
+            var actorMock = new Mock<IActor>();
+            var actor = actorMock.Object;
+            contextMock.SetupGet(x => x.Actor).Returns(actor);
+
             return context;
         }
 
