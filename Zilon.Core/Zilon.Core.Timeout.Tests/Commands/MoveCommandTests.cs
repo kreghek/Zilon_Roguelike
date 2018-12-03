@@ -29,6 +29,9 @@ namespace Zilon.Core.Commands.Tests
     {
         private ServiceContainer _container;
 
+        /// <summary>
+        /// Тест нужен для того, чтобы замерять производительность одного шага перемещения игрока по карте.
+        /// </summary>
         [Test]
         public void MoveCommandTest()
         {
