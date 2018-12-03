@@ -32,9 +32,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Timeout.Tests", "Zilon.Core.Timeout.Tests\Zilon.Core.Timeout.Tests.csproj", "{4192F9E9-0DFC-43B1-BB84-79A1E9CC92BA}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -78,9 +75,12 @@ Global
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{66CE455F-3F1F-4DC2-BCAE-F8243686FF54} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 		{0A6B541A-935E-4FE6-99B0-A69F571B7E32} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
-		{4192F9E9-0DFC-43B1-BB84-79A1E9CC92BA} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
+		{4192F9E9-0DFC-43B1-BB84-79A1E9CC92BA} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
