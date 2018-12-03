@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
@@ -12,8 +11,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly RoomGeneratorSettings _settings;
-
-        public StringBuilder Log { get; }
 
         /// <summary>
         /// Стартовая комната. Отсюда игрок будет начинать.
@@ -26,13 +23,11 @@ namespace Zilon.Core.MapGenerators
         public Room ExitRoom { get; private set; }
 
         public RoomGenerator(ISectorGeneratorRandomSource randomSource,
-            RoomGeneratorSettings settings,
-            StringBuilder log)
+            RoomGeneratorSettings settings)
         {
             _randomSource = randomSource;
             _settings = settings;
 
-            Log = log;
         }
 
         public List<Room> GenerateRoomsInGrid()
@@ -68,7 +63,7 @@ namespace Zilon.Core.MapGenerators
                         StartRoom = room;
                     }
 
-                    Log.AppendLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
+                    Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
                 }
                 else
                 {
@@ -189,14 +184,14 @@ namespace Zilon.Core.MapGenerators
                 if (selectedRooms == null || !selectedRooms.Any())
                 {
                     //Значит текущая комната тупиковая
-                    Log.AppendLine($"Для комнаты {room} нет соседей (тупик).");
+                    Console.WriteLine($"Для комнаты {room} нет соседей (тупик).");
                     continue;
                 }
 
-                Log.AppendLine($"Для комнаты {room} выбраны соседи ");
+                Console.WriteLine($"Для комнаты {room} выбраны соседи ");
                 foreach (var selectedRoom in selectedRooms)
                 {
-                    Log.Append(selectedRoom + " ");
+                    Console.Write(selectedRoom + " ");
                 }
 
                 foreach (var selectedRoom in selectedRooms)

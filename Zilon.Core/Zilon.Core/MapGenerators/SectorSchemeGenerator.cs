@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -20,8 +19,6 @@ namespace Zilon.Core.MapGenerators
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
 
-        public StringBuilder Log { get; }
-
         public SectorSchemeGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
             ISectorGeneratorRandomSource randomSource,
@@ -37,8 +34,6 @@ namespace Zilon.Core.MapGenerators
             _schemeService = schemeService;
             _propFactory = propFactory;
             _dropResolver = dropResolver;
-
-            Log = new StringBuilder();
         }
 
         public ISector Generate()

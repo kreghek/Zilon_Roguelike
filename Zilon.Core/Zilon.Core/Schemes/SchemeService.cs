@@ -30,7 +30,7 @@ namespace Zilon.Core.Schemes
         }
 
         private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
-            where TSchemeImpl: class, TScheme
+            where TSchemeImpl : class, TScheme
         {
             var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
             _handlerDict.Add(typeof(TScheme), handler);
@@ -50,7 +50,7 @@ namespace Zilon.Core.Schemes
             return scheme;
         }
 
-        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>() 
+        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
             where TScheme : class, IScheme
         {
             if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))

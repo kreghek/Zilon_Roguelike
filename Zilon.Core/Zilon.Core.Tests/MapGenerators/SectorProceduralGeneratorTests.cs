@@ -44,7 +44,8 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = () => {
+            Action act = () =>
+            {
                 var sector = generator.Generate();
             };
 
@@ -106,7 +107,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 actorManager,
                 propContainerManager,
                 randomSource,
-                botPlayer, 
+                botPlayer,
                 schemeService,
                 dropResolver,
                 mapFactory);
@@ -139,7 +140,7 @@ namespace Zilon.Core.Tests.MapGenerators
             {
                 Sid = "test-prop"
             };
-            
+
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.IsAny<string>()))
                 .Returns(propScheme);
 
