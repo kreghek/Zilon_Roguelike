@@ -113,7 +113,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ARRANGE
             foreach (var edge in map.Edges)
             {
-                var sameEdge = map.Edges.Where(x => x != edge && 
+                var sameEdge = map.Edges.Where(x => x != edge &&
                     (
                         (x.Nodes[0] == edge.Nodes[0] && x.Nodes[1] == edge.Nodes[1]) ||
                         (x.Nodes[0] == edge.Nodes[1] && x.Nodes[1] == edge.Nodes[0])

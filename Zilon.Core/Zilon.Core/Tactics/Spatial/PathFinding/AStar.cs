@@ -93,7 +93,9 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             {
                 var s = Step();
                 if (s != State.Searching)
+                {
                     return s;
+                }
             }
         }
 

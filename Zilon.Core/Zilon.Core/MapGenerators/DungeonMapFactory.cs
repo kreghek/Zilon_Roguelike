@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,22 +9,16 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly ISectorGeneratorRandomSource _randomSource;
 
-        public StringBuilder Log { get; }
-
         public DungeonMapFactory(ISectorGeneratorRandomSource randomSource)
         {
             _randomSource = randomSource;
-
-            Log = new StringBuilder();
         }
 
         public IMap Create()
         {
             var map = CreateMapInstance();
 
-            var roomGenerator = new RoomGenerator(_randomSource, Log);
-
-            Log.Clear();
+            var roomGenerator = new RoomGenerator(_randomSource);
 
             var edgeHash = new HashSet<string>();
 
