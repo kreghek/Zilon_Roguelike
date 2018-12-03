@@ -195,40 +195,32 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <returns> Возвращает список соседних узлов, соединённых ребрами с текущим. </returns>
         private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
-            try
+            var hexCurrent = (HexNode)current;
+            var neighbors = map.GetNext(hexCurrent);
+
+            var actualNeighbors = new List<IMapNode>();
+            foreach (var testedNeighbor in neighbors)
             {
-                var hexCurrent = (HexNode)current;
-                var neighbors = map.GetNext(hexCurrent);
-
-                var actualNeighbors = new List<IMapNode>();
-                foreach (var testedNeighbor in neighbors)
+                if (_context.TargetNode == null)
                 {
-                    if (_context.TargetNode == null)
-                    {
 
-                        if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
-                        {
-                            continue;
-                        }
-                    }
-                    else
+                    if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
                     {
-                        if (_context.TargetNode != testedNeighbor && !map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
-
-                    actualNeighbors.Add(testedNeighbor);
+                }
+                else
+                {
+                    if (_context.TargetNode != testedNeighbor && !map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+                    {
+                        continue;
+                    }
                 }
 
-                return actualNeighbors.ToArray();
+                actualNeighbors.Add(testedNeighbor);
             }
-            catch (System.Exception)
-            {
 
-                throw;
-            }
+            return actualNeighbors.ToArray();
         }
 
         /// <summary>

@@ -47,9 +47,11 @@ namespace Zilon.Core.MapGenerators
             roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
             // Указание регионов карты
+            var regionId = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(room.Nodes.ToArray());
+                var region = new MapRegion(regionId, room.Nodes.ToArray());
+                regionId++;
                 map.Regions.Add(region);
 
                 if (room == roomGenerator.StartRoom)

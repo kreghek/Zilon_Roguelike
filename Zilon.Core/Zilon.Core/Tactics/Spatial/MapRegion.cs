@@ -16,11 +16,19 @@ namespace Zilon.Core.Tactics.Spatial
     /// </remarks>
     public class MapRegion
     {
-        public MapRegion([NotNull][ItemNotNull] IMapNode[] nodes)
+        public MapRegion(int id, [NotNull][ItemNotNull] IMapNode[] nodes)
         {
+            Id = id;
             Nodes = nodes ?? throw new ArgumentNullException(nameof(nodes));
         }
 
         public IMapNode[] Nodes { get; }
+
+        public int Id { get; }
+
+        public override string ToString()
+        {
+            return $"{Id}, Nodes: {Nodes.Length}";
+        }
     }
 }
