@@ -30,6 +30,7 @@ internal class SectorVM : MonoBehaviour
 {
 
     private readonly List<MapNodeVM> _nodeViewModels;
+    private readonly List<ActorViewModel> _actorViewModels;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -89,6 +90,7 @@ internal class SectorVM : MonoBehaviour
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
+        _actorViewModels = new List<ActorViewModel>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -163,15 +165,17 @@ internal class SectorVM : MonoBehaviour
         var personScheme = _schemeService.GetScheme<IPersonScheme>("captain");
 
         var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
-        var playerActorVm = CreateHumanActorVm(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
             playerActorStartNode,
             nodeViewModels);
 
         //Лучше централизовать переключение текущего актёра только в playerState
-        _playerState.ActiveActor = playerActorVm;
+        _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+
+        _actorViewModels.Add(playerActorViewModel);
     }
 
     private List<MapNodeVM> InitNodeViewModels()
@@ -207,22 +211,24 @@ internal class SectorVM : MonoBehaviour
         var monsters = _actorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
-            var actorVm = Instantiate(ActorPrefab, transform);
-            var actorGraphic = Instantiate(MonoGraphicPrefab, actorVm.transform);
-            actorVm.GraphicRoot = actorGraphic;
+            var actorViewModel = Instantiate(ActorPrefab, transform);
+            var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
+            actorViewModel.GraphicRoot = actorGraphic;
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
 
-            var graphicController = actorVm.gameObject.AddComponent<MonsterSingleActorGraphicController>();
+            var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
             graphicController.Actor = monsterActor;
             graphicController.Graphic = actorGraphic;
 
             var actorNodeVm = nodeViewModels.Single(x => x.Node == monsterActor.Node);
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-            actorVm.transform.position = actorPosition;
-            actorVm.Actor = monsterActor;
+            actorViewModel.transform.position = actorPosition;
+            actorViewModel.Actor = monsterActor;
 
-            actorVm.Selected += EnemyActorVm_OnSelected;
+            actorViewModel.Selected += EnemyActorVm_OnSelected;
             monsterActor.UsedAct += ActorOnUsedAct;
+
+            _actorViewModels.Add(actorViewModel);
         }
     }
 
