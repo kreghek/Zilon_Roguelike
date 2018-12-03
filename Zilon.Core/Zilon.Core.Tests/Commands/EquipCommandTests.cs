@@ -44,8 +44,9 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
-        public void ExecuteTest()
+        public void Execute_Intention()
         {
+            // ARRANGE
             var command = Container.GetInstance<EquipCommand>();
             command.SlotIndex = 0;
 
@@ -55,6 +56,7 @@ namespace Zilon.Core.Tests.Commands
 
             // ACT
             command.Execute();
+
 
 
             // ASSERT
