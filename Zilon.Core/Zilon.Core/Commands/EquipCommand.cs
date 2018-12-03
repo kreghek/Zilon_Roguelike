@@ -50,6 +50,24 @@ namespace Zilon.Core.Commands
             return true;
         }
 
+        protected override void ExecuteTacticCommand()
+        {
+            if (SlotIndex == null)
+            {
+                throw new InvalidOperationException("Для команды не указан слот.");
+            }
+
+            var equipment = GetEquipment();
+            if (equipment == null)
+            {
+                throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
+            }
+
+            var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
+            PlayerState.TaskSource.Intent(intention);
+
+        }
+
         private Equipment GetEquipment()
         {
             var propVm = _inventoryState.SelectedProp;
@@ -58,22 +76,9 @@ namespace Zilon.Core.Commands
             return equipment;
         }
 
-        protected override void ExecuteTacticCommand()
+        private void ClearSelectedEquipment()
         {
-            if (SlotIndex == null)
-            {
-                throw new InvalidOperationException("Для команды не указан слот.");
-            }
-
-            var propVm = _inventoryState.SelectedProp;
-            var equipment = propVm.Prop as Equipment;
-            if (equipment == null)
-            {
-                throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
-            }
-
-            var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
-            PlayerState.TaskSource.Intent(intention);
+            _inventoryState.SelectedProp = null;
         }
     }
 }

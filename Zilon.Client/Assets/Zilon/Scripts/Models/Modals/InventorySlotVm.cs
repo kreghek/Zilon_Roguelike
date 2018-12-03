@@ -51,6 +51,7 @@ public class InventorySlotVm : MonoBehaviour
     private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
     {
         UpdateSlotIcon();
+        _inventoryState.SelectedProp = null;
     }
 
     private void UpdateSlotIcon()
@@ -91,12 +92,8 @@ public class InventorySlotVm : MonoBehaviour
     public void ApplyEquipment()
     {
         Debug.Log($"Slot {SlotIndex} equiped {_inventoryState.SelectedProp.Prop}");
-        //var currentSector = _sectorManager.CurrentSector;
 
-        //_equipCommand.Execute();
         _comamndManager.Push(_equipCommand);
-
-        //currentSector.Update();
     }
 
     private void ClearEventHandlers()

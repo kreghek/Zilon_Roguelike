@@ -26,7 +26,26 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentEquipment = equipmentCarrier.Equipments[_slotIndex];
             if (currentEquipment != null)
             {
+                // Означает, что предмет экипироуется из инвентаря.
                 Actor.Person.Inventory.Add(currentEquipment);
+            }
+            else
+            {
+                int? currentEquipedSlotIndex = null;
+                for (var i = 0; i < equipmentCarrier.Equipments.Length; i++)
+                {
+                    if (equipmentCarrier.Equipments[i] == _equipment)
+                    {
+                        currentEquipedSlotIndex = i;
+                    }
+                }
+
+                if (currentEquipedSlotIndex != null)
+                {
+                    // Означает, что предмет был экипирован в другой слой и мы его перекладываем
+                    equipmentCarrier.Equipments[currentEquipedSlotIndex.Value] = null;
+                }
+
             }
 
             equipmentCarrier.SetEquipment(_equipment, _slotIndex);
