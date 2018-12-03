@@ -8,14 +8,11 @@ namespace Zilon.Core.Tactics.Spatial
 {
     public class HexMap : MapBase
     {
-        private readonly IList<IEdge> _edges;
         private readonly IDictionary<SegmentKey, IMapNode[,]> _segmentDict;
         private readonly int _segmentSize;
 
         public HexMap(int segmentSize)
         {
-            _edges = new List<IEdge>();
-
             if (segmentSize % 2 != 0)
             {
                 throw new ArgumentException("Аргумент должен быть нечтётным", nameof(segmentSize));

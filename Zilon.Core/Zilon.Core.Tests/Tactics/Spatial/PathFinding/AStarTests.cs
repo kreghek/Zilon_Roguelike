@@ -24,30 +24,22 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public void Run_ShortGraph_PathFound()
         {
             // ARRAGE
-            var nodes = new List<IMapNode>();
-            var edges = new List<IEdge>();
             var expectedPath = new List<IMapNode>();
 
-            nodes.Add(new HexNode(0, 0));
-            nodes.Add(new HexNode(1, 0));
-            nodes.Add(new HexNode(0, 1));
+            var map = new GraphMap();
 
-            edges.Add(new Edge(nodes[0], nodes[2]));
-            edges.Add(new Edge(nodes[2], nodes[1]));
+            map.AddNode(new HexNode(0, 0));
+            map.AddNode(new HexNode(1, 0));
+            map.AddNode(new HexNode(0, 1));
 
-            expectedPath.Add(nodes[0]);
-            expectedPath.Add(nodes[2]);
-            expectedPath.Add(nodes[1]);
+            var nodesArray = map.Nodes.ToArray();
 
+            map.AddEdge(nodesArray[0], nodesArray[2]);
+            map.AddEdge(nodesArray[2], nodesArray[1]);
 
-            var mapMock = new Mock<IMap>();
-
-            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-            mapMock.SetupGet(x => x.Edges).Returns(edges);
-            mapMock.Setup(x => x.IsPositionAvailableFor(It.IsAny<IMapNode>(), It.IsAny<IActor>()))
-                .Returns(true);
-
-            var map = mapMock.Object;
+            expectedPath.Add(nodesArray[0]);
+            expectedPath.Add(nodesArray[2]);
+            expectedPath.Add(nodesArray[1]);
 
             var context = CreatePathFindingContext();
 
