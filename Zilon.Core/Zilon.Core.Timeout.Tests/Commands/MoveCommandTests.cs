@@ -47,7 +47,7 @@ namespace Zilon.Core.Commands.Tests
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("captain");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.Nodes.First();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
             var playerActorVm = CreateHumanActorVm(humanPlayer,
                 personScheme,
                 actorManager,
