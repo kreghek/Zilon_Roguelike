@@ -121,7 +121,8 @@ namespace Zilon.Core.Commands.Tests
         {
             _container = new ServiceContainer();
 
-            _container.Register<IDice>(factory => new Dice(), new PerContainerLifetime()); // инстанцируем явно из-за 2-х конструкторов.
+            // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
+            _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             _container.Register<ISectorGeneratorRandomSource, SectorGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());

@@ -118,10 +118,11 @@ namespace Zilon.Core.Tactics.Spatial
                     neighborSegmentY++;
                 }
 
+                IMapNode currentNeibour;
                 if (neighborSegmentX == segmentX &&
                     neighborSegmentY == segmentY)
                 {
-                    yield return matrix[neighborLocalOffset.X, neighborLocalOffset.Y];
+                    currentNeibour = matrix[neighborLocalOffset.X, neighborLocalOffset.Y];
                 }
                 else
                 {
@@ -129,7 +130,12 @@ namespace Zilon.Core.Tactics.Spatial
                     var neighborX = NormalizeNeighborCoord(neighborLocalOffset.X);
                     var neighborY = NormalizeNeighborCoord(neighborLocalOffset.Y);
 
-                    yield return segmentMatrix[neighborX, neighborY];
+                    currentNeibour = segmentMatrix[neighborX, neighborY];
+                }
+
+                if (currentNeibour != null)
+                {
+                    yield return currentNeibour;
                 }
             }
 
@@ -163,10 +169,6 @@ namespace Zilon.Core.Tactics.Spatial
         private IMapNode[,] CreateSegment(int segmentX, int segmentY)
         {
             var matrix = new IMapNode[_segmentSize, _segmentSize];
-
-            for (var i = 0; i < _segmentSize; i++)
-                for (var j = 0; j < _segmentSize; j++)
-                    matrix[i, j] = new HexNode(i + segmentX * _segmentSize, j + segmentY * _segmentSize);
 
             var key = new SegmentKey(segmentX, segmentY);
             _segmentDict[key] = matrix;
