@@ -120,18 +120,12 @@ namespace Zilon.Core.Tactics.Spatial
                     neighborSegmentY == segmentY)
                 {
                     currentNeibour = matrix[neighborLocalOffset.X, neighborLocalOffset.Y];
-                }
-                else
-                {
-                    var segmentMatrix = CreateSegment(neighborSegmentX, neighborSegmentY);
-                    var neighborX = NormalizeNeighborCoord(neighborLocalOffset.X);
-                    var neighborY = NormalizeNeighborCoord(neighborLocalOffset.Y);
 
-                    currentNeibour = segmentMatrix[neighborX, neighborY];
-                }
-
-                if (currentNeibour != null)
-                {
+                    if (currentNeibour == null)
+                    {
+                        continue;
+                    }
+                    
                     yield return currentNeibour;
                 }
             }

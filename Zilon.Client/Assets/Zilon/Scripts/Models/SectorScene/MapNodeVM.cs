@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
@@ -14,7 +16,6 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }
-    public IEdge[] Edges { get; set; }
 
     public event EventHandler OnSelect;
 

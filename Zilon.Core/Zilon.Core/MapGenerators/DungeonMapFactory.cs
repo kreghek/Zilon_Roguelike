@@ -19,8 +19,6 @@ namespace Zilon.Core.MapGenerators
         {
             _randomSource = randomSource ?? throw new System.ArgumentNullException(nameof(randomSource));
             _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
-
-            Log = new StringBuilder();
         }
 
         public IMap Create()
