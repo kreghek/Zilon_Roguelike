@@ -1,7 +1,7 @@
 ﻿using System;
 
 using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -24,11 +24,14 @@ namespace Zilon.Core.Tests.Persons
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
             // ACT
             Action act = () =>
             {
                 // ReSharper disable once UnusedVariable
-                var monster = new MonsterPerson(monsterScheme);
+                var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
             };
 
 
@@ -51,8 +54,11 @@ namespace Zilon.Core.Tests.Persons
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
 
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
             // ACT
-            var monster = new MonsterPerson(monsterScheme);
+            var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
 
 
 
@@ -115,7 +121,11 @@ namespace Zilon.Core.Tests.Persons
             {
                 PrimaryAct = new TestTacticalActStatsSubScheme()
             };
-            var monster = new MonsterPerson(monsterScheme);
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
             return monster;
         }
 

@@ -94,6 +94,7 @@ namespace Zilon.Core.Commands.Tests
         [NotNull] IMapNode startNode)
         {
             var schemeService = _container.GetInstance<ISchemeService>();
+            var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
 
 
             var inventory = new Inventory();
@@ -102,10 +103,11 @@ namespace Zilon.Core.Commands.Tests
 
             var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
-
-
-
+            var person = new HumanPerson(personScheme,
+                defaultActScheme,
+                evolutionData,
+                survivalRandomSource,
+                inventory);
 
             var actor = new Actor(person, player, startNode);
 
@@ -134,6 +136,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             _container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
             _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());

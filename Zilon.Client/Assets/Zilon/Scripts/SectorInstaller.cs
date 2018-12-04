@@ -7,6 +7,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -28,6 +29,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMapFactory>().To<DungeonMapFactory>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
+        Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();

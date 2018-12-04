@@ -1,0 +1,30 @@
+{
+  "Name": {
+    "Ru": "Персонаж игрока"
+  },
+  "Hp": 10,
+  "DefaultAct": "hand-hit",
+  "Slots": [
+    {
+      "Types": "Head"
+    },
+    {
+      "Types": "Body"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
+    }
+  ]
+}

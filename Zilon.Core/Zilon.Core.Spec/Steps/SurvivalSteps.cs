@@ -3,6 +3,8 @@ using System.Linq;
 
 using FluentAssertions;
 
+using LightInject;
+
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
@@ -93,13 +95,15 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
+            var survivalRandomSource = Context.Container.GetInstance<ISurvivalRandomSource>();
+
             var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(startEffect,
                 out SurvivalStatType stat,
                 out SurvivalStatHazardLevel level);
 
-            var effect = new SurvivalStatHazardEffect(stat, level);
+            var effect = new SurvivalStatHazardEffect(stat, level, survivalRandomSource);
 
             actor.Person.Effects.Add(effect);
         }

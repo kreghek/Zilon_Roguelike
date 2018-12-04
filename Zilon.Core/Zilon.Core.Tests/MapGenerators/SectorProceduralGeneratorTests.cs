@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -103,6 +104,9 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
             return new SectorProceduralGenerator(
                 actorManager,
                 propContainerManager,
@@ -110,7 +114,8 @@ namespace Zilon.Core.Tests.MapGenerators
                 botPlayer,
                 schemeService,
                 dropResolver,
-                mapFactory);
+                mapFactory,
+                survivalRandomSource);
         }
 
 

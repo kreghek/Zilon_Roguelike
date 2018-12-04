@@ -19,6 +19,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
         private readonly IMapFactory _mapFactory;
+        private readonly ISurvivalRandomSource _survivalRandomSource;
 
         public SectorProceduralGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
@@ -26,7 +27,8 @@ namespace Zilon.Core.MapGenerators
             IBotPlayer botPlayer,
             ISchemeService schemeService,
             IDropResolver dropResolver,
-            IMapFactory mapFactory)
+            IMapFactory mapFactory,
+            ISurvivalRandomSource survivalRandomSource)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -35,6 +37,7 @@ namespace Zilon.Core.MapGenerators
             _schemeService = schemeService;
             _dropResolver = dropResolver;
             _mapFactory = mapFactory;
+            _survivalRandomSource = survivalRandomSource;
         }
 
         public ISector Generate()
@@ -97,7 +100,7 @@ namespace Zilon.Core.MapGenerators
 
         private IActor CreateMonster(IMonsterScheme monsterScheme, HexNode startNode)
         {
-            var person = new MonsterPerson(monsterScheme);
+            var person = new MonsterPerson(monsterScheme, _survivalRandomSource);
             var actor = new Actor(person, _botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;

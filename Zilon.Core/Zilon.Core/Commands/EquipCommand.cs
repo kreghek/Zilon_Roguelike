@@ -75,10 +75,5 @@ namespace Zilon.Core.Commands
 
             return equipment;
         }
-
-        private void ClearSelectedEquipment()
-        {
-            _inventoryState.SelectedProp = null;
-        }
     }
 }

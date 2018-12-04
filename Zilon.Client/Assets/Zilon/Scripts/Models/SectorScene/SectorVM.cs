@@ -67,6 +67,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private IHumanPersonManager _personManager;
 
+    [NotNull] [Inject] private ISurvivalRandomSource _survivalRandomSource;
+
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
@@ -162,12 +164,13 @@ internal class SectorVM : MonoBehaviour
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var personScheme = _schemeService.GetScheme<IPersonScheme>("captain");
+        var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
         var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
         var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
+            _survivalRandomSource,
             playerActorStartNode,
             nodeViewModels);
 
@@ -290,6 +293,7 @@ internal class SectorVM : MonoBehaviour
     private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
         [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
+        [NotNull] ISurvivalRandomSource survivalRandomSource,
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
@@ -301,7 +305,7 @@ internal class SectorVM : MonoBehaviour
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
             _personManager.Person = person;
         }
