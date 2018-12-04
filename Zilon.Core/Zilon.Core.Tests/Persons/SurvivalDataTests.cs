@@ -26,7 +26,11 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
 
             //TODO Создавать сразу с готовыми значениями стат
-            ISurvivalData survivalData = CreateSurvivalData();
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            ISurvivalData survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme, survivalRandomSource);
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
