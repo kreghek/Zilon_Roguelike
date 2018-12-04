@@ -39,7 +39,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public ActorViewModel ActorPrefab;
 
-    [NotNull] public BulletDrive BulletPrefab;
+    [NotNull] public GunShootTracer GunShootTracer;
 
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
 
@@ -358,14 +358,12 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateBullet(IActor actor, IAttackTarget target)
     {
-        var viewModels = GetComponentsInChildren<IActorViewModel>();
+        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
+        var targetViewModel = _actorViewModels.Single(x => x.Actor == target);
 
-        var actorViewModel = viewModels.Single(x => x.Actor == actor);
-        var targetViewModel = viewModels.Single(x => x.Actor == target);
-
-        var bullet = Instantiate(BulletPrefab, transform);
-        bullet.StartObject = ((MonoBehaviour)actorViewModel).gameObject;
-        bullet.FinishObject = ((MonoBehaviour)targetViewModel).gameObject;
+        var bulletTracer = Instantiate(GunShootTracer, transform);
+        bulletTracer.FromPosition = actorViewModel.transform.position;
+        bulletTracer.TargetPosition = targetViewModel.transform.position;
     }
 
     private void MapNodeVm_OnSelect(object sender, EventArgs e)
