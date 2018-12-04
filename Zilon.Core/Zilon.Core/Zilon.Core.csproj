@@ -66,6 +66,7 @@
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\SquareMapFactory.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
+    <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />

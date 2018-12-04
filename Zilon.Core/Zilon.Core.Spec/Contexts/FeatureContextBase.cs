@@ -57,7 +57,8 @@ namespace Zilon.Core.Spec.Contexts
         public void CreateSector(int mapSize)
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
-            mapFactory.SetFunc(() => {
+            mapFactory.SetFunc(() =>
+            {
                 var map = SquareMapFactory.Create(mapSize);
                 return map;
             });
@@ -185,6 +186,7 @@ namespace Zilon.Core.Spec.Contexts
         {
 
             var schemeService = Container.GetInstance<ISchemeService>();
+            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
 
             var evolutionData = new EvolutionData(schemeService);
 
@@ -192,7 +194,11 @@ namespace Zilon.Core.Spec.Contexts
 
             var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, inventory);
+            var person = new HumanPerson(personScheme,
+                defaultActScheme,
+                evolutionData,
+                survivalRandomSource,
+                inventory);
 
             var actor = new Actor(person, player, startNode);
 
@@ -203,8 +209,10 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IMapNode startNode)
         {
+            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
 
-            var monsterPerson = new MonsterPerson(monsterScheme);
+
+            var monsterPerson = new MonsterPerson(monsterScheme, survivalRandomSource);
 
             var actor = new Actor(monsterPerson, player, startNode);
 
@@ -271,6 +279,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
             Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
+            Container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices()

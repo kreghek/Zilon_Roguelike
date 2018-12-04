@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons.Auxiliary;
@@ -39,7 +41,10 @@ namespace Zilon.Core.Persons
 
         public EffectCollection Effects { get; }
 
-        public HumanPerson(IPersonScheme scheme, ITacticalActScheme defaultActScheme, IEvolutionData evolutionData)
+        public HumanPerson([NotNull] IPersonScheme scheme,
+            [NotNull] ITacticalActScheme defaultActScheme,
+            [NotNull] IEvolutionData evolutionData,
+            [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
 
@@ -68,12 +73,16 @@ namespace Zilon.Core.Persons
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
 
-            Survival = SurvivalData.CreateHumanPersonSurvival(scheme);
+            Survival = SurvivalData.CreateHumanPersonSurvival(scheme, survivalRandomSource);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
         }
 
-        public HumanPerson(IPersonScheme scheme, ITacticalActScheme defaultScheme, IEvolutionData evolutionData, Inventory inventory) :
-            this(scheme, defaultScheme, evolutionData)
+        public HumanPerson(IPersonScheme scheme,
+            [NotNull] ITacticalActScheme defaultScheme,
+            [NotNull] IEvolutionData evolutionData,
+            [NotNull] ISurvivalRandomSource survivalRandomSource,
+            [NotNull] Inventory inventory) :
+            this(scheme, defaultScheme, evolutionData, survivalRandomSource)
         {
             Inventory = inventory;
         }

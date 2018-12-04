@@ -43,7 +43,10 @@ namespace Zilon.Core.Tests.Persons
             var evolutionDataMock = new Mock<IEvolutionData>();
             var evolutionData = evolutionDataMock.Object;
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData);
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
 
             var propScheme = new PropScheme
             {
@@ -124,10 +127,13 @@ namespace Zilon.Core.Tests.Persons
             evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionData = evolutionDataMock.Object;
 
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
 
 
             // ACT
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
 
 
 

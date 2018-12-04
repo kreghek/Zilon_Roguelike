@@ -2,6 +2,8 @@
 
 using FluentAssertions;
 
+using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -13,6 +15,7 @@ namespace Zilon.Core.Tests.Persons
     public class SurvivalDataTests
     {
         private TestPersonScheme _personScheme;
+        private ISurvivalRandomSource _survivalRandomSource;
 
         /// <summary>
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
@@ -21,8 +24,9 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
+
             //TODO Создавать сразу с готовыми значениями стат
-            ISurvivalData survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            ISurvivalData survivalData = CreateSurvivalData();
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
@@ -51,7 +55,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
-            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            var survivalData = CreateSurvivalData();
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = -1;
@@ -80,7 +84,7 @@ namespace Zilon.Core.Tests.Persons
         public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues2()
         {
             // ARRANGE
-            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            var survivalData = CreateSurvivalData();
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = stat.KeyPoints[1].Value;
@@ -116,7 +120,7 @@ namespace Zilon.Core.Tests.Persons
 
             _personScheme.Hp = personHp;
 
-            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            var survivalData = CreateSurvivalData();
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
@@ -146,7 +150,7 @@ namespace Zilon.Core.Tests.Persons
 
             _personScheme.Hp = personHp;
 
-            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            var survivalData = CreateSurvivalData();
 
 
             // ACT
@@ -165,6 +169,16 @@ namespace Zilon.Core.Tests.Persons
         public void SetUp()
         {
             _personScheme = new TestPersonScheme();
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            _survivalRandomSource = survivalRandomSourceMock.Object;
+        }
+
+
+        private ISurvivalData CreateSurvivalData()
+        {
+            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme, _survivalRandomSource);
+            return survivalData;
         }
     }
 }
