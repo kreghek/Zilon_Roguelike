@@ -11,6 +11,11 @@ namespace Zilon.Core.Persons
             _dice = dice;
         }
 
+        public int RollMaxHazardDamage()
+        {
+            return _dice.Roll(6);
+        }
+
         public int RollSurvival(SurvivalStat stat)
         {
             return _dice.Roll(6);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons
@@ -8,11 +10,16 @@ namespace Zilon.Core.Persons
     public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
         private SurvivalStatHazardLevel _level;
+        private readonly ISurvivalRandomSource _survivalRandomSource;
 
-        public SurvivalStatHazardEffect(SurvivalStatType type, SurvivalStatHazardLevel level)
+        public SurvivalStatHazardEffect(SurvivalStatType type,
+            SurvivalStatHazardLevel level,
+            [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             Type = type;
             Level = level;
+
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Rules = CalcRules();
         }
@@ -40,8 +47,18 @@ namespace Zilon.Core.Persons
         {
             if (Level == SurvivalStatHazardLevel.Max)
             {
-                survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                var roll = _survivalRandomSource.RollMaxHazardDamage();
+                var successRoll = GetSuccessHazardDamageRoll();
+                if (roll >= successRoll)
+                {
+                    survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                }
             }
+        }
+
+        private int GetSuccessHazardDamageRoll()
+        {
+            return 4;
         }
 
         public void Update()

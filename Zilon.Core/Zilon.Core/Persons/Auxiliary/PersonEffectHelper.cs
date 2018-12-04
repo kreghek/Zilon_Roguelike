@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
+using JetBrains.Annotations;
 
 namespace Zilon.Core.Persons.Auxiliary
 {
@@ -15,10 +18,14 @@ namespace Zilon.Core.Persons.Auxiliary
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
         /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик. </param>
-        public static void UpdateSurvivalEffect(EffectCollection currentEffects,
-            SurvivalStat stat,
-            IEnumerable<SurvivalStatKeyPoint> keyPoints)
+        public static void UpdateSurvivalEffect(
+            [NotNull] EffectCollection currentEffects,
+            [NotNull] SurvivalStat stat,
+            [NotNull][ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints,
+            [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
+            CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
+
             var statType = stat.Type;
 
             var currentTypeEffect = currentEffects.Items
@@ -61,8 +68,35 @@ namespace Zilon.Core.Persons.Auxiliary
             }
             else
             {
-                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType, keyPoint.Level);
+                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType, keyPoint.Level, survivalRandomSource);
                 currentEffects.Add(newCurrentTypeEffect);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void CheckArguments(EffectCollection currentEffects,
+            SurvivalStat stat,
+            IEnumerable<SurvivalStatKeyPoint> keyPoints,
+            ISurvivalRandomSource survivalRandomSource)
+        {
+            if (currentEffects == null)
+            {
+                throw new ArgumentNullException(nameof(currentEffects));
+            }
+
+            if (stat == null)
+            {
+                throw new ArgumentNullException(nameof(stat));
+            }
+
+            if (keyPoints == null)
+            {
+                throw new ArgumentNullException(nameof(keyPoints));
+            }
+
+            if (survivalRandomSource == null)
+            {
+                throw new ArgumentNullException(nameof(survivalRandomSource));
             }
         }
     }

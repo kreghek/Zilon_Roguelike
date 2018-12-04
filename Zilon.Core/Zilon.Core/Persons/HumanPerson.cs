@@ -18,6 +18,7 @@ namespace Zilon.Core.Persons
     public class HumanPerson : IPerson
     {
         private readonly ITacticalActScheme _defaultActScheme;
+        private readonly ISurvivalRandomSource _survivalRandomSource;
 
         public int Id { get; set; }
 
@@ -50,6 +51,7 @@ namespace Zilon.Core.Persons
 
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
             EvolutionData = evolutionData ?? throw new ArgumentNullException(nameof(evolutionData));
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Name = scheme.Sid;
             Hp = scheme.Hp;
@@ -204,7 +206,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoints);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoints, _survivalRandomSource);
         }
 
 

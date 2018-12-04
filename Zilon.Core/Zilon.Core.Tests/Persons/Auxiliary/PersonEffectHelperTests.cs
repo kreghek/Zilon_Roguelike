@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
 using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -21,13 +21,16 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         {
             //ARRANGE
 
+            var survivalRandomSource = CreateMaxRollsRandomSource();
             var currentEffects = new EffectCollection();
 
-            var testedEffect = new SurvivalStatHazardEffect(SurvivalStatType.Satiety, SurvivalStatHazardLevel.Lesser);
+            var testedEffect = new SurvivalStatHazardEffect(SurvivalStatType.Satiety,
+                SurvivalStatHazardLevel.Lesser,
+                survivalRandomSource);
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(1,-10, 10)
+            var stat = new SurvivalStat(1, -10, 10)
             {
                 Type = SurvivalStatType.Satiety,
                 KeyPoints = new[] {
@@ -38,7 +41,10 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
 
             // ACT
-            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, new[] { stat.KeyPoints[0] });
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects,
+                stat, 
+                new[] { stat.KeyPoints[0] },
+                survivalRandomSource);
 
 
 
@@ -59,9 +65,13 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             const SurvivalStatType expectedSurvivalHazardType = SurvivalStatType.Satiety;
 
+            var survivalRandomSource = CreateMaxRollsRandomSource();
+
             var currentEffects = new EffectCollection();
 
-            var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType, SurvivalStatHazardLevel.Lesser);
+            var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType,
+                SurvivalStatHazardLevel.Lesser,
+                survivalRandomSource);
 
             currentEffects.Add(testedEffect);
 
@@ -77,7 +87,10 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
 
             // ACT
-            PersonEffectHelper.UpdateSurvivalEffect(currentEffects, stat, new[] { stat.KeyPoints[1] });
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects,
+                stat,
+                new[] { stat.KeyPoints[1] },
+                survivalRandomSource);
 
 
 
@@ -87,6 +100,16 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
                 .Single(x => x.Type == expectedSurvivalHazardType);
 
             factEffect.Level.Should().Be(SurvivalStatHazardLevel.Lesser);
+        }
+
+
+        private static ISurvivalRandomSource CreateMaxRollsRandomSource()
+        {
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            return survivalRandomSource;
         }
     }
 }
