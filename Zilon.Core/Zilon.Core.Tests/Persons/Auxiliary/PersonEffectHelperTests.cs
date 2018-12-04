@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -9,14 +11,14 @@ using Zilon.Core.Persons.Auxiliary;
 
 namespace Zilon.Core.Tests.Persons.Auxiliary
 {
-    [TestFixture()]
+    [TestFixture]
     public class PersonEffectHelperTests
     {
         /// <summary>
         /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка,
         /// то эффект изымается.
         /// </summary>
-        [Test()]
+        [Test]
         public void UpdateSurvivalEffect_HasLesserEffectAndValueMoreThatKetValue_HasNoEffect()
         {
             //ARRANGE

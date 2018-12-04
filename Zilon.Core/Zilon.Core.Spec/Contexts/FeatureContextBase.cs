@@ -279,7 +279,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
             Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
-            Container.Register<ISurvivalRandomSource>(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+            Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
         }
 
         private ISurvivalRandomSource CreateSurvivalRandomSource()
@@ -288,6 +288,7 @@ namespace Zilon.Core.Spec.Contexts
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
+            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
 
             return survivalRandomSource;
         }
