@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
             //TODO Создавать сразу с готовыми значениями стат
-            var survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
+            ISurvivalData survivalData = SurvivalData.CreateHumanPersonSurvival(_personScheme);
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;

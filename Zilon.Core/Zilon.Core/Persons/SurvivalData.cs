@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using JetBrains.Annotations;
 using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
@@ -12,9 +12,13 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalData : ISurvivalData
     {
-        public SurvivalData(SurvivalStat[] stats)
+        private readonly ISurvivalRandomSource _randomSource;
+
+        public SurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats,
+            [NotNull] ISurvivalRandomSource randomSource)
         {
-            Stats = stats;
+            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         public SurvivalStat[] Stats { get; }
@@ -60,14 +64,30 @@ namespace Zilon.Core.Persons
         public void Update()
         {
             foreach (var stat in Stats)
-
             {
-                ChangeStatInner(stat, -stat.Rate);
+                var roll = _randomSource.RollSurvival(stat);
+                var successRoll = GetSuccessRoll(stat);
+
+                if (roll >= successRoll)
+                {
+                    ChangeStatInner(stat, -stat.Rate);
+                }
             }
         }
 
-        public static SurvivalData CreateHumanPersonSurvival(IPersonScheme personScheme)
+        public static SurvivalData CreateHumanPersonSurvival([NotNull] IPersonScheme personScheme,
+            [NotNull] ISurvivalRandomSource randomSource)
         {
+            if (personScheme == null)
+            {
+                throw new ArgumentNullException(nameof(personScheme));
+            }
+
+            if (randomSource == null)
+            {
+                throw new ArgumentNullException(nameof(randomSource));
+            }
+
             var stats = new[] {
                 new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
                     Type = SurvivalStatType.Health
@@ -76,18 +96,24 @@ namespace Zilon.Core.Persons
                 CreateStat(SurvivalStatType.Water)
             };
 
-            return new SurvivalData(stats);
+            return new SurvivalData(stats, randomSource);
         }
 
-        public static SurvivalData CreateMonsterPersonSurvival(IMonsterScheme monsterScheme)
+        public static SurvivalData CreateMonsterPersonSurvival([NotNull] IMonsterScheme monsterScheme,
+            [NotNull] ISurvivalRandomSource randomSource)
         {
+            if (monsterScheme == null)
+            {
+                throw new ArgumentNullException(nameof(monsterScheme));
+            }
+
             var stats = new[] {
                new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
                     Type = SurvivalStatType.Health
                 }
             };
 
-            return new SurvivalData(stats);
+            return new SurvivalData(stats, randomSource);
         }
 
         private void ValidateStatChangeValue(int value)
@@ -179,6 +205,12 @@ namespace Zilon.Core.Persons
         {
             var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
             StatCrossKeyValue?.Invoke(this, args);
+        }
+
+
+        private static int GetSuccessRoll(SurvivalStat stat)
+        {
+            return 4;
         }
     }
 }
