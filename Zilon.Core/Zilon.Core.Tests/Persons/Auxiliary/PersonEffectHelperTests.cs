@@ -61,7 +61,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         /// то эффект снижает уровень.
         /// </summary>
         [Test]
-        public void UpdateSurvivalEffect_HasStrongEffectAndValueMoreThatKetValue_HasLesserEffect()
+        public void UpdateSurvivalEffect_HasStrongEffectAndValueMoreThatKeyValue_HasLesserEffect()
         {
             //ARRANGE
 
@@ -102,6 +102,55 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
                 .Single(x => x.Type == expectedSurvivalHazardType);
 
             factEffect.Level.Should().Be(SurvivalStatHazardLevel.Lesser);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка эффекта выше уровнем,
+        /// то эффект снижает уровень.
+        /// </summary>
+        [Test]
+        public void UpdateSurvivalEffect_HasMaxEffectAndValueMoreThatKeyValue_HasStrongEffect()
+        {
+            //ARRANGE
+
+            const SurvivalStatType expectedSurvivalHazardType = SurvivalStatType.Satiety;
+
+            var survivalRandomSource = CreateMaxRollsRandomSource();
+
+            var currentEffects = new EffectCollection();
+
+            var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType,
+                SurvivalStatHazardLevel.Strong,
+                survivalRandomSource);
+
+            currentEffects.Add(testedEffect);
+
+            var stat = new SurvivalStat(-5, -10, 10)
+            {
+                Type = expectedSurvivalHazardType,
+                KeyPoints = new[] {
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 5),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 0),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -10)
+                }
+            };
+
+
+
+            // ACT
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects,
+                stat,
+                new[] { stat.KeyPoints[2] },
+                survivalRandomSource);
+
+
+
+            // ASSERT
+            var factEffect = currentEffects.Items
+                .OfType<SurvivalStatHazardEffect>()
+                .Single(x => x.Type == expectedSurvivalHazardType);
+
+            factEffect.Level.Should().Be(SurvivalStatHazardLevel.Strong);
         }
 
 

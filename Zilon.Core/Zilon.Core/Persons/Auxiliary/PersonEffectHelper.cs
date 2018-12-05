@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons.Auxiliary
         public static void UpdateSurvivalEffect(
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull][ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints,
+            [NotNull] [ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
@@ -32,9 +32,9 @@ namespace Zilon.Core.Persons.Auxiliary
 
             var keyPoint = keyPoints.Last();
 
-            // Эффект уже существует. Изменим его уровень.
             if (currentTypeEffect != null)
             {
+                // Эффект уже существует. Изменим его уровень.
                 if (stat.Value <= keyPoint.Value)
                 {
                     currentTypeEffect.Level = keyPoint.Level;
@@ -65,7 +65,11 @@ namespace Zilon.Core.Persons.Auxiliary
             }
             else
             {
-                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType, keyPoint.Level, survivalRandomSource);
+                // Создаём эффект
+                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType,
+                    keyPoint.Level,
+                    survivalRandomSource);
+
                 currentEffects.Add(newCurrentTypeEffect);
             }
         }
