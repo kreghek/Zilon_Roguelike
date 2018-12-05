@@ -5,32 +5,34 @@ namespace Zilon.Core.Persons
 {
     public class EffectCollection
     {
+        private readonly List<IPersonEffect> _items;
+
         public EffectCollection()
         {
-            Items = new List<IPersonEffect>();
+            _items = new List<IPersonEffect>();
         }
 
-        public IList<IPersonEffect> Items { get; }
+        public IEnumerable<IPersonEffect> Items { get => _items; }
 
         public void Add(IPersonEffect effect)
         {
-            Items.Add(effect);
+            _items.Add(effect);
 
             effect.Changed += Effect_Changed;
             DoAdd(effect);
         }
 
-        private void Effect_Changed(object sender, EventArgs e)
-        {
-            var effect = sender as IPersonEffect;
-            DoChanged(effect);
-        }
-
         public void Remove(IPersonEffect effect)
         {
-            Items.Remove(effect);
+            _items.Remove(effect);
             effect.Changed -= Effect_Changed;
             DoRemoved(effect);
+        }
+
+        private void Effect_Changed(object sender, EventArgs e)
+        {
+            var effect = (IPersonEffect)sender;
+            DoChanged(effect);
         }
 
         private void DoAdd(IPersonEffect effect)

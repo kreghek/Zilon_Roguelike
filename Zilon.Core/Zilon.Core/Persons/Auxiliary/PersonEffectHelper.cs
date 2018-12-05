@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -27,15 +28,11 @@ namespace Zilon.Core.Persons.Auxiliary
             CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
 
             var statType = stat.Type;
-
-            var currentTypeEffect = currentEffects.Items
-                .OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == statType);
+            var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
 
             var keyPoint = keyPoints.Last();
 
-            // Эффект уже существует.
-            // Изменим его тип.
+            // Эффект уже существует. Изменим его уровень.
             if (currentTypeEffect != null)
             {
                 if (stat.Value <= keyPoint.Value)
@@ -73,6 +70,14 @@ namespace Zilon.Core.Persons.Auxiliary
             }
         }
 
+        private static SurvivalStatHazardEffect GetCurrentEffect(EffectCollection currentEffects, SurvivalStatType statType)
+        {
+            return currentEffects.Items
+                            .OfType<SurvivalStatHazardEffect>()
+                            .SingleOrDefault(x => x.Type == statType);
+        }
+
+        [ExcludeFromCodeCoverage]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CheckArguments(EffectCollection currentEffects,
             SurvivalStat stat,
