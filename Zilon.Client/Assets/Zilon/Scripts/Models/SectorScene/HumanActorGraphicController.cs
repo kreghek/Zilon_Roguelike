@@ -2,7 +2,7 @@
 using System.Linq;
 
 using UnityEngine;
-
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -61,8 +61,7 @@ public class HumanActorGraphicController : MonoBehaviour
             var slot = equipmentCarrier.Slots[slotIndex];
             var types = slot.Types;
 
-            VisualPropHolder holder;
-            if (_visualSlots.TryGetValue(slotIndex, out holder))
+            if (_visualSlots.TryGetValue(slotIndex, out VisualPropHolder holder))
             {
                 foreach (Transform visualProp in holder.transform)
                 {
@@ -80,7 +79,20 @@ public class HumanActorGraphicController : MonoBehaviour
                 {
                     Instantiate(visualPropResource, holder.transform);
                 }
-            }            
+                else
+                {
+                    if ((holder.SlotTypes & EquipmentSlotTypes.Body) > 0)
+                    {
+                        var noneArmor = Resources.Load<VisualProp>($"VisualProps/none-armor");
+                        Instantiate(noneArmor, holder.transform);
+                    }
+                    else if ((holder.SlotTypes & EquipmentSlotTypes.Head) > 0)
+                    {
+                        var noneHead = Resources.Load<VisualProp>($"VisualProps/none-head");
+                        Instantiate(noneHead, holder.transform);
+                    }
+                }
+            }
         }
     }
 }
