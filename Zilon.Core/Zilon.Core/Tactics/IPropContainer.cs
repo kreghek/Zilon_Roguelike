@@ -45,6 +45,16 @@ namespace Zilon.Core.Tactics
         event EventHandler Opened;
 
         /// <summary>
+        /// Выстреливает, когда в контейнер добавлен предмет.
+        /// </summary>
+        event EventHandler<PropStoreEventArgs> ItemsAdded;
+
+        /// <summary>
+        /// Выстреливает, когда из контейнера удалён предмет.
+        /// </summary>
+        event EventHandler<PropStoreEventArgs> ItemsRemoved;
+
+        /// <summary>
         /// Блокер проходимости карты.
         /// </summary>
         /// <remarks>

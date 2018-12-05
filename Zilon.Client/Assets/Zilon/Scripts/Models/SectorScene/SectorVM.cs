@@ -31,6 +31,7 @@ internal class SectorVM : MonoBehaviour
 
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ActorViewModel> _actorViewModels;
+    private readonly List<ContainerVm> _containerViewModels;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -69,7 +70,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private IHumanPersonManager _personManager;
 
-    [NotNull] [Inject] private ISurvivalRandomSource _survivalRandomSource;
+    [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
 
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
@@ -95,6 +96,7 @@ internal class SectorVM : MonoBehaviour
     {
         _nodeViewModels = new List<MapNodeVM>();
         _actorViewModels = new List<ActorViewModel>();
+        _containerViewModels = new List<ContainerVm>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -147,6 +149,7 @@ internal class SectorVM : MonoBehaviour
         _sectorManager.CreateSector();
 
         _propContainerManager.Added += PropContainerManager_Added;
+        _propContainerManager.Removed += PropContainerManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
 
@@ -158,9 +161,20 @@ internal class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
     }
 
+    private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+    {
+        foreach (var container in e.Items)
+        {
+            var containerViewModel = _containerViewModels.Single(x => x.Container == container);
+            _containerViewModels.Remove(containerViewModel);
+            Destroy(containerViewModel.gameObject);
+        }
+    }
+
     public void OnDestroy()
     {
         _propContainerManager.Added -= PropContainerManager_Added;
+        _propContainerManager.Removed -= PropContainerManager_Removed;
         _sectorManager.CurrentSector.ActorExit -= SectorOnActorExit;
     }
 
@@ -249,13 +263,15 @@ internal class SectorVM : MonoBehaviour
     {
         var containerPrefab = GetContainerPrefab(container);
 
-        var containerVm = Instantiate(containerPrefab, transform);
+        var containerViewModel = Instantiate(containerPrefab, transform);
 
         var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
         var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
-        containerVm.transform.position = containerPosition;
-        containerVm.Container = container;
-        containerVm.Selected += Container_Selected;
+        containerViewModel.transform.position = containerPosition;
+        containerViewModel.Container = container;
+        containerViewModel.Selected += Container_Selected;
+
+        _containerViewModels.Add(containerViewModel);
     }
 
     private ContainerVm GetContainerPrefab(IPropContainer container)
@@ -264,6 +280,7 @@ internal class SectorVM : MonoBehaviour
         {
             return LootPrefab;
         }
+
         return ChestPrefab;
     }
 

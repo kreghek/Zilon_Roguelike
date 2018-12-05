@@ -5,6 +5,7 @@ using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -125,6 +126,20 @@ namespace Zilon.Core.Tactics
                 {
                     Map.HoldNode(container.Node, container);
                 }
+
+                if (container is ILootContainer)
+                {
+                    container.ItemsRemoved += LootContainer_ItemsRemoved;
+                }
+            }
+        }
+
+        private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
+        {
+            var container = (IPropContainer)sender;
+            if (!container.Content.CalcActualItems().Any())
+            {
+                _propContainerManager.Remove(container);
             }
         }
 
@@ -135,6 +150,11 @@ namespace Zilon.Core.Tactics
                 if (container.IsMapBlock)
                 {
                     Map.ReleaseNode(container.Node, container);
+                }
+
+                if (container is ILootContainer)
+                {
+                    container.ItemsRemoved -= LootContainer_ItemsRemoved;
                 }
             }
         }

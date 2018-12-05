@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using JetBrains.Annotations;
 
 namespace Zilon.Core.Props
 {
@@ -12,8 +15,13 @@ namespace Zilon.Core.Props
         public IProp[] Props { get; }
 
         [ExcludeFromCodeCoverage]
-        public PropStoreEventArgs(IEnumerable<IProp> props)
+        public PropStoreEventArgs([NotNull] [ItemNotNull] IEnumerable<IProp> props)
         {
+            if (props == null)
+            {
+                throw new ArgumentNullException(nameof(props));
+            }
+
             Props = props.ToArray();
         }
     }

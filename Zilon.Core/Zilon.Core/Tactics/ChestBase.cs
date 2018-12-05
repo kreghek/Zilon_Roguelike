@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
     public abstract class ChestBase : IPropContainer
     {
         [ExcludeFromCodeCoverage]
-        protected ChestBase(IMapNode node, IPropStore content) : this(node, content, 0)
+        protected ChestBase(IMapNode node, IPropStore content) : this(node, content, default(int))
         {
         }
 
@@ -19,6 +19,19 @@ namespace Zilon.Core.Tactics
             Id = id;
             Node = node ?? throw new ArgumentNullException(nameof(node));
             Content = content ?? throw new ArgumentNullException(nameof(content));
+
+            Content.Added += Content_Added;
+            Content.Removed += Content_Removed;
+        }
+
+        private void Content_Removed(object sender, PropStoreEventArgs e)
+        {
+            ItemsRemoved?.Invoke(this, e);
+        }
+
+        private void Content_Added(object sender, PropStoreEventArgs e)
+        {
+            ItemsAdded?.Invoke(this, e);
         }
 
         public int Id { get; }
@@ -28,6 +41,10 @@ namespace Zilon.Core.Tactics
         public abstract bool IsMapBlock { get; }
 
         public event EventHandler Opened;
+        //TODO Сделать оптимизацию. Выполнять подписку на события контента
+        // только если есть подписки на текущие события.
+        public event EventHandler<PropStoreEventArgs> ItemsAdded;
+        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
 
         public void Open()
         {
