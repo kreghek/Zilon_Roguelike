@@ -45,7 +45,9 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
-    [NotNull] public ContainerVm ContainerPrefab;
+    [NotNull] public ContainerVm ChestPrefab;
+
+    [NotNull] public ContainerVm LootPrefab;
 
     [NotNull] [Inject] private IGameLoop _gameLoop;
 
@@ -245,13 +247,24 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
     {
-        var containerVm = Instantiate(ContainerPrefab, transform);
+        var containerPrefab = GetContainerPrefab(container);
+
+        var containerVm = Instantiate(containerPrefab, transform);
 
         var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
         var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
         containerVm.transform.position = containerPosition;
         containerVm.Container = container;
         containerVm.Selected += Container_Selected;
+    }
+
+    private ContainerVm GetContainerPrefab(IPropContainer container)
+    {
+        if (container is DropTableLoot lootContainer)
+        {
+            return LootPrefab;
+        }
+        return ChestPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
