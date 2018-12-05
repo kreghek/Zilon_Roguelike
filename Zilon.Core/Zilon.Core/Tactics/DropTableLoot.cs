@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Реализация контейнера для выпавшего из монстра лута.
     /// </summary>
-    public class DropTableLoot : ChestBase
+    public class DropTableLoot : ChestBase, ILootContainer
     {
         public override bool IsMapBlock => false;
 
