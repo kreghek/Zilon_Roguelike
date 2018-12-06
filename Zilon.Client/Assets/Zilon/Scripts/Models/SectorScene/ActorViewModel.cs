@@ -7,6 +7,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -32,25 +33,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Actor.Person.Survival.Dead += Survival_Dead;
     }
 
-    private void Survival_Dead(object sender, EventArgs e)
-    {
-        GraphicRoot.ProcessDeath(gameObject);
-
-        if (_playerState.ActiveActor.Equals(this))
-        {
-            _playerState.ActiveActor = null;
-        }
-    }
-
-    private void Actor_Moved(object sender, EventArgs e)
-    {
-        _moveCounter = 0;
-        var actorNode = (HexNode) Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
-    }
-
-    void Update()
+    public void Update()
     {
         if (_moveCounter != null)
         {
@@ -72,5 +55,27 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
 
         Selected?.Invoke(this, new EventArgs());
+    }
+
+    private void Survival_Dead(object sender, EventArgs e)
+    {
+        var isHumanPerson = Actor.Owner is HumanPlayer;
+        GraphicRoot.ProcessDeath(
+            rootObject: gameObject,
+            rootRotting: !isHumanPerson
+        );
+
+        if (_playerState.ActiveActor.Equals(this))
+        {
+            _playerState.ActiveActor = null;
+        }
+    }
+
+    private void Actor_Moved(object sender, EventArgs e)
+    {
+        _moveCounter = 0;
+        var actorNode = (HexNode)Actor.Node;
+        var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
     }
 }

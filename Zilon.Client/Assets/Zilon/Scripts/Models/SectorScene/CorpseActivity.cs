@@ -3,7 +3,7 @@
 public class CorpseActivity : MonoBehaviour
 {
     private float _fallingCounter;
-    private float _rotingCounter;
+    private float _rottingCounter;
     private bool _isFalling;
     private SpriteRenderer[] _spriteRenderers;
 
@@ -12,17 +12,26 @@ public class CorpseActivity : MonoBehaviour
     /// </summary>
     public GameObject RootObject;
 
+    /// <summary>
+    /// Указывает, нужно ли уничтожить корневой объект после гниения.
+    /// </summary>
+    /// <remarks>
+    /// Выставляется false для персонажа игрока, чтобы труп был виден до перезапуска.
+    /// </remarks>
+    public bool RootRotting;
+
     public CorpseActivity()
     {
         _isFalling = true;
+        RootRotting = true;
     }
 
-    void Start()
+    public void Start()
     {
         _spriteRenderers = RootObject.GetComponentsInChildren<SpriteRenderer>();
     }
 
-    void Update()
+    public void Update()
     {
         if (_isFalling)
         {
@@ -43,16 +52,23 @@ public class CorpseActivity : MonoBehaviour
         }
         else
         {
-            _rotingCounter += Time.deltaTime;
-
-            foreach (var spriteRenderer in _spriteRenderers)
+            if (RootRotting)
             {
-                spriteRenderer.color = new Color(1, 1, 1, 1 - _rotingCounter);
+                _rottingCounter += Time.deltaTime;
+
+                foreach (var spriteRenderer in _spriteRenderers)
+                {
+                    spriteRenderer.color = new Color(1, 1, 1, 1 - _rottingCounter);
+                }
+
+                if (_rottingCounter >= 1)
+                {
+                    Destroy(RootObject);
+                }
             }
-
-            if (_rotingCounter >= 1)
+            else
             {
-                Destroy(RootObject);
+                Destroy(this);
             }
         }
     }
