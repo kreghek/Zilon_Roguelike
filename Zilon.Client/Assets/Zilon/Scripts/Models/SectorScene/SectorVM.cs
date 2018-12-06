@@ -314,6 +314,11 @@ internal class SectorVM : MonoBehaviour
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
     {
+        if (_playerState.ActiveActor == null)
+        {
+            return;
+        }
+
         var actorVm = sender as ActorViewModel;
 
         _playerState.HoverViewModel = actorVm;
@@ -407,6 +412,11 @@ internal class SectorVM : MonoBehaviour
 
     private void MapNodeVm_OnSelect(object sender, EventArgs e)
     {
+        if (_playerState.ActiveActor == null)
+        {
+            return;
+        }
+
         // указываем намерение двигиться на выбранную точку (узел).
 
         var nodeVm = sender as MapNodeVM;
