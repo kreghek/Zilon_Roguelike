@@ -276,7 +276,7 @@ internal class SectorVM : MonoBehaviour
 
     private ContainerVm GetContainerPrefab(IPropContainer container)
     {
-        if (container is DropTableLoot lootContainer)
+        if (container is ILootContainer lootContainer)
         {
             return LootPrefab;
         }

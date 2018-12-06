@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4839112038213922}
   - component: {fileID: 114666758840654916}
+  - component: {fileID: 4542185936034202667}
   m_Layer: 0
   m_Name: HumanoidGraphic
   m_TagString: Untagged
@@ -53,6 +54,18 @@ MonoBehaviour:
   - {fileID: 114216475254933932}
   - {fileID: 114594101453894202}
   - {fileID: 114253020338986754}
+--- !u!114 &4542185936034202667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071092651173494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2641632e21bbc4ca82fae3de7d1d36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1096935139331152
 GameObject:
   m_ObjectHideFlags: 0

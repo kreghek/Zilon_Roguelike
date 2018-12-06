@@ -28,10 +28,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void Survival_Dead(object sender, EventArgs e)
     {
-        GraphicRoot.ProcessDeath();
-
-        //TODO Сделать генерацию трупа
-        Destroy(gameObject);
+        GraphicRoot.ProcessDeath(gameObject);
     }
 
     private void Actor_Moved(object sender, EventArgs e)

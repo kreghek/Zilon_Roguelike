@@ -2,6 +2,7 @@
 using System.Linq;
 
 using UnityEngine;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
