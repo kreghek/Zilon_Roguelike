@@ -1,24 +1,31 @@
 ﻿using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
 public class HpBar : MonoBehaviour
 {
-	public Image BarImage;
-	
-	[Inject] private IPlayerState _playerState;
-	
-	// Update is called once per frame
-	void Update () {
-		if (_playerState.ActiveActor == null)
-		{
-			return;
-		}
+    public Image BarImage;
 
-		var actorVm = _playerState.ActiveActor;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
+
+
+    public void Update()
+    {
+        if (_playerState.ActiveActor == null)
+        {
+            // Активного актёра может не быть, потому что игрока убили и занулили это свойство.
+            BarImage.fillAmount = 0;
+
+            return;
+        }
+
+        var actorVm = _playerState.ActiveActor;
         var person = actorVm.Actor.Person;
 
 
@@ -27,11 +34,16 @@ public class HpBar : MonoBehaviour
 
         var hpPercentage = CalcPercentage(hpStat.Value, hpStat.Range.Max);
 
-		BarImage.fillAmount = hpPercentage;
-	}
+        BarImage.fillAmount = hpPercentage;
+    }
 
-	private float CalcPercentage(float actorHp, float personHp)
-	{
-		return actorHp/personHp;
-	}
+    private float CalcPercentage(float actorHp, float personHp)
+    {
+        if (personHp <= 0)
+        {
+            return 0;
+        }
+
+        return actorHp / personHp;
+    }
 }
