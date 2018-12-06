@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -6,11 +7,13 @@ namespace Zilon.Core.CommonServices.Dices
     {
         private readonly Random _random;
 
+        [ExcludeFromCodeCoverage]
         public Dice()
         {
             _random = new Random();
         }
 
+        [ExcludeFromCodeCoverage]
         public Dice(int seed)
         {
             _random = new Random(seed);

@@ -86,5 +86,30 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             // ASSERT
             factRoll.Should().Be(expectedRoll);
         }
+
+        /// <summary>
+        ///  Тест проверяет, что при одинаковых мин и макс корректно возвращается мин.
+        /// </summary>
+        [Test]
+        public void Roll_5to5_Returns5()
+        {
+            // ARRANGE
+
+            const int expectedRoll = 5;
+
+            var diceMock = new Mock<IDice>();
+            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);
+            var dice = diceMock.Object;
+
+
+
+            // ACT
+            var factRoll = dice.Roll(5, 5);
+
+
+
+            // ASSERT
+            factRoll.Should().Be(expectedRoll);
+        }
     }
 }
