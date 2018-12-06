@@ -1,6 +1,10 @@
 ﻿using System;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
@@ -10,6 +14,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 {
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
+
+    [Inject] private readonly IPlayerState _playerState;
 
     public ActorGraphicBase GraphicRoot;
 
@@ -29,6 +35,11 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private void Survival_Dead(object sender, EventArgs e)
     {
         GraphicRoot.ProcessDeath(gameObject);
+
+        if (_playerState.ActiveActor.Equals(this))
+        {
+            _playerState.ActiveActor = null;
+        }
     }
 
     private void Actor_Moved(object sender, EventArgs e)

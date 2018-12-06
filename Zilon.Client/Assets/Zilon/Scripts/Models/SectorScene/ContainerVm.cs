@@ -1,6 +1,7 @@
 ﻿using System;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
@@ -24,6 +25,11 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
 
     public void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         DoSelected();
     }
 

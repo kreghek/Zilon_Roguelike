@@ -50,25 +50,27 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
-    [NotNull] [Inject] private IGameLoop _gameLoop;
+    [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
 
-    [NotNull] [Inject] private ISectorManager _sectorManager;
+    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-    [NotNull] [Inject] private IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private ISchemeService _schemeService;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
+
+    [NotNull] [Inject] private readonly ISchemeService _schemeService;
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
     [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
 
-    [NotNull] [Inject] private IActorManager _actorManager;
+    [NotNull] [Inject] private readonly IActorManager _actorManager;
 
-    [NotNull] [Inject] private IPropContainerManager _propContainerManager;
+    [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
-    [NotNull] [Inject] private IHumanPersonManager _personManager;
+    [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
     [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
 
@@ -230,7 +232,9 @@ internal class SectorVM : MonoBehaviour
         var monsters = _actorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
-            var actorViewModel = Instantiate(ActorPrefab, transform);
+            var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
+            var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
+
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
             actorViewModel.GraphicRoot = actorGraphic;
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
@@ -344,24 +348,25 @@ internal class SectorVM : MonoBehaviour
 
         actorManager.Add(actor);
 
-        var actorVm = Instantiate(ActorPrefab, transform);
-        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorVm.transform);
+        var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
+        var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
+        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
         actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
-        actorVm.GraphicRoot = actorGraphic;
+        actorViewModel.GraphicRoot = actorGraphic;
 
-        var graphicController = actorVm.gameObject.AddComponent<HumanActorGraphicController>();
+        var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;
         graphicController.Graphic = actorGraphic;
 
         var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
         var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-        actorVm.transform.position = actorPosition;
-        actorVm.Actor = actor;
+        actorViewModel.transform.position = actorPosition;
+        actorViewModel.Actor = actor;
 
-        actorVm.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actorVm.Actor.UsedAct += ActorOnUsedAct;
+        actorViewModel.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actorViewModel.Actor.UsedAct += ActorOnUsedAct;
 
-        return actorVm;
+        return actorViewModel;
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
