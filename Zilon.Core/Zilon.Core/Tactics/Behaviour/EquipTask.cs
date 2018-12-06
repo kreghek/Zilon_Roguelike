@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Props;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -23,34 +24,69 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             var equipmentCarrier = Actor.Person.EquipmentCarrier;
 
+            // Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
+            // Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
+            //    (и)                                           (с)
+            // (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
+            // (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
+
+
+            // проверяем, есть ли в текущем слоте предмет (0)/(1).
             var currentEquipment = equipmentCarrier.Equipments[_slotIndex];
-            if (currentEquipment != null)
+
+            // проверяем, из инвентаря или из слота экипируем (и)/(с)
+            var currentEquipedSlotIndex = FindPropInEquiped(_equipment, equipmentCarrier);
+
+            if (currentEquipedSlotIndex == null)
             {
-                // Означает, что предмет экипироуется из инвентаря.
-                Actor.Person.Inventory.Add(currentEquipment);
+                // (и)
+
+                // текущий предмет возвращаем в инвентарь (1)
+                // про (0) ничего не делаем
+                if (currentEquipment != null)
+                {
+                    Actor.Person.Inventory.Add(currentEquipment);
+                }
+
+                Actor.Person.Inventory.Remove(_equipment);
+                equipmentCarrier.SetEquipment(_equipment, _slotIndex);
             }
             else
             {
-                int? currentEquipedSlotIndex = null;
-                for (var i = 0; i < equipmentCarrier.Equipments.Length; i++)
+                // (с)
+
+                if (currentEquipment != null)
                 {
-                    if (equipmentCarrier.Equipments[i] == _equipment)
-                    {
-                        currentEquipedSlotIndex = i;
-                    }
+                    // (1) Ставим существующий в данном слоте предмет предмет в слот, в котором был выбранный предмет
+                    equipmentCarrier.SetEquipment(currentEquipment, currentEquipedSlotIndex.Value);
+                }
+                else
+                {
+                    // В старый стол выбранного предмета записываем пустоту.
+                    // Потому что предмет перенесён из этого слота в другой.
+                    equipmentCarrier.SetEquipment(null, currentEquipedSlotIndex.Value);
                 }
 
-                if (currentEquipedSlotIndex != null)
-                {
-                    // Означает, что предмет был экипирован в другой слой и мы его перекладываем
-                    equipmentCarrier.Equipments[currentEquipedSlotIndex.Value] = null;
-                }
+                equipmentCarrier.SetEquipment(_equipment, _slotIndex);
+            }            
+        }
 
+        /// <summary>
+        /// Ищем предмет в уже экипированных.
+        /// </summary>
+        /// <param name="equipmentCarrier"></param>
+        /// <returns></returns>
+        private int? FindPropInEquiped(Equipment equipment, IEquipmentCarrier equipmentCarrier)
+        {
+            for (var i = 0; i < equipmentCarrier.Equipments.Length; i++)
+            {
+                if (equipmentCarrier.Equipments[i] == equipment)
+                {
+                    return i;
+                }
             }
 
-            equipmentCarrier.SetEquipment(_equipment, _slotIndex);
-
-            Actor.Person.Inventory.Remove(_equipment);
+            return null;
         }
     }
 }

@@ -126,6 +126,7 @@
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
+    <Compile Include="Tactics\Behaviour\EquipTaskTests.cs" />
     <Compile Include="Tactics\PropContainerManagerTests.cs" />
     <Compile Include="Tactics\ActorManagerTests.cs" />
     <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />

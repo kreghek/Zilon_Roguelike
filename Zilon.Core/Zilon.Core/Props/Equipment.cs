@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using JetBrains.Annotations;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -12,6 +12,8 @@ namespace Zilon.Core.Props
     /// </summary>
     public class Equipment : PropBase
     {
+        private readonly string _name;
+
         /// <inheritdoc />
         /// <summary>
         /// Конструктор.
@@ -22,7 +24,9 @@ namespace Zilon.Core.Props
         /// Выбрасывает, если на вход подана схема,
         /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
-        public Equipment(IPropScheme propScheme, IEnumerable<ITacticalActScheme> acts) : base(propScheme)
+        public Equipment(IPropScheme propScheme,
+            IEnumerable<ITacticalActScheme> acts) :
+            base(propScheme)
         {
             if (propScheme.Equip == null)
             {
@@ -41,11 +45,28 @@ namespace Zilon.Core.Props
             }
         }
 
+        public Equipment(IPropScheme propScheme,
+            IEnumerable<ITacticalActScheme> acts,
+            [NotNull] string name) :
+            this(propScheme, acts)
+        {
+            _name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
         public ITacticalActScheme[] Acts { get; }
 
         /// <summary>
         /// Мощь/качество/уровень экипировки.
         /// </summary>
         public int Power { get; set; }
+
+        public override string ToString()
+        {
+            if (_name != null)
+            {
+                return $"{_name} {base.ToString()}";
+            }
+            return base.ToString();
+        }
     }
 }
