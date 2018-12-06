@@ -103,15 +103,24 @@ namespace Zilon.Core.Tactics
         {
             var allExit = true;
 
+            //Проверяем, что есть хоть один персонаж игрока.
+            // Потому что, умирая, персонажи удаляются из менеджера.
+            // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
+            var atLeastOneHuman = false;
+
             foreach (var actor in _actorManager.Items)
             {
-                if (actor.Owner is HumanPlayer && Map.ExitNodes?.Contains(actor.Node) == false)
+                if (actor.Owner is HumanPlayer)
                 {
-                    allExit = false;
+                    atLeastOneHuman = true;
+                    if (Map.ExitNodes?.Contains(actor.Node) == false)
+                    {
+                        allExit = false;
+                    }
                 }
             }
 
-            if (allExit)
+            if (allExit && atLeastOneHuman)
             {
                 DoActorExit();
             }
