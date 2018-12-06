@@ -8,11 +8,11 @@ using Zilon.Core.Tactics;
 
 public class UiHandler : MonoBehaviour {
 
-	[Inject] private ISectorManager _sectorManager;
+	[Inject] private readonly ISectorManager _sectorManager;
 
-	[Inject] private IPlayerState _playerState;
+	[Inject] private readonly IPlayerState _playerState;
 	
-	[Inject] private ICommandManager _clientCommandExecutor;
+	[Inject] private readonly ICommandManager _clientCommandExecutor;
 	
 	[Inject(Id = "next-turn-command")] private ICommand _nextTurnCommand;
 	
