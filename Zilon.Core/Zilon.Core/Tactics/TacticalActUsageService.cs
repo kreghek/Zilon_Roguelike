@@ -104,7 +104,7 @@ namespace Zilon.Core.Tactics
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
                         var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
-                        actEfficientArmorBlocked -= armorAbsorbtion;
+                        actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                     }
                 }
 
@@ -119,6 +119,24 @@ namespace Zilon.Core.Tactics
             {
                 targetActor.ProcessDefence();
             }
+        }
+
+        /// <summary>
+        /// Расчёт эффективности умения с учётом поглащения бронёй.
+        /// </summary>
+        /// <param name="efficient"> Эффективность умения. </param>
+        /// <param name="armorAbsorbtion"> Числовое значение поглощения брони. </param>
+        /// <returns> Возвращает поглощённое значение эффективности. Эффективность не может быть меньше нуля при поглощении. </returns>
+        private static int AbsorbActEfficient(int efficient, int armorAbsorbtion)
+        {
+            efficient -= armorAbsorbtion;
+
+            if (efficient < 0)
+            {
+                efficient = 0;
+            }
+
+            return efficient;
         }
 
         /// <summary>
