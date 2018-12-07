@@ -125,6 +125,7 @@ namespace Zilon.Core.Persons
                     }
                 }
             }
+
             if (EvolutionData.Stats != null)
             {
                 foreach (var bonusItem in bonusDict)
@@ -145,6 +146,17 @@ namespace Zilon.Core.Persons
                 {
                     statItem.Value = (float)Math.Round(statItem.Value, 1);
                 }
+            }
+
+            foreach (var equipment in EquipmentCarrier.Equipments)
+            {
+                if (equipment == null)
+                {
+                    continue;
+                }
+
+                var equipStats = equipment.Scheme.Equip;
+                equipStats.Absorption
             }
         }
 
@@ -194,6 +206,10 @@ namespace Zilon.Core.Persons
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
+            ClearCalculatedStats();
+
+            CalcCombatStats();
+
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 

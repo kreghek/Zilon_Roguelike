@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Components;
+﻿using Zilon.Core.Common;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -7,11 +8,11 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public interface IPropEquipSubScheme
     {
-        /// <summary>
-        /// Ранг пробития брони.
-        /// </summary>
-        // ReSharper disable once UnusedMemberInSuper.Global
-        int ApRank { get; }
+        ImpactType Impact { get; }
+        PersonRuleLevel AbsorbtionLevel { get; }
+        int ArmorRank { get; }
+
+        
 
         /// <summary>
         /// Ранг брони.
