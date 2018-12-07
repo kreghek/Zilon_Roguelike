@@ -186,7 +186,6 @@
     <Compile Include="Schemes\MonsterDefenceSubScheme.cs" />
     <Compile Include="Schemes\MonsterScheme.cs" />
     <Compile Include="Persons\MonsterTacticalAct.cs" />
-    <Compile Include="Persons\PerkJobsEnumerableExtensions.cs" />
     <Compile Include="Schemes\JobScope.cs" />
     <Compile Include="Schemes\JobType.cs" />
     <Compile Include="Components\PersonStat.cs" />
