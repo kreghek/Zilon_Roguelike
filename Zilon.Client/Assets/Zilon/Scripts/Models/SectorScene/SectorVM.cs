@@ -383,11 +383,7 @@ internal class SectorVM : MonoBehaviour
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
-        var actor = sender as IActor;
-        if (actor == null)
-        {
-            throw new NotSupportedException("Не поддерживается обработка событий использования действия.");
-        }
+        var actor = GetActor(sender);
 
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
@@ -398,6 +394,16 @@ internal class SectorVM : MonoBehaviour
             // Создаём снараяд
             CreateBullet(actor, e.Target);
         }
+    }
+
+    private static IActor GetActor(object sender)
+    {
+        if (sender is IActor actor)
+        {
+            return actor;
+        }
+
+        throw new NotSupportedException("Не поддерживается обработка событий использования действия.");
     }
 
     private void CreateBullet(IActor actor, IAttackTarget target)
