@@ -1,6 +1,6 @@
 ﻿using System;
+
 using UnityEngine;
-using Zilon.Core.Props;
 
 public class CorpseActivity : MonoBehaviour
 {
@@ -15,11 +15,6 @@ public class CorpseActivity : MonoBehaviour
     /// Это объект, который будет уничтожен, когда время жизни трупа кончится.
     /// </summary>
     public GameObject RootObject;
-
-    /// <summary>
-    /// Объект, которвый содержит лут текущего актура (обычно монстра).
-    /// </summary>
-    public IPropStore Loot;
 
     /// <summary>
     /// Указывает, нужно ли уничтожить корневой объект после гниения.
@@ -44,7 +39,6 @@ public class CorpseActivity : MonoBehaviour
     {
         if (_isFalling)
         {
-
             _fallingCounter += Time.deltaTime * 2;
             if (_fallingCounter > 1)
             {
@@ -80,10 +74,5 @@ public class CorpseActivity : MonoBehaviour
                 Destroy(this);
             }
         }
-    }
-
-    private void OnMouseDown()
-    {
-        
     }
 }
