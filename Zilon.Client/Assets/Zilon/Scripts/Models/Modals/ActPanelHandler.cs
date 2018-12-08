@@ -50,20 +50,25 @@ public class ActPanelHandler : MonoBehaviour {
 	}
 
 	private void ActClick_Handler(object sender, EventArgs e)
-	{
-		var actItemVm = sender as ActItemVm;
-		if (actItemVm == null)
-		{
-			throw new InvalidOperationException("Не указано действие (ViewModel).");
-		}
+    {
+        var actItemVm = sender as ActItemVm;
+        if (actItemVm == null)
+        {
+            throw new InvalidOperationException("Не указано действие (ViewModel).");
+        }
 
-		var act = actItemVm.Act as TacticalAct;
-		if (act == null)
-		{
-			throw new InvalidOperationException("Не указано действие (Domain).");
-		}
+        TacticalAct act = GetAct(actItemVm);
 
+        Debug.Log(act.Scheme.Sid);
+    }
 
-		Debug.Log(act.Scheme.Sid);
-	}
+    private static TacticalAct GetAct(ActItemVm actItemVm)
+    {
+        if (actItemVm.Act is TacticalAct act)
+        {
+            return act;
+        }
+
+        throw new InvalidOperationException("Не указано действие (Domain).");
+    }
 }

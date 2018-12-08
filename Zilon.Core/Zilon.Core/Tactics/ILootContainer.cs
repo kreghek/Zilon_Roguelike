@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tactics
 {
-    interface ILootContainer: IPropContainer
+    public interface ILootContainer: IPropContainer
     {
     }
 }

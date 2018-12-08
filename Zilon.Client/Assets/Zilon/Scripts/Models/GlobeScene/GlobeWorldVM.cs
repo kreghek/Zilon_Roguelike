@@ -1,4 +1,5 @@
 ﻿//using Mono.Data.Sqlite;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ using Zilon.Core.Schemes;
 
 public class GlobeWorldVM : MonoBehaviour
 {
-    [Inject] private ISchemeService _schemeService;
+    [NotNull] [Inject] private readonly ISchemeService _schemeService;
     
     public GlobeMapVM Map;
     public Text Text;

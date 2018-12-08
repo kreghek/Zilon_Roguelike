@@ -1,13 +1,18 @@
 ﻿using System;
+
+using JetBrains.Annotations;
+
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once UnusedMember.Global
 public class FollowingCamera : MonoBehaviour
 {
-    [Inject] private IPlayerState _playerState;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
 
     // ReSharper disable once UnusedMember.Local
     private void Update()

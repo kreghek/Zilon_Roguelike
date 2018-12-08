@@ -3,14 +3,14 @@ using UnityEngine.Networking;
 
 public class NetworkDrive : NetworkBehaviour
 {
-    float periodSvrRpc = 0.02f; //как часто сервер шлёт обновление картинки клиентам, с.
-    float timeSvrRpcLast = 0; //когда последний раз сервер слал обновление картинки
+    private const float periodSvrRpc = 0.02f; //как часто сервер шлёт обновление картинки клиентам, с.
 
-    string srvCommand;
-    string myCommand;
+    private float timeSvrRpcLast = 0; //когда последний раз сервер слал обновление картинки
 
+    private string srvCommand;
+    private string myCommand;
 
-    void Update()
+    private void Update()
     {
         if (isLocalPlayer)
         {
@@ -23,12 +23,12 @@ public class NetworkDrive : NetworkBehaviour
         }
 
         if (isServer)
-            //Код исполняется только у духа
+        //Код исполняется только у духа
         {
             //Обработать мои команды
             //this.transform.Translate(0, 0, veloSvrCurr * Time.deltaTime, Space.Self);
             if (timeSvrRpcLast + periodSvrRpc < Time.time)
-                //Если пора, то выслать координаты всем моим аватарам
+            //Если пора, то выслать координаты всем моим аватарам
             {
                 //RpcUpdateUnitPosition(this.transform.position);
                 //RpcUpdateUnitOrientation(this.transform.rotation);
@@ -44,10 +44,10 @@ public class NetworkDrive : NetworkBehaviour
     }
 
     [Command(channel = 0)]
-    void CmdDrive(string data)
+    private void CmdDrive(string data)
     {
         if (isServer)
-            //Мой дух принимает и проверяет команду.
+        //Мой дух принимает и проверяет команду.
         {
             srvCommand = data;
             ////Проверяем моё требование на валидность.
@@ -62,7 +62,7 @@ public class NetworkDrive : NetworkBehaviour
     private void RpcSendCommand(string data)
     {
         if (isClient)
-            //Мои аватары копируют состояние моего духа.
+        //Мои аватары копируют состояние моего духа.
         {
             Debug.Log(data);
         }
