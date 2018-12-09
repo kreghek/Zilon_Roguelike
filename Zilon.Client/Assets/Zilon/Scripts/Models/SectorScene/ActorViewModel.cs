@@ -62,7 +62,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         var isHumanPerson = Actor.Owner is HumanPlayer;
         GraphicRoot.ProcessDeath(
             rootObject: gameObject,
-            rootRotting: !isHumanPerson
+            isRootRotting: !isHumanPerson
         );
 
         if (_playerState.ActiveActor.Equals(this))
