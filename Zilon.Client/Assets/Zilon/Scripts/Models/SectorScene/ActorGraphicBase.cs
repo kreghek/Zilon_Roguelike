@@ -11,6 +11,11 @@ public class ActorGraphicBase : MonoBehaviour
         throw new NotImplementedException();
     }
 
+    public virtual void ProcessHit()
+    {
+        gameObject.GetComponent<PersonActivity>().PlayHit();
+    }
+
     public virtual void ProcessDeath(GameObject rootObject, bool rootRotting)
     {
         var corpse = gameObject.AddComponent<CorpseActivity>();

@@ -397,6 +397,9 @@ internal class SectorVM : MonoBehaviour
             CreateBullet(actor, e.Target);
         }
 
+        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
+        actorViewModel.GraphicRoot.ProcessHit();
+
         var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
         var sfx = Instantiate(HitSfx, transform);
         sfx.transform.position = targetViewModel.transform.position;

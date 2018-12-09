@@ -2,18 +2,10 @@
 
 public class PersonActivity : MonoBehaviour
 {
-    private float _rotationCounter;
+    public Animator Animator;
 
-    private void Update()
+    public void PlayHit()
     {
-        _rotationCounter += Time.deltaTime * 3;
-        var angle = Mathf.Sin(_rotationCounter);
-
-        transform.Rotate(Vector3.back, angle * 0.3f);
-
-        if (angle >= Mathf.PI * 2)
-        {
-            angle = -Mathf.PI * 2;
-        }
+        Animator.Play("HumanoidAttack");
     }
 }
