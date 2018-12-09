@@ -93,3 +93,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EffectSpriteRenderer: {fileID: 2333736244157075401}
+  MeleeSprite: {fileID: 21300000, guid: 37438233a67d7ad459aa108eb012a24a, type: 3}
+  ShootSprite: {fileID: 21300000, guid: 64f7002194b558741a17b406377ee5dc, type: 3}

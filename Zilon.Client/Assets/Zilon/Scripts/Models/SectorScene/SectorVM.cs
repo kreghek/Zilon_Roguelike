@@ -390,19 +390,22 @@ internal class SectorVM : MonoBehaviour
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
 
-        var distance = actorHexNode.CubeCoords.DistanceTo(targetHexNode.CubeCoords);
-        if (distance > 1)
-        {
-            // Создаём снараяд
-            CreateBullet(actor, e.Target);
-        }
-
+        // Визуализируем удар.
         var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
         actorViewModel.GraphicRoot.ProcessHit();
 
         var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
         var sfx = Instantiate(HitSfx, transform);
         sfx.transform.position = targetViewModel.transform.position;
+
+        // Проверяем, стрелковое оружие или удар ближнего боя
+        if (e.TacticalAct.Stats.Range.Max > 1)
+        {
+            sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
+
+            // Создаём снараяд
+            CreateBullet(actor, e.Target);
+        }
     }
 
     private static IActor GetActor(object sender)

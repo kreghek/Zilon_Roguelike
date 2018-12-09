@@ -10,6 +10,9 @@ public class HitSfx : MonoBehaviour
 
     [NotNull] public SpriteRenderer EffectSpriteRenderer;
 
+    public Sprite MeleeSprite;
+    public Sprite ShootSprite;
+
     public HitSfx()
     {
         _lifetimeCounter = 1;
