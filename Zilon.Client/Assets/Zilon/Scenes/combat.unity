@@ -285,6 +285,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82181501504aa784fa6c65cf0bc10933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NextTurnButton: {fileID: 0}
+  InventoryButton: {fileID: 0}
+  PerksButton: {fileID: 0}
 --- !u!1 &269743640
 GameObject:
   m_ObjectHideFlags: 0
