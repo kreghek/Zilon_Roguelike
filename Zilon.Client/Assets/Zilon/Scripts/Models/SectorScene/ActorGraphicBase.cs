@@ -6,17 +6,42 @@ using Zilon.Core.Components;
 
 public class ActorGraphicBase : MonoBehaviour
 {
+    private GameObject _rootObject;
+    private bool _isRootRotting;
+
+    public Animator Animator;
+
     public virtual VisualPropHolder GetVisualProp(EquipmentSlotTypes types)
     {
         throw new NotImplementedException();
     }
 
-    public virtual void ProcessDeath(GameObject rootObject, bool rootRotting)
+    public virtual void ProcessHit()
     {
-        var corpse = gameObject.AddComponent<CorpseActivity>();
-        corpse.RootObject = rootObject;
-        corpse.RootRotting = rootRotting;
+        PlayHit();
+    }
 
-        Destroy(gameObject.GetComponent<PersonActivity>());
+    public virtual void ProcessDeath(GameObject rootObject, bool isRootRotting)
+    {
+        _rootObject = rootObject;
+        _isRootRotting = isRootRotting;
+        PlayDeath();
+    }
+
+    private void PlayHit()
+    {
+        Animator.Play("HumanoidAttack");
+    }
+
+    private void PlayDeath()
+    {
+        Animator.Play("HumanoidDeath");
+    }
+
+    private void StartRotting()
+    {
+        var corpse = gameObject.AddComponent<Rotting>();
+        corpse.RootObject = _rootObject;
+        corpse.RootRotting = _isRootRotting;
     }
 }

@@ -50,6 +50,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
+    [NotNull] public HitSfx HitSfx;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -388,9 +390,19 @@ internal class SectorVM : MonoBehaviour
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
 
-        var distance = actorHexNode.CubeCoords.DistanceTo(targetHexNode.CubeCoords);
-        if (distance > 1)
+        // Визуализируем удар.
+        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
+        actorViewModel.GraphicRoot.ProcessHit();
+
+        var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+        var sfx = Instantiate(HitSfx, transform);
+        sfx.transform.position = targetViewModel.transform.position;
+
+        // Проверяем, стрелковое оружие или удар ближнего боя
+        if (e.TacticalAct.Stats.Range.Max > 1)
         {
+            sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
+
             // Создаём снараяд
             CreateBullet(actor, e.Target);
         }
