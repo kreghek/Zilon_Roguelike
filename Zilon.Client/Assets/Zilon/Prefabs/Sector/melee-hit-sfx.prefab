@@ -17,6 +17,10 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 37438233a67d7ad459aa108eb012a24a,
         type: 3}
     - target: {fileID: 4006809255462265461}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006809255462265461}
       propertyPath: m_Size.x
       value: 0.32
       objectReference: {fileID: 0}
@@ -27,10 +31,6 @@ PrefabInstance:
     - target: {fileID: 4006809255462265461}
       propertyPath: m_WasSpriteAssigned
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4006809255462265461}
-      propertyPath: m_Color.a
-      value: 0.5176471
       objectReference: {fileID: 0}
     - target: {fileID: 1797661067929307859}
       propertyPath: m_LocalPosition.x
@@ -93,6 +93,31 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4006809255462265461}
+      propertyPath: m_Color.a
+      value: 0.5176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006809255462265461}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 37438233a67d7ad459aa108eb012a24a,
+        type: 3}
+    - target: {fileID: 4006809255462265461}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006809255462265461}
+      propertyPath: m_Size.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006809255462265461}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5867772698309250569}
+      propertyPath: m_Name
+      value: melee-hit-sfx
+      objectReference: {fileID: 0}
     - target: {fileID: 5867772698309250569}
       propertyPath: m_Name
       value: hit-sfx
@@ -112,11 +137,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 37438233a67d7ad459aa108eb012a24a,
         type: 3}
-    - target: {fileID: 2333736244157075401, guid: 42d971459a36bd54d841afef849791f6,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.5176471
-      objectReference: {fileID: 0}
     - target: {fileID: 2333736244157075401, guid: 42d971459a36bd54d841afef849791f6,
         type: 3}
       propertyPath: m_Size.x

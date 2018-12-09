@@ -92,3 +92,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adbc8e2882aeb924fa3122336061452e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectSpriteRenderer: {fileID: 2333736244157075401}

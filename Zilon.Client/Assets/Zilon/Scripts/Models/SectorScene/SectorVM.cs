@@ -50,6 +50,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
+    [NotNull] public HitSfx HitSfx;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -394,6 +396,10 @@ internal class SectorVM : MonoBehaviour
             // Создаём снараяд
             CreateBullet(actor, e.Target);
         }
+
+        var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+        var sfx = Instantiate(HitSfx, transform);
+        sfx.transform.position = targetViewModel.transform.position;
     }
 
     private static IActor GetActor(object sender)
