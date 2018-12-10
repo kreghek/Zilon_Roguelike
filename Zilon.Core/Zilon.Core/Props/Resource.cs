@@ -53,6 +53,11 @@ namespace Zilon.Core.Props
             return resource2;
         }
 
+        public override string ToString()
+        {
+            return $"{Scheme} x {Count}";
+        }
+
         public EventHandler<EventArgs> Changed;
     }
 }

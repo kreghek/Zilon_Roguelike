@@ -120,7 +120,7 @@ namespace Zilon.Core.Props
             else
             {
                 currentResource.Count += resource.Count;
-                DoChangedProp(resource);
+                DoChangedProp(currentResource);
             }
         }
 
@@ -153,6 +153,7 @@ namespace Zilon.Core.Props
             else
             {
                 currentResource.Count -= resource.Count;
+                DoChangedProp(currentResource);
             }
         }
     }
