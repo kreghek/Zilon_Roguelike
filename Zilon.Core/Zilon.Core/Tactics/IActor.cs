@@ -58,6 +58,26 @@ namespace Zilon.Core.Tactics
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         /// <summary>
+        /// Событие выстреливает, когда персонаж успешно отражает наступление.
+        /// </summary>
+        event EventHandler<DefenceEventArgs> OnDefence;
+
+        /// <summary>
+        /// Происходит, когда актёр выполняет действие.
+        /// </summary>
+        event EventHandler<UsedActEventArgs> UsedAct;
+
+        /// <summary>
+        /// Происходит, когда актёр получает урон.
+        /// </summary>
+        event EventHandler<DamageTakenEventArgs> DamageTaken;
+
+        /// <summary>
+        /// Происходит, когда актёр успешно использует броню.
+        /// </summary>
+        event EventHandler<ArmorEventArgs> OnArmorPassed;
+
+        /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
         /// <param name="target"> Цель действия. </param>
@@ -66,20 +86,16 @@ namespace Zilon.Core.Tactics
 
         void UseProp(IProp usedProp);
 
-        /// <summary>
-        /// Происходит, когда актёр выполняет действие.
-        /// </summary>
-        event EventHandler<UsedActEventArgs> UsedAct;
-
         //TODO Избавиться от этого метода.
         /// <summary>
         /// Вызывается службой действий в случае успешной обороны.
         /// </summary>
-        void ProcessDefence();
+        void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll);
 
+        //TODO Избавиться от этого метода.
         /// <summary>
-        /// Событие выстреливает, когда персонаж успешно отражает наступление.
+        /// Вызывается службой действий в случае успешного использования брони.
         /// </summary>
-        event EventHandler OnDefence;
+        void ProcessArmor(int armorRank, int successRoll, int factRoll);
     }
 }

@@ -97,15 +97,17 @@ namespace Zilon.Core.Tactics
 
                 var actEfficientArmorBlocked = tacticalActRoll.Efficient;
 
-                if (actApRank <= armorRank)
+                if (armorRank != null && (actApRank - armorRank) < 10)
                 {
                     var factArmorSaveRoll = RollArmorSave();
                     var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
                     if (factArmorSaveRoll >= successArmorSaveRoll)
                     {
                         var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
-                        actEfficientArmorBlocked -= armorAbsorbtion;
+                        actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                     }
+
+                    targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
                 }
 
                 targetActor.TakeDamage(actEfficientArmorBlocked);
@@ -117,8 +119,31 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                targetActor.ProcessDefence();
+                if (prefferedDefenceItem != null)
+                {
+                    targetActor.ProcessDefence(prefferedDefenceItem,
+                        successToHitRoll,
+                        factToHitRoll);
+                }
             }
+        }
+
+        /// <summary>
+        /// Расчёт эффективности умения с учётом поглащения бронёй.
+        /// </summary>
+        /// <param name="efficient"> Эффективность умения. </param>
+        /// <param name="armorAbsorbtion"> Числовое значение поглощения брони. </param>
+        /// <returns> Возвращает поглощённое значение эффективности. Эффективность не может быть меньше нуля при поглощении. </returns>
+        private static int AbsorbActEfficient(int efficient, int armorAbsorbtion)
+        {
+            efficient -= armorAbsorbtion;
+
+            if (efficient < 0)
+            {
+                efficient = 0;
+            }
+
+            return efficient;
         }
 
         /// <summary>
@@ -179,19 +204,49 @@ namespace Zilon.Core.Tactics
 
             if (preferredArmor == null)
             {
-                return 4;
+                throw new InvalidOperationException($"Не найдена защита {actImpact}.");
             }
 
             var apRankDiff = usedTacticalAct.Stats.Offense.ApRank - preferredArmor.ArmorRank;
 
-            var successRoll = 6;
-            if (apRankDiff <= 1)
+            switch (apRankDiff)
             {
-                return successRoll;
-            }
-            else
-            {
-                return successRoll - (apRankDiff - 1) / 2;
+                case 1:
+                case 0:
+                case -1:
+                    return 4;
+
+                case 2:
+                case 3:
+                    return 5;
+
+                case 4:
+                case 5:
+                case 6:
+                    return 6;
+
+                case -2:
+                case -3:
+                    return 3;
+
+                case -4:
+                case -5:
+                case -6:
+                    return 2;
+
+                default:
+                    if (apRankDiff >= 7)
+                    {
+                        return 7;
+                    }
+                    else if (apRankDiff <= -7)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
             }
         }
 
@@ -211,18 +266,13 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Актёр, для которого выбирается ранг брони. </param>
         /// <param name="usedTacticalAct"> Действие, от которого требуется броня. </param>
         /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
-        private static int GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
+        private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offense.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
-            if (preferredArmor == null)
-            {
-                return 0;
-            }
-
-            return preferredArmor.ArmorRank;
+            return preferredArmor?.ArmorRank;
         }
 
         /// <summary>

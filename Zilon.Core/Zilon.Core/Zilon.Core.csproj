@@ -68,6 +68,11 @@
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
+    <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
+    <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
+    <Compile Include="Tactics\ArmorEventArgs.cs" />
+    <Compile Include="Tactics\DamageTakenEventArgs.cs" />
+    <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />

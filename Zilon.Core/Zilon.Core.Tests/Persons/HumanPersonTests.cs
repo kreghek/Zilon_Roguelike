@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-
 using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -15,7 +15,7 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Persons
 {
     [TestFixture]
-    public class PersonTests
+    public class HumanPersonTests
     {
         /// <summary>
         /// Тест проверяет, что персонаж корректно обрабатывает назначение экипировки.
@@ -140,6 +140,74 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             var testedStat = person.EvolutionData.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
             testedStat.Value.Should().Be(11);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что если экипировать предмет с бронёй,
+        /// то броня будет записана в боевые характеристики персонажа.
+        /// </summary>
+        [Test]
+        public void HumanPerson_EquipArmor_ArmorInCombatStats()
+        {
+            // ARRANGE
+
+            var personScheme = new TestPersonScheme
+            {
+                Slots = new[]{
+                    new PersonSlotSubScheme
+                    {
+                        Types = EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var defaultAct = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Efficient = new Roll(6, 1)
+                }
+            };
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultAct, evolutionData, survivalRandomSource);
+
+            var armorPropScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    Armors = new IPropArmorItemSubScheme[]
+                    {
+                        new TestPropArmorItemSubScheme{
+                            Impact = ImpactType.Kinetic,
+                            ArmorRank = 10,
+                            AbsorbtionLevel = PersonRuleLevel.Lesser
+                        }
+                    },
+                    SlotTypes = new EquipmentSlotTypes[] {
+                        EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
+
+
+
+            // ACT
+            person.EquipmentCarrier.SetEquipment(armorProp, 0);
+
+
+
+            // ASSERT
+            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(10);
+            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
     }
 }

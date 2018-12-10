@@ -13,5 +13,10 @@ namespace Zilon.Core.Persons
             Type = type;
             Level = level;
         }
+
+        public override string ToString()
+        {
+            return $"{Type} {Level}";
+        }
     }
 }

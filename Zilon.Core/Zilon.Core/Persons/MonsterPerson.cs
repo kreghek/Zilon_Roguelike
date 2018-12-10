@@ -34,6 +34,11 @@ namespace Zilon.Core.Persons
         public MonsterPerson([NotNull] IMonsterScheme scheme,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
+            if (survivalRandomSource == null)
+            {
+                throw new ArgumentNullException(nameof(survivalRandomSource));
+            }
+
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
@@ -58,6 +63,11 @@ namespace Zilon.Core.Persons
             Survival = SurvivalData.CreateMonsterPersonSurvival(scheme, survivalRandomSource);
 
             Effects = new EffectCollection();
+        }
+
+        public override string ToString()
+        {
+            return $"{Scheme} Id:{Id}";
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -13,9 +15,9 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Экипировка персонажа.
         /// </summary>
-        Equipment[] Equipments { get; }
+        [NotNull] [ItemCanBeNull] Equipment[] Equipments { get; }
 
-        PersonSlotSubScheme[] Slots { get; }
+        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>
         /// Устанавливает экипировку.
@@ -25,7 +27,7 @@ namespace Zilon.Core.Persons
         /// Если указано null, то экипировка изымается из указанного слота.
         /// </param>
         /// <param name="slotIndex"> Индекс слота экипировки. </param>
-        void SetEquipment(Equipment equipment, int slotIndex);
+        void SetEquipment([NotNull] Equipment equipment, int slotIndex);
 
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.

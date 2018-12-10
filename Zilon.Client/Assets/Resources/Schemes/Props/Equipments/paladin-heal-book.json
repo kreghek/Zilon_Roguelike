@@ -1,9 +1,6 @@
 {
   "Equip": {
-    "Power": 1.0,
-    "ActSids": [
-      "chop"
-    ]
+   
   },
   "Name": {
     "En": "Книга лечения"

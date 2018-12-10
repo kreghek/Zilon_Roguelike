@@ -125,6 +125,7 @@ namespace Zilon.Core.Persons
                     }
                 }
             }
+
             if (EvolutionData.Stats != null)
             {
                 foreach (var bonusItem in bonusDict)
@@ -146,6 +147,32 @@ namespace Zilon.Core.Persons
                     statItem.Value = (float)Math.Round(statItem.Value, 1);
                 }
             }
+
+
+            var equipmentArmors = new List<PersonArmorItem>();
+            foreach (var equipment in EquipmentCarrier.Equipments)
+            {
+                if (equipment == null)
+                {
+                    continue;
+                }
+
+                var equipStats = equipment.Scheme.Equip;
+
+                if (equipStats.Armors != null)
+                {
+                    foreach (var propArmor in equipStats.Armors)
+                    {
+                        var personArmorItem = new PersonArmorItem(propArmor.Impact,
+                            propArmor.AbsorbtionLevel,
+                            propArmor.ArmorRank);
+
+                        equipmentArmors.Add(personArmorItem);
+                    }
+                }
+            }
+
+            CombatStats.DefenceStats.SetArmors(equipmentArmors.ToArray());
         }
 
         private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
@@ -194,6 +221,10 @@ namespace Zilon.Core.Persons
 
         private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
         {
+            ClearCalculatedStats();
+
+            CalcCombatStats();
+
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
         }
 

@@ -62,7 +62,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
                 else
                 {
-                    // В старый стол выбранного предмета записываем пустоту.
+                    // В старый слот выбранного предмета записываем пустоту.
                     // Потому что предмет перенесён из этого слота в другой.
                     equipmentCarrier.SetEquipment(null, currentEquipedSlotIndex.Value);
                 }

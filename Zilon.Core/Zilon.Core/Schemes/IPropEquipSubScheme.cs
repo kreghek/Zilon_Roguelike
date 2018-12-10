@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Components;
+﻿using Zilon.Core.Common;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -8,25 +9,9 @@ namespace Zilon.Core.Schemes
     public interface IPropEquipSubScheme
     {
         /// <summary>
-        /// Ранг пробития брони.
+        /// Характеристики брони, которую даёт предмет при экипировке.
         /// </summary>
-        // ReSharper disable once UnusedMemberInSuper.Global
-        int ApRank { get; }
-
-        /// <summary>
-        /// Ранг брони.
-        /// </summary>
-        // ReSharper disable once UnusedMemberInSuper.Global
-        int ArmorRank { get; }
-
-        /// <summary>
-        /// Доля поглощения урона при равном ранге пробития и брони.
-        /// </summary>
-        /// <remarks>
-        /// Зависит от Мощи.
-        /// </remarks>
-        // ReSharper disable once UnusedMemberInSuper.Global
-        float Absorption { get; }
+        IPropArmorItemSubScheme[] Armors { get; }
 
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using JetBrains.Annotations;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -9,8 +9,18 @@ namespace Zilon.Core.Persons
 {
     public class EquipmentCarrier : IEquipmentCarrier
     {
-        public EquipmentCarrier(IEnumerable<PersonSlotSubScheme> slots)
+        public EquipmentCarrier([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
         {
+            if (slots == null)
+            {
+                throw new ArgumentNullException(nameof(slots));
+            }
+
+            if (slots.Count() == 0)
+            {
+                throw new ArgumentException("Коллекция слотов не может быть пустой.");
+            }
+
             Slots = slots.ToArray();
 
             Equipments = new Equipment[Slots.Length];

@@ -14,7 +14,9 @@ namespace Zilon.Core.Tactics
         public event EventHandler Moved;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
         public event EventHandler<UsedActEventArgs> UsedAct;
-        public event EventHandler OnDefence;
+        public event EventHandler<DefenceEventArgs> OnDefence;
+        public event EventHandler<DamageTakenEventArgs> DamageTaken;
+        public event EventHandler<ArmorEventArgs> OnArmorPassed;
 
         /// <inheritdoc />
         /// <summary>
@@ -103,11 +105,16 @@ namespace Zilon.Core.Tactics
         public void TakeDamage(int value)
         {
             Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
+            DamageTaken?.Invoke(this, new DamageTakenEventArgs(value));
         }
 
-        public void ProcessDefence()
+        public void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
         {
-            OnDefence?.Invoke(this, new EventArgs());
+            var eventArgs = new DefenceEventArgs(prefferedDefenceItem,
+                successToHitRoll,
+                factToHitRoll);
+
+            OnDefence?.Invoke(this, eventArgs);
         }
 
         private void DoOpenContainer(IOpenContainerResult openResult)
@@ -120,6 +127,11 @@ namespace Zilon.Core.Tactics
         {
             var args = new UsedActEventArgs(target, tacticalAct);
             UsedAct?.Invoke(this, args);
+        }
+
+        public void ProcessArmor(int armorRank, int successRoll, int factRoll)
+        {
+            OnArmorPassed?.Invoke(this, new ArmorEventArgs(armorRank, successRoll, factRoll));
         }
     }
 }

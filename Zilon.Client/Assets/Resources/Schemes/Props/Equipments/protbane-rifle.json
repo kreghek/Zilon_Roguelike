@@ -1,10 +1,6 @@
 {
   "Equip": {
-    "Power": 0.75,
-    "ApRank": 5,
-    "ActSids": [
-      "chop"
-    ]
+   
   },
   "Craft": {
     "PrototypeSources": [

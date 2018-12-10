@@ -6,8 +6,8 @@ namespace Zilon.Core.Persons
 {
     public class PersonDefenceStats : IPersonDefenceStats
     {
-        public PersonDefenceStats([NotNull] PersonDefenceItem[] defences,
-            [NotNull] PersonArmorItem[] armors)
+        public PersonDefenceStats([NotNull] [ItemNotNull] PersonDefenceItem[] defences,
+            [NotNull] [ItemNotNull] PersonArmorItem[] armors)
         {
             Defences = defences ?? throw new ArgumentNullException(nameof(defences));
             Armors = armors ?? throw new ArgumentNullException(nameof(armors));
@@ -15,6 +15,16 @@ namespace Zilon.Core.Persons
 
         public PersonDefenceItem[] Defences { get; }
 
-        public PersonArmorItem[] Armors { get; }
+        public PersonArmorItem[] Armors { get; private set; }
+
+        public void SetArmors([ItemNotNull, NotNull] PersonArmorItem[] armors)
+        {
+            if (armors == null)
+            {
+                throw new ArgumentNullException(nameof(armors));
+            }
+
+            Armors = armors;
+        }
     }
 }
