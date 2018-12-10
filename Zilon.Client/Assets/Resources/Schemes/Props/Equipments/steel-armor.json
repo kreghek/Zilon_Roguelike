@@ -1,6 +1,13 @@
 {
   "Equip": {
-    "SlotTypes": [ "Body" ]
+    "SlotTypes": [ "Body" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 5
+      }
+    ]
   },
   "Name": {
     "En": "Steel Armor",
