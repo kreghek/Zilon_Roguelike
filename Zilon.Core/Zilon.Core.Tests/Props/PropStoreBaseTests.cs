@@ -377,6 +377,37 @@ namespace Zilon.Core.Tests.Props
         }
 
         /// <summary>
+        /// Тест проверяет, что при удалении ресурса, если стак ещё остаётся, выстреивает событие на изменение.
+        /// </summary>
+        [Test]
+        public void Remove_Resource_ChangedEventRaise()
+        {
+            // ARRANGE
+            const int resourceInitCount = 2;
+            const int resourceTakenCount = 1;
+            var resource = CreateResource(resourceInitCount);
+
+            var propStore = CreatePropStore();
+            propStore.Add(resource);
+
+            var usedResource = CreateResource(resourceTakenCount);
+
+
+
+            using (var monitor = propStore.Monitor())
+            {
+                // ACT
+                propStore.Remove(usedResource);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IPropStore.Changed));
+
+            }
+        }
+
+        /// <summary>
         /// Тест проверяет, что при удалении чертежа хранилище остаётся пустым.
         /// </summary>
         [Test]
