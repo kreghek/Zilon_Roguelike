@@ -364,6 +364,103 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
             _factActorNode.Should().NotBe(expectedSecondPoint);
         }
 
+
+        /// <summary>
+        /// Тест проверяет, что монстр после ожидания будет продолжать движение.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_2TurnWaiting_ContinueBypassAfterWaiting()
+        {
+            // ARRANGE
+
+            const int doudleIdleDuration = 2;
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(1, 1);
+
+            _map.HoldNode(_factActorNode, _actor);
+
+            var expectedActorPositions = new IMapNode[] {
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 2),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(5, 3),
+
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(4, 4),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5),
+
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5),
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 5),
+
+                _map.Nodes.OfType<HexNode>().SelectBy(3, 4),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 3),
+                _map.Nodes.OfType<HexNode>().SelectBy(2, 2),
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+                _map.Nodes.OfType<HexNode>().SelectBy(1, 1),
+            };
+
+            var tacticalActUsageService = CreateTacticalActUsageService();
+
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(doudleIdleDuration);
+            _decisionSource = decisionSourceMock.Object;
+
+            var logic = new PatrolLogic(_actor,
+                _patrolRoute3Points,
+                _map,
+                _actorList,
+                _decisionSource,
+                tacticalActUsageService);
+
+
+
+            // ACT
+            for (var round = 0; round < expectedActorPositions.Length + 1; round++)
+            {
+                var task = logic.GetCurrentTask();
+
+
+                // ASSERT
+                task.Should().NotBeNull();
+                switch (round)
+                {
+                    case 5:
+                    case 6:
+                    case 10:
+                    case 11:
+                    case 16:
+                    case 17:
+                        task.Should().BeOfType<IdleTask>($"На {round} итерации ожидается задача на простой.");
+                        break;
+
+                    default:
+                        task.Should().BeOfType<MoveTask>($"На {round} итерации ожидается задача на перемещение.");
+                        break;
+                }
+
+                task.Execute();
+
+                if (round < expectedActorPositions.Length)
+                {
+                    _factActorNode.Should().Be(expectedActorPositions[round],
+                        $"На {round} итерации неожиданные координаты актёра.");
+                }
+                else
+                {
+                    _factActorNode.Should().Be(expectedActorPositions[0],
+                        $"На {round} итерации актёр должен начать маршрут заново.");
+                }
+            }
+
+        }
+
         private ITacticalActUsageService CreateTacticalActUsageService()
         {
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();

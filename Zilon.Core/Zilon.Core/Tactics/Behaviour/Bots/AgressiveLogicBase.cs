@@ -90,7 +90,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// </remarks>
         protected abstract void ProcessIntruderDetected();
 
-        //TODO На этот метод нужен тест.
         private IActorTask HandleIdleMode()
         {
             if (_idleTask == null)
