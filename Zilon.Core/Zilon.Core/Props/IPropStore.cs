@@ -28,7 +28,25 @@ namespace Zilon.Core.Props
         /// <param name="prop"> Целевой предмет. </param>
         void Remove(IProp prop);
 
+        /// <summary>
+        /// Событие выстреливает, когда в хранилище появляется новый предмет.
+        /// </summary>
+        /// <remarks>
+        /// Это событие не срабатывает, если изменилось количество ресурсов.
+        /// </remarks>
         event EventHandler<PropStoreEventArgs> Added;
+
+        /// <summary>
+        /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
+        /// </summary>
         event EventHandler<PropStoreEventArgs> Removed;
+
+        /// <summary>
+        /// Событие выстреливает, когда один из предметов в хранилище изменяется.
+        /// </summary>
+        /// <remarks>
+        /// Используется, когда изменяется количество ресурсов в стаке.
+        /// </remarks>
+        event EventHandler<PropStoreEventArgs> Changed;
     }
 }

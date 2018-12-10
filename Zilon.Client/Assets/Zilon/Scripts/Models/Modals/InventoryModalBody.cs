@@ -70,6 +70,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
         inventory.Added += InventoryOnContentChanged;
         inventory.Removed += InventoryOnContentChanged;
+        inventory.Changed += InventoryOnContentChanged;
     }
 
     private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
@@ -83,6 +84,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var inventory = _actor.Person.Inventory;
         inventory.Added -= InventoryOnContentChanged;
         inventory.Removed -= InventoryOnContentChanged;
+        inventory.Changed -= InventoryOnContentChanged;
     }
 
     public void CancelChanges()

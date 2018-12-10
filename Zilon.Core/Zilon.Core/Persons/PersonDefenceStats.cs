@@ -19,12 +19,7 @@ namespace Zilon.Core.Persons
 
         public void SetArmors([ItemNotNull, NotNull] PersonArmorItem[] armors)
         {
-            if (armors == null)
-            {
-                throw new ArgumentNullException(nameof(armors));
-            }
-
-            Armors = armors;
+            Armors = armors ?? throw new ArgumentNullException(nameof(armors));
         }
     }
 }
