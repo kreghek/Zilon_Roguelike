@@ -30,15 +30,15 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     // ReSharper restore MemberCanBePrivate.Global
 
-    [NotNull] [Inject] private ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-    [NotNull] [Inject] private IPlayerState _playerState;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
 
-    [NotNull] [Inject] private ISectorManager _sectorManger;
+    [NotNull] [Inject] private readonly ISectorManager _sectorManger;
 
-    [NotNull] [Inject] private IGameLoop _gameLoop;
+    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
 
-    [NotNull] [Inject(Id = "prop-transfer-command")] private ICommand _propTransferCommand;
+    [NotNull] [Inject(Id = "prop-transfer-command")] private readonly ICommand _propTransferCommand;
 
     [NotNull] private PropTransferMachine _transferMachine;
 
@@ -51,7 +51,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         _transferMachine = transferMachine;
 
         ((PropTransferCommand)_propTransferCommand).TransferMachine = transferMachine;
-        
+
         UpdateProps();
     }
 
@@ -81,7 +81,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     private void PropItemOnClick(object sender, EventArgs e)
     {
-        var currentItemVm = (PropItemVm) sender;
+        var currentItemVm = (PropItemVm)sender;
         var parentTransform = currentItemVm.transform.parent;
         foreach (Transform itemTranform in parentTransform)
         {

@@ -18,11 +18,11 @@ public class InventorySlotVm : MonoBehaviour
 
     public int CurrentCount;
 
-    [NotNull] [Inject] private ISectorManager _sectorManager;
-    [NotNull] [Inject] private ICommandManager _comamndManager;
-    [NotNull] [Inject] private IInventoryState _inventoryState;
-    [NotNull] [Inject] private IPlayerState _playerState;
-    [NotNull] [Inject(Id = "equip-command")] private ICommand _equipCommand;
+    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
+    [NotNull] [Inject] private readonly ICommandManager _comamndManager;
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
     public int SlotIndex;
     public GameObject Border;

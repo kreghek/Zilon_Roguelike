@@ -9,50 +9,49 @@ using Zilon.Core.Props;
 public class PropItemVm : MonoBehaviour, IPropItemViewModel
 {
     public Text CountText;
-	public Image IconImage;
-	public Image SelectedBorder;
-	
-	public string Sid;
+    public Image IconImage;
+    public Image SelectedBorder;
+
+    public string Sid;
 
     public IProp Prop { get; private set; }
 
     public event EventHandler Click;
 
-	public void Init(IProp prop)
-	{
-		Prop = prop;
+    public void Init(IProp prop)
+    {
+        Prop = prop;
 
-		var resource = prop as Resource;
-		if (resource != null)
-		{
-			CountText.gameObject.SetActive(true);
-			CountText.text = $"x{resource.Count}";
-		}
-		else
-		{
-			CountText.gameObject.SetActive(false);
-		}
+        if (prop is Resource resource)
+        {
+            CountText.gameObject.SetActive(true);
+            CountText.text = $"x{resource.Count}";
+        }
+        else
+        {
+            CountText.gameObject.SetActive(false);
+        }
 
-		Sid = prop.Scheme.Sid;
+        Sid = prop.Scheme.Sid;
 
-		var iconSprite = CalcIcon(prop);
+        var iconSprite = CalcIcon(prop);
 
-		IconImage.sprite = iconSprite;
-	}
+        IconImage.sprite = iconSprite;
+    }
 
-	private Sprite CalcIcon(IProp prop)
-	{
-		var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
-		return iconSprite;
-	}
+    private Sprite CalcIcon(IProp prop)
+    {
+        var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
+        return iconSprite;
+    }
 
-	public void SetSelectedState(bool value)
-	{
-		SelectedBorder.gameObject.SetActive(value);
-	}
+    public void SetSelectedState(bool value)
+    {
+        SelectedBorder.gameObject.SetActive(value);
+    }
 
-	public void Click_Handler()
-	{
-		Click?.Invoke(this, new EventArgs());
-	}
+    public void Click_Handler()
+    {
+        Click?.Invoke(this, new EventArgs());
+    }
 }
