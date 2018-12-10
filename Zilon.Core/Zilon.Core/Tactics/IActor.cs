@@ -67,9 +67,15 @@ namespace Zilon.Core.Tactics
         /// </summary>
         event EventHandler<UsedActEventArgs> UsedAct;
 
-        event EventHandler DamageTaken;
+        /// <summary>
+        /// Происходит, когда актёр получает урон.
+        /// </summary>
+        event EventHandler<DamageTakenEventArgs> DamageTaken;
 
-        event EventHandler OnArmorPassed;
+        /// <summary>
+        /// Происходит, когда актёр успешно использует броню.
+        /// </summary>
+        event EventHandler<ArmorEventArgs> OnArmorPassed;
 
         /// <summary>
         /// Приенение действия к указанной цели.
@@ -85,5 +91,11 @@ namespace Zilon.Core.Tactics
         /// Вызывается службой действий в случае успешной обороны.
         /// </summary>
         void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll);
+
+        //TODO Избавиться от этого метода.
+        /// <summary>
+        /// Вызывается службой действий в случае успешного использования брони.
+        /// </summary>
+        void ProcessArmor(int armorRank, int successRoll, int factRoll);
     }
 }

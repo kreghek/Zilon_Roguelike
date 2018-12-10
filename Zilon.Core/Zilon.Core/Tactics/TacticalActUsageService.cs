@@ -106,6 +106,8 @@ namespace Zilon.Core.Tactics
                         var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
                         actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                     }
+
+                    actor.ProcessArmor(armorRank, successArmorSaveRoll, factArmorSaveRoll);
                 }
 
                 targetActor.TakeDamage(actEfficientArmorBlocked);
