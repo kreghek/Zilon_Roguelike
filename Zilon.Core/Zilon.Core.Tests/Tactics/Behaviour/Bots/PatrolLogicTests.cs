@@ -373,7 +373,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         {
             // ARRANGE
 
-            const int ExpectedIdleDuration = 2;
+            const int doudleIdleDuration = 2;
 
             _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(1, 1);
 
@@ -409,7 +409,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             var decisionSourceMock = new Mock<IDecisionSource>();
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(ExpectedIdleDuration);
+                .Returns(doudleIdleDuration);
             _decisionSource = decisionSourceMock.Object;
 
             var logic = new PatrolLogic(_actor,
