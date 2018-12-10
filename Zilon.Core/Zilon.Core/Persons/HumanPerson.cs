@@ -148,6 +148,8 @@ namespace Zilon.Core.Persons
                 }
             }
 
+
+            var equipmentArmors = new List<PersonArmorItem>();
             foreach (var equipment in EquipmentCarrier.Equipments)
             {
                 if (equipment == null)
@@ -156,7 +158,18 @@ namespace Zilon.Core.Persons
                 }
 
                 var equipStats = equipment.Scheme.Equip;
-                equipStats.Absorption
+
+                if (equipStats.Armors != null)
+                {
+                    foreach (var propArmor in equipStats.Armors)
+                    {
+                        var personArmorItem = new PersonArmorItem(propArmor.Impact,
+                            propArmor.AbsorbtionLevel,
+                            propArmor.ArmorRank);
+
+                        equipmentArmors.Add(personArmorItem);
+                    }
+                }
             }
         }
 
