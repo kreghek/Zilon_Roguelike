@@ -107,7 +107,7 @@ namespace Zilon.Core.Tactics
                         actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                     }
 
-                    actor.ProcessArmor(armorRank, successArmorSaveRoll, factArmorSaveRoll);
+                    targetActor.ProcessArmor(armorRank, successArmorSaveRoll, factArmorSaveRoll);
                 }
 
                 targetActor.TakeDamage(actEfficientArmorBlocked);
@@ -119,9 +119,12 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                targetActor.ProcessDefence(prefferedDefenceItem,
-                    successToHitRoll,
-                    factToHitRoll);
+                if (prefferedDefenceItem != null)
+                {
+                    targetActor.ProcessDefence(prefferedDefenceItem,
+                        successToHitRoll,
+                        factToHitRoll);
+                }
             }
         }
 
