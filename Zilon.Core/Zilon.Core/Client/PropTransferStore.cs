@@ -97,6 +97,7 @@ namespace Zilon.Core.Client
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
+        public event EventHandler<PropStoreEventArgs> Changed;
 
         public void Add(IProp prop)
         {

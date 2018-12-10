@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 namespace Zilon.Core.Props
 {
     /// <summary>
@@ -13,6 +15,7 @@ namespace Zilon.Core.Props
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
+        public event EventHandler<PropStoreEventArgs> Changed;
 
         protected PropStoreBase()
         {
@@ -62,12 +65,28 @@ namespace Zilon.Core.Props
 
         private void DoRemovedProp(IProp prop)
         {
-            Removed?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
+            DoEventInner(Removed, prop);
         }
 
         private void DoAddProp(IProp prop)
         {
-            Added?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
+            DoEventInner(Added, prop);
+        }
+
+        private void DoChangedProp(IProp prop)
+        {
+            DoEventInner(Changed, prop);
+        }
+
+        private void DoEventInner([CanBeNull] EventHandler<PropStoreEventArgs> @event,
+            [CanBeNull] IProp prop)
+        {
+            if (prop == null)
+            {
+                throw new ArgumentNullException(nameof(prop));
+            }
+
+            @event?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
         }
 
         private void RemoveEquipment(Equipment equipment)
@@ -101,6 +120,7 @@ namespace Zilon.Core.Props
             else
             {
                 currentResource.Count += resource.Count;
+                DoChangedProp(resource);
             }
         }
 
