@@ -9,33 +9,6 @@ namespace Zilon.Core.Schemes
     public sealed class PropEquipSubScheme : SubSchemeBase, IPropEquipSubScheme
     {
         /// <summary>
-        /// Мощь. Влияет на все характиристики предмета.
-        /// </summary>
-        [JsonProperty]
-        public float Power { get; private set; }
-
-        /// <summary>
-        /// Ранг пробития брони.
-        /// </summary>
-        [JsonProperty]
-        public int ApRank { get; private set; }
-
-        /// <summary>
-        /// Ранг брони.
-        /// </summary>
-        [JsonProperty]
-        public int ArmorRank { get; private set; }
-
-        /// <summary>
-        /// Доля поглощения урона при равном ранге пробития и брони.
-        /// </summary>
-        /// <remarks>
-        /// Зависит от Мощи.
-        /// </remarks>
-        [JsonProperty]
-        public float Absorption { get; private set; }
-
-        /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
         [JsonProperty]
@@ -48,6 +21,6 @@ namespace Zilon.Core.Schemes
         public EquipmentSlotTypes[] SlotTypes { get; private set; }
 
         [JsonConverter(typeof(ConcreteTypeConverter<PropArmorItemSubScheme[]>))]
-        public IPropArmorItemSubScheme[] Armors { get; private set; }
+        public IPropArmorItemSubScheme[] Armors { get; set; }
     }
 }

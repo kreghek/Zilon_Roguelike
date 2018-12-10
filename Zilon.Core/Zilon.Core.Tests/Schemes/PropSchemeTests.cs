@@ -17,27 +17,26 @@ namespace Zilon.Core.Tests.Schemes
         /// Тест проверяет, что работы корректно десериализуется.
         /// </summary>
         [Test]
-        public void Deserialization_JobsInLevel_TypeAndValueAreCorrect()
+        public void Deserialization_ArmorsInProp_ArmorIsCorrect()
         {
             // ARRANGE
-            var sourceText = "";
-//            var sourceText = @"{
-//  Equip: {
-//                "SlotTypes": [ "Body" ],
-//    "Armors": [
-//      {
-//        "Impact": "Kinetic",
-//        "AbsorbtionLevel": "Normal",
-//        "ArmorRank": 5
-//      }
-//    ]
-//  },
-//  "Name": {
-//    "En": "Steel Armor",
-//	  "Ru": "Стальная броня"
-//  }
-//}
-//";
+
+            var sourceText = @"{
+""Equip"": {
+  ""SlotTypes"": [ ""Body"" ],
+  ""Armors"": [
+  {
+    ""Impact"": ""Kinetic"",
+    ""AbsorbtionLevel"": ""Normal"",
+    ""ArmorRank"": 5
+  }]
+  },
+    ""Name"": {
+      ""En"": ""Steel Armor"",
+	  ""Ru"": ""Стальная броня""
+  }
+}
+";
 
 
 
