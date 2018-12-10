@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,14 +29,30 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public IActor Actor { get; set; }
 
 
+    [UsedImplicitly]
     public void Start()
     {
         Actor.Moved += Actor_Moved;
         Actor.Person.Survival.Dead += Survival_Dead;
+        Actor.DamageTaken += Actor_DamageTaken;
+        Actor.OnArmorPassed += Actor_OnArmorPassed;
+        Actor.OnDefence += Actor_OnDefence;
     }
 
+    [UsedImplicitly]
+    public void OnDestroy()
+    {
+        Actor.Moved -= Actor_Moved;
+        Actor.Person.Survival.Dead -= Survival_Dead;
+        Actor.DamageTaken -= Actor_DamageTaken;
+        Actor.OnArmorPassed -= Actor_OnArmorPassed;
+        Actor.OnDefence -= Actor_OnDefence;
+    }
+
+    [UsedImplicitly]
     public void Update()
     {
+        //TODO Можно вынести в отдельный компонент, который уничтожается после выполнения движения.
         if (_moveCounter != null)
         {
             transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
@@ -47,6 +65,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
     }
 
+    [UsedImplicitly]
     public void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject())
@@ -57,6 +76,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Selected?.Invoke(this, new EventArgs());
     }
 
+    [UsedImplicitly]
     private void Survival_Dead(object sender, EventArgs e)
     {
         var isHumanPerson = Actor.Owner is HumanPlayer;
@@ -77,5 +97,20 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         var actorNode = (HexNode)Actor.Node;
         var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
+    }
+
+    private void Actor_OnDefence(object sender, DefenceEventArgs e)
+    {
+        Debug.Log($"{sender} defends {e.PrefferedDefenceItem}, roll: {e.FactToHitRoll}, success: {e.SuccessToHitRoll}.");
+    }
+
+    private void Actor_OnArmorPassed(object sender, ArmorEventArgs e)
+    {
+        Debug.Log($"{sender} successfully used armor rank: {e.ArmorRank}, roll: {e.FactRoll}, success: {e.SuccessRoll}.");
+    }
+
+    private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
+    {
+        Debug.Log($"{sender} take damage {e.Value}");
     }
 }
