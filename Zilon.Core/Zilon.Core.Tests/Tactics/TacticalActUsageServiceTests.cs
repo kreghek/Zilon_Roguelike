@@ -56,8 +56,8 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест проверяет, что действием с определённым типом наступления
-        /// успешно выполняется при различных типах обороны.
+        /// Тест проверяет, что действие с определённым типом наступления
+        /// успешно пробивает различные типы обороны.
         /// </summary>
         [Test]
         public void UseOn_OffenceTypeVsDefenceType_Success()
@@ -127,7 +127,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 9) };
+            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 10) };
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -137,7 +137,7 @@ namespace Zilon.Core.Tests.Tactics
                 Offense = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType,
-                    ApRank = 10,
+                    ApRank = 20,
                     Impact = ImpactType.Kinetic
                 }
             };
@@ -221,7 +221,7 @@ namespace Zilon.Core.Tests.Tactics
             monsterMock.SetupGet(x => x.Node).Returns(new HexNode(1, 0));
 
             var monsterPersonMock = new Mock<IPerson>();
-            
+
             var monsterSurvivalDataMock = new Mock<ISurvivalData>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(false);
             var monsterSurvival = monsterSurvivalDataMock.Object;
