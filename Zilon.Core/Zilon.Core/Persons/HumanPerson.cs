@@ -171,6 +171,8 @@ namespace Zilon.Core.Persons
                     }
                 }
             }
+
+            CombatStats.DefenceStats.SetArmors(equipmentArmors.ToArray());
         }
 
         private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
