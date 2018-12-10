@@ -6,11 +6,12 @@ using NUnit.Framework;
 
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
 
-    [TestFixture()]
+    [TestFixture]
     public class EquipmentTests
     {
         /// <summary>
@@ -21,7 +22,9 @@ namespace Zilon.Core.Tests.Persons
         public void Equipment_SchemeWithOutEquipSubScheme_NoExceptions()
         {
             // ARRANGE
-            var scheme = new PropScheme();
+            var scheme = new TestPropScheme {
+                Equip = null //Явно указываем, что предмет не является экипировкой.
+            };
 
             var acts = new TacticalActScheme[0];
 
