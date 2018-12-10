@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
         public event EventHandler Moved;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
         public event EventHandler<UsedActEventArgs> UsedAct;
-        public event EventHandler OnDefence;
+        public event EventHandler<DefenceEventArgs> OnDefence;
 
         /// <inheritdoc />
         /// <summary>
@@ -105,9 +105,13 @@ namespace Zilon.Core.Tactics
             Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
         }
 
-        public void ProcessDefence()
+        public void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
         {
-            OnDefence?.Invoke(this, new EventArgs());
+            var eventArgs = new DefenceEventArgs(prefferedDefenceItem,
+                successToHitRoll,
+                factToHitRoll);
+
+            OnDefence?.Invoke(this, eventArgs);
         }
 
         private void DoOpenContainer(IOpenContainerResult openResult)

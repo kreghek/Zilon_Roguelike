@@ -117,7 +117,9 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                targetActor.ProcessDefence();
+                targetActor.ProcessDefence(prefferedDefenceItem,
+                    successToHitRoll,
+                    factToHitRoll);
             }
         }
 
