@@ -1,7 +1,5 @@
 {
   "Equip": {
-    "Power": 1.0,
-    "ApRank": 5,
     "ActSids": [
       "chop"
     ]

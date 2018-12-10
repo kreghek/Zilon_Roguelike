@@ -1,10 +1,6 @@
 {
   "Equip": {
-    "ArmorRank": 4,
-    "Absorption": 0.5,
-    "ActSids": [
-      "chop"
-    ]
+
   },
   "Craft": {
     "PrototypeSources": [

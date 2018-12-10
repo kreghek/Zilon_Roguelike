@@ -1,7 +1,5 @@
 {
   "Equip": {
-    "ArmorRank": 4,
-    "Absorption": 1,
     "ActSids": [
       "chop"
     ]
