@@ -37,6 +37,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // Специализированные сервисы для Ui.
         Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
+        Container.Bind<ILogService>().To<LogService>().AsSingle();
 
         // Комманды актёра.
         Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();

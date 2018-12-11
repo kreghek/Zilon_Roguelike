@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -18,7 +20,9 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private const float MOVE_SPEED_Q = 1;
     private const float END_MOVE_COUNTER = 1;
 
-    [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly IPlayerState _playerState;
+
+    [NotNull] [Inject] private readonly ILogService _logService;
 
     public ActorGraphicBase GraphicRoot;
 
@@ -101,16 +105,16 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void Actor_OnDefence(object sender, DefenceEventArgs e)
     {
-        Debug.Log($"{sender} defends {e.PrefferedDefenceItem}, roll: {e.FactToHitRoll}, success: {e.SuccessToHitRoll}.");
+        _logService.Log($"{sender} defends {e.PrefferedDefenceItem}, roll: {e.FactToHitRoll}, success: {e.SuccessToHitRoll}.");
     }
 
     private void Actor_OnArmorPassed(object sender, ArmorEventArgs e)
     {
-        Debug.Log($"{sender} successfully used armor rank: {e.ArmorRank}, roll: {e.FactRoll}, success: {e.SuccessRoll}.");
+        _logService.Log($"{sender} successfully used armor rank: {e.ArmorRank}, roll: {e.FactRoll}, success: {e.SuccessRoll}.");
     }
 
     private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
     {
-        Debug.Log($"{sender} take damage {e.Value}");
+        _logService.Log($"{sender} take damage {e.Value}");
     }
 }
