@@ -1,6 +1,13 @@
 {
   "Equip": {
-    "SlotTypes": [ "Head" ]
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ]
   },
   "Name": {
     "En": "Steel helmet",
