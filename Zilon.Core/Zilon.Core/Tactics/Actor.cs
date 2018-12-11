@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -27,17 +30,16 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        public IMapNode Node { get; set; }
-
-        public float Damage { get; set; }
+        public IMapNode Node { get; private set; }
 
         public IPlayer Owner { get; }
 
-        public Actor(IPerson person, IPlayer owner, IMapNode node)
+        [ExcludeFromCodeCoverage]
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node)
         {
-            Person = person;
-            Owner = owner;
-            Node = node;
+            Person = person ?? throw new ArgumentNullException(nameof(person));
+            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            Node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
         public bool CanBeDamaged()
@@ -61,11 +63,6 @@ namespace Zilon.Core.Tactics
         public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
         {
             DoUseAct(target, tacticalAct);
-        }
-
-        public override string ToString()
-        {
-            return $"{Person}";
         }
 
         public void UseProp(IProp usedProp)
@@ -105,9 +102,16 @@ namespace Zilon.Core.Tactics
         public void TakeDamage(int value)
         {
             Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
+            DoDamageTaken(value);
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void DoDamageTaken(int value)
+        {
             DamageTaken?.Invoke(this, new DamageTakenEventArgs(value));
         }
 
+        [ExcludeFromCodeCoverage]
         public void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
         {
             var eventArgs = new DefenceEventArgs(prefferedDefenceItem,
@@ -117,21 +121,30 @@ namespace Zilon.Core.Tactics
             OnDefence?.Invoke(this, eventArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         private void DoOpenContainer(IOpenContainerResult openResult)
         {
             var e = new OpenContainerEventArgs(openResult);
             OpenedContainer?.Invoke(this, e);
         }
 
+        [ExcludeFromCodeCoverage]
         private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
         {
             var args = new UsedActEventArgs(target, tacticalAct);
             UsedAct?.Invoke(this, args);
         }
 
+        [ExcludeFromCodeCoverage]
         public void ProcessArmor(int armorRank, int successRoll, int factRoll)
         {
             OnArmorPassed?.Invoke(this, new ArmorEventArgs(armorRank, successRoll, factRoll));
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override string ToString()
+        {
+            return $"{Person}";
         }
     }
 }

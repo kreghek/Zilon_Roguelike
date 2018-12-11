@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
 
 using Zilon.Core.Persons;
 
@@ -9,7 +12,10 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class DefenceEventArgs : EventArgs
     {
-        public DefenceEventArgs(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
+        [ExcludeFromCodeCoverage]
+        public DefenceEventArgs([NotNull] PersonDefenceItem prefferedDefenceItem,
+            int successToHitRoll,
+            int factToHitRoll)
         {
             PrefferedDefenceItem = prefferedDefenceItem ?? throw new ArgumentNullException(nameof(prefferedDefenceItem));
             SuccessToHitRoll = successToHitRoll;

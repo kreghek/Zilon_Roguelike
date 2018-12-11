@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.Tactics
 {
     public sealed class ArmorEventArgs: EventArgs
     {
+        [ExcludeFromCodeCoverage]
         public ArmorEventArgs(int armorRank, int successRoll, int factRoll)
         {
             ArmorRank = armorRank;

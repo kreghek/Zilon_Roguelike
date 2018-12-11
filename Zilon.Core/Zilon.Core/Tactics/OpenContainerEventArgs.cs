@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Аргументы события на открытие контейнера.
     /// </summary>
-    public class OpenContainerEventArgs: EventArgs
+    public sealed class OpenContainerEventArgs: EventArgs
     {
         /// <summary>
         /// Результат открытия. True - если открыт успешно. Иначе - false.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public IOpenContainerResult Result { get; }
 
         [ExcludeFromCodeCoverage]
-        public OpenContainerEventArgs(IOpenContainerResult result)
+        public OpenContainerEventArgs([NotNull] IOpenContainerResult result)
         {
-            Result = result;
+            Result = result ?? throw new ArgumentNullException(nameof(result));
         }
     }
 }
