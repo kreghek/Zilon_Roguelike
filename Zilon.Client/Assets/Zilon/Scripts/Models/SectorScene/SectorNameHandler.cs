@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 using Zenject;
 
-public class SectornameHad : MonoBehaviour
+public class SectorNameHandler : MonoBehaviour
 {
     public Text SectorNameText;
 
