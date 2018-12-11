@@ -1,6 +1,13 @@
 {
   "Equip": {
-    "SlotTypes": [ "Hand" ]
+    "SlotTypes": [ "Hand" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 2
+      }
+    ]
   },
   "Name": {
     "En": "Wood shield",

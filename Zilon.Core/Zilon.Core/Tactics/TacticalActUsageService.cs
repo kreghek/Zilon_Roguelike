@@ -110,11 +110,14 @@ namespace Zilon.Core.Tactics
                     targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
                 }
 
-                targetActor.TakeDamage(actEfficientArmorBlocked);
-
-                if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
+                if (actEfficientArmorBlocked > 0)
                 {
-                    CountTargetActorDefeat(actor, targetActor);
+                    targetActor.TakeDamage(actEfficientArmorBlocked);
+
+                    if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
+                    {
+                        CountTargetActorDefeat(actor, targetActor);
+                    }
                 }
             }
             else

@@ -148,7 +148,14 @@ namespace Zilon.Core.Persons
                 }
             }
 
+            RecalculatePersonArmor();
+        }
 
+        /// <summary>
+        /// Пересчёт показателей брони персонажа.
+        /// </summary>
+        private void RecalculatePersonArmor()
+        {
             var equipmentArmors = new List<PersonArmorItem>();
             foreach (var equipment in EquipmentCarrier.Equipments)
             {
@@ -172,7 +179,82 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            CombatStats.DefenceStats.SetArmors(equipmentArmors.ToArray());
+            var mergedArmors = MergeArmor(equipmentArmors);
+
+            CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+        }
+
+        private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
+        {
+            var armorGroups = equipmentArmors.GroupBy(x => x.Impact).OrderBy(x => x.Key);
+
+            var mergedArmors = new List<PersonArmorItem>();
+            foreach (var armorGroup in armorGroups)
+            {
+                var orderedArmors = from armor in armorGroup
+                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                                    select armor;
+
+                float? rankRaw = null;
+                PersonRuleLevel? armorLevel = null;
+                foreach (var armor in orderedArmors)
+                {
+                    //т.к. вся броня упорядочена от худшей
+                    // первым будет обработан элемент с худшими показателями
+                    if (rankRaw == null || armorLevel == null)
+                    {
+                        rankRaw = armor.ArmorRank;
+                        armorLevel = armor.AbsorbtionLevel;
+                    }
+                    else
+                    {
+                        rankRaw += armor.ArmorRank * 0.5f;
+
+                        var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
+                        if (levelDiff > 0)
+                        {
+                            rankRaw += armor.ArmorRank * 0.33f * levelDiff;
+                        }
+                    }
+                }
+
+                var totalRankRaw = Math.Round(rankRaw.Value);
+
+                yield return new PersonArmorItem(armorGroup.Key,
+                    armorLevel.Value,
+                    (int)totalRankRaw);
+            }
+        }
+
+        private static int GetLevelDiff(PersonRuleLevel level, PersonRuleLevel baseLevel)
+        {
+            var a = GetArmorModifierByLevel(level);
+            var b = GetArmorModifierByLevel(baseLevel);
+            return a - b;
+        }
+
+        private static int GetArmorModifierByLevel(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.None:
+                    return 0;
+
+                case PersonRuleLevel.Lesser:
+                    return 1;
+
+                case PersonRuleLevel.Normal:
+                    return 2;
+
+                case PersonRuleLevel.Grand:
+                    return 3;
+
+                case PersonRuleLevel.Absolute:
+                    return 5;
+
+                default:
+                    throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level));
+            }
         }
 
         private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,

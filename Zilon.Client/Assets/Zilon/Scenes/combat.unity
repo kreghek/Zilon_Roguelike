@@ -2206,6 +2206,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1809942183}
   - component: {fileID: 1809942185}
+  - component: {fileID: 1809942186}
   - component: {fileID: 1809942184}
   m_Layer: 5
   m_Name: SectorName
@@ -2275,6 +2276,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1809942182}
   m_CullTransparentMesh: 1
+--- !u!114 &1809942186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809942182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb29d8f0d8c7ec44b5867830b3befd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SectorNameText: {fileID: 1809942184}
 --- !u!1 &2057190880
 GameObject:
   m_ObjectHideFlags: 0

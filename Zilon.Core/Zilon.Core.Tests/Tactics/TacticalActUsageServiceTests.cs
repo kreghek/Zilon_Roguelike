@@ -70,6 +70,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeToHitDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
@@ -119,6 +120,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(fakeToHitDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
@@ -300,6 +302,7 @@ namespace Zilon.Core.Tests.Tactics
         {
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(6);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             _actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             _perkResolverMock = new Mock<IPerkResolver>();
