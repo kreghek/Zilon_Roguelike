@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using FluentAssertions;
 
 using NUnit.Framework;
@@ -54,8 +54,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial
                 factNeighbors[i].OffsetY.Should().Be(expectedNeighbors[i].OffsetY);
             }
 
-            // ReSharper disable once CoVariantArrayConversion
-            factNeighbors.Should().BeEquivalentTo(expectedNeighbors);
+            factNeighbors.Should().BeEquivalentTo<HexNode>(expectedNeighbors);
         }
     }
 }

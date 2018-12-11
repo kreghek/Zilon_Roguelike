@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+using JetBrains.Annotations;
 
 using Newtonsoft.Json;
 
@@ -7,10 +8,9 @@ namespace Zilon.Core.Schemes
     public class MonsterDefenceSubScheme : IMonsterDefenseSubScheme
     {
         [JsonConstructor]
-        public MonsterDefenceSubScheme([CanBeNull] MonsterDefenceItemSubScheme[] defences)
+        public MonsterDefenceSubScheme([CanBeNull] [ItemNotNull] MonsterDefenceItemSubScheme[] defences)
         {
-            // ReSharper disable once CoVariantArrayConversion
-            Defenses = defences;
+            Defenses = defences?.Cast<IMonsterDefenceItemSubScheme>().ToArray();
         }
 
         public IMonsterDefenceItemSubScheme[] Defenses { get; }
