@@ -311,6 +311,7 @@ internal class SectorVM : MonoBehaviour
     {
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
+        _personManager.SectorLevel++;
         SceneManager.LoadScene("combat");
     }
 
@@ -350,6 +351,7 @@ internal class SectorVM : MonoBehaviour
 
             _personManager.Person = person;
 
+            _personManager.SectorName = GetRandomName();
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
@@ -375,6 +377,12 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.Actor.UsedAct += ActorOnUsedAct;
 
         return actorViewModel;
+    }
+
+    private string GetRandomName()
+    {
+        var names = new[] { "Dungeon", "Caves", "Catacombs", "Ruins", "Chirch" };
+        return names[UnityEngine.Random.Range(0, names.Length - 1)];
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
