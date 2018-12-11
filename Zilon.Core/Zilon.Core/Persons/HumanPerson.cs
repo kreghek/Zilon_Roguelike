@@ -186,7 +186,7 @@ namespace Zilon.Core.Persons
 
         private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
         {
-            var armorGroups = equipmentArmors.GroupBy(x => x.Impact);
+            var armorGroups = equipmentArmors.GroupBy(x => x.Impact).OrderBy(x => x.Key);
 
             var mergedArmors = new List<PersonArmorItem>();
             foreach (var armorGroup in armorGroups)
@@ -210,9 +210,10 @@ namespace Zilon.Core.Persons
                     {
                         rankRaw += armor.ArmorRank * 0.5f;
 
-                        if (armorLevel.Value < armor.AbsorbtionLevel)
+                        var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
+                        if (levelDiff > 0)
                         {
-                            rankRaw += armor.ArmorRank * 0.3f;
+                            rankRaw += armor.ArmorRank * 0.33f * levelDiff;
                         }
                     }
                 }
@@ -222,6 +223,37 @@ namespace Zilon.Core.Persons
                 yield return new PersonArmorItem(armorGroup.Key,
                     armorLevel.Value,
                     (int)totalRankRaw);
+            }
+        }
+
+        private static int GetLevelDiff(PersonRuleLevel level, PersonRuleLevel baseLevel)
+        {
+            var a = GetArmorModifierByLevel(level);
+            var b = GetArmorModifierByLevel(baseLevel);
+            return a - b;
+        }
+
+        private static int GetArmorModifierByLevel(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.None:
+                    return 0;
+
+                case PersonRuleLevel.Lesser:
+                    return 1;
+
+                case PersonRuleLevel.Normal:
+                    return 2;
+
+                case PersonRuleLevel.Grand:
+                    return 3;
+
+                case PersonRuleLevel.Absolute:
+                    return 5;
+
+                default:
+                    throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level));
             }
         }
 
