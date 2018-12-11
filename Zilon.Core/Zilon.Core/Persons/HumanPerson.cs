@@ -148,7 +148,14 @@ namespace Zilon.Core.Persons
                 }
             }
 
+            RecalculatePersonArmor();
+        }
 
+        /// <summary>
+        /// Пересчёт показателей брони персонажа.
+        /// </summary>
+        private void RecalculatePersonArmor()
+        {
             var equipmentArmors = new List<PersonArmorItem>();
             foreach (var equipment in EquipmentCarrier.Equipments)
             {
@@ -172,7 +179,50 @@ namespace Zilon.Core.Persons
                 }
             }
 
-            CombatStats.DefenceStats.SetArmors(equipmentArmors.ToArray());
+            var mergedArmors = MergeArmor(equipmentArmors);
+
+            CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+        }
+
+        private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
+        {
+            var armorGroups = equipmentArmors.GroupBy(x => x.Impact);
+
+            var mergedArmors = new List<PersonArmorItem>();
+            foreach (var armorGroup in armorGroups)
+            {
+                var orderedArmors = from armor in armorGroup
+                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                                    select armor;
+
+                float? rankRaw = null;
+                PersonRuleLevel? armorLevel = null;
+                foreach (var armor in orderedArmors)
+                {
+                    //т.к. вся броня упорядочена от худшей
+                    // первым будет обработан элемент с худшими показателями
+                    if (rankRaw == null || armorLevel == null)
+                    {
+                        rankRaw = armor.ArmorRank;
+                        armorLevel = armor.AbsorbtionLevel;
+                    }
+                    else
+                    {
+                        rankRaw += armor.ArmorRank * 0.5f;
+
+                        if (armorLevel.Value < armor.AbsorbtionLevel)
+                        {
+                            rankRaw += armor.ArmorRank * 0.3f;
+                        }
+                    }
+                }
+
+                var totalRankRaw = Math.Round(rankRaw.Value);
+
+                yield return new PersonArmorItem(armorGroup.Key,
+                    armorLevel.Value,
+                    (int)totalRankRaw);
+            }
         }
 
         private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
