@@ -17,7 +17,7 @@ namespace Zilon.Core.Persons
         public TacticalAct([NotNull]ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
-            [NotNull] Equipment equipment)
+            [CanBeNull] Equipment equipment)
         {
             Scheme = scheme ?? throw new System.ArgumentNullException(nameof(scheme));
 
@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons
 
             ToHit = toHit ?? throw new System.ArgumentNullException(nameof(toHit));
 
-            Equipment = equipment ?? throw new System.ArgumentNullException(nameof(equipment));
+            Equipment = equipment;
         }
 
         public ITacticalActStatsSubScheme Stats { get; }

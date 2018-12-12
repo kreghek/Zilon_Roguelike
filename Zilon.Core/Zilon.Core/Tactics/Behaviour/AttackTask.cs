@@ -88,25 +88,32 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private IEnumerable<ITacticalAct> GetUsedActs()
         {
-            var slots = Actor.Person.EquipmentCarrier.Slots;
-            for (var i = 0; i < slots.Length; i++)
+            if (Actor.Person.EquipmentCarrier == null)
             {
-                var slotEquipment = Actor.Person.EquipmentCarrier.Equipments[i];
-                if (slotEquipment == null)
+                yield return Actor.Person.TacticalActCarrier.Acts.First();
+            }
+            else
+            {
+                var slots = Actor.Person.EquipmentCarrier.Slots;
+                for (var i = 0; i < slots.Length; i++)
                 {
-                    continue;
+                    var slotEquipment = Actor.Person.EquipmentCarrier.Equipments[i];
+                    if (slotEquipment == null)
+                    {
+                        continue;
+                    }
+
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) > 0)
+                    {
+                        continue;
+                    }
+
+                    var equipmentActs = from act in Actor.Person.TacticalActCarrier.Acts
+                                        where act.Equipment == slotEquipment
+                                        select act;
+
+                    yield return equipmentActs.First();
                 }
-
-                if ((slots[i].Types & EquipmentSlotTypes.Hand) > 0)
-                {
-                    continue;
-                }
-
-                var equipmentActs = from act in Actor.Person.TacticalActCarrier.Acts
-                                    where act.Equipment == slotEquipment
-                                    select act;
-
-                yield return equipmentActs.First();
             }
         }
     }
