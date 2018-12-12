@@ -297,7 +297,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var methodMock = new Mock<IOpenContainerMethod>();
             var method = methodMock.Object;
 
-            var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method));
+            var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method, map));
 
 
 

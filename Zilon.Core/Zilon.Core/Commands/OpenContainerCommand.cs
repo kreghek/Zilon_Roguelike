@@ -47,8 +47,6 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var openMethod = new HandOpenContainerMethod();
-
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
@@ -61,8 +59,14 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            var intetion = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, openMethod));
+            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container));
             PlayerState.TaskSource.Intent(intetion);
+        }
+
+        private OpenContainerTask CreateTask(IActor actor, IPropContainer container)
+        {
+            var openMethod = new HandOpenContainerMethod();
+            return new OpenContainerTask(actor, container, openMethod, SectorManager.CurrentSector.Map);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()

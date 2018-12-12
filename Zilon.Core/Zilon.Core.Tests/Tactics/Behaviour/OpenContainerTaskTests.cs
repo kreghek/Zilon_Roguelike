@@ -1,5 +1,6 @@
-﻿using System.Linq;
-
+﻿using System;
+using System.Linq;
+using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
@@ -11,14 +12,14 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture()]
+    [TestFixture]
     public class OpenContainerTaskTests
     {
         /// <summary>
         /// Тест проверяет, что при расстоянии до контейнера в 1 клетку задача вызывает метод актёра
         /// на открытие контейнера.
         /// </summary>
-        [Test()]
+        [Test]
         public void Execute_ValidLength_ActorOpenedContainer()
         {
             // ARRANGE
@@ -36,7 +37,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method);
+            var task = new OpenContainerTask(actor, container, method, map);
 
 
 
@@ -47,6 +48,43 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ASSERT
             actorMock.Verify(x => x.OpenContainer(It.IsAny<IPropContainer>(), It.IsAny<IOpenContainerMethod>()));
+        }
+
+        /// <summary>
+        /// Тест проверяет, что через стену нельзя открывать сундуки.
+        /// </summary>
+        [Test]
+        public void Execute_Wall_Exception()
+        {
+            // ARRANGE
+            var map = SquareMapFactory.Create(10);
+            map.RemoveEdge(0, 0, 1, 0);
+
+            var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(actorNode);
+            var actor = actorMock.Object;
+
+            var containerNode = map.Nodes.Cast<HexNode>().SelectBy(1, 0);
+
+            var container = CreateContainer(containerNode);
+
+            var method = CreateMethod();
+
+            var task = new OpenContainerTask(actor, container, method, map);
+
+
+
+            // ACT
+            Action act = () => {
+                task.Execute();
+            };
+
+
+
+            // ASSERT
+            act.Should().Throw<InvalidOperationException>();
         }
 
         private IOpenContainerMethod CreateMethod()
