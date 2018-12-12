@@ -14,6 +14,13 @@ namespace Zilon.Core.Tactics
     public sealed class UsedTacticalActs
     {
         [ExcludeFromCodeCoverage]
+        public UsedTacticalActs([NotNull] [ItemNotNull] IEnumerable<ITacticalAct> primary) :
+            this(primary, new ITacticalAct[0])
+        {
+
+        }
+
+        [ExcludeFromCodeCoverage]
         public UsedTacticalActs([NotNull] [ItemNotNull] IEnumerable<ITacticalAct> primary,
             [NotNull] [ItemNotNull] IEnumerable<ITacticalAct> secondary)
         {

@@ -48,6 +48,11 @@ namespace Zilon.Core.Tactics
             return RollD6();
         }
 
+        public int RollUseSecondaryAct()
+        {
+            return RollD6();
+        }
+
         private int RollD6()
         {
             var roll = _dice.Roll(6);

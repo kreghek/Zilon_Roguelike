@@ -9,6 +9,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics
@@ -21,6 +22,7 @@ namespace Zilon.Core.Tests.Tactics
         private IPerkResolver _perkResolver;
         private ITacticalAct _act;
         private IPerson _person;
+        private IMap _map;
 
         /// <summary>
         /// Тест проверяет, что сервис использования действий если монстр стал мёртв,
@@ -31,7 +33,7 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _map);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -44,7 +46,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, _act);
+            var usedActs = new UsedTacticalActs(new[] { _act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -73,7 +76,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _map);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -99,7 +102,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -123,7 +127,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _map);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -151,7 +155,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -179,7 +184,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _map);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -207,7 +212,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -300,6 +306,8 @@ namespace Zilon.Core.Tests.Tactics
         [SetUp]
         public void SetUp()
         {
+            _map = SquareMapFactory.Create(3);
+
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(6);
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
