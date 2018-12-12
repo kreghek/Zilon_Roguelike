@@ -11,11 +11,15 @@ namespace Zilon.Core.Tactics
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
+        private readonly IMap _map;
 
-        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource, IPerkResolver perkResolver)
+        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
+            IPerkResolver perkResolver,
+            IMap map)
         {
-            _actUsageRandomSource = actUsageRandomSource;
-            _perkResolver = perkResolver;
+            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
+            _map = map ?? throw new ArgumentNullException(nameof(map));
         }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
@@ -26,31 +30,8 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
             }
 
-            var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-            var targetCubePos = ((HexNode)target.Node).CubeCoords;
-
             foreach (var act in usedActs.Primary)
             {
-                var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
-                if (!isInDistance)
-                {
-                    throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
-                }
-
-                // проверка
-                var targetNode = Target.Node;
-
-                var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, Actor.Node, targetNode);
-                var isInDistance = currentAct.CheckDistance(((HexNode)Actor.Node).CubeCoords, ((HexNode)targetNode).CubeCoords);
-
-                var canExecute = targetIsOnLine && isInDistance;
-
-                if (!canExecute)
-                {
-                    throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
-                }
-                // проверка
-
                 UseAct(actor, target, act);
             }
 
@@ -72,6 +53,24 @@ namespace Zilon.Core.Tactics
 
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
+            var currentCubePos = ((HexNode)actor.Node).CubeCoords;
+            var targetCubePos = ((HexNode)target.Node).CubeCoords;
+
+            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+            if (!isInDistance)
+            {
+                throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+            }
+
+            var targetNode = target.Node;
+
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, actor.Node, targetNode);
+            if (!targetIsOnLine)
+            {
+                throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
+            }
+
+
             actor.UseAct(target, act);
 
             var tacticalActRoll = GetActEfficient(act);
