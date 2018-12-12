@@ -26,54 +26,9 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
 
-            var mainActProcessing = true;
             var availableSlotAct = GetUsedActs();
-
-
-            foreach (var currentAct in availableSlotAct)
-            {
-                if (mainActProcessing)
-                {
-                    mainActProcessing = false;
-
-                    var targetNode = Target.Node;
-
-                    var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, Actor.Node, targetNode);
-                    var isInDistance = currentAct.CheckDistance(((HexNode)Actor.Node).CubeCoords, ((HexNode)targetNode).CubeCoords);
-
-                    var canExecute = targetIsOnLine && isInDistance;
-
-                    if (!canExecute)
-                    {
-                        throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
-                    }
-
-                    Actor.UseAct(Target, currentAct);
-                    _actService.UseOn(Actor, Target, currentAct);
-
-                    if (currentAct.Stats.Range.Max > 1)
-                    {
-                        break;
-                    }
-                }
-                else
-                {
-                    var targetNode = Target.Node;
-
-                    var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, Actor.Node, targetNode);
-                    var isInDistance = currentAct.CheckDistance(((HexNode)Actor.Node).CubeCoords, ((HexNode)targetNode).CubeCoords);
-
-                    var canExecute = targetIsOnLine && isInDistance;
-
-                    if (!canExecute)
-                    {
-                        throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
-                    }
-
-                    Actor.UseAct(Target, currentAct);
-                    _actService.UseOn(Actor, Target, currentAct);
-                }
-            }
+            var usedActs = new UsedTacticalActs(availableSlotAct.Take(1), availableSlotAct.Skip(1));
+            _actService.UseOn(Actor, Target, usedActs);
         }
 
         public AttackTask(IActor actor,

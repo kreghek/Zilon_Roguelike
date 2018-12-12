@@ -37,6 +37,20 @@ namespace Zilon.Core.Tactics
                     throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
                 }
 
+                // проверка
+                var targetNode = Target.Node;
+
+                var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, Actor.Node, targetNode);
+                var isInDistance = currentAct.CheckDistance(((HexNode)Actor.Node).CubeCoords, ((HexNode)targetNode).CubeCoords);
+
+                var canExecute = targetIsOnLine && isInDistance;
+
+                if (!canExecute)
+                {
+                    throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
+                }
+                // проверка
+
                 UseAct(actor, target, act);
             }
 
@@ -58,6 +72,8 @@ namespace Zilon.Core.Tactics
 
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
+            actor.UseAct(target, act);
+
             var tacticalActRoll = GetActEfficient(act);
 
             if (target is IActor targetActor)
