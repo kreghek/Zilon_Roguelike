@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Common;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -11,6 +12,7 @@ namespace Zilon.Core.Persons
         public ITacticalActStatsSubScheme Stats { get; }
         public Roll Efficient { get; }
         public Roll ToHit { get; }
+        public Equipment Equipment { get; }
 
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
