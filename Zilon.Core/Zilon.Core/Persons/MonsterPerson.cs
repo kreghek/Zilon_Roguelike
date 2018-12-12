@@ -15,7 +15,7 @@ namespace Zilon.Core.Persons
     {
         public int Id { get; set; }
         public int Hp { get; }
-        public IEquipmentCarrier EquipmentCarrier => throw new NotSupportedException("Для монстров не поддерживается явная экипировка");
+        public IEquipmentCarrier EquipmentCarrier => null;
 
         public ITacticalActCarrier TacticalActCarrier { get; }
 

@@ -94,6 +94,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
             else
             {
+                var usedEquipmentActs = false;
                 var slots = Actor.Person.EquipmentCarrier.Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
@@ -103,7 +104,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    if ((slots[i].Types & EquipmentSlotTypes.Hand) > 0)
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
                     }
@@ -112,7 +113,19 @@ namespace Zilon.Core.Tactics.Behaviour
                                         where act.Equipment == slotEquipment
                                         select act;
 
-                    yield return equipmentActs.First();
+                    var usedAct = equipmentActs.FirstOrDefault();
+
+                    if (usedAct != null)
+                    {
+                        usedEquipmentActs = true;
+
+                        yield return usedAct;
+                    }
+                }
+
+                if (!usedEquipmentActs)
+                {
+                    yield return Actor.Person.TacticalActCarrier.Acts.First();
                 }
             }
         }
