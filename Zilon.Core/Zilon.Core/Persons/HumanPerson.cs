@@ -348,7 +348,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = CreateTacticalAct(_defaultActScheme, Effects);
+            var defaultAct = CreateTacticalAct(_defaultActScheme, Effects, equipment: null);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -360,7 +360,7 @@ namespace Zilon.Core.Persons
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var act = CreateTacticalAct(actScheme, Effects);
+                    var act = CreateTacticalAct(actScheme, Effects, equipment);
 
                     actList.Insert(0, act);
                 }
@@ -369,14 +369,14 @@ namespace Zilon.Core.Persons
             return actList.ToArray();
         }
 
-        private ITacticalAct CreateTacticalAct(ITacticalActScheme scheme, EffectCollection effects)
+        private ITacticalAct CreateTacticalAct(ITacticalActScheme scheme, EffectCollection effects, Equipment equipment)
         {
             var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
                 .OrderByDescending(x => x.Level).FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
             {
-                return new TacticalAct(scheme, scheme.Stats.Efficient, new Roll(6, 1));
+                return new TacticalAct(scheme, scheme.Stats.Efficient, new Roll(6, 1), equipment);
             }
             else
             {
@@ -400,7 +400,7 @@ namespace Zilon.Core.Persons
                     toHitRoll = new Roll(6, 1, modifiers);
                 }
 
-                return new TacticalAct(scheme, efficientRoll, toHitRoll);
+                return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
             }
         }
 

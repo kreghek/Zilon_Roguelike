@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Common;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -13,6 +14,11 @@ namespace Zilon.Core.Persons
         /// Схема основных характеристик тактического действия.
         /// </summary>
         ITacticalActStatsSubScheme Stats { get; }
+
+        /// <summary>
+        /// Предмет экипировки, который даёт данное действие.
+        /// </summary>
+        Equipment Equipment { get; }
 
         /// <summary>
         /// Актуальные данные об эффективности действия.
