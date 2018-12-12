@@ -211,13 +211,10 @@ namespace Zilon.Core.Persons
                     {
                         rankRaw += armor.ArmorRank * 0.5f;
 
-                        if (armorLevel != null)
+                        var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
+                        if (levelDiff > 0)
                         {
-                            var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
-                            if (levelDiff > 0)
-                            {
-                                rankRaw += armor.ArmorRank * 0.33f * levelDiff;
-                            }
+                            rankRaw += armor.ArmorRank * 0.33f * levelDiff;
                         }
                     }
                 }
