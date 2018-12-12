@@ -36,7 +36,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method);
+            var task = new OpenContainerTask(actor, container, method, map);
 
 
 
