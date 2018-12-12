@@ -10,7 +10,6 @@ namespace Zilon.Core.Tactics.Behaviour
     public class AttackTask : OneTurnActorTaskBase
     {
         private readonly ITacticalActUsageService _actService;
-        private readonly IMap _map;
 
         public IAttackTarget Target { get; }
 
@@ -33,12 +32,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public AttackTask(IActor actor,
             IAttackTarget target,
-            ITacticalActUsageService actService,
-            IMap map) :
+            ITacticalActUsageService actService) :
             base(actor)
         {
             _actService = actService;
-            _map = map;
 
             Target = target;
         }

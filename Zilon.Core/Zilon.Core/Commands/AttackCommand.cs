@@ -65,11 +65,10 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var map = SectorManager.CurrentSector.Map;
             var targetActorViewModel = (IActorViewModel)PlayerState.HoverViewModel;
 
             var targetActor = targetActorViewModel.Actor;
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService, map));
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention);
         }
     }
