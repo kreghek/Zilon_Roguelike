@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <summary>
         /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
         /// </summary>
-        [Test]
+        [Test, Ignore("Теперь это делает сервис использования действий, нужно написать тест для него")]
         public void AttackTask_Execute_RaiseUsedAct()
         {
             // ARRANGE
@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <summary>
         /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
         /// </summary>
-        [Test]
+        [Test, Ignore("теперь это делает сервис, нужно писать тест для него")]
         public void AttackTask_Wall_ThrowsInvalidOperationException()
         {
             // ARRANGE

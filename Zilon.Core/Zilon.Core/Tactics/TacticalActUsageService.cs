@@ -11,15 +11,15 @@ namespace Zilon.Core.Tactics
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
-        private readonly IMap _map;
+        private readonly ISectorManager _sectorManager;
 
         public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
             IPerkResolver perkResolver,
-            IMap map)
+            ISectorManager sectorManager)
         {
             _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
             _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
-            _map = map ?? throw new ArgumentNullException(nameof(map));
+            _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
         }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
@@ -64,7 +64,10 @@ namespace Zilon.Core.Tactics
 
             var targetNode = target.Node;
 
-            var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, actor.Node, targetNode);
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(_sectorManager.CurrentSector.Map,
+                actor.Node,
+                targetNode);
+
             if (!targetIsOnLine)
             {
                 throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
