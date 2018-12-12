@@ -28,6 +28,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var mainActProcessing = true;
             var availableSlotAct = GetUsedActs();
+
+
             foreach (var currentAct in availableSlotAct)
             {
                 if (mainActProcessing)

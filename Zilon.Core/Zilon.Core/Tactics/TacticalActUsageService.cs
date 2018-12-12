@@ -18,7 +18,7 @@ namespace Zilon.Core.Tactics
             _perkResolver = perkResolver;
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, ITacticalAct act)
+        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
             //TODO реализовать возможность действовать на себя некоторыми скиллами.
             if (actor == target)
@@ -29,12 +29,35 @@ namespace Zilon.Core.Tactics
             var currentCubePos = ((HexNode)actor.Node).CubeCoords;
             var targetCubePos = ((HexNode)target.Node).CubeCoords;
 
-            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
-            if (!isInDistance)
+            foreach (var act in usedActs.Primary)
             {
-                throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                if (!isInDistance)
+                {
+                    throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                }
+
+                UseAct(actor, target, act);
             }
 
+            // Использование дополнительных действий.
+            // Используются с некоторой вероятностью.
+            foreach (var act in usedActs.Secondary)
+            {
+                var useSuccessRoll = GetUseSuccessRoll();
+                var useFactRoll = GetUseFactRoll();
+
+                if (useFactRoll < useSuccessRoll)
+                {
+                    continue;
+                }
+
+                UseAct(actor, target, act);
+            }
+        }
+
+        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
             var tacticalActRoll = GetActEfficient(act);
 
             if (target is IActor targetActor)
@@ -45,6 +68,17 @@ namespace Zilon.Core.Tactics
             {
                 UseOnChest(target, tacticalActRoll);
             }
+        }
+
+        private int GetUseFactRoll()
+        {
+            var roll = _actUsageRandomSource.RollUseSecondaryAct();
+            return roll;
+        }
+
+        private int GetUseSuccessRoll()
+        {
+            return 5;
         }
 
         /// <summary>
