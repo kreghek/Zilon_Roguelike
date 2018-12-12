@@ -189,7 +189,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -261,7 +261,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -279,7 +279,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -353,7 +353,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -371,7 +371,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -445,7 +445,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -463,7 +463,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Grand
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -537,7 +537,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -555,7 +555,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -634,7 +634,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -652,7 +652,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new EquipmentSlotTypes[] {
+                    SlotTypes = new [] {
                         EquipmentSlotTypes.Body
                     }
                 }

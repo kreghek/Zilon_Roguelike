@@ -188,7 +188,6 @@ namespace Zilon.Core.Persons
         {
             var armorGroups = equipmentArmors.GroupBy(x => x.Impact).OrderBy(x => x.Key);
 
-            var mergedArmors = new List<PersonArmorItem>();
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
@@ -197,12 +196,14 @@ namespace Zilon.Core.Persons
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;
+                var minInited = false;
                 foreach (var armor in orderedArmors)
                 {
                     //т.к. вся броня упорядочена от худшей
                     // первым будет обработан элемент с худшими показателями
-                    if (rankRaw == null || armorLevel == null)
+                    if (!minInited)
                     {
+                        minInited = true;
                         rankRaw = armor.ArmorRank;
                         armorLevel = armor.AbsorbtionLevel;
                     }
@@ -210,19 +211,25 @@ namespace Zilon.Core.Persons
                     {
                         rankRaw += armor.ArmorRank * 0.5f;
 
-                        var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
-                        if (levelDiff > 0)
+                        if (armorLevel != null)
                         {
-                            rankRaw += armor.ArmorRank * 0.33f * levelDiff;
+                            var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
+                            if (levelDiff > 0)
+                            {
+                                rankRaw += armor.ArmorRank * 0.33f * levelDiff;
+                            }
                         }
                     }
                 }
 
-                var totalRankRaw = Math.Round(rankRaw.Value);
+                if (rankRaw != null)
+                {
+                    var totalRankRaw = Math.Round(rankRaw.Value);
 
-                yield return new PersonArmorItem(armorGroup.Key,
-                    armorLevel.Value,
-                    (int)totalRankRaw);
+                    yield return new PersonArmorItem(armorGroup.Key,
+                        armorLevel.Value,
+                        (int)totalRankRaw);
+                }
             }
         }
 
