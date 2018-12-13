@@ -259,7 +259,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [UsedImplicitly]
-        [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
+        [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
