@@ -25,28 +25,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         private IMap _testMap;
 
         /// <summary>
-        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
-        /// </summary>
-        [Test, Ignore("Теперь это делает сервис использования действий, нужно написать тест для него")]
-        public void AttackTask_Execute_RaiseUsedAct()
-        {
-            // ARRANGE
-
-
-
-            using (var monitor = _actor.Monitor())
-            {
-                // ACT
-                _attackTask.Execute();
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(IActor.UsedAct));
-            }
-        }
-
-        /// <summary>
         /// Тест проверяет, что при атаке, если не мешают стены, не выбрасывается исключение.
         /// </summary>
         [Test]

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using FluentAssertions;
+using JetBrains.Annotations;
 
 using Moq;
 
@@ -220,6 +221,42 @@ namespace Zilon.Core.Tests.Tactics
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
             monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра..
+        /// </summary>
+        [Test]
+        public void UseOn_Attack_RaiseUsedAct()
+        {
+            // ARRANGE
+
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(_person);
+            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateMonsterMock();
+            var monster = monsterMock.Object;
+
+
+
+            // ACT
+            var usedActs = new UsedTacticalActs(new[] { _act });
+
+            using (var monitor = actor.Monitor())
+            {
+                actUsageService.UseOn(actor, monster, usedActs);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IActor.UsedAct));
+            }
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
