@@ -1,9 +1,7 @@
-﻿using Zilon.Core.Persons;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     public interface ITacticalActUsageService
     {
-        void UseOn(IActor actor, IAttackTarget target, ITacticalAct act);
+        void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs);
     }
 }

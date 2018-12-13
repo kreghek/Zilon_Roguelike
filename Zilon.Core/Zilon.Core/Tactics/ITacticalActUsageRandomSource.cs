@@ -25,5 +25,14 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <returns> Возвращает результат броска D6. </returns>
         int RollArmorSave();
+
+        /// <summary>
+        /// Бросок проверки на использование дополнительных действий.
+        /// </summary>
+        /// <returns> Возвращает результат броска D6. </returns>
+        /// <remarks>
+        /// Используется для проверки удара вторым оружием.
+        /// </remarks>
+        int RollUseSecondaryAct();
     }
 }

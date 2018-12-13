@@ -11,14 +11,18 @@ namespace Zilon.Core.Tactics
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
+        private readonly ISectorManager _sectorManager;
 
-        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource, IPerkResolver perkResolver)
+        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
+            IPerkResolver perkResolver,
+            ISectorManager sectorManager)
         {
-            _actUsageRandomSource = actUsageRandomSource;
-            _perkResolver = perkResolver;
+            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
+            _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, ITacticalAct act)
+        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
             //TODO реализовать возможность действовать на себя некоторыми скиллами.
             if (actor == target)
@@ -26,6 +30,29 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
             }
 
+            foreach (var act in usedActs.Primary)
+            {
+                UseAct(actor, target, act);
+            }
+
+            // Использование дополнительных действий.
+            // Используются с некоторой вероятностью.
+            foreach (var act in usedActs.Secondary)
+            {
+                var useSuccessRoll = GetUseSuccessRoll();
+                var useFactRoll = GetUseFactRoll();
+
+                if (useFactRoll < useSuccessRoll)
+                {
+                    continue;
+                }
+
+                UseAct(actor, target, act);
+            }
+        }
+
+        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
             var currentCubePos = ((HexNode)actor.Node).CubeCoords;
             var targetCubePos = ((HexNode)target.Node).CubeCoords;
 
@@ -34,6 +61,20 @@ namespace Zilon.Core.Tactics
             {
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
             }
+
+            var targetNode = target.Node;
+
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(_sectorManager.CurrentSector.Map,
+                actor.Node,
+                targetNode);
+
+            if (!targetIsOnLine)
+            {
+                throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
+            }
+
+
+            actor.UseAct(target, act);
 
             var tacticalActRoll = GetActEfficient(act);
 
@@ -45,6 +86,17 @@ namespace Zilon.Core.Tactics
             {
                 UseOnChest(target, tacticalActRoll);
             }
+        }
+
+        private int GetUseFactRoll()
+        {
+            var roll = _actUsageRandomSource.RollUseSecondaryAct();
+            return roll;
+        }
+
+        private int GetUseSuccessRoll()
+        {
+            return 5;
         }
 
         /// <summary>

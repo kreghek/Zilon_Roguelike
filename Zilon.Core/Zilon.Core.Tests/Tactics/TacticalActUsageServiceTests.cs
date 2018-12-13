@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using FluentAssertions;
+using JetBrains.Annotations;
 
 using Moq;
 
@@ -9,6 +11,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics
@@ -21,6 +24,7 @@ namespace Zilon.Core.Tests.Tactics
         private IPerkResolver _perkResolver;
         private ITacticalAct _act;
         private IPerson _person;
+        private ISectorManager _sectorManager;
 
         /// <summary>
         /// Тест проверяет, что сервис использования действий если монстр стал мёртв,
@@ -31,7 +35,7 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -44,7 +48,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, _act);
+            var usedActs = new UsedTacticalActs(new[] { _act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -73,7 +78,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -99,7 +104,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -123,7 +129,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -151,7 +157,8 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
@@ -179,7 +186,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -207,13 +214,86 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ACT
-            actUsageService.UseOn(actor, monster, act);
+            var usedActs = new UsedTacticalActs(new[] { act });
+            actUsageService.UseOn(actor, monster, usedActs);
 
 
 
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
             monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра..
+        /// </summary>
+        [Test]
+        public void UseOn_Attack_RaiseUsedAct()
+        {
+            // ARRANGE
+
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(_person);
+            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateMonsterMock();
+            var monster = monsterMock.Object;
+
+
+
+            // ACT
+            var usedActs = new UsedTacticalActs(new[] { _act });
+
+            using (var monitor = actor.Monitor())
+            {
+                actUsageService.UseOn(actor, monster, usedActs);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(IActor.UsedAct));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
+        /// </summary>
+        [Test]
+        public void UseOn_Wall_ThrowsInvalidOperationException()
+        {
+            // ARRANGE
+
+            var sectorManager = CreateSectorManagerWithWall();
+
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, sectorManager);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(_person);
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateMonsterMock();
+            var monster = monsterMock.Object;
+
+
+
+            // ACT
+            var usedActs = new UsedTacticalActs(new[] { _act });
+
+            Action act = () =>
+            {
+                actUsageService.UseOn(actor, monster, usedActs);
+            };
+
+
+
+            // ASSERT
+            act.Should().Throw<InvalidOperationException>();
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
@@ -328,6 +408,32 @@ namespace Zilon.Core.Tests.Tactics
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             _act = actMock.Object;
+
+            var sectorManagerMock = new Mock<ISectorManager>();
+            var sectorManager = sectorManagerMock.Object;
+
+            var map = SquareMapFactory.Create(3);
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
+
+            _sectorManager = sectorManager;
         }
+
+        private ISectorManager CreateSectorManagerWithWall()
+        {
+            var sectorManagerMock = new Mock<ISectorManager>();
+            var sectorManager = sectorManagerMock.Object;
+
+            var map = SquareMapFactory.Create(3);
+            map.RemoveEdge(0, 0, 1, 0);
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
+            return sectorManager;
+        }
+
     }
 }

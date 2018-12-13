@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Common;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -8,7 +13,11 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class TacticalAct : ITacticalAct
     {
-        public TacticalAct(ITacticalActScheme scheme, Roll efficient, Roll toHit)
+        [ExcludeFromCodeCoverage]
+        public TacticalAct([NotNull]ITacticalActScheme scheme,
+            [NotNull] Roll efficient,
+            [NotNull] Roll toHit,
+            [CanBeNull] Equipment equipment)
         {
             Scheme = scheme ?? throw new System.ArgumentNullException(nameof(scheme));
 
@@ -17,12 +26,18 @@ namespace Zilon.Core.Persons
             Efficient = efficient ?? throw new System.ArgumentNullException(nameof(efficient));
 
             ToHit = toHit ?? throw new System.ArgumentNullException(nameof(toHit));
+
+            Equipment = equipment;
         }
 
         public ITacticalActStatsSubScheme Stats { get; }
 
         public ITacticalActScheme Scheme { get; }
+
         public Roll Efficient { get; }
+
         public Roll ToHit { get; }
+
+        public Equipment Equipment { get; }
     }
 }

@@ -25,28 +25,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         private IMap _testMap;
 
         /// <summary>
-        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
-        /// </summary>
-        [Test]
-        public void AttackTask_Execute_RaiseUsedAct()
-        {
-            // ARRANGE
-
-
-
-            using (var monitor = _actor.Monitor())
-            {
-                // ACT
-                _attackTask.Execute();
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(IActor.UsedAct));
-            }
-        }
-
-        /// <summary>
         /// Тест проверяет, что при атаке, если не мешают стены, не выбрасывается исключение.
         /// </summary>
         [Test]
@@ -62,28 +40,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ASSERT
             act.Should().NotThrow<InvalidOperationException>();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
-        /// </summary>
-        [Test]
-        public void AttackTask_Wall_ThrowsInvalidOperationException()
-        {
-            // ARRANGE
-            _testMap.RemoveEdge(0, 0, 1, 0);
-
-
-            Action act = () =>
-            {
-                // ACT
-                _attackTask.Execute();
-            };
-
-
-
-            // ASSERT
-            act.Should().Throw<InvalidOperationException>();
         }
 
         [SetUp]
@@ -128,7 +84,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, actService, _testMap);
+            _attackTask = new AttackTask(_actor, target, actService);
         }
     }
 }
