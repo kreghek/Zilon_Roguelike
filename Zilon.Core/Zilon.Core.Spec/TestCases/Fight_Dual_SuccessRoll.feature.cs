@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УспешныйУдарДвумяОружиями_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string monsterHp, string propSid1, string slotIndex1, string propSid2, string slotIndex2, string expectedMonsterHp, string[] exampleTags)
+        public virtual void УспешныйУдарДвумяОружиями_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string propSid1, string slotIndex1, string propSid2, string slotIndex2, string expectedMonsterHp, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "fight",
@@ -88,14 +88,12 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And(string.Format("Есть монстр класса {0} Id:{1} в ячейке ({2}, {3})", monsterSid, monsterId, monsterNodeX, monsterNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, monsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 12
  testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: {1}", propSid1, slotIndex1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 13
+#line 12
  testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: {1}", propSid2, slotIndex2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 14
+#line 13
  testRunner.When(string.Format("Актёр игрока атакует монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 17
+#line 16
  testRunner.Then(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, expectedMonsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -103,11 +101,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Успешный удар двумя оружиями., human-person", new string[] {
                 "fight",
-                "dev0"}, SourceLine=20)]
+                "dev0"}, SourceLine=19)]
         public virtual void УспешныйУдарДвумяОружиями__Human_Person()
         {
 #line 7
-this.УспешныйУдарДвумяОружиями_("human-person", "rat", "1000", "0", "1", "10", "short-sword", "2", "short-sword", "3", "4", ((string[])(null)));
+this.УспешныйУдарДвумяОружиями_("human-person", "skorolon", "1000", "0", "1", "short-sword", "2", "short-sword", "3", "4", ((string[])(null)));
 #line hidden
         }
         
