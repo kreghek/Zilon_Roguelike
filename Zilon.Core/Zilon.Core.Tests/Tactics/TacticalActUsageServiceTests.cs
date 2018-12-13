@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using JetBrains.Annotations;
 
 using Moq;
@@ -259,6 +260,42 @@ namespace Zilon.Core.Tests.Tactics
             }
         }
 
+        /// <summary>
+        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
+        /// </summary>
+        [Test]
+        public void UseOn_Wall_ThrowsInvalidOperationException()
+        {
+            // ARRANGE
+
+            var sectorManager = CreateSectorManagerWithWall();
+
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, sectorManager);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(_person);
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateMonsterMock();
+            var monster = monsterMock.Object;
+
+
+
+            // ACT
+            var usedActs = new UsedTacticalActs(new[] { _act });
+
+            Action act = () =>
+            {
+                actUsageService.UseOn(actor, monster, usedActs);
+            };
+
+
+
+            // ASSERT
+            act.Should().Throw<InvalidOperationException>();
+        }
+
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
             [CanBeNull] PersonArmorItem[] armors = null)
         {
@@ -383,5 +420,20 @@ namespace Zilon.Core.Tests.Tactics
 
             _sectorManager = sectorManager;
         }
+
+        private ISectorManager CreateSectorManagerWithWall()
+        {
+            var sectorManagerMock = new Mock<ISectorManager>();
+            var sectorManager = sectorManagerMock.Object;
+
+            var map = SquareMapFactory.Create(3);
+            map.RemoveEdge(0, 0, 1, 0);
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
+            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
+            return sectorManager;
+        }
+
     }
 }

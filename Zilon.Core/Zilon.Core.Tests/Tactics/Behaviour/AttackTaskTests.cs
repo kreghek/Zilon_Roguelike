@@ -42,28 +42,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             act.Should().NotThrow<InvalidOperationException>();
         }
 
-        /// <summary>
-        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
-        /// </summary>
-        [Test, Ignore("теперь это делает сервис, нужно писать тест для него")]
-        public void AttackTask_Wall_ThrowsInvalidOperationException()
-        {
-            // ARRANGE
-            _testMap.RemoveEdge(0, 0, 1, 0);
-
-
-            Action act = () =>
-            {
-                // ACT
-                _attackTask.Execute();
-            };
-
-
-
-            // ASSERT
-            act.Should().Throw<InvalidOperationException>();
-        }
-
         [SetUp]
         public void SetUp()
         {
