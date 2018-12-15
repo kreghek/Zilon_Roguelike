@@ -1,4 +1,5 @@
 {
+  "Tags": [ "weapon", "ranged" ],
   "Equip": {
     "ActSids": [
       "aimed-shot"

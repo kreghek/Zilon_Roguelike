@@ -1,4 +1,5 @@
 {
+  "Tags": [ "armor" ],
   "Equip": {
     "SlotTypes": [ "Body" ],
     "Armors": [
@@ -11,6 +12,6 @@
   },
   "Name": {
     "En": "Steel Armor",
-	  "Ru": "Стальная броня"
+    "Ru": "Стальная броня"
   }
 }

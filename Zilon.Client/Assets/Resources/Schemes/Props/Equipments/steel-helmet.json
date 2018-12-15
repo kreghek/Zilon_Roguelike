@@ -1,4 +1,5 @@
 {
+  "Tags": [ "armor" ],
   "Equip": {
     "SlotTypes": [ "Head" ],
     "Armors": [
@@ -11,6 +12,6 @@
   },
   "Name": {
     "En": "Steel helmet",
-	  "Ru": "Стальная каска"
+    "Ru": "Стальная каска"
   }
 }
