@@ -92,18 +92,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.When(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid1, slotIndex1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.And(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid1, slotIndex2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then(string.Format("В слоте Index: {0} актёра игрока есть {1}", slotIndex1, propSid1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 14
- testRunner.Then(string.Format("В слоте Index: {0} актёра игрока есть {0}", propSid1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 15
- testRunner.And(string.Format("В слоте Index: {0} актёра игрока есть {0}", propSid1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Невозможна экипировка предмета {0} в слот Index: {1}", propSid2, slotIndex2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("Экипировка двух пистолетов не разрешена., Variant 0", new string[] {
                 "equipment",
-                "dev0"}, SourceLine=18)]
+                "dev0"}, SourceLine=17)]
         public virtual void ЭкипировкаДвухПистолетовНеРазрешена__Variant0()
         {
 #line 7
@@ -113,7 +111,7 @@ this.ЭкипировкаДвухПистолетовНеРазрешена_("hu
         
         [TechTalk.SpecRun.ScenarioAttribute("Экипировка двух пистолетов не разрешена., Variant 1", new string[] {
                 "equipment",
-                "dev0"}, SourceLine=18)]
+                "dev0"}, SourceLine=17)]
         public virtual void ЭкипировкаДвухПистолетовНеРазрешена__Variant1()
         {
 #line 7

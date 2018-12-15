@@ -10,9 +10,8 @@ Scenario Outline: Экипировка двух пистолетов не раз
 	And В инвентаре у актёра игрока есть предмет: <propSid1>
 	And В инвентаре у актёра игрока есть предмет: <propSid2>
 	When Экипирую предмет <propSid1> в слот Index: <slotIndex1>
-	And Экипирую предмет <propSid1> в слот Index: <slotIndex2>
-	Then В слоте Index: <propSid1> актёра игрока есть <propSid1>
-	And В слоте Index: <propSid1> актёра игрока есть <propSid1>
+	Then В слоте Index: <slotIndex1> актёра игрока есть <propSid1>
+	And Невозможна экипировка предмета <propSid2> в слот Index: <slotIndex2>
 
 	Examples: 
 	| personSid    | propSid1    | slotIndex1 | propSid2 | slotIndex2 |
