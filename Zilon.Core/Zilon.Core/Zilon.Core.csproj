@@ -65,6 +65,7 @@
     <Compile Include="MapGenerators\RoomGeneratorSettings.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\SquareMapFactory.cs" />
+    <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
