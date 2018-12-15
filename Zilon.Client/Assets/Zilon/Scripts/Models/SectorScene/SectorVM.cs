@@ -407,8 +407,9 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.GraphicRoot.ProcessHit();
 
         var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
-        var sfx = Instantiate(HitSfx, transform);
-        sfx.transform.position = targetViewModel.transform.position;
+
+        var sfx = Instantiate(HitSfx, targetViewModel.transform);
+        targetViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя
         if (e.TacticalAct.Stats.Range.Max > 1)
