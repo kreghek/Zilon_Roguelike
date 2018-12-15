@@ -3,7 +3,7 @@
     public interface IPropScheme: IScheme
     {
         CraftSubScheme Craft { get; }
-        IPropEquipSubScheme Equip { get; set; }
-        IPropUseSubScheme Use { get; set; }
+        IPropEquipSubScheme Equip { get; }
+        IPropUseSubScheme Use { get; }
     }
 }
