@@ -42,7 +42,7 @@ namespace Zilon.Core.Persons
                 var slot = Slots[slotIndex];
 
                 CheckSlotCompability(equipment, slot);
-                CheckDualCompability(equipment, slot);
+                CheckDualCompability(equipment, slot, slotIndex);
 
                 Equipments[slotIndex] = equipment;
             }
@@ -71,7 +71,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void CheckDualCompability(Equipment equipment, PersonSlotSubScheme slot)
+        private void CheckDualCompability(Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
         {
             var equipmentTags = equipment.Scheme.Tags ?? new string[0];
             var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
@@ -80,8 +80,10 @@ namespace Zilon.Core.Persons
             {
                 // Проверяем наличие любого экипированного оружия.
                 // Если находим, то выбрасываем исключение.
+                var targetSlotEquipment = Equipments[slotIndex];
                 var currentEquipments = Equipments.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
+                                     where currentEquipment != targetSlotEquipment
                                      let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
                                      where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
                                      select currentEquipment;

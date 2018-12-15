@@ -59,15 +59,26 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что при установке экипировки выстреливает событие на изменение экипировки.
+        /// Тест проверяет, что корретно заменяется один пистолет другим.
         /// </summary>
         [Test]
-        public void SetEquipment_ChangePistolBySword_EquipmentChanged()
+        public void SetEquipment_ChangePistolByOtherPistol_EquipmentChanged()
         {
             // ARRANGE
             var pistolScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon }
+                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
+            };
+
+            var pistol2Scheme = new TestPropScheme
+            {
+                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
                 Equip = new TestPropEquipSubScheme
                 {
                     SlotTypes = new[] {
@@ -84,7 +95,8 @@ namespace Zilon.Core.Tests.Persons
 
             var tacticalActScheme = new TestTacticalActScheme();
 
-            var equipment = new Equipment(pistolScheme, new[] { tacticalActScheme });
+            var pistol1 = new Equipment(pistolScheme, new[] { tacticalActScheme });
+            var pistol2 = new Equipment(pistol2Scheme, new[] { tacticalActScheme });
 
             const int changedSlot = 0;
 
@@ -92,15 +104,15 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            using (var monitor = carrier.Monitor())
-            {
-                carrier.SetEquipment(equipment, changedSlot);
+            carrier.SetEquipment(pistol1, changedSlot);
+            Action act = () => {
+                carrier.SetEquipment(pistol2, changedSlot);
+            };
 
 
 
-                // ASSERT
-                monitor.Should().Raise(nameof(carrier.EquipmentChanged));
-            }
+            // ASSERT
+            act.Should().NotThrow();
         }
 
         /// <summary>
