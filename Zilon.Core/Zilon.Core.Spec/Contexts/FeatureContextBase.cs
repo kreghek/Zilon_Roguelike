@@ -29,6 +29,8 @@ namespace Zilon.Core.Spec.Contexts
 {
     public abstract class FeatureContextBase
     {
+        private ITacticalActUsageRandomSource _specificActUsageRandomSource;
+
         private HumanPlayer _humanPlayer;
         private BotPlayer _botPlayer;
 
@@ -179,6 +181,11 @@ namespace Zilon.Core.Spec.Contexts
             return monster;
         }
 
+        public void SpecifyTacticalActUsageRandomSource(ITacticalActUsageRandomSource actUsageRandomSource)
+        {
+            _specificActUsageRandomSource = actUsageRandomSource;
+        }
+
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
@@ -262,6 +269,24 @@ namespace Zilon.Core.Spec.Contexts
             decisionSourceMock.CallBase = true;
             var decisionSource = decisionSourceMock.Object;
 
+            Container.Register(factory => decisionSource, new PerContainerLifetime());
+            Container.Register(factory => CreateActUsageRandomSource(dice), new PerContainerLifetime());
+
+            Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
+            Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
+            Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
+            Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
+            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
+            Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+        }
+
+        private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
+        {
+            if (_specificActUsageRandomSource != null)
+            {
+                return _specificActUsageRandomSource;
+            }
+
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                 .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
@@ -271,15 +296,7 @@ namespace Zilon.Core.Spec.Contexts
                 .Returns(4);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            Container.Register(factory => decisionSource, new PerContainerLifetime());
-            Container.Register(factory => actUsageRandomSource, new PerContainerLifetime());
-
-            Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
-            Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
-            Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
-            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
-            Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+            return actUsageRandomSource;
         }
 
         private ISurvivalRandomSource CreateSurvivalRandomSource()

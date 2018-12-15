@@ -157,6 +157,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Equipment_ChangeHandsToEquipment.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Fight_Dual_FailureRoll.feature.cs">
+      <DependentUpon>Fight_Dual_FailureRoll.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Fight_Dual_SuccessRoll.feature.cs">
       <DependentUpon>Fight_Dual_SuccessRoll.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -306,6 +311,10 @@
     <None Include="TestCases\Equipment_ChangeHandsToEquipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Equipment_ChangeHandsToEquipment.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Fight_Dual_FailureRoll.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Fight_Dual_FailureRoll.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Fight_Dual_SuccessRoll.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

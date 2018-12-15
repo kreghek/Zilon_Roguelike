@@ -1,10 +1,10 @@
-﻿Feature: Fight_Dual_SuccessRoll
+﻿Feature: Fight_Dual_FailureRoll
 	Чтобы ввести разнообразные сбособы экипировки и развития
 	Как разработчику
 	Мне нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.
 
 @fight @dev0
-Scenario Outline: Успешный удар двумя оружиями.
+Scenario Outline: Провальный удар двумя оружиями.
 	Given Есть карта размером 10
 	And Есть актёр игрока класса <personSid> в ячейке (0, 0)
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
@@ -18,4 +18,4 @@ Scenario Outline: Успешный удар двумя оружиями.
 
 Examples: 
 | personSid    | monsterSid | monsterId | monsterNodeX | monsterNodeY | propSid1    | slotIndex1 | propSid2    | slotIndex2 | expectedMonsterHp |
-| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 4                 |
+| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 7                 |

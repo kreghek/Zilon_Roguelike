@@ -17,21 +17,21 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Fight_Dual_SuccessRoll", Description="\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
-        "е нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.", SourceFile="TestCases\\Fight_Dual_SuccessRoll.feature", SourceLine=0)]
-    public partial class Fight_Dual_SuccessRollFeature
+    [TechTalk.SpecRun.FeatureAttribute("Fight_Dual_FailureRoll", Description="\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
+        "е нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.", SourceFile="TestCases\\Fight_Dual_FailureRoll.feature", SourceLine=0)]
+    public partial class Fight_Dual_FailureRollFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Fight_Dual_SuccessRoll.feature"
+#line 1 "Fight_Dual_FailureRoll.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Fight_Dual_SuccessRoll", "\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Fight_Dual_FailureRoll", "\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
                     "е нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УспешныйУдарДвумяОружиями_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string propSid1, string slotIndex1, string propSid2, string slotIndex2, string expectedMonsterHp, string[] exampleTags)
+        public virtual void ПровальныйУдарДвумяОружиями_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string propSid1, string slotIndex1, string propSid2, string slotIndex2, string expectedMonsterHp, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "fight",
@@ -77,7 +77,7 @@ namespace Zilon.Core.Spec.TestCases
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Успешный удар двумя оружиями.", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Провальный удар двумя оружиями.", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -101,13 +101,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Успешный удар двумя оружиями., human-person", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Провальный удар двумя оружиями., human-person", new string[] {
                 "fight",
                 "dev0"}, SourceLine=20)]
-        public virtual void УспешныйУдарДвумяОружиями__Human_Person()
+        public virtual void ПровальныйУдарДвумяОружиями__Human_Person()
         {
 #line 7
-this.УспешныйУдарДвумяОружиями_("human-person", "skorolon", "1000", "0", "1", "short-sword", "2", "short-sword", "3", "4", ((string[])(null)));
+this.ПровальныйУдарДвумяОружиями_("human-person", "skorolon", "1000", "0", "1", "short-sword", "2", "short-sword", "3", "7", ((string[])(null)));
 #line hidden
         }
         
