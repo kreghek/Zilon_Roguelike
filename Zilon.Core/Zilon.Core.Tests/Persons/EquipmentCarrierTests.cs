@@ -479,7 +479,7 @@ namespace Zilon.Core.Tests.Persons
 
             // Смена слотов относительно предыдузего теста
             const int swordSlot1 = 1;
-            const int swordSlot2 = 2;
+            const int swordSlot2 = 0;
 
             var carrier = new EquipmentCarrier(slotSchemes);
 
