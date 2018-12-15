@@ -6,6 +6,7 @@
         {
             public const string Weapon = "weapon";
             public const string Ranged = "ranged";
+            public const string Shield = "shield";
         }
     }
 }
