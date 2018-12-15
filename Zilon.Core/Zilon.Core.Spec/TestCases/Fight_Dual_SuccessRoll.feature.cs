@@ -92,8 +92,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: {1}", propSid2, slotIndex2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
+ testRunner.And("Задаём броски для использования действий", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 14
  testRunner.When(string.Format("Актёр игрока атакует монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 16
+#line 17
  testRunner.Then(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, expectedMonsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -101,7 +103,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [TechTalk.SpecRun.ScenarioAttribute("Успешный удар двумя оружиями., human-person", new string[] {
                 "fight",
-                "dev0"}, SourceLine=19)]
+                "dev0"}, SourceLine=20)]
         public virtual void УспешныйУдарДвумяОружиями__Human_Person()
         {
 #line 7
