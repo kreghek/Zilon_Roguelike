@@ -48,7 +48,7 @@ namespace Zilon.Core.Tests.Persons
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
 
-            var propScheme = new PropScheme
+            var propScheme = new TestPropScheme
             {
                 Equip = new TestPropEquipSubScheme
                 {

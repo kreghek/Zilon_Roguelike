@@ -56,7 +56,7 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            var propScheme = new PropScheme {
+            var propScheme = new TestPropScheme {
                 Sid = propSid,
                 Use = new TestPropUseSubScheme
                 {

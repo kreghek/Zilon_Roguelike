@@ -14,12 +14,14 @@ namespace Zilon.Core.Schemes
         /// Характеристики схемы, связанные с экипировкой предмета персонажем.
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropEquipSubScheme>))]
+        [JsonProperty]
         public IPropEquipSubScheme Equip { get; private set; }
 
         /// <summary>
         /// Информация об использовании предмета.
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropUseSubScheme>))]
+        [JsonProperty]
         public IPropUseSubScheme Use { get; private set; }
 
         /// <summary>
