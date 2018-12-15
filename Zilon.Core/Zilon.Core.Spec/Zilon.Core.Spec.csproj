@@ -152,6 +152,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Chest_TakeWeapon.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Equipment_ChangeExistsEquipment.feature.cs">
+      <DependentUpon>Equipment_ChangeExistsEquipment.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Equipment_DualPistols_Failure.feature.cs">
       <DependentUpon>Equipment_DualPistols_Failure.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -317,6 +322,10 @@
     <None Include="TestCases\Chest_TakeWeapon.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Chest_TakeWeapon.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Equipment_ChangeExistsEquipment.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Equipment_ChangeExistsEquipment.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Equipment_DualPistols_Failure.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
