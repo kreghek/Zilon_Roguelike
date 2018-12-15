@@ -49,7 +49,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var canEquipDual = CheckDual(equipmentCarrier, equipment);
+            var canEquipDual = CheckDual(equipmentCarrier, equipment, SlotIndex.Value);
             if (!canEquipDual)
             {
                 return false;
@@ -95,7 +95,7 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        private bool CheckDual(IEquipmentCarrier equipmentCarrier, Equipment equipment)
+        private bool CheckDual(IEquipmentCarrier equipmentCarrier, Equipment equipment, int slotIndex)
         {
             var equipmentTags = equipment.Scheme.Tags ?? new string[0];
             var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
@@ -104,8 +104,10 @@ namespace Zilon.Core.Commands
             {
                 // Проверяем наличие любого экипированного оружия.
                 // Если находим, то выбрасываем исключение.
+                var targetSlotEquipment = equipmentCarrier.Equipments[slotIndex];
                 var currentEquipments = equipmentCarrier.Equipments.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
+                                     where currentEquipment != targetSlotEquipment
                                      let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
                                      where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
                                      select currentEquipment;

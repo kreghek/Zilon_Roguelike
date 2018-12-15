@@ -88,24 +88,46 @@ this.ScenarioInitialize(scenarioInfo);
 #line 9
  testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке (0, 0)", personSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And("В инвентаре у актёра игрока есть предмет: <propSid>", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("В инвентаре у актёра игрока есть предмет: {0}", propSid1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.When(string.Format("Экипирую предмет {0} в слот Index: {0}", propSid1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And(string.Format("В инвентаре у актёра игрока есть предмет: {0}", propSid2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid2, slotIndex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid1, slotIndex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
+ testRunner.And(string.Format("Экипирую предмет {0} в слот Index: {1}", propSid2, slotIndex), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 14
  testRunner.Then(string.Format("В слоте Index: {0} актёра игрока есть {1}", slotIndex, propSid2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Замена одного примета другим., human-person", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Замена одного примета другим., Variant 0", new string[] {
                 "equipment",
-                "dev0"}, SourceLine=16)]
-        public virtual void ЗаменаОдногоПриметаДругим__Human_Person()
+                "dev0"}, SourceLine=17)]
+        public virtual void ЗаменаОдногоПриметаДругим__Variant0()
         {
 #line 7
 this.ЗаменаОдногоПриметаДругим_("human-person", "short-sword", "short-sword", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [TechTalk.SpecRun.ScenarioAttribute("Замена одного примета другим., Variant 1", new string[] {
+                "equipment",
+                "dev0"}, SourceLine=17)]
+        public virtual void ЗаменаОдногоПриметаДругим__Variant1()
+        {
+#line 7
+this.ЗаменаОдногоПриметаДругим_("human-person", "pistol", "short-sword", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [TechTalk.SpecRun.ScenarioAttribute("Замена одного примета другим., Variant 2", new string[] {
+                "equipment",
+                "dev0"}, SourceLine=17)]
+        public virtual void ЗаменаОдногоПриметаДругим__Variant2()
+        {
+#line 7
+this.ЗаменаОдногоПриметаДругим_("human-person", "short-sword", "pistol", "2", ((string[])(null)));
 #line hidden
         }
         

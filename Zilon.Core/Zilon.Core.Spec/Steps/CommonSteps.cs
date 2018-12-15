@@ -267,5 +267,13 @@ namespace Zilon.Core.Spec.Steps
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 
+        [Then(@"Параметр (.*) равен (.*)")]
+        public void ThenПараметр_Равен(string paramType, string paramValue)
+        {
+            // пока нет предметов, которые изменяют характеристики, этот метод не реализуем.
+            // оставляем, чтобы после остались проверки.
+        }
+
+
     }
 }
