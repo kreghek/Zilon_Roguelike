@@ -152,6 +152,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Chest_TakeWeapon.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Equipment_ChangeExistsSecondEquipment.feature.cs">
+      <DependentUpon>Equipment_ChangeExistsSecondEquipment.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Equipment_ChangeExistsEquipment.feature.cs">
       <DependentUpon>Equipment_ChangeExistsEquipment.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -184,6 +189,11 @@
     </Compile>
     <Compile Include="TestCases\Fight_Dual_SuccessRoll.feature.cs">
       <DependentUpon>Fight_Dual_SuccessRoll.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="TestCases\Fight_OnlyShield_HitWithHand.feature.cs">
+      <DependentUpon>Fight_OnlyShield_HitWithHand.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -328,6 +338,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Chest_TakeWeapon.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Equipment_ChangeExistsSecondEquipment.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Equipment_ChangeExistsSecondEquipment.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Equipment_ChangeExistsEquipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Equipment_ChangeExistsEquipment.feature.cs</LastGenOutput>
@@ -355,6 +369,10 @@
     <None Include="TestCases\Fight_Dual_SuccessRoll.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Fight_Dual_SuccessRoll.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Fight_OnlyShield_HitWithHand.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Fight_OnlyShield_HitWithHand.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Fight_ToHit_Failure.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
