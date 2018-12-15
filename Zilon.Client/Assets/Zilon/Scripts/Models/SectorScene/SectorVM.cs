@@ -408,7 +408,7 @@ internal class SectorVM : MonoBehaviour
 
         var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
 
-        var sfx = Instantiate(HitSfx, targetViewModel.transform);
+        var sfx = Instantiate(HitSfx, transform);
         targetViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя

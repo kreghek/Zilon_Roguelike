@@ -91,7 +91,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void AddHitEffect(HitSfx sfxObject)
     {
         sfxObject.HitSfxes = _effectList;
-        sfxObject.transform.position = Vector3.up * 0.2f * _effectList.Count;
+        sfxObject.transform.position = transform.position + Vector3.up * 0.2f * _effectList.Count;
 
         _effectList.Add(sfxObject);
     }
