@@ -102,7 +102,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            Action act = () => {
+            Action act = () =>
+            {
                 carrier.SetEquipment(swordEquipment1, swordSlot1);
                 carrier.SetEquipment(swordEquipment2, swordSlot2);
             };
@@ -162,7 +163,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            Action act = () => {
+            Action act = () =>
+            {
                 carrier.SetEquipment(pistolEquipment1, pistolSlot1);
                 carrier.SetEquipment(pistolEquipment2, pistolSlot2);
             };
