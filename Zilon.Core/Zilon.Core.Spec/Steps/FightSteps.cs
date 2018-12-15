@@ -46,6 +46,26 @@ namespace Zilon.Core.Spec.Steps
                         Context.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
                     }
                     break;
+
+                case "Провальный удар двумя оружиями.":
+                    {
+                        var dice = Context.Container.GetInstance<IDice>();
+
+                        var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
+                        actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
+                            .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
+                        actUsageRandomSourceMock.Setup(x => x.RollToHit())
+                            .Returns(4);
+                        actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
+                            .Returns(4);
+                        actUsageRandomSourceMock.Setup(x => x.RollUseSecondaryAct())
+                            .Returns(1);
+                        var actUsageRandomSource = actUsageRandomSourceMock.Object;
+
+                        Context.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
+                    }
+                    break;
+
                 default:
                     throw new InvalidOperationException("Для этого сценарция не заданы броски кубов.");
             }
