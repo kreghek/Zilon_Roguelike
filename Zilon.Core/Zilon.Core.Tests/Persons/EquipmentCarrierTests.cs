@@ -59,6 +59,51 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
+        /// Тест проверяет, что при установке экипировки выстреливает событие на изменение экипировки.
+        /// </summary>
+        [Test]
+        public void SetEquipment_ChangePistolBySword_EquipmentChanged()
+        {
+            // ARRANGE
+            var pistolScheme = new TestPropScheme
+            {
+                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon }
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
+            };
+
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var tacticalActScheme = new TestTacticalActScheme();
+
+            var equipment = new Equipment(pistolScheme, new[] { tacticalActScheme });
+
+            const int changedSlot = 0;
+
+            var carrier = new EquipmentCarrier(slotSchemes);
+
+
+            // ACT
+            using (var monitor = carrier.Monitor())
+            {
+                carrier.SetEquipment(equipment, changedSlot);
+
+
+
+                // ASSERT
+                monitor.Should().Raise(nameof(carrier.EquipmentChanged));
+            }
+        }
+
+        /// <summary>
         /// Тест проверяет, что при экипировке двух мечей не выбрасывается исключение.
         /// </summary>
         [Test]
