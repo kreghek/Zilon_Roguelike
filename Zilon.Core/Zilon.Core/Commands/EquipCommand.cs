@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -43,14 +42,28 @@ namespace Zilon.Core.Commands
             }
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
-            var canEquipInSlot = CheckSlot(equipmentCarrier, equipment);
+            var slot = equipmentCarrier.Slots[SlotIndex.Value];
+
+            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment, slot);
             if (!canEquipInSlot)
             {
                 return false;
             }
 
-            var canEquipDual = CheckDual(equipmentCarrier, equipment, SlotIndex.Value);
+            var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
+                equipment,
+                slot,
+                SlotIndex.Value);
             if (!canEquipDual)
+            {
+                return false;
+            }
+
+            var canEquipShield = EquipmentCarrierHelper.CheckSheildCompability(equipmentCarrier,
+                equipment,
+                slot,
+                SlotIndex.Value);
+            if (!canEquipShield)
             {
                 return false;
             }
@@ -82,45 +95,6 @@ namespace Zilon.Core.Commands
             var equipment = propVm?.Prop as Equipment;
 
             return equipment;
-        }
-
-        private bool CheckSlot(IEquipmentCarrier equipmentCarrier, Equipment equipment)
-        {
-            var slot = equipmentCarrier.Slots[SlotIndex.Value];
-            if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool CheckDual(IEquipmentCarrier equipmentCarrier, Equipment equipment, int slotIndex)
-        {
-            var equipmentTags = equipment.Scheme.Tags ?? new string[0];
-            var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
-            var hasWeaponTag = equipmentTags.Any(x => x == PropTags.Equipment.Weapon);
-            if (hasRangedTag && hasWeaponTag)
-            {
-                // Проверяем наличие любого экипированного оружия.
-                // Если находим, то выбрасываем исключение.
-                var targetSlotEquipment = equipmentCarrier.Equipments[slotIndex];
-                var currentEquipments = equipmentCarrier.Equipments.Where(x => x != null);
-                var currentWeapons = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
-                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
-                                     select currentEquipment;
-
-                var hasWeapon = currentWeapons.Any();
-
-                if (hasWeapon)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }
