@@ -118,6 +118,7 @@
     <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PerkResolverTests.cs" />
     <Compile Include="Persons\SurvivalDataTests.cs" />
+    <Compile Include="Persons\TestCases\EquipmentCarrierTestsCaseSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Props\PropStoreBaseTests.cs" />
     <Compile Include="Schemes\PropSchemeTests.cs" />
