@@ -41,14 +41,10 @@ namespace Zilon.Core.Persons
             {
                 var slot = Slots[slotIndex];
 
-                if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) > 0)
-                {
-                    Equipments[slotIndex] = equipment;
-                }
-                else
-                {
-                    throw new ArgumentException($"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
-                }
+                CheckSlotCompability(equipment, slot);
+                CheckDualCompability(equipment, slot);
+
+                Equipments[slotIndex] = equipment;
             }
             else
             {
@@ -64,6 +60,39 @@ namespace Zilon.Core.Persons
             Equipment equipment)
         {
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
+        }
+
+        private static void CheckSlotCompability(Equipment equipment, PersonSlotSubScheme slot)
+        {
+            var invalidSlot = (slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0;
+            if (invalidSlot)
+            {
+                throw new ArgumentException($"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
+            }
+        }
+
+        private void CheckDualCompability(Equipment equipment, PersonSlotSubScheme slot)
+        {
+            var equipmentTags = equipment.Scheme.Tags ?? new string[0];
+            var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
+            var hasWeaponTag = equipmentTags.Any(x => x == PropTags.Equipment.Weapon);
+            if (hasRangedTag && hasWeaponTag)
+            {
+                // Проверяем наличие любого экипированного оружия.
+                // Если находим, то выбрасываем исключение.
+                var currentEquipments = Equipments.Where(x => x != null);
+                var currentWeapons = from currentEquipment in currentEquipments
+                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
+                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
+                                     select currentEquipment;
+
+                var hasWeapon = currentWeapons.Any();
+
+                if (hasWeapon)
+                {
+                    throw new InvalidOperationException("Попытка экипировать два стрелковых оружия.");
+                }
+            }
         }
     }
 }

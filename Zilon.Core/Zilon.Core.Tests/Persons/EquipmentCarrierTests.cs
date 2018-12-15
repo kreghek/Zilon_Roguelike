@@ -21,7 +21,7 @@ namespace Zilon.Core.Tests.Persons
         public void SetEquipment_ChangeEquipment_EventRaised()
         {
             // ARRANGE
-            var scheme = new PropScheme
+            var scheme = new TestPropScheme
             {
                 Equip = new TestPropEquipSubScheme
                 {
@@ -65,8 +65,9 @@ namespace Zilon.Core.Tests.Persons
         public void SetEquipment_DualShortSwords_NoException()
         {
             // ARRANGE
-            var scheme = new PropScheme
+            var scheme = new TestPropScheme
             {
+                Tags = new[] { PropTags.Equipment.Weapon },
                 Equip = new TestPropEquipSubScheme
                 {
                     SlotTypes = new[] {
@@ -126,8 +127,9 @@ namespace Zilon.Core.Tests.Persons
         public void SetEquipment_DualPistols_ExceptionRaised()
         {
             // ARRANGE
-            var scheme = new PropScheme
+            var scheme = new TestPropScheme
             {
+                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
                 Equip = new TestPropEquipSubScheme
                 {
                     SlotTypes = new[] {

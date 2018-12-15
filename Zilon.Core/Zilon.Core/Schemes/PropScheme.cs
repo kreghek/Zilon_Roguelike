@@ -37,5 +37,6 @@ namespace Zilon.Core.Schemes
         /// Информации о создании/разборе предмета.
         /// </summary>
         public CraftSubScheme Craft { get; }
+        public string[] Tags { get; }
     }
 }
