@@ -62,7 +62,7 @@ namespace Zilon.Core.Spec.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().Single(x=>x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x=>x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {

@@ -152,6 +152,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Chest_TakeWeapon.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Equipment_DualPistols_Failure.feature.cs">
+      <DependentUpon>Equipment_DualPistols_Failure.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="TestCases\Equipment_DualSwords_Success.feature.cs">
+      <DependentUpon>Equipment_DualSwords_Success.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\Equipment_ChangeHandsToEquipment.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -307,6 +317,14 @@
     <None Include="TestCases\Chest_TakeWeapon.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Chest_TakeWeapon.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Equipment_DualPistols_Failure.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Equipment_DualPistols_Failure.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Equipment_DualSwords_Success.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Equipment_DualSwords_Success.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Equipment_ChangeHandsToEquipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
