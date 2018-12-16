@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tests.Common
+namespace Zilon.Core.MapGenerators.PrimitiveStyle
 {
     public class SquareMapFactory : IMapFactory
     {

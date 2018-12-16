@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.CommonServices.Dices;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {

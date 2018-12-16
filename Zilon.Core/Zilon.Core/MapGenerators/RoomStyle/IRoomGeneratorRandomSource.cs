@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
     /// Интерфейс источника рандома для генератора карт из комнат.

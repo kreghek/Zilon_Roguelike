@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomMapFactory : IMapFactory
     {

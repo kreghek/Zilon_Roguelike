@@ -1,19 +1,24 @@
 ﻿using System.Linq;
 
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.MapGenerators
 {
+    /// <summary>
+    /// Задел под генератор сектора по схеме. ВНИМАНИЕ, он ещё не готов к полноценному использованию.
+    /// </summary>
+    /// <remarks>
+    /// Сейчас он больше нужен для тестов. Например, на клиенте.
+    /// </remarks>
     public class SectorSchemeGenerator : ISectorProceduralGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly IRoomGeneratorRandomSource _randomSource;
         private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
@@ -21,7 +26,6 @@ namespace Zilon.Core.MapGenerators
 
         public SectorSchemeGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
-            IRoomGeneratorRandomSource randomSource,
             IBotPlayer botPlayer,
             ISchemeService schemeService,
             IPropFactory propFactory,
@@ -29,7 +33,6 @@ namespace Zilon.Core.MapGenerators
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _randomSource = randomSource;
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _propFactory = propFactory;

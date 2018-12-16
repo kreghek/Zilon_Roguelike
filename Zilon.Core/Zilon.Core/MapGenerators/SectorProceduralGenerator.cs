@@ -14,7 +14,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly IRoomGeneratorRandomSource _randomSource;
         private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
@@ -23,7 +22,6 @@ namespace Zilon.Core.MapGenerators
 
         public SectorProceduralGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
-            IRoomGeneratorRandomSource randomSource,
             IBotPlayer botPlayer,
             ISchemeService schemeService,
             IDropResolver dropResolver,
@@ -32,7 +30,6 @@ namespace Zilon.Core.MapGenerators
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _randomSource = randomSource;
             _botPlayer = botPlayer;
             _schemeService = schemeService;
             _dropResolver = dropResolver;

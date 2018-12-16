@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
     /// Настройки для генерации карт из комнат.
