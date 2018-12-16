@@ -53,10 +53,14 @@ namespace Zilon.Core.Tests.MapGenerators
         /// </summary>
         [Test]
         [Timeout(3 * 60 * 1000)]
-        public void Create_RealRandom_NoExceptions()
+        [TestCase(123)]
+        [TestCase(1)]
+        [TestCase(8674)]
+        [TestCase(1000)]
+        public void Create_RealRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var dice = new Dice(123);
+            var dice = new Dice(diceSeed);
             var randomSource = new SectorGeneratorRandomSource(dice);
             var factory = new DungeonMapFactory(randomSource);
 

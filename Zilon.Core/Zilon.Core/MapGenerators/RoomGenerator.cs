@@ -196,8 +196,6 @@ namespace Zilon.Core.MapGenerators
                 foreach (var selectedRoom in selectedRooms)
                 {
                     ConnectRoomsWithCorridor(map, edgeHash, room, selectedRoom);
-                    roomsInGraph.Add(selectedRoom);
-                    roomsNotInGraph.Remove(selectedRoom);
                 }
             }
         }
@@ -212,6 +210,12 @@ namespace Zilon.Core.MapGenerators
             foreach (var point in points)
             {
                 var offsetCoords = HexHelper.ConvertToOffset(point);
+
+                // это происходит, потому что если при нулевом Х для обеих комнат
+                // попытаться отрисовать линию коридора, то она будет змейкой заходить за 0.
+                // Нужно искать решение получше.
+                offsetCoords = new OffsetCoords(offsetCoords.X < 0 ? 0 : offsetCoords.X,
+                    offsetCoords.Y < 0 ? 0 : offsetCoords.Y);
 
                 var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;

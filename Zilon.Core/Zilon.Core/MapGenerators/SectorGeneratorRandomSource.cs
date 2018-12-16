@@ -18,19 +18,20 @@ namespace Zilon.Core.MapGenerators
         [NotNull, ItemNotNull]
         public Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms)
         {
+            var availableRooms = new List<Room>(rooms);
             var selectedRooms = new HashSet<Room>();
-            for (var i = 0; i < maxNeighbors; i++)
+            var neighborCount = _dice.Roll(1, maxNeighbors);
+            for (var i = 0; i < neighborCount; i++)
             {
-                var hasNeighborRoll = _dice.Roll(MaxProbably);
-                var hasNeighborSuccess = MaxProbably - p;
-                if (hasNeighborRoll < hasNeighborSuccess)
-                {
-                    // Провал броска на выбор очередного соседа.
-                    continue;
-                }
+                var rolledRoomIndex = _dice.Roll(0, availableRooms.Count - 1);
+                var selectedRoom = availableRooms[rolledRoomIndex];
+                selectedRooms.Add(selectedRoom);
+                availableRooms.Remove(selectedRoom);
 
-                var rolledRoomIndex = _dice.Roll(rooms.Count) - 1;
-                selectedRooms.Add(rooms[rolledRoomIndex]);
+                if (!availableRooms.Any())
+                {
+                    break;
+                }
             }
 
             return selectedRooms.ToArray();
