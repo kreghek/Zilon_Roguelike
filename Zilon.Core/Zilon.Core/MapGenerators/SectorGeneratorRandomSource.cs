@@ -37,8 +37,8 @@ namespace Zilon.Core.MapGenerators
 
         public OffsetCoords RollRoomPosition(int maxPosition)
         {
-            var rollX = _dice.Roll(maxPosition);
-            var rollY = _dice.Roll(maxPosition);
+            var rollX = _dice.Roll(0, maxPosition - 1);
+            var rollY = _dice.Roll(0, maxPosition - 1);
 
             return new OffsetCoords(rollX, rollY);
         }

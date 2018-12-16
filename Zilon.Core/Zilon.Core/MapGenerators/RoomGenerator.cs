@@ -36,10 +36,22 @@ namespace Zilon.Core.MapGenerators
             var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
+            var usedHash = new HashSet<int>();
             for (var i = 0; i < _settings.RoomCount; i++)
             {
-                var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
-                var rolledPosition = GenerationHelper.GetFreeCell(roomGrid, rolledUncheckedPosition);
+                OffsetCoords rolledPosition;
+                while (true)
+                {
+                    var rolledRoomPosition = _randomSource.RollRoomPosition(roomGridSize);
+                    var positionHash = rolledRoomPosition.X * 1000 + rolledRoomPosition.Y;
+
+                    if (!usedHash.Contains(positionHash))
+                    {
+                        rolledPosition = rolledRoomPosition;
+                        usedHash.Add(positionHash);
+                        break;
+                    }
+                }
 
                 if (rolledPosition != null)
                 {
@@ -58,11 +70,6 @@ namespace Zilon.Core.MapGenerators
 
                     rooms.Add(room);
 
-                    if (StartRoom == null)
-                    {
-                        StartRoom = room;
-                    }
-
                     Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
                 }
                 else
@@ -70,8 +77,6 @@ namespace Zilon.Core.MapGenerators
                     throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
                 }
             }
-
-            ExitRoom = rooms.Last();
 
             return rooms;
         }
