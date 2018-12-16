@@ -31,7 +31,7 @@ namespace Zilon.Core.Tests.MapGenerators
             };
         }
 
-        public Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms)
+        public Room[] RollConnectedRooms(Room room, int maxNeighbors, IList<Room> rooms)
         {
             if (rollIndex < expectedRolls - 1)
             {

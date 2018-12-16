@@ -142,7 +142,6 @@
     <Compile Include="Tactics\DropTableChestStoreTests.cs" />
     <Compile Include="Tactics\DropTablePropChestTests.cs" />
     <Compile Include="Tactics\GameLoopTests.cs" />
-    <Compile Include="MapGenerators\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="MapGenerators\SectorProceduralGeneratorTests.cs" />
     <Compile Include="Tactics\SectorTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />

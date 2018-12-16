@@ -13,9 +13,8 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="room"> Текущая комната. </param>
         /// <param name="maxNeighbors"> Максимальное количество соединённых соседей. </param>
-        /// <param name="p"> Веротяность в процентах, с которой выбирается сосед. 0-100. </param>
         /// <param name="rooms"> Набор доступных комнат для соединения. </param>
         /// <returns> Возвращает соединённые комнаты. </returns>
-        Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms);
+        Room[] RollConnectedRooms(Room room, int maxNeighbors, IList<Room> rooms);
     }
 }

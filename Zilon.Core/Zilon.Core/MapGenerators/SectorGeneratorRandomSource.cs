@@ -16,7 +16,7 @@ namespace Zilon.Core.MapGenerators
         }
 
         [NotNull, ItemNotNull]
-        public Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms)
+        public Room[] RollConnectedRooms(Room room, int maxNeighbors, IList<Room> rooms)
         {
             var availableRooms = new List<Room>(rooms);
             var selectedRooms = new HashSet<Room>();

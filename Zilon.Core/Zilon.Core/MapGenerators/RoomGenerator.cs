@@ -168,7 +168,7 @@ namespace Zilon.Core.MapGenerators
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
-                var availableRooms = roomsInGraph.Where(x => x.Key != room && x.Value < 1).Select(x=>x.Key).ToArray();
+                var availableRooms = roomsInGraph.Where(x => x.Key != room && x.Value < _settings.MaxNeighbors).Select(x=>x.Key).ToArray();
 
                 if (!availableRooms.Any())
                 {
@@ -177,7 +177,6 @@ namespace Zilon.Core.MapGenerators
 
                 var selectedRooms = _randomSource.RollConnectedRooms(room,
                     _settings.MaxNeighbors,
-                    _settings.NeighborProbably,
                     availableRooms);
 
                 if (!selectedRooms.Any())
