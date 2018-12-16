@@ -278,7 +278,6 @@
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
     <Compile Include="Tactics\Behaviour\PropTransfer.cs" />
     <Compile Include="Tactics\Behaviour\TransferPropsTask.cs" />
-    <Compile Include="MapGenerators\GenerationHelper.cs" />
     <Compile Include="MapGenerators\ISectorGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\Room.cs" />
     <Compile Include="MapGenerators\RoomGenerator.cs" />

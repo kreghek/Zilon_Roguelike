@@ -164,6 +164,7 @@ namespace Zilon.Core.MapGenerators
             {
                 var room = roomsNotInGraph.First();
                 roomsInGraph.Add(room);
+                roomsNotInGraph.Remove(room);
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
