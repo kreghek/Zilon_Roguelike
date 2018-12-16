@@ -158,17 +158,17 @@ namespace Zilon.Core.MapGenerators
 
         public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
         {
-            var roomsInGraph = new List<Room>();
+            var roomsInGraph = new Dictionary<Room, int>();
             var roomsNotInGraph = new List<Room>(rooms);
             while(roomsNotInGraph.Any())
             {
                 var room = roomsNotInGraph.First();
-                roomsInGraph.Add(room);
+                roomsInGraph.Add(room, 0);
                 roomsNotInGraph.Remove(room);
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
-                var availableRooms = roomsInGraph.Where(x => x != room).ToArray();
+                var availableRooms = roomsInGraph.Where(x => x.Key != room && x.Value < 1).Select(x=>x.Key).ToArray();
 
                 if (!availableRooms.Any())
                 {
@@ -196,6 +196,7 @@ namespace Zilon.Core.MapGenerators
                 foreach (var selectedRoom in selectedRooms)
                 {
                     ConnectRoomsWithCorridor(map, edgeHash, room, selectedRoom);
+                    roomsInGraph[selectedRoom]++;
                 }
             }
         }
