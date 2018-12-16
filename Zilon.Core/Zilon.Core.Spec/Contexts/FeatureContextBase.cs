@@ -14,6 +14,8 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -249,6 +251,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop()
