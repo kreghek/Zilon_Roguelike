@@ -7,9 +7,10 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tests.MapGenerators
+namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
     public class DungeonMapFactoryTests
@@ -62,7 +63,8 @@ namespace Zilon.Core.Tests.MapGenerators
             // ARRANGE
             var dice = new Dice(diceSeed);
             var randomSource = new RoomGeneratorRandomSource(dice);
-            var factory = new RoomMapFactory(randomSource);
+            var roomGenerator = new RoomGenerator(randomSource);
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 
@@ -87,7 +89,8 @@ namespace Zilon.Core.Tests.MapGenerators
             // ARRANGE
             var dice = new Dice(3245);
             var randomSource = new RoomGeneratorRandomSource(dice);
-            var factory = new RoomMapFactory(randomSource);
+            var roomGenerator = new RoomGenerator(randomSource);
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 
@@ -103,11 +106,6 @@ namespace Zilon.Core.Tests.MapGenerators
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
                 sameNode.Should().BeEmpty();
             }
-        }
-
-        private static IMapFactory CreateFactory(IRoomGeneratorRandomSource randomSource)
-        {
-            return new RoomMapFactory(randomSource);
         }
     }
 }
