@@ -259,13 +259,21 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [UsedImplicitly]
-        [Then(@"Монстр Id:(.*) имеет Hp (.*)")]
+        [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
             var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
+
+        [Then(@"Параметр (.*) равен (.*)")]
+        public void ThenПараметр_Равен(string paramType, string paramValue)
+        {
+            // пока нет предметов, которые изменяют характеристики, этот метод не реализуем.
+            // оставляем, чтобы после остались проверки.
+        }
+
 
     }
 }

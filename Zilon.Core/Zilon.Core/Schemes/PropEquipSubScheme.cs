@@ -21,6 +21,7 @@ namespace Zilon.Core.Schemes
         public EquipmentSlotTypes[] SlotTypes { get; private set; }
 
         [JsonConverter(typeof(ConcreteTypeConverter<PropArmorItemSubScheme[]>))]
+        [JsonProperty]
         public IPropArmorItemSubScheme[] Armors { get; set; }
     }
 }

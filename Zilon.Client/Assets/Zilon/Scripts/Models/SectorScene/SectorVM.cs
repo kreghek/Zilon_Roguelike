@@ -352,9 +352,6 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-
-            AddEquipmentToActor(inventory, "short-sword");
-            AddEquipmentToActor(inventory, "short-sword");
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
@@ -407,8 +404,9 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.GraphicRoot.ProcessHit();
 
         var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+
         var sfx = Instantiate(HitSfx, transform);
-        sfx.transform.position = targetViewModel.transform.position;
+        targetViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя
         if (e.TacticalAct.Stats.Range.Max > 1)

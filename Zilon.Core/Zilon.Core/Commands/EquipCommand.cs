@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -42,7 +43,27 @@ namespace Zilon.Core.Commands
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
             var slot = equipmentCarrier.Slots[SlotIndex.Value];
-            if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0)
+
+            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment, slot);
+            if (!canEquipInSlot)
+            {
+                return false;
+            }
+
+            var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
+                equipment,
+                slot,
+                SlotIndex.Value);
+            if (!canEquipDual)
+            {
+                return false;
+            }
+
+            var canEquipShield = EquipmentCarrierHelper.CheckSheildCompability(equipmentCarrier,
+                equipment,
+                slot,
+                SlotIndex.Value);
+            if (!canEquipShield)
             {
                 return false;
             }

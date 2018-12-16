@@ -17,6 +17,7 @@ namespace Zilon.Core.Schemes
         public PerkRuleSubScheme[] Rules { get; set; }
 
         [JsonConverter(typeof(ConcreteTypeConverter<JobSubScheme[]>))]
+        [JsonProperty]
         public IJobSubScheme[] Jobs { get; set; }
 
         public int MaxValue { get; set; }

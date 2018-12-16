@@ -17,22 +17,22 @@ namespace Zilon.Core.Spec.TestCases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("Fight_HitWithHand", Description="\tЧтобы персонаж начинал \"голым\"\r\n\tКак разработчику\r\n\tМне нужно, чтобы персонаж мо" +
-        "г атаковать даже если у него нет никакой экипировки для атаки.", SourceFile="TestCases\\Fight_HitWithHand.feature", SourceLine=0)]
-    public partial class Fight_HitWithHandFeature
+    [TechTalk.SpecRun.FeatureAttribute("Fight_Dual_SuccessRoll", Description="\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
+        "е нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.", SourceFile="TestCases\\Fight_Dual_SuccessRoll.feature", SourceLine=0)]
+    public partial class Fight_Dual_SuccessRollFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Fight_HitWithHand.feature"
+#line 1 "Fight_Dual_SuccessRoll.feature"
 #line hidden
         
         [TechTalk.SpecRun.FeatureInitialize()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Fight_HitWithHand", "\tЧтобы персонаж начинал \"голым\"\r\n\tКак разработчику\r\n\tМне нужно, чтобы персонаж мо" +
-                    "г атаковать даже если у него нет никакой экипировки для атаки.", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Fight_Dual_SuccessRoll", "\tЧтобы ввести разнообразные сбособы экипировки и развития\r\n\tКак разработчику\r\n\tМн" +
+                    "е нужно, чтобы персонаж мог экипироваться и атаковать двумя оружиями.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.TestCases
             testRunner.CollectScenarioErrors();
         }
         
-        public virtual void УдарыРуками_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string monsterHp, string expectedMonsterHp, string[] exampleTags)
+        public virtual void УспешныйУдарДвумяОружиями_(string personSid, string monsterSid, string monsterId, string monsterNodeX, string monsterNodeY, string propSid1, string slotIndex1, string propSid2, string slotIndex2, string expectedMonsterHp, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "fight",
@@ -77,7 +77,7 @@ namespace Zilon.Core.Spec.TestCases
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Удары \"руками\".", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Успешный удар двумя оружиями.", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -88,22 +88,26 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.And(string.Format("Есть монстр класса {0} Id:{1} в ячейке ({2}, {3})", monsterSid, monsterId, monsterNodeX, monsterNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, monsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: {1}", propSid1, slotIndex1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
+ testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: {1}", propSid2, slotIndex2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 13
+ testRunner.And("Задаём броски для использования действий", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 14
  testRunner.When(string.Format("Актёр игрока атакует монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 15
+#line 17
  testRunner.Then(string.Format("Монстр Id:{0} имеет Hp {1}", monsterId, expectedMonsterHp), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Удары \"руками\"., captain", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("Успешный удар двумя оружиями., human-person", new string[] {
                 "fight",
-                "dev0"}, SourceLine=18)]
-        public virtual void УдарыРуками__Captain()
+                "dev0"}, SourceLine=20)]
+        public virtual void УспешныйУдарДвумяОружиями__Human_Person()
         {
 #line 7
-this.УдарыРуками_("captain", "rat", "1000", "0", "1", "2", "1", ((string[])(null)));
+this.УспешныйУдарДвумяОружиями_("human-person", "skorolon", "1000", "0", "1", "short-sword", "2", "short-sword", "3", "4", ((string[])(null)));
 #line hidden
         }
         

@@ -36,6 +36,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
 
+
             // ASSERT
             canExecute.Should().Be(true);
         }
@@ -65,7 +66,7 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
         {
-            var propScheme = new PropScheme
+            var propScheme = new TestPropScheme
             {
                 Equip = new TestPropEquipSubScheme
                 {

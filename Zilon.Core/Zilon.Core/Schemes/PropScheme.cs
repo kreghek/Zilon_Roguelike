@@ -10,32 +10,34 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class PropScheme : SchemeBase, IPropScheme
     {
-        public PropScheme()
-        {
-        }
-
-        [UsedImplicitly]
-        [JsonConstructor]
-        public PropScheme(PropEquipSubScheme equip, PropUseSubScheme use, CraftSubScheme craft)
-        {
-            Equip = equip;
-            Use = use;
-            Craft = craft;
-        }
-
         /// <summary>
         /// Характеристики схемы, связанные с экипировкой предмета персонажем.
         /// </summary>
-        public IPropEquipSubScheme Equip { get; set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<PropEquipSubScheme>))]
+        [JsonProperty]
+        public IPropEquipSubScheme Equip { get; private set; }
 
         /// <summary>
         /// Информация об использовании предмета.
         /// </summary>
-        public IPropUseSubScheme Use { get; set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<PropUseSubScheme>))]
+        [JsonProperty]
+        public IPropUseSubScheme Use { get; private set; }
 
         /// <summary>
         /// Информации о создании/разборе предмета.
         /// </summary>
-        public CraftSubScheme Craft { get; }
+        [JsonProperty]
+        public CraftSubScheme Craft { get; private set; }
+
+        /// <summary>
+        /// Теги предмета.
+        /// </summary>
+        /// <remarks>
+        /// Теги используются для определения типа предмета. Например, для того, чтобы отследить
+        /// возможность парного оружия.
+        /// </remarks>
+        [JsonProperty]
+        public string[] Tags { get; private set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Zilon.Core.Tests.Schemes
     public class PropSchemeTests
     {
         /// <summary>
-        /// Тест проверяет, что работы корректно десериализуется.
+        /// Тест проверяет, что показания брони корректно десериализуется.
         /// </summary>
         [Test]
         public void Deserialization_ArmorsInProp_ArmorIsCorrect()
@@ -49,6 +49,40 @@ namespace Zilon.Core.Tests.Schemes
             factPropScheme.Equip.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
             factPropScheme.Equip.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
             factPropScheme.Equip.Armors[0].ArmorRank.Should().Be(5);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что работы корректно десериализуется.
+        /// </summary>
+        [Test]
+        public void Deserialization_TagsEquip()
+        {
+            // ARRANGE
+
+            var sourceText = @"{
+  ""Tags"": [ ""weapon"", ""ranged"" ],
+  ""Equip"": {
+                ""ActSids"": [
+                  ""shot""
+    ],
+    ""SlotTypes"": [ ""Hand"" ]
+    },
+  ""Name"": {
+    ""Ru"": ""Пистолет""
+  }
+}
+";
+
+
+
+            // ACT
+            var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
+
+
+
+            // ASSERT
+            factPropScheme.Tags.Should().BeEquivalentTo("weapon", "ranged");
+            factPropScheme.Equip.Should().NotBeNull();
         }
     }
 }

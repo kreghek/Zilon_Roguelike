@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -41,14 +43,22 @@ namespace Zilon.Core.Persons
             {
                 var slot = Slots[slotIndex];
 
-                if ((slot.Types & equipment.Scheme.Equip.SlotTypes[0]) > 0)
-                {
-                    Equipments[slotIndex] = equipment;
-                }
-                else
+                if (!EquipmentCarrierHelper.CheckSlotCompability(equipment, slot))
                 {
                     throw new ArgumentException($"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
                 }
+
+                if (!EquipmentCarrierHelper.CheckDualCompability(this, equipment, slot, slotIndex))
+                {
+                    throw new InvalidOperationException($"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
+                }
+
+                if (!EquipmentCarrierHelper.CheckSheildCompability(this, equipment, slot, slotIndex))
+                {
+                    throw new InvalidOperationException("Попытка экипировать два щита.");
+                }
+
+                Equipments[slotIndex] = equipment;
             }
             else
             {
@@ -65,5 +75,6 @@ namespace Zilon.Core.Persons
         {
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
+
     }
 }

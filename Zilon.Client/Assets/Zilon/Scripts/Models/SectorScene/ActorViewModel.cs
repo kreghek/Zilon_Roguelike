@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -26,8 +27,15 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     public ActorGraphicBase GraphicRoot;
 
+    private readonly List<HitSfx> _effectList;
+
     private Vector3 _targetPosition;
     private float? _moveCounter;
+
+    public ActorViewModel()
+    {
+        _effectList = new List<HitSfx>();
+    }
 
     public event EventHandler Selected;
     public IActor Actor { get; set; }
@@ -80,7 +88,14 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Selected?.Invoke(this, new EventArgs());
     }
 
-    [UsedImplicitly]
+    public void AddHitEffect(HitSfx sfxObject)
+    {
+        sfxObject.HitSfxes = _effectList;
+        sfxObject.transform.position = transform.position + Vector3.up * 0.2f * _effectList.Count;
+
+        _effectList.Add(sfxObject);
+    }
+    
     private void Survival_Dead(object sender, EventArgs e)
     {
         var isHumanPerson = Actor.Owner is HumanPlayer;

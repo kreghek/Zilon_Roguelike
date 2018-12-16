@@ -73,7 +73,7 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
         {
-            var propScheme = new PropScheme
+            var propScheme = new TestPropScheme
             {
                 Use = new TestPropUseSubScheme()
             };

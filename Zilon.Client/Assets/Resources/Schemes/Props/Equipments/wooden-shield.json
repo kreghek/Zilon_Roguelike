@@ -1,4 +1,5 @@
 {
+  "Tags": [ "shield" ],
   "Equip": {
     "SlotTypes": [ "Hand" ],
     "Armors": [
@@ -11,6 +12,6 @@
   },
   "Name": {
     "En": "Wood shield",
-	  "Ru": "Деревянный щит"
+    "Ru": "Деревянный щит"
   }
 }
