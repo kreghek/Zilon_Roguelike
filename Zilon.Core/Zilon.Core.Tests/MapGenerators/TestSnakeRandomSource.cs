@@ -15,7 +15,7 @@ namespace Zilon.Core.Tests.MapGenerators
         public TestSnakeRandomSource()
         {
             expectedRolls = 10;
-            rollIndex = 0;
+            rollIndex = -1;
             rolledOffsetCoords = new[] {
                 new OffsetCoords(0, 0),new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
                 new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
@@ -44,11 +44,10 @@ namespace Zilon.Core.Tests.MapGenerators
             }
         }
 
-        public OffsetCoords RollRoomPosition(int maxPosition)
+        public int RollRoomPositionIndex(int maxPosition)
         {
-            var rolled = rolledOffsetCoords[rollIndex];
             rollIndex++;
-            return rolled;
+            return rollIndex;
         }
 
         public Size RollRoomSize(int maxSize)

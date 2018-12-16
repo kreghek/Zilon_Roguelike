@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using JetBrains.Annotations;
 
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,12 +13,15 @@ namespace Zilon.Core.MapGenerators
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly RoomGeneratorSettings _settings;
 
-        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource) :
+        [ExcludeFromCodeCoverage]
+        public DungeonMapFactory([NotNull] ISectorGeneratorRandomSource randomSource) :
             this(randomSource, new RoomGeneratorSettings())
         {
         }
 
-        public DungeonMapFactory(ISectorGeneratorRandomSource randomSource, RoomGeneratorSettings settings)
+        [ExcludeFromCodeCoverage]
+        public DungeonMapFactory([NotNull] ISectorGeneratorRandomSource randomSource,
+            [NotNull] RoomGeneratorSettings settings)
         {
             _randomSource = randomSource ?? throw new System.ArgumentNullException(nameof(randomSource));
             _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));

@@ -17,9 +17,11 @@ namespace Zilon.Core.Tests.MapGenerators
         /// <summary>
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
-        [Test]
+        [Test, Ignore("На самом деле этот тест не строит змейку")]
         public void Create_SimpleSnakeMaze_NoExceptions()
         {
+            // В конечном счёте этот генератор выбирает случайные комнаты, но в порядке их генерации.
+            // Это не змейка. Нужно будет модифицировать.
             var randomSource = new TestSnakeRandomSource();
 
 
