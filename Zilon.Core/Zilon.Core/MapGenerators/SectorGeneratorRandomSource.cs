@@ -35,12 +35,9 @@ namespace Zilon.Core.MapGenerators
             return selectedRooms.ToArray();
         }
 
-        public OffsetCoords RollRoomPosition(int maxPosition)
+        public int RollRoomPositionIndex(int maxPosition)
         {
-            var rollX = _dice.Roll(0, maxPosition - 1);
-            var rollY = _dice.Roll(0, maxPosition - 1);
-
-            return new OffsetCoords(rollX, rollY);
+            return _dice.Roll(0, maxPosition - 1);
         }
 
         public Size RollRoomSize(int maxSize)

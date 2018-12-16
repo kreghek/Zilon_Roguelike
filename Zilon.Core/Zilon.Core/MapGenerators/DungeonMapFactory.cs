@@ -31,13 +31,17 @@ namespace Zilon.Core.MapGenerators
 
             // Генерируем комнаты в сетке
             var rooms = roomGenerator.GenerateRoomsInGrid();
-            var mainRooms = rooms.Where(x => x != roomGenerator.StartRoom).ToArray();
 
             // Создаём узлы и рёбра комнат
             roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
 
             // Соединяем комнаты
             roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
+
+            // разбиваем комнаты на группы по назначению.
+            var startRoom = rooms.First();
+            var exitRoom = rooms.Last();
+            var mainRooms = rooms.Skip(1).Take(rooms.Count - 2).ToArray();
 
             // Указание регионов карты
             var regionId = 1;
@@ -47,7 +51,7 @@ namespace Zilon.Core.MapGenerators
                 regionId++;
                 map.Regions.Add(region);
 
-                if (room == roomGenerator.StartRoom)
+                if (room == startRoom)
                 {
                     map.StartRegion = region;
                     map.StartNodes = region
@@ -56,7 +60,7 @@ namespace Zilon.Core.MapGenerators
                         .ToArray();
                 }
 
-                if (room == roomGenerator.ExitRoom)
+                if (room == exitRoom)
                 {
                     map.ExitRegion = region;
                     map.ExitNodes = region

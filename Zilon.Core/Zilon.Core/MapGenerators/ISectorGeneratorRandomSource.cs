@@ -4,7 +4,7 @@ namespace Zilon.Core.MapGenerators
 {
     public interface ISectorGeneratorRandomSource
     {
-        OffsetCoords RollRoomPosition(int maxPosition);
+        int RollRoomPositionIndex(int maxPosition);
 
         Size RollRoomSize(int maxSize);
 

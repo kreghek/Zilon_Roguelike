@@ -12,16 +12,6 @@ namespace Zilon.Core.MapGenerators
         private readonly ISectorGeneratorRandomSource _randomSource;
         private readonly RoomGeneratorSettings _settings;
 
-        /// <summary>
-        /// Стартовая комната. Отсюда игрок будет начинать.
-        /// </summary>
-        public Room StartRoom { get; private set; }
-
-        /// <summary>
-        /// Комната с выходом из сектора.
-        /// </summary>
-        public Room ExitRoom { get; private set; }
-
         public RoomGenerator(ISectorGeneratorRandomSource randomSource,
             RoomGeneratorSettings settings)
         {
@@ -37,45 +27,39 @@ namespace Zilon.Core.MapGenerators
 
             var rooms = new List<Room>();
             var usedHash = new HashSet<int>();
+
+            var roomMatrixPosList = new List<OffsetCoords>(roomGridSize * roomGridSize);
+            for (var x = 0; x < roomGridSize; x++)
+            {
+                for (var y = 0; y < roomGridSize; y++)
+                {
+                    roomMatrixPosList.Add(new OffsetCoords(x, y));
+                }
+            }
+
             for (var i = 0; i < _settings.RoomCount; i++)
             {
-                OffsetCoords rolledPosition;
-                while (true)
+                var rolledRoomPositionIndex = _randomSource.RollRoomPositionIndex(roomMatrixPosList.Count);
+                var rolledPosition = roomMatrixPosList[rolledRoomPositionIndex];
+                roomMatrixPosList.RemoveAt(rolledRoomPositionIndex);
+
+                var room = new Room
                 {
-                    var rolledRoomPosition = _randomSource.RollRoomPosition(roomGridSize);
-                    var positionHash = rolledRoomPosition.X * 1000 + rolledRoomPosition.Y;
+                    PositionX = rolledPosition.X,
+                    PositionY = rolledPosition.Y
+                };
 
-                    if (!usedHash.Contains(positionHash))
-                    {
-                        rolledPosition = rolledRoomPosition;
-                        usedHash.Add(positionHash);
-                        break;
-                    }
-                }
+                roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                if (rolledPosition != null)
-                {
-                    var room = new Room
-                    {
-                        PositionX = rolledPosition.X,
-                        PositionY = rolledPosition.Y
-                    };
+                var rolledSize = _randomSource.RollRoomSize(_settings.RoomCellSize - 2);
 
-                    roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
+                room.Width = rolledSize.Width + 2;
+                room.Height = rolledSize.Height + 2;
 
-                    var rolledSize = _randomSource.RollRoomSize(_settings.RoomCellSize - 2);
+                rooms.Add(room);
 
-                    room.Width = rolledSize.Width + 2;
-                    room.Height = rolledSize.Height + 2;
+                Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
 
-                    rooms.Add(room);
-
-                    Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
-                }
-                else
-                {
-                    throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
-                }
             }
 
             return rooms;
