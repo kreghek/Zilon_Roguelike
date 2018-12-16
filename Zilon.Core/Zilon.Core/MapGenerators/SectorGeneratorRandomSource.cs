@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using JetBrains.Annotations;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators
@@ -15,6 +15,7 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
         }
 
+        [NotNull, ItemNotNull]
         public Room[] RollConnectedRooms(Room room, int maxNeighbors, int p, IList<Room> rooms)
         {
             var selectedRooms = new HashSet<Room>();
