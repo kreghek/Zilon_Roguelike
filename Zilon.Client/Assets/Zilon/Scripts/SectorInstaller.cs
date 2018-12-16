@@ -7,12 +7,11 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Spatial;
 
 public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
@@ -26,7 +25,9 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
         Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<DungeonMapFactory>().AsSingle();
+        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
+        Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
