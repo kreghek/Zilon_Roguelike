@@ -352,15 +352,6 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-
-            AddEquipmentToActor(inventory, "short-sword");
-            AddEquipmentToActor(inventory, "short-sword");
-            AddEquipmentToActor(inventory, "pistol");
-            AddEquipmentToActor(inventory, "pistol");
-            AddEquipmentToActor(inventory, "wooden-shield");
-            AddEquipmentToActor(inventory, "wooden-shield");
-            AddEquipmentToActor(inventory, "battle-axe");
-            AddEquipmentToActor(inventory, "battle-axe");
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
