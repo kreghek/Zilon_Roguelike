@@ -129,7 +129,7 @@ namespace Zilon.Core.Commands.Tests
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
             _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            _container.Register<ISectorGeneratorRandomSource, SectorGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
             _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
             _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
@@ -151,7 +151,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
-            _container.Register<IMapFactory, DungeonMapFactory>(new PerContainerLifetime());
+            _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 

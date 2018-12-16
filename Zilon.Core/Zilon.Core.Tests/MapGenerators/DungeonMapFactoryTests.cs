@@ -32,7 +32,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 MaxNeighbors = 1
             };
 
-            var factory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
+            var factory = new RoomMapFactory(randomSource, roomGeneratorSettings);
 
 
 
@@ -61,8 +61,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var factory = new RoomMapFactory(randomSource);
 
 
 
@@ -86,8 +86,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(3245);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var factory = new RoomMapFactory(randomSource);
 
 
 
@@ -105,9 +105,9 @@ namespace Zilon.Core.Tests.MapGenerators
             }
         }
 
-        private static IMapFactory CreateFactory(ISectorGeneratorRandomSource randomSource)
+        private static IMapFactory CreateFactory(IRoomGeneratorRandomSource randomSource)
         {
-            return new DungeonMapFactory(randomSource);
+            return new RoomMapFactory(randomSource);
         }
     }
 }

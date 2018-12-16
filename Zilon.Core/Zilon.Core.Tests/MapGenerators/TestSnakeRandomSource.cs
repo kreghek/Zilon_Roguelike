@@ -4,7 +4,7 @@ using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    public class TestSnakeRandomSource : ISectorGeneratorRandomSource
+    public class TestSnakeRandomSource : IRoomGeneratorRandomSource
     {
         private readonly int expectedRolls;
         private int rollIndex;

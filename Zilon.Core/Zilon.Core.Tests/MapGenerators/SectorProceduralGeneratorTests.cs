@@ -36,7 +36,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 RoomCellSize = 10,
                 MaxNeighbors = 1
             };
-            var mapFactory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
+            var mapFactory = new RoomMapFactory(randomSource, roomGeneratorSettings);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
@@ -69,8 +69,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var mapFactory = new DungeonMapFactory(randomSource);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var mapFactory = new RoomMapFactory(randomSource);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
@@ -90,7 +90,7 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource,
+        private static SectorProceduralGenerator CreateGenerator(IRoomGeneratorRandomSource randomSource,
             ISchemeService schemeService,
             IBotPlayer botPlayer,
             IMapFactory mapFactory)

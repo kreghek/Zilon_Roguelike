@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class SectorGeneratorRandomSource : ISectorGeneratorRandomSource
+    public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
         private const int MaxProbably = 100;
         private readonly IDice _dice;
 
-        public SectorGeneratorRandomSource(IDice dice)
+        public RoomGeneratorRandomSource(IDice dice)
         {
             _dice = dice;
         }

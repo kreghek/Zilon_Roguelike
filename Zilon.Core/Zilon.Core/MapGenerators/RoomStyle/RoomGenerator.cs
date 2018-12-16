@@ -1,23 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using JetBrains.Annotations;
 
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class RoomGenerator
+    public class RoomGenerator : IRoomGenerator
     {
-        private readonly ISectorGeneratorRandomSource _randomSource;
+        private readonly IRoomGeneratorRandomSource _randomSource;
         private readonly RoomGeneratorSettings _settings;
 
-        public RoomGenerator(ISectorGeneratorRandomSource randomSource,
-            RoomGeneratorSettings settings)
+        [ExcludeFromCodeCoverage]
+        public RoomGenerator([NotNull] IRoomGeneratorRandomSource randomSource,
+            [NotNull] RoomGeneratorSettings settings)
         {
-            _randomSource = randomSource;
-            _settings = settings;
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
+        }
+
+        [ExcludeFromCodeCoverage]
+        public RoomGenerator(IRoomGeneratorRandomSource randomSource): this(randomSource, new RoomGeneratorSettings())
+        {
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         public List<Room> GenerateRoomsInGrid()

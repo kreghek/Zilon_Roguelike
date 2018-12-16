@@ -8,41 +8,30 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class DungeonMapFactory : IMapFactory
+    public class RoomMapFactory : IMapFactory
     {
-        private readonly ISectorGeneratorRandomSource _randomSource;
-        private readonly RoomGeneratorSettings _settings;
+        private readonly IRoomGenerator _roomGenerator;
 
         [ExcludeFromCodeCoverage]
-        public DungeonMapFactory([NotNull] ISectorGeneratorRandomSource randomSource) :
-            this(randomSource, new RoomGeneratorSettings())
+        public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
-        }
-
-        [ExcludeFromCodeCoverage]
-        public DungeonMapFactory([NotNull] ISectorGeneratorRandomSource randomSource,
-            [NotNull] RoomGeneratorSettings settings)
-        {
-            _randomSource = randomSource ?? throw new System.ArgumentNullException(nameof(randomSource));
-            _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
+            _roomGenerator = roomGenerator;
         }
 
         public IMap Create()
         {
             var map = CreateMapInstance();
 
-            var roomGenerator = new RoomGenerator(_randomSource, _settings);
-
             var edgeHash = new HashSet<string>();
 
             // Генерируем комнаты в сетке
-            var rooms = roomGenerator.GenerateRoomsInGrid();
+            var rooms = _roomGenerator.GenerateRoomsInGrid();
 
             // Создаём узлы и рёбра комнат
-            roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
+            _roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
 
             // Соединяем комнаты
-            roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
+            _roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
             // разбиваем комнаты на группы по назначению.
             var startRoom = rooms.First();
