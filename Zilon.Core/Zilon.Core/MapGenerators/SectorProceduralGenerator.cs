@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -50,20 +51,19 @@ namespace Zilon.Core.MapGenerators
             var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
             CreateRoomMonsters(sector, monsterRegions);
 
-            CreateChests(monsterRegions);
+            CreateChests(map, monsterRegions);
 
             return sector;
         }
 
-        private void CreateChests(IEnumerable<MapRegion> rooms)
+        private void CreateChests(IMap map, IEnumerable<MapRegion> regions)
         {
             var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
             var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
 
-            foreach (var room in rooms)
+            foreach (var room in regions)
             {
-                var absNodeIndex = room.Nodes.Count();
-                var containerNode = room.Nodes[absNodeIndex / 2];
+                var containerNode = MapRegionHelper.FindFreeNode(map, room.Nodes);
                 var container = new DropTablePropChest(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
                     _dropResolver);
