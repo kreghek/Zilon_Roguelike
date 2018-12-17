@@ -1,5 +1,10 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+
+using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.MapGenerators;
@@ -106,6 +111,71 @@ namespace Zilon.Core.Tests.MapGenerators
             // ASSERT
             node.Should().NotBe(node10);
             node.Should().NotBe(corridorNode);
+        }
+
+        /// <summary>
+        /// Тест воспроизводит ошибку, возникующую в MoveCommandTest
+        /// в коммите SHA-1: df2c306ddd744bcd32f9b8b47839838f9982fd85
+        /// </summary>
+        [Test]
+        public void FindNonBlockedNode_80409354_NodeFound()
+        {
+            // ARRANGE
+            var hexMap = new HexMap(200);
+
+            var region = new List<IMapNode>();
+            for (var x = 80; x <= 93; x++)
+            {
+                for (var y = 40; y <= 54; y++)
+                {
+                    var node = new HexNode(x, y);
+                    region.Add(node);
+                    hexMap.AddNode(node);
+                }
+            }
+
+            // генерация коридоров
+            hexMap.AddNode(new HexNode(79, 40));
+            hexMap.AddNode(new HexNode(78, 40));
+
+            hexMap.AddNode(new HexNode(39, 89));
+            hexMap.AddNode(new HexNode(38, 89));
+
+            hexMap.AddNode(new HexNode(39, 90));
+            hexMap.AddNode(new HexNode(38, 90));
+
+            hexMap.AddNode(new HexNode(94, 40));
+            hexMap.AddNode(new HexNode(95, 40));
+
+            hexMap.AddNode(new HexNode(94, 48));
+            hexMap.AddNode(new HexNode(94, 49));
+            hexMap.AddNode(new HexNode(95, 49));
+            hexMap.AddNode(new HexNode(95, 50));
+
+            // эмулируем выборку сундуков в предыдущих итерациях
+            var availableNodes = new List<IMapNode>(region);
+            var rolled = new[] { 114, 136, 0, 123, 179, 0, 111, 3 };
+            foreach (int rolledIndex in rolled)
+            {
+                var rolledNode = availableNodes[rolledIndex];  // узел, который валил поиск.
+                var selectedNode = MapRegionHelper.FindNonBlockedNode(rolledNode, hexMap, availableNodes);
+
+                availableNodes.Remove(selectedNode);
+            }
+
+
+
+            // ACT
+            Action act = () =>
+            {
+                var testedNode = availableNodes[0];  // узел, который валил поиск.
+                var selectedNode = MapRegionHelper.FindNonBlockedNode(testedNode, hexMap, availableNodes);
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow<InvalidOperationException>();
         }
     }
 }
