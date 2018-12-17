@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -23,6 +21,13 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<PropUseSubScheme>))]
         [JsonProperty]
         public IPropUseSubScheme Use { get; private set; }
+
+        /// <summary>
+        /// Информация предмете, как .
+        /// </summary>
+        [JsonConverter(typeof(ConcreteTypeConverter<PropBulletSubScheme>))]
+        [JsonProperty]
+        public IPropBulletSubScheme Bullet { get; private set; }
 
         /// <summary>
         /// Информации о создании/разборе предмета.
