@@ -62,6 +62,8 @@
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
+    <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\IChestGenerator.cs" />
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />

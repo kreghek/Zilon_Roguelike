@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class ChestGenerator
+    public class ChestGenerator : IChestGenerator
     {
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
         private readonly IPropContainerManager _propContainerManager;
+        private readonly IChestGeneratorRandomSource _chestGeneratorRandomSource;
 
         public ChestGenerator(ISchemeService schemeService, 
             IDropResolver dropResolver,
-            IPropContainerManager propContainerManager)
+            IPropContainerManager propContainerManager,
+            IChestGeneratorRandomSource chestGeneratorRandomSource)
         {
             _schemeService = schemeService;
             _dropResolver = dropResolver;
             _propContainerManager = propContainerManager;
+            _chestGeneratorRandomSource = chestGeneratorRandomSource;
         }
 
         public void CreateChests(IMap map, IEnumerable<MapRegion> regions)
@@ -29,13 +30,22 @@ namespace Zilon.Core.MapGenerators
             var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
             var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
 
-            foreach (var room in regions)
+            foreach (var region in regions)
             {
-                var containerNode = MapRegionHelper.FindNonBlockedNode(map, room.Nodes);
-                var container = new DropTablePropChest(containerNode,
-                    new[] { defaultDropTable, survivalDropTable },
-                    _dropResolver);
-                _propContainerManager.Add(container);
+                var maxChestCount = region.Nodes.Count() / 9;
+                var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
+
+                var freeNodes = new List<IMapNode>(region.Nodes);
+                for (var i = 0; i < rolledCount; i++)
+                {
+                    var rollIndex = _chestGeneratorRandomSource.RollChestCount(freeNodes.Count);
+                    var containerNode = MapRegionHelper.FindNonBlockedNode(freeNodes[rollIndex], map, freeNodes);
+                    freeNodes.Remove(containerNode);
+                    var container = new DropTablePropChest(containerNode,
+                        new[] { defaultDropTable, survivalDropTable },
+                        _dropResolver);
+                    _propContainerManager.Add(container);
+                }
             }
         }
     }

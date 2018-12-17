@@ -19,7 +19,9 @@ namespace Zilon.Core.MapGenerators
         /// <param name="availableNodes"> Доступные узлы. Использовать узлы региона.
         /// Возможно отфильтрованные от уже занятых узлов. </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
-        public static IMapNode FindNonBlockedNode([NotNull] IMap map,
+        public static IMapNode FindNonBlockedNode(
+            [NotNull] IMapNode node,
+            [NotNull] IMap map,
             [NotNull] [ItemNotNull] IEnumerable<IMapNode> availableNodes)
         {
             if (map == null)
@@ -34,9 +36,6 @@ namespace Zilon.Core.MapGenerators
 
             var checkedNodes = new List<IMapNode>();
 
-            var absNodeIndex = availableNodes.Count();
-            var node = availableNodes.ElementAt(absNodeIndex / 2);
-
             if (node == null)
             {
                 throw new ArgumentNullException(nameof(availableNodes), "Последовательность содержит null.");
@@ -44,7 +43,6 @@ namespace Zilon.Core.MapGenerators
 
             while (checkedNodes.Count < availableNodes.Count())
             {
-
                 checkedNodes.Add(node);
 
                 var neigbours = map.GetNext(node)
@@ -60,7 +58,7 @@ namespace Zilon.Core.MapGenerators
                 }
                 else
                 {
-                    node = neigbours.Where(x => !checkedNodes.Contains(x)).FirstOrDefault();
+                    node = neigbours.Where(x => !checkedNodes.Contains(x) && availableNodes.Contains(x)).FirstOrDefault();
 
                     if (node == null)
                     {

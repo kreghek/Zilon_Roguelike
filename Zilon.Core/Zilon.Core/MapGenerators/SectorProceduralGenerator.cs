@@ -18,6 +18,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
         private readonly IMapFactory _mapFactory;
+        private readonly IChestGenerator _chestGenerator;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
         public SectorProceduralGenerator(IActorManager actorManager,
@@ -26,6 +27,7 @@ namespace Zilon.Core.MapGenerators
             ISchemeService schemeService,
             IDropResolver dropResolver,
             IMapFactory mapFactory,
+            IChestGenerator chestGenerator,
             ISurvivalRandomSource survivalRandomSource)
         {
             _actorManager = actorManager;
@@ -34,6 +36,7 @@ namespace Zilon.Core.MapGenerators
             _schemeService = schemeService;
             _dropResolver = dropResolver;
             _mapFactory = mapFactory;
+            _chestGenerator = chestGenerator;
             _survivalRandomSource = survivalRandomSource;
         }
 
@@ -50,24 +53,9 @@ namespace Zilon.Core.MapGenerators
             var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
             CreateRoomMonsters(sector, monsterRegions);
 
-            CreateChests(map, monsterRegions);
+            _chestGenerator.CreateChests(map, monsterRegions);
 
             return sector;
-        }
-
-        private void CreateChests(IMap map, IEnumerable<MapRegion> regions)
-        {
-            var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
-            var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
-
-            foreach (var room in regions)
-            {
-                var containerNode = MapRegionHelper.FindNonBlockedNode(map, room.Nodes);
-                var container = new DropTablePropChest(containerNode,
-                    new[] { defaultDropTable, survivalDropTable },
-                    _dropResolver);
-                _propContainerManager.Add(container);
-            }
         }
 
         private void CreateRoomMonsters(ISector sector, IEnumerable<MapRegion> regions)

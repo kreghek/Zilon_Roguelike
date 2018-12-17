@@ -139,6 +139,8 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
             _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
+            _container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
+            _container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
