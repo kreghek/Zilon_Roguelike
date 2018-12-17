@@ -72,7 +72,6 @@
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
-    <Compile Include="Schemes\ITacticalActRestrictionSubScheme.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Schemes\PropTags.cs" />

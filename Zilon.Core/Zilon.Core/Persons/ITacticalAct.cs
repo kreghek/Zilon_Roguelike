@@ -15,7 +15,10 @@ namespace Zilon.Core.Persons
         /// </summary>
         ITacticalActStatsSubScheme Stats { get; }
 
-        ITacticalActRstrictionSubScheme Restrictions{get;}
+        /// <summary>
+        /// Подсхема с ограничениями на использование действий.
+        /// </summary>
+        ITacticalActConstrainsSubScheme Constrains { get; }
 
         /// <summary>
         /// Предмет экипировки, который даёт данное действие.

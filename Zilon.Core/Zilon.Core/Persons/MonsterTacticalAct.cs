@@ -13,6 +13,7 @@ namespace Zilon.Core.Persons
         public Roll Efficient { get; }
         public Roll ToHit { get; }
         public Equipment Equipment { get; }
+        public ITacticalActConstrainsSubScheme Constrains { get; }
 
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {

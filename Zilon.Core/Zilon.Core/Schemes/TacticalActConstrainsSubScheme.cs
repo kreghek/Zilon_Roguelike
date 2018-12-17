@@ -11,7 +11,7 @@
         /// <summary>
         /// Количество использований.
         /// </summary>
-        public int? UsageResource { get; set; }
+        public int? PropResourceCount { get; set; }
 
         /// <summary>
         /// Восстановление количества использований.
@@ -22,5 +22,7 @@
         /// Куллдаун между использованиями.
         /// </summary>
         public int? Cooldown { get; set; }
+
+        public string PropResourceType { get; }
     }
 }
