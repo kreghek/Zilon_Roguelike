@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;

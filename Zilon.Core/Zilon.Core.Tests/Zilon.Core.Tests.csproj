@@ -108,7 +108,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MapGenerators\DungeonMapFactoryTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />
-    <Compile Include="MapGenerators\TestSnakeRandomSource.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\DefeatActorJobProgressTests.cs" />

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
@@ -9,41 +9,30 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     internal sealed class TestSnakeRoomGenerator : IRoomGenerator
     {
-        private readonly int expectedRolls;
-        private int rollIndex;
-        private readonly int[][] rolledConnectedRoomIndexes;
-        private readonly OffsetCoords[] rolledOffsetCoords;
-        private readonly Size rolledSize;
+        private readonly OffsetCoords[] _rolledOffsetCoords;
+        private readonly Size _rolledSize;
 
         public TestSnakeRoomGenerator()
         {
-            expectedRolls = 10;
-            rollIndex = -1;
-            rolledOffsetCoords = new[] {
+            _rolledOffsetCoords = new[] {
                 new OffsetCoords(0, 0),new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
                 new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
                 new OffsetCoords(0, 2),new OffsetCoords(1, 2)
             };
 
-            rolledSize = new Size(3, 3);
-
-            rolledConnectedRoomIndexes = new[] {
-                new[]{ 1 }, new[]{ 2 },new[]{ 3 },new[]{ 4 },
-                new[]{ 5 },new[]{ 6 },new[]{ 7 },new[]{ 8 },
-                new[]{ 9 }
-            };
+            _rolledSize = new Size(3, 3);
         }
 
         public List<Room> GenerateRoomsInGrid()
         {
             var rooms = new List<Room>();
 
-            for (var i = 0; i < rolledOffsetCoords.Length; i++)
+            for (var i = 0; i < _rolledOffsetCoords.Length; i++)
             {
                 var room = new Room
                 {
-                    PositionX = rolledOffsetCoords[i].X,
-                    PositionY = rolledOffsetCoords[i].Y
+                    PositionX = _rolledOffsetCoords[i].X,
+                    PositionY = _rolledOffsetCoords[i].Y
                 };
 
                 var rolledSize = new Size(3, 3);

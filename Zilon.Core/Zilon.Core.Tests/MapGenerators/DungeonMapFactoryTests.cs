@@ -18,22 +18,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// <summary>
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
-        [Test, Ignore("На самом деле этот тест не строит змейку")]
+        [Test]
         public void Create_SimpleSnakeMaze_NoExceptions()
         {
-            // В конечном счёте этот генератор выбирает случайные комнаты, но в порядке их генерации.
-            // Это не змейка. Нужно будет модифицировать.
-            var randomSource = new TestSnakeRandomSource();
-
-
-            var roomGeneratorSettings = new RoomGeneratorSettings
-            {
-                RoomCount = 10,
-                RoomCellSize = 10,
-                MaxNeighbors = 1
-            };
-
-            var factory = new RoomMapFactory(randomSource, roomGeneratorSettings);
+            var roomGenerator = new TestSnakeRoomGenerator();
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 

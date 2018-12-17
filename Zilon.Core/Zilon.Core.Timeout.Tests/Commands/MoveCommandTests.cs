@@ -11,6 +11,7 @@ using NUnit.Framework;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -64,7 +65,8 @@ namespace Zilon.Core.Commands.Tests
             var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
             var moveTargetNode = nextNodes.First();
 
-            playerState.HoverViewModel = new TestNodeViewModel {
+            playerState.HoverViewModel = new TestNodeViewModel
+            {
                 Node = moveTargetNode
             };
 
@@ -85,7 +87,7 @@ namespace Zilon.Core.Commands.Tests
                 }
             } while (command != null);
 
-            
+
         }
 
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
@@ -141,7 +143,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
 
-            _container.Register<ISchemeLocator>( factory => CreateSchemeLocator(), new PerContainerLifetime());
+            _container.Register<ISchemeLocator>(factory => CreateSchemeLocator(), new PerContainerLifetime());
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
@@ -151,6 +153,8 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
+            _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());

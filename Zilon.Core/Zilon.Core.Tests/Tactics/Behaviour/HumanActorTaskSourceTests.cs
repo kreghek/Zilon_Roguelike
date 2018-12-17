@@ -9,6 +9,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;

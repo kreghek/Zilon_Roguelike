@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+
 using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
