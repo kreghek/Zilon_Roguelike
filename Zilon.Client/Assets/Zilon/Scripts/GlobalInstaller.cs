@@ -3,7 +3,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -19,7 +19,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
     {
         Container.Bind<IDice>().FromInstance(new Dice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
-        Container.Bind<ISectorGeneratorRandomSource>().To<SectorGeneratorRandomSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();

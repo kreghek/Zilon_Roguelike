@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.MapGenerators
+﻿namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public sealed class RoomMatrix
     {

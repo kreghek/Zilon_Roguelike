@@ -7,6 +7,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -127,11 +128,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             var tacticalActUsageService = CreateTacticalActUsageService();
 
-            var logic = new PatrolLogic(_actor, 
-                _patrolRoute3Points, 
-                _map, 
+            var logic = new PatrolLogic(_actor,
+                _patrolRoute3Points,
+                _map,
                 _actorList,
-                _decisionSource, 
+                _decisionSource,
                 tacticalActUsageService);
 
 

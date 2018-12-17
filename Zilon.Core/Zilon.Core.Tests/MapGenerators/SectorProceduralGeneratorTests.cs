@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -16,6 +17,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.Tests.MapGenerators.RoomStyle;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -29,18 +31,12 @@ namespace Zilon.Core.Tests.MapGenerators
         public void Create_DifferentMaps_NoExceptions()
         {
             // ARRANGE
-            var randomSource = new TestSnakeRandomSource();
-            var roomGeneratorSettings = new RoomGeneratorSettings
-            {
-                RoomCount = 10,
-                RoomCellSize = 10,
-                MaxNeighbors = 1
-            };
-            var mapFactory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
+            var roomGenerator = new TestSnakeRoomGenerator();
+            var mapFactory = new RoomMapFactory(roomGenerator);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(randomSource, schemeService, botPlayer, mapFactory);
+            var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
 
 
 
@@ -69,12 +65,13 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var mapFactory = new DungeonMapFactory(randomSource);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var roomGenerator = new RoomGenerator(randomSource);
+            var mapFactory = new RoomMapFactory(roomGenerator);
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(randomSource, schemeService, botPlayer, mapFactory);
+            var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
 
 
 
@@ -90,8 +87,7 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static SectorProceduralGenerator CreateGenerator(ISectorGeneratorRandomSource randomSource,
-            ISchemeService schemeService,
+        private static SectorProceduralGenerator CreateGenerator(ISchemeService schemeService,
             IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
@@ -110,7 +106,6 @@ namespace Zilon.Core.Tests.MapGenerators
             return new SectorProceduralGenerator(
                 actorManager,
                 propContainerManager,
-                randomSource,
                 botPlayer,
                 schemeService,
                 dropResolver,

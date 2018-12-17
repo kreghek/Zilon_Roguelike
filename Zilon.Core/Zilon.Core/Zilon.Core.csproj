@@ -61,10 +61,11 @@
     <Compile Include="Client\InventoryState.cs" />
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
+    <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
-    <Compile Include="MapGenerators\RoomGeneratorSettings.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
-    <Compile Include="MapGenerators\SquareMapFactory.cs" />
+    <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Common\RangeHelper.cs" />
     <Compile Include="Common\Roll.cs" />
     <Compile Include="Common\RollModifiers.cs" />
-    <Compile Include="MapGenerators\DungeonMapFactory.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
     <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
     <Compile Include="Tactics\Spatial\GraphMap.cs" />
@@ -129,7 +130,7 @@
     <Compile Include="IJob.cs" />
     <Compile Include="CubeCoords.cs" />
     <Compile Include="CommonServices\Dices\IDice.cs" />
-    <Compile Include="MapGenerators\RoomMatrix.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomMatrix.cs" />
     <Compile Include="OffsetCoords.cs" />
     <Compile Include="PerkHelper.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelper.cs" />
@@ -278,11 +279,10 @@
     <Compile Include="Tactics\Behaviour\OpenContainerTask.cs" />
     <Compile Include="Tactics\Behaviour\PropTransfer.cs" />
     <Compile Include="Tactics\Behaviour\TransferPropsTask.cs" />
-    <Compile Include="MapGenerators\GenerationHelper.cs" />
-    <Compile Include="MapGenerators\ISectorGeneratorRandomSource.cs" />
-    <Compile Include="MapGenerators\Room.cs" />
-    <Compile Include="MapGenerators\RoomGenerator.cs" />
-    <Compile Include="MapGenerators\SectorGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\IRoomGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\Room.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGenerator.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
     <Compile Include="Tactics\DropTablePropChest.cs" />
     <Compile Include="Tactics\GameLoop.cs" />

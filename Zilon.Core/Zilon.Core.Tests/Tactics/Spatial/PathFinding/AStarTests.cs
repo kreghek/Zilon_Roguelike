@@ -7,6 +7,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;

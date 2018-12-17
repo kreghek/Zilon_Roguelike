@@ -107,7 +107,7 @@
     <Compile Include="Components\PersonStatTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MapGenerators\DungeonMapFactoryTests.cs" />
-    <Compile Include="MapGenerators\TestSnakeRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\DefeatActorJobProgressTests.cs" />
@@ -142,8 +142,6 @@
     <Compile Include="Tactics\DropTableChestStoreTests.cs" />
     <Compile Include="Tactics\DropTablePropChestTests.cs" />
     <Compile Include="Tactics\GameLoopTests.cs" />
-    <Compile Include="MapGenerators\GenerationHelperTests.cs" />
-    <Compile Include="MapGenerators\SectorGeneratorRandomSourceTests.cs" />
     <Compile Include="MapGenerators\SectorProceduralGeneratorTests.cs" />
     <Compile Include="Tactics\SectorTests.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />

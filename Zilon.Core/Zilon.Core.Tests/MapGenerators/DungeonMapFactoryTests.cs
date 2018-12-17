@@ -7,9 +7,10 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tests.MapGenerators
+namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
     public class DungeonMapFactoryTests
@@ -20,17 +21,8 @@ namespace Zilon.Core.Tests.MapGenerators
         [Test]
         public void Create_SimpleSnakeMaze_NoExceptions()
         {
-            var randomSource = new TestSnakeRandomSource();
-
-
-            var roomGeneratorSettings = new RoomGeneratorSettings
-            {
-                RoomCount = 10,
-                RoomCellSize = 10,
-                MaxNeighbors = 1
-            };
-
-            var factory = new DungeonMapFactory(randomSource, roomGeneratorSettings);
+            var roomGenerator = new TestSnakeRoomGenerator();
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 
@@ -51,12 +43,17 @@ namespace Zilon.Core.Tests.MapGenerators
         /// </summary>
         [Test]
         [Timeout(3 * 60 * 1000)]
-        public void Create_RealRandom_NoExceptions()
+        [TestCase(123)]
+        [TestCase(1)]
+        [TestCase(8674)]
+        [TestCase(1000)]
+        public void Create_RealRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var dice = new Dice(123);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
+            var dice = new Dice(diceSeed);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var roomGenerator = new RoomGenerator(randomSource);
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 
@@ -80,8 +77,9 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(3245);
-            var randomSource = new SectorGeneratorRandomSource(dice);
-            var factory = new DungeonMapFactory(randomSource);
+            var randomSource = new RoomGeneratorRandomSource(dice);
+            var roomGenerator = new RoomGenerator(randomSource);
+            var factory = new RoomMapFactory(roomGenerator);
 
 
 
@@ -97,11 +95,6 @@ namespace Zilon.Core.Tests.MapGenerators
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
                 sameNode.Should().BeEmpty();
             }
-        }
-
-        private static IMapFactory CreateFactory(ISectorGeneratorRandomSource randomSource)
-        {
-            return new DungeonMapFactory(randomSource);
         }
     }
 }

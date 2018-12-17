@@ -1,81 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
-    public class RoomGenerator
+    internal sealed class TestSnakeRoomGenerator : IRoomGenerator
     {
-        private readonly ISectorGeneratorRandomSource _randomSource;
-        private readonly RoomGeneratorSettings _settings;
+        private readonly OffsetCoords[] _rolledOffsetCoords;
+        private readonly Size _rolledSize;
 
-        /// <summary>
-        /// Стартовая комната. Отсюда игрок будет начинать.
-        /// </summary>
-        public Room StartRoom { get; private set; }
-
-        /// <summary>
-        /// Комната с выходом из сектора.
-        /// </summary>
-        public Room ExitRoom { get; private set; }
-
-        public RoomGenerator(ISectorGeneratorRandomSource randomSource,
-            RoomGeneratorSettings settings)
+        public TestSnakeRoomGenerator()
         {
-            _randomSource = randomSource;
-            _settings = settings;
+            _rolledOffsetCoords = new[] {
+                new OffsetCoords(0, 0),new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
+                new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
+                new OffsetCoords(0, 2),new OffsetCoords(1, 2)
+            };
 
+            _rolledSize = new Size(3, 3);
         }
 
         public List<Room> GenerateRoomsInGrid()
         {
-            var roomGridSize = (int)Math.Ceiling(Math.Log(_settings.RoomCount, 2)) + 1;
-            var roomGrid = new RoomMatrix(roomGridSize);
-
             var rooms = new List<Room>();
-            for (var i = 0; i < _settings.RoomCount; i++)
+
+            for (var i = 0; i < _rolledOffsetCoords.Length; i++)
             {
-                var rolledUncheckedPosition = _randomSource.RollRoomPosition(roomGridSize - 1);
-                var rolledPosition = GenerationHelper.GetFreeCell(roomGrid, rolledUncheckedPosition);
-
-                if (rolledPosition != null)
+                var room = new Room
                 {
-                    var room = new Room
-                    {
-                        PositionX = rolledPosition.X,
-                        PositionY = rolledPosition.Y
-                    };
+                    PositionX = _rolledOffsetCoords[i].X,
+                    PositionY = _rolledOffsetCoords[i].Y
+                };
 
-                    roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
+                var rolledSize = new Size(3, 3);
 
-                    var rolledSize = _randomSource.RollRoomSize(_settings.RoomCellSize - 2);
+                room.Width = rolledSize.Width + 2;
+                room.Height = rolledSize.Height + 2;
 
-                    room.Width = rolledSize.Width + 2;
-                    room.Height = rolledSize.Height + 2;
+                rooms.Add(room);
 
-                    rooms.Add(room);
-
-                    if (StartRoom == null)
-                    {
-                        StartRoom = room;
-                    }
-
-                    Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
-                }
-                else
-                {
-                    throw new InvalidOperationException("Не найдено свободной ячейки для комнаты.");
-                }
             }
-
-            ExitRoom = rooms.Last();
 
             return rooms;
         }
 
+        public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        {
+            for (var i = 0; i < rooms.Count - 1; i++)
+            {
+                ConnectRoomsWithCorridor(map, edgeHash, rooms[i], rooms[i + 1]);
+            }
+        }
+
+        #region Duplicate
         public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
         {
             foreach (var room in rooms)
@@ -90,8 +70,8 @@ namespace Zilon.Core.MapGenerators
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * _settings.RoomCellSize;
-                    var nodeY = y + room.PositionY * _settings.RoomCellSize;
+                    var nodeX = x + room.PositionX * 20;
+                    var nodeY = y + room.PositionY * 20;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
                     map.AddNode(node);
@@ -167,40 +147,6 @@ namespace Zilon.Core.MapGenerators
             return node;
         }
 
-        public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
-        {
-            foreach (var room in rooms)
-            {
-                // для каждой комнаты выбираем произвольную другую комнату
-                // и проводим к ней коридор
-
-                var availableRooms = rooms.Where(x => x != room).ToArray();
-
-                var selectedRooms = _randomSource.RollConnectedRooms(room,
-                    _settings.MaxNeighbors,
-                    _settings.NeighborProbably,
-                    availableRooms);
-
-                if (selectedRooms == null || !selectedRooms.Any())
-                {
-                    //Значит текущая комната тупиковая
-                    Console.WriteLine($"Для комнаты {room} нет соседей (тупик).");
-                    continue;
-                }
-
-                Console.WriteLine($"Для комнаты {room} выбраны соседи ");
-                foreach (var selectedRoom in selectedRooms)
-                {
-                    Console.Write(selectedRoom + " ");
-                }
-
-                foreach (var selectedRoom in selectedRooms)
-                {
-                    ConnectRoomsWithCorridor(map, edgeHash, room, selectedRoom);
-                }
-            }
-        }
-
         private void ConnectRoomsWithCorridor(IMap map, HashSet<string> edgeHash, Room room, Room selectedRoom)
         {
             var currentNode = room.Nodes.First();
@@ -212,9 +158,16 @@ namespace Zilon.Core.MapGenerators
             {
                 var offsetCoords = HexHelper.ConvertToOffset(point);
 
+                // это происходит, потому что если при нулевом Х для обеих комнат
+                // попытаться отрисовать линию коридора, то она будет змейкой заходить за 0.
+                // Нужно искать решение получше.
+                offsetCoords = new OffsetCoords(offsetCoords.X < 0 ? 0 : offsetCoords.X,
+                    offsetCoords.Y < 0 ? 0 : offsetCoords.Y);
+
                 var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;
             }
-        }
+        } 
+        #endregion
     }
 }
