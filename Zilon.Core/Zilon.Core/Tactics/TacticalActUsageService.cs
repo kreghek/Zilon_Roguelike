@@ -78,6 +78,9 @@ namespace Zilon.Core.Tactics
 
             var tacticalActRoll = GetActEfficient(act);
 
+            // Изъятие патронов
+            if (act.Efficient)
+
             if (target is IActor targetActor)
             {
                 UseOnActor(actor, targetActor, tacticalActRoll);
