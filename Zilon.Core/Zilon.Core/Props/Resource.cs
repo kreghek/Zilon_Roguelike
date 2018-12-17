@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics.CodeAnalysis;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -8,6 +8,9 @@ namespace Zilon.Core.Props
     {
         private int _count;
 
+        public event EventHandler<EventArgs> Changed;
+
+        [ExcludeFromCodeCoverage]
         public Resource(IPropScheme scheme, int count) : base(scheme)
         {
             if (count <= 0)
@@ -36,6 +39,7 @@ namespace Zilon.Core.Props
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void DoChange()
         {
             Changed?.Invoke(this, new EventArgs());
@@ -53,11 +57,10 @@ namespace Zilon.Core.Props
             return resource2;
         }
 
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Scheme} x {Count}";
         }
-
-        public EventHandler<EventArgs> Changed;
     }
 }
