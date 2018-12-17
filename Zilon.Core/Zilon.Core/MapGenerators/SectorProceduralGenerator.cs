@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -63,7 +62,7 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var room in regions)
             {
-                var containerNode = MapRegionHelper.FindFreeNode(map, room.Nodes);
+                var containerNode = MapRegionHelper.FindNonBlockedNode(map, room.Nodes);
                 var container = new DropTablePropChest(containerNode,
                     new[] { defaultDropTable, survivalDropTable },
                     _dropResolver);

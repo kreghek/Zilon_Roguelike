@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -17,18 +19,36 @@ namespace Zilon.Core.MapGenerators
         /// <param name="availableNodes"> Доступные узлы. Использовать узлы региона.
         /// Возможно отфильтрованные от уже занятых узлов. </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
-        public static IMapNode FindFreeNode(IMap map, IEnumerable<IMapNode> availableNodes)
+        public static IMapNode FindNonBlockedNode([NotNull] IMap map,
+            [NotNull] [ItemNotNull] IEnumerable<IMapNode> availableNodes)
         {
+            if (map == null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
+            if (availableNodes == null)
+            {
+                throw new ArgumentNullException(nameof(availableNodes));
+            }
+
             var checkedNodes = new List<IMapNode>();
 
             var absNodeIndex = availableNodes.Count();
             var node = availableNodes.ElementAt(absNodeIndex / 2);
+
+            if (node == null)
+            {
+                throw new ArgumentNullException(nameof(availableNodes), "Последовательность содержит null.");
+            }
+
             while (checkedNodes.Count < availableNodes.Count())
             {
-                
+
                 checkedNodes.Add(node);
 
-                var neigbours = map.GetNext(node);
+                var neigbours = map.GetNext(node)
+                    .ToArray();
                 var corridorNodes = from neighbor in neigbours
                                     where !availableNodes.Contains(neighbor)
                                     select neighbor;
