@@ -24,29 +24,18 @@ namespace Zilon.Core.MapGenerators
             [NotNull] IMap map,
             [NotNull] [ItemNotNull] IEnumerable<IMapNode> availableNodes)
         {
-            if (map == null)
+            CheckArguments(node, map, availableNodes);
+
+            var openList = new List<IMapNode>(6 + 1) { node };
+            var closedNodes = new List<IMapNode>();
+            while (openList.Any())
             {
-                throw new ArgumentNullException(nameof(map));
-            }
+                node = openList[0];
+                openList.RemoveAt(0);
+                closedNodes.Add(node);
 
-            if (availableNodes == null)
-            {
-                throw new ArgumentNullException(nameof(availableNodes));
-            }
+                var neigbours = map.GetNext(node);
 
-            var checkedNodes = new List<IMapNode>();
-
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(availableNodes), "Последовательность содержит null.");
-            }
-
-            while (checkedNodes.Count < availableNodes.Count())
-            {
-                checkedNodes.Add(node);
-
-                var neigbours = map.GetNext(node)
-                    .ToArray();
                 var corridorNodes = from neighbor in neigbours
                                     where !availableNodes.Contains(neighbor)
                                     select neighbor;
@@ -58,16 +47,33 @@ namespace Zilon.Core.MapGenerators
                 }
                 else
                 {
-                    node = neigbours.Where(x => !checkedNodes.Contains(x) && availableNodes.Contains(x)).FirstOrDefault();
-
-                    if (node == null)
-                    {
-                        throw new InvalidOperationException("В комнате не удалось найти узел для размещения сундука.");
-                    }
+                    var openNeighbors = neigbours.Where(x => !closedNodes.Contains(x) && availableNodes.Contains(x));
+                    openList.AddRange(openNeighbors);
                 }
             }
 
-            throw new InvalidOperationException("В комнате не удалось найти узел для размещения сундука.");
+            // "В комнате не удалось найти узел для размещения сундука."
+            return null;
+        }
+
+        private static void CheckArguments(IMapNode node,
+            IMap map,
+            IEnumerable<IMapNode> availableNodes)
+        {
+            if (map == null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
+            if (availableNodes == null)
+            {
+                throw new ArgumentNullException(nameof(availableNodes));
+            }
+
+            if (node == null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
         }
     }
 }

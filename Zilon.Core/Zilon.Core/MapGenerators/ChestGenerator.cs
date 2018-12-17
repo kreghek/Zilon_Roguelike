@@ -40,6 +40,15 @@ namespace Zilon.Core.MapGenerators
                 {
                     var rollIndex = _chestGeneratorRandomSource.RollChestCount(freeNodes.Count);
                     var containerNode = MapRegionHelper.FindNonBlockedNode(freeNodes[rollIndex], map, freeNodes);
+                    if (containerNode == null)
+                    {
+                        // в этом случае будет сгенерировано на один сундук меньше.
+                        // узел, с которого не удаётся найти подходящий узел, удаляем,
+                        // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
+                        freeNodes.Remove(freeNodes[rollIndex]);
+                        continue;
+                    }
+
                     freeNodes.Remove(containerNode);
                     var container = new DropTablePropChest(containerNode,
                         new[] { defaultDropTable, survivalDropTable },

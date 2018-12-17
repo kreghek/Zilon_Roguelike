@@ -166,16 +166,13 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = () =>
-            {
-                var testedNode = availableNodes[0];  // узел, который валил поиск.
-                var selectedNode = MapRegionHelper.FindNonBlockedNode(testedNode, hexMap, availableNodes);
-            };
+            var testedNode = availableNodes[0];  // узел, который валил поиск.
+            var factNode = MapRegionHelper.FindNonBlockedNode(testedNode, hexMap, availableNodes);
 
 
 
             // ASSERT
-            act.Should().NotThrow<InvalidOperationException>();
+            factNode.Should().NotBeNull();
         }
     }
 }
