@@ -13,8 +13,8 @@ namespace Zilon.Core.MapGenerators
 
         public int RollChestCount(int maxCount)
         {
-            var hasChestRoll = _dice.Roll(6) + _dice.Roll(6); // 2D6
-            if (hasChestRoll >= 6 && hasChestRoll <= 9)
+            var hasChestRoll = _dice.Roll(100);
+            if (100-hasChestRoll <= 15)
             {
                 var chestCount = _dice.Roll(1, maxCount);
                 return chestCount;
