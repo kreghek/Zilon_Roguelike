@@ -29,7 +29,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть карта размером (.*)")]
+        [Given(@"Есть карта размером (\d*)")]
         public void GivenЕстьКартаРазмером(int mapSize)
         {
             Context.CreateSector(mapSize);
@@ -111,6 +111,13 @@ namespace Zilon.Core.Spec.Steps
             var resource = propFactory.CreateResource(propScheme, count);
 
             container.Content.Add(resource);
+        }
+
+        [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void GivenВИнвентареУАктёраЕстьРесурс(string propSid, int count)
+        {
+            var actor = Context.GetActiveActor();
+            Context.AddResourceToActor(propSid, count, actor);
         }
 
         [UsedImplicitly]
@@ -236,6 +243,19 @@ namespace Zilon.Core.Spec.Steps
 
             prop.Should().BeNull();
         }
+
+        [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void ThenВИнвентареУАктёраЕстьРесурсPropSidКоличествоExpectedCount(string propSid, int expectedCount)
+        {
+            var actor = Context.GetActiveActor();
+
+            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+            var testedResouce = testedProp as Resource;
+
+            testedResouce.Count.Should().Be(expectedCount);
+        }
+
 
         [UsedImplicitly]
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
