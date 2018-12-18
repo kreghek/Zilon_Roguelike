@@ -50,9 +50,11 @@
     <Compile Include="Schemes\TestPerkScheme.cs" />
     <Compile Include="Schemes\TestPersonScheme.cs" />
     <Compile Include="Schemes\TestPropArmorItemSubScheme.cs" />
+    <Compile Include="Schemes\TestPropBulletSubScheme.cs" />
     <Compile Include="Schemes\TestPropEquipSubScheme.cs" />
     <Compile Include="Schemes\TestPropScheme.cs" />
     <Compile Include="Schemes\TestPropUseSubScheme.cs" />
+    <Compile Include="Schemes\TestTacticalActConstrainsSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
     <Compile Include="TestContainerViewModel.cs" />
     <Compile Include="Schemes\TestMonsterScheme.cs" />
