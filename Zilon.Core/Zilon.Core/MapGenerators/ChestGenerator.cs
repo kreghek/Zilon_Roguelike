@@ -33,13 +33,13 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var region in regions)
             {
-                var maxChestCount = Math.Min(region.Nodes.Count() / 9, 1);
+                var maxChestCount = Math.Max(region.Nodes.Count() / 9, 1);
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
 
                 var freeNodes = new List<IMapNode>(region.Nodes);
                 for (var i = 0; i < rolledCount; i++)
                 {
-                    var rollIndex = _chestGeneratorRandomSource.RollChestCount(freeNodes.Count);
+                    var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(freeNodes.Count);
                     var containerNode = MapRegionHelper.FindNonBlockedNode(freeNodes[rollIndex], map, freeNodes);
                     if (containerNode == null)
                     {

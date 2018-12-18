@@ -106,6 +106,7 @@
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MapGenerators\ChestGeneratorRandomSourceTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomMapFactoryTests.cs" />
     <Compile Include="MapGenerators\MapRegionHelperTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />

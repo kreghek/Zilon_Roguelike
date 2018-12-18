@@ -5,8 +5,8 @@ namespace Zilon.Core.MapGenerators
 {
     public class ChestGeneratorRandomSource : IChestGeneratorRandomSource
     {
-        private const int _startChestProbability = 50;
-        private const int _probabilityDividor = 2;
+        private const float _startChestProbability = 75f;
+        private const float _probabilityDividor = 0.75f;
 
         private readonly IDice _dice;
 
@@ -28,8 +28,9 @@ namespace Zilon.Core.MapGenerators
             for (var i = 0; i < maxCount; i++)
             {
                 var hasChestRoll = _dice.Roll(100);
+                var successHasChest = 100 - currentProbability;
 
-                if (hasChestRoll >= currentProbability)
+                if (hasChestRoll >= successHasChest)
                 {
                     sum++;
                 }
@@ -38,7 +39,7 @@ namespace Zilon.Core.MapGenerators
                     break;
                 }
 
-                currentProbability = currentProbability / _probabilityDividor;
+                currentProbability = currentProbability * _probabilityDividor;
                 if (currentProbability <= 0)
                 {
                     break;
