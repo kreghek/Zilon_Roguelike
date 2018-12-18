@@ -103,6 +103,9 @@ namespace Zilon.Core.Tests.MapGenerators
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
+            var chestGeneratorMock = new Mock<IChestGenerator>();
+            var chestGenerator = chestGeneratorMock.Object;
+
             return new SectorProceduralGenerator(
                 actorManager,
                 propContainerManager,
@@ -110,6 +113,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 schemeService,
                 dropResolver,
                 mapFactory,
+                chestGenerator,
                 survivalRandomSource);
         }
 
