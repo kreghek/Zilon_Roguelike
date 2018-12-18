@@ -1,9 +1,13 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators
 {
     public class ChestGeneratorRandomSource : IChestGeneratorRandomSource
     {
+        private const int _startChestProbability = 50;
+        private const int _probabilityDividor = 2;
+
         private readonly IDice _dice;
 
         public ChestGeneratorRandomSource(IDice dice)
@@ -13,15 +17,35 @@ namespace Zilon.Core.MapGenerators
 
         public int RollChestCount(int maxCount)
         {
-            var hasChestRoll = _dice.Roll(100);
-            if (100-hasChestRoll <= 15)
+            if (maxCount <= 0)
             {
-                var chestCount = _dice.Roll(1, maxCount);
-                return chestCount;
+                throw new ArgumentException($"Значение {maxCount} не может быть меньше или равно 0.", nameof(maxCount));
             }
+
+            var currentProbability = _startChestProbability;
+
+            var sum = 0;
+            for (var i = 0; i < maxCount; i++)
             {
-                return 0;
+                var hasChestRoll = _dice.Roll(100);
+
+                if (hasChestRoll >= currentProbability)
+                {
+                    sum++;
+                }
+                else
+                {
+                    break;
+                }
+
+                currentProbability = currentProbability / _probabilityDividor;
+                if (currentProbability <= 0)
+                {
+                    break;
+                }
             }
+
+            return sum;
         }
 
         public int RollNodeIndex(int nodeCount)
