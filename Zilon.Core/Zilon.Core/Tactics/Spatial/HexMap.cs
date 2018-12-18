@@ -125,7 +125,7 @@ namespace Zilon.Core.Tactics.Spatial
                     {
                         continue;
                     }
-                    
+
                     yield return currentNeibour;
                 }
             }
@@ -134,6 +134,40 @@ namespace Zilon.Core.Tactics.Spatial
         public override void RemoveEdge(IMapNode node1, IMapNode node2)
         {
             throw new NotImplementedException();
+        }
+
+        public void SaveToFile(string fileName)
+        {
+            const int cellWidth = 4;
+
+            var matrix = _segmentDict.First().Value;
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
+            {
+                file.Write(" ".PadLeft(cellWidth, ' '));
+                for (var x = 0; x < _segmentSize; x++)
+                {
+                    file.Write($"{x,3}".PadRight(cellWidth, ' '));
+                }
+                file.WriteLine();
+
+                for (var y = 0; y < _segmentSize; y++)
+                {
+                    file.Write($"{y,3}".PadLeft(cellWidth, ' '));
+                    for (var x = 0; x < _segmentSize; x++)
+                    {
+                        if (matrix[x, y] != null)
+                        {
+                            file.Write(" ".PadLeft(cellWidth, ' '));
+                        }
+                        else
+                        {
+                            file.Write("x".PadLeft(cellWidth, ' '));
+                        }
+                    }
+
+                    file.WriteLine();
+                }
+            }
         }
 
         private IMapNode[,] CreateSegment(int segmentX, int segmentY)
@@ -175,7 +209,10 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                if (!(obj is SegmentKey)) return false;
+                if (!(obj is SegmentKey))
+                {
+                    return false;
+                }
 
                 var key = (SegmentKey)obj;
                 return X == key.X &&
