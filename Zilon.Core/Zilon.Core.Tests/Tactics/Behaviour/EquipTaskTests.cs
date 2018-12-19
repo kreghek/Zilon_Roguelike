@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -47,6 +49,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(1)
                 .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -92,8 +95,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new Equipment[] { equipedEquipmentProp })
+            var initEquipments = new Equipment[] { equipedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { initEquipments })
                 .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -101,7 +106,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.SetupGet(x => x.Inventory).Returns(inventory);
 
-            
+
 
             var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
 
@@ -139,9 +144,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInit = new Equipment[] {null, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(equipmentsInit)
+            var equipmentsInit = new Equipment[] { null, testedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { equipmentsInit })
                 .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -190,8 +196,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actorMock.SetupGet(x => x.Person).Returns(person);
 
             var equipmentsInit = new Equipment[] { equipedEquipmentProp, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(equipmentsInit)
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { equipmentsInit })
                .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 

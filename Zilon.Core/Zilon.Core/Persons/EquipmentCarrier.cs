@@ -91,7 +91,7 @@ namespace Zilon.Core.Persons
 
         public IEnumerator<Equipment> GetEnumerator()
         {
-            return (IEnumerator<Equipment>)Equipments.GetEnumerator();
+            return Equipments.Cast<Equipment>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

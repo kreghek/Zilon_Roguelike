@@ -32,11 +32,9 @@ namespace Zilon.Core.Persons
 
         public abstract event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
 
-        public abstract IEnumerator<Equipment> GetEnumerator();
+        public IEnumerator<Equipment> GetEnumerator() => _equipment.Cast<Equipment>().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+
+        IEnumerator IEnumerable.GetEnumerator() => _equipment.GetEnumerator();
     }
 }
