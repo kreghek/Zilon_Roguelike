@@ -42,7 +42,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 // (и)
 
                 // текущий предмет возвращаем в инвентарь (1)
-                // про (0) ничего не делаем
+                // при (0) ничего не делаем
                 if (currentEquipment != null)
                 {
                     Actor.Person.Inventory.Add(currentEquipment);
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
 
                 equipmentCarrier.SetEquipment(_equipment, _slotIndex);
-            }            
+            }
         }
 
         /// <summary>
