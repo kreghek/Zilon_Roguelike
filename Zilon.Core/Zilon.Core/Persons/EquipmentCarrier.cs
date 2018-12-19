@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,14 +29,26 @@ namespace Zilon.Core.Persons
             Equipments = new Equipment[Slots.Length];
         }
 
-        public Equipment[] Equipments { get; }
+        public Equipment this[int index]
+        {
+            get
+            {
+                return Equipments[index];
+            }
+            set
+            {
+                SetEquipment(value, index);
+            }
+        }
+
+        private Equipment[] Equipments { get; }
 
         public PersonSlotSubScheme[] Slots { get; }
 
         public event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
 
 
-        public void SetEquipment(Equipment equipment, int slotIndex)
+        private void SetEquipment(Equipment equipment, int slotIndex)
         {
             var oldEquipment = Equipments[slotIndex];
 
@@ -64,7 +77,7 @@ namespace Zilon.Core.Persons
             {
                 Equipments[slotIndex] = null;
             }
-            
+
 
             DoEquipmentChanged(slotIndex, oldEquipment, equipment);
         }
@@ -76,5 +89,14 @@ namespace Zilon.Core.Persons
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
 
+        public IEnumerator<Equipment> GetEnumerator()
+        {
+            return (IEnumerator<Equipment>)Equipments.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Equipments.GetEnumerator();
+        }
     }
 }

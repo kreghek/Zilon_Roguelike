@@ -28,8 +28,8 @@ namespace Zilon.Core.Persons
                 // Проверяем наличие любого экипированного оружия.
                 // Если находим, то выбрасываем исключение.
                 // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier.Equipments[slotIndex];
-                var currentEquipments = equipmentCarrier.Equipments.Where(x => x != null);
+                var targetSlotEquipment = equipmentCarrier[slotIndex];
+                var currentEquipments = equipmentCarrier.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
                                      let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
@@ -49,8 +49,8 @@ namespace Zilon.Core.Persons
                 // проверяем наличие стрелкового оружия.
                 // Если находим, то выбрасываем исключение.
                 // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier.Equipments[slotIndex];
-                var currentEquipments = equipmentCarrier.Equipments.Where(x => x != null);
+                var targetSlotEquipment = equipmentCarrier[slotIndex];
+                var currentEquipments = equipmentCarrier.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
                                      let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
@@ -80,8 +80,8 @@ namespace Zilon.Core.Persons
                 // Проверяем наличие других щитов.
                 // Если в другой руке щит уже экипирован, то выбрасываем исключение.
                 // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier.Equipments[slotIndex];
-                var currentEquipments = equipmentCarrier.Equipments.Where(x => x != null);
+                var targetSlotEquipment = equipmentCarrier[slotIndex];
+                var currentEquipments = equipmentCarrier.Where(x => x != null);
                 var currentSheilds = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
                                      let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]

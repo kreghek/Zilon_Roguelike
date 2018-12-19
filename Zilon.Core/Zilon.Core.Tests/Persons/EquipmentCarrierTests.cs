@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             using (var monitor = carrier.Monitor())
             {
-                carrier.SetEquipment(equipment, changedSlot);
+                carrier[changedSlot] = equipment;
 
 
 
@@ -105,10 +105,10 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            carrier.SetEquipment(pistol1, changedSlot);
+            carrier[changedSlot] = pistol1;
             Action act = () =>
             {
-                carrier.SetEquipment(pistol2, changedSlot);
+                carrier[changedSlot] = pistol2;
             };
 
 
@@ -164,8 +164,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(swordEquipment1, swordSlot1);
-                carrier.SetEquipment(swordEquipment2, swordSlot2);
+                carrier[swordSlot1] = swordEquipment1;
+                carrier[swordSlot2] = swordEquipment2;
             };
 
 
@@ -226,8 +226,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(pistolEquipment1, pistolSlot1);
-                carrier.SetEquipment(pistolEquipment2, pistolSlot2);
+                carrier[pistolSlot1] = pistolEquipment1;
+                carrier[pistolSlot2] = pistolEquipment2;
             };
 
 
@@ -286,8 +286,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(shieldEquipment1, shieldSlot1);
-                carrier.SetEquipment(shieldEquipment2, shieldSlot2);
+                carrier[shieldSlot1] = shieldEquipment1;
+                carrier[shieldSlot2] = shieldEquipment2;
             };
 
 
@@ -353,8 +353,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(swordEquipment1, swordSlot1);
-                carrier.SetEquipment(sheildEquipment2, swordSlot2);
+                carrier[swordSlot1] = swordEquipment1;
+                carrier[swordSlot2] = sheildEquipment2;
             };
 
 
@@ -420,8 +420,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(pistolEquipment1, swordSlot1);
-                carrier.SetEquipment(sheildEquipment2, swordSlot2);
+                carrier[swordSlot1] = pistolEquipment1;
+                carrier[swordSlot2] = sheildEquipment2;
             };
 
 
@@ -488,8 +488,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             Action act = () =>
             {
-                carrier.SetEquipment(pistolEquipment1, swordSlot1);
-                carrier.SetEquipment(sheildEquipment2, swordSlot2);
+                carrier[swordSlot1] = pistolEquipment1;
+                carrier[swordSlot2] = sheildEquipment2;
             };
 
 
@@ -555,8 +555,8 @@ namespace Zilon.Core.Tests.Persons
                 // ACT
                 Action act = () =>
                 {
-                    carrier.SetEquipment(equipment1, slotIndex1);
-                    carrier.SetEquipment(equipment2, slotIndex2);
+                    carrier[slotIndex1] = equipment1;
+                    carrier[slotIndex2] = equipment2;
                 };
 
 

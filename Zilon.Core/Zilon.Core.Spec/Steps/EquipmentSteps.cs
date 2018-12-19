@@ -47,7 +47,7 @@ namespace Zilon.Core.Spec.Steps
             var equipment = Context.CreateEquipment(propSid);
 
             var actor = Context.GetActiveActor();
-            actor.Person.EquipmentCarrier.SetEquipment(equipment, slotIndex);
+            actor.Person.EquipmentCarrier[slotIndex] = equipment;
         }
 
 
@@ -80,7 +80,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.EquipmentCarrier.Equipments[slotIndex].Scheme.Sid.Should().Be(propSid);
+            actor.Person.EquipmentCarrier[slotIndex].Scheme.Sid.Should().Be(propSid);
         }
 
         [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
