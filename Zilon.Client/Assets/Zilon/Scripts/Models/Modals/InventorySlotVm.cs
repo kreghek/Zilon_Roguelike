@@ -56,7 +56,7 @@ public class InventorySlotVm : MonoBehaviour
     {
         var actor = _playerState.ActiveActor.Actor;
 
-        var currentEquipment = actor.Person.EquipmentCarrier.Equipments[SlotIndex];
+        var currentEquipment = actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
             if (IconImage != null)
