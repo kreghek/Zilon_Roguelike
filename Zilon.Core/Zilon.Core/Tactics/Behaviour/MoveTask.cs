@@ -18,15 +18,11 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (!_path.Any())
             {
-                IsComplete = true;
-                return;
-            }
+                if (TargetNode != Actor.Node)
+                {
+                    throw new TaskException("Актёр не достиг целевого узла при окончании пути.");
+                }
 
-            //TODO Добавить тест, исправить баг.
-            // Этой проверки быть не должно, потому что _path и так содержит
-            // цепочку узлов до целевого. И должно выполняться верхнее условие.
-            if (Actor.Node == TargetNode)
-            {
                 IsComplete = true;
                 return;
             }
