@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -56,6 +58,14 @@ namespace Zilon.Core.Tactics
 
                 foreach (var actorTask in actorTasks)
                 {
+                    if (actorTask is MoveTask moveTask)
+                    {
+                        if (moveTask.TargetNode is HexNode hexNode && hexNode.OffsetX == 4 && hexNode.OffsetY == 2)
+                        {
+                            
+                        }
+                    }
+
                     actorTask.Execute();
                 }
             }

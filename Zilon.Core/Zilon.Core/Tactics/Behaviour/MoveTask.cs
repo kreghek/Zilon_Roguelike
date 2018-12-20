@@ -55,12 +55,23 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public MoveTask(IActor actor, IMapNode targetNode, IMap map) : base(actor)
         {
-            TargetNode = targetNode;
-            _map = map;
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+            _map = map ?? throw new ArgumentNullException(nameof(map));
 
-            _path = new List<IMapNode>();
+            if (actor.Node == targetNode)
+            {
+                // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
+                // в результате рандома.
+                IsComplete = true;
 
-            CreatePath();
+                _path = new List<IMapNode>(0);
+            }
+            else
+            {
+                _path = new List<IMapNode>();
+
+                CreatePath();
+            }
         }
 
         private void CreatePath()
