@@ -73,7 +73,7 @@ namespace Zilon.Core.Persons
             ClearCalculatedStats();
             CalcCombatStats();
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
 
             Survival = SurvivalData.CreateHumanPersonSurvival(scheme, survivalRandomSource);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
@@ -157,7 +157,7 @@ namespace Zilon.Core.Persons
         private void RecalculatePersonArmor()
         {
             var equipmentArmors = new List<PersonArmorItem>();
-            foreach (var equipment in EquipmentCarrier.Equipments)
+            foreach (var equipment in EquipmentCarrier)
             {
                 if (equipment == null)
                 {
@@ -311,7 +311,7 @@ namespace Zilon.Core.Persons
 
             CalcCombatStats();
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
@@ -336,7 +336,7 @@ namespace Zilon.Core.Persons
                 CalcCombatStats();
             }
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier.Equipments);
+            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
         }
 
         private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using FluentAssertions;
 
 using Moq;
@@ -69,7 +70,7 @@ namespace Zilon.Core.Tests.Persons
 
             // ACT
 
-            person.EquipmentCarrier.SetEquipment(equipment, expectedSlotIndex);
+            person.EquipmentCarrier[expectedSlotIndex] = equipment;
 
 
 
@@ -189,7 +190,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -200,7 +201,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorProp, 0);
+            person.EquipmentCarrier[0] = armorProp;
 
 
 
@@ -261,7 +262,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -279,7 +280,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -291,8 +292,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorHeadProp, 0);
-            person.EquipmentCarrier.SetEquipment(armorBodyProp, 1);
+            person.EquipmentCarrier[0] = armorHeadProp;
+            person.EquipmentCarrier[1] = armorBodyProp;
 
 
 
@@ -353,7 +354,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -371,7 +372,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -383,8 +384,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorHeadProp, 0);
-            person.EquipmentCarrier.SetEquipment(armorBodyProp, 1);
+            person.EquipmentCarrier[0] = armorHeadProp;
+            person.EquipmentCarrier[1] = armorBodyProp;
 
 
 
@@ -445,7 +446,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Lesser
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -463,7 +464,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Grand
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -475,8 +476,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorHeadProp, 0);
-            person.EquipmentCarrier.SetEquipment(armorBodyProp, 1);
+            person.EquipmentCarrier[0] = armorHeadProp;
+            person.EquipmentCarrier[1] = armorBodyProp;
 
 
 
@@ -537,7 +538,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -555,7 +556,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -567,8 +568,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorHeadProp, 0);
-            person.EquipmentCarrier.SetEquipment(armorBodyProp, 1);
+            person.EquipmentCarrier[0] = armorHeadProp;
+            person.EquipmentCarrier[1] = armorBodyProp;
 
 
 
@@ -634,7 +635,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Head
                     }
                 }
@@ -652,7 +653,7 @@ namespace Zilon.Core.Tests.Persons
                             AbsorbtionLevel = PersonRuleLevel.Normal
                         }
                     },
-                    SlotTypes = new [] {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Body
                     }
                 }
@@ -664,8 +665,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            person.EquipmentCarrier.SetEquipment(armorHeadProp, 0);
-            person.EquipmentCarrier.SetEquipment(armorBodyProp, 1);
+            person.EquipmentCarrier[0] = armorHeadProp;
+            person.EquipmentCarrier[1] = armorBodyProp;
 
 
 

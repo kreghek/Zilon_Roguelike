@@ -71,6 +71,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
+    <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />

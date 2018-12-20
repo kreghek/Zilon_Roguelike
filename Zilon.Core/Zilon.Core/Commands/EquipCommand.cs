@@ -33,7 +33,7 @@ namespace Zilon.Core.Commands
             var equipment = GetEquipment();
             if (equipment == null)
             {
-                return false;
+                return true;
             }
 
             if (SlotIndex == null)
@@ -79,10 +79,6 @@ namespace Zilon.Core.Commands
             }
 
             var equipment = GetEquipment();
-            if (equipment == null)
-            {
-                throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
-            }
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
             PlayerState.TaskSource.Intent(intention);
@@ -91,10 +87,20 @@ namespace Zilon.Core.Commands
 
         private Equipment GetEquipment()
         {
-            var propVm = _inventoryState.SelectedProp;
-            var equipment = propVm?.Prop as Equipment;
+            var propVieModel = _inventoryState.SelectedProp;
+            if (propVieModel == null)
+            {
+                return null;
+            }
 
-            return equipment;
+            if (propVieModel.Prop is Equipment equipment)
+            {
+                return equipment;
+            }
+            else
+            {
+                throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
+            }
         }
     }
 }
