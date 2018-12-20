@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -45,11 +47,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInner = new Equipment[1];
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
-            equipmentCarrierMock.SetupGet(x => x.Equipments).Returns(equipmentsInner);
-            equipmentCarrierMock.Setup(x => x.SetEquipment(It.IsAny<Equipment>(), It.IsAny<int>()))
-                .Callback<Equipment, int>((equipment, slotIndex) => equipmentsInner[slotIndex] = equipment);
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(1)
+                .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentsInner[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
             inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)), Times.Once);
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
         }
@@ -95,11 +95,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInner = new Equipment[] { equipedEquipmentProp };
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
-            equipmentCarrierMock.SetupGet(x => x.Equipments).Returns(equipmentsInner);
-            equipmentCarrierMock.Setup(x => x.SetEquipment(It.IsAny<Equipment>(), It.IsAny<int>()))
-                .Callback<Equipment, int>((equipment, slotIndex) => equipmentsInner[slotIndex] = equipment);
+            var initEquipments = new Equipment[] { equipedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { initEquipments })
+                .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -107,7 +106,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.SetupGet(x => x.Inventory).Returns(inventory);
 
-            
+
 
             var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
 
@@ -119,7 +118,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentsInner[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
             inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)), Times.Once);
             inventoryMock.Verify(x => x.Add(It.Is<IProp>(equipment => equipment == equipedEquipmentProp)), Times.Once);
         }
@@ -145,11 +144,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInner = new Equipment[2] {null, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
-            equipmentCarrierMock.SetupGet(x => x.Equipments).Returns(equipmentsInner);
-            equipmentCarrierMock.Setup(x => x.SetEquipment(It.IsAny<Equipment>(), It.IsAny<int>()))
-                .Callback<Equipment, int>((equipment, slotIndex) => equipmentsInner[slotIndex] = equipment);
+            var equipmentsInit = new Equipment[] { null, testedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { equipmentsInit })
+                .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -169,8 +167,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentsInner[0].Should().BeSameAs(testedEquipmentProp);
-            equipmentsInner[1].Should().BeNull();
+            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentCarrier[1].Should().BeNull();
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
             inventoryMock.Verify(x => x.Remove(It.IsAny<IProp>()), Times.Never);
         }
@@ -197,11 +195,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInner = new Equipment[2] { equipedEquipmentProp, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
-            equipmentCarrierMock.SetupGet(x => x.Equipments).Returns(equipmentsInner);
-            equipmentCarrierMock.Setup(x => x.SetEquipment(It.IsAny<Equipment>(), It.IsAny<int>()))
-                .Callback<Equipment, int>((equipment, slotIndex) => equipmentsInner[slotIndex] = equipment);
+            var equipmentsInit = new Equipment[] { equipedEquipmentProp, testedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { equipmentsInit })
+               .As<IEquipmentCarrier>();
+            equipmentCarrierMock.CallBase = true;
             var equipmentCarrier = equipmentCarrierMock.Object;
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
 
@@ -221,8 +218,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentsInner[0].Should().BeSameAs(testedEquipmentProp);
-            equipmentsInner[1].Should().BeSameAs(equipedEquipmentProp);
+            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentCarrier[1].Should().BeSameAs(equipedEquipmentProp);
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
             inventoryMock.Verify(x => x.Remove(It.IsAny<IProp>()), Times.Never);
         }

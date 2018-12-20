@@ -52,7 +52,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 var slots = Actor.Person.EquipmentCarrier.Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = Actor.Person.EquipmentCarrier.Equipments[i];
+                    var slotEquipment = Actor.Person.EquipmentCarrier[i];
                     if (slotEquipment == null)
                     {
                         continue;

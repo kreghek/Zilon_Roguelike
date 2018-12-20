@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using Zilon.Core.Props;
@@ -10,28 +10,26 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Интерфейс для работы с экипировкой.
     /// </summary>
-    public interface IEquipmentCarrier
+    public interface IEquipmentCarrier: IEnumerable<Equipment>
     {
-        /// <summary>
-        /// Экипировка персонажа.
-        /// </summary>
-        [NotNull] [ItemCanBeNull] Equipment[] Equipments { get; }
-
         [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
-
-        /// <summary>
-        /// Устанавливает экипировку.
-        /// </summary>
-        /// <param name="equipment">
-        /// Экипировка.
-        /// Если указано null, то экипировка изымается из указанного слота.
-        /// </param>
-        /// <param name="slotIndex"> Индекс слота экипировки. </param>
-        void SetEquipment([NotNull] Equipment equipment, int slotIndex);
 
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.
         /// </summary>
         event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
+
+        /// <summary>
+        /// Экипировка персонажа.
+        /// </summary>
+        /// <remarks>
+        /// Если указан экземпляр предмета, то производится попытка установки предмета
+        /// с учётом правил экипировки (двуручное занимает две руки, пистолеты только в единственном экземпляре).
+        /// При необходимости, согласно релизации этого интерфейса, предметы, несовместимые с устанавливаемым,
+        /// могут изыматся из слотов в инвентарь или уничтожаться.
+        /// Если указано null, то экипировка изымается из указанного слота.
+        /// </remarks>
+        [NotNull, ItemCanBeNull]
+        Equipment this[int index] { get; set; }
     }
 }

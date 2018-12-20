@@ -38,9 +38,7 @@ public class InventorySlotVm : MonoBehaviour
         ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
 
         UpdateSlotIcon();
-
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        InitEventHandlers();
     }
 
     public void OnDestroy()
@@ -58,7 +56,7 @@ public class InventorySlotVm : MonoBehaviour
     {
         var actor = _playerState.ActiveActor.Actor;
 
-        var currentEquipment = actor.Person.EquipmentCarrier.Equipments[SlotIndex];
+        var currentEquipment = actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
             if (IconImage != null)
@@ -91,9 +89,14 @@ public class InventorySlotVm : MonoBehaviour
 
     public void ApplyEquipment()
     {
-        Debug.Log($"Slot {SlotIndex} equiped {_inventoryState.SelectedProp.Prop}");
-
         _comamndManager.Push(_equipCommand);
+    }
+
+
+    private void InitEventHandlers()
+    {
+        var actor = _playerState.ActiveActor.Actor;
+        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ClearEventHandlers()

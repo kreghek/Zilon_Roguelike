@@ -70,7 +70,7 @@ public class HumanActorGraphicController : MonoBehaviour
                 }
 
                 VisualProp visualPropResource = null;
-                var equipment = equipmentCarrier.Equipments[slotIndex];
+                var equipment = equipmentCarrier[slotIndex];
                 if (equipment != null)
                 {
                     visualPropResource = Resources.Load<VisualProp>($"VisualProps/{equipment.Scheme.Sid}");
