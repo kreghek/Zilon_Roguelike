@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
@@ -72,6 +73,61 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             // ASSERT
             _factActorNode.Should().Be(expectedActorNode);
+        }
+
+        /// <summary>
+        /// Тест проверяет, если актер стоит рядом с непроходимым узлом и 
+        /// этот узел был выбран, как альтернативная целевая точка, то
+        /// не происходи исключений.
+        /// </summary>
+        [Test]
+        public void GetCurrentTask_BlockedNodeSelectedAsAlternate_NoExceptions()
+        {
+            // ARRANGE
+
+            _factActorNode = _map.Nodes.OfType<HexNode>().SelectBy(1, 1);
+
+            _map.HoldNode(_factActorNode, _actor);
+
+            var blockedNode = _map.Nodes.OfType<HexNode>().SelectBy(2, 1);
+            var blockerMock = new Mock<IPassMapBlocker>();
+            var blocker = blockerMock.Object;
+            _map.HoldNode(blockedNode, blocker);
+
+            var decisionSourceMock = new Mock<IDecisionSource>();
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(ExpectedIdleDuration);
+            decisionSourceMock.Setup(x => x.SelectTargetRoamingNode(It.IsAny<IEnumerable<IMapNode>>()))
+                .Returns(blockedNode);
+            var decisionSource = decisionSourceMock.Object;
+
+            var actors = new List<IActor> { _actor };
+            var actorListMock = new Mock<IActorManager>();
+            actorListMock.SetupGet(x => x.Items).Returns(actors);
+            var actorList = actorListMock.Object;
+
+
+            var tacticalActUsageService = CreateTacticalActUsageService();
+
+            var logic = new RoamingLogic(_actor,
+                _map,
+                actorList,
+                decisionSource,
+                tacticalActUsageService);
+
+
+
+            // ACT
+            Action act = () =>
+            {
+                var task = logic.GetCurrentTask();
+                task.Execute();
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
         }
 
         [SetUp]
