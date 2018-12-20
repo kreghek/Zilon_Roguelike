@@ -190,7 +190,7 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat(50, -150, 100)
+            var stat = new SurvivalStat(150, -150, 300)
             {
                 Type = type,
                 Rate = 1,

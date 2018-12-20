@@ -15,5 +15,5 @@ Scenario Outline: Употребление провианта для восст�
 
 Examples: 
 	| propSid | propCount | stat    | propValue | statRate | expectedStatValue |
-	| cheese  | 1         | сытость | 50        | 1        | 99                |
-	| water   | 1         | вода    | 50        | 1        | 99                |
+	| cheese  | 1         | сытость | 50        | 1        | 200               |
+	| water   | 1         | вода    | 50        | 1        | 200               |
