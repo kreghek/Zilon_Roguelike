@@ -89,14 +89,9 @@ namespace Zilon.Core.Persons
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
 
-        public IEnumerator<Equipment> GetEnumerator()
-        {
-            return Equipments.Cast<Equipment>().GetEnumerator();
-        }
+        public IEnumerator<Equipment> GetEnumerator() => Equipments.Cast<Equipment>().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Equipments.GetEnumerator();
-        }
+
+        IEnumerator IEnumerable.GetEnumerator() => Equipments.GetEnumerator();
     }
 }
