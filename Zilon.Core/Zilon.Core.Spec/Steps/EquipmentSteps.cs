@@ -52,7 +52,7 @@ namespace Zilon.Core.Spec.Steps
 
 
         [UsedImplicitly]
-        [When(@"Экипирую предмет (.*) в слот Index: (.*)")]
+        [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
         {
             var equipCommand = Context.Container.GetInstance<ICommand>("equip");
@@ -74,13 +74,34 @@ namespace Zilon.Core.Spec.Steps
             equipCommand.Execute();
         }
 
-        [UsedImplicitly]
-        [Then(@"В слоте Index: (.+) актёра игрока есть (.+)")]
+        [When(@"Снимаю экипировку из слота (\d+)")]
+        public void WhenСнимаюЭкипировкуИзСлота(int slotIndex)
+        {
+            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
+            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+
+            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+
+            inventoryState.SelectedProp = null;
+
+            equipCommand.Execute();
+        }
+
+
+        [Then(@"В слоте Index: (\d+) актёра игрока есть (.+)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)
         {
             var actor = Context.GetActiveActor();
 
             actor.Person.EquipmentCarrier[slotIndex].Scheme.Sid.Should().Be(propSid);
+        }
+
+        [Then(@"В слоте Index: (\d+) актёра игрока ничего нет")]
+        public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex)
+        {
+            var actor = Context.GetActiveActor();
+
+            actor.Person.EquipmentCarrier[slotIndex].Should().BeNull();
         }
 
         [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
