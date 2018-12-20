@@ -130,5 +130,44 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 actor.Node.Should().Be(expectedPath[step]);
             }
         }
+
+        /// <summary>
+        /// Тест проверяет, что задача заканчивается, когда актёр доходит до крайнего узла найденного маршрута.
+        /// </summary>
+        [Test]
+        public void ExecuteTest_FindingPathAndMove_IsCompleteTrue()
+        {
+            // ARRANGE
+
+            var map = SquareMapFactory.Create(10);
+
+            var expectedPath = new IMapNode[] {
+                map.Nodes.Cast<HexNode>().SelectBy(4,4),
+                map.Nodes.Cast<HexNode>().SelectBy(3,4),
+                map.Nodes.Cast<HexNode>().SelectBy(2,4),
+                map.Nodes.Cast<HexNode>().SelectBy(1,5),
+            };
+
+            var startNode = expectedPath.First();
+            var finishNode = expectedPath.Last();
+
+
+            var actor = CreateActor(map, (HexNode)startNode);
+
+            var task = new MoveTask(actor, finishNode, map);
+
+
+
+            // ACT
+            for (var step = 1; step < expectedPath.Length; step++)
+            {
+                task.Execute();
+            }
+
+
+
+            // ASSERT
+            task.IsComplete.Should().BeTrue();
+        }
     }
 }
