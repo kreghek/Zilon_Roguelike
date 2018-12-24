@@ -48,6 +48,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool CanExecute()
         {
+            if (!_path.Any())
+            {
+                return false;
+            }
+
             var nextNode = _path[0];
 
             return _map.IsPositionAvailableFor(nextNode, Actor);
