@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -74,11 +74,45 @@ namespace Zilon.Core.Tactics
                 switch (rule.Type)
                 {
                     case ConsumeCommonRuleType.Satiety:
-                        Person.Survival.RestoreStat(SurvivalStatType.Satiety, 51);
+
+                        switch (rule.Level)
+                        {
+                            case PersonRuleLevel.Lesser:
+                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 51);
+                                break;
+
+                            case PersonRuleLevel.Normal:
+                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 101);
+                                break;
+
+                            case PersonRuleLevel.Grand:
+                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 151);
+                                break;
+
+                            default:
+                                throw new InvalidOperationException($"Неизвестный уровень влияния правила {rule.Level}.");
+                        }
+
                         break;
 
                     case ConsumeCommonRuleType.Thrist:
-                        Person.Survival.RestoreStat(SurvivalStatType.Water, 51);
+                        switch (rule.Level)
+                        {
+                            case PersonRuleLevel.Lesser:
+                                Person.Survival.RestoreStat(SurvivalStatType.Water, 51);
+                                break;
+
+                            case PersonRuleLevel.Normal:
+                                Person.Survival.RestoreStat(SurvivalStatType.Water, 101);
+                                break;
+
+                            case PersonRuleLevel.Grand:
+                                Person.Survival.RestoreStat(SurvivalStatType.Water, 151);
+                                break;
+
+                            default:
+                                throw new InvalidOperationException($"Неизвестный уровень влияния правила {rule.Level}.");
+                        }
                         break;
 
                     case ConsumeCommonRuleType.Health:

@@ -1,0 +1,19 @@
+{
+  "Name": {
+    "En": "Tomaton",
+    "Ru": "Томатон"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Satiety",
+        "Level": "Lesser"
+      },
+      {
+        "Type": "Water",
+        "Level": "Lesser"
+      }
+    ]
+  }
+}

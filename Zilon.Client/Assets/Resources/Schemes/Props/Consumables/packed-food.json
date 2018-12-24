@@ -8,7 +8,7 @@
     "CommonRules": [
       {
         "Type": "Satiety",
-        "Level": "Lesser"
+        "Level": "Normal"
       }
     ]
   }

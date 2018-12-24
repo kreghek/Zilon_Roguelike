@@ -2,32 +2,38 @@
   "Rolls": 5,
   "Records": [
     {
-      "SchemeSid": "cheese",
+      "SchemeSid": "kalin-cheese",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 3
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "tomaton",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 4
     },
     {
       "SchemeSid": "packed-food",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 3
+      "Weight": 2
     },
     {
-      "SchemeSid": "water",
+      "SchemeSid": "bottle",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 6
+      "Weight": 3
     },
     {
       "SchemeSid": "med-kit",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 6
+      "Weight": 3
     },
     {
       "SchemeSid": null,
-      "Weight": 70
+      "Weight": 250
     }
   ]
 }
