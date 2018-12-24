@@ -169,7 +169,20 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             if (_moveTask == null)
             {
                 _moveTask = CreateBypassMoveTask();
-                return _moveTask;
+
+                if (_moveTask != null)
+                {
+                    return _moveTask;
+                }
+                else
+                {
+                    // Это может произойти, если актёр не выбрал следующий узел.
+                    // Тогда переводим актёра в режим ожидания.
+
+                    _idleTask = new IdleTask(Actor, DecisionSource);
+                    _mode = Mode.Idle;
+                    return _idleTask;
+                }
             }
             else
             {
@@ -183,7 +196,14 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                         _moveTask = CreateBypassMoveTask();
                     }
 
-                    return _moveTask;
+                    if (_moveTask != null)
+                    {
+                        return _moveTask;
+                    }
+
+                    _idleTask = new IdleTask(Actor, DecisionSource);
+                    _mode = Mode.Idle;
+                    return _idleTask;
                 }
 
                 // Команда на перемещение к целевому узлу закончена.
