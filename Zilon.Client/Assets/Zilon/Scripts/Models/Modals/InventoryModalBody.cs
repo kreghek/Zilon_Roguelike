@@ -85,6 +85,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         inventory.Added -= InventoryOnContentChanged;
         inventory.Removed -= InventoryOnContentChanged;
         inventory.Changed -= InventoryOnContentChanged;
+
+        _inventoryState.SelectedProp = null;
     }
 
     public void CancelChanges()
