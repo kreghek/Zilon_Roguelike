@@ -123,6 +123,19 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [UsedImplicitly]
+        [When(@"Следующая итерация сектора (\d+) раз")]
+        public void WhenСледующаяИтерацияСектора(int count)
+        {
+            //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
+            var gameLoop = Context.Container.GetInstance<IGameLoop>();
+
+            for (var i = 0; i < count; i++)
+            {
+                gameLoop.Update();
+            }
+        }
+
+        [UsedImplicitly]
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {

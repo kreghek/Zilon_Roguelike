@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" />
   <Import Project="..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" />
   <Import Project="..\packages\SpecRun.Runner.1.8.2\build\SpecRun.Runner.props" Condition="Exists('..\packages\SpecRun.Runner.1.8.2\build\SpecRun.Runner.props')" />
   <PropertyGroup>
@@ -217,6 +218,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Fight_ShootingDecreaseBullets.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestCases\Monsters.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Monsters.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Monster_Movement.feature.cs">
       <DependentUpon>Monster_Movement.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -395,6 +401,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Fight_ShootingDecreaseBullets.feature.cs</LastGenOutput>
     </None>
+    <None Include="TestCases\Monsters.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Monsters.feature.cs</LastGenOutput>
+    </None>
     <None Include="TestCases\Monster_Movement.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Monster_Movement.feature.cs</LastGenOutput>
@@ -490,8 +500,11 @@
     <Error Condition="!Exists('..\packages\SpecRun.SpecFlow.2-4-0.1.8.2\build\SpecRun.SpecFlow.2-4-0.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecRun.SpecFlow.2-4-0.1.8.2\build\SpecRun.SpecFlow.2-4-0.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
     <Error Condition="!Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.11.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.props'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
   </Target>
   <Import Project="..\packages\SpecFlow.2.4.0\build\SpecFlow.targets" Condition="Exists('..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" />
   <Import Project="..\packages\SpecRun.SpecFlow.2-4-0.1.8.2\build\SpecRun.SpecFlow.2-4-0.targets" Condition="Exists('..\packages\SpecRun.SpecFlow.2-4-0.1.8.2\build\SpecRun.SpecFlow.2-4-0.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.2.4.0\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
 </Project>

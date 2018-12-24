@@ -30,11 +30,20 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var currentActorCoords = currentActorNode.CubeCoords;
             //TODO Сделать привязку монстра к текущей комнате.
             var avaialbleNodes = Map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
-            var targetNode = DecisionSource.SelectTargetRoamingNode(avaialbleNodes);
 
-            var moveTask = new MoveTask(Actor, targetNode, Map);
+            for (var i = 0; i < 3; i++)
+            {
+                var targetNode = DecisionSource.SelectTargetRoamingNode(avaialbleNodes);
 
-            return moveTask;
+                if (Map.IsPositionAvailableFor(targetNode, Actor))
+                {
+                    var moveTask = new MoveTask(Actor, targetNode, Map);
+
+                    return moveTask;
+                }
+            }
+
+            return null;
         }
 
         protected override void ProcessIntruderDetected()

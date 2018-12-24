@@ -16,17 +16,18 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
-            if (!_path.Any())
+            if (IsComplete)
             {
-                IsComplete = true;
                 return;
             }
 
-            //TODO Добавить тест, исправить баг.
-            // Этой проверки быть не должно, потому что _path и так содержит
-            // цепочку узлов до целевого. И должно выполняться верхнее условие.
-            if (Actor.Node == TargetNode)
+            if (!_path.Any())
             {
+                if (TargetNode != Actor.Node)
+                {
+                    throw new TaskException("Актёр не достиг целевого узла при окончании пути.");
+                }
+
                 IsComplete = true;
                 return;
             }
@@ -52,6 +53,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool CanExecute()
         {
+            if (!_path.Any())
+            {
+                return false;
+            }
+
             var nextNode = _path[0];
 
             return _map.IsPositionAvailableFor(nextNode, Actor);
@@ -59,12 +65,28 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public MoveTask(IActor actor, IMapNode targetNode, IMap map) : base(actor)
         {
-            TargetNode = targetNode;
-            _map = map;
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+            _map = map ?? throw new ArgumentNullException(nameof(map));
 
-            _path = new List<IMapNode>();
+            if (actor.Node == targetNode)
+            {
+                // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
+                // в результате рандома.
+                IsComplete = true;
 
-            CreatePath();
+                _path = new List<IMapNode>(0);
+            }
+            else
+            {
+                _path = new List<IMapNode>();
+
+                CreatePath();
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
+            }
         }
 
         private void CreatePath()
