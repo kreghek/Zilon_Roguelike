@@ -16,6 +16,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override void Execute()
         {
+            if (IsComplete)
+            {
+                return;
+            }
+
             if (!_path.Any())
             {
                 if (TargetNode != Actor.Node)
@@ -76,6 +81,11 @@ namespace Zilon.Core.Tactics.Behaviour
                 _path = new List<IMapNode>();
 
                 CreatePath();
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
             }
         }
 
