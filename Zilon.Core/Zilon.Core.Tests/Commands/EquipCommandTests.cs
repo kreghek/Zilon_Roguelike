@@ -20,11 +20,13 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public class EquipCommandTests : CommandTestBase
     {
+        private Mock<IInventoryState> _inventoryStateMock;
+
         /// <summary>
         /// Тест проверяет, что можно использовать экипировку.
         /// </summary>
         [Test]
-        public void CanExecuteTest()
+        public void CanExecute_SelectEquipment_ReturnsTrue()
         {
             // ARRANGE
             var command = Container.GetInstance<EquipCommand>();
@@ -38,7 +40,47 @@ namespace Zilon.Core.Tests.Commands
 
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что нельзя экипировать ресурс.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectConsumableResource_ReturnsFalse()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Use = new TestPropUseSubScheme
+                {
+                    Consumable = true,
+                    CommonRules = new ConsumeCommonRule[] {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
+                    }
+                }
+            };
+            var resource = new Resource(propScheme, 10);
+
+            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
+            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(resource);
+            var equipmentViewModel = equipmentViewModelMock.Object;
+
+            _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
+
+
+            var command = Container.GetInstance<EquipCommand>();
+            command.SlotIndex = 0;
+
+
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+
+
+            // ASSERT
+            canExecute.Should().BeFalse();
         }
 
         /// <summary>
@@ -81,9 +123,9 @@ namespace Zilon.Core.Tests.Commands
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);
             var equipmentViewModel = equipmentViewModelMock.Object;
 
-            var inventoryStateMock = new Mock<IInventoryState>();
-            inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
-            var inventoryState = inventoryStateMock.Object;
+            _inventoryStateMock = new Mock<IInventoryState>();
+            _inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
+            var inventoryState = _inventoryStateMock.Object;
 
             Container.Register(factory => inventoryState, new PerContainerLifetime());
             Container.Register<EquipCommand>(new PerContainerLifetime());
