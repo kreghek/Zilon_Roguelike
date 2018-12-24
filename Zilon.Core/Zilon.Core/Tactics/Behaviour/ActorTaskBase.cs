@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
@@ -7,13 +9,14 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     /// <remarks>
     /// ОБЯЗАТЕЛЬНО все задачи актёров наследовать от этого класса.
+    /// Во избежание ситуации, когда можно забыть инициировать актёра.
     /// </remarks>
     public abstract class ActorTaskBase: IActorTask
     {
         [ExcludeFromCodeCoverage]
-        protected ActorTaskBase(IActor actor)
+        protected ActorTaskBase([NotNull] IActor actor)
         {
-            Actor = actor;
+            Actor = actor ?? throw new System.ArgumentNullException(nameof(actor));
         }
 
         protected IActor Actor { get; }

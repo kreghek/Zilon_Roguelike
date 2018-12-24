@@ -30,10 +30,15 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var equipment = GetEquipment();
-            if (equipment == null)
+            if (_inventoryState.SelectedProp == null)
             {
                 return true;
+            }
+
+            var equipment = GetEquipment();
+            if (equipment == null && _inventoryState.SelectedProp != null)
+            {
+                return false;
             }
 
             if (SlotIndex == null)
@@ -97,10 +102,8 @@ namespace Zilon.Core.Commands
             {
                 return equipment;
             }
-            else
-            {
-                throw new InvalidOperationException("Попытка экипировать то, что не является экипировкой.");
-            }
+
+            return null;
         }
     }
 }

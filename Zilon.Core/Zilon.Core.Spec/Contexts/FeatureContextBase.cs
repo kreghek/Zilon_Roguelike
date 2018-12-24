@@ -264,7 +264,7 @@ namespace Zilon.Core.Spec.Contexts
         /// </summary>
         private void RegisterAuxServices()
         {
-            var dice = new Dice();
+            var dice = new Dice(123);
             Container.Register<IDice>(factory => dice, new PerContainerLifetime());
 
 

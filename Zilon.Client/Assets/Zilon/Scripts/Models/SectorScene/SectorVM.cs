@@ -392,6 +392,13 @@ internal class SectorVM : MonoBehaviour
         inventory.Add(equipment);
     }
 
+    private void AddResourceToActor(Inventory inventory, string resourceSid, int count)
+    {
+        var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+        var resource = _propFactory.CreateResource(resourceScheme, count);
+        inventory.Add(resource);
+    }
+
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
         var actor = GetActor(sender);

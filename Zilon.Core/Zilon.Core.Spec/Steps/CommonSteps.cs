@@ -29,7 +29,7 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть карта размером (.*)")]
+        [Given(@"Есть карта размером (\d*)")]
         public void GivenЕстьКартаРазмером(int mapSize)
         {
             Context.CreateSector(mapSize);
@@ -113,6 +113,13 @@ namespace Zilon.Core.Spec.Steps
             container.Content.Add(resource);
         }
 
+        [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void GivenВИнвентареУАктёраЕстьРесурс(string propSid, int count)
+        {
+            var actor = Context.GetActiveActor();
+            Context.AddResourceToActor(propSid, count, actor);
+        }
+
         [UsedImplicitly]
         [When(@"Следующая итерация сектора")]
         public void WhenСледующаяИтерацияСектора()
@@ -120,6 +127,19 @@ namespace Zilon.Core.Spec.Steps
             //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
             var gameLoop = Context.Container.GetInstance<IGameLoop>();
             gameLoop.Update();
+        }
+
+        [UsedImplicitly]
+        [When(@"Следующая итерация сектора (\d+) раз")]
+        public void WhenСледующаяИтерацияСектора(int count)
+        {
+            //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
+            var gameLoop = Context.Container.GetInstance<IGameLoop>();
+
+            for (var i = 0; i < count; i++)
+            {
+                gameLoop.Update();
+            }
         }
 
         [UsedImplicitly]
@@ -236,6 +256,19 @@ namespace Zilon.Core.Spec.Steps
 
             prop.Should().BeNull();
         }
+
+        [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void ThenВИнвентареУАктёраЕстьРесурсPropSidКоличествоExpectedCount(string propSid, int expectedCount)
+        {
+            var actor = Context.GetActiveActor();
+
+            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+            var testedResouce = testedProp as Resource;
+
+            testedResouce.Count.Should().Be(expectedCount);
+        }
+
 
         [UsedImplicitly]
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]

@@ -82,19 +82,19 @@ namespace Zilon.Core.Spec.TestCases
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given(string.Format("Есть произвольная карта размером {0}", mapSize), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("Есть карта размером {0}", mapSize), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
  testRunner.And(string.Format("Есть актёр игрока класса {0} в ячейке ({1}, {2})", personSid, actorNodeX, actorNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And(string.Format("Актёр игрока экипирован {0}", equipmentSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("Актёр игрока экипирован предметом {0} в слот Index: 2", equipmentSid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.And(string.Format("Актёр игрока имеет в инвентаре {0} количеством {1}", resourceSid, resourceCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("В инвентаре у актёра есть ресурс: {0} количество: {1}", resourceSid, resourceCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
  testRunner.And(string.Format("Есть монстр класса {0} Id:{1} в ячейке ({2}, {3})", monsterSid, monsterId, monsterNodeX, monsterNodeY), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.When(string.Format("Актёр игрока стреляет в монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("Актёр игрока атакует монстра Id:{0}", monsterId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
- testRunner.Then(string.Format("Актёр игрока имеет в инвентаре {0} количеством {1}", resourceSid, expectedResourceCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("В инвентаре у актёра есть ресурс: {0} количество: {1}", resourceSid, expectedResourceCount), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -105,7 +105,7 @@ this.ScenarioInitialize(scenarioInfo);
         public virtual void РасходПатроновПриСтрельбе__3()
         {
 #line 7
-this.РасходПатроновПриСтрельбе_("3", "captain", "0", "0", "pistol", "bullet-45", "10", "rat", "1000", "0", "2", "9", ((string[])(null)));
+this.РасходПатроновПриСтрельбе_("3", "human-person", "0", "0", "pistol", "bullet-45", "10", "rat", "1000", "0", "2", "9", ((string[])(null)));
 #line hidden
         }
         

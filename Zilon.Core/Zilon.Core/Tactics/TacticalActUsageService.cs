@@ -3,6 +3,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -78,6 +79,12 @@ namespace Zilon.Core.Tactics
 
             var tacticalActRoll = GetActEfficient(act);
 
+            // Изъятие патронов
+            if (act.Constrains?.PropResourceType != null)
+            {
+                RemovePropResource(actor, act);
+            }
+
             if (target is IActor targetActor)
             {
                 UseOnActor(actor, targetActor, tacticalActRoll);
@@ -85,6 +92,31 @@ namespace Zilon.Core.Tactics
             else
             {
                 UseOnChest(target, tacticalActRoll);
+            }
+        }
+
+        private static void RemovePropResource(IActor actor, ITacticalAct act)
+        {
+            var propResources = from prop in actor.Person.Inventory.CalcActualItems()
+                                where prop is Resource
+                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                                select prop;
+
+            if (propResources.FirstOrDefault() is Resource propResource)
+            {
+                if (propResource.Count >= act.Constrains.PropResourceCount)
+                {
+                    var usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
+                    actor.Person.Inventory.Remove(usedResource);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Не хватает ресурса {propResource} для использования действия {act}.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
             }
         }
 

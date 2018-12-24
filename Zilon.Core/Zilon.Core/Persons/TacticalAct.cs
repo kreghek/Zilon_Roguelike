@@ -28,6 +28,8 @@ namespace Zilon.Core.Persons
             ToHit = toHit ?? throw new System.ArgumentNullException(nameof(toHit));
 
             Equipment = equipment;
+
+            Constrains = scheme.Constrains;
         }
 
         public ITacticalActStatsSubScheme Stats { get; }
@@ -39,5 +41,6 @@ namespace Zilon.Core.Persons
         public Roll ToHit { get; }
 
         public Equipment Equipment { get; }
+        public ITacticalActConstrainsSubScheme Constrains { get; }
     }
 }
