@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using FluentAssertions;
 
 using JetBrains.Annotations;
@@ -12,6 +12,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -296,6 +297,72 @@ namespace Zilon.Core.Tests.Tactics
 
             // ASSERT
             act.Should().Throw<InvalidOperationException>();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при выстреле изымаются патроны из инвентаря.
+        /// </summary>
+        [Test]
+        public void UseOn_DecreaseBullets_BulletRemovedFromInventory()
+        {
+            // ARRANGE
+
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(person);
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateOnHitMonsterMock();
+            var monster = monsterMock.Object;
+
+            var actStatsSubScheme = new TestTacticalActStatsSubScheme
+            {
+                Offense = new TestTacticalActOffenceSubScheme
+                {
+                    Type = OffenseType.Tactical,
+                    Impact = ImpactType.Kinetic,
+                    ApRank = 10
+                }
+            };
+
+            var actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
+            {
+                PropResourceType = "7-62",
+                PropResourceCount = 1
+            };
+
+            var inventory = new Inventory();
+            var bulletScheme = new TestPropScheme {
+                Sid = "bullet-7-62",
+                Bullet = new TestPropBulletSubScheme
+                {
+                    Caliber = "7-62"
+                }
+            };
+            inventory.Add(new Resource(bulletScheme, 10));
+            personMock.Setup(x => x.Inventory).Returns(inventory);
+
+
+            var actMock = new Mock<ITacticalAct>();
+            actMock.SetupGet(x => x.Stats).Returns(actStatsSubScheme);
+            actMock.SetupGet(x => x.Constrains).Returns(actConstrainsSubScheme);
+            var shootAct = actMock.Object;
+
+
+            // ACT
+            var usedActs = new UsedTacticalActs(new[] { shootAct });
+            actUsageService.UseOn(actor, monster, usedActs);
+
+
+
+            // ASSERT
+            var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
+            bullets.Count.Should().Be(9);
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,

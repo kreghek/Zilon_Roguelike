@@ -9,5 +9,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public IPropEquipSubScheme Equip { get; set; }
         public IPropUseSubScheme Use { get; set; }
         public string[] Tags { get; set; }
+        public IPropBulletSubScheme Bullet { get; set; }
     }
 }

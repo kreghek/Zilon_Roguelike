@@ -24,13 +24,26 @@
       "SchemeSid": "pistol",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
     {
       "SchemeSid": "short-sword",
       "MinPower": 1,
       "MaxPower": 1,
       "Weight": 10
+    },
+
+    {
+      "SchemeSid": "bullet-45",
+      "MinCount": 3,
+      "MaxCount": 5,
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "bullet-45",
+      "MinCount": 6,
+      "MaxCount": 10,
+      "Weight": 2
     },
 
     {

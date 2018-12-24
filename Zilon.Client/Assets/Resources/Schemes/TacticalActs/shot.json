@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Выстрел"
+    "Ru": "Выстрел",
+    "En":  "Shot"
   },
   "Stats": {
     "Efficient": {
@@ -16,5 +17,9 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     }
+  },
+  "Constrains": {
+    "PropResourceType": "bullet-45",
+    "PropResourceCount": 1
   }
 }
