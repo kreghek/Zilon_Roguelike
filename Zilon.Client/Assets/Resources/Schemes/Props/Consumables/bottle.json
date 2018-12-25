@@ -8,7 +8,7 @@
     "CommonRules": [
       {
         "Type": "Thrist",
-        "Level": "Lesser"
+        "Level": "Normal"
       }
     ]
   }
