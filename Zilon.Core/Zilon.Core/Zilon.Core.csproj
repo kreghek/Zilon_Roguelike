@@ -66,10 +66,17 @@
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\IMonsterGenerator.cs" />
+    <Compile Include="MapGenerators\IMonsterGeneratorOptions.cs" />
+    <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\ISectorFactory.cs" />
+    <Compile Include="MapGenerators\ISectorGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
+    <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />
+    <Compile Include="MapGenerators\SectorProceduralGeneratorOptions.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />

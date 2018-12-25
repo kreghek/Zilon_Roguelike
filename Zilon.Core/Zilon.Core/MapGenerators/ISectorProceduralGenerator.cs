@@ -4,6 +4,6 @@ namespace Zilon.Core.MapGenerators
 {
     public interface ISectorProceduralGenerator
     {
-        ISector Generate();
+        ISector Generate(ISectorGeneratorOptions options);
     }
 }

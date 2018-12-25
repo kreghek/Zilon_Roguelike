@@ -21,6 +21,9 @@ namespace Zilon.Core.MapGenerators
         private readonly IChestGenerator _chestGenerator;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
+        private readonly ISectorFactory _sectorFactory;
+        private readonly IMonsterGenerator _monsterGenerator;
+
         public SectorProceduralGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
             IBotPlayer botPlayer,
@@ -40,25 +43,39 @@ namespace Zilon.Core.MapGenerators
             _survivalRandomSource = survivalRandomSource;
         }
 
-        public ISector Generate()
+        public ISector Generate(ISectorGeneratorOptions options)
         {
             var map = _mapFactory.Create();
 
-            var sector = new Sector(map,
-                _actorManager,
-                _propContainerManager,
-                _dropResolver,
-                _schemeService);
+            var sector = _sectorFactory.Create(map);
+
+            var proceduralOptions = (SectorProceduralGeneratorOptions)options;
 
             var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
-            CreateRoomMonsters(sector, monsterRegions);
+
+            _monsterGenerator.CreateMonsters(sector,
+                monsterRegions,
+                proceduralOptions.MonsterGeneratorOptions);
+
+            //var sector = new Sector(map,
+            //    _actorManager,
+            //    _propContainerManager,
+            //    _dropResolver,
+            //    _schemeService);
+
+            
+            //CreateRoomMonsters(sector,
+            //    monsterRegions,
+            //    (SectorProceduralGeneratorOptions)options);
 
             _chestGenerator.CreateChests(map, monsterRegions);
 
             return sector;
         }
 
-        private void CreateRoomMonsters(ISector sector, IEnumerable<MapRegion> regions)
+        private void CreateRoomMonsters(ISector sector,
+            IEnumerable<MapRegion> regions,
+            SectorProceduralGeneratorOptions options)
         {
             var monsterScheme = _schemeService.GetScheme<IMonsterScheme>("rat");
 
