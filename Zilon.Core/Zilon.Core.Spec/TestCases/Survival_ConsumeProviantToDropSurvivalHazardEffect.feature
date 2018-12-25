@@ -6,13 +6,12 @@
 
 Scenario Outline: Поглощение провианта, чтобы снимать выживальные состояния (жажда/голод).
 	Given Есть карта размером 2
-	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	And Актёр значение <stat> равное <statValue>
 	And Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat>)
 	When Актёр использует предмет <propSid> на себя
-	Then Значение <stat> стало <expectedValue>
-	And Актёр под эффектом <effect>
+	Then Актёр под эффектом <effect>
 
 Examples: 
 | stat    | statValue | startEffect   | propSid    | provisionStat | propCount | expectedValue | effect       |
