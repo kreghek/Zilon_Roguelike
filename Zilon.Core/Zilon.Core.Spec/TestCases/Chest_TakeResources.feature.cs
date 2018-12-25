@@ -92,15 +92,15 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.And("Есть сундук Id:500 в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.And("Сундук содержит Id:500 ресурс water в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Сундук содержит Id:500 ресурс bottle в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
  testRunner.When("Я выбираю сундук Id:500", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
- testRunner.And("Я забираю из сундука рерурс water в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Я забираю из сундука рерурс bottle в количестве 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 15
- testRunner.Then("У актёра в инвентаре есть water", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("У актёра в инвентаре есть bottle", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 16
- testRunner.And("В сундуке Id:500 нет предмета water", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("В сундуке Id:500 нет предмета bottle", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -61,6 +61,7 @@
     <Compile Include="Client\InventoryState.cs" />
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
+    <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
-    <Compile Include="Schemes\PropTags.cs" />
+    <Compile Include="Common\PropTags.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />

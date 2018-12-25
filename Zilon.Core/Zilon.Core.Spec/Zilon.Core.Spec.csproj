@@ -284,13 +284,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Survival_ConsumeMedicineToRestoreHp.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Survival_ConsumeProviantToDropSurvivalHazardEffect.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_ConsumeProviantToDropSurvivalHazardEffect.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature.cs">
-      <DependentUpon>Survival_ConsumeProviantToRestoreSurvivalData.feature</DependentUpon>
+    <Compile Include="TestCases\Survival.feature.cs">
+      <DependentUpon>Survival.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -453,13 +448,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival_ConsumeMedicineToRestoreHp.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Survival_ConsumeProviantToDropSurvivalHazardEffect.feature">
+    <None Include="TestCases\Survival.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_ConsumeProviantToDropSurvivalHazardEffect.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_ConsumeProviantToRestoreSurvivalData.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_ConsumeProviantToRestoreSurvivalData.feature.cs</LastGenOutput>
+      <LastGenOutput>Survival.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
