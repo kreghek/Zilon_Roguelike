@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
 {
