@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Common
 {
     public static class PropTags
     {

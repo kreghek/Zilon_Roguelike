@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -74,45 +75,11 @@ namespace Zilon.Core.Tactics
                 switch (rule.Type)
                 {
                     case ConsumeCommonRuleType.Satiety:
-
-                        switch (rule.Level)
-                        {
-                            case PersonRuleLevel.Lesser:
-                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 51);
-                                break;
-
-                            case PersonRuleLevel.Normal:
-                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 101);
-                                break;
-
-                            case PersonRuleLevel.Grand:
-                                Person.Survival.RestoreStat(SurvivalStatType.Satiety, 151);
-                                break;
-
-                            default:
-                                throw new InvalidOperationException($"Неизвестный уровень влияния правила {rule.Level}.");
-                        }
-
+                        RestoreStat(SurvivalStatType.Satiety, rule.Level);
                         break;
 
                     case ConsumeCommonRuleType.Thrist:
-                        switch (rule.Level)
-                        {
-                            case PersonRuleLevel.Lesser:
-                                Person.Survival.RestoreStat(SurvivalStatType.Water, 51);
-                                break;
-
-                            case PersonRuleLevel.Normal:
-                                Person.Survival.RestoreStat(SurvivalStatType.Water, 101);
-                                break;
-
-                            case PersonRuleLevel.Grand:
-                                Person.Survival.RestoreStat(SurvivalStatType.Water, 151);
-                                break;
-
-                            default:
-                                throw new InvalidOperationException($"Неизвестный уровень влияния правила {rule.Level}.");
-                        }
+                        RestoreStat(SurvivalStatType.Water, rule.Level);
                         break;
 
                     case ConsumeCommonRuleType.Health:
@@ -179,6 +146,30 @@ namespace Zilon.Core.Tactics
         public override string ToString()
         {
             return $"{Person}";
+        }
+
+        private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival.RestoreStat(statType,
+                        PropMetrics.SurvivalLesserRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival.RestoreStat(statType,
+                        PropMetrics.SurvivalNormalRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival.RestoreStat(statType,
+                        PropMetrics.SurvivalGrandRestoreValue + 1);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
         }
     }
 }
