@@ -208,7 +208,7 @@ internal class SectorVM : MonoBehaviour
             case 8:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "main-core" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "manticore" };
                 break;
         }
 
