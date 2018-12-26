@@ -73,6 +73,7 @@
     <Compile Include="MapGenerators\ISectorGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
+    <Compile Include="MapGenerators\MonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />

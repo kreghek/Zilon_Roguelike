@@ -14,6 +14,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -150,7 +151,49 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
-        _sectorManager.CreateSector();
+        var monsterGeneratorOptions = new MonsterGeneratorOptions();
+        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions {
+            MonsterGeneratorOptions = monsterGeneratorOptions
+        };
+
+        switch (_personManager.SectorLevel)
+        {
+            case 1:
+            case 2:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer" };
+                break;
+
+            case 3:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "genomass", "gemonass-slave" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "infernal-genomass", "dervish" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer" };
+                break;
+
+            case 4:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "skeleton-champion", "vampire" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer", "demon-roamer" };
+                break;
+
+            case 5:
+            case 6:
+            case 7:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-lord", "hell-rock", "infernal-bard" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "demon-guard", "dark-seer", "hell-herald" };
+                break;
+
+            case 8:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "main-core" };
+                break;
+        }
+
+
+        _sectorManager.CreateSector(proceduralGeneratorOptions);
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;

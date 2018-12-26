@@ -15,9 +15,9 @@ namespace Zilon.Core.Tactics
 
 
 
-        public void CreateSector()
+        public void CreateSector(ISectorGeneratorOptions options)
         {
-            CurrentSector = _generator.Generate();
+            CurrentSector = _generator.Generate(options);
         }
     }
 }

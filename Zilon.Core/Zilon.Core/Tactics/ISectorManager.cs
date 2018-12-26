@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics
+﻿using Zilon.Core.MapGenerators;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Интерфейс, который предоставляет доступ к общей информации о текущем секторе.
@@ -7,6 +9,6 @@
     {
         ISector CurrentSector { get; }
 
-        void CreateSector();
+        void CreateSector(ISectorGeneratorOptions options);
     }
 }

@@ -39,7 +39,7 @@ namespace Zilon.Core.MapGenerators
             _dropResolver = dropResolver;
         }
 
-        public ISector Generate()
+        public ISector Generate(ISectorGeneratorOptions options)
         {
             var map = SquareMapFactory.Create(20);
 
