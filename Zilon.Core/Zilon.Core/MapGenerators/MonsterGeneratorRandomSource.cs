@@ -27,6 +27,11 @@ namespace Zilon.Core.MapGenerators
             return availableMonsterSchemes.ElementAt(rollIndex);
         }
 
+        public int RollNodeIndex(int count)
+        {
+            return _dice.Roll(0, count - 1);
+        }
+
         public int RollRarity()
         {
             return _dice.Roll(0, 2);

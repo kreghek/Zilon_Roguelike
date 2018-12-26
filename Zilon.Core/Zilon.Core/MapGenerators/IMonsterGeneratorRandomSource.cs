@@ -9,5 +9,6 @@ namespace Zilon.Core.MapGenerators
         int RollRarity();
         IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes);
         int RollCount();
+        int RollNodeIndex(int count);
     }
 }

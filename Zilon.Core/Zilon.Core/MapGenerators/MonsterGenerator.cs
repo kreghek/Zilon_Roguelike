@@ -37,10 +37,18 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var region in monsterRegions)
             {
+                var freeNodes = new List<IMapNode>(region.Nodes);
+
                 var monsterCount = _generatorRandomSource.RollCount();
 
                 for (int i = 0; i < monsterCount; i++)
                 {
+                    // если в комнате все места заняты
+                    if (!freeNodes.Any())
+                    {
+                        break;
+                    }
+
                     var rarity = _generatorRandomSource.RollRarity();
 
                     //Снижать редкость, если лимит текущей редкости исчерпан
@@ -85,31 +93,34 @@ namespace Zilon.Core.MapGenerators
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
 
-                    //TODO Учесть вероятность, что монстр может инстанцироваться на сундук
+                    // первый монстр ходит по маршруту
+                    // остальные бродят произвольно
                     if (i == 0)
                     {
-                        // В каждую комнату генерируем по 2 монстра
-                        // первый ходит по маршруту
+                        // генерируем маршрут обхода
+                        var startPatrolNode = region.Nodes.First();
+                        var endPatrolNode = region.Nodes.Last();
 
-                        var startNode1 = (HexNode)region.Nodes.FirstOrDefault();
-                        var actor1 = CreateMonster(monsterScheme, startNode1, monsterGeneratorOptions.BotPlayer);
+                        // генерируем моснтра
+                        var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
+                        var monster = CreateMonster(monsterScheme, startPatrolNode, monsterGeneratorOptions.BotPlayer);
+                        sector.PatrolRoutes[monster] = patrolRoute;
 
-                        var finishPatrolNode = region.Nodes.Last();
-                        var patrolRoute = new PatrolRoute(startNode1, finishPatrolNode);
-                        sector.PatrolRoutes[actor1] = patrolRoute;
+                        freeNodes.Remove(monster.Node);
                     }
                     else
                     {
-                        // второй произвольно бродит
-
-                        var startNode2 = (HexNode)region.Nodes.Skip(3).FirstOrDefault();
-                        CreateMonster(monsterScheme, startNode2, monsterGeneratorOptions.BotPlayer);
+                        var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
+                        var monsterNode = freeNodes[rollIndex];
+                        var monster = CreateMonster(monsterScheme, monsterNode, monsterGeneratorOptions.BotPlayer);
+                        
+                        freeNodes.Remove(monster.Node);
                     }
                 }
             }
         }
 
-        private IActor CreateMonster(IMonsterScheme monsterScheme, HexNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
         {
             var person = new MonsterPerson(monsterScheme, _survivalRandomSource);
             var actor = new Actor(person, botPlayer, startNode);
