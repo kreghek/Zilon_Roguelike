@@ -201,13 +201,13 @@ internal class SectorVM : MonoBehaviour
             case 6:
             case 7:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-lord", "hell-rock", "infernal-bard" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "demon-guard", "dark-seer", "hell-herald" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-warlock", "hell-rock", "infernal-bard" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "archidemon", "hell-herald", "pit-baron" };
                 break;
 
             case 8:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "main-core" };
                 break;
         }
