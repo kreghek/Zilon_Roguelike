@@ -187,8 +187,8 @@ internal class SectorVM : MonoBehaviour
             case 1:
             case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer", "night-stalker" };
                 break;
 
             case 3:

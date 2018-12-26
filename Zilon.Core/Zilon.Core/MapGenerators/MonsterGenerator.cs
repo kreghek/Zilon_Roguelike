@@ -32,7 +32,9 @@ namespace Zilon.Core.MapGenerators
             IEnumerable<MapRegion> monsterRegions,
             IMonsterGeneratorOptions monsterGeneratorOptions)
         {
-            //TODO Учесть вероятность, что монстр может инстанцироваться на сундук
+            var rarityCounter = new int[3];
+            var rarityMaxCounter = new int[3] { -1, 5, 1 };
+
             foreach (var region in monsterRegions)
             {
                 var monsterCount = _generatorRandomSource.RollCount();
@@ -41,9 +43,24 @@ namespace Zilon.Core.MapGenerators
                 {
                     var rarity = _generatorRandomSource.RollRarity();
 
-                    //TODO Снижать редкость, если лимит текущей редкости исчерпан
+                    //Снижать редкость, если лимит текущей редкости исчерпан
+                    var currentRarity = rarity;
+                    while (currentRarity > 0)
+                    {
+                        var currentRarityCounter = rarityCounter[currentRarity];
+                        var maxRarityCounter = rarityMaxCounter[currentRarity];
+                        if (currentRarityCounter >= maxRarityCounter)
+                        {
+                            currentRarity--;
+                        }
+                        else
+                        {
+                            rarityCounter[currentRarity]++;
+                        }
+                    }
+                    
                     IEnumerable<string> availableSchemeSids;
-                    switch (rarity)
+                    switch (currentRarity)
                     {
                         case 0:
                             availableSchemeSids = monsterGeneratorOptions.RegularMonsterSids;
@@ -68,6 +85,7 @@ namespace Zilon.Core.MapGenerators
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
 
+                    //TODO Учесть вероятность, что монстр может инстанцироваться на сундук
                     if (i == 0)
                     {
                         // В каждую комнату генерируем по 2 монстра
