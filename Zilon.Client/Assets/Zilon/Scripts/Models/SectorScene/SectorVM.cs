@@ -151,8 +151,28 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
+        var proceduralGeneratorOptions = CreateSectorGeneratorOptions();
+
+        _sectorManager.CreateSector(proceduralGeneratorOptions);
+
+        _propContainerManager.Added += PropContainerManager_Added;
+        _propContainerManager.Removed += PropContainerManager_Removed;
+
+        _playerState.TaskSource = _humanActorTaskSource;
+
+        _gameLoop.ActorTaskSources = new[] {
+            _humanActorTaskSource,
+            _monsterActorTaskSource
+        };
+
+        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
+    }
+
+    private ISectorGeneratorOptions CreateSectorGeneratorOptions()
+    {
         var monsterGeneratorOptions = new MonsterGeneratorOptions();
-        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions {
+        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
+        {
             MonsterGeneratorOptions = monsterGeneratorOptions
         };
 
@@ -192,20 +212,7 @@ internal class SectorVM : MonoBehaviour
                 break;
         }
 
-
-        _sectorManager.CreateSector(proceduralGeneratorOptions);
-
-        _propContainerManager.Added += PropContainerManager_Added;
-        _propContainerManager.Removed += PropContainerManager_Removed;
-
-        _playerState.TaskSource = _humanActorTaskSource;
-
-        _gameLoop.ActorTaskSources = new[] {
-            _humanActorTaskSource,
-            _monsterActorTaskSource
-        };
-
-        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
+        return proceduralGeneratorOptions;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
