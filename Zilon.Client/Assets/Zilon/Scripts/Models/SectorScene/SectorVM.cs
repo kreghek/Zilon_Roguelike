@@ -81,6 +81,8 @@ internal class SectorVM : MonoBehaviour
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
 
+    [Inject] private readonly IBotPlayer _botPlayer;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -170,7 +172,11 @@ internal class SectorVM : MonoBehaviour
 
     private ISectorGeneratorOptions CreateSectorGeneratorOptions()
     {
-        var monsterGeneratorOptions = new MonsterGeneratorOptions();
+        var monsterGeneratorOptions = new MonsterGeneratorOptions
+        {
+            BotPlayer = _botPlayer
+        };
+
         var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
         {
             MonsterGeneratorOptions = monsterGeneratorOptions

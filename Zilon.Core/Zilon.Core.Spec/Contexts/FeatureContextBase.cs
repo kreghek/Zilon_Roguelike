@@ -68,7 +68,7 @@ namespace Zilon.Core.Spec.Contexts
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();
-            sectorManager.CreateSector();
+            sectorManager.CreateSector(new SectorProceduralGeneratorOptions());
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)

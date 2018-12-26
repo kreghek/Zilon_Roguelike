@@ -45,7 +45,7 @@ namespace Zilon.Core.Commands.Tests
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
-            sectorManager.CreateSector();
+            sectorManager.CreateSector(new SectorProceduralGeneratorOptions());
 
 
 
