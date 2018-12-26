@@ -50,11 +50,14 @@ namespace Zilon.Core.MapGenerators
                             break;
 
                         case 1:
-                            availableSchemeSids = monsterGeneratorOptions.RareMonsterSids;
+                            availableSchemeSids = monsterGeneratorOptions.RareMonsterSids ?? 
+                                monsterGeneratorOptions.RegularMonsterSids;
                             break;
 
                         case 2:
-                            availableSchemeSids = monsterGeneratorOptions.ChampionMonsterSids;
+                            availableSchemeSids = monsterGeneratorOptions.ChampionMonsterSids ??
+                                monsterGeneratorOptions.RareMonsterSids ??
+                                monsterGeneratorOptions.RegularMonsterSids;
                             break;
 
                         default:
