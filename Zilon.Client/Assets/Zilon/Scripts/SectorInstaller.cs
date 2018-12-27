@@ -33,6 +33,9 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
         Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();
+        Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
+        Container.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
+        Container.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();

@@ -184,6 +184,7 @@ internal class SectorVM : MonoBehaviour
 
         switch (_personManager.SectorLevel)
         {
+            case 0:
             case 1:
             case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
