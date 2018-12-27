@@ -33,7 +33,7 @@ namespace Zilon.Core.MapGenerators
             IMonsterGeneratorOptions monsterGeneratorOptions)
         {
             var rarityCounter = new int[3];
-            var rarityMaxCounter = new int[3] { -1, 5, 1 };
+            var rarityMaxCounter = new int[3] { -1, 10, 1 };
 
             foreach (var region in monsterRegions)
             {
