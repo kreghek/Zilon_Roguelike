@@ -64,6 +64,7 @@ namespace Zilon.Core.MapGenerators
                         else
                         {
                             rarityCounter[currentRarity]++;
+                            break;
                         }
                     }
                     
