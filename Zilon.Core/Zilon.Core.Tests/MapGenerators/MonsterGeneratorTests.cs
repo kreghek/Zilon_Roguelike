@@ -1,21 +1,22 @@
-﻿using NUnit.Framework;
-using Zilon.Core.MapGenerators;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Schemes;
-using Moq;
-using Zilon.Core.Tests.Common.Schemes;
-using Zilon.Core.Tactics;
-using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Players;
+
 using FluentAssertions;
-using Zilon.Core.MapGenerators.PrimitiveStyle;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -57,8 +58,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var monsterGenerator = new MonsterGenerator(schemeService, 
-                randomSource, 
+            var monsterGenerator = new MonsterGenerator(schemeService,
+                randomSource,
                 actorManager,
                 survivalRandomSource);
 
@@ -94,10 +95,13 @@ namespace Zilon.Core.Tests.MapGenerators
             rareCount.Should().Be(10);
         }
 
-        private IMonsterScheme CreateMonsterScheme(string sid) {
-            var scheme = new TestMonsterScheme {
+        private IMonsterScheme CreateMonsterScheme(string sid)
+        {
+            var scheme = new TestMonsterScheme
+            {
                 Sid = sid,
-                PrimaryAct = new TestTacticalActStatsSubScheme {
+                PrimaryAct = new TestTacticalActStatsSubScheme
+                {
                     Efficient = new Core.Common.Roll(6, 1)
                 }
             };
