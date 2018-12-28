@@ -18,7 +18,7 @@ public class SectorNameHandler : MonoBehaviour
         if (_humanPersonManager.SectorName != null)
         {
             var name = _humanPersonManager.SectorName;
-            var level = _humanPersonManager.SectorLevel + 1;
+            var level = _humanPersonManager.SectorLevel;
             SectorNameText.text = $"{name} lvl{level}";
 
             Destroy(this);

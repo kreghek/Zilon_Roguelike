@@ -184,7 +184,6 @@ internal class SectorVM : MonoBehaviour
 
         switch (_personManager.SectorLevel)
         {
-            case 0:
             case 1:
             case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
@@ -409,6 +408,8 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
+
+            _personManager.SectorLevel = 1;
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
