@@ -1,5 +1,5 @@
 {
-  "Hp": 5,
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -22,5 +22,5 @@
       }
     ]
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival", "default", "champion-loot" ]
 }

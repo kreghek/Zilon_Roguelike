@@ -22,5 +22,5 @@
       }
     ]
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival", "survival", "default" ]
 }
