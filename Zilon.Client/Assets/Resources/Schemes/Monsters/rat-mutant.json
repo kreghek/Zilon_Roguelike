@@ -1,5 +1,5 @@
 {
-  "Hp": 2,
+  "Hp": 6,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -13,6 +13,14 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     }
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Lesser"
+      }
+    ]
   },
   "DropTableSids": [ "survival" ]
 }

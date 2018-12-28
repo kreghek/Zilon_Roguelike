@@ -15,8 +15,8 @@
     }
   },
   "DropTableSids": [ "survival" ],
-  "Defence": {
-    "Defences": [
+  "Defense": {
+    "Defenses": [
       {
         "Type": "TacticalDefence",
         "Level": "Normal"
