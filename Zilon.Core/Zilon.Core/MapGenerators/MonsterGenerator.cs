@@ -90,6 +90,11 @@ namespace Zilon.Core.MapGenerators
                             throw new InvalidOperationException();
                     }
 
+                    if (availableSchemeSids == null)
+                    {
+                        throw new InvalidOperationException("Не удалось выбрать доступные схемы для монстров.");
+                    }
+
                     var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);

@@ -182,7 +182,9 @@ internal class SectorVM : MonoBehaviour
             MonsterGeneratorOptions = monsterGeneratorOptions
         };
 
-        switch (_personManager.SectorLevel)
+        var wellFormedSectorLevel = _personManager.SectorLevel + 1;
+
+        switch (wellFormedSectorLevel)
         {
             case 1:
             case 2:
@@ -408,8 +410,6 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-
-            _personManager.SectorLevel = 1;
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
