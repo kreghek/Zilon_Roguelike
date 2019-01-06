@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
 
 using Zilon.Core.Client;
@@ -72,5 +73,10 @@ public class UiHandler : MonoBehaviour
         }
 
         _clientCommandExecutor.Push(_showPerksCommand);
+    }
+
+    public void ExitGame_Handler()
+    {
+        Application.Quit();
     }
 }
