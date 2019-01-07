@@ -39,6 +39,11 @@ namespace Zilon.Core.Schemes
 
         public TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme
         {
+            if (sid == null)
+            {
+                throw new ArgumentNullException(nameof(sid));
+            }
+
             var schemeType = typeof(TScheme);
             if (!schemeType.IsInterface)
             {

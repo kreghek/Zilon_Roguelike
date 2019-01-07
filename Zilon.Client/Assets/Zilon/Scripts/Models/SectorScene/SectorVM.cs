@@ -14,6 +14,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -79,6 +80,8 @@ internal class SectorVM : MonoBehaviour
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
+
+    [Inject] private readonly IBotPlayer _botPlayer;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -150,7 +153,9 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
-        _sectorManager.CreateSector();
+        var proceduralGeneratorOptions = CreateSectorGeneratorOptions();
+
+        _sectorManager.CreateSector(proceduralGeneratorOptions);
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -163,6 +168,59 @@ internal class SectorVM : MonoBehaviour
         };
 
         _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
+    }
+
+    private ISectorGeneratorOptions CreateSectorGeneratorOptions()
+    {
+        var monsterGeneratorOptions = new MonsterGeneratorOptions
+        {
+            BotPlayer = _botPlayer
+        };
+
+        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
+        {
+            MonsterGeneratorOptions = monsterGeneratorOptions
+        };
+
+        var wellFormedSectorLevel = _personManager.SectorLevel + 1;
+
+        switch (wellFormedSectorLevel)
+        {
+            case 1:
+            case 2:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer", "night-stalker" };
+                break;
+
+            case 3:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "genomass", "gemonass-slave" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "infernal-genomass", "dervish" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer" };
+                break;
+
+            case 4:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "skeleton-champion", "vampire" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer", "demon-roamer" };
+                break;
+
+            case 5:
+            case 6:
+            case 7:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-warlock", "hell-rock", "infernal-bard" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "archidemon", "hell-herald", "pit-baron" };
+                break;
+
+            case 8:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
+                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "manticore" };
+                break;
+        }
+
+        return proceduralGeneratorOptions;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)

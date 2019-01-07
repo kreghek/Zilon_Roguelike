@@ -22,6 +22,6 @@ namespace Zilon.Core.Schemes
 
         [JsonConverter(typeof(ConcreteTypeConverter<PropArmorItemSubScheme[]>))]
         [JsonProperty]
-        public IPropArmorItemSubScheme[] Armors { get; set; }
+        public IPropArmorItemSubScheme[] Armors { get; private set; }
     }
 }

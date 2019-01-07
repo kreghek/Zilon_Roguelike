@@ -45,11 +45,18 @@ namespace Zilon.Core.Commands.Tests
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
-            sectorManager.CreateSector();
+            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
+            {
+                    MonsterGeneratorOptions = new MonsterGeneratorOptions
+                    {
+                        BotPlayer = _container.GetInstance<IBotPlayer>(),
+                        RegularMonsterSids = new[] { "rat" }
+                    }
+             });
 
 
 
-            var personScheme = schemeService.GetScheme<IPersonScheme>("captain");
+            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
             var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
             var playerActorVm = CreateHumanActorVm(humanPlayer,
@@ -141,6 +148,9 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
             _container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
             _container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
+            _container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());

@@ -1,0 +1,26 @@
+{
+  "Hp": 8,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 2
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    }
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival", "default", "champion-loot" ]
+}

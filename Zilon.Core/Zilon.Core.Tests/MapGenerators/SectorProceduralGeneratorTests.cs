@@ -37,19 +37,32 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
+            var options = CreateOptions(botPlayer);
 
 
 
             // ACT
             Action act = () =>
             {
-                var sector = generator.Generate();
+                var sector = generator.Generate(options);
             };
 
 
 
             // ASSERT
             act.Should().NotThrow();
+        }
+
+        private static ISectorGeneratorOptions CreateOptions(IBotPlayer botPlayer)
+        {
+            return new SectorProceduralGeneratorOptions
+            {
+                MonsterGeneratorOptions = new MonsterGeneratorOptions
+                {
+                    BotPlayer = botPlayer,
+                    RegularMonsterSids = new[] { "rat" }
+                }
+            };
         }
 
         /// <summary>
@@ -72,13 +85,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
+            var options = CreateOptions(botPlayer);
 
 
 
             // ACT
             Action act = () =>
             {
-                var sector = generator.Generate();
+                var sector = generator.Generate(options);
             };
 
 
@@ -106,15 +120,16 @@ namespace Zilon.Core.Tests.MapGenerators
             var chestGeneratorMock = new Mock<IChestGenerator>();
             var chestGenerator = chestGeneratorMock.Object;
 
-            return new SectorProceduralGenerator(
-                actorManager,
-                propContainerManager,
-                botPlayer,
-                schemeService,
-                dropResolver,
-                mapFactory,
-                chestGenerator,
-                survivalRandomSource);
+            var monsterGeneratorMock = new Mock<IMonsterGenerator>();
+            var monsterGenerator = monsterGeneratorMock.Object;
+
+            var sectorFactoryMock = new Mock<ISectorFactory>();
+            var sectorFactory = sectorFactoryMock.Object;
+
+            return new SectorProceduralGenerator(mapFactory,
+                sectorFactory,
+                monsterGenerator,
+                chestGenerator);
         }
 
 

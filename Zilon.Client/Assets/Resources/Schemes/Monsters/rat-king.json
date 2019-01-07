@@ -1,8 +1,8 @@
 {
-  "Hp": 2,
+  "Hp": 12,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -14,17 +14,13 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ],
-  "Defence": {
-    "Defences": [
+  "Defense": {
+    "Defenses": [
       {
         "Type": "TacticalDefence",
-        "Level": "Normal"
-      },
-      {
-        "Type": "FuryDefence",
-        "Level": "Normal"
+        "Level": "Lesser"
       }
     ]
-  }
+  },
+  "DropTableSids": [ "survival", "default", "champion-loot" ]
 }

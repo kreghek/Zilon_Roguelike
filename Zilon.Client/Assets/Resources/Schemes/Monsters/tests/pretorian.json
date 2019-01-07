@@ -15,14 +15,14 @@
     }
   },
   "DropTableSids": [ "survival" ],
-  "Defence": {
-    "Defences": [
+  "Defense": {
+    "Defenses": [
       {
-        "Type": "ShadowDefence",
+        "Type": "TacticalDefence",
         "Level": "Normal"
       },
       {
-        "Type": "TrickyDefence",
+        "Type": "FuryDefence",
         "Level": "Normal"
       }
     ]

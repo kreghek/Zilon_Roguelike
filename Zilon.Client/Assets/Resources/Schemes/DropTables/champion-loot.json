@@ -1,0 +1,36 @@
+{
+  "Rolls": 2,
+  "Records": [
+    {
+      "SchemeSid": "battle-axe",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+    {
+      "SchemeSid": "gold-armor",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+
+    {
+      "SchemeSid": "gold-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+    {
+      "SchemeSid": "pistol",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "short-sword",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    }
+  ]
+}

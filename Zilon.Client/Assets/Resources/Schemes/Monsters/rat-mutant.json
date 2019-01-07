@@ -1,5 +1,5 @@
 {
-  "Hp": 2,
+  "Hp": 6,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,17 +14,13 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ],
-  "Defence": {
-    "Defences": [
+  "Defense": {
+    "Defenses": [
       {
-        "Type": "ConcentratedDefence",
-        "Level": "Normal"
-      },
-      {
-        "Type": "RapidDefence",
-        "Level": "Normal"
+        "Type": "FuryDefence",
+        "Level": "Lesser"
       }
     ]
-  }
+  },
+  "DropTableSids": [ "survival", "survival", "default" ]
 }

@@ -1,0 +1,26 @@
+{
+  "Hp": 5,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    }
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival", "survival", "default" ]
+}
