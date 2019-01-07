@@ -58,7 +58,7 @@ public class PersonEffectHandler : MonoBehaviour
             if (effect is SurvivalStatHazardEffect survivalHazardEffect)
             {
                 var effectViewModel = Instantiate(EffectPrefab, EffectParent);
-                effectViewModel.Title = $"{survivalHazardEffect.Level} {survivalHazardEffect.Type}";
+                effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
             }
         }
     }
