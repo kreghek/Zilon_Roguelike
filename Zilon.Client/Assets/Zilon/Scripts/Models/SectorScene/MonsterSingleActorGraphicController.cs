@@ -32,6 +32,15 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
         var monoGraphics = (MonoActorGraphic)Graphic;
         var holder = monoGraphics.VisualPropHolder;
         var visualPropResource = Resources.Load<VisualProp>($"VisualProps/Monsters/{propSid}");
-        Instantiate(visualPropResource, holder.transform);
+        if (visualPropResource != null)
+        {
+            Instantiate(visualPropResource, holder.transform);
+        }
+        else
+        {
+            visualPropResource = Resources.Load<VisualProp>($"VisualProps/Monsters/undef");
+            Instantiate(visualPropResource, holder.transform);
+        }
+        
     }
 }
