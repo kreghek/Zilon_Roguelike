@@ -20,11 +20,13 @@ namespace Assets.Zilon.Scripts.Services
 		public InventoryModalBody InventoryModalPrefab;
 		
 		public PerksModalBody PerksModalPrefab;
-		
-		// ReSharper restore MemberCanBePrivate.Global
-		// ReSharper restore UnassignedField.Global
 
-		[Inject] 
+        public InstructionModalBody InstructionModalPrefab;
+
+        // ReSharper restore MemberCanBePrivate.Global
+        // ReSharper restore UnassignedField.Global
+
+        [Inject] 
 		private DiContainer _container;
 
 #pragma warning restore 649
@@ -51,7 +53,12 @@ namespace Assets.Zilon.Scripts.Services
 			modalBody.Init(actor);
 		}
 
-		private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
+        public void ShowInstructionModal()
+        {
+            var modalBody = CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+        }
+
+        private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
 		{
 			var modal = InstantiateModalDialog();
 

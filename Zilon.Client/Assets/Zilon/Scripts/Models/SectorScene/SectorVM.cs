@@ -75,6 +75,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
+    [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
+
     [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
 
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
@@ -141,6 +143,11 @@ internal class SectorVM : MonoBehaviour
         InitPlayerActor(nodeViewModels);
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
+
+        if (_personManager.SectorLevel == 0)
+        {
+            _sectorModalManager.ShowInstructionModal();
+        }
     }
 
     private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)

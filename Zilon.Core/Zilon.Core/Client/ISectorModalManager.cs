@@ -9,5 +9,7 @@ namespace Zilon.Core.Client
         void ShowInventoryModal(IActor actor);
 
         void ShowPerksModal(IActor actor);
+
+        void ShowInstructionModal();
     }
 }
