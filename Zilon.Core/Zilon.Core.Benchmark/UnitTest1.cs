@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Zilon.Core.Benchmark
 {
     [TestFixture]
+    [Category("benckmark")]
     public class UnitTest1
     {
         [Test]
