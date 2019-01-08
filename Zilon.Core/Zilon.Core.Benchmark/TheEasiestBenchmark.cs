@@ -8,8 +8,11 @@ using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Loggers;
+
 using JetBrains.Annotations;
+
 using LightInject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -41,7 +44,7 @@ namespace Zilon.Core.Benchmark
                 Add(CsvExporter.Default);
                 Add(EnvironmentAnalyser.Default);
                 UnionRule = ConfigUnionRule.AlwaysUseLocal;
-                ArtifactsPath = @"c:\benchmarkdotnet";
+                ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
             }
         }
 
