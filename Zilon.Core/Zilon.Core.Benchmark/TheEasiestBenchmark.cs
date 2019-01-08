@@ -1,13 +1,30 @@
 ﻿using System.Linq;
 
+using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Loggers;
 
 namespace Zilon.Core.Benchmark
 {
-    [ArtifactsPath(@"c:\benchmarkdotnet")]
-    //[DryJob]
+    [Config(typeof(Config))]
     public class TheEasiestBenchmark
     {
+        private class Config : ManualConfig
+        {
+            public Config()
+            {
+                Add(ConsoleLogger.Default);
+                Add(TargetMethodColumn.Method, StatisticColumn.Mean);
+                Add(CsvExporter.Default);
+                Add(EnvironmentAnalyser.Default);
+                UnionRule = ConfigUnionRule.AlwaysUseLocal;
+                ArtifactsPath = @"c:\benchmarkdotnet";
+            }
+        }
+
         [Benchmark(Description = "Summ100")]
         public int Test100()
         {
