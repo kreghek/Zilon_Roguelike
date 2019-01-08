@@ -7,6 +7,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Loggers;
 
 using JetBrains.Annotations;
@@ -30,23 +31,9 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
 {
-    [Config(typeof(Config))]
     public class TheEasiestBenchmark
     {
         private ServiceContainer _container;
-
-        private class Config : ManualConfig
-        {
-            public Config()
-            {
-                Add(ConsoleLogger.Default);
-                Add(TargetMethodColumn.Method, StatisticColumn.Mean, StatisticColumn.StdDev);
-                Add(CsvExporter.Default);
-                Add(EnvironmentAnalyser.Default);
-                UnionRule = ConfigUnionRule.AlwaysUseLocal;
-                ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
-            }
-        }
 
         [Benchmark(Description = "Move100")]
         public void Move100()
