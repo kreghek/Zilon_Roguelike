@@ -40,7 +40,7 @@ namespace Zilon.Core.Benchmark
             public Config()
             {
                 Add(ConsoleLogger.Default);
-                Add(TargetMethodColumn.Method, StatisticColumn.Mean);
+                Add(TargetMethodColumn.Method, StatisticColumn.Mean, StatisticColumn.StdDev);
                 Add(CsvExporter.Default);
                 Add(EnvironmentAnalyser.Default);
                 UnionRule = ConfigUnionRule.AlwaysUseLocal;
