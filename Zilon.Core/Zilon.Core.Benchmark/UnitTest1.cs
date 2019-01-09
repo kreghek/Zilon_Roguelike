@@ -34,18 +34,20 @@ namespace Zilon.Core.Benchmark
         {
             public Config(string buildNumber)
             {
+                var iterationCount = int.Parse(ConfigurationManager.AppSettings["IterationCount"]);
                 var monoRuntimeName = ConfigurationManager.AppSettings["MonoRuntimeName"];
                 var monoRuntimePath = ConfigurationManager.AppSettings["MonoRuntimePath"];
 
-                Add(Job.Clr.With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(10));
-                Add(Job.Clr.With(Platform.X64).With(Jit.RyuJit).WithIterationCount(10));
-                Add(Job.ShortRun.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(10));
+                Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
+                Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+                Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
 
                 Add(ConsoleLogger.Default);
                 Add(TargetMethodColumn.Method,
                     JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Runtime"),
                     JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Jit"),
                     StatisticColumn.Mean,
+                    StatisticColumn.Median,
                     StatisticColumn.StdDev);
                 Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
                 Add(EnvironmentAnalyser.Default);
