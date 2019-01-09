@@ -10,7 +10,7 @@ using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
-
+using BenchmarkDotNet.Toolchains.CsProj;
 using NUnit.Framework;
 
 namespace Zilon.Core.Benchmark
@@ -37,11 +37,16 @@ namespace Zilon.Core.Benchmark
                 var monoRuntimeName = ConfigurationManager.AppSettings["MonoRuntimeName"];
                 var monoRuntimePath = ConfigurationManager.AppSettings["MonoRuntimePath"];
 
-                Add(Job.Clr);
-                Add(Job.ShortRun.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)));
+                Add(Job.Clr.With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(10));
+                Add(Job.Clr.With(Platform.X64).With(Jit.RyuJit).WithIterationCount(10));
+                Add(Job.ShortRun.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(10));
 
                 Add(ConsoleLogger.Default);
-                Add(TargetMethodColumn.Method, JobCharacteristicColumn.AllColumns.Single(x=>x.ColumnName == "Runtime"), StatisticColumn.Mean, StatisticColumn.StdDev);
+                Add(TargetMethodColumn.Method,
+                    JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Runtime"),
+                    JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Jit"),
+                    StatisticColumn.Mean,
+                    StatisticColumn.StdDev);
                 Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
                 Add(EnvironmentAnalyser.Default);
                 UnionRule = ConfigUnionRule.AlwaysUseLocal;
