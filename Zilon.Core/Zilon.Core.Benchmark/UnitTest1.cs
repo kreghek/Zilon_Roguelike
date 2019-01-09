@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 
 using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters.Json;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 
@@ -31,13 +34,23 @@ namespace Zilon.Core.Benchmark
         {
             public Config(string buildNumber)
             {
+                var monoRuntimeName = ConfigurationManager.AppSettings["MonoRuntimeName"];
+                var monoRuntimePath = ConfigurationManager.AppSettings["MonoRuntimePath"];
+
+                Add(Job.Clr);
+                Add(Job.ShortRun.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)));
+
                 Add(ConsoleLogger.Default);
-                Add(TargetMethodColumn.Method, StatisticColumn.Mean, StatisticColumn.StdDev);
-                Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}"));
+                Add(TargetMethodColumn.Method, JobCharacteristicColumn.AllColumns.Single(x=>x.ColumnName == "Runtime"), StatisticColumn.Mean, StatisticColumn.StdDev);
+                Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
                 Add(EnvironmentAnalyser.Default);
                 UnionRule = ConfigUnionRule.AlwaysUseLocal;
                 ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
+            }
 
+            private object Mono()
+            {
+                throw new NotImplementedException();
             }
         }
     }
