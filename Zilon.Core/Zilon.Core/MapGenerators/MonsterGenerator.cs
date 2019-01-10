@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -49,51 +50,8 @@ namespace Zilon.Core.MapGenerators
                         break;
                     }
 
-                    var rarity = _generatorRandomSource.RollRarity();
-
-                    //Снижать редкость, если лимит текущей редкости исчерпан
-                    var currentRarity = rarity;
-                    while (currentRarity > 0)
-                    {
-                        var currentRarityCounter = rarityCounter[currentRarity];
-                        var maxRarityCounter = rarityMaxCounter[currentRarity];
-                        if (currentRarityCounter >= maxRarityCounter)
-                        {
-                            currentRarity--;
-                        }
-                        else
-                        {
-                            rarityCounter[currentRarity]++;
-                            break;
-                        }
-                    }
-                    
-                    IEnumerable<string> availableSchemeSids;
-                    switch (currentRarity)
-                    {
-                        case 0:
-                            availableSchemeSids = monsterGeneratorOptions.RegularMonsterSids;
-                            break;
-
-                        case 1:
-                            availableSchemeSids = monsterGeneratorOptions.RareMonsterSids ?? 
-                                monsterGeneratorOptions.RegularMonsterSids;
-                            break;
-
-                        case 2:
-                            availableSchemeSids = monsterGeneratorOptions.ChampionMonsterSids ??
-                                monsterGeneratorOptions.RareMonsterSids ??
-                                monsterGeneratorOptions.RegularMonsterSids;
-                            break;
-
-                        default:
-                            throw new InvalidOperationException();
-                    }
-
-                    if (availableSchemeSids == null)
-                    {
-                        throw new InvalidOperationException("Не удалось выбрать доступные схемы для монстров.");
-                    }
+                    var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
+                    var availableSchemeSids = GetAvailableSchemeSids(monsterGeneratorOptions, currentRarity);
 
                     var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
@@ -119,11 +77,84 @@ namespace Zilon.Core.MapGenerators
                         var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                         var monsterNode = freeNodes[rollIndex];
                         var monster = CreateMonster(monsterScheme, monsterNode, monsterGeneratorOptions.BotPlayer);
-                        
+
                         freeNodes.Remove(monster.Node);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Получение доступных схем моснтров на основе указанной редкости монстра.
+        /// </summary>
+        /// <param name="monsterGeneratorOptions"> Настройки генерации монстров. </param>
+        /// <param name="currentRarity"> Целевой уровень редкости монстра. </param>
+        /// <returns> Возвращает набор строк, являющихся идентификаторами схем монстров. </returns>
+        private static IEnumerable<string> GetAvailableSchemeSids(IMonsterGeneratorOptions monsterGeneratorOptions, int currentRarity)
+        {
+            IEnumerable<string> availableSchemeSids;
+            switch (currentRarity)
+            {
+                case 0:
+                    availableSchemeSids = monsterGeneratorOptions.RegularMonsterSids;
+                    break;
+
+                case 1:
+                    availableSchemeSids = monsterGeneratorOptions.RareMonsterSids ??
+                        monsterGeneratorOptions.RegularMonsterSids;
+                    break;
+
+                case 2:
+                    availableSchemeSids = monsterGeneratorOptions.ChampionMonsterSids ??
+                        monsterGeneratorOptions.RareMonsterSids ??
+                        monsterGeneratorOptions.RegularMonsterSids;
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            if (availableSchemeSids == null)
+            {
+                throw new InvalidOperationException("Не удалось выбрать доступные схемы для монстров.");
+            }
+
+            return availableSchemeSids;
+        }
+
+        /// <summary>
+        /// Получение редкости текущего монстра.
+        /// </summary>
+        /// <param name="rarityCounter"> Систояние счётчиков редкости. </param>
+        /// <param name="rarityMaxCounter"> Максимальные значения счётчиков редкости монстров в секторе. </param>
+        /// <returns> Возвращает целочисленное значение, представляющее редкость монстра. </returns>
+        /// <remarks>
+        /// 0 - обычный.
+        /// 1 - редкий.
+        /// 2 - чемпион (уникальный, босс).
+        /// </remarks>
+        private int GetMonsterRarity(int[] rarityCounter, int[] rarityMaxCounter)
+        {
+            var rarity = _generatorRandomSource.RollRarity();
+
+            //Снижать редкость, если лимит текущей редкости исчерпан
+            var currentRarity = rarity;
+            while (currentRarity > 0)
+            {
+                var currentRarityCounter = rarityCounter[currentRarity];
+                var maxRarityCounter = rarityMaxCounter[currentRarity];
+                if (currentRarityCounter >= maxRarityCounter)
+                {
+                    currentRarity--;
+                }
+                else
+                {
+                    rarityCounter[currentRarity]++;
+                    break;
+                }
+            }
+
+            return currentRarity;
         }
 
         private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
