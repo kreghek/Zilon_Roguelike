@@ -13,12 +13,25 @@ namespace Zilon.Core.Benchmark
         [Test]
         public void Move()
         {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<MoveBench>(config);
+        }
+
+        [Test]
+        public void CreateProceduralSector()
+        {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<CreateProceduralSectorBench>(config);
+        }
+
+        private Config CreateBenchConfig() {
             var buildNumber = TestContext.Parameters["buildNumber"];
 
             Console.WriteLine($"buildNumber: {buildNumber}");
 
             var config = new Config(buildNumber);
-            BenchmarkRunner.Run<MoveBench>(config);
+
+            return config;
         }
     }
 }
