@@ -47,7 +47,8 @@ namespace Zilon.Core.Tactics.Spatial
 
         public override void AddEdge(IMapNode node1, IMapNode node2)
         {
-            //throw new NotImplementedException();
+            // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
+            // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
         }
 
         public override void AddNode(IMapNode node)
