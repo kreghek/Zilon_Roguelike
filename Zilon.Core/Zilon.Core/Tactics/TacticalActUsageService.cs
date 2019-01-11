@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
@@ -166,11 +167,9 @@ namespace Zilon.Core.Tactics
             var targetIsDeadLast = targetActor.Person.Survival.IsDead;
 
             var offenceType = tacticalActRoll.TacticalAct.Stats.Offense.Type;
-            var defenceType = HitHelper.GetDefence(offenceType);
-            var currentDefences = targetActor.Person.CombatStats.DefenceStats.Defences
-                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
+            var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
-            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(currentDefences);
+            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
             var factToHitRoll = _actUsageRandomSource.RollToHit();
 
@@ -213,6 +212,21 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        /// <summary>
+        /// Извлечение всех оборон актёра, способных противостоять указанному типу урона.
+        /// Включая DivineDefence, противодействующий всем типам урона.
+        /// </summary>
+        /// <param name="targetActor"> Целевой актёр. </param>
+        /// <param name="offenceType"> Тип урона. </param>
+        /// <returns> Возвращает набор оборон. </returns>
+        private static IEnumerable<PersonDefenceItem> GetCurrentDefences(IActor targetActor, OffenseType offenceType)
+        {
+            var defenceType = HitHelper.GetDefence(offenceType);
+
+            return targetActor.Person.CombatStats.DefenceStats.Defences
+                            .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
         /// <summary>
