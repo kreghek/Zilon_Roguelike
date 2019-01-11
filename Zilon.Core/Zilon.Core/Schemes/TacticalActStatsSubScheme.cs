@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 using Zilon.Core.Common;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -60,5 +61,7 @@ namespace Zilon.Core.Schemes
         /// Во время рукопашного режима можно использовать только рукопашные действия.
         /// </remarks>
         public bool IsMelee { get; }
+
+        public TacticalActTargets Targets => TacticalActTargets.Enemy;
     }
 }

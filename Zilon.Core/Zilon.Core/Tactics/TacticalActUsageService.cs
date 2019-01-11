@@ -26,14 +26,13 @@ namespace Zilon.Core.Tactics
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
-            //TODO реализовать возможность действовать на себя некоторыми скиллами.
-            if (actor == target)
-            {
-                throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
-            }
-
             foreach (var act in usedActs.Primary)
             {
+                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
+                {
+                    throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
+                }
+
                 UseAct(actor, target, act);
             }
 
