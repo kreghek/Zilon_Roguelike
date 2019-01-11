@@ -2,13 +2,7 @@
 using System.Configuration;
 using System.Linq;
 
-using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Columns;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Exporters.Csv;
-using BenchmarkDotNet.Exporters.Json;
-using BenchmarkDotNet.Loggers;
 
 using JetBrains.Annotations;
 
@@ -31,7 +25,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
 {
-    public class TheEasiestBenchmark
+    public class MoveBench
     {
         private ServiceContainer _container;
 
