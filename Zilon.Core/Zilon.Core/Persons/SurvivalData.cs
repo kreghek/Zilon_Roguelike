@@ -68,7 +68,7 @@ namespace Zilon.Core.Persons
             foreach (var stat in Stats)
             {
                 var roll = _randomSource.RollSurvival(stat);
-                var successRoll = GetSuccessRoll(stat);
+                var successRoll = GetSuccessRoll();
 
                 if (roll >= successRoll)
                 {
@@ -210,7 +210,7 @@ namespace Zilon.Core.Persons
         }
 
 
-        private static int GetSuccessRoll(SurvivalStat stat)
+        private static int GetSuccessRoll()
         {
             return 4;
         }

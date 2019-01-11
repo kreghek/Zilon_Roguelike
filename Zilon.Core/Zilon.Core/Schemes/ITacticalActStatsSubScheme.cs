@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Common;
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -13,6 +14,11 @@ namespace Zilon.Core.Schemes
         /// Эффект, который оказывает действие.
         /// </summary>
         TacticalActEffectType Effect { get; }
+
+        /// <summary>
+        /// Доступные цели действия.
+        /// </summary>
+        TacticalActTargets Targets { get; }
 
         /// <summary>
         /// Эффективность действия.

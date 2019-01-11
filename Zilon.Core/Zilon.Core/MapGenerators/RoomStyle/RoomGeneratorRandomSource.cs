@@ -9,7 +9,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
-        private const int MaxProbably = 100;
         private readonly IDice _dice;
 
         public RoomGeneratorRandomSource(IDice dice)

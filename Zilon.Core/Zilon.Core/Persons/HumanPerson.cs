@@ -95,35 +95,7 @@ namespace Zilon.Core.Persons
 
             if (EvolutionData.Perks != null)
             {
-                var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
-                foreach (var archievedPerk in archievedPerks)
-                {
-                    var currentLevel = archievedPerk.CurrentLevel;
-                    var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
-
-                    if (currentLevelScheme.Rules == null)
-                    {
-                        continue;
-                    }
-
-                    for (var i = 0; i <= currentLevel.Sub; i++)
-                    {
-                        foreach (var rule in currentLevelScheme.Rules)
-                        {
-                            var ruleType = rule.Type;
-                            switch (ruleType)
-                            {
-                                case PersonRuleType.Melee:
-                                    AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
-                                    break;
-
-                                case PersonRuleType.Ballistic:
-                                    AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
-                                    break;
-                            }
-                        }
-                    }
-                }
+                CalcPerkBonuses(bonusDict);
             }
 
             if (EvolutionData.Stats != null)
@@ -133,12 +105,7 @@ namespace Zilon.Core.Persons
                     var stat = EvolutionData.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
                     if (stat != null)
                     {
-                        stat.Value += stat.Value * bonusItem.Value;
-
-                        if (stat.Value <= 1)
-                        {
-                            stat.Value = 1;
-                        }
+                        ApplyBonusToStat(bonusItem.Value, stat);
                     }
                 }
 
@@ -149,6 +116,68 @@ namespace Zilon.Core.Persons
             }
 
             RecalculatePersonArmor();
+        }
+
+        /// <summary>
+        /// Применение бонуса к характеристике навыка.
+        /// </summary>
+        /// <param name="bonusValue"> Величина бонуса. </param>
+        /// <param name="stat"> Характеристика навыка. </param>
+        private static void ApplyBonusToStat(float bonusValue, SkillStatItem stat)
+        {
+            stat.Value += stat.Value * bonusValue;
+
+            if (stat.Value <= 1)
+            {
+                stat.Value = 1;
+            }
+        }
+
+        /// <summary>
+        /// Расчёт бонусов, которые дают перки.
+        /// </summary>
+        /// <param name="bonusDict"> Текущее состояние бонусов. </param>
+        private void CalcPerkBonuses(Dictionary<SkillStatType, float> bonusDict)
+        {
+            var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+            foreach (var archievedPerk in archievedPerks)
+            {
+                var currentLevel = archievedPerk.CurrentLevel;
+                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
+
+                if (currentLevelScheme.Rules == null)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i <= currentLevel.Sub; i++)
+                {
+                    foreach (var rule in currentLevelScheme.Rules)
+                    {
+                        CalcRuleBonuses(rule, bonusDict);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Расчёт бонуса, который даёт правило перка.
+        /// </summary>
+        /// <param name="rule"> Правило перка. </param>
+        /// <param name="bonusDict"> Текущее состояние бонусов. </param>
+        private static void CalcRuleBonuses(PerkRuleSubScheme rule, Dictionary<SkillStatType, float> bonusDict)
+        {
+            var ruleType = rule.Type;
+            switch (ruleType)
+            {
+                case PersonRuleType.Melee:
+                    AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    break;
+
+                case PersonRuleType.Ballistic:
+                    AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    break;
+            }
         }
 
         /// <summary>
