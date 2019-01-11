@@ -174,32 +174,18 @@ namespace Zilon.Core.Tactics
 
             if (factToHitRoll >= successToHitRoll)
             {
-                var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
-                var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+                int actEfficient = CalcEfficient(targetActor, tacticalActRoll);
 
-                var actEfficientArmorBlocked = tacticalActRoll.Efficient;
-
-                if (armorRank != null && (actApRank - armorRank) < 10)
+                if (actEfficient <= 0)
                 {
-                    var factArmorSaveRoll = RollArmorSave();
-                    var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
-                    if (factArmorSaveRoll >= successArmorSaveRoll)
-                    {
-                        var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
-                        actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
-                    }
-
-                    targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
+                    return;
                 }
 
-                if (actEfficientArmorBlocked > 0)
-                {
-                    targetActor.TakeDamage(actEfficientArmorBlocked);
+                targetActor.TakeDamage(actEfficient);
 
-                    if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
-                    {
-                        CountTargetActorDefeat(actor, targetActor);
-                    }
+                if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
+                {
+                    CountTargetActorDefeat(actor, targetActor);
                 }
             }
             else
@@ -211,6 +197,35 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        /// <summary>
+        /// Расчитывает эффективность умения с учётом поглощения броней.
+        /// </summary>
+        /// <param name="targetActor"> Целевой актёр. </param>
+        /// <param name="tacticalActRoll"> Результат броска исходной эфективности действия. </param>
+        /// <returns> Возвращает числовое значение эффективности действия. </returns>
+        private int CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
+            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
+            var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+
+            var actEfficientArmorBlocked = tacticalActRoll.Efficient;
+
+            if (armorRank != null && (actApRank - armorRank) < 10)
+            {
+                var factArmorSaveRoll = RollArmorSave();
+                var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
+                if (factArmorSaveRoll >= successArmorSaveRoll)
+                {
+                    var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                    actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
+                }
+
+                targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
+            }
+
+            return actEfficientArmorBlocked;
         }
 
         /// <summary>
