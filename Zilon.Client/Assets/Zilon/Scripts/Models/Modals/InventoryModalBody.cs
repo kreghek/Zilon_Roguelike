@@ -32,6 +32,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
+    public string Caption => "Inventory";
+
     public void Start()
     {
         CreateSlots();

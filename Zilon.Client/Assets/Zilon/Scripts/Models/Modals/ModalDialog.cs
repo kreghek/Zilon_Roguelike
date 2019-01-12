@@ -1,15 +1,28 @@
-﻿using Assets.Zilon.Scripts;
-using System;
+﻿using System;
+
+using Assets.Zilon.Scripts;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ModalDialog : MonoBehaviour
 {
+    public Text CaptionText;
     public GameObject Body;
-    public IModalWindowHandler WindowHandler { get; set; }
+    private IModalWindowHandler _windowHandler;
+
+    public IModalWindowHandler WindowHandler
+    {
+        get => _windowHandler;
+        set
+        {
+            _windowHandler = value;
+            CaptionText.text = _windowHandler.Caption;
+        }
+    }
 
     public event EventHandler AcceptChanges;
-    
+
     public void Close()
     {
         WindowHandler.ApplyChanges();
