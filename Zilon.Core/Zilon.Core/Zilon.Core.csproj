@@ -62,6 +62,7 @@
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="Common\PropMetrics.cs" />
+    <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />

@@ -6,7 +6,8 @@ namespace Zilon.Core.Tactics.Behaviour
     /// <summary>
     /// Исключение, которые выбрасывается при нарушении выполнения задачи актёра.
     /// </summary>
-    public class TaskException : ApplicationException
+    [Serializable]
+    public sealed class TaskException : ApplicationException
     {
         public TaskException()
         {
@@ -20,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
         }
 
-        protected TaskException(SerializationInfo info, StreamingContext context) : base(info, context)
+        private TaskException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
