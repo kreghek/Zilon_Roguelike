@@ -1,21 +1,21 @@
 {
   "Name": {
-    "Ru": "Внетреннее пламя",
-	"En": "Inner flame"
+    "Ru": "Огненный шар",
+    "En":  "Fireball"
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
-      "Count": 1
+      "Dice": 3,
+      "Count": 3
     },
     "Range": {
       "Min": 1,
-      "Max": 1
+      "Max": 5
     },
     "HitCount": 1,
     "Offence": {
-      "Type": "Shadow",
-      "Impact":  "Psy"
+      "Type": "Tactical",
+      "Impact": "Kinetic"
     }
   },
   "Constrains": {
