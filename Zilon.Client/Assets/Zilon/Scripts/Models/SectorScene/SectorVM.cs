@@ -194,33 +194,30 @@ internal class SectorVM : MonoBehaviour
         switch (wellFormedSectorLevel)
         {
             case 1:
-            case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer", "night-stalker" };
                 break;
 
-            case 3:
+            case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "genomass", "gemonass-slave" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "infernal-genomass", "dervish" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer" };
                 break;
 
-            case 4:
+            case 3:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "skeleton-champion", "vampire" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer", "demon-roamer" };
                 break;
 
-            case 5:
-            case 6:
-            case 7:
+            case 4:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "demon-warlock", "hell-rock", "infernal-bard" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "archidemon", "hell-herald", "pit-baron" };
                 break;
 
-            case 8:
+            case 5:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
                 monsterGeneratorOptions.ChampionMonsterSids = new[] { "manticore" };
