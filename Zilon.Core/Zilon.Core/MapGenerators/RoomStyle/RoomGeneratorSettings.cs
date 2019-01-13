@@ -14,8 +14,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         [ExcludeFromCodeCoverage]
         public RoomGeneratorSettings()
         {
-            RoomCount = 20;
-            RoomCellSize = 20;
+            RoomCount = 10;
+            RoomCellSize = 10;
             MaxNeighbors = 1;
         }
     }
