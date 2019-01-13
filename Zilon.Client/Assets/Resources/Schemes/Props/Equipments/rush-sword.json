@@ -1,4 +1,15 @@
 {
+  "Tags": [ "weapon" ],
+  "Equip": {
+    "ActSids": [
+      "slash"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Меч стремительности",
+	"En": "Rush sword"
+  },
   "Craft": {
     "PrototypeSources": [
       {
@@ -47,8 +58,5 @@
       }
     ],
     "ProductOutput": 1
-  },
-  "Name": {
-    "En": "Rush Sword"
   }
 }

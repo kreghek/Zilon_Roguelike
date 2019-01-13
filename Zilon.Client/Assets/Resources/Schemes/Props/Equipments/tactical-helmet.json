@@ -1,9 +1,20 @@
 {
+ "Tags": [ "armor" ],
   "Equip": {
-    "ActSids": [
-      "chop"
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
     ]
   },
+  "Name": {
+    "En": "Tactical helmet",
+    "Ru": "Тактический шлем"
+  }
+  
   "Craft": {
     "PrototypeSources": [
       {
@@ -52,8 +63,5 @@
       }
     ],
     "ProductOutput": 1
-  },
-  "Name": {
-    "En": "Tactical helmet."
   }
 }

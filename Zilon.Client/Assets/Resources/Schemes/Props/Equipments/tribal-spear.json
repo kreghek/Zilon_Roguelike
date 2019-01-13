@@ -2,12 +2,12 @@
   "Tags": [ "weapon" ],
   "Equip": {
     "ActSids": [
-      "slash"
+      "pierce"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Короткий меч",
-	"En": "Short sword"
+    "Ru": "Племенное копьё",
+	"En": "Tribal spear"
   }
 }

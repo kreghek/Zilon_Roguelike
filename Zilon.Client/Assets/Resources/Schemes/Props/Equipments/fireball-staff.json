@@ -2,12 +2,12 @@
   "Tags": [ "weapon", "ranged" ],
   "Equip": {
     "ActSids": [
-      "shot"
+      "fireball"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Пистолет",
-	"En": "Pistol"
+    "En": "Fireball Staff",
+    "Ru": "Огненный посох"
   }
 }

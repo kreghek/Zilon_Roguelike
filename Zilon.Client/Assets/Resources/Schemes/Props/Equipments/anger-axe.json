@@ -2,12 +2,12 @@
   "Tags": [ "weapon" ],
   "Equip": {
     "ActSids": [
-      "slash"
+      "chop"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Короткий меч",
-	"En": "Short sword"
+    "Ru": "Топор гнева",
+	"En": "Anger axe"
   }
 }
