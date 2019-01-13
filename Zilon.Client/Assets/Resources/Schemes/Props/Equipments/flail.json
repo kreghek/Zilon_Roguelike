@@ -2,12 +2,12 @@
   "Tags": [ "weapon" ],
   "Equip": {
     "ActSids": [
-      "chop"
+      "blow"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "Боевой топор",
-	"En": "Battle axe"
+    "Ru": "Цеп",
+	"En": "Flail"
   }
 }
