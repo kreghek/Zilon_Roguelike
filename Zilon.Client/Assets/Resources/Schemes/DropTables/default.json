@@ -8,17 +8,28 @@
       "Weight": 10
     },
     {
-      "SchemeSid": "gold-armor",
+      "SchemeSid": "steel-armor",
       "MinPower": 1,
       "MaxPower": 1,
       "Weight": 10
     },
-
+    {
+      "SchemeSid": "steel-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "gold-armor",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
     {
       "SchemeSid": "gold-helmet",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
     {
       "SchemeSid": "pistol",
@@ -32,6 +43,128 @@
       "MaxPower": 1,
       "Weight": 10
     },
+    {
+      "SchemeSid": "anger-axe",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "suprime-anger-axe",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "bow",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "composite-bow",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "leather-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "closed-leather-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "elder-hat",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "wizard-hat",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "fireball-staff",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "shadow-staff",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "flail",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "mace",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "knobstick",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "leather-armor",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "master-robe",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "quilted-coat",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "scholar-robe",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "tribal-spear",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "rush-sword",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "tactical-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
+	
+	
 
     {
       "SchemeSid": "bullet-45",
@@ -41,6 +174,32 @@
     },
     {
       "SchemeSid": "bullet-45",
+      "MinCount": 6,
+      "MaxCount": 10,
+      "Weight": 2
+    },
+	
+	{
+      "SchemeSid": "arrow",
+      "MinCount": 3,
+      "MaxCount": 5,
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "arrow",
+      "MinCount": 6,
+      "MaxCount": 10,
+      "Weight": 2
+    },
+	
+	{
+      "SchemeSid": "mana",
+      "MinCount": 3,
+      "MaxCount": 5,
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "mana",
       "MinCount": 6,
       "MaxCount": 10,
       "Weight": 2
