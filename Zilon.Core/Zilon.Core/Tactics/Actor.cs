@@ -83,7 +83,7 @@ namespace Zilon.Core.Tactics
                         break;
 
                     case ConsumeCommonRuleType.Health:
-                        Person.Survival.RestoreStat(SurvivalStatType.Health, 4);
+                        RestoreStat(SurvivalStatType.Health, rule.Level);
                         break;
                 }
             }
@@ -150,6 +150,34 @@ namespace Zilon.Core.Tactics
 
         private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
         {
+            switch (statType)
+            {
+                case SurvivalStatType.Satiety:
+                    RestoreSatiety(level);
+                    break;
+
+                case SurvivalStatType.Water:
+                    RestoreWater(level);
+                    break;
+
+                case SurvivalStatType.Health:
+                    RestoreHp(level);
+                    break;
+            }
+        }
+
+        private void RestoreSatiety(PersonRuleLevel level)
+        {
+            RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
+        }
+
+        private void RestoreWater(PersonRuleLevel level)
+        {
+            RestoreSurvivalStatInner(SurvivalStatType.Water, level);
+        }
+
+        private void RestoreSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
+        {
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
@@ -165,6 +193,30 @@ namespace Zilon.Core.Tactics
                 case PersonRuleLevel.Grand:
                     Person.Survival.RestoreStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue + 1);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void RestoreHp(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                        PropMetrics.HpLesserRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                        PropMetrics.HpNormalRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                        PropMetrics.HpGrandRestoreValue);
                     break;
 
                 default:

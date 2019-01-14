@@ -9,6 +9,10 @@
       {
         "Type": "Thrist",
         "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
       }
     ]
   }

@@ -7,7 +7,7 @@
     "CommonRules": [
       {
         "Type": "Health",
-        "Level": "Lesser"
+        "Level": "Normal"
       }
     ]
   }
