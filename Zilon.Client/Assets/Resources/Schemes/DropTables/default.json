@@ -8,17 +8,28 @@
       "Weight": 10
     },
     {
-      "SchemeSid": "gold-armor",
+      "SchemeSid": "steel-armor",
       "MinPower": 1,
       "MaxPower": 1,
       "Weight": 10
     },
-
+    {
+      "SchemeSid": "steel-helmet",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "gold-armor",
+      "MinPower": 1,
+      "MaxPower": 1,
+      "Weight": 5
+    },
     {
       "SchemeSid": "gold-helmet",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
     {
       "SchemeSid": "pistol",
@@ -42,7 +53,7 @@
       "SchemeSid": "suprime-anger-axe",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 3
     },
 	{
       "SchemeSid": "bow",
@@ -54,7 +65,7 @@
       "SchemeSid": "composite-bow",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "leather-helmet",
@@ -66,13 +77,13 @@
       "SchemeSid": "closed-leather-helmet",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "elder-hat",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 3
     },
 	{
       "SchemeSid": "wizard-hat",
@@ -84,19 +95,19 @@
       "SchemeSid": "fireball-staff",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "shadow-staff",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "flail",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 3
     },
 	{
       "SchemeSid": "mace",
@@ -108,7 +119,7 @@
       "SchemeSid": "knobstick",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "leather-armor",
@@ -117,22 +128,16 @@
       "Weight": 10
     },
 	{
-      "SchemeSid": "mace",
-      "MinPower": 1,
-      "MaxPower": 1,
-      "Weight": 10
-    },
-	{
       "SchemeSid": "master-robe",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "quilted-coat",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "scholar-robe",
@@ -150,13 +155,13 @@
       "SchemeSid": "rush-sword",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "tactical-helmet",
       "MinPower": 1,
       "MaxPower": 1,
-      "Weight": 10
+      "Weight": 5
     },
 	
 	
