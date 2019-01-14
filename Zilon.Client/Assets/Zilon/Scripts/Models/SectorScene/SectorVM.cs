@@ -417,29 +417,6 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-
-            AddEquipmentToActor(inventory, "anger-axe");
-            AddEquipmentToActor(inventory, "bow");
-            AddEquipmentToActor(inventory, "composite-bow");
-            AddEquipmentToActor(inventory, "leather-helmet");
-            AddEquipmentToActor(inventory, "closed-leather-helmet");
-            AddEquipmentToActor(inventory, "elder-hat");
-            AddEquipmentToActor(inventory, "fireball-staff");
-            AddEquipmentToActor(inventory, "flail");
-            AddEquipmentToActor(inventory, "knobstick");
-            AddEquipmentToActor(inventory, "leather-armor");
-            AddEquipmentToActor(inventory, "mace");
-            AddEquipmentToActor(inventory, "master-robe");
-            AddEquipmentToActor(inventory, "quilted-coat");
-            AddEquipmentToActor(inventory, "scholar-robe");
-            AddEquipmentToActor(inventory, "shadow-staff");
-            AddEquipmentToActor(inventory, "suprime-anger-axe");
-            AddEquipmentToActor(inventory, "tribal-spear");
-            AddEquipmentToActor(inventory, "wizard-hat");
-            AddEquipmentToActor(inventory, "rush-sword");
-            AddEquipmentToActor(inventory, "tactical-helmet");
-            AddResourceToActor(inventory, "arrow", 10);
-            AddResourceToActor(inventory, "mana", 10);
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
