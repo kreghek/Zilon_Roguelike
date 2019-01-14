@@ -66,6 +66,9 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void Init(IActor actor)
     {
+        // изначально скрываем кнопку использования
+        UseButton.SetActive(false);
+
         _actor = actor;
         var inventory = _actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
@@ -127,7 +130,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
 
-        var propTitle = currentItemVm.Prop.Scheme.Name.Ru ?? currentItemVm.Prop.Scheme.Name.En;
+        var propTitle = currentItemVm.Prop.Scheme.Name.En ?? currentItemVm.Prop.Scheme.Name.Ru;
         DetailText.text = propTitle;
         // --- этот фрагмент - не дубликат
 
