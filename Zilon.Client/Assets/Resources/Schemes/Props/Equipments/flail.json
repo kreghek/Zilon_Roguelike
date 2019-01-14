@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon" ],
+  "Equip": {
+    "ActSids": [
+      "blow"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Цеп",
+	"En": "Flail"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged" ],
+  "Equip": {
+    "ActSids": [
+      "bow-shot"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лук",
+	"En": "Bow"
+  }
+}
