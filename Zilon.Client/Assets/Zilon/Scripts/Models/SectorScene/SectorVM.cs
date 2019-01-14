@@ -414,6 +414,11 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
+
+            AddResourceToActor(inventory, "mana", 10);
+            AddResourceToActor(inventory, "bullet-45", 10);
+            AddResourceToActor(inventory, "packed-food", 10);
+            AddEquipmentToActor(inventory, "rush-sword");
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
@@ -449,16 +454,30 @@ internal class SectorVM : MonoBehaviour
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
     {
-        var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
-        var equipment = _propFactory.CreateEquipment(equipmentScheme);
-        inventory.Add(equipment);
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var equipment = _propFactory.CreateEquipment(equipmentScheme);
+            inventory.Add(equipment);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
+        }
     }
 
     private void AddResourceToActor(Inventory inventory, string resourceSid, int count)
     {
-        var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
-        var resource = _propFactory.CreateResource(resourceScheme, count);
-        inventory.Add(resource);
+        try
+        {
+            var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+            var resource = _propFactory.CreateResource(resourceScheme, count);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {resourceSid}");
+        }
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
