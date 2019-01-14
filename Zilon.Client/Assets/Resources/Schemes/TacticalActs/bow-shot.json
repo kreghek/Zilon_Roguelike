@@ -1,7 +1,7 @@
 {
   "Name": {
-    "Ru": "Внетреннее пламя",
-	"En": "Inner flame"
+    "Ru": "Выстрел",
+	"En": "Shot"
   },
   "Stats": {
     "Efficient": {
@@ -10,16 +10,16 @@
     },
     "Range": {
       "Min": 1,
-      "Max": 1
+      "Max": 5
     },
     "HitCount": 1,
     "Offence": {
-      "Type": "Shadow",
-      "Impact":  "Psy"
+      "Type": "Tactical",
+      "Impact":  "Kinetic"
     }
   },
   "Constrains": {
-    "PropResourceType": "mana",
+    "PropResourceType": "arrow",
     "PropResourceCount": 1
   }
 }

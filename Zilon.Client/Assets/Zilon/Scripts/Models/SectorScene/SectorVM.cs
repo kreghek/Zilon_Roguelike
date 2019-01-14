@@ -438,6 +438,8 @@ internal class SectorVM : MonoBehaviour
             AddEquipmentToActor(inventory, "wizard-hat");
             AddEquipmentToActor(inventory, "rush-sword");
             AddEquipmentToActor(inventory, "tactical-helmet");
+            AddResourceToActor(inventory, "arrow", 10);
+            AddResourceToActor(inventory, "mana", 10);
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);

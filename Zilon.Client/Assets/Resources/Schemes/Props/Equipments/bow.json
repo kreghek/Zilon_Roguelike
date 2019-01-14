@@ -2,7 +2,7 @@
   "Tags": [ "weapon", "ranged" ],
   "Equip": {
     "ActSids": [
-      "shot"
+      "bow-shot"
     ],
     "SlotTypes": [ "Hand" ]
   },

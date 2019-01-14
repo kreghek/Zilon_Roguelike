@@ -19,7 +19,7 @@
     }
   },
   "Constrains": {
-    "PropResourceType": "mana-crystal",
+    "PropResourceType": "mana",
     "PropResourceCount": 1
   }
 }
