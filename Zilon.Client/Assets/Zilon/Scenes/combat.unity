@@ -2362,6 +2362,8 @@ MonoBehaviour:
     type: 3}
   InstructionModalPrefab: {fileID: 77522310, guid: b999b3ffad113624c9528851766fedff,
     type: 3}
+  WinModalPrefab: {fileID: 6260784154107413228, guid: a573016feebf12d4e85666f8f416f422,
+    type: 3}
 --- !u!114 &1808564501
 MonoBehaviour:
   m_ObjectHideFlags: 0

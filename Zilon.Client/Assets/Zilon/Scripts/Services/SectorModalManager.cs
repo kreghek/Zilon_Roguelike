@@ -23,6 +23,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public InstructionModalBody InstructionModalPrefab;
 
+        public WinModalBody WinModalPrefab;
+
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
@@ -55,7 +57,12 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowInstructionModal()
         {
-            var modalBody = CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+            CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+        }
+
+        public void ShowWinModal()
+        {
+            CreateWindowHandler<WinModalBody>(WinModalPrefab.gameObject);
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
