@@ -416,7 +416,7 @@ internal class SectorVM : MonoBehaviour
             _personManager.SectorName = GetRandomName();
 
 
-            var classRoll = UnityEngine.Random.Range(1, 5);
+            var classRoll = UnityEngine.Random.Range(1, 6);
             switch (classRoll)
             {
                 case 1:
