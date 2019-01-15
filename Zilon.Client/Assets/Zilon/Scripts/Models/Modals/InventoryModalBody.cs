@@ -49,6 +49,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
             slotViewModel.SlotIndex = i;
+            slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += SlotOnClick;
         }
     }
