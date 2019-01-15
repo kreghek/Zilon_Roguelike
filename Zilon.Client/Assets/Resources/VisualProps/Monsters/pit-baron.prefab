@@ -10,23 +10,33 @@ PrefabInstance:
     - target: {fileID: 3341399921365361410, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_Name
-      value: infernal-genomass
+      value: pit-baron
       objectReference: {fileID: 0}
     - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_LocalScale.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.099
+      objectReference: {fileID: 0}
+    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.016
+      objectReference: {fileID: 0}
     - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 50e35e809110837439d57904fedc2121,
+      objectReference: {fileID: 21300664, guid: 843b30543feafba4f94eaa8042bbd9c3,
         type: 3}
     - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
@@ -42,25 +52,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.3537736
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.3537736
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481664540224024}
-      propertyPath: m_Name
-      value: genomass
       objectReference: {fileID: 0}
     - target: {fileID: 1481664540224024}
       propertyPath: m_Name
@@ -113,23 +104,6 @@ PrefabInstance:
     - target: {fileID: 4316621229199028}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 50e35e809110837439d57904fedc2121,
-        type: 3}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_Size.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_Size.y
-      value: 0.3359375
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212029691314796988}
       propertyPath: m_Sprite
