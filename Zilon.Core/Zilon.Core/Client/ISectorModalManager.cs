@@ -11,5 +11,7 @@ namespace Zilon.Core.Client
         void ShowPerksModal(IActor actor);
 
         void ShowInstructionModal();
+
+        void ShowWinModal();
     }
 }

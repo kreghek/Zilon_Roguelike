@@ -374,7 +374,15 @@ internal class SectorVM : MonoBehaviour
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
         _personManager.SectorLevel++;
-        SceneManager.LoadScene("combat");
+
+        if (_personManager.SectorLevel > 4)
+        {
+            _sectorModalManager.ShowWinModal();
+        }
+        else
+        {
+            SceneManager.LoadScene("combat");
+        }
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
