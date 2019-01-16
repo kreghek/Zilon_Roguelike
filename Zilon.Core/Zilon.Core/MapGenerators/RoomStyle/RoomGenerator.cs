@@ -36,7 +36,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
-            var usedHash = new HashSet<int>();
 
             var roomMatrixPosList = new List<OffsetCoords>(roomGridSize * roomGridSize);
             for (var x = 0; x < roomGridSize; x++)
