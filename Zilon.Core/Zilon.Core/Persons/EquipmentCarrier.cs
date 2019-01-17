@@ -19,7 +19,7 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(slots));
             }
 
-            if (slots.Count() == 0)
+            if (!slots.Any())
             {
                 throw new ArgumentException("Коллекция слотов не может быть пустой.");
             }
@@ -89,7 +89,7 @@ namespace Zilon.Core.Persons
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
 
-        public IEnumerator<Equipment> GetEnumerator() => Equipments.Cast<Equipment>().GetEnumerator();
+        public IEnumerator<Equipment> GetEnumerator() => Equipments.AsEnumerable().GetEnumerator();
 
 
         IEnumerator IEnumerable.GetEnumerator() => Equipments.GetEnumerator();

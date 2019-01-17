@@ -212,6 +212,7 @@ namespace Zilon.Core.Persons
 
         private static int GetSuccessRoll()
         {
+            // В будущем этот порог будет расчитываться, исходя из характеристик, перков и экипировки персонажа.
             return 4;
         }
     }

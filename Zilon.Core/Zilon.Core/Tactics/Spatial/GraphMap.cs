@@ -63,7 +63,6 @@ namespace Zilon.Core.Tactics.Spatial
                                select edge;
             var currentEdgeArray = currentEdges.ToArray();
 
-            var actualNeighbors = new List<IMapNode>();
             foreach (var testedNeighbor in neighbors)
             {
                 var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
