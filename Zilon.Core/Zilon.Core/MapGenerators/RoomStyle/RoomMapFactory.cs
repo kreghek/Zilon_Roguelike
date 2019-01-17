@@ -36,7 +36,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             // разбиваем комнаты на группы по назначению.
             var startRoom = rooms.First();
             var exitRoom = rooms.Last();
-            var mainRooms = rooms.Skip(1).Take(rooms.Count - 2).ToArray();
 
             // Указание регионов карты
             var regionId = 1;

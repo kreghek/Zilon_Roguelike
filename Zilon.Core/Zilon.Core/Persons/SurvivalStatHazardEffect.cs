@@ -58,6 +58,7 @@ namespace Zilon.Core.Persons
 
         private int GetSuccessHazardDamageRoll()
         {
+            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
             return 4;
         }
 

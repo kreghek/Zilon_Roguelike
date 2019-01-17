@@ -19,7 +19,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
@@ -33,7 +32,6 @@ namespace Zilon.Core.MapGenerators
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _botPlayer = botPlayer;
             _schemeService = schemeService;
             _propFactory = propFactory;
             _dropResolver = dropResolver;
