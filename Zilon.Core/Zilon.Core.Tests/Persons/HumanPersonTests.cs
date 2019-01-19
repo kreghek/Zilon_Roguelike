@@ -111,7 +111,7 @@ namespace Zilon.Core.Tests.Persons
                         Rules = new []{
                             new PerkRuleSubScheme{
                                 Type = PersonRuleType.Ballistic,
-                                Level = PersonRuleLevel.Normal
+                                Level = PersonRuleLevel.Lesser
                             }
                         }
                     }

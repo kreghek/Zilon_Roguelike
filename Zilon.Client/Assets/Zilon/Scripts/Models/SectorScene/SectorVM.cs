@@ -369,6 +369,11 @@ internal class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
+        if (!(e.Result is SuccessOpenContainerResult))
+        {
+            Debug.Log($"Не удалось открыть контейнер {e.Container}.");
+        }
+
         _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 

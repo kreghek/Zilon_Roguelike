@@ -24,8 +24,6 @@ namespace Zilon.Core.Persons
 
         public string Name { get; }
 
-        public int Hp { get; }
-
         public IEquipmentCarrier EquipmentCarrier { get; }
 
         public ITacticalActCarrier TacticalActCarrier { get; }
@@ -54,7 +52,6 @@ namespace Zilon.Core.Persons
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Name = scheme.Sid;
-            Hp = scheme.Hp;
 
             Effects = new EffectCollection();
             Effects.Added += Effects_CollectionChanged;
@@ -167,16 +164,21 @@ namespace Zilon.Core.Persons
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private static void CalcRuleBonuses(PerkRuleSubScheme rule, Dictionary<SkillStatType, float> bonusDict)
         {
-            var ruleType = rule.Type;
-            switch (ruleType)
+            switch (rule.Type)
             {
                 case PersonRuleType.Melee:
-                    AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    AddStatToDict(bonusDict, SkillStatType.Melee, rule.Level, PersonRuleDirection.Positive);
                     break;
 
                 case PersonRuleType.Ballistic:
-                    AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
+                
+                case PersonRuleType.Undefined:
+                    throw new ArgumentOutOfRangeException();
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
