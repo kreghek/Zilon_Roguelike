@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -11,13 +10,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Тип правила.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public PersonRuleType Type { get; set; }
 
         /// <summary>
         /// Степень влияния правила.
         /// </summary>
-        [ExcludeFromCodeCoverage]
         public PersonRuleLevel Level { get; set; }
     }
 }

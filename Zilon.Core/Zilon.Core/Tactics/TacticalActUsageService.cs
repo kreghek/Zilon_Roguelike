@@ -212,8 +212,9 @@ namespace Zilon.Core.Tactics
             var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
 
             var actEfficientArmorBlocked = tacticalActRoll.Efficient;
+            var rankDiff = actApRank - armorRank;
 
-            if (armorRank != null && (actApRank - armorRank) < 10)
+            if (armorRank != null && rankDiff < 10)
             {
                 var factArmorSaveRoll = RollArmorSave();
                 var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);

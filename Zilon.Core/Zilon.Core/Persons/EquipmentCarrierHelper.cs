@@ -71,7 +71,7 @@ namespace Zilon.Core.Persons
             return true;
         }
 
-        public static bool CheckSheildCompability(IEquipmentCarrier equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
+        public static bool CheckShieldCompability(IEquipmentCarrier equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
         {
             var equipmentTags = equipment.Scheme.Tags ?? new string[0];
 
@@ -89,9 +89,8 @@ namespace Zilon.Core.Persons
                                      where currentEqupmentTags.Any(x => x == PropTags.Equipment.Shield)
                                      select currentEquipment;
 
-                var hasSheidls = currentSheilds.Any();
-
-                if (hasSheidls)
+                var hasShields = currentSheilds.Any();
+                if (hasShields)
                 {
                     return false;
                 }

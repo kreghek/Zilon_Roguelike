@@ -41,7 +41,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var regionId = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(regionId, room.Nodes.ToArray());
+                var region = new MapRegion(regionId, room.Nodes.Cast<IMapNode>().ToArray());
                 regionId++;
                 map.Regions.Add(region);
 

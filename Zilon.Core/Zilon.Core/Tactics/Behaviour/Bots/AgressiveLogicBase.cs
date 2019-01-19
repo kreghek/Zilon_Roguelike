@@ -140,23 +140,21 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
         {
-            var actorNode = (HexNode)Actor.Node;
-            var targetNode = (HexNode)targetIntruder.Node;
-
-            if (Actor.Person.TacticalActCarrier != null)
-            {
-                var actCarrier = Actor.Person.TacticalActCarrier;
-                var act = actCarrier.Acts.First();
-
-                var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
-                var targetIsOnLine = MapHelper.CheckNodeAvailability(Map, actorNode, targetNode);
-
-                return isInDistance && targetIsOnLine;
-            }
-            else
+            if (Actor.Person.TacticalActCarrier == null)
             {
                 throw new NotSupportedException();
             }
+            
+            var actorNode = (HexNode)Actor.Node;
+            var targetNode = (HexNode)targetIntruder.Node;
+
+            var actCarrier = Actor.Person.TacticalActCarrier;
+            var act = actCarrier.Acts.First();
+
+            var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(Map, actorNode, targetNode);
+
+            return isInDistance && targetIsOnLine;
         }
 
         private IActorTask HandleBypassMode()

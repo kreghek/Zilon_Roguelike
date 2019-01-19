@@ -15,11 +15,13 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Цель действия.
         /// </summary>
+        [PublicAPI]
         public IAttackTarget Target { get; }
 
         /// <summary>
         /// Совершённое над целью действие.
         /// </summary>
+        [PublicAPI]
         public ITacticalAct TacticalAct { get; }
 
         [ExcludeFromCodeCoverage]

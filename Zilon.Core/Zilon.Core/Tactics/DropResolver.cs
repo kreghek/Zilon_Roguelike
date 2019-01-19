@@ -96,8 +96,6 @@ namespace Zilon.Core.Tactics
             switch (propClass)
             {
                 case PropClass.Equipment:
-                    var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower);
-
                     var equipment = _propFactory.CreateEquipment(scheme);
                     return equipment;
 
@@ -119,10 +117,14 @@ namespace Zilon.Core.Tactics
         private static PropClass GetPropClass(IPropScheme scheme)
         {
             if (scheme.Equip != null)
+            {
                 return PropClass.Equipment;
+            }
 
             if (scheme.Sid == "conceptual-scheme")
+            {
                 return PropClass.Concept;
+            }
 
             return PropClass.Resource;
         }

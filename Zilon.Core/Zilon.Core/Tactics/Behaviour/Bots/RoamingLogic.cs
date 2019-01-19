@@ -28,11 +28,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             var currentActorNode = (HexNode)Actor.Node;
             var currentActorCoords = currentActorNode.CubeCoords;
-            var avaialbleNodes = Map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
+            var availableNodes = Map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
 
+            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
             for (var i = 0; i < 3; i++)
             {
-                var targetNode = DecisionSource.SelectTargetRoamingNode(avaialbleNodes);
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
 
                 if (Map.IsPositionAvailableFor(targetNode, Actor))
                 {

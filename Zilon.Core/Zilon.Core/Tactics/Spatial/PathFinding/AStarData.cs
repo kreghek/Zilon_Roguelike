@@ -16,13 +16,8 @@
         public int MovementCost { get; set; }
 
         /// <summary>
-        /// Остаточная стоимость.
-        /// </summary>
-        public int EstimateCost { get; set; }
-
-        /// <summary>
         /// Суммарная стоимость.
         /// </summary>
-        public int TotalCost { get; set; }
+        public static int TotalCost => 0;
     }
 }

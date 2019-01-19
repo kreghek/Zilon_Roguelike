@@ -105,8 +105,9 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Ищем предмет в уже экипированных.
         /// </summary>
-        /// <param name="equipmentCarrier"></param>
-        /// <returns></returns>
+        /// <param name="equipment"> Целевой предмет. </param>
+        /// <param name="equipmentCarrier"> Объект для хранения экипировки. </param>
+        /// <returns> Возвращает индекс слота, в котором находится указанный предмет. Или null, если предмет не найден. </returns>
         private int? FindPropInEquiped(Equipment equipment, IEquipmentCarrier equipmentCarrier)
         {
             for (var i = 0; i < equipmentCarrier.Count(); i++)
