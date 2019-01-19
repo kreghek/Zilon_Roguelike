@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using JetBrains.Annotations;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема персонажа.
@@ -13,11 +15,13 @@
         /// <summary>
         /// Действие персонажа по умолчанию.
         /// </summary>
+        [UsedImplicitly]
         public string DefaultAct { get; set; }
 
         /// <summary>
         /// Слоты экипировки.
         /// </summary>
+        [UsedImplicitly]
         public PersonSlotSubScheme[] Slots { get; set; }
     }
 }

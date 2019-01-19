@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
@@ -162,20 +161,12 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
                 childData.Parent = CurrentNode;
                 childData.MovementCost = currentData.MovementCost + 1;
-                childData.EstimateCost = CalcEstimateCost(child);
 
                 _openList.Add(child, childData);
             }
 
             // This step did not find the goal so return status of still searching.
             return State.Searching;
-        }
-
-        private int CalcEstimateCost(IMapNode node)
-        {
-            var hexGoal = (HexNode)_goal;
-            var hexNode = (HexNode)node;
-            return hexGoal.CubeCoords.DistanceTo(hexNode.CubeCoords);
         }
 
         private AStarData GetData(IMapNode node)

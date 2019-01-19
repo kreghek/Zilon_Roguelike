@@ -25,16 +25,19 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Оборона, которая была использована.
         /// </summary>
+        [PublicAPI]
         public PersonDefenceItem PrefferedDefenceItem { get; }
 
         /// <summary>
         /// Бросок, который был необходим для того, чтобы пробить оборону.
         /// </summary>
+        [PublicAPI]
         public int SuccessToHitRoll { get; }
 
         /// <summary>
         /// Фактический бросок, который был выполнен для пробития обороны.
         /// </summary>
+        [PublicAPI]
         public int FactToHitRoll { get; }
     }
 }

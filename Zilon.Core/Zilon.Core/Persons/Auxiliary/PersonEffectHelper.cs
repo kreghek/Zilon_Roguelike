@@ -19,6 +19,7 @@ namespace Zilon.Core.Persons.Auxiliary
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
         /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик. </param>
+        /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalEffect(
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,

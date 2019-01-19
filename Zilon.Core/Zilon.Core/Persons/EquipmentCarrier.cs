@@ -19,12 +19,13 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(slots));
             }
 
-            if (!slots.Any())
+            var slotArray = slots as PersonSlotSubScheme[] ?? slots.ToArray();
+            if (!slotArray.Any())
             {
                 throw new ArgumentException("Коллекция слотов не может быть пустой.");
             }
 
-            Slots = slots.ToArray();
+            Slots = slotArray;
 
             Equipments = new Equipment[Slots.Length];
         }

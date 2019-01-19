@@ -58,7 +58,7 @@ namespace Zilon.Core.Tactics
         {
             var openResult = method.TryOpen(container);
 
-            DoOpenContainer(openResult);
+            DoOpenContainer(container, openResult);
         }
 
         public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
@@ -123,9 +123,9 @@ namespace Zilon.Core.Tactics
         }
 
         [ExcludeFromCodeCoverage]
-        private void DoOpenContainer(IOpenContainerResult openResult)
+        private void DoOpenContainer(IPropContainer container, IOpenContainerResult openResult)
         {
-            var e = new OpenContainerEventArgs(openResult);
+            var e = new OpenContainerEventArgs(container, openResult);
             OpenedContainer?.Invoke(this, e);
         }
 
