@@ -7,10 +7,7 @@
         public RoomMatrix(int size)
         {
             _rooms = new Room[size, size];
-            Size = size;
         }
-
-        public int Size { get; }
 
         public void SetRoom(int x, int y, Room room)
         {
