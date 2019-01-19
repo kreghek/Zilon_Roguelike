@@ -9,7 +9,6 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
 {
-    //TODO Не учитывает момента, когда записи с 0 весом выпадают всегда.
     public class DropResolver : IDropResolver
     {
         private readonly IDropResolverRandomSource _randomSource;
@@ -32,7 +31,6 @@ namespace Zilon.Core.Tactics
 
         private IProp[] GenerateContent(IDropTableScheme[] dropTables)
         {
-            //TODO Модификаторы нужно будет получать из игрока, актёра, который открыл сундук и актёров, которые на это могу повлиять.
             var modificators = new IDropTableModificatorScheme[0];
             var rolledRecords = new List<DropTableRecordSubScheme>();
 
@@ -42,9 +40,6 @@ namespace Zilon.Core.Tactics
                 var recMods = GetModRecords(records, modificators);
 
                 var totalWeight = recMods.Sum(x => x.ModifiedWeight);
-
-                // Записи с нулевым весом всегда добавляются.
-                rolledRecords.AddRange(records.Where(x => x.Weight == 0));
 
                 for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
                 {

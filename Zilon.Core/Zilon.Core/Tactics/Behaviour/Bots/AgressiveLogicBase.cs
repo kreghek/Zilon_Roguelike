@@ -10,7 +10,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public abstract class AgressiveLogicBase : IBotLogic
     {
         private const int PursuitCounter = 3;
-        //TODO Дальность видимости вынести в схему персонажа и, затем, в пересчитанном состоянии в актёра.
         private const int VisibilityRange = 5;
 
         protected readonly IActor Actor;
@@ -120,7 +119,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
                 if (_pursuitCounter > 0 && _moveTask != null)
                 {
                     _pursuitCounter--;
