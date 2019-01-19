@@ -7,13 +7,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
-    //TODO Учесть, что в один ход другой актёр может занять целевой узел.
-    //TODO Учесть, что при малом расстоянии до цели нужно строить путь каждый ход
-    //Иначе не получится догнать нарушителя.
     public abstract class AgressiveLogicBase : IBotLogic
     {
         private const int PursuitCounter = 3;
-        //TODO Дальность видимости вынести в схему персонажа и, затем, в пересчитанном состоянии в актёра.
         private const int VisibilityRange = 5;
 
         protected readonly IActor Actor;
@@ -123,7 +119,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
                 if (_pursuitCounter > 0 && _moveTask != null)
                 {
                     _pursuitCounter--;

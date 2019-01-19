@@ -58,9 +58,6 @@ namespace Zilon.Core.Persons
             {
                 stat.Value = value;
             }
-
-            //TODO Сделать расчёт и установку эффекта угроз выживания
-            // После убрать явную установку эффекта в спецификации Survival_ConsumeProviantToDropSurvivalHazard
         }
 
         public void Update()

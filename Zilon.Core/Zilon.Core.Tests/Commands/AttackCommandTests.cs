@@ -17,8 +17,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
-    //TODO Добавить тест, который проверяет, что нельзя атаковать сквозь стены.
-    public class AttackCommandTests: CommandTestBase
+    public class AttackCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно атаковать, если не мешают стены.

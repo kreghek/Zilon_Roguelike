@@ -124,7 +124,6 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Следующая итерация сектора")]
         public void WhenСледующаяИтерацияСектора()
         {
-            //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
             var gameLoop = Context.Container.GetInstance<IGameLoop>();
             gameLoop.Update();
         }
@@ -133,7 +132,6 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Следующая итерация сектора (\d+) раз")]
         public void WhenСледующаяИтерацияСектора(int count)
         {
-            //TODO Заменить на выполнение специальной команды смены итерации (её ещё нет)
             var gameLoop = Context.Container.GetInstance<IGameLoop>();
 
             for (var i = 0; i < count; i++)

@@ -23,8 +23,6 @@ namespace Zilon.Core.Commands
         
         public override void Execute()
         {
-            //TODO Можно убрать этот параметр, т.к. менеджер модалов сам может вычистилть текущего актёра.
-            // Бонус - внутри модала на инвентарь можно менять активного актёра.
             ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
         }
 

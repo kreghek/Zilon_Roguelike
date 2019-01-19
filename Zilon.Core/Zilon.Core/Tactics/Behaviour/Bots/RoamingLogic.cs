@@ -28,7 +28,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         {
             var currentActorNode = (HexNode)Actor.Node;
             var currentActorCoords = currentActorNode.CubeCoords;
-            //TODO Сделать привязку монстра к текущей комнате.
             var avaialbleNodes = Map.Nodes.Cast<HexNode>().Where(x => x.CubeCoords.DistanceTo(currentActorCoords) < 5);
 
             for (var i = 0; i < 3; i++)

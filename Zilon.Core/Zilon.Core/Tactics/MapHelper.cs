@@ -7,8 +7,6 @@ namespace Zilon.Core.Tactics
 {
     public static class MapHelper
     {
-        //TODO Добавить тест
-        //TODO Перенести в карту, чтобы опираться на таблицу проходимости, как в генераторе сектора.
         public static bool CheckNodeAvailability(IMap map, IMapNode currentNode, IMapNode targetNode)
         {
             var targetHexNode = (HexNode)targetNode;

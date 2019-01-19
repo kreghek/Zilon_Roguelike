@@ -28,7 +28,6 @@ namespace Zilon.Core.Tactics
 
             var actorsQueue = CalcActorList();
 
-            //TODO Учитывать, что могут быть другие персонажи актёра (псы, участники взвода/группы)
             var firstIsHumanPlayer = actorsQueue.FirstOrDefault()?.Owner is HumanPlayer;
             if (!firstIsHumanPlayer && actorsQueue.Any(x => x.Owner is HumanPlayer))
             {
