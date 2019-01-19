@@ -18,6 +18,6 @@
         /// <summary>
         /// Суммарная стоимость.
         /// </summary>
-        public int TotalCost { get; set; }
+        public static int TotalCost => 0;
     }
 }

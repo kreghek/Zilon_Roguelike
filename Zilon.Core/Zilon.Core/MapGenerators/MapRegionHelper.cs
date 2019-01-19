@@ -36,9 +36,10 @@ namespace Zilon.Core.MapGenerators
                 openList.RemoveAt(0);
                 closedNodes.Add(node);
 
-                var neigbours = map.GetNext(node);
+                var neighbors = map.GetNext(node);
 
-                var corridorNodes = from neighbor in neigbours
+                var neighborsArray = neighbors as IMapNode[] ?? neighbors.ToArray();
+                var corridorNodes = from neighbor in neighborsArray
                                     where !availableNodesArray.Contains(neighbor)
                                     select neighbor;
 
@@ -47,11 +48,9 @@ namespace Zilon.Core.MapGenerators
                     // Найден узел, не перекрывающий выход из региона
                     return node;
                 }
-                else
-                {
-                    var openNeighbors = neigbours.Where(x => !closedNodes.Contains(x) && availableNodesArray.Contains(x));
-                    openList.AddRange(openNeighbors);
-                }
+
+                var openNeighbors = neighborsArray.Where(x => !closedNodes.Contains(x) && availableNodesArray.Contains(x));
+                openList.AddRange(openNeighbors);
             }
 
             // "В комнате не удалось найти узел для размещения сундука."

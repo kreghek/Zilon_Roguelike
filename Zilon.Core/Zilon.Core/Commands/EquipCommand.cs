@@ -64,7 +64,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var canEquipShield = EquipmentCarrierHelper.CheckSheildCompability(equipmentCarrier,
+            var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
                 equipment,
                 slot,
                 SlotIndex.Value);

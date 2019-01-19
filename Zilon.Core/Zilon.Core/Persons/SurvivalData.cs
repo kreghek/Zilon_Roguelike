@@ -139,7 +139,7 @@ namespace Zilon.Core.Persons
                 CheckStatKeyPoints(stat, oldValue);
             }
 
-            CheckHp(stat);
+            ProcessIfHealth(stat);
         }
 
         private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
@@ -167,16 +167,22 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void CheckHp(SurvivalStat stat)
+        /// <summary>
+        /// Индивидуально обрабатывает характеристику, если это здоровье.
+        /// </summary>
+        /// <param name="stat"> Обрабатываемая характеристика. </param>
+        private void ProcessIfHealth(SurvivalStat stat)
         {
-            if (stat.Type == SurvivalStatType.Health)
+            if (stat.Type != SurvivalStatType.Health)
             {
-                var hp = stat.Value;
-                if (hp <= 0)
-                {
-                    IsDead = true;
-                    DoDead();
-                }
+                return;
+            }
+            
+            var hp = stat.Value;
+            if (hp <= 0)
+            {
+                IsDead = true;
+                DoDead();
             }
         }
 

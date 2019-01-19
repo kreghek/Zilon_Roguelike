@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Components
+﻿using System.Linq;
+using System.Runtime.CompilerServices;
+
+namespace Zilon.Core.Components
 {
     /// <summary>
     /// Структура для хранения характеристики.
@@ -35,17 +38,20 @@
         /// <returns> Возвращает актуальное значение характеритсики. </returns>
         public float GetActualValue(int level, float rarityBonus, PersonStat[] bonuses = null)
         {
-            var bonusValue = 0f;
-
-            if (bonuses != null)
-            {
-                foreach (var bonus in bonuses)
-                {
-                    bonusValue += bonus.GetActualValue(level, 0);
-                }
-            }
+            var bonusValue = CalcBonusValue(level, bonuses);
 
             return (Base + LevelInc * (level - 1)) * (1 + rarityBonus) + bonusValue;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static float CalcBonusValue(int level, PersonStat[] bonuses)
+        {
+            if (bonuses == null)
+            {
+                return 0;
+            }
+
+            return bonuses.Sum(bonus => bonus.GetActualValue(level, 0));
         }
     }
 }

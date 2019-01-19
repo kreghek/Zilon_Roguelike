@@ -199,20 +199,26 @@ namespace Zilon.Core.Persons
 
                 if (equipStats.Armors != null)
                 {
-                    foreach (var propArmor in equipStats.Armors)
-                    {
-                        var personArmorItem = new PersonArmorItem(propArmor.Impact,
-                            propArmor.AbsorbtionLevel,
-                            propArmor.ArmorRank);
-
-                        equipmentArmors.Add(personArmorItem);
-                    }
+                    var currentEquipmentArmors = GetEquipmentArmors(equipStats.Armors);
+                    equipmentArmors.AddRange(currentEquipmentArmors);
                 }
             }
 
             var mergedArmors = MergeArmor(equipmentArmors);
 
             CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+        }
+
+        private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
+        {
+            foreach (var propArmor in armors)
+            {
+                var personArmorItem = new PersonArmorItem(propArmor.Impact,
+                    propArmor.AbsorbtionLevel,
+                    propArmor.ArmorRank);
+
+                yield return personArmorItem;
+            }
         }
 
         private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
@@ -430,8 +436,12 @@ namespace Zilon.Core.Persons
                     efficientRoll = new Roll(efficientRoll.Dice, efficientRoll.Count, modifiers);
                 }
 
-                var toHitRoll = new Roll(6, 1);
-                if (toHitBuffRule != null)
+                Roll toHitRoll;
+                if (toHitBuffRule == null)
+                {
+                    toHitRoll = new Roll(6, 1);
+                }
+                else
                 {
                     var modifiers = new RollModifiers(-1);
                     toHitRoll = new Roll(6, 1, modifiers);

@@ -130,7 +130,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
             var currentData = GetData(CurrentNode);
 
-            _openList.Remove(currentData.TotalCost);
+            _openList.Remove(AStarData.TotalCost);
 
             _closedList.Add(CurrentNode, currentData);
 

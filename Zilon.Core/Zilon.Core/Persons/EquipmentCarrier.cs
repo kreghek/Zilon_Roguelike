@@ -67,7 +67,7 @@ namespace Zilon.Core.Persons
                     throw new InvalidOperationException($"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
                 }
 
-                if (!EquipmentCarrierHelper.CheckSheildCompability(this, equipment, slot, slotIndex))
+                if (!EquipmentCarrierHelper.CheckShieldCompability(this, equipment, slot, slotIndex))
                 {
                     throw new InvalidOperationException("Попытка экипировать два щита.");
                 }

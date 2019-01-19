@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="data"> Данные узла для алгоритма. </param>
         internal static void Add(this SortedList<int, IMapNode> sortedList, IMapNode node, AStarData data)
         {
-            sortedList.Add(data.TotalCost, node);
+            sortedList.Add(AStarData.TotalCost, node);
         }
 
         /// <summary>
