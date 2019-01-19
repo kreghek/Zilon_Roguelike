@@ -96,12 +96,9 @@ namespace Zilon.Core.Tactics
             switch (propClass)
             {
                 case PropClass.Equipment:
-                    //TODO Вынести в отдельный метод. Чтобы можно было использовать в крафте.
-
                     var power = _randomSource.RollEquipmentPower(record.MinPower, record.MaxPower);
 
                     var equipment = _propFactory.CreateEquipment(scheme);
-                    equipment.Power = power;
                     return equipment;
 
                 case PropClass.Resource:
