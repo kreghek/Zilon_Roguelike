@@ -18,7 +18,6 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-//TODO Провести реорганизацию тестов. Потому что они не актуальны после ввода абстракции намерений
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     /// <summary>
@@ -123,7 +122,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             act.Should().Throw<ArgumentException>();
         }
 
-        //TODO Этот тест - это проверка намерения. Сделать отдельный тест.
         /// <summary>
         /// Тест проверяет, что после окончания команды на перемещение и назначения новой команды всё работает корректно.
         /// То есть новая команда возвращается при запросе.
