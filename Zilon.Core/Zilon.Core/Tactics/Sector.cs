@@ -110,13 +110,15 @@ namespace Zilon.Core.Tactics
 
             foreach (var actor in _actorManager.Items)
             {
-                if (actor.Owner is HumanPlayer)
+                if (!(actor.Owner is HumanPlayer))
                 {
-                    atLeastOneHuman = true;
-                    if (Map.ExitNodes?.Contains(actor.Node) == false)
-                    {
-                        allExit = false;
-                    }
+                    continue;
+                }
+                
+                atLeastOneHuman = true;
+                if (Map.ExitNodes?.Contains(actor.Node) == false)
+                {
+                    allExit = false;
                 }
             }
 
@@ -185,18 +187,20 @@ namespace Zilon.Core.Tactics
             _actorManager.Remove(actor);
             actor.Person.Survival.Dead -= ActorState_Dead;
 
-            if (actor.Person is MonsterPerson monsterPerson)
+            if (!(actor.Person is MonsterPerson monsterPerson))
             {
-                var monsterScheme = monsterPerson.Scheme;
+                return;
+            }
+            
+            var monsterScheme = monsterPerson.Scheme;
 
-                var dropSchemes = GetMonsterDropTables(monsterScheme);
+            var dropSchemes = GetMonsterDropTables(monsterScheme);
 
-                var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+            var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
 
-                if (loot.Content.CalcActualItems().Any())
-                {
-                    _propContainerManager.Add(loot);
-                }
+            if (loot.Content.CalcActualItems().Any())
+            {
+                _propContainerManager.Add(loot);
             }
         }
 

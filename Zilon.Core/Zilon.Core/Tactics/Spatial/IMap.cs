@@ -60,7 +60,6 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>true, если указанный узел проходим для актёра. Иначе - false. </returns>
         bool IsPositionAvailableFor(IMapNode targetNode, IActor actor);
 
-        //TODO Выглядит, что это внутреняя реализация. (Чего?)
         /// <summary>
         /// Указывает, что узел карты освобождён одним из блоков.
         /// </summary>
@@ -68,7 +67,6 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="blocker"> Блокер, который освобождает узел. </param>
         void ReleaseNode(IMapNode node, IPassMapBlocker blocker);
 
-        //TODO Выглядит, что это внутреняя реализация. (Чего? Какой сущности?)
         /// <summary>
         /// Указывает, что узел карты занят блоком.
         /// </summary>

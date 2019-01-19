@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 
 using Zilon.Core.MapGenerators.PrimitiveStyle;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -19,21 +18,18 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly IBotPlayer _botPlayer;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
 
         public SectorSchemeGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
-            IBotPlayer botPlayer,
             ISchemeService schemeService,
             IPropFactory propFactory,
             IDropResolver dropResolver)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _botPlayer = botPlayer;
             _schemeService = schemeService;
             _propFactory = propFactory;
             _dropResolver = dropResolver;

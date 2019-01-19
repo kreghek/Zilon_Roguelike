@@ -8,12 +8,10 @@ namespace Zilon.Core.Client
         {
             Inventory = new PropTransferStore(inventory);
             Container = new PropTransferStore(container);
-            Floor = new FloorPropContainer();
         }
 
         public PropTransferStore Inventory { get; }
         public PropTransferStore Container { get; }
-        public FloorPropContainer Floor { get; }
 
         public void TransferProp(IProp prop, IPropStore sourceStore, IPropStore distStore)
         {

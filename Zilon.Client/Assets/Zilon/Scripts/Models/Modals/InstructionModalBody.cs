@@ -11,6 +11,8 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
     public Button NextButton;
     public Button PrevButton;
 
+    public string Caption => "Tutorial!";
+
     public void Start()
     {
         _pageCounter = 0;

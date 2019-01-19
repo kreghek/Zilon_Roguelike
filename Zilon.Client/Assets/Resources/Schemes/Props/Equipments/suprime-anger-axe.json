@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon" ],
+  "Equip": {
+    "ActSids": [
+      "chop"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Верховный топор гнева",
+	"En": "Suprime anger axe"
+  }
+}

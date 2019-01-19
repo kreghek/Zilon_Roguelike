@@ -171,13 +171,12 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
-        private IMapNode[,] CreateSegment(int segmentX, int segmentY)
+        private void CreateSegment(int segmentX, int segmentY)
         {
             var matrix = new IMapNode[_segmentSize, _segmentSize];
 
             var key = new SegmentKey(segmentX, segmentY);
             _segmentDict[key] = matrix;
-            return matrix;
         }
 
         private int NormalizeNeighborCoord(int neighborX)

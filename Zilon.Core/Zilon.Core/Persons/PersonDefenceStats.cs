@@ -17,7 +17,7 @@ namespace Zilon.Core.Persons
 
         public PersonArmorItem[] Armors { get; private set; }
 
-        public void SetArmors([ItemNotNull, NotNull] PersonArmorItem[] armors)
+        public void SetArmors(PersonArmorItem[] armors)
         {
             Armors = armors ?? throw new ArgumentNullException(nameof(armors));
         }

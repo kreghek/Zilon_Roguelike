@@ -25,6 +25,6 @@ namespace Zilon.Core.Schemes
         /// Область действия на этап высадки.
         /// Этап высадки это от отдыха до отдыха (ключевые точки).
         /// </summary>
-        KeyPoint,
+        KeyPoint
     }
 }

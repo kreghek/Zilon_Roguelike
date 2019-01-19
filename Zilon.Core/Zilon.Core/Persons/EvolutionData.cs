@@ -81,8 +81,8 @@ namespace Zilon.Core.Persons
                     Scheme = perkScheme,
                     CurrentLevel = null,
                     CurrentJobs = perkScheme.Levels[0].Jobs
-                    .Select(x => new PerkJob(x))
-                    .Cast<IJob>().ToArray()
+                        .Select(x => (IJob)new PerkJob(x))
+                        .ToArray()
                 };
 
                 perks.Add(perk);

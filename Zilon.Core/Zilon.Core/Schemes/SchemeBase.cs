@@ -35,7 +35,7 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
-        public LocalizedStringSubScheme Description { get; set; }
+        public LocalizedStringSubScheme Description { get; }
 
         /// <inheritdoc />
         /// <summary>
@@ -44,7 +44,7 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Если установлен, то схема игнорируется службой схем
         /// </remarks>
-        public bool Disabled { get; set; }
+        public bool Disabled { get; }
 
         /// <summary>
         /// Строковое представление рецепта.

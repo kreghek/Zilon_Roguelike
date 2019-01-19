@@ -9,6 +9,7 @@ Scenario Outline: Промахи действий с определённым т
 	And Есть актёр игрока класса <personSid> в ячейке (0, 0)
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
 	And Актёр игрока экипирован предметом <equipmentSid> в слот Index: 2
+	And В инвентаре у актёра есть ресурс: mana количество: 10
 	When Актёр игрока атакует монстра Id:<monsterId>
 	Then Монстр Id:<monsterId> успешно обороняется
 

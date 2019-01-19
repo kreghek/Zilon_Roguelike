@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon" ],
+  "Equip": {
+    "ActSids": [
+      "pierce"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Племенное копьё",
+	"En": "Tribal spear"
+  }
+}

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Client;
@@ -43,7 +42,7 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedActorViewModel.Actor.Node;
 
-            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.FirstOrDefault();
+            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
             var isInDistance = act.CheckDistance(((HexNode)currentNode).CubeCoords, ((HexNode)targetNode).CubeCoords);
             if (!isInDistance)
             {
@@ -56,7 +55,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            if (act.Constrains?.PropResourceType != null)
+            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
             {
                 var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
                     act.Constrains.PropResourceType,
@@ -87,15 +86,9 @@ namespace Zilon.Core.Commands
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         private IActorViewModel GetSelectedActorViewModel()
