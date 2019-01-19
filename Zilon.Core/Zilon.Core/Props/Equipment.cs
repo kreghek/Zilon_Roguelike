@@ -61,6 +61,7 @@ namespace Zilon.Core.Props
             {
                 return $"{_name} {base.ToString()}";
             }
+            
             return base.ToString();
         }
     }

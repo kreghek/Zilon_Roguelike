@@ -314,6 +314,12 @@ namespace Zilon.Core.Persons
                     q = 0.5f;
                     break;
 
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+                
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+                
                 default:
                     throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
             }

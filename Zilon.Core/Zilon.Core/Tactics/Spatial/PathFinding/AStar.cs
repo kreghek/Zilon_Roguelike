@@ -171,11 +171,13 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
         private AStarData GetData(IMapNode node)
         {
-            if (!_dataDict.TryGetValue(node, out var data))
+            if (_dataDict.TryGetValue(node, out var data))
             {
-                data = new AStarData();
-                _dataDict.Add(node, data);
+                return data;
             }
+            
+            data = new AStarData();
+            _dataDict.Add(node, data);
 
             return data;
         }

@@ -16,12 +16,12 @@ namespace Zilon.Core.Commands
 
         public ICommand Pop()
         {
-            if (!_queue.Any())
+            if (_queue.Any())
             {
-                return null;
+                return _queue.Dequeue();
             }
-
-            return _queue.Dequeue();
+            
+            return null;
         }
 
         public void Push(ICommand command)

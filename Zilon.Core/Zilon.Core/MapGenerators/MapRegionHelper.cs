@@ -25,7 +25,8 @@ namespace Zilon.Core.MapGenerators
             [NotNull] IMap map,
             [NotNull] [ItemNotNull] IEnumerable<IMapNode> availableNodes)
         {
-            CheckArguments(node, map, availableNodes);
+            var availableNodesArray = availableNodes as IMapNode[] ?? availableNodes.ToArray();
+            CheckArguments(node, map, availableNodesArray);
 
             var openList = new List<IMapNode>(6 + 1) { node };
             var closedNodes = new List<IMapNode>();
@@ -38,7 +39,7 @@ namespace Zilon.Core.MapGenerators
                 var neigbours = map.GetNext(node);
 
                 var corridorNodes = from neighbor in neigbours
-                                    where !availableNodes.Contains(neighbor)
+                                    where !availableNodesArray.Contains(neighbor)
                                     select neighbor;
 
                 if (!corridorNodes.Any())
@@ -48,7 +49,7 @@ namespace Zilon.Core.MapGenerators
                 }
                 else
                 {
-                    var openNeighbors = neigbours.Where(x => !closedNodes.Contains(x) && availableNodes.Contains(x));
+                    var openNeighbors = neigbours.Where(x => !closedNodes.Contains(x) && availableNodesArray.Contains(x));
                     openList.AddRange(openNeighbors);
                 }
             }

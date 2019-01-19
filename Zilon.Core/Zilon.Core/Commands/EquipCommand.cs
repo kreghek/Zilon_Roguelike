@@ -68,6 +68,7 @@ namespace Zilon.Core.Commands
                 equipment,
                 slot,
                 SlotIndex.Value);
+            
             if (!canEquipShield)
             {
                 return false;

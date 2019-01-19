@@ -117,10 +117,14 @@ namespace Zilon.Core.Tactics
         private static PropClass GetPropClass(IPropScheme scheme)
         {
             if (scheme.Equip != null)
+            {
                 return PropClass.Equipment;
+            }
 
             if (scheme.Sid == "conceptual-scheme")
+            {
                 return PropClass.Concept;
+            }
 
             return PropClass.Resource;
         }

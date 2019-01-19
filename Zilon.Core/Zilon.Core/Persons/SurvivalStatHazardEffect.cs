@@ -83,6 +83,9 @@ namespace Zilon.Core.Persons
                     rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
                     break;
 
+                case SurvivalStatHazardLevel.Undefined:
+                    throw new NotSupportedException();
+                
                 default:
                     throw new NotSupportedException("Неизветный уровень угрозы выживания.");
             }

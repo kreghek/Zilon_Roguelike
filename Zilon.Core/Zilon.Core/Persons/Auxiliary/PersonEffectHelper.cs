@@ -58,6 +58,12 @@ namespace Zilon.Core.Persons.Auxiliary
                                 currentTypeEffect.Level = SurvivalStatHazardLevel.Strong;
                                 break;
 
+                            case SurvivalStatHazardLevel.Undefined:
+                                throw new NotSupportedException();
+                            
+                            case SurvivalStatHazardLevel.Lesser:
+                                throw new NotSupportedException();
+                            
                             default:
                                 throw new InvalidOperationException("Уровень эффекта, который не обрабатывается.");
                         }

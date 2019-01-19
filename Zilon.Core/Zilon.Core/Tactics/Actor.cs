@@ -85,18 +85,29 @@ namespace Zilon.Core.Tactics
                     case ConsumeCommonRuleType.Health:
                         Person.Survival.RestoreStat(SurvivalStatType.Health, 4);
                         break;
+                    
+                    case ConsumeCommonRuleType.Undefined:
+                        throw new NotSupportedException();
+                        
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 
             if (useData.Consumable)
             {
-                switch (usedProp)
-                {
-                    case Resource resource:
-                        var removeResource = new Resource(resource.Scheme, 1);
-                        Person.Inventory.Remove(removeResource);
-                        break;
-                }
+                ConsumeResource(usedProp);
+            }
+        }
+
+        private void ConsumeResource(IProp usedProp)
+        {
+            switch (usedProp)
+            {
+                case Resource resource:
+                    var removeResource = new Resource(resource.Scheme, 1);
+                    Person.Inventory.Remove(removeResource);
+                    break;
             }
         }
 
@@ -167,6 +178,12 @@ namespace Zilon.Core.Tactics
                         PropMetrics.SurvivalGrandRestoreValue + 1);
                     break;
 
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+                
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+                
                 default:
                     throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
             }
