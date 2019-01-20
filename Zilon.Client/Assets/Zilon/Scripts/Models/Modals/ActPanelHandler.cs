@@ -58,8 +58,6 @@ public class ActPanelHandler : MonoBehaviour {
         }
 
         TacticalAct act = GetAct(actItemVm);
-
-        Debug.Log(act.Scheme.Sid);
     }
 
     private static TacticalAct GetAct(ActItemVm actItemVm)

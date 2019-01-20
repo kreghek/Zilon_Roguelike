@@ -27,7 +27,6 @@ public class PerkItemViewModel : MonoBehaviour {
 	
 	private Sprite CalcIcon(IPerk perk)
 	{
-		Debug.Log(perk.Scheme.Sid);
 		var iconSprite = Resources.Load<Sprite>($"Icons/perks/{perk.Scheme.Sid}");
 		return iconSprite;
 	}
