@@ -8,11 +8,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public interface IRoomGeneratorRandomSource
     {
         /// <summary>
-        /// Выбрасывает случайный индекс команты из списка указанной длины.
+        /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>
-        /// <param name="maxPosition"> Максимальное количество комнат в списке. </param>
-        /// <returns> Возвращает случайное число в диапазоне (0, maxPosition). </returns>
-        int RollRoomPositionIndex(int maxPosition);
+        /// <param name="roomGridSize"> Размер матрицы комнат. </param>
+        /// <param name="roomCount"> Количество комнат в секторе. </param>
+        /// <returns> Возвращает массив координат из матрицы комнат. </returns>
+        IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount);
 
         /// <summary>
         /// выбрасывает случайный размер комнаты.

@@ -37,20 +37,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var rooms = new List<Room>();
 
-            var roomMatrixPosList = new List<OffsetCoords>(roomGridSize * roomGridSize);
-            for (var x = 0; x < roomGridSize; x++)
-            {
-                for (var y = 0; y < roomGridSize; y++)
-                {
-                    roomMatrixPosList.Add(new OffsetCoords(x, y));
-                }
-            }
+            var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, _settings.RoomCount).ToArray();
 
             for (var i = 0; i < _settings.RoomCount; i++)
             {
-                var rolledRoomPositionIndex = _randomSource.RollRoomPositionIndex(roomMatrixPosList.Count);
-                var rolledPosition = roomMatrixPosList[rolledRoomPositionIndex];
-                roomMatrixPosList.RemoveAt(rolledRoomPositionIndex);
+                var rolledPosition = roomMatrixCoords[i];
 
                 var room = new Room
                 {
@@ -66,9 +57,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 room.Height = rolledSize.Height + 2;
 
                 rooms.Add(room);
-
-                Console.WriteLine($"Выбрана комната в ячейке {rolledPosition} размером {rolledSize}.");
-
             }
 
             return rooms;
@@ -190,14 +178,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 if (!selectedRooms.Any())
                 {
                     //Значит текущая комната тупиковая
-                    Console.WriteLine($"Для комнаты {room} нет соседей (тупик).");
                     continue;
-                }
-
-                Console.WriteLine($"Для комнаты {room} выбраны соседи ");
-                foreach (var selectedRoom in selectedRooms)
-                {
-                    Console.Write(selectedRoom + " ");
                 }
 
                 foreach (var selectedRoom in selectedRooms)

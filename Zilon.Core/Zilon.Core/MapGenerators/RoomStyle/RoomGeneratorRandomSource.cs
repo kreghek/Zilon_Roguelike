@@ -38,9 +38,27 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return selectedRooms.ToArray();
         }
 
-        public int RollRoomPositionIndex(int maxPosition)
+        public IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
         {
-            return _dice.Roll(0, maxPosition - 1);
+            var roomMatrixPosList = new List<OffsetCoords>(roomGridSize * roomGridSize);
+            for (var x = 0; x < roomGridSize; x++)
+            {
+                for (var y = 0; y < roomGridSize; y++)
+                {
+                    roomMatrixPosList.Add(new OffsetCoords(x, y));
+                }
+            }
+
+            var rolledCoords = new List<OffsetCoords>(roomCount);
+            for (var i = 0; i < roomCount; i++)
+            {
+                var rolledIndex = _dice.Roll(0, roomMatrixPosList.Count - 1);
+                var currentRolledCoords = roomMatrixPosList[rolledIndex];
+                rolledCoords.Add(currentRolledCoords);
+                roomMatrixPosList.RemoveAt(rolledIndex);
+            }
+
+            return rolledCoords;
         }
 
         public Size RollRoomSize(int maxSize)
