@@ -17,19 +17,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         [NotNull, ItemNotNull]
-        public Room[] RollConnectedRooms(Room room, int maxNeighbors, IList<Room> rooms)
+        public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
-            var availableRooms = new List<Room>(rooms);
+            var openRooms = new List<Room>(availableRooms);
             var selectedRooms = new HashSet<Room>();
             var neighborCount = _dice.Roll(1, maxNeighbors);
             for (var i = 0; i < neighborCount; i++)
             {
-                var rolledRoomIndex = _dice.Roll(0, availableRooms.Count - 1);
-                var selectedRoom = availableRooms[rolledRoomIndex];
+                var rolledRoomIndex = _dice.Roll(0, openRooms.Count - 1);
+                var selectedRoom = openRooms[rolledRoomIndex];
                 selectedRooms.Add(selectedRoom);
-                availableRooms.Remove(selectedRoom);
+                openRooms.Remove(selectedRoom);
 
-                if (!availableRooms.Any())
+                if (!openRooms.Any())
                 {
                     break;
                 }
@@ -61,10 +61,54 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return rolledCoords;
         }
 
+        public IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors)
+        {
+            var result = new Dictionary<Room, Room[]>();
+
+            var roomsInGraph = new Dictionary<Room, int>();
+            var roomsNotInGraph = new List<Room>(rooms);
+            while (roomsNotInGraph.Any())
+            {
+                var room = roomsNotInGraph.First();
+                roomsInGraph.Add(room, 0);
+                roomsNotInGraph.Remove(room);
+                // для каждой комнаты выбираем произвольную другую комнату
+                // и проводим к ней коридор
+
+                var availableRooms = roomsInGraph
+                    .Where(x => x.Key != room && x.Value < maxNeighbors)
+                    .Select(x => x.Key)
+                    .ToArray();
+
+                if (!availableRooms.Any())
+                {
+                    continue;
+                }
+
+                var selectedRooms = RollConnectedRooms(room,
+                    maxNeighbors,
+                    availableRooms);
+
+                if (!selectedRooms.Any())
+                {
+                    //Значит текущая комната тупиковая
+                    continue;
+                }
+
+                result.Add(room, selectedRooms);
+                foreach (var selectedRoom in selectedRooms)
+                {
+                    roomsInGraph[selectedRoom]++;
+                }
+            }
+
+            return result;
+        }
+
         public Size RollRoomSize(int maxSize)
         {
-            var rollWidth = _dice.Roll(maxSize);
-            var rollHeight = _dice.Roll(maxSize);
+            var rollWidth = _dice.Roll(2, maxSize);
+            var rollHeight = _dice.Roll(2, maxSize);
 
             return new Size(rollWidth, rollHeight);
         }

@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -70,7 +72,7 @@ namespace Zilon.Core.Benchmark
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
             _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<IRoomGeneratorRandomSource, FixCompactRoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
             _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
             _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
@@ -104,7 +106,6 @@ namespace Zilon.Core.Benchmark
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            //_container.Register<ISectorModalManager>(factory => GetSectorModalManager(), new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.
@@ -132,14 +133,6 @@ namespace Zilon.Core.Benchmark
             var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
-        }
-
-        private IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource()
-        {
-            var mock = new Mock<IRoomGeneratorRandomSource>();
-            mock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns();
-            return mock.Object;
         }
 
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,

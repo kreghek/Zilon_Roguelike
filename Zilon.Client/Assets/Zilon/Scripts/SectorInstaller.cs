@@ -26,7 +26,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
         Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
         Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IRoomGeneratorRandomSource>().To<FixCompactRoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
