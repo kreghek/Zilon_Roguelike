@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using LightInject;
-
+using Moq;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -24,11 +24,11 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
 {
-    public class CreateProceduralSectorBench
+    public class CreateProceduralSectorMinBench
     {
         private ServiceContainer _container;
 
-        [Benchmark(Description = "CreateProceduralSector")]
+        [Benchmark(Description = "CreateProceduralMinSector")]
         public void Create()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
@@ -132,6 +132,14 @@ namespace Zilon.Core.Benchmark
             var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
+        }
+
+        private IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource()
+        {
+            var mock = new Mock<IRoomGeneratorRandomSource>();
+            mock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns();
+            return mock.Object;
         }
 
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
