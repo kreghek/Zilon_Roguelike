@@ -90,7 +90,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 12
  testRunner.And("Есть актёр игрока класса captain в ячейке (0, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.And("В инвентаре у актёра есть фейковый провиант fake-food (сытость - 10)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("В инвентаре у актёра есть ресурс: packed-food количество: 10", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
  testRunner.When("Я выбираю ячейку (1, 0)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
@@ -112,3 +112,4 @@ this.ScenarioInitialize(scenarioInfo);
 }
 #pragma warning restore
 #endregion
+
