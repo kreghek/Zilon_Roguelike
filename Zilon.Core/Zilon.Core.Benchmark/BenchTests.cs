@@ -25,6 +25,13 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        public void CreateProceduralSector()
+        {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<CreateProceduralSectorBench>(config);
+        }
+
+        [Test]
         public void CreateProceduralMaxSector()
         {
             var config = CreateBenchConfig();

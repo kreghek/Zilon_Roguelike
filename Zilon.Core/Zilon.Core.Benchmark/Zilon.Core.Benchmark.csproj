@@ -163,6 +163,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="CreateProceduralSectorBench.cs" />
     <Compile Include="CreateProceduralSectorMaxBench.cs" />
     <Compile Include="CreateProceduralSectorMinBench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
