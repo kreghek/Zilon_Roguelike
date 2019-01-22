@@ -71,6 +71,29 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return result;
         }
 
+        public IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors)
+        {
+            var result = new Dictionary<Room, Room[]>();
+
+            foreach (var currentRoom in rooms)
+            {
+                var currentConnection = _connections.Single(x =>
+                        x.Item1.X == currentRoom.PositionX &&
+                        x.Item1.Y == currentRoom.PositionY);
+
+                var connectedRoom = rooms.SingleOrDefault(x =>
+                    x.PositionX == currentConnection.Item2.X &&
+                    x.PositionY == currentConnection.Item2.Y);
+
+                if (connectedRoom != null)
+                {
+                    result.Add(currentRoom, new[] { connectedRoom });
+                }
+            }
+
+            return result;
+        }
+
         public Size RollRoomSize(int maxSize)
         {
             return new Size(2, 2);
