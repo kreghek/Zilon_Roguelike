@@ -1,6 +1,7 @@
-using Assets.Zilon.Scripts.Services;
+using System.Collections.Generic;
+using System.Linq;
 
-using UnityEngine;
+using Assets.Zilon.Scripts.Services;
 
 using Zenject;
 
@@ -9,6 +10,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -26,15 +28,15 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
         Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
         Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().To<FixCompactRoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IRoomGeneratorRandomSource>().To<FixLargeRoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
-        Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();
+        Container.Bind<IChestGeneratorRandomSource>().To<FakeIChestGeneratorRandomSource>().AsSingle();
         Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
-        Container.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
+        Container.Bind<IMonsterGeneratorRandomSource>().To<FakeIMonsterGeneratorRandomSource>().AsSingle();
         Container.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
@@ -66,7 +68,42 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     private SectorModalManager GetSectorModalManager()
     {
         var sectorModalManager = FindObjectOfType<SectorModalManager>();
-        Debug.Log(sectorModalManager);
         return sectorModalManager;
+    }
+
+    private class FakeIMonsterGeneratorRandomSource : IMonsterGeneratorRandomSource
+    {
+        public int RollCount()
+        {
+            return 5;
+        }
+
+        public IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes)
+        {
+            return availableMonsterSchemes.First();
+        }
+
+        public int RollNodeIndex(int count)
+        {
+            return 0;
+        }
+
+        public int RollRarity()
+        {
+            return 2;
+        }
+    }
+
+    private class FakeIChestGeneratorRandomSource : IChestGeneratorRandomSource
+    {
+        public int RollChestCount(int maxCount)
+        {
+            return maxCount;
+        }
+
+        public int RollNodeIndex(int nodeCount)
+        {
+            return 0;
+        }
     }
 }

@@ -39,6 +39,14 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        public void CreateProceduralSector2()
+        {
+            var bench = new CreateProceduralSectorBench();
+            bench.IterationSetup();
+            bench.Create();
+        }
+
+        [Test]
         public void CreateProceduralMaxSector2()
         {
             var bench = new CreateProceduralSectorMaxBench();
