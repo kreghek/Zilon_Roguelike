@@ -96,7 +96,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 15
  testRunner.And("Выполняется команда на перемещение", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 16
- testRunner.And("Актёр использует предмет fake-food на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Актёр использует предмет packed-food на себя", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 17
  testRunner.Then("Актёр находится в ячейке (0, 1)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
