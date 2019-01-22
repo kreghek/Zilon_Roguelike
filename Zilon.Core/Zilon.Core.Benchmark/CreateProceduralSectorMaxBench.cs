@@ -26,11 +26,11 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
 {
-    public class CreateProceduralSectorMinBench
+    public class CreateProceduralSectorMaxBench
     {
         private ServiceContainer _container;
 
-        [Benchmark(Description = "CreateProceduralMinSector")]
+        [Benchmark(Description = "CreateProceduralMaxSector")]
         public void Create()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
@@ -45,7 +45,9 @@ namespace Zilon.Core.Benchmark
                 MonsterGeneratorOptions = new MonsterGeneratorOptions
                 {
                     BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
+                    RegularMonsterSids = new[] { "rat" },
+                    RareMonsterSids = new[] { "rat" },
+                    ChampionMonsterSids = new[] { "rat" }
                 }
             });
 
@@ -137,7 +139,7 @@ namespace Zilon.Core.Benchmark
         private IChestGeneratorRandomSource CreateFakeChestGeneratorRandomSource()
         {
             var mock = new Mock<IChestGeneratorRandomSource>();
-            mock.Setup(x => x.RollChestCount(It.IsAny<int>())).Returns(0);
+            mock.Setup(x => x.RollChestCount(It.IsAny<int>())).Returns<int>(n => n);
             return mock.Object;
         }
 

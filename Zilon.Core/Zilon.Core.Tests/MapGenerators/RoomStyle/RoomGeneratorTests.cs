@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using FluentAssertions;
 
 using NUnit.Framework;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle.Tests
@@ -16,11 +18,33 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
         {
             // ARRANGE
             var random = new FixCompactRoomGeneratorRandomSource();
-            var settings = new RoomGeneratorSettings()
+            var settings = new RoomGeneratorSettings();
+            var generator = new RoomGenerator(random);
+            var graphMap = new GraphMap();
+
+
+            // ACT
+            Action act = () =>
             {
-                MaxNeighbors = 100
+                var rooms = generator.GenerateRoomsInGrid();
+                var edgeHash = new HashSet<string>();
+                generator.CreateRoomNodes(graphMap, rooms, edgeHash);
+                generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
-            var generator = new RoomGenerator(random, settings);
+
+
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
+
+        [Test]
+        public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
+        {
+            // ARRANGE
+            var random = new FixLargeRoomGeneratorRandomSource();
+            var generator = new RoomGenerator(random);
             var graphMap = new GraphMap();
 
 

@@ -76,6 +76,7 @@
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
