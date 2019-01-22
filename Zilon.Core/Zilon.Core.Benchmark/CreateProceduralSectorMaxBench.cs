@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -132,7 +133,10 @@ namespace Zilon.Core.Benchmark
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
-            mock.Setup(x => x.RollCount()).Returns(0);
+            mock.Setup(x => x.RollCount()).Returns(5);
+            mock.Setup(x => x.RollMonsterScheme(It.IsAny<IEnumerable<IMonsterScheme>>()))
+                .Returns<IEnumerable<IMonsterScheme>>(sids => sids.First());
+            mock.Setup(x => x.RollRarity()).Returns(2);
             return mock.Object;
         }
 
@@ -140,6 +144,7 @@ namespace Zilon.Core.Benchmark
         {
             var mock = new Mock<IChestGeneratorRandomSource>();
             mock.Setup(x => x.RollChestCount(It.IsAny<int>())).Returns<int>(n => n);
+            mock.Setup(x => x.RollNodeIndex(It.IsAny<int>())).Returns(0);
             return mock.Object;
         }
 

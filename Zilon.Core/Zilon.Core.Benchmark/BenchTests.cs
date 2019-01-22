@@ -24,6 +24,13 @@ namespace Zilon.Core.Benchmark
             BenchmarkRunner.Run<CreateProceduralSectorMinBench>(config);
         }
 
+        [Test]
+        public void CreateProceduralMaxSector()
+        {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<CreateProceduralSectorMaxBench>(config);
+        }
+
         private Config CreateBenchConfig() {
             var buildNumber = TestContext.Parameters["buildNumber"];
 
