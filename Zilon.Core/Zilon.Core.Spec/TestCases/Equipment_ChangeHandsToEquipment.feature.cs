@@ -118,3 +118,4 @@ this.ЭкипировкаПредметаВПодходящийСлот_("captai
 }
 #pragma warning restore
 #endregion
+

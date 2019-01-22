@@ -118,3 +118,4 @@ this.РасходПатроновПриСтрельбе_("3", "human-person", "0
 }
 #pragma warning restore
 #endregion
+

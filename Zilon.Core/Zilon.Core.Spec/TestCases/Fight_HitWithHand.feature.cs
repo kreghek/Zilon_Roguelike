@@ -116,3 +116,4 @@ this.УдарыРуками_("captain", "rat", "1000", "0", "1", "2", "1", ((str
 }
 #pragma warning restore
 #endregion
+

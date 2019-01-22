@@ -233,52 +233,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Monster_NotThrowWhenKill.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Move_CanMove.feature.cs">
-      <DependentUpon>Move_CanMove.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveAfterExceptionDuringTaskExecution.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature.cs">
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode_WithMonsters.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature.cs">
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode2.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveThroughKilledMonsters.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveThroughKilledMonsters.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CantMoveThroughMonsters.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CantMoveThroughMonsters.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_ChangeTaskInCurrentMovingNotCompleted.feature</DependentUpon>
-    </Compile>
     <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
     </Compile>
     <Compile Include="Contexts\CommonGameActionsContext.cs" />
+    <Compile Include="TestCases\Movement.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Movement.feature</DependentUpon>
+    </Compile>
     <Compile Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -408,41 +373,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Monster_NotThrowWhenKill.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Move_CanMove.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMove.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode_WithMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode2.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveThroughKilledMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveThroughKilledMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CantMoveThroughMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CantMoveThroughMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs</LastGenOutput>
-    </None>
     <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TestCases\Movement.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Movement.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -120,3 +120,4 @@ this.ЭкипировкаДвухОружий_("human-person", "short-sword", "2
 }
 #pragma warning restore
 #endregion
+
