@@ -78,7 +78,7 @@ namespace Zilon.Core.Tactics
                         RestoreStat(SurvivalStatType.Satiety, rule.Level);
                         break;
 
-                    case ConsumeCommonRuleType.Thrist:
+                    case ConsumeCommonRuleType.Thirst:
                         RestoreStat(SurvivalStatType.Water, rule.Level);
                         break;
 
