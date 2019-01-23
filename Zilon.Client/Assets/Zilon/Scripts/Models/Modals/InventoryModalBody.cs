@@ -140,7 +140,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void UseButton_Handler()
     {
-        Debug.Log($"Used: {_inventoryState.SelectedProp.Prop.Scheme.Sid}");
         _commandManager.Push(_useSelfCommand);
     }
 }

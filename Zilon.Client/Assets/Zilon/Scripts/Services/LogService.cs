@@ -10,7 +10,6 @@ namespace Assets.Zilon.Scripts.Services
 
         public void Log(string message)
         {
-            Debug.Log(message);
             LogChanged?.Invoke(this, new LogChangedEventArgs(message));
         }
     }
