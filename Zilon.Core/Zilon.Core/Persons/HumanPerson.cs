@@ -175,10 +175,8 @@ namespace Zilon.Core.Persons
                     break;
                 
                 case PersonRuleType.Undefined:
-                    throw new ArgumentOutOfRangeException();
-                
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
             }
         }
 

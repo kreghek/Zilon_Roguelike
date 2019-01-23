@@ -87,10 +87,8 @@ namespace Zilon.Core.Tactics
                         break;
                     
                     case ConsumeCommonRuleType.Undefined:
-                        throw new NotSupportedException();
-                        
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
                 }
             }
 
