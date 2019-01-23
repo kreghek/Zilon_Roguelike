@@ -108,365 +108,86 @@
     <Compile Include="Mocks\TestEmptySectorGenerator.cs" />
     <Compile Include="Steps\CommonSteps.cs" />
     <Compile Include="Steps\MonsterSteps.cs" />
-    <Compile Include="Steps\PredefinedMapSteps.cs" />
     <Compile Include="Steps\FightSteps.cs" />
     <Compile Include="Steps\MoveSteps.cs" />
     <Compile Include="Steps\GenericStepsBase.cs" />
     <Compile Include="Steps\EquipmentSteps.cs" />
+    <Compile Include="Steps\ChestSteps.cs" />
     <Compile Include="Steps\PerkSteps.cs" />
-    <Compile Include="TestCases\Bug_EquipmentAfterContainerLoot.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Bug_EquipmentAfterContainerLoot.feature</DependentUpon>
-    </Compile>
     <Compile Include="Steps\BugEquipmentAfterContainerLootSteps.cs" />
-    <Compile Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Bug_MonsterPatrol_NoExceptions.feature</DependentUpon>
-    </Compile>
     <Compile Include="Steps\BugMonsterPatrolNoExceptionsSteps.cs" />
-    <Compile Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Bug_MonsterPatrol_NoFreeze.feature</DependentUpon>
-    </Compile>
     <Compile Include="Steps\BugMonsterPatrolNoFreezeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCases\Cheast_DuplicateDrop.feature.cs">
+    <Compile Include="TestCases\Chests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cheast_DuplicateDrop.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Cheast_OnceOpenedContainersCanBeOpenedByHand.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cheast_OnceOpenedContainersCanBeOpenedByHand.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Chest_TakeResources.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Chest_TakeResources.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Chest_TakeWeapon.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Chest_TakeWeapon.feature</DependentUpon>
+      <DependentUpon>Chests.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Equipment.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Equipment.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Equipment_ChangeExistsSecondEquipment.feature.cs">
-      <DependentUpon>Equipment_ChangeExistsSecondEquipment.feature</DependentUpon>
+    <Compile Include="TestCases\Fight.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Equipment_ChangeExistsEquipment.feature.cs">
-      <DependentUpon>Equipment_ChangeExistsEquipment.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Equipment_DualShields_Failure.feature.cs">
-      <DependentUpon>Equipment_DualShields_Failure.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Equipment_DualPistols_Failure.feature.cs">
-      <DependentUpon>Equipment_DualPistols_Failure.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Equipment_DualSwords_Success.feature.cs">
-      <DependentUpon>Equipment_DualSwords_Success.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Equipment_ChangeHandsToEquipment.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Equipment_ChangeHandsToEquipment.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Fight_Dual_FailureRoll.feature.cs">
-      <DependentUpon>Fight_Dual_FailureRoll.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Fight_Dual_SuccessRoll.feature.cs">
-      <DependentUpon>Fight_Dual_SuccessRoll.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Fight_OnlyShield_HitWithHand.feature.cs">
-      <DependentUpon>Fight_OnlyShield_HitWithHand.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Fight_ToHit_Failure.feature.cs">
-      <DependentUpon>Fight_ToHit_Failure.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Fight_HitWithHand.feature.cs">
-      <DependentUpon>Fight_HitWithHand.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Fight_ShootingDecreaseBullets.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Fight_ShootingDecreaseBullets.feature</DependentUpon>
+      <DependentUpon>Fight.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Monsters.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Monsters.feature</DependentUpon>
     </Compile>
-    <Compile Include="TestCases\Monster_Movement.feature.cs">
-      <DependentUpon>Monster_Movement.feature</DependentUpon>
+    <Compile Include="TestCases\Perks.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Monster_NotThrowWhenKill.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Monster_NotThrowWhenKill.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMove.feature.cs">
-      <DependentUpon>Move_CanMove.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveAfterExceptionDuringTaskExecution.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature.cs">
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode_WithMonsters.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature.cs">
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode2.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveOnlyInNeighborNode.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CanMoveThroughKilledMonsters.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CanMoveThroughKilledMonsters.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_CantMoveThroughMonsters.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_CantMoveThroughMonsters.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Move_ChangeTaskInCurrentMovingNotCompleted.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Perks_DefeatPerksAreLevelUp.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Perks_DefeatPerksAreLevelUp.feature</DependentUpon>
+      <DependentUpon>Perks.feature</DependentUpon>
     </Compile>
     <Compile Include="Contexts\CommonGameActionsContext.cs" />
-    <Compile Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature.cs">
+    <Compile Include="TestCases\Movement.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_ConsumeMedicineToRestoreHp.feature</DependentUpon>
+      <DependentUpon>Movement.feature</DependentUpon>
     </Compile>
     <Compile Include="TestCases\Survival.feature.cs">
       <DependentUpon>Survival.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_DecreaseSurvivalDataOnGameTurn.feature</DependentUpon>
-    </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
-    <Compile Include="TestCases\Survival_HazardsDecreaseActEfficient.feature.cs">
-      <DependentUpon>Survival_HazardsDecreaseActEfficient.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Survival_HarardsDamagesActor.feature.cs">
-      <DependentUpon>Survival_HarardsDamagesActor.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="TestCases\Survival_GainSurvivalEffect.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Survival_GainSurvivalEffect.feature</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="TestCases\Bug_MonsterPatrol_NoExceptions.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Bug_MonsterPatrol_NoExceptions.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Bug_EquipmentAfterContainerLoot.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Bug_EquipmentAfterContainerLoot.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Bug_MonsterPatrol_NoFreeze.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Bug_MonsterPatrol_NoFreeze.feature.cs</LastGenOutput>
-    </None>
     <None Include="packages.config" />
-    <None Include="TestCases\Cheast_DuplicateDrop.feature">
+    <None Include="TestCases\Chests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Cheast_DuplicateDrop.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Cheast_OnceOpenedContainersCanBeOpenedByHand.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Cheast_OnceOpenedContainersCanBeOpenedByHand.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Chest_TakeResources.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Chest_TakeResources.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Chest_TakeWeapon.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Chest_TakeWeapon.feature.cs</LastGenOutput>
+      <LastGenOutput>Chests.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Equipment.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Equipment.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Equipment_ChangeExistsSecondEquipment.feature">
+    <None Include="TestCases\Fight.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_ChangeExistsSecondEquipment.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment_ChangeExistsEquipment.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_ChangeExistsEquipment.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment_DualShields_Failure.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_DualShields_Failure.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment_DualPistols_Failure.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_DualPistols_Failure.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment_DualSwords_Success.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_DualSwords_Success.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment_ChangeHandsToEquipment.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment_ChangeHandsToEquipment.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_Dual_FailureRoll.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_Dual_FailureRoll.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_Dual_SuccessRoll.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_Dual_SuccessRoll.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_OnlyShield_HitWithHand.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_OnlyShield_HitWithHand.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_ToHit_Failure.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_ToHit_Failure.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_HitWithHand.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_HitWithHand.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight_ShootingDecreaseBullets.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight_ShootingDecreaseBullets.feature.cs</LastGenOutput>
+      <LastGenOutput>Fight.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Monsters.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Monsters.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Monster_Movement.feature">
+    <None Include="TestCases\Perks.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Monster_Movement.feature.cs</LastGenOutput>
+      <LastGenOutput>Perks.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestCases\Monster_NotThrowWhenKill.feature">
+    <None Include="TestCases\Movement.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Monster_NotThrowWhenKill.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMove.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMove.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveAfterExceptionDuringTaskExecution.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveAfterExceptionDuringTaskExecution.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode_WithMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode_WithMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode2.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode2.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveOnlyInNeighborNode.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveOnlyInNeighborNode.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CanMoveThroughKilledMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CanMoveThroughKilledMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_CantMoveThroughMonsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_CantMoveThroughMonsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Move_ChangeTaskInCurrentMovingNotCompleted.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Move_ChangeTaskInCurrentMovingNotCompleted.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Perks_DefeatPerksAreLevelUp.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Perks_DefeatPerksAreLevelUp.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_ConsumeMedicineToRestoreHp.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_ConsumeMedicineToRestoreHp.feature.cs</LastGenOutput>
+      <LastGenOutput>Movement.feature.cs</LastGenOutput>
     </None>
     <None Include="TestCases\Survival.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Survival.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_DecreaseSurvivalDataOnGameTurn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_DecreaseSurvivalDataOnGameTurn.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_HazardsDecreaseActEfficient.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_HazardsDecreaseActEfficient.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_HarardsDamagesActor.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_HarardsDamagesActor.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival_GainSurvivalEffect.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival_GainSurvivalEffect.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
