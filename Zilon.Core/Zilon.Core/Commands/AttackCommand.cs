@@ -76,19 +76,14 @@ namespace Zilon.Core.Commands
             int usedPropResourceCount)
         {
             var propResources = from prop in inventory.CalcActualItems()
-                                where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == usedPropResourceType
-                                select prop;
+                                let propResource = prop as Resource
+                                where propResource != null
+                                where propResource.Scheme.Bullet?.Caliber == usedPropResourceType
+                                select propResource;
 
-            if (propResources.FirstOrDefault() is Resource propResource)
-            {
-                if (propResource.Count >= usedPropResourceCount)
-                {
-                    return true;
-                }
-            }
+            var preferredPropResource = propResources.FirstOrDefault();
 
-            return false;
+            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
         private IActorViewModel GetSelectedActorViewModel()
