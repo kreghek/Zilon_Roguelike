@@ -23,29 +23,24 @@ namespace Zilon.Core.Props
                 throw new ArgumentException("Не корректная схема.", nameof(scheme));
             }
 
-
-            var actSchemes = new List<ITacticalActScheme>();
-            var actSchemeSids = scheme.Equip.ActSids;
-
-            if (scheme.Equip.ActSids != null)
-            {
-                foreach (var actSchemeSid in actSchemeSids)
-                {
-
-                    var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
-
-                    actSchemes.Add(actScheme);
-                }
-
-
-                var equipment = new Equipment(scheme, actSchemes);
-
-                return equipment;
-            }
-            else
+            if (scheme.Equip.ActSids == null)
             {
                 return new Equipment(scheme, null);
             }
+
+            var actSchemes = new List<ITacticalActScheme>();
+            var actSchemeSids = scheme.Equip.ActSids;
+            
+            foreach (var actSchemeSid in actSchemeSids)
+            {
+                var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
+
+                actSchemes.Add(actScheme);
+            }
+
+            var equipment = new Equipment(scheme, actSchemes);
+
+            return equipment;
         }
 
         public Resource CreateResource(IPropScheme scheme, int count)

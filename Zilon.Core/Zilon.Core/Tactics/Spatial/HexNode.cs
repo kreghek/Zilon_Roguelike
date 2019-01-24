@@ -1,9 +1,17 @@
-﻿using Zilon.Core.Common;
+﻿using JetBrains.Annotations;
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     public class HexNode: IMapNode
     {
+        /// <summary>
+        /// Уникальный идентификатор узла в рамках сектора.
+        /// </summary>
+        /// <remarks>
+        /// Нужен только для отладки.
+        /// </remarks>
+        [PublicAPI]
         public int Id { get; set; }
 
         public int OffsetX { get; }

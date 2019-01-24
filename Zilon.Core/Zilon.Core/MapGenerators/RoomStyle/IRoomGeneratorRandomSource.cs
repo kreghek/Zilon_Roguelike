@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
@@ -8,26 +9,32 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public interface IRoomGeneratorRandomSource
     {
         /// <summary>
-        /// Выбрасывает случайный индекс команты из списка указанной длины.
+        /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>
-        /// <param name="maxPosition"> Максимальное количество комнат в списке. </param>
-        /// <returns> Возвращает случайное число в диапазоне (0, maxPosition). </returns>
-        int RollRoomPositionIndex(int maxPosition);
+        /// <param name="roomGridSize"> Размер матрицы комнат. </param>
+        /// <param name="roomCount"> Количество комнат в секторе. </param>
+        /// <returns> Возвращает массив координат из матрицы комнат. </returns>
+        IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount);
 
         /// <summary>
-        /// выбрасывает случайный размер комнаты.
+        /// Выбрасывает случайный размер комнаты минимального размера 2х2.
         /// </summary>
         /// <param name="maxSize"> Максимальный размер комнаты. </param>
-        /// <returns> Возвращает размер с произвольными шириной и высотой в диапазоне (0, maxSize). </returns>
+        /// <returns> Возвращает размер с произвольными шириной и высотой в диапазоне (2, maxSize). </returns>
+        /// <remarks>
+        /// Источник рандома возвращает комнаты минимального размера 2х2.
+        /// </remarks>
         Size RollRoomSize(int maxSize);
 
         /// <summary>
         /// Выбирает комнаты, с которыми есть соединение.
         /// </summary>
-        /// <param name="room"> Текущая комната. </param>
+        /// <param name="currentRoom"> Текущая комната, для которой ищуются соединённые соседи. </param>
         /// <param name="maxNeighbors"> Максимальное количество соединённых соседей. </param>
-        /// <param name="rooms"> Набор доступных комнат для соединения. </param>
-        /// <returns> Возвращает соединённые комнаты. </returns>
-        Room[] RollConnectedRooms(Room room, int maxNeighbors, IList<Room> rooms);
+        /// <param name="availableRooms"> Набор доступных для соединения соседенй. </param>
+        /// <returns> Возвращает целевые комнаты для соединения. </returns>
+        Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms);
+
+        IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
     }
 }

@@ -6,7 +6,6 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
-    //TODO Объединить команды, связанные с инвентярём (UseSelf и Equip)
     /// <summary>
     /// Команда на использование предмета.
     /// </summary>

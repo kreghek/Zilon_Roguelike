@@ -9,6 +9,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -25,8 +26,11 @@ public class InventorySlotVm : MonoBehaviour
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
     public int SlotIndex;
-    public GameObject Border;
+    
+    public GameObject DenyBorder;
     public Image IconImage;
+    public EquipmentSlotTypes SlotTypes;
+    public Sprite[] TypeBackgrounds;
 
     public event EventHandler Click;
 
@@ -61,7 +65,6 @@ public class InventorySlotVm : MonoBehaviour
         {
             if (IconImage != null)
             {
-                IconImage.gameObject.SetActive(true);
                 IconImage.sprite = Resources.Load<Sprite>($"Icons/props/{currentEquipment.Scheme.Sid}");
             }
         }
@@ -69,7 +72,27 @@ public class InventorySlotVm : MonoBehaviour
         {
             if (IconImage != null)
             {
-                IconImage.gameObject.SetActive(false);
+                switch (SlotTypes)
+                {
+                    case EquipmentSlotTypes.Head:
+                        IconImage.sprite = TypeBackgrounds[0];
+                        break;
+
+                    case EquipmentSlotTypes.Body:
+                        IconImage.sprite = TypeBackgrounds[1];
+                        break;
+
+                    case EquipmentSlotTypes.Hand:
+                        IconImage.sprite = TypeBackgrounds[2];
+                        break;
+
+                    case EquipmentSlotTypes.Aux:
+                        IconImage.sprite = TypeBackgrounds[3];
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Неизвестный тип слота {SlotTypes}.");
+                }
             }
         }
     }
@@ -79,7 +102,7 @@ public class InventorySlotVm : MonoBehaviour
         var canEquip = _equipCommand.CanExecute();
         var selectedProp = _inventoryState.SelectedProp;
         var denySlot = !canEquip && selectedProp != null;
-        Border.SetActive(denySlot);
+        DenyBorder.SetActive(denySlot);
     }
 
     public void Click_Handler()

@@ -24,8 +24,6 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
-
-            //TODO Создавать сразу с готовыми значениями стат
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
             var survivalRandomSource = survivalRandomSourceMock.Object;

@@ -22,11 +22,13 @@ namespace Zilon.Core.Persons
             var modifiedJobs = new List<IJob>();
             foreach (var job in currentJobs)
             {
-                if (job.Scheme.Type == JobType.Defeats)
+                if (job.Scheme.Type != JobType.Defeats)
                 {
-                    job.Progress++;
-                    modifiedJobs.Add(job);
+                    continue;
                 }
+                
+                job.Progress++;
+                modifiedJobs.Add(job);
             }
 
             return modifiedJobs.ToArray();

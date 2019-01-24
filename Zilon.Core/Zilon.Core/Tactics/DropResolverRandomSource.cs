@@ -15,12 +15,6 @@ namespace Zilon.Core.Tactics
         }
 
         [ExcludeFromCodeCoverage]
-        public int RollEquipmentPower(int minPower, int maxPower)
-        {
-            return _dice.Roll(minPower, maxPower);
-        }
-
-        [ExcludeFromCodeCoverage]
         public int RollResourceCount(int minCount, int maxCount)
         {
             return _dice.Roll(minCount, maxCount);

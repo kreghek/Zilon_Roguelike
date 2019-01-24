@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged" ],
+  "Equip": {
+    "ActSids": [
+      "bow-shot"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Композитный лук",
+	"En": "Composite bow"
+  }
+}

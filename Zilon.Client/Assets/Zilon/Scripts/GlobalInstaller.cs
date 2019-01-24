@@ -3,7 +3,6 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;

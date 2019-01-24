@@ -1,0 +1,25 @@
+{
+  "Name": {
+    "Ru": "Огненный шар",
+    "En":  "Fireball"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 3
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 5
+    },
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    }
+  },
+  "Constrains": {
+    "PropResourceType": "mana",
+    "PropResourceCount": 1
+  }
+}

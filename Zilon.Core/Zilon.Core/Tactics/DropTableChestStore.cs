@@ -26,12 +26,14 @@ namespace Zilon.Core.Tactics
 
         public override IProp[] CalcActualItems()
         {
-            if (!_contentResolved)
+            if (_contentResolved)
             {
-                var props = GenerateProps();
-                AddToContent(props);
-                _contentResolved = true;
+                return base.CalcActualItems();
             }
+            
+            var props = GenerateProps();
+            AddToContent(props);
+            _contentResolved = true;
 
             return base.CalcActualItems();
         }

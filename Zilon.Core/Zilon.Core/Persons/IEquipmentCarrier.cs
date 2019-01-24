@@ -30,7 +30,7 @@ namespace Zilon.Core.Persons
         /// могут изыматся из слотов в инвентарь или уничтожаться.
         /// Если указано null, то экипировка изымается из указанного слота.
         /// </remarks>
-        [NotNull, ItemCanBeNull]
+        [CanBeNull]
         Equipment this[int index] { get; set; }
     }
 }

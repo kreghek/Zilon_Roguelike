@@ -66,7 +66,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     private SectorModalManager GetSectorModalManager()
     {
         var sectorModalManager = FindObjectOfType<SectorModalManager>();
-        Debug.Log(sectorModalManager);
         return sectorModalManager;
     }
 }

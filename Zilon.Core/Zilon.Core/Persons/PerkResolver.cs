@@ -51,25 +51,18 @@ namespace Zilon.Core.Persons
 
             var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
 
-            var maxLevel = perk.Scheme.Levels.Length - 1;
+            var perkLevels = perk.Scheme.Levels;
+            var maxLevel = perkLevels.Length - 1;
             var nextLevelOutOfRange = nextLevel.Primary > maxLevel;
 
             if (nextLevelOutOfRange)
             {
                 return true;
             }
-            else
-            {
-                var currentSubLevelIsMax = currentLevel.Sub >= perk.Scheme.Levels[currentLevel.Primary].MaxValue;
-                if (currentSubLevelIsMax)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+
+            var maxSubLevel = perkLevels[currentLevel.Primary].MaxValue;
+            var currentSubLevelIsMax = currentLevel.Sub >= maxSubLevel;
+            return currentSubLevelIsMax;
         }
     }
 }

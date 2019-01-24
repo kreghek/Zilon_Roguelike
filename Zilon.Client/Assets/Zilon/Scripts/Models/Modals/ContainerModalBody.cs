@@ -42,6 +42,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] private PropTransferMachine _transferMachine;
 
+    public string Caption => "Loot";
+
 #pragma warning restore 649    
     // ReSharper restore UnassignedField.Global
     // ReSharper restore NotNullMemberIsNotInitialized

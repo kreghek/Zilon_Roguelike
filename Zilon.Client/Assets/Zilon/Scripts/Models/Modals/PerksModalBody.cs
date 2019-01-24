@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Assets.Zilon.Scripts;
+﻿using Assets.Zilon.Scripts;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -20,8 +21,10 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler {
 	public Text Stats;
 	
 	[NotNull] [Inject] private DiContainer _diContainer;
-	
-	public void Start()
+
+    public string Caption => "Character";
+
+    public void Start()
 	{
 		CreateSlots();
 	}

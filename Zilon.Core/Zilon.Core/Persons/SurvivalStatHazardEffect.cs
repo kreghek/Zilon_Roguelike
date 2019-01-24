@@ -58,6 +58,7 @@ namespace Zilon.Core.Persons
 
         private int GetSuccessHazardDamageRoll()
         {
+            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
             return 4;
         }
 
@@ -82,6 +83,9 @@ namespace Zilon.Core.Persons
                     rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
                     break;
 
+                case SurvivalStatHazardLevel.Undefined:
+                    throw new NotSupportedException();
+                
                 default:
                     throw new NotSupportedException("Неизветный уровень угрозы выживания.");
             }

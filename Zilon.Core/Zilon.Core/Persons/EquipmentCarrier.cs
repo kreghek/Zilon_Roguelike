@@ -19,12 +19,13 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(slots));
             }
 
-            if (slots.Count() == 0)
+            var slotArray = slots as PersonSlotSubScheme[] ?? slots.ToArray();
+            if (!slotArray.Any())
             {
                 throw new ArgumentException("Коллекция слотов не может быть пустой.");
             }
 
-            Slots = slots.ToArray();
+            Slots = slotArray;
 
             Equipments = new Equipment[Slots.Length];
         }
@@ -66,7 +67,7 @@ namespace Zilon.Core.Persons
                     throw new InvalidOperationException($"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
                 }
 
-                if (!EquipmentCarrierHelper.CheckSheildCompability(this, equipment, slot, slotIndex))
+                if (!EquipmentCarrierHelper.CheckShieldCompability(this, equipment, slot, slotIndex))
                 {
                     throw new InvalidOperationException("Попытка экипировать два щита.");
                 }
@@ -89,7 +90,7 @@ namespace Zilon.Core.Persons
             EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
 
-        public IEnumerator<Equipment> GetEnumerator() => Equipments.Cast<Equipment>().GetEnumerator();
+        public IEnumerator<Equipment> GetEnumerator() => Equipments.AsEnumerable().GetEnumerator();
 
 
         IEnumerator IEnumerable.GetEnumerator() => Equipments.GetEnumerator();

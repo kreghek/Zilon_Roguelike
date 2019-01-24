@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -33,8 +35,6 @@ namespace Zilon.Core.Props
                 throw new ArgumentException("Не корректная схема.", nameof(propScheme));
             }
 
-            Power = 1;
-
             if (acts != null)
             {
                 Acts = acts.ToArray();
@@ -55,17 +55,13 @@ namespace Zilon.Core.Props
 
         public ITacticalActScheme[] Acts { get; }
 
-        /// <summary>
-        /// Мощь/качество/уровень экипировки.
-        /// </summary>
-        public int Power { get; set; }
-
         public override string ToString()
         {
             if (_name != null)
             {
                 return $"{_name} {base.ToString()}";
             }
+            
             return base.ToString();
         }
     }

@@ -39,8 +39,7 @@ namespace Zilon.Core.MapGenerators
                 var freeNodes = new List<IMapNode>(region.Nodes);
                 for (var i = 0; i < rolledCount; i++)
                 {
-                    //TODO Учесть вероятность, что сундук может инстанцироваться на монстра
-                    // Выбрать из коллекции доступных узлов занятые монстрами
+                    // Выбрать из коллекции доступных узлов
                     var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(freeNodes.Count);
                     var containerNode = MapRegionHelper.FindNonBlockedNode(freeNodes[rollIndex], map, freeNodes);
                     if (containerNode == null)

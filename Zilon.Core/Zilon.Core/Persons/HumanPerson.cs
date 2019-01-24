@@ -24,8 +24,6 @@ namespace Zilon.Core.Persons
 
         public string Name { get; }
 
-        public int Hp { get; }
-
         public IEquipmentCarrier EquipmentCarrier { get; }
 
         public ITacticalActCarrier TacticalActCarrier { get; }
@@ -54,7 +52,6 @@ namespace Zilon.Core.Persons
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Name = scheme.Sid;
-            Hp = scheme.Hp;
 
             Effects = new EffectCollection();
             Effects.Added += Effects_CollectionChanged;
@@ -167,16 +164,19 @@ namespace Zilon.Core.Persons
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private static void CalcRuleBonuses(PerkRuleSubScheme rule, Dictionary<SkillStatType, float> bonusDict)
         {
-            var ruleType = rule.Type;
-            switch (ruleType)
+            switch (rule.Type)
             {
                 case PersonRuleType.Melee:
-                    AddStatToDict(bonusDict, SkillStatType.Melee, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    AddStatToDict(bonusDict, SkillStatType.Melee, rule.Level, PersonRuleDirection.Positive);
                     break;
 
                 case PersonRuleType.Ballistic:
-                    AddStatToDict(bonusDict, SkillStatType.Ballistic, PersonRuleLevel.Lesser, PersonRuleDirection.Positive);
+                    AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
+                
+                case PersonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
             }
         }
 
@@ -197,20 +197,26 @@ namespace Zilon.Core.Persons
 
                 if (equipStats.Armors != null)
                 {
-                    foreach (var propArmor in equipStats.Armors)
-                    {
-                        var personArmorItem = new PersonArmorItem(propArmor.Impact,
-                            propArmor.AbsorbtionLevel,
-                            propArmor.ArmorRank);
-
-                        equipmentArmors.Add(personArmorItem);
-                    }
+                    var currentEquipmentArmors = GetEquipmentArmors(equipStats.Armors);
+                    equipmentArmors.AddRange(currentEquipmentArmors);
                 }
             }
 
             var mergedArmors = MergeArmor(equipmentArmors);
 
             CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+        }
+
+        private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
+        {
+            foreach (var propArmor in armors)
+            {
+                var personArmorItem = new PersonArmorItem(propArmor.Impact,
+                    propArmor.AbsorbtionLevel,
+                    propArmor.ArmorRank);
+
+                yield return personArmorItem;
+            }
         }
 
         private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
@@ -312,6 +318,12 @@ namespace Zilon.Core.Persons
                     q = 0.5f;
                     break;
 
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+                
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+                
                 default:
                     throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
             }
@@ -422,8 +434,12 @@ namespace Zilon.Core.Persons
                     efficientRoll = new Roll(efficientRoll.Dice, efficientRoll.Count, modifiers);
                 }
 
-                var toHitRoll = new Roll(6, 1);
-                if (toHitBuffRule != null)
+                Roll toHitRoll;
+                if (toHitBuffRule == null)
+                {
+                    toHitRoll = new Roll(6, 1);
+                }
+                else
                 {
                     var modifiers = new RollModifiers(-1);
                     toHitRoll = new Roll(6, 1, modifiers);

@@ -32,6 +32,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
+    public string Caption => "Inventory";
+
     public void Start()
     {
         CreateSlots();
@@ -47,6 +49,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
             slotViewModel.SlotIndex = i;
+            slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += SlotOnClick;
         }
     }
@@ -64,6 +67,9 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void Init(IActor actor)
     {
+        // изначально скрываем кнопку использования
+        UseButton.SetActive(false);
+
         _actor = actor;
         var inventory = _actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
@@ -125,7 +131,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
 
-        var propTitle = currentItemVm.Prop.Scheme.Name.Ru ?? currentItemVm.Prop.Scheme.Name.En;
+        var propTitle = currentItemVm.Prop.Scheme.Name.En ?? currentItemVm.Prop.Scheme.Name.Ru;
         DetailText.text = propTitle;
         // --- этот фрагмент - не дубликат
 
@@ -134,7 +140,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void UseButton_Handler()
     {
-        Debug.Log($"Used: {_inventoryState.SelectedProp.Prop.Scheme.Sid}");
         _commandManager.Push(_useSelfCommand);
     }
 }

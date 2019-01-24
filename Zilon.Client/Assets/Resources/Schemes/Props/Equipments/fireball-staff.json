@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged" ],
+  "Equip": {
+    "ActSids": [
+      "fireball"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "En": "Fireball Staff",
+    "Ru": "Огненный посох"
+  }
+}

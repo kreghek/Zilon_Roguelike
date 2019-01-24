@@ -23,7 +23,6 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
             throw new NotSupportedException($"Тип персонажа {Actor.Person} не поддерживается ");
         }
 
-        Debug.Log(monsterPerson.Scheme.Sid);
         SetVisualProp(monsterPerson.Scheme.Sid, 0);
     }
 
