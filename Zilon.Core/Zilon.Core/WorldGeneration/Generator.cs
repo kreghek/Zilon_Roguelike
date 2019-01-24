@@ -17,6 +17,8 @@ namespace Zilon.Core.WorldGeneration
 
         public void Generate()
         {
+            const int Size = 10;
+
             var realms = new Realm[4];
             var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow };
             for (var i = 0; i < 4; i++)
@@ -31,16 +33,16 @@ namespace Zilon.Core.WorldGeneration
 
             var globe = new Globe
             {
-                Terrain = new TerrainCell[100][]
+                Terrain = new TerrainCell[Size][]
             };
 
             var localitiesCells = new Dictionary<TerrainCell, Locality>();
             var localities = new List<Locality>();
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < Size; i++)
             {
-                globe.Terrain[i] = new TerrainCell[100];
+                globe.Terrain[i] = new TerrainCell[Size];
 
-                for (var j = 0; j < 100; j++)
+                for (var j = 0; j < Size; j++)
                 {
                     globe.Terrain[i][j] = new TerrainCell {
                         X = i,
@@ -51,8 +53,8 @@ namespace Zilon.Core.WorldGeneration
 
             for (var i = 0; i < 4; i++)
             {
-                var randomX = _dice.Roll(0, 100);
-                var randomY = _dice.Roll(0, 100);
+                var randomX = _dice.Roll(0, Size - 1);
+                var randomY = _dice.Roll(0, Size - 1);
 
                 var locality = new Locality()
                 {
@@ -102,9 +104,9 @@ namespace Zilon.Core.WorldGeneration
             {
                 // обработка карты
                 var scanResult = new ScanResult();
-                for (var x = 0; x < 100; x++)
+                for (var x = 0; x < Size; x++)
                 {
-                    for (var y = 0; y < 100; y++)
+                    for (var y = 0; y < Size; y++)
                     {
 
                         var free = true;
@@ -131,12 +133,12 @@ namespace Zilon.Core.WorldGeneration
                                     continue;
                                 }
 
-                                if (scanX >= 100)
+                                if (scanX >= Size)
                                 {
                                     continue;
                                 }
 
-                                if (scanY >= 100)
+                                if (scanY >= Size)
                                 {
                                     continue;
                                 }
@@ -189,10 +191,13 @@ namespace Zilon.Core.WorldGeneration
 
                                     TerrainCell freeLocaltion = null;
 
-                                    for (var freeX = -1; freeX <= 1; freeX++)
+                                    for (var freeOffsetX = -1; freeOffsetX <= 1; freeOffsetX++)
                                     {
-                                        for (var freeY = -1; freeY <= 1; freeY++)
+                                        for (var freeOffsetY = -1; freeOffsetY <= 1; freeOffsetY++)
                                         {
+                                            var freeX = freeOffsetX + currentLocality.Cells[0].X;
+                                            var freeY = freeOffsetY + currentLocality.Cells[0].Y;
+
                                             if (freeX == 0 && freeY == 0)
                                             {
                                                 continue;
@@ -208,12 +213,12 @@ namespace Zilon.Core.WorldGeneration
                                                 continue;
                                             }
 
-                                            if (freeX >= 100)
+                                            if (freeX >= Size)
                                             {
                                                 continue;
                                             }
 
-                                            if (freeY >= 100)
+                                            if (freeY >= Size)
                                             {
                                                 continue;
                                             }
@@ -274,12 +279,12 @@ namespace Zilon.Core.WorldGeneration
 
             var branchColors = new[] { Color.Red, Color.Blue, Color.Green, Color.Yellow,
                 Color.Black, Color.Magenta, Color.Maroon, Color.LightGray };
-            using (var realmBmp = new Bitmap(100, 100))
-            using (var branchmBmp = new Bitmap(100, 100))
+            using (var realmBmp = new Bitmap(Size, Size))
+            using (var branchmBmp = new Bitmap(Size, Size))
             {
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < Size; i++)
                 {
-                    for (var j = 0; j < 100; j++)
+                    for (var j = 0; j < Size; j++)
                     {
                         var cell = globe.Terrain[i][j];
                         if (localitiesCells.TryGetValue(cell, out var locality))

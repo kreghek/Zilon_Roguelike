@@ -20,5 +20,10 @@ namespace Zilon.Core.WorldGeneration
         public Realm Realm { get; set; }
 
         public Dictionary<BranchType, int> Skills { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} [{Realm}] {Localtion}";
+        }
     }
 }

@@ -9,5 +9,10 @@ namespace Zilon.Core.WorldGeneration
     {
         public string Name { get; set; }
         public Color Color;
+
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }
 }
