@@ -154,6 +154,7 @@
     <Compile Include="Tactics\Spatial\TestCases\ConvertOffsetToCubeTestCaseSource.cs" />
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="Tactics\TacticalActUsageServiceTests.cs" />
+    <Compile Include="WorldGeneration\GeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

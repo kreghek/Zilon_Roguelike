@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -11,5 +7,7 @@ namespace Zilon.Core.WorldGeneration
     /// </summary>
     public class Realm
     {
+        public string Name { get; set; }
+        public Color Color;
     }
 }
