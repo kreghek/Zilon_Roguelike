@@ -1,18 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
-using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Columns;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Exporters.Csv;
-using BenchmarkDotNet.Exporters.Json;
-using BenchmarkDotNet.Loggers;
 
 using JetBrains.Annotations;
 
 using LightInject;
+
+using Moq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -31,92 +27,44 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
 {
-    public class TheEasiestBenchmark
+    public class CreateProceduralSectorMaxBench
     {
         private ServiceContainer _container;
 
-        [Benchmark(Description = "Move100")]
-        public void Move100()
+        [Benchmark(Description = "CreateProceduralMaxSector")]
+        public void Create()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var commandManger = _container.GetInstance<ICommandManager>();
 
-            for (var i = 0; i < 100; i++)
+            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
             {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
-                var moveTargetNode = nextNodes.First();
-
-                playerState.HoverViewModel = new TestNodeViewModel
+                MonsterGeneratorOptions = new MonsterGeneratorOptions
                 {
-                    Node = moveTargetNode
-                };
+                    BotPlayer = _container.GetInstance<IBotPlayer>(),
+                    RegularMonsterSids = new[] { "rat" },
+                    RareMonsterSids = new[] { "rat" },
+                    ChampionMonsterSids = new[] { "rat" }
+                }
+            });
 
-                commandManger.Push(moveCommand);
 
-                ICommand command = null;
-                do
-                {
-                    command = commandManger.Pop();
 
-                    try
-                    {
-                        command?.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-                    }
-                } while (command != null);
-            }
-        }
+            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-        [Benchmark(Description = "Move1")]
-        public void Move1()
-        {
-            var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var commandManger = _container.GetInstance<ICommandManager>();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
+            var playerActorVm = CreateHumanActorVm(humanPlayer,
+                personScheme,
+                actorManager,
+                playerActorStartNode);
 
-            for (var i = 0; i < 1; i++)
-            {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
-                var moveTargetNode = nextNodes.First();
-
-                playerState.HoverViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
-
-                commandManger.Push(moveCommand);
-
-                ICommand command = null;
-                do
-                {
-                    command = commandManger.Pop();
-
-                    try
-                    {
-                        command?.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-                    }
-                } while (command != null);
-            }
+            //Лучше централизовать переключение текущего актёра только в playerState
+            playerState.ActiveActor = playerActorVm;
+            humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
         }
 
         [IterationSetup]
@@ -127,7 +75,7 @@ namespace Zilon.Core.Benchmark
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
             _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<IRoomGeneratorRandomSource, FixLargeRoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
             _container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
             _container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
@@ -136,9 +84,9 @@ namespace Zilon.Core.Benchmark
             _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
             _container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
-            _container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register(factory => CreateFakeChestGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
-            _container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register(factory => CreateFakeMonsterGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
@@ -155,13 +103,11 @@ namespace Zilon.Core.Benchmark
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
-            _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            //_container.Register<ISectorModalManager>(factory => GetSectorModalManager(), new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.
@@ -182,42 +128,25 @@ namespace Zilon.Core.Benchmark
             // Специализированные команды для Ui.
             _container.Register<ICommand, EquipCommand>(serviceName: "show-container-modal-command");
             _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
+        }
 
+        private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
+        {
+            var mock = new Mock<IMonsterGeneratorRandomSource>();
+            mock.Setup(x => x.RollCount()).Returns(5);
+            mock.Setup(x => x.RollMonsterScheme(It.IsAny<IEnumerable<IMonsterScheme>>()))
+                .Returns<IEnumerable<IMonsterScheme>>(sids => sids.First());
+            mock.Setup(x => x.RollRarity()).Returns(2);
+            //mock.Setup(x => x.RollNodeIndex(It.IsAny<int>())).Returns(0);
+            return mock.Object;
+        }
 
-
-
-
-            var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var commandManger = _container.GetInstance<ICommandManager>();
-
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
-            {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
-                }
-            });
-
-
-
-            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
-
-            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
-            var playerActorVm = CreateHumanActorVm(humanPlayer,
-                personScheme,
-                actorManager,
-                playerActorStartNode);
-
-            //Лучше централизовать переключение текущего актёра только в playerState
-            playerState.ActiveActor = playerActorVm;
-            humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
+        private IChestGeneratorRandomSource CreateFakeChestGeneratorRandomSource()
+        {
+            var mock = new Mock<IChestGeneratorRandomSource>();
+            mock.Setup(x => x.RollChestCount(It.IsAny<int>())).Returns<int>(n => n);
+            mock.Setup(x => x.RollNodeIndex(It.IsAny<int>())).Returns(0);
+            return mock.Object;
         }
 
         private FileSchemeLocator CreateSchemeLocator()
