@@ -46,28 +46,30 @@ namespace Zilon.Core.WorldGeneration
                         X = i,
                         Y = j
                     };
+                }
+            }
 
-                    if (_dice.Roll(100) > 75)
-                    {
-                        var rolledRealmIndex = _dice.Roll(0, 3);
+            for (var i = 0; i < 4; i++)
+            {
+                var randomX = _dice.Roll(0, 100);
+                var randomY = _dice.Roll(0, 100);
 
-                        var locality = new Locality()
-                        {
-                            Cells = new[] { globe.Terrain[i][j] },
-                            Owner = realms[rolledRealmIndex]
-                        };
+                var locality = new Locality()
+                {
+                    Cells = new[] { globe.Terrain[randomX][randomY] },
+                    Owner = realms[i],
+                    Population = 3
+                };
 
-                        var rolledBranchIndex = _dice.Roll(0, 7);
-                        locality.Branches = new Dictionary<BranchType, int>
+                var rolledBranchIndex = _dice.Roll(0, 7);
+                locality.Branches = new Dictionary<BranchType, int>
                         {
                             { (BranchType)rolledBranchIndex, 1 }
                         };
 
-                        localities.Add(locality);
+                localities.Add(locality);
 
-                        localitiesCells[globe.Terrain[i][j]] = locality;
-                    }
-                }
+                localitiesCells[locality.Cells[0]] = locality;
             }
 
             var agents = new List<Agent>();
@@ -165,6 +167,12 @@ namespace Zilon.Core.WorldGeneration
                     if (localitiesCells.TryGetValue(agent.Localtion, out var currentLocality))
                     {
                         // Деятель в городе
+
+                        if (currentLocality.Population <= 1)
+                        {
+                            currentLocality.Population++;
+                            continue;
+                        }
 
                         // если политик на 2 любая компетенция на 1, то
                         // население в городе 3, тогда новый город
