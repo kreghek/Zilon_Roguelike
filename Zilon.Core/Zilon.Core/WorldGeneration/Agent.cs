@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -12,5 +8,17 @@ namespace Zilon.Core.WorldGeneration
     public class Agent
     {
         public string Name { get; set; }
+
+        /// <summary>
+        /// Текущее местоположение деятеля.
+        /// </summary>
+        public TerrainCell Localtion { get; set; }
+
+        /// <summary>
+        /// Государтсво, на которое работает данный деятель.
+        /// </summary>
+        public Realm Realm { get; set; }
+
+        public Dictionary<BranchType, int> Skills { get; set; }
     }
 }
