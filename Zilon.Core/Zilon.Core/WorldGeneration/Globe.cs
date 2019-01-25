@@ -13,5 +13,12 @@ namespace Zilon.Core.WorldGeneration
         public List<Agent> agents = new List<Agent>();
         public Dictionary<TerrainCell, List<Agent>> agentCells = new Dictionary<TerrainCell, List<Agent>>();
         public Dictionary<TerrainCell, Locality> localitiesCells = new Dictionary<TerrainCell, Locality>();
+
+        public ScanResult ScanResult = new ScanResult();
+    }
+
+    public class ScanResult
+    {
+        public HashSet<TerrainCell> Free = new HashSet<TerrainCell>();
     }
 }

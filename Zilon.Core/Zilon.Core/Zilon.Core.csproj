@@ -381,10 +381,15 @@
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
+    <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
+    <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />
+    <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
     <Compile Include="WorldGeneration\Generator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
+    <Compile Include="WorldGeneration\Helper.cs" />
+    <Compile Include="WorldGeneration\IAgentCard.cs" />
     <Compile Include="WorldGeneration\Locality.cs" />
     <Compile Include="WorldGeneration\Realm.cs" />
     <Compile Include="WorldGeneration\RealmRelations.cs" />
