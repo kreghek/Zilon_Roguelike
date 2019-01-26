@@ -11,7 +11,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            var hasCurrentLocality = globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            var hasCurrentLocality = globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
             if (currentLocality != null)
             {
                 if (currentLocality.Population >= 2)
@@ -25,7 +25,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
 
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1);
@@ -67,7 +67,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                     var freeLocaltion1 = globe.Terrain[freeX][freeY];
 
-                    if (!globe.localitiesCells.TryGetValue(freeLocaltion1, out var freeCheckLocality))
+                    if (!globe.LocalitiesCells.TryGetValue(freeLocaltion1, out var freeCheckLocality))
                     {
                         freeLocaltion = globe.Terrain[freeX][freeY];
                     }
@@ -87,21 +87,21 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                     currentLocality.Population--;
 
-                    globe.localities.Add(createdLocality);
-                    globe.localitiesCells[freeLocaltion] = createdLocality;
+                    globe.Localities.Add(createdLocality);
+                    globe.LocalitiesCells[freeLocaltion] = createdLocality;
                     globe.ScanResult.Free.Remove(freeLocaltion);
                 }
                 else
                 {
-                    var realmLocalities = globe.localities.Where(x => x.Owner == agent.Realm).ToArray();
+                    var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm).ToArray();
                     var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
                     var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
 
-                    Helper.RemoveAgentToCell(globe.agentCells, agent.Localtion, agent);
+                    Helper.RemoveAgentToCell(globe.AgentCells, agent.Localtion, agent);
 
                     agent.Localtion = rolledTransportLocality.Cell;
 
-                    Helper.AddAgentToCell(globe.agentCells, agent.Localtion, agent);
+                    Helper.AddAgentToCell(globe.AgentCells, agent.Localtion, agent);
                 }
             }
         }

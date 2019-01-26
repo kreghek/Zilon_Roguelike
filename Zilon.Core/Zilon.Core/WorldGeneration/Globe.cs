@@ -15,10 +15,10 @@ namespace Zilon.Core.WorldGeneration
     {
         public TerrainCell[][] Terrain { get; set; }
         public List<Realm> Realms = new List<Realm>();
-        public List<Locality> localities = new List<Locality>();
-        public List<Agent> agents = new List<Agent>();
-        public Dictionary<TerrainCell, List<Agent>> agentCells = new Dictionary<TerrainCell, List<Agent>>();
-        public Dictionary<TerrainCell, Locality> localitiesCells = new Dictionary<TerrainCell, Locality>();
+        public List<Locality> Localities = new List<Locality>();
+        public List<Agent> Agents = new List<Agent>();
+        public Dictionary<TerrainCell, List<Agent>> AgentCells = new Dictionary<TerrainCell, List<Agent>>();
+        public Dictionary<TerrainCell, Locality> LocalitiesCells = new Dictionary<TerrainCell, Locality>();
 
         public ScanResult ScanResult = new ScanResult();
 
@@ -34,7 +34,7 @@ namespace Zilon.Core.WorldGeneration
                     for (var j = 0; j < Terrain[0].Length; j++)
                     {
                         var cell = Terrain[i][j];
-                        if (localitiesCells.TryGetValue(cell, out var locality))
+                        if (LocalitiesCells.TryGetValue(cell, out var locality))
                         {
                             var branch = locality.Branches.Single(x => x.Value > 0);
 

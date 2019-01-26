@@ -16,9 +16,9 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
 
-            var realmLocalities = globe.localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
+            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
             if (!realmLocalities.Any())
             {
                 return;
@@ -29,12 +29,12 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             if (currentLocality != null)
             {
-                Helper.RemoveAgentToCell(globe.agentCells, agent.Localtion, agent);
+                Helper.RemoveAgentToCell(globe.AgentCells, agent.Localtion, agent);
             }
 
             agent.Localtion = rolledTransportLocality.Cell;
 
-            Helper.AddAgentToCell(globe.agentCells, agent.Localtion, agent);
+            Helper.AddAgentToCell(globe.AgentCells, agent.Localtion, agent);
         }
     }
 }

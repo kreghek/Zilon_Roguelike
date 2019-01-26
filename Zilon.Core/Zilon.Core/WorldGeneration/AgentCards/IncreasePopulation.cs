@@ -8,14 +8,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
 
             return currentLocality.Population <= 5;
         }
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
             currentLocality.Population++;
         }
     }

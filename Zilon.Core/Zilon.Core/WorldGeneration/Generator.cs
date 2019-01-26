@@ -75,17 +75,17 @@ namespace Zilon.Core.WorldGeneration
                             { (BranchType)rolledBranchIndex, 1 }
                         };
 
-                globe.localities.Add(locality);
+                globe.Localities.Add(locality);
 
-                globe.localitiesCells[locality.Cell] = locality;
+                globe.LocalitiesCells[locality.Cell] = locality;
 
                 scanResult.Free.Remove(locality.Cell);
             }
 
             for (var i = 0; i < 40; i++)
             {
-                var rolledLocalityIndex = _dice.Roll(0, globe.localities.Count - 1);
-                var locality = globe.localities[rolledLocalityIndex];
+                var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
+                var locality = globe.Localities[rolledLocalityIndex];
 
                 var agent = new Agent
                 {
@@ -94,9 +94,9 @@ namespace Zilon.Core.WorldGeneration
                     Realm = locality.Owner
                 };
 
-                globe.agents.Add(agent);
+                globe.Agents.Add(agent);
 
-                Helper.AddAgentToCell(globe.agentCells, locality.Cell, agent);
+                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>
@@ -117,7 +117,7 @@ namespace Zilon.Core.WorldGeneration
 
             for (var year = 0; year < 100/*40_000*/; year++)
             {
-                foreach (var agent in globe.agents.ToArray())
+                foreach (var agent in globe.Agents.ToArray())
                 {
                     var card = cardQueue.Dequeue();
 
