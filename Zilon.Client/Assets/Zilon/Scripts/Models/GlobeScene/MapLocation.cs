@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 
 public class MapLocation : MonoBehaviour
@@ -9,16 +10,6 @@ public class MapLocation : MonoBehaviour
     public SpriteRenderer Icon;
 
     public string Sid { get; set; }
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
     public void OnMouseDown()
     {
