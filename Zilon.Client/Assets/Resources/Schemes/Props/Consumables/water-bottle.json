@@ -7,7 +7,7 @@
     "Consumable": true,
     "CommonRules": [
       {
-        "Type": "Thrist",
+        "Type": "Thirst",
         "Level": "Normal"
       }
     ]
