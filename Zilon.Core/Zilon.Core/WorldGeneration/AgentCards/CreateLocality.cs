@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
@@ -35,9 +35,15 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                 TerrainCell freeLocaltion = null;
 
-                for (var freeOffsetX = -1; freeOffsetX <= 1; freeOffsetX++)
+                var nextCoords = HexHelper.GetOffsetClockwise();
+                var agentCubeCoords = HexHelper.ConvertToCube(agent.Localtion.Coords.X, agent.Localtion.Coords.Y);
+                for (var i = 0; i < nextCoords.Length; i++)
                 {
-                    var freeX = freeOffsetX + currentLocality.Cell.X;
+                    var scanCubeCoords = agentCubeCoords + nextCoords[i];
+                    var scanOffsetCoords = HexHelper.ConvertToOffset(scanCubeCoords);
+
+                    var freeX = scanOffsetCoords.X;
+                    var freeY = scanOffsetCoords.Y;
 
                     if (freeX < 0)
                     {
@@ -49,31 +55,21 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                         continue;
                     }
 
-                    for (var freeOffsetY = -1; freeOffsetY <= 1; freeOffsetY++)
+                    if (freeY < 0)
                     {
-                        var freeY = freeOffsetY + currentLocality.Cell.Y;
+                        continue;
+                    }
 
-                        if (freeOffsetX == 0 && freeOffsetY == 0)
-                        {
-                            continue;
-                        }
+                    if (freeY >= globe.Terrain[freeX].Length)
+                    {
+                        continue;
+                    }
 
-                        if (freeY < 0)
-                        {
-                            continue;
-                        }
+                    var freeLocaltion1 = globe.Terrain[freeX][freeY];
 
-                        if (freeY >= globe.Terrain[freeX].Length)
-                        {
-                            continue;
-                        }
-
-                        var freeLocaltion1 = globe.Terrain[freeX][freeY];
-
-                        if (!globe.localitiesCells.TryGetValue(freeLocaltion1, out var freeCheckLocality))
-                        {
-                            freeLocaltion = globe.Terrain[freeX][freeY];
-                        }
+                    if (!globe.localitiesCells.TryGetValue(freeLocaltion1, out var freeCheckLocality))
+                    {
+                        freeLocaltion = globe.Terrain[freeX][freeY];
                     }
                 }
 
@@ -82,7 +78,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                     var createdLocality = new Locality
                     {
                         Name = currentLocality.Name + " " + agent.Name,
-                        Branches = new Dictionary<BranchType, int> {{ firstBranch.Key, 1 } },
+                        Branches = new Dictionary<BranchType, int> { { firstBranch.Key, 1 } },
                         Cell = freeLocaltion,
 
                         Population = 1,

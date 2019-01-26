@@ -5,12 +5,11 @@
     /// </summary>
     public class TerrainCell
     {
-        public int X;
-        public int Y;
+        public OffsetCoords Coords;
 
         public override string ToString()
         {
-            return $"({X}, {Y})";
+            return $"{Coords}";
         }
     }
 }
