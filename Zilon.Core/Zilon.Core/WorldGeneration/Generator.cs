@@ -119,7 +119,7 @@ namespace Zilon.Core.WorldGeneration
                 new IncreasePopulation()
             });
 
-            for (var year = 0; year < 40_000; year++)
+            for (var year = 0; year < 100/*40_000*/; year++)
             {
                 foreach (var agent in globe.agents.ToArray())
                 {
