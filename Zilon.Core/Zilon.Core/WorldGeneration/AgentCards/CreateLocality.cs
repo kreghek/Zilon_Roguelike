@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
@@ -13,15 +11,23 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            return globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality) &&
-                currentLocality.Population <= 1;
+            var hasCurrentLocality = globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            if (currentLocality != null)
+            {
+                if (currentLocality.Population >= 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
             globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
 
-            var highestBranchs = currentLocality.Branches.OrderBy(x => x.Value)
+            var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1);
             if (highestBranchs.Any())
             {
@@ -31,17 +37,23 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                 for (var freeOffsetX = -1; freeOffsetX <= 1; freeOffsetX++)
                 {
+                    var freeX = freeOffsetX + currentLocality.Cell.X;
+
+                    if (freeX < 0)
+                    {
+                        continue;
+                    }
+
+                    if (freeX >= globe.Terrain.Length)
+                    {
+                        continue;
+                    }
+
                     for (var freeOffsetY = -1; freeOffsetY <= 1; freeOffsetY++)
                     {
-                        var freeX = freeOffsetX + currentLocality.Cells[0].X;
-                        var freeY = freeOffsetY + currentLocality.Cells[0].Y;
+                        var freeY = freeOffsetY + currentLocality.Cell.Y;
 
-                        if (freeX == 0 && freeY == 0)
-                        {
-                            continue;
-                        }
-
-                        if (freeX < 0)
+                        if (freeOffsetX == 0 && freeOffsetY == 0)
                         {
                             continue;
                         }
@@ -51,12 +63,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                             continue;
                         }
 
-                        if (freeX >= globe.Terrain.GetLength(0))
-                        {
-                            continue;
-                        }
-
-                        if (freeY >= globe.Terrain.GetLength(1))
+                        if (freeY >= globe.Terrain[freeX].Length)
                         {
                             continue;
                         }
@@ -75,12 +82,9 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                     var createdLocality = new Locality
                     {
                         Name = currentLocality.Name + " " + agent.Name,
-                        Branches = new Dictionary<BranchType, int> {
-                                                { firstBranch.Key, 1 }
-                                            },
-                        Cells = new[] {
-                                                freeLocaltion
-                                            },
+                        Branches = new Dictionary<BranchType, int> {{ firstBranch.Key, 1 } },
+                        Cell = freeLocaltion,
+
                         Population = 1,
                         Owner = currentLocality.Owner
                     };
@@ -99,7 +103,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                     Helper.RemoveAgentToCell(globe.agentCells, agent.Localtion, agent);
 
-                    agent.Localtion = rolledTransportLocality.Cells[0];
+                    agent.Localtion = rolledTransportLocality.Cell;
 
                     Helper.AddAgentToCell(globe.agentCells, agent.Localtion, agent);
                 }

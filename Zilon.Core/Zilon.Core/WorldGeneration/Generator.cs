@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.WorldGeneration.AgentCards;
 
@@ -21,7 +22,7 @@ namespace Zilon.Core.WorldGeneration
 
         public void Generate()
         {
-            const int Size = 10;
+            const int Size = 20;
             const int StartRealmCount = 4;
 
             var globe = new Globe
@@ -40,10 +41,6 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.Realms.Add(realm);
             }
-
-
-
-
 
             var scanResult = new ScanResult();
             for (var i = 0; i < Size; i++)
@@ -70,7 +67,8 @@ namespace Zilon.Core.WorldGeneration
 
                 var locality = new Locality()
                 {
-                    Cells = new[] { globe.Terrain[randomX][randomY] },
+                    Name = $"L{i}",
+                    Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
                     Population = 3
                 };
@@ -83,9 +81,9 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.localities.Add(locality);
 
-                globe.localitiesCells[locality.Cells[0]] = locality;
+                globe.localitiesCells[locality.Cell] = locality;
 
-                scanResult.Free.Remove(locality.Cells[0]);
+                scanResult.Free.Remove(locality.Cell);
             }
 
             for (var i = 0; i < 40; i++)
@@ -96,13 +94,13 @@ namespace Zilon.Core.WorldGeneration
                 var agent = new Agent
                 {
                     Name = $"agent {i}",
-                    Localtion = locality.Cells[0],
+                    Localtion = locality.Cell,
                     Realm = locality.Owner
                 };
 
                 globe.agents.Add(agent);
 
-                Helper.AddAgentToCell(globe.agentCells, locality.Cells[0], agent);
+                Helper.AddAgentToCell(globe.agentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>

@@ -16,13 +16,23 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var realmLocalities = globe.localities.Where(x => x.Owner == agent.Realm).ToArray();
+            globe.localitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+
+            var realmLocalities = globe.localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
+            if (!realmLocalities.Any())
+            {
+                return;
+            }
+
             var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
             var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
 
-            Helper.RemoveAgentToCell(globe.agentCells, agent.Localtion, agent);
+            if (currentLocality != null)
+            {
+                Helper.RemoveAgentToCell(globe.agentCells, agent.Localtion, agent);
+            }
 
-            agent.Localtion = rolledTransportLocality.Cells[0];
+            agent.Localtion = rolledTransportLocality.Cell;
 
             Helper.AddAgentToCell(globe.agentCells, agent.Localtion, agent);
         }
