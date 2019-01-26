@@ -13,7 +13,7 @@ namespace Zilon.Core.WorldGeneration.Tests
             var dice = new Dice();
             var generator = new WorldGenerator(dice);
 
-            var globe = generator.Generate();
+            var globe = generator.GenerateGlobe();
             globe.Save(@"c:\worldgen");
         }
     }

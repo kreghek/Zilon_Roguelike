@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
 
 namespace Zilon.Core.WorldGeneration
@@ -17,7 +18,7 @@ namespace Zilon.Core.WorldGeneration
             _dice = dice;
         }
 
-        public Globe Generate()
+        public Globe GenerateGlobe()
         {
             const int Size = 20;
             const int StartRealmCount = 4;
@@ -136,6 +137,20 @@ namespace Zilon.Core.WorldGeneration
             return globe;
         }
 
-        
+        public GlobeRegion GenerateRegion(Globe globe, TerrainCell cell)
+        {
+            var region = new GlobeRegion();
+
+            for (var x = 0; x < 10; x++)
+            {
+                for (var y = 0; y < 10; y++)
+                {
+                    var node = new GlobeRegionNode(x, y);
+                    region.AddNode(node);
+                }
+            }
+
+            return region;
+        }
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Zilon.Core.World
 {
-    public class GlobeRegionNode: IMapNode
+    public class GlobeRegionNode : HexNode
     {
+        public GlobeRegionNode(int x, int y) : base(x, y)
+        {
+        }
     }
 }

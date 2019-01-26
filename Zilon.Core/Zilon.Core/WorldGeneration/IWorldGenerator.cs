@@ -1,7 +1,11 @@
-﻿namespace Zilon.Core.WorldGeneration
+﻿using Zilon.Core.World;
+
+namespace Zilon.Core.WorldGeneration
 {
     public interface IWorldGenerator
     {
-        Globe Generate();
+        Globe GenerateGlobe();
+
+        GlobeRegion GenerateRegion(Globe globe, TerrainCell cell);
     }
 }

@@ -1,13 +1,13 @@
-﻿//using Mono.Data.Sqlite;
-using System.Linq;
+﻿using System.Linq;
+
 using Assets.Zilon.Scripts.Services;
-using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
+
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 
 public class GlobeWorldVM : MonoBehaviour
 {
@@ -22,11 +22,17 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.CurrentGlobe == null)
         {
-            _globeManager.Generate();
+            _globeManager.GenerateGlobe();
         }
 
-        var currentGlobeCell = _globeManager.CurrentGlobe.Localities.First();
+        var currentLocality = _globeManager.CurrentGlobe.Localities.First();
+        var currentGlobeCell = currentLocality.Cell;
 
+        var region = _globeManager.GenerateRegion(currentGlobeCell);
 
+        foreach (var gloneRegionNode in region.Nodes)
+        {
+
+        }
     }
 }

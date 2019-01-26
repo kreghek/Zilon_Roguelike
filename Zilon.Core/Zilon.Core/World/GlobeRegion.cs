@@ -2,7 +2,10 @@
 
 namespace Zilon.Core.World
 {
-    public class GlobeRegion: GraphMap
+    public class GlobeRegion : HexMap
     {
+        public GlobeRegion() : base(10)
+        {
+        }
     }
 }

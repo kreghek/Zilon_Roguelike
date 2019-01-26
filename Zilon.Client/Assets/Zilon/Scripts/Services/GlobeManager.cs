@@ -1,4 +1,5 @@
-﻿using Zilon.Core.WorldGeneration;
+﻿using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Assets.Zilon.Scripts.Services
 {
@@ -13,9 +14,14 @@ namespace Assets.Zilon.Scripts.Services
 
         public Globe CurrentGlobe { get; private set; }
 
-        public void Generate()
+        public void GenerateGlobe()
         {
-            CurrentGlobe = _generator.Generate();
+            CurrentGlobe = _generator.GenerateGlobe();
+        }
+
+        public GlobeRegion GenerateRegion(TerrainCell cell)
+        {
+            return _generator.GenerateRegion(CurrentGlobe, cell);
         }
     }
 }
