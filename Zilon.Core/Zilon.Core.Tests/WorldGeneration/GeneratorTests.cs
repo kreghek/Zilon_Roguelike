@@ -11,7 +11,7 @@ namespace Zilon.Core.WorldGeneration.Tests
         public void GenerateTest()
         {
             var dice = new Dice();
-            var generator = new Generator(dice);
+            var generator = new WorldGenerator(dice);
 
             var globe = generator.Generate();
             globe.Save(@"c:\worldgen");

@@ -386,7 +386,8 @@
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
-    <Compile Include="WorldGeneration\Generator.cs" />
+    <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
     <Compile Include="WorldGeneration\Helper.cs" />
     <Compile Include="WorldGeneration\IAgentCard.cs" />
@@ -395,6 +396,8 @@
     <Compile Include="WorldGeneration\RealmRelations.cs" />
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\GlobeRegion.cs" />
+    <Compile Include="World\GlobeRegionNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

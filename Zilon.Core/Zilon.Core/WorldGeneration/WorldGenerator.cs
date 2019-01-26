@@ -8,11 +8,11 @@ using Zilon.Core.WorldGeneration.AgentCards;
 
 namespace Zilon.Core.WorldGeneration
 {
-    public class Generator
+    public class WorldGenerator : IWorldGenerator
     {
         private readonly IDice _dice;
 
-        public Generator(IDice dice)
+        public WorldGenerator(IDice dice)
         {
             _dice = dice;
         }
