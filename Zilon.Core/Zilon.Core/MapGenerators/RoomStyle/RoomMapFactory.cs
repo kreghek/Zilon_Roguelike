@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var edgeHash = new HashSet<string>();
 
-            // Генерируем комнаты в сетке
+            // Генерируем случайные координаты комнат
             var rooms = _roomGenerator.GenerateRoomsInGrid();
 
             // Создаём узлы и рёбра комнат
