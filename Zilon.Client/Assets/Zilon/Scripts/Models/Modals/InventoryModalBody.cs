@@ -155,6 +155,9 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         {
             CreatePropObject(itemsParent, prop);
         }
+
+        var parentRect = itemsParent.GetComponent<RectTransform>();
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * props.Count() / 4);
     }
 
     private void CreatePropObject(Transform itemsParent, IProp prop)
