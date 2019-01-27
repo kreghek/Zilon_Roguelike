@@ -20,7 +20,7 @@
       "Weight": 2
     },
     {
-      "SchemeSid": "bottle",
+      "SchemeSid": "water-bottle",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 3
