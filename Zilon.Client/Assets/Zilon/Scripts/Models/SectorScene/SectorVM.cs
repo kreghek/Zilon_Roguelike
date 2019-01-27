@@ -382,7 +382,7 @@ internal class SectorVM : MonoBehaviour
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
         _personManager.SectorLevel++;
-        SceneManager.LoadScene("combat");
+        SceneManager.LoadScene("globe");
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)

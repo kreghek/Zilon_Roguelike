@@ -1,4 +1,5 @@
-﻿using Zilon.Core.World;
+﻿using System.Collections.Generic;
+using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
 namespace Assets.Zilon.Scripts.Services
@@ -10,5 +11,7 @@ namespace Assets.Zilon.Scripts.Services
         void GenerateGlobe();
 
         GlobeRegion GenerateRegion(TerrainCell cell);
+
+        Dictionary<TerrainCell, GlobeRegion> Regions { get; }
     }
 }

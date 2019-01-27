@@ -161,6 +161,8 @@ MonoBehaviour:
     type: 3}
   ConnectorPrefab: {fileID: 114584494024405158, guid: 1eb9dfbe82f41cc4c85dca2d195bf356,
     type: 3}
+  HumanGroupPrefab: {fileID: 114608583235101136, guid: a8cba799ff5227f49bbf6822a03853d7,
+    type: 3}
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,6 +317,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b7f22fcb9a3b647bfed24a47f8b65a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
   LocationPrefab: {fileID: 114552413250840230, guid: cd522b30c005d0f45b172d248bfdb6cf,
     type: 3}
   ConnectorPrefab: {fileID: 114584494024405158, guid: 1eb9dfbe82f41cc4c85dca2d195bf356,
@@ -322,6 +338,10 @@ MonoBehaviour:
   GroupPrefab: {fileID: 114608583235101136, guid: a8cba799ff5227f49bbf6822a03853d7,
     type: 3}
   Canvas: {fileID: 227365884}
+  <Nodes>k__BackingField: []
+  <Paths>k__BackingField: []
+  <Groups>k__BackingField: []
+  <SelectedGroup>k__BackingField: {fileID: 0}
 --- !u!1 &838207152
 GameObject:
   m_ObjectHideFlags: 0
