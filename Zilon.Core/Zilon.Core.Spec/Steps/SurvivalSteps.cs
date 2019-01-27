@@ -45,7 +45,7 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 case "вода":
-                    consumeRuleType = ConsumeCommonRuleType.Thrist;
+                    consumeRuleType = ConsumeCommonRuleType.Thirst;
                     break;
 
                 case "хп":
