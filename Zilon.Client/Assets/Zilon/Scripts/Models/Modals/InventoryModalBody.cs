@@ -81,8 +81,43 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
-        inventory.Removed += InventoryOnContentChanged;
+        inventory.Removed += Inventory_Removed;
         inventory.Changed += Inventory_Changed;
+    }
+
+    public void ApplyChanges()
+    {
+        var inventory = _actor.Person.Inventory;
+        inventory.Added -= InventoryOnContentChanged;
+        inventory.Removed -= InventoryOnContentChanged;
+        inventory.Changed -= InventoryOnContentChanged;
+
+        _inventoryState.SelectedProp = null;
+    }
+
+    public void CancelChanges()
+    {
+        _inventoryState.SelectedProp = null;
+
+        throw new NotImplementedException();
+    }
+
+
+    private void Inventory_Removed(object sender, PropStoreEventArgs e)
+    {
+        var inventory = _actor.Person.Inventory;
+        foreach (var removedProp in e.Props)
+        {
+            var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
+            _propViewModels.Remove(propViewModel);
+            Destroy(propViewModel.gameObject);
+
+            if (_inventoryState.SelectedProp == propViewModel)
+            {
+                _inventoryState.SelectedProp = null;
+                UseButton.SetActive(false);
+            }
+        }
     }
 
     private void Inventory_Changed(object sender, PropStoreEventArgs e)
@@ -90,7 +125,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var inventory = _actor.Person.Inventory;
         foreach (var changedProp in e.Props)
         {
-            var propViewModel = _propViewModels.Single(x=>x.Prop == changedProp);
+            var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
             propViewModel.UpdateProp();
         }
     }
@@ -108,21 +143,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     {
         var inventory = _actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    }
-
-    public void ApplyChanges()
-    {
-        var inventory = _actor.Person.Inventory;
-        inventory.Added -= InventoryOnContentChanged;
-        inventory.Removed -= InventoryOnContentChanged;
-        inventory.Changed -= InventoryOnContentChanged;
-
-        _inventoryState.SelectedProp = null;
-    }
-
-    public void CancelChanges()
-    {
-        throw new NotImplementedException();
     }
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
@@ -151,11 +171,10 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     {
         var currentItemVm = (PropItemVm)sender;
         var parentTransform = currentItemVm.transform.parent;
-        foreach (Transform itemTranform in parentTransform)
+        foreach (var propViewModel in _propViewModels)
         {
-            var itemVm = itemTranform.gameObject.GetComponent<PropItemVm>();
-            var isSelected = itemVm == currentItemVm;
-            itemVm.SetSelectedState(isSelected);
+            var isSelected = propViewModel == currentItemVm;
+            propViewModel.SetSelectedState(isSelected);
         }
 
         // этот фрагмент - не дубликат
