@@ -1,0 +1,21 @@
+{
+  "Name": {
+    "Ru": "Укол",
+	"En": "Pierce"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 6,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Fury",
+      "Impact":  "Kinetic"
+    }
+  }
+}

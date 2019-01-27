@@ -47,7 +47,8 @@ namespace Zilon.Core.Tactics.Spatial
 
         public override void AddEdge(IMapNode node1, IMapNode node2)
         {
-            //throw new NotImplementedException();
+            // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
+            // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
         }
 
         public override void AddNode(IMapNode node)
@@ -170,13 +171,12 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
-        private IMapNode[,] CreateSegment(int segmentX, int segmentY)
+        private void CreateSegment(int segmentX, int segmentY)
         {
             var matrix = new IMapNode[_segmentSize, _segmentSize];
 
             var key = new SegmentKey(segmentX, segmentY);
             _segmentDict[key] = matrix;
-            return matrix;
         }
 
         private int NormalizeNeighborCoord(int neighborX)

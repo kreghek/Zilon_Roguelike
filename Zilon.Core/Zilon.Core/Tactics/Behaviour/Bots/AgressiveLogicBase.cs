@@ -7,13 +7,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
-    //TODO Учесть, что в один ход другой актёр может занять целевой узел.
-    //TODO Учесть, что при малом расстоянии до цели нужно строить путь каждый ход
-    //Иначе не получится догнать нарушителя.
     public abstract class AgressiveLogicBase : IBotLogic
     {
         private const int PursuitCounter = 3;
-        //TODO Дальность видимости вынести в схему персонажа и, затем, в пересчитанном состоянии в актёра.
         private const int VisibilityRange = 5;
 
         protected readonly IActor Actor;
@@ -123,7 +119,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                //TODO Сделать тест аналогичный GetActorTasks_PatrolsTryToAttackEnemy_ReturnsMoveTask
                 if (_pursuitCounter > 0 && _moveTask != null)
                 {
                     _pursuitCounter--;
@@ -145,23 +140,21 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckAttackAvailability(IAttackTarget targetIntruder)
         {
-            var actorNode = (HexNode)Actor.Node;
-            var targetNode = (HexNode)targetIntruder.Node;
-
-            if (Actor.Person.TacticalActCarrier != null)
-            {
-                var actCarrier = Actor.Person.TacticalActCarrier;
-                var act = actCarrier.Acts.First();
-
-                var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
-                var targetIsOnLine = MapHelper.CheckNodeAvailability(Map, actorNode, targetNode);
-
-                return isInDistance && targetIsOnLine;
-            }
-            else
+            if (Actor.Person.TacticalActCarrier == null)
             {
                 throw new NotSupportedException();
             }
+            
+            var actorNode = (HexNode)Actor.Node;
+            var targetNode = (HexNode)targetIntruder.Node;
+
+            var actCarrier = Actor.Person.TacticalActCarrier;
+            var act = actCarrier.Acts.First();
+
+            var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
+            var targetIsOnLine = MapHelper.CheckNodeAvailability(Map, actorNode, targetNode);
+
+            return isInDistance && targetIsOnLine;
         }
 
         private IActorTask HandleBypassMode()

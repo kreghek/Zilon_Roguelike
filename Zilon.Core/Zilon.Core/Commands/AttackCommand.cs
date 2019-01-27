@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Client;
@@ -43,7 +42,7 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedActorViewModel.Actor.Node;
 
-            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.FirstOrDefault();
+            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
             var isInDistance = act.CheckDistance(((HexNode)currentNode).CubeCoords, ((HexNode)targetNode).CubeCoords);
             if (!isInDistance)
             {
@@ -56,7 +55,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            if (act.Constrains?.PropResourceType != null)
+            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
             {
                 var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
                     act.Constrains.PropResourceType,
@@ -77,25 +76,14 @@ namespace Zilon.Core.Commands
             int usedPropResourceCount)
         {
             var propResources = from prop in inventory.CalcActualItems()
-                                where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == usedPropResourceType
-                                select prop;
+                                let propResource = prop as Resource
+                                where propResource != null
+                                where propResource.Scheme.Bullet?.Caliber == usedPropResourceType
+                                select propResource;
 
-            if (propResources.FirstOrDefault() is Resource propResource)
-            {
-                if (propResource.Count >= usedPropResourceCount)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            var preferredPropResource = propResources.FirstOrDefault();
+
+            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
         private IActorViewModel GetSelectedActorViewModel()

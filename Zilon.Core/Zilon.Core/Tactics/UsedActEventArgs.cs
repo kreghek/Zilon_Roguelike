@@ -7,7 +7,6 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
-    //TODO Нужен тест, который проверяет, что событие на использование выстреливает и значения этого объекта корректны.
     /// <summary>
     /// Аргументы события при использовании действия на цель.
     /// </summary>
@@ -16,11 +15,13 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Цель действия.
         /// </summary>
+        [PublicAPI]
         public IAttackTarget Target { get; }
 
         /// <summary>
         /// Совершённое над целью действие.
         /// </summary>
+        [PublicAPI]
         public ITacticalAct TacticalAct { get; }
 
         [ExcludeFromCodeCoverage]

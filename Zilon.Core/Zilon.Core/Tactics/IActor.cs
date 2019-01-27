@@ -86,13 +86,11 @@ namespace Zilon.Core.Tactics
 
         void UseProp(IProp usedProp);
 
-        //TODO Избавиться от этого метода.
         /// <summary>
         /// Вызывается службой действий в случае успешной обороны.
         /// </summary>
         void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll);
 
-        //TODO Избавиться от этого метода.
         /// <summary>
         /// Вызывается службой действий в случае успешного использования брони.
         /// </summary>

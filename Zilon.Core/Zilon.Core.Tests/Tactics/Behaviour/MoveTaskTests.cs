@@ -83,7 +83,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ReSharper disable once UnusedVariable
             var actor = actorMock.Object;
 
-            //TODO Вероятно здесь нужно использовать мок.
             // Исправить и убрать отключение инспекции для actor.
 
             var actor2 = new Actor(person, player, startNode);

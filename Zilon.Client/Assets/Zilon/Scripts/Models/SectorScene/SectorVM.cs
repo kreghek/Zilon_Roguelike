@@ -369,6 +369,11 @@ internal class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
+        if (!(e.Result is SuccessOpenContainerResult))
+        {
+            Debug.Log($"Не удалось открыть контейнер {e.Container}.");
+        }
+
         _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 
@@ -417,7 +422,7 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-        }
+         }
 
         var actor = new Actor(_personManager.Person, player, startNode);
 
@@ -452,16 +457,30 @@ internal class SectorVM : MonoBehaviour
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
     {
-        var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
-        var equipment = _propFactory.CreateEquipment(equipmentScheme);
-        inventory.Add(equipment);
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var equipment = _propFactory.CreateEquipment(equipmentScheme);
+            inventory.Add(equipment);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
+        }
     }
 
     private void AddResourceToActor(Inventory inventory, string resourceSid, int count)
     {
-        var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
-        var resource = _propFactory.CreateResource(resourceScheme, count);
-        inventory.Add(resource);
+        try
+        {
+            var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+            var resource = _propFactory.CreateResource(resourceScheme, count);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {resourceSid}");
+        }
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)

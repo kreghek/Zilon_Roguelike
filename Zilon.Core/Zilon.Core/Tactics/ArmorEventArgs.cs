@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics
 {
@@ -13,8 +14,22 @@ namespace Zilon.Core.Tactics
             FactRoll = factRoll;
         }
 
+        /// <summary>
+        /// Ранг брони цели.
+        /// </summary>
+        [PublicAPI]
         public int ArmorRank { get; }
+        
+        /// <summary>
+        /// Бросок, который нужен был для упешного использования брони.
+        /// </summary>
+        [PublicAPI]
         public int SuccessRoll { get; }
+        
+        /// <summary>
+        /// Фактический бросок.
+        /// </summary>
+        [PublicAPI]
         public int FactRoll { get; }
     }
 }

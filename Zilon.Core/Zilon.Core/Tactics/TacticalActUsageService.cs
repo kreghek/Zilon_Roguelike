@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
@@ -25,14 +26,13 @@ namespace Zilon.Core.Tactics
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
-            //TODO реализовать возможность действовать на себя некоторыми скиллами.
-            if (actor == target)
-            {
-                throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
-            }
-
             foreach (var act in usedActs.Primary)
             {
+                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
+                {
+                    throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
+                }
+
                 UseAct(actor, target, act);
             }
 
@@ -128,6 +128,7 @@ namespace Zilon.Core.Tactics
 
         private int GetUseSuccessRoll()
         {
+            // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
             return 5;
         }
 
@@ -166,42 +167,26 @@ namespace Zilon.Core.Tactics
             var targetIsDeadLast = targetActor.Person.Survival.IsDead;
 
             var offenceType = tacticalActRoll.TacticalAct.Stats.Offense.Type;
-            var defenceType = HitHelper.GetDefence(offenceType);
-            var currentDefences = targetActor.Person.CombatStats.DefenceStats.Defences
-                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
+            var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
-            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(currentDefences);
+            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
             var factToHitRoll = _actUsageRandomSource.RollToHit();
 
             if (factToHitRoll >= successToHitRoll)
             {
-                var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
-                var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+                int actEfficient = CalcEfficient(targetActor, tacticalActRoll);
 
-                var actEfficientArmorBlocked = tacticalActRoll.Efficient;
-
-                if (armorRank != null && (actApRank - armorRank) < 10)
+                if (actEfficient <= 0)
                 {
-                    var factArmorSaveRoll = RollArmorSave();
-                    var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
-                    if (factArmorSaveRoll >= successArmorSaveRoll)
-                    {
-                        var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
-                        actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
-                    }
-
-                    targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
+                    return;
                 }
 
-                if (actEfficientArmorBlocked > 0)
-                {
-                    targetActor.TakeDamage(actEfficientArmorBlocked);
+                targetActor.TakeDamage(actEfficient);
 
-                    if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
-                    {
-                        CountTargetActorDefeat(actor, targetActor);
-                    }
+                if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
+                {
+                    CountTargetActorDefeat(actor, targetActor);
                 }
             }
             else
@@ -213,6 +198,51 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        /// <summary>
+        /// Расчитывает эффективность умения с учётом поглощения броней.
+        /// </summary>
+        /// <param name="targetActor"> Целевой актёр. </param>
+        /// <param name="tacticalActRoll"> Результат броска исходной эфективности действия. </param>
+        /// <returns> Возвращает числовое значение эффективности действия. </returns>
+        private int CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
+            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
+            var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+
+            var actEfficientArmorBlocked = tacticalActRoll.Efficient;
+            var rankDiff = actApRank - armorRank;
+
+            if (armorRank != null && rankDiff < 10)
+            {
+                var factArmorSaveRoll = RollArmorSave();
+                var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
+                if (factArmorSaveRoll >= successArmorSaveRoll)
+                {
+                    var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                    actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
+                }
+
+                targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
+            }
+
+            return actEfficientArmorBlocked;
+        }
+
+        /// <summary>
+        /// Извлечение всех оборон актёра, способных противостоять указанному типу урона.
+        /// Включая DivineDefence, противодействующий всем типам урона.
+        /// </summary>
+        /// <param name="targetActor"> Целевой актёр. </param>
+        /// <param name="offenceType"> Тип урона. </param>
+        /// <returns> Возвращает набор оборон. </returns>
+        private static IEnumerable<PersonDefenceItem> GetCurrentDefences(IActor targetActor, OffenseType offenceType)
+        {
+            var defenceType = HitHelper.GetDefence(offenceType);
+
+            return targetActor.Person.CombatStats.DefenceStats.Defences
+                            .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
         /// <summary>

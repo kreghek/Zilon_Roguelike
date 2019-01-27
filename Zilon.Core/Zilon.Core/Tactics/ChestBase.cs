@@ -41,8 +41,6 @@ namespace Zilon.Core.Tactics
         public abstract bool IsMapBlock { get; }
 
         public event EventHandler Opened;
-        //TODO Сделать оптимизацию. Выполнять подписку на события контента
-        // только если есть подписки на текущие события.
         public event EventHandler<PropStoreEventArgs> ItemsAdded;
         public event EventHandler<PropStoreEventArgs> ItemsRemoved;
 

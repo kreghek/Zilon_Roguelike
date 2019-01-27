@@ -62,6 +62,7 @@
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
     <Compile Include="Common\PropMetrics.cs" />
+    <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />
@@ -229,7 +232,6 @@
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
     <Compile Include="Schemes\PerkRuleSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />
-    <Compile Include="Schemes\TacticalActDependencySubScheme.cs" />
     <Compile Include="Tactics\Behaviour\Bots\AgressiveLogicBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogic.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />

@@ -60,7 +60,6 @@ namespace Zilon.Core.Persons
                     new PersonArmorItem[0])
             };
 
-            //TODO Убрать зависимость данных монстров от рандома, т.к. он влияет только на голод, которого у монстров нет
             Survival = SurvivalData.CreateMonsterPersonSurvival(scheme, survivalRandomSource);
 
             Effects = new EffectCollection();

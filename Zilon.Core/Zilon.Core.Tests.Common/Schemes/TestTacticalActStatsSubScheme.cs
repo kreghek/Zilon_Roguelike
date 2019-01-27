@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Common;
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
@@ -21,5 +22,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public bool IsMelee { get; }
         public ITacticalActOffenceSubScheme Offense { get; set; }
         public Range<int> Range { get; set; }
+        public TacticalActTargets Targets => TacticalActTargets.Enemy;
     }
 }

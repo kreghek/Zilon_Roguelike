@@ -13,7 +13,7 @@
         public override void Execute()
         {
             ExecuteTask();
-            IsComplete = true;
+            _isComplete = true;
         }
 
         protected abstract void ExecuteTask();

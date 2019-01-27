@@ -12,6 +12,7 @@ namespace Zilon.Core.Props
     /// </summary>
     public class PropStoreEventArgs
     {
+        [PublicAPI]
         public IProp[] Props { get; }
 
         [ExcludeFromCodeCoverage]

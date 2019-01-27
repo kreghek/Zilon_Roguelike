@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Внетреннее пламя"
+    "Ru": "Внетреннее пламя",
+	"En": "Inner flame"
   },
   "Stats": {
     "Efficient": {
@@ -16,5 +17,9 @@
       "Type": "Shadow",
       "Impact":  "Psy"
     }
+  },
+  "Constrains": {
+    "PropResourceType": "mana",
+    "PropResourceCount": 1
   }
 }

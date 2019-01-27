@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var edgeHash = new HashSet<string>();
 
-            // Генерируем комнаты в сетке
+            // Генерируем случайные координаты комнат
             var rooms = _roomGenerator.GenerateRoomsInGrid();
 
             // Создаём узлы и рёбра комнат
@@ -36,13 +36,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             // разбиваем комнаты на группы по назначению.
             var startRoom = rooms.First();
             var exitRoom = rooms.Last();
-            var mainRooms = rooms.Skip(1).Take(rooms.Count - 2).ToArray();
 
             // Указание регионов карты
             var regionId = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(regionId, room.Nodes.ToArray());
+                var region = new MapRegion(regionId, room.Nodes.Cast<IMapNode>().ToArray());
                 regionId++;
                 map.Regions.Add(region);
 
