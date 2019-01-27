@@ -88,16 +88,18 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public void ApplyChanges()
     {
         var inventory = _actor.Person.Inventory;
-        inventory.Added -= InventoryOnContentChanged;
-        inventory.Removed -= InventoryOnContentChanged;
-        inventory.Changed -= InventoryOnContentChanged;
+        inventory.Added -= Inventory_Added;
+        inventory.Removed -= Inventory_Removed;
+        inventory.Changed -= Inventory_Changed;
 
         _inventoryState.SelectedProp = null;
+        _propViewModels.Clear();
     }
 
     public void CancelChanges()
     {
         _inventoryState.SelectedProp = null;
+        _propViewModels.Clear();
 
         throw new NotImplementedException();
     }
@@ -105,7 +107,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void Inventory_Removed(object sender, PropStoreEventArgs e)
     {
-        var inventory = _actor.Person.Inventory;
         foreach (var removedProp in e.Props)
         {
             var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
@@ -122,7 +123,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void Inventory_Changed(object sender, PropStoreEventArgs e)
     {
-        var inventory = _actor.Person.Inventory;
         foreach (var changedProp in e.Props)
         {
             var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
@@ -132,7 +132,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void Inventory_Added(object sender, PropStoreEventArgs e)
     {
-        var inventory = _actor.Person.Inventory;
         foreach (var newProp in e.Props)
         {
             CreatePropObject(InventoryItemsParent, newProp);
