@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -126,6 +127,27 @@ namespace Zilon.Core.Tests.Schemes
             createService.Should().NotThrow();
         }
 
+        /// <summary>
+        /// Тест проверяем схемы дропа.
+        /// 1. Sid предметов должен быть корректным. Эти предметы должны существовать.
+        /// </summary>
+        [Test]
+        public void DropTables_CheckPropSids_AllPropsExist()
+        {
+            // ARRANGE
+            var schemeService = CreateSchemeService();
+            var dropTables = schemeService.GetSchemes<IDropTableScheme>();
+
+
+
+            // ASSERT
+            var allTasks = new List<Task>();
+            foreach (var dropTable in dropTables)
+            {
+                CheckDropTableScheme(dropTable, schemeService);
+            }
+        }
+
         private SchemeService CreateSchemeService()
         {
             var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
@@ -149,6 +171,25 @@ namespace Zilon.Core.Tests.Schemes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
                 x.IsInterface && x != typeof(IScheme)).ToArray();
             return schemeTypes;
+        }
+
+        private void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
+        {
+            Action act = () =>
+            {
+                foreach (var record in dropTableScheme.Records)
+                {
+                    var propSid = record.SchemeSid;
+                    if (propSid == null)
+                    {
+                        continue;
+                    }
+
+                    schemeService.GetScheme<IPropScheme>(propSid);
+                }
+            };
+
+            act.Should().NotThrow();
         }
     }
 }
