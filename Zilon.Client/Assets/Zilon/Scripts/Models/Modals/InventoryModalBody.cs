@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Assets.Zilon.Scripts;
 
 using JetBrains.Annotations;
@@ -18,6 +18,7 @@ using Zilon.Core.Tactics;
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
     private IActor _actor;
+    private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
@@ -31,6 +32,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private IInventoryState _inventoryState;
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
+
+    public InventoryModalBody()
+    {
+        _propViewModels = new List<PropItemVm>();
+    }
 
     public string Caption => "Inventory";
 
@@ -74,9 +80,28 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var inventory = _actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
-        inventory.Added += InventoryOnContentChanged;
+        inventory.Added += Inventory_Added;
         inventory.Removed += InventoryOnContentChanged;
-        inventory.Changed += InventoryOnContentChanged;
+        inventory.Changed += Inventory_Changed;
+    }
+
+    private void Inventory_Changed(object sender, PropStoreEventArgs e)
+    {
+        var inventory = _actor.Person.Inventory;
+        foreach (var changedProp in e.Props)
+        {
+            var propViewModel = _propViewModels.Single(x=>x.Prop == changedProp);
+            propViewModel.UpdateProp();
+        }
+    }
+
+    private void Inventory_Added(object sender, PropStoreEventArgs e)
+    {
+        var inventory = _actor.Person.Inventory;
+        foreach (var newProp in e.Props)
+        {
+            CreatePropObject(InventoryItemsParent, newProp);
+        }
     }
 
     private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
@@ -109,10 +134,16 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var prop in props)
         {
-            var propItemVm = Instantiate(PropItemPrefab, itemsParent);
-            propItemVm.Init(prop);
-            propItemVm.Click += PropItemOnClick;
+            CreatePropObject(itemsParent, prop);
         }
+    }
+
+    private void CreatePropObject(Transform itemsParent, IProp prop)
+    {
+        var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
+        propItemViewModel.Init(prop);
+        propItemViewModel.Click += PropItemOnClick;
+        _propViewModels.Add(propItemViewModel);
     }
 
     //TODO Дубликат с ContainerModalBody.PropItemOnClick

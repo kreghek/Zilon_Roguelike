@@ -22,27 +22,7 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     {
         Prop = prop;
 
-        if (prop is Resource resource)
-        {
-            CountText.gameObject.SetActive(true);
-            CountText.text = $"x{resource.Count}";
-        }
-        else
-        {
-            CountText.gameObject.SetActive(false);
-        }
-
-        Sid = prop.Scheme.Sid;
-
-        var iconSprite = CalcIcon(prop);
-
-        IconImage.sprite = iconSprite;
-    }
-
-    private Sprite CalcIcon(IProp prop)
-    {
-        var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
-        return iconSprite;
+        UpdateProp();
     }
 
     public void SetSelectedState(bool value)
@@ -53,5 +33,30 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     public void Click_Handler()
     {
         Click?.Invoke(this, new EventArgs());
+    }
+
+    public void UpdateProp()
+    {
+        if (Prop is Resource resource)
+        {
+            CountText.gameObject.SetActive(true);
+            CountText.text = $"x{resource.Count}";
+        }
+        else
+        {
+            CountText.gameObject.SetActive(false);
+        }
+
+        Sid = Prop.Scheme.Sid;
+
+        var iconSprite = CalcIcon(Prop);
+
+        IconImage.sprite = iconSprite;
+    }
+
+    private Sprite CalcIcon(IProp prop)
+    {
+        var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
+        return iconSprite;
     }
 }
