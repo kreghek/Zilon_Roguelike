@@ -21,6 +21,11 @@ namespace Zilon.Core.WorldGeneration
 
         public Dictionary<BranchType, int> Skills { get; set; }
 
+        /// <summary>
+        /// Условно, ХП деятеля. Когда ХП опускается до 0, деятель перестаёт существовать.
+        /// </summary>
+        public int Hp { get; set; }
+
         public override string ToString()
         {
             return $"{Name} [{Realm}] {Localtion}";

@@ -113,7 +113,9 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = new Queue<IAgentCard>(new IAgentCard[] {
                 new ChangeLocality(),
                 new CreateLocality(),
-                new IncreasePopulation()
+                new IncreasePopulation(),
+                new AgentOpposition(),
+                new AgentSupport()
             });
 
             for (var year = 0; year < 100/*40_000*/; year++)
