@@ -7,6 +7,11 @@ namespace Zilon.Core.WorldGeneration
     /// </summary>
     public class Agent
     {
+        public Agent()
+        {
+            Hp = 3;
+        }
+
         public string Name { get; set; }
 
         /// <summary>

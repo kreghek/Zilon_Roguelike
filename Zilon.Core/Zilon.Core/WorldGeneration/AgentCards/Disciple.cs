@@ -13,7 +13,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
 
-            return highestBranchs.Any();
+            return highestBranchs.Any() && agent.Hp < 1;
         }
 
         public void Use(Agent agent, Globe globe, IDice dice)
@@ -29,7 +29,8 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 {
                     Name = agent.Name + " disciple",
                     Localtion = agent.Localtion,
-                    Realm = agent.Realm
+                    Realm = agent.Realm,
+                    Hp = 3
                 };
 
                 globe.Agents.Add(agent);
