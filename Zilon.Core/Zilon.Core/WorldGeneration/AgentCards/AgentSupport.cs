@@ -15,9 +15,13 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var agentRollIndex = dice.Roll(0, globe.Agents.Where(x => x.Hp >= 0).Count() - 1);
-            var targetAgent = globe.Agents[agentRollIndex];
-            targetAgent.Hp++;
+            var availableTargets = globe.Agents.Where(x => x != agent && x.Hp >= 0 && x.Hp <= 2).ToArray();
+            if (availableTargets.Any())
+            {
+                var agentRollIndex = dice.Roll(0, availableTargets.Count() - 1);
+                var targetAgent = availableTargets[agentRollIndex];
+                targetAgent.Hp++;
+            }
         }
     }
 }
