@@ -385,6 +385,7 @@
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentOpposition.cs" />
     <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
+    <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />

@@ -115,7 +115,8 @@ namespace Zilon.Core.WorldGeneration
                 new CreateLocality(),
                 new IncreasePopulation(),
                 new AgentOpposition(),
-                new AgentSupport()
+                new AgentSupport(),
+                new Disciple()
             });
 
             for (var year = 0; year < 100/*40_000*/; year++)

@@ -22,6 +22,8 @@ namespace Zilon.Core.WorldGeneration
 
         public ScanResult ScanResult = new ScanResult();
 
+        public int AgentCrisys = 0;
+
         public void Save(string path)
         {
             var branchColors = new[] { Color.Red, Color.Blue, Color.Green, Color.Yellow,
