@@ -14,10 +14,20 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
-    public class MoveCommand : ActorCommandBase
+    public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
         private readonly List<IMapNode> _path;
 
+        /// <summary>
+        /// Конструктор на создание команды перемещения.
+        /// </summary>
+        /// <param name="gameLoop"> Игровой цикл.
+        /// Нужен для того, чтобы команда выполнила обновление игрового цикла
+        /// после завершения перемещения персонажа. </param>
+        /// <param name="sectorManager"> Менеджер сектора.
+        /// Нужен для получения информации о секторе. </param>
+        /// <param name="playerState"> Состояние игрока.
+        /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
         public MoveCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
@@ -27,6 +37,10 @@ namespace Zilon.Core.Commands
             _path = new List<IMapNode>();
         }
 
+        /// <summary>
+        /// Определяем, может ли команда выполниться.
+        /// </summary>
+        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
@@ -39,6 +53,18 @@ namespace Zilon.Core.Commands
             return _path.Any();
         }
 
+        /// <summary>
+        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// </summary>
+        /// <returns> Возвращает true, если команду можно повторить. </returns>
+        public bool CanRepeat()
+        {
+            return CanExecute();
+        }
+
+        /// <summary>
+        /// Выполнение команды на перемещение и обновление игрового цикла.
+        /// </summary>
         protected override void ExecuteTacticCommand()
         {
             var selectedNodeVm = GetSelectedNodeViewModel();
