@@ -17,6 +17,7 @@ namespace Zilon.Core.Commands
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
         private readonly List<IMapNode> _path;
+        private readonly IActorManager _actorManager;
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -31,9 +32,12 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public MoveCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState) :
+            IPlayerState playerState,
+            IActorManager actorManager) :
             base(gameLoop, sectorManager, playerState)
         {
+            _actorManager = actorManager;
+
             _path = new List<IMapNode>();
         }
 
@@ -59,7 +63,8 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если команду можно повторить. </returns>
         public bool CanRepeat()
         {
-            return CanExecute();
+            var canRepeat = CanExecute() && CheckEnemies();
+            return canRepeat;
         }
 
         /// <summary>
@@ -109,6 +114,34 @@ namespace Zilon.Core.Commands
             {
                 _path.Add((HexNode)pathNode);
             }
+        }
+
+        private bool CheckEnemies()
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var enemies = _actorManager.Items
+                .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
+
+            foreach (var enemyActor in enemies)
+            {
+                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor).CubeCoords);
+
+                if (distance > 5)
+                {
+                    continue;
+                }
+
+                var isAvailable = MapHelper.CheckNodeAvailability(SectorManager.CurrentSector.Map,
+                    actor.Node,
+                    enemyActor.Node);
+
+                if (isAvailable)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
