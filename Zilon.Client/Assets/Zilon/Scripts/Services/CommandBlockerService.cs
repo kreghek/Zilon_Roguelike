@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Assets.Zilon.Scripts.Services
 {
@@ -12,11 +11,18 @@ namespace Assets.Zilon.Scripts.Services
             _commandBlockers = new HashSet<ICommandBlocker>();
         }
 
-        public bool HasBlockers { get; }
+        public bool HasBlockers { get => _commandBlockers.Count > 0; }
 
         public void AddBlocker(ICommandBlocker commandBlocker)
         {
-            throw new NotImplementedException();
+            commandBlocker.Released += CommandBlocker_Release;
+            _commandBlockers.Add(commandBlocker);
+        }
+
+        private void CommandBlocker_Release(object sender, System.EventArgs e)
+        {
+            var blocker = (ICommandBlocker)sender;
+            _commandBlockers.Remove(blocker);
         }
     }
 }

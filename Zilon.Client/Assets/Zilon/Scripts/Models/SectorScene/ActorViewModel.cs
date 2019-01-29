@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -19,11 +19,13 @@ using Zilon.Core.Tactics.Spatial;
 public class ActorViewModel : MonoBehaviour, IActorViewModel
 {
     private const float MOVE_SPEED_Q = 1;
-    private const float END_MOVE_COUNTER = 1;
+    private const float END_MOVE_COUNTER = 0.3f;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
     [NotNull] [Inject] private readonly ILogService _logService;
+
+    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     public ActorGraphicBase GraphicRoot;
 
@@ -31,6 +33,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
+    private MoveCommandBlocker _moveCommandBlocker;
 
     public ActorViewModel()
     {
@@ -68,11 +71,13 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         if (_moveCounter != null)
         {
             transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
-            _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
+            _moveCounter += Time.fixedUnscaledDeltaTime * MOVE_SPEED_Q;
 
             if (_moveCounter >= END_MOVE_COUNTER)
             {
                 _moveCounter = null;
+                _moveCommandBlocker.Release();
+                _moveCommandBlocker = null;
             }
         }
     }
@@ -116,6 +121,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         var actorNode = (HexNode)Actor.Node;
         var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
+        _moveCommandBlocker = new MoveCommandBlocker();
+        _commandBlockerService.AddBlocker(_moveCommandBlocker);
     }
 
     private void Actor_OnDefence(object sender, DefenceEventArgs e)
