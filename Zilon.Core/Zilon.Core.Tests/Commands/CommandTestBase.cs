@@ -30,7 +30,7 @@ namespace Zilon.Core.Tests.Commands
         {
             Container = new ServiceContainer();
 
-            var testMap = SquareMapFactory.Create(3);
+            var testMap = SquareMapFactory.Create(10);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
