@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -69,6 +70,11 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
 
             Container.Register<MoveCommand>(new PerContainerLifetime());
+
+            var actorManagerMock = new Mock<IActorManager>();
+            var actorManager = actorManagerMock.Object;
+
+            Container.Register(factory => actorManager, new PerContainerLifetime());
         }
     }
 }

@@ -29,6 +29,8 @@ namespace Zilon.Core.Commands
         /// Нужен для получения информации о секторе. </param>
         /// <param name="playerState"> Состояние игрока.
         /// Нужен для получения информации о текущем состоянии игрока. </param>
+        /// <param name="actorManager"> Менеджер актёров.
+        /// Нужен для отслеживания противников при автоперемещении. </param>
         [ExcludeFromCodeCoverage]
         public MoveCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
@@ -124,7 +126,7 @@ namespace Zilon.Core.Commands
 
             foreach (var enemyActor in enemies)
             {
-                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor).CubeCoords);
+                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
 
                 if (distance > 5)
                 {
@@ -137,11 +139,11 @@ namespace Zilon.Core.Commands
 
                 if (isAvailable)
                 {
-                    return true;
+                    return false;
                 }
             }
 
-            return false;
+            return true;
         }
     }
 }
