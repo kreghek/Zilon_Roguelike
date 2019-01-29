@@ -124,7 +124,18 @@ internal class SectorVM : MonoBehaviour
 
         try
         {
-            command?.Execute();
+            if (command != null)
+            {
+                command.Execute();
+
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat())
+                    {
+                        _clientCommandExecutor.Push(repeatableCommand);
+                    }
+                }
+            }
         }
         catch (Exception exception)
         {
