@@ -85,6 +85,8 @@ internal class SectorVM : MonoBehaviour
 
     [Inject] private readonly IBotPlayer _botPlayer;
 
+    [Inject] private readonly ICommandBlockerService _commandBlockerService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -115,7 +117,10 @@ internal class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
     {
-        ExecuteCommands();
+        if (!_commandBlockerService.HasBlockers)
+        {
+            ExecuteCommands();
+        }
     }
 
     private void ExecuteCommands()
