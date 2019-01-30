@@ -5,6 +5,7 @@ using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 using Zenject;
 
 using Zilon.Core.Common;
@@ -21,8 +22,7 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
 
-    
-    void Start()
+    private void Start()
     {
         if (_globeManager.CurrentGlobe == null)
         {
@@ -75,7 +75,7 @@ public class GlobeWorldVM : MonoBehaviour
             }
         }
 
-        var playerGroupNodeViewModel = locationNodeViewModels.Single(x=>x.Node == _player.GlobeNode);
+        var playerGroupNodeViewModel = locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
         var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
     }

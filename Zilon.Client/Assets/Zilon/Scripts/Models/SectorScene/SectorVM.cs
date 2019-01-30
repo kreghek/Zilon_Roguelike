@@ -216,6 +216,9 @@ internal class SectorVM : MonoBehaviour
         switch (wellFormedSectorLevel)
         {
             case 1:
+                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
+                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-mutant", "moon-rat" };
+                break;
             case 2:
                 monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
                 monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
