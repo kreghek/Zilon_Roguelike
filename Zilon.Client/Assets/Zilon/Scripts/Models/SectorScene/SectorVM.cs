@@ -29,10 +29,11 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once UnusedMember.Global
 internal class SectorVM : MonoBehaviour
 {
-
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ActorViewModel> _actorViewModels;
     private readonly List<ContainerVm> _containerViewModels;
+
+    private bool _interuptCommands;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -85,6 +86,8 @@ internal class SectorVM : MonoBehaviour
 
     [Inject] private readonly IBotPlayer _botPlayer;
 
+    [Inject] private readonly ICommandBlockerService _commandBlockerService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -115,7 +118,10 @@ internal class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     private void FixedUpdate()
     {
-        ExecuteCommands();
+        if (!_commandBlockerService.HasBlockers)
+        {
+            ExecuteCommands();
+        }
     }
 
     private void ExecuteCommands()
@@ -124,7 +130,23 @@ internal class SectorVM : MonoBehaviour
 
         try
         {
-            command?.Execute();
+            if (command != null)
+            {
+                command.Execute();
+
+                if (_interuptCommands)
+                {
+                    return;
+                }
+
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat())
+                    {
+                        _clientCommandExecutor.Push(repeatableCommand);
+                    }
+                }
+            }
         }
         catch (Exception exception)
         {
@@ -379,6 +401,8 @@ internal class SectorVM : MonoBehaviour
 
     private void SectorOnActorExit(object sender, EventArgs e)
     {
+        _interuptCommands = true;
+        _commandBlockerService.DropBlockers();
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
         //_personManager.SectorLevel++;

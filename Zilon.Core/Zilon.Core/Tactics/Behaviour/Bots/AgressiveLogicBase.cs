@@ -119,7 +119,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                if (_pursuitCounter > 0 && _moveTask != null)
+                if (_pursuitCounter > 0 && _moveTask != null && _moveTask.CanExecute())
                 {
                     _pursuitCounter--;
                     return _moveTask;
@@ -144,7 +144,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             {
                 throw new NotSupportedException();
             }
-            
+
             var actorNode = (HexNode)Actor.Node;
             var targetNode = (HexNode)targetIntruder.Node;
 
