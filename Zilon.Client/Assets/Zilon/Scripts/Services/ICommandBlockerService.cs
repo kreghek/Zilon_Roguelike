@@ -4,5 +4,7 @@
     {
         void AddBlocker(ICommandBlocker commandBlocker);
         bool HasBlockers { get; }
+
+        void DropBlockers();
     }
 }

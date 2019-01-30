@@ -19,9 +19,15 @@ namespace Assets.Zilon.Scripts.Services
             _commandBlockers.Add(commandBlocker);
         }
 
+        public void DropBlockers()
+        {
+            _commandBlockers.Clear();
+        }
+
         private void CommandBlocker_Release(object sender, System.EventArgs e)
         {
             var blocker = (ICommandBlocker)sender;
+            blocker.Released -= CommandBlocker_Release;
             _commandBlockers.Remove(blocker);
         }
     }
