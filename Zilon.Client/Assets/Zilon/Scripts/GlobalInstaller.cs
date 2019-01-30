@@ -32,5 +32,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
+
+        Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
     }
 }
