@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
 
@@ -12,10 +13,12 @@ namespace Zilon.Core.WorldGeneration
     public class WorldGenerator : IWorldGenerator
     {
         private readonly IDice _dice;
+        private readonly ISchemeService _schemeService;
 
-        public WorldGenerator(IDice dice)
+        public WorldGenerator(IDice dice, ISchemeService schemeService)
         {
             _dice = dice;
+            _schemeService = schemeService;
         }
 
         public Globe GenerateGlobe()
@@ -143,7 +146,15 @@ namespace Zilon.Core.WorldGeneration
 
         public GlobeRegion GenerateRegion(Globe globe, TerrainCell cell)
         {
-            var sectorSchemeSids = new[] { "rat-post", "rat-kingdom", "demon-dungeon", "demon-lair" };
+            var locationSchemeSids = new[] {
+                "rat-hole",
+                "rat-kingdom",
+                "demon-dungeon",
+                "demon-lair",
+                "crypt",
+                "elder-place",
+                "genomass-cave"
+            };
             var region = new GlobeRegion();
 
             for (var x = 0; x < 10; x++)
@@ -153,14 +164,16 @@ namespace Zilon.Core.WorldGeneration
                     var hasDundeonRoll = _dice.Roll(6);
                     if (hasDundeonRoll > 5)
                     {
-                        var sectorSidIndex = _dice.Roll(0, sectorSchemeSids.Length - 1);
-                        var sectorSid = sectorSchemeSids[sectorSidIndex];
-                        var node = new GlobeRegionNode(x, y, sectorSid);
+                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                        var locationSid = locationSchemeSids[locationSidIndex];
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                        var node = new GlobeRegionNode(x, y, locationScheme);
                         region.AddNode(node);
                     }
                     else
                     {
-                        var node = new GlobeRegionNode(x, y);
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>("forest");
+                        var node = new GlobeRegionNode(x, y, locationScheme);
                         region.AddNode(node);
                     }
                 }

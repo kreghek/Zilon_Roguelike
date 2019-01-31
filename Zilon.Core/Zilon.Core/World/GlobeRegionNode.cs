@@ -1,36 +1,27 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.World
 {
     /// <summary>
-    /// Узел провинции в графе глобальной карте.
+    /// Узел локации провинции в графе провинции.
     /// </summary>
     public class GlobeRegionNode : HexNode
     {
         /// <summary>
-        /// Конструктор узла провинции без сектора.
+        /// Конструктор узла провинции.
         /// </summary>
         /// <param name="x"> Координата X в сетке гексов. </param>
         /// <param name="y"> Координата Y в сетке гексов. </param>
-        public GlobeRegionNode(int x, int y) : base(x, y)
+        /// <param name="scheme"> Схема провинции. </param>
+        public GlobeRegionNode(int x, int y, ILocationScheme scheme) : base(x, y)
         {
+            Scheme = scheme;
         }
 
         /// <summary>
-        /// Конструктор узла провинции с сектором.
+        /// Схема провинции.
         /// </summary>
-        /// <param name="x"> Координата X в сетке гексов. </param>
-        /// <param name="y"> Координата Y в сетке гексов. </param>
-        /// <param name="sectorSid"> Символьный идентификатор схемы сектора.
-        /// Если равен null, то в узле нет сектора. </param>
-        public GlobeRegionNode(int x, int y, string sectorSid) : base(x, y)
-        {
-            SectorSid = sectorSid;
-        }
-
-        /// <summary>
-        /// Символьный идентификаторв сектора.
-        /// </summary>
-        public string SectorSid { get; }
+        public ILocationScheme Scheme { get; }
     }
 }
