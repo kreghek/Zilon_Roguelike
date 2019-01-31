@@ -1,7 +1,5 @@
 using Assets.Zilon.Scripts.Services;
 
-using UnityEngine;
-
 using Zenject;
 
 using Zilon.Core.Client;

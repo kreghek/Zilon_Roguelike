@@ -6,8 +6,6 @@
     /// </summary>
     public sealed class LocationScheme : SchemeBase, ILocationScheme
     {
-        public string MapSid { get; set; }
-        public float X { get; set; }
-        public float Y { get; set; }
+        public ISectorSubScheme[] SectorLevels { get; }
     }
 }

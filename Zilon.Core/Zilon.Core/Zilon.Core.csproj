@@ -95,6 +95,7 @@
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
+    <Compile Include="Schemes\ISectorSubScheme.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
@@ -199,7 +200,6 @@
     <Compile Include="Schemes\IDropTableScheme.cs" />
     <Compile Include="Schemes\IJobSubScheme.cs" />
     <Compile Include="Schemes\ILocationScheme.cs" />
-    <Compile Include="Schemes\IMapScheme.cs" />
     <Compile Include="Schemes\IMonsterDefenceItemSubScheme.cs" />
     <Compile Include="Schemes\IMonsterDefenceSubScheme.cs" />
     <Compile Include="Schemes\IMonsterScheme.cs" />
@@ -363,7 +363,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
     <Compile Include="Schemes\LocationScheme.cs" />
-    <Compile Include="Schemes\MapScheme.cs" />
     <Compile Include="Schemes\PathScheme.cs" />
     <Compile Include="Schemes\SchemeBase.cs" />
     <Compile Include="Schemes\ISchemeLocator.cs" />
