@@ -143,14 +143,26 @@ namespace Zilon.Core.WorldGeneration
 
         public GlobeRegion GenerateRegion(Globe globe, TerrainCell cell)
         {
+            var sectorSchemeSids = new[] { "rat-post", "rat-kingdom", "demon-dungeon", "demon-lair" };
             var region = new GlobeRegion();
 
             for (var x = 0; x < 10; x++)
             {
                 for (var y = 0; y < 10; y++)
                 {
-                    var node = new GlobeRegionNode(x, y);
-                    region.AddNode(node);
+                    var hasDundeonRoll = _dice.Roll(6);
+                    if (hasDundeonRoll > 5)
+                    {
+                        var sectorSidIndex = _dice.Roll(0, sectorSchemeSids.Length - 1);
+                        var sectorSid = sectorSchemeSids[sectorSidIndex];
+                        var node = new GlobeRegionNode(x, y, sectorSid);
+                        region.AddNode(node);
+                    }
+                    else
+                    {
+                        var node = new GlobeRegionNode(x, y);
+                        region.AddNode(node);
+                    }
                 }
             }
 
