@@ -17,7 +17,8 @@ public class GlobeWorldVM : MonoBehaviour
     public MapLocation LocationPrefab;
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
-
+    private GameObject _groupObject;
+    private GroupVM _groupViewModel;
     [Inject] private readonly IGlobeManager _globeManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
@@ -76,8 +77,10 @@ public class GlobeWorldVM : MonoBehaviour
         }
 
         var playerGroupNodeViewModel = locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
-        var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
-        groupObject.transform.position = playerGroupNodeViewModel.transform.position;
+        _groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
+        _groupViewModel = _groupObject.GetComponent<GroupVM>();
+        _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
+        _groupObject.transform.position = playerGroupNodeViewModel.transform.position;
     }
 
     private void LocationViewModel_OnSelect(object sender, System.EventArgs e)
@@ -86,6 +89,13 @@ public class GlobeWorldVM : MonoBehaviour
 
         _player.GlobeNode = selectedNodeViewModel.Node;
 
-        SceneManager.LoadScene("combat");
+        if (_player.GlobeNode.Scheme.SectorLevels != null)
+        {
+            SceneManager.LoadScene("combat");
+        }
+        else
+        {
+            _groupViewModel.CurrentLocation = selectedNodeViewModel;
+        }
     }
 }

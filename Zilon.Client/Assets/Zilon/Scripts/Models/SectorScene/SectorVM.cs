@@ -182,7 +182,8 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
-        var proceduralGeneratorOptions = CreateSectorGeneratorOptions();
+        var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        var proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
 
         _sectorManager.CreateSector(proceduralGeneratorOptions);
 
@@ -199,7 +200,7 @@ internal class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
     }
 
-    private ISectorGeneratorOptions CreateSectorGeneratorOptions()
+    private ISectorGeneratorOptions CreateSectorGeneratorOptions(ILocationScheme locationScheme)
     {
         var monsterGeneratorOptions = new MonsterGeneratorOptions
         {
@@ -211,46 +212,12 @@ internal class SectorVM : MonoBehaviour
             MonsterGeneratorOptions = monsterGeneratorOptions
         };
 
-        var wellFormedSectorLevel = _personManager.SectorLevel + 1;
+        var wellFormedSectorLevel = _personManager.SectorLevel;
+        var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
 
-        switch (wellFormedSectorLevel)
-        {
-            case 1:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-mutant", "moon-rat" };
-                break;
-            case 2:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer", "night-stalker" };
-                break;
-
-            case 3:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "genomass", "gemonass-slave" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "infernal-genomass", "dervish" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer" };
-                break;
-
-            case 4:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "skeleton-champion", "vampire" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer", "demon-roamer" };
-                break;
-
-            case 5:
-            case 6:
-            case 7:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-warlock", "hell-rock", "infernal-bard" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "archidemon", "hell-herald", "pit-baron" };
-                break;
-
-            case 8:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "manticore" };
-                break;
-        }
+        monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
+        monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
+        monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
 
         return proceduralGeneratorOptions;
     }
@@ -408,8 +375,18 @@ internal class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
-        //_personManager.SectorLevel++;
-        SceneManager.LoadScene("globe");
+        _personManager.SectorLevel++;
+
+        var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        {
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+        }
+        else
+        {
+            SceneManager.LoadScene("combat");
+        }
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
@@ -449,7 +426,7 @@ internal class SectorVM : MonoBehaviour
             _personManager.Person = person;
 
             _personManager.SectorName = GetRandomName();
-         }
+        }
 
         var actor = new Actor(_personManager.Person, player, startNode);
 

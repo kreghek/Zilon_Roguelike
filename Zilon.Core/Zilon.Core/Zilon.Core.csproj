@@ -99,6 +99,7 @@
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
+    <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
@@ -203,7 +204,6 @@
     <Compile Include="Schemes\IMonsterDefenceItemSubScheme.cs" />
     <Compile Include="Schemes\IMonsterDefenceSubScheme.cs" />
     <Compile Include="Schemes\IMonsterScheme.cs" />
-    <Compile Include="Schemes\IPathScheme.cs" />
     <Compile Include="Schemes\IPerkScheme.cs" />
     <Compile Include="Schemes\IPersonScheme.cs" />
     <Compile Include="Schemes\IPropEquipSubScheme.cs" />
@@ -363,7 +363,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\IScheme.cs" />
     <Compile Include="Schemes\LocationScheme.cs" />
-    <Compile Include="Schemes\PathScheme.cs" />
     <Compile Include="Schemes\SchemeBase.cs" />
     <Compile Include="Schemes\ISchemeLocator.cs" />
     <Compile Include="Schemes\ISchemeService.cs" />

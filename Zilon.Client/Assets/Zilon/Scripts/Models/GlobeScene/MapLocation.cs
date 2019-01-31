@@ -11,6 +11,14 @@ public class MapLocation : MonoBehaviour
 
     public GlobeRegionNode Node { get; set; }
 
+    public void Start()
+    {
+        if (Node.Scheme.Sid != "forest")
+        {
+            Icon.color = Color.red;
+        }
+    }
+
     public void OnMouseDown()
     {
         OnSelect(this, new EventArgs());

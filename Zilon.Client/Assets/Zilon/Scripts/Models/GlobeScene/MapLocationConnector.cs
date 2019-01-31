@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 
-using Zilon.Core.Schemes;
-
 public class MapLocationConnector : MonoBehaviour
 {
     public GameObject gameObject1; // Reference to the first GameObject
     public GameObject gameObject2; // Reference to the second GameObject
 
     public LineRenderer line; // Line Renderer
-
-    public PathScheme Scheme { get; set; }
 
     void Start()
     {
