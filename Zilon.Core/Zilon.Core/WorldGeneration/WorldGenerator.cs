@@ -20,7 +20,7 @@ namespace Zilon.Core.WorldGeneration
 
         public Globe GenerateGlobe()
         {
-            const int Size = 50;
+            const int Size = 10;
             const int StartRealmCount = 4;
 
             var globe = new Globe
@@ -120,7 +120,7 @@ namespace Zilon.Core.WorldGeneration
                 new TakeLocation()
             });
 
-            for (var year = 0; year < 40_000; year++)
+            for (var year = 0; year < 100; year++)
             {
                 foreach (var agent in globe.Agents.ToArray())
                 {
