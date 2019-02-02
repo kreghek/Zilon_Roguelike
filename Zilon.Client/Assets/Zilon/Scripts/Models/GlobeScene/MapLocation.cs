@@ -13,9 +13,15 @@ public class MapLocation : MonoBehaviour
 
     public void Start()
     {
-        if (Node.Scheme.Sid != "forest")
+        if (Node.Scheme.Sid == "forest")
         {
-            Icon.color = Color.red;
+            var sprite = Resources.Load<Sprite>("Globe/forest");
+            Icon.sprite = sprite;
+        }
+        else
+        {
+            var sprite = Resources.Load<Sprite>("Globe/gungeon");
+            Icon.sprite = sprite;
         }
     }
 
