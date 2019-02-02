@@ -17,6 +17,7 @@ namespace Zilon.Core.WorldGeneration
         private const int StartRealmCount = 4;
         private const int HistoryIterationCount = 40;
         private const int StartAgentCount = 40;
+        private const int LocationBaseSize = 20;
 
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
@@ -190,12 +191,18 @@ namespace Zilon.Core.WorldGeneration
                 "elder-place",
                 "genomass-cave"
             };
-            var region = new GlobeRegion();
+            var region = new GlobeRegion(LocationBaseSize);
 
-            for (var x = 0; x < 10; x++)
+            for (var x = 0; x < LocationBaseSize; x++)
             {
-                for (var y = 0; y < 10; y++)
+                for (var y = 0; y < LocationBaseSize; y++)
                 {
+                    var hasNodeRoll = _dice.Roll(6);
+                    if (hasNodeRoll <= 2)
+                    {
+                        continue;
+                    }
+
                     var hasDundeonRoll = _dice.Roll(6);
                     if (hasDundeonRoll > 5)
                     {

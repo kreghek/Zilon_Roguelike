@@ -10,7 +10,7 @@ namespace Zilon.Core.World
         /// <summary>
         /// Конструктор графа провинции.
         /// </summary>
-        public GlobeRegion() : base(10)
+        public GlobeRegion(int segmentSize) : base(segmentSize)
         {
         }
     }

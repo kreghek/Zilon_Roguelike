@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -18,14 +18,14 @@ namespace Assets.Zilon.Scripts.Services
         public Globe CurrentGlobe { get; private set; }
         public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
 
-        public void GenerateGlobe()
+        public async Task GenerateGlobeAsync()
         {
-            CurrentGlobe = _generator.GenerateGlobe();
+            CurrentGlobe = await _generator.GenerateGlobeAsync();
         }
 
-        public GlobeRegion GenerateRegion(TerrainCell cell)
+        public async Task<GlobeRegion> GenerateRegionAsync(TerrainCell cell)
         {
-            return _generator.GenerateRegion(CurrentGlobe, cell);
+            return await _generator.GenerateRegionAsync(CurrentGlobe, cell);
         }
     }
 }

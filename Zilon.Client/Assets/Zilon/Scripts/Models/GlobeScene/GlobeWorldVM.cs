@@ -17,23 +17,25 @@ public class GlobeWorldVM : MonoBehaviour
     public MapLocation LocationPrefab;
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
-    private GameObject _groupObject;
+    public GlobalFollowCamera Camera;
+
     private GroupVM _groupViewModel;
+
     [Inject] private readonly IGlobeManager _globeManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
 
-    private void Start()
+    private async void Start()
     {
         if (_globeManager.CurrentGlobe == null)
         {
-            _globeManager.GenerateGlobe();
+            await _globeManager.GenerateGlobeAsync();
 
             var firstLocality = _globeManager.CurrentGlobe.Localities.First();
 
             _player.Terrain = firstLocality.Cell;
 
-            var createdRegion = _globeManager.GenerateRegion(firstLocality.Cell);
+            var createdRegion = await _globeManager.GenerateRegionAsync(firstLocality.Cell);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
@@ -77,10 +79,11 @@ public class GlobeWorldVM : MonoBehaviour
         }
 
         var playerGroupNodeViewModel = locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
-        _groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
-        _groupViewModel = _groupObject.GetComponent<GroupVM>();
+        var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
+        _groupViewModel = groupObject.GetComponent<GroupVM>();
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
-        _groupObject.transform.position = playerGroupNodeViewModel.transform.position;
+        groupObject.transform.position = playerGroupNodeViewModel.transform.position;
+        Camera.Target = groupObject;
     }
 
     private void LocationViewModel_OnSelect(object sender, System.EventArgs e)

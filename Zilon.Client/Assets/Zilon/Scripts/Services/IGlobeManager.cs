@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -8,9 +10,9 @@ namespace Assets.Zilon.Scripts.Services
     {
         Globe CurrentGlobe { get; }
 
-        void GenerateGlobe();
+        Task GenerateGlobeAsync();
 
-        GlobeRegion GenerateRegion(TerrainCell cell);
+        Task<GlobeRegion> GenerateRegionAsync(TerrainCell cell);
 
         Dictionary<TerrainCell, GlobeRegion> Regions { get; }
     }

@@ -93,6 +93,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             {
                 agent.Hp -= 2;
                 agent.Realm = realm;
+                return;
             }
 
             var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
