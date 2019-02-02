@@ -203,8 +203,8 @@ namespace Zilon.Core.WorldGeneration
                         continue;
                     }
 
-                    var hasDundeonRoll = _dice.Roll(6);
-                    if (hasDundeonRoll > 5)
+                    var hasDundeonRoll = _dice.Roll(100);
+                    if (hasDundeonRoll > 90)
                     {
                         var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
                         var locationSid = locationSchemeSids[locationSidIndex];
