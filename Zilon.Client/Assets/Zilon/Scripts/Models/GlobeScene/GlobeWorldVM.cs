@@ -20,6 +20,8 @@ public class GlobeWorldVM : MonoBehaviour
     public GlobalFollowCamera Camera;
 
     private GroupVM _groupViewModel;
+    private GlobeRegion _region;
+    private List<MapLocation> _locationNodeViewModels;
 
     [Inject] private readonly IGlobeManager _globeManager;
     [Inject] private readonly HumanPlayer _player;
@@ -45,10 +47,10 @@ public class GlobeWorldVM : MonoBehaviour
         }
 
         var currentGlobeCell = _player.Terrain;
-        var region = _globeManager.Regions[currentGlobeCell];
+        _region = _globeManager.Regions[currentGlobeCell];
 
-        var locationNodeViewModels = new List<MapLocation>(100);
-        foreach (GlobeRegionNode globeRegionNode in region.Nodes)
+        _locationNodeViewModels = new List<MapLocation>(100);
+        foreach (GlobeRegionNode globeRegionNode in _region.Nodes)
         {
             var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
 
@@ -56,18 +58,18 @@ public class GlobeWorldVM : MonoBehaviour
             locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
             var locationViewModel = locationObject.GetComponent<MapLocation>();
             locationViewModel.Node = globeRegionNode;
-            locationNodeViewModels.Add(locationViewModel);
+            _locationNodeViewModels.Add(locationViewModel);
 
             locationViewModel.OnSelect += LocationViewModel_OnSelect;
         }
 
-        var openNodeViewModels = new List<MapLocation>(locationNodeViewModels);
+        var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
         while (openNodeViewModels.Any())
         {
             var currentNodeViewModel = openNodeViewModels[0];
             openNodeViewModels.Remove(currentNodeViewModel);
 
-            var neighbors = region.GetNext(currentNodeViewModel.Node);
+            var neighbors = _region.GetNext(currentNodeViewModel.Node);
             var neighborViewModels = openNodeViewModels.Where(x => neighbors.Contains(x.Node)).ToArray();
             foreach (var neibourNodeViewModel in neighborViewModels)
             {
@@ -78,7 +80,7 @@ public class GlobeWorldVM : MonoBehaviour
             }
         }
 
-        var playerGroupNodeViewModel = locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
+        var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
         var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
         _groupViewModel = groupObject.GetComponent<GroupVM>();
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
@@ -90,15 +92,24 @@ public class GlobeWorldVM : MonoBehaviour
     {
         var selectedNodeViewModel = (MapLocation)sender;
 
-        _player.GlobeNode = selectedNodeViewModel.Node;
+        var currentNode = _player.GlobeNode;
+        var currentNodeViewModel = _locationNodeViewModels.Single(x=>x.Node == currentNode);
 
-        if (_player.GlobeNode.Scheme.SectorLevels != null)
+        var neighborNodes = _region.GetNext(currentNode);
+        var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
+
+        if (selectedIsNeighbor)
         {
-            SceneManager.LoadScene("combat");
-        }
-        else
-        {
-            _groupViewModel.CurrentLocation = selectedNodeViewModel;
+            _player.GlobeNode = selectedNodeViewModel.Node;
+
+            if (_player.GlobeNode.Scheme.SectorLevels != null)
+            {
+                SceneManager.LoadScene("combat");
+            }
+            else
+            {
+                _groupViewModel.CurrentLocation = selectedNodeViewModel;
+            }
         }
     }
 }
