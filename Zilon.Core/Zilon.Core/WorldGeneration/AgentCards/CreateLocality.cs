@@ -89,7 +89,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                     globe.Localities.Add(createdLocality);
                     globe.LocalitiesCells[freeLocaltion] = createdLocality;
-                    globe.ScanResult.Free.Remove(freeLocaltion);
+                    globe.scanResult.Free.Remove(freeLocaltion);
                 }
                 else
                 {

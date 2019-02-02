@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
@@ -12,6 +13,11 @@ namespace Zilon.Core.WorldGeneration
 {
     public class WorldGenerator : IWorldGenerator
     {
+        private const int Size = 10;
+        private const int StartRealmCount = 4;
+        private const int HistoryIterationCount = 40;
+        private const int StartAgentCount = 40;
+
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
 
@@ -21,45 +27,94 @@ namespace Zilon.Core.WorldGeneration
             _schemeService = schemeService;
         }
 
-        public Globe GenerateGlobe()
+        public Task<Globe> GenerateGlobeAsync()
         {
-            const int Size = 10;
-            const int StartRealmCount = 4;
-
             var globe = new Globe
             {
-                Terrain = new TerrainCell[Size][],
+                Terrain = new TerrainCell[Size][]
             };
 
-            var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow };
-            for (var i = 0; i < StartRealmCount; i++)
+            var realmTask = CreateRealms(globe);
+            var terrainTask = CreateTerrain(globe);
+
+            Task.WaitAll(realmTask, terrainTask);
+
+            CreateStartLocalities(globe);
+            CreateStartAgents(globe);
+
+            var agentsClock = new Stopwatch();
+            agentsClock.Start();
+
+            var cardQueue = CreateAgentCardQueue();
+
+            // обработка итераций
+            ProcessIterations(globe, cardQueue);
+
+            agentsClock.Stop();
+            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
+
+            return Task.FromResult(globe);
+        }
+
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
+        {
+            for (var year = 0; year < HistoryIterationCount; year++)
             {
-                var realm = new Realm
+                foreach (var agent in globe.Agents.ToArray())
                 {
-                    Name = $"realm {i}",
-                    Color = realmColors[i]
-                };
+                    var card = cardQueue.Dequeue();
 
-                globe.Realms.Add(realm);
-            }
-
-            var scanResult = new ScanResult();
-            for (var i = 0; i < Size; i++)
-            {
-                globe.Terrain[i] = new TerrainCell[Size];
-
-                for (var j = 0; j < Size; j++)
-                {
-                    globe.Terrain[i][j] = new TerrainCell
+                    if (card.CanUse(agent, globe))
                     {
-                        Coords = new OffsetCoords(i, j)
-                    };
+                        card.Use(agent, globe, _dice);
+                    }
 
-                    scanResult.Free.Add(globe.Terrain[i][j]);
+                    cardQueue.Enqueue(card);
                 }
             }
+        }
 
+        private static Queue<IAgentCard> CreateAgentCardQueue()
+        {
+            return new Queue<IAgentCard>(new IAgentCard[] {
+                new ChangeLocality(),
+                new CreateLocality(),
+                new IncreasePopulation(),
+                new AgentOpposition(),
+                new AgentSupport(),
+                new Disciple(),
+                new TakeLocation()
+            });
+        }
 
+        private void CreateStartAgents(Globe globe)
+        {
+            for (var i = 0; i < StartAgentCount; i++)
+            {
+                var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
+                var locality = globe.Localities[rolledLocalityIndex];
+
+                var agent = new Agent
+                {
+                    Name = $"agent {i}",
+                    Localtion = locality.Cell,
+                    Realm = locality.Owner
+                };
+
+                globe.Agents.Add(agent);
+
+                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
+
+                var rolledBranchIndex = _dice.Roll(0, 7);
+                agent.Skills = new Dictionary<BranchType, int>
+                {
+                    { (BranchType)rolledBranchIndex, 1 }
+                };
+            }
+        }
+
+        private void CreateStartLocalities(Globe globe)
+        {
             for (var i = 0; i < StartRealmCount; i++)
             {
                 var randomX = _dice.Roll(0, Size - 1);
@@ -83,68 +138,48 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.LocalitiesCells[locality.Cell] = locality;
 
-                scanResult.Free.Remove(locality.Cell);
+                globe.scanResult.Free.Remove(locality.Cell);
             }
+        }
 
-            for (var i = 0; i < 40; i++)
+        private Task CreateTerrain(Globe globe)
+        {
+            for (var i = 0; i < Size; i++)
             {
-                var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
-                var locality = globe.Localities[rolledLocalityIndex];
+                globe.Terrain[i] = new TerrainCell[Size];
 
-                var agent = new Agent
+                for (var j = 0; j < Size; j++)
                 {
-                    Name = $"agent {i}",
-                    Localtion = locality.Cell,
-                    Realm = locality.Owner
-                };
-
-                globe.Agents.Add(agent);
-
-                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
-
-                var rolledBranchIndex = _dice.Roll(0, 7);
-                agent.Skills = new Dictionary<BranchType, int>
-                {
-                    { (BranchType)rolledBranchIndex, 1 }
-                };
-            }
-
-            var agentsClock = new Stopwatch();
-            agentsClock.Start();
-
-            // обработка итераций
-            var cardQueue = new Queue<IAgentCard>(new IAgentCard[] {
-                new ChangeLocality(),
-                new CreateLocality(),
-                new IncreasePopulation(),
-                new AgentOpposition(),
-                new AgentSupport(),
-                new Disciple(),
-                new TakeLocation()
-            });
-
-            for (var year = 0; year < 100; year++)
-            {
-                foreach (var agent in globe.Agents.ToArray())
-                {
-                    var card = cardQueue.Dequeue();
-
-                    if (card.CanUse(agent, globe))
+                    globe.Terrain[i][j] = new TerrainCell
                     {
-                        card.Use(agent, globe, _dice);
-                    }
+                        Coords = new OffsetCoords(i, j)
+                    };
 
-                    cardQueue.Enqueue(card);
+                    globe.scanResult.Free.Add(globe.Terrain[i][j]);
                 }
             }
 
-            agentsClock.Stop();
-            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
-
-            return globe;
+            return Task.CompletedTask;
         }
 
-        public GlobeRegion GenerateRegion(Globe globe, TerrainCell cell)
+        private Task CreateRealms(Globe globe)
+        {
+            var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow };
+            for (var i = 0; i < StartRealmCount; i++)
+            {
+                var realm = new Realm
+                {
+                    Name = $"realm {i}",
+                    Color = realmColors[i]
+                };
+
+                globe.Realms.Add(realm);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
         {
             var locationSchemeSids = new[] {
                 "rat-hole",
@@ -179,7 +214,7 @@ namespace Zilon.Core.WorldGeneration
                 }
             }
 
-            return region;
+            return Task.FromResult(region);
         }
     }
 }

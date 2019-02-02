@@ -20,7 +20,7 @@ namespace Zilon.Core.WorldGeneration
         public Dictionary<TerrainCell, List<Agent>> AgentCells = new Dictionary<TerrainCell, List<Agent>>();
         public Dictionary<TerrainCell, Locality> LocalitiesCells = new Dictionary<TerrainCell, Locality>();
 
-        public ScanResult ScanResult = new ScanResult();
+        public ScanResult scanResult = new ScanResult();
 
         public int AgentCrisys = 0;
 

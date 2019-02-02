@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
@@ -11,13 +11,13 @@ namespace Zilon.Core.WorldGeneration.Tests
     public class GeneratorTests
     {
         [Test]
-        public void GenerateTest()
+        public async Task GenerateTestAsync()
         {
             var dice = new Dice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = generator.GenerateGlobe();
+            var globe = await generator.GenerateGlobeAsync();
             globe.Save(@"c:\worldgen");
         }
 
