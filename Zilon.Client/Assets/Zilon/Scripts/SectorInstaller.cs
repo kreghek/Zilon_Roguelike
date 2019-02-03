@@ -20,6 +20,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPlayerState>().To<PlayerState>().AsSingle();
         Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
+        Container.Bind<ITraderManager>().To<TraderManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();

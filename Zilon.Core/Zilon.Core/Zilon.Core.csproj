@@ -57,6 +57,7 @@
     <Compile Include="AppException.cs" />
     <Compile Include="Client\FloorPropContainer.cs" />
     <Compile Include="Client\IActorViewModel.cs" />
+    <Compile Include="Client\ITraderViewModel.cs" />
     <Compile Include="Client\IContainerViewModel.cs" />
     <Compile Include="Client\IInventoryState.cs" />
     <Compile Include="Client\IMapNodeViewModel.cs" />
@@ -111,12 +112,15 @@
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
+    <Compile Include="Tactics\ITraderManager.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
     <Compile Include="Client\PlayerState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\ITrader.cs" />
+    <Compile Include="Tactics\TraderManager.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\UseSelfCommand.cs" />
     <Compile Include="Commands\ShowPerksModalCommand.cs" />
@@ -383,6 +387,7 @@
     <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
+    <Compile Include="Tactics\Trader.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />

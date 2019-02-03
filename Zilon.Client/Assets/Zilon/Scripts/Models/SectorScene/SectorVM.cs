@@ -32,6 +32,7 @@ internal class SectorVM : MonoBehaviour
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ActorViewModel> _actorViewModels;
     private readonly List<ContainerVm> _containerViewModels;
+    private readonly List<TraderViewModel> _traderViewModels;
 
     private bool _interuptCommands;
 
@@ -51,6 +52,8 @@ internal class SectorVM : MonoBehaviour
     [NotNull] public ContainerVm ChestPrefab;
 
     [NotNull] public ContainerVm LootPrefab;
+
+    [NotNull] public TraderViewModel TraderPrefab;
 
     [NotNull] public HitSfx HitSfx;
 
@@ -75,6 +78,8 @@ internal class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IActorManager _actorManager;
 
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
+
+    [NotNull] [Inject] private readonly ITraderManager _traderManager;
 
     [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
@@ -111,6 +116,7 @@ internal class SectorVM : MonoBehaviour
         _nodeViewModels = new List<MapNodeVM>();
         _actorViewModels = new List<ActorViewModel>();
         _containerViewModels = new List<ContainerVm>();
+        _traderViewModels = new List<TraderViewModel>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -167,6 +173,7 @@ internal class SectorVM : MonoBehaviour
         InitPlayerActor(nodeViewModels);
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
+        CreateTraderViewModels(nodeViewModels);
 
         if (_personManager.SectorLevel == 0)
         {
@@ -340,6 +347,14 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
+    private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    {
+        foreach (var trader in _traderManager.Items)
+        {
+            CreateTraderViewModel(nodeViewModels, trader);
+        }
+    }
+
     private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
     {
         var containerPrefab = GetContainerPrefab(container);
@@ -355,6 +370,34 @@ internal class SectorVM : MonoBehaviour
         _containerViewModels.Add(containerViewModel);
     }
 
+    private void CreateTraderViewModel(IEnumerable<MapNodeVM> nodeViewModels, ITrader trader)
+    {
+        var traderPrefab = GetTraderPrefab(trader);
+
+        var traderViewModel = Instantiate(traderPrefab, transform);
+
+        var traderNodeVm = nodeViewModels.Single(x => x.Node == trader.Node);
+        var containerPosition = traderNodeVm.transform.position + new Vector3(0, 0, -1);
+        traderViewModel.transform.position = containerPosition;
+        traderViewModel.Trader = trader;
+        traderViewModel.Selected += TraderViewModel_Selected;
+
+        _traderViewModels.Add(traderViewModel);
+    }
+
+    private void TraderViewModel_Selected(object sender, EventArgs e)
+    {
+        var traderViewModel = sender as TraderViewModel;
+
+        _playerState.HoverViewModel = traderViewModel;
+
+        //TODO Вставить команду на взаимодействие с торговцем
+        //if (traderViewModel != null)
+        //{
+        //    _clientCommandExecutor.Push(_openContainerCommand);
+        //}
+    }
+
     private ContainerVm GetContainerPrefab(IPropContainer container)
     {
         if (container is ILootContainer lootContainer)
@@ -363,6 +406,11 @@ internal class SectorVM : MonoBehaviour
         }
 
         return ChestPrefab;
+    }
+
+    private TraderViewModel GetTraderPrefab(ITrader trader)
+    {
+        return TraderPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)

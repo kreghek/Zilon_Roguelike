@@ -18,23 +18,29 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
+        private readonly ITraderManager _traderManager;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
 
         public SectorSchemeGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
+            ITraderManager traderManager,
             ISchemeService schemeService,
             IPropFactory propFactory,
             IDropResolver dropResolver)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
+            _traderManager = traderManager;
             _schemeService = schemeService;
             _propFactory = propFactory;
             _dropResolver = dropResolver;
         }
 
+        /// <summary>Создаёт сектора с учётом указанных настроек.</summary>
+        /// <param name="options">Настройки создания сектора.</param>
+        /// <returns>Возвращает созданный сектор.</returns>
         public ISector Generate(ISectorGeneratorOptions options)
         {
             var map = SquareMapFactory.Create(20);
@@ -42,6 +48,7 @@ namespace Zilon.Core.MapGenerators
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
+                _traderManager,
                 _dropResolver,
                 _schemeService);
 
