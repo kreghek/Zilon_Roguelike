@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Assets.Zilon.Scripts;
 
 using JetBrains.Annotations;
@@ -79,6 +79,10 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             propItemVm.Init(prop);
             propItemVm.Click += PropItemOnClick;
         }
+
+        var parentRect = itemsParent.GetComponent<RectTransform>();
+        var rowCount = (int)Math.Ceiling(props.Count() / 4f);
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
     }
 
     private void PropItemOnClick(object sender, EventArgs e)
