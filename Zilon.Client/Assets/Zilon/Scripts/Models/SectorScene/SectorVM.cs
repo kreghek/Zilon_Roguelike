@@ -182,8 +182,19 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
-        var currentLocation = _humanPlayer.GlobeNode.Scheme;
-        var proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
+
+        ISectorGeneratorOptions proceduralGeneratorOptions;
+
+        if (_humanPlayer.GlobeNode == null)
+        {
+            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
+            proceduralGeneratorOptions = CreateSectorGeneratorOptions(introLocationScheme);
+        }
+        else
+        {
+            var currentLocation = _humanPlayer.GlobeNode.Scheme;
+            proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
+        }
 
         _sectorManager.CreateSector(proceduralGeneratorOptions);
 
@@ -375,8 +386,16 @@ internal class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
-        _personManager.SectorLevel++;
 
+        if (_humanPlayer.GlobeNode == null)
+        {
+            // intro
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+            return;
+        }
+
+        _personManager.SectorLevel++;
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
         if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
         {
