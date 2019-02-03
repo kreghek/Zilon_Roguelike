@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts;
+﻿using System;
+using Assets.Zilon.Scripts;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
     public GameObject[] Pages;
     public Button NextButton;
     public Button PrevButton;
+
+    public event EventHandler Closed;
 
     public string Caption => "Tutorial!";
 

@@ -42,9 +42,11 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] private PropTransferMachine _transferMachine;
 
+    public event EventHandler Closed;
+
     public string Caption => "Loot";
 
-#pragma warning restore 649    
+#pragma warning restore 649
     // ReSharper restore UnassignedField.Global
     // ReSharper restore NotNullMemberIsNotInitialized
 
@@ -106,7 +108,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             _transferMachine.TransferProp(prop, _transferMachine.Container, _transferMachine.Inventory);
         }
 
-        UpdateProps();
+        Closed?.Invoke(this, new EventArgs());
     }
 
     public void ApplyChanges()

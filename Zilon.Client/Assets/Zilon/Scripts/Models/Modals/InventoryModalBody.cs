@@ -33,6 +33,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
+    public event EventHandler Closed;
+
     public InventoryModalBody()
     {
         _propViewModels = new List<PropItemVm>();
