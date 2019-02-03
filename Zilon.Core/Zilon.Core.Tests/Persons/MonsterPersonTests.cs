@@ -31,7 +31,7 @@ namespace Zilon.Core.Tests.Persons
             Action act = () =>
             {
                 // ReSharper disable once UnusedVariable
-                var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
+                var monster = new MonsterPerson(monsterScheme);
             };
 
 
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tests.Persons
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
             // ACT
-            var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
+            var monster = new MonsterPerson(monsterScheme);
 
 
 
@@ -125,7 +125,7 @@ namespace Zilon.Core.Tests.Persons
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var monster = new MonsterPerson(monsterScheme, survivalRandomSource);
+            var monster = new MonsterPerson(monsterScheme);
             return monster;
         }
 
