@@ -11,6 +11,21 @@ namespace Zilon.Core.Client
     /// </summary>
     public class PropTransferStore : IPropStore
     {
+
+        public List<IProp> PropAdded { get; }
+
+        public List<IProp> PropRemoved { get; }
+
+        public IPropStore PropStore { get; }
+
+        public event EventHandler<PropStoreEventArgs> Added;
+        public event EventHandler<PropStoreEventArgs> Removed;
+        public event EventHandler<PropStoreEventArgs> Changed;
+
+        /// <summary>
+        /// Конструктор для хранилища-трансфера.
+        /// </summary>
+        /// <param name="propStore"> Реальное хранилище предметов. </param>
         public PropTransferStore(IPropStore propStore)
         {
             PropStore = propStore;
@@ -19,18 +34,11 @@ namespace Zilon.Core.Client
             PropRemoved = new List<IProp>();
         }
 
+        /// <summary>
+        /// Возвращает текущий список предметов в хранилище.
+        /// </summary>
+        /// <returns></returns>
         public IProp[] CalcActualItems()
-        {
-            return CalcItems();
-        }
-
-        public List<IProp> PropAdded { get; }
-
-        public List<IProp> PropRemoved { get; }
-
-        public IPropStore PropStore { get; }
-
-        private IProp[] CalcItems()
         {
             var result = new List<IProp>();
             var propStoreItems = PropStore.CalcActualItems();
@@ -94,10 +102,6 @@ namespace Zilon.Core.Client
 
             return result.ToArray();
         }
-
-        public event EventHandler<PropStoreEventArgs> Added;
-        public event EventHandler<PropStoreEventArgs> Removed;
-        public event EventHandler<PropStoreEventArgs> Changed;
 
         public void Add(IProp prop)
         {
