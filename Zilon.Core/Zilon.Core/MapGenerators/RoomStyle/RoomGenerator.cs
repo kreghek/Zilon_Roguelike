@@ -10,11 +10,19 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
+    /// <summary>
+    /// Генератор карты с комнатами.
+    /// </summary>
     public sealed class RoomGenerator : IRoomGenerator
     {
         private readonly IRoomGeneratorRandomSource _randomSource;
         private readonly RoomGeneratorSettings _settings;
 
+        /// <summary>
+        /// Конструктор генератора.
+        /// </summary>
+        /// <param name="randomSource"> Источник рандома для генератора. </param>
+        /// <param name="settings"> Настройки генерации. </param>
         [ExcludeFromCodeCoverage]
         public RoomGenerator([NotNull] IRoomGeneratorRandomSource randomSource,
             [NotNull] RoomGeneratorSettings settings)
@@ -24,6 +32,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         }
 
+        /// <summary>
+        /// Конструктор генератора с настройками по умолчанию.
+        /// Используется в тестах.
+        /// </summary>
+        /// <param name="randomSource"> Источник рандома для генератора. </param>
         [ExcludeFromCodeCoverage]
         public RoomGenerator(IRoomGeneratorRandomSource randomSource) : this(randomSource, new RoomGeneratorSettings())
         {
@@ -62,7 +75,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             return rooms;
         }
-
 
         public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
         {

@@ -23,5 +23,10 @@ namespace Zilon.Core.World
         /// Схема провинции.
         /// </summary>
         public ILocationScheme Scheme { get; }
+
+        /// <summary>
+        /// Является ли локация фрагментом города.
+        /// </summary>
+        public bool IsTown { get; set; }
     }
 }

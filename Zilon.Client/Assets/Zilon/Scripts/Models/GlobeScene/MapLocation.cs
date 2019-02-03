@@ -18,6 +18,11 @@ public class MapLocation : MonoBehaviour
             var sprite = Resources.Load<Sprite>("Globe/forest");
             Icon.sprite = sprite;
         }
+        else if(Node.Scheme.Sid == "city")
+        {
+            var sprite = Resources.Load<Sprite>("Globe/city");
+            Icon.sprite = sprite;
+        }
         else
         {
             var sprite = Resources.Load<Sprite>("Globe/gungeon");

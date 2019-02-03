@@ -11,6 +11,10 @@ using Zilon.Core.WorldGeneration.AgentCards;
 
 namespace Zilon.Core.WorldGeneration
 {
+    /// <summary>
+    /// Экземпляр генератора мира с историей.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.WorldGeneration.IWorldGenerator" />
     public class WorldGenerator : IWorldGenerator
     {
         private const int Size = 10;
@@ -22,12 +26,25 @@ namespace Zilon.Core.WorldGeneration
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
 
+        /// <summary>
+        /// Создаёт экземпляр <see cref="WorldGenerator"/>.
+        /// </summary>
+        /// <param name="dice"> Игровая кость, которая будет использована для рандомицзации событий мира.
+        /// В ближайшее время будет заменена специализированным источником рандома.
+        /// </param>
+        /// <param name="schemeService"> Сервис для доступа к схемам. Используется для генерации карты локации в провинции. </param>
         public WorldGenerator(IDice dice, ISchemeService schemeService)
         {
             _dice = dice;
             _schemeService = schemeService;
         }
 
+        /// <summary>
+        /// Создание игрового мира с историей и граф провинций.
+        /// </summary>
+        /// <returns>
+        /// Возвращает объект игрового мира.
+        /// </returns>
         public Task<Globe> GenerateGlobeAsync()
         {
             var globe = new Globe
@@ -56,6 +73,76 @@ namespace Zilon.Core.WorldGeneration
 
             return Task.FromResult(globe);
         }
+
+        /// <summary>
+        /// Создание
+        /// </summary>
+        /// <param name="globe">Объект игрового мира, для которого создаётся локация.</param>
+        /// <param name="cell">Провинция игрового мира из указанного выше <see cref="Globe" />,
+        /// для которого создаётся локация.</param>
+        /// <returns>
+        /// Возвращает граф локация для провинции.
+        /// </returns>
+        public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
+        {
+            var locationSchemeSids = new[] {
+                "rat-hole",
+                "rat-kingdom",
+                "demon-dungeon",
+                "demon-lair",
+                "crypt",
+                "elder-place",
+                "genomass-cave"
+            };
+            var region = new GlobeRegion(LocationBaseSize);
+
+            for (var x = 0; x < LocationBaseSize; x++)
+            {
+                for (var y = 0; y < LocationBaseSize; y++)
+                {
+                    var hasNodeRoll = _dice.Roll(6);
+                    if (hasNodeRoll <= 2)
+                    {
+                        continue;
+                    }
+
+                    var hasDundeonRoll = _dice.Roll(100);
+                    if (hasDundeonRoll > 90)
+                    {
+                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                        var locationSid = locationSchemeSids[locationSidIndex];
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                        var node = new GlobeRegionNode(x, y, locationScheme);
+                        region.AddNode(node);
+                    }
+                    else
+                    {
+                        var hasCityRoll = _dice.Roll(100);
+
+                        if (hasCityRoll > 90)
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>("city");
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsTown = true
+                            };
+                            region.AddNode(node);
+                        }
+                        else
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>("forest");
+                            var node = new GlobeRegionNode(x, y, locationScheme);
+                            region.AddNode(node);
+                        }
+
+                        
+                    }
+                }
+            }
+
+            return Task.FromResult(region);
+        }
+
 
         private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
         {
@@ -178,50 +265,6 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return Task.CompletedTask;
-        }
-
-        public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
-        {
-            var locationSchemeSids = new[] {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
-                "genomass-cave"
-            };
-            var region = new GlobeRegion(LocationBaseSize);
-
-            for (var x = 0; x < LocationBaseSize; x++)
-            {
-                for (var y = 0; y < LocationBaseSize; y++)
-                {
-                    var hasNodeRoll = _dice.Roll(6);
-                    if (hasNodeRoll <= 2)
-                    {
-                        continue;
-                    }
-
-                    var hasDundeonRoll = _dice.Roll(100);
-                    if (hasDundeonRoll > 90)
-                    {
-                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                        var locationSid = locationSchemeSids[locationSidIndex];
-                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                        var node = new GlobeRegionNode(x, y, locationScheme);
-                        region.AddNode(node);
-                    }
-                    else
-                    {
-                        var locationScheme = _schemeService.GetScheme<ILocationScheme>("forest");
-                        var node = new GlobeRegionNode(x, y, locationScheme);
-                        region.AddNode(node);
-                    }
-                }
-            }
-
-            return Task.FromResult(region);
         }
     }
 }

@@ -102,7 +102,7 @@ public class GlobeWorldVM : MonoBehaviour
         {
             _player.GlobeNode = selectedNodeViewModel.Node;
 
-            if (_player.GlobeNode.Scheme.SectorLevels != null)
+            if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
             {
                 SceneManager.LoadScene("combat");
             }

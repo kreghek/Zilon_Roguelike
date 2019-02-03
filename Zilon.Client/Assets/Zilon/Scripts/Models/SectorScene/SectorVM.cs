@@ -62,6 +62,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
+    [NotNull] [Inject] private readonly ISectorGeneratorSelector _sectorGeneratorSelector;
+
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
@@ -196,7 +198,9 @@ internal class SectorVM : MonoBehaviour
             proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
         }
 
-        _sectorManager.CreateSector(proceduralGeneratorOptions);
+        var sectorGenerator = _sectorGeneratorSelector.GetGenerator(_humanPlayer.GlobeNode);
+
+        _sectorManager.CreateSector(sectorGenerator, proceduralGeneratorOptions);
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -223,12 +227,15 @@ internal class SectorVM : MonoBehaviour
             MonsterGeneratorOptions = monsterGeneratorOptions
         };
 
-        var wellFormedSectorLevel = _personManager.SectorLevel;
-        var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
+        if (locationScheme.SectorLevels != null)
+        {
+            var wellFormedSectorLevel = _personManager.SectorLevel;
+            var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
 
-        monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
-        monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
-        monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
+            monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
+            monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
+            monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
+        }
 
         return proceduralGeneratorOptions;
     }

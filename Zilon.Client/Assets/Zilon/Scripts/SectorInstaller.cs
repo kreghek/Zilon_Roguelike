@@ -22,21 +22,26 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
-        Container.Bind<ISectorProceduralGenerator>().To<SectorProceduralGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
-        Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
+
+        Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
+        Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
+
+        // генераци€ сектора
+        Container.Bind<ISectorGeneratorSelector>().To<SectorGeneratorSelector>().AsSingle();
+        Container.Bind<IDungeonSectorGenerator>().To<SectorProceduralGenerator>().AsSingle();
+        Container.Bind<ITownSectorGenerator>().To<TownSectorGenerator>().AsSingle();
+        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle().WhenInjectedInto<SectorProceduralGenerator>();
+        Container.Bind<IMapFactory>().To<TownMapFactory>().AsSingle().WhenInjectedInto<TownSectorGenerator>();
+        Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
         Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();
         Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
         Container.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
         Container.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
-
-        Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
-        Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
 
 
         // —пециализированные сервисы дл€ Ui.
