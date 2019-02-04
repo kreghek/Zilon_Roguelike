@@ -17,8 +17,8 @@ public class TraderViewModel : MonoBehaviour, ITraderViewModel
     public void Start()
     {
         // выбрать визуализацию торговца
-        //var visualSprite = Resources.Load<Sprite>($"Traders/trader");
-        //SpriteRenderer.sprite = visualSprite;
+        var visualSprite = Resources.Load<Sprite>($"Traders/trader1");
+        SpriteRenderer.sprite = visualSprite;
     }
 
     public void OnMouseDown()
