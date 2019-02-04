@@ -111,6 +111,10 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-container-modal-command")]
     private readonly ICommand _showContainerModalCommand;
 
+    [NotNull]
+    [Inject(Id = "show-trader-modal-command")]
+    private readonly ICommand _showTraderModalCommand;
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
@@ -391,11 +395,10 @@ internal class SectorVM : MonoBehaviour
 
         _playerState.HoverViewModel = traderViewModel;
 
-        //TODO Вставить команду на взаимодействие с торговцем
-        //if (traderViewModel != null)
-        //{
-        //    _clientCommandExecutor.Push(_openContainerCommand);
-        //}
+        if (traderViewModel != null)
+        {
+            _clientCommandExecutor.Push(_showTraderModalCommand);
+        }
     }
 
     private ContainerVm GetContainerPrefab(IPropContainer container)
@@ -498,6 +501,10 @@ internal class SectorVM : MonoBehaviour
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
             _personManager.Person = person;
+
+            AddResourceToActor(inventory, "packed-food", 10);
+            AddEquipmentToActor(inventory, "short-sword");
+            AddEquipmentToActor(inventory, "short-sword");
         }
 
         var actor = new Actor(_personManager.Person, player, startNode);

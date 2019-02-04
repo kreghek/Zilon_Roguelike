@@ -47,7 +47,6 @@ namespace Zilon.Core.Tactics
         /// <returns>
         /// Возвращает товар, который отдаёт торговец.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public IProp Offer()
         {
             var goods = _dropResolver.GetProps(new[] { _goodsDropTable });
