@@ -14,11 +14,18 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class MonsterSurvivalData : ISurvivalData
     {
-        private readonly ISurvivalRandomSource _randomSource;
-
-        public MonsterSurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats)
+        public MonsterSurvivalData([NotNull] IMonsterScheme monsterScheme)
         {
-            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            if (monsterScheme == null)
+            {
+                throw new ArgumentNullException(nameof(monsterScheme));
+            }
+
+            Stats = new[] {
+               new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
+                    Type = SurvivalStatType.Health
+                }
+            };
         }
 
         public SurvivalStat[] Stats { get; }
@@ -59,31 +66,11 @@ namespace Zilon.Core.Persons
         }
 
         /// <summary>
-        /// Монстры не требуют расчета своих характеристик.
+        /// Обновление состояния данных о выживании.
         /// </summary>
         public void Update()
         {
-
-        }
-        /// <summary>
-        /// Создание монстра.
-        /// </summary>
-        /// <param name="monsterScheme"></param>
-        /// <returns></returns>
-        public static MonsterSurvivalData CreateMonsterPersonSurvival([NotNull] IMonsterScheme monsterScheme)
-        {
-            if (monsterScheme == null)
-            {
-                throw new ArgumentNullException(nameof(monsterScheme));
-            }
-
-            var stats = new[] {
-               new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
-                    Type = SurvivalStatType.Health
-                }
-            };
-
-            return new MonsterSurvivalData(stats);
+            // Монстры не требуют расчета своих характеристик.
         }
 
         private void ValidateStatChangeValue(int value)

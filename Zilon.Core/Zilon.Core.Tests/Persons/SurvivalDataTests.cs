@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.Persons
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            ISurvivalData survivalData = HumanSurvivalData.CreateHumanPersonSurvival(_personScheme, survivalRandomSource);
+            ISurvivalData survivalData = new HumanSurvivalData(_personScheme, survivalRandomSource);
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = 1;
@@ -179,7 +179,7 @@ namespace Zilon.Core.Tests.Persons
 
         private ISurvivalData CreateSurvivalData()
         {
-            var survivalData = HumanSurvivalData.CreateHumanPersonSurvival(_personScheme, _survivalRandomSource);
+            var survivalData = new HumanSurvivalData(_personScheme, _survivalRandomSource);
             return survivalData;
         }
     }
