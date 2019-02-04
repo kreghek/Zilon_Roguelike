@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Client
 {
@@ -35,12 +37,32 @@ namespace Zilon.Core.Client
         /// Перенос предмета между указанными хранилищами.
         /// </summary>
         /// <param name="prop"> Предмет, который будет перенесён. </param>
-        /// <param name="sourceStore"> Хранилище-источник. </param>
-        /// <param name="distStore"> Хранилище-назначение. </param>
-        public void TransferProp(IProp prop, IPropStore sourceStore, IPropStore distStore)
+        /// <param name="sourceStoreType"> Хранилище-источник. </param>
+        /// <param name="distStoreType"> Хранилище-назначение. </param>
+        public void TransferProp(IProp prop,
+            PropTransferMachineStores sourceStoreType,
+            PropTransferMachineStores distStoreType)
         {
+            var sourceStore = GetStore(sourceStoreType);
             sourceStore.Remove(prop);
+
+            var distStore = GetStore(distStoreType);
             distStore.Add(prop);
+        }
+
+        private IPropStore GetStore(PropTransferMachineStores transferStoreType)
+        {
+            switch (transferStoreType)
+            {
+                case PropTransferMachineStores.Inventory:
+                    return Inventory;
+
+                case PropTransferMachineStores.Container:
+                    return Container;
+
+                default:
+                    throw new ArgumentException($"Неизвестный тип контейнера для трансфера {transferStoreType}");
+            }
         }
     }
 }

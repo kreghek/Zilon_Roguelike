@@ -47,8 +47,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                transferMachine.Container,
-                transferMachine.Inventory);
+                PropTransferMachineStores.Container,
+                PropTransferMachineStores.Inventory);
 
 
 
@@ -90,8 +90,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                transferMachine.Container,
-                transferMachine.Inventory);
+                PropTransferMachineStores.Container,
+                PropTransferMachineStores.Inventory);
 
 
 
