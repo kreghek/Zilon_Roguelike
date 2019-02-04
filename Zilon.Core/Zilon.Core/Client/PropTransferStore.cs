@@ -167,11 +167,22 @@ namespace Zilon.Core.Client
                 {
                     addedResource = new Resource(resource.Scheme, resource.Count);
                     oppositList.Add(addedResource);
-                    eventHandler?.Invoke(this, new PropStoreEventArgs(resource));
+
+                    var currentStoreProps = PropStore.CalcActualItems();
+                    var currentStoreProp = currentStoreProps.SingleOrDefault(x => x.Scheme == resource.Scheme);
+                    if (currentStoreProp == null || eventHandler == Removed)
+                    {
+                        eventHandler?.Invoke(this, new PropStoreEventArgs(resource));
+                    }
+                    else
+                    {
+                        Changed?.Invoke(this, new PropStoreEventArgs(resource));
+                    }
                 }
                 else
                 {
                     addedResource.Count += resource.Count;
+                    Changed?.Invoke(this, new PropStoreEventArgs(resource));
                 }
             }
         }
