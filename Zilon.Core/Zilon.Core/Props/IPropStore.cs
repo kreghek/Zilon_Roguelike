@@ -17,13 +17,13 @@ namespace Zilon.Core.Props
         IProp[] CalcActualItems();
 
         /// <summary>
-        /// Добавление предмета в инвентарь.
+        /// Добавление предмета в хранилище.
         /// </summary>
         /// <param name="prop"> Целевой предмет. </param>
         void Add(IProp prop);
 
         /// <summary>
-        /// Удаление предмета из инвентаря.
+        /// Удаление предмета из хранилища.
         /// </summary>
         /// <param name="prop"> Целевой предмет. </param>
         void Remove(IProp prop);
