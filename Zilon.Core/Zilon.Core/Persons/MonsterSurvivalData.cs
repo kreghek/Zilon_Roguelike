@@ -10,17 +10,15 @@ using Zilon.Core.Schemes;
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Базовая реализация данных о выживании.
+    /// Базовая реализация данных о выживании для монстров.
     /// </summary>
-    public sealed class SurvivalData : ISurvivalData
+    public sealed class MonsterSurvivalData : ISurvivalData
     {
         private readonly ISurvivalRandomSource _randomSource;
 
-        public SurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats,
-            [NotNull] ISurvivalRandomSource randomSource)
+        public MonsterSurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats)
         {
             Stats = stats ?? throw new ArgumentNullException(nameof(stats));
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         public SurvivalStat[] Stats { get; }
@@ -60,46 +58,19 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>
+        /// Монстры не требуют расчета своих характеристик.
+        /// </summary>
         public void Update()
         {
-            foreach (var stat in Stats)
-            {
-                var roll = _randomSource.RollSurvival(stat);
-                var successRoll = GetSuccessRoll();
 
-                if (roll >= successRoll)
-                {
-                    ChangeStatInner(stat, -stat.Rate);
-                }
-            }
         }
-
-        public static SurvivalData CreateHumanPersonSurvival([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource)
-        {
-            if (personScheme == null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
-            if (randomSource == null)
-            {
-                throw new ArgumentNullException(nameof(randomSource));
-            }
-
-            var stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
-                    Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
-            };
-
-            return new SurvivalData(stats, randomSource);
-        }
-
-        public static SurvivalData CreateMonsterPersonSurvival([NotNull] IMonsterScheme monsterScheme,
-            [NotNull] ISurvivalRandomSource randomSource)
+        /// <summary>
+        /// Создание монстра.
+        /// </summary>
+        /// <param name="monsterScheme"></param>
+        /// <returns></returns>
+        public static MonsterSurvivalData CreateMonsterPersonSurvival([NotNull] IMonsterScheme monsterScheme)
         {
             if (monsterScheme == null)
             {
@@ -112,7 +83,7 @@ namespace Zilon.Core.Persons
                 }
             };
 
-            return new SurvivalData(stats, randomSource);
+            return new MonsterSurvivalData(stats);
         }
 
         private void ValidateStatChangeValue(int value)
@@ -177,7 +148,7 @@ namespace Zilon.Core.Persons
             {
                 return;
             }
-            
+
             var hp = stat.Value;
             if (hp <= 0)
             {
