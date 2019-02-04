@@ -16,11 +16,23 @@ namespace Zilon.Core.Persons
     {
         private readonly ISurvivalRandomSource _randomSource;
 
-        public HumanSurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats,
+        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
         {
-            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            if (personScheme == null)
+            {
+                throw new ArgumentNullException(nameof(personScheme));
+            }
+
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+
+            Stats = new[] {
+                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                    Type = SurvivalStatType.Health
+                },
+                CreateStat(SurvivalStatType.Satiety),
+                CreateStat(SurvivalStatType.Water)
+            };
         }
 
         public SurvivalStat[] Stats { get; }
@@ -73,36 +85,7 @@ namespace Zilon.Core.Persons
                 }
             }
         }
-        /// <summary>
-        /// Создание человеческого персонажа.
-        /// </summary>
-        /// <param name="personScheme"></param>
-        /// <param name="randomSource"></param>
-        /// <returns></returns>
-        public static HumanSurvivalData CreateHumanPersonSurvival([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource)
-        {
-            if (personScheme == null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
-            if (randomSource == null)
-            {
-                throw new ArgumentNullException(nameof(randomSource));
-            }
-
-            var stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
-                    Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
-            };
-
-            return new HumanSurvivalData(stats, randomSource);
-        }
-
+        
         private void ValidateStatChangeValue(int value)
         {
             if (value == 0)
