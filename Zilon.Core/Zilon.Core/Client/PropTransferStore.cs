@@ -108,17 +108,40 @@ namespace Zilon.Core.Client
             switch (prop)
             {
                 case Resource resource:
-                    TransferResource(resource, PropRemoved, PropAdded);
+                    TransferResource(resource, PropRemoved, PropAdded,
+                        eventHandler: Added);
                     break;
 
                 case Equipment _:
                 case Concept _:
-                    TransferNoCount(prop, PropRemoved, PropAdded);
+                    TransferNoCount(prop, PropRemoved, PropAdded,
+                        eventHandler: Added);
                     break;
             }
         }
 
-        private void TransferResource(Resource resource, IList<IProp> bittenList, IList<IProp> oppositList)
+        public void Remove(IProp prop)
+        {
+            switch (prop)
+            {
+                case Resource resource:
+
+                    TransferResource(resource, PropAdded, PropRemoved,
+                        eventHandler: Removed);
+                    break;
+
+                case Equipment _:
+                case Concept _:
+                    TransferNoCount(prop, PropAdded, PropRemoved,
+                        eventHandler: Removed);
+                    break;
+            }
+        }
+
+        private void TransferResource(Resource resource,
+            IList<IProp> bittenList,
+            IList<IProp> oppositList,
+            EventHandler<PropStoreEventArgs> eventHandler)
         {
             var removedResource = bittenList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
             if (removedResource != null)
@@ -144,6 +167,7 @@ namespace Zilon.Core.Client
                 {
                     addedResource = new Resource(resource.Scheme, resource.Count);
                     oppositList.Add(addedResource);
+                    eventHandler?.Invoke(this, new PropStoreEventArgs(resource));
                 }
                 else
                 {
@@ -152,23 +176,10 @@ namespace Zilon.Core.Client
             }
         }
 
-        public void Remove(IProp prop)
-        {
-            switch (prop)
-            {
-                case Resource resource:
-
-                    TransferResource(resource, PropAdded, PropRemoved);
-                    break;
-
-                case Equipment _:
-                case Concept _:
-                    TransferNoCount(prop, PropAdded, PropRemoved);
-                    break;
-            }
-        }
-
-        private void TransferNoCount(IProp prop, IList<IProp> bittenList, IList<IProp> oppositList)
+        private void TransferNoCount(IProp prop,
+            IList<IProp> bittenList,
+            IList<IProp> oppositList,
+            EventHandler<PropStoreEventArgs> eventHandler)
         {
             var isBitten = bittenList.Contains(prop);
             if (isBitten)
@@ -177,6 +188,7 @@ namespace Zilon.Core.Client
             }
 
             oppositList.Add(prop);
+            eventHandler?.Invoke(this, new PropStoreEventArgs(prop));
         }
     }
 }

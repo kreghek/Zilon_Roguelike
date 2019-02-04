@@ -67,7 +67,8 @@ namespace Zilon.Core.Tests.Client
         {
             // ARRANGE
 
-            var resourceScheme = new TestPropScheme {
+            var equipmentScheme = new TestPropScheme
+            {
                 Equip = new TestPropEquipSubScheme()
             };
 
@@ -76,7 +77,7 @@ namespace Zilon.Core.Tests.Client
 
             // контейнер
             var containerProps = new IProp[] {
-                new Equipment(resourceScheme, new ITacticalActScheme[0])
+                new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
@@ -98,6 +99,183 @@ namespace Zilon.Core.Tests.Client
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Equipment>();
             transferMachine.Container.PropRemoved[0].Should().BeOfType<Equipment>();
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        /// </summary>
+        [Test]
+        public void TransferProp_Resources_StoreEventsRaised()
+        {
+            // ARRANGE
+
+            var resourceScheme = new TestPropScheme();
+
+            // Инвентарь
+            var inventory = new Inventory();
+
+            // контейнер
+            var containerProps = new IProp[] {
+                new Resource(resourceScheme, 1)
+            };
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+            var container = new FixedPropChest(node, containerProps);
+
+            // трансферная машина
+            var transferMachine = new PropTransferMachine(inventory, container.Content);
+
+
+
+            // ACT
+            using (var monitorInventory = transferMachine.Inventory.Monitor())
+            using (var monitorContainer = transferMachine.Container.Monitor())
+            {
+                var transferResource = new Resource(resourceScheme, 1);
+                transferMachine.TransferProp(transferResource,
+                    PropTransferMachineStores.Container,
+                    PropTransferMachineStores.Inventory);
+
+
+
+                // ASSERT
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        /// </summary>
+        [Test]
+        public void TransferProp_InventoryHasResources_StoreEventsRaised()
+        {
+            // ARRANGE
+
+            var resourceScheme = new TestPropScheme();
+
+            // Инвентарь
+            var inventory = new Inventory();
+            inventory.Add(new Resource(resourceScheme, 1));
+
+            // контейнер
+            var containerProps = new IProp[] {
+                new Resource(resourceScheme, 1)
+            };
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+            var container = new FixedPropChest(node, containerProps);
+
+            // трансферная машина
+            var transferMachine = new PropTransferMachine(inventory, container.Content);
+
+
+
+            // ACT
+            using (var monitorInventory = transferMachine.Inventory.Monitor())
+            using (var monitorContainer = transferMachine.Container.Monitor())
+            {
+                var transferResource = new Resource(resourceScheme, 1);
+                transferMachine.TransferProp(transferResource,
+                    PropTransferMachineStores.Container,
+                    PropTransferMachineStores.Inventory);
+
+
+
+                // ASSERT
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        /// </summary>
+        [Test]
+        public void TransferProp_ChangesResources_StoreEventsRaised()
+        {
+            // ARRANGE
+
+            var resourceScheme = new TestPropScheme();
+
+            // Инвентарь
+            var inventory = new Inventory();
+            inventory.Add(new Resource(resourceScheme, 1));
+
+            // контейнер
+            var containerProps = new IProp[] {
+                new Resource(resourceScheme, 2)
+            };
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+            var container = new FixedPropChest(node, containerProps);
+
+            // трансферная машина
+            var transferMachine = new PropTransferMachine(inventory, container.Content);
+
+
+
+            // ACT
+            using (var monitorInventory = transferMachine.Inventory.Monitor())
+            using (var monitorContainer = transferMachine.Container.Monitor())
+            {
+                var transferResource = new Resource(resourceScheme, 1);
+                transferMachine.TransferProp(transferResource,
+                    PropTransferMachineStores.Container,
+                    PropTransferMachineStores.Inventory);
+
+
+
+                // ASSERT
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Changed));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
+        /// </summary>
+        [Test]
+        public void TransferProp_Equipment_StoreEventsRaised()
+        {
+            // ARRANGE
+
+            var equipmentScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+
+            // Инвентарь
+            var inventory = new Inventory();
+
+            // контейнер
+            var containerProps = new IProp[] {
+                new Equipment(equipmentScheme, new ITacticalActScheme[0])
+            };
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+            var container = new FixedPropChest(node, containerProps);
+
+            // трансферная машина
+            var transferMachine = new PropTransferMachine(inventory, container.Content);
+
+
+
+            // ACT
+            using (var monitorInventory = transferMachine.Inventory.Monitor())
+            using (var monitorContainer = transferMachine.Container.Monitor())
+            {
+                var transferResource = containerProps.First();
+                transferMachine.TransferProp(transferResource,
+                    PropTransferMachineStores.Container,
+                    PropTransferMachineStores.Inventory);
+
+
+
+                // ASSERT
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            }
         }
     }
 }

@@ -119,6 +119,7 @@ namespace Zilon.Core.Tests.Client
         }
 
 
+
         private static IPropStore CreateContainer(IProp[] props)
         {
             var realStoreMock = new Mock<IPropStore>();
