@@ -125,9 +125,22 @@ namespace Zilon.Core.Client
             switch (prop)
             {
                 case Resource resource:
-
                     TransferResource(resource, PropAdded, PropRemoved,
                         eventHandler: Removed);
+
+                    //var currentStoreProps = PropStore.CalcActualItems();
+                    //var currentStoreProp = (Resource)currentStoreProps.SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+                    //var removedProp = (Resource)PropRemoved.SingleOrDefault(x => x.Scheme == resource.Scheme);
+                    //if (removedProp?.Count >= currentStoreProp?.Count)
+                    //{
+                    //    Removed?.Invoke(this, new PropStoreEventArgs(resource));
+                    //}
+                    //else
+                    //{
+                    //    Changed?.Invoke(this, new PropStoreEventArgs(resource));
+                    //}
+
                     break;
 
                 case Equipment _:
@@ -135,6 +148,8 @@ namespace Zilon.Core.Client
                     TransferNoCount(prop, PropAdded, PropRemoved,
                         eventHandler: Removed);
                     break;
+                default:
+                    throw new ArgumentException($"Предмет неизвестного типа {prop.GetType()}.");
             }
         }
 
@@ -168,16 +183,16 @@ namespace Zilon.Core.Client
                     addedResource = new Resource(resource.Scheme, resource.Count);
                     oppositList.Add(addedResource);
 
-                    var currentStoreProps = PropStore.CalcActualItems();
-                    var currentStoreProp = currentStoreProps.SingleOrDefault(x => x.Scheme == resource.Scheme);
-                    if (currentStoreProp == null || eventHandler == Removed)
-                    {
-                        eventHandler?.Invoke(this, new PropStoreEventArgs(resource));
-                    }
-                    else
-                    {
-                        Changed?.Invoke(this, new PropStoreEventArgs(resource));
-                    }
+                    //var currentStoreProps = PropStore.CalcActualItems();
+                    //var currentStoreProp = currentStoreProps.SingleOrDefault(x => x.Scheme == resource.Scheme);
+                    //if (currentStoreProp == null || eventHandler == Removed)
+                    //{
+                    //    eventHandler?.Invoke(this, new PropStoreEventArgs(resource));
+                    //}
+                    //else
+                    //{
+                    //    Changed?.Invoke(this, new PropStoreEventArgs(resource));
+                    //}
                 }
                 else
                 {
