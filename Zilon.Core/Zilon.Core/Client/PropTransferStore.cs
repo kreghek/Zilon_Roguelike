@@ -133,12 +133,16 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Целевой предмет. </param>
         public void Add(IProp prop)
         {
+            // запоминаем предыдущее состояния для событий
+            var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
             switch (prop)
             {
                 case Resource resource:
-                    TransferResource(resource, PropRemoved, PropAdded,
-                        bittenEventHandler: Removed,
-                        oppositEventHandler: Added);
+
+                    TransferResource(resource, PropAdded, PropRemoved,
+                        mainEventHandler: Added,
+                        oppositEventHandler: Removed);
 
                     break;
 
@@ -148,6 +152,18 @@ namespace Zilon.Core.Client
                         eventHandler: Added);
                     break;
             }
+
+            // Обработка событий
+            var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+            if (oldProp == null)
+            {
+                Added?.Invoke(this, new PropStoreEventArgs(currentProp));
+            }
+            else
+            {
+                Changed.Invoke(this, new PropStoreEventArgs(currentProp));
+            }
         }
 
         /// <summary>
@@ -156,74 +172,82 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Целевой предмет. </param>
         public void Remove(IProp prop)
         {
+            var oldProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
             switch (prop)
             {
                 case Resource resource:
-                    TransferResource(resource, PropAdded, PropRemoved,
-                        bittenEventHandler: Added,
-                        oppositEventHandler: Removed);
+
+                    TransferResource(resource, PropRemoved, PropAdded,
+                        mainEventHandler: Removed,
+                        oppositEventHandler: Added);
+
                     break;
 
                 case Equipment _:
                 case Concept _:
+
                     TransferNoCount(prop, PropAdded, PropRemoved,
                         eventHandler: Removed);
+
                     break;
 
                 default:
                     throw new ArgumentException($"Предмет неизвестного типа {prop.GetType()}.");
             }
+
+            // Обработка событий
+            var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+            if (currentProp != null)
+            {
+                Changed?.Invoke(this, new PropStoreEventArgs(oldProp));
+            }
+            else
+            {
+                Removed?.Invoke(this, new PropStoreEventArgs(oldProp));
+            }
         }
 
         private void TransferResource(Resource resource,
-            IList<IProp> bittenList,
+            IList<IProp> mainList,
             IList<IProp> oppositList,
-            EventHandler<PropStoreEventArgs> bittenEventHandler,
+            EventHandler<PropStoreEventArgs> mainEventHandler,
             EventHandler<PropStoreEventArgs> oppositEventHandler)
         {
-            var bittenResource = bittenList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-            if (bittenResource != null)
+            var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+            if (oppositResource != null)
             {
-                var bittenRemains = bittenResource.Count - resource.Count;
-                if (bittenRemains > 0)
+                var remains = oppositResource.Count - resource.Count;
+                if (remains > 0)
                 {
-                    Changed?.Invoke(this, new PropStoreEventArgs(resource));
                     return;
                 }
-
-                bittenList.Remove(bittenResource);
-
-                if (bittenRemains < 0)
+                else
                 {
-                    //resource.Count - похоже на ошибку. Нужно добавить тест.
-                    var oppositeResource = new Resource(resource.Scheme, resource.Count );
-                    oppositList.Add(oppositeResource);
+                    oppositList.Remove(oppositResource);
+
+                    if (remains < 0)
+                    {
+                        //resource.Count - похоже на ошибку. Нужно добавить тест.
+                        // должно быть что-то типа remains * -1
+                        // сейчас просто нет ситуации, когда у нас, например, из инвентаря было изъято 10 ед. А потом 15 добавлено.
+                        var mainResource = new Resource(resource.Scheme, resource.Count);
+                        mainList.Add(mainResource);
+                    }
                 }
             }
             else
             {
-                var oppositeResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-                if (oppositeResource == null)
+                var mainResource = mainList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+                if (mainResource == null)
                 {
-                    oppositeResource = new Resource(resource.Scheme, resource.Count);
-                    oppositList.Add(oppositeResource);
-
-                    // события
-                    // раньше в инвентаре не было, а потом стало
-                    var oldProp = PropStore.CalcActualItems().SingleOrDefault(x => x.Scheme == resource.Scheme);
-                    if (oldProp == null)
-                    {
-                        oppositEventHandler?.Invoke(this, new PropStoreEventArgs(resource));
-                    }
-                    else
-                    {
-                        Changed?.Invoke(this, new PropStoreEventArgs(oldProp));
-                    }
+                    mainResource = new Resource(resource.Scheme, resource.Count);
+                    mainList.Add(mainResource);
                 }
                 else
                 {
-                    oppositeResource.Count += resource.Count;
-                    Changed?.Invoke(this, new PropStoreEventArgs(resource));
+                    mainResource.Count += resource.Count;
                 }
             }
         }
