@@ -25,6 +25,8 @@ public class TraderModalBody : MonoBehaviour, IModalWindowHandler
 
     private ITrader _trader;
 
+    public event EventHandler Closed;
+
     public TraderModalBody()
     {
         _propViewModels = new List<PropItemVm>();
