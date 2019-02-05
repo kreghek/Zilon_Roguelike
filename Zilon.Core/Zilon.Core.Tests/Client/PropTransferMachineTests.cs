@@ -110,13 +110,15 @@ namespace Zilon.Core.Tests.Client
             // ARRANGE
 
             var resourceScheme = new TestPropScheme();
+            var resource = new Resource(resourceScheme, 1);
 
             // Инвентарь
             var inventory = new Inventory();
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Resource(resourceScheme, 1)
+            var containerProps = new IProp[]
+            {
+                resource
             };
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
@@ -139,8 +141,10 @@ namespace Zilon.Core.Tests.Client
 
 
                 // ASSERT
-                monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
-                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Added))
+                    .WithArgs<PropStoreEventArgs>(args => args.Props[0].Scheme == resource.Scheme);
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed))
+                    .WithArgs<PropStoreEventArgs>(args => args.Props[0].Scheme == resource.Scheme);
             }
         }
 

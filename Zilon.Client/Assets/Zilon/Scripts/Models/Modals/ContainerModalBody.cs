@@ -86,7 +86,22 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var prop in e.Props)
         {
-            var propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+            PropItemVm propViewModel;
+            switch (prop)
+            {
+                case Resource resource:
+                    propViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+                    break;
+
+                case Equipment _:
+                case Concept _:
+                    propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+            
             _containerViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= ContainerPropItem_Click;
@@ -122,7 +137,22 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var prop in e.Props)
         {
-            var propViewModel = _inventoryViewModels.Single(x => x.Prop == prop);
+            PropItemVm propViewModel;
+            switch (prop)
+            {
+                case Resource resource:
+                    propViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+                    break;
+
+                case Equipment _:
+                case Concept _:
+                    propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
             _inventoryViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= InventoryPropItem_Click;
@@ -206,19 +236,21 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     public void CancelChanges()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void OnDestroy()
     {
-        foreach (PropItemVm propItemViewModel in InventoryItemsParent)
+        foreach (Transform propTranfsorm in InventoryItemsParent)
         {
+            var propItemViewModel = propTranfsorm.GetComponent<PropItemVm>();
             propItemViewModel.Click -= InventoryPropItem_Click;
             Destroy(propItemViewModel.gameObject);
         }
 
-        foreach (PropItemVm propItemViewModel in ContainerItemsParent)
+        foreach (Transform propTranfsorm in ContainerItemsParent)
         {
+            var propItemViewModel = propTranfsorm.GetComponent<PropItemVm>();
             propItemViewModel.Click -= ContainerPropItem_Click;
             Destroy(propItemViewModel.gameObject);
         }

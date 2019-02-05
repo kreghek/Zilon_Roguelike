@@ -151,15 +151,14 @@ namespace Zilon.Core.Client
                     }
                     else
                     {
-                        Changed.Invoke(this, new PropStoreEventArgs(currentProp));
+                        Changed?.Invoke(this, new PropStoreEventArgs(currentProp));
                     }
 
                     break;
 
                 case Equipment _:
                 case Concept _:
-                    TransferNoCount(prop, PropRemoved, PropAdded,
-                        eventHandler: Added);
+                    TransferNoCount(prop, PropRemoved, PropAdded);
 
                     Added?.Invoke(this, new PropStoreEventArgs(prop));
                     break;
@@ -197,8 +196,7 @@ namespace Zilon.Core.Client
                 case Equipment _:
                 case Concept _:
 
-                    TransferNoCount(prop, PropAdded, PropRemoved,
-                        eventHandler: Removed);
+                    TransferNoCount(prop, PropAdded, PropRemoved);
 
                     Removed?.Invoke(this, new PropStoreEventArgs(prop));
 
@@ -252,8 +250,7 @@ namespace Zilon.Core.Client
 
         private void TransferNoCount(IProp prop,
             IList<IProp> bittenList,
-            IList<IProp> oppositList,
-            EventHandler<PropStoreEventArgs> eventHandler)
+            IList<IProp> oppositList)
         {
             var isBitten = bittenList.Contains(prop);
             if (isBitten)
@@ -262,7 +259,6 @@ namespace Zilon.Core.Client
             }
 
             oppositList.Add(prop);
-            eventHandler?.Invoke(this, new PropStoreEventArgs(prop));
         }
     }
 }
