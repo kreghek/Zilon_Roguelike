@@ -277,5 +277,53 @@ namespace Zilon.Core.Tests.Client
                 monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
             }
         }
+
+        /// <summary>
+        /// Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
+        /// В инвентаре уже есть предмет с такой схемой.
+        /// </summary>
+        [Test]
+        public void TransferProp_InventoryHasEquipment_StoreEventsRaised()
+        {
+            // ARRANGE
+
+            var equipmentScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+
+            // Инвентарь
+            var inventory = new Inventory();
+            inventory.Add(new Equipment(equipmentScheme, new ITacticalActScheme[0]));
+
+            // контейнер
+            var containerProps = new IProp[] {
+                new Equipment(equipmentScheme, new ITacticalActScheme[0])
+            };
+            var nodeMock = new Mock<IMapNode>();
+            var node = nodeMock.Object;
+            var container = new FixedPropChest(node, containerProps);
+
+            // трансферная машина
+            var transferMachine = new PropTransferMachine(inventory, container.Content);
+
+
+
+            // ACT
+            using (var monitorInventory = transferMachine.Inventory.Monitor())
+            using (var monitorContainer = transferMachine.Container.Monitor())
+            {
+                var transferResource = containerProps.First();
+                transferMachine.TransferProp(transferResource,
+                    PropTransferMachineStores.Container,
+                    PropTransferMachineStores.Inventory);
+
+
+
+                // ASSERT
+                monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
+                monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            }
+        }
     }
 }

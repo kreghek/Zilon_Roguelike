@@ -133,16 +133,26 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Целевой предмет. </param>
         public void Add(IProp prop)
         {
-            // запоминаем предыдущее состояния для событий
-            var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
-
             switch (prop)
             {
                 case Resource resource:
 
-                    TransferResource(resource, PropAdded, PropRemoved,
-                        mainEventHandler: Added,
-                        oppositEventHandler: Removed);
+                    // запоминаем предыдущее состояния для событий
+                    var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    TransferResource(resource, PropAdded, PropRemoved);
+
+                    // Выброс событий
+                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (oldProp == null)
+                    {
+                        Added?.Invoke(this, new PropStoreEventArgs(currentProp));
+                    }
+                    else
+                    {
+                        Changed.Invoke(this, new PropStoreEventArgs(currentProp));
+                    }
 
                     break;
 
@@ -150,19 +160,9 @@ namespace Zilon.Core.Client
                 case Concept _:
                     TransferNoCount(prop, PropRemoved, PropAdded,
                         eventHandler: Added);
+
+                    Added?.Invoke(this, new PropStoreEventArgs(prop));
                     break;
-            }
-
-            // Обработка событий
-            var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
-
-            if (oldProp == null)
-            {
-                Added?.Invoke(this, new PropStoreEventArgs(currentProp));
-            }
-            else
-            {
-                Changed.Invoke(this, new PropStoreEventArgs(currentProp));
             }
         }
 
@@ -172,15 +172,25 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Целевой предмет. </param>
         public void Remove(IProp prop)
         {
-            var oldProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
-
             switch (prop)
             {
                 case Resource resource:
+                    // запоминаем предыдущее состояние для событий
+                    var oldProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
-                    TransferResource(resource, PropRemoved, PropAdded,
-                        mainEventHandler: Removed,
-                        oppositEventHandler: Added);
+                    TransferResource(resource, PropRemoved, PropAdded);
+
+                    // Выброс событий
+                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (currentProp != null)
+                    {
+                        Changed?.Invoke(this, new PropStoreEventArgs(oldProp));
+                    }
+                    else
+                    {
+                        Removed?.Invoke(this, new PropStoreEventArgs(oldProp));
+                    }
 
                     break;
 
@@ -190,30 +200,18 @@ namespace Zilon.Core.Client
                     TransferNoCount(prop, PropAdded, PropRemoved,
                         eventHandler: Removed);
 
+                    Removed?.Invoke(this, new PropStoreEventArgs(prop));
+
                     break;
 
                 default:
                     throw new ArgumentException($"Предмет неизвестного типа {prop.GetType()}.");
             }
-
-            // Обработка событий
-            var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
-
-            if (currentProp != null)
-            {
-                Changed?.Invoke(this, new PropStoreEventArgs(oldProp));
-            }
-            else
-            {
-                Removed?.Invoke(this, new PropStoreEventArgs(oldProp));
-            }
         }
 
         private void TransferResource(Resource resource,
             IList<IProp> mainList,
-            IList<IProp> oppositList,
-            EventHandler<PropStoreEventArgs> mainEventHandler,
-            EventHandler<PropStoreEventArgs> oppositEventHandler)
+            IList<IProp> oppositList)
         {
             var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
             if (oppositResource != null)
