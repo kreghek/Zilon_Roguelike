@@ -37,15 +37,18 @@ namespace Zilon.Core.Benchmark
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
 
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
+            var generationOptions = new SectorProceduralGeneratorOptions
             {
                 MonsterGeneratorOptions = new MonsterGeneratorOptions
                 {
                     BotPlayer = _container.GetInstance<IBotPlayer>(),
                     RegularMonsterSids = new[] { "rat" }
                 }
-            });
+            };
+
+            sectorManager.CreateSector(sectorGenerator, generationOptions);
 
 
 

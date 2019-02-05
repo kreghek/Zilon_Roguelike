@@ -8,18 +8,21 @@ namespace Zilon.Core.Spec.Mocks
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
+        private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IMapFactory _mapFactory;
 
         public TestEmptySectorGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
+            ITraderManager traderManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IMapFactory mapFactory)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
+            _traderManager = traderManager;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _mapFactory = mapFactory;
@@ -31,6 +34,7 @@ namespace Zilon.Core.Spec.Mocks
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
+                _traderManager,
                 _dropResolver,
                 _schemeService);
             return sector;

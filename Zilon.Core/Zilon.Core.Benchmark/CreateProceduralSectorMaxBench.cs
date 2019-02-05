@@ -41,7 +41,9 @@ namespace Zilon.Core.Benchmark
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
 
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
+            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
+
+            var generationOptions = new SectorProceduralGeneratorOptions
             {
                 MonsterGeneratorOptions = new MonsterGeneratorOptions
                 {
@@ -50,7 +52,9 @@ namespace Zilon.Core.Benchmark
                     RareMonsterSids = new[] { "rat" },
                     ChampionMonsterSids = new[] { "rat" }
                 }
-            });
+            };
+
+            sectorManager.CreateSector(sectorGenerator, generationOptions);
 
 
 

@@ -38,6 +38,9 @@ namespace Zilon.Core.Tests.Tactics
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var traderManagerMock = new Mock<ITraderManager>();
+            var traderManager = traderManagerMock.Object;
+
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
 
@@ -47,6 +50,7 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
+                traderManager,
                 dropResolver,
                 schemeService);
 
@@ -82,6 +86,9 @@ namespace Zilon.Core.Tests.Tactics
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var traderManagerMock = new Mock<ITraderManager>();
+            var traderManager = traderManagerMock.Object;
+
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
 
@@ -91,6 +98,7 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
+                traderManager,
                 dropResolver,
                 schemeService);
 
