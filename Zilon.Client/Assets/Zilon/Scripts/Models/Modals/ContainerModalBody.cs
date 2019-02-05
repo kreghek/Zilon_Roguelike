@@ -72,62 +72,13 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         UpdatePropsInner(InventoryItemsParent, inventoryItems, InventoryPropItem_Click, _inventoryViewModels);
         _transferMachine.Inventory.Added += Inventory_Added;
         _transferMachine.Inventory.Removed += Inventory_Removed;
+        _transferMachine.Inventory.Changed += Inventory_Changed;
 
         var containerItems = _transferMachine.Container.CalcActualItems();
         UpdatePropsInner(ContainerItemsParent, containerItems, ContainerPropItem_Click, _containerViewModels);
         _transferMachine.Container.Added += Container_Added;
         _transferMachine.Container.Removed += Container_Removed;
-    }
-
-    private void Container_Removed(object sender, PropStoreEventArgs e)
-    {
-        var propStore = (IPropStore)sender;
-        var itemsParent = InventoryItemsParent;
-
-        foreach (var prop in e.Props)
-        {
-            PropItemVm propViewModel;
-            switch (prop)
-            {
-                case Resource resource:
-                    propViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
-                    break;
-
-                case Equipment _:
-                case Concept _:
-                    propViewModel = _containerViewModels.Single(x => x.Prop == prop);
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-            
-            _containerViewModels.Remove(propViewModel);
-            Destroy(propViewModel.gameObject);
-            propViewModel.Click -= ContainerPropItem_Click;
-        }
-
-        var parentRect = itemsParent.GetComponent<RectTransform>();
-        var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
-        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
-    }
-
-    private void Container_Added(object sender, PropStoreEventArgs e)
-    {
-        var propStore = (IPropStore)sender;
-        var itemsParent = InventoryItemsParent;
-
-        foreach (var prop in e.Props)
-        {
-            var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
-            propItemViewModel.Init(prop);
-            propItemViewModel.Click += ContainerPropItem_Click;
-            _containerViewModels.Add(propItemViewModel);
-        }
-
-        var parentRect = itemsParent.GetComponent<RectTransform>();
-        var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
-        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
+        _transferMachine.Container.Changed += Container_Changed;
     }
 
     private void Inventory_Removed(object sender, PropStoreEventArgs e)
@@ -141,12 +92,12 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             switch (prop)
             {
                 case Resource resource:
-                    propViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+                    propViewModel = _inventoryViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
                     break;
 
                 case Equipment _:
                 case Concept _:
-                    propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+                    propViewModel = _inventoryViewModels.Single(x => x.Prop == prop);
                     break;
 
                 default:
@@ -179,6 +130,81 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         var parentRect = itemsParent.GetComponent<RectTransform>();
         var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
         parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
+    }
+
+    private void Inventory_Changed(object sender, PropStoreEventArgs e)
+    {
+        var propStore = (IPropStore)sender;
+        var itemsParent = InventoryItemsParent;
+
+        foreach (var prop in e.Props)
+        {
+            var propItemViewModel = _inventoryViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+            propItemViewModel.Init(prop);
+        }
+    }
+
+    private void Container_Removed(object sender, PropStoreEventArgs e)
+    {
+        var propStore = (IPropStore)sender;
+        var itemsParent = ContainerItemsParent;
+
+        foreach (var prop in e.Props)
+        {
+            PropItemVm propViewModel;
+            switch (prop)
+            {
+                case Resource resource:
+                    propViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+                    break;
+
+                case Equipment _:
+                case Concept _:
+                    propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+            
+            _containerViewModels.Remove(propViewModel);
+            Destroy(propViewModel.gameObject);
+            propViewModel.Click -= ContainerPropItem_Click;
+        }
+
+        var parentRect = itemsParent.GetComponent<RectTransform>();
+        var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
+    }
+
+    private void Container_Added(object sender, PropStoreEventArgs e)
+    {
+        var propStore = (IPropStore)sender;
+        var itemsParent = ContainerItemsParent;
+
+        foreach (var prop in e.Props)
+        {
+            var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
+            propItemViewModel.Init(prop);
+            propItemViewModel.Click += ContainerPropItem_Click;
+            _containerViewModels.Add(propItemViewModel);
+        }
+
+        var parentRect = itemsParent.GetComponent<RectTransform>();
+        var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
+    }
+
+    private void Container_Changed(object sender, PropStoreEventArgs e)
+    {
+        var propStore = (IPropStore)sender;
+        var itemsParent = ContainerItemsParent;
+
+        foreach (var prop in e.Props)
+        {
+            var propItemViewModel = _containerViewModels.Single(x => x.Prop.Scheme == prop.Scheme);
+            propItemViewModel.Init(prop);
+        }
     }
 
     private void UpdatePropsInner(Transform itemsParent,
@@ -257,8 +283,10 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
         _transferMachine.Inventory.Added -= Inventory_Added;
         _transferMachine.Inventory.Removed -= Inventory_Removed;
+        _transferMachine.Inventory.Changed -= Inventory_Changed;
 
         _transferMachine.Container.Added -= Container_Added;
         _transferMachine.Container.Removed -= Container_Removed;
+        _transferMachine.Container.Changed -= Container_Changed;
     }
 }
