@@ -145,6 +145,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
