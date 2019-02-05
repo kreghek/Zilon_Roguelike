@@ -171,16 +171,16 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     {
         var currentItemViewModel = (PropItemVm)sender;
         _transferMachine.TransferProp(currentItemViewModel.Prop,
-            _transferMachine.Inventory,
-            _transferMachine.Container);
+            PropTransferMachineStores.Inventory,
+            PropTransferMachineStores.Container);
     }
 
     private void ContainerPropItem_Click(object sender, EventArgs e)
     {
         var currentItemViewModel = (PropItemVm)sender;
         _transferMachine.TransferProp(currentItemViewModel.Prop,
-            _transferMachine.Container,
-            _transferMachine.Inventory);
+            PropTransferMachineStores.Container,
+            PropTransferMachineStores.Inventory);
     }
 
     // ReSharper disable once UnusedMember.Global
@@ -189,7 +189,9 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         var props = _transferMachine.Container.CalcActualItems();
         foreach (var prop in props)
         {
-            _transferMachine.TransferProp(prop, _transferMachine.Container, _transferMachine.Inventory);
+            _transferMachine.TransferProp(prop,
+                PropTransferMachineStores.Container,
+                PropTransferMachineStores.Inventory);
         }
 
         Closed?.Invoke(this, new EventArgs());
