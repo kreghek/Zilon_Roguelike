@@ -231,7 +231,7 @@ namespace Zilon.Core.Spec.Contexts
             var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
 
 
-            var monsterPerson = new MonsterPerson(monsterScheme, survivalRandomSource);
+            var monsterPerson = new MonsterPerson(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
 

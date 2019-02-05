@@ -9,7 +9,7 @@ using Zilon.Core.Schemes;
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Персонаж для монстров  секторе.
+    /// Персонаж для монстров в секторе.
     /// </summary>
     public class MonsterPerson : IPerson
     {
@@ -31,14 +31,9 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
-        public MonsterPerson([NotNull] IMonsterScheme scheme,
-            [NotNull] ISurvivalRandomSource survivalRandomSource)
+        public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
-            if (survivalRandomSource == null)
-            {
-                throw new ArgumentNullException(nameof(survivalRandomSource));
-            }
-
+            
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
@@ -60,7 +55,7 @@ namespace Zilon.Core.Persons
                     new PersonArmorItem[0])
             };
 
-            Survival = SurvivalData.CreateMonsterPersonSurvival(scheme, survivalRandomSource);
+            Survival = new MonsterSurvivalData(scheme);
 
             Effects = new EffectCollection();
         }

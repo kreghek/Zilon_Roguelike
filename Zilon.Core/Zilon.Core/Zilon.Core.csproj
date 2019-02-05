@@ -64,6 +64,7 @@
     <Compile Include="Client\InventoryState.cs" />
     <Compile Include="Client\IPlayerState.cs" />
     <Compile Include="Client\IPropItemViewModel.cs" />
+    <Compile Include="Client\PropTransferMachineStores.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\ShowTraderModalCommand.cs" />
     <Compile Include="Common\PropMetrics.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
+    <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
@@ -199,7 +201,7 @@
     <Compile Include="Persons\PerkJob.cs" />
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
-    <Compile Include="Persons\SurvivalData.cs" />
+    <Compile Include="Persons\HumanSurvivalData.cs" />
     <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
     <Compile Include="Persons\SurvivalStatHazardLevel.cs" />
     <Compile Include="Persons\SurvivalStat.cs" />

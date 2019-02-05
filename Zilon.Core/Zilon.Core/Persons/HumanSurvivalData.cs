@@ -10,17 +10,29 @@ using Zilon.Core.Schemes;
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Базовая реализация данных о выживании.
+    /// Базовая реализация данных о выживании для человеческих персонажей.
     /// </summary>
-    public sealed class SurvivalData : ISurvivalData
+    public sealed class HumanSurvivalData : ISurvivalData
     {
         private readonly ISurvivalRandomSource _randomSource;
 
-        public SurvivalData([NotNull][ItemNotNull] SurvivalStat[] stats,
+        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
         {
-            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            if (personScheme == null)
+            {
+                throw new ArgumentNullException(nameof(personScheme));
+            }
+
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+
+            Stats = new[] {
+                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                    Type = SurvivalStatType.Health
+                },
+                CreateStat(SurvivalStatType.Satiety),
+                CreateStat(SurvivalStatType.Water)
+            };
         }
 
         public SurvivalStat[] Stats { get; }
@@ -73,48 +85,7 @@ namespace Zilon.Core.Persons
                 }
             }
         }
-
-        public static SurvivalData CreateHumanPersonSurvival([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource)
-        {
-            if (personScheme == null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
-            if (randomSource == null)
-            {
-                throw new ArgumentNullException(nameof(randomSource));
-            }
-
-            var stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
-                    Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
-            };
-
-            return new SurvivalData(stats, randomSource);
-        }
-
-        public static SurvivalData CreateMonsterPersonSurvival([NotNull] IMonsterScheme monsterScheme,
-            [NotNull] ISurvivalRandomSource randomSource)
-        {
-            if (monsterScheme == null)
-            {
-                throw new ArgumentNullException(nameof(monsterScheme));
-            }
-
-            var stats = new[] {
-               new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
-                    Type = SurvivalStatType.Health
-                }
-            };
-
-            return new SurvivalData(stats, randomSource);
-        }
-
+        
         private void ValidateStatChangeValue(int value)
         {
             if (value == 0)

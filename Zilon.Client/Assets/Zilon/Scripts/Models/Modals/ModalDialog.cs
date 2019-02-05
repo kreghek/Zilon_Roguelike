@@ -16,9 +16,21 @@ public class ModalDialog : MonoBehaviour
         get => _windowHandler;
         set
         {
+            if (_windowHandler != null)
+            {
+                _windowHandler.Closed -= WindowHandler_Closed;
+            }
+
             _windowHandler = value;
             CaptionText.text = _windowHandler.Caption;
+
+            _windowHandler.Closed += WindowHandler_Closed;
         }
+    }
+
+    private void WindowHandler_Closed(object sender, EventArgs e)
+    {
+        Close();
     }
 
     public event EventHandler AcceptChanges;
