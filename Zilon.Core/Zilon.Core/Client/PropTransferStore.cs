@@ -11,6 +11,46 @@ namespace Zilon.Core.Client
     /// </summary>
     public class PropTransferStore : IPropStore
     {
+        /// <summary>
+        /// Список добавленых в хранилище предметов по сравнению с базовым хранилищем.
+        /// </summary>
+        public List<IProp> PropAdded { get; }
+
+        /// <summary>
+        /// Список удалённых из хранилища предметов по сравнению с базовым хранилищем.
+        /// </summary>
+        public List<IProp> PropRemoved { get; }
+
+        /// <summary>
+        /// Базовое хранилище.
+        /// </summary>
+        public IPropStore PropStore { get; }
+
+        /// <summary>
+        /// Событие выстреливает, когда в хранилище появляется новый предмет.
+        /// </summary>
+        /// <remarks>
+        /// Это событие не срабатывает, если изменилось количество ресурсов.
+        /// </remarks>
+        public event EventHandler<PropStoreEventArgs> Added;
+
+        /// <summary>
+        /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
+        /// </summary>
+        public event EventHandler<PropStoreEventArgs> Removed;
+
+        /// <summary>
+        /// Событие выстреливает, когда один из предметов в хранилище изменяется.
+        /// </summary>
+        /// <remarks>
+        /// Используется, когда изменяется количество ресурсов в стаке.
+        /// </remarks>
+        public event EventHandler<PropStoreEventArgs> Changed;
+
+        /// <summary>
+        /// Конструктор для хранилища-трансфера.
+        /// </summary>
+        /// <param name="propStore"> Реальное хранилище предметов. </param>
         public PropTransferStore(IPropStore propStore)
         {
             PropStore = propStore;
@@ -19,18 +59,10 @@ namespace Zilon.Core.Client
             PropRemoved = new List<IProp>();
         }
 
+        /// <summary>
+        /// Предметы в хранилище.
+        /// </summary>
         public IProp[] CalcActualItems()
-        {
-            return CalcItems();
-        }
-
-        public List<IProp> PropAdded { get; }
-
-        public List<IProp> PropRemoved { get; }
-
-        public IPropStore PropStore { get; }
-
-        private IProp[] CalcItems()
         {
             var result = new List<IProp>();
             var propStoreItems = PropStore.CalcActualItems();
@@ -95,76 +127,130 @@ namespace Zilon.Core.Client
             return result.ToArray();
         }
 
-        public event EventHandler<PropStoreEventArgs> Added;
-        public event EventHandler<PropStoreEventArgs> Removed;
-        public event EventHandler<PropStoreEventArgs> Changed;
-
+        /// <summary>
+        /// Добавление предмета в хранилище.
+        /// </summary>
+        /// <param name="prop"> Целевой предмет. </param>
         public void Add(IProp prop)
         {
             switch (prop)
             {
                 case Resource resource:
-                    TransferResource(resource, PropRemoved, PropAdded);
+
+                    // запоминаем предыдущее состояния для событий
+                    var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    TransferResource(resource, PropAdded, PropRemoved);
+
+                    // Выброс событий
+                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (oldProp == null)
+                    {
+                        Added?.Invoke(this, new PropStoreEventArgs(currentProp));
+                    }
+                    else
+                    {
+                        Changed?.Invoke(this, new PropStoreEventArgs(currentProp));
+                    }
+
                     break;
 
                 case Equipment _:
                 case Concept _:
                     TransferNoCount(prop, PropRemoved, PropAdded);
+
+                    Added?.Invoke(this, new PropStoreEventArgs(prop));
                     break;
             }
         }
 
-        private void TransferResource(Resource resource, IList<IProp> bittenList, IList<IProp> oppositList)
-        {
-            var removedResource = bittenList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-            if (removedResource != null)
-            {
-                var removedRemains = removedResource.Count - resource.Count;
-                if (removedRemains > 0)
-                {
-                    return;
-                }
-
-                bittenList.Remove(removedResource);
-
-                if (removedRemains < 0)
-                {
-                    var addedResource = new Resource(resource.Scheme, resource.Count);
-                    oppositList.Add(addedResource);
-                }
-            }
-            else
-            {
-                var addedResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-                if (addedResource == null)
-                {
-                    addedResource = new Resource(resource.Scheme, resource.Count);
-                    oppositList.Add(addedResource);
-                }
-                else
-                {
-                    addedResource.Count += resource.Count;
-                }
-            }
-        }
-
+        /// <summary>
+        /// Удаление предмета из хранилища.
+        /// </summary>
+        /// <param name="prop"> Целевой предмет. </param>
         public void Remove(IProp prop)
         {
             switch (prop)
             {
                 case Resource resource:
+                    // запоминаем предыдущее состояние для событий
+                    var oldProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
-                    TransferResource(resource, PropAdded, PropRemoved);
+                    TransferResource(resource, PropRemoved, PropAdded);
+
+                    // Выброс событий
+                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (currentProp != null)
+                    {
+                        Changed?.Invoke(this, new PropStoreEventArgs(oldProp));
+                    }
+                    else
+                    {
+                        Removed?.Invoke(this, new PropStoreEventArgs(oldProp));
+                    }
+
                     break;
 
                 case Equipment _:
                 case Concept _:
+
                     TransferNoCount(prop, PropAdded, PropRemoved);
+
+                    Removed?.Invoke(this, new PropStoreEventArgs(prop));
+
                     break;
+
+                default:
+                    throw new ArgumentException($"Предмет неизвестного типа {prop.GetType()}.");
             }
         }
 
-        private void TransferNoCount(IProp prop, IList<IProp> bittenList, IList<IProp> oppositList)
+        private void TransferResource(Resource resource,
+            IList<IProp> mainList,
+            IList<IProp> oppositList)
+        {
+            var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+            if (oppositResource != null)
+            {
+                var remains = oppositResource.Count - resource.Count;
+                if (remains > 0)
+                {
+                    return;
+                }
+                else
+                {
+                    oppositList.Remove(oppositResource);
+
+                    if (remains < 0)
+                    {
+                        //resource.Count - похоже на ошибку. Нужно добавить тест.
+                        // должно быть что-то типа remains * -1
+                        // сейчас просто нет ситуации, когда у нас, например, из инвентаря было изъято 10 ед. А потом 15 добавлено.
+                        var mainResource = new Resource(resource.Scheme, resource.Count);
+                        mainList.Add(mainResource);
+                    }
+                }
+            }
+            else
+            {
+                var mainResource = mainList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+                if (mainResource == null)
+                {
+                    mainResource = new Resource(resource.Scheme, resource.Count);
+                    mainList.Add(mainResource);
+                }
+                else
+                {
+                    mainResource.Count += resource.Count;
+                }
+            }
+        }
+
+        private void TransferNoCount(IProp prop,
+            IList<IProp> bittenList,
+            IList<IProp> oppositList)
         {
             var isBitten = bittenList.Contains(prop);
             if (isBitten)
