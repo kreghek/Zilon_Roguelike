@@ -86,7 +86,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var prop in e.Props)
         {
-            var propViewModel = _inventoryViewModels.Single(x => x.Prop == prop);
+            var propViewModel = _containerViewModels.Single(x => x.Prop == prop);
+            _containerViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= ContainerPropItem_Click;
         }
@@ -106,7 +107,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
             propItemViewModel.Init(prop);
             propItemViewModel.Click += ContainerPropItem_Click;
-            _inventoryViewModels.Add(propItemViewModel);
+            _containerViewModels.Add(propItemViewModel);
         }
 
         var parentRect = itemsParent.GetComponent<RectTransform>();
@@ -122,6 +123,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         foreach (var prop in e.Props)
         {
             var propViewModel = _inventoryViewModels.Single(x => x.Prop == prop);
+            _inventoryViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= InventoryPropItem_Click;
         }
