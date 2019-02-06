@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Запись в схеме таблицы дропа.
@@ -9,16 +12,32 @@
     /// </remarks>
     public sealed class DropTableRecordSubScheme : SubSchemeBase, IDropTableRecordSubScheme
     {
+        [ExcludeFromCodeCoverage]
+        [JsonConstructor]
+        private DropTableRecordSubScheme()
+        {
+        }
+
+        [ExcludeFromCodeCoverage]
         public DropTableRecordSubScheme(string schemeSid, int weight)
         {
-            SchemeSid = schemeSid;
+            //TODO Этот конструктор должен быть в тестовой реализации записи дропа.
+            // После удаления конструктора убрать и безпараметровый и проверить загрузку схем
+            SchemeSid = schemeSid ?? throw new System.ArgumentNullException(nameof(schemeSid));
+
+            if (weight <= 0)
+            {
+                throw new System.ArgumentNullException(nameof(weight), "Вес записи в таблице дропа должен быть положительным.");
+            }
+
             Weight = weight;
         }
 
         /// <summary>
         /// Схема предмета.
         /// </summary>
-        public string SchemeSid { get; }
+        [JsonProperty]
+        public string SchemeSid { get; private set; }
 
         /// <summary>
         /// Вес записи в таблице дропа.
@@ -26,34 +45,26 @@
         /// <remarks>
         /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
-        public int Weight { get; }
-
-        /// <summary>
-        /// Минимальная мощь экипировки.
-        /// </summary>
-        public int MinPower { get; set; }
-
-        /// <summary>
-        /// Максимальная мощь экипировки.
-        /// </summary>
-        public int MaxPower { get; set; }
+        [JsonProperty]
+        public int Weight { get; private set; }
 
         /// <summary>
         /// Минимальное количество ресурса.
         /// </summary>
-        public int MinCount { get; set; }
+        [JsonProperty]
+        public int MinCount { get; private set; }
 
         /// <summary>
         /// Максимальное количество ресурса.
         /// </summary>
-        public int MaxCount { get; set; }
+        [JsonProperty]
+        public int MaxCount { get; private set; }
 
         /// <summary>
-        /// Концепт какого предмета.
+        /// Дополнительный дроп.
         /// </summary>
-        /// <remarks>
-        /// См. описание сущности концепта.
-        /// </remarks>
-        public string Concept { get; set; }
+        [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]
+        public IDropTableScheme[] Extra { get; private set; }
     }
 }

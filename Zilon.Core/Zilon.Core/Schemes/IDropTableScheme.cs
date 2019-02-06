@@ -2,7 +2,7 @@
 {
     public interface IDropTableScheme: IScheme
     {
-        DropTableRecordSubScheme[] Records { get; }
+        IDropTableRecordSubScheme[] Records { get; }
         int Rolls { get; }
     }
 }
