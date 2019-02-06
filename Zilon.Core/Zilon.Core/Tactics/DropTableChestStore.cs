@@ -48,7 +48,7 @@ namespace Zilon.Core.Tactics
 
         private IProp[] GenerateProps()
         {
-            var props = _dropResolver.GetProps(_dropTables);
+            var props = _dropResolver.Resolve(_dropTables);
             return props;
         }
     }
