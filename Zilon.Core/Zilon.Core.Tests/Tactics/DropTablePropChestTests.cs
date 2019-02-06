@@ -9,6 +9,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics
 {
@@ -26,13 +27,15 @@ namespace Zilon.Core.Tests.Tactics
             var nodeMock = new Mock<IMapNode>();
             var node = nodeMock.Object;
 
-            var dropTableRecord = new DropTableRecordSubScheme("test-prop", 1)
+            var dropTableRecord = new TestDropTableRecordSubScheme
             {
+                SchemeSid = "test-prop",
+                Weight = 1,
                 MinCount = 1,
                 MaxCount = 1
             };
 
-            var dropTable = new DropTableScheme(1, dropTableRecord);
+            var dropTable = new TestDropTableScheme(1, dropTableRecord);
 
             var testPropScheme = new PropScheme
             {

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -10,12 +11,15 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Записи в таблице дропа.
         /// </summary>
-        public DropTableRecordSubScheme[] Records { get; }
+        [JsonConverter(typeof(ConcreteTypeConverter<DropTableRecordSubScheme[]>))]
+        [JsonProperty]
+        public IDropTableRecordSubScheme[] Records { get; private set; }
 
         /// <summary>
         /// Количество бросков на проверку выпавшей записи.
         /// </summary>
-        public int Rolls { get; }
+        [JsonProperty]
+        public int Rolls { get; private set; }
 
         [ExcludeFromCodeCoverage]
         public DropTableScheme(int rolls, params DropTableRecordSubScheme[] records)

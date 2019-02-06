@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics
 {
@@ -42,13 +43,15 @@ namespace Zilon.Core.Tests.Tactics
 
             var resolver = new DropResolver(randomSource, schemeService, propFactory);
 
-            var testDropTableRecord = new DropTableRecordSubScheme(testPropSchemeSid, 1)
+            var testDropTableRecord = new TestDropTableRecordSubScheme
             {
+                SchemeSid = testPropSchemeSid,
+                Weight = 1,
                 MinCount = 1,
                 MaxCount = 1
             };
 
-            var testDropTable = new DropTableScheme(1, testDropTableRecord);
+            var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
 
             // ACT

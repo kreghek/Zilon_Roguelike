@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics
         private IProp[] GenerateContent(IDropTableScheme[] dropTables)
         {
             var modificators = new IDropTableModificatorScheme[0];
-            var rolledRecords = new List<DropTableRecordSubScheme>();
+            var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             foreach (var table in dropTables)
             {
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tactics
             return props;
         }
 
-        private DropTableModRecord[] GetModRecords(IEnumerable<DropTableRecordSubScheme> records,
+        private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
             IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var modificatorsArray = modificators.ToArray();
@@ -88,7 +88,7 @@ namespace Zilon.Core.Tactics
             return resultList.ToArray();
         }
 
-        private IProp GenerateProp(DropTableRecordSubScheme record)
+        private IProp GenerateProp(IDropTableRecordSubScheme record)
         {
             var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
             var propClass = GetPropClass(scheme);
@@ -105,7 +105,9 @@ namespace Zilon.Core.Tactics
 
                 case PropClass.Concept:
 
-                    var propScheme = _schemeService.GetScheme<IPropScheme>(record.Concept);
+                    throw new ArgumentException($"Пока концепты не поддерживаются.");
+
+                    var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
 
                     return new Concept(scheme, propScheme);
 
