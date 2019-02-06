@@ -16,7 +16,26 @@
     },
     {
       "SchemeSid": "pistol",
-      "Weight": 5
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
     {
       "SchemeSid": "short-sword",

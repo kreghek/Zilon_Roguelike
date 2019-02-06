@@ -61,13 +61,49 @@
     },
 	{
       "SchemeSid": "bow",
-
-      "Weight": 10
+      "Weight": 10,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
 	{
       "SchemeSid": "composite-bow",
-
-      "Weight": 5
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
 	{
       "SchemeSid": "leather-helmet",
@@ -86,18 +122,53 @@
     },
 	{
       "SchemeSid": "wizard-hat",
-
       "Weight": 10
     },
 	{
       "SchemeSid": "fireball-staff",
-
-      "Weight": 5
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
 	{
       "SchemeSid": "shadow-staff",
-
-      "Weight": 5
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
 	{
       "SchemeSid": "flail",
