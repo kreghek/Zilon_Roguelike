@@ -22,20 +22,22 @@ namespace Zilon.Core.Tactics
             _propFactory = propFactory;
         }
 
-        public IProp[] GetProps(IEnumerable<IDropTableScheme> dropTables)
+        public IProp[] Resolve(IEnumerable<IDropTableScheme> dropTables)
         {
             var materializedDropTables = dropTables.ToArray();
-            var props = GenerateContent(materializedDropTables);
+            var props = ResolveInner(materializedDropTables);
             return props;
         }
 
-        private IProp[] GenerateContent(IDropTableScheme[] dropTables)
+        private IProp[] ResolveInner(IDropTableScheme[] dropTables)
         {
             var modificators = new IDropTableModificatorScheme[0];
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
-            foreach (var table in dropTables)
+            var openDropTables = new List<IDropTableScheme>(dropTables);
+            while(openDropTables.Any())
             {
+                var table = openDropTables[0];
                 var records = table.Records;
                 var recMods = GetModRecords(records, modificators);
 
@@ -52,7 +54,14 @@ namespace Zilon.Core.Tactics
                     }
 
                     rolledRecords.Add(recMod.Record);
+
+                    if (recMod.Record.Extra != null)
+                    {
+                        openDropTables.AddRange(recMod.Record.Extra);
+                    }
                 }
+
+                openDropTables.RemoveAt(0);
             }
 
             var props = rolledRecords.Select(GenerateProp).ToArray();
@@ -103,7 +112,8 @@ namespace Zilon.Core.Tactics
 
                 case PropClass.Resource:
                     var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
-                    return new Resource(scheme, rolledCount);
+                    var resource = _propFactory.CreateResource(scheme, rolledCount);
+                    return resource;
 
                 case PropClass.Concept:
 

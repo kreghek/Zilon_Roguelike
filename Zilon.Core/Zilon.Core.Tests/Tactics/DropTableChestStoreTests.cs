@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Tactics
             var scheme = new PropScheme();
 
             var dropResolverMock = new Mock<IDropResolver>();
-            dropResolverMock.Setup(x => x.GetProps(It.IsAny<DropTableScheme[]>()))
+            dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
                 .Returns(new IProp[] { CreateFakeResource(scheme), CreateFakeResource(scheme) });
             var dropResolver = dropResolverMock.Object;
 
@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Tactics
             var scheme = new PropScheme();
 
             var dropResolverMock = new Mock<IDropResolver>();
-            dropResolverMock.Setup(x => x.GetProps(It.IsAny<DropTableScheme[]>()))
+            dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
                 .Returns(new IProp[] { CreateFakeResource(scheme) });
             var dropResolver = dropResolverMock.Object;
 
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
             // ASSERT
-            dropResolverMock.Verify(x => x.GetProps(It.IsAny<DropTableScheme[]>()), Times.Once);
+            dropResolverMock.Verify(x => x.Resolve(It.IsAny<DropTableScheme[]>()), Times.Once);
             secondProps.Length.Should().Be(firstProps.Length);
             secondProps[0].Should().BeSameAs(firstProps[0]);
         }

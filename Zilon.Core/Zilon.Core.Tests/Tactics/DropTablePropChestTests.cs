@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             var dropResolverMock = new Mock<IDropResolver>();
-            dropResolverMock.Setup(x => x.GetProps(It.IsAny<IEnumerable<IDropTableScheme>>()))
+            dropResolverMock.Setup(x => x.Resolve(It.IsAny<IEnumerable<IDropTableScheme>>()))
                 .Returns(new IProp[] { new Resource(testPropScheme, 1) });
             var dropResolver = dropResolverMock.Object;
 

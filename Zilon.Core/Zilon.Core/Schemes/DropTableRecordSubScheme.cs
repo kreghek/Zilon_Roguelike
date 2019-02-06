@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -46,5 +47,12 @@ namespace Zilon.Core.Schemes
         /// Максимальное количество ресурса.
         /// </summary>
         public int MaxCount { get; private set; }
+
+        /// <summary>
+        /// Дополнительный дроп.
+        /// </summary>
+        [JsonProperty]
+        [JsonConverter(typeof(DropTableScheme[]))]
+        public IDropTableScheme[] Extra { get; private set; }
     }
 }

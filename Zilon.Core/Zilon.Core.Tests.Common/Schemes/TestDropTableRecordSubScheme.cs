@@ -8,5 +8,10 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int MinCount { get; set; }
         public string SchemeSid { get; set; }
         public int Weight { get; set; }
+
+        /// <summary>
+        /// Дополнительный дроп.
+        /// </summary>
+        public IDropTableScheme[] Extra { get; set; }
     }
 }
