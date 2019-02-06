@@ -8,7 +8,7 @@ namespace Zilon.Core.Tests.Common.Schemes
 
         public int Rolls { get; }
 
-        
+
         public TestDropTableScheme(int rolls, params IDropTableRecordSubScheme[] records)
         {
             Rolls = rolls;

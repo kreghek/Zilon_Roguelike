@@ -47,7 +47,9 @@ namespace Zilon.Core.Tactics
                     var recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
                     if (recMod.Record.SchemeSid == null)
+                    {
                         continue;
+                    }
 
                     rolledRecords.Add(recMod.Record);
                 }
@@ -131,7 +133,7 @@ namespace Zilon.Core.Tactics
             return PropClass.Resource;
         }
 
-        enum PropClass
+        private enum PropClass
         {
             Equipment = 1,
             Resource = 2,
