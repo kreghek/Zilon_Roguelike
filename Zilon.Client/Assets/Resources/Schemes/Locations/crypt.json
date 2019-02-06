@@ -1,0 +1,13 @@
+{
+	"Name": {
+		"En": "Crypt",
+		"Ru": "Склеп"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul"],
+			"RareMonsterSids": ["skeleton-champion", "vampire"],
+			"ChampionMonsterSids": ["necromancer", "dervish"]
+		}
+	]
+}

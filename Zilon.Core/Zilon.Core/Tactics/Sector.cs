@@ -17,6 +17,7 @@ namespace Zilon.Core.Tactics
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
+        private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
@@ -32,11 +33,13 @@ namespace Zilon.Core.Tactics
         public Sector(IMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
+            ITraderManager traderManager,
             IDropResolver dropResolver,
             ISchemeService schemeService)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
+            _traderManager = traderManager;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _actorManager.Added += ActorManager_Added;

@@ -1,0 +1,23 @@
+{
+	"Name": {
+		"En": "Genomass cave",
+		"Ru": "Пещера геномассы"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null
+		},
+		{
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null
+		},
+		{
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": ["infernal-genomass"],
+		}
+	]
+}

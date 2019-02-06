@@ -32,6 +32,7 @@ internal class SectorVM : MonoBehaviour
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ActorViewModel> _actorViewModels;
     private readonly List<ContainerVm> _containerViewModels;
+    private readonly List<TraderViewModel> _traderViewModels;
 
     private bool _interuptCommands;
 
@@ -52,6 +53,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
+    [NotNull] public TraderViewModel TraderPrefab;
+
     [NotNull] public HitSfx HitSfx;
 
     [NotNull] [Inject] private readonly DiContainer _container;
@@ -61,6 +64,8 @@ internal class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
+
+    [NotNull] [Inject] private readonly ISectorGeneratorSelector _sectorGeneratorSelector;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
@@ -73,6 +78,8 @@ internal class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IActorManager _actorManager;
 
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
+
+    [NotNull] [Inject] private readonly ITraderManager _traderManager;
 
     [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
@@ -104,11 +111,16 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-container-modal-command")]
     private readonly ICommand _showContainerModalCommand;
 
+    [NotNull]
+    [Inject(Id = "show-trader-modal-command")]
+    private readonly ICommand _showTraderModalCommand;
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
         _actorViewModels = new List<ActorViewModel>();
         _containerViewModels = new List<ContainerVm>();
+        _traderViewModels = new List<TraderViewModel>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -165,6 +177,7 @@ internal class SectorVM : MonoBehaviour
         InitPlayerActor(nodeViewModels);
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
+        CreateTraderViewModels(nodeViewModels);
 
         if (_personManager.SectorLevel == 0)
         {
@@ -182,9 +195,23 @@ internal class SectorVM : MonoBehaviour
 
     private void InitServices()
     {
-        var proceduralGeneratorOptions = CreateSectorGeneratorOptions();
 
-        _sectorManager.CreateSector(proceduralGeneratorOptions);
+        ISectorGeneratorOptions proceduralGeneratorOptions;
+
+        if (_humanPlayer.GlobeNode == null)
+        {
+            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
+            proceduralGeneratorOptions = CreateSectorGeneratorOptions(introLocationScheme);
+        }
+        else
+        {
+            var currentLocation = _humanPlayer.GlobeNode.Scheme;
+            proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
+        }
+
+        var sectorGenerator = _sectorGeneratorSelector.GetGenerator(_humanPlayer.GlobeNode);
+
+        _sectorManager.CreateSector(sectorGenerator, proceduralGeneratorOptions);
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -199,7 +226,7 @@ internal class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
     }
 
-    private ISectorGeneratorOptions CreateSectorGeneratorOptions()
+    private ISectorGeneratorOptions CreateSectorGeneratorOptions(ILocationScheme locationScheme)
     {
         var monsterGeneratorOptions = new MonsterGeneratorOptions
         {
@@ -211,42 +238,14 @@ internal class SectorVM : MonoBehaviour
             MonsterGeneratorOptions = monsterGeneratorOptions
         };
 
-        var wellFormedSectorLevel = _personManager.SectorLevel + 1;
-
-        switch (wellFormedSectorLevel)
+        if (locationScheme.SectorLevels != null)
         {
-            case 1:
-            case 2:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "rat", "bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "rat-mutant", "moon-rat" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "rat-king", "rat-human-slayer", "night-stalker" };
-                break;
+            var wellFormedSectorLevel = _personManager.SectorLevel;
+            var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
 
-            case 3:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "genomass", "gemonass-slave" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "infernal-genomass", "dervish" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer" };
-                break;
-
-            case 4:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "skeleton-champion", "vampire" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "necromancer", "demon-roamer" };
-                break;
-
-            case 5:
-            case 6:
-            case 7:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "demon", "demon-spearman", "demon-bat", "hell-bat" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "demon-warlock", "hell-rock", "infernal-bard" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "demon-lord", "archidemon", "hell-herald", "pit-baron" };
-                break;
-
-            case 8:
-                monsterGeneratorOptions.RegularMonsterSids = new[] { "elder-slave", "dark-guardian" };
-                monsterGeneratorOptions.RareMonsterSids = new[] { "eternal-executor", "dark-seer" };
-                monsterGeneratorOptions.ChampionMonsterSids = new[] { "manticore" };
-                break;
+            monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
+            monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
+            monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
         }
 
         return proceduralGeneratorOptions;
@@ -352,6 +351,14 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
+    private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    {
+        foreach (var trader in _traderManager.Items)
+        {
+            CreateTraderViewModel(nodeViewModels, trader);
+        }
+    }
+
     private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
     {
         var containerPrefab = GetContainerPrefab(container);
@@ -367,6 +374,33 @@ internal class SectorVM : MonoBehaviour
         _containerViewModels.Add(containerViewModel);
     }
 
+    private void CreateTraderViewModel(IEnumerable<MapNodeVM> nodeViewModels, ITrader trader)
+    {
+        var traderPrefab = GetTraderPrefab(trader);
+
+        var traderViewModel = Instantiate(traderPrefab, transform);
+
+        var traderNodeVm = nodeViewModels.Single(x => x.Node == trader.Node);
+        var containerPosition = traderNodeVm.transform.position + new Vector3(0, 0, -1);
+        traderViewModel.transform.position = containerPosition;
+        traderViewModel.Trader = trader;
+        traderViewModel.Selected += TraderViewModel_Selected;
+
+        _traderViewModels.Add(traderViewModel);
+    }
+
+    private void TraderViewModel_Selected(object sender, EventArgs e)
+    {
+        var traderViewModel = sender as TraderViewModel;
+
+        _playerState.HoverViewModel = traderViewModel;
+
+        if (traderViewModel != null)
+        {
+            _clientCommandExecutor.Push(_showTraderModalCommand);
+        }
+    }
+
     private ContainerVm GetContainerPrefab(IPropContainer container)
     {
         if (container is ILootContainer lootContainer)
@@ -375,6 +409,11 @@ internal class SectorVM : MonoBehaviour
         }
 
         return ChestPrefab;
+    }
+
+    private TraderViewModel GetTraderPrefab(ITrader trader)
+    {
+        return TraderPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
@@ -405,8 +444,34 @@ internal class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
+
+        if (_humanPlayer.GlobeNode == null)
+        {
+            // intro
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+            return;
+        }
+
+        var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        if (currentLocation?.SectorLevels == null)
+        {
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+            return;
+        }
+
         _personManager.SectorLevel++;
-        SceneManager.LoadScene("combat");
+        
+        if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        {
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+        }
+        else
+        {
+            SceneManager.LoadScene("combat");
+        }
     }
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
@@ -445,8 +510,10 @@ internal class SectorVM : MonoBehaviour
 
             _personManager.Person = person;
 
-            _personManager.SectorName = GetRandomName();
-         }
+            AddResourceToActor(inventory, "med-kit", 1);
+            AddResourceToActor(inventory, "water-bottle", 2);
+            AddResourceToActor(inventory, "packed-food", 2);
+        }
 
         var actor = new Actor(_personManager.Person, player, startNode);
 
@@ -471,12 +538,6 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.Actor.UsedAct += ActorOnUsedAct;
 
         return actorViewModel;
-    }
-
-    private string GetRandomName()
-    {
-        var names = new[] { "Dungeon", "Caves", "Catacombs", "Ruins", "Chirch" };
-        return names[UnityEngine.Random.Range(0, names.Length - 1)];
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)

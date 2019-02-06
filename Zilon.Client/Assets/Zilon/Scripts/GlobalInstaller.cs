@@ -9,6 +9,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -29,6 +30,9 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
         Container.Bind<IHumanPersonManager>().To<HumanPersonManager>().AsSingle();
+
+        Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
+        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
 
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();

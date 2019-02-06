@@ -1,0 +1,13 @@
+{
+	"Name": {
+		"En": "Demon dungeon",
+		"Ru": "Подземелье демонов"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
+			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
+			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"]
+		}
+	]
+}

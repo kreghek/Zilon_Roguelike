@@ -2,22 +2,25 @@
 
 namespace Zilon.Core.Tactics
 {
+    /// <summary>
+    /// Реализация менеджера сектора.
+    /// </summary>
+    /// <seealso cref="ISectorManager" />
     public class SectorManager : ISectorManager
     {
-        private readonly ISectorProceduralGenerator _generator;
-
-        public SectorManager(ISectorProceduralGenerator generator)
-        {
-            _generator = generator;
-        }
-
+        /// <summary>
+        /// Текущий сектор.
+        /// </summary>
         public ISector CurrentSector { get; private set; }
 
-
-
-        public void CreateSector(ISectorGeneratorOptions options)
+        /// <summary>
+        /// Создаёт текущий сектор по указанному генератору и настройкам.
+        /// </summary>
+        /// <param name="generator">Генератор сектора.</param>
+        /// <param name="options">Настройки генерации сектора.</param>
+        public void CreateSector(ISectorProceduralGenerator generator, ISectorGeneratorOptions options)
         {
-            CurrentSector = _generator.Generate(options);
+            CurrentSector = generator.Generate(options);
         }
     }
 }

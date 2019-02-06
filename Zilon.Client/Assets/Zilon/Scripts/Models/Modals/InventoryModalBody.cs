@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Zilon.Scripts;
 
 using JetBrains.Annotations;
@@ -33,6 +34,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
+    public event EventHandler Closed;
+
     public InventoryModalBody()
     {
         _propViewModels = new List<PropItemVm>();
@@ -58,17 +61,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += SlotOnClick;
         }
-    }
-
-    private void SlotOnClick(object sender, EventArgs e)
-    {
-        var slotVm = sender as InventorySlotVm;
-        if (slotVm == null)
-        {
-            throw new NotSupportedException();
-        }
-
-        slotVm.ApplyEquipment();
     }
 
     public void Init(IActor actor)
@@ -104,6 +96,16 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         throw new NotImplementedException();
     }
 
+    private void SlotOnClick(object sender, EventArgs e)
+    {
+        var slotVm = sender as InventorySlotVm;
+        if (slotVm == null)
+        {
+            throw new NotSupportedException();
+        }
+
+        slotVm.ApplyEquipment();
+    }
 
     private void Inventory_Removed(object sender, PropStoreEventArgs e)
     {

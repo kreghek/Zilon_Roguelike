@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <inheritdoc cref="ILocationScheme" />
     /// <summary>
@@ -6,8 +8,12 @@
     /// </summary>
     public sealed class LocationScheme : SchemeBase, ILocationScheme
     {
-        public string MapSid { get; set; }
-        public float X { get; set; }
-        public float Y { get; set; }
+        /// <summary>
+        /// Характеристики секторов по уровням.
+        /// Если null, то в данной локации нет сектора.
+        /// </summary>
+        [JsonConverter(typeof(ConcreteTypeConverter<SectorSubScheme[]>))]
+        [JsonProperty]
+        public ISectorSubScheme[] SectorLevels { get; private set; }
     }
 }

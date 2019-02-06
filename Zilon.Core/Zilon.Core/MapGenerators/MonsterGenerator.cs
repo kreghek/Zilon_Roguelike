@@ -159,7 +159,7 @@ namespace Zilon.Core.MapGenerators
 
         private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
         {
-            var person = new MonsterPerson(monsterScheme, _survivalRandomSource);
+            var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;

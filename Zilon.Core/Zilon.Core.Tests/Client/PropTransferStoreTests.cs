@@ -44,15 +44,6 @@ namespace Zilon.Core.Tests.Client
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
         }
 
-        private static IPropStore CreateContainer(IProp[] props)
-        {
-            var realStoreMock = new Mock<IPropStore>();
-            realStoreMock.Setup(x => x.CalcActualItems()).Returns(props);
-            var realStore = realStoreMock.Object;
-            return realStore;
-        }
-
-
         /// <summary>
         /// Тест проверяет, что при удалении 1 единицы ресурса из инвентаря с 1 единицей этого ресурса
         /// на выходе будет пустой инвентярь.
@@ -125,6 +116,16 @@ namespace Zilon.Core.Tests.Client
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
+        }
+
+
+
+        private static IPropStore CreateContainer(IProp[] props)
+        {
+            var realStoreMock = new Mock<IPropStore>();
+            realStoreMock.Setup(x => x.CalcActualItems()).Returns(props);
+            var realStore = realStoreMock.Object;
+            return realStore;
         }
     }
 }

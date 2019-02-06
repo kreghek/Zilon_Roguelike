@@ -25,5 +25,11 @@ namespace Zilon.Core.Props
 
             Props = props.ToArray();
         }
+
+        [ExcludeFromCodeCoverage]
+        public PropStoreEventArgs([NotNull] [ItemNotNull] params IProp[] props)
+        {
+            Props = props ?? throw new ArgumentNullException(nameof(props));
+        }
     }
 }

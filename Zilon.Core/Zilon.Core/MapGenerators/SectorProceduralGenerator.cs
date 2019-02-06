@@ -4,7 +4,11 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators
 {
-    public class SectorProceduralGenerator : ISectorProceduralGenerator
+    /// <summary>
+    /// Реализация генератора сектора для подземелий.
+    /// </summary>
+    /// <seealso cref="IDungeonSectorGenerator" />
+    public class SectorProceduralGenerator : IDungeonSectorGenerator
     {
 
         private readonly IMapFactory _mapFactory;
@@ -12,6 +16,13 @@ namespace Zilon.Core.MapGenerators
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
 
+        /// <summary>
+        /// Создаёт экземпляр <see cref="SectorProceduralGenerator"/>.
+        /// </summary>
+        /// <param name="mapFactory"> Фабрика карты. Сейчас используется <see cref="RoomStyle.RoomMapFactory"/> </param>
+        /// <param name="sectorFactory"> Фабрика сектора. </param>
+        /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
+        /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
         public SectorProceduralGenerator(
             IMapFactory mapFactory,
             ISectorFactory sectorFactory,
@@ -25,6 +36,12 @@ namespace Zilon.Core.MapGenerators
             _chestGenerator = chestGenerator;
         }
 
+        /// <summary>
+        /// Создаёт экземпляр сектора подземелий с указанными параметрами.
+        /// </summary>
+        /// <param name="options"> Параметры генерации.
+        /// Сейчас передаётся <see cref="SectorProceduralGeneratorOptions"/> с указанием схем монстров. </param>
+        /// <returns> Возвращает экземпляр сектора. </returns>
         public ISector Generate(ISectorGeneratorOptions options)
         {
             var map = _mapFactory.Create();

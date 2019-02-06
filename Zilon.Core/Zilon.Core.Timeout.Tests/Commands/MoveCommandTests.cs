@@ -45,14 +45,17 @@ namespace Zilon.Core.Commands.Tests
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
+            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
+            var generationOptions = new SectorProceduralGeneratorOptions
             {
-                    MonsterGeneratorOptions = new MonsterGeneratorOptions
-                    {
-                        BotPlayer = _container.GetInstance<IBotPlayer>(),
-                        RegularMonsterSids = new[] { "rat" }
-                    }
-             });
+                MonsterGeneratorOptions = new MonsterGeneratorOptions
+                {
+                    BotPlayer = _container.GetInstance<IBotPlayer>(),
+                    RegularMonsterSids = new[] { "rat" }
+                }
+            };
+
+            sectorManager.CreateSector(sectorGenerator, generationOptions);
 
 
 
