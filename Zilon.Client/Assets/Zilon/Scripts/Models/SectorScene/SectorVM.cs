@@ -458,6 +458,7 @@ internal class SectorVM : MonoBehaviour
         {
             _personManager.SectorLevel = 0;
             SceneManager.LoadScene("globe");
+            return;
         }
 
         _personManager.SectorLevel++;
