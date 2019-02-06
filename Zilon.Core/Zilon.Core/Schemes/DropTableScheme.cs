@@ -20,12 +20,5 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public int Rolls { get; private set; }
-
-        [ExcludeFromCodeCoverage]
-        public DropTableScheme(int rolls, params DropTableRecordSubScheme[] records)
-        {
-            Rolls = rolls;
-            Records = records;
-        }
     }
 }

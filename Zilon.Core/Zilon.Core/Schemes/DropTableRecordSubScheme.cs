@@ -13,8 +13,16 @@ namespace Zilon.Core.Schemes
     public sealed class DropTableRecordSubScheme : SubSchemeBase, IDropTableRecordSubScheme
     {
         [ExcludeFromCodeCoverage]
+        [JsonConstructor]
+        private DropTableRecordSubScheme()
+        {
+        }
+
+        [ExcludeFromCodeCoverage]
         public DropTableRecordSubScheme(string schemeSid, int weight)
         {
+            //TODO Этот конструктор должен быть в тестовой реализации записи дропа.
+            // После удаления конструктора убрать и безпараметровый и проверить загрузку схем
             SchemeSid = schemeSid ?? throw new System.ArgumentNullException(nameof(schemeSid));
 
             if (weight <= 0)
@@ -28,6 +36,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Схема предмета.
         /// </summary>
+        [JsonProperty]
         public string SchemeSid { get; private set; }
 
         /// <summary>
@@ -36,23 +45,26 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
+        [JsonProperty]
         public int Weight { get; private set; }
 
         /// <summary>
         /// Минимальное количество ресурса.
         /// </summary>
+        [JsonProperty]
         public int MinCount { get; private set; }
 
         /// <summary>
         /// Максимальное количество ресурса.
         /// </summary>
+        [JsonProperty]
         public int MaxCount { get; private set; }
 
         /// <summary>
         /// Дополнительный дроп.
         /// </summary>
         [JsonProperty]
-        [JsonConverter(typeof(DropTableScheme[]))]
+        [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]
         public IDropTableScheme[] Extra { get; private set; }
     }
 }
