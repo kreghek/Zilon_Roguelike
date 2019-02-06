@@ -453,8 +453,15 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        _personManager.SectorLevel++;
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        if (currentLocation?.SectorLevels == null)
+        {
+            _personManager.SectorLevel = 0;
+            SceneManager.LoadScene("globe");
+        }
+
+        _personManager.SectorLevel++;
+        
         if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
         {
             _personManager.SectorLevel = 0;

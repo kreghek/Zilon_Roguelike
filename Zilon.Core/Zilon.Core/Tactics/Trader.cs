@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics
         /// </returns>
         public IProp Offer()
         {
-            var goods = _dropResolver.GetProps(new[] { _goodsDropTable });
+            var goods = _dropResolver.Resolve(new[] { _goodsDropTable });
             return goods.Single();
         }
     }
