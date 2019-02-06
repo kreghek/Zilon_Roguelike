@@ -37,15 +37,18 @@ namespace Zilon.Core.Benchmark
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
 
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions
+            var generationOptions = new SectorProceduralGeneratorOptions
             {
                 MonsterGeneratorOptions = new MonsterGeneratorOptions
                 {
                     BotPlayer = _container.GetInstance<IBotPlayer>(),
                     RegularMonsterSids = new[] { "rat" }
                 }
-            });
+            };
+
+            sectorManager.CreateSector(sectorGenerator, generationOptions);
 
 
 
@@ -94,6 +97,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());

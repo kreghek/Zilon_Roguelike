@@ -1,0 +1,13 @@
+{
+	"Name": {
+		"En": "Demon lair",
+		"Ru": "Логово демонов"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["elder-slave", "dark-guardian"],
+			"RareMonsterSids": ["eternal-executor", "dark-seer"],
+			"ChampionMonsterSids": ["manticore"]
+		}
+	]
+}

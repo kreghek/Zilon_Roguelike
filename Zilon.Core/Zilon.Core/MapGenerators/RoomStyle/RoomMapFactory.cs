@@ -10,6 +10,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomMapFactory : IMapFactory
     {
+        private const int SegmentSize = 200;
         private readonly IRoomGenerator _roomGenerator;
 
         [ExcludeFromCodeCoverage]
@@ -70,7 +71,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private static IMap CreateMapInstance()
         {
-            return new HexMap(200);
+            return new HexMap(SegmentSize);
         }
     }
 }

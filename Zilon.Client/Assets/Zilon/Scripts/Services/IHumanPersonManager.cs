@@ -7,7 +7,5 @@ namespace Assets.Zilon.Scripts.Services
         HumanPerson Person { get; set; }
 
         int SectorLevel { get; set; }
-
-        string SectorName { get; set; }
     }
 }

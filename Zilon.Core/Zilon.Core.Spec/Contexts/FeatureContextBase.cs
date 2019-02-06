@@ -68,7 +68,11 @@ namespace Zilon.Core.Spec.Contexts
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();
-            sectorManager.CreateSector(new SectorProceduralGeneratorOptions());
+            var sectorGenerator = Container.GetInstance<ISectorProceduralGenerator>();
+
+            var generationOptions = new SectorProceduralGeneratorOptions();
+
+            sectorManager.CreateSector(sectorGenerator, generationOptions);
         }
 
         public ISector GetSector()
@@ -257,6 +261,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            Container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
         }
 

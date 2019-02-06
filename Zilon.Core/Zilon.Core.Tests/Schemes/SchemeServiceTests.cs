@@ -148,7 +148,7 @@ namespace Zilon.Core.Tests.Schemes
             }
         }
 
-        private SchemeService CreateSchemeService()
+        private ISchemeService CreateSchemeService()
         {
             var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
 

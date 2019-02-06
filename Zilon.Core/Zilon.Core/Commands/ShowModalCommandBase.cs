@@ -9,8 +9,15 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class ShowModalCommandBase : UiCommandBase
     {
+        /// <summary>
+        /// Менеджер модальных окон.
+        /// </summary>
         protected readonly ISectorModalManager ModalManager;
 
+        /// <summary>
+        /// Создаёт экземпляр <see cref="ShowModalCommandBase"/>.
+        /// </summary>
+        /// <param name="modalManager"> Менеджер модальных окон. Реализация на клиенте. </param>
         [ExcludeFromCodeCoverage]
         protected ShowModalCommandBase(ISectorModalManager modalManager)
         {

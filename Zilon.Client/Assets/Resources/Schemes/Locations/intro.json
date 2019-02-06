@@ -1,0 +1,13 @@
+{
+	"Name": {
+		"En": "Rat hole",
+		"Ru": "Крысиная нора"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": ["rat-mutant", "moon-rat"]
+		}
+	]
+}

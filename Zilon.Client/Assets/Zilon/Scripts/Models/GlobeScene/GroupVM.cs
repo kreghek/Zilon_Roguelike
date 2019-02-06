@@ -10,12 +10,6 @@ public class GroupVM : MonoBehaviour
     public MapLocation CurrentLocation { get; set; }
     public event EventHandler OnSelect;
 
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
     // Update is called once per frame
     void Update()
     {

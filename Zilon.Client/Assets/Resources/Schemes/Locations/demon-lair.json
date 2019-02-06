@@ -1,0 +1,23 @@
+{
+	"Name": {
+		"En": "Demon lair",
+		"Ru": "Логово демонов"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
+			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
+			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"]
+		},
+		{
+			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
+			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
+			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"]
+		},
+		{
+			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
+			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
+			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"]
+		}
+	]
+}

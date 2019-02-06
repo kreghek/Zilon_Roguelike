@@ -2,6 +2,10 @@
 
 namespace Zilon.Core.Client
 {
+    /// <summary>
+    /// Менеджер модальных окон.
+    /// Реализация на клиенте.
+    /// </summary>
     public interface ISectorModalManager
     {
         void ShowContainerModal(PropTransferMachine transferMachine);
@@ -11,5 +15,7 @@ namespace Zilon.Core.Client
         void ShowPerksModal(IActor actor);
 
         void ShowInstructionModal();
+
+        void ShowTraderModal(ITrader trader);
     }
 }

@@ -1,0 +1,23 @@
+{
+	"Name": {
+		"En": "Rat kingdom",
+		"Ru": "Крысиное королевство"
+	},
+	"SectorLevels": [
+		{
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": ["rat-mutant", "moon-rat"]
+		},
+		{
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": ["rat-mutant", "moon-rat"],
+			"ChampionMonsterSids": null
+		},
+		{
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": ["rat-mutant", "moon-rat"],
+			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"]
+		}
+	]
+}

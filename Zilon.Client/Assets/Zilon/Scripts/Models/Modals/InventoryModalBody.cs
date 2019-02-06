@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Zilon.Scripts;
 
 using JetBrains.Annotations;
@@ -62,17 +63,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         }
     }
 
-    private void SlotOnClick(object sender, EventArgs e)
-    {
-        var slotVm = sender as InventorySlotVm;
-        if (slotVm == null)
-        {
-            throw new NotSupportedException();
-        }
-
-        slotVm.ApplyEquipment();
-    }
-
     public void Init(IActor actor)
     {
         // изначально скрываем кнопку использования
@@ -106,6 +96,16 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         throw new NotImplementedException();
     }
 
+    private void SlotOnClick(object sender, EventArgs e)
+    {
+        var slotVm = sender as InventorySlotVm;
+        if (slotVm == null)
+        {
+            throw new NotSupportedException();
+        }
+
+        slotVm.ApplyEquipment();
+    }
 
     private void Inventory_Removed(object sender, PropStoreEventArgs e)
     {
