@@ -23,6 +23,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Benchmark
 {
@@ -42,16 +43,12 @@ namespace Zilon.Core.Benchmark
 
             var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
 
-            var generationOptions = new SectorProceduralGeneratorOptions
+            var sectorScheme = new TestSectorSubScheme
             {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
-                }
+                RegularMonsterSids = new[] { "rat" }
             };
 
-            sectorManager.CreateSector(sectorGenerator, generationOptions);
+            sectorManager.CreateSector(sectorGenerator, sectorScheme);
 
 
 
@@ -134,7 +131,7 @@ namespace Zilon.Core.Benchmark
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
-            mock.Setup(x => x.RollCount()).Returns(0);
+            mock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(0);
             return mock.Object;
         }
 

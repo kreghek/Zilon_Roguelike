@@ -39,9 +39,9 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создание сектора.
         /// </summary>
-        /// <param name="options"> Настройки генерации сектора. </param>
+        /// <param name="sectorScheme"> Настройки генерации сектора. </param>
         /// <returns> Возвращает экземпляр сектора. </returns>
-        public ISector Generate(ISectorGeneratorOptions options)
+        public ISector Generate(ISectorSubScheme sectorScheme)
         {
             var map = _mapFactory.Create();
 

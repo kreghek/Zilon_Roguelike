@@ -28,7 +28,7 @@ namespace Zilon.Core.Spec.Mocks
             _mapFactory = mapFactory;
         }
 
-        public ISector Generate(ISectorGeneratorOptions options)
+        public ISector Generate(ISectorSubScheme sectorScheme)
         {
             var map = _mapFactory.Create();
             var sector = new Sector(map,

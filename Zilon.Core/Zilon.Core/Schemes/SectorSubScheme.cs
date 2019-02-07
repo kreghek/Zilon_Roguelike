@@ -54,7 +54,7 @@ namespace Zilon.Core.Schemes
         /// Количество монстров в секторе.
         /// </summary>
         [JsonProperty]
-        public int MonsterCount { get; private set; }
+        public int RegionMonsterCount { get; private set; }
 
         /// <summary>
         /// Количество сундуков в секторе.

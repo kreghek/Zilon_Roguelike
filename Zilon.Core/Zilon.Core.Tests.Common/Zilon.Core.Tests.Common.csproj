@@ -55,6 +55,7 @@
     <Compile Include="Schemes\TestPropEquipSubScheme.cs" />
     <Compile Include="Schemes\TestPropScheme.cs" />
     <Compile Include="Schemes\TestPropUseSubScheme.cs" />
+    <Compile Include="Schemes\TestSectorSubScheme.cs" />
     <Compile Include="Schemes\TestTacticalActConstrainsSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
     <Compile Include="TestContainerViewModel.cs" />

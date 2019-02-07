@@ -10,7 +10,6 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -37,32 +36,20 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
-            var options = CreateOptions(botPlayer);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
             Action act = () =>
             {
-                var sector = generator.Generate(options);
+                var sector = generator.Generate(sectorScheme);
             };
 
 
 
             // ASSERT
             act.Should().NotThrow();
-        }
-
-        private static ISectorGeneratorOptions CreateOptions(IBotPlayer botPlayer)
-        {
-            return new SectorProceduralGeneratorOptions
-            {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = botPlayer,
-                    RegularMonsterSids = new[] { "rat" }
-                }
-            };
         }
 
         /// <summary>
@@ -85,14 +72,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
-            var options = CreateOptions(botPlayer);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
             Action act = () =>
             {
-                var sector = generator.Generate(options);
+                var sector = generator.Generate(sectorScheme);
             };
 
 
@@ -114,9 +101,6 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            var survivalRandomSource = survivalRandomSourceMock.Object;
-
             var chestGeneratorMock = new Mock<IChestGenerator>();
             var chestGenerator = chestGeneratorMock.Object;
 
@@ -129,7 +113,8 @@ namespace Zilon.Core.Tests.MapGenerators
             return new SectorProceduralGenerator(mapFactory,
                 sectorFactory,
                 monsterGenerator,
-                chestGenerator);
+                chestGenerator,
+                botPlayer);
         }
 
 
@@ -187,6 +172,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var botPlayerMock = new Mock<IBotPlayer>();
             var botPlayer = botPlayerMock.Object;
             return botPlayer;
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegularMonsterSids = new[] { "rat" }
+            };
         }
     }
 }

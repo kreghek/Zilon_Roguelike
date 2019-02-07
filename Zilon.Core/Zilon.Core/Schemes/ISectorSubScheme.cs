@@ -60,9 +60,9 @@
         int RegionSize { get; }
 
         /// <summary>
-        /// Количество монстров в секторе.
+        /// Максимальное количество монстров в регионе сектора.
         /// </summary>
-        int MonsterCount { get; }
+        int RegionMonsterCount { get; }
 
         /// <summary>
         /// Количество сундуков в секторе.

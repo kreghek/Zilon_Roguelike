@@ -38,10 +38,10 @@ namespace Zilon.Core.MapGenerators
             _dropResolver = dropResolver;
         }
 
-        /// <summary>Создаёт сектора с учётом указанных настроек.</summary>
-        /// <param name="options">Настройки создания сектора.</param>
-        /// <returns>Возвращает созданный сектор.</returns>
-        public ISector Generate(ISectorGeneratorOptions options)
+        /// <summary> Создаёт сектора с учётом указанных настроек. </summary>
+        /// <param name="sectorScheme"> Настройки создания сектора. </param>
+        /// <returns> Возвращает созданный сектор. </returns>
+        public ISector Generate(ISectorSubScheme sectorScheme)
         {
             var map = SquareMapFactory.Create(20);
 

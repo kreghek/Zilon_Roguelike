@@ -26,6 +26,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Spec.Contexts
 {
@@ -70,9 +71,12 @@ namespace Zilon.Core.Spec.Contexts
             var sectorManager = Container.GetInstance<ISectorManager>();
             var sectorGenerator = Container.GetInstance<ISectorProceduralGenerator>();
 
-            var generationOptions = new SectorProceduralGeneratorOptions();
+            var sectorScheme = new TestSectorSubScheme
+            {
+                
+            };
 
-            sectorManager.CreateSector(sectorGenerator, generationOptions);
+            sectorManager.CreateSector(sectorGenerator, sectorScheme);
         }
 
         public ISector GetSector()

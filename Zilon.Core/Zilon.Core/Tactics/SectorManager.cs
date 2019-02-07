@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.MapGenerators;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
 {
@@ -17,10 +18,10 @@ namespace Zilon.Core.Tactics
         /// Создаёт текущий сектор по указанному генератору и настройкам.
         /// </summary>
         /// <param name="generator">Генератор сектора.</param>
-        /// <param name="options">Настройки генерации сектора.</param>
-        public void CreateSector(ISectorProceduralGenerator generator, ISectorGeneratorOptions options)
+        /// <param name="scheme">Схема генерации сектора.</param>
+        public void CreateSector(ISectorProceduralGenerator generator, ISectorSubScheme scheme)
         {
-            CurrentSector = generator.Generate(options);
+            CurrentSector = generator.Generate(scheme);
         }
     }
 }

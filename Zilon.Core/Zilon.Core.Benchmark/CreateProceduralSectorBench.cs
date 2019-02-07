@@ -21,6 +21,7 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Benchmark
 {
@@ -39,16 +40,12 @@ namespace Zilon.Core.Benchmark
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
 
-            var generationOptions = new SectorProceduralGeneratorOptions
+            var sectorScheme = new TestSectorSubScheme
             {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
-                }
+                RegularMonsterSids = new[] { "rat" }
             };
 
-            sectorManager.CreateSector(sectorGenerator, generationOptions);
+            sectorManager.CreateSector(sectorGenerator, sectorScheme);
 
 
 

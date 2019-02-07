@@ -75,15 +75,12 @@
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IDungeonSectorGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
-    <Compile Include="MapGenerators\IMonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
-    <Compile Include="MapGenerators\ISectorGeneratorOptions.cs" />
     <Compile Include="MapGenerators\ISectorGeneratorSelector.cs" />
     <Compile Include="MapGenerators\ITownSectorGenerator.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
-    <Compile Include="MapGenerators\MonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
@@ -93,7 +90,6 @@
     <Compile Include="MapGenerators\RoomStyle\TownMapFactory.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\SectorGeneratorSelector.cs" />
-    <Compile Include="MapGenerators\SectorProceduralGeneratorOptions.cs" />
     <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="MapGenerators\TownSectorGenerator.cs" />
