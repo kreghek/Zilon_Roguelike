@@ -3,8 +3,26 @@
     /// <summary>
     /// Интерфейс схемы для создания сектора.
     /// </summary>
-    public interface ISectorSubScheme: ISubScheme
+    public interface ISectorSubScheme : ISubScheme
     {
+        /// <summary>
+        /// Символьный идентфиикатор сектора.
+        /// </summary>
+        /// <remarks>
+        /// Нужен для перехода из сектора в сектор.
+        /// </remarks>
+        string Sid { get; }
+
+        /// <summary>
+        /// Наименование сектора.
+        /// </summary>
+        LocalizedStringSubScheme Name { get; }
+
+        /// <summary>
+        /// Описание сектора.
+        /// </summary>
+        LocalizedStringSubScheme Description { get; }
+
         /// <summary>
         /// Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>

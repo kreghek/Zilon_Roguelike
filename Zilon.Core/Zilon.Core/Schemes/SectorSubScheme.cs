@@ -67,5 +67,27 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public string[] ChestDropTableSids { get; private set; }
+
+
+        /// <summary>
+        /// Символьный идентфиикатор сектора.
+        /// </summary>
+        /// <remarks>
+        /// Нужен для перехода из сектора в сектор.
+        /// </remarks>
+        [JsonProperty]
+        public string Sid { get; private set; }
+
+        /// <summary>
+        /// Наименование сектора.
+        /// </summary>
+        [JsonProperty]
+        public LocalizedStringSubScheme Name { get; private set; }
+
+        /// <summary>
+        /// Описание сектора.
+        /// </summary>
+        [JsonProperty]
+        public LocalizedStringSubScheme Description { get; private set; }
     }
 }

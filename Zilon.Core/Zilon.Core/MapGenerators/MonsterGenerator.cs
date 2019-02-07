@@ -90,7 +90,9 @@ namespace Zilon.Core.MapGenerators
         /// <param name="monsterGeneratorOptions"> Настройки генерации монстров. </param>
         /// <param name="currentRarity"> Целевой уровень редкости монстра. </param>
         /// <returns> Возвращает набор строк, являющихся идентификаторами схем монстров. </returns>
-        private static IEnumerable<string> GetAvailableSchemeSids(IMonsterGeneratorOptions monsterGeneratorOptions, int currentRarity)
+        private static IEnumerable<string> GetAvailableSchemeSids(
+            IMonsterGeneratorOptions monsterGeneratorOptions,
+            int currentRarity)
         {
             IEnumerable<string> availableSchemeSids;
             switch (currentRarity)
