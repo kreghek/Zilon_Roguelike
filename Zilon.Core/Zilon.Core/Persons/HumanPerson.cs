@@ -353,6 +353,16 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+
+            CalcSurvivalStats();
+        }
+
+        private void CalcSurvivalStats()
+        {
+            for (var i = 0; i < EquipmentCarrier.Count(); i++)
+            {
+                var equipment = EquipmentCarrier[i]
+            }
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)
