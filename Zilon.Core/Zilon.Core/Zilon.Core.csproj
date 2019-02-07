@@ -110,6 +110,7 @@
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
+    <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
