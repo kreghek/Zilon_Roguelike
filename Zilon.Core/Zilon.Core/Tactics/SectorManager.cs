@@ -19,9 +19,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="generator">Генератор сектора.</param>
         /// <param name="scheme">Схема генерации сектора.</param>
-        public void CreateSector(ISectorProceduralGenerator generator, ISectorSubScheme scheme)
+        public void CreateSector(ISectorGenerator generator, ISectorSubScheme scheme)
         {
-            CurrentSector = generator.Generate(scheme);
+            CurrentSector = generator.GenerateDungeonAsync(scheme);
         }
     }
 }

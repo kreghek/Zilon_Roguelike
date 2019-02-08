@@ -14,7 +14,7 @@ namespace Zilon.Core.MapGenerators
     /// <remarks>
     /// Сейчас он больше нужен для тестов. Например, на клиенте.
     /// </remarks>
-    public class SectorSchemeGenerator : ISectorProceduralGenerator
+    public class SectorSchemeGenerator : ISectorGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
@@ -43,7 +43,7 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Возвращает созданный сектор. </returns>
         public ISector Generate(ISectorSubScheme sectorScheme)
         {
-            var map = SquareMapFactory.Create(20);
+            var map = SquareMapFactory.CreateAsync(20);
 
             var sector = new Sector(map,
                 _actorManager,

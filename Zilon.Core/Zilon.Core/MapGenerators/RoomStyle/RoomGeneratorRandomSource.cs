@@ -16,6 +16,15 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             _dice = dice;
         }
 
+        /// <summary>
+        /// Выбирает комнаты, с которыми есть соединение.
+        /// </summary>
+        /// <param name="currentRoom">Текущая комната, для которой ищуются соединённые соседи.</param>
+        /// <param name="maxNeighbors">Максимальное количество соединённых соседей.</param>
+        /// <param name="availableRooms">Набор доступных для соединения соседенй.</param>
+        /// <returns>
+        /// Возвращает целевые комнаты для соединения.
+        /// </returns>
         [NotNull, ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
@@ -38,6 +47,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return selectedRooms.ToArray();
         }
 
+        /// <summary>
+        /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
+        /// </summary>
+        /// <param name="roomGridSize">Размер матрицы комнат.</param>
+        /// <param name="roomCount">Количество комнат в секторе.</param>
+        /// <returns>
+        /// Возвращает массив координат из матрицы комнат.
+        /// </returns>
         public IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
         {
             var roomMatrixPosList = new List<OffsetCoords>(roomGridSize * roomGridSize);
@@ -61,6 +78,15 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return rolledCoords;
         }
 
+        /// <summary>
+        /// Возвращает матрицу смежности между комнатами (сеть комнат).
+        /// </summary>
+        /// <param name="rooms">Всё комнаты, которые должны быть соединены в сеть.</param>
+        /// <param name="maxNeighbors">Максимальное количество соседей у комнаты.</param>
+        /// <returns>
+        /// Возвращает словарь, представляющий собой матрицу смежности комнат.
+        /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение.
+        /// </returns>
         public IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors)
         {
             var result = new Dictionary<Room, Room[]>();
@@ -105,7 +131,18 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return result;
         }
 
-        public Size RollRoomSize(int maxSize)
+        /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        public Size RollRoomSize(int minSize, int maxSize)
         {
             var rollWidth = _dice.Roll(2, maxSize);
             var rollHeight = _dice.Roll(2, maxSize);

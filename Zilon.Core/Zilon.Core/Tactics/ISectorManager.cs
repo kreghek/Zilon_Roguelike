@@ -19,6 +19,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="generator">Генератор сектора.</param>
         /// <param name="scheme">Схема генерации сектора.</param>
-        void CreateSector(ISectorProceduralGenerator generator, ISectorSubScheme scheme);
+        void CreateSector(ISectorGenerator generator, ISectorSubScheme scheme);
     }
 }

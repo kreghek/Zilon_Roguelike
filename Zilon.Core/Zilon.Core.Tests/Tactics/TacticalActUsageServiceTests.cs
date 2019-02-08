@@ -481,7 +481,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = SquareMapFactory.Create(3);
+            var map = SquareMapFactory.CreateAsync(3);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;
@@ -495,7 +495,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = SquareMapFactory.Create(3);
+            var map = SquareMapFactory.CreateAsync(3);
             map.RemoveEdge(0, 0, 1, 0);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);

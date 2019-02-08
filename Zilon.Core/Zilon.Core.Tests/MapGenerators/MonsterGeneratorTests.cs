@@ -60,7 +60,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 actorManager);
 
 
-            var map = SquareMapFactory.Create(20);
+            var map = SquareMapFactory.CreateAsync(20);
             var sectorMock = new Mock<ISector>();
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);

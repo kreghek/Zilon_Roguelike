@@ -4,7 +4,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Spec.Mocks
 {
-    public class TestEmptySectorGenerator : ISectorProceduralGenerator
+    public class TestEmptySectorGenerator : ISectorGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;

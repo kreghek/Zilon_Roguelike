@@ -8,15 +8,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// </summary>
     public class TownMapFactory : IMapFactory
     {
-        private const int MapSize = 20;
+        private const int MapSize = 10;
 
         /// <summary>
         /// Создание карты.
         /// </summary>
-        /// <returns> Создаёт экземпляр карты. </returns>
-        public IMap Create()
+        /// <param name="options">Параметры создания карты.</param>
+        /// <returns>
+        /// Возвращает экземпляр карты.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public IMap Create(object options)
         {
-            var squareMap = SquareMapFactory.Create(MapSize);
+            var squareMap = SquareMapFactory.CreateAsync(MapSize);
             return squareMap;
         }
     }

@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            var map = SquareMapFactory.Create(7);
+            var map = SquareMapFactory.CreateAsync(7);
 
 
 
@@ -64,7 +64,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Action act = () =>
             {
-                var map = SquareMapFactory.Create(7);
+                var map = SquareMapFactory.CreateAsync(7);
             };
 
 

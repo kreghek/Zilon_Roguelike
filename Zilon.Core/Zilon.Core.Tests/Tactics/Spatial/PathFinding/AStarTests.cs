@@ -174,7 +174,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// <returns></returns>
         private static IMap CreateGridOpenMap()
         {
-            return SquareMapFactory.Create(10);
+            return SquareMapFactory.CreateAsync(10);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Zilon.Core.Benchmark
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
 
-            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
+            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
             var sectorScheme = new TestSectorSubScheme
             {
@@ -103,7 +103,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
-            _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            _container.Register<ISectorGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());

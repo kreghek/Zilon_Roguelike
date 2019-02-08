@@ -149,7 +149,7 @@
     <Compile Include="Common\RollModifiers.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
-    <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
+    <Compile Include="MapGenerators\ISectorGenerator.cs" />
     <Compile Include="Tactics\Spatial\GraphMap.cs" />
     <Compile Include="Tactics\Spatial\MapRegion.cs" />
     <Compile Include="Schemes\ConcreteTypeConverter.cs" />

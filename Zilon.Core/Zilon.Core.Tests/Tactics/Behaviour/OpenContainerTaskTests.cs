@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void Execute_ValidLength_ActorOpenedContainer()
         {
             // ARRANGE
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 
@@ -60,7 +60,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void Execute_Wall_Exception()
         {
             // ARRANGE
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
             map.RemoveEdge(0, 0, 1, 0);
 
             var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);

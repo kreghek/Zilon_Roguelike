@@ -69,7 +69,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -103,7 +103,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -131,7 +131,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -187,7 +187,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -250,7 +250,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             //ARRANGE
             var usageService = _container.GetInstance<ITacticalActUsageService>();
 
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
@@ -282,7 +282,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
         {
             //ARRANGE
-            var map = SquareMapFactory.Create(10);
+            var map = SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 

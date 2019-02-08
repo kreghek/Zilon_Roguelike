@@ -12,6 +12,6 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="globeNode"> Узел локации на графе провинции на глобальной карте. </param>
         /// <returns> Возвращает генератор сектора. </returns>
-        ISectorProceduralGenerator GetGenerator(GlobeRegionNode globeNode);
+        ISectorGenerator GetGenerator(GlobeRegionNode globeNode);
     }
 }

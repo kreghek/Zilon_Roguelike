@@ -46,7 +46,7 @@ namespace Zilon.Core.Commands.Tests
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
-            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
+            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
             var sectorScheme = new TestSectorSubScheme
             {
                 RegularMonsterSids = new[] { "rat" }
@@ -164,7 +164,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
-            _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            _container.Register<ISectorGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());

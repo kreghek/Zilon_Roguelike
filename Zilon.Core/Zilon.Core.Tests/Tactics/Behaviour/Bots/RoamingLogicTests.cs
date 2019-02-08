@@ -133,7 +133,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         [SetUp]
         public void SetUp()
         {
-            _map = SquareMapFactory.Create(10);
+            _map = SquareMapFactory.CreateAsync(10);
 
 
             var playerMock = new Mock<IPlayer>();

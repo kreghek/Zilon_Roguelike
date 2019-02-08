@@ -64,12 +64,12 @@ namespace Zilon.Core.Spec.Contexts
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
             mapFactory.SetFunc(() =>
             {
-                var map = SquareMapFactory.Create(mapSize);
+                var map = SquareMapFactory.CreateAsync(mapSize);
                 return map;
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();
-            var sectorGenerator = Container.GetInstance<ISectorProceduralGenerator>();
+            var sectorGenerator = Container.GetInstance<ISectorGenerator>();
 
             var sectorScheme = new TestSectorSubScheme
             {
@@ -261,7 +261,7 @@ namespace Zilon.Core.Spec.Contexts
         private void RegisterSectorService()
         {
             Container.Register<IMapFactory, FuncMapFactory>(new PerContainerLifetime());
-            Container.Register<ISectorProceduralGenerator, TestEmptySectorGenerator>(new PerContainerLifetime());
+            Container.Register<ISectorGenerator, TestEmptySectorGenerator>(new PerContainerLifetime());
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());

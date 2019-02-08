@@ -47,7 +47,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public void SetUp()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            _testMap = SquareMapFactory.Create(3);
+            _testMap = SquareMapFactory.CreateAsync(3);
 
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme

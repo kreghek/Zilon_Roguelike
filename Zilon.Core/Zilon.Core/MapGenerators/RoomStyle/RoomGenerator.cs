@@ -77,7 +77,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
         public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
         {
-            var cellSize = 
+            var cellSize = CalcCellSize(rooms);
 
             foreach (var room in rooms)
             {

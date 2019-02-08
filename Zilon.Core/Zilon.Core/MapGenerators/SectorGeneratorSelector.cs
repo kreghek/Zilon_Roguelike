@@ -29,7 +29,7 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="globeNode"> Узел локации на графе провинции на глобальной карте. </param>
         /// <returns> Возвращает генератор сектора. </returns>
-        public ISectorProceduralGenerator GetGenerator(GlobeRegionNode globeNode)
+        public ISectorGenerator GetGenerator(GlobeRegionNode globeNode)
         {
             if (globeNode == null)
             {

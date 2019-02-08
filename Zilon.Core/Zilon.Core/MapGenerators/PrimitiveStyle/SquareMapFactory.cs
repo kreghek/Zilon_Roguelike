@@ -1,31 +1,42 @@
 ﻿using System.Linq;
-
+using System.Threading.Tasks;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.PrimitiveStyle
 {
+    /// <summary>
+    /// Реализация фабрики для построения квадратной карты указанного размера.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.MapGenerators.IMapFactory" />
     public class SquareMapFactory : IMapFactory
     {
-        private readonly int _mapSize;
-
-        public SquareMapFactory(int mapSize)
+        /// <summary>
+        /// Создание карты.
+        /// </summary>
+        /// <param name="options">Параметры создания карты.</param>
+        /// <returns>
+        /// Возвращает экземпляр карты.
+        /// </returns>
+        public Task<IMap> CreateAsync(object options)
         {
-            _mapSize = mapSize;
-        }
+            var mapSize = (int)options;
 
-        public IMap Create()
-        {
             var map = new GraphMap();
-            MapFiller.FillSquareMap(map, _mapSize);
+            MapFiller.FillSquareMap(map, mapSize);
             map.StartNodes = map.Nodes.Take(1).ToArray();
             map.ExitNodes = new[] { map.Nodes.Last() };
-            return map;
+            return Task.FromResult<IMap>(map);
         }
 
-        public static IMap Create(int mapSize)
+        /// <summary>
+        /// Вспомогательный метод для создания квадратной карты без создания экземпляра фабрики.
+        /// </summary>
+        /// <param name="mapSize"> Размер карты. </param>
+        /// <returns> Возвращает объект карты. </returns>
+        public static async Task<IMap> CreateAsync(int mapSize)
         {
-            var factory = new SquareMapFactory(mapSize);
-            return factory.Create();
+            var factory = new SquareMapFactory();
+            return await factory.CreateAsync((object)mapSize);
         }
     }
 }
