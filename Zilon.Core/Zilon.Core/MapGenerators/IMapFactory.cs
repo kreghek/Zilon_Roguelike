@@ -18,6 +18,6 @@ namespace Zilon.Core.MapGenerators
         /// Создание карты.
         /// </summary>
         /// <returns> Возвращает экземпляр карты. </returns>
-        [NotNull] IMap Create();
+        [NotNull] IMap Create(object options);
     }
 }
