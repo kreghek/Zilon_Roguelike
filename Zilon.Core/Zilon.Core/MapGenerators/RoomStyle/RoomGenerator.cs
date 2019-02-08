@@ -75,14 +75,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        public void CreateRoomNodes(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var cellSize = CalcCellSize(rooms);
 
             foreach (var room in rooms)
             {
-                CreateOneRoomNodes(map, edgeHash, room);
+                CreateOneRoomNodes(map, edgeHash, room, cellSize);
             }
+        }
+
+        private Size CalcCellSize(IEnumerable<Room> rooms)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -91,7 +96,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Существующие комнаты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        public void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var roomNet = _randomSource.RollRoomNet(rooms, 1);
             foreach (var roomPair in roomNet)
@@ -103,14 +108,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)
+        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * _settings.RoomCellSize;
-                    var nodeY = y + room.PositionY * _settings.RoomCellSize;
+                    var nodeX = x + room.PositionX * cellSize.Width;
+                    var nodeY = y + room.PositionY * cellSize.Height;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
                     map.AddNode(node);

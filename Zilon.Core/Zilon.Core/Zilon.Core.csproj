@@ -73,12 +73,9 @@
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
-    <Compile Include="MapGenerators\IDungeonSectorGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
-    <Compile Include="MapGenerators\ISectorGeneratorSelector.cs" />
-    <Compile Include="MapGenerators\ITownSectorGenerator.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
@@ -88,10 +85,7 @@
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownMapFactory.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
-    <Compile Include="MapGenerators\SectorGeneratorSelector.cs" />
-    <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
-    <Compile Include="MapGenerators\TownSectorGenerator.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
@@ -317,7 +311,7 @@
     <Compile Include="MapGenerators\RoomStyle\Room.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGenerator.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorRandomSource.cs" />
-    <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
+    <Compile Include="MapGenerators\SectorGenerator.cs" />
     <Compile Include="Tactics\DropTablePropChest.cs" />
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />

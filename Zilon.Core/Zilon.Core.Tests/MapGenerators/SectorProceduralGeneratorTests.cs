@@ -88,7 +88,7 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static SectorProceduralGenerator CreateGenerator(ISchemeService schemeService,
+        private static SectorGenerator CreateGenerator(ISchemeService schemeService,
             IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
@@ -110,7 +110,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorFactoryMock = new Mock<ISectorFactory>();
             var sectorFactory = sectorFactoryMock.Object;
 
-            return new SectorProceduralGenerator(mapFactory,
+            return new SectorGenerator(mapFactory,
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,

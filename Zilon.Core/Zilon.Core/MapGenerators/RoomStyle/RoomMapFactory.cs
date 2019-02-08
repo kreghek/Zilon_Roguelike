@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
@@ -11,6 +11,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public class RoomMapFactory : IMapFactory
     {
         private const int SegmentSize = 200;
+        private const int RoomMinSize = 2;
         private readonly IRoomGenerator _roomGenerator;
 
         [ExcludeFromCodeCoverage]
@@ -25,7 +26,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает экземпляр карты.
         /// </returns>
-        public IMap Create(object options)
+        public Task<IMap> CreateAsync(object options)
         {
             var sectorScheme = (ISectorSubScheme)options;
 
@@ -34,7 +35,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount, sectorScheme.RegionSize);
+            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount, RoomMinSize, sectorScheme.RegionSize);
 
             // Создаём узлы и рёбра комнат
             _roomGenerator.CreateRoomNodes(map, rooms, edgeHash);

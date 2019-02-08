@@ -1,4 +1,6 @@
-﻿using Zilon.Core.MapGenerators.PrimitiveStyle;
+﻿using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -18,9 +20,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Возвращает экземпляр карты.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public IMap Create(object options)
+        public async Task<IMap> CreateAsync(object options)
         {
-            var squareMap = SquareMapFactory.CreateAsync(MapSize);
+            var squareMap = await SquareMapFactory.CreateAsync(MapSize);
             return squareMap;
         }
     }
