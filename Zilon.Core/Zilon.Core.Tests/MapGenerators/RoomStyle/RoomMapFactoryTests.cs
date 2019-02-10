@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
@@ -22,13 +24,14 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             var roomGenerator = new TestSnakeRoomGenerator();
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = async () =>
+            Func<Task> act = async () =>
             {
-                var map = await factory.CreateAsync(null);
+                var map = await factory.CreateAsync(sectorScheme);
             };
 
 
@@ -53,13 +56,14 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var randomSource = new RoomGeneratorRandomSource(dice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = async () =>
+            Func<Task> act = async () =>
             {
-                var map = await factory.CreateAsync(null);
+                var map = await factory.CreateAsync(sectorScheme);
             };
 
 
@@ -79,11 +83,12 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var randomSource = new RoomGeneratorRandomSource(dice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            var map = await factory.CreateAsync(null);
+            var map = await factory.CreateAsync(sectorScheme);
 
 
 
@@ -94,6 +99,15 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
                 sameNode.Should().BeEmpty();
             }
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegionSize = 20,
+                RegionCount = 20
+            };
         }
     }
 }

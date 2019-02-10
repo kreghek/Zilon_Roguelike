@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -41,7 +41,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = async () =>
+            Func<Task> act = async () =>
             {
                 var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = async () =>
+            Func<Task> act = async () =>
             {
                 var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
@@ -184,7 +184,9 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             return new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] { "rat" }
+                RegularMonsterSids = new[] { "rat" },
+                RegionCount = 20,
+                RegionSize = 20
             };
         }
     }

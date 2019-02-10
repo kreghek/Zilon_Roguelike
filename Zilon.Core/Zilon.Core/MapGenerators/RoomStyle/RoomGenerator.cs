@@ -87,7 +87,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private Size CalcCellSize(IEnumerable<Room> rooms)
         {
-            throw new NotImplementedException();
+            return new Size(20, 20);
         }
 
         /// <summary>
