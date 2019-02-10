@@ -406,6 +406,8 @@
     <Compile Include="WorldGeneration\TerrainCell.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
+    <Compile Include="World\IWorldManager.cs" />
+    <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

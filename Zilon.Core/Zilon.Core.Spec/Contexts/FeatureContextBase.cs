@@ -71,12 +71,20 @@ namespace Zilon.Core.Spec.Contexts
             var sectorManager = Container.GetInstance<ISectorManager>();
             var sectorGenerator = Container.GetInstance<ISectorGenerator>();
 
-            var sectorScheme = new TestSectorSubScheme
+            var locationScheme = new TestLocationScheme
             {
-                
+                SectorLevels = new ISectorSubScheme[]
+               {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+                    }
+               }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
+            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
+                globe: null,
+                regionNode: null);
         }
 
         public ISector GetSector()

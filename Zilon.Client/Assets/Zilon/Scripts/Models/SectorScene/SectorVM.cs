@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -80,8 +80,6 @@ internal class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
     [NotNull] [Inject] private readonly ITraderManager _traderManager;
-
-    [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
     [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
@@ -179,7 +177,7 @@ internal class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_personManager.SectorLevel == 0)
+        if (_sectorManager.SectorLevel == 0)
         {
             _sectorModalManager.ShowInstructionModal();
         }
@@ -193,19 +191,9 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
-    private async System.Threading.Tasks.Task InitServicesAsync()
+    private async Task InitServicesAsync()
     {
-        ILocationScheme localtionScheme = null;
-        if (_humanPlayer.GlobeNode == null)
-        {
-            localtionScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-        }
-        else
-        {
-            localtionScheme = _humanPlayer.GlobeNode.Scheme;
-        }
-
-        await _sectorManager.CreateSectorAsync(_sectorGenerator, localtionScheme?.SectorLevels[0]);
+        await _sectorManager.CreateSectorAsync();
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -417,7 +405,7 @@ internal class SectorVM : MonoBehaviour
         if (_humanPlayer.GlobeNode == null)
         {
             // intro
-            _personManager.SectorLevel = 0;
+            _sectorManager.SectorLevel = 0;
             SceneManager.LoadScene("globe");
             return;
         }
@@ -425,16 +413,16 @@ internal class SectorVM : MonoBehaviour
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
         if (currentLocation?.SectorLevels == null)
         {
-            _personManager.SectorLevel = 0;
+            _sectorManager.SectorLevel = 0;
             SceneManager.LoadScene("globe");
             return;
         }
 
-        _personManager.SectorLevel++;
-        
-        if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        _sectorManager.SectorLevel++;
+
+        if (_sectorManager.SectorLevel >= currentLocation.SectorLevels.Length)
         {
-            _personManager.SectorLevel = 0;
+            _sectorManager.SectorLevel = 0;
             SceneManager.LoadScene("globe");
         }
         else
@@ -467,7 +455,7 @@ internal class SectorVM : MonoBehaviour
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        if (_personManager.Person == null)
+        if (_humanPlayer.MainPerson == null)
         {
             var inventory = new Inventory();
 
@@ -477,14 +465,14 @@ internal class SectorVM : MonoBehaviour
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
-            _personManager.Person = person;
+            _humanPlayer.MainPerson = person;
 
             AddResourceToActor(inventory, "med-kit", 1);
             AddResourceToActor(inventory, "water-bottle", 2);
             AddResourceToActor(inventory, "packed-food", 2);
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode);
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
 
         actorManager.Add(actor);
 

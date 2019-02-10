@@ -47,14 +47,21 @@ namespace Zilon.Core.Commands.Tests
             var commandManger = _container.GetInstance<ICommandManager>();
 
             var sectorGenerator = _container.GetInstance<ISectorGenerator>();
-            var sectorScheme = new TestSectorSubScheme
+
+            var locationScheme = new TestLocationScheme
             {
-                RegularMonsterSids = new[] { "rat" }
+                SectorLevels = new ISectorSubScheme[]
+               {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+                    }
+               }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
-
-
+            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
+                globe: null,
+                regionNode: null);
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 

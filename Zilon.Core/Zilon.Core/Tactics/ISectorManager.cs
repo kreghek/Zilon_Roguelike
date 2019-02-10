@@ -2,6 +2,8 @@
 
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tactics
 {
@@ -16,11 +18,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         ISector CurrentSector { get; }
 
+        /// <summary> Текущий уровень сектора подземелья. Используется только в подземельях. </summary>
+        int SectorLevel { get; set; }
+
         /// <summary>
-        /// Создаёт текущий сектор по указанному генератору и настройкам.
+        /// Создаёт и присваивает сектор для текущего узла локации.
         /// </summary>
-        /// <param name="generator">Генератор сектора.</param>
-        /// <param name="scheme">Схема генерации сектора.</param>
-        Task CreateSectorAsync(ISectorGenerator generator, ISectorSubScheme scheme);
+        Task CreateSectorAsync();
     }
 }

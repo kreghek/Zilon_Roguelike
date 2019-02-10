@@ -48,6 +48,7 @@
     <Compile Include="Schemes\TestDropTableRecordSubScheme.cs" />
     <Compile Include="Schemes\TestDropTableScheme.cs" />
     <Compile Include="Schemes\TestJobSubScheme.cs" />
+    <Compile Include="Schemes\TestLocationScheme.cs" />
     <Compile Include="Schemes\TestPerkScheme.cs" />
     <Compile Include="Schemes\TestPersonScheme.cs" />
     <Compile Include="Schemes\TestPropArmorItemSubScheme.cs" />

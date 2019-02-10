@@ -43,16 +43,23 @@ namespace Zilon.Core.Benchmark
 
             var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
-            var sectorScheme = new TestSectorSubScheme
+            var locationScheme = new TestLocationScheme
             {
-                RegularMonsterSids = new[] { "rat" },
-                RegionCount = 20,
-                RegionSize = 20
+                SectorLevels = new ISectorSubScheme[]
+               {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+
+                        RegionCount = 20,
+                        RegionSize = 20
+                    }
+               }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
-
-
+            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
+                globe: null,
+                regionNode: null);
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 

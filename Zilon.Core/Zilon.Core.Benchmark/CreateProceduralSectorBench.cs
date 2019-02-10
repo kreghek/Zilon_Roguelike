@@ -40,15 +40,23 @@ namespace Zilon.Core.Benchmark
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
-            var sectorScheme = new TestSectorSubScheme
+            var locationScheme = new TestLocationScheme
             {
-                RegularMonsterSids = new[] { "rat" },
+                SectorLevels = new ISectorSubScheme[]
+                {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
 
-                RegionCount = 20,
-                RegionSize = 20
+                        RegionCount = 20,
+                        RegionSize = 20
+                    }
+                }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
+            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
+                globe: null,
+                regionNode: null);
 
 
 

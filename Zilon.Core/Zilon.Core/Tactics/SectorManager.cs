@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -10,19 +14,62 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISectorManager" />
     public class SectorManager : ISectorManager
     {
+        private const string IntrolLocationSid = "intro";
+        private readonly IWorldManager _worldManager;
+        private readonly ISectorGenerator _generator;
+        private readonly HumanPlayer _humanPlayer;
+        private readonly ISchemeService _schemeService;
+
+        public SectorManager(IWorldManager worldManager,
+            ISectorGenerator generator,
+            HumanPlayer humanPlayer,
+            ISchemeService schemeService)
+        {
+            _worldManager = worldManager ?? throw new ArgumentNullException(nameof(worldManager));
+            _generator = generator ?? throw new ArgumentNullException(nameof(generator));
+            _humanPlayer = humanPlayer ?? throw new ArgumentNullException(nameof(humanPlayer));
+            _schemeService = schemeService;
+        }
+
         /// <summary>
         /// Текущий сектор.
         /// </summary>
         public ISector CurrentSector { get; private set; }
 
         /// <summary>
+        /// Текущий уровень сектора подземелья. Используется только в подземельях.
+        /// </summary>
+        public int SectorLevel { get; set; }
+
+        /// <summary>
         /// Создаёт текущий сектор по указанному генератору и настройкам.
         /// </summary>
-        /// <param name="generator">Генератор сектора.</param>
-        /// <param name="scheme">Схема генерации сектора.</param>
-        public async Task CreateSectorAsync(ISectorGenerator generator, ISectorSubScheme scheme)
+        public async Task CreateSectorAsync()
         {
-            CurrentSector = await generator.GenerateDungeonAsync(scheme);
+            var regionNode = _humanPlayer.GlobeNode;
+
+            ILocationScheme scheme = null;
+            if (_humanPlayer.GlobeNode == null)
+            {
+                scheme = _schemeService.GetScheme<ILocationScheme>(IntrolLocationSid);
+            }
+            else
+            {
+                scheme = _humanPlayer.GlobeNode.Scheme;
+            }
+
+            if (scheme.SectorLevels != null)
+            {
+                CurrentSector = await _generator.GenerateDungeonAsync(scheme.SectorLevels[SectorLevel]);
+            }
+            else if (regionNode.IsTown)
+            {
+                CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode);
+            }
+            else
+            {
+                CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode);
+            }
         }
     }
 }
