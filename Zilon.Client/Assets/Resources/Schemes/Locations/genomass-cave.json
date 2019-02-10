@@ -7,17 +7,26 @@
 		{
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
-			"ChampionMonsterSids": null
+			"ChampionMonsterSids": null,
+			"RegionCount": 20,
+			"RegionSize": 20,
+			"RegionMonsterCount": 5
 		},
 		{
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
-			"ChampionMonsterSids": null
+			"ChampionMonsterSids": null,
+			"RegionCount": 10,
+			"RegionSize": 10,
+			"RegionMonsterCount": 5
 		},
 		{
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["infernal-genomass"],
+			"RegionCount": 20,
+			"RegionSize": 5,
+			"RegionMonsterCount": 5
 		}
 	]
 }
