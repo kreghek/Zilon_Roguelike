@@ -71,10 +71,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Точки расположены так, что есть прямой путь.
         /// </summary>
         [Test]
-        public void Run_GridGraphAndLinePath_PathFound()
+        public async System.Threading.Tasks.Task Run_GridGraphAndLinePath_PathFoundAsync()
         {
             // ARRAGE
-            var map = CreateGridOpenMap();
+            var map = await CreateGridOpenMapAsync();
 
             var expectedPath = new IMapNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(1,1),
@@ -115,10 +115,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Обход соседей должен начинаться с левого и идти по часовой стрелке.
         /// </summary>
         [Test]
-        public void Run_CheckNeighborBypass_ExpectedPath()
+        public async System.Threading.Tasks.Task Run_CheckNeighborBypass_ExpectedPathAsync()
         {
             // ARRAGE
-            var map = CreateGridOpenMap();
+            var map = await CreateGridOpenMapAsync();
 
             var expectedPath = new IMapNode[] {
                 map.Nodes.OfType<HexNode>().SelectBy(1, 1),
@@ -172,9 +172,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Создаёт открытую карту без препятствий.
         /// </summary>
         /// <returns></returns>
-        private static IMap CreateGridOpenMap()
+        private static async System.Threading.Tasks.Task<IMap> CreateGridOpenMapAsync()
         {
-            return SquareMapFactory.CreateAsync(10);
+            return await SquareMapFactory.CreateAsync(10);
         }
     }
 }

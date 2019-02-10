@@ -26,9 +26,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
 
             // ACT
-            Action act = () =>
+            Action act = async () =>
             {
-                var map = factory.Create();
+                var map = await factory.CreateAsync(null);
             };
 
 
@@ -57,9 +57,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
 
             // ACT
-            Action act = () =>
+            Action act = async () =>
             {
-                var map = factory.Create();
+                var map = await factory.CreateAsync(null);
             };
 
 
@@ -72,7 +72,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public void Create_RealRandom_NoOverlapNodes()
+        public async System.Threading.Tasks.Task Create_RealRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
             var dice = new Dice(3245);
@@ -83,7 +83,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
 
             // ACT
-            var map = factory.Create();
+            var map = await factory.CreateAsync(null);
 
 
 

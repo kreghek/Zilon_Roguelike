@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands.Tests
         /// Тест нужен для того, чтобы замерять производительность одного шага перемещения игрока по карте.
         /// </summary>
         [Test]
-        public void MoveCommandTest()
+        public async System.Threading.Tasks.Task MoveCommandTestAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
@@ -52,7 +52,7 @@ namespace Zilon.Core.Commands.Tests
                 RegularMonsterSids = new[] { "rat" }
             };
 
-            sectorManager.CreateSector(sectorGenerator, sectorScheme);
+            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
 
 
 

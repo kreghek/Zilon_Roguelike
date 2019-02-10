@@ -41,9 +41,9 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = () =>
+            Action act = async () =>
             {
-                var sector = generator.Generate(sectorScheme);
+                var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
 
 
@@ -77,9 +77,9 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Action act = () =>
+            Action act = async () =>
             {
-                var sector = generator.Generate(sectorScheme);
+                var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
 
 
@@ -101,6 +101,9 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var tradeManagerMock = new Mock<ITraderManager>();
+            var tradeManager = tradeManagerMock.Object;
+
             var chestGeneratorMock = new Mock<IChestGenerator>();
             var chestGenerator = chestGeneratorMock.Object;
 
@@ -114,7 +117,10 @@ namespace Zilon.Core.Tests.MapGenerators
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,
-                botPlayer);
+                botPlayer,
+                schemeService,
+                tradeManager,
+                dropResolver);
         }
 
 

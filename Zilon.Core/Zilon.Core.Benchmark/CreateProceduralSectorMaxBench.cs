@@ -33,7 +33,7 @@ namespace Zilon.Core.Benchmark
         private ServiceContainer _container;
 
         [Benchmark(Description = "CreateProceduralMaxSector")]
-        public void Create()
+        public async System.Threading.Tasks.Task CreateAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
@@ -51,7 +51,7 @@ namespace Zilon.Core.Benchmark
                 ChampionMonsterSids = new[] { "rat" }
             };
 
-            sectorManager.CreateSector(sectorGenerator, sectorScheme);
+            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
 
 
 

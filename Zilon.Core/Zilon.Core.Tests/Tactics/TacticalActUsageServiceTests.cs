@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using FluentAssertions;
 
 using JetBrains.Annotations;
@@ -267,11 +268,11 @@ namespace Zilon.Core.Tests.Tactics
         /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
         /// </summary>
         [Test]
-        public void UseOn_Wall_ThrowsInvalidOperationException()
+        public async System.Threading.Tasks.Task UseOn_Wall_ThrowsInvalidOperationExceptionAsync()
         {
             // ARRANGE
 
-            var sectorManager = CreateSectorManagerWithWall();
+            var sectorManager = await CreateSectorManagerWithWallAsync();
 
             var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, sectorManager);
 
@@ -337,7 +338,8 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             var inventory = new Inventory();
-            var bulletScheme = new TestPropScheme {
+            var bulletScheme = new TestPropScheme
+            {
                 Sid = "bullet-7-62",
                 Bullet = new TestPropBulletSubScheme
                 {
@@ -447,7 +449,7 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         [SetUp]
-        public void SetUp()
+        public async System.Threading.Tasks.Task SetUpAsync()
         {
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(6);
@@ -481,7 +483,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = SquareMapFactory.CreateAsync(3);
+            var map = await SquareMapFactory.CreateAsync(3);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;
@@ -490,12 +492,12 @@ namespace Zilon.Core.Tests.Tactics
             _sectorManager = sectorManager;
         }
 
-        private ISectorManager CreateSectorManagerWithWall()
+        private async System.Threading.Tasks.Task<ISectorManager> CreateSectorManagerWithWallAsync()
         {
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = SquareMapFactory.CreateAsync(3);
+            var map = await SquareMapFactory.CreateAsync(3);
             map.RemoveEdge(0, 0, 1, 0);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);

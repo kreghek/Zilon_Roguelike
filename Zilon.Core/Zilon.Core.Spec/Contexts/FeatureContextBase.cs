@@ -62,9 +62,9 @@ namespace Zilon.Core.Spec.Contexts
         public void CreateSector(int mapSize)
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
-            mapFactory.SetFunc(() =>
+            mapFactory.SetFunc(async () =>
             {
-                var map = SquareMapFactory.CreateAsync(mapSize);
+                var map = await SquareMapFactory.CreateAsync(mapSize);
                 return map;
             });
 
@@ -76,7 +76,7 @@ namespace Zilon.Core.Spec.Contexts
                 
             };
 
-            sectorManager.CreateSector(sectorGenerator, sectorScheme);
+            sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
         }
 
         public ISector GetSector()

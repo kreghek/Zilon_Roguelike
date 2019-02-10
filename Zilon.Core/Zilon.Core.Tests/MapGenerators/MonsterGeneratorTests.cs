@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
         /// </summary>
         [Test]
-        public void CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonsters()
+        public async System.Threading.Tasks.Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
         {
             var schemeDict = new Dictionary<string, IMonsterScheme>
             {
@@ -60,7 +60,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 actorManager);
 
 
-            var map = SquareMapFactory.CreateAsync(20);
+            var map = await SquareMapFactory.CreateAsync(20);
             var sectorMock = new Mock<ISector>();
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);

@@ -115,7 +115,7 @@ namespace Zilon.Core.Benchmark
         }
 
         [IterationSetup]
-        public void IterationSetup()
+        public async System.Threading.Tasks.Task IterationSetupAsync()
         {
             _container = new ServiceContainer();
 
@@ -199,7 +199,7 @@ namespace Zilon.Core.Benchmark
                 RegularMonsterSids = new[] { "rat" }
             };
 
-            sectorManager.CreateSector(sectorGenerator, sectorScheme);
+            await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);
 
 
 
