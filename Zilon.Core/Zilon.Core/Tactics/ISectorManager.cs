@@ -1,4 +1,6 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
@@ -19,6 +21,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="generator">Генератор сектора.</param>
         /// <param name="scheme">Схема генерации сектора.</param>
-        void CreateSector(ISectorGenerator generator, ISectorSubScheme scheme);
+        Task CreateSectorAsync(ISectorGenerator generator, ISectorSubScheme scheme);
     }
 }

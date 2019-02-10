@@ -2,7 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -75,7 +77,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 }
             }
 
-            return map;
+            return Task.FromResult(map);
         }
 
         private static IMap CreateMapInstance()
