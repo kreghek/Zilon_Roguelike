@@ -31,21 +31,16 @@ namespace Zilon.Core.Spec.Mocks
             _mapFactory = mapFactory;
         }
 
-        //public ISector Generate(ISectorSubScheme sectorScheme)
-        //{
-        //    var map = _mapFactory.Create();
-        //    var sector = new Sector(map,
-        //        _actorManager,
-        //        _propContainerManager,
-        //        _traderManager,
-        //        _dropResolver,
-        //        _schemeService);
-        //    return sector;
-        //}
-
-        public Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
+        public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
         {
-            throw new System.NotImplementedException();
+            var map = await _mapFactory.CreateAsync(sectorScheme);
+            var sector = new Sector(map,
+                _actorManager,
+                _propContainerManager,
+                _traderManager,
+                _dropResolver,
+                _schemeService);
+            return sector;
         }
 
         public Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)

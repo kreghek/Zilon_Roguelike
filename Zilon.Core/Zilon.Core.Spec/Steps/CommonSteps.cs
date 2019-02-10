@@ -30,9 +30,9 @@ namespace Zilon.Core.Spec.Steps
 
         [UsedImplicitly]
         [Given(@"Есть карта размером (\d*)")]
-        public void GivenЕстьКартаРазмером(int mapSize)
+        public async System.Threading.Tasks.Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            Context.CreateSector(mapSize);
+            await Context.CreateSectorAsync(mapSize);
         }
 
         [UsedImplicitly]
