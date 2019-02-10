@@ -42,7 +42,10 @@ namespace Zilon.Core.Benchmark
 
             var sectorScheme = new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] { "rat" }
+                RegularMonsterSids = new[] { "rat" },
+
+                RegionCount = 20,
+                RegionSize = 20
             };
 
             await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);

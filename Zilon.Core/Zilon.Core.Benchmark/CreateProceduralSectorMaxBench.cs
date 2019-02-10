@@ -48,7 +48,10 @@ namespace Zilon.Core.Benchmark
             {
                 RegularMonsterSids = new[] { "rat" },
                 RareMonsterSids = new[] { "rat" },
-                ChampionMonsterSids = new[] { "rat" }
+                ChampionMonsterSids = new[] { "rat" },
+
+                RegionCount = 20,
+                RegionSize = 20
             };
 
             await sectorManager.CreateSectorAsync(sectorGenerator, sectorScheme);

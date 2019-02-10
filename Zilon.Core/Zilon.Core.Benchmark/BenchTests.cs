@@ -39,19 +39,27 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
-        public void CreateProceduralSector_Test()
+        public async System.Threading.Tasks.Task CreateProceduralSector_TestAsync()
         {
             var bench = new CreateProceduralSectorBench();
             bench.IterationSetup();
-            bench.CreateAsync();
+            await bench.CreateAsync();
         }
 
         [Test]
-        public void CreateProceduralMaxSector_Test()
+        public async System.Threading.Tasks.Task CreateProceduralMinSector_TestAsync()
+        {
+            var bench = new CreateProceduralSectorMinBench();
+            bench.IterationSetup();
+            await bench.CreateAsync();
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task CreateProceduralMaxSector_TestAsync()
         {
             var bench = new CreateProceduralSectorMaxBench();
             bench.IterationSetup();
-            bench.CreateAsync();
+            await bench.CreateAsync();
         }
 
         private Config CreateBenchConfig() {

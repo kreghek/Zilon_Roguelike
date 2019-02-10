@@ -7,7 +7,10 @@
 		{
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
-			"ChampionMonsterSids": ["rat-mutant", "moon-rat"]
+			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
+			"RegionCount": 10,
+			"RegionSize": 10,
+			"RegionMonsterCount": 5
 		}
 	]
 }

@@ -87,7 +87,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private Size CalcCellSize(IEnumerable<Room> rooms)
         {
-            return new Size(20, 20);
+            var maxWidth = rooms.Max(x => x.Width);
+            var maxHeight = rooms.Max(x => x.Height);
+            return new Size(maxWidth, maxHeight);
         }
 
         /// <summary>

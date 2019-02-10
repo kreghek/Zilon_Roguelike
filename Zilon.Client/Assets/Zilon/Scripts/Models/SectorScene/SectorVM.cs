@@ -65,7 +65,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private readonly ISectorGeneratorSelector _sectorGeneratorSelector;
+    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
@@ -167,9 +167,9 @@ internal class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    private void Awake()
+    private async void Awake()
     {
-        InitServices();
+        await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
@@ -193,25 +193,19 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
-    private void InitServices()
+    private async System.Threading.Tasks.Task InitServicesAsync()
     {
-
-        ISectorGeneratorOptions proceduralGeneratorOptions;
-
+        ILocationScheme localtionScheme = null;
         if (_humanPlayer.GlobeNode == null)
         {
-            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(introLocationScheme);
+            localtionScheme = _schemeService.GetScheme<ILocationScheme>("intro");
         }
         else
         {
-            var currentLocation = _humanPlayer.GlobeNode.Scheme;
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
+            localtionScheme = _humanPlayer.GlobeNode.Scheme;
         }
 
-        var sectorGenerator = _sectorGeneratorSelector.GetGenerator(_humanPlayer.GlobeNode);
-
-        _sectorManager.CreateSector(sectorGenerator, proceduralGeneratorOptions);
+        await _sectorManager.CreateSectorAsync(_sectorGenerator, localtionScheme?.SectorLevels[0]);
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -224,31 +218,6 @@ internal class SectorVM : MonoBehaviour
         };
 
         _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
-    }
-
-    private ISectorGeneratorOptions CreateSectorGeneratorOptions(ILocationScheme locationScheme)
-    {
-        var monsterGeneratorOptions = new MonsterGeneratorOptions
-        {
-            BotPlayer = _botPlayer
-        };
-
-        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
-        {
-            MonsterGeneratorOptions = monsterGeneratorOptions
-        };
-
-        if (locationScheme.SectorLevels != null)
-        {
-            var wellFormedSectorLevel = _personManager.SectorLevel;
-            var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
-
-            monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
-            monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
-            monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
-        }
-
-        return proceduralGeneratorOptions;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
