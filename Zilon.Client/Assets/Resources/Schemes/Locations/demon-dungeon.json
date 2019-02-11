@@ -5,9 +5,18 @@
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Demon dungeon"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
 			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
-			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"]
+			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"],
+			"RegionCount": 20,
+			"RegionSize": 20,
+			"RegionMonsterCount": 5
 		}
 	]
 }

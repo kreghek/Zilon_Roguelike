@@ -31,11 +31,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
 
         // генерация сектора
-        Container.Bind<ISectorGeneratorSelector>().To<SectorGeneratorSelector>().AsSingle();
-        Container.Bind<IDungeonSectorGenerator>().To<SectorProceduralGenerator>().AsSingle();
-        Container.Bind<ITownSectorGenerator>().To<TownSectorGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle().WhenInjectedInto<SectorProceduralGenerator>();
-        Container.Bind<IMapFactory>().To<TownMapFactory>().AsSingle().WhenInjectedInto<TownSectorGenerator>();
+        Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
+        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
         Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();

@@ -16,44 +16,37 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public sealed class RoomGenerator : IRoomGenerator
     {
         private readonly IRoomGeneratorRandomSource _randomSource;
-        private readonly RoomGeneratorSettings _settings;
 
         /// <summary>
         /// Конструктор генератора.
         /// </summary>
         /// <param name="randomSource"> Источник рандома для генератора. </param>
-        /// <param name="settings"> Настройки генерации. </param>
         [ExcludeFromCodeCoverage]
-        public RoomGenerator([NotNull] IRoomGeneratorRandomSource randomSource,
-            [NotNull] RoomGeneratorSettings settings)
+        public RoomGenerator([NotNull] IRoomGeneratorRandomSource randomSource)
         {
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
         }
 
         /// <summary>
-        /// Конструктор генератора с настройками по умолчанию.
-        /// Используется в тестах.
+        /// Генерация комнат.
         /// </summary>
-        /// <param name="randomSource"> Источник рандома для генератора. </param>
-        [ExcludeFromCodeCoverage]
-        public RoomGenerator(IRoomGeneratorRandomSource randomSource) : this(randomSource, new RoomGeneratorSettings())
-        {
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-        }
-
-        public List<Room> GenerateRoomsInGrid()
+        /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
+        /// <param name="roomMinSize">Минимальный размер комнаты.</param>
+        /// <param name="roomMaxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает набор созданных комнат.
+        /// </returns>
+        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize)
         {
             // На 20 комнат будет матрица 6х6.
-            var roomGridSize = (int)Math.Ceiling(Math.Log(_settings.RoomCount, 2)) + 1;
+            var roomGridSize = (int)Math.Ceiling(Math.Log(roomCount, 2)) + 1;
             var roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>();
 
-            var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, _settings.RoomCount).ToArray();
+            var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount).ToArray();
 
-            for (var i = 0; i < _settings.RoomCount; i++)
+            for (var i = 0; i < roomCount; i++)
             {
                 var rolledPosition = roomMatrixCoords[i];
 
@@ -65,7 +58,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                var rolledSize = _randomSource.RollRoomSize(_settings.RoomCellSize);
+                var rolledSize = _randomSource.RollRoomSize(roomMinSize, roomMaxSize);
 
                 room.Width = rolledSize.Width;
                 room.Height = rolledSize.Height;
@@ -76,18 +69,38 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return rooms;
         }
 
-        public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        /// <summary>
+        /// Создаёт узлы комнат на карте.
+        /// </summary>
+        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
+        /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
+        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
+        public void CreateRoomNodes(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
+            var cellSize = CalcCellSize(rooms);
+
             foreach (var room in rooms)
             {
-                CreateOneRoomNodes(map, edgeHash, room);
+                CreateOneRoomNodes(map, edgeHash, room, cellSize);
             }
         }
 
-
-        public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        private Size CalcCellSize(IEnumerable<Room> rooms)
         {
-            var roomNet = _randomSource.RollRoomNet(rooms, _settings.MaxNeighbors);
+            var maxWidth = rooms.Max(x => x.Width);
+            var maxHeight = rooms.Max(x => x.Height);
+            return new Size(maxWidth, maxHeight);
+        }
+
+        /// <summary>
+        /// Соединяет комнаты коридорами.
+        /// </summary>
+        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
+        /// <param name="rooms">Существующие комнаты.</param>
+        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
+        public void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        {
+            var roomNet = _randomSource.RollRoomNet(rooms, 1);
             foreach (var roomPair in roomNet)
             {
                 foreach (var selectedRoom in roomPair.Value)
@@ -97,14 +110,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)
+        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * _settings.RoomCellSize;
-                    var nodeY = y + room.PositionY * _settings.RoomCellSize;
+                    var nodeX = x + room.PositionX * cellSize.Width;
+                    var nodeY = y + room.PositionY * cellSize.Height;
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
                     map.AddNode(node);

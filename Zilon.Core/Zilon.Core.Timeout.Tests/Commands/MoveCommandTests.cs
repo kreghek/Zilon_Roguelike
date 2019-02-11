@@ -21,6 +21,8 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Tests
 {
@@ -34,7 +36,7 @@ namespace Zilon.Core.Commands.Tests
         /// Тест нужен для того, чтобы замерять производительность одного шага перемещения игрока по карте.
         /// </summary>
         [Test]
-        public void MoveCommandTest()
+        public async System.Threading.Tasks.Task MoveCommandTestAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
@@ -45,23 +47,31 @@ namespace Zilon.Core.Commands.Tests
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
-            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
-            var generationOptions = new SectorProceduralGeneratorOptions
+            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
+
+            var locationScheme = new TestLocationScheme
             {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
-                }
+                SectorLevels = new ISectorSubScheme[]
+               {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+
+                        IsStart = true
+                    }
+               }
             };
 
-            sectorManager.CreateSector(sectorGenerator, generationOptions);
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
 
-
+            await sectorManager.CreateSectorAsync();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+                .SingleOrDefault(x => x.IsStart).Nodes
+                .First();
             var playerActorVm = CreateHumanActorVm(humanPlayer,
                 personScheme,
                 actorManager,
@@ -167,7 +177,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
-            _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
@@ -175,7 +185,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            //_container.Register<ISectorModalManager>(factory => GetSectorModalManager(), new PerContainerLifetime());
+            _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.

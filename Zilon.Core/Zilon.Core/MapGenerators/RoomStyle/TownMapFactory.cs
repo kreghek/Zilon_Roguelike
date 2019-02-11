@@ -1,4 +1,6 @@
-﻿using Zilon.Core.MapGenerators.PrimitiveStyle;
+﻿using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -8,15 +10,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// </summary>
     public class TownMapFactory : IMapFactory
     {
-        private const int MapSize = 20;
+        private const int MapSize = 10;
 
         /// <summary>
         /// Создание карты.
         /// </summary>
-        /// <returns> Создаёт экземпляр карты. </returns>
-        public IMap Create()
+        /// <param name="options">Параметры создания карты.</param>
+        /// <returns>
+        /// Возвращает экземпляр карты.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public async Task<IMap> CreateAsync(object options)
         {
-            var squareMap = SquareMapFactory.Create(MapSize);
+            var squareMap = await SquareMapFactory.CreateAsync(MapSize);
             return squareMap;
         }
     }

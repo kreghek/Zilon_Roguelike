@@ -1,23 +1,52 @@
 {
 	"Name": {
-		"En": "Rat kingdom",
+		"En": "Rat Kingdom",
 		"Ru": "Крысиное королевство"
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Rat Kingdom Hall"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
-			"ChampionMonsterSids": ["rat-mutant", "moon-rat"]
+			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
+			"RegionCount": 30,
+			"RegionSize": 5,
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": ["lvl2"]
 		},
 		{
+			"Sid": "lvl2",
+			"Name":{
+				"En": "Rat Kingdom City"
+			},
+			
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
-			"ChampionMonsterSids": null
+			"ChampionMonsterSids": null,
+			"RegionCount": 10,
+			"RegionSize": 5,
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": ["lvl3"]
 		},
 		{
+			"Sid": "lvl3",
+			"Name":{
+				"En": "Rat Kingdom Throne"
+			},
+			
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
-			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"]
+			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"],
+			"RegionCount": 3,
+			"RegionSize": 30,
+			"RegionMonsterCount": 20
 		}
 	]
 }

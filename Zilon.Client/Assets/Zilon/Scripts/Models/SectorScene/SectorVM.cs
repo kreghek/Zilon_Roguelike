@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -65,7 +65,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private readonly ISectorGeneratorSelector _sectorGeneratorSelector;
+    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
@@ -80,8 +80,6 @@ internal class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
     [NotNull] [Inject] private readonly ITraderManager _traderManager;
-
-    [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
 
     [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
@@ -167,9 +165,9 @@ internal class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    private void Awake()
+    private async void Awake()
     {
-        InitServices();
+        await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
@@ -179,7 +177,7 @@ internal class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_personManager.SectorLevel == 0)
+        if (_humanPlayer.SectorSid == "intro")
         {
             _sectorModalManager.ShowInstructionModal();
         }
@@ -193,25 +191,9 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
-    private void InitServices()
+    private async Task InitServicesAsync()
     {
-
-        ISectorGeneratorOptions proceduralGeneratorOptions;
-
-        if (_humanPlayer.GlobeNode == null)
-        {
-            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(introLocationScheme);
-        }
-        else
-        {
-            var currentLocation = _humanPlayer.GlobeNode.Scheme;
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
-        }
-
-        var sectorGenerator = _sectorGeneratorSelector.GetGenerator(_humanPlayer.GlobeNode);
-
-        _sectorManager.CreateSector(sectorGenerator, proceduralGeneratorOptions);
+        await _sectorManager.CreateSectorAsync();
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -223,32 +205,7 @@ internal class SectorVM : MonoBehaviour
             _monsterActorTaskSource
         };
 
-        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
-    }
-
-    private ISectorGeneratorOptions CreateSectorGeneratorOptions(ILocationScheme locationScheme)
-    {
-        var monsterGeneratorOptions = new MonsterGeneratorOptions
-        {
-            BotPlayer = _botPlayer
-        };
-
-        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
-        {
-            MonsterGeneratorOptions = monsterGeneratorOptions
-        };
-
-        if (locationScheme.SectorLevels != null)
-        {
-            var wellFormedSectorLevel = _personManager.SectorLevel;
-            var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
-
-            monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
-            monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
-            monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
-        }
-
-        return proceduralGeneratorOptions;
+        _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -265,14 +222,17 @@ internal class SectorVM : MonoBehaviour
     {
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
-        _sectorManager.CurrentSector.ActorExit -= SectorOnActorExit;
+        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
+        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
+            .SingleOrDefault(x=>x.IsStart).Nodes
+            .First();
+
         var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -291,6 +251,9 @@ internal class SectorVM : MonoBehaviour
     {
         var map = _sectorManager.CurrentSector.Map;
         var nodeVMs = new List<MapNodeVM>();
+        var exitRegions = map.Regions.Where(x => x.TransSectorSid != null || x.IsOut).ToArray();
+        var exitNodes = exitRegions.SelectMany(x => x.ExitNodes).ToArray();
+
         foreach (var node in map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
@@ -302,7 +265,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
 
-            if (map.ExitNodes?.Contains(node) == true)
+            if (exitNodes.Contains(node))
             {
                 mapNodeVm.IsExit = true;
             }
@@ -438,7 +401,7 @@ internal class SectorVM : MonoBehaviour
         _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 
-    private void SectorOnActorExit(object sender, EventArgs e)
+    private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
@@ -448,7 +411,7 @@ internal class SectorVM : MonoBehaviour
         if (_humanPlayer.GlobeNode == null)
         {
             // intro
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
@@ -456,20 +419,19 @@ internal class SectorVM : MonoBehaviour
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
         if (currentLocation?.SectorLevels == null)
         {
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
 
-        _personManager.SectorLevel++;
-        
-        if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        if (e.MapRegion.IsOut)
         {
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
         }
         else
         {
+            _humanPlayer.SectorSid = e.MapRegion.TransSectorSid;
             SceneManager.LoadScene("combat");
         }
     }
@@ -498,7 +460,7 @@ internal class SectorVM : MonoBehaviour
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        if (_personManager.Person == null)
+        if (_humanPlayer.MainPerson == null)
         {
             var inventory = new Inventory();
 
@@ -508,14 +470,14 @@ internal class SectorVM : MonoBehaviour
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
-            _personManager.Person = person;
+            _humanPlayer.MainPerson = person;
 
             AddResourceToActor(inventory, "med-kit", 1);
             AddResourceToActor(inventory, "water-bottle", 2);
             AddResourceToActor(inventory, "packed-food", 2);
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode);
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
 
         actorManager.Add(actor);
 

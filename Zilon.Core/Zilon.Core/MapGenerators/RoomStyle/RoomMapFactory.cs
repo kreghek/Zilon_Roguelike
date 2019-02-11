@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -11,6 +13,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public class RoomMapFactory : IMapFactory
     {
         private const int SegmentSize = 200;
+        private const int RoomMinSize = 2;
         private readonly IRoomGenerator _roomGenerator;
 
         [ExcludeFromCodeCoverage]
@@ -19,14 +22,22 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             _roomGenerator = roomGenerator;
         }
 
-        public IMap Create()
+        /// <summary>
+        /// Создание карты.
+        /// </summary>
+        /// <returns>
+        /// Возвращает экземпляр карты.
+        /// </returns>
+        public Task<IMap> CreateAsync(object options)
         {
+            var sectorScheme = (ISectorSubScheme)options;
+
             var map = CreateMapInstance();
 
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var rooms = _roomGenerator.GenerateRoomsInGrid();
+            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount, RoomMinSize, sectorScheme.RegionSize);
 
             // Создаём узлы и рёбра комнат
             _roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
@@ -48,17 +59,23 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 if (room == startRoom)
                 {
-                    map.StartRegion = region;
-                    map.StartNodes = region
-                        .Nodes
-                        .Take(1)
-                        .ToArray();
+                    region.IsStart = true;
                 }
 
                 if (room == exitRoom)
                 {
-                    map.ExitRegion = region;
-                    map.ExitNodes = region
+                    var transSectorSid = sectorScheme.TransSectorSids?.FirstOrDefault();
+
+                    if (transSectorSid == null)
+                    {
+                        region.IsOut = true;
+                    }
+                    else
+                    {
+                        region.TransSectorSid = transSectorSid;
+                    }
+
+                    region.ExitNodes = region
                         .Nodes
                         .Skip(region.Nodes.Count() - 2)
                         .Take(1)
@@ -66,7 +83,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 }
             }
 
-            return map;
+            return Task.FromResult(map);
         }
 
         private static IMap CreateMapInstance()

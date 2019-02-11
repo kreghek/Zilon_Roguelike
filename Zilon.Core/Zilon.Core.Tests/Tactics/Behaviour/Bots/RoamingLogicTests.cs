@@ -131,9 +131,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         }
 
         [SetUp]
-        public void SetUp()
+        public async System.Threading.Tasks.Task SetUpAsync()
         {
-            _map = SquareMapFactory.Create(10);
+            _map = await SquareMapFactory.CreateAsync(10);
 
 
             var playerMock = new Mock<IPlayer>();

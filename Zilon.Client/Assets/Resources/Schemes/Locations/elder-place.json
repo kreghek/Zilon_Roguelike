@@ -1,13 +1,22 @@
 {
 	"Name": {
-		"En": "Demon lair",
+		"En": "Elder Place",
 		"Ru": "Логово демонов"
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Elder Place"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["elder-slave", "dark-guardian"],
 			"RareMonsterSids": ["eternal-executor", "dark-seer"],
-			"ChampionMonsterSids": ["manticore"]
+			"ChampionMonsterSids": ["manticore"],
+			"RegionCount": 20,
+			"RegionSize": 20,
+			"RegionMonsterCount": 5
 		}
 	]
 }

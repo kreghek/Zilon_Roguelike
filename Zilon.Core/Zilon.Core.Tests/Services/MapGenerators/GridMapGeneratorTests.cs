@@ -21,14 +21,14 @@ namespace Zilon.Core.Tests.MapGenerators
         /// Тест проверяет, что для карты создаётся корректный набор ребёр между узлами.
         /// </summary>
         [Test]
-        public void Create_FixedMap_EdgesAreCorrect()
+        public async System.Threading.Tasks.Task Create_FixedMap_EdgesAreCorrectAsync()
         {
             // ARRANGE
 
 
 
             // ACT
-            var map = SquareMapFactory.Create(7);
+            var map = await SquareMapFactory.CreateAsync(7);
 
 
 
@@ -64,7 +64,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Action act = () =>
             {
-                var map = SquareMapFactory.Create(7);
+                var map = SquareMapFactory.CreateAsync(7);
             };
 
 

@@ -118,11 +118,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         /// В стартовые настройки входит создание актёра, для которого назначен маршрут.
         /// </summary>
         [SetUp]
-        public void SetUp()
+        public async System.Threading.Tasks.Task SetUpAsync()
         {
             _container = new ServiceContainer();
 
-            _map = SquareMapFactory.Create(10);
+            _map = await SquareMapFactory.CreateAsync(10);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(_map);

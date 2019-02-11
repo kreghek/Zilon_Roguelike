@@ -5,9 +5,18 @@
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Crypt"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul"],
 			"RareMonsterSids": ["skeleton-champion", "vampire"],
-			"ChampionMonsterSids": ["necromancer", "dervish"]
+			"ChampionMonsterSids": ["necromancer", "dervish"],
+			"RegionCount": 20,
+			"RegionSize": 20,
+			"RegionMonsterCount": 5
 		}
 	]
 }
