@@ -5,6 +5,12 @@
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Crypt"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul"],
 			"RareMonsterSids": ["skeleton-champion", "vampire"],
 			"ChampionMonsterSids": ["necromancer", "dervish"],

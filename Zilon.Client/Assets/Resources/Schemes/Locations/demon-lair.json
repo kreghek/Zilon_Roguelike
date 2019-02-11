@@ -5,22 +5,42 @@
 	},
 	"SectorLevels": [
 		{
+			"Sid": "intro",
+			"Name":{
+				"En": "intro"
+			},
+			"IsStart": true,
+			
 			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
 			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
 			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"],
 			"RegionCount": 20,
 			"RegionSize": 20,
-			"RegionMonsterCount": 5
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": ["lvl2"]
 		},
 		{
+			"Sid": "lvl2",
+			"Name":{
+				"En": "Demon lair lvl2"
+			},
+			
 			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
 			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
 			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"],
 			"RegionCount": 20,
 			"RegionSize": 10,
-			"RegionMonsterCount": 5
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": ["lvl3"]
 		},
 		{
+			"Sid": "lvl3",
+			"Name":{
+				"En": "Demon lair lvl3"
+			},
+			
 			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],
 			"RareMonsterSids": ["demon-warlock", "hell-rock", "infernal-bard"],
 			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"],

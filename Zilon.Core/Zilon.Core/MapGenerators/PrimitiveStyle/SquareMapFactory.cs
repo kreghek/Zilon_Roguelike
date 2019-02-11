@@ -21,11 +21,16 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var mapSize = (int)options;
 
-            var map = new GraphMap();
+            IMap map = new GraphMap();
             MapFiller.FillSquareMap(map, mapSize);
-            map.StartNodes = map.Nodes.Take(1).ToArray();
-            map.ExitNodes = new[] { map.Nodes.Last() };
-            return Task.FromResult<IMap>(map);
+
+            var mapRegion = new MapRegion(1, map.Nodes.ToArray());
+            mapRegion.IsStart = true;
+            mapRegion.IsOut = true;
+            mapRegion.ExitNodes = new[] { map.Nodes.Last() };
+            map.Regions.Add(mapRegion);
+
+            return Task.FromResult(map);
         }
 
         /// <summary>

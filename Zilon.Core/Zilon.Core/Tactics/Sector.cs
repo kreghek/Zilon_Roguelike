@@ -123,6 +123,11 @@ namespace Zilon.Core.Tactics
             // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
             var atLeastOneHuman = false;
 
+            if (Map.Regions == null)
+            {
+                return;
+            }
+
             var exitRegions = Map.Regions.Where(x => x.IsOut || x.TransSectorSid != null).ToArray();
 
             foreach (var actor in _actorManager.Items)

@@ -21,5 +21,7 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int RegionMonsterCount { get; set; }
         public int ChestCount { get; set; }
         public string[] ChestDropTableSids { get; set; }
+        public string[] TransSectorSids { get; set; }
+        public bool IsStart { get; set; }
     }
 }

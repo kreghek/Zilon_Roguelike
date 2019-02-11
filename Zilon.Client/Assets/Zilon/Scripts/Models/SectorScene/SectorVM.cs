@@ -205,7 +205,7 @@ internal class SectorVM : MonoBehaviour
             _monsterActorTaskSource
         };
 
-        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
+        _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -222,14 +222,17 @@ internal class SectorVM : MonoBehaviour
     {
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
-        _sectorManager.CurrentSector.ActorExit -= SectorOnActorExit;
+        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
+        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
+            .SingleOrDefault(x=>x.IsStart).Nodes
+            .First();
+
         var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -248,6 +251,9 @@ internal class SectorVM : MonoBehaviour
     {
         var map = _sectorManager.CurrentSector.Map;
         var nodeVMs = new List<MapNodeVM>();
+        var exitRegions = map.Regions.Where(x => x.TransSectorSid != null || x.IsOut).ToArray();
+        var exitNodes = exitRegions.SelectMany(x => x.ExitNodes).ToArray();
+
         foreach (var node in map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
@@ -259,7 +265,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
 
-            if (map.ExitNodes?.Contains(node) == true)
+            if (exitNodes.Contains(node))
             {
                 mapNodeVm.IsExit = true;
             }
@@ -395,7 +401,7 @@ internal class SectorVM : MonoBehaviour
         _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 
-    private void SectorOnActorExit(object sender, EventArgs e)
+    private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
@@ -418,15 +424,14 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        _humanPlayer.SectorSid = (int.Parse(_humanPlayer.SectorSid) + 1).ToString();
-
-        if (_sectorManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        if (e.MapRegion.IsOut)
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
         }
         else
         {
+            _humanPlayer.SectorSid = e.MapRegion.TransSectorSid;
             SceneManager.LoadScene("combat");
         }
     }

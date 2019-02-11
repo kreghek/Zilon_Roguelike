@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using System.Linq;
+using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -24,9 +25,32 @@ public class SectorNameHandler : MonoBehaviour
         }
         else
         {
-            var name = _humanPlayer.GlobeNode.Scheme.Name.En;
-            var level = _sectorManager.SectorLevel + 1;
-            SectorNameText.text = $"{name} lvl{level}";
+            var locationName = _humanPlayer.GlobeNode.Scheme.Name.En;
+            string sectorName = null;
+            if (_humanPlayer.GlobeNode.Scheme.SectorLevels != null)
+            {
+                if (_humanPlayer.SectorSid == null)
+                {
+                    var sector = _humanPlayer
+                        .GlobeNode
+                        .Scheme
+                        .SectorLevels
+                        .SingleOrDefault(x => x.IsStart);
+                    sectorName = sector.Name?.En;
+                }
+                else
+                {
+                    var sector = _humanPlayer
+                        .GlobeNode
+                        .Scheme
+                        .SectorLevels
+                        .SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+                    sectorName = sector.Name?.En;
+                }
+            }
+
+            var name = sectorName ?? locationName;
+            SectorNameText.text = $"{name}";
         }
 
         Destroy(this);

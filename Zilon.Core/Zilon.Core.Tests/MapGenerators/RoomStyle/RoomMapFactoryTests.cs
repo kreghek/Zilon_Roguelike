@@ -76,7 +76,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Create_RealRandom_NoOverlapNodesAsync()
+        public async Task Create_RealRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
             var dice = new Dice(3245);

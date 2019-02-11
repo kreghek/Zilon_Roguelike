@@ -56,7 +56,16 @@ namespace Zilon.Core.Tactics
 
             if (scheme.SectorLevels != null)
             {
-                var sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+                ISectorSubScheme sectorLevelScheme;
+                if (_humanPlayer.SectorSid == null)
+                {
+                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
+                }
+                else
+                {
+                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+                }
+                
                 CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
             }
             else if (regionNode.IsTown)

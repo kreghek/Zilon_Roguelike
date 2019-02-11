@@ -39,11 +39,6 @@
         string[] ChampionMonsterSids { get; }
 
         /// <summary>
-        /// Тип фабрики для карты.
-        /// </summary>
-        SectorSubSchemeMapFactory MapFactory { get; }
-
-        /// <summary>
         /// Количество регионов в карте.
         /// </summary>
         /// <remarks>
@@ -78,5 +73,10 @@
         /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
         string[] TransSectorSids { get; }
+
+        /// <summary>
+        /// Индикатор того, что сектор является стартовым при входе из локации.
+        /// </summary>
+        bool IsStart { get; }
     }
 }

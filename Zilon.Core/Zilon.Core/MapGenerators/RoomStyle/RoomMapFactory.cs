@@ -60,16 +60,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 if (room == startRoom)
                 {
                     region.IsStart = true;
-                    //map.StartRegion = region;
-                    //map.StartNodes = region
-                    //    .Nodes
-                    //    .Take(1)
-                    //    .ToArray();
                 }
 
                 if (room == exitRoom)
                 {
-                    var transSectorSid = sectorScheme.TransSectorSids.FirstOrDefault();
+                    var transSectorSid = sectorScheme.TransSectorSids?.FirstOrDefault();
 
                     if (transSectorSid == null)
                     {

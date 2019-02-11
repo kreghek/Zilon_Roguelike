@@ -96,5 +96,11 @@ namespace Zilon.Core.Schemes
         /// <seealso cref="Sid"/>
         [JsonProperty]
         public string[] TransSectorSids { get; private set; }
+
+        /// <summary>
+        /// Индикатор того, что сектор является стартовым при входе из локации.
+        /// </summary>
+        [JsonProperty]
+        public bool IsStart { get; private set; }
     }
 }
