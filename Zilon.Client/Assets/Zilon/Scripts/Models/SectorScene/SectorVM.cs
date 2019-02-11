@@ -177,7 +177,7 @@ internal class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_sectorManager.SectorLevel == 0)
+        if (_humanPlayer.SectorSid == "intro")
         {
             _sectorModalManager.ShowInstructionModal();
         }
@@ -405,7 +405,7 @@ internal class SectorVM : MonoBehaviour
         if (_humanPlayer.GlobeNode == null)
         {
             // intro
-            _sectorManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
@@ -413,16 +413,16 @@ internal class SectorVM : MonoBehaviour
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
         if (currentLocation?.SectorLevels == null)
         {
-            _sectorManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
 
-        _sectorManager.SectorLevel++;
+        _humanPlayer.SectorSid = (int.Parse(_humanPlayer.SectorSid) + 1).ToString();
 
         if (_sectorManager.SectorLevel >= currentLocation.SectorLevels.Length)
         {
-            _sectorManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
         }
         else

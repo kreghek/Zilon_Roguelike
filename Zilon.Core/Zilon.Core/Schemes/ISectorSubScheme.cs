@@ -73,5 +73,10 @@
         /// Таблицы дропа для сундуков.
         /// </summary>
         string[] ChestDropTableSids { get; }
+
+        /// <summary>
+        /// Идентфикаторы связанных секторов в рамках текущей локации.
+        /// </summary>
+        string[] TransSectorSids { get; }
     }
 }

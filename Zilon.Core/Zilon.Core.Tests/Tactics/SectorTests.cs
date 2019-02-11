@@ -116,7 +116,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
                 // ASSERT
-                monitor.Should().NotRaise(nameof(sector.ActorExit));
+                monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
             }
         }
 

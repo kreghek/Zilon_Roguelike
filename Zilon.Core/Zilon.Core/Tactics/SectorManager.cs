@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators;
@@ -37,11 +38,6 @@ namespace Zilon.Core.Tactics
         public ISector CurrentSector { get; private set; }
 
         /// <summary>
-        /// Текущий уровень сектора подземелья. Используется только в подземельях.
-        /// </summary>
-        public int SectorLevel { get; set; }
-
-        /// <summary>
         /// Создаёт текущий сектор по указанному генератору и настройкам.
         /// </summary>
         public async Task CreateSectorAsync()
@@ -60,7 +56,8 @@ namespace Zilon.Core.Tactics
 
             if (scheme.SectorLevels != null)
             {
-                CurrentSector = await _generator.GenerateDungeonAsync(scheme.SectorLevels[SectorLevel]);
+                var sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+                CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
             }
             else if (regionNode.IsTown)
             {

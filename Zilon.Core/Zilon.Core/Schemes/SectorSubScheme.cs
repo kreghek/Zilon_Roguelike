@@ -89,5 +89,12 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public LocalizedStringSubScheme Description { get; private set; }
+
+        /// <summary>
+        /// Идентфикаторы связанных секторов в рамках текущей локации.
+        /// </summary>
+        /// <seealso cref="Sid"/>
+        [JsonProperty]
+        public string[] TransSectorSids { get; private set; }
     }
 }

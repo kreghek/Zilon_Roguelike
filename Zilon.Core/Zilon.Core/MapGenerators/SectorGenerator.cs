@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -12,7 +15,7 @@ namespace Zilon.Core.MapGenerators
     /// <summary>
     /// Реализация генератора сектора для подземелий.
     /// </summary>
-    /// <seealso cref="IDungeonSectorGenerator" />
+    /// <seealso cref="ISectorGenerator" />
     public class SectorGenerator : ISectorGenerator
     {
 
@@ -66,7 +69,7 @@ namespace Zilon.Core.MapGenerators
 
             var sector = _sectorFactory.Create(map);
 
-            var monsterRegions = map.Regions.Where(x => x != map.StartRegion);
+            var monsterRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
             _monsterGenerator.CreateMonsters(sector,
                 _monsterPlayer,
