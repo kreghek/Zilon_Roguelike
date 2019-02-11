@@ -5,12 +5,12 @@
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
+      "Dice": 3,
       "Count": 1
     },
     "Range": {
       "Min": 1,
-      "Max": 1
+      "Max": 8
     },
     "HitCount": 1,
     "Offence": {
