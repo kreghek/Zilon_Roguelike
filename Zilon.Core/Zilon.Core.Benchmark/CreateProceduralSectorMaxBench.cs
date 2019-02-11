@@ -25,6 +25,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmark
 {
@@ -34,14 +35,13 @@ namespace Zilon.Core.Benchmark
 
         [Benchmark(Description = "CreateProceduralMaxSector")]
         public async System.Threading.Tasks.Task CreateAsync()
-        {
+        { 
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-
             var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
             var locationScheme = new TestLocationScheme
@@ -55,18 +55,24 @@ namespace Zilon.Core.Benchmark
                         ChampionMonsterSids = new[] { "rat" },
 
                         RegionCount = 20,
-                        RegionSize = 20
+                        RegionSize = 20,
+
+                        IsStart = true
                     }
                 }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
-                globe: null,
-                regionNode: null);
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
+
+            await sectorManager.CreateSectorAsync();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+                .SingleOrDefault(x => x.IsStart).Nodes
+                .First();
+
             var playerActorVm = CreateHumanActorVm(humanPlayer,
                 personScheme,
                 actorManager,
@@ -119,6 +125,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.

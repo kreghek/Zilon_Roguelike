@@ -7,7 +7,7 @@ namespace Zilon.Core.Players
     /// <summary>
     /// Класс игрока. Содержат данные игрока, переходящие между глобальной и локальной картами.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Players.PlayerBase" />
+    /// <seealso cref="PlayerBase" />
     public class HumanPlayer: PlayerBase
     {
         /// <summary>

@@ -22,6 +22,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Tests
 {
@@ -55,17 +56,22 @@ namespace Zilon.Core.Commands.Tests
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
+
+                        IsStart = true
                     }
                }
             };
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
-                globe: null,
-                regionNode: null);
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
+
+            await sectorManager.CreateSectorAsync();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+                .SingleOrDefault(x => x.IsStart).Nodes
+                .First();
             var playerActorVm = CreateHumanActorVm(humanPlayer,
                 personScheme,
                 actorManager,
@@ -179,7 +185,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            //_container.Register<ISectorModalManager>(factory => GetSectorModalManager(), new PerContainerLifetime());
+            _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.

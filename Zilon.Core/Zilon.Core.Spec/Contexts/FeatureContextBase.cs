@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -27,15 +28,13 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Spec.Contexts
 {
     public abstract class FeatureContextBase
     {
         private ITacticalActUsageRandomSource _specificActUsageRandomSource;
-
-        private HumanPlayer _humanPlayer;
-        private BotPlayer _botPlayer;
 
         public ServiceContainer Container { get; }
 
@@ -49,17 +48,17 @@ namespace Zilon.Core.Spec.Contexts
             RegisterSectorService();
             RegisterGameLoop();
             RegisterAuxServices();
-            RegisterTaskSources();
+            RegisterPlayerServices();
             RegisterClientServices();
             RegisterCommands();
+            RegisterWorldServices();
 
-            InitPlayers();
             InitClientServices();
 
             VisualEvents = new List<VisualEventInfo>();
         }
 
-        public async System.Threading.Tasks.Task CreateSectorAsync(int mapSize)
+        public async Task CreateSectorAsync(int mapSize)
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
             mapFactory.SetFunc(async () =>
@@ -70,6 +69,7 @@ namespace Zilon.Core.Spec.Contexts
 
             var sectorManager = Container.GetInstance<ISectorManager>();
             var sectorGenerator = Container.GetInstance<ISectorGenerator>();
+            var humanPlayer = Container.GetInstance<HumanPlayer>();
 
             var locationScheme = new TestLocationScheme
             {
@@ -81,10 +81,10 @@ namespace Zilon.Core.Spec.Contexts
                     }
                }
             };
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
 
-            await sectorManager.CreateSectorAsync(sectorGenerator, locationScheme,
-                globe: null,
-                regionNode: null);
+            await sectorManager.CreateSectorAsync();
         }
 
         public ISector GetSector()
@@ -127,12 +127,13 @@ namespace Zilon.Core.Spec.Contexts
             var sectorManager = Container.GetInstance<ISectorManager>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
+            var humanPlayer = Container.GetInstance<HumanPlayer>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(_humanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -149,11 +150,12 @@ namespace Zilon.Core.Spec.Contexts
             var schemeService = Container.GetInstance<ISchemeService>();
             var sectorManager = Container.GetInstance<ISectorManager>();
             var actorManager = Container.GetInstance<IActorManager>();
+            var botPlayer = Container.GetInstance<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
 
-            var monster = CreateMonsterActor(_botPlayer, monsterScheme, monsterStartNode);
+            var monster = CreateMonsterActor(botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
             monster.OnDefence += Monster_OnDefence;
@@ -352,17 +354,17 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ICommand, EquipCommand>("equip");
         }
 
-        private void RegisterTaskSources()
+        private void RegisterPlayerServices()
         {
+            Container.Register<HumanPlayer>(new PerContainerLifetime());
             Container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
             Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             Container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 
-        private void InitPlayers()
+        private void RegisterWorldServices()
         {
-            _humanPlayer = new HumanPlayer();
-            _botPlayer = (BotPlayer)Container.GetInstance<IBotPlayer>();
+            Container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
         }
 
         private void InitClientServices()
