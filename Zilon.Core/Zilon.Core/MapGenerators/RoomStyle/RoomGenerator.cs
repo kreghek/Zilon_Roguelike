@@ -33,18 +33,26 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
         /// <param name="roomMinSize">Минимальный размер комнаты.</param>
         /// <param name="roomMaxSize">Максимальный размер комнаты.</param>
+        /// <param name="availableTransitions"> Информация о переходах из данного сектора. </param>
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize)
+        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
+            IEnumerable<RoomTransition> availableTransitions)
         {
             // На 20 комнат будет матрица 6х6.
             var roomGridSize = (int)Math.Ceiling(Math.Log(roomCount, 2)) + 1;
             var roomGrid = new RoomMatrix(roomGridSize);
 
-            var rooms = new List<Room>();
+            var rooms = new List<Room>(roomCount);
 
+            //Координаты не повторяются и их ровно roomCount.
+            // Это гарантирует IroomGeneratorRandomSource
             var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount).ToArray();
+
+            var openTransitions = new List<RoomTransition>(availableTransitions);
 
             for (var i = 0; i < roomCount; i++)
             {
@@ -62,6 +70,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 room.Width = rolledSize.Width;
                 room.Height = rolledSize.Height;
+
+                if (openTransitions.Any())
+                {
+                    var roomTransitions = _randomSource.RollTransitions(openTransitions);
+
+                    room.TransSids
+                }
 
                 rooms.Add(room);
             }
