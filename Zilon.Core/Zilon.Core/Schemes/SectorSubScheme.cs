@@ -102,5 +102,12 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public bool IsStart { get; private set; }
+
+        /// <summary>
+        /// Коэффициент максимального количества сундуков в регионе сектора (комнате)
+        /// в зависимости от размера региона.
+        /// </summary>
+        [JsonProperty]
+        public int RegionChestCountRatio { get; private set; }
     }
 }

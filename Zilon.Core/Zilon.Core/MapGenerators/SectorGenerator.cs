@@ -76,7 +76,7 @@ namespace Zilon.Core.MapGenerators
                 monsterRegions,
                 sectorScheme);
 
-            _chestGenerator.CreateChests(map, monsterRegions);
+            _chestGenerator.CreateChests(map, sectorScheme, monsterRegions);
 
             return sector;
         }

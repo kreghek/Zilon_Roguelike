@@ -54,7 +54,11 @@ namespace Zilon.Core.Benchmark
                         RegionCount = 20,
                         RegionSize = 20,
 
-                        IsStart = true
+                        IsStart = true,
+
+                        ChestDropTableSids = new[] {"survival", "default" },
+                        RegionChestCountRatio = 9,
+                        TotalChestCount = 20
                     }
                 }
             };
