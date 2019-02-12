@@ -26,14 +26,20 @@ namespace Zilon.Core.MapGenerators
             _chestGeneratorRandomSource = chestGeneratorRandomSource;
         }
 
-        public void CreateChests(IMap map, IEnumerable<MapRegion> regions)
+        /// <summary>
+        /// Создать сундуки в секторе.
+        /// </summary>
+        /// <param name="map">Карта сектора. Нужна для определения доступного места для сундука.</param>
+        /// <param name="sectorSubScheme">Схема сектора. По сути - настройки для размещения сундуков.</param>
+        /// <param name="regions">Регионы, в которых возможно размещение сундуков.</param>
+        public void CreateChests(IMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
         {
-            var defaultDropTable = _schemeService.GetScheme<IDropTableScheme>("default");
-            var survivalDropTable = _schemeService.GetScheme<IDropTableScheme>("survival");
+            var dropTables = GetDropTables(sectorSubScheme);
+            var chestCounter = sectorSubScheme.TotalChestCount;
 
             foreach (var region in regions)
             {
-                var maxChestCount = Math.Max(region.Nodes.Count() / 9, 1);
+                var maxChestCount = Math.Max(region.Nodes.Count() / sectorSubScheme.RegionChestCountRatio, 1);
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
 
                 var freeNodes = new List<IMapNode>(region.Nodes);
@@ -53,11 +59,31 @@ namespace Zilon.Core.MapGenerators
 
                     freeNodes.Remove(containerNode);
                     var container = new DropTablePropChest(containerNode,
-                        new[] { defaultDropTable, survivalDropTable },
+                        dropTables,
                         _dropResolver);
                     _propContainerManager.Add(container);
+
+                    chestCounter--;
+
+                    if (chestCounter <= 0)
+                    {
+                        // лимит сундуков в секторе исчерпан.
+                        break;
+                    }
                 }
             }
+        }
+
+        private IDropTableScheme[] GetDropTables(ISectorSubScheme sectorSubScheme)
+        {
+            var dropTables = new List<IDropTableScheme>();
+            foreach (var chestDropSid in sectorSubScheme.ChestDropTableSids)
+            {
+                var dropTable = _schemeService.GetScheme<IDropTableScheme>(chestDropSid);
+                dropTables.Add(dropTable);
+            }
+
+            return dropTables.ToArray();
         }
     }
 }

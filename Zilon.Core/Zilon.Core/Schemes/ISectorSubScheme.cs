@@ -60,9 +60,15 @@
         int RegionMonsterCount { get; }
 
         /// <summary>
-        /// Количество сундуков в секторе.
+        /// Максимальное количество сундуков в секторе.
         /// </summary>
-        int ChestCount { get; }
+        int TotalChestCount { get; }
+
+        /// <summary>
+        /// Коэффициент максимального количества сундуков в регионе сектора (комнате)
+        /// в зависимости от размера региона.
+        /// </summary>
+        int RegionChestCountRatio { get; }
 
         /// <summary>
         /// Таблицы дропа для сундуков.
