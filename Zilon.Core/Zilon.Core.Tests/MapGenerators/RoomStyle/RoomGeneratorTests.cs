@@ -19,13 +19,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
             // ARRANGE
             var random = new FixCompactRoomGeneratorRandomSource();
             var generator = new RoomGenerator(random);
-            var graphMap = new GraphMap();
+            var graphMap = new SectorMap();
 
 
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20);
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
@@ -44,13 +44,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
             // ARRANGE
             var random = new FixLargeRoomGeneratorRandomSource();
             var generator = new RoomGenerator(random);
-            var graphMap = new GraphMap();
+            var graphMap = new SectorMap();
 
 
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20);
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);

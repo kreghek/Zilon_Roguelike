@@ -76,6 +76,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     var roomTransitions = _randomSource.RollTransitions(openTransitions);
 
                     room.Transitions.AddRange(roomTransitions);
+                    openTransitions.RemoveAll(transition => roomTransitions.Contains(transition));
                 }
 
                 rooms.Add(room);
@@ -160,6 +161,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 {
                     var transitionNode = _randomSource.RollTransitionNode(openRoomNodes);
                     map.Transitions.Add(transitionNode, transition);
+                    openRoomNodes.Remove(transitionNode);
                 }
             }
         }

@@ -23,7 +23,10 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             _rolledSize = new Size(3, 3);
         }
 
-        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize)
+        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
+            IEnumerable<RoomTransition> availableTransitions)
         {
             var rooms = new List<Room>();
 
@@ -57,7 +60,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         }
 
         #region Duplicate
-        public void CreateRoomNodes(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             foreach (var room in rooms)
             {
@@ -169,6 +172,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 currentNode = node;
             }
         }
+
         #endregion
     }
 }

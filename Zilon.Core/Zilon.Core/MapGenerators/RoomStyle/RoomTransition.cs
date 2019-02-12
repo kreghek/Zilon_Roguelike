@@ -31,5 +31,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Если равно null, то означает, что переход выводит из подземелья (на глобалную карту).
         /// </remarks>
         public string SectorSid { get; }
+
+        /// <summary> Создаёт переход на поверхность. </summary>
+        /// <returns> Возвращает экземпляр перехода, настроенного для перехода на поверхность. </returns>
+        public static RoomTransition CreateGlobalExit()
+        {
+            return new RoomTransition(null);
+        }
     }
 }

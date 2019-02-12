@@ -12,7 +12,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomMapFactory : IMapFactory
     {
-        private const int SegmentSize = 200;
         private const int RoomMinSize = 2;
         private readonly IRoomGenerator _roomGenerator;
 
@@ -28,7 +27,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает экземпляр карты.
         /// </returns>
-        public Task<IMap> CreateAsync(object options)
+        public Task<ISectorMap> CreateAsync(object options)
         {
             var sectorScheme = (ISectorSubScheme)options;
 
@@ -37,9 +36,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
+            var transitions = CreateTransitions(sectorScheme);
+
             var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
                 RoomMinSize,
-                sectorScheme.RegionSize);
+                sectorScheme.RegionSize,
+                transitions);
 
             // Создаём узлы и рёбра комнат
             _roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
@@ -88,9 +90,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return Task.FromResult(map);
         }
 
-        private static IMap CreateMapInstance()
+        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
         {
-            return new HexMap(SegmentSize);
+            if (sectorScheme.TransSectorSids == null)
+            {
+                return new[] { RoomTransition.CreateGlobalExit() };
+            }
+
+            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+        }
+
+        private static ISectorMap CreateMapInstance()
+        {
+            return new SectorMap();
         }
     }
 }

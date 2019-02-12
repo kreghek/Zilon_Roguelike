@@ -84,7 +84,6 @@
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomTransition.cs" />
-    <Compile Include="MapGenerators\RoomStyle\TownMapFactory.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />

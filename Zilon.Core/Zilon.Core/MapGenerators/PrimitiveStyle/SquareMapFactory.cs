@@ -17,11 +17,11 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         /// <returns>
         /// Возвращает экземпляр карты.
         /// </returns>
-        public Task<IMap> CreateAsync(object options)
+        public Task<ISectorMap> CreateAsync(object options)
         {
             var mapSize = (int)options;
 
-            IMap map = new GraphMap();
+            ISectorMap map = new SectorMap(mapSize);
             MapFiller.FillSquareMap(map, mapSize);
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray());
@@ -38,7 +38,7 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         /// </summary>
         /// <param name="mapSize"> Размер карты. </param>
         /// <returns> Возвращает объект карты. </returns>
-        public static async Task<IMap> CreateAsync(int mapSize)
+        public static async Task<ISectorMap> CreateAsync(int mapSize)
         {
             var factory = new SquareMapFactory();
             return await factory.CreateAsync((object)mapSize);

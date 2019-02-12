@@ -8,7 +8,11 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private const int SegmentSize = 200;
 
-        public SectorMap(): base(SegmentSize)
+        public SectorMap() : this(SegmentSize)
+        {
+        }
+
+        public SectorMap(int segmentSize) : base(segmentSize)
         {
             Transitions = new Dictionary<IMapNode, RoomTransition>();
         }
