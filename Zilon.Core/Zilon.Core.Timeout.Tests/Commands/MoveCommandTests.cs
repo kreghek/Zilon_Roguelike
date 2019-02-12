@@ -57,6 +57,9 @@ namespace Zilon.Core.Commands.Tests
                     {
                         RegularMonsterSids = new[] { "rat" },
 
+                        RegionCount = 20,
+                        RegionSize = 20,
+
                         IsStart = true
                     }
                }
@@ -174,6 +177,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
             _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
