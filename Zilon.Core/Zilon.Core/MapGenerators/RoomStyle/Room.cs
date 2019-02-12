@@ -42,12 +42,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Этот набор является подмножеством идентфикаторов секторов
         /// из схемы строящегося сектора
         /// </remarks>
-        public List<string> TransSids { get; }
+        public List<RoomTransition> Transitions { get; }
 
         public Room()
         {
             Nodes = new List<HexNode>();
-            TransSids = new List<string>();
+            Transitions = new List<RoomTransition>();
         }
 
         public override string ToString()

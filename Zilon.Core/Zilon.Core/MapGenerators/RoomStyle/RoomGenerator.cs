@@ -75,7 +75,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 {
                     var roomTransitions = _randomSource.RollTransitions(openTransitions);
 
-                    room.TransSids
+                    room.Transitions.AddRange(roomTransitions);
                 }
 
                 rooms.Add(room);
@@ -90,7 +90,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void CreateRoomNodes(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var cellSize = CalcCellSize(rooms);
 
@@ -125,7 +125,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room, Size cellSize)
+        private void CreateOneRoomNodes(ISectorMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
             for (var x = 0; x < room.Width; x++)
             {
@@ -148,6 +148,18 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                             AddEdgeToMap(map, edgeHash, node, neighbor);
                         }
                     }
+                }
+            }
+
+            // создаём переходы, если они есть в данной комнате
+            if (room.Transitions.Any())
+            {
+                //TODO Отфильтровать узлы, которые на входах в коридор
+                var openRoomNodes = new List<HexNode>(room.Nodes);
+                foreach (var transition in room.Transitions)
+                {
+                    var transitionNode = _randomSource.RollTransitionNode(openRoomNodes);
+                    map.Transitions.Add(transitionNode, transition);
                 }
             }
         }
