@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -21,7 +21,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// Тест проверяет, что для карты создаётся корректный набор ребёр между узлами.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Create_FixedMap_EdgesAreCorrectAsync()
+        public async Task Create_FixedMap_EdgesAreCorrectAsync()
         {
             // ARRANGE
 

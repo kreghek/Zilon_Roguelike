@@ -52,7 +52,7 @@ namespace Zilon.Core.Commands.Tests
             var locationScheme = new TestLocationScheme
             {
                 SectorLevels = new ISectorSubScheme[]
-               {
+                {
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
@@ -60,9 +60,12 @@ namespace Zilon.Core.Commands.Tests
                         RegionCount = 20,
                         RegionSize = 20,
 
-                        IsStart = true
+                        IsStart = true,
+
+                        ChestDropTableSids = new[]{ "default" },
+                        RegionChestCountRatio = 9
                     }
-               }
+                }
             };
 
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);

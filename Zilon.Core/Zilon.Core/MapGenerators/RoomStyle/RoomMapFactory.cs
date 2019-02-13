@@ -102,7 +102,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private static ISectorMap CreateMapInstance()
         {
-            return new SectorMap();
+            return new SectorHexMap();
         }
     }
 }

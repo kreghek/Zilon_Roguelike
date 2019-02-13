@@ -19,7 +19,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
             // ARRANGE
             var random = new FixCompactRoomGeneratorRandomSource();
             var generator = new RoomGenerator(random);
-            var graphMap = new SectorMap();
+            var graphMap = new SectorHexMap();
 
 
             // ACT
@@ -44,7 +44,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
             // ARRANGE
             var random = new FixLargeRoomGeneratorRandomSource();
             var generator = new RoomGenerator(random);
-            var graphMap = new SectorMap();
+            var graphMap = new SectorHexMap();
 
 
             // ACT

@@ -21,7 +21,7 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var mapSize = (int)options;
 
-            ISectorMap map = new SectorMap(mapSize);
+            ISectorMap map = new SectorGraphMap();
             MapFiller.FillSquareMap(map, mapSize);
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray());

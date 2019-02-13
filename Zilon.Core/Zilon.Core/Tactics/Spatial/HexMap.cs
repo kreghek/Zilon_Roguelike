@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics.Spatial
         {
             if (segmentSize % 2 != 0)
             {
-                throw new ArgumentException("Аргумент должен быть нечтётным", nameof(segmentSize));
+                throw new ArgumentException("Аргумент должен быть чётным", nameof(segmentSize));
             }
 
             _segmentSize = segmentSize;

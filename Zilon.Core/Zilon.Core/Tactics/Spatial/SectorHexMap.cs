@@ -4,15 +4,15 @@ using Zilon.Core.MapGenerators.RoomStyle;
 
 namespace Zilon.Core.Tactics.Spatial
 {
-    public class SectorMap : HexMap, ISectorMap
+    public class SectorHexMap : HexMap, ISectorMap
     {
         private const int SegmentSize = 200;
 
-        public SectorMap() : this(SegmentSize)
+        public SectorHexMap() : this(SegmentSize)
         {
         }
 
-        public SectorMap(int segmentSize) : base(segmentSize)
+        public SectorHexMap(int segmentSize) : base(segmentSize)
         {
             Transitions = new Dictionary<IMapNode, RoomTransition>();
         }

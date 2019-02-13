@@ -115,7 +115,8 @@
     <Compile Include="Tactics\ITrader.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
-    <Compile Include="Tactics\Spatial\SectorMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\TraderManager.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\UseSelfCommand.cs" />

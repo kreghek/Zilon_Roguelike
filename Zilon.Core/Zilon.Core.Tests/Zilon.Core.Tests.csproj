@@ -129,7 +129,7 @@
     <Compile Include="Schemes\PropSchemeTests.cs" />
     <Compile Include="Schemes\PerkSchemeTests.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />
-    <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
+    <Compile Include="Services\MapGenerators\SquareMapFactoryTests.cs" />
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
