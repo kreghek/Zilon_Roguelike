@@ -424,14 +424,14 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        if (e.MapRegion.IsOut)
+        if (e.Transition.SectorSid == null)
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
         }
         else
         {
-            _humanPlayer.SectorSid = e.MapRegion.TransSectorSid;
+            _humanPlayer.SectorSid = e.Transition.SectorSid;
             SceneManager.LoadScene("combat");
         }
     }

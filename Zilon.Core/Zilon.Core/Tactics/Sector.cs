@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using JetBrains.Annotations;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -118,56 +119,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private void DetectSectorExit()
         {
-            // Из сектора нет прямого выхода.
-            // Пока используется только в тестах.
-            if (Map.Transitions == null)
+            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPerson).Select(x => x.Node);
+            var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
+
+            if (detectedTransition != null)
             {
-                return;
-            }
-
-            var allExit = true;
-
-            //Проверяем, что есть хоть один персонаж игрока.
-            // Потому что, умирая, персонажи удаляются из менеджера.
-            // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
-            var atLeastOneHuman = false;
-
-            if (Map.Regions == null)
-            {
-                return;
-            }
-
-            RoomTransition expectedTransition = null;
-            foreach (var actor in _actorManager.Items)
-            {
-                // На переход проверяем только персонажей игрока (сейчас тоько один персонаж).
-                var personIsHumanController = actor.Owner is HumanPlayer;
-                if (!personIsHumanController)
-                {
-                    continue;
-                }
-                
-                atLeastOneHuman = true;
-
-                if (Map.Transitions.TryGetValue(actor.Node, out var transition))
-                {
-                    if (expectedTransition == null)
-                    {
-                        expectedTransition = transition;
-                    }
-                    else
-                    {
-                        if (expectedTransition != transition)
-                        {
-                            allExit = false;
-                        }
-                    }
-                }
-            }
-
-            if (allExit && atLeastOneHuman)
-            {
-                DoActorExit(expectedTransition);
+                DoActorExit(detectedTransition);
             }
         }
 
@@ -265,13 +222,8 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit(RoomTransition roomTransition)
+        private void DoActorExit([NotNull] RoomTransition roomTransition)
         {
-            if (roomTransition == null)
-            {
-                throw new ArgumentNullException(nameof(roomTransition));
-            }
-
             var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
