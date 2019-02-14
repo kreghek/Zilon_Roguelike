@@ -54,6 +54,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var openTransitions = new List<RoomTransition>(availableTransitions);
 
+            var startAssigned = false;
+
             for (var i = 0; i < roomCount; i++)
             {
                 var rolledPosition = roomMatrixCoords[i];
@@ -77,6 +79,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                     room.Transitions.AddRange(roomTransitions);
                     openTransitions.RemoveAll(transition => roomTransitions.Contains(transition));
+                }
+                else if (!startAssigned)
+                {
+                    room.IsStart = true;
+                    startAssigned = true;
                 }
 
                 rooms.Add(room);

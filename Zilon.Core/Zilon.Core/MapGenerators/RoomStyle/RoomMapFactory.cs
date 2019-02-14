@@ -49,41 +49,27 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             // Соединяем комнаты
             _roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
-            // разбиваем комнаты на группы по назначению.
-            var startRoom = rooms.First();
-            var exitRoom = rooms.Last();
-
             // Указание регионов карты
-            var regionId = 1;
+            var regionIdCounter = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(regionId, room.Nodes.Cast<IMapNode>().ToArray());
-                regionId++;
+                var region = new MapRegion(regionIdCounter, room.Nodes.Cast<IMapNode>().ToArray());
+                regionIdCounter++;
                 map.Regions.Add(region);
 
-                if (room == startRoom)
+                if (room.IsStart)
                 {
                     region.IsStart = true;
+                    continue;
                 }
 
-                if (room == exitRoom)
+                if (room.Transitions?.Any() == true)
                 {
-                    var transSectorSid = sectorScheme.TransSectorSids?.FirstOrDefault();
+                    region.ExitNodes = (from regionNode in region.Nodes
+                                        where map.Transitions.Keys.Contains(regionNode)
+                                        select regionNode).ToArray();
 
-                    if (transSectorSid == null)
-                    {
-                        region.IsOut = true;
-                    }
-                    else
-                    {
-                        region.TransSectorSid = transSectorSid;
-                    }
-
-                    region.ExitNodes = region
-                        .Nodes
-                        .Skip(region.Nodes.Count() - 2)
-                        .Take(1)
-                        .ToArray();
+                    continue;
                 }
             }
 

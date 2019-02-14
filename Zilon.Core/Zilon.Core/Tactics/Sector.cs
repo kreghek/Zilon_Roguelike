@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -21,12 +21,15 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
+        /// <summary>
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// </summary>
         public event EventHandler<SectorExitEventArgs> HumanGroupExit;
 
         /// <summary>
         /// Карта в основе сектора.
         /// </summary>
-        public IMap Map { get; }
+        public ISectorMap Map { get; }
 
         /// <summary>
         /// Маршруты патрулирования в секторе.
@@ -142,6 +145,9 @@ namespace Zilon.Core.Tactics
                 atLeastOneHuman = true;
 
                 //TODO Учесть, что может быть больше одного выхода в разные места
+
+                Map.
+
                 foreach (var testedExitRegion in exitRegions)
                 {
                     var checkResult = testedExitRegion.ExitNodes?.Contains(actor.Node);
@@ -256,9 +262,9 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit(MapRegion exitRegion)
+        private void DoActorExit(MapRegion exitRegion, RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(exitRegion);
+            var e = new SectorExitEventArgs(exitRegion, roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
     }

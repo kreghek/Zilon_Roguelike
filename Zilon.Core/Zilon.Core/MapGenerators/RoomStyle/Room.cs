@@ -44,6 +44,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </remarks>
         public List<RoomTransition> Transitions { get; }
 
+        /// <summary>
+        /// Признак того, что комната является стартовой в секторе.
+        /// </summary>
+        public bool IsStart { get; set; }
+
         public Room()
         {
             Nodes = new List<HexNode>();

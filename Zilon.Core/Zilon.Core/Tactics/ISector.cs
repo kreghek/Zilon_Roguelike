@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Карта в основе сектора.
         /// </summary>
-        IMap Map { get; }
+        ISectorMap Map { get; }
 
         /// <summary>
         /// Маршруты патрулирования в секторе.
