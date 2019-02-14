@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics
         public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var innerActorList = new List<IActor>();
@@ -75,7 +75,7 @@ namespace Zilon.Core.Tests.Tactics
         public void Update_NoExits_EventNotRaised()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var innerActorList = new List<IActor>();

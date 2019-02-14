@@ -44,7 +44,7 @@ namespace Zilon.Core.Tactics
         public IMapNode[] StartNodes { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public Sector(IMap map,
+        public Sector(ISectorMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
             ITraderManager traderManager,
@@ -118,8 +118,14 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private void DetectSectorExit()
         {
+            // Из сектора нет прямого выхода.
+            // Пока используется только в тестах.
+            if (Map.Transitions == null)
+            {
+                return;
+            }
+
             var allExit = true;
-            MapRegion exitRegion = null;
 
             //Проверяем, что есть хоть один персонаж игрока.
             // Потому что, умирая, персонажи удаляются из менеджера.
@@ -131,8 +137,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var exitRegions = Map.Regions.Where(x => x.IsOut || x.TransSectorSid != null).ToArray();
-
+            RoomTransition expectedTransition = null;
             foreach (var actor in _actorManager.Items)
             {
                 // На переход проверяем только персонажей игрока (сейчас тоько один персонаж).
@@ -144,27 +149,25 @@ namespace Zilon.Core.Tactics
                 
                 atLeastOneHuman = true;
 
-                //TODO Учесть, что может быть больше одного выхода в разные места
-
-                Map.
-
-                foreach (var testedExitRegion in exitRegions)
+                if (Map.Transitions.TryGetValue(actor.Node, out var transition))
                 {
-                    var checkResult = testedExitRegion.ExitNodes?.Contains(actor.Node);
-                    if (checkResult == false)
+                    if (expectedTransition == null)
                     {
-                        allExit = false;
+                        expectedTransition = transition;
                     }
-                    else if (checkResult == true)
+                    else
                     {
-                        exitRegion = testedExitRegion;
+                        if (expectedTransition != transition)
+                        {
+                            allExit = false;
+                        }
                     }
                 }
             }
 
             if (allExit && atLeastOneHuman)
             {
-                DoActorExit(exitRegion);
+                DoActorExit(expectedTransition);
             }
         }
 
@@ -262,9 +265,14 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit(MapRegion exitRegion, RoomTransition roomTransition)
+        private void DoActorExit(RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(exitRegion, roomTransition);
+            if (roomTransition == null)
+            {
+                throw new ArgumentNullException(nameof(roomTransition));
+            }
+
+            var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
     }

@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
     public class MonsterActorTaskSourceTests
     {
         private ServiceContainer _container;
-        private IMap _map;
+        private ISectorMap _map;
         private List<IActor> _actorListInner;
         private IActor _testedActor;
 

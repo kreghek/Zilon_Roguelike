@@ -27,7 +27,7 @@ namespace Zilon.Core.MapGenerators
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
         }
 
-        public ISector Create(IMap map)
+        public ISector Create(ISectorMap map)
         {
             var sector = new Sector(map,
                 _actorManager,
