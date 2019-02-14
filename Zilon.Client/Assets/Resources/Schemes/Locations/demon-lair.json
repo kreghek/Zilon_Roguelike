@@ -7,7 +7,7 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "intro"
+				"En": "Demon lair"
 			},
 			"IsStart": true,
 			
@@ -18,7 +18,7 @@
 			"RegionSize": 20,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"],
+			"TransSectorSids": ["lvl2", "lvl3"],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,

@@ -6,6 +6,11 @@
 	"SectorLevels": [
 		{
 			"Sid": "intro",
+			
+			"Name": {
+				"En": "Rat hole",
+				"Ru": "Крысиная нора"
+			},
 
 			"IsStart": true,
 			

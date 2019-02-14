@@ -27,7 +27,7 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Rat Kingdom City"
+				"En": "Rat Kingdom Suare"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
@@ -37,7 +37,7 @@
 			"RegionSize": 5,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3"],
+			"TransSectorSids": ["lvl3", "lvl-barracks"],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -59,6 +59,25 @@
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
 			"ChestDropTableSids": ["survival", "default"]
+		},
+		{
+			"Sid": "lvl-barracks",
+			"Name":{
+				"En": "Rat Kingdom Barraks"
+			},
+			
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": ["rat-mutant", "moon-rat"],
+			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"],
+			"RegionCount": 3,
+			"RegionSize": 30,
+			"RegionMonsterCount": 20,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"TransSectorSids": ["lvl3", "lvl-barracks"]
 		}
 	]
 }
