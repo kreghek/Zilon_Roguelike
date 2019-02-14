@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Zilon.Core.MapGenerators.RoomStyle;
+using System;
 using System.Collections.Generic;
 
 using FluentAssertions;
@@ -60,6 +61,21 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
 
             // ASSERT
             act.Should().NotThrow();
+        }
+
+
+        /// <summary>
+        /// Тест проверяет, что если в схеме сектора обозначены переходы,
+        /// то они генерируются в комнате.
+        /// </summary>
+        [Test]
+        public void GenerateRoomsInGrid_Transitions()
+        {
+            // ARRANGE
+            var generator = new RoomGenerator();
+
+
+
         }
     }
 }
