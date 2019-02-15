@@ -70,8 +70,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 var rolledSize = _randomSource.RollRoomSize(roomMinSize, roomMaxSize);
 
-                room.Width = rolledSize.Width;
-                room.Height = rolledSize.Height;
+                room.Width = rolledSize?.Width ?? 0;
+                room.Height = rolledSize?.Height ?? 0;
 
                 if (openTransitions.Any())
                 {

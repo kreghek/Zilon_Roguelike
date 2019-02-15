@@ -7,14 +7,19 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using Zilon.Core.Tactics.Spatial;
+using Moq;
+using System.Linq;
 
 namespace Zilon.Core.MapGenerators.RoomStyle.Tests
 {
     [TestFixture]
-    [Category("Integration")]
     public class RoomGeneratorTests
     {
+        /// <summary>
+        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
+        /// </summary>
         [Test]
+        [Category("integration")]
         public void GenerateRoomsInGrid_WithFixCompact_NotThrowsExceptions()
         {
             // ARRANGE
@@ -39,7 +44,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
         }
 
 
+        /// <summary>
+        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
+        /// </summary>
         [Test]
+        [Category("integration")]
         public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
         {
             // ARRANGE
@@ -72,10 +81,29 @@ namespace Zilon.Core.MapGenerators.RoomStyle.Tests
         public void GenerateRoomsInGrid_Transitions()
         {
             // ARRANGE
-            var generator = new RoomGenerator();
+            var transition = RoomTransition.CreateGlobalExit();
+            var availableTransitions = new[] { transition };
+
+            var randomMock = new Mock<IRoomGeneratorRandomSource>();
+            randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(new[] { new OffsetCoords(0, 0) });
+            randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
+                .Returns(new[] { transition });
+            var random = randomMock.Object;
+
+            var generator = new RoomGenerator(random);
+
+            var expectedTransitions = new[] { transition };
 
 
 
+            // ACT
+            var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
+
+
+
+            // ASSERT
+            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(availableTransitions);
         }
     }
 }
