@@ -24,10 +24,13 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
             ISectorMap map = new SectorGraphMap();
             MapFiller.FillSquareMap(map, mapSize);
 
-            var mapRegion = new MapRegion(1, map.Nodes.ToArray());
-            mapRegion.IsStart = true;
-            mapRegion.IsOut = true;
-            mapRegion.ExitNodes = new[] { map.Nodes.Last() };
+            var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+            {
+                IsStart = true,
+                IsOut = true,
+                ExitNodes = new[] { map.Nodes.Last() }
+            };
+
             map.Regions.Add(mapRegion);
 
             return Task.FromResult(map);

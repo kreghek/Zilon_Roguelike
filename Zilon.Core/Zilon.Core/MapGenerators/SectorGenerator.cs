@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -104,6 +105,8 @@ namespace Zilon.Core.MapGenerators
             var trader = new Trader(traderDropTable, map.Nodes.ElementAt(10), _dropResolver);
             _traderManager.Add(trader);
             map.HoldNode(trader.Node, trader);
+
+            map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
 
             return sector;
         }
