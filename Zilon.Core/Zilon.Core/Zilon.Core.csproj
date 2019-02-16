@@ -105,6 +105,7 @@
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
+    <Compile Include="Tactics\IScoreManager.cs" />
     <Compile Include="Tactics\ITraderManager.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ITrader.cs" />
+    <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />

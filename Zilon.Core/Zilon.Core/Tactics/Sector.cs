@@ -15,7 +15,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-
+    /// <summary>
+    /// Базовая реализация сектора.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.Tactics.ISector" />
     public class Sector : ISector
     {
         private readonly IActorManager _actorManager;
@@ -45,6 +48,7 @@ namespace Zilon.Core.Tactics
         /// на начало прохождения сектора.
         /// </summary>
         public IMapNode[] StartNodes { get; set; }
+        public IScoreManager ScoreManager { get; set; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,

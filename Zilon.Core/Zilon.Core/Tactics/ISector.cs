@@ -35,5 +35,8 @@ namespace Zilon.Core.Tactics
         /// Маршруты патрулирования в секторе.
         /// </summary>
         Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
+
+        /// <summary>Менеджер работы с очками.</summary>
+        IScoreManager ScoreManager { get; set; }
     }
 }
