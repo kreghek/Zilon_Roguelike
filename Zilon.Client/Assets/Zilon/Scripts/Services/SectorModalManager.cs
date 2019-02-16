@@ -70,7 +70,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowQuitComfirmationModal()
         {
-            CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
+            var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
+            modalBody.Init();
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
