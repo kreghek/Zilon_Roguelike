@@ -1,7 +1,8 @@
+using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
-
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -38,5 +39,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
+
+
+        Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
     }
 }

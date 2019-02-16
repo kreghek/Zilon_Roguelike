@@ -2124,6 +2124,8 @@ MonoBehaviour:
     type: 3}
   TraderModalPrefab: {fileID: 391459472281275467, guid: 925b2a6ed0fec2648844b346b66ee74b,
     type: 3}
+  QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
+    type: 3}
 --- !u!114 &1808564501
 MonoBehaviour:
   m_ObjectHideFlags: 0

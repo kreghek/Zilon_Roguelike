@@ -25,6 +25,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public TraderModalBody TraderModalPrefab;
 
+        public QuitModalBody QuitModalPrefab;
+
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
@@ -64,6 +66,11 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<TraderModalBody>(TraderModalPrefab.gameObject);
             modalBody.Init(trader);
+        }
+
+        public void ShowQuitComfirmationModal()
+        {
+            CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler

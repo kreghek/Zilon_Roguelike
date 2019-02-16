@@ -1,3 +1,4 @@
+using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -62,6 +63,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
         Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
+        Container.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
     }
 
 
