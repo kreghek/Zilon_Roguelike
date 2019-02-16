@@ -17,5 +17,7 @@ namespace Zilon.Core.Client
         void ShowInstructionModal();
 
         void ShowTraderModal(ITrader trader);
+
+        void ShowQuitComfirmationModal();
     }
 }
