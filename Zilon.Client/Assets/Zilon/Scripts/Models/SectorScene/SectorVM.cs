@@ -251,8 +251,6 @@ internal class SectorVM : MonoBehaviour
     {
         var map = _sectorManager.CurrentSector.Map;
         var nodeVMs = new List<MapNodeVM>();
-        var exitRegions = map.Regions.Where(x => x.TransSectorSid != null || x.IsOut).ToArray();
-        var exitNodes = exitRegions.SelectMany(x => x.ExitNodes).ToArray();
 
         foreach (var node in map.Nodes)
         {
@@ -265,7 +263,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
 
-            if (exitNodes.Contains(node))
+            if (map.Transitions.ContainsKey(node))
             {
                 mapNodeVm.IsExit = true;
             }
