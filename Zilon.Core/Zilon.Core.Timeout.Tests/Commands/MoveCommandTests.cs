@@ -52,14 +52,20 @@ namespace Zilon.Core.Commands.Tests
             var locationScheme = new TestLocationScheme
             {
                 SectorLevels = new ISectorSubScheme[]
-               {
+                {
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
 
-                        IsStart = true
+                        RegionCount = 20,
+                        RegionSize = 20,
+
+                        IsStart = true,
+
+                        ChestDropTableSids = new[]{ "default" },
+                        RegionChestCountRatio = 9
                     }
-               }
+                }
             };
 
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);
@@ -174,6 +180,7 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
             _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
+            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());

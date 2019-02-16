@@ -19,9 +19,10 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int RegionCount { get; set; }
         public int RegionSize { get; set; }
         public int RegionMonsterCount { get; set; }
-        public int ChestCount { get; set; }
+        public int TotalChestCount { get; set; }
         public string[] ChestDropTableSids { get; set; }
         public string[] TransSectorSids { get; set; }
         public bool IsStart { get; set; }
+        public int RegionChestCountRatio { get; set; }
     }
 }

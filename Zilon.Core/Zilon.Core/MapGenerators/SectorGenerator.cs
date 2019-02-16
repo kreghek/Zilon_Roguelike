@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -37,6 +36,8 @@ namespace Zilon.Core.MapGenerators
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
         /// <param name="monsterPlayer"> Игрок, управляющий монстрами. </param>
         /// <param name="schemeService"> Сервис схем. </param>
+        /// <param name="traderManager"> Менеджер торговцев. Нужен для сектора. </param>
+        /// <param name="dropResolver"> Служба работы с таблицами дропа. Нужна для создания торговцев. </param>
         public SectorGenerator(
             IMapFactory mapFactory,
             ISectorFactory sectorFactory,
@@ -44,7 +45,7 @@ namespace Zilon.Core.MapGenerators
             IChestGenerator chestGenerator,
             IBotPlayer monsterPlayer,
             ISchemeService schemeService,
-            ITraderManager traderManager,
+            ITraderManager traderManager,//TODO Вынести в отдельный генератор
             IDropResolver dropResolver
             )
         {
@@ -76,11 +77,23 @@ namespace Zilon.Core.MapGenerators
                 monsterRegions,
                 sectorScheme);
 
-            _chestGenerator.CreateChests(map, monsterRegions);
+            _chestGenerator.CreateChests(map, sectorScheme, monsterRegions);
 
             return sector;
         }
 
+        /// <summary>
+        /// Создаёт сектор квартала города.
+        /// </summary>
+        /// <param name="globe">Объект мира.</param>
+        /// <param name="globeNode">Узел провинции, на основе которого генерируется сектор.</param>
+        /// <returns>
+        /// Возвращает созданный сектор.
+        /// </returns>
+        /// <remarks>
+        /// Нужно будет передавать параметры зданий, наличие персонажей и станков для крафта.
+        /// Вместо общей информации об узле.
+        /// </remarks>
         public async Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
         {
             var map = await SquareMapFactory.CreateAsync(10);
@@ -93,9 +106,23 @@ namespace Zilon.Core.MapGenerators
             _traderManager.Add(trader);
             map.HoldNode(trader.Node, trader);
 
+            map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
+
             return sector;
         }
 
+        /// <summary>
+        /// Создаёт сектор фрагмента дикого окружения.
+        /// </summary>
+        /// <param name="globe">Объект мира.</param>
+        /// <param name="globeNode">Узел провинции, на основе которого генерируется сектор.</param>
+        /// <returns>
+        /// Возвращает созданный сектор.
+        /// </returns>
+        /// <remarks>
+        /// Нужно будет передавать параметры окружения и количество
+        /// и характеристики монстров.
+        /// </remarks>
         public async Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
         {
             var map = await SquareMapFactory.CreateAsync(10);

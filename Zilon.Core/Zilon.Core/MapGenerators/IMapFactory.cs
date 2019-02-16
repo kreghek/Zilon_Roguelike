@@ -21,6 +21,6 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="options"> Параметры создания карты. </param>
         /// <returns> Возвращает экземпляр карты. </returns>
-        [NotNull] Task<IMap> CreateAsync(object options);
+        [NotNull] Task<ISectorMap> CreateAsync(object options);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
@@ -13,6 +14,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="roomGridSize"> Размер матрицы комнат. </param>
         /// <param name="roomCount"> Количество комнат в секторе. </param>
         /// <returns> Возвращает массив координат из матрицы комнат. </returns>
+        /// <remarks>
+        /// Координаты не повторяются и их ровно roomCount. Эти 2 условия метод должен гарантировать.
+        /// </remarks>
         IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount);
 
         /// <summary>
@@ -43,5 +47,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns> Возвращает словарь, представляющий собой матрицу смежности комнат.
         /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение. </returns>
         IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
+        IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
+        HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
     }
 }

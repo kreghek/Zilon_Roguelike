@@ -33,18 +33,28 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
         /// <param name="roomMinSize">Минимальный размер комнаты.</param>
         /// <param name="roomMaxSize">Максимальный размер комнаты.</param>
+        /// <param name="availableTransitions"> Информация о переходах из данного сектора. </param>
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize)
+        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
+            IEnumerable<RoomTransition> availableTransitions)
         {
             // На 20 комнат будет матрица 6х6.
             var roomGridSize = (int)Math.Ceiling(Math.Log(roomCount, 2)) + 1;
             var roomGrid = new RoomMatrix(roomGridSize);
 
-            var rooms = new List<Room>();
+            var rooms = new List<Room>(roomCount);
 
+            //Координаты не повторяются и их ровно roomCount.
+            // Это гарантирует IroomGeneratorRandomSource
             var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount).ToArray();
+
+            var openTransitions = new List<RoomTransition>(availableTransitions);
+
+            var startAssigned = false;
 
             for (var i = 0; i < roomCount; i++)
             {
@@ -60,8 +70,21 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 var rolledSize = _randomSource.RollRoomSize(roomMinSize, roomMaxSize);
 
-                room.Width = rolledSize.Width;
-                room.Height = rolledSize.Height;
+                room.Width = rolledSize?.Width ?? 0;
+                room.Height = rolledSize?.Height ?? 0;
+
+                if (openTransitions.Any())
+                {
+                    var roomTransitions = _randomSource.RollTransitions(openTransitions);
+
+                    room.Transitions.AddRange(roomTransitions);
+                    openTransitions.RemoveAll(transition => roomTransitions.Contains(transition));
+                }
+                else if (!startAssigned)
+                {
+                    room.IsStart = true;
+                    startAssigned = true;
+                }
 
                 rooms.Add(room);
             }
@@ -75,7 +98,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void CreateRoomNodes(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var cellSize = CalcCellSize(rooms);
 
@@ -110,7 +133,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room, Size cellSize)
+        private void CreateOneRoomNodes(ISectorMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
             for (var x = 0; x < room.Width; x++)
             {
@@ -133,6 +156,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                             AddEdgeToMap(map, edgeHash, node, neighbor);
                         }
                     }
+                }
+            }
+
+            // создаём переходы, если они есть в данной комнате
+            if (room.Transitions.Any())
+            {
+                //TODO Отфильтровать узлы, которые на входах в коридор
+                var openRoomNodes = new List<HexNode>(room.Nodes);
+                foreach (var transition in room.Transitions)
+                {
+                    var transitionNode = _randomSource.RollTransitionNode(openRoomNodes);
+                    map.Transitions.Add(transitionNode, transition);
+                    openRoomNodes.Remove(transitionNode);
                 }
             }
         }

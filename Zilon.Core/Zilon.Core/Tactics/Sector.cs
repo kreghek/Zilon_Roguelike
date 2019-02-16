@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
+using JetBrains.Annotations;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -21,12 +22,15 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
+        /// <summary>
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// </summary>
         public event EventHandler<SectorExitEventArgs> HumanGroupExit;
 
         /// <summary>
         /// Карта в основе сектора.
         /// </summary>
-        public IMap Map { get; }
+        public ISectorMap Map { get; }
 
         /// <summary>
         /// Маршруты патрулирования в секторе.
@@ -41,7 +45,7 @@ namespace Zilon.Core.Tactics
         public IMapNode[] StartNodes { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public Sector(IMap map,
+        public Sector(ISectorMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
             ITraderManager traderManager,
@@ -115,50 +119,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private void DetectSectorExit()
         {
-            var allExit = true;
-            MapRegion exitRegion = null;
+            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
+            var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
 
-            //Проверяем, что есть хоть один персонаж игрока.
-            // Потому что, умирая, персонажи удаляются из менеджера.
-            // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
-            var atLeastOneHuman = false;
-
-            if (Map.Regions == null)
+            if (detectedTransition != null)
             {
-                return;
-            }
-
-            var exitRegions = Map.Regions.Where(x => x.IsOut || x.TransSectorSid != null).ToArray();
-
-            foreach (var actor in _actorManager.Items)
-            {
-                // На переход проверяем только персонажей игрока (сейчас тоько один персонаж).
-                var personIsHumanController = actor.Owner is HumanPlayer;
-                if (!personIsHumanController)
-                {
-                    continue;
-                }
-                
-                atLeastOneHuman = true;
-
-                //TODO Учесть, что может быть больше одного выхода в разные места
-                foreach (var testedExitRegion in exitRegions)
-                {
-                    var checkResult = testedExitRegion.ExitNodes?.Contains(actor.Node);
-                    if (checkResult == false)
-                    {
-                        allExit = false;
-                    }
-                    else if (checkResult == true)
-                    {
-                        exitRegion = testedExitRegion;
-                    }
-                }
-            }
-
-            if (allExit && atLeastOneHuman)
-            {
-                DoActorExit(exitRegion);
+                DoActorExit(detectedTransition);
             }
         }
 
@@ -256,9 +222,9 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit(MapRegion exitRegion)
+        private void DoActorExit([NotNull] RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(exitRegion);
+            var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
     }

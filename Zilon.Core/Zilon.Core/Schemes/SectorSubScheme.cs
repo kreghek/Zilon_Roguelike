@@ -60,7 +60,7 @@ namespace Zilon.Core.Schemes
         /// Количество сундуков в секторе.
         /// </summary>
         [JsonProperty]
-        public int ChestCount { get; private set; }
+        public int TotalChestCount { get; private set; }
 
         /// <summary>
         /// Таблицы дропа для сундуков.
@@ -102,5 +102,12 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public bool IsStart { get; private set; }
+
+        /// <summary>
+        /// Коэффициент максимального количества сундуков в регионе сектора (комнате)
+        /// в зависимости от размера региона.
+        /// </summary>
+        [JsonProperty]
+        public int RegionChestCountRatio { get; private set; }
     }
 }

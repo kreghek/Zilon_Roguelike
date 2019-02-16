@@ -1,16 +1,16 @@
 ﻿using System;
 
-using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.MapGenerators.RoomStyle;
 
 namespace Zilon.Core.Tactics
 {
     public sealed class SectorExitEventArgs: EventArgs
     {
-        public SectorExitEventArgs(MapRegion mapRegion)
+        public SectorExitEventArgs(RoomTransition transition)
         {
-            MapRegion = mapRegion ?? throw new ArgumentNullException(nameof(mapRegion));
+            Transition = transition ?? throw new ArgumentNullException(nameof(transition));
         }
 
-        public MapRegion MapRegion { get; }
+        public RoomTransition Transition { get; }
     }
 }

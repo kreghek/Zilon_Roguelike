@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
@@ -134,6 +135,16 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public Size RollRoomSize(int minSize, int maxSize)
         {
             return new Size(minSize, minSize);
+        }
+
+        public HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes)
+        {
+            return openRoomNodes.First();
+        }
+
+        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        {
+            return new[] { openTransitions.First() };
         }
     }
 }

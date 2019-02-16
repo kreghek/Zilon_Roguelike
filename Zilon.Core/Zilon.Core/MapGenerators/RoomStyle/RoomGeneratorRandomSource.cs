@@ -4,9 +4,14 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
+    /// <summary>
+    /// Реализация источника рандома для генератора комнат сектора.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.MapGenerators.RoomStyle.IRoomGeneratorRandomSource" />
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
         private readonly IDice _dice;
@@ -148,6 +153,18 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var rollHeight = _dice.Roll(2, maxSize);
 
             return new Size(rollWidth, rollHeight);
+        }
+
+        public HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes)
+        {
+            var index = _dice.Roll(0, openRoomNodes.Count() - 1);
+            return openRoomNodes.ElementAt(index);
+        }
+
+        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        {
+            var index = _dice.Roll(0, openTransitions.Count() - 1);
+            return new[] { openTransitions.ElementAt(index) };
         }
     }
 }

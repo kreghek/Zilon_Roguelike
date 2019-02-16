@@ -8,9 +8,9 @@ namespace Zilon.Core.Spec.Mocks
 {
     public class FuncMapFactory : IMapFactory
     {
-        private Func<Task<IMap>> _factoryFunc;
+        private Func<Task<ISectorMap>> _factoryFunc;
 
-        public async Task<IMap> CreateAsync(object options)
+        public async Task<ISectorMap> CreateAsync(object options)
         {
             if (_factoryFunc == null)
             {
@@ -22,7 +22,7 @@ namespace Zilon.Core.Spec.Mocks
             return map;
         }
 
-        public void SetFunc(Func<Task<IMap>> factoryFunc)
+        public void SetFunc(Func<Task<ISectorMap>> factoryFunc)
         {
             _factoryFunc = factoryFunc;
         }

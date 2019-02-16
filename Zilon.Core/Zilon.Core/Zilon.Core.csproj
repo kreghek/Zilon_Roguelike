@@ -83,7 +83,7 @@
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
-    <Compile Include="MapGenerators\RoomStyle\TownMapFactory.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomTransition.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
@@ -114,6 +114,9 @@
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ITrader.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\Spatial\ISectorMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\TraderManager.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\UseSelfCommand.cs" />
@@ -382,6 +385,7 @@
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\Trader.cs" />
+    <Compile Include="Tactics\TransitionDetection.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />

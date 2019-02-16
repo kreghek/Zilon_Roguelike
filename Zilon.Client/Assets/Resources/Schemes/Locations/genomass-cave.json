@@ -18,7 +18,11 @@
 			"RegionSize": 20,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"]
+			"TransSectorSids": ["lvl2"],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		},
 		{
 			"Sid": "lvl2",
@@ -33,7 +37,11 @@
 			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3"]
+			"TransSectorSids": ["lvl3", "lvl4", "lvl5", "lvl6"],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		},
 		{
 			"Sid": "lvl3",
@@ -46,7 +54,62 @@
 			"ChampionMonsterSids": ["infernal-genomass"],
 			"RegionCount": 20,
 			"RegionSize": 5,
-			"RegionMonsterCount": 5
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
+		},
+		{
+			"Sid": "lvl4",
+			"Name":{
+				"En": "Genomass cave 4"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionCount": 10,
+			"RegionSize": 10,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
+		},
+		{
+			"Sid": "lvl5",
+			"Name":{
+				"En": "Genomass cave 5"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionCount": 10,
+			"RegionSize": 10,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
+		},
+		{
+			"Sid": "lvl6",
+			"Name":{
+				"En": "Genomass cave 6"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionCount": 10,
+			"RegionSize": 10,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		}
 	]
 }

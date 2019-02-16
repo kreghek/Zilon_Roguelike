@@ -12,7 +12,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class RoomMapFactory : IMapFactory
     {
-        private const int SegmentSize = 200;
         private const int RoomMinSize = 2;
         private readonly IRoomGenerator _roomGenerator;
 
@@ -28,7 +27,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает экземпляр карты.
         /// </returns>
-        public Task<IMap> CreateAsync(object options)
+        public Task<ISectorMap> CreateAsync(object options)
         {
             var sectorScheme = (ISectorSubScheme)options;
 
@@ -37,7 +36,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount, RoomMinSize, sectorScheme.RegionSize);
+            var transitions = CreateTransitions(sectorScheme);
+
+            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
+                RoomMinSize,
+                sectorScheme.RegionSize,
+                transitions);
 
             // Создаём узлы и рёбра комнат
             _roomGenerator.CreateRoomNodes(map, rooms, edgeHash);
@@ -45,50 +49,46 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             // Соединяем комнаты
             _roomGenerator.BuildRoomCorridors(map, rooms, edgeHash);
 
-            // разбиваем комнаты на группы по назначению.
-            var startRoom = rooms.First();
-            var exitRoom = rooms.Last();
-
             // Указание регионов карты
-            var regionId = 1;
+            var regionIdCounter = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(regionId, room.Nodes.Cast<IMapNode>().ToArray());
-                regionId++;
+                var region = new MapRegion(regionIdCounter, room.Nodes.Cast<IMapNode>().ToArray());
+                regionIdCounter++;
                 map.Regions.Add(region);
 
-                if (room == startRoom)
+                if (room.IsStart)
                 {
                     region.IsStart = true;
+                    continue;
                 }
 
-                if (room == exitRoom)
+                if (room.Transitions?.Any() == true)
                 {
-                    var transSectorSid = sectorScheme.TransSectorSids?.FirstOrDefault();
+                    region.ExitNodes = (from regionNode in region.Nodes
+                                        where map.Transitions.Keys.Contains(regionNode)
+                                        select regionNode).ToArray();
 
-                    if (transSectorSid == null)
-                    {
-                        region.IsOut = true;
-                    }
-                    else
-                    {
-                        region.TransSectorSid = transSectorSid;
-                    }
-
-                    region.ExitNodes = region
-                        .Nodes
-                        .Skip(region.Nodes.Count() - 2)
-                        .Take(1)
-                        .ToArray();
+                    continue;
                 }
             }
 
             return Task.FromResult(map);
         }
 
-        private static IMap CreateMapInstance()
+        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
         {
-            return new HexMap(SegmentSize);
+            if (sectorScheme.TransSectorSids == null)
+            {
+                return new[] { RoomTransition.CreateGlobalExit() };
+            }
+
+            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+        }
+
+        private static ISectorMap CreateMapInstance()
+        {
+            return new SectorHexMap();
         }
     }
 }

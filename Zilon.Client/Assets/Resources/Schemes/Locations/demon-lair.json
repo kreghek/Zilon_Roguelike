@@ -7,7 +7,7 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "intro"
+				"En": "Demon lair"
 			},
 			"IsStart": true,
 			
@@ -18,7 +18,11 @@
 			"RegionSize": 20,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"]
+			"TransSectorSids": ["lvl2", "lvl3"],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		},
 		{
 			"Sid": "lvl2",
@@ -33,7 +37,11 @@
 			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3"]
+			"TransSectorSids": ["lvl3"],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		},
 		{
 			"Sid": "lvl3",
@@ -46,7 +54,11 @@
 			"ChampionMonsterSids": ["demon-lord", "archidemon", "hell-herald", "pit-baron"],
 			"RegionCount": 10,
 			"RegionSize": 10,
-			"RegionMonsterCount": 5
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
 		}
 	]
 }
