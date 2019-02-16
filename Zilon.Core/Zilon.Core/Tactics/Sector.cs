@@ -119,7 +119,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private void DetectSectorExit()
         {
-            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPerson).Select(x => x.Node);
+            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
             var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
 
             if (detectedTransition != null)

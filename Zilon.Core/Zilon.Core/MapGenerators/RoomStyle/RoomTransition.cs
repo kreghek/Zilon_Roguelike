@@ -38,5 +38,21 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             return new RoomTransition(null);
         }
+
+        /// <summary>
+        /// Вывод строкого представления перехода.
+        /// </summary>
+        /// <returns>
+        /// <see cref="string" />, который представляет переход.
+        /// </returns>
+        public override string ToString()
+        {
+            if (SectorSid == null)
+            {
+                return "[Global]";
+            }
+
+            return SectorSid;
+        }
     }
 }
