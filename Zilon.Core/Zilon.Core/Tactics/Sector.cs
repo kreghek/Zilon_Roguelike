@@ -208,6 +208,11 @@ namespace Zilon.Core.Tactics
             {
                 _propContainerManager.Add(loot);
             }
+
+            if (ScoreManager != null)
+            {
+                ScoreManager.CountMonsterDefeat(monsterPerson);
+            }
         }
 
         private IDropTableScheme[] GetMonsterDropTables(IMonsterScheme monsterScheme)
