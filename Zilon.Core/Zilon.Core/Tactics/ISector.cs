@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -38,5 +38,7 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Менеджер работы с очками.</summary>
         IScoreManager ScoreManager { get; set; }
+
+        ILocationScheme Scheme { get; set; }
     }
 }
