@@ -494,10 +494,17 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        actorViewModel.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actorViewModel.Actor.UsedAct += ActorOnUsedAct;
+        actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actor.UsedAct += ActorOnUsedAct;
+        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
 
         return actorViewModel;
+    }
+
+    private void HumanPersonSurvival_Dead(object sender, EventArgs e)
+    {
+        _sectorModalManager.ShowScoreModal();
+        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)

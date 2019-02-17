@@ -14,5 +14,6 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 25
 }

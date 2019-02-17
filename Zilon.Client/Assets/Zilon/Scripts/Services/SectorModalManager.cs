@@ -27,6 +27,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public QuitModalBody QuitModalPrefab;
 
+        public ScoreModalBody ScoreModalPrefab;
+
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
@@ -71,6 +73,12 @@ namespace Assets.Zilon.Scripts.Services
         public void ShowQuitComfirmationModal()
         {
             var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
+            modalBody.Init();
+        }
+
+        public void ShowScoreModal()
+        {
+            var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
             modalBody.Init();
         }
 

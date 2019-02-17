@@ -2126,6 +2126,8 @@ MonoBehaviour:
     type: 3}
   QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
     type: 3}
+  ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
+    type: 3}
 --- !u!114 &1808564501
 MonoBehaviour:
   m_ObjectHideFlags: 0

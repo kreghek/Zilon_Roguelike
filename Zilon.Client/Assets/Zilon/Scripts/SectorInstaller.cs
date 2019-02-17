@@ -27,6 +27,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
+        Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();

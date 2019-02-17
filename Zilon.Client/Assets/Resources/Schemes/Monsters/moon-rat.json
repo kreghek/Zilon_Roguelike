@@ -22,5 +22,6 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "survival", "default" ]
+  "DropTableSids": [ "survival", "survival", "default" ],
+  "BaseScore": 120
 }
