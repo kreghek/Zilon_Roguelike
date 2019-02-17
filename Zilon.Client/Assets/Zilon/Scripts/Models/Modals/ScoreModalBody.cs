@@ -29,7 +29,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         DetailsText.text += "=== Your killed ===" + "\n";
         foreach (var frag in _scoreManager.Frags)
         {
-            DetailsText.text += $"{frag.Key}:{frag.Value}" + "\n";
+            DetailsText.text += $"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}:{frag.Value}" + "\n";
         }
     }
 

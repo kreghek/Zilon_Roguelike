@@ -192,12 +192,16 @@ namespace Zilon.Core.Tactics
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
             actor.Person.Survival.Dead -= ActorState_Dead;
+            ProcessMonsterDeath(actor);
+        }
 
+        private void ProcessMonsterDeath(IActor actor)
+        {
             if (!(actor.Person is MonsterPerson monsterPerson))
             {
                 return;
             }
-            
+
             var monsterScheme = monsterPerson.Scheme;
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);

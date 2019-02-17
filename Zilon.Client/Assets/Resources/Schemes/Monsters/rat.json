@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Крыса",
+	"En": "Rat"
+  },
   "Hp": 2,
   "PrimaryAct": {
     "Efficient": {

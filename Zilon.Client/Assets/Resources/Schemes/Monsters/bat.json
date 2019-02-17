@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Летучая мышь",
+	"En": "Bat"
+  },
   "Hp": 2,
   "PrimaryAct": {
     "Efficient": {

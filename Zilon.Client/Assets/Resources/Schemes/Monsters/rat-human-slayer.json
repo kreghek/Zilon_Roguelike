@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Крыса людо-убийца",
+	"En": "Rat Human Slayer"
+  },
   "Hp": 8,
   "PrimaryAct": {
     "Efficient": {

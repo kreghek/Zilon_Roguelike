@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Лунная крыса",
+	"En": "Moon Rat"
+  },
   "Hp": 5,
   "PrimaryAct": {
     "Efficient": {
