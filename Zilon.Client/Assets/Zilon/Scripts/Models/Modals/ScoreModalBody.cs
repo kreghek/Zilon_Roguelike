@@ -23,10 +23,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     public void Init()
     {
-        // TODO Сделать накручивание очков через Lerp от инта
+        // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
 
-        DetailsText.text += "=== Your killed ===";
+        DetailsText.text += "=== Your killed ===" + "\n";
         foreach (var frag in _scoreManager.Frags)
         {
             DetailsText.text += $"{frag.Key}:{frag.Value}" + "\n";
