@@ -14,8 +14,8 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Psy",
-      "Impact": "Kinetic"
+      "Type": "Shadow",
+      "Impact": "Psy"
     }
   },
   "Defense": {
@@ -27,7 +27,7 @@
     ],
 	"Defenses": [
       {
-        "Type": "PsyDefence",
+        "Type": "ShadowDefence",
         "Level": "Normal"
       }
     ]
