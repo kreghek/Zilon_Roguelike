@@ -2,6 +2,7 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -12,6 +13,7 @@ namespace Zilon.Core.Tactics
     public class ScoreManager : IScoreManager
     {
         private const float TURN_INC = 1f;
+        private const int PLACE_SCORES = 100;
 
         private float _turnCounter = 0;
 
@@ -19,6 +21,7 @@ namespace Zilon.Core.Tactics
         {
             Frags = new Dictionary<IMonsterScheme, int>();
             PlaceTypes = new Dictionary<ILocationScheme, int>();
+            Places = new HashSet<GlobeRegionNode>();
         }
 
         /// <summary>Базовые очки, набранные игроком.</summary>
@@ -31,6 +34,7 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
+        public ISet<GlobeRegionNode> Places { get; }
 
         /// <summary>Засчитать убийство монстра.</summary>
         /// <param name="monster">Монстр, убитый игроком.</param>
@@ -46,6 +50,12 @@ namespace Zilon.Core.Tactics
             }
 
             Frags[monsterScheme]++;
+        }
+
+        public void CountPlace(GlobeRegionNode regionNode)
+        {
+            Places.Add(regionNode);
+            BaseScores += PLACE_SCORES;
         }
 
         /// <summary>Засчитать один прожитый шаг.</summary>
