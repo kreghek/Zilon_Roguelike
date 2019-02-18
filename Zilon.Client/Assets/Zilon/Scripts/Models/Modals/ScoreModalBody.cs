@@ -36,6 +36,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         DetailsText.text += $"{days} days {hours} hours" + "\n";
         Debug.Log($"Turns: {_scoreManager.Turns}");
 
+        DetailsText.text += "=== Your visited ===" + "\n";
+
+        DetailsText.text += $"{_scoreManager.Places.Count} places" + "\n";
+
         foreach (var placeType in _scoreManager.PlaceTypes)
         {
             DetailsText.text += $"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns" + "\n";

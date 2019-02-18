@@ -30,11 +30,13 @@ namespace Zilon.Core.Tactics
         /// <summary>Фраги по схемам монстров, добытые игроком.</summary>
         public IDictionary<IMonsterScheme, int> Frags { get; }
 
+        /// <summary>Счётчик ходов по типам секторов.</summary>
         public IDictionary<ILocationScheme, int> PlaceTypes { get; }
 
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
 
+        /// <summary>Посещённые места.</summary>
         public ISet<GlobeRegionNode> Places { get; }
 
         /// <summary>Засчитать убийство монстра.</summary>
@@ -53,10 +55,15 @@ namespace Zilon.Core.Tactics
             Frags[monsterScheme]++;
         }
 
+        /// <summary>Засчитывает посещение места на глобальной карте.</summary>
+        /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
         public void CountPlace(GlobeRegionNode regionNode)
         {
-            Places.Add(regionNode);
-            BaseScores += PLACE_SCORES;
+            if (!Places.Contains(regionNode))
+            {
+                Places.Add(regionNode);
+                BaseScores += PLACE_SCORES;
+            }
         }
 
         /// <summary>Засчитать один прожитый шаг.</summary>
