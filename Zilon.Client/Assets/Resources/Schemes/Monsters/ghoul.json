@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Гуль",
+	"En": "Ghoul"
+  },
+  "Hp": 5,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,5 +18,6 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 50
 }
