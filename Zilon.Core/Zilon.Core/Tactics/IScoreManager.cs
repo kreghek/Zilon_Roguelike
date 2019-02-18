@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Засчитывает посещение места на глобальной карте.
         /// </summary>
-        /// <param name="regionNode">Узел провинции.</param>
+        /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
         void CountPlace(GlobeRegionNode regionNode);
     }
 }

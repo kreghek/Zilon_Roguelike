@@ -12,7 +12,7 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="Zilon.Core.Tactics.IScoreManager" />
     public class ScoreManager : IScoreManager
     {
-        private const float TURN_INC = 1f;
+        private const float TURN_INC = 0.1f;
         private const int PLACE_SCORES = 100;
 
         private float _turnCounter = 0;
@@ -34,6 +34,7 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
+
         public ISet<GlobeRegionNode> Places { get; }
 
         /// <summary>Засчитать убийство монстра.</summary>
@@ -64,6 +65,7 @@ namespace Zilon.Core.Tactics
             _turnCounter += TURN_INC;
             if (_turnCounter >= 1)
             {
+                _turnCounter -= 1;
                 BaseScores++;
             }
 
