@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Хеллрок",
+	"En": "Hell rock"
+  },
+  "Hp": 50,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,5 +18,22 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Grand"
+      },
+	  {
+        "Type": "TrickyDefence",
+        "Level": "Grand"
+      },
+	  {
+        "Type": "ShadowDefence",
+        "Level": "Grand"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 100
 }

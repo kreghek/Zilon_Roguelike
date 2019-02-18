@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Инфернальный бард",
+	"En": "infernal bard"
+  },
+  "Hp": 3,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -10,9 +14,10 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
-      "Impact": "Kinetic"
+      "Type": "Shadow",
+      "Impact": "Tricky"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 50
 }
