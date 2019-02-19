@@ -76,6 +76,8 @@ namespace Zilon.Core.Tactics
             {
                 CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode);
             }
+
+            CurrentSector.Scheme = scheme;
         }
     }
 }

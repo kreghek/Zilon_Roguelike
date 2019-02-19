@@ -8,6 +8,7 @@ using Zenject;
 
 using Zilon.Core.Common;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -24,6 +25,7 @@ public class GlobeWorldVM : MonoBehaviour
 
     [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IWorldGenerator _globeGenerator;
+    [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
 
@@ -104,6 +106,7 @@ public class GlobeWorldVM : MonoBehaviour
 
             if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
             {
+                _scoreManager.CountPlace(selectedNodeViewModel.Node);
                 SceneManager.LoadScene("combat");
             }
             else

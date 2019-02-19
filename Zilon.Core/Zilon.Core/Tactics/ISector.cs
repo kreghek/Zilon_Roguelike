@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -35,5 +35,10 @@ namespace Zilon.Core.Tactics
         /// Маршруты патрулирования в секторе.
         /// </summary>
         Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
+
+        /// <summary>Менеджер работы с очками.</summary>
+        IScoreManager ScoreManager { get; set; }
+
+        ILocationScheme Scheme { get; set; }
     }
 }

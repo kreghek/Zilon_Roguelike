@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Адская летучая мышь",
+	"En": "Hell Bat"
+  },
+  "Hp": 4,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,5 +18,6 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 30
 }

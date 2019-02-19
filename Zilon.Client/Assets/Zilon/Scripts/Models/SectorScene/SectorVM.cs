@@ -85,6 +85,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
 
+    [NotNull] [Inject] private readonly IScoreManager _scoreManager;
+
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
@@ -194,6 +196,8 @@ internal class SectorVM : MonoBehaviour
     private async Task InitServicesAsync()
     {
         await _sectorManager.CreateSectorAsync();
+
+        _sectorManager.CurrentSector.ScoreManager = _scoreManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -403,6 +407,7 @@ internal class SectorVM : MonoBehaviour
     {
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
+        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
 
@@ -494,10 +499,17 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        actorViewModel.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actorViewModel.Actor.UsedAct += ActorOnUsedAct;
+        actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actor.UsedAct += ActorOnUsedAct;
+        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
 
         return actorViewModel;
+    }
+
+    private void HumanPersonSurvival_Dead(object sender, EventArgs e)
+    {
+        _sectorModalManager.ShowScoreModal();
+        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)

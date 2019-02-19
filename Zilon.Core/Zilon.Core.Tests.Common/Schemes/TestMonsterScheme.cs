@@ -10,5 +10,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] DropTableSids { get; }
         public int Hp { get; set; }
         public ITacticalActStatsSubScheme PrimaryAct { get; set; }
+        public int BaseScore { get; set; }
     }
 }

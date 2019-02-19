@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Крыса-Мутант",
+	"En": "Rat Mutant"
+  },
   "Hp": 6,
   "PrimaryAct": {
     "Efficient": {
@@ -22,5 +26,6 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "survival", "default" ]
+  "DropTableSids": [ "survival", "survival", "default" ],
+  "BaseScore": 100
 }

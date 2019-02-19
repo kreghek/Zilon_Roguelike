@@ -2,6 +2,7 @@ using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
+
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
@@ -27,6 +28,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
+        Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
 
 
         Container.Bind<HumanPlayer>().AsSingle();
