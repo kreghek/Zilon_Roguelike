@@ -81,8 +81,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectIcon: {fileID: 1645137972383179856}
   Background: {fileID: 4544340499035745814}
-  HungerSprite: {fileID: 21300044, guid: 288c0870db3dd254fab189ab6cbb0f85, type: 3}
-  ThristSprite: {fileID: 21300122, guid: 288c0870db3dd254fab189ab6cbb0f85, type: 3}
+  HungerSprite: {fileID: 21300000, guid: 69b5169aed016d84a92c951bfa1e974f, type: 3}
+  ThristSprite: {fileID: 21300000, guid: dd18b85fa6f2c4546a07ce7d47fde67a, type: 3}
 --- !u!1 &1578793237884679211
 GameObject:
   m_ObjectHideFlags: 0
