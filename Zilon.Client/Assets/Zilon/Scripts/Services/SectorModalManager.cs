@@ -23,6 +23,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public InstructionModalBody InstructionModalPrefab;
 
+        public WinModalBody WinModalPrefab;
+
         public TraderModalBody TraderModalPrefab;
 
         public QuitModalBody QuitModalPrefab;
@@ -61,7 +63,12 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowInstructionModal()
         {
-            var modalBody = CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+            CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+        }
+
+        public void ShowWinModal()
+        {
+            CreateWindowHandler<WinModalBody>(WinModalPrefab.gameObject);
         }
 
         public void ShowTraderModal(ITrader trader)

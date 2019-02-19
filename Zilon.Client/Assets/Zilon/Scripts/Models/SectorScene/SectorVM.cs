@@ -475,12 +475,56 @@ internal class SectorVM : MonoBehaviour
 
             _humanPlayer.MainPerson = person;
 
+
+            var classRoll = UnityEngine.Random.Range(1, 6);
+            switch (classRoll)
+            {
+                case 1:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "short-sword");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "steel-armor");
+                    AddEquipmentToActor(person.EquipmentCarrier, 3, "wooden-shield");
+                    break;
+
+                case 2:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "steel-helmet");
+                    break;
+
+                case 3:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "bow");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-armor");
+                    AddEquipmentToActor(inventory, "short-sword");
+                    AddResourceToActor(inventory, "arrow", 10);
+                    break;
+
+                case 4:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "fireball-staff");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "scholar-robe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "wizard-hat");
+                    AddResourceToActor(inventory, "mana", 15);
+                    break;
+
+                case 5:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "pistol");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "elder-hat");
+                    AddResourceToActor(inventory, "bullet-45", 5);
+
+                    AddResourceToActor(inventory, "packed-food", 1);
+                    AddResourceToActor(inventory, "bottle", 1);
+                    AddResourceToActor(inventory, "med-kit", 1);
+
+                    AddResourceToActor(inventory, "mana", 5);
+                    AddResourceToActor(inventory, "arrow", 3);
+                    break;
+            }
+
+            AddResourceToActor(inventory, "packed-food", 1);
+            AddResourceToActor(inventory, "bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);
-            AddResourceToActor(inventory, "water-bottle", 2);
-            AddResourceToActor(inventory, "packed-food", 2);
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
+        var actor = new Actor(_personManager.Person, player, startNode);
 
         actorManager.Add(actor);
 
@@ -519,6 +563,20 @@ internal class SectorVM : MonoBehaviour
             var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = _propFactory.CreateEquipment(equipmentScheme);
             inventory.Add(equipment);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
+        }
+    }
+
+    private void AddEquipmentToActor(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid)
+    {
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var equipment = _propFactory.CreateEquipment(equipmentScheme);
+            equipmentCarrier[slotIndex] = equipment;
         }
         catch (KeyNotFoundException)
         {
