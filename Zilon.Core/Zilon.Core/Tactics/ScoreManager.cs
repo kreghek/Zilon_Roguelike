@@ -14,6 +14,7 @@ namespace Zilon.Core.Tactics
     {
         private const float TURN_INC = 0.1f;
         private const int PLACE_SCORES = 100;
+        private const int MONSTER_DEFAULT_BASE_SCORE = 25;
 
         private float _turnCounter = 0;
 
@@ -45,7 +46,13 @@ namespace Zilon.Core.Tactics
         {
             var monsterScheme = monster.Scheme;
 
-            BaseScores += monsterScheme.BaseScore;
+            var score = monsterScheme.BaseScore;
+            if (score == 0)
+            {
+                score = MONSTER_DEFAULT_BASE_SCORE;
+            }
+
+            BaseScores += score;
 
             if (!Frags.ContainsKey(monsterScheme))
             {
