@@ -26,7 +26,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
 
-        DetailsText.text += "=== Your survived ===" + "\n";
+        DetailsText.text += "=== You survived ===" + "\n";
         var minutesTotal = _scoreManager.Turns * 2;
         var hoursTotal = minutesTotal / 60f;
         var daysTotal = hoursTotal / 24f;
@@ -36,7 +36,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         DetailsText.text += $"{days} days {hours} hours" + "\n";
         Debug.Log($"Turns: {_scoreManager.Turns}");
 
-        DetailsText.text += "=== Your visited ===" + "\n";
+        DetailsText.text += "=== You visited ===" + "\n";
 
         DetailsText.text += $"{_scoreManager.Places.Count} places" + "\n";
 
@@ -45,7 +45,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
             DetailsText.text += $"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns" + "\n";
         }
 
-        DetailsText.text += "=== Your killed ===" + "\n";
+        DetailsText.text += "=== You killed ===" + "\n";
         foreach (var frag in _scoreManager.Frags)
         {
             DetailsText.text += $"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}" + "\n";
