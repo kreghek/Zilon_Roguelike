@@ -493,7 +493,7 @@ internal class SectorVM : MonoBehaviour
 
                 case 3:
                     AddEquipmentToActor(person.EquipmentCarrier, 2, "bow");
-                    AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-armor");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-jacket");
                     AddEquipmentToActor(inventory, "short-sword");
                     AddResourceToActor(inventory, "arrow", 10);
                     break;
@@ -511,7 +511,7 @@ internal class SectorVM : MonoBehaviour
                     AddResourceToActor(inventory, "bullet-45", 5);
 
                     AddResourceToActor(inventory, "packed-food", 1);
-                    AddResourceToActor(inventory, "bottle", 1);
+                    AddResourceToActor(inventory, "water-bottle", 1);
                     AddResourceToActor(inventory, "med-kit", 1);
 
                     AddResourceToActor(inventory, "mana", 5);
@@ -520,11 +520,11 @@ internal class SectorVM : MonoBehaviour
             }
 
             AddResourceToActor(inventory, "packed-food", 1);
-            AddResourceToActor(inventory, "bottle", 1);
+            AddResourceToActor(inventory, "water-bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode);
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
 
         actorManager.Add(actor);
 

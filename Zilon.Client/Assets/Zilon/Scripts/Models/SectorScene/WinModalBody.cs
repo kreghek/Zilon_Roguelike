@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts;
+﻿using System;
+using Assets.Zilon.Scripts;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class WinModalBody : MonoBehaviour, IModalWindowHandler
 {
     public string Caption => "Critical error!!";
+
+    public event EventHandler Closed;
 
     public void ApplyChanges()
     {
