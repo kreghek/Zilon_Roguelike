@@ -1,8 +1,12 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Геномасса",
+	"En": "Genomass"
+  },
+  "Hp": 3,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -14,5 +18,6 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 25
 }

@@ -17,9 +17,7 @@ namespace Zilon.Core.Schemes
 
             _handlerDict = new Dictionary<Type, object>();
 
-            InitHandler<IMapScheme, MapScheme>();
             InitHandler<ILocationScheme, LocationScheme>();
-            InitHandler<IPathScheme, PathScheme>();
             InitHandler<IPropScheme, PropScheme>();
             InitHandler<ITacticalActScheme, TacticalActScheme>();
             InitHandler<IPersonScheme, PersonScheme>();

@@ -11,36 +11,49 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
+    /// <summary>
+    /// Реализация генератора монстров.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.MapGenerators.IMonsterGenerator" />
     public class MonsterGenerator : IMonsterGenerator
     {
         private readonly ISchemeService _schemeService;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
         private readonly IActorManager _actorManager;
-        private readonly ISurvivalRandomSource _survivalRandomSource;
 
+        /// <summary>
+        /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
+        /// </summary>
+        /// <param name="schemeService"> Сервис схем. </param>
+        /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
+        /// <param name="actorManager"> Менеджер актёров, в который размещаются монстры. </param>
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterGeneratorRandomSource generatorRandomSource,
-            IActorManager actorManager,
-            ISurvivalRandomSource survivalRandomSource)
+            IActorManager actorManager)
         {
             _schemeService = schemeService;
             _generatorRandomSource = generatorRandomSource;
             _actorManager = actorManager;
-            _survivalRandomSource = survivalRandomSource;
         }
 
+        /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
+        /// <param name="sector">Целевой сектор.</param>
+        /// <param name="monsterPlayer">Бот, управляющий монстрами. По сути, команда монстров.</param>
+        /// <param name="monsterRegions">Регионы сектора, где могут быть монстры.</param>
+        /// <param name="sectorScheme">Схема сектора. Отсюда берутся параметры генерации монстров.</param>
         public void CreateMonsters(ISector sector,
+            IBotPlayer monsterPlayer,
             IEnumerable<MapRegion> monsterRegions,
-            IMonsterGeneratorOptions monsterGeneratorOptions)
+            ISectorSubScheme sectorScheme)
         {
             var rarityCounter = new int[3];
-            var rarityMaxCounter = new [] { -1, 10, 1 };
+            var rarityMaxCounter = new[] { -1, 10, 1 };
 
             foreach (var region in monsterRegions)
             {
                 var freeNodes = new List<IMapNode>(region.Nodes);
 
-                var monsterCount = _generatorRandomSource.RollCount();
+                var monsterCount = _generatorRandomSource.RollRegionCount(sectorScheme.RegionMonsterCount);
 
                 for (int i = 0; i < monsterCount; i++)
                 {
@@ -51,7 +64,7 @@ namespace Zilon.Core.MapGenerators
                     }
 
                     var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
-                    var availableSchemeSids = GetAvailableSchemeSids(monsterGeneratorOptions, currentRarity);
+                    var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);
 
                     var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
@@ -67,7 +80,7 @@ namespace Zilon.Core.MapGenerators
 
                         // генерируем моснтра
                         var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
-                        var monster = CreateMonster(monsterScheme, startPatrolNode, monsterGeneratorOptions.BotPlayer);
+                        var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
                         sector.PatrolRoutes[monster] = patrolRoute;
 
                         freeNodes.Remove(monster.Node);
@@ -76,7 +89,7 @@ namespace Zilon.Core.MapGenerators
                     {
                         var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                         var monsterNode = freeNodes[rollIndex];
-                        var monster = CreateMonster(monsterScheme, monsterNode, monsterGeneratorOptions.BotPlayer);
+                        var monster = CreateMonster(monsterScheme, monsterNode, monsterPlayer);
 
                         freeNodes.Remove(monster.Node);
                     }
@@ -87,27 +100,29 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Получение доступных схем моснтров на основе указанной редкости монстра.
         /// </summary>
-        /// <param name="monsterGeneratorOptions"> Настройки генерации монстров. </param>
+        /// <param name="sectorScheme"> Настройки генерации монстров. </param>
         /// <param name="currentRarity"> Целевой уровень редкости монстра. </param>
         /// <returns> Возвращает набор строк, являющихся идентификаторами схем монстров. </returns>
-        private static IEnumerable<string> GetAvailableSchemeSids(IMonsterGeneratorOptions monsterGeneratorOptions, int currentRarity)
+        private static IEnumerable<string> GetAvailableSchemeSids(
+            ISectorSubScheme sectorScheme,
+            int currentRarity)
         {
             IEnumerable<string> availableSchemeSids;
             switch (currentRarity)
             {
                 case 0:
-                    availableSchemeSids = monsterGeneratorOptions.RegularMonsterSids;
+                    availableSchemeSids = sectorScheme.RegularMonsterSids;
                     break;
 
                 case 1:
-                    availableSchemeSids = monsterGeneratorOptions.RareMonsterSids ??
-                        monsterGeneratorOptions.RegularMonsterSids;
+                    availableSchemeSids = sectorScheme.RareMonsterSids ??
+                        sectorScheme.RegularMonsterSids;
                     break;
 
                 case 2:
-                    availableSchemeSids = monsterGeneratorOptions.ChampionMonsterSids ??
-                        monsterGeneratorOptions.RareMonsterSids ??
-                        monsterGeneratorOptions.RegularMonsterSids;
+                    availableSchemeSids = sectorScheme.ChampionMonsterSids ??
+                        sectorScheme.RareMonsterSids ??
+                        sectorScheme.RegularMonsterSids;
                     break;
 
                 default:
@@ -159,7 +174,7 @@ namespace Zilon.Core.MapGenerators
 
         private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
         {
-            var person = new MonsterPerson(monsterScheme, _survivalRandomSource);
+            var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;

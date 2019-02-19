@@ -129,7 +129,7 @@
     <Compile Include="Schemes\PropSchemeTests.cs" />
     <Compile Include="Schemes\PerkSchemeTests.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />
-    <Compile Include="Services\MapGenerators\GridMapGeneratorTests.cs" />
+    <Compile Include="Services\MapGenerators\SquareMapFactoryTests.cs" />
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
@@ -154,6 +154,8 @@
     <Compile Include="Tactics\Spatial\TestCases\ConvertOffsetToCubeTestCaseSource.cs" />
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="Tactics\TacticalActUsageServiceTests.cs" />
+    <Compile Include="Tactics\TransitionDetectionTests.cs" />
+    <Compile Include="WorldGeneration\WorldGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

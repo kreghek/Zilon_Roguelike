@@ -1,23 +1,33 @@
 ﻿using System;
+
 using UnityEngine;
+
+using Zilon.Core.World;
 
 public class MapLocation : MonoBehaviour
 {
-    public ModalDialog DialogPrefab;
-    public Canvas Canvas;
     public event EventHandler OnSelect;
     public SpriteRenderer Icon;
 
-    public string Sid { get; set; }
+    public GlobeRegionNode Node { get; set; }
 
-    // Use this for initialization
-    void Start()
+    public void Start()
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        if (Node.Scheme.Sid == "forest")
+        {
+            var sprite = Resources.Load<Sprite>("Globe/forest");
+            Icon.sprite = sprite;
+        }
+        else if(Node.Scheme.Sid == "city")
+        {
+            var sprite = Resources.Load<Sprite>("Globe/city");
+            Icon.sprite = sprite;
+        }
+        else
+        {
+            var sprite = Resources.Load<Sprite>("Globe/gungeon");
+            Icon.sprite = sprite;
+        }
     }
 
     public void OnMouseDown()

@@ -26,11 +26,11 @@ namespace Zilon.Core.Tests.Commands
         protected ServiceContainer Container;
 
         [SetUp]
-        public void SetUp()
+        public async System.Threading.Tasks.Task SetUpAsync()
         {
             Container = new ServiceContainer();
 
-            var testMap = SquareMapFactory.Create(3);
+            var testMap = await SquareMapFactory.CreateAsync(10);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(testMap);

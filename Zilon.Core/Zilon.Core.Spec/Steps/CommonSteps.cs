@@ -30,9 +30,9 @@ namespace Zilon.Core.Spec.Steps
 
         [UsedImplicitly]
         [Given(@"Есть карта размером (\d*)")]
-        public void GivenЕстьКартаРазмером(int mapSize)
+        public async System.Threading.Tasks.Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            Context.CreateSector(mapSize);
+            await Context.CreateSectorAsync(mapSize);
         }
 
         [UsedImplicitly]
@@ -179,7 +179,9 @@ namespace Zilon.Core.Spec.Steps
 
             var equipment = container.Content.CalcActualItems().Single(x=>x.Scheme.Sid == equipmentSchemeSid);
 
-            transferMachine.TransferProp(equipment, container.Content, actor.Person.Inventory);
+            transferMachine.TransferProp(equipment, 
+                PropTransferMachineStores.Container,
+                PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
         }
@@ -213,7 +215,9 @@ namespace Zilon.Core.Spec.Steps
             }
             
 
-            transferMachine.TransferProp(takenResource, container.Content, actor.Person.Inventory);
+            transferMachine.TransferProp(takenResource,
+                PropTransferMachineStores.Container,
+                PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
         }

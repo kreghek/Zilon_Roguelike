@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Бродяга демонов",
+	"En": "Demon Roamer"
+  },
+  "Hp": 4,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -10,9 +14,10 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
+      "Type": "Rapid",
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 30
 }

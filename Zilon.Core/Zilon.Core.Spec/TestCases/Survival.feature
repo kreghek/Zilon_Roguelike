@@ -20,7 +20,7 @@ Scenario Outline: Восстановление параметров провиа
 Examples: 
 	| propSid      | stat    | propValue | expectedStatValue |
 	| kalin-cheese | сытость | 70        | 220               |
-	| bottle       | вода    | 150       | 299               |
+	| water-bottle | вода    | 150       | 299               |
 
 @survival @dev1
 Scenario Outline: Снятие угроз выживания

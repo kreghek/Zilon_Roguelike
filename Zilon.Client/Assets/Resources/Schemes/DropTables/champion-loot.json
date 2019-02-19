@@ -3,33 +3,42 @@
   "Records": [
     {
       "SchemeSid": "battle-axe",
-      "MinPower": 1,
-      "MaxPower": 1,
       "Weight": 10
     },
     {
       "SchemeSid": "gold-armor",
-      "MinPower": 1,
-      "MaxPower": 1,
       "Weight": 10
     },
 
     {
       "SchemeSid": "gold-helmet",
-      "MinPower": 1,
-      "MaxPower": 1,
       "Weight": 10
     },
     {
       "SchemeSid": "pistol",
-      "MinPower": 1,
-      "MaxPower": 1,
-      "Weight": 5
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
     },
     {
       "SchemeSid": "short-sword",
-      "MinPower": 1,
-      "MaxPower": 1,
       "Weight": 10
     }
   ]

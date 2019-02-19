@@ -1,9 +1,13 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Темный гвардеец",
+	"En": "Dark guardian"
+  },
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 2
     },
     "Range": {
       "Min": 1,
@@ -14,5 +18,20 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Grand"
+      }
+    ],
+	"Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+   "BaseScore": 75
 }

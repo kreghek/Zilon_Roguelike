@@ -25,10 +25,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// когда актёр достиг цели, должна отмечаться, как заверщённая.
         /// </summary>
         [Test]
-        public void ExecuteTest_OpenGridMap_ActorReachPointAndTaskComplete()
+        public async System.Threading.Tasks.Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
         {
             // ARRANGE
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -95,11 +95,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
         [Test]
-        public void ExecuteTest_MapWithWalls_ActorAvoidWalls()
+        public async System.Threading.Tasks.Task ExecuteTest_MapWithWalls_ActorAvoidWallsAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 
@@ -134,11 +134,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, что задача заканчивается, когда актёр доходит до крайнего узла найденного маршрута.
         /// </summary>
         [Test]
-        public void ExecuteTest_FindingPathAndMove_IsCompleteTrue()
+        public async System.Threading.Tasks.Task ExecuteTest_FindingPathAndMove_IsCompleteTrueAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var expectedPath = new IMapNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(4,4),

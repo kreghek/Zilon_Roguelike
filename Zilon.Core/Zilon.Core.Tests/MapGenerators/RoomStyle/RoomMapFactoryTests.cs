@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
@@ -22,13 +24,14 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             var roomGenerator = new TestSnakeRoomGenerator();
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = () =>
+            Func<Task> act = async () =>
             {
-                var map = factory.Create();
+                var map = await factory.CreateAsync(sectorScheme);
             };
 
 
@@ -53,13 +56,14 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var randomSource = new RoomGeneratorRandomSource(dice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = () =>
+            Func<Task> act = async () =>
             {
-                var map = factory.Create();
+                var map = await factory.CreateAsync(sectorScheme);
             };
 
 
@@ -72,18 +76,19 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public void Create_RealRandom_NoOverlapNodes()
+        public async Task Create_RealRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
             var dice = new Dice(3245);
             var randomSource = new RoomGeneratorRandomSource(dice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            var map = factory.Create();
+            var map = await factory.CreateAsync(sectorScheme);
 
 
 
@@ -94,6 +99,15 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
                 sameNode.Should().BeEmpty();
             }
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegionSize = 20,
+                RegionCount = 20
+            };
         }
     }
 }

@@ -1,0 +1,15 @@
+{
+  "Name": {
+    "En": "Water",
+    "Ru": "Питьевая вода"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Thirst",
+        "Level": "Normal"
+      }
+    ]
+  }
+}

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Spatial

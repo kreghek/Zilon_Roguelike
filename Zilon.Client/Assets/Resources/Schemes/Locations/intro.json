@@ -1,0 +1,26 @@
+{
+	"Name": {
+		"En": "Rat hole",
+		"Ru": "Крысиная нора"
+	},
+	"SectorLevels": [
+		{
+			"Sid": "intro",
+			"Name":{
+				"En": "intro"
+			},
+			"IsStart": true,
+			
+			"RegularMonsterSids": ["rat", "bat"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
+			"RegionCount": 10,
+			"RegionSize": 5,
+			"RegionMonsterCount": 2,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"]
+		}
+	]
+}
