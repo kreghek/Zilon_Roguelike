@@ -3,6 +3,7 @@
 using Assets.Zilon.Scripts;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
@@ -25,6 +26,8 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
     {
         // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
+
+        DetailsText.text = "YOU DIED" + "\n" + "\n";
 
         DetailsText.text += "=== You survived ===" + "\n";
         var minutesTotal = _scoreManager.Turns * 2;
@@ -54,11 +57,11 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        // TODO Здесь будет рестарт игры
+        SceneManager.LoadScene("title");
     }
 
     public void CancelChanges()
     {
-        throw new NotImplementedException();
+        SceneManager.LoadScene("title");
     }
 }

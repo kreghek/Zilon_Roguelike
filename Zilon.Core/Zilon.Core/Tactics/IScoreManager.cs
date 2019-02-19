@@ -40,5 +40,8 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
         void CountPlace(GlobeRegionNode regionNode);
+
+        /// <summary> Обнуление текущих очков. </summary>
+        void ResetScores();
     }
 }

@@ -508,7 +508,7 @@ internal class SectorVM : MonoBehaviour
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
-        _sectorModalManager.ShowScoreModal();
+        _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
     }
 

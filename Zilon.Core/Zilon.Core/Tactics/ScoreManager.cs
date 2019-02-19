@@ -92,5 +92,15 @@ namespace Zilon.Core.Tactics
 
             PlaceTypes[sectorScheme]++;
         }
+
+        /// <summary>Обнуление текущих очков.</summary>
+        public void ResetScores()
+        {
+            BaseScores = 0;
+            Frags.Clear();
+            PlaceTypes.Clear();
+            Turns = 0;
+            Places.Clear();
+        }
     }
 }
