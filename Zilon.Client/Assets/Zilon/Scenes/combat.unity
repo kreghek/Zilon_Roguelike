@@ -743,6 +743,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 269743641}
     m_Modifications:
+    - target: {fileID: 1168310117906570, guid: 0db7f7d19fca32f4f84606cc02c237d7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224235414461808456, guid: 0db7f7d19fca32f4f84606cc02c237d7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2121,6 +2125,8 @@ MonoBehaviour:
   PerksModalPrefab: {fileID: 114098677241160990, guid: 945687b1947415e4f904a9948ce195f7,
     type: 3}
   InstructionModalPrefab: {fileID: 77522310, guid: b999b3ffad113624c9528851766fedff,
+    type: 3}
+  WinModalPrefab: {fileID: 6260784154107413228, guid: a573016feebf12d4e85666f8f416f422,
     type: 3}
   TraderModalPrefab: {fileID: 391459472281275467, guid: 925b2a6ed0fec2648844b346b66ee74b,
     type: 3}
