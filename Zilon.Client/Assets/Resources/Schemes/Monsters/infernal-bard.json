@@ -14,8 +14,8 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Shadow",
-      "Impact": "Tricky"
+      "Type": "Tricky",
+      "Impact": "Psy"
     }
   },
   "DropTableSids": [ "survival" ],
