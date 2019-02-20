@@ -17,6 +17,8 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     public IProp Prop { get; private set; }
 
     public event EventHandler Click;
+    public event EventHandler MouseEnter;
+    public event EventHandler MouseExit;
 
     public void Init(IProp prop)
     {
@@ -34,6 +36,16 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     {
         Click?.Invoke(this, new EventArgs());
     }
+
+    //public void OnMouseEnter()
+    //{
+    //    MouseEnter?.Invoke(this, new EventArgs());
+    //}
+
+    //public void OnMouseExit()
+    //{
+    //    MouseExit?.Invoke(this, new EventArgs());
+    //}
 
     public void UpdateProp()
     {

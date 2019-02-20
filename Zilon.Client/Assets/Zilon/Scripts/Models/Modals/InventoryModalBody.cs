@@ -23,6 +23,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public PropItemVm PropItemPrefab;
     public Transform EquipmentSlotsParent;
     public InventorySlotVm EquipmentSlotPrefab;
+    public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
     public Text DetailText;
 
@@ -168,12 +169,25 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     {
         var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
         propItemViewModel.Init(prop);
-        propItemViewModel.Click += PropItemOnClick;
+        propItemViewModel.Click += PropItem_Click;
+        propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
+        propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
         _propViewModels.Add(propItemViewModel);
     }
 
+    private void PropItemViewModel_MouseExit(object sender, EventArgs e)
+    {
+        //PropInfoPopup.SetPropViewModel(null);
+    }
+
+    private void PropItemViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var currentItemVm = (PropItemVm)sender;
+        PropInfoPopup.SetPropViewModel(currentItemVm);
+    }
+
     //TODO Дубликат с ContainerModalBody.PropItemOnClick
-    private void PropItemOnClick(object sender, EventArgs e)
+    private void PropItem_Click(object sender, EventArgs e)
     {
         var currentItemVm = (PropItemVm)sender;
         var parentTransform = currentItemVm.transform.parent;
@@ -192,6 +206,15 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         // --- этот фрагмент - не дубликат
 
         _inventoryState.SelectedProp = currentItemVm;
+
+        if (currentItemVm.Prop == currentItemVm)
+        {
+            PropInfoPopup.SetPropViewModel(null);
+        }
+        else
+        {
+            PropInfoPopup.SetPropViewModel(currentItemVm);
+        }
     }
 
     public void UseButton_Handler()
