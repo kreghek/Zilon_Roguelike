@@ -14,11 +14,9 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
-    private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
@@ -63,13 +61,13 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         }
     }
 
-    public void Init(IActor actor)
+    public void Init()
     {
         // изначально скрываем кнопку использования
         UseButton.SetActive(false);
 
-        _actor = actor;
-        var inventory = _actor.Person.Inventory;
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
@@ -79,7 +77,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        var inventory = _actor.Person.Inventory;
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         inventory.Added -= Inventory_Added;
         inventory.Removed -= Inventory_Removed;
         inventory.Changed -= Inventory_Changed;
@@ -115,7 +114,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             _propViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
 
-            if (_inventoryState.SelectedProp == propViewModel)
+            var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+            if (isRemovedPropWasSelected)
             {
                 _inventoryState.SelectedProp = null;
                 UseButton.SetActive(false);
@@ -142,7 +142,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
     {
-        var inventory = _actor.Person.Inventory;
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
     }
 
