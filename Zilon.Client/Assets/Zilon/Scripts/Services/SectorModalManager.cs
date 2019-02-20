@@ -51,7 +51,7 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<InventoryModalBody>(InventoryModalPrefab.gameObject);
 
-            modalBody.Init(actor);
+            modalBody.Init();
         }
 
         public void ShowPerksModal(IActor actor)
