@@ -1,6 +1,7 @@
 ﻿using System;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 using Zilon.Core.Client;
@@ -36,16 +37,6 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     {
         Click?.Invoke(this, new EventArgs());
     }
-
-    //public void OnMouseEnter()
-    //{
-    //    MouseEnter?.Invoke(this, new EventArgs());
-    //}
-
-    //public void OnMouseExit()
-    //{
-    //    MouseExit?.Invoke(this, new EventArgs());
-    //}
 
     public void UpdateProp()
     {

@@ -25,7 +25,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public InventorySlotVm EquipmentSlotPrefab;
     public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
-    public Text DetailText;
 
     [NotNull] [Inject] private DiContainer _diContainer;
     [NotNull] [Inject] private IPlayerState _playerState;
@@ -200,14 +199,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         // этот фрагмент - не дубликат
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
-
-        var propTitle = currentItemVm.Prop.Scheme.Name.En ?? currentItemVm.Prop.Scheme.Name.Ru;
-        DetailText.text = propTitle;
         // --- этот фрагмент - не дубликат
 
         _inventoryState.SelectedProp = currentItemVm;
 
-        if (currentItemVm.Prop == currentItemVm)
+        if ((object)currentItemVm.Prop == currentItemVm)
         {
             PropInfoPopup.SetPropViewModel(null);
         }
