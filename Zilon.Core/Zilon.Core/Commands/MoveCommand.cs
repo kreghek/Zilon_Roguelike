@@ -16,8 +16,9 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
-        private readonly List<IMapNode> _path;
         private readonly IActorManager _actorManager;
+
+        public List<IMapNode> Path { get; }
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -40,7 +41,7 @@ namespace Zilon.Core.Commands
         {
             _actorManager = actorManager;
 
-            _path = new List<IMapNode>();
+            Path = new List<IMapNode>();
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Zilon.Core.Commands
             }
 
             CreatePath();
-            return _path.Any();
+            return Path.Any();
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace Zilon.Core.Commands
             var finishNode = nodeViewModel.Node;
             var map = SectorManager.CurrentSector.Map;
 
-            _path.Clear();
+            Path.Clear();
 
             var context = new PathFindingContext(PlayerState.ActiveActor.Actor);
 
@@ -114,7 +115,7 @@ namespace Zilon.Core.Commands
             var foundPath = astar.GetPath().Skip(1).ToArray();
             foreach (var pathNode in foundPath)
             {
-                _path.Add((HexNode)pathNode);
+                Path.Add((HexNode)pathNode);
             }
         }
 

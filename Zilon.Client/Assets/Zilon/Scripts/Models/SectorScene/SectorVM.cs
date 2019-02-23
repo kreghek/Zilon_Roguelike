@@ -115,6 +115,8 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
+    private bool _canMove;
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
@@ -273,11 +275,18 @@ internal class SectorVM : MonoBehaviour
             }
 
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
+            mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
 
             nodeVMs.Add(mapNodeVm);
         }
 
         return nodeVMs;
+    }
+
+    private void MapNodeVm_MouseEnter(object sender, EventArgs e)
+    {
+        _playerState.HoverViewModel = (IMapNodeViewModel)sender;
+        _canMove = _moveCommand.CanExecute();
     }
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
