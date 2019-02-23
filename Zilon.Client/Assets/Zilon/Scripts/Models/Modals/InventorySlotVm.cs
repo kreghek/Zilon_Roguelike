@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Assets.Zilon.Scripts.Models;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -27,7 +29,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
     public int SlotIndex;
-    
+
     public GameObject DenyBorder;
     public Image IconImage;
     public EquipmentSlotTypes SlotTypes;

@@ -1,7 +1,8 @@
 ﻿using System;
+
 using Assets.Zilon.Scripts.Models;
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 using Zilon.Core.Client;
