@@ -38,6 +38,16 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
         Click?.Invoke(this, new EventArgs());
     }
 
+    public void OnMouseEnter()
+    {
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseExit()
+    {
+        MouseExit?.Invoke(this, new EventArgs());
+    }
+
     public void UpdateProp()
     {
         if (Prop is Resource resource)

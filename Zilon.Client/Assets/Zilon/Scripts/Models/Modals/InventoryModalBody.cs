@@ -176,7 +176,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void PropItemViewModel_MouseExit(object sender, EventArgs e)
     {
-        //PropInfoPopup.SetPropViewModel(null);
+        PropInfoPopup.SetPropViewModel(null);
     }
 
     private void PropItemViewModel_MouseEnter(object sender, EventArgs e)
@@ -202,15 +202,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         // --- этот фрагмент - не дубликат
 
         _inventoryState.SelectedProp = currentItemVm;
-
-        if ((object)currentItemVm.Prop == currentItemVm)
-        {
-            PropInfoPopup.SetPropViewModel(null);
-        }
-        else
-        {
-            PropInfoPopup.SetPropViewModel(currentItemVm);
-        }
     }
 
     public void UseButton_Handler()
