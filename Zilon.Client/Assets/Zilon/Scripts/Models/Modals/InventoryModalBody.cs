@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts;
-
+using Assets.Zilon.Scripts.Models;
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -57,8 +57,15 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
             slotViewModel.SlotIndex = i;
             slotViewModel.SlotTypes = slots[i].Types;
-            slotViewModel.Click += SlotOnClick;
+            slotViewModel.Click += Slot_Click;
+            slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
         }
+    }
+
+    private void SlotViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var currentItemVm = (IPropViewModelDescription)sender;
+        PropInfoPopup.SetPropViewModel(currentItemVm);
     }
 
     public void Init()
@@ -95,7 +102,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         throw new NotImplementedException();
     }
 
-    private void SlotOnClick(object sender, EventArgs e)
+    private void Slot_Click(object sender, EventArgs e)
     {
         var slotVm = sender as InventorySlotVm;
         if (slotVm == null)

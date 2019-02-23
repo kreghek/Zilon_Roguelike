@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 114484836081510712}
   - component: {fileID: 114889429254206848}
   - component: {fileID: 114999057452803224}
+  - component: {fileID: 4063666282255933052}
   m_Layer: 5
   m_Name: EquipmentSlot
   m_TagString: Untagged
@@ -138,7 +139,7 @@ MonoBehaviour:
   SlotIndex: 0
   DenyBorder: {fileID: 1135710153834554}
   IconImage: {fileID: 114511485552313524}
-  SlotType: 0
+  SlotTypes: 0
   TypeBackgrounds:
   - {fileID: 21300000, guid: 5db07acd905b8b24e83de9af228130f0, type: 3}
   - {fileID: 21300000, guid: 9155e055b7ee49f4cbdabd4b1ee4c15a, type: 3}
@@ -217,6 +218,32 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!61 &4063666282255933052
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168523480684566}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 40, y: 40}
+  m_EdgeRadius: 0
 --- !u!1 &1331298518315526
 GameObject:
   m_ObjectHideFlags: 0

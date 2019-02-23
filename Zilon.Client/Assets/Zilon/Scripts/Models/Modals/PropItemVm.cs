@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Assets.Zilon.Scripts.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 
-public class PropItemVm : MonoBehaviour, IPropItemViewModel
+public class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
     public Text CountText;
     public Image IconImage;
@@ -16,6 +16,7 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     public string Sid;
 
     public IProp Prop { get; private set; }
+    public Vector3 Position => GetComponent<RectTransform>().position;
 
     public event EventHandler Click;
     public event EventHandler MouseEnter;
