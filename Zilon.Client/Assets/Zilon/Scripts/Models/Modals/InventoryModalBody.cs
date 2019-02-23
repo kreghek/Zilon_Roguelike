@@ -4,10 +4,10 @@ using System.Linq;
 
 using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Models;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 using Zenject;
 

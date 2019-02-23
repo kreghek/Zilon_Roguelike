@@ -170,7 +170,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
                 default:
                     throw new InvalidOperationException();
             }
-            
+
             _containerViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= ContainerPropItem_Click;
