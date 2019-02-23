@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,11 +46,14 @@ public class PropInfoPopup : MonoBehaviour
         switch (propViewModel.Prop)
         {
             case Equipment equipment:
+                var actDescriptions = new List<string>();
                 foreach (var sid in propViewModel.Prop.Scheme.Equip.ActSids)
                 {
                     var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
-                    StatText.text = $"Efficient: {act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
+                    var actName = act.Name.En ?? act.Name.Ru;
+                    actDescriptions.Add($"{actName}: {act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}");
                 }
+                StatText.text = string.Join("\n", actDescriptions);
                 break;
 
             case Resource resource:
