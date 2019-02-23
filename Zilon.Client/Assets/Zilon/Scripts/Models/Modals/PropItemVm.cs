@@ -1,12 +1,14 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Models;
+
 using UnityEngine;
 using UnityEngine.UI;
 
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 
-public class PropItemVm : MonoBehaviour, IPropItemViewModel
+public class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
     public Text CountText;
     public Image IconImage;
@@ -15,8 +17,11 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     public string Sid;
 
     public IProp Prop { get; private set; }
+    public Vector3 Position => GetComponent<RectTransform>().position;
 
     public event EventHandler Click;
+    public event EventHandler MouseEnter;
+    public event EventHandler MouseExit;
 
     public void Init(IProp prop)
     {
@@ -33,6 +38,16 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel
     public void Click_Handler()
     {
         Click?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseEnter()
+    {
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseExit()
+    {
+        MouseExit?.Invoke(this, new EventArgs());
     }
 
     public void UpdateProp()
