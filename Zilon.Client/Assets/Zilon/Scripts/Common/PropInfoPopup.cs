@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Zilon.Scripts.Models;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +13,7 @@ using Zilon.Core.Schemes;
 
 public class PropInfoPopup : MonoBehaviour
 {
-    [Inject] ISchemeService _schemeService;
+    [Inject] private ISchemeService _schemeService;
 
     public Text NameText;
     public Text StatText;
@@ -91,8 +93,8 @@ public class PropInfoPopup : MonoBehaviour
     {
         if (PropViewModel != null)
         {
-            
-            GetComponent<RectTransform>().position = PropViewModel.Position 
+
+            GetComponent<RectTransform>().position = PropViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }
     }
