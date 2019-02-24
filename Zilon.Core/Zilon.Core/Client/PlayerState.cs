@@ -9,5 +9,7 @@ namespace Zilon.Core.Client
         public ISelectableViewModel HoverViewModel { get; set; }
 
         public IHumanActorTaskSource TaskSource { get; set; }
+
+        public ISelectableViewModel SelectedViewModel { get; set; }
     }
 }

@@ -16,9 +16,14 @@ namespace Zilon.Core.Client
         IActorViewModel ActiveActor { get; set; }
 
         /// <summary>
-        /// Выбранный узел.
+        /// Выбранный объект.
         /// </summary>
         ISelectableViewModel HoverViewModel { get; set; }
+
+        /// <summary>
+        /// Зафиксированный выбранный объект.
+        /// </summary>
+        ISelectableViewModel SelectedViewModel { get; set; }
 
         /// <summary>
         /// Пользовательский источник задач для актёров.
