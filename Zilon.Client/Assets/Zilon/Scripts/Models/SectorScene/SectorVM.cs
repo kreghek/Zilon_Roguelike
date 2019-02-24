@@ -315,6 +315,7 @@ internal class SectorVM : MonoBehaviour
             actorViewModel.Actor = monsterActor;
 
             actorViewModel.Selected += EnemyActorVm_OnSelected;
+            actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
 
             _actorViewModels.Add(actorViewModel);
@@ -459,14 +460,19 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        var actorVm = sender as ActorViewModel;
+        var actorViewModel = sender as ActorViewModel;
 
-        _playerState.HoverViewModel = actorVm;
+        _playerState.SelectedViewModel = actorViewModel;
 
-        if (actorVm != null)
+        if (actorViewModel != null)
         {
             _clientCommandExecutor.Push(_attackCommand);
         }
+    }
+
+    private void EnemyViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
     private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
