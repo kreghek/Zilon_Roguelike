@@ -91,10 +91,13 @@ namespace Zilon.Core.Commands.Tests
             var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
             var moveTargetNode = nextNodes.First();
 
-            playerState.HoverViewModel = new TestNodeViewModel
+            var nodeViewModel = new TestNodeViewModel
             {
                 Node = moveTargetNode
             };
+
+            playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
 
             commandManger.Push(moveCommand);
 
