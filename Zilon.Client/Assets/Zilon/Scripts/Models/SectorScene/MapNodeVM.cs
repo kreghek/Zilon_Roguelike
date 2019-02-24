@@ -54,6 +54,11 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 
     public void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         MouseEnter?.Invoke(this, new EventArgs());
     }
 

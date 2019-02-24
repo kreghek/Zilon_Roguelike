@@ -315,6 +315,7 @@ internal class SectorVM : MonoBehaviour
             actorViewModel.Actor = monsterActor;
 
             actorViewModel.Selected += EnemyActorVm_OnSelected;
+            actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
 
             _actorViewModels.Add(actorViewModel);
@@ -348,6 +349,7 @@ internal class SectorVM : MonoBehaviour
         containerViewModel.transform.position = containerPosition;
         containerViewModel.Container = container;
         containerViewModel.Selected += Container_Selected;
+        containerViewModel.MouseEnter += ContainerViewModel_MouseEnter;
 
         _containerViewModels.Add(containerViewModel);
     }
@@ -399,11 +401,19 @@ internal class SectorVM : MonoBehaviour
         var containerViewModel = sender as ContainerVm;
 
         _playerState.HoverViewModel = containerViewModel;
+        _playerState.SelectedViewModel = containerViewModel;
 
         if (containerViewModel != null)
         {
             _clientCommandExecutor.Push(_openContainerCommand);
         }
+    }
+
+    private void ContainerViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var containerViewModel = sender as ContainerVm;
+
+        _playerState.HoverViewModel = containerViewModel;
     }
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
@@ -459,14 +469,19 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        var actorVm = sender as ActorViewModel;
+        var actorViewModel = sender as ActorViewModel;
 
-        _playerState.HoverViewModel = actorVm;
+        _playerState.SelectedViewModel = actorViewModel;
 
-        if (actorVm != null)
+        if (actorViewModel != null)
         {
             _clientCommandExecutor.Push(_attackCommand);
         }
+    }
+
+    private void EnemyViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
     private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,

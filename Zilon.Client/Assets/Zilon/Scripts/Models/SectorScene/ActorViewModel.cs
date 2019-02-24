@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -41,6 +42,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     }
 
     public event EventHandler Selected;
+    public event EventHandler MouseEnter;
+
     public IActor Actor { get; set; }
 
 
@@ -93,6 +96,16 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Selected?.Invoke(this, new EventArgs());
     }
 
+    public void OnMouseEnter()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
     public void AddHitEffect(HitSfx sfxObject)
     {
         sfxObject.HitSfxes = _effectList;
@@ -100,7 +113,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
         _effectList.Add(sfxObject);
     }
-    
+
     private void Survival_Dead(object sender, EventArgs e)
     {
         var isHumanPerson = Actor.Owner is HumanPlayer;

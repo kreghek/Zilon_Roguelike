@@ -144,7 +144,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {
-            Context.HoverNode(x, y);
+            Context.ClickOnNode(x, y);
         }
 
         [UsedImplicitly]

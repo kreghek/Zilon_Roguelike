@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using System;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
 {
@@ -29,5 +30,8 @@ namespace Zilon.Core.Client
         /// Пользовательский источник задач для актёров.
         /// </summary>
         IHumanActorTaskSource TaskSource { get; set; }
+
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
+        event EventHandler HoverChanged;
     }
 }
