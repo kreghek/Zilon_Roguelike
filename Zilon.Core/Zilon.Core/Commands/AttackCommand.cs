@@ -34,7 +34,7 @@ namespace Zilon.Core.Commands
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = GetHoverActorViewModel();
+            var selectedActorViewModel = GetCanExecuteActorViewModel();
             if (selectedActorViewModel == null)
             {
                 return false;
@@ -86,9 +86,11 @@ namespace Zilon.Core.Commands
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
-        private IActorViewModel GetHoverActorViewModel()
+        private IActorViewModel GetCanExecuteActorViewModel()
         {
-            return PlayerState.HoverViewModel as IActorViewModel;
+            var hover = PlayerState.HoverViewModel as IActorViewModel;
+            var selected = PlayerState.SelectedViewModel as IActorViewModel;
+            return hover ?? selected;
         }
 
         protected override void ExecuteTacticCommand()
