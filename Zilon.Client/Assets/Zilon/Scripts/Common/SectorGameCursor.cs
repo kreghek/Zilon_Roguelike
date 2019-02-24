@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using UnityEngine.EventSystems;
 using Zenject;
 
 using Zilon.Core.Client;
@@ -20,18 +20,17 @@ public class SectorGameCursor : MonoBehaviour
     public void Start()
     {
         Cursor.visible = false;
+        _playerState.HoverChanged += PlayerState_HoverChanged;
     }
 
-
-    public void Update()
-    {
-        var cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.localPosition = cursorPosition + new Vector3(0, 0, 11);
-    }
-
-    public void FixedUpdate()
+    private void PlayerState_HoverChanged(object sender, System.EventArgs e)
     {
         SpriteRenderer.sprite = DefaultCursorSprite;
+
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
         if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
@@ -48,12 +47,26 @@ public class SectorGameCursor : MonoBehaviour
             }
             else
             {
-                SpriteRenderer.sprite = CantMoveCursorSprite;
+                if (_playerState.HoverViewModel != _playerState.ActiveActor)
+                {
+                    SpriteRenderer.sprite = CantMoveCursorSprite;
+                }
             }
         }
         else if (_playerState.HoverViewModel is IContainerViewModel)
         {
             SpriteRenderer.sprite = InteractiveCursorSprite;
         }
+    }
+
+    public void OnDestroy()
+    {
+        _playerState.HoverChanged -= PlayerState_HoverChanged;
+    }
+
+    public void Update()
+    {
+        var cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.localPosition = cursorPosition + new Vector3(0, 0, 11);
     }
 }

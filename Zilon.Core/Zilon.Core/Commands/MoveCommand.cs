@@ -114,13 +114,19 @@ namespace Zilon.Core.Commands
 
         private void CreatePath(IMapNodeViewModel targetNode)
         {
-            var startNode = PlayerState.ActiveActor.Actor.Node;
+            var actor = PlayerState.ActiveActor.Actor;
+            var startNode = actor.Node;
             var finishNode = targetNode.Node;
             var map = SectorManager.CurrentSector.Map;
 
             Path.Clear();
 
-            var context = new PathFindingContext(PlayerState.ActiveActor.Actor);
+            if (!map.IsPositionAvailableFor(finishNode, actor))
+            {
+                return;
+            }
+
+            var context = new PathFindingContext(actor);
 
             var astar = new AStar(map, context, startNode, finishNode);
             var resultState = astar.Run();

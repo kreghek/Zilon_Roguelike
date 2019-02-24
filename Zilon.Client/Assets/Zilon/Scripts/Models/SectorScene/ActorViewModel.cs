@@ -98,6 +98,11 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     public void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         MouseEnter?.Invoke(this, new EventArgs());
     }
 
