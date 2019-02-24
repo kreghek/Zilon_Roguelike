@@ -66,7 +66,7 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если команду можно повторить. </returns>
         public bool CanRepeat()
         {
-            var canRepeat = CanExecute() && CheckEnemies();
+            var canRepeat = CanExecuteForSelected() && CheckEnemies();
             return canRepeat;
         }
 
@@ -98,6 +98,18 @@ namespace Zilon.Core.Commands
         private IMapNodeViewModel GetSelectedNodeViewModel()
         {
             return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
+        private bool CanExecuteForSelected()
+        {
+            var nodeViewModel = GetSelectedNodeViewModel();
+            if (nodeViewModel == null)
+            {
+                return false;
+            }
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
         }
 
         private void CreatePath(IMapNodeViewModel targetNode)

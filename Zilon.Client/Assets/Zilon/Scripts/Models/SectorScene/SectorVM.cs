@@ -669,6 +669,7 @@ internal class SectorVM : MonoBehaviour
         var nodeVm = sender as MapNodeVM;
 
         _playerState.SelectedViewModel = nodeVm;
+        _playerState.HoverViewModel = nodeVm;
 
         if (nodeVm != null)
         {

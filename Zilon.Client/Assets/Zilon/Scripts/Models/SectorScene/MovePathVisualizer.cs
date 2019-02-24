@@ -3,7 +3,7 @@
 using UnityEngine;
 
 using Zenject;
-
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
@@ -13,6 +13,7 @@ public class MovePathVisualizer : MonoBehaviour
     public GameObject VisualizationItemPrefab;
 
     [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
+    [Inject] private readonly IPlayerState _playerState;
     private List<IMapNode> _lastPath;
 
     public void FixedUpdate()
@@ -25,17 +26,20 @@ public class MovePathVisualizer : MonoBehaviour
             Destroy(visualizationItem.gameObject);
         }
 
-        _lastPath = path;
-
-        if (_lastPath != null)
+        if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
-            foreach (var pathNode in _lastPath)
-            {
-                var hexPathNode = (HexNode)pathNode;
-                var worldPosition = HexHelper.ConvertToWorld(hexPathNode.OffsetX, hexPathNode.OffsetY);
+            _lastPath = path;
 
-                var item = Instantiate(VisualizationItemPrefab, transform);
-                item.transform.position = new Vector3(worldPosition[0], worldPosition[1] / 2);
+            if (_lastPath != null)
+            {
+                foreach (var pathNode in _lastPath)
+                {
+                    var hexPathNode = (HexNode)pathNode;
+                    var worldPosition = HexHelper.ConvertToWorld(hexPathNode.OffsetX, hexPathNode.OffsetY);
+
+                    var item = Instantiate(VisualizationItemPrefab, transform);
+                    item.transform.position = new Vector3(worldPosition[0], worldPosition[1] / 2);
+                }
             }
         }
     }
