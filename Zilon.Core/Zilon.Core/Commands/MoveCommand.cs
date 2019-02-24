@@ -50,13 +50,13 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            var nodeViewModel = GetSelectedNodeViewModel();
+            var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel == null)
             {
                 return false;
             }
 
-            CreatePath();
+            CreatePath(nodeViewModel);
             return Path.Any();
         }
 
@@ -81,6 +81,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
+            CreatePath(selectedNodeVm);
+
             var targetNode = selectedNodeVm.Node;
             var targetMap = SectorManager.CurrentSector.Map;
 
@@ -88,17 +90,20 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(moveIntetion);
         }
 
-        private IMapNodeViewModel GetSelectedNodeViewModel()
+        private IMapNodeViewModel GetHoverNodeViewModel()
         {
             return PlayerState.HoverViewModel as IMapNodeViewModel;
         }
 
-        private void CreatePath()
+        private IMapNodeViewModel GetSelectedNodeViewModel()
         {
-            var nodeViewModel = GetSelectedNodeViewModel();
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
 
+        private void CreatePath(IMapNodeViewModel targetNode)
+        {
             var startNode = PlayerState.ActiveActor.Actor.Node;
-            var finishNode = nodeViewModel.Node;
+            var finishNode = targetNode.Node;
             var map = SectorManager.CurrentSector.Map;
 
             Path.Clear();

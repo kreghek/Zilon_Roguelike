@@ -285,8 +285,12 @@ internal class SectorVM : MonoBehaviour
 
     private void MapNodeVm_MouseEnter(object sender, EventArgs e)
     {
-        _playerState.HoverViewModel = (IMapNodeViewModel)sender;
-        _canMove = _moveCommand.CanExecute();
+        var blocked = _commandBlockerService.HasBlockers;
+        if (!blocked)
+        {
+            _playerState.HoverViewModel = (IMapNodeViewModel)sender;
+            _canMove = _moveCommand.CanExecute();
+        }
     }
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
@@ -664,7 +668,7 @@ internal class SectorVM : MonoBehaviour
 
         var nodeVm = sender as MapNodeVM;
 
-        _playerState.HoverViewModel = nodeVm;
+        _playerState.SelectedViewModel = nodeVm;
 
         if (nodeVm != null)
         {
