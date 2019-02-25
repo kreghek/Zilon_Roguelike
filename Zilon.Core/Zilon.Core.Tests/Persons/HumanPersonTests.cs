@@ -679,5 +679,133 @@ namespace Zilon.Core.Tests.Persons
             person.CombatStats.DefenceStats.Armors[1].ArmorRank.Should().Be(10);
             person.CombatStats.DefenceStats.Armors[1].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
         }
+
+        /// <summary>
+        /// Тест проверяет, что если экипировать предмет бонусом к здоровью,
+        /// то здоровье персонажа будет увеличено.
+        /// </summary>
+        [Test]
+        public void HumanPerson_EquipPropWithHpBonus_HpIncreased()
+        {
+            // ARRANGE
+
+            var personScheme = new TestPersonScheme
+            {
+                Hp = 10,
+                Slots = new[]{
+                    new PersonSlotSubScheme
+                    {
+                        Types = EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var defaultAct = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Efficient = new Roll(6, 1)
+                }
+            };
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultAct, evolutionData, survivalRandomSource);
+
+            var armorPropScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    Rules = new[] {
+                        new EquipCommonRule(EquipCommonRuleType.Health, PersonRuleLevel.Lesser)
+                    },
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
+
+
+
+            // ACT
+            person.EquipmentCarrier[0] = armorProp;
+
+
+
+            // ASSERT
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(11);
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(11);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что если экипировать предмет бонусом к здоровью,
+        /// то здоровье персонажа будет увеличено пропорционально текущему здоровью.
+        /// </summary>
+        [Test]
+        public void HumanPerson_EquipPropWithHpBonusWithNoHalfHp_HpIncreasedRateably()
+        {
+            // ARRANGE
+
+            var personScheme = new TestPersonScheme
+            {
+                Hp = 10,
+                Slots = new[]{
+                    new PersonSlotSubScheme
+                    {
+                        Types = EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var defaultAct = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Efficient = new Roll(6, 1)
+                }
+            };
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultAct, evolutionData, survivalRandomSource);
+
+            var armorPropScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    Rules = new[] {
+                        new EquipCommonRule(EquipCommonRuleType.Health, PersonRuleLevel.Normal)
+                    },
+                    SlotTypes = new[] {
+                        EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
+
+            person.Survival.DecreaseStat(SurvivalStatType.Health, 5);
+
+
+
+            // ACT
+            person.EquipmentCarrier[0] = armorProp;
+
+
+
+            // ASSERT
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(13);
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(7);
+        }
     }
 }

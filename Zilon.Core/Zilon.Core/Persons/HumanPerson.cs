@@ -392,7 +392,7 @@ namespace Zilon.Core.Persons
                                         break;
                                 }
 
-                                hpStat.ChangeStatRange(hpStat.Range.Min, newMax);
+                                hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + bonus);
                             }
                             break;
                     }

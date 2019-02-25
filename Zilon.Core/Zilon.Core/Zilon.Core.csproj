@@ -92,6 +92,8 @@
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
+    <Compile Include="Schemes\EquipCommonRule.cs" />
+    <Compile Include="Schemes\EquipCommonRuleType.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
     <Compile Include="Schemes\ISectorSubScheme.cs" />
