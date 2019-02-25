@@ -14,6 +14,7 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
 
 
     public event EventHandler Selected;
+    public event EventHandler MouseEnter;
 
     public IPropContainer Container { get; set; }
 
@@ -33,9 +34,24 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
         DoSelected();
     }
 
+    public void OnMouseEnter()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        DoMouseEnter();
+    }
+
     private void DoSelected()
     {
         Selected?.Invoke(this, new EventArgs());
+    }
+
+    private void DoMouseEnter()
+    {
+        MouseEnter?.Invoke(this, new EventArgs());
     }
 
 

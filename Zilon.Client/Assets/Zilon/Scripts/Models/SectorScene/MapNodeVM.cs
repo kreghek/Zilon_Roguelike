@@ -18,6 +18,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     public HexNode[] Neighbors { get; set; }
 
     public event EventHandler OnSelect;
+    public event EventHandler MouseEnter;
 
 
     public void Start()
@@ -49,6 +50,16 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
         }
 
         OnSelect?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseEnter()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        MouseEnter?.Invoke(this, new EventArgs());
     }
 
     public override string ToString()

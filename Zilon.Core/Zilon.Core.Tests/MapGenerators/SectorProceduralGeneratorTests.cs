@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -10,7 +10,6 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -37,32 +36,20 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
-            var options = CreateOptions(botPlayer);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = () =>
+            Func<Task> act = async () =>
             {
-                var sector = generator.Generate(options);
+                var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
 
 
 
             // ASSERT
             act.Should().NotThrow();
-        }
-
-        private static ISectorGeneratorOptions CreateOptions(IBotPlayer botPlayer)
-        {
-            return new SectorProceduralGeneratorOptions
-            {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
-                {
-                    BotPlayer = botPlayer,
-                    RegularMonsterSids = new[] { "rat" }
-                }
-            };
         }
 
         /// <summary>
@@ -85,14 +72,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
-            var options = CreateOptions(botPlayer);
+            var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Action act = () =>
+            Func<Task> act = async () =>
             {
-                var sector = generator.Generate(options);
+                var sector = await generator.GenerateDungeonAsync(sectorScheme);
             };
 
 
@@ -101,7 +88,7 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static SectorProceduralGenerator CreateGenerator(ISchemeService schemeService,
+        private static SectorGenerator CreateGenerator(ISchemeService schemeService,
             IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
@@ -114,8 +101,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            var survivalRandomSource = survivalRandomSourceMock.Object;
+            var tradeManagerMock = new Mock<ITraderManager>();
+            var tradeManager = tradeManagerMock.Object;
 
             var chestGeneratorMock = new Mock<IChestGenerator>();
             var chestGenerator = chestGeneratorMock.Object;
@@ -126,10 +113,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorFactoryMock = new Mock<ISectorFactory>();
             var sectorFactory = sectorFactoryMock.Object;
 
-            return new SectorProceduralGenerator(mapFactory,
+            return new SectorGenerator(mapFactory,
                 sectorFactory,
                 monsterGenerator,
-                chestGenerator);
+                chestGenerator,
+                botPlayer,
+                schemeService,
+                tradeManager,
+                dropResolver);
         }
 
 
@@ -187,6 +178,16 @@ namespace Zilon.Core.Tests.MapGenerators
             var botPlayerMock = new Mock<IBotPlayer>();
             var botPlayer = botPlayerMock.Object;
             return botPlayer;
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegularMonsterSids = new[] { "rat" },
+                RegionCount = 20,
+                RegionSize = 20
+            };
         }
     }
 }

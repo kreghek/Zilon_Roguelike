@@ -1,8 +1,12 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Дервиш",
+	"En": "Dervish"
+  },
+  "Hp": 50,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -10,9 +14,10 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
+      "Type": "Fury",
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 150
 }

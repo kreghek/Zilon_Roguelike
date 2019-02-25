@@ -32,6 +32,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] public Transform ContainerItemsParent;
 
+    public PropInfoPopup PropInfoPopup;
+
     // ReSharper restore MemberCanBePrivate.Global
 
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
@@ -124,6 +126,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
             propItemViewModel.Init(prop);
             propItemViewModel.Click += InventoryPropItem_Click;
+            propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
+            propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
             _inventoryViewModels.Add(propItemViewModel);
         }
 
@@ -166,7 +170,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
                 default:
                     throw new InvalidOperationException();
             }
-            
+
             _containerViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
             propViewModel.Click -= ContainerPropItem_Click;
@@ -187,12 +191,25 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
             propItemViewModel.Init(prop);
             propItemViewModel.Click += ContainerPropItem_Click;
+            propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
+            propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
             _containerViewModels.Add(propItemViewModel);
         }
 
         var parentRect = itemsParent.GetComponent<RectTransform>();
         var rowCount = (int)Math.Ceiling(propStore.CalcActualItems().Count() / 4f);
         parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
+    }
+
+    private void PropItemViewModel_MouseExit(object sender, EventArgs e)
+    {
+        PropInfoPopup.SetPropViewModel(null);
+    }
+
+    private void PropItemViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var currentItemVm = (PropItemVm)sender;
+        PropInfoPopup.SetPropViewModel(currentItemVm);
     }
 
     private void Container_Changed(object sender, PropStoreEventArgs e)
@@ -217,6 +234,8 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             var propItemVm = Instantiate(PropItemPrefab, itemsParent);
             propItemVm.Init(prop);
             propItemVm.Click += propItemHandler;
+            propItemVm.MouseEnter += PropItemViewModel_MouseEnter;
+            propItemVm.MouseExit += PropItemViewModel_MouseExit;
             propItems.Add(propItemVm);
         }
 

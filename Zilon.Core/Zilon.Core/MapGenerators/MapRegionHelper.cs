@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using JetBrains.Annotations;
 
@@ -57,6 +58,7 @@ namespace Zilon.Core.MapGenerators
             return null;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CheckArguments(IMapNode node,
             IMap map,
             IEnumerable<IMapNode> availableNodes)

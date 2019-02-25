@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
         /// </summary>
         [Test]
-        public void CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonsters()
+        public async System.Threading.Tasks.Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
         {
             var schemeDict = new Dictionary<string, IMonsterScheme>
             {
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var randomSourceMock = new Mock<MonsterGeneratorRandomSource>(dice).As<IMonsterGeneratorRandomSource>();
             randomSourceMock.CallBase = true;
             randomSourceMock.Setup(x => x.RollRarity()).Returns(2);
-            randomSourceMock.Setup(x => x.RollCount()).Returns(20);
+            randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(20);
             var randomSource = randomSourceMock.Object;
 
             var actorList = new List<IActor>();
@@ -55,16 +55,12 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            var survivalRandomSource = survivalRandomSourceMock.Object;
-
             var monsterGenerator = new MonsterGenerator(schemeService,
                 randomSource,
-                actorManager,
-                survivalRandomSource);
+                actorManager);
 
 
-            var map = SquareMapFactory.Create(20);
+            var map = await SquareMapFactory.CreateAsync(20);
             var sectorMock = new Mock<ISector>();
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
@@ -74,16 +70,18 @@ namespace Zilon.Core.Tests.MapGenerators
                 new MapRegion(1, map.Nodes.ToArray())
             };
 
-            var options = new MonsterGeneratorOptions
+            var sectorScheme = new TestSectorSubScheme
             {
-                BotPlayer = new Mock<IBotPlayer>().Object,
                 RegularMonsterSids = new[] { "regular" },
                 RareMonsterSids = new[] { "rare" },
                 ChampionMonsterSids = new[] { "champion" }
             };
 
             // ACT
-            monsterGenerator.CreateMonsters(sector, monsterRegions, options);
+            monsterGenerator.CreateMonsters(sector,
+                new Mock<IBotPlayer>().Object,
+                monsterRegions,
+                sectorScheme);
 
 
 

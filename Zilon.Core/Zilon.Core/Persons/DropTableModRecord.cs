@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Запись таблицы дропа.
         /// </summary>
-        public DropTableRecordSubScheme Record { get; set; }
+        public IDropTableRecordSubScheme Record { get; set; }
 
         /// <summary>
         /// Модифицированный вес.

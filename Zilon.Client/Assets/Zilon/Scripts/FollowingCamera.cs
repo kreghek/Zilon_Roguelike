@@ -28,11 +28,11 @@ public class FollowingCamera : MonoBehaviour
             return;
         }
 
-        var actorVm = _playerState.ActiveActor;
-        var actorVmMonobehaviour = (ActorViewModel) actorVm;
-        
+        var actorViewModel = _playerState.ActiveActor;
+        var actorViewModelMonobehaviour = (ActorViewModel)actorViewModel;
+
         transform.position = Vector3.Lerp(transform.position,
-            actorVmMonobehaviour.transform.position + new Vector3(0, 0, -10),
+            actorViewModelMonobehaviour.transform.position + new Vector3(0, 0, -10),
             Time.deltaTime * 3);
     }
 }

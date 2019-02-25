@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 2eb382b06f562914eb01237f561ff778
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - DefaultCursorSprite: {fileID: 21300000, guid: 101d2dbe851584c4b9de2aff5fda9ed7,
+      type: 3}
+  - AttackCursorSprite: {fileID: 21300000, guid: 1235ba7996f325f47b91a3f85b9d43ff,
+      type: 3}
+  - InteractiveCursorSprite: {fileID: 21300000, guid: 101d2dbe851584c4b9de2aff5fda9ed7,
+      type: 3}
+  - CantMoveCursorSprite: {fileID: 21300000, guid: 2321a44ea6a725447926dd4344fedeed,
+      type: 3}
+  - SpriteRenderer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

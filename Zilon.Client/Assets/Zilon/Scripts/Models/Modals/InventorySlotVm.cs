@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Models;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -11,9 +13,10 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
-public class InventorySlotVm : MonoBehaviour
+public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 {
     public static int Count;
 
@@ -26,13 +29,26 @@ public class InventorySlotVm : MonoBehaviour
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
     public int SlotIndex;
-    
+
     public GameObject DenyBorder;
     public Image IconImage;
     public EquipmentSlotTypes SlotTypes;
     public Sprite[] TypeBackgrounds;
 
+    public Vector3 Position => GetComponent<RectTransform>().position;
+    public IProp Prop
+    {
+        get
+        {
+            var actor = _playerState.ActiveActor.Actor;
+            var prop = actor.Person.EquipmentCarrier[SlotIndex];
+            return prop;
+        }
+    }
+
     public event EventHandler Click;
+    public event EventHandler MouseEnter;
+    public event EventHandler MouseExit;
 
     public void Start()
     {
@@ -108,6 +124,16 @@ public class InventorySlotVm : MonoBehaviour
     public void Click_Handler()
     {
         Click?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseEnter()
+    {
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseExit()
+    {
+        MouseExit?.Invoke(this, new EventArgs());
     }
 
     public void ApplyEquipment()

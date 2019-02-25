@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Демон",
+	"En": "Demon"
+  },
+  "Hp": 5,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,5 +18,20 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Lesser"
+      }
+    ],
+	"Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 40
 }

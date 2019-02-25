@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -18,7 +19,7 @@ using Zilon.Core.Tactics.Spatial;
 
 public class ActorViewModel : MonoBehaviour, IActorViewModel
 {
-    private const float MOVE_SPEED_Q = 1;
+    private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
@@ -41,6 +42,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     }
 
     public event EventHandler Selected;
+    public event EventHandler MouseEnter;
+
     public IActor Actor { get; set; }
 
 
@@ -65,13 +68,13 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     }
 
     [UsedImplicitly]
-    public void Update()
+    public void FixedUpdate()
     {
         //TODO Можно вынести в отдельный компонент, который уничтожается после выполнения движения.
         if (_moveCounter != null)
         {
             transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
-            _moveCounter += Time.fixedUnscaledDeltaTime * MOVE_SPEED_Q;
+            _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
 
             if (_moveCounter >= END_MOVE_COUNTER)
             {
@@ -93,6 +96,16 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Selected?.Invoke(this, new EventArgs());
     }
 
+    public void OnMouseEnter()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
     public void AddHitEffect(HitSfx sfxObject)
     {
         sfxObject.HitSfxes = _effectList;
@@ -100,7 +113,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
         _effectList.Add(sfxObject);
     }
-    
+
     private void Survival_Dead(object sender, EventArgs e)
     {
         var isHumanPerson = Actor.Owner is HumanPlayer;

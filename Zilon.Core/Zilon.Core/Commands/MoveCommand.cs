@@ -16,8 +16,9 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
-        private readonly List<IMapNode> _path;
         private readonly IActorManager _actorManager;
+
+        public List<IMapNode> Path { get; }
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -40,7 +41,7 @@ namespace Zilon.Core.Commands
         {
             _actorManager = actorManager;
 
-            _path = new List<IMapNode>();
+            Path = new List<IMapNode>();
         }
 
         /// <summary>
@@ -49,14 +50,14 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            var nodeViewModel = GetSelectedNodeViewModel();
+            var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel == null)
             {
                 return false;
             }
 
-            CreatePath();
-            return _path.Any();
+            CreatePath(nodeViewModel);
+            return Path.Any();
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если команду можно повторить. </returns>
         public bool CanRepeat()
         {
-            var canRepeat = CanExecute() && CheckEnemies();
+            var canRepeat = CanExecuteForSelected() && CheckEnemies();
             return canRepeat;
         }
 
@@ -80,6 +81,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
+            CreatePath(selectedNodeVm);
+
             var targetNode = selectedNodeVm.Node;
             var targetMap = SectorManager.CurrentSector.Map;
 
@@ -87,22 +90,43 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(moveIntetion);
         }
 
-        private IMapNodeViewModel GetSelectedNodeViewModel()
+        private IMapNodeViewModel GetHoverNodeViewModel()
         {
             return PlayerState.HoverViewModel as IMapNodeViewModel;
         }
 
-        private void CreatePath()
+        private IMapNodeViewModel GetSelectedNodeViewModel()
+        {
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
+        private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
+            if (nodeViewModel == null)
+            {
+                return false;
+            }
 
-            var startNode = PlayerState.ActiveActor.Actor.Node;
-            var finishNode = nodeViewModel.Node;
+            CreatePath(nodeViewModel);
+            return Path.Any();
+        }
+
+        private void CreatePath(IMapNodeViewModel targetNode)
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var startNode = actor.Node;
+            var finishNode = targetNode.Node;
             var map = SectorManager.CurrentSector.Map;
 
-            _path.Clear();
+            Path.Clear();
 
-            var context = new PathFindingContext(PlayerState.ActiveActor.Actor);
+            if (!map.IsPositionAvailableFor(finishNode, actor))
+            {
+                return;
+            }
+
+            var context = new PathFindingContext(actor);
 
             var astar = new AStar(map, context, startNode, finishNode);
             var resultState = astar.Run();
@@ -114,7 +138,7 @@ namespace Zilon.Core.Commands
             var foundPath = astar.GetPath().Skip(1).ToArray();
             foreach (var pathNode in foundPath)
             {
-                _path.Add((HexNode)pathNode);
+                Path.Add((HexNode)pathNode);
             }
         }
 

@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics
         public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var innerActorList = new List<IActor>();
@@ -38,6 +38,9 @@ namespace Zilon.Core.Tests.Tactics
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var traderManagerMock = new Mock<ITraderManager>();
+            var traderManager = traderManagerMock.Object;
+
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
 
@@ -47,6 +50,7 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
+                traderManager,
                 dropResolver,
                 schemeService);
 
@@ -71,7 +75,7 @@ namespace Zilon.Core.Tests.Tactics
         public void Update_NoExits_EventNotRaised()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var innerActorList = new List<IActor>();
@@ -82,6 +86,9 @@ namespace Zilon.Core.Tests.Tactics
             var propContainerManagerMock = new Mock<IPropContainerManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
+            var traderManagerMock = new Mock<ITraderManager>();
+            var traderManager = traderManagerMock.Object;
+
             var dropResolverMock = new Mock<IDropResolver>();
             var dropResolver = dropResolverMock.Object;
 
@@ -91,6 +98,7 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
+                traderManager,
                 dropResolver,
                 schemeService);
 
@@ -108,7 +116,7 @@ namespace Zilon.Core.Tests.Tactics
 
 
                 // ASSERT
-                monitor.Should().NotRaise(nameof(sector.ActorExit));
+                monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
             }
         }
 

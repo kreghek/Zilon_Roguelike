@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Крысиный король",
+	"En": "Rat King"
+  },
   "Hp": 12,
   "PrimaryAct": {
     "Efficient": {
@@ -22,5 +26,6 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "default", "champion-loot" ]
+  "DropTableSids": [ "survival", "default", "champion-loot" ],
+  "BaseScore": 250
 }

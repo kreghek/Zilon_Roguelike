@@ -1,8 +1,12 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Темный провидец",
+	"En": "Dark seer"
+  },
+  "Hp": 3,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -10,9 +14,24 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
-      "Impact": "Kinetic"
+      "Type": "Shadow",
+      "Impact": "Psy"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Grand"
+      }
+    ],
+	"Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Normal"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+   "BaseScore": 75
 }

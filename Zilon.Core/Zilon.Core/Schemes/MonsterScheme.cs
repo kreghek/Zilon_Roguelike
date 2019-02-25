@@ -32,5 +32,11 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public string[] DropTableSids { get; private set; }
+
+        /// <summary>
+        /// Базовые очки, начисляемые за убиство монстра.
+        /// </summary>
+        [JsonProperty]
+        public int BaseScore { get; private set; }
     }
 }

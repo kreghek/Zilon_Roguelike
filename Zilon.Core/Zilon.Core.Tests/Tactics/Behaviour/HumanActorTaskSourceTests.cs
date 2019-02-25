@@ -65,11 +65,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
         /// </remarks>
         [Test()]
-        public void Intent_TargetToStartPoint_GenerateMoveCommand()
+        public async System.Threading.Tasks.Task Intent_TargetToStartPoint_GenerateMoveCommandAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -99,11 +99,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
         /// </remarks>
         [Test()]
-        public void Intent_SetNullTarget_ThrownException()
+        public async System.Threading.Tasks.Task Intent_SetNullTarget_ThrownExceptionAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -127,11 +127,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// То есть новая команда возвращается при запросе.
         /// </summary>
         [Test()]
-        public void Intent_AssignAfterTaskComplete_NoNullCommand()
+        public async System.Threading.Tasks.Task Intent_AssignAfterTaskComplete_NoNullCommandAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -183,11 +183,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// то новое намерение отменяет текущее.
         /// </summary>
         [Test()]
-        public void Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
+        public async System.Threading.Tasks.Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommandAsync()
         {
             // ARRANGE
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -245,12 +245,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test()]
-        public void IntentAttack_SetTarget_ReturnsAttackTask()
+        public async System.Threading.Tasks.Task IntentAttack_SetTarget_ReturnsAttackTaskAsync()
         {
             //ARRANGE
             var usageService = _container.GetInstance<ITacticalActUsageService>();
 
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
@@ -279,10 +279,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
         /// </summary>
         [Test()]
-        public void IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
+        public async System.Threading.Tasks.Task IntentOpenContainer_SetContainerAndMethod_ReturnsTaskAsync()
         {
             //ARRANGE
-            var map = SquareMapFactory.Create(10);
+            var map = await SquareMapFactory.CreateAsync(10);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 

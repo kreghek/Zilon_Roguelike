@@ -10,22 +10,29 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
+        private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
-        public SectorFactory(IActorManager actorManager, IPropContainerManager propContainerManager, IDropResolver dropResolver, ISchemeService schemeService)
+        public SectorFactory(IActorManager actorManager,
+            IPropContainerManager propContainerManager,
+            ITraderManager traderManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService)
         {
             _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
             _propContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            _traderManager = traderManager;
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
         }
 
-        public ISector Create(IMap map)
+        public ISector Create(ISectorMap map)
         {
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
+                _traderManager,
                 _dropResolver,
                 _schemeService);
             return sector;

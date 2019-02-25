@@ -12,10 +12,6 @@ namespace Zilon.Core.Tactics.Spatial
         private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers;
 
         public IList<MapRegion> Regions { get; }
-        public MapRegion StartRegion { get; set; }
-        public MapRegion ExitRegion { get; set; }
-        public IMapNode[] StartNodes { get; set; }
-        public IMapNode[] ExitNodes { get; set; }
         public abstract IEnumerable<IMapNode> Nodes { get; }
 
         protected MapBase()

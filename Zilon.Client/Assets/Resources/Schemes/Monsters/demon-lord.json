@@ -1,8 +1,12 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Лорд демонов",
+	"En": "Demon Lord"
+  },
+  "Hp": 10,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -10,9 +14,24 @@
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
+      "Type": "Fury",
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Normal"
+      }
+    ],
+	"Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Normal"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 75
 }
