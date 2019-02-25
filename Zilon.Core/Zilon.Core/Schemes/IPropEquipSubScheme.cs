@@ -25,6 +25,6 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>
-        EquipCommonRule[] Rules { get; }
+        PersonRule[] Rules { get; }
     }
 }

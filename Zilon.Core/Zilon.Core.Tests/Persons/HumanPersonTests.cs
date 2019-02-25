@@ -721,7 +721,7 @@ namespace Zilon.Core.Tests.Persons
                 Equip = new TestPropEquipSubScheme
                 {
                     Rules = new[] {
-                        new EquipCommonRule(EquipCommonRuleType.Health, PersonRuleLevel.Lesser)
+                        new PersonRule(EquipCommonRuleType.Health, PersonRuleLevel.Lesser)
                     },
                     SlotTypes = new[] {
                         EquipmentSlotTypes.Body
@@ -783,10 +783,12 @@ namespace Zilon.Core.Tests.Persons
             {
                 Equip = new TestPropEquipSubScheme
                 {
-                    Rules = new[] {
-                        new EquipCommonRule(EquipCommonRuleType.Health, PersonRuleLevel.Normal)
+                    Rules = new[]
+                    {
+                        new PersonRule(EquipCommonRuleType.Health, PersonRuleLevel.Normal)
                     },
-                    SlotTypes = new[] {
+                    SlotTypes = new[]
+                    {
                         EquipmentSlotTypes.Body
                     }
                 }

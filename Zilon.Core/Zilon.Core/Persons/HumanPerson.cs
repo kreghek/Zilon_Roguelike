@@ -364,6 +364,11 @@ namespace Zilon.Core.Persons
                 var equipment = EquipmentCarrier[i];
                 var rules = equipment.Scheme.Equip.Rules;
 
+                if (rules == null)
+                {
+                    return;
+                }
+
                 foreach (var rule in rules)
                 {
                     switch (rule.Type)
@@ -390,6 +395,11 @@ namespace Zilon.Core.Persons
                                     case PersonRuleLevel.Absolute:
                                         bonus = 10;
                                         break;
+                                }
+
+                                if (rule.Direction == PersonRuleDirection.Negative)
+                                {
+                                    bonus *= -1;
                                 }
 
                                 hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + bonus);

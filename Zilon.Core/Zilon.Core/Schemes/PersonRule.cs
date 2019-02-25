@@ -4,10 +4,11 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
-    public sealed class EquipCommonRule
+    public sealed class PersonRule
     {
         [JsonConstructor]
-        public EquipCommonRule(EquipCommonRuleType type, PersonRuleLevel level)
+        public PersonRule(EquipCommonRuleType type, PersonRuleLevel level,
+            PersonRuleDirection direction = PersonRuleDirection.Positive)
         {
             Type = type;
             Level = level;
@@ -15,5 +16,6 @@ namespace Zilon.Core.Schemes
 
         public EquipCommonRuleType Type { get; }
         public PersonRuleLevel Level { get; }
+        public PersonRuleDirection Direction { get; }
     }
 }
