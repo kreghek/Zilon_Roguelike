@@ -8,10 +8,16 @@
         "AbsorbtionLevel": "Lesser",
         "ArmorRank": 1
       }
-    ]
+    ],
+	"Rules": [
+	  {
+	    "Type": "Health",
+		"Level": "Normal"
+	  }
+	]
   },
   "Name": {
     "En": "Steel helmet",
-    "Ru": "Стальная каска"
+    "Ru": "Стальной шлем"
   }
 }
