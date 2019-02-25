@@ -361,7 +361,42 @@ namespace Zilon.Core.Persons
         {
             for (var i = 0; i < EquipmentCarrier.Count(); i++)
             {
-                var equipment = EquipmentCarrier[i]
+                var equipment = EquipmentCarrier[i];
+                var rules = equipment.Scheme.Equip.Rules;
+
+                foreach (var rule in rules)
+                {
+                    switch (rule.Type)
+                    {
+                        case EquipCommonRuleType.Health:
+                            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+                            if (hpStat != null)
+                            {
+                                var bonus = 0;
+                                switch (rule.Level)
+                                {
+                                    case PersonRuleLevel.Lesser:
+                                        bonus = 1;
+                                        break;
+
+                                    case PersonRuleLevel.Normal:
+                                        bonus = 3;
+                                        break;
+
+                                    case PersonRuleLevel.Grand:
+                                        bonus = 5;
+                                        break;
+
+                                    case PersonRuleLevel.Absolute:
+                                        bonus = 10;
+                                        break;
+                                }
+
+                                hpStat.ChangeStatRange(hpStat.Range.Min, newMax);
+                            }
+                            break;
+                    }
+                }
             }
         }
 
