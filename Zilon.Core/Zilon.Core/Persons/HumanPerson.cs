@@ -362,6 +362,11 @@ namespace Zilon.Core.Persons
             for (var i = 0; i < EquipmentCarrier.Count(); i++)
             {
                 var equipment = EquipmentCarrier[i];
+                if (equipment == null)
+                {
+                    return;
+                }
+
                 var rules = equipment.Scheme.Equip.Rules;
 
                 if (rules == null)
