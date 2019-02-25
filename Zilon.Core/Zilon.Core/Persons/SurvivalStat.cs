@@ -49,6 +49,13 @@ namespace Zilon.Core.Persons
         /// <param name="max">The maximum.</param>
         public void ChangeStatRange(int min, int max)
         {
+            if (min >= max)
+            {
+                Range = new Range<int>(min, min + 1);
+                Value = Range.Max;
+                return;
+            }
+
             var currentValue = Value;
             var currentMax = Range.Max;
             var newMax = max;
