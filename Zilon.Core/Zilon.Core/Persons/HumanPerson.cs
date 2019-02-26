@@ -359,6 +359,8 @@ namespace Zilon.Core.Persons
 
         private void CalcSurvivalStats()
         {
+            Survival.ResetStats();
+
             for (var i = 0; i < EquipmentCarrier.Count(); i++)
             {
                 var equipment = EquipmentCarrier[i];

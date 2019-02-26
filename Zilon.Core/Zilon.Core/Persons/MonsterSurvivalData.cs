@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -28,12 +26,24 @@ namespace Zilon.Core.Persons
             };
         }
 
+        /// <summary>Текущие характеристики.</summary>
         public SurvivalStat[] Stats { get; }
+
+        /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
 
+        /// <summary>
+        /// Событие, которое происходит, если значение характеристики
+        /// пересекает ключевое значение (мин/макс/четверти/0).
+        /// </summary>
         public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
+
+        /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;
 
+        /// <summary>Пополнение запаса характеристики.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Значение, на которое восстанавливается текущий запас.</param>
         public void RestoreStat(SurvivalStatType type, int value)
         {
             ValidateStatChangeValue(value);
@@ -45,6 +55,9 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>Снижение характеристики.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Значение, на которое снижается текущий запас.</param>
         public void DecreaseStat(SurvivalStatType type, int value)
         {
             ValidateStatChangeValue(value);
@@ -56,6 +69,9 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>Форсированно установить запас здоровья.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Целевое значение запаса характеристики.</param>
         public void SetStatForce(SurvivalStatType type, int value)
         {
             var stat = Stats.SingleOrDefault(x => x.Type == type);
@@ -88,41 +104,9 @@ namespace Zilon.Core.Persons
 
         private void ChangeStatInner(SurvivalStat stat, int value)
         {
-            var oldValue = stat.Value;
-
             stat.Value += value;
 
-            if (stat.KeyPoints != null)
-            {
-                CheckStatKeyPoints(stat, oldValue);
-            }
-
             ProcessIfHealth(stat);
-        }
-
-        private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
-        {
-            var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
-
-            var orientedKeyPoints = stat.KeyPoints;
-            if (!diff.IsAcs)
-            {
-                orientedKeyPoints = stat.KeyPoints.Reverse().ToArray();
-            }
-
-            var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
-            foreach (var keyPoint in orientedKeyPoints)
-            {
-                if (diff.Contains(keyPoint.Value))
-                {
-                    crossedKeyPoints.Add(keyPoint);
-                }
-            }
-
-            if (crossedKeyPoints.Any())
-            {
-                DoStatCrossKeyPoint(stat, crossedKeyPoints);
-            }
         }
 
         /// <summary>
@@ -149,32 +133,10 @@ namespace Zilon.Core.Persons
             Dead?.Invoke(this, new EventArgs());
         }
 
-        private static SurvivalStat CreateStat(SurvivalStatType type)
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        public void ResetStats()
         {
-            var stat = new SurvivalStat(150, -150, 300)
-            {
-                Type = type,
-                Rate = 1,
-                KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -100),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -50),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0)
-                    }
-            };
-            return stat;
-        }
-
-        private void DoStatCrossKeyPoint(SurvivalStat stat, IEnumerable<SurvivalStatKeyPoint> keyPoints)
-        {
-            var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
-            StatCrossKeyValue?.Invoke(this, args);
-        }
-
-
-        private static int GetSuccessRoll()
-        {
-            // В будущем этот порог будет расчитываться, исходя из характеристик, перков и экипировки персонажа.
-            return 4;
+            // эта реализация пока ничего не делает.
         }
     }
 }
