@@ -11,6 +11,7 @@ using Zilon.Core.Persons;
 public class HpBar : MonoBehaviour
 {
     public Image BarImage;
+    public Text Text;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
@@ -35,6 +36,8 @@ public class HpBar : MonoBehaviour
         var hpPercentage = CalcPercentage(hpStat.Value, hpStat.Range.Max);
 
         BarImage.fillAmount = hpPercentage;
+
+        Text.text = $"{hpStat.Value}/{hpStat.Range.Max}";
     }
 
     private float CalcPercentage(float actorHp, float personHp)

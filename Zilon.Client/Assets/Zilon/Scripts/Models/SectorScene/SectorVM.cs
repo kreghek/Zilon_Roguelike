@@ -550,6 +550,7 @@ internal class SectorVM : MonoBehaviour
             AddResourceToActor(inventory, "packed-food", 1);
             AddResourceToActor(inventory, "water-bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);
+            AddEquipmentToActor(inventory, "steel-helmet");
         }
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
