@@ -31,6 +31,6 @@ namespace Zilon.Core.Schemes
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>
         [JsonProperty]
-        public PersonRule[] Rules { get; }
+        public PersonRule[] Rules { get; private set; }
     }
 }
