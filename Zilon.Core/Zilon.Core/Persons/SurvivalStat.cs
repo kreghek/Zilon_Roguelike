@@ -40,6 +40,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int Rate { get; set; }
 
+        /// <summary> Набор ключевых точек характеристики. </summary>
         public SurvivalStatKeyPoint[] KeyPoints { get; set; }
 
         /// <summary>
@@ -56,14 +57,8 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var currentValue = Value;
-            var currentMax = Range.Max;
-            var newMax = max;
-            var newValueRaw = (float) newMax / currentMax * currentValue;
-            var newValue = (int)Math.Ceiling(newValueRaw);
-
             Range = new Range<int>(min, max);
-            Value = newValue;
+            Value = Math.Min(Value, max);
         }
     }
 }

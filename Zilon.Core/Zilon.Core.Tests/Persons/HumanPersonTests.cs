@@ -689,9 +689,15 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
 
+            const int START_PERSON_HP = 10;
+            const int LESSER_HP_BONUS = 1;
+
+            const int EXPECTED_PERSON_HP = START_PERSON_HP;
+            const int EXPECTED_PERSON_MAX_HP = START_PERSON_HP + LESSER_HP_BONUS;
+
             var personScheme = new TestPersonScheme
             {
-                Hp = 10,
+                Hp = START_PERSON_HP,
                 Slots = new[]{
                     new PersonSlotSubScheme
                     {
@@ -739,22 +745,28 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ASSERT
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(11);
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(11);
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
+            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_PERSON_HP);
         }
 
         /// <summary>
         /// Тест проверяет, что если экипировать предмет бонусом к здоровью,
-        /// то здоровье персонажа будет увеличено пропорционально текущему здоровью.
+        /// то здоровье персонажа остаётся текущим.
         /// </summary>
         [Test]
-        public void HumanPerson_EquipPropWithHpBonusWithNoHalfHp_HpIncreasedRateably()
+        public void HumanPerson_EquipPropWithHpBonusWithNoHalfHp_HpStays()
         {
             // ARRANGE
 
+            const int START_PERSON_HP = 10;
+            const int NORMAL_HP_BONUS = 3;
+
+            const int EXPECTED_PERSON_HP = START_PERSON_HP / 2; // Ниже снижаем стату
+            const int EXPECTED_PERSON_MAX_HP = START_PERSON_HP + NORMAL_HP_BONUS;
+
             var personScheme = new TestPersonScheme
             {
-                Hp = 10,
+                Hp = START_PERSON_HP,
                 Slots = new[]{
                     new PersonSlotSubScheme
                     {
@@ -796,7 +808,8 @@ namespace Zilon.Core.Tests.Persons
 
             var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
 
-            person.Survival.DecreaseStat(SurvivalStatType.Health, 5);
+            var hpStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            person.Survival.DecreaseStat(SurvivalStatType.Health, hpStat.Value / 2);
 
 
 
@@ -806,8 +819,8 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ASSERT
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(13);
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(7);
+            hpStat.Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
+            hpStat.Value.Should().Be(EXPECTED_PERSON_HP);
         }
     }
 }
