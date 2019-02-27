@@ -692,8 +692,9 @@ namespace Zilon.Core.Tests.Persons
             const int START_PERSON_HP = 10;
             const int LESSER_HP_BONUS = 1;
 
-            const int EXPECTED_PERSON_HP = START_PERSON_HP;
             const int EXPECTED_PERSON_MAX_HP = START_PERSON_HP + LESSER_HP_BONUS;
+            const int EXPECTED_PERSON_HP = EXPECTED_PERSON_MAX_HP;
+            
 
             var personScheme = new TestPersonScheme
             {
@@ -761,7 +762,7 @@ namespace Zilon.Core.Tests.Persons
             const int START_PERSON_HP = 10;
             const int NORMAL_HP_BONUS = 3;
 
-            const int EXPECTED_PERSON_HP = START_PERSON_HP / 2; // Ниже снижаем стату
+            const int EXPECTED_PERSON_HP = 6;
             const int EXPECTED_PERSON_MAX_HP = START_PERSON_HP + NORMAL_HP_BONUS;
 
             var personScheme = new TestPersonScheme

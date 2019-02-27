@@ -8,12 +8,13 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class SurvivalStat
     {
-        private int _value;
+        private float _rawValue;
 
         public SurvivalStat(int startValue, int min, int max)
         {
-            _value = startValue;
             Range = new Range<int>(min, max);
+
+            Value = startValue;
         }
 
         /// <summary>
@@ -26,8 +27,12 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int Value
         {
-            get => _value;
-            set => _value = Range.GetBounded(value);
+            get => (int)Math.Round((Range.Max - Range.Min) * _rawValue);
+            set
+            {
+                var boundedValue = Range.GetBounded(value);
+                _rawValue = boundedValue / (float)(Range.Max - Range.Min);
+            }
         }
 
         /// <summary>
@@ -58,7 +63,6 @@ namespace Zilon.Core.Persons
             }
 
             Range = new Range<int>(min, max);
-            Value = Math.Min(Value, max);
         }
     }
 }
