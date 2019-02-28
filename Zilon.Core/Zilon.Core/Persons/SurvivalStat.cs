@@ -27,7 +27,11 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int Value
         {
-            get => (int)Math.Round((Range.Max - Range.Min) * _rawValue);
+            get
+            {
+                var result = Math.Round((Range.Max - Range.Min) * _rawValue);
+                return (int)result;
+            }
             set
             {
                 var boundedValue = Range.GetBounded(value);
