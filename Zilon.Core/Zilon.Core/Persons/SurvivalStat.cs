@@ -29,11 +29,27 @@ namespace Zilon.Core.Persons
         {
             get
             {
+                if (_rawValue == 1)
+                {
+                    return Range.Max;
+                }
+
+                if (_rawValue == 0)
+                {
+                    return Range.Min;
+                }
+
                 var result = Math.Round((Range.Max - Range.Min) * _rawValue);
                 return (int)result;
             }
             set
             {
+                if (Range.Max == Range.Min)
+                {
+                    _rawValue = 1;
+                    return;
+                }
+
                 var boundedValue = Range.GetBounded(value);
                 _rawValue = boundedValue / (float)(Range.Max - Range.Min);
             }
@@ -61,8 +77,8 @@ namespace Zilon.Core.Persons
         {
             if (min >= max)
             {
-                Range = new Range<int>(min, min + 1);
-                Value = Range.Max;
+                Range = new Range<int>(min, min);
+                Value = Range.Min;
                 return;
             }
 

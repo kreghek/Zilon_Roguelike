@@ -14,7 +14,7 @@ namespace Zilon.Core.Tests.Persons
         /// получается ожидаемый результат.
         /// </summary>
         [Test]
-        [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.TestCases))]
+        [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.ValueTestCases))]
         public int Value_IncrementDecrementValue_ExpectedResults(int startValue, int min, int max, int diffValue)
         {
             // ARRANGE
@@ -24,6 +24,27 @@ namespace Zilon.Core.Tests.Persons
 
             // ACT
             survivalStat.Value += diffValue;
+
+
+            // ASSERT
+            return survivalStat.Value;
+        }
+
+        /// <summary>
+        /// Тест проверяет, что после изменения диапазона текущее значение изменяется пропорционально.
+        /// </summary>
+        [Test]
+        [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.RangeTestCases))]
+        public int Value_IncrementDecrementRange_ExpectedResults(int startValue, int min, int max, 
+            int newMin, int newMax)
+        {
+            // ARRANGE
+            var survivalStat = new SurvivalStat(startValue, min, max);
+
+
+
+            // ACT
+            survivalStat.ChangeStatRange(newMin, newMax);
 
 
             // ASSERT
