@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
-
+using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -72,6 +72,15 @@ public class PropInfoPopup : MonoBehaviour
                     foreach (var armor in propScheme.Equip.Armors)
                     {
                         descriptionLines.Add($"Protects: {armor.Impact} ({armor.ArmorRank} rank): {armor.AbsorbtionLevel}");
+                    }
+                }
+
+                if (propScheme.Equip.Rules != null)
+                {
+                    foreach (var rule in propScheme.Equip.Rules)
+                    {
+                        var sign = rule.Direction == PersonRuleDirection.Negative ? "-" : string.Empty;
+                        descriptionLines.Add($"Bonus: {rule.Type}: {sign}{rule.Level}");
                     }
                 }
 
