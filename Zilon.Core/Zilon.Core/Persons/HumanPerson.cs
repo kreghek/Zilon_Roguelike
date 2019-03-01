@@ -381,39 +381,67 @@ namespace Zilon.Core.Persons
                     switch (rule.Type)
                     {
                         case EquipCommonRuleType.Health:
-                            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-                            if (hpStat != null)
+                            BonusToHealth(rule.Level, rule.Direction);
+                            break;
+
+                        case EquipCommonRuleType.HealthIfNoBody:
+
+                            var requirementsCompleted = true;
+
+                            for (var slotIndex = 0; slotIndex < EquipmentCarrier.Count(); slotIndex++)
                             {
-                                var bonus = 0;
-                                switch (rule.Level)
+                                if ((EquipmentCarrier.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
                                 {
-                                    case PersonRuleLevel.Lesser:
-                                        bonus = 1;
+                                    if (EquipmentCarrier[slotIndex] != null)
+                                    {
+                                        requirementsCompleted = false;
                                         break;
-
-                                    case PersonRuleLevel.Normal:
-                                        bonus = 3;
-                                        break;
-
-                                    case PersonRuleLevel.Grand:
-                                        bonus = 5;
-                                        break;
-
-                                    case PersonRuleLevel.Absolute:
-                                        bonus = 10;
-                                        break;
+                                    }
                                 }
-
-                                if (rule.Direction == PersonRuleDirection.Negative)
-                                {
-                                    bonus *= -1;
-                                }
-
-                                hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + bonus);
                             }
+
+                            if (requirementsCompleted)
+                            {
+                                BonusToHealth(rule.Level, rule.Direction);
+                            }
+
                             break;
                     }
                 }
+            }
+        }
+
+        private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction)
+        {
+            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            if (hpStat != null)
+            {
+                var bonus = 0;
+                switch (level)
+                {
+                    case PersonRuleLevel.Lesser:
+                        bonus = 1;
+                        break;
+
+                    case PersonRuleLevel.Normal:
+                        bonus = 3;
+                        break;
+
+                    case PersonRuleLevel.Grand:
+                        bonus = 5;
+                        break;
+
+                    case PersonRuleLevel.Absolute:
+                        bonus = 10;
+                        break;
+                }
+
+                if (direction == PersonRuleDirection.Negative)
+                {
+                    bonus *= -1;
+                }
+
+                hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + bonus);
             }
         }
 

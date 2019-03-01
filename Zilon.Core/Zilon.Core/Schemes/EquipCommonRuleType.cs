@@ -8,6 +8,11 @@
         /// <summary>
         /// Влияет на здоровье.
         /// </summary>
-        Health = 1
+        Health = 1,
+
+        /// <summary>
+        /// Влияет на здоровье, если нет доспеха на тело.
+        /// </summary>
+        HealthIfNoBody
     }
 }
