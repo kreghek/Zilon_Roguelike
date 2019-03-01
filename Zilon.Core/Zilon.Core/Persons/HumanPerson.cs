@@ -359,6 +359,8 @@ namespace Zilon.Core.Persons
 
         private void CalcSurvivalStats()
         {
+            // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
+            // На вход принимает SurvivalData. SurvivalData дожен содержать метод увеличение диапазона характеристики.
             Survival.ResetStats();
 
             for (var i = 0; i < EquipmentCarrier.Count(); i++)
