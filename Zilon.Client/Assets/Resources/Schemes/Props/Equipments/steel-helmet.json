@@ -8,13 +8,7 @@
         "AbsorbtionLevel": "Lesser",
         "ArmorRank": 1
       }
-    ],
-	"Rules": [
-	  {
-	    "Type": "HealthIfNoBody",
-		"Level": "Normal"
-	  }
-	]
+    ]
   },
   "Name": {
     "En": "Steel helmet",

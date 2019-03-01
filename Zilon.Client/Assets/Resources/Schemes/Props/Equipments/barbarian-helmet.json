@@ -1,0 +1,28 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 2
+      },
+	  {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 2
+      }
+    ],
+	"Rules": [
+	  {
+	    "Type": "HealthIfNoBody",
+		"Level": "Normal"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Barbarian helmet",
+    "Ru": "Варварский шлем"
+  }
+}
