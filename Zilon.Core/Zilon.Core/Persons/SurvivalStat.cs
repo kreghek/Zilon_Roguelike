@@ -39,7 +39,7 @@ namespace Zilon.Core.Persons
                     return Range.Min;
                 }
 
-                var result = Math.Round((Range.Max - Range.Min) * _rawValue);
+                var result = Math.Round((Range.Max - Range.Min) * _rawValue + Range.Min);
                 return (int)result;
             }
             set
@@ -51,7 +51,7 @@ namespace Zilon.Core.Persons
                 }
 
                 var boundedValue = Range.GetBounded(value);
-                _rawValue = boundedValue / (float)(Range.Max - Range.Min);
+                _rawValue = (boundedValue - Range.Min) / (float)(Range.Max - Range.Min);
             }
         }
 
