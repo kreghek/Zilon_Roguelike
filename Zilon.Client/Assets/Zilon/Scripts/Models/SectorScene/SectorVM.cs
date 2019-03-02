@@ -516,7 +516,7 @@ internal class SectorVM : MonoBehaviour
                 case 2:
                     AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe");
                     AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe");
-                    AddEquipmentToActor(person.EquipmentCarrier, 0, "steel-helmet");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "barbarian-helmet");
                     break;
 
                 case 3:
@@ -550,7 +550,6 @@ internal class SectorVM : MonoBehaviour
             AddResourceToActor(inventory, "packed-food", 1);
             AddResourceToActor(inventory, "water-bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);
-            AddEquipmentToActor(inventory, "barbarian-helmet");
         }
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
