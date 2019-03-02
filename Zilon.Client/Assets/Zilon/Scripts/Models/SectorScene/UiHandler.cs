@@ -23,6 +23,8 @@ public class UiHandler : MonoBehaviour
 
     [NotNull] [Inject(Id = "show-perks-command")] private readonly ICommand _showPerksCommand;
 
+    [NotNull] [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
+
     public Button NextTurnButton;
     public Button InventoryButton;
     public Button PerksButton;
@@ -77,6 +79,6 @@ public class UiHandler : MonoBehaviour
 
     public void ExitGame_Handler()
     {
-        Application.Quit();
+        _clientCommandExecutor.Push(_quitRequestCommand);
     }
 }

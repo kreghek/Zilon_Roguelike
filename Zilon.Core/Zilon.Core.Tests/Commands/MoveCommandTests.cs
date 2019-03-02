@@ -162,6 +162,7 @@ namespace Zilon.Core.Tests.Commands
             var targetVm = targetVmMock.Object;
 
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
+            playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.Register<MoveCommand>(new PerContainerLifetime());
 

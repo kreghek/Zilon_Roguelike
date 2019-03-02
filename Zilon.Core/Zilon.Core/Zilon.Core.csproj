@@ -73,30 +73,19 @@
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
-    <Compile Include="MapGenerators\IDungeonSectorGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
-    <Compile Include="MapGenerators\IMonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
-    <Compile Include="MapGenerators\ISectorGeneratorOptions.cs" />
-    <Compile Include="MapGenerators\ISectorGeneratorSelector.cs" />
-    <Compile Include="MapGenerators\ITownSectorGenerator.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
-    <Compile Include="MapGenerators\MonsterGeneratorOptions.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
-    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorSettings.cs" />
-    <Compile Include="MapGenerators\RoomStyle\TownMapFactory.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomTransition.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
-    <Compile Include="MapGenerators\SectorGeneratorSelector.cs" />
-    <Compile Include="MapGenerators\SectorProceduralGeneratorOptions.cs" />
-    <Compile Include="MapGenerators\SectorSchemeGenerator.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
-    <Compile Include="MapGenerators\TownSectorGenerator.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
@@ -110,11 +99,13 @@
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
+    <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
+    <Compile Include="Tactics\IScoreManager.cs" />
     <Compile Include="Tactics\ITraderManager.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\ISectorModalManager.cs" />
@@ -123,6 +114,11 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ITrader.cs" />
+    <Compile Include="Tactics\ScoreManager.cs" />
+    <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\Spatial\ISectorMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\TraderManager.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\UseSelfCommand.cs" />
@@ -153,7 +149,7 @@
     <Compile Include="Common\RollModifiers.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomMapFactory.cs" />
     <Compile Include="MapGenerators\IMapFactory.cs" />
-    <Compile Include="MapGenerators\ISectorProceduralGenerator.cs" />
+    <Compile Include="MapGenerators\ISectorGenerator.cs" />
     <Compile Include="Tactics\Spatial\GraphMap.cs" />
     <Compile Include="Tactics\Spatial\MapRegion.cs" />
     <Compile Include="Schemes\ConcreteTypeConverter.cs" />
@@ -321,7 +317,7 @@
     <Compile Include="MapGenerators\RoomStyle\Room.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGenerator.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorRandomSource.cs" />
-    <Compile Include="MapGenerators\SectorProceduralGenerator.cs" />
+    <Compile Include="MapGenerators\SectorGenerator.cs" />
     <Compile Include="Tactics\DropTablePropChest.cs" />
     <Compile Include="Tactics\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
@@ -391,6 +387,7 @@
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\Trader.cs" />
+    <Compile Include="Tactics\TransitionDetection.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
@@ -416,6 +413,8 @@
     <Compile Include="WorldGeneration\TerrainCell.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
+    <Compile Include="World\IWorldManager.cs" />
+    <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

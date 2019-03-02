@@ -9,6 +9,10 @@
       {
         "Type": "Satiety",
         "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
       }
     ]
   }

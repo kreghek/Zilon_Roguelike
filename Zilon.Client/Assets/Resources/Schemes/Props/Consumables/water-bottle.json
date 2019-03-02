@@ -9,6 +9,10 @@
       {
         "Type": "Thirst",
         "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
       }
     ]
   }

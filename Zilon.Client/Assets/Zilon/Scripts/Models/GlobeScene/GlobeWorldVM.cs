@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts.Services;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +8,9 @@ using Zenject;
 
 using Zilon.Core.Common;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 public class GlobeWorldVM : MonoBehaviour
 {
@@ -23,21 +23,23 @@ public class GlobeWorldVM : MonoBehaviour
     private GlobeRegion _region;
     private List<MapLocation> _locationNodeViewModels;
 
-    [Inject] private readonly IGlobeManager _globeManager;
+    [Inject] private readonly IWorldManager _globeManager;
+    [Inject] private readonly IWorldGenerator _globeGenerator;
+    [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
 
     private async void Start()
     {
-        if (_globeManager.CurrentGlobe == null)
+        if (_globeManager.Globe == null)
         {
-            await _globeManager.GenerateGlobeAsync();
+            _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
 
-            var firstLocality = _globeManager.CurrentGlobe.Localities.First();
+            var firstLocality = _globeManager.Globe.Localities.First();
 
             _player.Terrain = firstLocality.Cell;
 
-            var createdRegion = await _globeManager.GenerateRegionAsync(firstLocality.Cell);
+            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, firstLocality.Cell);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
@@ -93,7 +95,7 @@ public class GlobeWorldVM : MonoBehaviour
         var selectedNodeViewModel = (MapLocation)sender;
 
         var currentNode = _player.GlobeNode;
-        var currentNodeViewModel = _locationNodeViewModels.Single(x=>x.Node == currentNode);
+        var currentNodeViewModel = _locationNodeViewModels.Single(x => x.Node == currentNode);
 
         var neighborNodes = _region.GetNext(currentNode);
         var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
@@ -104,6 +106,7 @@ public class GlobeWorldVM : MonoBehaviour
 
             if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
             {
+                _scoreManager.CountPlace(selectedNodeViewModel.Node);
                 SceneManager.LoadScene("combat");
             }
             else

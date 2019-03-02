@@ -1,4 +1,8 @@
 {
+  "Name":{
+    "Ru": "Крыса людо-убийца",
+	"En": "Rat Human Slayer"
+  },
   "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
@@ -22,5 +26,6 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "default", "champion-loot" ]
+  "DropTableSids": [ "survival", "default", "champion-loot" ],
+  "BaseScore": 250
 }

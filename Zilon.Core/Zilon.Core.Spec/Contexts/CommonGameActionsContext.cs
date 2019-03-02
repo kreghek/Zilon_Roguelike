@@ -33,6 +33,7 @@ namespace Zilon.Core.Spec.Contexts
             };
 
             playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
 
             moveCommand.Execute();
         }
@@ -54,7 +55,7 @@ namespace Zilon.Core.Spec.Contexts
             useSelfCommand.Execute();
         }
 
-        internal void HoverNode(int x, int y)
+        internal void ClickOnNode(int x, int y)
         {
             var playerState = Container.GetInstance<IPlayerState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
@@ -67,6 +68,7 @@ namespace Zilon.Core.Spec.Contexts
             var nodeViewModel = nodeViewModelMock.Object;
 
             playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
         }
     }
 }

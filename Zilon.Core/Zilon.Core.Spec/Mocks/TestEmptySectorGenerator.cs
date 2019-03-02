@@ -1,10 +1,13 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using System.Threading.Tasks;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Spec.Mocks
 {
-    public class TestEmptySectorGenerator : ISectorProceduralGenerator
+    public class TestEmptySectorGenerator : ISectorGenerator
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
@@ -28,9 +31,9 @@ namespace Zilon.Core.Spec.Mocks
             _mapFactory = mapFactory;
         }
 
-        public ISector Generate(ISectorGeneratorOptions options)
+        public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
         {
-            var map = _mapFactory.Create();
+            var map = await _mapFactory.CreateAsync(sectorScheme);
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
@@ -38,6 +41,16 @@ namespace Zilon.Core.Spec.Mocks
                 _dropResolver,
                 _schemeService);
             return sector;
+        }
+
+        public Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

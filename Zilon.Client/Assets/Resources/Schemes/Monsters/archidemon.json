@@ -1,18 +1,37 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Архидемон",
+	"En": "Archdemon"
+  },
+  "Hp": 100,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 3
     },
     "Range": {
       "Min": 1,
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
-      "Impact": "Kinetic"
+      "Type": "Shadow",
+      "Impact": "Psy"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "FuryDefence",
+        "Level": "Normal"
+      }
+    ],
+	"Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Normal"
+      }
+    ]
+  },
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 600
 }

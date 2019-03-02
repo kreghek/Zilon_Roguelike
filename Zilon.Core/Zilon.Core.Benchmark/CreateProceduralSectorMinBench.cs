@@ -23,6 +23,8 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmark
 {
@@ -31,7 +33,7 @@ namespace Zilon.Core.Benchmark
         private ServiceContainer _container;
 
         [Benchmark(Description = "CreateProceduralMinSector")]
-        public void Create()
+        public async System.Threading.Tasks.Task CreateAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<IPlayerState>();
@@ -39,25 +41,41 @@ namespace Zilon.Core.Benchmark
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
-            var sectorGenerator = _container.GetInstance<ISectorProceduralGenerator>();
-
-            var generationOptions = new SectorProceduralGeneratorOptions
+            var locationScheme = new TestLocationScheme
             {
-                MonsterGeneratorOptions = new MonsterGeneratorOptions
+                SectorLevels = new ISectorSubScheme[]
                 {
-                    BotPlayer = _container.GetInstance<IBotPlayer>(),
-                    RegularMonsterSids = new[] { "rat" }
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+                        RareMonsterSids = new[] { "rat" },
+                        ChampionMonsterSids = new[] { "rat" },
+
+                        RegionCount = 20,
+                        RegionSize = 20,
+
+                        IsStart = true,
+
+                        ChestDropTableSids = new[] {"survival", "default" },
+                        RegionChestCountRatio = 9,
+                        TotalChestCount = 20
+                    }
                 }
             };
 
-            sectorManager.CreateSector(sectorGenerator, generationOptions);
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
 
-
+            await sectorManager.CreateSectorAsync();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.StartNodes.First();
+            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+                .SingleOrDefault(x => x.IsStart).Nodes
+                .First();
+
             var playerActorVm = CreateHumanActorVm(humanPlayer,
                 personScheme,
                 actorManager,
@@ -100,15 +118,17 @@ namespace Zilon.Core.Benchmark
             _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
+            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
-            _container.Register<ISectorProceduralGenerator, SectorProceduralGenerator>(new PerContainerLifetime());
+            _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
 
             // Специализированные сервисы для Ui.
@@ -134,7 +154,7 @@ namespace Zilon.Core.Benchmark
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
-            mock.Setup(x => x.RollCount()).Returns(0);
+            mock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(0);
             return mock.Object;
         }
 

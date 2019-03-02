@@ -1,3 +1,4 @@
+using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -31,11 +32,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
 
         // генераци€ сектора
-        Container.Bind<ISectorGeneratorSelector>().To<SectorGeneratorSelector>().AsSingle();
-        Container.Bind<IDungeonSectorGenerator>().To<SectorProceduralGenerator>().AsSingle();
-        Container.Bind<ITownSectorGenerator>().To<TownSectorGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle().WhenInjectedInto<SectorProceduralGenerator>();
-        Container.Bind<IMapFactory>().To<TownMapFactory>().AsSingle().WhenInjectedInto<TownSectorGenerator>();
+        Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
+        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
         Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
@@ -65,6 +63,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         // —пециализированные команды дл€ Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
         Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
+        Container.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
     }
 
 

@@ -15,11 +15,10 @@ namespace Zilon.Core.MapGenerators
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public int RollCount()
-        {
-            return _dice.Roll(0, 5);
-        }
-
+        /// <summary>Выбирает случайную схему монстра среди доступных.</summary>
+        /// <param name="availableMonsterSchemes">Доступные схемы монстров.
+        /// Расчитываются исходя из схемы сектора и выбранной редкости.</param>
+        /// <returns>Возвращает схему монстра.</returns>
         public IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes)
         {
             var count = availableMonsterSchemes.Count();
@@ -27,14 +26,31 @@ namespace Zilon.Core.MapGenerators
             return availableMonsterSchemes.ElementAt(rollIndex);
         }
 
+        /// <summary>
+        /// Выбирает слуяайный индекс узла, в который будет размещён монстр.
+        /// </summary>
+        /// <param name="count">Количество узлов в коллекции доступных узлов.</param>
+        /// <returns>Индекс узла карты.</returns>
         public int RollNodeIndex(int count)
         {
             return _dice.Roll(0, count - 1);
         }
 
+        /// <summary>Выбирает случайную редкость моснтра.</summary>
+        /// <returns>2 - чемпион, 1 - редкий, 0 - обычный.</returns>
         public int RollRarity()
         {
             return _dice.Roll(0, 2);
+        }
+
+        /// <summary>Выбирает случайное количество монстров в секторе.</summary>
+        /// <param name="regionMaxCount">Максимальное количество монстров в секторе.</param>
+        /// <returns>
+        /// Возвращает слуяайное количество монстров в секторе от 0 до указанного максимального числа.
+        /// </returns>
+        public int RollRegionCount(int regionMaxCount)
+        {
+            return _dice.Roll(0, regionMaxCount);
         }
     }
 }

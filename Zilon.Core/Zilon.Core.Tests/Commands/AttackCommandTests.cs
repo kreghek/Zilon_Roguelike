@@ -56,7 +56,7 @@ namespace Zilon.Core.Tests.Commands
 
 
             // ASSERT
-            var target = ((IActorViewModel)playerState.HoverViewModel).Actor;
+            var target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
                 CheckAttackIntention(intention, playerState, target)
@@ -80,7 +80,7 @@ namespace Zilon.Core.Tests.Commands
             var targetVmMock = new Mock<IActorViewModel>();
             targetVmMock.SetupProperty(x => x.Actor, target);
             var targetVm = targetVmMock.Object;
-            playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
+            playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.Register<AttackCommand>(new PerContainerLifetime());
         }

@@ -23,7 +23,10 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             _rolledSize = new Size(3, 3);
         }
 
-        public List<Room> GenerateRoomsInGrid()
+        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
+            IEnumerable<RoomTransition> availableTransitions)
         {
             var rooms = new List<Room>();
 
@@ -47,16 +50,17 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             return rooms;
         }
 
-        public void BuildRoomCorridors(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        public void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
-            for (var i = 0; i < rooms.Count - 1; i++)
+            var roomArray = rooms.ToArray();
+            for (var i = 0; i < roomArray.Length - 1; i++)
             {
-                ConnectRoomsWithCorridor(map, edgeHash, rooms[i], rooms[i + 1]);
+                ConnectRoomsWithCorridor(map, edgeHash, roomArray[i], roomArray[i + 1]);
             }
         }
 
         #region Duplicate
-        public void CreateRoomNodes(IMap map, List<Room> rooms, HashSet<string> edgeHash)
+        public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             foreach (var room in rooms)
             {
@@ -167,7 +171,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 var node = CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;
             }
-        } 
+        }
+
         #endregion
     }
 }

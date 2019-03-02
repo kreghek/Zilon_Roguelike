@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -65,7 +65,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private readonly ISectorGeneratorSelector _sectorGeneratorSelector;
+    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
     [NotNull] [Inject] private readonly IPlayerState _playerState;
 
@@ -81,11 +81,11 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ITraderManager _traderManager;
 
-    [NotNull] [Inject] private readonly IHumanPersonManager _personManager;
-
     [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
     [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
+
+    [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
     [Inject] private IHumanActorTaskSource _humanActorTaskSource;
 
@@ -114,6 +114,8 @@ internal class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
+
+    private bool _canMove;
 
     public SectorVM()
     {
@@ -167,9 +169,9 @@ internal class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    private void Awake()
+    private async void Awake()
     {
-        InitServices();
+        await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
@@ -179,7 +181,7 @@ internal class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_personManager.SectorLevel == 0)
+        if (_humanPlayer.SectorSid == "intro")
         {
             _sectorModalManager.ShowInstructionModal();
         }
@@ -193,25 +195,11 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
-    private void InitServices()
+    private async Task InitServicesAsync()
     {
+        await _sectorManager.CreateSectorAsync();
 
-        ISectorGeneratorOptions proceduralGeneratorOptions;
-
-        if (_humanPlayer.GlobeNode == null)
-        {
-            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(introLocationScheme);
-        }
-        else
-        {
-            var currentLocation = _humanPlayer.GlobeNode.Scheme;
-            proceduralGeneratorOptions = CreateSectorGeneratorOptions(currentLocation);
-        }
-
-        var sectorGenerator = _sectorGeneratorSelector.GetGenerator(_humanPlayer.GlobeNode);
-
-        _sectorManager.CreateSector(sectorGenerator, proceduralGeneratorOptions);
+        _sectorManager.CurrentSector.ScoreManager = _scoreManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -223,32 +211,7 @@ internal class SectorVM : MonoBehaviour
             _monsterActorTaskSource
         };
 
-        _sectorManager.CurrentSector.ActorExit += SectorOnActorExit;
-    }
-
-    private ISectorGeneratorOptions CreateSectorGeneratorOptions(ILocationScheme locationScheme)
-    {
-        var monsterGeneratorOptions = new MonsterGeneratorOptions
-        {
-            BotPlayer = _botPlayer
-        };
-
-        var proceduralGeneratorOptions = new SectorProceduralGeneratorOptions
-        {
-            MonsterGeneratorOptions = monsterGeneratorOptions
-        };
-
-        if (locationScheme.SectorLevels != null)
-        {
-            var wellFormedSectorLevel = _personManager.SectorLevel;
-            var sectorScheme = locationScheme.SectorLevels[wellFormedSectorLevel];
-
-            monsterGeneratorOptions.RegularMonsterSids = sectorScheme.RegularMonsterSids;
-            monsterGeneratorOptions.RareMonsterSids = sectorScheme.RareMonsterSids;
-            monsterGeneratorOptions.ChampionMonsterSids = sectorScheme.ChampionMonsterSids;
-        }
-
-        return proceduralGeneratorOptions;
+        _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
     private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -265,14 +228,17 @@ internal class SectorVM : MonoBehaviour
     {
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
-        _sectorManager.CurrentSector.ActorExit -= SectorOnActorExit;
+        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.StartNodes.First();
+        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
+            .SingleOrDefault(x=>x.IsStart).Nodes
+            .First();
+
         var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
             personScheme,
             _actorManager,
@@ -291,6 +257,7 @@ internal class SectorVM : MonoBehaviour
     {
         var map = _sectorManager.CurrentSector.Map;
         var nodeVMs = new List<MapNodeVM>();
+
         foreach (var node in map.Nodes)
         {
             var mapNodeVm = Instantiate(MapNodePrefab, transform);
@@ -302,17 +269,28 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
 
-            if (map.ExitNodes?.Contains(node) == true)
+            if (map.Transitions.ContainsKey(node))
             {
                 mapNodeVm.IsExit = true;
             }
 
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
+            mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
 
             nodeVMs.Add(mapNodeVm);
         }
 
         return nodeVMs;
+    }
+
+    private void MapNodeVm_MouseEnter(object sender, EventArgs e)
+    {
+        var blocked = _commandBlockerService.HasBlockers;
+        if (!blocked)
+        {
+            _playerState.HoverViewModel = (IMapNodeViewModel)sender;
+            _canMove = _moveCommand.CanExecute();
+        }
     }
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
@@ -337,6 +315,7 @@ internal class SectorVM : MonoBehaviour
             actorViewModel.Actor = monsterActor;
 
             actorViewModel.Selected += EnemyActorVm_OnSelected;
+            actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
 
             _actorViewModels.Add(actorViewModel);
@@ -370,6 +349,7 @@ internal class SectorVM : MonoBehaviour
         containerViewModel.transform.position = containerPosition;
         containerViewModel.Container = container;
         containerViewModel.Selected += Container_Selected;
+        containerViewModel.MouseEnter += ContainerViewModel_MouseEnter;
 
         _containerViewModels.Add(containerViewModel);
     }
@@ -421,11 +401,19 @@ internal class SectorVM : MonoBehaviour
         var containerViewModel = sender as ContainerVm;
 
         _playerState.HoverViewModel = containerViewModel;
+        _playerState.SelectedViewModel = containerViewModel;
 
         if (containerViewModel != null)
         {
             _clientCommandExecutor.Push(_openContainerCommand);
         }
+    }
+
+    private void ContainerViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var containerViewModel = sender as ContainerVm;
+
+        _playerState.HoverViewModel = containerViewModel;
     }
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
@@ -438,17 +426,18 @@ internal class SectorVM : MonoBehaviour
         _clientCommandExecutor.Push(_showContainerModalCommand);
     }
 
-    private void SectorOnActorExit(object sender, EventArgs e)
+    private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
+        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
         _humanActorTaskSource.SwitchActor(null);
 
         if (_humanPlayer.GlobeNode == null)
         {
             // intro
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
@@ -456,20 +445,19 @@ internal class SectorVM : MonoBehaviour
         var currentLocation = _humanPlayer.GlobeNode.Scheme;
         if (currentLocation?.SectorLevels == null)
         {
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
             return;
         }
 
-        _personManager.SectorLevel++;
-        
-        if (_personManager.SectorLevel >= currentLocation.SectorLevels.Length)
+        if (e.Transition.SectorSid == null)
         {
-            _personManager.SectorLevel = 0;
+            _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
         }
         else
         {
+            _humanPlayer.SectorSid = e.Transition.SectorSid;
             SceneManager.LoadScene("combat");
         }
     }
@@ -481,14 +469,19 @@ internal class SectorVM : MonoBehaviour
             return;
         }
 
-        var actorVm = sender as ActorViewModel;
+        var actorViewModel = sender as ActorViewModel;
 
-        _playerState.HoverViewModel = actorVm;
+        _playerState.SelectedViewModel = actorViewModel;
 
-        if (actorVm != null)
+        if (actorViewModel != null)
         {
             _clientCommandExecutor.Push(_attackCommand);
         }
+    }
+
+    private void EnemyViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
     private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
@@ -498,7 +491,7 @@ internal class SectorVM : MonoBehaviour
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        if (_personManager.Person == null)
+        if (_humanPlayer.MainPerson == null)
         {
             var inventory = new Inventory();
 
@@ -508,14 +501,58 @@ internal class SectorVM : MonoBehaviour
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
-            _personManager.Person = person;
+            _humanPlayer.MainPerson = person;
 
+
+            var classRoll = UnityEngine.Random.Range(1, 6);
+            switch (classRoll)
+            {
+                case 1:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "short-sword");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "steel-armor");
+                    AddEquipmentToActor(person.EquipmentCarrier, 3, "wooden-shield");
+                    break;
+
+                case 2:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "steel-helmet");
+                    break;
+
+                case 3:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "bow");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-jacket");
+                    AddEquipmentToActor(inventory, "short-sword");
+                    AddResourceToActor(inventory, "arrow", 10);
+                    break;
+
+                case 4:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "fireball-staff");
+                    AddEquipmentToActor(person.EquipmentCarrier, 1, "scholar-robe");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "wizard-hat");
+                    AddResourceToActor(inventory, "mana", 15);
+                    break;
+
+                case 5:
+                    AddEquipmentToActor(person.EquipmentCarrier, 2, "pistol");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "elder-hat");
+                    AddResourceToActor(inventory, "bullet-45", 5);
+
+                    AddResourceToActor(inventory, "packed-food", 1);
+                    AddResourceToActor(inventory, "water-bottle", 1);
+                    AddResourceToActor(inventory, "med-kit", 1);
+
+                    AddResourceToActor(inventory, "mana", 5);
+                    AddResourceToActor(inventory, "arrow", 3);
+                    break;
+            }
+
+            AddResourceToActor(inventory, "packed-food", 1);
+            AddResourceToActor(inventory, "water-bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);
-            AddResourceToActor(inventory, "water-bottle", 2);
-            AddResourceToActor(inventory, "packed-food", 2);
         }
 
-        var actor = new Actor(_personManager.Person, player, startNode);
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
 
         actorManager.Add(actor);
 
@@ -534,10 +571,17 @@ internal class SectorVM : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        actorViewModel.Actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actorViewModel.Actor.UsedAct += ActorOnUsedAct;
+        actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actor.UsedAct += ActorOnUsedAct;
+        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
 
         return actorViewModel;
+    }
+
+    private void HumanPersonSurvival_Dead(object sender, EventArgs e)
+    {
+        _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
+        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
     }
 
     private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
@@ -547,6 +591,20 @@ internal class SectorVM : MonoBehaviour
             var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = _propFactory.CreateEquipment(equipmentScheme);
             inventory.Add(equipment);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
+        }
+    }
+
+    private void AddEquipmentToActor(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid)
+    {
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var equipment = _propFactory.CreateEquipment(equipmentScheme);
+            equipmentCarrier[slotIndex] = equipment;
         }
         catch (KeyNotFoundException)
         {
@@ -625,6 +683,7 @@ internal class SectorVM : MonoBehaviour
 
         var nodeVm = sender as MapNodeVM;
 
+        _playerState.SelectedViewModel = nodeVm;
         _playerState.HoverViewModel = nodeVm;
 
         if (nodeVm != null)

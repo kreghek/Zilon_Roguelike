@@ -1,9 +1,13 @@
 {
-  "Hp": 2,
+  "Name":{
+    "Ru": "Мантикора",
+	"En": "Manticore"
+  },
+  "Hp": 60,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 2
     },
     "Range": {
       "Min": 1,
@@ -14,5 +18,6 @@
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [ "survival" ],
+  "BaseScore": 75
 }

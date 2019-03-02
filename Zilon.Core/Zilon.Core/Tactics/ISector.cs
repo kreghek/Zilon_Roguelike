@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
+    /// <summary>
+    /// Сектор (игровая локация). Используется в тактическом режиме.
+    /// </summary>
     public interface ISector
     {
         /// <summary>
@@ -19,19 +22,23 @@ namespace Zilon.Core.Tactics
         void Update();
 
         /// <summary>
-        /// Событие выстреливает, когда все наблюдаемые актёры покинули сектор.
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        event EventHandler ActorExit;
-
-        IMap Map { get; }
+        event EventHandler<SectorExitEventArgs> HumanGroupExit;
 
         /// <summary>
-        /// Стартовые узлы.
-        /// Набор узлов, где могут располагаться актёры игрока
-        /// на начало прохождения сектора.
+        /// Карта в основе сектора.
         /// </summary>
-        IMapNode[] StartNodes { get; set; }
+        ISectorMap Map { get; }
 
+        /// <summary>
+        /// Маршруты патрулирования в секторе.
+        /// </summary>
         Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
+
+        /// <summary>Менеджер работы с очками.</summary>
+        IScoreManager ScoreManager { get; set; }
+
+        ILocationScheme Scheme { get; set; }
     }
 }

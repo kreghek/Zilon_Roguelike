@@ -88,7 +88,7 @@ namespace Zilon.Core.Spec.Steps
                 Actor = monster
             };
 
-            playerState.HoverViewModel = monsterViewModel;
+            playerState.SelectedViewModel = monsterViewModel;
 
             attackCommand.Execute();
         }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using JetBrains.Annotations;
+
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -12,7 +15,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-
+    /// <summary>
+    /// Базовая реализация сектора.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.Tactics.ISector" />
     public class Sector : ISector
     {
         private readonly IActorManager _actorManager;
@@ -21,16 +27,33 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
-        public event EventHandler ActorExit;
+        /// <summary>
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// </summary>
+        public event EventHandler<SectorExitEventArgs> HumanGroupExit;
 
-        public IMap Map { get; }
+        /// <summary>
+        /// Карта в основе сектора.
+        /// </summary>
+        public ISectorMap Map { get; }
 
+        /// <summary>
+        /// Маршруты патрулирования в секторе.
+        /// </summary>
         public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
+        /// <summary>
+        /// Стартовые узлы.
+        /// Набор узлов, где могут располагаться актёры игрока
+        /// на начало прохождения сектора.
+        /// </summary>
         public IMapNode[] StartNodes { get; set; }
+        public IScoreManager ScoreManager { get; set; }
+        public string Sid { get; set; }
+        public ILocationScheme Scheme { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public Sector(IMap map,
+        public Sector(ISectorMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
             ITraderManager traderManager,
@@ -104,30 +127,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         private void DetectSectorExit()
         {
-            var allExit = true;
+            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
+            var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
 
-            //Проверяем, что есть хоть один персонаж игрока.
-            // Потому что, умирая, персонажи удаляются из менеджера.
-            // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
-            var atLeastOneHuman = false;
-
-            foreach (var actor in _actorManager.Items)
+            if (detectedTransition != null)
             {
-                if (!(actor.Owner is HumanPlayer))
-                {
-                    continue;
-                }
-                
-                atLeastOneHuman = true;
-                if (Map.ExitNodes?.Contains(actor.Node) == false)
-                {
-                    allExit = false;
-                }
-            }
-
-            if (allExit && atLeastOneHuman)
-            {
-                DoActorExit();
+                DoActorExit(detectedTransition);
             }
         }
 
@@ -180,6 +185,19 @@ namespace Zilon.Core.Tactics
                 Map.HoldNode(actor.Node, actor);
 
                 actor.Person.Survival.Dead += ActorState_Dead;
+
+                if (actor.Owner is HumanPlayer)
+                {
+                    actor.Moved += HumanActor_Moved;
+                }
+            }
+        }
+
+        private void HumanActor_Moved(object sender, EventArgs e)
+        {
+            if (ScoreManager != null)
+            {
+                ScoreManager.CountTurn(Scheme);
             }
         }
 
@@ -189,12 +207,17 @@ namespace Zilon.Core.Tactics
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
             actor.Person.Survival.Dead -= ActorState_Dead;
+            actor.Moved -= HumanActor_Moved;
+            ProcessMonsterDeath(actor);
+        }
 
+        private void ProcessMonsterDeath(IActor actor)
+        {
             if (!(actor.Person is MonsterPerson monsterPerson))
             {
                 return;
             }
-            
+
             var monsterScheme = monsterPerson.Scheme;
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);
@@ -204,6 +227,11 @@ namespace Zilon.Core.Tactics
             if (loot.Content.CalcActualItems().Any())
             {
                 _propContainerManager.Add(loot);
+            }
+
+            if (ScoreManager != null)
+            {
+                ScoreManager.CountMonsterDefeat(monsterPerson);
             }
         }
 
@@ -225,10 +253,10 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit()
+        private void DoActorExit([NotNull] RoomTransition roomTransition)
         {
-            var e = new EventArgs();
-            ActorExit?.Invoke(this, e);
+            var e = new SectorExitEventArgs(roomTransition);
+            HumanGroupExit?.Invoke(this, e);
         }
     }
 }

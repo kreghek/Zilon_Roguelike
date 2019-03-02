@@ -30,9 +30,9 @@ namespace Zilon.Core.Spec.Steps
 
         [UsedImplicitly]
         [Given(@"Есть карта размером (\d*)")]
-        public void GivenЕстьКартаРазмером(int mapSize)
+        public async System.Threading.Tasks.Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            Context.CreateSector(mapSize);
+            await Context.CreateSectorAsync(mapSize);
         }
 
         [UsedImplicitly]
@@ -144,7 +144,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я выбираю ячейку \((.*), (.*)\)")]
         public void WhenЯВыбираюЯчейку(int x, int y)
         {
-            Context.HoverNode(x, y);
+            Context.ClickOnNode(x, y);
         }
 
         [UsedImplicitly]
