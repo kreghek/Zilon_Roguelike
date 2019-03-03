@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Rapid",
       "Impact": "Kinetic"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   },
   "DropTableSids": [ "survival" ],
   "BaseScore": 30

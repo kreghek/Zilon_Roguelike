@@ -239,7 +239,7 @@ internal class SectorVM : MonoBehaviour
             .SingleOrDefault(x=>x.IsStart).Nodes
             .First();
 
-        var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
             personScheme,
             _actorManager,
             _survivalRandomSource,
@@ -462,6 +462,18 @@ internal class SectorVM : MonoBehaviour
         }
     }
 
+    private void HumanActorViewModel_Selected(object sender, EventArgs e)
+    {
+        var actorViewModel = sender as ActorViewModel;
+
+        _playerState.SelectedViewModel = actorViewModel;
+
+        if (actorViewModel != null)
+        {
+            _clientCommandExecutor.Push(_attackCommand);
+        }
+    }
+
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
     {
         if (_playerState.ActiveActor == null)
@@ -484,7 +496,7 @@ internal class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
-    private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
+    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
         [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] ISurvivalRandomSource survivalRandomSource,
@@ -570,6 +582,7 @@ internal class SectorVM : MonoBehaviour
         var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
+        actorViewModel.Selected += HumanActorViewModel_Selected;
 
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
@@ -637,18 +650,25 @@ internal class SectorVM : MonoBehaviour
         var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
         actorViewModel.GraphicRoot.ProcessHit();
 
-        var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
-
-        var sfx = Instantiate(HitSfx, transform);
-        targetViewModel.AddHitEffect(sfx);
-
-        // Проверяем, стрелковое оружие или удар ближнего боя
-        if (e.TacticalAct.Stats.Range.Max > 1)
+        if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Damage)
         {
-            sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
+            var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
 
-            // Создаём снараяд
-            CreateBullet(actor, e.Target);
+            var sfx = Instantiate(HitSfx, transform);
+            targetViewModel.AddHitEffect(sfx);
+
+            // Проверяем, стрелковое оружие или удар ближнего боя
+            if (e.TacticalAct.Stats.Range?.Max > 1)
+            {
+                sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
+
+                // Создаём снараяд
+                CreateBullet(actor, e.Target);
+            }
+        }
+        else if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Heal)
+        {
+            Debug.Log($"{actor} healed youself");
         }
     }
 

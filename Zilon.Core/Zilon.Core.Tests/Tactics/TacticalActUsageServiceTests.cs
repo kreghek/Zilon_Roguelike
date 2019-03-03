@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using JetBrains.Annotations;
@@ -14,6 +14,7 @@ using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -95,7 +96,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType
                 }
@@ -146,7 +147,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType,
                     ApRank = 20,
@@ -203,7 +204,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType,
                     ApRank = 10,
@@ -265,10 +266,65 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
+        /// Тест проверяет, что при лечении навык восстанавливает здоровье, когда актёр использует навык на себя.
+        /// </summary>
+        [Test]
+        public void UseOn_HealSelfWithHalfHp_HpRestored()
+        {
+            // ARRANGE
+            const int HEAL_EFFICIENT = 1;
+
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(HEAL_EFFICIENT);
+            var actUsageRandomSource = actUsageRandomSourceMock.Object;
+
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
+
+            var survivalDataMock = new Mock<ISurvivalData>();
+            var survivalData = survivalDataMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            personMock.Setup(x => x.Survival).Returns(survivalData);
+            var person = personMock.Object;
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+            var actor = actorMock.Object;
+
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Effect = TacticalActEffectType.Heal,
+                Efficient = new Roll(6, 1),
+                Targets = TacticalActTargets.Self
+            };
+
+            var tacticalActMock = new Mock<ITacticalAct>();
+            tacticalActMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            var tacticalAct = tacticalActMock.Object;
+
+            var usedActs = new UsedTacticalActs(new[] { tacticalAct });
+
+
+
+            // ACT
+            actUsageService.UseOn(actor, actor, usedActs);
+
+
+
+            // ASSERT
+            survivalDataMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
+                It.Is<int>(v => v == HEAL_EFFICIENT)));
+
+        }
+
+        /// <summary>
         /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task UseOn_Wall_ThrowsInvalidOperationExceptionAsync()
+        public async Task UseOn_Wall_ThrowsInvalidOperationExceptionAsync()
         {
             // ARRANGE
 
@@ -323,7 +379,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actStatsSubScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical,
                     Impact = ImpactType.Kinetic,
@@ -449,7 +505,7 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task SetUpAsync()
         {
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit()).Returns(6);
@@ -468,7 +524,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical,
                     Impact = ImpactType.Kinetic,
@@ -492,7 +548,7 @@ namespace Zilon.Core.Tests.Tactics
             _sectorManager = sectorManager;
         }
 
-        private async System.Threading.Tasks.Task<ISectorManager> CreateSectorManagerWithWallAsync()
+        private async Task<ISectorManager> CreateSectorManagerWithWallAsync()
         {
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;

@@ -13,6 +13,8 @@
       "Min": 1,
       "Max": 1
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "Offence": {
       "Type": "Shadow",
       "Impact": "Psy"

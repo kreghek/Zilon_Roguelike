@@ -15,17 +15,6 @@ public class MonsterInfoPanel : MonoBehaviour
     public Text MonsterNameText;
     public Text MonsterHpText;
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    _playerState.HoverChanged += PlayerState_HoverChanged;
-    //}
-
-    //private void OnDestroy()
-    //{
-    //    _playerState.HoverChanged -= PlayerState_HoverChanged;
-    //}
-
     public void FixedUpdate()
     {
         if (_playerState.HoverViewModel is IActorViewModel actorViewModel)

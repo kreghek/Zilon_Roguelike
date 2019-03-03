@@ -11,47 +11,36 @@ namespace Zilon.Core.Schemes
 {
     public class TacticalActStatsSubScheme : SubSchemeBase, ITacticalActStatsSubScheme
     {
-        [UsedImplicitly]
-        [JsonConstructor]
-        public TacticalActStatsSubScheme(TacticalActOffenceSubScheme offence,
-            TacticalActEffectType effect,
-            Roll efficient,
-            Range<int> range,
-            int hitCount,
-            bool isMelee)
-        {
-            Offense = offence ?? throw new ArgumentNullException(nameof(offence));
-            Effect = effect;
-            Efficient = efficient ?? throw new ArgumentNullException(nameof(efficient));
-            Range = range ?? throw new ArgumentNullException(nameof(range));
-            HitCount = hitCount;
-            IsMelee = isMelee;
-        }
-
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>
-        public ITacticalActOffenceSubScheme Offense { get; set; }
+        [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActOffenceSubScheme>))]
+        public ITacticalActOffenceSubScheme Offence { get; private set; }
 
         /// <summary>
         /// Эффект, который оказывает действие.
         /// </summary>
-        public TacticalActEffectType Effect { get; }
+        [JsonProperty]
+        public TacticalActEffectType Effect { get; private set; }
 
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        public Roll Efficient { get; }
+        [JsonProperty]
+        public Roll Efficient { get; private set; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.
         /// </summary>
-        public Range<int> Range { get; set; }
+        [JsonProperty]
+        public Range<int> Range { get; private set; }
 
         /// <summary>
         /// Количество ударов при совершении действия.
         /// </summary>
-        public int HitCount { get; }
+        [JsonProperty]
+        public int HitCount { get; private set; }
 
         /// <summary>
         /// Является ли действие рукопашным.
@@ -60,8 +49,11 @@ namespace Zilon.Core.Schemes
         /// Рукопашные действия переводят актёра в режим рукопашного боя.
         /// Во время рукопашного режима можно использовать только рукопашные действия.
         /// </remarks>
-        public bool IsMelee { get; }
+        [JsonProperty]
+        public bool IsMelee { get; private set; }
 
-        public TacticalActTargets Targets => TacticalActTargets.Enemy;
+        /// <summary>Доступные цели действия.</summary>
+        [JsonProperty]
+        public TacticalActTargets Targets { get; private set; }
     }
 }

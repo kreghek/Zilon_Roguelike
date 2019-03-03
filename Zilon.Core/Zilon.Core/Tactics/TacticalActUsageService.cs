@@ -5,6 +5,7 @@ using System.Linq;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -54,10 +55,19 @@ namespace Zilon.Core.Tactics
 
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
-            var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-            var targetCubePos = ((HexNode)target.Node).CubeCoords;
+            bool isInDistance;
+            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
+            {
+                isInDistance = true;
+            }
+            else
+            {
+                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
+                var targetCubePos = ((HexNode)target.Node).CubeCoords;
 
-            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+            }
+
             if (!isInDistance)
             {
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
@@ -164,9 +174,34 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private void UseOnActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
+            switch (tacticalActRoll.TacticalAct.Stats.Effect)
+            {
+                case TacticalActEffectType.Damage:
+                    DamageActor(actor, targetActor, tacticalActRoll);
+                    break;
+
+                case TacticalActEffectType.Heal:
+                    HealActor(actor, targetActor, tacticalActRoll);
+                    break;
+
+                default:
+                    throw new ArgumentException(string.Format("Не определённый эффект {0} действия {1}.",
+                        tacticalActRoll.TacticalAct.Stats.Effect,
+                        tacticalActRoll.TacticalAct));
+            }
+        }
+
+        /// <summary>
+        /// Наносит урон актёру.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private void DamageActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
             var targetIsDeadLast = targetActor.Person.Survival.IsDead;
 
-            var offenceType = tacticalActRoll.TacticalAct.Stats.Offense.Type;
+            var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
             var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
@@ -198,6 +233,17 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        /// <summary>
+        /// Лечит актёра.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
+            targetActor.Person.Survival.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>
@@ -273,7 +319,7 @@ namespace Zilon.Core.Tactics
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offense.Impact;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -316,7 +362,7 @@ namespace Zilon.Core.Tactics
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offense.Impact;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -324,7 +370,7 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException($"Не найдена защита {actImpact}.");
             }
 
-            var apRankDiff = usedTacticalAct.Stats.Offense.ApRank - preferredArmor.ArmorRank;
+            var apRankDiff = usedTacticalAct.Stats.Offence.ApRank - preferredArmor.ArmorRank;
 
             switch (apRankDiff)
             {
@@ -386,7 +432,7 @@ namespace Zilon.Core.Tactics
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offense.Impact;
+            var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             return preferredArmor?.ArmorRank;
@@ -399,7 +445,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private int GetActApRank(ITacticalAct tacticalAct)
         {
-            return tacticalAct.Stats.Offense.ApRank;
+            return tacticalAct.Stats.Offence.ApRank;
         }
 
         /// <summary>
