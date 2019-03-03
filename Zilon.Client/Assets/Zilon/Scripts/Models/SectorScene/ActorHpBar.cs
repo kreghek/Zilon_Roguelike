@@ -18,7 +18,7 @@ public class ActorHpBar : MonoBehaviour
         {
             var hpStat = Actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
 
-            if (hpStat.Value == hpStat.Range.Max)
+            if (hpStat.Value == hpStat.Range.Max || hpStat.Value <= 0)
             {
                 foreach (var obj in Objects)
                 {
