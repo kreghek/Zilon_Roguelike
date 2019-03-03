@@ -43,7 +43,9 @@ namespace Zilon.Core.Commands
             var targetNode = selectedActorViewModel.Actor.Node;
 
             var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
-            var isInDistance = act.CheckDistance(((HexNode)currentNode).CubeCoords, ((HexNode)targetNode).CubeCoords);
+            var currentCoords = ((HexNode)currentNode).CubeCoords;
+            var targetCoords = ((HexNode)targetNode).CubeCoords;
+            var isInDistance = act.CheckDistance(currentCoords, targetCoords);
             if (!isInDistance)
             {
                 return false;

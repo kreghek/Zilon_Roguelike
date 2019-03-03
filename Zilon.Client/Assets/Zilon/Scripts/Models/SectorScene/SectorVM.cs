@@ -239,7 +239,7 @@ internal class SectorVM : MonoBehaviour
             .SingleOrDefault(x=>x.IsStart).Nodes
             .First();
 
-        var playerActorViewModel = CreateHumanActorVm(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
             personScheme,
             _actorManager,
             _survivalRandomSource,
@@ -484,7 +484,7 @@ internal class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
-    private ActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
+    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
         [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
         [NotNull] ISurvivalRandomSource survivalRandomSource,

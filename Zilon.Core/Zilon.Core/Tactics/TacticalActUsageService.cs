@@ -5,6 +5,7 @@ using System.Linq;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -54,10 +55,19 @@ namespace Zilon.Core.Tactics
 
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
-            var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-            var targetCubePos = ((HexNode)target.Node).CubeCoords;
+            bool isInDistance;
+            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
+            {
+                isInDistance = true;
+            }
+            else
+            {
+                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
+                var targetCubePos = ((HexNode)target.Node).CubeCoords;
 
-            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+            }
+
             if (!isInDistance)
             {
                 throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
@@ -164,6 +174,26 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private void UseOnActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
+            switch (tacticalActRoll.TacticalAct.Stats.Effect)
+            {
+                case TacticalActEffectType.Damage:
+                    DamageActor(actor, targetActor, tacticalActRoll);
+                    break;
+
+                case TacticalActEffectType.Heal:
+                    HealActor(actor, targetActor, tacticalActRoll);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Наносит урон актёру.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private void DamageActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
             var targetIsDeadLast = targetActor.Person.Survival.IsDead;
 
             var offenceType = tacticalActRoll.TacticalAct.Stats.Offense.Type;
@@ -198,6 +228,17 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        /// <summary>
+        /// Лечит актёра.
+        /// </summary>
+        /// <param name="actor"> Актёр, который совершил действие. </param>
+        /// <param name="targetActor"> Цель использования действия. </param>
+        /// <param name="tacticalActRoll"> Эффективность действия. </param>
+        private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        {
+            targetActor.Person.Survival.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>

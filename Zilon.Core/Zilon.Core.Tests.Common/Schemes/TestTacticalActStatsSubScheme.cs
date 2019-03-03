@@ -14,14 +14,15 @@ namespace Zilon.Core.Tests.Common.Schemes
             Range = new Range<int>(1, 1);
             HitCount = 1;
             IsMelee = true;
+            Targets = TacticalActTargets.Enemy;
         }
 
-        public TacticalActEffectType Effect { get; }
+        public TacticalActEffectType Effect { get; set; }
         public Roll Efficient { get; set; }
         public int HitCount { get; }
         public bool IsMelee { get; }
         public ITacticalActOffenceSubScheme Offense { get; set; }
         public Range<int> Range { get; set; }
-        public TacticalActTargets Targets => TacticalActTargets.Enemy;
+        public TacticalActTargets Targets { get; set; }
     }
 }
