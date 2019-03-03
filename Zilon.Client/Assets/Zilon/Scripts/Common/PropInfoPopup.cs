@@ -62,8 +62,8 @@ public class PropInfoPopup : MonoBehaviour
                         var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
                         var actName = act.Name.En ?? act.Name.Ru;
                         var efficient = $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
-                        var actImpact = act.Stats.Offense.Impact;
-                        descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offense.ApRank} rank)");
+                        var actImpact = act.Stats.Offence.Impact;
+                        descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offence.ApRank} rank)");
                     }
                 }
 

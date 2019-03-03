@@ -547,6 +547,9 @@ internal class SectorVM : MonoBehaviour
                     break;
             }
 
+            AddEquipmentToActor(inventory, "heal-staff");
+            AddResourceToActor(inventory, "mana", 5);
+
             AddResourceToActor(inventory, "packed-food", 1);
             AddResourceToActor(inventory, "water-bottle", 1);
             AddResourceToActor(inventory, "med-kit", 1);

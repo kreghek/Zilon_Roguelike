@@ -8,7 +8,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>
-        ITacticalActOffenceSubScheme Offense { get; }
+        ITacticalActOffenceSubScheme Offence { get; }
 
         /// <summary>
         /// Эффект, который оказывает действие.
@@ -28,7 +28,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Дистанция, в котором возможно использования действия.
         /// </summary>
-        Range<int> Range { get; set; }
+        Range<int> Range { get; }
 
         /// <summary>
         /// Количество ударов при совершении действия.

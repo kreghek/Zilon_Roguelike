@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Client;
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -43,29 +44,42 @@ namespace Zilon.Core.Commands
             var targetNode = selectedActorViewModel.Actor.Node;
 
             var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
-            var currentCoords = ((HexNode)currentNode).CubeCoords;
-            var targetCoords = ((HexNode)targetNode).CubeCoords;
-            var isInDistance = act.CheckDistance(currentCoords, targetCoords);
-            if (!isInDistance)
+            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
+                PlayerState.ActiveActor.Actor == selectedActorViewModel.Actor)
             {
-                return false;
+                return true;
             }
-
-            var targetIsOnLine = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
-            if (!targetIsOnLine)
+            else
             {
-                return false;
-            }
-
-            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
-            {
-                var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
-                    act.Constrains.PropResourceType,
-                    act.Constrains.PropResourceCount.Value);
-
-                if (!hasPropResource)
+                if (act.Stats.Range == null)
                 {
                     return false;
+                }
+
+                var currentCoords = ((HexNode)currentNode).CubeCoords;
+                var targetCoords = ((HexNode)targetNode).CubeCoords;
+                var isInDistance = act.CheckDistance(currentCoords, targetCoords);
+                if (!isInDistance)
+                {
+                    return false;
+                }
+
+                var targetIsOnLine = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+                if (!targetIsOnLine)
+                {
+                    return false;
+                }
+
+                if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
+                {
+                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
+                        act.Constrains.PropResourceType,
+                        act.Constrains.PropResourceCount.Value);
+
+                    if (!hasPropResource)
+                    {
+                        return false;
+                    }
                 }
             }
 

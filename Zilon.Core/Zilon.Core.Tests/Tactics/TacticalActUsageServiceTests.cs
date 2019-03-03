@@ -96,7 +96,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType
                 }
@@ -147,7 +147,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType,
                     ApRank = 20,
@@ -204,7 +204,7 @@ namespace Zilon.Core.Tests.Tactics
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = offenceType,
                     ApRank = 10,
@@ -379,7 +379,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actStatsSubScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical,
                     Impact = ImpactType.Kinetic,
@@ -524,7 +524,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offense = new TestTacticalActOffenceSubScheme
+                Offence = new TestTacticalActOffenceSubScheme
                 {
                     Type = OffenseType.Tactical,
                     Impact = ImpactType.Kinetic,
