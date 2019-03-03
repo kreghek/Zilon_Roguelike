@@ -29,6 +29,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     public ActorGraphicBase GraphicRoot;
+    public ActorHpBar ActorHpBar;
 
     private readonly List<HitSfx> _effectList;
 
@@ -55,6 +56,16 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Actor.DamageTaken += Actor_DamageTaken;
         Actor.OnArmorPassed += Actor_OnArmorPassed;
         Actor.OnDefence += Actor_OnDefence;
+
+        if (ActorHpBar != null)
+        {
+            ActorHpBar.Actor = Actor;
+
+            if (ReferenceEquals(_playerState.ActiveActor, this))
+            {
+                ActorHpBar.gameObject.SetActive(false);
+            }
+        }
     }
 
     [UsedImplicitly]
