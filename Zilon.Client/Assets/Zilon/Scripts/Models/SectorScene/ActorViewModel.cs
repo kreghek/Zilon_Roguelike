@@ -57,7 +57,15 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Actor.OnArmorPassed += Actor_OnArmorPassed;
         Actor.OnDefence += Actor_OnDefence;
 
-        ActorHpBar.Actor = Actor;
+        if (ActorHpBar != null)
+        {
+            ActorHpBar.Actor = Actor;
+
+            if (ReferenceEquals(_playerState.ActiveActor, this))
+            {
+                ActorHpBar.gameObject.SetActive(false);
+            }
+        }
     }
 
     [UsedImplicitly]

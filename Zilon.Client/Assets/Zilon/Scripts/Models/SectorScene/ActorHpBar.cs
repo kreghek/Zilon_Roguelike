@@ -1,8 +1,41 @@
-﻿using UnityEngine;
+﻿using System.Linq;
 
+using UnityEngine;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
 public class ActorHpBar : MonoBehaviour
 {
+    public GameObject Bar;
+    public GameObject[] Objects;
+
     public IActor Actor { get; set; }
+
+    public void FixedUpdate()
+    {
+        if (Actor != null)
+        {
+            var hpStat = Actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+
+            if (hpStat.Value == hpStat.Range.Max)
+            {
+                foreach (var obj in Objects)
+                {
+                    obj.SetActive(false);
+                }
+            }
+            else
+            {
+                foreach (var obj in Objects)
+                {
+                    obj.SetActive(true);
+                }
+
+                var hpPercent = (float)hpStat.Value / hpStat.Range.Max;
+
+                Bar.transform.localScale = new Vector3(hpPercent, 0.1f, 1);
+            }
+        }
+    }
 }
