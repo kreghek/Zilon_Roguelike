@@ -15,6 +15,9 @@ namespace Zilon.Core.Persons
         /// </summary>
         SurvivalStat[] Stats { get; }
 
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        void ResetStats();
+
         /// <summary>
         /// Обновление состояния данных о выживании.
         /// </summary>

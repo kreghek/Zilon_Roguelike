@@ -516,7 +516,7 @@ internal class SectorVM : MonoBehaviour
                 case 2:
                     AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe");
                     AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe");
-                    AddEquipmentToActor(person.EquipmentCarrier, 0, "steel-helmet");
+                    AddEquipmentToActor(person.EquipmentCarrier, 0, "highlander-helmet");
                     break;
 
                 case 3:

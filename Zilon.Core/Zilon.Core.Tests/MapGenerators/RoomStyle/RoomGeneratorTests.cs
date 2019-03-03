@@ -8,9 +8,10 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.MapGenerators.RoomStyle.Tests
+namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
     public class RoomGeneratorTests

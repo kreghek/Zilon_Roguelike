@@ -8,5 +8,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] ActSids { get; }
         public EquipmentSlotTypes[] SlotTypes { get; set; }
         public IPropArmorItemSubScheme[] Armors { get; set; }
+        public PersonRule[] Rules { get; set; }
     }
 }

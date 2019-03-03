@@ -20,8 +20,17 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         public EquipmentSlotTypes[] SlotTypes { get; private set; }
 
+        /// <summary>
+        /// Характеристики брони, которую даёт предмет при экипировке.
+        /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropArmorItemSubScheme[]>))]
         [JsonProperty]
         public IPropArmorItemSubScheme[] Armors { get; private set; }
+
+        /// <summary>
+        /// Правила, которые будут срабатывать при экипировке предмета.
+        /// </summary>
+        [JsonProperty]
+        public PersonRule[] Rules { get; private set; }
     }
 }
