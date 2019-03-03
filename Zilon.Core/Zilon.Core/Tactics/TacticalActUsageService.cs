@@ -183,6 +183,11 @@ namespace Zilon.Core.Tactics
                 case TacticalActEffectType.Heal:
                     HealActor(actor, targetActor, tacticalActRoll);
                     break;
+
+                default:
+                    throw new ArgumentException(string.Format("Не определённый эффект {0} действия {1}.",
+                        tacticalActRoll.TacticalAct.Stats.Effect,
+                        tacticalActRoll.TacticalAct));
             }
         }
 

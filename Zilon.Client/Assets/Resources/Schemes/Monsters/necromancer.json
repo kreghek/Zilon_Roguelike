@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   },
   "DropTableSids": [ "survival" ],
   "BaseScore": 75

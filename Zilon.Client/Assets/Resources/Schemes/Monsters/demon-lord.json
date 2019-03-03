@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Fury",
       "Impact": "Kinetic"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   },
   "Defense": {
     "Defenses": [

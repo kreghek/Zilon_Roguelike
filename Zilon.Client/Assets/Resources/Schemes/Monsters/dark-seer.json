@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Shadow",
       "Impact": "Psy"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   },
   "Defense": {
     "Defenses": [

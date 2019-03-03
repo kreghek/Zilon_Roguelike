@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Tricky",
       "Impact": "Psy"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   },
   "DropTableSids": [ "survival" ],
   "BaseScore": 50
