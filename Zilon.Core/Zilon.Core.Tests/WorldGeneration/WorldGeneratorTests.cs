@@ -1,15 +1,14 @@
-﻿using NUnit.Framework;
-using Zilon.Core.WorldGeneration;
-using System;
-using System.Collections.Generic;
+﻿using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Zilon.Core.Schemes;
-using System.Configuration;
-using Zilon.Core.CommonServices.Dices;
 
-namespace Zilon.Core.WorldGeneration.Tests
+using NUnit.Framework;
+
+using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Schemes;
+using Zilon.Core.WorldGeneration;
+
+namespace Zilon.Core.Tests.WorldGeneration
 {
     [TestFixture()]
     public class WorldGeneratorTests

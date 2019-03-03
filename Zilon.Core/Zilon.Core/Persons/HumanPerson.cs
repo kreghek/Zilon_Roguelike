@@ -353,6 +353,98 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+
+            CalcSurvivalStats();
+        }
+
+        private void CalcSurvivalStats()
+        {
+            // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
+            // На вход принимает SurvivalData. SurvivalData дожен содержать метод увеличение диапазона характеристики.
+            Survival.ResetStats();
+
+            for (var i = 0; i < EquipmentCarrier.Count(); i++)
+            {
+                var equipment = EquipmentCarrier[i];
+                if (equipment == null)
+                {
+                    return;
+                }
+
+                var rules = equipment.Scheme.Equip.Rules;
+
+                if (rules == null)
+                {
+                    return;
+                }
+
+                foreach (var rule in rules)
+                {
+                    switch (rule.Type)
+                    {
+                        case EquipCommonRuleType.Health:
+                            BonusToHealth(rule.Level, rule.Direction);
+                            break;
+
+                        case EquipCommonRuleType.HealthIfNoBody:
+
+                            var requirementsCompleted = true;
+
+                            for (var slotIndex = 0; slotIndex < EquipmentCarrier.Count(); slotIndex++)
+                            {
+                                if ((EquipmentCarrier.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                                {
+                                    if (EquipmentCarrier[slotIndex] != null)
+                                    {
+                                        requirementsCompleted = false;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (requirementsCompleted)
+                            {
+                                BonusToHealth(rule.Level, rule.Direction);
+                            }
+
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction)
+        {
+            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            if (hpStat != null)
+            {
+                var bonus = 0;
+                switch (level)
+                {
+                    case PersonRuleLevel.Lesser:
+                        bonus = 1;
+                        break;
+
+                    case PersonRuleLevel.Normal:
+                        bonus = 3;
+                        break;
+
+                    case PersonRuleLevel.Grand:
+                        bonus = 5;
+                        break;
+
+                    case PersonRuleLevel.Absolute:
+                        bonus = 10;
+                        break;
+                }
+
+                if (direction == PersonRuleDirection.Negative)
+                {
+                    bonus *= -1;
+                }
+
+                hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + bonus);
+            }
         }
 
         private void EvolutionData_PerkLeveledUp(object sender, PerkEventArgs e)

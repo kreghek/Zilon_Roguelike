@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tests.Common;
 
@@ -126,5 +127,22 @@ namespace Zilon.Core.Spec.Steps
             equipCommand.CanExecute().Should().BeFalse();
         }
 
+        [Then(@"Текущий запас здоровья персонажа игрока равен (\d+)")]
+        public void ThenЗдоровьеПерсонажаИгрокаРавно(int expectedHp)
+        {
+            var actor = Context.GetActiveActor();
+
+            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+        }
+
+        [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]
+        public void ThenМаксимальноеЗдоровьеПерсонажаИгрокаРавно(int expectedMaxHp)
+        {
+            var actor = Context.GetActiveActor();
+
+            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health)
+                .Range.Max
+                .Should().Be(expectedMaxHp);
+        }
     }
 }

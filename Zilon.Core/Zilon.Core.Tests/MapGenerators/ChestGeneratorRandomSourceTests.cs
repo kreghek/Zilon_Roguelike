@@ -5,8 +5,9 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 
-namespace Zilon.Core.MapGenerators.Tests
+namespace Zilon.Core.Tests.MapGenerators
 {
     [TestFixture]
     public class ChestGeneratorRandomSourceTests
