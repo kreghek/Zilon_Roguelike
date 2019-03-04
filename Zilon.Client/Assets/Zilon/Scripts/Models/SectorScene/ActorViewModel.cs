@@ -133,6 +133,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
             isRootRotting: !isHumanPerson
         );
 
+        Destroy(GetComponent<Collider2D>());
+
         if (_playerState.ActiveActor.Equals(this))
         {
             _playerState.ActiveActor = null;
