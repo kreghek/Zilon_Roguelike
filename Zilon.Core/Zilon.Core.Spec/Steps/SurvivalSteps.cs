@@ -62,7 +62,7 @@ namespace Zilon.Core.Spec.Steps
                 {
                     Consumable = true,
                     CommonRules = new[] {
-                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser)
+                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
                     }
                 }
             };

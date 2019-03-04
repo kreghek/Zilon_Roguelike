@@ -72,24 +72,50 @@ namespace Zilon.Core.Tactics
 
             foreach (var rule in useData.CommonRules)
             {
-                switch (rule.Type)
+                switch (rule.Direction)
                 {
-                    case ConsumeCommonRuleType.Satiety:
-                        RestoreStat(SurvivalStatType.Satiety, rule.Level);
-                        break;
+                    case PersonRuleDirection.Positive:
+                        switch (rule.Type)
+                        {
+                            case ConsumeCommonRuleType.Satiety:
+                                RestoreStat(SurvivalStatType.Satiety, rule.Level);
+                                break;
 
-                    case ConsumeCommonRuleType.Thirst:
-                        RestoreStat(SurvivalStatType.Water, rule.Level);
-                        break;
+                            case ConsumeCommonRuleType.Thirst:
+                                RestoreStat(SurvivalStatType.Water, rule.Level);
+                                break;
 
-                    case ConsumeCommonRuleType.Health:
-                        RestoreStat(SurvivalStatType.Health, rule.Level);
+                            case ConsumeCommonRuleType.Health:
+                                RestoreStat(SurvivalStatType.Health, rule.Level);
+                                break;
+
+                            case ConsumeCommonRuleType.Undefined:
+                            default:
+                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
+                        }
                         break;
-                    
-                    case ConsumeCommonRuleType.Undefined:
-                    default:
-                        throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
+                    case PersonRuleDirection.Negative:
+                        switch (rule.Type)
+                        {
+                            case ConsumeCommonRuleType.Satiety:
+                                DecreaseStat(SurvivalStatType.Satiety, rule.Level);
+                                break;
+
+                            case ConsumeCommonRuleType.Thirst:
+                                DecreaseStat(SurvivalStatType.Water, rule.Level);
+                                break;
+
+                            case ConsumeCommonRuleType.Health:
+                                DecreaseStat(SurvivalStatType.Health, rule.Level);
+                                break;
+
+                            case ConsumeCommonRuleType.Undefined:
+                            default:
+                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
+                        }
+                        break;
                 }
+
             }
 
             if (useData.Consumable)
@@ -162,27 +188,17 @@ namespace Zilon.Core.Tactics
             switch (statType)
             {
                 case SurvivalStatType.Satiety:
-                    RestoreSatiety(level);
+                    RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
                     break;
 
                 case SurvivalStatType.Water:
-                    RestoreWater(level);
+                    RestoreSurvivalStatInner(SurvivalStatType.Water, level);
                     break;
 
                 case SurvivalStatType.Health:
                     RestoreHp(level);
                     break;
             }
-        }
-
-        private void RestoreSatiety(PersonRuleLevel level)
-        {
-            RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
-        }
-
-        private void RestoreWater(PersonRuleLevel level)
-        {
-            RestoreSurvivalStatInner(SurvivalStatType.Water, level);
         }
 
         private void RestoreSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
@@ -206,10 +222,10 @@ namespace Zilon.Core.Tactics
 
                 case PersonRuleLevel.None:
                     throw new NotSupportedException();
-                
+
                 case PersonRuleLevel.Absolute:
                     throw new NotSupportedException();
-                
+
                 default:
                     throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
             }
@@ -231,6 +247,78 @@ namespace Zilon.Core.Tactics
 
                 case PersonRuleLevel.Grand:
                     Person.Survival.RestoreStat(SurvivalStatType.Health,
+                        PropMetrics.HpGrandRestoreValue);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void DecreaseStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (statType)
+            {
+                case SurvivalStatType.Satiety:
+                    DecreaseSurvivalStatInner(SurvivalStatType.Satiety, level);
+                    break;
+
+                case SurvivalStatType.Water:
+                    DecreaseSurvivalStatInner(SurvivalStatType.Water, level);
+                    break;
+
+                case SurvivalStatType.Health:
+                    DecreaseHp(level);
+                    break;
+            }
+        }
+
+        private void DecreaseSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival.DecreaseStat(statType,
+                        PropMetrics.SurvivalLesserRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival.DecreaseStat(statType,
+                        PropMetrics.SurvivalNormalRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival.DecreaseStat(statType,
+                        PropMetrics.SurvivalGrandRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void DecreaseHp(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                        PropMetrics.HpLesserRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                        PropMetrics.HpNormalRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 
