@@ -56,6 +56,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Actor.DamageTaken += Actor_DamageTaken;
         Actor.OnArmorPassed += Actor_OnArmorPassed;
         Actor.OnDefence += Actor_OnDefence;
+        Actor.OpenedContainer += Actor_OpenedContainer;
 
         if (ActorHpBar != null)
         {
@@ -76,6 +77,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         Actor.DamageTaken -= Actor_DamageTaken;
         Actor.OnArmorPassed -= Actor_OnArmorPassed;
         Actor.OnDefence -= Actor_OnDefence;
+        Actor.OpenedContainer -= Actor_OpenedContainer;
     }
 
     [UsedImplicitly]
@@ -149,6 +151,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
         _moveCommandBlocker = new MoveCommandBlocker();
         _commandBlockerService.AddBlocker(_moveCommandBlocker);
+        GraphicRoot.ProcessMove(_targetPosition);
     }
 
     private void Actor_OnDefence(object sender, DefenceEventArgs e)
@@ -164,5 +167,14 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
     {
         _logService.Log($"{sender} take damage {e.Value}");
+    }
+
+    private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
+    {
+        var containerNode = (HexNode)e.Container.Node;
+        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetX, containerNode.OffsetY);
+        var targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
+
+        GraphicRoot.ProcessInteractive(targetPosition);
     }
 }
