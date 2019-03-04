@@ -88,6 +88,8 @@ namespace Zilon.Core.Tactics
 
             UpdateActorEffects();
 
+            UpdateEquipments();
+
             // Определяем, не покинули ли актёры игрока сектор.
             DetectSectorExit();
         }
@@ -119,6 +121,30 @@ namespace Zilon.Core.Tactics
                 }
 
                 survival.Update();
+            }
+        }
+
+        private void UpdateEquipments()
+        {
+            var actors = _actorManager.Items.ToArray();
+            foreach (var actor in actors)
+            {
+                var equipmentCarrier = actor.Person.EquipmentCarrier;
+                if (equipmentCarrier == null)
+                {
+                    continue;
+                }
+
+                foreach (var equipment in equipmentCarrier)
+                {
+                    if (equipment == null)
+                    {
+                        // пустой слот.
+                        continue;
+                    }
+
+                    
+                }
             }
         }
 
