@@ -68,6 +68,7 @@
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\ShowTraderModalCommand.cs" />
     <Compile Include="Common\PropMetrics.cs" />
+    <Compile Include="Common\Stat.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />

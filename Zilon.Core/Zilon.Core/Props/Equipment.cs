@@ -4,6 +4,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -14,6 +15,8 @@ namespace Zilon.Core.Props
     /// </summary>
     public class Equipment : PropBase
     {
+        private const int EQUIPMENT_DURABLE = 100;
+
         private readonly string _name;
 
         /// <inheritdoc />
@@ -43,6 +46,8 @@ namespace Zilon.Core.Props
             {
                 Acts = new ITacticalActScheme[0];
             }
+
+            Durable = new Stat(EQUIPMENT_DURABLE, 0, EQUIPMENT_DURABLE);
         }
 
         public Equipment(IPropScheme propScheme,
@@ -54,6 +59,9 @@ namespace Zilon.Core.Props
         }
 
         public ITacticalActScheme[] Acts { get; }
+
+        /// <summary>Прочность предмета.</summary>
+        public Stat Durable { get; }
 
         public override string ToString()
         {
