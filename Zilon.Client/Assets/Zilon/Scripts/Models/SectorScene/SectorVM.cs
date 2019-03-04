@@ -648,11 +648,12 @@ internal class SectorVM : MonoBehaviour
 
         // Визуализируем удар.
         var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
-        actorViewModel.GraphicRoot.ProcessHit();
 
         if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Damage)
         {
             var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+
+            actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
 
             var sfx = Instantiate(HitSfx, transform);
             targetViewModel.AddHitEffect(sfx);
@@ -668,6 +669,7 @@ internal class SectorVM : MonoBehaviour
         }
         else if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Heal)
         {
+            actorViewModel.GraphicRoot.ProcessHit(actorViewModel.transform.position);
             Debug.Log($"{actor} healed youself");
         }
     }
