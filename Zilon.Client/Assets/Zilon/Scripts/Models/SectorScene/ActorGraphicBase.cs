@@ -40,6 +40,7 @@ public class ActorGraphicBase : MonoBehaviour
 
     private void StartRotting()
     {
+        // Вызывается, как событие анимации.
         var corpse = gameObject.AddComponent<Rotting>();
         corpse.RootObject = _rootObject;
         corpse.RootRotting = _isRootRotting;
