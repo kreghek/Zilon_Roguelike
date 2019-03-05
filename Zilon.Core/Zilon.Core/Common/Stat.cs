@@ -14,6 +14,12 @@ namespace Zilon.Core.Common
     {
         private float _rawValue;
 
+        /// <summary>
+        /// Конструирует объект статы.
+        /// </summary>
+        /// <param name="startValue"> Начальное значение. Должно быть в диапазоне [min, max]. </param>
+        /// <param name="min"> Минимальное значение статы. </param>
+        /// <param name="max"> Минимальное значение статы. </param>
         public Stat(int startValue, int min, int max)
         {
             Range = new Range<int>(min, max);

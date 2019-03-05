@@ -7,8 +7,12 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalStat: Stat
     {
-        private float _rawValue;
-
+        /// <summary>
+        /// Конструирует объект статы выживания.
+        /// </summary>
+        /// <param name="startValue"> Начальное значение. Должно быть в диапазоне [min, max]. </param>
+        /// <param name="min"> Минимальное значение статы. </param>
+        /// <param name="max"> Минимальное значение статы. </param>
         public SurvivalStat(int startValue, int min, int max): base(startValue, min, max)
         {
 
