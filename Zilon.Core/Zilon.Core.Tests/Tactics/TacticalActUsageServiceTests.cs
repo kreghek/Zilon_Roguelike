@@ -40,7 +40,9 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, 
+                _perkResolver,
+                _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -83,7 +85,9 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -134,7 +138,9 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -191,7 +197,10 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(
+                actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -237,7 +246,10 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(
+                _actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -278,7 +290,10 @@ namespace Zilon.Core.Tests.Tactics
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(HEAL_EFFICIENT);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-            var actUsageService = new TacticalActUsageService(actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(
+                actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var survivalDataMock = new Mock<ISurvivalData>();
             var survivalData = survivalDataMock.Object;
@@ -330,7 +345,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var sectorManager = await CreateSectorManagerWithWallAsync();
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, sectorManager);
+            var actUsageService = new TacticalActUsageService(
+                _actUsageRandomSource,
+                _perkResolver,
+                sectorManager);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
@@ -364,7 +382,10 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actUsageService = new TacticalActUsageService(_actUsageRandomSource, _perkResolver, _sectorManager);
+            var actUsageService = new TacticalActUsageService(
+                _actUsageRandomSource,
+                _perkResolver,
+                _sectorManager);
 
             var personMock = new Mock<IPerson>();
             var person = personMock.Object;

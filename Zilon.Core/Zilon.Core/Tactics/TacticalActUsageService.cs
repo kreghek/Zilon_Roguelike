@@ -16,6 +16,8 @@ namespace Zilon.Core.Tactics
         private readonly IPerkResolver _perkResolver;
         private readonly ISectorManager _sectorManager;
 
+        public IEquipmentDurableService EquipmentDurableService { get; set; }
+
         public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
             IPerkResolver perkResolver,
             ISectorManager sectorManager)
@@ -102,6 +104,11 @@ namespace Zilon.Core.Tactics
             else
             {
                 UseOnChest(target, tacticalActRoll);
+            }
+
+            if (act.Equipment != null)
+            {
+                EquipmentDurableService?.UpdateByUse(act.Equipment);
             }
         }
 
