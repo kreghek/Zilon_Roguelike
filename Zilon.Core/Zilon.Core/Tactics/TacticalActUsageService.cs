@@ -10,14 +10,32 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
+    /// <summary>
+    /// Базовая реализация сервиса для работы с действиями персонажа.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.Tactics.ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IPerkResolver _perkResolver;
         private readonly ISectorManager _sectorManager;
 
+        /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
 
+        /// <summary>
+        /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
+        /// </summary>
+        /// <param name="actUsageRandomSource">Источник рандома для выполнения действий.</param>
+        /// <param name="perkResolver">Сервис для работы с прогрессом перков.</param>
+        /// <param name="sectorManager">Менеджер сектора.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// actUsageRandomSource
+        /// or
+        /// perkResolver
+        /// or
+        /// sectorManager
+        /// </exception>
         public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
             IPerkResolver perkResolver,
             ISectorManager sectorManager)
