@@ -1,4 +1,5 @@
 ﻿using System;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
 {
@@ -54,23 +55,55 @@ namespace Zilon.Core.Props
 
         /// <summary>Обновляет прочность экипировки со временем.</summary>
         /// <param name="equipment">Целевая экипировка.</param>
-        public void UpdateByTurn(Equipment equipment)
+        public void UpdateByTurn(Equipment equipment, IPerson equipmentOwner)
         {
             var resistRoll = _randomSource.RollTurnResist(equipment);
             if (resistRoll < SUCCESS_TURN_RESIST)
             {
                 equipment.Durable.Value--;
             }
+
+            UnequipIfDurableIsOver(equipment, equipmentOwner);
         }
 
         /// <summary>Обновляет прочность экипировки при использовании.</summary>
         /// <param name="equipment">Целевая экипировка.</param>
-        public void UpdateByUse(Equipment equipment)
+        public void UpdateByUse(Equipment equipment, IPerson equipmentOwner)
         {
             var resistRoll = _randomSource.RollUseResist(equipment);
             if (resistRoll < SUCCESS_USE_RESIST)
             {
                 equipment.Durable.Value--;
+            }
+
+            UnequipIfDurableIsOver(equipment, equipmentOwner);
+        }
+
+        private static void UnequipIfDurableIsOver(Equipment equipment, IPerson equipmentOwner)
+        {
+            if (equipment.Durable.Value <= 0)
+            {
+                var equipmentCarrier = equipmentOwner.EquipmentCarrier;
+                if (equipmentCarrier == null)
+                {
+                    return;
+                }
+
+                int? slotIndex = null;
+                for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
+                {
+                    var prop = equipmentCarrier[i];
+                    if (prop == equipment)
+                    {
+                        slotIndex = i;
+                        break;
+                    }
+                }
+
+                if (slotIndex != null)
+                {
+                    equipmentOwner.UnequipProp(slotIndex.Value);
+                }
             }
         }
     }

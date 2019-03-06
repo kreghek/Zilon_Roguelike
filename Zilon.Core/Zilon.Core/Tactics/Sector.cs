@@ -153,7 +153,7 @@ namespace Zilon.Core.Tactics
                         continue;
                     }
 
-                    _equipmentDurableService.UpdateByTurn(equipment);
+                    _equipmentDurableService.UpdateByTurn(equipment, actor.Person);
                 }
             }
         }

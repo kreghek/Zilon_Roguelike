@@ -91,6 +91,7 @@
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
+    <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />

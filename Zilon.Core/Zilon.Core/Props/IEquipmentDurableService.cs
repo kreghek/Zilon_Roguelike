@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Props
+﻿using Zilon.Core.Persons;
+
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Сервис для работы с прочностью экипировки.
@@ -9,13 +11,13 @@
         /// Обновляет прочность экипировки со временем.
         /// </summary>
         /// <param name="equipment">Целевая экипировка.</param>
-        void UpdateByTurn(Equipment equipment);
+        void UpdateByTurn(Equipment equipment, IPerson equipmentOwner);
 
         /// <summary>
         /// Обновляет прочность экипировки при использовании.
         /// </summary>
         /// <param name="equipment">Целевая экипировка.</param>
-        void UpdateByUse(Equipment equipment);
+        void UpdateByUse(Equipment equipment, IPerson equipmentOwner);
 
         /// <summary>
         /// Восстановление прочности экипировки.

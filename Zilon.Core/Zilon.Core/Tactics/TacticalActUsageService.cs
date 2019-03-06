@@ -108,7 +108,7 @@ namespace Zilon.Core.Tactics
 
             if (act.Equipment != null)
             {
-                EquipmentDurableService?.UpdateByUse(act.Equipment);
+                EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
             }
         }
 
