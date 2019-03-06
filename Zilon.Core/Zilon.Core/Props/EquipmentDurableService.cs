@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Zilon.Core.Props
 {
+    /// <summary>
+    /// Реализация сервиса для работы с прочностью экипировки.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.Props.IEquipmentDurableService" />
     public class EquipmentDurableService : IEquipmentDurableService
     {
         private const int SUCCESS_TURN_RESIST = 2;
@@ -15,24 +15,45 @@ namespace Zilon.Core.Props
 
         private readonly IEquipmentDurableServiceRandomSource _randomSource;
 
+        /// <summary>
+        /// Создаёт экземпляр <see cref="EquipmentDurableService"/>.
+        /// </summary>
+        /// <param name="randomSource">Источник рандома для сервиса.</param>
         public EquipmentDurableService(IEquipmentDurableServiceRandomSource randomSource)
         {
             _randomSource = randomSource;
         }
 
+        /// <summary>Определяет, может ли экипировка быть отремонтирована.</summary>
+        /// <param name="equipment">Целевая экипировка.</param>
+        /// <returns>
+        ///   <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
+        /// </returns>
+        public bool CanBeRepaired(Equipment equipment)
+        {
+            return equipment.Durable.Range.Max > 1;
+        }
+
+        /// <summary>Восстановление прочности экипировки.</summary>
+        /// <param name="repairResource">Ресурс, при помощи которого производится ремонт.</param>
+        /// <param name="equipment">Целевая экипировка.</param>
+        /// <exception cref="System.ArgumentException">Указанная экипировка не может быть отремонтирована. - equipment</exception>
         public void Repair(IProp repairResource, Equipment equipment)
         {
+            if (!CanBeRepaired(equipment))
+            {
+                throw new ArgumentException("Указанная экипировка не может быть отремонтирована.", nameof(equipment));
+            }
+
             var maxDurable = equipment.Durable.Range.Max;
             var reduceValue = (int)Math.Round(maxDurable * FIELD_REDUCE_MAX) + 1;
             var newMaxDurable = maxDurable - reduceValue;
 
-            if (newMaxDurable <= 0)
-            {
-            }
-
             equipment.Durable.ChangeStatRange(0, maxDurable - reduceValue);
         }
 
+        /// <summary>Обновляет прочность экипировки со временем.</summary>
+        /// <param name="equipment">Целевая экипировка.</param>
         public void UpdateByTurn(Equipment equipment)
         {
             var resistRoll = _randomSource.RollTurnResist(equipment);
@@ -42,6 +63,8 @@ namespace Zilon.Core.Props
             }
         }
 
+        /// <summary>Обновляет прочность экипировки при использовании.</summary>
+        /// <param name="equipment">Целевая экипировка.</param>
         public void UpdateByUse(Equipment equipment)
         {
             var resistRoll = _randomSource.RollUseResist(equipment);
@@ -49,10 +72,6 @@ namespace Zilon.Core.Props
             {
                 equipment.Durable.Value--;
             }
-        }
-
-        public class RepairResult {
-            bool Destroyed;
         }
     }
 }

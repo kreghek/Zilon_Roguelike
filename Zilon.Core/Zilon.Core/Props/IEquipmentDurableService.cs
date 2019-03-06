@@ -23,5 +23,14 @@
         /// <param name="repairResource">Ресурс, при помощи которого производится ремонт.</param>
         /// <param name="equipment">Целевая экипировка.</param>
         void Repair(IProp repairResource, Equipment equipment);
+
+        /// <summary>
+        /// Определяет, может ли экипировка быть отремонтирована.
+        /// </summary>
+        /// <param name="equipment">Целевая экипировка.</param>
+        /// <returns>
+        ///   <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
+        /// </returns>
+        bool CanBeRepaired(Equipment equipment);
     }
 }
