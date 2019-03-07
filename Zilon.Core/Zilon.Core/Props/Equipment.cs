@@ -15,7 +15,7 @@ namespace Zilon.Core.Props
     /// </summary>
     public class Equipment : PropBase
     {
-        private const int EQUIPMENT_DURABLE = 100;
+        private const int EQUIPMENT_DURABLE = 300;
 
         private readonly string _name;
 
