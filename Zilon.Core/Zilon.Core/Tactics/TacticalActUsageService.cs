@@ -244,6 +244,12 @@ namespace Zilon.Core.Tactics
 
                 targetActor.TakeDamage(actEfficient);
 
+                if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
+                {
+                    var damagedEquipment = GetDamagedEquipment(targetActor);
+                    EquipmentDurableService.UpdateByUse(damagedEquipment, targetActor.Person);
+                }
+
                 if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
                 {
                     CountTargetActorDefeat(actor, targetActor);
@@ -258,6 +264,27 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private Equipment GetDamagedEquipment(IActor targetActor)
+        {
+            if (targetActor.Person.EquipmentCarrier == null)
+            {
+                throw new ArgumentException("Передан персонаж, который не может носить экипировку.");
+            }
+
+            var armorEquipments = new List<Equipment>();
+            foreach (var currentEquipment in targetActor.Person.EquipmentCarrier)
+            {
+                if (currentEquipment.Scheme.Equip?.Armors != null)
+                {
+                    armorEquipments.Add(currentEquipment);
+                }
+            }
+
+            var rolledDamagedEquipment = _actUsageRandomSource.RollDamagedEquipment(armorEquipments);
+
+            return rolledDamagedEquipment;
         }
 
         /// <summary>
