@@ -95,6 +95,7 @@
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
+    <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Props\IEquipmentDurableService.cs" />
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Schemes\PersonRule.cs" />

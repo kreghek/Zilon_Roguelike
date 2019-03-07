@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
@@ -7,7 +8,7 @@ namespace Zilon.Core.Props
     /// Реализация сервиса для работы с прочностью экипировки.
     /// </summary>
     /// <seealso cref="Zilon.Core.Props.IEquipmentDurableService" />
-    public class EquipmentDurableService : IEquipmentDurableService
+    public sealed class EquipmentDurableService : IEquipmentDurableService
     {
         private const int SUCCESS_TURN_RESIST = 2;
         private const int SUCCESS_USE_RESIST = 6;
