@@ -1,6 +1,7 @@
 {
   "Name": {
-    "En": "Медпакет"
+    "En": "Medkit",
+	"Ru": "Медпакет"
   },
   "Use": {
     "Consumable": true,
