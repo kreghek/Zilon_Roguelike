@@ -1,13 +1,13 @@
 {
   "Name": {
-    "Ru": "Сухой паёк",
-    "En": "Packed food"
+    "En": "Northerner Ale",
+    "Ru": "Эль серерян"
   },
   "Use": {
     "Consumable": true,
     "CommonRules": [
       {
-        "Type": "Satiety",
+        "Type": "Thirst",
         "Level": "Normal"
       },
 	  {
@@ -15,7 +15,7 @@
         "Level": "Lesser"
       },
 	  {
-        "Type": "Thirst",
+        "Type": "Satiety",
         "Level": "Lesser",
 		"Direction": "Negative"
       }
