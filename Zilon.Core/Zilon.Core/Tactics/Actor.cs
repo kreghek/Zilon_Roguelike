@@ -279,17 +279,17 @@ namespace Zilon.Core.Tactics
             {
                 case PersonRuleLevel.Lesser:
                     Person.Survival.DecreaseStat(statType,
-                        PropMetrics.SurvivalLesserRestoreValue + 1);
+                        PropMetrics.SurvivalLesserRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Normal:
                     Person.Survival.DecreaseStat(statType,
-                        PropMetrics.SurvivalNormalRestoreValue + 1);
+                        PropMetrics.SurvivalNormalRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Grand:
                     Person.Survival.DecreaseStat(statType,
-                        PropMetrics.SurvivalGrandRestoreValue + 1);
+                        PropMetrics.SurvivalGrandRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.None:
