@@ -100,11 +100,11 @@ namespace Zilon.Core.WorldGeneration
             {
                 for (var y = 0; y < LocationBaseSize; y++)
                 {
-                    var hasNodeRoll = _dice.Roll(6);
-                    if (hasNodeRoll <= 2)
-                    {
-                        continue;
-                    }
+                    //var hasNodeRoll = _dice.Roll(6);
+                    //if (hasNodeRoll <= 2)
+                    //{
+                    //    continue;
+                    //}
 
                     var hasDundeonRoll = _dice.Roll(100);
                     if (hasDundeonRoll > 90)
