@@ -42,7 +42,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
-
         Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
     }
 }

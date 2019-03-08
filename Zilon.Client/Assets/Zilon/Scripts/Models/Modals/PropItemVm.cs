@@ -11,6 +11,7 @@ using Zilon.Core.Props;
 public class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
     public Text CountText;
+    public Text DurableStatusText;
     public Image IconImage;
     public Image SelectedBorder;
 
@@ -56,10 +57,26 @@ public class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescr
         {
             CountText.gameObject.SetActive(true);
             CountText.text = $"x{resource.Count}";
+
+            DurableStatusText.gameObject.SetActive(false);
+        }
+        else if (Prop is Equipment equipment)
+        {
+            CountText.gameObject.SetActive(false);
+
+            if (equipment.Durable.Value <= 0)
+            {
+                DurableStatusText.gameObject.SetActive(true);
+                DurableStatusText.text = "B";
+            }
+            else
+            {
+                DurableStatusText.gameObject.SetActive(false);
+            }
         }
         else
         {
-            CountText.gameObject.SetActive(false);
+            throw new ArgumentException($"Тип предмета {Prop.GetType().Name} не поддерживается", nameof(Prop));
         }
 
         Sid = Prop.Scheme.Sid;

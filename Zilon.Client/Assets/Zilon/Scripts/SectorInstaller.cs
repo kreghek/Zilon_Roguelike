@@ -8,6 +8,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -24,9 +25,20 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ITraderManager>().To<TraderManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
-        Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle();
+        Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
+            .OnInstantiated<TacticalActUsageService>((c, i) =>
+             {
+                 var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
+                 if (equipmentDurableService != null)
+                 {
+                     i.EquipmentDurableService = equipmentDurableService;
+                 }
+
+             });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();

@@ -91,6 +91,8 @@ public class PropInfoPopup : MonoBehaviour
                     }
                 }
 
+                descriptionLines.Add($"Durable: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
+
                 StatText.text = string.Join("\n", descriptionLines);
 
                 break;

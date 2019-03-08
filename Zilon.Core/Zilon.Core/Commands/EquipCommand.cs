@@ -35,8 +35,14 @@ namespace Zilon.Core.Commands
                 return true;
             }
 
-            var equipment = GetEquipment();
+            var equipment = GetInventorySelectedEquipment();
             if (equipment == null && _inventoryState.SelectedProp != null)
+            {
+                return false;
+            }
+
+            // Сломанную экипировку нельзя надевать
+            if (equipment.Durable.Value <= 0)
             {
                 return false;
             }
@@ -84,14 +90,14 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipment = GetEquipment();
+            var equipment = GetInventorySelectedEquipment();
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
             PlayerState.TaskSource.Intent(intention);
 
         }
 
-        private Equipment GetEquipment()
+        private Equipment GetInventorySelectedEquipment()
         {
             var propVieModel = _inventoryState.SelectedProp;
             if (propVieModel == null)

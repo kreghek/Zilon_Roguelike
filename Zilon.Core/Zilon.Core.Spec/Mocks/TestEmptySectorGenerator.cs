@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -15,13 +16,15 @@ namespace Zilon.Core.Spec.Mocks
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IMapFactory _mapFactory;
+        private readonly IEquipmentDurableService _equipmentDurableService;
 
         public TestEmptySectorGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
             ITraderManager traderManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
-            IMapFactory mapFactory)
+            IMapFactory mapFactory,
+            IEquipmentDurableService equipmentDurableService)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
@@ -29,6 +32,7 @@ namespace Zilon.Core.Spec.Mocks
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _mapFactory = mapFactory;
+            _equipmentDurableService = equipmentDurableService;
         }
 
         public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
@@ -39,7 +43,8 @@ namespace Zilon.Core.Spec.Mocks
                 _propContainerManager,
                 _traderManager,
                 _dropResolver,
-                _schemeService);
+                _schemeService,
+                _equipmentDurableService);
             return sector;
         }
 

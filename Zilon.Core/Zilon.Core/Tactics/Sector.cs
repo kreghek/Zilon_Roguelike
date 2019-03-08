@@ -26,6 +26,7 @@ namespace Zilon.Core.Tactics
         private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
+        private readonly IEquipmentDurableService _equipmentDurableService;
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
@@ -48,8 +49,14 @@ namespace Zilon.Core.Tactics
         /// на начало прохождения сектора.
         /// </summary>
         public IMapNode[] StartNodes { get; set; }
+
+        /// <summary>
+        /// Менеджер работы с очками.
+        /// </summary>
         public IScoreManager ScoreManager { get; set; }
+
         public string Sid { get; set; }
+
         public ILocationScheme Scheme { get; set; }
 
         [ExcludeFromCodeCoverage]
@@ -58,13 +65,16 @@ namespace Zilon.Core.Tactics
             IPropContainerManager propContainerManager,
             ITraderManager traderManager,
             IDropResolver dropResolver,
-            ISchemeService schemeService)
+            ISchemeService schemeService,
+            IEquipmentDurableService equipmentDurableService)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
             _traderManager = traderManager;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
+            _equipmentDurableService = equipmentDurableService;
+
             _actorManager.Added += ActorManager_Added;
             _propContainerManager.Added += PropContainerManager_Added;
             _propContainerManager.Removed += PropContainerManager_Remove;
@@ -87,6 +97,8 @@ namespace Zilon.Core.Tactics
             UpdateSurvivals();
 
             UpdateActorEffects();
+
+            UpdateEquipments();
 
             // Определяем, не покинули ли актёры игрока сектор.
             DetectSectorExit();
@@ -119,6 +131,30 @@ namespace Zilon.Core.Tactics
                 }
 
                 survival.Update();
+            }
+        }
+
+        private void UpdateEquipments()
+        {
+            var actors = _actorManager.Items.ToArray();
+            foreach (var actor in actors)
+            {
+                var equipmentCarrier = actor.Person.EquipmentCarrier;
+                if (equipmentCarrier == null)
+                {
+                    continue;
+                }
+
+                foreach (var equipment in equipmentCarrier)
+                {
+                    if (equipment == null)
+                    {
+                        // пустой слот.
+                        continue;
+                    }
+
+                    _equipmentDurableService.UpdateByTurn(equipment, actor.Person);
+                }
             }
         }
 

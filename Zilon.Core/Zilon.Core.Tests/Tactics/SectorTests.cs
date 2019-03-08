@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -47,12 +48,16 @@ namespace Zilon.Core.Tests.Tactics
             var schemeServiceMock = new Mock<ISchemeService>();
             var schemeService = schemeServiceMock.Object;
 
+            var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
+            var equipmentDurableService = equipmentDurableServiceMock.Object;
+
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
                 traderManager,
                 dropResolver,
-                schemeService);
+                schemeService,
+                equipmentDurableService);
 
             var actorMock = CreateActorMock();
             innerActorList.Add(actorMock.Object);
@@ -95,12 +100,16 @@ namespace Zilon.Core.Tests.Tactics
             var schemeServiceMock = new Mock<ISchemeService>();
             var schemeService = schemeServiceMock.Object;
 
+            var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
+            var equipmentDurableService = equipmentDurableServiceMock.Object;
+
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
                 traderManager,
                 dropResolver,
-                schemeService);
+                schemeService,
+                equipmentDurableService);
 
             var actorMock = CreateActorMock();
             actorMock.SetupGet(x => x.Owner).Returns(new Mock<HumanPlayer>().Object);
