@@ -307,6 +307,9 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
             Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+
+            Container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
         }
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)

@@ -17,7 +17,8 @@
     "HitCount": 1,
     "Offence": {
       "Type": "Tactical",
-      "Impact":  "Kinetic"
+      "Impact":  "Kinetic",
+	  "ApRank": 1
     }
   },
   "Constrains": {

@@ -16,7 +16,8 @@
     "HitCount": 1,
     "Offence": {
       "Type": "Tricky",
-      "Impact": "Kinetic"
+      "Impact": "Kinetic",
+	  "ApRank": 2
     }
   }
 }

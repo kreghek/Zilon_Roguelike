@@ -247,7 +247,12 @@ namespace Zilon.Core.Tactics
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
                     var damagedEquipment = GetDamagedEquipment(targetActor);
-                    EquipmentDurableService.UpdateByUse(damagedEquipment, targetActor.Person);
+
+                    // может быть null, если нет брони вообще
+                    if (damagedEquipment != null)
+                    {
+                        EquipmentDurableService.UpdateByUse(damagedEquipment, targetActor.Person);
+                    }
                 }
 
                 if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
@@ -276,6 +281,11 @@ namespace Zilon.Core.Tactics
             var armorEquipments = new List<Equipment>();
             foreach (var currentEquipment in targetActor.Person.EquipmentCarrier)
             {
+                if (currentEquipment == null)
+                {
+                    continue;
+                }
+
                 if (currentEquipment.Scheme.Equip?.Armors != null)
                 {
                     armorEquipments.Add(currentEquipment);

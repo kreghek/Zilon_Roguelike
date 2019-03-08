@@ -16,7 +16,8 @@
     "HitCount": 1,
     "Offence": {
       "Type": "Rapid",
-      "Impact": "Kinetic"
+      "Impact": "Kinetic",
+	  "ApRank": 4
     }
   }
 }

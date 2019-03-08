@@ -10,11 +10,7 @@
     },
 	"Targets": "Self",
 	"Effect": "Heal",
-    "HitCount": 1,
-    "Offence": {
-      "Type": "Tactical",
-      "Impact": "Kinetic"
-    }
+    "HitCount": 1
   },
   "Constrains": {
     "PropResourceType": "mana",

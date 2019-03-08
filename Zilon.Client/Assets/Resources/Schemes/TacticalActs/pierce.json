@@ -17,7 +17,8 @@
     "HitCount": 1,
     "Offence": {
       "Type": "Fury",
-      "Impact":  "Kinetic"
+      "Impact":  "Kinetic",
+	  "ApRank": 3
     }
   }
 }
