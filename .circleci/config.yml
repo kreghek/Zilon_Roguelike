@@ -1,13 +1,9 @@
 version: 2
 jobs:
   build:
-    working_directory: /temp
     docker:
-      - image: microsoft/dotnet:sdk
-    environment:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      - image: aparker/circleci-dotnet-mono:latest
     steps:
       - checkout
-      - run: dotnet restore
-      - run: dotnet build
+      - run: msbuild /t:Restore
+      - run: msbuild /t:Build
