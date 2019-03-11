@@ -18,6 +18,7 @@ public class GlobeWorldVM : MonoBehaviour
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
     public GlobalFollowCamera Camera;
+    public SceneLoader SceneLoader;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -107,12 +108,17 @@ public class GlobeWorldVM : MonoBehaviour
             if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
             {
                 _scoreManager.CountPlace(selectedNodeViewModel.Node);
-                SceneManager.LoadScene("combat");
+                StartLoadScene();
             }
             else
             {
                 _groupViewModel.CurrentLocation = selectedNodeViewModel;
             }
         }
+    }
+
+    private void StartLoadScene()
+    {
+        SceneLoader.gameObject.SetActive(true);
     }
 }

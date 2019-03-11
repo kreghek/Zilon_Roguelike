@@ -4,7 +4,12 @@
     "Armors": [
       {
         "Impact": "Kinetic",
-        "AbsorbtionLevel": "Normal",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      },
+	  {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
         "ArmorRank": 1
       }
     ]

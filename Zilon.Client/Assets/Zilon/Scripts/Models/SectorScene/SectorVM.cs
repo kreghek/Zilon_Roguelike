@@ -57,6 +57,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] public HitSfx HitSfx;
 
+    [NotNull] public SceneLoader SceneLoader;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -458,7 +460,7 @@ internal class SectorVM : MonoBehaviour
         else
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
-            SceneManager.LoadScene("combat");
+            StartLoadScene();
         }
     }
 
@@ -712,5 +714,10 @@ internal class SectorVM : MonoBehaviour
         {
             _clientCommandExecutor.Push(_moveCommand);
         }
+    }
+
+    private void StartLoadScene()
+    {
+        SceneLoader.gameObject.SetActive(true);
     }
 }
