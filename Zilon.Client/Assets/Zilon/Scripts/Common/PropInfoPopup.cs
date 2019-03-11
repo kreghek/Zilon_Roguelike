@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
+
 using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -86,7 +87,7 @@ public class PropInfoPopup : MonoBehaviour
                 {
                     foreach (var rule in propScheme.Equip.Rules)
                     {
-                        var sign = rule.Direction == PersonRuleDirection.Negative ? "-" : string.Empty;
+                        var sign = GetDirectionString(rule.Direction);
                         descriptionLines.Add($"Bonus: {rule.Type}: {sign}{rule.Level}");
                     }
                 }
@@ -100,7 +101,8 @@ public class PropInfoPopup : MonoBehaviour
             case Resource resource:
                 if (resource.Scheme.Use != null)
                 {
-                    var rules = string.Join("\n", resource.Scheme.Use.CommonRules.Select(x => $"{x.Type}:{x.Level}"));
+                    var ruleArray = resource.Scheme.Use.CommonRules.Select(GetUseRuleDescription);
+                    var rules = string.Join("\n", ruleArray);
                     StatText.text = rules;
                 }
 
@@ -116,5 +118,16 @@ public class PropInfoPopup : MonoBehaviour
             GetComponent<RectTransform>().position = PropViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }
+    }
+
+    private static string GetUseRuleDescription(ConsumeCommonRule rule)
+    {
+        string signString = GetDirectionString(rule.Direction);
+        return $"{rule.Type}:{signString}{rule.Level}";
+    }
+
+    private static string GetDirectionString(PersonRuleDirection direction)
+    {
+        return direction == PersonRuleDirection.Positive ? string.Empty : "-";
     }
 }
