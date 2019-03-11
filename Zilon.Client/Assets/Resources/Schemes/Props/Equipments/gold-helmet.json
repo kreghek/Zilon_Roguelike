@@ -5,6 +5,11 @@
       {
         "Impact": "Kinetic",
         "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      },
+	  {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
         "ArmorRank": 1
       }
     ]

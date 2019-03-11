@@ -1,12 +1,12 @@
 {
   "Name": {
-    "Ru": "Рубящий удар",
-	"En": "Slash"
+    "Ru": "Стремительный удар с плеча",
+	"En": "Rush Slash"
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
-      "Count": 1
+      "Dice": 3,
+      "Count": 2
     },
     "Range": {
       "Min": 1,
@@ -16,7 +16,7 @@
 	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
-      "Type": "Tactical",
+      "Type": "Rapid",
       "Impact":  "Kinetic",
 	  "ApRank": 2
     }
