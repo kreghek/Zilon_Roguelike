@@ -6,4 +6,4 @@ jobs:
     steps:
       - checkout
       - run: msbuild /t:Restore
-      - run: msbuild /t:Build
+      - run: msbuild Zilon.Core\Zilon.Core.sln /t:Build
