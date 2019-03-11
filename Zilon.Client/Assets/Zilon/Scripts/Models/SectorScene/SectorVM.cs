@@ -458,7 +458,7 @@ internal class SectorVM : MonoBehaviour
         else
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
-            SceneManager.LoadScene("combat");
+            SceneManager.LoadScene("loading");
         }
     }
 
