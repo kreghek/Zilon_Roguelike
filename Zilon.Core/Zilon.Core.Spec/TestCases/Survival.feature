@@ -35,8 +35,10 @@ Examples:
 | stat    | statValue | propSid    | provisionStat | propCount | expectedValue | effect       |
 #Слабый голод 
 | сытость | 0         | fake-food  | сытость       | 1         | 50            | нет          |
+| сытость | 0         | fake-food  | -сытость      | 1         | -50           | Голод        |
 #Голод
 | сытость | -50       | fake-food  | сытость       | 1         | 0             | нет          |
+| сытость | -50       | fake-food  | -сытость      | 1         | 0             | Голодание    |
 #Голодание
 | сытость | -100      | fake-food  | сытость       | 1         | -50           | Слабый голод |
 #Слабая жажда

@@ -31,12 +31,14 @@ namespace Zilon.Core.Spec.Steps
         }
 
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
+        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
         public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
             string provisionStat)
         {
             var actor = Context.GetActiveActor();
 
             ConsumeCommonRuleType consumeRuleType;
+            var direction = PersonRuleDirection.Positive;
 
             switch (provisionStat)
             {
@@ -52,6 +54,21 @@ namespace Zilon.Core.Spec.Steps
                     consumeRuleType = ConsumeCommonRuleType.Health;
                     break;
 
+                case "-сытость":
+                    consumeRuleType = ConsumeCommonRuleType.Satiety;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
+                case "-вода":
+                    consumeRuleType = ConsumeCommonRuleType.Thirst;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
+                case "-хп":
+                    consumeRuleType = ConsumeCommonRuleType.Health;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
                 default:
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
@@ -62,7 +79,7 @@ namespace Zilon.Core.Spec.Steps
                 {
                     Consumable = true,
                     CommonRules = new[] {
-                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
                     }
                 }
             };
