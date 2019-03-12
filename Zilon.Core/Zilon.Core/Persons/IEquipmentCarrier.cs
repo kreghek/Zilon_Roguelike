@@ -11,8 +11,11 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Интерфейс для работы с экипировкой.
     /// </summary>
-    public interface IEquipmentCarrier: IEnumerable<Equipment>
+    public interface IEquipmentCarrier : IEnumerable<Equipment>
     {
+        /// <summary>
+        /// Текущие слоты экипировки.
+        /// </summary>
         [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>
