@@ -137,23 +137,8 @@ namespace Zilon.Core.Persons
 
         private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
         {
-            var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
-
-            var orientedKeyPoints = stat.KeyPoints;
-            if (!diff.IsAcs)
-            {
-                orientedKeyPoints = stat.KeyPoints.Reverse().ToArray();
-            }
-
-            var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
-            foreach (var keyPoint in orientedKeyPoints)
-            {
-                if (diff.Contains(keyPoint.Value))
-                {
-                    crossedKeyPoints.Add(keyPoint);
-                }
-            }
-
+            var crossedKeyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, stat.Value);
+            
             if (crossedKeyPoints.Any())
             {
                 DoStatCrossKeyPoint(stat, crossedKeyPoints);

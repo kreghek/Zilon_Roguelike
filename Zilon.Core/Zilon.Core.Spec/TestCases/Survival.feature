@@ -22,24 +22,29 @@ Examples:
 	| kalin-cheese | сытость | 70        | 220               |
 	| water-bottle | вода    | 150       | 299               |
 
-@survival @dev1
+@survival @dev1 @dev2
 Scenario Outline: Снятие угроз выживания
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	And Актёр значение <stat> равное <statValue>
-	And Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat>)
 	When Актёр использует предмет <propSid> на себя
 	Then Актёр под эффектом <effect>
 
 Examples: 
-| stat    | statValue | startEffect   | propSid    | provisionStat | propCount | expectedValue | effect       |
-| сытость | 0         | Слабый голод  | fake-food  | сытость       | 1         | 50            | нет          |
-| сытость | -50       | Голод         | fake-food  | сытость       | 1         | 0             | нет          |
-| сытость | -100      | Голодание     | fake-food  | сытость       | 1         | -50           | Слабый голод |
-| вода    | 0         | Слабая жажда  | fake-water | вода          | 1         | 50            | нет          |
-| вода    | -50       | Жажда         | fake-water | вода          | 1         | 0             | нет          |
-| вода    | -100      | Обезвоживание | fake-water | вода          | 1         | -50           | Слабая жажда |
+| stat    | statValue | propSid    | provisionStat | propCount | expectedValue | effect       |
+#Слабый голод 
+| сытость | 0         | fake-food  | сытость       | 1         | 50            | нет          |
+#Голод
+| сытость | -50       | fake-food  | сытость       | 1         | 0             | нет          |
+#Голодание
+| сытость | -100      | fake-food  | сытость       | 1         | -50           | Слабый голод |
+#Слабая жажда
+| вода    | 0         | fake-water | вода          | 1         | 50            | нет          |
+#Жажда
+| вода    | -50       | fake-water | вода          | 1         | 0             | нет          |
+#Обезвоживание
+| вода    | -100      | fake-water | вода          | 1         | -50           | Слабая жажда |
 
 @survival @dev1
 Scenario Outline: Употребление медикаментов для восстановления Hp.

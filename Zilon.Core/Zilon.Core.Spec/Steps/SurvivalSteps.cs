@@ -77,19 +77,32 @@ namespace Zilon.Core.Spec.Steps
             var actor = Context.GetActiveActor();
             var survival = actor.Person.Survival;
 
+            SurvivalStatType statType;
             switch (statName)
             {
                 case "сытость":
-                    survival.SetStatForce(SurvivalStatType.Satiety, statValue);
+                    statType = SurvivalStatType.Satiety;
                     break;
 
                 case "вода":
-                    survival.SetStatForce(SurvivalStatType.Water, statValue);
+                    statType = SurvivalStatType.Water;
                     break;
 
                 default:
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
+
+            var stat = survival.Stats.Single(x => x.Type == statType);
+            var oldValue = stat.Value;
+
+            survival.SetStatForce(statType, statValue);
+
+            var keyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, statValue);
+
+            var survivalRandomSource = Context.Container.GetInstance<ISurvivalRandomSource>();
+            var effect = new SurvivalStatHazardEffect(statType, keyPoints.First().Level, survivalRandomSource);
+
+            actor.Person.Effects.Add(effect);
         }
 
         [Given(@"Актёр имеет эффект (.*)")]
