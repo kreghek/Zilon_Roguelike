@@ -4,7 +4,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -30,12 +29,22 @@ namespace Zilon.Core.Persons
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
 
             Stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                new SurvivalStat(_personScheme.Hp, 0, _personScheme.Hp){
                     Type = SurvivalStatType.Health
                 },
                 CreateStat(SurvivalStatType.Satiety),
                 CreateStat(SurvivalStatType.Water)
             };
+        }
+
+        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
+            [NotNull] IEnumerable<SurvivalStat> stats,
+            [NotNull] ISurvivalRandomSource randomSource)
+        {
+            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+
+            Stats = stats.ToArray();
         }
 
         /// <summary>Текущие характеристики.</summary>
@@ -138,7 +147,7 @@ namespace Zilon.Core.Persons
         private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
         {
             var crossedKeyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, stat.Value);
-            
+
             if (crossedKeyPoints.Any())
             {
                 DoStatCrossKeyPoint(stat, crossedKeyPoints);
