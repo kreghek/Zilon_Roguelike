@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -64,8 +65,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <remarks>
         /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
         /// </remarks>
-        [Test()]
-        public async System.Threading.Tasks.Task Intent_TargetToStartPoint_GenerateMoveCommandAsync()
+        [Test]
+        public async Task Intent_TargetToStartPoint_GenerateMoveCommandAsync()
         {
             // ARRANGE
 
@@ -98,8 +99,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <remarks>
         /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
         /// </remarks>
-        [Test()]
-        public async System.Threading.Tasks.Task Intent_SetNullTarget_ThrownExceptionAsync()
+        [Test]
+        public async Task Intent_SetNullTarget_ThrownExceptionAsync()
         {
             // ARRANGE
 
@@ -123,11 +124,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Тест проверяет, что после окончания команды на перемещение и назначения новой команды всё работает корректно.
+        /// Тест проверяет, что после окончания команды на перемещение
+        /// и назначения новой команды всё работает корректно.
         /// То есть новая команда возвращается при запросе.
         /// </summary>
-        [Test()]
-        public async System.Threading.Tasks.Task Intent_AssignAfterTaskComplete_NoNullCommandAsync()
+        [Test]
+        public async Task Intent_AssignAfterTaskComplete_NoNullCommandAsync()
         {
             // ARRANGE
 
@@ -182,8 +184,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, что если указать ещё одно намерение на перемещение, пока предыдущая задача не выполнилась,
         /// то новое намерение отменяет текущее.
         /// </summary>
-        [Test()]
-        public async System.Threading.Tasks.Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommandAsync()
+        [Test]
+        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommandAsync()
         {
             // ARRANGE
 
@@ -244,8 +246,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <summary>
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
-        [Test()]
-        public async System.Threading.Tasks.Task IntentAttack_SetTarget_ReturnsAttackTaskAsync()
+        [Test]
+        public async Task IntentAttack_SetTarget_ReturnsAttackTaskAsync()
         {
             //ARRANGE
             var usageService = _container.GetInstance<ITacticalActUsageService>();
@@ -278,8 +280,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <summary>
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
         /// </summary>
-        [Test()]
-        public async System.Threading.Tasks.Task IntentOpenContainer_SetContainerAndMethod_ReturnsTaskAsync()
+        [Test]
+        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTaskAsync()
         {
             //ARRANGE
             var map = await SquareMapFactory.CreateAsync(10);
