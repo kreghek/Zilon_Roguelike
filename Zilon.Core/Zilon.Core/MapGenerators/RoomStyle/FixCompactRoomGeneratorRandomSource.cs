@@ -66,6 +66,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return new[] { connectedRoom };
         }
 
+        public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
+        {
+            return new RoomInteriorObjectMeta[0];
+        }
+
         /// <summary>
         /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>

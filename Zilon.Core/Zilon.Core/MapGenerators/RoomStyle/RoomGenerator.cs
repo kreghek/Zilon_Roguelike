@@ -135,13 +135,27 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private void CreateOneRoomNodes(ISectorMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
+            var interiorObjects = _randomSource.RollInteriorObjects(room.Width, room.Height);
+
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
                     var nodeX = x + room.PositionX * cellSize.Width;
                     var nodeY = y + room.PositionY * cellSize.Height;
-                    var node = new HexNode(nodeX, nodeY);
+
+                    var isObstacle = false;
+                    var interiorObjectForCoords = interiorObjects
+                        .SingleOrDefault(o => o.Coords.CompsEqual(nodeX, nodeY));
+
+                    if (interiorObjectForCoords != null)
+                    {
+                        isObstacle = true;
+                    }
+
+                    var node = new HexNode(nodeX, nodeY, isObstacle);
+
+
                     room.Nodes.Add(node);
                     map.AddNode(node);
 

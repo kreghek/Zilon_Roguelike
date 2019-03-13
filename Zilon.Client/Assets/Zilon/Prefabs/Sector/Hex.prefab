@@ -588,6 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad369185e20e800439d4cd5c47003361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FloorSpriteRenderer: {fileID: 1179243400147505981}
   Walls:
   - {fileID: 1713535658571114}
   - {fileID: 1746856328168706}

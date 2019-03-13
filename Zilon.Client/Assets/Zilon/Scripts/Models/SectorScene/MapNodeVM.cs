@@ -10,6 +10,7 @@ using Zilon.Core.Tactics.Spatial;
 
 public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 {
+    public SpriteRenderer FloorSpriteRenderer;
     public GameObject[] Walls;
     public bool IsExit;
     public GameObject ExitMarker;
@@ -40,6 +41,11 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
         }
 
         ExitMarker.SetActive(IsExit);
+
+        if (Node.IsObstacle)
+        {
+            FloorSpriteRenderer.color = Color.gray;
+        }
     }
     
     public void OnMouseDown()
