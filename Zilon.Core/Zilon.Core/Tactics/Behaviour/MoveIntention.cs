@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using JetBrains.Annotations;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -17,7 +18,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IMapNode TargetNode { get; }
 
-        public IActorTask CreateActorTask(IActorTask currentTask, IActor actor)
+        public IActorTask CreateActorTask([CanBeNull] IActorTask currentTask, [NotNull] IActor actor)
         {
             var currentMoveTask = currentTask as MoveTask;
             if (currentMoveTask == null)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -79,5 +80,22 @@ namespace Zilon.Core.Tactics.Spatial
         public abstract void RemoveEdge(IMapNode node1, IMapNode node2);
 
         public abstract void AddNode(IMapNode node);
+
+        public void FindPath(IMapNode start, IMapNode end, PathFindingContext context, List<IMapNode> outputPath)
+        {
+            var startNode = start;
+            var finishNode = end;
+
+            var astar = new AStar(this, context, startNode, finishNode);
+            var resultState = astar.Run();
+            if (resultState == State.GoalFound)
+            {
+                var foundPath = astar.GetPath().Skip(1).ToArray();
+                foreach (var pathNode in foundPath)
+                {
+                    outputPath.Add((HexNode)pathNode);
+                }
+            }
+        }
     }
 }
