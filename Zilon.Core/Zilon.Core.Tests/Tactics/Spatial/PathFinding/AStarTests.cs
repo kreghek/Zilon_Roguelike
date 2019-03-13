@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -71,7 +71,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Точки расположены так, что есть прямой путь.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Run_GridGraphAndLinePath_PathFoundAsync()
+        public async Task Run_GridGraphAndLinePath_PathFound()
         {
             // ARRAGE
             var map = await CreateGridOpenMapAsync();
@@ -115,7 +115,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Обход соседей должен начинаться с левого и идти по часовой стрелке.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Run_CheckNeighborBypass_ExpectedPathAsync()
+        public async Task Run_CheckNeighborBypass_ExpectedPath()
         {
             // ARRAGE
             var map = await CreateGridOpenMapAsync();
@@ -154,7 +154,55 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             }
         }
 
+        /// <summary>
+        /// Тест проверяет, что в карте шестиугольников выполняется корректный поиск пути
+        /// с учётом припятсвий.
+        /// </summary>
+        [Test]
+        [Category("integrational")]
+        public void Run_HexMapWithObstacle_FoundExpectedPath()
+        {
+            var hexMap = new HexMap(10);
+            hexMap.AddNode(new HexNode(0, 0));
+            hexMap.AddNode(new HexNode(1, 0, isObstacle: true));
+            hexMap.AddNode(new HexNode(2, 0));
 
+            hexMap.AddNode(new HexNode(0, 1));
+            hexMap.AddNode(new HexNode(1, 1));
+            hexMap.AddNode(new HexNode(2, 1));
+
+            var context = CreatePathFindingContext();
+
+            var startNode = hexMap.Nodes.Cast<HexNode>().SelectBy(0, 0);
+            var finishNode = hexMap.Nodes.Cast<HexNode>().SelectBy(2, 0);
+
+            var expectedPath = new[] {
+                hexMap.Nodes.Cast<HexNode>().SelectBy(0, 0),
+                hexMap.Nodes.Cast<HexNode>().SelectBy(0, 1),
+                hexMap.Nodes.Cast<HexNode>().SelectBy(1, 1),
+                hexMap.Nodes.Cast<HexNode>().SelectBy(2, 0)
+            };
+
+
+            var astar = new AStar(hexMap, context, startNode, finishNode);
+
+
+
+            // ACT
+            var factState = astar.Run();
+
+
+
+            // ASSERT
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+
+            for (var i = 0; i < expectedPath.Length; i++)
+            {
+                factPath[i].Should().Be(expectedPath[i]);
+            }
+        }
 
         private static IPathFindingContext CreatePathFindingContext()
         {
@@ -172,7 +220,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Создаёт открытую карту без препятствий.
         /// </summary>
         /// <returns></returns>
-        private static async System.Threading.Tasks.Task<IMap> CreateGridOpenMapAsync()
+        private static async Task<IMap> CreateGridOpenMapAsync()
         {
             return await SquareMapFactory.CreateAsync(10);
         }

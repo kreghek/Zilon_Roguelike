@@ -22,7 +22,7 @@ namespace Zilon.Core.Tactics.Spatial
             _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
         }
 
-        public bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
+        public virtual bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
         {
             if (targetNode == null)
             {

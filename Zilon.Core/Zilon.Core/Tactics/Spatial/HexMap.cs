@@ -132,6 +132,17 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
+        public override bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
+        {
+            if (!base.IsPositionAvailableFor(targetNode, actor))
+            {
+                return false;
+            }
+
+            var hexIsObstacle = CheckNodeIsObstable(targetNode);
+            return !hexIsObstacle;
+        }
+
         public override void RemoveEdge(IMapNode node1, IMapNode node2)
         {
             throw new NotImplementedException();
@@ -191,6 +202,13 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return neighborX;
+        }
+
+        private static bool CheckNodeIsObstable(IMapNode targetNode)
+        {
+            var hex = targetNode as HexNode;
+            var hexIsObstacle = hex.IsObstacle;
+            return hexIsObstacle;
         }
 
         private struct SegmentKey
