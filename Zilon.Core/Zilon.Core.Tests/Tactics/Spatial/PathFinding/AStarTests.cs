@@ -59,11 +59,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factState.Should().Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-
-            for (var i = 0; i < expectedPath.Count; i++)
-            {
-                factPath[i].Should().Be(expectedPath[i]);
-            }
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -103,11 +99,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factState.Should().Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-
-            for (var i = 0; i < expectedPath.Length; i++)
-            {
-                factPath[i].Should().Be(expectedPath[i]);
-            }
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -147,11 +139,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factState.Should().Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-
-            for (var i = 0; i < expectedPath.Length; i++)
-            {
-                factPath[i].Should().Be(expectedPath[i]);
-            }
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -197,11 +185,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factState.Should().Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-
-            for (var i = 0; i < expectedPath.Length; i++)
-            {
-                factPath[i].Should().Be(expectedPath[i]);
-            }
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         private static IPathFindingContext CreatePathFindingContext()
