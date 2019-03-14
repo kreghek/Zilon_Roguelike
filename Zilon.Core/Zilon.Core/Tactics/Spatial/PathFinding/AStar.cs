@@ -206,7 +206,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                 }
                 else
                 {
-                    if (_context.TargetNode != testedNeighbor && !map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+                    var isNotAvailable = !IsAvailable(map, testedNeighbor);
+                    if (isNotAvailable)
                     {
                         continue;
                     }
@@ -216,6 +217,21 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             }
 
             return actualNeighbors.ToArray();
+        }
+
+        private bool IsAvailable(IMap map, IMapNode testedNeighbor)
+        {
+            if (_context.TargetNode == testedNeighbor)
+            {
+                return true;
+            }
+
+            if (map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

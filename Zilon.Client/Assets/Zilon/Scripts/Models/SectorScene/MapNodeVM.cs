@@ -10,6 +10,11 @@ using Zilon.Core.Tactics.Spatial;
 
 public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 {
+    public SpriteRenderer FloorSpriteRenderer;
+    public SpriteRenderer FloorDecorRenderer;
+    public SpriteRenderer InteriorObjectSpriteRenderer;
+    public Sprite[] InteriorObjectSprites;
+    public Sprite[] FloorDecorSprites;
     public GameObject[] Walls;
     public bool IsExit;
     public GameObject ExitMarker;
@@ -40,6 +45,20 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
         }
 
         ExitMarker.SetActive(IsExit);
+
+        if (Node.IsObstacle)
+        {
+            var selectedInteriorObjectSpriteIndex = UnityEngine.Random.Range(0, InteriorObjectSprites.Length);
+            var selectedInteriorObjectSprite = InteriorObjectSprites[selectedInteriorObjectSpriteIndex];
+            InteriorObjectSpriteRenderer.sprite = selectedInteriorObjectSprite;
+        }
+
+        var hasFloorDecor = UnityEngine.Random.Range(0, 100) > 90;
+        if (hasFloorDecor)
+        {
+            var decorIndex = UnityEngine.Random.Range(0, FloorDecorSprites.Length);
+            FloorDecorRenderer.sprite = FloorDecorSprites[decorIndex];
+        }
     }
     
     public void OnMouseDown()

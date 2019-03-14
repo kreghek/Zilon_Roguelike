@@ -25,6 +25,7 @@ namespace Zilon.Core.Tactics.Spatial
             CreateSegment(0, 0);
         }
 
+        /// <summary>Список узлов карты.</summary>
         public override IEnumerable<IMapNode> Nodes
         {
             get
@@ -45,12 +46,17 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
+        /// <summary>Создаёт ребро между двумя узлами графа карты.</summary>
+        /// <param name="node1">Узел графа карты.</param>
+        /// <param name="node2">Узел графа карты.</param>
         public override void AddEdge(IMapNode node1, IMapNode node2)
         {
             // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
             // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
         }
 
+        /// <summary>Добавляет новый узел графа.</summary>
+        /// <param name="node"></param>
         public override void AddNode(IMapNode node)
         {
             var hexNode = (HexNode)node;
@@ -61,6 +67,9 @@ namespace Zilon.Core.Tactics.Spatial
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
+        /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
+        /// <param name="node">Опорный узел, относительно которого выбираются соседние узлы.</param>
+        /// <returns>Возвращает набор соседних узлов.</returns>
         public override IEnumerable<IMapNode> GetNext(IMapNode node)
         {
             var hexCurrent = (HexNode)node;
@@ -132,6 +141,27 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
+        /// <summary>
+        /// Проверяет, является ли данная ячейка доступной для текущего актёра.
+        /// </summary>
+        /// <param name="targetNode">Целевая ячейка.</param>
+        /// <param name="actor">Проверяемый актёр.</param>
+        /// <returns>true, если указанный узел проходим для актёра. Иначе - false.</returns>
+        public override bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
+        {
+            if (!base.IsPositionAvailableFor(targetNode, actor))
+            {
+                return false;
+            }
+
+            var hexIsObstacle = CheckNodeIsObstable(targetNode);
+            return !hexIsObstacle;
+        }
+
+        /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
+        /// <param name="node1">Узел графа карты.</param>
+        /// <param name="node2">Узел графа карты.</param>
+        /// <exception cref="NotImplementedException"></exception>
         public override void RemoveEdge(IMapNode node1, IMapNode node2)
         {
             throw new NotImplementedException();
@@ -191,6 +221,13 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return neighborX;
+        }
+
+        private static bool CheckNodeIsObstable(IMapNode targetNode)
+        {
+            var hex = targetNode as HexNode;
+            var hexIsObstacle = hex.IsObstacle;
+            return hexIsObstacle;
         }
 
         private struct SegmentKey

@@ -18,11 +18,14 @@ namespace Zilon.Core.Tactics.Spatial
         public int OffsetX { get; }
         public int OffsetY { get; }
         public CubeCoords CubeCoords { get; }
+        public bool IsObstacle { get; }
 
-        public HexNode(int x, int y)
+        public HexNode(int x, int y, bool isObstacle = false)
         {
             OffsetX = x;
             OffsetY = y;
+            IsObstacle = isObstacle;
+
             CubeCoords = HexHelper.ConvertToCube(x, y);
         }
 

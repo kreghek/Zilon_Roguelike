@@ -52,6 +52,30 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return selectedRooms.ToArray();
         }
 
+        public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
+        {
+            var list = new List<RoomInteriorObjectMeta>();
+            var maxCount = (roomWidth * roomHeight) / 9;
+            var count = _dice.Roll(0, maxCount);
+            for (var i = 0; i < count; i++)
+            {
+                var x = _dice.Roll(1, roomWidth - 1);
+                var y = _dice.Roll(1, roomHeight - 1);
+
+                var same = list.SingleOrDefault(o => o.Coords.CompsEqual(x, y));
+                if (same != null)
+                {
+                    continue;
+                }
+
+                var interiorObject = new RoomInteriorObjectMeta(new OffsetCoords(x, y));
+
+                list.Add(interiorObject);
+            }
+
+            return list.ToArray();
+        }
+
         /// <summary>
         /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>

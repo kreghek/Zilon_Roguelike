@@ -49,5 +49,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
         IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
         HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
+
+        /// <summary>
+        /// Выбрасывает случаный набор элементов интерьера комнаты.
+        /// </summary>
+        /// <param name="roomWidth">Ширина комнаты.</param>
+        /// <param name="roomHeight">Высота комнаты.</param>
+        /// <returns> Возвращает набор элементов интерьера комнаты. </returns>
+        RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight);
     }
 }
