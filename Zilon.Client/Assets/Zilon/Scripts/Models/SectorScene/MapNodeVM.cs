@@ -11,6 +11,8 @@ using Zilon.Core.Tactics.Spatial;
 public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 {
     public SpriteRenderer FloorSpriteRenderer;
+    public SpriteRenderer InteriorObjectSpriteRenderer;
+    public Sprite[] InteriorObjectSprites;
     public GameObject[] Walls;
     public bool IsExit;
     public GameObject ExitMarker;
@@ -44,7 +46,9 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 
         if (Node.IsObstacle)
         {
-            FloorSpriteRenderer.color = Color.gray;
+            var selectedInteriorObjectSpriteIndex = UnityEngine.Random.Range(0, InteriorObjectSprites.Length - 1);
+            var selectedInteriorObjectSprite = InteriorObjectSprites[selectedInteriorObjectSpriteIndex];
+            InteriorObjectSpriteRenderer.sprite = selectedInteriorObjectSprite;
         }
     }
     
