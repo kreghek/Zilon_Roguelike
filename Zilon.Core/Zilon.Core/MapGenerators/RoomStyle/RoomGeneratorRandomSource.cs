@@ -59,8 +59,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var count = _dice.Roll(0, maxCount);
             for (var i = 0; i < count; i++)
             {
-                var x = _dice.Roll(0, roomWidth);
-                var y = _dice.Roll(0, roomHeight);
+                var x = _dice.Roll(1, roomWidth - 1);
+                var y = _dice.Roll(1, roomHeight - 1);
 
                 var same = list.SingleOrDefault(o => o.Coords.CompsEqual(x, y));
                 if (same != null)
