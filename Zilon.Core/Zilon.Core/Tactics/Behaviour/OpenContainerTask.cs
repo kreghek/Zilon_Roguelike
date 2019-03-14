@@ -39,7 +39,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Невозможно взаимодействовать с контейнером на расстоянии больше 1.");
             }
 
-            var targetIsOnLine = MapHelper.CheckNodeAvailability(_map, Actor.Node, containerHexNode);
+            var targetIsOnLine = _map.CheckNodeAvailability(Actor.Node, containerHexNode);
 
             if (!targetIsOnLine)
             {

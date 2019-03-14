@@ -211,6 +211,46 @@ namespace Zilon.Core.Tactics.Spatial
             return hexIsObstacle;
         }
 
+        /// <summary>
+        /// Проверяет, доступен ли целевой узел из стартового узла.
+        /// </summary>
+        /// <param name="currentNode">Стартовый узел.</param>
+        /// <param name="targetNode">Целевой проверяемый узел.</param>
+        /// <returns>
+        /// Возвращает true, если узел доступен. Иначе, false.
+        /// </returns>
+        public override bool CheckNodeAvailability(IMapNode currentNode, IMapNode targetNode)
+        {
+            var targetHexNode = (HexNode)targetNode;
+            var currentHexNode = (HexNode)currentNode;
+
+            var line = CubeCoordsHelper.CubeDrawLine(currentHexNode.CubeCoords, targetHexNode.CubeCoords);
+
+            for (var i = 1; i < line.Length; i++)
+            {
+                var prevPoint = line[i - 1];
+                var testPoint = line[i];
+
+                var prevNode = Nodes
+                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == prevPoint);
+
+                var testNode = Nodes
+                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == testPoint);
+
+                if (((HexNode)testNode).IsObstacle)
+                {
+                    return false;
+                }
+
+                if (!GetNext(prevNode).Contains(testNode))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private struct SegmentKey
         {
             // ReSharper disable once MemberCanBePrivate.Local

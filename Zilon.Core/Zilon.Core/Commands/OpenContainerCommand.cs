@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands
 
             var targetNode = targetContainerViewModel.Container.Node;
 
-            var canExecute = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+            var canExecute = map.CheckNodeAvailability(currentNode, targetNode);
 
             return canExecute;
         }

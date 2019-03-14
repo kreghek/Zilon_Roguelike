@@ -52,6 +52,11 @@ namespace Zilon.Core.Tactics.Spatial
             _nodes.Add(node);
         }
 
+        public override bool CheckNodeAvailability(IMapNode currentNode, IMapNode targetNode)
+        {
+            return true;
+        }
+
         public override IEnumerable<IMapNode> GetNext(IMapNode node)
         {
             var hexCurrent = (HexNode)node;

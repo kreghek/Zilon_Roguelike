@@ -80,5 +80,13 @@ namespace Zilon.Core.Tactics.Spatial
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
         void FindPath(IMapNode start, IMapNode end, PathFindingContext context, List<IMapNode> outputPath);
+
+        /// <summary>
+        /// Проверяет, доступен ли целевой узел из стартового узла.
+        /// </summary>
+        /// <param name="currentNode">Стартовый узел.</param>
+        /// <param name="targetNode">Целевой проверяемый узел.</param>
+        /// <returns> Возвращает true, если узел доступен. Иначе, false.</returns>
+        bool CheckNodeAvailability(IMapNode currentNode, IMapNode targetNode);
     }
 }
