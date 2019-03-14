@@ -146,7 +146,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                     var isObstacle = false;
                     var interiorObjectForCoords = interiorObjects
-                        .SingleOrDefault(o => o.Coords.CompsEqual(nodeX, nodeY));
+                        .SingleOrDefault(o => o.Coords.CompsEqual(x, y));
 
                     if (interiorObjectForCoords != null)
                     {
