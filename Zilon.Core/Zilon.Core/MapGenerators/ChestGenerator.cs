@@ -37,9 +37,12 @@ namespace Zilon.Core.MapGenerators
             var dropTables = GetDropTables(sectorSubScheme);
             var chestCounter = sectorSubScheme.TotalChestCount;
 
+            //TODO В схемах хранить уже приведённое значение пропорции.
+            var countChestRatioNormal = 1f / sectorSubScheme.RegionChestCountRatio;
             foreach (var region in regions)
             {
-                var maxChestCount = Math.Max(region.Nodes.Count() / sectorSubScheme.RegionChestCountRatio, 1);
+                var maxChestCountRaw = region.Nodes.Count() * countChestRatioNormal;
+                var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
 
                 var freeNodes = new List<IMapNode>(region.Nodes);
