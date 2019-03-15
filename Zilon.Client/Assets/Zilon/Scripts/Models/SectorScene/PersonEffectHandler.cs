@@ -11,7 +11,7 @@ using Zilon.Core.Tactics;
 public class PersonEffectHandler : MonoBehaviour
 {
     [UsedImplicitly]
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [UsedImplicitly]
     [NotNull] [Inject] private readonly IActorManager _actorManager;

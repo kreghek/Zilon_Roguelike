@@ -69,7 +69,8 @@
     <Compile Include="Client\PropTransferMachineStores.cs" />
     <Compile Include="Client\IUiState.cs" />
     <Compile Include="Client\UiStateBase.cs" />
-    <Compile Include="Commands\Sector\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
+    <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
@@ -142,8 +143,8 @@
     <Compile Include="Commands\Sector\ActorCommandBase.cs" />
     <Compile Include="Commands\Sector\AttackCommand.cs" />
     <Compile Include="Commands\Sector\EquipCommand.cs" />
-    <Compile Include="Commands\Sector\ICommand.cs" />
-    <Compile Include="Commands\Sector\ICommandManager.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ICommandManager.cs" />
     <Compile Include="Commands\Sector\MoveCommand.cs" />
     <Compile Include="Commands\Sector\NextTurnCommand.cs" />
     <Compile Include="Commands\Sector\OpenContainerCommand.cs" />
@@ -434,8 +435,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Globe\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

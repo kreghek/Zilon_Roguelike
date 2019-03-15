@@ -13,7 +13,7 @@ public class UiHandler : MonoBehaviour
 {
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 

@@ -14,7 +14,7 @@ public class NoBulletHandler : MonoBehaviour
 {
     public Image IconSprite;
 
-    [Inject] [NotNull] private IPlayerState _playerState;
+    [Inject] [NotNull] private ISectorUiState _playerState;
 
     private void Start()
     {

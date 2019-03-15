@@ -10,7 +10,7 @@ using Zilon.Core.Persons;
 
 public class MonsterInfoPanel : MonoBehaviour
 {
-    [Inject] private readonly IPlayerState _playerState;
+    [Inject] private readonly ISectorUiState _playerState;
 
     public Text MonsterNameText;
     public Text MonsterHpText;

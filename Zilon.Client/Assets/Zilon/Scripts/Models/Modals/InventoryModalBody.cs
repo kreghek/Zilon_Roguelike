@@ -27,7 +27,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public GameObject UseButton;
 
     [NotNull] [Inject] private DiContainer _diContainer;
-    [NotNull] [Inject] private IPlayerState _playerState;
+    [NotNull] [Inject] private ISectorUiState _playerState;
     [NotNull] [Inject] private IInventoryState _inventoryState;
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;

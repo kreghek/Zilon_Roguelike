@@ -12,7 +12,7 @@ using Zilon.Core.Client;
 // ReSharper disable once UnusedMember.Global
 public class FollowingCamera : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     // ReSharper disable once UnusedMember.Local
     private void Update()

@@ -13,7 +13,7 @@ public class MovePathVisualizer : MonoBehaviour
     public GameObject VisualizationItemPrefab;
 
     [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
-    [Inject] private readonly IPlayerState _playerState;
+    [Inject] private readonly ISectorUiState _playerState;
     private List<IMapNode> _lastPath;
 
     public void FixedUpdate()
