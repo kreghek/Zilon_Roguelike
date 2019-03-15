@@ -69,8 +69,8 @@
     <Compile Include="Client\PropTransferMachineStores.cs" />
     <Compile Include="Client\IUiState.cs" />
     <Compile Include="Client\UiStateBase.cs" />
-    <Compile Include="Commands\IRepeatableCommand.cs" />
-    <Compile Include="Commands\ShowTraderModalCommand.cs" />
+    <Compile Include="Commands\Sector\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
@@ -136,23 +136,23 @@
     <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\TraderManager.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
-    <Compile Include="Commands\UseSelfCommand.cs" />
-    <Compile Include="Commands\ShowPerksModalCommand.cs" />
-    <Compile Include="Commands\SpecialActorCommandBase.cs" />
-    <Compile Include="Commands\ActorCommandBase.cs" />
-    <Compile Include="Commands\AttackCommand.cs" />
-    <Compile Include="Commands\EquipCommand.cs" />
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandManager.cs" />
-    <Compile Include="Commands\MoveCommand.cs" />
-    <Compile Include="Commands\NextTurnCommand.cs" />
-    <Compile Include="Commands\OpenContainerCommand.cs" />
-    <Compile Include="Commands\PropTransferCommand.cs" />
+    <Compile Include="Commands\Sector\UseSelfCommand.cs" />
+    <Compile Include="Commands\Sector\ShowPerksModalCommand.cs" />
+    <Compile Include="Commands\Sector\SpecialActorCommandBase.cs" />
+    <Compile Include="Commands\Sector\ActorCommandBase.cs" />
+    <Compile Include="Commands\Sector\AttackCommand.cs" />
+    <Compile Include="Commands\Sector\EquipCommand.cs" />
+    <Compile Include="Commands\Sector\ICommand.cs" />
+    <Compile Include="Commands\Sector\ICommandManager.cs" />
+    <Compile Include="Commands\Sector\MoveCommand.cs" />
+    <Compile Include="Commands\Sector\NextTurnCommand.cs" />
+    <Compile Include="Commands\Sector\OpenContainerCommand.cs" />
+    <Compile Include="Commands\Sector\PropTransferCommand.cs" />
     <Compile Include="Commands\QueueCommandManager.cs" />
-    <Compile Include="Commands\ShowContainerModalCommand.cs" />
-    <Compile Include="Commands\ShowInventoryModalCommand.cs" />
-    <Compile Include="Commands\ShowModalCommandBase.cs" />
-    <Compile Include="Commands\TacticCommandBase.cs" />
+    <Compile Include="Commands\Sector\ShowContainerModalCommand.cs" />
+    <Compile Include="Commands\Sector\ShowInventoryModalCommand.cs" />
+    <Compile Include="Commands\Sector\ShowModalCommandBase.cs" />
+    <Compile Include="Commands\Sector\TacticCommandBase.cs" />
     <Compile Include="Commands\UiCommandBase.cs" />
     <Compile Include="CommonServices\Dices\Dice.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensions.cs" />
@@ -434,6 +434,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Commands\Globe\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
