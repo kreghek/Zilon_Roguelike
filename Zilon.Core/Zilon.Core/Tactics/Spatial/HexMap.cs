@@ -230,66 +230,6 @@ namespace Zilon.Core.Tactics.Spatial
             return hexIsObstacle;
         }
 
-        /// <summary>
-        /// Проверяет, доступен ли целевой узел из стартового узла.
-        /// </summary>
-        /// <param name="currentNode">Стартовый узел.</param>
-        /// <param name="targetNode">Целевой проверяемый узел.</param>
-        /// <returns>
-        /// Возвращает true, если узел доступен. Иначе, false.
-        /// </returns>
-        public bool TargetIsOnLine(IMapNode currentNode, IMapNode targetNode)
-        {
-            var targetHexNode = (HexNode)targetNode;
-            var currentHexNode = (HexNode)currentNode;
-
-            var line = CubeCoordsHelper.CubeDrawLine(currentHexNode.CubeCoords, targetHexNode.CubeCoords);
-
-            for (var i = 1; i < line.Length; i++)
-            {
-                var prevPoint = line[i - 1];
-                var testPoint = line[i];
-
-                var prevNode = Nodes
-                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == prevPoint);
-
-                var testNode = Nodes
-                    .SingleOrDefault(x => ((HexNode)x).CubeCoords == testPoint);
-
-                if (((HexNode)testNode).IsObstacle)
-                {
-                    return false;
-                }
-
-                if (!GetNext(prevNode).Contains(testNode))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Distances the between.
-        /// </summary>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="targetNode">The target node.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public int DistanceBetween(IMapNode currentNode, IMapNode targetNode)
-        {
-            var actorHexNode = (HexNode)currentNode;
-            var containerHexNode = (HexNode)targetNode;
-
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
-
-            var distance = actorCoords.DistanceTo(containerCoords);
-
-            return distance;
-        }
-
         private struct SegmentKey
         {
             // ReSharper disable once MemberCanBePrivate.Local
