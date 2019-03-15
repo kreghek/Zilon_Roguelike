@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public MoveCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState,
+            ISectorUiState playerState,
             IActorManager actorManager) :
             base(gameLoop, sectorManager, playerState)
         {

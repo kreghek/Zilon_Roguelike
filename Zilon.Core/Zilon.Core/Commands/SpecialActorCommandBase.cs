@@ -13,7 +13,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         protected SpecialActorCommandBase(IGameLoop gameloop,
             ISectorManager sectorManager,
-            IPlayerState playerState) : base(gameloop, sectorManager, playerState)
+            ISectorUiState playerState) : base(gameloop, sectorManager, playerState)
         {
 
         }

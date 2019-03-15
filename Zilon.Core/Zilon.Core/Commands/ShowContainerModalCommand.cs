@@ -13,10 +13,10 @@ namespace Zilon.Core.Commands
     [PublicAPI]
     public class ShowContainerModalCommand : ShowModalCommandBase
     {
-        private readonly IPlayerState _playerState;
+        private readonly ISectorUiState _playerState;
 
         [ExcludeFromCodeCoverage]
-        public ShowContainerModalCommand(ISectorModalManager modalManager, IPlayerState playerState) :
+        public ShowContainerModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
             _playerState = playerState;

@@ -56,7 +56,7 @@ namespace Zilon.Core.Tests.Commands
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var inventory = CreateStore();
             var container = CreateStore();

@@ -16,7 +16,7 @@ namespace Zilon.Core.Spec.Contexts
     {
         public void MoveOnceActiveActor(OffsetCoords targetCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var moveCommand = Container.GetInstance<ICommand>("move");
             var sectorManager = Container.GetInstance<ISectorManager>();
 
@@ -57,7 +57,7 @@ namespace Zilon.Core.Spec.Contexts
 
         internal void ClickOnNode(int x, int y)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;

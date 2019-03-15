@@ -16,7 +16,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public UseSelfCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState,
+            ISectorUiState playerState,
             IInventoryState inventoryState) :
             base(gameLoop, sectorManager, playerState)
         {

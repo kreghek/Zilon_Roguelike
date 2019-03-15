@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.Commands
             var humanTaskSourceMock = new Mock<IHumanActorTaskSource>();
             var humanTaskSource = humanTaskSourceMock.Object;
 
-            var playerStateMock = new Mock<IPlayerState>();
+            var playerStateMock = new Mock<ISectorUiState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
             playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
             var playerState = playerStateMock.Object;
@@ -97,6 +97,6 @@ namespace Zilon.Core.Tests.Commands
             RegisterSpecificServices(testMap, playerStateMock);
         }
 
-        protected abstract void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock);
+        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
     }
 }

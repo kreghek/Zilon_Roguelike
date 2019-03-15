@@ -152,7 +152,7 @@ namespace Zilon.Core.Spec.Steps
         public void WhenЯВыбираюСундукId(int id)
         {
             var containerManager = Context.Container.GetInstance<IPropContainerManager>();
-            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var playerState = Context.Container.GetInstance<ISectorUiState>();
 
             var container = containerManager.Items.Single(x => x.Id == id);
 
@@ -168,7 +168,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Я забираю из сундука экипировку (.*)")]
         public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
         {
-            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var playerState = Context.Container.GetInstance<ISectorUiState>();
             var propTransferCommand = Context.Container.GetInstance<ICommand>("prop-transfer");
 
             var actor = Context.GetActiveActor();
@@ -191,7 +191,7 @@ namespace Zilon.Core.Spec.Steps
         public void WhenЯЗабираюИзСундукаРерурсWaterВКоличестве(string resourceSid, int count)
         {
             var propFactory = Context.Container.GetInstance<IPropFactory>();
-            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var playerState = Context.Container.GetInstance<ISectorUiState>();
             var propTransferCommand = Context.Container.GetInstance<ICommand>("prop-transfer");
 
             var actor = Context.GetActiveActor();
