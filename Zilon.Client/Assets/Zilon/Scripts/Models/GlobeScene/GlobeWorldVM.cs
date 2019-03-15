@@ -1,19 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 
+using Zilon.Core.Commands;
+using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
 public class GlobeWorldVM : MonoBehaviour
 {
+    private bool _interuptCommands;
+
     public MapLocation LocationPrefab;
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
@@ -26,12 +31,16 @@ public class GlobeWorldVM : MonoBehaviour
 
     [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IWorldGenerator _globeGenerator;
-    [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
+    [Inject] private readonly MoveGroupCommand _moveGroupCommand;
+    [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     private async void Start()
     {
+        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
+
         if (_globeManager.Globe == null)
         {
             _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
@@ -91,30 +100,65 @@ public class GlobeWorldVM : MonoBehaviour
         Camera.Target = groupObject;
     }
 
-    private void LocationViewModel_OnSelect(object sender, System.EventArgs e)
+    public void OnDestroy()
     {
-        var selectedNodeViewModel = (MapLocation)sender;
+        _player.GlobeNodeChanged -= HumanPlayer_GlobeNodeChanged;
+    }
 
-        var currentNode = _player.GlobeNode;
-        var currentNodeViewModel = _locationNodeViewModels.Single(x => x.Node == currentNode);
-
-        var neighborNodes = _region.GetNext(currentNode);
-        var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
-
-        if (selectedIsNeighbor)
+    private void FixedUpdate()
+    {
+        if (!_commandBlockerService.HasBlockers)
         {
-            _player.GlobeNode = selectedNodeViewModel.Node;
+            ExecuteCommands();
+        }
+    }
 
-            if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+    private void ExecuteCommands()
+    {
+        var command = _clientCommandExecutor.Pop();
+
+        try
+        {
+            if (command != null)
             {
-                _scoreManager.CountPlace(selectedNodeViewModel.Node);
-                StartLoadScene();
-            }
-            else
-            {
-                _groupViewModel.CurrentLocation = selectedNodeViewModel;
+                command.Execute();
+
+                if (_interuptCommands)
+                {
+                    return;
+                }
+
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat())
+                    {
+                        _clientCommandExecutor.Push(repeatableCommand);
+                    }
+                }
             }
         }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+        }
+    }
+
+    private void HumanPlayer_GlobeNodeChanged(object sender, System.EventArgs e)
+    {
+        if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+        {
+            StartLoadScene();
+        }
+        else
+        {
+            var selectedNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
+            _groupViewModel.CurrentLocation = selectedNodeViewModel;
+        }
+    }
+
+    private void LocationViewModel_OnSelect(object sender, System.EventArgs e)
+    {
+        _clientCommandExecutor.Push(_moveGroupCommand);
     }
 
     private void StartLoadScene()
