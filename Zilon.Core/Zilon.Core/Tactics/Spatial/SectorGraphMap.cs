@@ -12,5 +12,10 @@ namespace Zilon.Core.Tactics.Spatial
         {
             Transitions = new Dictionary<IMapNode, RoomTransition>();
         }
+
+        public int DistanceBetween(IMapNode currentNode, IMapNode targetNode)
+        {
+            return 0;
+        }
     }
 }

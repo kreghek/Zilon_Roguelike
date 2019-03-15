@@ -52,6 +52,11 @@ namespace Zilon.Core.Tactics.Spatial
             _nodes.Add(node);
         }
 
+        public bool TargetIsOnLine(IMapNode currentNode, IMapNode targetNode)
+        {
+            return true;
+        }
+
         public override IEnumerable<IMapNode> GetNext(IMapNode node)
         {
             var hexCurrent = (HexNode)node;

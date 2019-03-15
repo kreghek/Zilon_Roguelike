@@ -339,11 +339,11 @@ namespace Zilon.Core.Tests.Tactics
         /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
         /// </summary>
         [Test]
-        public async Task UseOn_Wall_ThrowsInvalidOperationExceptionAsync()
+        public void UseOn_Wall_ThrowsInvalidOperationException()
         {
             // ARRANGE
 
-            var sectorManager = await CreateSectorManagerWithWallAsync();
+            var sectorManager = CreateSectorManagerWithWall();
 
             var actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
@@ -569,13 +569,16 @@ namespace Zilon.Core.Tests.Tactics
             _sectorManager = sectorManager;
         }
 
-        private async Task<ISectorManager> CreateSectorManagerWithWallAsync()
+        private ISectorManager CreateSectorManagerWithWall()
         {
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = await SquareMapFactory.CreateAsync(3);
-            map.RemoveEdge(0, 0, 1, 0);
+            var mapMock = new Mock<ISectorMap>();
+            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IMapNode>(), It.IsAny<IMapNode>()))
+                .Returns(false);
+            var map = mapMock.Object;
+           
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;

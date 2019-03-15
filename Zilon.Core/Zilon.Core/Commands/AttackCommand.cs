@@ -64,7 +64,7 @@ namespace Zilon.Core.Commands
                     return false;
                 }
 
-                var targetIsOnLine = MapHelper.CheckNodeAvailability(map, currentNode, targetNode);
+                var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
                 if (!targetIsOnLine)
                 {
                     return false;

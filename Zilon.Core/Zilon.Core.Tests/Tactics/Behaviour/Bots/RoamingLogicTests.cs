@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
         private IMapNode _factActorNode;
         private IMapNode _factIntruderNode;
-        private IMap _map;
+        private ISectorMap _map;
         private IPlayer _player;
         private IActor _actor;
         private IActorManager _actorList;
