@@ -13,7 +13,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private const int VisibilityRange = 5;
 
         protected readonly IActor Actor;
-        protected readonly IMap Map;
+        protected readonly ISectorMap Map;
         protected readonly IDecisionSource DecisionSource;
 
         private readonly IActorManager _actorList;
@@ -26,7 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private int _pursuitCounter;
 
         protected AgressiveLogicBase(IActor actor,
-            IMap map,
+            ISectorMap map,
             IActorManager actors,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService)
@@ -152,7 +152,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var act = actCarrier.Acts.First();
 
             var isInDistance = act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
-            var targetIsOnLine = Map.CheckNodeAvailability(actorNode, targetNode);
+            var targetIsOnLine = Map.TargetIsOnLine(actorNode, targetNode);
 
             return isInDistance && targetIsOnLine;
         }

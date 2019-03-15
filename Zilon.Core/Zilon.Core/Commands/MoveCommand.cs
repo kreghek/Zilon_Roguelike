@@ -157,7 +157,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = SectorManager.CurrentSector.Map.CheckNodeAvailability(
+                var isAvailable = SectorManager.CurrentSector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 

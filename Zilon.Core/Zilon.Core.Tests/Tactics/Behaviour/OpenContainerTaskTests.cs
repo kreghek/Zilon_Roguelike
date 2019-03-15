@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -23,7 +24,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// на открытие контейнера.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Execute_ValidLength_ActorOpenedContainerAsync()
+        public async Task Execute_ValidLength_ActorOpenedContainerAsync()
         {
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10);
@@ -54,22 +55,26 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Тест проверяет, что через стену нельзя открывать сундуки.
+        /// Тест проверяет, что задача выполняет проверку доступности сундука.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task Execute_Wall_ExceptionAsync()
+        public void Execute_CheckWalls_MapTargetIsOnLineInvoked()
         {
             // ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10);
-            map.RemoveEdge(0, 0, 1, 0);
+            var mapMock = new Mock<ISectorMap>();
+            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IMapNode>(), It.IsAny<IMapNode>()))
+                .Returns(true);
+            var map = mapMock.Object;
 
-            var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+            var actorNodeMock = new Mock<IMapNode>();
+            var actorNode = actorNodeMock.Object;
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             var actor = actorMock.Object;
 
-            var containerNode = map.Nodes.Cast<HexNode>().SelectBy(1, 0);
+            var containerNodeMock = new Mock<IMapNode>();
+            var containerNode = containerNodeMock.Object;
 
             var container = CreateContainer(containerNode);
 
@@ -80,14 +85,15 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ACT
-            Action act = () => {
-                task.Execute();
-            };
+            task.Execute();
 
 
 
             // ASSERT
-            act.Should().Throw<InvalidOperationException>();
+            mapMock.Verify(x => x.TargetIsOnLine(
+                It.Is<IMapNode>(n => n == actorNode),
+                It.Is<IMapNode>(n => n == containerNode))
+                );
         }
 
         private IOpenContainerMethod CreateMethod()
@@ -97,7 +103,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return method;
         }
 
-        private IPropContainer CreateContainer(HexNode containerNode)
+        private IPropContainer CreateContainer(IMapNode containerNode)
         {
             var containerMock = new Mock<IPropContainer>();
             containerMock.SetupGet(x => x.Node).Returns(containerNode);

@@ -52,7 +52,7 @@ namespace Zilon.Core.Tactics.Spatial
             _nodes.Add(node);
         }
 
-        public override bool CheckNodeAvailability(IMapNode currentNode, IMapNode targetNode)
+        public bool TargetIsOnLine(IMapNode currentNode, IMapNode targetNode)
         {
             return true;
         }

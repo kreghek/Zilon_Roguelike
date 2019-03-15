@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         private const int ExpectedIdleDuration = 1;
 
         private IMapNode _factActorNode;
-        private IMap _map;
+        private ISectorMap _map;
         private IPlayer _player;
         private IActor _actor;
         private IPatrolRoute _patrolRoute3Points;
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
         private IDecisionSource _decisionSource;
 
         [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task SetUpAsync()
         {
             _map = await SquareMapFactory.CreateAsync(10);
 

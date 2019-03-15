@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         public PatrolLogic(IActor actor,
             IPatrolRoute patrolRoute,
-            IMap map,
+            ISectorMap map,
             IActorManager actors,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService): base(actor, map, actors, decisionSource, actService)

@@ -95,7 +95,7 @@ namespace Zilon.Core.Tactics
 
             var targetNode = target.Node;
 
-            var targetIsOnLine = _sectorManager.CurrentSector.Map.CheckNodeAvailability(
+            var targetIsOnLine = _sectorManager.CurrentSector.Map.TargetIsOnLine(
                 actor.Node,
                 targetNode);
 

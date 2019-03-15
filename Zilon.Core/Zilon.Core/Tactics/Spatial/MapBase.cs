@@ -165,15 +165,5 @@ namespace Zilon.Core.Tactics.Spatial
                 }
             }
         }
-
-        /// <summary>
-        /// Проверяет, доступен ли целевой узел из стартового узла.
-        /// </summary>
-        /// <param name="currentNode">Стартовый узел.</param>
-        /// <param name="targetNode">Целевой проверяемый узел.</param>
-        /// <returns>
-        /// Возвращает true, если узел доступен. Иначе, false.
-        /// </returns>
-        public abstract bool CheckNodeAvailability(IMapNode currentNode, IMapNode targetNode);
     }
 }

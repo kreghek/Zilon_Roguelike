@@ -13,12 +13,12 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly IPropContainer _container;
         private readonly IOpenContainerMethod _method;
-        private readonly IMap _map;
+        private readonly ISectorMap _map;
 
         public OpenContainerTask([NotNull] IActor actor,
             [NotNull] IPropContainer container,
             [NotNull] IOpenContainerMethod method,
-            [NotNull] IMap map) : base(actor)
+            [NotNull] ISectorMap map) : base(actor)
         {
             _container = container ?? throw new ArgumentNullException(nameof(container));
             _method = method ?? throw new ArgumentNullException(nameof(method));
@@ -27,19 +27,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            var actorHexNode = (HexNode)Actor.Node;
-            var containerHexNode = (HexNode)_container.Node;
-
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
-
-            var distance = actorCoords.DistanceTo(containerCoords);
+            var distance = _map.DistanceBetween(Actor.Node, _container.Node);
             if (distance > 1)
             {
                 throw new InvalidOperationException("Невозможно взаимодействовать с контейнером на расстоянии больше 1.");
             }
 
-            var targetIsOnLine = _map.CheckNodeAvailability(Actor.Node, containerHexNode);
+            var targetIsOnLine = _map.TargetIsOnLine(Actor.Node, _container.Node);
 
             if (!targetIsOnLine)
             {
