@@ -58,6 +58,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>Возвращает набор элементов интерьера комнаты.</returns>
         public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
         {
+            if (roomWidth <= 2 || roomHeight <= 2)
+            {
+                return new RoomInteriorObjectMeta[0];
+            }
+
             const int PASS_PADDING = 1;
 
             var minHorizontalBorder = 0;
