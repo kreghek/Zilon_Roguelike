@@ -32,7 +32,7 @@ namespace Zilon.Core.MapGenerators
         /// <param name="map">Карта сектора. Нужна для определения доступного места для сундука.</param>
         /// <param name="sectorSubScheme">Схема сектора. По сути - настройки для размещения сундуков.</param>
         /// <param name="regions">Регионы, в которых возможно размещение сундуков.</param>
-        public void CreateChests(IMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
+        public void CreateChests(ISectorMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
         {
             var dropTables = GetDropTables(sectorSubScheme);
             var chestCounter = sectorSubScheme.TotalChestCount;
@@ -45,22 +45,25 @@ namespace Zilon.Core.MapGenerators
                 var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
 
-                var freeNodes = new List<IMapNode>(region.Nodes);
+                var availableNodes = from node in region.Nodes
+                                     where !map.Transitions.Keys.Contains(node)
+                                     select node;
+                var openNodes = new List<IMapNode>(availableNodes);
                 for (var i = 0; i < rolledCount; i++)
                 {
                     // Выбрать из коллекции доступных узлов
-                    var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(freeNodes.Count);
-                    var containerNode = MapRegionHelper.FindNonBlockedNode(freeNodes[rollIndex], map, freeNodes);
+                    var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(openNodes.Count);
+                    var containerNode = MapRegionHelper.FindNonBlockedNode(openNodes[rollIndex], map, openNodes);
                     if (containerNode == null)
                     {
                         // в этом случае будет сгенерировано на один сундук меньше.
                         // узел, с которого не удаётся найти подходящий узел, удаляем,
                         // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
-                        freeNodes.Remove(freeNodes[rollIndex]);
+                        openNodes.Remove(openNodes[rollIndex]);
                         continue;
                     }
 
-                    freeNodes.Remove(containerNode);
+                    openNodes.Remove(containerNode);
                     var container = new DropTablePropChest(containerNode,
                         dropTables,
                         _dropResolver);
