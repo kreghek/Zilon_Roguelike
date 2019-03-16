@@ -22,7 +22,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public AttackCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState,
+            ISectorUiState playerState,
             ITacticalActUsageService tacticalActUsageService) :
             base(gameLoop, sectorManager, playerState)
         {

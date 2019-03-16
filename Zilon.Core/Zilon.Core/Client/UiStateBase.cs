@@ -1,16 +1,11 @@
 ﻿using System;
 
-using Zilon.Core.Tactics.Behaviour;
-
 namespace Zilon.Core.Client
 {
-    public class PlayerState : IPlayerState
+    public class UiStateBase: IUiState
     {
         private ISelectableViewModel _hoverViewModel;
         private ISelectableViewModel _selectedViewModel;
-
-        /// <summary>Активный актёр.</summary>
-        public IActorViewModel ActiveActor { get; set; }
 
         /// <summary>Выбранный объект.</summary>
         public ISelectableViewModel HoverViewModel
@@ -23,9 +18,6 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Пользовательский источник задач для актёров.</summary>
-        public IHumanActorTaskSource TaskSource { get; set; }
-
         /// <summary>Зафиксированный выбранный объект.</summary>
         public ISelectableViewModel SelectedViewModel
         {
@@ -37,7 +29,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
         public event EventHandler HoverChanged;
     }
 }

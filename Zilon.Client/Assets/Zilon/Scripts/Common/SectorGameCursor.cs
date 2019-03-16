@@ -13,7 +13,7 @@ public class SectorGameCursor : MonoBehaviour
     public Sprite CantMoveCursorSprite;
     public SpriteRenderer SpriteRenderer;
 
-    [Inject] private readonly IPlayerState _playerState;
+    [Inject] private readonly ISectorUiState _playerState;
     [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
     [Inject(Id = "attack-command")] private readonly ICommand _attackCommand;
 

@@ -13,7 +13,7 @@ namespace Zilon.Core.Commands
     [PublicAPI]
     public class ShowTraderModalCommand : ShowModalCommandBase
     {
-        private readonly IPlayerState _playerState;
+        private readonly ISectorUiState _playerState;
 
         /// <summary>
         /// Создаёт экземпляр команды <see cref="ShowTraderModalCommand"/>.
@@ -22,7 +22,7 @@ namespace Zilon.Core.Commands
         /// <param name="playerState"> Текущее состояние игрока. </param>
         [ExcludeFromCodeCoverage]
         public ShowTraderModalCommand(ISectorModalManager modalManager,
-            IPlayerState playerState) :
+            ISectorUiState playerState) :
             base(modalManager)
         {
             _playerState = playerState;

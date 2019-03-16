@@ -69,7 +69,7 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
 

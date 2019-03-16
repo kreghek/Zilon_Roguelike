@@ -11,11 +11,11 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class ShowInventoryModalCommand : ShowModalCommandBase
     {
-        private readonly IPlayerState _playerState;
+        private readonly ISectorUiState _playerState;
 
         [PublicAPI]
         [ExcludeFromCodeCoverage]
-        public ShowInventoryModalCommand(ISectorModalManager modalManager, IPlayerState playerState) :
+        public ShowInventoryModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
             _playerState = playerState;

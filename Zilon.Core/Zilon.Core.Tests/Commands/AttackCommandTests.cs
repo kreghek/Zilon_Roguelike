@@ -47,7 +47,7 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var command = Container.GetInstance<AttackCommand>();
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
 
 
 
@@ -63,14 +63,14 @@ namespace Zilon.Core.Tests.Commands
             )));
         }
 
-        private static bool CheckAttackIntention(IIntention intention, IPlayerState playerState, IActor target)
+        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
         {
             var attackIntention = (Intention<AttackTask>)intention;
             var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
             return attackTask.Target == target;
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var targetMock = new Mock<IActor>();
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);

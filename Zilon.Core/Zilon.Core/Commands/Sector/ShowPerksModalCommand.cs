@@ -12,11 +12,11 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class ShowPerksModalCommand : ShowModalCommandBase
     {
-        private readonly IPlayerState _playerState;
+        private readonly ISectorUiState _playerState;
 
         [PublicAPI]
         [ExcludeFromCodeCoverage]
-        public ShowPerksModalCommand(ISectorModalManager sectorManager, IPlayerState playerState) :
+        public ShowPerksModalCommand(ISectorModalManager sectorManager, ISectorUiState playerState) :
             base(sectorManager)
         {
             _playerState = playerState;

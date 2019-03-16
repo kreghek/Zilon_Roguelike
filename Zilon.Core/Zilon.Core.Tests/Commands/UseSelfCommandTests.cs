@@ -48,7 +48,7 @@ namespace Zilon.Core.Tests.Commands
             var command = Container.GetInstance<UseSelfCommand>();
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
             var inventoryState = Container.GetInstance<IInventoryState>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
 
 
 
@@ -64,14 +64,14 @@ namespace Zilon.Core.Tests.Commands
             )));
         }
 
-        private static bool CheckUsePropIntention(IIntention intention, IPlayerState playerState, IProp usedProp)
+        private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
         {
             var usePropIntention = (Intention<UsePropTask>)intention;
             var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
             return usePropTask.UsedProp == usedProp;
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var propScheme = new TestPropScheme
             {

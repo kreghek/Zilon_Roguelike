@@ -1,19 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
-
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
+using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
 public class GlobeWorldVM : MonoBehaviour
 {
+    private bool _interuptCommands;
+
     public MapLocation LocationPrefab;
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
@@ -26,9 +31,12 @@ public class GlobeWorldVM : MonoBehaviour
 
     [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IWorldGenerator _globeGenerator;
-    [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
+    [Inject] private readonly MoveGroupCommand _moveGroupCommand;
+    [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [Inject] private readonly IGlobeUiState _globeUiState;
 
     private async void Start()
     {
@@ -64,6 +72,7 @@ public class GlobeWorldVM : MonoBehaviour
             _locationNodeViewModels.Add(locationViewModel);
 
             locationViewModel.OnSelect += LocationViewModel_OnSelect;
+            locationViewModel.OnHover += LocationViewModel_OnHover;
         }
 
         var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
@@ -89,32 +98,92 @@ public class GlobeWorldVM : MonoBehaviour
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
         Camera.Target = groupObject;
+
+        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
+        MoveGroupViewModel(_player.GlobeNode);
     }
 
-    private void LocationViewModel_OnSelect(object sender, System.EventArgs e)
+    private void LocationViewModel_OnHover(object sender, EventArgs e)
     {
-        var selectedNodeViewModel = (MapLocation)sender;
+        _globeUiState.HoverViewModel = sender as MapLocation;
+    }
 
-        var currentNode = _player.GlobeNode;
-        var currentNodeViewModel = _locationNodeViewModels.Single(x => x.Node == currentNode);
+    public void OnDestroy()
+    {
+        _player.GlobeNodeChanged -= HumanPlayer_GlobeNodeChanged;
+    }
 
-        var neighborNodes = _region.GetNext(currentNode);
-        var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
-
-        if (selectedIsNeighbor)
+    private void FixedUpdate()
+    {
+        if (!_commandBlockerService.HasBlockers)
         {
-            _player.GlobeNode = selectedNodeViewModel.Node;
+            ExecuteCommands();
+        }
+    }
 
-            if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+    private void ExecuteCommands()
+    {
+        var command = _clientCommandExecutor.Pop();
+
+        try
+        {
+            if (command != null)
             {
-                _scoreManager.CountPlace(selectedNodeViewModel.Node);
-                StartLoadScene();
-            }
-            else
-            {
-                _groupViewModel.CurrentLocation = selectedNodeViewModel;
+                command.Execute();
+
+                if (_interuptCommands)
+                {
+                    return;
+                }
+
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat())
+                    {
+                        _clientCommandExecutor.Push(repeatableCommand);
+                    }
+                }
             }
         }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+        }
+    }
+
+    private void HumanPlayer_GlobeNodeChanged(object sender, EventArgs e)
+    {
+        if (_player.GlobeNode == null)
+        {
+            return;
+        }
+
+        if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+        {
+            StartLoadScene();
+        }
+        else
+        {
+            MoveGroupViewModel(_player.GlobeNode);
+        }
+    }
+
+    private void MoveGroupViewModel(GlobeRegionNode targetNode)
+    {
+        var selectedNodeViewModel = GetNodeViewModel(targetNode);
+        _groupViewModel.CurrentLocation = selectedNodeViewModel;
+    }
+
+    private MapLocation GetNodeViewModel(GlobeRegionNode targetNode)
+    {
+        var locationViewModel = _locationNodeViewModels.Single(x => x.Node == targetNode);
+        return locationViewModel;
+    }
+
+    private void LocationViewModel_OnSelect(object sender, EventArgs e)
+    {
+        _globeUiState.SelectedViewModel = (MapLocation)sender;
+        _clientCommandExecutor.Push(_moveGroupCommand);
     }
 
     private void StartLoadScene()

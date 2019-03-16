@@ -60,7 +60,7 @@ namespace Zilon.Core.Tests.Commands
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var targetMock = new Mock<IPropContainer>();
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);

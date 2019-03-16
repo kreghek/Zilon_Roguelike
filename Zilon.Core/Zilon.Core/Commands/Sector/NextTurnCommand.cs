@@ -25,7 +25,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public NextTurnCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState,
+            ISectorUiState playerState,
             IDecisionSource decisionSource) :
             base(gameLoop, sectorManager, playerState)
         {

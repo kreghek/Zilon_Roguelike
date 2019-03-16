@@ -104,7 +104,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetActiveActor()
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
@@ -122,7 +122,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var schemeService = Container.GetInstance<ISchemeService>();
             var sectorManager = Container.GetInstance<ISectorManager>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
@@ -344,7 +344,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterClientServices()
         {
-            Container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            Container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
@@ -374,7 +374,7 @@ namespace Zilon.Core.Spec.Contexts
         private void InitClientServices()
         {
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
 
             playerState.TaskSource = humanTaskSource;
         }

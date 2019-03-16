@@ -38,7 +38,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManger;
 

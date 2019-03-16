@@ -79,7 +79,7 @@ namespace Zilon.Core.Spec.Steps
         public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
             var attackCommand = Context.Container.GetInstance<ICommand>("attack");
-            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var playerState = Context.Container.GetInstance<ISectorUiState>();
 
             var monster = Context.GetMonsterById(monsterId);
 

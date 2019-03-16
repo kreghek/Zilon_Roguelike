@@ -20,7 +20,7 @@ public class TraderModalBody : MonoBehaviour, IModalWindowHandler
 
     private readonly List<PropItemVm> _propViewModels;
 
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly DiContainer _diContainer;
 
     private ITrader _trader;

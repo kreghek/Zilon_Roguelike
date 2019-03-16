@@ -8,7 +8,7 @@ using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour {
 
-	[Inject] private IPlayerState _playerState;
+	[Inject] private ISectorUiState _playerState;
 
 	public ActItemVm ActVmPrefab;
 	public Transform ActItemParent;

@@ -52,7 +52,7 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var command = Container.GetInstance<MoveCommand>();
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
 
 
 
@@ -92,7 +92,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = Container.GetInstance<MoveCommand>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
 
@@ -127,7 +127,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = Container.GetInstance<MoveCommand>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
 
@@ -154,7 +154,7 @@ namespace Zilon.Core.Tests.Commands
             canRepeat.Should().BeTrue();
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
             var targetVmMock = new Mock<IMapNodeViewModel>();

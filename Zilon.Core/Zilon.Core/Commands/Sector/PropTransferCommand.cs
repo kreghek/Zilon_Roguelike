@@ -14,7 +14,7 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public PropTransferCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            IPlayerState playerState) :
+            ISectorUiState playerState) :
             base(gameLoop, sectorManager, playerState)
         {
         }

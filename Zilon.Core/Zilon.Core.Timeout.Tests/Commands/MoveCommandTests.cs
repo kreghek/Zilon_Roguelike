@@ -39,7 +39,7 @@ namespace Zilon.Core.Commands.Tests
         public async System.Threading.Tasks.Task MoveCommandTestAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
@@ -181,7 +181,7 @@ namespace Zilon.Core.Commands.Tests
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
-            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            _container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());

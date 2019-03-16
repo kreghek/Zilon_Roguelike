@@ -61,6 +61,7 @@ namespace Zilon.Core.Tests.MapGenerators
         [TestCase(3257)]
         [TestCase(636)]
         [TestCase(100000)]
+        
         public void Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
@@ -77,15 +78,9 @@ namespace Zilon.Core.Tests.MapGenerators
 
 
             // ACT
-            Func<Task> act = async () =>
-            {
-                var sector = await generator.GenerateDungeonAsync(sectorScheme);
-            };
+            generator.GenerateDungeonAsync(sectorScheme).Wait();
 
 
-
-            // ASSERT
-            act.Should().NotThrow();
         }
 
         private static SectorGenerator CreateGenerator(ISchemeService schemeService,

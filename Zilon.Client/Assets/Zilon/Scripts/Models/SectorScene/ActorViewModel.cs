@@ -22,7 +22,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
 
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] [Inject] private readonly ILogService _logService;
 

@@ -25,7 +25,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
     [NotNull] [Inject] private readonly ICommandManager _comamndManager;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
     public int SlotIndex;

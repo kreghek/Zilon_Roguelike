@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
@@ -9,7 +10,7 @@ namespace Zilon.Core.Client
     /// <remarks>
     /// Используется командами для получения ввода игрока. Хранит состояние объектов боя.
     /// </remarks>
-    public interface IPlayerState
+    public interface ISectorUiState: IUiState
     {
         /// <summary>
         /// Активный актёр.
@@ -17,21 +18,8 @@ namespace Zilon.Core.Client
         IActorViewModel ActiveActor { get; set; }
 
         /// <summary>
-        /// Выбранный объект.
-        /// </summary>
-        ISelectableViewModel HoverViewModel { get; set; }
-
-        /// <summary>
-        /// Зафиксированный выбранный объект.
-        /// </summary>
-        ISelectableViewModel SelectedViewModel { get; set; }
-
-        /// <summary>
         /// Пользовательский источник задач для актёров.
         /// </summary>
         IHumanActorTaskSource TaskSource { get; set; }
-
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
-        event EventHandler HoverChanged;
     }
 }

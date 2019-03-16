@@ -177,6 +177,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             if (room.Transitions.Any())
             {
                 //TODO Отфильтровать узлы, которые на входах в коридор
+                var availableNodes = room.Nodes.Where(x => !x.IsObstacle);
                 var openRoomNodes = new List<HexNode>(room.Nodes);
                 foreach (var transition in room.Transitions)
                 {

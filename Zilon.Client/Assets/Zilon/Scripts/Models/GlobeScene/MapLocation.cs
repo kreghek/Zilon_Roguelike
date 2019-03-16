@@ -2,11 +2,13 @@
 
 using UnityEngine;
 
+using Zilon.Core.Client;
 using Zilon.Core.World;
 
-public class MapLocation : MonoBehaviour
+public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 {
     public event EventHandler OnSelect;
+    public event EventHandler OnHover;
     public SpriteRenderer Icon;
 
     public GlobeRegionNode Node { get; set; }
@@ -32,7 +34,12 @@ public class MapLocation : MonoBehaviour
 
     public void OnMouseDown()
     {
-        OnSelect(this, new EventArgs());
+        OnSelect?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseOver()
+    {
+        OnHover?.Invoke(this, new EventArgs());
     }
 
     internal void SetAvailableState(bool state)
