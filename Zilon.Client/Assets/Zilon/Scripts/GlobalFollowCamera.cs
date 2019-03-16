@@ -10,7 +10,8 @@ public class GlobalFollowCamera : MonoBehaviour
     {
         if (Target == null)
         {
-            throw new ArgumentException("Не указан объект слежения.");
+            return;
+            //throw new ArgumentException("Не указан объект слежения.");
         }
 
         transform.position = Vector3.Lerp(transform.position,

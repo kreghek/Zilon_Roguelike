@@ -2,9 +2,10 @@
 
 using UnityEngine;
 
+using Zilon.Core.Client;
 using Zilon.Core.World;
 
-public class MapLocation : MonoBehaviour
+public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 {
     public event EventHandler OnSelect;
     public event EventHandler OnHover;

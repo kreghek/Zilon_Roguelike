@@ -7,7 +7,7 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 
 using Zenject;
-
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
@@ -36,11 +36,10 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly MoveGroupCommand _moveGroupCommand;
     [Inject] private readonly ICommandManager _clientCommandExecutor;
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [Inject] private readonly IGlobeUiState _globeUiState;
 
     private async void Start()
     {
-        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
-
         if (_globeManager.Globe == null)
         {
             _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
@@ -98,6 +97,9 @@ public class GlobeWorldVM : MonoBehaviour
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
         Camera.Target = groupObject;
+
+        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
+        MoveGroupViewModel(_player.GlobeNode);
     }
 
     public void OnDestroy()
@@ -143,21 +145,38 @@ public class GlobeWorldVM : MonoBehaviour
         }
     }
 
-    private void HumanPlayer_GlobeNodeChanged(object sender, System.EventArgs e)
+    private void HumanPlayer_GlobeNodeChanged(object sender, EventArgs e)
     {
+        if (_player.GlobeNode == null)
+        {
+            return;
+        }
+
         if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
         {
             StartLoadScene();
         }
         else
         {
-            var selectedNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
-            _groupViewModel.CurrentLocation = selectedNodeViewModel;
+            MoveGroupViewModel(_player.GlobeNode);
         }
     }
 
-    private void LocationViewModel_OnSelect(object sender, System.EventArgs e)
+    private void MoveGroupViewModel(GlobeRegionNode targetNode)
     {
+        var selectedNodeViewModel = GetNodeViewModel(targetNode);
+        _groupViewModel.CurrentLocation = selectedNodeViewModel;
+    }
+
+    private MapLocation GetNodeViewModel(GlobeRegionNode targetNode)
+    {
+        var locationViewModel = _locationNodeViewModels.Single(x => x.Node == targetNode);
+        return locationViewModel;
+    }
+
+    private void LocationViewModel_OnSelect(object sender, EventArgs e)
+    {
+        _globeUiState.SelectedViewModel = (MapLocation)sender;
         _clientCommandExecutor.Push(_moveGroupCommand);
     }
 
