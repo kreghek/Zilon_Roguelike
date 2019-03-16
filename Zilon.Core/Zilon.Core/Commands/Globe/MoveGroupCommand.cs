@@ -56,7 +56,7 @@ namespace Zilon.Core.Commands.Globe
 
                 if (globeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
                 {
-                    ScoreManager.CountPlace(globeNode);
+                    ScoreManager?.CountPlace(globeNode);
                 }
 
                 _player.GlobeNode = globeNode;

@@ -20,8 +20,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
     public override void InstallBindings()
     {
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
-
         Container.Bind<IDice>().FromInstance(new Dice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();

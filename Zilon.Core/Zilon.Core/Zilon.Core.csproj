@@ -127,7 +127,7 @@
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\Sector\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
-    <Compile Include="Client\Sector\PlayerState.cs" />
+    <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ITrader.cs" />
