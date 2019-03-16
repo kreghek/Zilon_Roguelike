@@ -52,15 +52,32 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return selectedRooms.ToArray();
         }
 
+        /// <summary>Выбрасывает случаный набор элементов интерьера комнаты.</summary>
+        /// <param name="roomWidth">Ширина комнаты.</param>
+        /// <param name="roomHeight">Высота комнаты.</param>
+        /// <returns>Возвращает набор элементов интерьера комнаты.</returns>
         public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
         {
+            const int PASS_PADDING = 1;
+
+            var minHorizontalBorder = 0;
+            var maxHorizontalBorder = roomWidth - 1;
+            var minVerticalBorder = 0;
+            var maxVerticalBorder = roomHeight - 1;
+
+            var leftBorder = minHorizontalBorder + PASS_PADDING;
+            var topBorder = minVerticalBorder + PASS_PADDING;
+
+            var rightBorder = maxHorizontalBorder - PASS_PADDING;
+            var bottomBorder = maxVerticalBorder - PASS_PADDING;
+
             var list = new List<RoomInteriorObjectMeta>();
             var maxCount = (roomWidth * roomHeight) / 9;
             var count = _dice.Roll(0, maxCount);
             for (var i = 0; i < count; i++)
             {
-                var x = _dice.Roll(1, roomWidth - 1);
-                var y = _dice.Roll(1, roomHeight - 1);
+                var x = _dice.Roll(leftBorder, rightBorder);
+                var y = _dice.Roll(topBorder, bottomBorder);
 
                 var same = list.SingleOrDefault(o => o.Coords.CompsEqual(x, y));
                 if (same != null)
@@ -68,7 +85,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     continue;
                 }
 
-                var interiorObject = new RoomInteriorObjectMeta(new OffsetCoords(x, y));
+                var interiorObjectCoords = new OffsetCoords(x, y);
+                var interiorObject = new RoomInteriorObjectMeta(interiorObjectCoords);
 
                 list.Add(interiorObject);
             }
