@@ -72,6 +72,7 @@ public class GlobeWorldVM : MonoBehaviour
             _locationNodeViewModels.Add(locationViewModel);
 
             locationViewModel.OnSelect += LocationViewModel_OnSelect;
+            locationViewModel.OnHover += LocationViewModel_OnHover;
         }
 
         var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
@@ -100,6 +101,11 @@ public class GlobeWorldVM : MonoBehaviour
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private void LocationViewModel_OnHover(object sender, EventArgs e)
+    {
+        _globeUiState.HoverViewModel = sender as MapLocation;
     }
 
     public void OnDestroy()
