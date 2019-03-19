@@ -135,7 +135,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void TakeDamage(int value)
+        public void TakeDamage(TacticalActRoll tacticalActRoll)
         {
             Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
             DoDamageTaken(value);

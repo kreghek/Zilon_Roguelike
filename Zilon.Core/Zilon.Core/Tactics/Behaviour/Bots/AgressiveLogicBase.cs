@@ -110,7 +110,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(Actor, _targetIntruder, _actService);
+                var attackTask = new DamageActorTask(Actor, _targetIntruder, _actService);
                 return attackTask;
             }
             else

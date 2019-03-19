@@ -65,7 +65,7 @@ namespace Zilon.Core.Tests.Commands
 
         private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
         {
-            var attackIntention = (Intention<AttackTask>)intention;
+            var attackIntention = (Intention<DamageActorTask>)intention;
             var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
             return attackTask.Target == target;
         }
