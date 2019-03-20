@@ -131,6 +131,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ITrader.cs" />
+    <Compile Include="Tactics\IUseActResolver.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />

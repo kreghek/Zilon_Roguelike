@@ -12,18 +12,17 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class DamageActorTask : OneTurnActorTaskBase
     {
-        private readonly ITacticalActUsageService _actService;
+        private readonly ISectorMap _map;
 
         public IAttackTarget Target { get; }
 
         public DamageActorTask(IActor actor,
             IAttackTarget target,
-            ITacticalActUsageService actService) :
+            ISectorMap map) :
             base(actor)
         {
-            _actService = actService;
-
             Target = target;
+            _map = map;
         }
 
         protected override void ExecuteTask()
@@ -49,10 +48,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var targetNode = Target.Node;
 
-            var targetIsOnLine = _sectorManager.CurrentSector.Map.TargetIsOnLine(
-                Actor.Node,
-                targetNode);
+            
 
+            var targetIsOnLine = _map.TargetIsOnLine(Actor.Node, targetNode);
             if (!targetIsOnLine)
             {
                 throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
@@ -187,17 +185,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
             bool isInDistance;
-            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
-            {
-                isInDistance = true;
-            }
-            else
-            {
-                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-                var targetCubePos = ((HexNode)target.Node).CubeCoords;
-
-                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
-            }
+            isInDistance = CheckInDistance(actor, target, act);
 
             if (!isInDistance)
             {
@@ -215,13 +203,34 @@ namespace Zilon.Core.Tactics.Behaviour
                 RemovePropResource(actor, act);
             }
 
-            
-                UseOnActor(actor, targetActor, tacticalActRoll);
+
+            UseOnActor(actor, targetActor, tacticalActRoll);
 
             if (act.Equipment != null)
             {
                 EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
             }
+        }
+
+        private static bool CheckInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
+            var useOnSelf = actor == target;
+            var actCanBeUsedOnSelf = act.Stats.Targets.HasFlag(TacticalActTargets.Self);
+
+            if (useOnSelf && actCanBeUsedOnSelf)
+            {
+                return true;
+            }
+
+            var currentHexNode = (HexNode)actor.Node;
+            var targetHexNode = (HexNode)target.Node;
+
+            var currentCubePos = currentHexNode.CubeCoords;
+            var targetCubePos = targetHexNode.CubeCoords;
+
+            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+
+            return isInDistance;
         }
 
         /// <summary>

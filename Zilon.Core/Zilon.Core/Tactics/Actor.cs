@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
@@ -59,11 +60,6 @@ namespace Zilon.Core.Tactics
             var openResult = method.TryOpen(container);
 
             DoOpenContainer(container, openResult);
-        }
-
-        public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
-        {
-            DoUseAct(target, tacticalAct);
         }
 
         public void UseProp(IProp usedProp)
@@ -325,6 +321,130 @@ namespace Zilon.Core.Tactics
                 default:
                     throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
             }
+        }
+
+        /// <summary>
+        /// Атака указанного актёра.
+        /// </summary>
+        /// <param name="target">Целевой актёр.</param>
+        /// <param name="usedTacticalActs">Используемые для атаки действия.</param>
+        public void AttackActor(IActor target, UsedTacticalActs usedTacticalActs)
+        {
+            foreach (var act in usedTacticalActs.Primary)
+            {
+                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && this == target)
+                {
+                    throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
+                }
+
+                UseAct(actor, target, act);
+            }
+
+            // Использование дополнительных действий.
+            // Используются с некоторой вероятностью.
+            foreach (var act in usedTacticalActs.Secondary)
+            {
+                var useSuccessRoll = GetUseSuccessRoll();
+                var useFactRoll = GetUseFactRoll();
+
+                if (useFactRoll < useSuccessRoll)
+                {
+                    continue;
+                }
+
+                UseAct(actor, target, act);
+            }
+        }
+
+        public void TakeDamage(int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Атака указанный статический объект (не актёра).
+        /// </summary>
+        /// <param name="target">Целевой объект.</param>
+        /// <param name="usedTacticalActs">Используемые для атаки дейсвтия.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void AttackStaticObject(IAttackTarget target, UsedTacticalActs usedTacticalActs)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Лечение указанного актёра.
+        /// </summary>
+        /// <param name="target">Целевой актёр. Актёр может применить действие на себя.</param>
+        /// <param name="usedTacticalActs">Применяемые действия.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void HealActor(IActor target, UsedTacticalActs usedTacticalActs)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
+            bool isInDistance;
+            isInDistance = CheckInDistance(actor, target, act);
+
+            if (!isInDistance)
+            {
+                throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+            }
+
+
+            var tacticalActRoll = GetActEfficient(act);
+
+            // Изъятие патронов
+            if (act.Constrains?.PropResourceType != null)
+            {
+                RemovePropResource(actor, act);
+            }
+
+
+            UseOnActor(actor, targetActor, tacticalActRoll);
+
+            if (act.Equipment != null)
+            {
+                EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
+            }
+        }
+
+        private static bool CheckInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
+            var useOnSelf = actor == target;
+            var actCanBeUsedOnSelf = act.Stats.Targets.HasFlag(TacticalActTargets.Self);
+
+            if (useOnSelf && actCanBeUsedOnSelf)
+            {
+                return true;
+            }
+
+            var currentHexNode = (HexNode)actor.Node;
+            var targetHexNode = (HexNode)target.Node;
+
+            var currentCubePos = currentHexNode.CubeCoords;
+            var targetCubePos = targetHexNode.CubeCoords;
+
+            var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+
+            return isInDistance;
+        }
+
+        /// <summary>
+        /// Возвращает случайное значение эффективность действия.
+        /// </summary>
+        /// <param name="act"> Соверщённое действие. </param>
+        /// <returns> Возвращает выпавшее значение эффективности. </returns>
+        private TacticalActRoll GetActEfficient(ITacticalAct act)
+        {
+            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
+
+            var roll = new TacticalActRoll(act, rolledEfficient);
+
+            return roll;
         }
     }
 }
