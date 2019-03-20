@@ -328,26 +328,26 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="target">Целевой актёр.</param>
         /// <param name="usedTacticalActs">Используемые для атаки действия.</param>
-        public void AttackActor(IActor target, UsedTacticalActs usedTacticalActs)
+        public void AttackActor(IActor target, UsedTacticalActs usedTacticalActs, IUseActResolver useActResolver)
         {
             foreach (var act in usedTacticalActs.Primary)
             {
-                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && this == target)
+                var useOnSelf = this == target;
+                var actCanBeUsedOnSelf = act.Stats.Targets.HasFlag(TacticalActTargets.Self);
+                if (!actCanBeUsedOnSelf && this == target)
                 {
                     throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
                 }
 
-                UseAct(actor, target, act);
+                UseAct(this, target, act);
             }
 
             // Использование дополнительных действий.
             // Используются с некоторой вероятностью.
             foreach (var act in usedTacticalActs.Secondary)
             {
-                var useSuccessRoll = GetUseSuccessRoll();
-                var useFactRoll = GetUseFactRoll();
-
-                if (useFactRoll < useSuccessRoll)
+                var secondaryIsUsed = useActResolver.SecondaryActUsePass(this, act);
+                if (!secondaryIsUsed)
                 {
                     continue;
                 }
@@ -414,10 +414,8 @@ namespace Zilon.Core.Tactics
 
         private static bool CheckInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
         {
-            var useOnSelf = actor == target;
-            var actCanBeUsedOnSelf = act.Stats.Targets.HasFlag(TacticalActTargets.Self);
-
-            if (useOnSelf && actCanBeUsedOnSelf)
+            var isValidTargetedOnSelf = IsValidateTargetOnSelf(actor, target, act);
+            if (isValidTargetedOnSelf)
             {
                 return true;
             }
@@ -431,6 +429,13 @@ namespace Zilon.Core.Tactics
             var isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
 
             return isInDistance;
+        }
+
+        private static bool IsValidateTargetOnSelf(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
+            var useOnSelf = actor == target;
+            var actCanBeUsedOnSelf = act.Stats.Targets.HasFlag(TacticalActTargets.Self);
+            return useOnSelf && actCanBeUsedOnSelf;
         }
 
         /// <summary>

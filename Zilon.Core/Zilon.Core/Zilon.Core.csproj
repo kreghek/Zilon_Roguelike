@@ -405,6 +405,7 @@
     <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\Trader.cs" />
     <Compile Include="Tactics\TransitionDetection.cs" />
+    <Compile Include="Tactics\UseActResolver.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
