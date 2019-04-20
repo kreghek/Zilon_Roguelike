@@ -10,6 +10,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
+    [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
     [TestFixture()]
     public class WorldGeneratorTests
     {
