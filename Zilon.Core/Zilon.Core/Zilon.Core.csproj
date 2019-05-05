@@ -118,6 +118,7 @@
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
+    <Compile Include="Tactics\Behaviour\Bots\HumanBotActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
