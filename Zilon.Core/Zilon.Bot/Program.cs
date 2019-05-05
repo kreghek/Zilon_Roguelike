@@ -45,6 +45,7 @@ namespace Zilon.Bot
             };
 
             var humanActor = CreateHumanActor(humanPlayer, schemeService, survivalRandomSource, propFactory, sectorManager, actorManager);
+            humanActor.UsedAct += HumanActor_UsedAct;
 
             while (!humanActor.Person.Survival.IsDead)
             {
@@ -61,6 +62,11 @@ namespace Zilon.Bot
             };
 
             Console.ReadLine();
+        }
+
+        private static void HumanActor_UsedAct(object sender, UsedActEventArgs e)
+        {
+            Console.WriteLine($"Used act: {e.TacticalAct} Target: {e.Target}");
         }
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
