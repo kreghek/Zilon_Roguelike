@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+
 using LightInject;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot
 {
@@ -45,28 +45,72 @@ namespace Zilon.Bot
             };
 
             var humanActor = CreateHumanActor(humanPlayer, schemeService, survivalRandomSource, propFactory, sectorManager, actorManager);
-            humanActor.UsedAct += HumanActor_UsedAct;
+            foreach (var actor in actorManager.Items)
+            {
+                actor.UsedAct += Actor_UsedAct;
+                actor.DamageTaken += Actor_DamageTaken;
+            }
+            
 
             while (!humanActor.Person.Survival.IsDead)
             {
                 try
                 {
-                    Console.WriteLine($"Current HP: {humanActor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value}");
+                    var humanPersonHp = humanActor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value;
+                    Console.WriteLine($"Current HP: {humanPersonHp}");
                     gameLoop.Update();
                 }
                 catch (Exception exception)
                 {
                     Console.WriteLine($"[.] {exception.Message}");
-                    throw;
                 }
             };
+
+            WriteScores(scoreManager);
 
             Console.ReadLine();
         }
 
-        private static void HumanActor_UsedAct(object sender, UsedActEventArgs e)
+        private static void WriteScores(IScoreManager scoreManager)
         {
-            Console.WriteLine($"Used act: {e.TacticalAct} Target: {e.Target}");
+            Console.WriteLine("YOU (BOT) DIED");
+
+            Console.WriteLine($"SCORES: {scoreManager.BaseScores}");
+
+            Console.WriteLine("=== You survived ===");
+            var minutesTotal = scoreManager.Turns * 2;
+            var hoursTotal = minutesTotal / 60f;
+            var daysTotal = hoursTotal / 24f;
+            var days = (int)daysTotal;
+            var hours = (int)(hoursTotal - days * 24);
+
+            Console.WriteLine($"{days} days {hours} hours");
+            Console.WriteLine($"Turns: {scoreManager.Turns}");
+
+            Console.WriteLine("=== You visited ===");
+
+            Console.WriteLine($"{scoreManager.Places.Count} places");
+
+            foreach (var placeType in scoreManager.PlaceTypes)
+            {
+                Console.WriteLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
+            }
+
+            Console.WriteLine("=== You killed ===");
+            foreach (var frag in scoreManager.Frags)
+            {
+                Console.WriteLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
+            }
+        }
+
+        private static void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
+        {
+            Console.WriteLine($"{sender} taken {e.Value} damage");
+        }
+
+        private static void Actor_UsedAct(object sender, UsedActEventArgs e)
+        {
+            Console.WriteLine($"{sender} Used act: {e.TacticalAct} Target: {e.Target}");
         }
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
@@ -95,7 +139,7 @@ namespace Zilon.Bot
                 humanPlayer.MainPerson = person;
 
 
-                var classRoll = new Random().Next(1, 7);
+                var classRoll = new Random().Next(1, 3);
                 switch (classRoll)
                 {
                     case 1:
