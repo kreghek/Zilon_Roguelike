@@ -106,7 +106,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateActorEffects()
         {
-            foreach (var actor in _actorManager.Items)
+            foreach (var actor in _actorManager.Items.ToArray())
             {
                 var effects = actor.Person.Effects;
                 foreach (var effect in effects.Items)
