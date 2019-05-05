@@ -1,15 +1,34 @@
-﻿using LightInject;
+﻿using System.Threading.Tasks;
+using LightInject;
+using Zilon.Core.Client;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var container = new ServiceContainer();
-            var startup = new Startup();
+            var startUp = new Startup();
 
-            startup.ConfigureServices(container);
+            startUp.ConfigureServices(container);
+
+            var gameLoop = container.GetInstance<IGameLoop>();
+            var sectorManager = container.GetInstance<ISectorManager>();
+            var scoreManager = container.GetInstance<IScoreManager>();
+            var humanActorTaskSource = container.GetInstance<IActorTaskSource>("bot");
+            var monsterActorTaskSource = container.GetInstance<IActorTaskSource>("monster");
+
+            await sectorManager.CreateSectorAsync();
+
+            sectorManager.CurrentSector.ScoreManager = scoreManager;
+
+            gameLoop.ActorTaskSources = new[] {
+                humanActorTaskSource,
+                monsterActorTaskSource
+            };
         }
     }
 }
