@@ -20,16 +20,16 @@ namespace Zilon.Bot
 {
     class Startup
     {
-        public void ConfigureServices(IServiceRegistry container)
+        public void ConfigureTacticServices(IServiceRegistry tacticContainer)
         {
-            RegisterSchemeService(container);
-            RegisterSectorService(container);
-            RegisterGameLoop(container);
-            RegisterAuxServices(container);
-            RegisterPlayerServices(container);
-            RegisterClientServices(container);
-            RegisterCommands(container);
-            RegisterWorldServices(container);
+            RegisterSchemeService(tacticContainer);
+            RegisterSectorService(tacticContainer);
+            RegisterGameLoop(tacticContainer);
+            RegisterAuxServices(tacticContainer);
+            RegisterPlayerServices(tacticContainer);
+            RegisterClientServices(tacticContainer);
+            RegisterCommands(tacticContainer);
+            RegisterWorldServices(tacticContainer);
         }
 
         private void RegisterSchemeService(IServiceRegistry container)
@@ -52,12 +52,18 @@ namespace Zilon.Bot
         {
             container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
+            container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
             container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
+            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
+            container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
+            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
+            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
@@ -107,7 +113,7 @@ namespace Zilon.Bot
         {
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
+            container.Register<IActorTaskSource, MonsterActorTaskSource>("bot", new PerContainerLifetime());
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 
