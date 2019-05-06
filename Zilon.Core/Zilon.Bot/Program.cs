@@ -12,6 +12,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot
 {
@@ -47,9 +48,13 @@ namespace Zilon.Bot
             var humanActor = CreateHumanActor(humanPlayer, schemeService, survivalRandomSource, propFactory, sectorManager, actorManager);
             foreach (var actor in actorManager.Items)
             {
+                actor.Moved += Actor_Moved;
                 actor.UsedAct += Actor_UsedAct;
                 actor.DamageTaken += Actor_DamageTaken;
+                actor.Person.Survival.Dead += Survival_Dead;
             }
+
+            WriteSector(sectorManager.CurrentSector);
             
 
             while (!humanActor.Person.Survival.IsDead)
@@ -69,6 +74,25 @@ namespace Zilon.Bot
             WriteScores(scoreManager);
 
             Console.ReadLine();
+        }
+
+        private static void Survival_Dead(object sender, EventArgs e)
+        {
+            Console.WriteLine($"{sender} dead");
+        }
+
+        private static void Actor_Moved(object sender, EventArgs e)
+        {
+            var actor = sender as IActor;
+            Console.WriteLine($"{actor} moved {actor.Node}");
+        }
+
+        private static void WriteSector(ISector sector)
+        {
+            if (sector.Map is HexMap hexMap)
+            {
+                hexMap.SaveToFile("map");
+            }
         }
 
         private static void WriteScores(IScoreManager scoreManager)
