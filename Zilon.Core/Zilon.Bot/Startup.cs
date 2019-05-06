@@ -76,7 +76,7 @@ namespace Zilon.Bot
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = new Dice(123);
+            var dice = new Dice();
             container.Register<IDice>(factory => dice, new PerContainerLifetime());
 
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
@@ -113,7 +113,7 @@ namespace Zilon.Bot
         {
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IActorTaskSource, HumanBotActorTaskSource>("bot", new PerContainerLifetime());
+            container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 

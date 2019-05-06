@@ -31,16 +31,18 @@ namespace Zilon.Bot
             var gameLoop = tacticContainer.GetInstance<IGameLoop>();
             var sectorManager = tacticContainer.GetInstance<ISectorManager>();
             var scoreManager = tacticContainer.GetInstance<IScoreManager>();
-            var humanActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("bot");
+            var humanActorTaskSource = tacticContainer.GetInstance<IHumanActorTaskSource>();
             var monsterActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("monster");
             var survivalRandomSource = tacticContainer.GetInstance<ISurvivalRandomSource>();
             var propFactory = tacticContainer.GetInstance<IPropFactory>();
             var actorManager = tacticContainer.GetInstance<IActorManager>();
             var sectorUiState = tacticContainer.GetInstance<ISectorUiState>();
+            var moveCommand = tacticContainer.GetInstance<ICommand>("move");
 
             await sectorManager.CreateSectorAsync();
 
             sectorManager.CurrentSector.ScoreManager = scoreManager;
+            sectorUiState.TaskSource = humanActorTaskSource;
 
             gameLoop.ActorTaskSources = new[] {
                 humanActorTaskSource,
@@ -48,6 +50,8 @@ namespace Zilon.Bot
             };
 
             var humanActor = CreateHumanActor(humanPlayer, schemeService, survivalRandomSource, propFactory, sectorManager, actorManager);
+            humanActorTaskSource.SwitchActor(humanActor);
+
             foreach (var actor in actorManager.Items)
             {
                 actor.Moved += Actor_Moved;
@@ -58,7 +62,7 @@ namespace Zilon.Bot
 
             sectorUiState.ActiveActor = new ActorViewModel { Actor = humanActor };
 
-            var interpereter = new Interpreter(sectorManager, sectorUiState);
+            var interpereter = new Interpreter(sectorManager, sectorUiState, moveCommand);
 
             while (!humanActor.Person.Survival.IsDead)
             {
@@ -70,7 +74,7 @@ namespace Zilon.Bot
                         .Single(x => x.Type == SurvivalStatType.Health)
                         .Value;
 
-                    Console.WriteLine($"Current HP: {humanPersonHp}");
+                    Console.WriteLine($"Current HP: {humanPersonHp} Node {humanActor.Node}");
 
                     ICommand command = null;
 

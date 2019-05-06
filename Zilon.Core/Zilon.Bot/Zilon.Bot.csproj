@@ -56,7 +56,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="TestActorViewModel.cs" />
+    <Compile Include="ActorViewModel.cs" />
+    <Compile Include="NodeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

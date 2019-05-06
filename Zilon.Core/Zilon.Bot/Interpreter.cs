@@ -13,11 +13,14 @@ namespace Zilon.Bot
     {
         private readonly ISectorManager _sectorManager;
         private readonly ISectorUiState _sectorUiState;
+        private readonly ICommand _moveCommand;
 
-        public Interpreter(ISectorManager sectorManager, ISectorUiState sectorUiState)
+        public Interpreter(ISectorManager sectorManager, ISectorUiState sectorUiState,
+            ICommand moveCommand)
         {
             _sectorManager = sectorManager;
             _sectorUiState = sectorUiState;
+            _moveCommand = moveCommand;
         }
 
         public ICommand Process(string request)
@@ -31,6 +34,9 @@ namespace Zilon.Bot
                 case "map":
                     PrintMap();
                     break;
+
+                case "move":
+                    return MoveToNode(methdParams[0]);
             }
 
             return null;
@@ -51,6 +57,22 @@ namespace Zilon.Bot
                     Console.WriteLine(node);
                 }
             }
+        }
+
+        private ICommand MoveToNode(string serializedNode)
+        {
+            var nodeCoords = serializedNode
+                .Trim('(', ')')
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var map = _sectorManager.CurrentSector.Map;
+            var node = map.Nodes.Single(x => ((HexNode)x).OffsetX == int.Parse(nodeCoords[0])
+            && ((HexNode)x).OffsetY == int.Parse(nodeCoords[1]));
+
+            var nodeViewModel = new NodeViewModel { Node = (HexNode)node };
+            _sectorUiState.SelectedViewModel = nodeViewModel;
+
+            return _moveCommand;
         }
     }
 }

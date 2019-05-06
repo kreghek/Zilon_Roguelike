@@ -135,6 +135,11 @@ namespace Zilon.Core.Commands
                 return;
             }
 
+            RememberFoundPath(astar);
+        }
+
+        private void RememberFoundPath(AStar astar)
+        {
             var foundPath = astar.GetPath().Skip(1).ToArray();
             foreach (var pathNode in foundPath)
             {
