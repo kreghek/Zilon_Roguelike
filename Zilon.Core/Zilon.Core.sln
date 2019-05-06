@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.SchemeEditor", "Zilon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot", "Zilon.Bot\Zilon.Bot.csproj", "{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotPlayer", "Zilon.BotPlayer\Zilon.BotPlayer.csproj", "{BD0E9A1B-7F1E-4168-BB7D-BD261CFBB463}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD0E9A1B-7F1E-4168-BB7D-BD261CFBB463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD0E9A1B-7F1E-4168-BB7D-BD261CFBB463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0E9A1B-7F1E-4168-BB7D-BD261CFBB463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD0E9A1B-7F1E-4168-BB7D-BD261CFBB463}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

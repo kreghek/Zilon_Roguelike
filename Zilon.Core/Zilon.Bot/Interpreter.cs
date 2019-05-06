@@ -54,9 +54,10 @@ namespace Zilon.Bot
                 {
                     selectedNodes.Add(node);
 
-                    Console.WriteLine(node);
+                    Console.Write(node);
                 }
             }
+            Console.WriteLine();
         }
 
         private ICommand MoveToNode(string serializedNode)

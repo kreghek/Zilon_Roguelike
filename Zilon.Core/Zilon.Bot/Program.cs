@@ -80,6 +80,7 @@ namespace Zilon.Bot
 
                     while (command == null)
                     {
+                        Console.WriteLine("Enter request:");
                         var requestString = Console.ReadLine();
 
                         command = interpereter.Process(requestString);
