@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
-
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -35,6 +36,7 @@ namespace Zilon.Bot
             var survivalRandomSource = tacticContainer.GetInstance<ISurvivalRandomSource>();
             var propFactory = tacticContainer.GetInstance<IPropFactory>();
             var actorManager = tacticContainer.GetInstance<IActorManager>();
+            var sectorUiState = tacticContainer.GetInstance<ISectorUiState>();
 
             await sectorManager.CreateSectorAsync();
 
@@ -54,16 +56,32 @@ namespace Zilon.Bot
                 actor.Person.Survival.Dead += Survival_Dead;
             }
 
-            WriteSector(sectorManager.CurrentSector);
-            
+            sectorUiState.ActiveActor = new ActorViewModel { Actor = humanActor };
+
+            var interpereter = new Interpreter(sectorManager, sectorUiState);
 
             while (!humanActor.Person.Survival.IsDead)
             {
                 try
                 {
-                    var humanPersonHp = humanActor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value;
+                    var humanPersonHp = humanActor.Person
+                        .Survival
+                        .Stats
+                        .Single(x => x.Type == SurvivalStatType.Health)
+                        .Value;
+
                     Console.WriteLine($"Current HP: {humanPersonHp}");
-                    gameLoop.Update();
+
+                    ICommand command = null;
+
+                    while (command == null)
+                    {
+                        var requestString = Console.ReadLine();
+
+                        command = interpereter.Process(requestString);
+                    }
+
+                    command.Execute();
                 }
                 catch (Exception exception)
                 {
