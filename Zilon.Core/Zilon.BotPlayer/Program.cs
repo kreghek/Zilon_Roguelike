@@ -11,8 +11,9 @@ namespace Zilon.BotPlayer
     class Program
     {
         private static Process process;
+        private static TaskCompletionSource<string> tcs;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var pathToEnv = ConfigurationManager.AppSettings["env"];
             process = new Process
@@ -32,11 +33,42 @@ namespace Zilon.BotPlayer
 
             process.Start();
             process.BeginOutputReadLine();
-            process.WaitForExit();
+
+            // first
+            tcs = new TaskCompletionSource<string>();
+            var startDataTask = tcs.Task;
+            var startData = await startDataTask;
+            tcs = null;
 
             Console.ReadLine();
-            process.Close();
+
+            await SendRequestAsync("map");
+
+            Console.ReadLine();
+
+            process.OutputDataReceived -= Process_OutputDataReceived;
+            process.Kill();
         }
+
+        private static async Task<string> SendRequestAsync(string reqquest)
+        {
+            if (tcs != null)
+            {
+                tcs.SetCanceled();
+            }
+
+            tcs = new TaskCompletionSource<string>();
+
+            process.StandardInput.WriteLine(reqquest);
+
+            var task = tcs.Task;
+            var data = await task;
+            tcs = null;
+            return data;
+
+        }
+
+        static string Out;
 
         private static void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
@@ -46,7 +78,11 @@ namespace Zilon.BotPlayer
 
                 if (e.Data == "Enter request:")
                 {
-                    process.StandardInput.WriteLine("map");
+                    tcs.SetResult(Out);
+                }
+                else
+                {
+                    Out = e.Data;
                 }
             }
         }
