@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zilon.Bot.Models;
 
 namespace Zilon.BotPlayer
 {
@@ -38,7 +40,11 @@ namespace Zilon.BotPlayer
             tcs = new TaskCompletionSource<string>();
             var startDataTask = tcs.Task;
             var startData = await startDataTask;
+            var state = JsonConvert.DeserializeObject<State>(startData);
             tcs = null;
+
+            Console.WriteLine($"Current HP: {state.CurrentHp}");
+            Console.WriteLine($"Current Position: {state.Position.X}, {state.Position.Y}");
 
             Console.ReadLine();
 
