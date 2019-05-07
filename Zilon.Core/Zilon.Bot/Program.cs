@@ -5,6 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
+
+using Newtonsoft.Json;
+
+using Zilon.Bot.Models;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
@@ -74,7 +78,20 @@ namespace Zilon.Bot
                         .Single(x => x.Type == SurvivalStatType.Health)
                         .Value;
 
-                    Console.WriteLine($"Current HP: {humanPersonHp} Node {humanActor.Node}");
+                    var hexNode = (HexNode)humanActor.Node;
+
+                    var state = new State
+                    {
+                        CurrentHp = humanPersonHp,
+                        Mode = WorldMode.Sector,
+                        Position = new Position
+                        {
+                            X = hexNode.OffsetX,
+                            Y = hexNode.OffsetY
+                        }
+                    };
+
+                    Console.WriteLine(JsonConvert.SerializeObject(state));
 
                     ICommand command = null;
 

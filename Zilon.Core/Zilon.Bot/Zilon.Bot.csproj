@@ -41,6 +41,9 @@
     <Reference Include="LightInject, Version=5.1.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LightInject.5.1.8\lib\net46\LightInject.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -64,6 +67,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Models\Zilon.Bot.Models.csproj">
+      <Project>{f1df5d12-aed7-4dc0-b29c-fa178b07eb9e}</Project>
+      <Name>Zilon.Bot.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
       <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>
