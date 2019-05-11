@@ -46,7 +46,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             // на предмет нарушителей.
             var intruders = CheckForIntruders();
 
-            var nearbyIntruder = intruders.OrderBy(x => ((HexNode)Actor.Node).CubeCoords.DistanceTo(((HexNode)x.Node).CubeCoords)).FirstOrDefault();
+            var orderedIntruders = intruders.OrderBy(x => Map.DistanceBetween(Actor.Node, x.Node));
+            var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             if (nearbyIntruder != null)
             {
@@ -56,17 +57,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 ProcessIntruderDetected();
             }
             else {
-
-
                 if (_idleTask == null || _idleTask.IsComplete)
                 {
                     _mode = Mode.Bypass;
                     _targetIntruder = null;
                     _idleTask = null;
-                }
-                else
-                {
-
                 }
             }
 
@@ -82,7 +77,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     return HandleIdleMode();
 
                 default:
-                    throw new InvalidOperationException($"Неизвестный режим патрулирования {_mode}");
+                    throw new InvalidOperationException($"Неизвестный режим {_mode}");
             }
         }
 

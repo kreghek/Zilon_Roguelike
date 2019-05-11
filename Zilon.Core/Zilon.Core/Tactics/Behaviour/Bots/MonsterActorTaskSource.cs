@@ -38,6 +38,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
+            // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
             if (actor.Owner != _player)
             {
                 return new IActorTask[0];

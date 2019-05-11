@@ -42,12 +42,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HumanBotActorTaskSource.cs" />
+    <Compile Include="ILogicState.cs" />
+    <Compile Include="ILogicStateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
       <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
       <Name>Zilon.Bot.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
+      <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
+      <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

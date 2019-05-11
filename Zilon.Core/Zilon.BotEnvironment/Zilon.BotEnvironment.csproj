@@ -66,6 +66,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Player\Zilon.Bot.Players.csproj">
+      <Project>{218B22DD-5BF3-4A86-B979-7E6F534F3F52}</Project>
+      <Name>Zilon.Bot.Players</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
+      <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
+      <Name>Zilon.Bot.Sdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
       <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>

@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotEnvironment", "Zil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Sdk", "Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj", "{C043BDA8-78EA-4B90-A35E-14282665F0D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Player", "Zilon.Bot.Player\Zilon.Bot.Player.csproj", "{218B22DD-5BF3-4A86-B979-7E6F534F3F52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players", "Zilon.Bot.Player\Zilon.Bot.Players.csproj", "{218B22DD-5BF3-4A86-B979-7E6F534F3F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
