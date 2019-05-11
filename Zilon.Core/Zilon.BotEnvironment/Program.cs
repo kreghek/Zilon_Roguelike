@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 using LightInject;
 
-using Newtonsoft.Json;
-
-using Zilon.Bot.Models;
-using Zilon.Core.Client;
-using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -23,7 +18,7 @@ namespace Zilon.Bot
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
@@ -35,26 +30,27 @@ namespace Zilon.Bot
             var gameLoop = tacticContainer.GetInstance<IGameLoop>();
             var sectorManager = tacticContainer.GetInstance<ISectorManager>();
             var scoreManager = tacticContainer.GetInstance<IScoreManager>();
-            var humanActorTaskSource = tacticContainer.GetInstance<IHumanActorTaskSource>();
+            var botActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("bot");
             var monsterActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("monster");
             var survivalRandomSource = tacticContainer.GetInstance<ISurvivalRandomSource>();
             var propFactory = tacticContainer.GetInstance<IPropFactory>();
             var actorManager = tacticContainer.GetInstance<IActorManager>();
-            var sectorUiState = tacticContainer.GetInstance<ISectorUiState>();
-            var moveCommand = tacticContainer.GetInstance<ICommand>("move");
 
             await sectorManager.CreateSectorAsync();
 
             sectorManager.CurrentSector.ScoreManager = scoreManager;
-            sectorUiState.TaskSource = humanActorTaskSource;
 
             gameLoop.ActorTaskSources = new[] {
-                humanActorTaskSource,
+                botActorTaskSource,
                 monsterActorTaskSource
             };
 
-            var humanActor = CreateHumanActor(humanPlayer, schemeService, survivalRandomSource, propFactory, sectorManager, actorManager);
-            humanActorTaskSource.SwitchActor(humanActor);
+            var humanActor = CreateHumanActor(humanPlayer,
+                schemeService,
+                survivalRandomSource,
+                propFactory,
+                sectorManager,
+                actorManager);
 
             foreach (var actor in actorManager.Items)
             {
@@ -63,10 +59,6 @@ namespace Zilon.Bot
                 actor.DamageTaken += Actor_DamageTaken;
                 actor.Person.Survival.Dead += Survival_Dead;
             }
-
-            sectorUiState.ActiveActor = new ActorViewModel { Actor = humanActor };
-
-            var interpereter = new Interpreter(sectorManager, sectorUiState, moveCommand);
 
             while (!humanActor.Person.Survival.IsDead)
             {
@@ -80,30 +72,9 @@ namespace Zilon.Bot
 
                     var hexNode = (HexNode)humanActor.Node;
 
-                    var state = new State
-                    {
-                        CurrentHp = humanPersonHp,
-                        Mode = WorldMode.Sector,
-                        Position = new Position
-                        {
-                            X = hexNode.OffsetX,
-                            Y = hexNode.OffsetY
-                        }
-                    };
+                    Console.WriteLine($"Current HP: {humanPersonHp} Node {humanActor.Node}");
 
-                    Console.WriteLine(JsonConvert.SerializeObject(state));
-
-                    ICommand command = null;
-
-                    while (command == null)
-                    {
-                        Console.WriteLine("Enter request:");
-                        var requestString = Console.ReadLine();
-
-                        command = interpereter.Process(requestString);
-                    }
-
-                    command.Execute();
+                    gameLoop.Update();
                 }
                 catch (Exception exception)
                 {
