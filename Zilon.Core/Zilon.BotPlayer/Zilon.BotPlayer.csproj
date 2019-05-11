@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoPlayer.cs" />
+    <Compile Include="BotEnvironment.cs" />
     <Compile Include="GlobeStrategy.cs" />
     <Compile Include="IBotEnvironment.cs" />
     <Compile Include="IWorldStrategy.cs" />
