@@ -2,8 +2,7 @@
 
 using LightInject;
 
-using Zilon.Bot.Player;
-using Zilon.Bot.Sdk;
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
@@ -7,7 +6,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
-namespace Zilon.Bot.Player
+namespace Zilon.Bot.Players
 {
     public class HumanBotActorTaskSource : ISectorActorTaskSource
     {

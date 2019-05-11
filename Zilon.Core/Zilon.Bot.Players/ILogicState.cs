@@ -1,6 +1,6 @@
 ﻿using Zilon.Core.Tactics.Behaviour;
 
-namespace Zilon.Bot.Player
+namespace Zilon.Bot.Players
 {
     public interface ILogicState
     {

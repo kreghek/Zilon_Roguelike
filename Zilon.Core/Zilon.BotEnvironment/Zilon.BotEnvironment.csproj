@@ -66,7 +66,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zilon.Bot.Player\Zilon.Bot.Players.csproj">
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
       <Project>{218B22DD-5BF3-4A86-B979-7E6F534F3F52}</Project>
       <Name>Zilon.Bot.Players</Name>
     </ProjectReference>

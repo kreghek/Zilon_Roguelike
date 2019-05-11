@@ -1,4 +1,4 @@
-﻿namespace Zilon.Bot.Player
+﻿namespace Zilon.Bot.Players
 {
     public interface ILogicStateSelector
     {
