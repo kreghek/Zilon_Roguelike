@@ -32,13 +32,14 @@ namespace Zilon.BotPlayer
             process.Start();
             process.BeginOutputReadLine();
 
-            Console.ReadLine();
-
             var response = await _botEnvironment.RequestAsync("map");
             Console.WriteLine(response);
 
             Console.ReadLine();
+
+            _botEnvironment.Dispose();
             process.Kill();
+            process.Dispose();
         }
     }
 }
