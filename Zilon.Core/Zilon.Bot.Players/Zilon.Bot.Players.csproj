@@ -47,6 +47,7 @@
     <Compile Include="ILogicStateSelectorResult.cs" />
     <Compile Include="LogicSelection\PersuitNearbyIntruderSelection.cs" />
     <Compile Include="LogicSelection\PersuitNearbyIntruderSelectionResult.cs" />
+    <Compile Include="Logics\PersuitNearbyIntruderLogicState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,5 +60,6 @@
       <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
