@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
+using Zilon.Bot.Players.Logics;
+
 namespace Zilon.Bot.Players.LogicSelection
 {
     public class PersuitNearbyIntruderSelection: ILogicStateSelector
     {
-        private const int VISUBLE_RANGE = 5;
+        private const int VISIBLE_RANGE = 5;
         private readonly IActor _actor;
         private readonly IActorManager _actorManager;
         private readonly ISectorMap _map;
@@ -43,9 +44,14 @@ namespace Zilon.Bot.Players.LogicSelection
 
         public ILogicState GenerateLogic(ILogicStateSelectorResult result)
         {
-            throw new NotImplementedException();
-        }
+            var logicResult = result as PersuitNearbyIntruderSelectionResult;
+            if (logicResult == null)
+            {
+                throw new System.ArgumentException("Результат не соответствует ожидаемому типу.");
+            }
 
+            return new PersuitNearbyIntruderLogicState();
+        }
 
         private IActor[] CheckForIntruders()
         {
@@ -78,7 +84,7 @@ namespace Zilon.Bot.Players.LogicSelection
         {
             var distance = _map.DistanceBetween(node, target);
 
-            var isVisible = distance <= VISUBLE_RANGE;
+            var isVisible = distance <= VISIBLE_RANGE;
             return isVisible;
         }
     }
