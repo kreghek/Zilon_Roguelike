@@ -2,7 +2,7 @@
 {
     public interface ILogicStateSelector
     {
-        bool CheckConditions();
-        ILogicState GenerateLogic();
+        ILogicStateSelectorResult CheckConditions();
+        ILogicState GenerateLogic(ILogicStateSelectorResult result);
     }
 }

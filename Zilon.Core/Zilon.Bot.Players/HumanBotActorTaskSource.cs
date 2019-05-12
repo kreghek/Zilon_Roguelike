@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
@@ -62,9 +63,9 @@ namespace Zilon.Bot.Players
             {
                 if (_logicDict.TryGetValue(actor, out var logicSelectors))
                 {
-                    var logicStateSelector = GetReadyLogicSelector(logicSelectors);
+                    var readySelector = GetReadyLogicSelector(logicSelectors);
 
-                    var logicState = logicStateSelector?.GenerateLogic();
+                    var logicState = readySelector?.Selector.GenerateLogic(readySelector?.Result);
 
                     var actorTask = logicState?.GetCurrentTask();
 
@@ -80,19 +81,33 @@ namespace Zilon.Bot.Players
             return new IActorTask[0];
         }
 
-        private ILogicStateSelector GetReadyLogicSelector(IEnumerable<ILogicStateSelector> logicStateSelectors)
+        private ReadyLogicStateSelector GetReadyLogicSelector(IEnumerable<ILogicStateSelector> logicStateSelectors)
         {
             // Перебираем все селекторы логики, пока не будут выполнены условия генерации.
             // На выходе возвращаем селектор, готовый к генерации логики.
             foreach (var logicSelector in logicStateSelectors)
             {
-                if (logicSelector.CheckConditions())
+                var result = logicSelector.CheckConditions();
+                if (result != null)
                 {
-                    return logicSelector;
+                    return new ReadyLogicStateSelector(logicSelector, result);
                 }
             }
 
             return null;
+        }
+
+        private class ReadyLogicStateSelector
+        {
+            public ReadyLogicStateSelector(ILogicStateSelector selector, ILogicStateSelectorResult result)
+            {
+                Selector = selector ?? throw new ArgumentNullException(nameof(selector));
+                Result = result ?? throw new ArgumentNullException(nameof(result));
+            }
+
+            public ILogicStateSelector Selector { get; }
+
+            public ILogicStateSelectorResult Result { get; }
         }
     }
 }

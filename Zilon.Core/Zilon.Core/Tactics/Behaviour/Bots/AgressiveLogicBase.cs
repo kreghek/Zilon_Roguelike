@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         protected readonly ISectorMap Map;
         protected readonly IDecisionSource DecisionSource;
 
-        private readonly IActorManager _actorList;
+        private readonly IActorManager _actorManager;
         private readonly ITacticalActUsageService _actService;
 
         private MoveTask _moveTask;
@@ -27,7 +27,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         protected AgressiveLogicBase(IActor actor,
             ISectorMap map,
-            IActorManager actors,
+            IActorManager actorManager,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService)
         {
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             Map = map;
             DecisionSource = decisionSource;
 
-            _actorList = actors;
+            _actorManager = actorManager;
             _actService = actService;
             _pursuitCounter = PursuitCounter;
         }
@@ -234,7 +234,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
-            foreach (var target in _actorList.Items)
+            foreach (var target in _actorManager.Items)
             {
                 if (target.Owner == Actor.Owner)
                 {
@@ -260,9 +260,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckTargetVisible(IActor actor, IAttackTarget target)
         {
-            var actorNode = (HexNode)actor.Node;
-            var targetNode = (HexNode)target.Node;
-            var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
+            var distance = Map.DistanceBetween(actor.Node, target.Node);
 
             var isVisible = distance <= VisibilityRange;
             return isVisible;

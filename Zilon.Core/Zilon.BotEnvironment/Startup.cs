@@ -2,7 +2,6 @@
 
 using LightInject;
 
-using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -16,6 +15,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
+using Zilon.Bot.Players;
 
 namespace Zilon.Bot
 {
