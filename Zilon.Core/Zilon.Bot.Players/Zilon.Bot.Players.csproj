@@ -45,9 +45,11 @@
     <Compile Include="ILogicState.cs" />
     <Compile Include="ILogicStateSelector.cs" />
     <Compile Include="ILogicStateSelectorResult.cs" />
+    <Compile Include="ILogicStrategy.cs" />
     <Compile Include="LogicSelection\PersuitNearbyIntruderSelection.cs" />
     <Compile Include="LogicSelection\PersuitNearbyIntruderSelectionResult.cs" />
     <Compile Include="Logics\PersuitNearbyIntruderLogicState.cs" />
+    <Compile Include="LogicTransition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

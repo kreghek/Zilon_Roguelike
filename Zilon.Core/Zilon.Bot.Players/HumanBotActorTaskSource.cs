@@ -17,7 +17,7 @@ namespace Zilon.Bot.Players
         private readonly ISectorManager _sectorManager;
         private readonly IActorManager _actorManager;
 
-        private readonly Dictionary<IActor, List<ILogicStateSelector>> _logicDict;
+        private readonly Dictionary<IActor, ILogicStrategy> _logicDict;
 
         public HumanBotActorTaskSource(HumanPlayer player,
                                        IDecisionSource decisionSource,
@@ -31,7 +31,7 @@ namespace Zilon.Bot.Players
             _sectorManager = sectorManager;
             _actorManager = actorManager;
 
-            _logicDict = new Dictionary<IActor, List<ILogicStateSelector>>();
+            _logicDict = new Dictionary<IActor, ILogicStrategy>();
         }
 
         public IActorTask[] GetActorTasks(IActor actor)
@@ -42,17 +42,28 @@ namespace Zilon.Bot.Players
                 return new IActorTask[0];
             }
 
-            // Алгоритм состоит из двух компонент:
-            // -- логика.
-            // ---- возвращает задачу актёра.
-            // -- селектор логики.
-            // ---- проверка условия генерации логики.
-            // ---- генерация логики (создание новой или выбор существующей).
-            // Логика и селекторы содержат состояние, завязанное на актёра.
-            // Все селекторы организованы в список. Проверка начинается с первого по списку селектора.
-            // Сначала селектор выбирает логику для текущего актёра.
-            // Если условия генерации выстреливают, вызывается метод генерации логики.
-            // В ином случае проверяются условия следующего селектора.
+            // Основные компоненты:
+            // -- Стратегия.
+            // ---- Стартовая логика (не равна нулю).
+            // ---- Текущая логика (изначально равна стартовой).
+            // ---- Текущее состояние для логик (счётчики, ссылки на объекты и т.д.)
+            // ---- Возращает задачу актёра.
+            // -- Логика.
+            // ---- Список селекторов для выбора следующих логик.
+            // ---- Признак завершения логики.
+            // ---- Возвращает задачу актёра.
+            // -- Селектор.
+            // ---- Проверка условия перехода.
+            // Стратегия является конечным автоматом. Узлы автомата - логики. Условия перехода - селекторы.
+            // Стратегия содержит указатель на текущую логику.
+            // Логика и селекторы не содержат состояние, завязанное на актёра. Состояние передаёются из стратегии.
+            // Все селекторы организованы в список в логике. Каждый селектор указывает на логику, которая будет
+            // выбрана текущей в случае выполнения условия. Селекторы упорядочены по приоритету в рамках каждой логики.
+            // Услоя перехода грубо делятся на две категории:
+            // -- Определённое состояние окружения или актёра.
+            // -- Окончание выполнения текущей логики (например, логика преследования или ожидания зависят от счётчика).
+            // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
+            // то выполнять переход на стартовую логику.
 
             if (actor.Person.Survival.IsDead)
             {
@@ -61,13 +72,13 @@ namespace Zilon.Bot.Players
             }
             else
             {
-                if (_logicDict.TryGetValue(actor, out var logicSelectors))
+                if (_logicDict.TryGetValue(actor, out var logicStrategy))
                 {
-                    var readySelector = GetReadyLogicSelector(logicSelectors);
+                    //var readySelector = GetReadyLogicSelector(logicStrategy);
 
-                    var logicState = readySelector?.Selector.GenerateLogic(readySelector?.Result);
+                    //var logicState = readySelector?.Selector.GenerateLogic(readySelector?.Result);
 
-                    var actorTask = logicState?.GetCurrentTask();
+                    var actorTask = logicStrategy.GetActorTask();
 
                     if (actorTask == null)
                     {
@@ -75,6 +86,11 @@ namespace Zilon.Bot.Players
                     }
 
                     return new IActorTask[] { actorTask };
+                }
+                else
+                {
+                    // Создаём стратегию для текущего актёра.
+                    // Добавляем созданную стратегию в словарь стратегий.
                 }
             }
 
