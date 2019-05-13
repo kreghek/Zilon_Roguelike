@@ -34,15 +34,9 @@ namespace Zilon.Bot.Players.Logics
         }
 
 
-        public IActorTask GetCurrentTask(IActor actor, ILogicStateData data)
+        public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
             var logicData = (DefeateTargetLogicData)data;
-
-            if (!logicData.Target.CanBeDamaged())
-            {
-                Complete = true;
-                return null;
-            }
 
             var isAttackAllowed = CheckAttackAvailability(actor, logicData.Target);
             if (isAttackAllowed)
@@ -83,6 +77,16 @@ namespace Zilon.Bot.Players.Logics
             var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
 
             return isInDistance && targetIsOnLine;
+        }
+
+        public bool CanGetTask(IActor actor, ILogicStateData data)
+        {
+            var logicData = (DefeateTargetLogicData)data;
+
+            var targetCanBeDamaged = logicData.Target.CanBeDamaged();
+            var canAct = CheckAttackAvailability(actor, logicData.Target);
+
+            return targetCanBeDamaged && canAct;
         }
     }
 }

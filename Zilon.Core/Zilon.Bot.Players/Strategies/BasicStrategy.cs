@@ -32,7 +32,14 @@ namespace Zilon.Bot.Players.Strategies
 
         public IActorTask GetActorTask()
         {
+            // Для текущего состояния проверяем каждый из переходов.
+            // Если переход выстреливает, то генерируем задачу актёру.
+            // Логика может вернуть нулевую задачу, когда дальнейшее исполнение невозможно.
+            // Если задача актёра не нулевая, то считаем логику выстрелившего перехода текущей
+            // и дальше работаем с ней.
+
             var currentStateTransitions = _transitions[CurrentState];
+            IActorTask actorTask = null;
             foreach (var transition in currentStateTransitions)
             {
                 var trigger = transition.Selector;
@@ -43,39 +50,61 @@ namespace Zilon.Bot.Players.Strategies
                     _currentStateTransitionData[trigger] = triggerData;
                 }
 
-                var isFired = trigger.Test(Actor, triggerData);
+                var isFired = trigger.Test(Actor, CurrentState, triggerData);
                 if (isFired)
                 {
-                    CurrentState = transition.NextState;
-                    _currentStateData = CurrentState.CreateData(Actor);
-                    break;
+                    var nextData = transition.NextState.CreateData(Actor);
+                    actorTask = transition.NextState.GetTask(Actor, nextData);
+
+                    if (actorTask != null)
+                    {
+                        CurrentState = transition.NextState;
+                        _currentStateData = nextData;
+                        break;
+                    }
                 }
             }
 
-            var actorTask = CurrentState.GetCurrentTask(Actor, _currentStateData);
+            // Эта ситуация может произойти, если:
+            // -- для текущей логики не выстрелило ниодного перехода.
+            // -- переходы, которые выстрелили, вернули нулевую задачу.
+            // Значит остаёмся с текущей логикой и запрашиваем у неё задачу.
+            if (actorTask == null)
+            {
+                actorTask = CurrentState.GetTask(Actor, _currentStateData);
+            }
+
             return actorTask;
         }
 
         private void InitializeStateTree(ref ILogicState start)
         {
-            var idleLogic = _factory.CreateLogic<IdleLogicState>();
-            var attackLogic = _factory.CreateLogic<DefeatTargetLogicState>();
             var roamingLogic = _factory.CreateLogic<RoamingLogicState>();
+            var roamingIdleLogic = _factory.CreateLogic<IdleLogicState>();
+            var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
+            var fightIdleLogic = _factory.CreateLogic<IdleLogicState>();
+            
 
             start = roamingLogic;
 
             _transitions.Add(roamingLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), attackLogic),
-                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), idleLogic)
+                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
             });
 
-            _transitions.Add(attackLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), attackLogic),
-                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), idleLogic)
+            _transitions.Add(fightLogic, new LogicTransition[] {
+                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                // После победы над текущим противником отдыхаем
+                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
             });
 
-            _transitions.Add(idleLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), attackLogic),
+            _transitions.Add(roamingIdleLogic, new LogicTransition[] {
+                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
+            });
+
+            _transitions.Add(fightIdleLogic, new LogicTransition[] {
+                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                 new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
             });
         }

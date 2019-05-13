@@ -53,7 +53,7 @@ namespace Zilon.Bot.Players.Triggers
             return isVisible;
         }
 
-        public bool Test(IActor actor, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
         {
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
