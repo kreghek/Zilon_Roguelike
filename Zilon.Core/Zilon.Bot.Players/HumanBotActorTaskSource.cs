@@ -56,7 +56,8 @@ namespace Zilon.Bot.Players
             // ---- Проверка условия перехода.
             // Стратегия является конечным автоматом. Узлы автомата - логики. Условия перехода - селекторы.
             // Стратегия содержит указатель на текущую логику.
-            // Логика и селекторы не содержат состояние, завязанное на актёра. Состояние передаёются из стратегии.
+            // Логика и селекторы не содержат состояние, завязанное на актёра. Состояние передаётся из стратегии.
+            // ПОКА НЕ ПОНЯТНО, КАК ХРАНИТЬ И ПЕРЕДАВАТЬ СОСТОЯНИЕ. СОСТОЯНИЕ МОЖЕТ БЫТЬ СОЗДАНО ИЗ СЕЛЕКТОРА.
             // Все селекторы организованы в список в логике. Каждый селектор указывает на логику, которая будет
             // выбрана текущей в случае выполнения условия. Селекторы упорядочены по приоритету в рамках каждой логики.
             // Услоя перехода грубо делятся на две категории:
@@ -115,7 +116,7 @@ namespace Zilon.Bot.Players
 
         private class ReadyLogicStateSelector
         {
-            public ReadyLogicStateSelector(ILogicStateSelector selector, ILogicStateSelectorResult result)
+            public ReadyLogicStateSelector(ILogicStateSelector selector, ILogicStateData result)
             {
                 Selector = selector ?? throw new ArgumentNullException(nameof(selector));
                 Result = result ?? throw new ArgumentNullException(nameof(result));
@@ -123,7 +124,7 @@ namespace Zilon.Bot.Players
 
             public ILogicStateSelector Selector { get; }
 
-            public ILogicStateSelectorResult Result { get; }
+            public ILogicStateData Result { get; }
         }
     }
 }

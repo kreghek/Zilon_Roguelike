@@ -25,7 +25,7 @@ namespace Zilon.Bot.Players.LogicSelection
             _player = player;
         }
 
-        public ILogicStateSelectorResult CheckConditions()
+        public ILogicStateData CheckConditions()
         {
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
@@ -39,12 +39,12 @@ namespace Zilon.Bot.Players.LogicSelection
                 return null;
             }
 
-            return new PersuitNearbyIntruderSelectionResult(nearbyIntruder);
+            return new PersuitNearbyIntruderData(nearbyIntruder);
         }
 
-        public ILogicState GenerateLogic(ILogicStateSelectorResult result)
+        public ILogicState GenerateLogic(ILogicStateData result)
         {
-            var logicResult = result as PersuitNearbyIntruderSelectionResult;
+            var logicResult = result as PersuitNearbyIntruderData;
             if (logicResult == null)
             {
                 throw new System.ArgumentException("Результат не соответствует ожидаемому типу.");

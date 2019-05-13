@@ -2,7 +2,6 @@
 {
     public interface ILogicStateSelector
     {
-        ILogicStateSelectorResult CheckConditions();
-        ILogicState GenerateLogic(ILogicStateSelectorResult result);
+        ILogicStateData CheckConditions();
     }
 }

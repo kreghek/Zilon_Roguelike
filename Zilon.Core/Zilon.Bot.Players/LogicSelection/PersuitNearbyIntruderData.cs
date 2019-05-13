@@ -4,9 +4,9 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.LogicSelection
 {
-    public class PersuitNearbyIntruderSelectionResult: ILogicStateSelectorResult
+    public class PersuitNearbyIntruderData: ILogicStateData
     {
-        public PersuitNearbyIntruderSelectionResult(IActor target)
+        public PersuitNearbyIntruderData(IActor target)
         {
             Target = target ?? throw new ArgumentNullException(nameof(target));
         }
