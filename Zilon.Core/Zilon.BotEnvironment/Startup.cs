@@ -114,7 +114,7 @@ namespace Zilon.Bot
         {
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IActorTaskSource, HumanBotActorTaskSource>("bot", new PerContainerLifetime());
+            container.Register<IActorTaskSource, BotActorTaskSource>("bot", new PerContainerLifetime());
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 

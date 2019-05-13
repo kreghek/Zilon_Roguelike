@@ -9,7 +9,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Bot.Players
 {
-    public class HumanBotActorTaskSource : ISectorActorTaskSource
+    public class BotActorTaskSource : ISectorActorTaskSource
     {
         private readonly HumanPlayer _player;
         private readonly IDecisionSource _decisionSource;
@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players
 
         private readonly Dictionary<IActor, ILogicStrategy> _logicDict;
 
-        public HumanBotActorTaskSource(HumanPlayer player,
+        public BotActorTaskSource(HumanPlayer player,
                                        IDecisionSource decisionSource,
                                        ITacticalActUsageService actService,
                                        ISectorManager sectorManager,
