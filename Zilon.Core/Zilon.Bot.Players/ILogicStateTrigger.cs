@@ -1,7 +1,11 @@
-﻿namespace Zilon.Bot.Players
+﻿using Zilon.Core.Tactics;
+
+namespace Zilon.Bot.Players
 {
     public interface ILogicStateTrigger
     {
-        ILogicStateData Test();
+        bool Test(IActor actor, ILogicStateData data);
+
+        ILogicStateData CreateData(IActor actor);
     }
 }

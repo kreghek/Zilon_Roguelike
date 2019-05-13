@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="HumanBotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
+    <Compile Include="ILogicStateFactory.cs" />
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
