@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -10,33 +11,85 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class DefeatTargetLogicState : ILogicState
     {
+        private const int VISIBLE_RANGE = 5;
+
         private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
+        private readonly IActorManager _actorManager;
 
         public DefeatTargetLogicState(ISectorMap map,
-                                      ITacticalActUsageService actService)
+                                      ITacticalActUsageService actService,
+                                      IActorManager actorManager)
         {
             _map = map ?? throw new ArgumentNullException(nameof(map));
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
+            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }
 
-        public bool Complete { get; }
+        public bool Complete { get; private set; }
 
         public ILogicStateData CreateData(IActor actor)
         {
-            var target = GetTarget();
+            var target = GetTarget(actor);
             return new DefeateTargetLogicData(target);
         }
 
-        private IAttackTarget GetTarget()
+        private IAttackTarget GetTarget(IActor actor)
         {
-            throw new NotImplementedException();
+            //TODO Убрать дублирование кода с InruderDetectedTrigger
+            var intruders = CheckForIntruders(actor);
+
+            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var nearbyIntruder = orderedIntruders.FirstOrDefault();
+
+            return nearbyIntruder;
         }
 
+        private IActor[] CheckForIntruders(IActor actor)
+        {
+            var foundIntruders = new List<IActor>();
+            foreach (var target in _actorManager.Items)
+            {
+                if (target.Owner == actor.Owner)
+                {
+                    continue;
+                }
+
+                if (target.Person.Survival.IsDead)
+                {
+                    continue;
+                }
+
+                var isVisible = CheckTargetVisible(actor.Node, target.Node);
+                if (!isVisible)
+                {
+                    continue;
+                }
+
+                foundIntruders.Add(target);
+            }
+
+            return foundIntruders.ToArray();
+        }
+
+        private bool CheckTargetVisible(IMapNode node, IMapNode target)
+        {
+            var distance = _map.DistanceBetween(node, target);
+
+            var isVisible = distance <= VISIBLE_RANGE;
+            return isVisible;
+        }
 
         public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
             var logicData = (DefeateTargetLogicData)data;
+
+            var targetCanBeDamaged = logicData.Target.CanBeDamaged();
+            if (!targetCanBeDamaged)
+            {
+                Complete = true;
+                return null;
+            }
 
             var isAttackAllowed = CheckAttackAvailability(actor, logicData.Target);
             if (isAttackAllowed)
@@ -57,8 +110,18 @@ namespace Zilon.Bot.Players.Logics
                 }
                 else
                 {
-                    logicData.MoveTask = new MoveTask(actor, logicData.Target.Node, _map);
-                    return logicData.MoveTask;
+                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, logicData.Target.Node);
+
+                    if (targetIsOnLine)
+                    {
+                        logicData.MoveTask = new MoveTask(actor, logicData.Target.Node, _map);
+                        return logicData.MoveTask;
+                    }
+                    else
+                    {
+                        // Цел за пределами видимости. Считается потерянной.
+                        return null;
+                    }
                 }
             }
         }
