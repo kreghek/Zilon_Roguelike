@@ -43,14 +43,19 @@
   <ItemGroup>
     <Compile Include="HumanBotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
-    <Compile Include="ILogicStateSelector.cs" />
+    <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
-    <Compile Include="LogicSelection\PersuitNearbyIntruderSelection.cs" />
-    <Compile Include="LogicSelection\PersuitNearbyIntruderData.cs" />
-    <Compile Include="Logics\PersuitNearbyIntruderLogicState.cs" />
+    <Compile Include="Triggers\CounterOverTrigger.cs" />
+    <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
+    <Compile Include="Triggers\LogicOverTrigger.cs" />
+    <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
+    <Compile Include="Logics\IdleLogicState.cs" />
+    <Compile Include="Logics\DefeatTargetLogicState.cs" />
+    <Compile Include="Logics\RoamingLogicState.cs" />
     <Compile Include="LogicTransition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategies\BasicStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">

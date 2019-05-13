@@ -8,7 +8,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public sealed class PersuitNearbyIntruderLogicState : ILogicState
+    public sealed class DefeatTargetLogicState : ILogicState
     {
         private readonly IActor _actor;
         private readonly IAttackTarget _targetIntruder;
@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
         private IdleTask _idleTask;
         private int _pursuitCounter;
 
-        public PersuitNearbyIntruderLogicState(IActor actor,
+        public DefeatTargetLogicState(IActor actor,
                                                IAttackTarget targetIntruder,
                                                IDecisionSource decisionSource,
                                                ISectorMap map,

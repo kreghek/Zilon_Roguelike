@@ -2,7 +2,7 @@
 
 using Zilon.Core.Tactics;
 
-namespace Zilon.Bot.Players.LogicSelection
+namespace Zilon.Bot.Players.Triggers
 {
     public class PersuitNearbyIntruderData: ILogicStateData
     {

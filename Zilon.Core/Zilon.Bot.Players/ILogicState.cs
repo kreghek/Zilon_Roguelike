@@ -6,8 +6,6 @@ namespace Zilon.Bot.Players
     {
         IActorTask GetCurrentTask();
 
-        LogicTransition[] Transitions { get; }
-
         bool Complete { get; }
     }
 }

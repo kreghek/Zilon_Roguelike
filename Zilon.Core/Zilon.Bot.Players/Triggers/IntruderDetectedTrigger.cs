@@ -7,9 +7,9 @@ using Zilon.Core.Tactics.Spatial;
 
 using Zilon.Bot.Players.Logics;
 
-namespace Zilon.Bot.Players.LogicSelection
+namespace Zilon.Bot.Players.Triggers
 {
-    public class PersuitNearbyIntruderSelection: ILogicStateSelector
+    public class IntruderDetectedTrigger: ILogicStateTrigger
     {
         private const int VISIBLE_RANGE = 5;
         private readonly IActor _actor;
@@ -17,7 +17,7 @@ namespace Zilon.Bot.Players.LogicSelection
         private readonly ISectorMap _map;
         private readonly IPlayer _player;
 
-        public PersuitNearbyIntruderSelection(IActor actor, IActorManager actorManager, ISectorMap map, IPlayer player)
+        public IntruderDetectedTrigger(IActor actor, IActorManager actorManager, ISectorMap map, IPlayer player)
         {
             _actor = actor;
             _actorManager = actorManager;
@@ -25,7 +25,7 @@ namespace Zilon.Bot.Players.LogicSelection
             _player = player;
         }
 
-        public ILogicStateData CheckConditions()
+        public ILogicStateData Test()
         {
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
@@ -50,7 +50,7 @@ namespace Zilon.Bot.Players.LogicSelection
                 throw new System.ArgumentException("Результат не соответствует ожидаемому типу.");
             }
 
-            return new PersuitNearbyIntruderLogicState();
+            return new DefeatTargetLogicState();
         }
 
         private IActor[] CheckForIntruders()
