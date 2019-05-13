@@ -48,6 +48,7 @@
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="Logics\IdleLogicData.cs" />
     <Compile Include="Logics\DefeateTargetLogicData.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
@@ -8,7 +9,12 @@ namespace Zilon.Bot.Players.Logics
     {
         public bool Complete { get; }
 
-        public IActorTask GetCurrentTask()
+        public ILogicStateData CreateData(IActor actor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
             throw new NotImplementedException();
         }

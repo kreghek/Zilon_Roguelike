@@ -1,16 +1,40 @@
-﻿using System;
-
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Bot.Players.Logics
 {
     public sealed class IdleLogicState : ILogicState
     {
-        public bool Complete { get; }
+        private readonly IDecisionSource _decisionSource;
 
-        public IActorTask GetCurrentTask()
+        public IdleLogicState(IDecisionSource decisionSource)
         {
-            throw new NotImplementedException();
+            _decisionSource = decisionSource;
+        }
+
+        public bool Complete { get; private set; }
+
+        public ILogicStateData CreateData(IActor actor)
+        {
+            return new IdleLogicData();
+        }
+
+        public IActorTask GetTask(IActor actor, ILogicStateData data)
+        {
+            var logicData = (IdleLogicData)data;
+            if (logicData.IdleTask == null)
+            {
+                logicData.IdleTask = new IdleTask(actor, _decisionSource);
+            }
+
+            if (logicData.IdleTask.IsComplete)
+            {
+                Complete = true;
+                return null;
+            }
+
+            return logicData.IdleTask;
         }
     }
 }
