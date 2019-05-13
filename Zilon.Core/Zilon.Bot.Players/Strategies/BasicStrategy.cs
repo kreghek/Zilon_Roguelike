@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using Zilon.Bot.Players.Logics;
 using Zilon.Bot.Players.Triggers;
 using Zilon.Core.Tactics;
@@ -65,8 +65,8 @@ namespace Zilon.Bot.Players.Strategies
             start = roamingLogic;
 
             _transitions.Add(roamingLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger< IntruderDetectedTrigger>(), attackLogic),
-                new LogicTransition(_factory.CreateTrigger< LogicOverTrigger>(), idleLogic)
+                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), attackLogic),
+                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), idleLogic)
             });
 
             _transitions.Add(attackLogic, new LogicTransition[] {

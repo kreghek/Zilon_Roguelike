@@ -1,64 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-
-using Zilon.Bot.Players.Logics;
 
 namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger: ILogicStateTrigger
     {
         private const int VISIBLE_RANGE = 5;
-        private readonly IActor _actor;
         private readonly IActorManager _actorManager;
         private readonly ISectorMap _map;
-        private readonly IPlayer _player;
 
-        public IntruderDetectedTrigger(IActor actor, IActorManager actorManager, ISectorMap map, IPlayer player)
+        public IntruderDetectedTrigger(IActorManager actorManager, ISectorMap map)
         {
-            _actor = actor;
             _actorManager = actorManager;
             _map = map;
-            _player = player;
         }
 
-        public ILogicStateData Test()
-        {
-            // На каждом шаге осматриваем окрестности
-            // на предмет нарушителей.
-            var intruders = CheckForIntruders();
-
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(_actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
-
-            if (nearbyIntruder == null)
-            {
-                return null;
-            }
-
-            return new PersuitNearbyIntruderData(nearbyIntruder);
-        }
-
-        public ILogicState GenerateLogic(ILogicStateData result)
-        {
-            var logicResult = result as PersuitNearbyIntruderData;
-            if (logicResult == null)
-            {
-                throw new System.ArgumentException("Результат не соответствует ожидаемому типу.");
-            }
-
-            return new DefeatTargetLogicState();
-        }
-
-        private IActor[] CheckForIntruders()
+        private IActor[] CheckForIntruders(IActor actor)
         {
             var foundIntruders = new List<IActor>();
             foreach (var target in _actorManager.Items)
             {
-                if (target.Owner == _player)
+                if (target.Owner == actor.Owner)
                 {
                     continue;
                 }
@@ -68,7 +33,7 @@ namespace Zilon.Bot.Players.Triggers
                     continue;
                 }
 
-                var isVisible = CheckTargetVisible(_actor.Node, target.Node);
+                var isVisible = CheckTargetVisible(actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -86,6 +51,28 @@ namespace Zilon.Bot.Players.Triggers
 
             var isVisible = distance <= VISIBLE_RANGE;
             return isVisible;
+        }
+
+        public bool Test(IActor actor, ILogicStateData data)
+        {
+            // На каждом шаге осматриваем окрестности
+            // на предмет нарушителей.
+            var intruders = CheckForIntruders(actor);
+
+            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var nearbyIntruder = orderedIntruders.FirstOrDefault();
+
+            if (nearbyIntruder == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public ILogicStateData CreateData(IActor actor)
+        {
+            return new EmptyLogicTriggerData();
         }
     }
 }

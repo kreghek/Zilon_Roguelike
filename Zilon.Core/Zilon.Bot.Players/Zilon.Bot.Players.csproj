@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyLogicTriggerData.cs" />
     <Compile Include="HumanBotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
     <Compile Include="ILogicStateFactory.cs" />
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="Logics\DefeateTargetLogicData.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />

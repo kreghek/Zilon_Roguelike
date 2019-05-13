@@ -1,43 +1,53 @@
 ﻿using System;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
     public sealed class DefeatTargetLogicState : ILogicState
     {
-        private readonly IActor _actor;
-        private readonly IAttackTarget _targetIntruder;
-        private readonly IDecisionSource _decisionSource;
         private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
-        private MoveTask _moveTask;
-        private IdleTask _idleTask;
-        private int _pursuitCounter;
 
-        public DefeatTargetLogicState(IActor actor,
-                                               IAttackTarget targetIntruder,
-                                               IDecisionSource decisionSource,
-                                               ISectorMap map,
-                                               ITacticalActUsageService actService)
+        public DefeatTargetLogicState(ISectorMap map,
+                                      ITacticalActUsageService actService)
         {
-            _actor = actor;
-            _targetIntruder = targetIntruder ?? throw new ArgumentNullException(nameof(targetIntruder));
-            _decisionSource = decisionSource;
-            _map = map;
-            _actService = actService;
+            _map = map ?? throw new ArgumentNullException(nameof(map));
+            _actService = actService ?? throw new ArgumentNullException(nameof(actService));
         }
 
-        public IActorTask GetCurrentTask()
+        public bool Complete { get; }
+
+        public ILogicStateData CreateData(IActor actor)
         {
-            var isAttackAllowed = CheckAttackAvailability(_targetIntruder);
+            var target = GetTarget();
+            return new DefeateTargetLogicData(target);
+        }
+
+        private IAttackTarget GetTarget()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IActorTask GetCurrentTask(IActor actor, ILogicStateData data)
+        {
+            var logicData = (DefeateTargetLogicData)data;
+
+            if (!logicData.Target.CanBeDamaged())
+            {
+                Complete = true;
+                return null;
+            }
+
+            var isAttackAllowed = CheckAttackAvailability(actor, logicData.Target);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(_actor, _targetIntruder, _actService);
+                var attackTask = new AttackTask(actor, logicData.Target, _actService);
                 return attackTask;
             }
             else
@@ -46,34 +56,31 @@ namespace Zilon.Bot.Players.Logics
                 // Для оптимизации.
                 // Эффект потери цели.
 
-                if (_pursuitCounter > 0 && _moveTask != null && _moveTask.CanExecute())
+                if (logicData.RefreshCounter > 0 && logicData.MoveTask?.CanExecute() == true)
                 {
-                    _pursuitCounter--;
-                    return _moveTask;
+                    logicData.RefreshCounter--;
+                    return logicData.MoveTask;
                 }
                 else
                 {
-                    _moveTask = new MoveTask(_actor, _targetIntruder.Node, _map);
-                    return _moveTask;
+                    logicData.MoveTask = new MoveTask(actor, logicData.Target.Node, _map);
+                    return logicData.MoveTask;
                 }
             }
         }
 
-        private bool CheckAttackAvailability(IAttackTarget targetIntruder)
+        private bool CheckAttackAvailability(IActor actor, IAttackTarget target)
         {
-            if (_actor.Person.TacticalActCarrier == null)
+            if (actor.Person.TacticalActCarrier == null)
             {
                 throw new NotSupportedException();
             }
 
-            var actorNode = (HexNode)_actor.Node;
-            var targetNode = (HexNode)targetIntruder.Node;
-
-            var actCarrier = _actor.Person.TacticalActCarrier;
+            var actCarrier = actor.Person.TacticalActCarrier;
             var act = actCarrier.Acts.First();
 
-            var isInDistance =  act.CheckDistance(actorNode.CubeCoords, targetNode.CubeCoords);
-            var targetIsOnLine = _map.TargetIsOnLine(actorNode, targetNode);
+            var isInDistance =  act.CheckDistance(actor.Node, target.Node, _map);
+            var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
 
             return isInDistance && targetIsOnLine;
         }
