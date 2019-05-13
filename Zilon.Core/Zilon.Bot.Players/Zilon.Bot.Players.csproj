@@ -50,6 +50,7 @@
     <Compile Include="ILogicStrategy.cs" />
     <Compile Include="Logics\IdleLogicData.cs" />
     <Compile Include="Logics\DefeateTargetLogicData.cs" />
+    <Compile Include="Logics\RoamingLogicData.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
