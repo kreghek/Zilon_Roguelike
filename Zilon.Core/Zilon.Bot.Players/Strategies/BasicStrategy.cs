@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Zilon.Bot.Players.Logics;
-using Zilon.Bot.Players.Triggers;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -10,24 +8,19 @@ namespace Zilon.Bot.Players.Strategies
     public sealed class BasicStrategy : ILogicStrategy
     {
         private readonly Dictionary<ILogicStateTrigger, ILogicStateData> _currentStateTransitionData;
-        private readonly Dictionary<ILogicState, IEnumerable<LogicTransition>> _transitions;
-        private readonly ILogicState _startState;
-        private readonly ILogicStateFactory _factory;
+        private readonly LogicStateTree _stateTree;
         private ILogicStateData _currentStateData;
 
-        public BasicStrategy(IActor actor, ILogicStateFactory factory)
+        public BasicStrategy(IActor actor, LogicStateTree stateTree)
         {
             Actor = actor;
-            _factory = factory;
+            _stateTree = stateTree;
             _currentStateTransitionData = new Dictionary<ILogicStateTrigger, ILogicStateData>();
 
-            InitializeStateTree(ref _startState);
-
-            CurrentState = StartState;
+            CurrentState = _stateTree.StartState;
         }
 
         public IActor Actor { get; }
-        public ILogicState StartState => _startState;
         public ILogicState CurrentState { get; private set; }
 
         public IActorTask GetActorTask()
@@ -38,7 +31,7 @@ namespace Zilon.Bot.Players.Strategies
             // Если задача актёра не нулевая, то считаем логику выстрелившего перехода текущей
             // и дальше работаем с ней.
 
-            var currentStateTransitions = _transitions[CurrentState];
+            var currentStateTransitions = _stateTree.Transitions[CurrentState];
             IActorTask actorTask = null;
             foreach (var transition in currentStateTransitions)
             {
@@ -75,38 +68,6 @@ namespace Zilon.Bot.Players.Strategies
             }
 
             return actorTask;
-        }
-
-        private void InitializeStateTree(ref ILogicState start)
-        {
-            var roamingLogic = _factory.CreateLogic<RoamingLogicState>();
-            var roamingIdleLogic = _factory.CreateLogic<IdleLogicState>();
-            var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
-            var fightIdleLogic = _factory.CreateLogic<IdleLogicState>();
-            
-
-            start = roamingLogic;
-
-            _transitions.Add(roamingLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
-            });
-
-            _transitions.Add(fightLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                // После победы над текущим противником отдыхаем
-                new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
-            });
-
-            _transitions.Add(roamingIdleLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
-            });
-
-            _transitions.Add(fightIdleLogic, new LogicTransition[] {
-                new LogicTransition(_factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
-            });
         }
     }
 }

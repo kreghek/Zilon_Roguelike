@@ -31,8 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LightInject, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LightInject.5.4.0\lib\net46\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO" />
+    <Reference Include="System.Linq.Expressions" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,12 +58,17 @@
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="LogicStateFactory.cs" />
     <Compile Include="Logics\IdleLogicData.cs" />
     <Compile Include="Logics\DefeateTargetLogicData.cs" />
     <Compile Include="Logics\RoamingLogicData.cs" />
+    <Compile Include="Strategies\LogicStateTree.cs" />
+    <Compile Include="Strategies\LogicStateTreePatterns.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
+    <Compile Include="Triggers\CounterTriggerData.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
+    <Compile Include="Triggers\ObserveLogicData.cs" />
     <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
     <Compile Include="Logics\IdleLogicState.cs" />
     <Compile Include="Logics\DefeatTargetLogicState.cs" />
@@ -72,6 +87,8 @@
       <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,8 +7,6 @@ namespace Zilon.Bot.Players
     {
         IActor Actor { get; }
 
-        ILogicState StartState { get; }
-
         ILogicState CurrentState { get; }
 
         IActorTask GetActorTask();

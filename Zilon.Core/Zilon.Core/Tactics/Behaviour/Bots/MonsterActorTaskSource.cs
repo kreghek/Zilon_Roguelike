@@ -48,6 +48,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             if (actor.Person.Survival.IsDead)
             {
                 _logicDict.Remove(actor);
+                //TODO Избавиться от этой зависимости.
+                // Лучше в секторе подписаться на смерть актёра и удалять там из списка маршрутов.
                 _sectorManager.CurrentSector.PatrolRoutes.Remove(actor);
             }
             else
