@@ -59,7 +59,7 @@ namespace Zilon.Bot.Players
                 {
                     // Создаём стратегию для текущего актёра.
                     // Добавляем созданную стратегию в словарь стратегий.
-                    logicStrategy = new BasicStrategy(actor, LogicStateTreePatterns.Monster);
+                    logicStrategy = new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster);
                     _actorStrategies[actor] = logicStrategy;
                 }
 

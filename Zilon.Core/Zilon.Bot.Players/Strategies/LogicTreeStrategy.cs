@@ -5,13 +5,13 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Strategies
 {
-    public sealed class BasicStrategy : ILogicStrategy
+    public sealed class LogicTreeStrategy : ILogicStrategy
     {
         private readonly Dictionary<ILogicStateTrigger, ILogicStateData> _currentStateTransitionData;
         private readonly LogicStateTree _stateTree;
         private ILogicStateData _currentStateData;
 
-        public BasicStrategy(IActor actor, LogicStateTree stateTree)
+        public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
             Actor = actor;
             _stateTree = stateTree;

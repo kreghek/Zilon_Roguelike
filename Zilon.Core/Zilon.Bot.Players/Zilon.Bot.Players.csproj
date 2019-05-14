@@ -75,7 +75,7 @@
     <Compile Include="Logics\RoamingLogicState.cs" />
     <Compile Include="LogicTransition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\BasicStrategy.cs" />
+    <Compile Include="Strategies\LogicTreeStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
