@@ -94,6 +94,8 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         public void Update()
         {
+            UpdateScores();
+
             UpdateSurvivals();
 
             UpdateActorEffects();
@@ -102,6 +104,14 @@ namespace Zilon.Core.Tactics
 
             // Определяем, не покинули ли актёры игрока сектор.
             DetectSectorExit();
+        }
+
+        private void UpdateScores()
+        {
+            if (ScoreManager != null)
+            {
+                ScoreManager.CountTurn(Scheme);
+            }
         }
 
         private void UpdateActorEffects()
@@ -221,19 +231,6 @@ namespace Zilon.Core.Tactics
                 Map.HoldNode(actor.Node, actor);
 
                 actor.Person.Survival.Dead += ActorState_Dead;
-
-                if (actor.Owner is HumanPlayer)
-                {
-                    actor.Moved += HumanActor_Moved;
-                }
-            }
-        }
-
-        private void HumanActor_Moved(object sender, EventArgs e)
-        {
-            if (ScoreManager != null)
-            {
-                ScoreManager.CountTurn(Scheme);
             }
         }
 
@@ -243,7 +240,6 @@ namespace Zilon.Core.Tactics
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
             actor.Person.Survival.Dead -= ActorState_Dead;
-            actor.Moved -= HumanActor_Moved;
             ProcessMonsterDeath(actor);
         }
 
