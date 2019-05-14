@@ -16,6 +16,8 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
 using Zilon.Bot.Players;
+using Zilon.Bot.Players.DependencyInjection;
+using System;
 
 namespace Zilon.Bot
 {
@@ -31,6 +33,13 @@ namespace Zilon.Bot
             RegisterClientServices(tacticContainer);
             RegisterCommands(tacticContainer);
             RegisterWorldServices(tacticContainer);
+            RegisterBotServices(tacticContainer);
+        }
+
+        private void RegisterBotServices(IServiceRegistry tacticContainer)
+        {
+            tacticContainer.RegisterBot();
+            tacticContainer.Register<ILogicStateFactory>(factory => new LogicStateFactory(factory), new PerContainerLifetime());
         }
 
         private void RegisterSchemeService(IServiceRegistry container)

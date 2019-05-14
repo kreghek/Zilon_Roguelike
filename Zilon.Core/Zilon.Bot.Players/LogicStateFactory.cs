@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LightInject;
 
 namespace Zilon.Bot.Players
 {
     public sealed class LogicStateFactory : ILogicStateFactory
     {
-        public LogicStateFactory()
+        private readonly IServiceFactory _serviceFactory;
+
+        public LogicStateFactory(IServiceFactory serviceContainer)
         {
+            _serviceFactory = serviceContainer;
         }
 
-        public ILogicState CreateLogic<T>()
+        public ILogicState CreateLogic<T>() where T : ILogicState
         {
-            throw new NotImplementedException();
+            return _serviceFactory.GetInstance<T>();
         }
 
-        public ILogicStateTrigger CreateTrigger<T>()
+        public ILogicStateTrigger CreateTrigger<T>() where T : ILogicStateTrigger
         {
-            throw new NotImplementedException();
+            return _serviceFactory.GetInstance<T>();
         }
     }
 }

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyInjection\LightInjectServiceContainerExtensions.cs" />
     <Compile Include="EmptyLogicTriggerData.cs" />
     <Compile Include="BotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
