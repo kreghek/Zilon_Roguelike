@@ -12,10 +12,10 @@ namespace Zilon.Bot.Players.Triggers
         private readonly IActorManager _actorManager;
         private readonly ISectorMap _map;
 
-        public IntruderDetectedTrigger(IActorManager actorManager, ISectorMap map)
+        public IntruderDetectedTrigger(IActorManager actorManager, ISectorManager sectorManager)
         {
             _actorManager = actorManager;
-            _map = map;
+            _map = sectorManager.CurrentSector.Map;
         }
 
         private IActor[] CheckForIntruders(IActor actor)

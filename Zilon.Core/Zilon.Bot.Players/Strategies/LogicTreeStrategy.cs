@@ -76,6 +76,13 @@ namespace Zilon.Bot.Players.Strategies
             // Значит остаёмся с текущей логикой и запрашиваем у неё задачу.
             if (actorTask == null)
             {
+                // Пустые данные состояния означают, что состояние ещё не было инициализировано.
+                // Это происходит, например, при первом старте стратегии.
+                if (_currentStateData == null)
+                {
+                    _currentStateData = CurrentState.CreateData(Actor);
+                }
+
                 actorTask = CurrentState.GetTask(Actor, _currentStateData);
             }
 

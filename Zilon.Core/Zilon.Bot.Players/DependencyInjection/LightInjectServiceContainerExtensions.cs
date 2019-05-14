@@ -9,13 +9,13 @@ namespace Zilon.Bot.Players.DependencyInjection
     {
         public static void RegisterBot(this IServiceRegistry serviceRegistry)
         {
-            serviceRegistry.Register<DefeatTargetLogicState>(new PerContainerLifetime());
-            serviceRegistry.Register<IdleLogicState>(new PerContainerLifetime());
-            serviceRegistry.Register<RoamingLogicState>(new PerContainerLifetime());
+            serviceRegistry.Register<DefeatTargetLogicState>();
+            serviceRegistry.Register<IdleLogicState>();
+            serviceRegistry.Register<RoamingLogicState>();
 
-            serviceRegistry.Register<CounterOverTrigger>(new PerContainerLifetime());
-            serviceRegistry.Register<IntruderDetectedTrigger>(new PerContainerLifetime());
-            serviceRegistry.Register<LogicOverTrigger>(new PerContainerLifetime());
+            serviceRegistry.Register<CounterOverTrigger>();
+            serviceRegistry.Register<IntruderDetectedTrigger>();
+            serviceRegistry.Register<LogicOverTrigger>();
 
 
         }

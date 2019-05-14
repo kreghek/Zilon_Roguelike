@@ -17,11 +17,11 @@ namespace Zilon.Bot.Players.Logics
         private readonly ITacticalActUsageService _actService;
         private readonly IActorManager _actorManager;
 
-        public DefeatTargetLogicState(ISectorMap map,
+        public DefeatTargetLogicState(ISectorManager sectorManager,
                                       ITacticalActUsageService actService,
                                       IActorManager actorManager)
         {
-            _map = map ?? throw new ArgumentNullException(nameof(map));
+            _map = sectorManager.CurrentSector.Map;
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
             _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }

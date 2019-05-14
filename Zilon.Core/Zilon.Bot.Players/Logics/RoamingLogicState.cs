@@ -13,10 +13,10 @@ namespace Zilon.Bot.Players.Logics
         private readonly IDecisionSource _decisionSource;
         private readonly ISectorMap _map;
 
-        public RoamingLogicState(IDecisionSource decisionSource, ISectorMap map)
+        public RoamingLogicState(IDecisionSource decisionSource, ISectorManager sectorManager)
         {
             _decisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
-            _map = map;
+            _map = sectorManager.CurrentSector.Map;
         }
 
         public bool Complete { get; }
