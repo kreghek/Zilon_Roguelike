@@ -21,7 +21,8 @@ namespace Zilon.Bot
 {
     class Program
     {
-        private const string SERVER_RUN_PARAM = "ServerRun";
+        private const string SERVER_RUN_ARG = "ServerRun";
+        private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string SCORE_FILE_PATH = "bot-scores";
 
         static async Task Main(string[] args)
@@ -89,9 +90,10 @@ namespace Zilon.Bot
                 }
             };
 
-            WriteScores(tacticContainer, scoreManager);
+            var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
+            WriteScores(tacticContainer, scoreManager, scoreFilePreffix);
 
-            if (!HasProgramArgument(args, SERVER_RUN_PARAM))
+            if (!HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();
             }
@@ -100,6 +102,23 @@ namespace Zilon.Bot
         private static bool HasProgramArgument(string[] args, string testArg)
         {
             return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
+        }
+
+        private static string GetProgramArgument(string[] args, string testArg)
+        {
+            foreach (var arg in args)
+            {
+                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (components.Length >= 2)
+                    {
+                        return components[1];
+                    }
+                }
+            }
+
+            return null;
         }
 
         private static void Survival_Dead(object sender, EventArgs e)
@@ -121,7 +140,7 @@ namespace Zilon.Bot
             }
         }
 
-        private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager)
+        private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string scoreFilePreffix)
         {
             Console.WriteLine("YOU (BOT) DIED");
 
@@ -152,10 +171,10 @@ namespace Zilon.Bot
                 Console.WriteLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
             }
 
-            AppendScores(scoreManager, serviceFactory);
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix);
         }
 
-        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory)
+        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix)
         {
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))
@@ -164,11 +183,23 @@ namespace Zilon.Bot
             }
 
             var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
-            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}.scores");
+            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
             using (StreamWriter file = new StreamWriter(filename, append: true))
             {
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}");
             }
+        }
+
+        private static string GetScoreFilePreffix(string scoreFilePreffix)
+        {
+            var scoreFilePreffixFileName = string.Empty;
+            if (!string.IsNullOrWhiteSpace(scoreFilePreffix))
+            {
+                scoreFilePreffixFileName = $"-{scoreFilePreffix}";
+            }
+
+            return scoreFilePreffixFileName;
         }
 
         private static void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
