@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{65115D33
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.LightInject", "Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj", "{1325F406-E074-438F-9A8F-28B9F411CADF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotMassLauncher", "Zilon.BotMassLauncher\Zilon.BotMassLauncher.csproj", "{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{1325F406-E074-438F-9A8F-28B9F411CADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1325F406-E074-438F-9A8F-28B9F411CADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1325F406-E074-438F-9A8F-28B9F411CADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,6 +126,7 @@ Global
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F} = {65115D33-2698-4BCE-9B94-A187A740CDE0}
 		{65115D33-2698-4BCE-9B94-A187A740CDE0} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{1325F406-E074-438F-9A8F-28B9F411CADF} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
+		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}

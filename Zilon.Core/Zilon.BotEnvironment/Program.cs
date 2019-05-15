@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Persons;
@@ -23,7 +24,7 @@ namespace Zilon.Bot
         private const string SERVER_RUN_PARAM = "ServerRun";
         private const string SCORE_FILE_PATH = "bot-scores";
 
-        static async Task Main(string[] param)
+        static async Task Main(string[] args)
         {
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
@@ -90,15 +91,15 @@ namespace Zilon.Bot
 
             WriteScores(tacticContainer, scoreManager);
 
-            if (!HasParam(param, SERVER_RUN_PARAM))
+            if (!HasProgramArgument(args, SERVER_RUN_PARAM))
             {
                 Console.ReadLine();
             }
         }
 
-        private static bool HasParam(string[] param, string testedParam)
+        private static bool HasProgramArgument(string[] args, string testArg)
         {
-            return param?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testedParam.ToLowerInvariant()) == true;
+            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
         }
 
         private static void Survival_Dead(object sender, EventArgs e)
