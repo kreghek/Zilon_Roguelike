@@ -49,6 +49,7 @@
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="Logics\EatProviantLogicState.cs" />
     <Compile Include="Logics\HealSelfLogicState.cs" />
     <Compile Include="Logics\IdleLogicData.cs" />
     <Compile Include="Logics\DefeateTargetLogicData.cs" />
@@ -57,8 +58,10 @@
     <Compile Include="Strategies\LogicStateTreePatterns.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
     <Compile Include="Triggers\CounterTriggerData.cs" />
+    <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
+    <Compile Include="Triggers\HungryAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\ObserveLogicData.cs" />
     <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
