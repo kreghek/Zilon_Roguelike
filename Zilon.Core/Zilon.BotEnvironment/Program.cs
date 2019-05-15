@@ -20,7 +20,8 @@ namespace Zilon.Bot
 {
     class Program
     {
-        private const string ServerRun = "ServerRun";
+        private const string SERVER_RUN_PARAM = "ServerRun";
+        private const string SCORE_FILE_PATH = "bot-scores";
 
         static async Task Main(string[] param)
         {
@@ -89,7 +90,7 @@ namespace Zilon.Bot
 
             WriteScores(tacticContainer, scoreManager);
 
-            if (!HasParam(param, ServerRun))
+            if (!HasParam(param, SERVER_RUN_PARAM))
             {
                 Console.ReadLine();
             }
@@ -155,11 +156,17 @@ namespace Zilon.Bot
 
         private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory)
         {
+            var path = SCORE_FILE_PATH;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
             var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
-            var filename = $"{botTaskSource.GetType().FullName}.scores";
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}.scores");
             using (StreamWriter file = new StreamWriter(filename, append: true))
             {
-                file.WriteLine(scoreManager.BaseScores);
+                file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}");
             }
         }
 
