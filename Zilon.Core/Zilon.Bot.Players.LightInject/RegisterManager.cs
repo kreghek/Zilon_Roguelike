@@ -23,7 +23,7 @@ namespace Zilon.Bot.Players.LightInject
                 new PerContainerLifetime());
         }
 
-        [ConfigureAuxServicesAttribute]
+        [ConfigureAuxServices]
         public static void ConfigureAuxServices(IServiceFactory serviceFactory)
         {
             LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();

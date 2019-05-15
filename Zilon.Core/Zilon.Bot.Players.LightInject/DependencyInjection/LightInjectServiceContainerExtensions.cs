@@ -12,10 +12,12 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
             serviceRegistry.Register<DefeatTargetLogicState>();
             serviceRegistry.Register<IdleLogicState>();
             serviceRegistry.Register<RoamingLogicState>();
+            serviceRegistry.Register<HealSelfLogicState>();
 
             serviceRegistry.Register<CounterOverTrigger>();
             serviceRegistry.Register<IntruderDetectedTrigger>();
             serviceRegistry.Register<LogicOverTrigger>();
+            serviceRegistry.Register<LowHpTrigger>();
         }
     }
 }

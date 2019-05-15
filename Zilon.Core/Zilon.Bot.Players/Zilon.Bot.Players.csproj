@@ -49,6 +49,7 @@
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="Logics\HealSelfLogicState.cs" />
     <Compile Include="Logics\IdleLogicData.cs" />
     <Compile Include="Logics\DefeateTargetLogicData.cs" />
     <Compile Include="Logics\RoamingLogicData.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Triggers\CounterTriggerData.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
+    <Compile Include="Triggers\LowHpTrigger.cs" />
     <Compile Include="Triggers\ObserveLogicData.cs" />
     <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
     <Compile Include="Logics\IdleLogicState.cs" />
