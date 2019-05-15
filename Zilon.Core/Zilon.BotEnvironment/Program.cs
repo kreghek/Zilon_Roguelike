@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 using LightInject;
 
-using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -32,11 +30,9 @@ namespace Zilon.Bot
         {
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
+            startUp.ConfigureTacticServices(tacticContainer);
 
             LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", tacticContainer, tacticContainer);
-
-            startUp.ConfigureTacticServices(tacticContainer);
-            LogicStateTreePatterns.Factory = tacticContainer.GetInstance<ILogicStateFactory>();
 
             var schemeService = tacticContainer.GetInstance<ISchemeService>();
             var humanPlayer = tacticContainer.GetInstance<HumanPlayer>();

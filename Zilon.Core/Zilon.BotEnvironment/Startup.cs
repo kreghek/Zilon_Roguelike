@@ -2,9 +2,6 @@
 
 using LightInject;
 
-using Zilon.Bot.Players;
-using Zilon.Bot.Players.LightInject;
-using Zilon.Bot.Players.LightInject.DependencyInjection;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
