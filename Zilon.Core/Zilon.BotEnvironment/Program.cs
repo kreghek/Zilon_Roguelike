@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,9 @@ namespace Zilon.Bot
 {
     class Program
     {
-        static async Task Main()
+        private const string ServerRun = "ServerRun";
+
+        static async Task Main(string[] param)
         {
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
@@ -84,9 +87,17 @@ namespace Zilon.Bot
                 }
             };
 
-            WriteScores(scoreManager);
+            WriteScores(tacticContainer, scoreManager);
 
-            Console.ReadLine();
+            if (!HasParam(param, ServerRun))
+            {
+                Console.ReadLine();
+            }
+        }
+
+        private static bool HasParam(string[] param, string testedParam)
+        {
+            return param?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testedParam.ToLowerInvariant()) == true;
         }
 
         private static void Survival_Dead(object sender, EventArgs e)
@@ -108,7 +119,7 @@ namespace Zilon.Bot
             }
         }
 
-        private static void WriteScores(IScoreManager scoreManager)
+        private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager)
         {
             Console.WriteLine("YOU (BOT) DIED");
 
@@ -137,6 +148,18 @@ namespace Zilon.Bot
             foreach (var frag in scoreManager.Frags)
             {
                 Console.WriteLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
+            }
+
+            AppendScores(scoreManager, serviceFactory);
+        }
+
+        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory)
+        {
+            var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
+            var filename = $"{botTaskSource.GetType().FullName}.scores";
+            using (StreamWriter file = new StreamWriter(filename, append: true))
+            {
+                file.WriteLine(scoreManager.BaseScores);
             }
         }
 
