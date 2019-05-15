@@ -7,7 +7,7 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
 {
     public static class LightInjectServiceContainerExtensions
     {
-        public static void RegisterBot(this IServiceRegistry serviceRegistry)
+        public static void RegisterLogicState(this IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<DefeatTargetLogicState>();
             serviceRegistry.Register<IdleLogicState>();

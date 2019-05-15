@@ -18,7 +18,7 @@ namespace Zilon.Bot.Players.LightInject
         [RegisterAuxServices]
         public static void RegisterBot(IServiceRegistry serviceRegistry)
         {
-            serviceRegistry.RegisterBot();
+            serviceRegistry.RegisterLogicState();
             serviceRegistry.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
                 new PerContainerLifetime());
         }
