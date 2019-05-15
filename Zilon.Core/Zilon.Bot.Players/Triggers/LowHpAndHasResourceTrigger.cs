@@ -6,29 +6,27 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
-namespace Zilon.Bot.Players.Logics
+namespace Zilon.Bot.Players.Triggers
 {
-    public class HealSelfLogicState : ILogicState
+    public class LowHpAndHasResourceTrigger : ILogicStateTrigger
     {
-        public bool Complete { get; private set; }
-
         public ILogicStateData CreateData(IActor actor)
         {
             return new EmptyLogicTriggerData();
         }
 
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
         {
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
             var isLowHp = hpStatCoeff <= 0.5f;
             if (!isLowHp)
             {
-                Complete = true;
-                return null;
+                return false;
             }
+
+            //
 
             var props = actor.Person.Inventory.CalcActualItems();
             var resources = props.OfType<Resource>();
@@ -39,11 +37,10 @@ namespace Zilon.Bot.Players.Logics
 
             if (bestHealResource == null)
             {
-                Complete = true;
-                return null;
+                return false;
             }
 
-            return new UsePropTask(actor, bestHealResource.Resource);
+            return true;
         }
 
         private static IEnumerable<HealSelection> FindHealResources(IEnumerable<Resource> resources)

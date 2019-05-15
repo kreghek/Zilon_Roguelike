@@ -59,7 +59,7 @@
     <Compile Include="Triggers\CounterTriggerData.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
-    <Compile Include="Triggers\LowHpTrigger.cs" />
+    <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\ObserveLogicData.cs" />
     <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
     <Compile Include="Logics\IdleLogicState.cs" />

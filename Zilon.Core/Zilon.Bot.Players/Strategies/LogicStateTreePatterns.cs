@@ -64,28 +64,32 @@ namespace Zilon.Bot.Players.Strategies
                 tree.StartState = roamingLogic;
 
                 tree.Transitions.Add(roamingLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic),
-                    new LogicTransition(Factory.CreateTrigger<LowHpTrigger>(), healSelfLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
                 });
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     // После победы над текущим противником отдыхаем
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic),
-                    new LogicTransition(Factory.CreateTrigger<LowHpTrigger>(), healSelfLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
                 });
 
                 tree.Transitions.Add(roamingIdleLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic),
-                    new LogicTransition(Factory.CreateTrigger<LowHpTrigger>(), healSelfLogic)
+                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
                 });
 
                 tree.Transitions.Add(fightIdleLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic),
-                    new LogicTransition(Factory.CreateTrigger<LowHpTrigger>(), healSelfLogic)
+                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
+                });
+
+                tree.Transitions.Add(healSelfLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
                 });
 
                 return tree;

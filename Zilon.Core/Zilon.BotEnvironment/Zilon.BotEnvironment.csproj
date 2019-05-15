@@ -71,4 +71,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>XCOPY /E /Y "$(SolutionDir)Zilon.Bot.Players.LightInject\bin\Debug\*.*" "$(TargetDir)bots\cdt\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

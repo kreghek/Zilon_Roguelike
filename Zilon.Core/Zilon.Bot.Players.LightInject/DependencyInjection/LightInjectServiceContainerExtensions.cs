@@ -17,7 +17,7 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
             serviceRegistry.Register<CounterOverTrigger>();
             serviceRegistry.Register<IntruderDetectedTrigger>();
             serviceRegistry.Register<LogicOverTrigger>();
-            serviceRegistry.Register<LowHpTrigger>();
+            serviceRegistry.Register<LowHpAndHasResourceTrigger>();
         }
     }
 }
