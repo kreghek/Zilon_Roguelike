@@ -1,12 +1,12 @@
 ﻿using LightInject;
 
-namespace Zilon.Bot.Players
+namespace Zilon.Bot.Players.LightInject
 {
-    public sealed class LogicStateFactory : ILogicStateFactory
+    public sealed class ContainerLogicStateFactory : ILogicStateFactory
     {
         private readonly IServiceFactory _serviceFactory;
 
-        public LogicStateFactory(IServiceFactory serviceContainer)
+        public ContainerLogicStateFactory(IServiceFactory serviceContainer)
         {
             _serviceFactory = serviceContainer;
         }

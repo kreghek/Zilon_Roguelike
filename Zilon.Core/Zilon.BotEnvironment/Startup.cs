@@ -2,6 +2,9 @@
 
 using LightInject;
 
+using Zilon.Bot.Players;
+using Zilon.Bot.Players.LightInject;
+using Zilon.Bot.Players.LightInject.DependencyInjection;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -15,9 +18,6 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Bot.Players;
-using Zilon.Bot.Players.DependencyInjection;
-using System;
 
 namespace Zilon.Bot
 {
@@ -39,7 +39,7 @@ namespace Zilon.Bot
         private void RegisterBotServices(IServiceRegistry tacticContainer)
         {
             tacticContainer.RegisterBot();
-            tacticContainer.Register<ILogicStateFactory>(factory => new LogicStateFactory(factory), new PerContainerLifetime());
+            tacticContainer.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory), new PerContainerLifetime());
         }
 
         private void RegisterSchemeService(IServiceRegistry container)

@@ -3,7 +3,7 @@
 using Zilon.Bot.Players.Logics;
 using Zilon.Bot.Players.Triggers;
 
-namespace Zilon.Bot.Players.DependencyInjection
+namespace Zilon.Bot.Players.LightInject.DependencyInjection
 {
     public static class LightInjectServiceContainerExtensions
     {
@@ -16,8 +16,6 @@ namespace Zilon.Bot.Players.DependencyInjection
             serviceRegistry.Register<CounterOverTrigger>();
             serviceRegistry.Register<IntruderDetectedTrigger>();
             serviceRegistry.Register<LogicOverTrigger>();
-
-
         }
     }
 }
