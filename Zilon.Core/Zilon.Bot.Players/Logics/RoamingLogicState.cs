@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
             _map = sectorManager.CurrentSector.Map;
         }
 
-        public bool Complete { get; }
+        public bool Complete { get; private set; }
 
         public ILogicStateData CreateData(IActor actor)
         {
@@ -69,8 +69,11 @@ namespace Zilon.Bot.Players.Logics
                     logicData.IdleTask = new IdleTask(actor, _decisionSource);
                     return logicData.IdleTask;
                 }
-
-                return null;
+                else
+                {
+                    Complete = true;
+                    return null;
+                }
             }
         }
 

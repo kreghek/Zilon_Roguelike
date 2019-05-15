@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -65,6 +66,7 @@ namespace Zilon.Bot.Players.Strategies
                     {
                         CurrentState = transition.NextState;
                         _currentStateData = nextData;
+                        ChangeState();
                         break;
                     }
                 }
@@ -87,6 +89,11 @@ namespace Zilon.Bot.Players.Strategies
             }
 
             return actorTask;
+        }
+
+        private void ChangeState()
+        {
+            _currentStateTransitionData.Clear();
         }
     }
 }
