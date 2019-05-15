@@ -33,13 +33,6 @@ namespace Zilon.Bot
             RegisterClientServices(tacticContainer);
             RegisterCommands(tacticContainer);
             RegisterWorldServices(tacticContainer);
-            RegisterBotServices(tacticContainer);
-        }
-
-        private void RegisterBotServices(IServiceRegistry tacticContainer)
-        {
-            tacticContainer.RegisterBot();
-            tacticContainer.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory), new PerContainerLifetime());
         }
 
         private void RegisterSchemeService(IServiceRegistry container)
@@ -123,7 +116,6 @@ namespace Zilon.Bot
         {
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IActorTaskSource, BotActorTaskSource>("bot", new PerContainerLifetime());
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 

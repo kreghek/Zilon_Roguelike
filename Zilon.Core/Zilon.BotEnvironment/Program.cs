@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 using LightInject;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -29,6 +32,8 @@ namespace Zilon.Bot
         {
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
+
+            LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", tacticContainer, tacticContainer);
 
             startUp.ConfigureTacticServices(tacticContainer);
             LogicStateTreePatterns.Factory = tacticContainer.GetInstance<ILogicStateFactory>();
@@ -98,6 +103,70 @@ namespace Zilon.Bot
                 Console.ReadLine();
             }
         }
+
+        private static void LoadBotAssembly(string botDirectory, string assemblyName,
+            IServiceRegistry serviceRegistry, IServiceFactory serviceFactory)
+        {
+            var directory = Thread.GetDomain().BaseDirectory;
+            var dllPath = Path.Combine(directory, "bots", botDirectory, assemblyName);
+            var botAssembly = Assembly.LoadFrom(dllPath);
+
+            // Ищем класс для инициализации.
+            var registerManagers = GetTypesWithHelpAttribute<BotRegistrationAttribute>(botAssembly);
+            var registerManager = registerManagers.SingleOrDefault();
+
+            // Регистрируем сервис источника команд.
+            var botActorTaskSource = GetBotActorTaskSource(registerManager);
+            serviceRegistry.Register(typeof(IActorTaskSource), botActorTaskSource, "bot", new PerContainerLifetime());
+
+            var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
+            registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
+
+            var configAuxMethod = GetMethodByAttribute<ConfigureAuxServicesAttribute>(registerManager);
+            configAuxMethod.Invoke(null, new object[] { serviceFactory });
+        }
+
+        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
+        }
+
+        private static Type GetBotActorTaskSource(Type registerManagerType)
+        {
+            var props = registerManagerType.GetProperties();
+            foreach (var prop in props)
+            {
+                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
+                if (actorTaskSourceAttribute != null)
+                {
+                    return prop.GetValue(null) as Type;
+                }
+            }
+
+            return null;
+        }
+
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType) where TAttribute: Attribute
+        {
+            var methods = registerManagerType.GetMethods();
+            foreach (var method in methods)
+            {
+                var specificAttr = method.GetCustomAttribute<TAttribute>();
+                if (specificAttr != null)
+                {
+                    return method;
+                }
+            }
+
+            return null;
+        }
+
 
         private static bool HasProgramArgument(string[] args, string testArg)
         {

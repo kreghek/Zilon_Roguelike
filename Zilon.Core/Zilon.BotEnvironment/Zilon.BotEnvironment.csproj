@@ -70,7 +70,7 @@
       <Name>Zilon.Bot.Players</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
-      <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
+      <Project>{c043bda8-78ea-4b90-a35e-14282665f0d1}</Project>
       <Name>Zilon.Bot.Sdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
