@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         protected readonly ISectorMap Map;
         protected readonly IDecisionSource DecisionSource;
 
-        private readonly IActorManager _actorList;
+        private readonly IActorManager _actorManager;
         private readonly ITacticalActUsageService _actService;
 
         private MoveTask _moveTask;
@@ -27,7 +27,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         protected AgressiveLogicBase(IActor actor,
             ISectorMap map,
-            IActorManager actors,
+            IActorManager actorManager,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService)
         {
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             Map = map;
             DecisionSource = decisionSource;
 
-            _actorList = actors;
+            _actorManager = actorManager;
             _actService = actService;
             _pursuitCounter = PursuitCounter;
         }
@@ -46,7 +46,8 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             // на предмет нарушителей.
             var intruders = CheckForIntruders();
 
-            var nearbyIntruder = intruders.FirstOrDefault();
+            var orderedIntruders = intruders.OrderBy(x => Map.DistanceBetween(Actor.Node, x.Node));
+            var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             if (nearbyIntruder != null)
             {
@@ -55,11 +56,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                 _idleTask = null;
                 ProcessIntruderDetected();
             }
-            else if (_idleTask?.IsComplete == true)
-            {
-                _mode = Mode.Bypass;
-                _targetIntruder = null;
-                _idleTask = null;
+            else {
+                if (_idleTask == null || _idleTask.IsComplete)
+                {
+                    _mode = Mode.Bypass;
+                    _targetIntruder = null;
+                    _idleTask = null;
+                }
             }
 
             switch (_mode)
@@ -74,7 +77,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     return HandleIdleMode();
 
                 default:
-                    throw new InvalidOperationException($"Неизвестный режим патрулирования {_mode}");
+                    throw new InvalidOperationException($"Неизвестный режим {_mode}");
             }
         }
 
@@ -231,7 +234,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         private IActor[] CheckForIntruders()
         {
             var foundIntruders = new List<IActor>();
-            foreach (var target in _actorList.Items)
+            foreach (var target in _actorManager.Items)
             {
                 if (target.Owner == Actor.Owner)
                 {
@@ -257,9 +260,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         private bool CheckTargetVisible(IActor actor, IAttackTarget target)
         {
-            var actorNode = (HexNode)actor.Node;
-            var targetNode = (HexNode)target.Node;
-            var distance = actorNode.CubeCoords.DistanceTo(targetNode.CubeCoords);
+            var distance = Map.DistanceBetween(actor.Node, target.Node);
 
             var isVisible = distance <= VisibilityRange;
             return isVisible;

@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         protected override void ProcessMovementComplete()
         {
             // Пока никак не обрабатываем.
-            // В конечном счёте сдесь можно сделать учёт уже пройденных узлов комнаты.
+            // В конечном счёте здесь можно сделать учёт уже пройденных узлов комнаты.
         }
 
         protected override MoveTask CreateBypassMoveTask()

@@ -42,5 +42,10 @@ namespace Zilon.Core.Persons
 
         public Equipment Equipment { get; }
         public ITacticalActConstrainsSubScheme Constrains { get; }
+
+        public override string ToString()
+        {
+            return $"{Scheme} [{Equipment}]";
+        }
     }
 }

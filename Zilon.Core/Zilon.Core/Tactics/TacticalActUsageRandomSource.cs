@@ -77,6 +77,11 @@ namespace Zilon.Core.Tactics
         public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
         {
             var count = armorEquipments.Count();
+            if (count == 0)
+            {
+                return null;
+            }
+
             var rollIndex = _dice.Roll(0, count - 1);
             return armorEquipments.ElementAt(rollIndex);
         }
