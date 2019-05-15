@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Zilon.BotMassLauncher
@@ -11,20 +12,41 @@ namespace Zilon.BotMassLauncher
         private static int launchCount;
         private static string scorePreffix;
 
-        static void Main()
+        static void Main(string[] args)
         {
             pathToEnv = ConfigurationManager.AppSettings["env"];
             launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
             scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
-            var parallelOptions = new ParallelOptions
+            var parallel = GetProgramArgument(args, "parallel");
+            if (!string.IsNullOrWhiteSpace(parallel))
             {
-                MaxDegreeOfParallelism = 10
+                RunParallel(int.Parse(parallel));
+            }
+            else
+            {
+                RunLinear();
+            }
+
+            Console.WriteLine($"[x] COMPLETE");
+        }
+
+        private static void RunParallel(int maxDegreeOfParallelism)
+        {
+            ParallelOptions parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = maxDegreeOfParallelism
             };
 
             Parallel.For(0, launchCount, parallelOptions, RunEnvironment);
+        }
 
-            Console.WriteLine($"[x] COMPLETE");
+        private static void RunLinear()
+        {
+            for (var i = 0; i < launchCount; i++)
+            {
+                RunEnvironment(i);
+            }
         }
 
         private static void RunEnvironment(int iteration)
@@ -38,9 +60,7 @@ namespace Zilon.BotMassLauncher
                     FileName = pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{scorePreffix}\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
+                    Arguments = $"serverrun ScorePreffix=\"{scorePreffix}\""
                 };
 
 
@@ -50,6 +70,28 @@ namespace Zilon.BotMassLauncher
             }
 
             Console.WriteLine($"[x] ITERATION {iteration} FINISHED");
+        }
+
+        private static bool HasProgramArgument(string[] args, string testArg)
+        {
+            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
+        }
+
+        private static string GetProgramArgument(string[] args, string testArg)
+        {
+            foreach (var arg in args)
+            {
+                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (components.Length >= 2)
+                    {
+                        return components[1];
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
