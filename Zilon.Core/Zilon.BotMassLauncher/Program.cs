@@ -46,8 +46,6 @@ namespace Zilon.BotMassLauncher
 
                 process.Start();
 
-                Console.WriteLine(process.StandardOutput.ReadToEnd());
-
                 process.WaitForExit();
             }
 
