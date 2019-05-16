@@ -45,7 +45,7 @@ namespace Zilon.BotMassLauncher
                 {
                     _infiniteCounter = 0;
                 }
-            } while (!_isInfinite);
+            } while (_isInfinite);
 
 
             Console.WriteLine($"[x] COMPLETE");
