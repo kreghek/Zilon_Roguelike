@@ -250,9 +250,10 @@ namespace Zilon.Bot
             var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
             var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
             var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
-            using (StreamWriter file = new StreamWriter(filename, append: true))
+            using (var file = new StreamWriter(filename, append: true))
             {
-                file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}");
+                var fragSum = scoreManager.Frags.Sum(x => x.Value);
+                file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
         }
 
