@@ -96,13 +96,15 @@ namespace Zilon.Bot.Players.Strategies
                 });
 
                 tree.Transitions.Add(healSelfLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
                 });
 
                 tree.Transitions.Add(eatProviantLogic, new LogicTransition[] {
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic),
+                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic)
                 });
 
                 return tree;

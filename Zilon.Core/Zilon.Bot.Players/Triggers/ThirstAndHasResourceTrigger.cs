@@ -20,7 +20,7 @@ namespace Zilon.Bot.Players.Triggers
         {
             var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == SurvivalStatType.Water);
-            if (hazardEffect != null)
+            if (hazardEffect == null)
             {
                 return false;
             }

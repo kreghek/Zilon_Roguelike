@@ -61,6 +61,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
                 gameLoop.Update();
             };
+
+            Console.WriteLine($"Scores: {scoreManager.BaseScores}");
         }
 
         [SetUp]

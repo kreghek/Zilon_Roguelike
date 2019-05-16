@@ -33,6 +33,7 @@ namespace Zilon.Bot.Players.Logics
                 return drinkWaterTask;
             }
 
+            Complete = true;
             return null;
         }
 
@@ -64,7 +65,7 @@ namespace Zilon.Bot.Players.Logics
         {
             var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == hazardType);
-            if (hazardEffect != null)
+            if (hazardEffect == null)
             {
                 return null;
             }
