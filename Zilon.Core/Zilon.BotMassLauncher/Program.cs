@@ -19,21 +19,38 @@ namespace Zilon.BotMassLauncher
             scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             var parallel = GetProgramArgument(args, "parallel");
-            if (!string.IsNullOrWhiteSpace(parallel))
+            var isInfinite = HasProgramArgument(args, "infinite");
+            ulong infiniteCounter = 0;
+            do
             {
-                RunParallel(int.Parse(parallel));
-            }
-            else
-            {
-                RunLinear();
-            }
+                if (isInfinite)
+                {
+                    Console.WriteLine($"[x] INFINITE COUNTER {infiniteCounter}");
+                }
+
+                if (!string.IsNullOrWhiteSpace(parallel))
+                {
+                    RunParallel(int.Parse(parallel));
+                }
+                else
+                {
+                    RunLinear();
+                }
+
+                infiniteCounter++;
+                if (infiniteCounter == ulong.MaxValue)
+                {
+                    infiniteCounter = 0;
+                }
+            } while (isInfinite);
+
 
             Console.WriteLine($"[x] COMPLETE");
         }
 
         private static void RunParallel(int maxDegreeOfParallelism)
         {
-            ParallelOptions parallelOptions = new ParallelOptions
+            var parallelOptions = new ParallelOptions
             {
                 MaxDegreeOfParallelism = maxDegreeOfParallelism
             };
