@@ -8,41 +8,44 @@ namespace Zilon.BotMassLauncher
 {
     class Program
     {
-        private static string pathToEnv;
-        private static int launchCount;
-        private static string scorePreffix;
+        private static string _pathToEnv;
+        private static int _launchCount;
+        private static string _scorePreffix;
+        private static string _parallel;
+        private static bool _isInfinite;
+        private static ulong _infiniteCounter;
 
         static void Main(string[] args)
         {
-            pathToEnv = ConfigurationManager.AppSettings["env"];
-            launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
-            scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
+            _pathToEnv = ConfigurationManager.AppSettings["env"];
+            _launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
-            var parallel = GetProgramArgument(args, "parallel");
-            var isInfinite = HasProgramArgument(args, "infinite");
-            ulong infiniteCounter = 0;
+            _parallel = GetProgramArgument(args, "parallel");
+            _isInfinite = HasProgramArgument(args, "infinite");
+
             do
             {
-                if (isInfinite)
+                if (_isInfinite)
                 {
-                    Console.WriteLine($"[x] INFINITE COUNTER {infiniteCounter}");
+                    Console.WriteLine($"[x] INFINITE COUNTER {_infiniteCounter}");
                 }
 
-                if (!string.IsNullOrWhiteSpace(parallel))
+                if (!string.IsNullOrWhiteSpace(_parallel))
                 {
-                    RunParallel(int.Parse(parallel));
+                    RunParallel(int.Parse(_parallel));
                 }
                 else
                 {
                     RunLinear();
                 }
 
-                infiniteCounter++;
-                if (infiniteCounter == ulong.MaxValue)
+                _infiniteCounter++;
+                if (_infiniteCounter == ulong.MaxValue)
                 {
-                    infiniteCounter = 0;
+                    _infiniteCounter = 0;
                 }
-            } while (isInfinite);
+            } while (!_isInfinite);
 
 
             Console.WriteLine($"[x] COMPLETE");
@@ -55,12 +58,12 @@ namespace Zilon.BotMassLauncher
                 MaxDegreeOfParallelism = maxDegreeOfParallelism
             };
 
-            Parallel.For(0, launchCount, parallelOptions, RunEnvironment);
+            Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
         }
 
         private static void RunLinear()
         {
-            for (var i = 0; i < launchCount; i++)
+            for (var i = 0; i < _launchCount; i++)
             {
                 RunEnvironment(i);
             }
@@ -68,16 +71,22 @@ namespace Zilon.BotMassLauncher
 
         private static void RunEnvironment(int iteration)
         {
-            Console.WriteLine($"[x] ITERATION {iteration} STARTED");
+            var infiniteCounterPreffix = string.Empty;
+            if (_isInfinite)
+            {
+                infiniteCounterPreffix = _infiniteCounter.ToString() + " ";
+            }
+
+            Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} STARTED");
 
             using (var process = new Process())
             {
                 process.StartInfo = new ProcessStartInfo
                 {
-                    FileName = pathToEnv,
+                    FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{scorePreffix}\""
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\""
                 };
 
 
@@ -86,7 +95,7 @@ namespace Zilon.BotMassLauncher
                 process.WaitForExit();
             }
 
-            Console.WriteLine($"[x] ITERATION {iteration} FINISHED");
+            Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} FINISHED");
         }
 
         private static bool HasProgramArgument(string[] args, string testArg)
