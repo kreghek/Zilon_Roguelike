@@ -55,7 +55,14 @@ namespace Zilon.Core.Tactics
 
                 foreach (var actorTask in actorTasks)
                 {
-                    actorTask.Execute();
+                    try
+                    {
+                        actorTask.Execute();
+                    }
+                    catch (Exception)
+                    {
+                        throw new ActorTaskExecutionException(taskSource);
+                    }
                 }
             }
         }

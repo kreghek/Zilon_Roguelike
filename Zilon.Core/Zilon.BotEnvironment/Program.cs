@@ -28,6 +28,8 @@ namespace Zilon.Bot
 
         static async Task Main(string[] args)
         {
+            var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
+
             var tacticContainer = new ServiceContainer();
             var startUp = new Startup();
             startUp.ConfigureTacticServices(tacticContainer);
@@ -69,6 +71,7 @@ namespace Zilon.Bot
                 actor.Person.Survival.Dead += Survival_Dead;
             }
 
+            var botExceptionCount = 0;
             while (!humanActor.Person.Survival.IsDead)
             {
                 try
@@ -85,13 +88,29 @@ namespace Zilon.Bot
 
                     gameLoop.Update();
                 }
+                catch (ActorTaskExecutionException exception)
+                {
+                    if (exception.ActorTaskSource != monsterActorTaskSource)
+                    {
+                        botExceptionCount++;
+
+                        if (botExceptionCount >= 3)
+                        {
+                            AppendFail(tacticContainer, scoreFilePreffix);
+                            throw;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[.] {exception.Message}");
+                    }
+                }
                 catch (Exception exception)
                 {
                     Console.WriteLine($"[.] {exception.Message}");
                 }
             };
 
-            var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
             WriteScores(tacticContainer, scoreManager, scoreFilePreffix);
 
             if (!HasProgramArgument(args, SERVER_RUN_ARG))
@@ -254,6 +273,23 @@ namespace Zilon.Bot
             {
                 var fragSum = scoreManager.Frags.Sum(x => x.Value);
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
+            }
+        }
+
+        private static void AppendFail(IServiceFactory serviceFactory, string scoreFilePreffix)
+        {
+            var path = SCORE_FILE_PATH;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
+            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
+            using (var file = new StreamWriter(filename, append: true))
+            {
+                file.WriteLine($"-1");
             }
         }
 
