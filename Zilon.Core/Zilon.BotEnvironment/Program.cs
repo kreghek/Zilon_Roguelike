@@ -57,6 +57,7 @@ namespace Zilon.Bot
             }
 
             var botExceptionCount = 0;
+            var envExceptionCount = 0;
             while (!humanActor.Person.Survival.IsDead)
             {
                 try
@@ -87,11 +88,15 @@ namespace Zilon.Bot
                     }
                     else
                     {
+                        envExceptionCount++;
+                        CheckEnvExceptions(envExceptionCount, exception);
                         Console.WriteLine($"[.] {exception.Message}");
                     }
                 }
                 catch (Exception exception)
                 {
+                    envExceptionCount++;
+                    CheckEnvExceptions(envExceptionCount, exception);
                     Console.WriteLine($"[.] {exception.Message}");
                 }
 
@@ -110,6 +115,14 @@ namespace Zilon.Bot
             if (!HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();
+            }
+        }
+
+        private static void CheckEnvExceptions(int envExceptionCount, Exception exception)
+        {
+            if (envExceptionCount >= 3)
+            {
+                throw exception;
             }
         }
 

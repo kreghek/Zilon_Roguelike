@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Zilon.BotMassLauncher
@@ -14,15 +15,22 @@ namespace Zilon.BotMassLauncher
         private static string _parallel;
         private static bool _isInfinite;
         private static ulong _infiniteCounter;
+        private static CancellationToken _shutdownToken;
+        private static CancellationTokenSource _shutdownTokenSource;
 
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+
             _pathToEnv = ConfigurationManager.AppSettings["env"];
             _launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
             _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");
+
+            _shutdownTokenSource = new CancellationTokenSource();
+            _shutdownToken = _shutdownTokenSource.Token;
 
             do
             {
@@ -51,11 +59,20 @@ namespace Zilon.BotMassLauncher
             Console.WriteLine($"[x] COMPLETE");
         }
 
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            if (_shutdownTokenSource != null)
+            {
+                _shutdownTokenSource.Cancel();
+            }
+        }
+
         private static void RunParallel(int maxDegreeOfParallelism)
         {
             var parallelOptions = new ParallelOptions
             {
-                MaxDegreeOfParallelism = maxDegreeOfParallelism
+                MaxDegreeOfParallelism = maxDegreeOfParallelism,
+                CancellationToken = _shutdownToken
             };
 
             Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
