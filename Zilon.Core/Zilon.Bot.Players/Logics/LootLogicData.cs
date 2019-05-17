@@ -1,6 +1,5 @@
-﻿using System;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
 {
@@ -12,5 +11,7 @@ namespace Zilon.Bot.Players.Logics
         }
 
         public IPropContainer PropContainer { get; }
+
+        public MoveTask MoveTask { get; set; }
     }
 }

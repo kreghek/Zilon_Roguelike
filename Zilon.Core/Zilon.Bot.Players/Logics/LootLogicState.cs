@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -37,20 +37,54 @@ namespace Zilon.Bot.Players.Logics
         public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
             var logicData = (LootLogicData)data;
+            if (logicData.PropContainer == null)
+            {
+                Complete = true;
+                return null;
+            }
 
             var distance = _map.DistanceBetween(actor.Node, logicData.PropContainer.Node);
             if (distance <= 1)
             {
-                var transfer = new PropTransfer(logicData.PropContainer.Content,
-                    logicData.PropContainer.Content.CalcActualItems(),
-                    new IProp[0]);
-
-                var transfer = new PropTransfer(logicData.PropContainer.Content,
-                    logicData.PropContainer.Content.CalcActualItems(),
-                    new IProp[0]);
-
-                return new TransferPropsTask(actor, new[] { transfer });
+                return TakeAllFromContainerTask(actor, logicData.PropContainer);
             }
+            else
+            {
+                var storedMoveTask = logicData.MoveTask;
+                var moveTask = MoveToContainerTask(actor, logicData.PropContainer.Node, storedMoveTask);
+                logicData.MoveTask = moveTask;
+                return moveTask;
+            }
+        }
+
+        private MoveTask MoveToContainerTask(IActor actor, IMapNode containerMapNode, MoveTask storedMoveTask)
+        {
+            var moveTask = storedMoveTask;
+            if (storedMoveTask == null)
+            {
+                moveTask = new MoveTask(actor, containerMapNode, _map);
+            }
+
+            if (storedMoveTask.IsComplete || !storedMoveTask.CanExecute())
+            {
+                Complete = true;
+                return null;
+            }
+
+            return moveTask;
+        }
+
+        private static IActorTask TakeAllFromContainerTask(IActor actor, IPropContainer container)
+        {
+            var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
+                                container.Content.CalcActualItems(),
+                                new IProp[0]);
+
+            var containerTransfer = new PropTransfer(container.Content,
+                new IProp[0],
+                container.Content.CalcActualItems());
+
+            return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
         }
     }
 }

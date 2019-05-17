@@ -60,6 +60,7 @@ namespace Zilon.Bot.Players.Strategies
                 var fightIdleLogic = Factory.CreateLogic<IdleLogicState>();
                 var healSelfLogic = Factory.CreateLogic<HealSelfLogicState>();
                 var eatProviantLogic = Factory.CreateLogic<EatProviantLogicState>();
+                var lootLogic = Factory.CreateLogic<LootLogicState>();
 
 
                 tree.StartState = roamingLogic;
@@ -67,6 +68,7 @@ namespace Zilon.Bot.Players.Strategies
                 tree.Transitions.Add(roamingLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    new LogicTransition(Factory.CreateTrigger<LootDetectedTrigger>(), lootLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
@@ -105,6 +107,11 @@ namespace Zilon.Bot.Players.Strategies
                 tree.Transitions.Add(eatProviantLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic)
+                });
+
+                tree.Transitions.Add(lootLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
                 });
 
                 return tree;
