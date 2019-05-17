@@ -63,6 +63,7 @@
     <Compile Include="Triggers\CounterOverTrigger.cs" />
     <Compile Include="Triggers\CounterTriggerData.cs" />
     <Compile Include="Triggers\LootDetectedTrigger.cs" />
+    <Compile Include="Triggers\ResourceFinder.cs" />
     <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />

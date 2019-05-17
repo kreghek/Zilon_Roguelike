@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
-using Zilon.Core.Components;
+using Zilon.Bot.Players.Triggers;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -37,30 +36,6 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        private static IEnumerable<HealSelection> FindFoodResources(IEnumerable<Resource> resources, ConsumeCommonRuleType foodType)
-        {
-            foreach (var resource in resources)
-            {
-                var rule = resource.Scheme.Use.CommonRules
-                    .SingleOrDefault(x => x.Type == foodType && x.Direction == PersonRuleDirection.Positive);
-
-                if (rule != null)
-                {
-                    yield return new HealSelection
-                    {
-                        Resource = resource,
-                        Rule = rule
-                    };
-                }
-            }
-        }
-
-        private class HealSelection
-        {
-            public Resource Resource;
-            public ConsumeCommonRule Rule;
-        }
-
         private UsePropTask CheckHazard(IActor actor, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)
         {
             var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
@@ -72,17 +47,15 @@ namespace Zilon.Bot.Players.Logics
 
             var props = actor.Person.Inventory.CalcActualItems();
             var resources = props.OfType<Resource>();
-            var foundHealResources = FindFoodResources(resources, resourceType);
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+                resourceType);
 
-            var orderedHealResources = foundHealResources.OrderByDescending(x => x.Rule.Level);
-            var bestHealResource = foundHealResources.FirstOrDefault();
-
-            if (bestHealResource == null)
+            if (bestResource == null)
             {
                 return null;
             }
 
-            return new UsePropTask(actor, bestHealResource.Resource);
+            return new UsePropTask(actor, bestResource);
         }
     }
 }
