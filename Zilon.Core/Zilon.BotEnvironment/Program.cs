@@ -26,42 +26,27 @@ namespace Zilon.Bot
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string SCORE_FILE_PATH = "bot-scores";
 
+        private static ServiceContainer _globalServiceContainer;
+        private static Startup _startUp;
+        private static Scope _sectorServiceContainer;
+        private static bool _changeSector;
+
         static async Task Main(string[] args)
         {
             var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
-            var tacticContainer = new ServiceContainer();
-            var startUp = new Startup();
-            startUp.ConfigureTacticServices(tacticContainer);
+            _globalServiceContainer = new ServiceContainer();
+            _startUp = new Startup();
+            _startUp.RegisterServices(_globalServiceContainer);
 
-            LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", tacticContainer, tacticContainer);
+            LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", _globalServiceContainer, _globalServiceContainer);
 
-            var schemeService = tacticContainer.GetInstance<ISchemeService>();
-            var humanPlayer = tacticContainer.GetInstance<HumanPlayer>();
-            var gameLoop = tacticContainer.GetInstance<IGameLoop>();
-            var sectorManager = tacticContainer.GetInstance<ISectorManager>();
-            var scoreManager = tacticContainer.GetInstance<IScoreManager>();
-            var botActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("bot");
-            var monsterActorTaskSource = tacticContainer.GetInstance<IActorTaskSource>("monster");
-            var survivalRandomSource = tacticContainer.GetInstance<ISurvivalRandomSource>();
-            var propFactory = tacticContainer.GetInstance<IPropFactory>();
-            var actorManager = tacticContainer.GetInstance<IActorManager>();
+            var humanActor = await CreateSectorAsync();
 
-            await sectorManager.CreateSectorAsync();
-
-            sectorManager.CurrentSector.ScoreManager = scoreManager;
-
-            gameLoop.ActorTaskSources = new[] {
-                botActorTaskSource,
-                monsterActorTaskSource
-            };
-
-            var humanActor = CreateHumanActor(humanPlayer,
-                schemeService,
-                survivalRandomSource,
-                propFactory,
-                sectorManager,
-                actorManager);
+            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+            var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
+            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
 
             foreach (var actor in actorManager.Items)
             {
@@ -96,7 +81,7 @@ namespace Zilon.Bot
 
                         if (botExceptionCount >= 3)
                         {
-                            AppendFail(tacticContainer, scoreFilePreffix);
+                            AppendFail(_globalServiceContainer, scoreFilePreffix);
                             throw;
                         }
                     }
@@ -109,14 +94,66 @@ namespace Zilon.Bot
                 {
                     Console.WriteLine($"[.] {exception.Message}");
                 }
+
+                if (_changeSector)
+                {
+                    humanActor = await CreateSectorAsync();
+
+                    gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+
+                    _changeSector = false;
+                }
             };
 
-            WriteScores(tacticContainer, scoreManager, scoreFilePreffix);
+            WriteScores(_globalServiceContainer, scoreManager, scoreFilePreffix);
 
             if (!HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();
             }
+        }
+
+        private static async Task<IActor> CreateSectorAsync()
+        {
+            if (_sectorServiceContainer != null && !_sectorServiceContainer.IsDisposed)
+            {
+                _sectorServiceContainer.Dispose();
+            }
+
+            _sectorServiceContainer = _globalServiceContainer.BeginScope();
+
+            _startUp.ConfigureAux(_sectorServiceContainer);
+
+            var schemeService = _globalServiceContainer.GetInstance<ISchemeService>();
+            var humanPlayer = _globalServiceContainer.GetInstance<HumanPlayer>();
+            var survivalRandomSource = _globalServiceContainer.GetInstance<ISurvivalRandomSource>();
+            var propFactory = _globalServiceContainer.GetInstance<IPropFactory>();
+            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+
+            var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+            var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
+            var botActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
+            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
+
+            await sectorManager.CreateSectorAsync();
+
+            sectorManager.CurrentSector.ScoreManager = scoreManager;
+            sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
+
+            gameLoop.ActorTaskSources = new[] {
+                botActorTaskSource,
+                monsterActorTaskSource
+            };
+
+            var humanActor = CreateHumanActor(humanPlayer,
+                schemeService,
+                survivalRandomSource,
+                propFactory,
+                sectorManager,
+                actorManager);
+
+            return humanActor;
         }
 
         private static void LoadBotAssembly(string botDirectory, string assemblyName,
@@ -132,7 +169,7 @@ namespace Zilon.Bot
 
             // Регистрируем сервис источника команд.
             var botActorTaskSource = GetBotActorTaskSource(registerManager);
-            serviceRegistry.Register(typeof(IActorTaskSource), botActorTaskSource, "bot", new PerContainerLifetime());
+            serviceRegistry.Register(typeof(IActorTaskSource), botActorTaskSource, "bot", new PerScopeLifetime());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
             registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
@@ -216,14 +253,6 @@ namespace Zilon.Bot
             Console.WriteLine($"{actor} moved {actor.Node}");
         }
 
-        private static void WriteSector(ISector sector)
-        {
-            if (sector.Map is HexMap hexMap)
-            {
-                hexMap.SaveToFile("map");
-            }
-        }
-
         private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string scoreFilePreffix)
         {
             Console.WriteLine("YOU (BOT) DIED");
@@ -278,6 +307,8 @@ namespace Zilon.Bot
 
         private static void AppendFail(IServiceFactory serviceFactory, string scoreFilePreffix)
         {
+            Console.WriteLine("[x] Bot task source error limit reached");
+
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))
             {
@@ -312,6 +343,15 @@ namespace Zilon.Bot
         private static void Actor_UsedAct(object sender, UsedActEventArgs e)
         {
             Console.WriteLine($"{sender} Used act: {e.TacticalAct} Target: {e.Target}");
+        }
+
+        private static void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
+        {
+            Console.WriteLine("Exit");
+
+            _changeSector = true;
+            var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
+            sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
         }
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,

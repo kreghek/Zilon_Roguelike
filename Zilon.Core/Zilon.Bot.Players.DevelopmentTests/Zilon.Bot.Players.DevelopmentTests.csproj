@@ -85,6 +85,10 @@
       <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj">
+      <Project>{36013151-86C1-431E-ABC6-AFF816D4E015}</Project>
+      <Name>Zilon.Emulation.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

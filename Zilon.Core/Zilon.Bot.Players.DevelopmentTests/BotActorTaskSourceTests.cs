@@ -22,7 +22,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
     {
         private ServiceContainer _globalServiceContainer;
         private Startup _startUp;
-        private Scope scope;
         private Scope _sectorServiceContainer;
         private bool _changeSector;
 
@@ -53,8 +52,11 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
         {
-            Console.WriteLine("Выход");
+            Console.WriteLine("Exit");
             _changeSector = true;
+
+            var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
+            sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
         }
 
         [SetUp]
@@ -62,17 +64,17 @@ namespace Zilon.Bot.Players.DevelopmentTests
         {
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup();
-            _startUp.RegisterGlobalServices(_globalServiceContainer);
+            _startUp.RegisterServices(_globalServiceContainer);
         }
 
-        private async Task<IActor> CreateSectorAsync() {
-            if (scope != null && !scope.IsDisposed)
+        private async Task<IActor> CreateSectorAsync()
+        {
+            if (_sectorServiceContainer != null && !_sectorServiceContainer.IsDisposed)
             {
-                scope.Dispose();
+                _sectorServiceContainer.Dispose();
             }
 
-            scope = _globalServiceContainer.BeginScope();
-            _sectorServiceContainer = scope;
+            _sectorServiceContainer = _globalServiceContainer.BeginScope();
 
             _startUp.ConfigureAux(_sectorServiceContainer);
 

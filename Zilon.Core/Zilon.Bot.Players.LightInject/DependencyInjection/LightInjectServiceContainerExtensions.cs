@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using LightInject;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-using Zilon.Bot.Players.Logics;
-using Zilon.Bot.Players.Triggers;
+using LightInject;
 
 namespace Zilon.Bot.Players.LightInject.DependencyInjection
 {
@@ -10,19 +10,24 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
     {
         public static void RegisterLogicState(this IServiceRegistry serviceRegistry)
         {
-            var logicTypes = typeof(ILogicState).Assembly.GetTypes()
-                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(ILogicState).IsAssignableFrom(x));
-            foreach (var logicType in logicTypes)
+            var logicTypes = GetTypes<ILogicState>();
+            var triggerTypes = GetTypes<ILogicStateTrigger>();
+
+            var allTypes = logicTypes.Union(triggerTypes);
+            foreach (var logicType in allTypes)
             {
+                // Регистрируем, как персистентные. Потому что нам может потребовать несколько
+                // состояний и триггеров одного и того же типа.
+                // Например, для различной кастомизации.
                 serviceRegistry.Register(logicType);
             }
+        }
 
-            var triggerTypes = typeof(ILogicStateTrigger).Assembly.GetTypes()
-                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(ILogicStateTrigger).IsAssignableFrom(x));
-            foreach (var triggerType in triggerTypes)
-            {
-                serviceRegistry.Register(triggerType);
-            }
+        private static IEnumerable<Type> GetTypes<TInterface>()
+        {
+            var logicTypes = typeof(ILogicState).Assembly.GetTypes()
+                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(TInterface).IsAssignableFrom(x));
+            return logicTypes;
         }
     }
 }
