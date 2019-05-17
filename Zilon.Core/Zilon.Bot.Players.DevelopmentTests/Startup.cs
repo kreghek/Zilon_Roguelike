@@ -22,15 +22,20 @@ namespace Zilon.Bot.Players.DevelopmentTests
 {
     class Startup
     {
-        public void RegisterServices(IServiceRegistry serviceRegistry)
+        public void RegisterGlobalServices(IServiceRegistry serviceRegistry)
         {
             RegisterSchemeService(serviceRegistry);
-            RegisterSectorService(serviceRegistry);
-            RegisterGameLoop(serviceRegistry);
             RegisterAuxServices(serviceRegistry);
             RegisterPlayerServices(serviceRegistry);
+
+            RegisterSectorServices(serviceRegistry);
+        }
+
+        private void RegisterSectorServices(IServiceRegistry serviceRegistry)
+        {
             RegisterClientServices(serviceRegistry);
-            RegisterCommands(serviceRegistry);
+            RegisterGameLoop(serviceRegistry);
+            RegisterSectorService(serviceRegistry);
             RegisterBot(serviceRegistry);
         }
 
@@ -57,25 +62,27 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         private void RegisterSectorService(IServiceRegistry container)
         {
-            container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
-            container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
-            container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
-            container.Register<ISectorManager, InfiniteSectorManager>(new PerContainerLifetime());
-            container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
-            container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
-            container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
-            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
-            container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
-            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
-            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IMapFactory, RoomMapFactory>(new PerScopeLifetime());
+            container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
+            container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
+            container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
+            container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
+            container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
+            container.Register<ITraderManager, TraderManager>(new PerScopeLifetime());
+            container.Register<IRoomGenerator, RoomGenerator>(new PerScopeLifetime());
+            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerScopeLifetime());
+            container.Register<IScoreManager, ScoreManager>(new PerScopeLifetime());
+            container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
+            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerScopeLifetime());
+            container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
+            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerScopeLifetime());
+
+            container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerScopeLifetime());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
         {
-            container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
+            container.Register<IGameLoop, GameLoop>(new PerScopeLifetime());
         }
 
         /// <summary>
@@ -102,33 +109,23 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         private void RegisterClientServices(IServiceRegistry container)
         {
-            container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
-            container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
-        }
-
-        private void RegisterCommands(IServiceRegistry container)
-        {
-            container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
-            container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
-            container.Register<ICommand, AttackCommand>("attack", new PerContainerLifetime());
-
-            container.Register<ICommand, PropTransferCommand>("prop-transfer");
-            container.Register<ICommand, EquipCommand>("equip");
+            container.Register<ISectorUiState, SectorUiState>(new PerScopeLifetime());
+            container.Register<IInventoryState, InventoryState>(new PerScopeLifetime());
         }
 
         private void RegisterPlayerServices(IServiceRegistry container)
         {
+            container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 
         private void RegisterBot(IServiceRegistry container)
         {
             container.RegisterLogicState();
             container.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
-                new PerContainerLifetime());
-            container.Register<IActorTaskSource, BotActorTaskSource>("bot", new PerContainerLifetime());
+                new PerScopeLifetime());
+            container.Register<IActorTaskSource, BotActorTaskSource>("bot", new PerScopeLifetime());
         }
     }
 }

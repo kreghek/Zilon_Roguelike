@@ -59,9 +59,9 @@ namespace Zilon.Core.Tactics
                     {
                         actorTask.Execute();
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
-                        throw new ActorTaskExecutionException(taskSource);
+                        throw new ActorTaskExecutionException("Ошибка при работе источника команд", taskSource, exception);
                     }
                 }
             }

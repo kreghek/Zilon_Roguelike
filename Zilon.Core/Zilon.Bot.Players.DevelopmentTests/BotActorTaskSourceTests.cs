@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 using LightInject;
 
@@ -19,21 +20,73 @@ namespace Zilon.Bot.Players.DevelopmentTests
     [TestFixture]
     public class BotActorTaskSourceTests
     {
-        private ServiceContainer _serviceContainer;
+        private ServiceContainer _globalServiceContainer;
+        private Startup _startUp;
+        private Scope scope;
+        private Scope _sectorServiceContainer;
+        private bool _changeSector;
 
         [Test]
-        public async System.Threading.Tasks.Task GetActorTasksTestAsync()
+        public async Task GetActorTasksTestAsync()
         {
-            var schemeService = _serviceContainer.GetInstance<ISchemeService>();
-            var humanPlayer = _serviceContainer.GetInstance<HumanPlayer>();
-            var gameLoop = _serviceContainer.GetInstance<IGameLoop>();
-            var sectorManager = _serviceContainer.GetInstance<ISectorManager>();
-            var scoreManager = _serviceContainer.GetInstance<IScoreManager>();
-            var botActorTaskSource = _serviceContainer.GetInstance<IActorTaskSource>("bot");
-            var monsterActorTaskSource = _serviceContainer.GetInstance<IActorTaskSource>("monster");
-            var survivalRandomSource = _serviceContainer.GetInstance<ISurvivalRandomSource>();
-            var propFactory = _serviceContainer.GetInstance<IPropFactory>();
-            var actorManager = _serviceContainer.GetInstance<IActorManager>();
+            var humanActor = await CreateSectorAsync();
+
+            var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+
+            while (!humanActor.Person.Survival.IsDead)
+            {
+                gameLoop.Update();
+
+                if (_changeSector)
+                {
+                    humanActor = await CreateSectorAsync();
+
+                    gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+
+                    _changeSector = false;
+                }
+            };
+
+            Console.WriteLine($"Scores: {scoreManager.BaseScores}");
+        }
+
+        private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
+        {
+            Console.WriteLine("Выход");
+            _changeSector = true;
+        }
+
+        [SetUp]
+        public void StartUp()
+        {
+            _globalServiceContainer = new ServiceContainer();
+            _startUp = new Startup();
+            _startUp.RegisterGlobalServices(_globalServiceContainer);
+        }
+
+        private async Task<IActor> CreateSectorAsync() {
+            if (scope != null && !scope.IsDisposed)
+            {
+                scope.Dispose();
+            }
+
+            scope = _globalServiceContainer.BeginScope();
+            _sectorServiceContainer = scope;
+
+            _startUp.ConfigureAux(_sectorServiceContainer);
+
+            var schemeService = _globalServiceContainer.GetInstance<ISchemeService>();
+            var humanPlayer = _globalServiceContainer.GetInstance<HumanPlayer>();
+            var survivalRandomSource = _globalServiceContainer.GetInstance<ISurvivalRandomSource>();
+            var propFactory = _globalServiceContainer.GetInstance<IPropFactory>();
+            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+
+            var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+            var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
+            var botActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
+            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
 
             await sectorManager.CreateSectorAsync();
 
@@ -52,32 +105,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
                 sectorManager,
                 actorManager);
 
-            while (!humanActor.Person.Survival.IsDead)
-            {
-                var humanPersonHp = humanActor.Person
-                    .Survival
-                    .Stats
-                    .Single(x => x.Type == SurvivalStatType.Health)
-                    .Value;
-
-                gameLoop.Update();
-            };
-
-            Console.WriteLine($"Scores: {scoreManager.BaseScores}");
-        }
-
-        private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
-        {
-            Console.WriteLine("Выход");
-        }
-
-        [SetUp]
-        public void StartUp()
-        {
-            _serviceContainer = new ServiceContainer();
-            var startUp = new Startup();
-            startUp.RegisterServices(_serviceContainer);
-            startUp.ConfigureAux(_serviceContainer);
+            return humanActor;
         }
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,

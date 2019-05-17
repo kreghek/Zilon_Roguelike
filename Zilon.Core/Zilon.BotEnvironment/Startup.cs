@@ -29,7 +29,6 @@ namespace Zilon.Bot
             RegisterPlayerServices(tacticContainer);
             RegisterClientServices(tacticContainer);
             RegisterCommands(tacticContainer);
-            RegisterWorldServices(tacticContainer);
         }
 
         private void RegisterSchemeService(IServiceRegistry container)
@@ -59,11 +58,12 @@ namespace Zilon.Bot
             container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
             container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+
+            container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
@@ -111,14 +111,9 @@ namespace Zilon.Bot
 
         private void RegisterPlayerServices(IServiceRegistry container)
         {
+            container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
-        }
-
-        private void RegisterWorldServices(IServiceRegistry container)
-        {
-            //container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
         }
     }
 }
