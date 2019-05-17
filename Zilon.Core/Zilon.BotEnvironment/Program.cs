@@ -76,6 +76,8 @@ namespace Zilon.Bot
                 }
                 catch (ActorTaskExecutionException exception)
                 {
+                    AppendException(exception, scoreFilePreffix);
+
                     if (exception.ActorTaskSource != monsterActorTaskSource)
                     {
                         botExceptionCount++;
@@ -95,6 +97,8 @@ namespace Zilon.Bot
                 }
                 catch (Exception exception)
                 {
+                    AppendException(exception, scoreFilePreffix);
+
                     envExceptionCount++;
                     CheckEnvExceptions(envExceptionCount, exception);
                     Console.WriteLine($"[.] {exception.Message}");
@@ -334,6 +338,24 @@ namespace Zilon.Bot
             using (var file = new StreamWriter(filename, append: true))
             {
                 file.WriteLine($"-1");
+            }
+        }
+
+        private static void AppendException(Exception exception, string scoreFilePreffix)
+        {
+            var path = SCORE_FILE_PATH;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            var botTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
+            using (var file = new StreamWriter(filename, append: true))
+            {
+                file.WriteLine(exception);
+                file.WriteLine();
             }
         }
 
