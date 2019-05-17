@@ -354,6 +354,7 @@ namespace Zilon.Bot
             var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
             using (var file = new StreamWriter(filename, append: true))
             {
+                file.WriteLine(DateTime.UtcNow);
                 file.WriteLine(exception);
                 file.WriteLine();
             }
