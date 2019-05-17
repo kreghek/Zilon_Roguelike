@@ -37,7 +37,8 @@ namespace Zilon.Bot.Players.Logics
         public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
             var logicData = (LootLogicData)data;
-            if (logicData.PropContainer == null)
+            if (logicData.PropContainer == null || 
+                !logicData.PropContainer.Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
@@ -65,7 +66,7 @@ namespace Zilon.Bot.Players.Logics
                 moveTask = new MoveTask(actor, containerMapNode, _map);
             }
 
-            if (storedMoveTask.IsComplete || !storedMoveTask.CanExecute())
+            if (moveTask.IsComplete || !moveTask.CanExecute())
             {
                 Complete = true;
                 return null;
