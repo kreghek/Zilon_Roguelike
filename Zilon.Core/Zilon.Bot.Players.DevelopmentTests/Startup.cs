@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 
 using LightInject;
+
 using Zilon.Bot.Players.LightInject;
 using Zilon.Bot.Players.LightInject.DependencyInjection;
 using Zilon.Bot.Players.Strategies;
@@ -16,7 +17,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.World;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -31,7 +31,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             RegisterPlayerServices(serviceRegistry);
             RegisterClientServices(serviceRegistry);
             RegisterCommands(serviceRegistry);
-            RegisterWorldServices(serviceRegistry);
             RegisterBot(serviceRegistry);
         }
 
@@ -61,7 +60,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
-            container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            container.Register<ISectorManager, InfiniteSectorManager>(new PerContainerLifetime());
             container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
@@ -122,11 +121,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             container.Register<HumanPlayer>(new PerContainerLifetime());
             container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
-        }
-
-        private void RegisterWorldServices(IServiceRegistry container)
-        {
-            container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
         }
 
         private void RegisterBot(IServiceRegistry container)

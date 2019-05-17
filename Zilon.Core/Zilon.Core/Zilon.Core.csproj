@@ -123,6 +123,7 @@
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
+    <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
     <Compile Include="Tactics\ITraderManager.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />

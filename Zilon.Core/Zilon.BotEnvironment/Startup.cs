@@ -53,7 +53,7 @@ namespace Zilon.Bot
             container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
-            container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
+            container.Register<ISectorManager, InfiniteSectorManager>(new PerContainerLifetime());
             container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
@@ -118,7 +118,7 @@ namespace Zilon.Bot
 
         private void RegisterWorldServices(IServiceRegistry container)
         {
-            container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
+            //container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
         }
     }
 }

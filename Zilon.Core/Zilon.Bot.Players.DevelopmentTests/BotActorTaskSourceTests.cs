@@ -38,6 +38,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             await sectorManager.CreateSectorAsync();
 
             sectorManager.CurrentSector.ScoreManager = scoreManager;
+            sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
 
             gameLoop.ActorTaskSources = new[] {
                 botActorTaskSource,
@@ -63,6 +64,11 @@ namespace Zilon.Bot.Players.DevelopmentTests
             };
 
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
+        }
+
+        private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
+        {
+            Console.WriteLine("Выход");
         }
 
         [SetUp]
