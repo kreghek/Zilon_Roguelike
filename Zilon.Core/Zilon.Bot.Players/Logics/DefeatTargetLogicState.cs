@@ -11,8 +11,6 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class DefeatTargetLogicState : ILogicState
     {
-        private const int VISIBLE_RANGE = 5;
-
         private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
         private readonly IActorManager _actorManager;
@@ -31,7 +29,7 @@ namespace Zilon.Bot.Players.Logics
         public ILogicStateData CreateData(IActor actor)
         {
             var target = GetTarget(actor);
-            return new DefeateTargetLogicData(target);
+            return new DefeatTargetLogicData(target);
         }
 
         private IAttackTarget GetTarget(IActor actor)
@@ -60,7 +58,7 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                var isVisible = CheckTargetVisible(actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -72,17 +70,10 @@ namespace Zilon.Bot.Players.Logics
             return foundIntruders.ToArray();
         }
 
-        private bool CheckTargetVisible(IMapNode node, IMapNode target)
-        {
-            var distance = _map.DistanceBetween(node, target);
-
-            var isVisible = distance <= VISIBLE_RANGE;
-            return isVisible;
-        }
 
         public IActorTask GetTask(IActor actor, ILogicStateData data)
         {
-            var logicData = (DefeateTargetLogicData)data;
+            var logicData = (DefeatTargetLogicData)data;
 
             var targetCanBeDamaged = logicData.Target.CanBeDamaged();
             if (!targetCanBeDamaged)
@@ -144,7 +135,7 @@ namespace Zilon.Bot.Players.Logics
 
         public bool CanGetTask(IActor actor, ILogicStateData data)
         {
-            var logicData = (DefeateTargetLogicData)data;
+            var logicData = (DefeatTargetLogicData)data;
 
             var targetCanBeDamaged = logicData.Target.CanBeDamaged();
             var canAct = CheckAttackAvailability(actor, logicData.Target);

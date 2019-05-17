@@ -53,7 +53,7 @@
     <Compile Include="Logics\EatProviantLogicState.cs" />
     <Compile Include="Logics\HealSelfLogicState.cs" />
     <Compile Include="Logics\IdleLogicData.cs" />
-    <Compile Include="Logics\DefeateTargetLogicData.cs" />
+    <Compile Include="Logics\DefeatTargetLogicData.cs" />
     <Compile Include="Logics\LootLogicData.cs" />
     <Compile Include="Logics\LootLogicState.cs" />
     <Compile Include="Logics\RoamingLogicData.cs" />
@@ -69,7 +69,6 @@
     <Compile Include="Triggers\LogicOverTrigger.cs" />
     <Compile Include="Triggers\HungryAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
-    <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
     <Compile Include="Logics\IdleLogicState.cs" />
     <Compile Include="Logics\DefeatTargetLogicState.cs" />
     <Compile Include="Logics\RoamingLogicState.cs" />

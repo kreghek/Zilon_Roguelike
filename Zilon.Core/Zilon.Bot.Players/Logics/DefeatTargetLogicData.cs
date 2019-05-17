@@ -5,9 +5,9 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public sealed class DefeateTargetLogicData : ILogicStateData
+    public sealed class DefeatTargetLogicData : ILogicStateData
     {
-        public DefeateTargetLogicData(IAttackTarget target)
+        public DefeatTargetLogicData(IAttackTarget target)
         {
             Target = target ?? throw new ArgumentNullException(nameof(target));
         }
