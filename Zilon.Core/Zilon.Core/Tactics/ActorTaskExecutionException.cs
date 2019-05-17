@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Runtime.Serialization;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics

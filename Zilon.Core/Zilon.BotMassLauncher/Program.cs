@@ -92,7 +92,7 @@ namespace Zilon.BotMassLauncher
 
                 process.Start();
 
-                process.WaitForExit(10000);
+                process.WaitForExit(30000);
             }
 
             Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} FINISHED");

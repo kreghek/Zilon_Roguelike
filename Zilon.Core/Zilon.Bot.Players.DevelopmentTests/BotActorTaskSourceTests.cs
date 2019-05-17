@@ -36,21 +36,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             while (!humanActor.Person.Survival.IsDead)
             {
-                try
-                {
-                    gameLoop.Update();
-                }
-                catch (ActorTaskExecutionException exception)
-                {
-                    if (exception.ActorTaskSource is BotActorTaskSource)
-                    {
-                        throw exception.InnerException;
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                gameLoop.Update();
 
                 if (_changeSector)
                 {
