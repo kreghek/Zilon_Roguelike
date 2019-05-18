@@ -11,13 +11,14 @@ namespace Zilon.Bot.Players
     public class BotActorTaskSource : ISectorActorTaskSource
     {
         private readonly HumanPlayer _player;
+        private readonly ILogicStrategySelector _logicStrategySelector;
 
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSource(HumanPlayer player)
+        public BotActorTaskSource(HumanPlayer player, ILogicStrategySelector logicStrategySelector)
         {
             _player = player;
-
+            _logicStrategySelector = logicStrategySelector;
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
@@ -59,7 +60,7 @@ namespace Zilon.Bot.Players
                 {
                     // Создаём стратегию для текущего актёра.
                     // Добавляем созданную стратегию в словарь стратегий.
-                    logicStrategy = new LogicTreeStrategy(actor, LogicStateTreePatterns.HumanBot);
+                    logicStrategy = _logicStrategySelector.GetLogicStrategy(actor);
                     _actorStrategies[actor] = logicStrategy;
                 }
 

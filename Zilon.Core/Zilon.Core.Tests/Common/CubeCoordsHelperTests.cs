@@ -12,19 +12,22 @@ namespace Zilon.Core.Tests.Common
     [TestFixture]
     public class CubeCoordsHelperTests
     {
+        /// <summary>
+        /// Тест проверяет, что при произвольных входных данных строится непрерывная линия.
+        /// </summary>
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
-        public void CubeDrawLineTest(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
+        public void CubeDrawLine_DifferentPoints_LineIsSolid(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
         {
             // ARRANGE
 
             var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
-            var finishCubCoords = HexHelper.ConvertToCube(offsetX, offsetY);
+            var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
 
 
             // ACT
-            var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubCoords);
+            var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
 
 
 
@@ -53,6 +56,36 @@ namespace Zilon.Core.Tests.Common
                 }
 
                 hasNeighbor.Should().Be(true);
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что нет различий, с какой стороны строить линию. От начала до конца или наоборот.
+        /// </summary>
+        [Test]
+        [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
+        public void CubeDrawLine_DifferentPoints_ReverseEquals(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
+        {
+            // ARRANGE
+
+            var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
+            var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
+
+
+
+            // ACT
+            var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
+            var reverseLine = CubeCoordsHelper.CubeDrawLine(finishCubeCoords, startCubeCoords);
+
+
+
+            // ASSERT
+            for (int i = 0; i < line.Length; i++)
+            {
+                var linePoint = line[i];
+                var reversePoint = reverseLine[reverseLine.Length - i - 1];
+
+                reversePoint.Should().Be(linePoint);
             }
         }
     }

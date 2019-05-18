@@ -49,6 +49,7 @@
     <Compile Include="ILogicStateTrigger.cs" />
     <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
+    <Compile Include="Strategies\ILogicStrategySelector.cs" />
     <Compile Include="LogicHelper.cs" />
     <Compile Include="Logics\EatProviantLogicState.cs" />
     <Compile Include="Logics\HealSelfLogicState.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Logics\LootLogicState.cs" />
     <Compile Include="Logics\RoamingLogicData.cs" />
     <Compile Include="LootHelper.cs" />
+    <Compile Include="Strategies\BotLogicStrategySelector.cs" />
     <Compile Include="Strategies\LogicStateTree.cs" />
     <Compile Include="Strategies\LogicStateTreePatterns.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />

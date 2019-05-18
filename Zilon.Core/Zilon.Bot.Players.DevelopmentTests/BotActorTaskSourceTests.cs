@@ -50,6 +50,14 @@ namespace Zilon.Bot.Players.DevelopmentTests
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
         }
 
+        [SetUp]
+        public void StartUp()
+        {
+            _globalServiceContainer = new ServiceContainer();
+            _startUp = new Startup();
+            _startUp.RegisterServices(_globalServiceContainer);
+        }
+
         private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
         {
             Console.WriteLine("Exit");
@@ -57,14 +65,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
             sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
-        }
-
-        [SetUp]
-        public void StartUp()
-        {
-            _globalServiceContainer = new ServiceContainer();
-            _startUp = new Startup();
-            _startUp.RegisterServices(_globalServiceContainer);
         }
 
         private async Task<IActor> CreateSectorAsync()

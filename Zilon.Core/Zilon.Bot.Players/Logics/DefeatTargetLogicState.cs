@@ -43,9 +43,8 @@ namespace Zilon.Bot.Players.Logics
             return nearbyIntruder;
         }
 
-        private IActor[] CheckForIntruders(IActor actor)
+        private IEnumerable<IActor> CheckForIntruders(IActor actor)
         {
-            var foundIntruders = new List<IActor>();
             foreach (var target in _actorManager.Items)
             {
                 if (target.Owner == actor.Owner)
@@ -64,10 +63,8 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                foundIntruders.Add(target);
+                yield return target;
             }
-
-            return foundIntruders.ToArray();
         }
 
 

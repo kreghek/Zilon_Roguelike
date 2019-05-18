@@ -2,6 +2,7 @@
 
 using LightInject;
 
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -69,8 +70,10 @@ namespace Zilon.Emulation.Common
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerScopeLifetime());
             container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerScopeLifetime());
+            container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
 
             container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerScopeLifetime());
+            container.Register<ILogicStrategySelector, BotLogicStrategySelector>(new PerScopeLifetime());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
@@ -90,7 +93,6 @@ namespace Zilon.Emulation.Common
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
             container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
             container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());

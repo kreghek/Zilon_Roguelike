@@ -12,11 +12,19 @@ namespace Zilon.Bot.Players
         public static bool CheckTargetVisible(ISectorMap map, IMapNode node, IMapNode target)
         {
             var distance = map.DistanceBetween(node, target);
-            var isVisible = map.TargetIsOnLine(node, target);
-
             var isInSignRange = distance <= SIGN_RANGE;
+            if (!isInSignRange)
+            {
+                return false;
+            }
 
-            return isInSignRange && isVisible;
+            var isVisible = map.TargetIsOnLine(node, target);
+            if (!isVisible)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
