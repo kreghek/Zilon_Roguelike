@@ -16,7 +16,7 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
             var allTypes = logicTypes.Union(triggerTypes);
             foreach (var logicType in allTypes)
             {
-                // Регистрируем, как персистентные. Потому что нам может потребовать несколько
+                // Регистрируем, как трансиентные. Потому что нам может потребовать несколько
                 // состояний и триггеров одного и того же типа.
                 // Например, для различной кастомизации.
                 serviceRegistry.Register(logicType);

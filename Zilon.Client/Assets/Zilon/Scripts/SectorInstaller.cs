@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
 
+using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
@@ -11,7 +17,6 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 
 public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
@@ -25,7 +30,10 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ITraderManager>().To<TraderManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
-        Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSource>().WithId("monster").To<BotActorTaskSource>().AsSingle();
+        Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
+        Container.Bind<ILogicStrategySelector>().To<BotLogicStrategySelector>().AsSingle();
+        RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
             .OnInstantiated<TacticalActUsageService>((c, i) =>
              {
@@ -79,6 +87,28 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
     }
 
+    private void RegisterBotLogics(DiContainer container)
+    {
+        var logicTypes = GetTypes<ILogicState>();
+        var triggerTypes = GetTypes<ILogicStateTrigger>();
+
+        var allTypes = logicTypes.Union(triggerTypes);
+        foreach (var logicType in allTypes)
+        {
+            // –егистрируем, как трансиентные. ѕотому что нам может потребовать несколько
+            // состо€ний и триггеров одного и того же типа.
+            // Ќапример, дл€ различной кастомизации.
+
+            container.Bind(logicType).AsTransient();
+        }
+    }
+
+    private static IEnumerable<Type> GetTypes<TInterface>()
+    {
+        var logicTypes = typeof(ILogicState).Assembly.GetTypes()
+            .Where(x => !x.IsAbstract && !x.IsInterface && typeof(TInterface).IsAssignableFrom(x));
+        return logicTypes;
+    }
 
     private SectorModalManager GetSectorModalManager()
     {

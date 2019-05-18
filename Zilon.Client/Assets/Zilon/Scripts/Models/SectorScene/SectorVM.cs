@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -10,7 +11,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Zenject;
-
+using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -96,6 +98,8 @@ internal class SectorVM : MonoBehaviour
     [Inject] private readonly IBotPlayer _botPlayer;
 
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
+
+    [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -199,6 +203,8 @@ internal class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
+        LogicStateTreePatterns.Factory = _logicStateFactory;
+
         await _sectorManager.CreateSectorAsync();
 
         _sectorManager.CurrentSector.ScoreManager = _scoreManager;
