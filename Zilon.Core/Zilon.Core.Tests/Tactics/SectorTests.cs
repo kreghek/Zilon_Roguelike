@@ -54,7 +54,6 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
-                traderManager,
                 dropResolver,
                 schemeService,
                 equipmentDurableService);
@@ -106,7 +105,6 @@ namespace Zilon.Core.Tests.Tactics
             var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
-                traderManager,
                 dropResolver,
                 schemeService,
                 equipmentDurableService);

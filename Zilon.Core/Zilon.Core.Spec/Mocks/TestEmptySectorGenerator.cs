@@ -41,7 +41,6 @@ namespace Zilon.Core.Spec.Mocks
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
-                _traderManager,
                 _dropResolver,
                 _schemeService,
                 _equipmentDurableService);
