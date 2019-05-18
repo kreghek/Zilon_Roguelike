@@ -13,7 +13,7 @@ namespace Zilon.Bot.Players.LightInject
     public static class RegisterManager
     {
         [ActorTaskSourceType]
-        public static Type ActorTaskSourceType => typeof(BotActorTaskSource);
+        public static Type ActorTaskSourceType => typeof(BotActorTaskSourceBase);
 
         [RegisterAuxServices]
         public static void RegisterBot(IServiceRegistry serviceRegistry)

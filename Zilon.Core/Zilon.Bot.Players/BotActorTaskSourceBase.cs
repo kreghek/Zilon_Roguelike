@@ -8,17 +8,17 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public class BotActorTaskSource : ISectorActorTaskSource
+    public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
     {
-        private readonly HumanPlayer _player;
+        private readonly IPlayer _player;
         private readonly ILogicStrategySelector _logicStrategySelector;
 
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSource(HumanPlayer player, ILogicStrategySelector logicStrategySelector)
+        public BotActorTaskSourceBase(IPlayer player)
         {
             _player = player;
-            _logicStrategySelector = logicStrategySelector;
+
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
@@ -80,5 +80,7 @@ namespace Zilon.Bot.Players
 
             return new IActorTask[0];
         }
+
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

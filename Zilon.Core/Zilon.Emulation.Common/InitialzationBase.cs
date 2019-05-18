@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 
 using LightInject;
-
+using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices.Dices;
@@ -72,7 +72,7 @@ namespace Zilon.Emulation.Common
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerScopeLifetime());
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
 
-            container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerScopeLifetime());
+            container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
             container.Register<ILogicStrategySelector, BotLogicStrategySelector>(new PerScopeLifetime());
         }
 

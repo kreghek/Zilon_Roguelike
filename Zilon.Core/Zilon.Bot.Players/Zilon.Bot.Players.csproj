@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmptyLogicTriggerData.cs" />
-    <Compile Include="BotActorTaskSource.cs" />
+    <Compile Include="BotActorTaskSourceBase.cs" />
+    <Compile Include="MonsterBotActorTaskSource.cs" />
+    <Compile Include="HumanBotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
     <Compile Include="ILogicStateFactory.cs" />
     <Compile Include="ILogicStateTrigger.cs" />
