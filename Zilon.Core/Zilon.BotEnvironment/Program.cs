@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -293,39 +294,43 @@ namespace Zilon.BotEnvironment
 
         private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string scoreFilePreffix)
         {
-            Console.WriteLine("YOU (BOT) DIED");
+            var summaryStringBuilder = new StringBuilder(); 
+            
+            summaryStringBuilder.AppendLine("YOU (BOT) DIED");
 
-            Console.WriteLine($"SCORES: {scoreManager.BaseScores}");
+            summaryStringBuilder.AppendLine($"SCORES: {scoreManager.BaseScores}");
 
-            Console.WriteLine("=== You survived ===");
+            summaryStringBuilder.AppendLine("=== You survived ===");
             var minutesTotal = scoreManager.Turns * 2;
             var hoursTotal = minutesTotal / 60f;
             var daysTotal = hoursTotal / 24f;
             var days = (int)daysTotal;
             var hours = (int)(hoursTotal - days * 24);
 
-            Console.WriteLine($"{days} days {hours} hours");
-            Console.WriteLine($"Turns: {scoreManager.Turns}");
+            summaryStringBuilder.AppendLine($"{days} days {hours} hours");
+            summaryStringBuilder.AppendLine($"Turns: {scoreManager.Turns}");
 
-            Console.WriteLine("=== You visited ===");
+            summaryStringBuilder.AppendLine("=== You visited ===");
 
-            Console.WriteLine($"{scoreManager.Places.Count} places");
+            summaryStringBuilder.AppendLine($"{scoreManager.Places.Count} places");
 
             foreach (var placeType in scoreManager.PlaceTypes)
             {
-                Console.WriteLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
+                summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
             }
 
-            Console.WriteLine("=== You killed ===");
+            summaryStringBuilder.AppendLine("=== You killed ===");
             foreach (var frag in scoreManager.Frags)
             {
-                Console.WriteLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
+                summaryStringBuilder.AppendLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
             }
 
-            AppendScores(scoreManager, serviceFactory, scoreFilePreffix);
+            Console.WriteLine(summaryStringBuilder.ToString());
+
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, summaryStringBuilder.ToString());
         }
 
-        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix)
+        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix, string summary)
         {
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))
@@ -342,7 +347,7 @@ namespace Zilon.BotEnvironment
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
 
-            DatabaseContext.AppendScores(scoreManager, serviceFactory, scoreFilePreffix, "summary");
+            DatabaseContext.AppendScores(scoreManager, serviceFactory, scoreFilePreffix, summary);
         }
 
         private static void AppendFail(IServiceFactory serviceFactory, string scoreFilePreffix)
