@@ -103,7 +103,7 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\""
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\" mode=duncan"
                 };
 
 

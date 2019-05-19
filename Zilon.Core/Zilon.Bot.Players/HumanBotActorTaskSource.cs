@@ -1,4 +1,5 @@
-﻿using Zilon.Bot.Players.Strategies;
+﻿using System;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -7,16 +8,41 @@ namespace Zilon.Bot.Players
 {
     public sealed class HumanBotActorTaskSource : BotActorTaskSourceBase
     {
-        private readonly IBotSettings _botSettings;
+        private IBotSettings _botSettings;
 
-        public HumanBotActorTaskSource(HumanPlayer player, IBotSettings botSettings) : base(player)
+        public HumanBotActorTaskSource(HumanPlayer player) : base(player)
         {
-            _botSettings = botSettings;
+            
         }
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
-            return new LogicTreeStrategy(actor, LogicStateTreePatterns.HumanBot);
+            if (_botSettings == null)
+            {
+                return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot);
+            }
+
+            var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
+            switch (normalizedMode)
+            {
+                case "":
+                case null:
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot);
+
+                case "JOE":
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.JoeHumanBot);
+
+                case "DUNCAN":
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DuncanHumanBot);
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public override void Configure(IBotSettings botSettings)
+        {
+            _botSettings = botSettings;
         }
     }
 }

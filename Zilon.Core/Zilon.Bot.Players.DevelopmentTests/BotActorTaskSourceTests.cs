@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LightInject;
 
 using NUnit.Framework;
-
+using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -32,6 +32,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+
+            var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
+            botActorTaskSource.Configure(new BotSettings { Mode = "duncan" });
+
 
             while (!humanActor.Person.Survival.IsDead)
             {

@@ -74,7 +74,6 @@ namespace Zilon.Emulation.Common
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
 
             container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
-            container.Register<ILogicStrategySelector, BotLogicStrategySelector>(new PerScopeLifetime());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)

@@ -24,7 +24,11 @@ namespace Zilon.Bot
     {
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
+        private const string BOT_MODE_ARG = "Mode";
         private const string SCORE_FILE_PATH = "bot-scores";
+        private const int ITERATION_LIMIT = 40_000;
+        private const int BOT_EXCEPTION_LIMIT = 3;
+        private const int ENVIRONMENT_EXCEPTION_LIMIT = 3;
 
         private static ServiceContainer _globalServiceContainer;
         private static Startup _startUp;
@@ -46,7 +50,9 @@ namespace Zilon.Bot
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
             var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
-            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
+            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
+            ConfigureBot(args, botActorTaskSource);
 
             foreach (var actor in actorManager.Items)
             {
@@ -58,7 +64,8 @@ namespace Zilon.Bot
 
             var botExceptionCount = 0;
             var envExceptionCount = 0;
-            while (!humanActor.Person.Survival.IsDead)
+            var iterationCounter = 1;
+            while (!humanActor.Person.Survival.IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {
@@ -82,7 +89,7 @@ namespace Zilon.Bot
                     {
                         botExceptionCount++;
 
-                        if (botExceptionCount >= 3)
+                        if (botExceptionCount >= BOT_EXCEPTION_LIMIT)
                         {
                             AppendFail(_globalServiceContainer, scoreFilePreffix);
                             throw;
@@ -112,6 +119,8 @@ namespace Zilon.Bot
 
                     _changeSector = false;
                 }
+
+                iterationCounter++;
             };
 
             WriteScores(_globalServiceContainer, scoreManager, scoreFilePreffix);
@@ -122,9 +131,18 @@ namespace Zilon.Bot
             }
         }
 
+        private static void ConfigureBot(string[] args, ISectorActorTaskSource monsterActorTaskSource)
+        {
+            var botSettings = new BotSettings
+            {
+                Mode = GetProgramArgument(args, BOT_MODE_ARG)
+            };
+            monsterActorTaskSource.Configure(botSettings);
+        }
+
         private static void CheckEnvExceptions(int envExceptionCount, Exception exception)
         {
-            if (envExceptionCount >= 3)
+            if (envExceptionCount >= ENVIRONMENT_EXCEPTION_LIMIT)
             {
                 throw exception;
             }
@@ -149,7 +167,7 @@ namespace Zilon.Bot
 
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
             var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
-            var botActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
             var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
             var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
 
@@ -186,7 +204,9 @@ namespace Zilon.Bot
 
             // Регистрируем сервис источника команд.
             var botActorTaskSource = GetBotActorTaskSource(registerManager);
-            serviceRegistry.Register(typeof(IActorTaskSource), botActorTaskSource, "bot", new PerScopeLifetime());
+            serviceRegistry.Register(typeof(ISectorActorTaskSource), botActorTaskSource, "bot", new PerScopeLifetime());
+            serviceRegistry.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot",
+                new PerScopeLifetime());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
             registerAuxMethod.Invoke(null, new object[] { serviceRegistry });

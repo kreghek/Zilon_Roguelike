@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -11,7 +10,6 @@ namespace Zilon.Bot.Players
     public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
     {
         private readonly IPlayer _player;
-        private readonly ILogicStrategySelector _logicStrategySelector;
 
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
@@ -21,6 +19,8 @@ namespace Zilon.Bot.Players
 
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
+
+        public abstract void Configure(IBotSettings botSettings);
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
