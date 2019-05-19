@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 
 using LightInject;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
