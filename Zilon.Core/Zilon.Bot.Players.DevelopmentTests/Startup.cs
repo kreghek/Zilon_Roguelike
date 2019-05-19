@@ -21,7 +21,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             container.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
                 new PerScopeLifetime());
 
-            container.Register<IActorTaskSource, BotActorTaskSourceBase>("bot", new PerScopeLifetime());
+            container.Register<IActorTaskSource, HumanBotActorTaskSource>("bot", new PerScopeLifetime());
 
         }
     }
