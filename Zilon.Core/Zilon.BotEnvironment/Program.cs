@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using LightInject;
 
+using Zilon.Bot;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -18,7 +19,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Bot
+namespace Zilon.BotEnvironment
 {
     class Program
     {
@@ -241,7 +242,7 @@ namespace Zilon.Bot
             return null;
         }
 
-        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType) where TAttribute: Attribute
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType) where TAttribute : Attribute
         {
             var methods = registerManagerType.GetMethods();
             foreach (var method in methods)
@@ -340,6 +341,8 @@ namespace Zilon.Bot
                 var fragSum = scoreManager.Frags.Sum(x => x.Value);
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
+
+            DatabaseContext.AppendScores(scoreManager, serviceFactory, scoreFilePreffix, "summary");
         }
 
         private static void AppendFail(IServiceFactory serviceFactory, string scoreFilePreffix)
