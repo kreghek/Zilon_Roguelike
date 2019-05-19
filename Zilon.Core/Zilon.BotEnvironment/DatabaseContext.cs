@@ -1,10 +1,11 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+
 using LightInject;
+
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
