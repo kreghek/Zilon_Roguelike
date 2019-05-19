@@ -30,7 +30,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<ITraderManager>().To<TraderManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
-        Container.Bind<IActorTaskSource>().WithId("monster").To<BotActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         Container.Bind<ILogicStrategySelector>().To<BotLogicStrategySelector>().AsSingle();
         RegisterBotLogics(Container);
