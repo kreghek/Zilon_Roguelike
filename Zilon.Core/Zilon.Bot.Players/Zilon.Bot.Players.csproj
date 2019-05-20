@@ -39,7 +39,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmptyLogicTriggerData.cs" />
     <Compile Include="BotActorTaskSourceBase.cs" />
     <Compile Include="ILogicStrategyData.cs" />
     <Compile Include="Logics\LogicStateBase.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="Strategies\LogicStateTree.cs" />
     <Compile Include="Strategies\LogicStateTreePatterns.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
-    <Compile Include="Triggers\CounterTriggerData.cs" />
     <Compile Include="Triggers\LootDetectedTrigger.cs" />
     <Compile Include="Triggers\ResourceFinder.cs" />
     <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
