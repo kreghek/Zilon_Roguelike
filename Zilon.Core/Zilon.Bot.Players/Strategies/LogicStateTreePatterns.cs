@@ -28,7 +28,7 @@ namespace Zilon.Bot.Players.Strategies
                 });
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
-                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     // После победы над текущим противником отдыхаем
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
                 });
@@ -76,7 +76,7 @@ namespace Zilon.Bot.Players.Strategies
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
-                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     // После победы над текущим противником отдыхаем
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
                 });
@@ -144,7 +144,7 @@ namespace Zilon.Bot.Players.Strategies
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
-                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                 });
 
                 tree.Transitions.Add(healSelfLogic, new LogicTransition[] {

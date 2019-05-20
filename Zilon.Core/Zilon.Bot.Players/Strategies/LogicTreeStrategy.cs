@@ -44,51 +44,109 @@ namespace Zilon.Bot.Players.Strategies
             // возвращает пустые задачи и не меняется определённое количество раз (100, например), выбрасывать исключение.
             //TODO Нужно переделать стратегию, логики и триггеры под описание выше. Сейчас работают, как описано в НЕПРАВИЛЬНОМ БЛОКЕ
 
-            var currentStateTransitions = _stateTree.Transitions[CurrentState];
-            IActorTask actorTask = null;
-            foreach (var transition in currentStateTransitions)
+
+            var newCurrentState = SelectCurrentState();
+            if (newCurrentState != CurrentState)
             {
-                var trigger = transition.Selector;
+                CurrentState = newCurrentState;
+                _currentStateData = CurrentState.CreateData(Actor);
+            }
 
-                if (!_currentStateTransitionData.TryGetValue(trigger, out var triggerData))
+            if (_currentStateData == null)
+            {
+                _currentStateData = CurrentState.CreateData(Actor);
+            }
+
+            var actorTask = CurrentState.GetTask(Actor, _currentStateData);
+            return actorTask;
+
+
+
+            //IActorTask actorTask = null;
+            //foreach (var transition in currentStateTransitions)
+            //{
+            //    var trigger = transition.Selector;
+
+            //    if (!_currentStateTransitionData.TryGetValue(trigger, out var triggerData))
+            //    {
+            //        triggerData = trigger.CreateData(Actor);
+            //        _currentStateTransitionData[trigger] = triggerData;
+            //    }
+
+            //    var isFired = trigger.Test(Actor, CurrentState, triggerData);
+            //    if (isFired)
+            //    {
+            //        var nextData = transition.NextState.CreateData(Actor);
+            //        actorTask = transition.NextState.GetTask(Actor, nextData);
+
+            //        if (actorTask != null)
+            //        {
+            //            CurrentState = transition.NextState;
+            //            _currentStateData = nextData;
+            //            ChangeState();
+            //            break;
+            //        }
+            //    }
+            //}
+
+            //// Эта ситуация может произойти, если:
+            //// -- для текущей логики не выстрелило ниодного перехода.
+            //// -- переходы, которые выстрелили, вернули нулевую задачу.
+            //// Значит остаёмся с текущей логикой и запрашиваем у неё задачу.
+            //if (actorTask == null)
+            //{
+            //    // Пустые данные состояния означают, что состояние ещё не было инициализировано.
+            //    // Это происходит, например, при первом старте стратегии.
+            //    if (_currentStateData == null)
+            //    {
+            //        _currentStateData = CurrentState.CreateData(Actor);
+            //    }
+
+            //    actorTask = CurrentState.GetTask(Actor, _currentStateData);
+            //}
+
+            //return actorTask;
+        }
+
+        private ILogicState SelectCurrentState()
+        {
+            var currentState = CurrentState;
+            var safityCounter = 100;
+            bool anyTransitionFired;
+            do
+            {
+                var currentStateTransitions = _stateTree.Transitions[currentState];
+
+                anyTransitionFired = false;
+                foreach (var transition in currentStateTransitions)
                 {
-                    triggerData = trigger.CreateData(Actor);
-                    _currentStateTransitionData[trigger] = triggerData;
-                }
+                    var trigger = transition.Selector;
 
-                var isFired = trigger.Test(Actor, CurrentState, triggerData);
-                if (isFired)
-                {
-                    var nextData = transition.NextState.CreateData(Actor);
-                    actorTask = transition.NextState.GetTask(Actor, nextData);
-
-                    if (actorTask != null)
+                    if (!_currentStateTransitionData.TryGetValue(trigger, out var triggerData))
                     {
-                        CurrentState = transition.NextState;
-                        _currentStateData = nextData;
-                        ChangeState();
+                        triggerData = trigger.CreateData(Actor);
+                        _currentStateTransitionData[trigger] = triggerData;
+                    }
+
+                    var isFired = trigger.Test(Actor, сurrentState, triggerData);
+                    if (isFired)
+                    {
+                        currentState = transition.NextState;
+                        _currentStateTransitionData.Clear();
+                        anyTransitionFired = true;
                         break;
                     }
                 }
-            }
 
-            // Эта ситуация может произойти, если:
-            // -- для текущей логики не выстрелило ниодного перехода.
-            // -- переходы, которые выстрелили, вернули нулевую задачу.
-            // Значит остаёмся с текущей логикой и запрашиваем у неё задачу.
-            if (actorTask == null)
+                safityCounter--;
+            } while (anyTransitionFired && safityCounter > 0);
+
+            if (safityCounter <= 0)
             {
-                // Пустые данные состояния означают, что состояние ещё не было инициализировано.
-                // Это происходит, например, при первом старте стратегии.
-                if (_currentStateData == null)
-                {
-                    _currentStateData = CurrentState.CreateData(Actor);
-                }
-
-                actorTask = CurrentState.GetTask(Actor, _currentStateData);
+                throw new Exception();
             }
 
-            return actorTask;
+            return currentState;
         }
 
         private void ChangeState()
