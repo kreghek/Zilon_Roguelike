@@ -6,6 +6,11 @@ namespace Zilon.Bot.Players.Triggers
     {
         private const int COUNTER_INITIAL_VALUE = 3;
 
+        public CounterOverTrigger()
+        {
+            Counter = COUNTER_INITIAL_VALUE;
+        }
+
         public int Counter { get; private set; }
         public bool CounterIsOver => Counter <= 0;
 

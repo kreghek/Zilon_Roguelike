@@ -16,7 +16,7 @@ namespace Zilon.Bot.Players.Strategies
 
         public override string ToString()
         {
-            return $"{Logic} ({FiredTrigger})";
+            return $"{FiredTrigger} -> {Logic}";
         }
     }
 }

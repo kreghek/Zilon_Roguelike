@@ -130,6 +130,7 @@ namespace Zilon.Bot.Players.Strategies
                 var healSelfLogic = Factory.CreateLogic<HealSelfLogicState>();
                 var eatProviantLogic = Factory.CreateLogic<EatProviantLogicState>();
                 var lootLogic = Factory.CreateLogic<LootLogicState>();
+                var idleLogic = Factory.CreateLogic<IdleLogicState>();
 
 
                 tree.StartState = roamingLogic;
@@ -140,7 +141,7 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<LootDetectedTrigger>(), lootLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), idleLogic)
                 });
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
@@ -163,6 +164,14 @@ namespace Zilon.Bot.Players.Strategies
 
                 tree.Transitions.Add(lootLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
+                });
+
+                tree.Transitions.Add(idleLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
+                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
                 });
 

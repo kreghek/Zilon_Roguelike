@@ -34,12 +34,6 @@ namespace Zilon.Bot.Players.Logics
             _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }
 
-        public IAttackTarget CreateData(IActor actor)
-        {
-            var target = GetTarget(actor);
-            return target;
-        }
-
         private IAttackTarget GetTarget(IActor actor)
         {
             //TODO Убрать дублирование кода с IntruderDetectedTrigger
@@ -95,6 +89,11 @@ namespace Zilon.Bot.Players.Logics
 
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
+            if (_target == null)
+            {
+                _target = GetTarget(actor);
+            }
+
             var targetCanBeDamaged = _target.CanBeDamaged();
             if (!targetCanBeDamaged)
             {
