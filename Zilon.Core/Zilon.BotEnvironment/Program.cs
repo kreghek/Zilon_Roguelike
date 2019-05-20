@@ -125,7 +125,8 @@ namespace Zilon.BotEnvironment
                 iterationCounter++;
             };
 
-            WriteScores(_globalServiceContainer, scoreManager, scoreFilePreffix);
+            var mode = GetProgramArgument(args, BOT_MODE_ARG);
+            WriteScores(_globalServiceContainer, scoreManager, mode, scoreFilePreffix);
 
             if (!HasProgramArgument(args, SERVER_RUN_ARG))
             {
@@ -292,7 +293,7 @@ namespace Zilon.BotEnvironment
             Console.WriteLine($"{actor} moved {actor.Node}");
         }
 
-        private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string scoreFilePreffix)
+        private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string mode, string scoreFilePreffix)
         {
             var summaryStringBuilder = new StringBuilder(); 
             
@@ -327,10 +328,10 @@ namespace Zilon.BotEnvironment
 
             Console.WriteLine(summaryStringBuilder.ToString());
 
-            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, summaryStringBuilder.ToString());
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryStringBuilder.ToString());
         }
 
-        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix, string summary)
+        private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix, string mode, string summary)
         {
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))
@@ -347,7 +348,7 @@ namespace Zilon.BotEnvironment
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
 
-            DatabaseContext.AppendScores(scoreManager, serviceFactory, scoreFilePreffix, summary);
+            DatabaseContext.AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summary);
         }
 
         private static void AppendFail(IServiceFactory serviceFactory, string scoreFilePreffix)

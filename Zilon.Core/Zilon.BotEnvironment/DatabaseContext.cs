@@ -16,6 +16,7 @@ namespace Zilon.BotEnvironment
         public static void AppendScores(IScoreManager scoreManager,
             IServiceFactory serviceFactory,
             string scoreFilePreffix,
+            string mode,
             string textSummary)
         {
             var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
@@ -55,7 +56,7 @@ namespace Zilon.BotEnvironment
                 using (var command = new SQLiteCommand(connection))
                 {
                     command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
-                    VALUES ('{botTaskSource.GetType().FullName}', '{scoreFilePreffix}', 'mode', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
+                    VALUES ('{botTaskSource.GetType().FullName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }
