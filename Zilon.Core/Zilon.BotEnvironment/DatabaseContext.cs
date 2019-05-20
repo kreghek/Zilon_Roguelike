@@ -36,9 +36,25 @@ namespace Zilon.BotEnvironment
                 connection.ConnectionString = "Data Source = " + baseName;
                 connection.Open();
 
+                CreateScoresTableIfNotExists(connection);
+
+                CreatMeasuresViewIfNotExists(connection);
+
                 using (var command = new SQLiteCommand(connection))
                 {
-                    command.CommandText = @"CREATE TABLE IF NOT EXISTS [Scores](
+                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
+                    VALUES ('{botTaskSource.GetType().FullName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
+        {
+            using (var command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS [Scores](
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         Name TEXT NOT NULL,
                         Preffix TEXT NULL,
@@ -49,17 +65,48 @@ namespace Zilon.BotEnvironment
                         Frags INTEGER NULL,
                         TextSummary TEXT NULL
                     );";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
+                command.CommandType = CommandType.Text;
+                command.ExecuteNonQuery();
+            }
+        }
 
-                using (var command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
-                    VALUES ('{botTaskSource.GetType().FullName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
-                    command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
+        private static void CreatMeasuresViewIfNotExists(SQLiteConnection connection)
+        {
+            using (var command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"CREATE VIEW IF NOT EXISTS [v_Measures] ([Name]
+                            ,[Preffix]
+                            ,[Mode]
+                            ,[MinScores]
+                            ,[AvgScores]
+                            ,[MaxScores]
+                            ,[MinTurns]
+                            ,[AvgTurns]
+                            ,[MaxTurns]
+                            ,[MinFrags]
+                            ,[AvgFrags]
+                            ,[MaxFrags]
+                            ,[Iterations]
+                            ,[AvgIterationDuration])
+                        AS
+                        SELECT [Name]
+                            ,[Preffix]
+                            ,[Mode]
+                            ,MIN([Scores]) AS MinScores
+                            ,AVG([Scores]) AS AvgScores
+                            ,MAX([Scores]) AS MaxScores
+                            ,MIN([Turns]) AS MinTurns
+                            ,AVG([Turns]) AS AvgTurns
+                            ,MAX([Turns]) AS MaxTurns
+                            ,MIN([Frags]) AS MinFrags
+                            ,AVG([Frags]) AS AvgFrags
+                            ,MAX([Frags]) AS MaxFrags
+                            ,COUNT(*) AS Iterations
+                            ,(julianday(MAX([TimeStamp])) - julianday(MIN([TimeStamp]))) * 24 * 60 * 60 / COUNT(*) AS AvgIterationDuration
+                        FROM [Scores]
+                        GROUP BY [Name] ,[Preffix] ,[Mode]";
+                command.CommandType = CommandType.Text;
+                command.ExecuteNonQuery();
             }
         }
     }

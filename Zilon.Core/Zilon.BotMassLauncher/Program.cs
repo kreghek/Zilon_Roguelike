@@ -15,6 +15,7 @@ namespace Zilon.BotMassLauncher
         private static string _parallel;
         private static bool _isInfinite;
         private static ulong _infiniteCounter;
+        private static string _botMode;
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
@@ -28,6 +29,7 @@ namespace Zilon.BotMassLauncher
 
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");
+            _botMode = GetProgramArgument(args, "mode");
 
             _shutdownTokenSource = new CancellationTokenSource();
             _shutdownToken = _shutdownTokenSource.Token;
@@ -88,6 +90,12 @@ namespace Zilon.BotMassLauncher
 
         private static void RunEnvironment(int iteration)
         {
+            var modeArg = string.Empty;
+            if (!string.IsNullOrEmpty(_botMode))
+            {
+                modeArg = $" mode={_botMode}";
+            }
+
             var infiniteCounterPreffix = string.Empty;
             if (_isInfinite)
             {
@@ -103,9 +111,8 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\" mode=duncan"
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg}"
                 };
-
 
                 process.Start();
 
