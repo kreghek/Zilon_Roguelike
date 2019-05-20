@@ -4,8 +4,10 @@ namespace Zilon.Bot.Players
 {
     public interface ILogicStateTrigger
     {
-        bool Test(IActor actor, ILogicState currentState, ILogicStateData data);
+        bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData);
 
-        ILogicStateData CreateData(IActor actor);
+        void Update();
+
+        void Reset();
     }
 }

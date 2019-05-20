@@ -140,22 +140,25 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<LootDetectedTrigger>(), lootLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
                 });
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
                 });
 
                 tree.Transitions.Add(healSelfLogic, new LogicTransition[] {
-                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                    new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
+                    //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
+                    //new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
+                    //new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
                 });
 
                 tree.Transitions.Add(eatProviantLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic),
-                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic)
+                    //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic)
                 });
 
                 tree.Transitions.Add(lootLogic, new LogicTransition[] {

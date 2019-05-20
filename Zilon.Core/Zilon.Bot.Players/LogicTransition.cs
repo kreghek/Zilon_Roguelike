@@ -4,13 +4,13 @@ namespace Zilon.Bot.Players
 {
     public class LogicTransition
     {
-        public LogicTransition(ILogicStateTrigger selector, ILogicState nextState)
+        public LogicTransition(ILogicStateTrigger trigger, ILogicState nextState)
         {
-            Selector = selector ?? throw new ArgumentNullException(nameof(selector));
+            Trigger = trigger ?? throw new ArgumentNullException(nameof(trigger));
             NextState = nextState ?? throw new ArgumentNullException(nameof(nextState));
         }
 
-        public ILogicStateTrigger Selector { get; }
+        public ILogicStateTrigger Trigger { get; }
         public ILogicState NextState { get; }
     }
 }
