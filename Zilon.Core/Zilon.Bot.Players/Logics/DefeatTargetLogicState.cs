@@ -9,8 +9,18 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public sealed class DefeatTargetLogicState : ILogicState
+    public sealed class DefeatTargetLogicState : LogicStateBase
     {
+        private const int REFRESH_COUNTER_VALUE = 3;
+
+        public IAttackTarget _target;
+
+        public int _refreshCounter;
+
+        public MoveTask _moveTask;
+
+        public IdleTask _idleTask;
+
         private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
         private readonly IActorManager _actorManager;
@@ -24,17 +34,17 @@ namespace Zilon.Bot.Players.Logics
             _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }
 
-        public bool Complete { get; private set; }
-
-        public ILogicStateData CreateData(IActor actor)
+        public IAttackTarget CreateData(IActor actor)
         {
             var target = GetTarget(actor);
-            return new DefeatTargetLogicData(target);
+            return target;
         }
 
         private IAttackTarget GetTarget(IActor actor)
         {
-            //TODO Убрать дублирование кода с InruderDetectedTrigger
+            //TODO Убрать дублирование кода с IntruderDetectedTrigger
+            // Этот фрагмент уже однажды был использован неправильно,
+            // что привело к трудноуловимой ошибке.
             var intruders = CheckForIntruders(actor);
 
             var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
@@ -67,53 +77,6 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
-        {
-            var logicData = (DefeatTargetLogicData)data;
-
-            var targetCanBeDamaged = logicData.Target.CanBeDamaged();
-            if (!targetCanBeDamaged)
-            {
-                Complete = true;
-                return null;
-            }
-
-            var isAttackAllowed = CheckAttackAvailability(actor, logicData.Target);
-            if (isAttackAllowed)
-            {
-                var attackTask = new AttackTask(actor, logicData.Target, _actService);
-                return attackTask;
-            }
-            else
-            {
-                // Маршрут до цели обновляем каждые 3 хода.
-                // Для оптимизации.
-                // Эффект потери цели.
-
-                if (logicData.RefreshCounter > 0 && logicData.MoveTask?.CanExecute() == true)
-                {
-                    logicData.RefreshCounter--;
-                    return logicData.MoveTask;
-                }
-                else
-                {
-                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, logicData.Target.Node);
-
-                    if (targetIsOnLine)
-                    {
-                        logicData.MoveTask = new MoveTask(actor, logicData.Target.Node, _map);
-                        return logicData.MoveTask;
-                    }
-                    else
-                    {
-                        // Цел за пределами видимости. Считается потерянной.
-                        return null;
-                    }
-                }
-            }
-        }
-
         private bool CheckAttackAvailability(IActor actor, IAttackTarget target)
         {
             if (actor.Person.TacticalActCarrier == null)
@@ -124,20 +87,63 @@ namespace Zilon.Bot.Players.Logics
             var actCarrier = actor.Person.TacticalActCarrier;
             var act = actCarrier.Acts.First();
 
-            var isInDistance =  act.CheckDistance(actor.Node, target.Node, _map);
+            var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
             var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
 
             return isInDistance && targetIsOnLine;
         }
 
-        public bool CanGetTask(IActor actor, ILogicStateData data)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
-            var logicData = (DefeatTargetLogicData)data;
+            var targetCanBeDamaged = _target.CanBeDamaged();
+            if (!targetCanBeDamaged)
+            {
+                Complete = true;
+                return null;
+            }
 
-            var targetCanBeDamaged = logicData.Target.CanBeDamaged();
-            var canAct = CheckAttackAvailability(actor, logicData.Target);
+            var isAttackAllowed = CheckAttackAvailability(actor, _target);
+            if (isAttackAllowed)
+            {
+                var attackTask = new AttackTask(actor, _target, _actService);
+                return attackTask;
+            }
+            else
+            {
+                // Маршрут до цели обновляем каждые 3 хода.
+                // Для оптимизации.
+                // Эффект потери цели.
 
-            return targetCanBeDamaged && canAct;
+                if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
+                {
+                    _refreshCounter--;
+                    return _moveTask;
+                }
+                else
+                {
+                    _refreshCounter = REFRESH_COUNTER_VALUE;
+                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, _target.Node);
+
+                    if (targetIsOnLine)
+                    {
+                        _moveTask = new MoveTask(actor, _target.Node, _map);
+                        return _moveTask;
+                    }
+                    else
+                    {
+                        // Цел за пределами видимости. Считается потерянной.
+                        return null;
+                    }
+                }
+            }
+        }
+
+        protected override void ResetData()
+        {
+            _refreshCounter = 0;
+            _target = null;
+            _idleTask = null;
+            _moveTask = null;
         }
     }
 }

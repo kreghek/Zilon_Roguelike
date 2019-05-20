@@ -5,7 +5,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public abstract class LogicStateBase: ILogicState
     {
-        public abstract bool Complete { get; protected set; }
+        public bool Complete { get; protected set; }
 
         public abstract IActorTask GetTask(IActor actor, ILogicStrategyData strategyData);
 

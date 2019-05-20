@@ -22,8 +22,6 @@ namespace Zilon.Bot.Players.Logics
             _map = sectorManager.CurrentSector.Map;
         }
 
-        public override bool Complete { get; protected set; }
-
         protected override void ResetData()
         {
             _moveTask = null;

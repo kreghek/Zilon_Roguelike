@@ -53,9 +53,6 @@
     <Compile Include="LogicHelper.cs" />
     <Compile Include="Logics\EatProviantLogicState.cs" />
     <Compile Include="Logics\HealSelfLogicState.cs" />
-    <Compile Include="Logics\IdleLogicData.cs" />
-    <Compile Include="Logics\DefeatTargetLogicData.cs" />
-    <Compile Include="Logics\LootLogicData.cs" />
     <Compile Include="Logics\LootLogicState.cs" />
     <Compile Include="LootHelper.cs" />
     <Compile Include="Strategies\BotStrategyException.cs" />

@@ -9,16 +9,9 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public class EatProviantLogicState : ILogicState
+    public class EatProviantLogicState : LogicStateBase
     {
-        public bool Complete { get; private set; }
-
-        public ILogicStateData CreateData(IActor actor)
-        {
-            return new EmptyLogicTriggerData();
-        }
-
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             var eatFoodTask = CheckHazard(actor, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
             if (eatFoodTask != null)
@@ -34,6 +27,11 @@ namespace Zilon.Bot.Players.Logics
 
             Complete = true;
             return null;
+        }
+
+        protected override void ResetData()
+        {
+            // Внутреннего состояния нет.
         }
 
         private UsePropTask CheckHazard(IActor actor, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)

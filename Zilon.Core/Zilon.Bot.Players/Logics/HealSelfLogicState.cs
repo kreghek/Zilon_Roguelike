@@ -9,16 +9,9 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public class HealSelfLogicState : ILogicState
+    public class HealSelfLogicState : LogicStateBase
     {
-        public bool Complete { get; private set; }
-
-        public ILogicStateData CreateData(IActor actor)
-        {
-            return new EmptyLogicTriggerData();
-        }
-
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
@@ -41,6 +34,11 @@ namespace Zilon.Bot.Players.Logics
             }
 
             return new UsePropTask(actor, bestResource);
+        }
+
+        protected override void ResetData()
+        {
+            // Внутреннего состояния нет.
         }
     }
 }
