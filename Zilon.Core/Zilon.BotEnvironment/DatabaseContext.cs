@@ -93,16 +93,16 @@ namespace Zilon.BotEnvironment
                             ,[Preffix]
                             ,[Mode]
                             ,MIN([Scores]) AS MinScores
-                            ,AVG([Scores]) AS AvgScores
+                            ,ROUND(AVG([Scores]), 1) AS AvgScores
                             ,MAX([Scores]) AS MaxScores
                             ,MIN([Turns]) AS MinTurns
-                            ,AVG([Turns]) AS AvgTurns
+                            ,ROUND(AVG([Turns]), 1) AS AvgTurns
                             ,MAX([Turns]) AS MaxTurns
                             ,MIN([Frags]) AS MinFrags
-                            ,AVG([Frags]) AS AvgFrags
+                            ,ROUND(AVG([Frags]), 1) AS AvgFrags
                             ,MAX([Frags]) AS MaxFrags
                             ,COUNT(*) AS Iterations
-                            ,(julianday(MAX([TimeStamp])) - julianday(MIN([TimeStamp]))) * 24 * 60 * 60 / COUNT(*) AS AvgIterationDuration
+                            ,ROUND((julianday(MAX([TimeStamp])) - julianday(MIN([TimeStamp]))) * 24 * 60 * 60 / COUNT(*), 1) AS AvgIterationDuration
                         FROM [Scores]
                         GROUP BY [Name] ,[Preffix] ,[Mode]";
                 command.CommandType = CommandType.Text;
