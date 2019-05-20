@@ -128,7 +128,7 @@ namespace Zilon.Bot.Players.Strategies
                         _currentStateTransitionData[trigger] = triggerData;
                     }
 
-                    var isFired = trigger.Test(Actor, сurrentState, triggerData);
+                    var isFired = trigger.Test(Actor, currentState, triggerData);
                     if (isFired)
                     {
                         currentState = transition.NextState;
