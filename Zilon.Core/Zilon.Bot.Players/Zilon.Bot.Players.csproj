@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="BotActorTaskSourceBase.cs" />
     <Compile Include="ILogicStrategyData.cs" />
+    <Compile Include="Logics\ExitLogicState.cs" />
     <Compile Include="Logics\LogicStateBase.cs" />
     <Compile Include="Logics\ExploreLogicState.cs" />
     <Compile Include="Strategies\LogicTreeStrategyData.cs" />
@@ -59,7 +60,10 @@
     <Compile Include="Strategies\LogicStateTrack.cs" />
     <Compile Include="Strategies\LogicStateTree.cs" />
     <Compile Include="Strategies\LogicStateTreePatterns.cs" />
+    <Compile Include="Triggers\AndTrigger.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
+    <Compile Include="ICompositLogicStateTrigger.cs" />
+    <Compile Include="Triggers\ExploredTrigger.cs" />
     <Compile Include="Triggers\LootDetectedTrigger.cs" />
     <Compile Include="Triggers\ResourceFinder.cs" />
     <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />

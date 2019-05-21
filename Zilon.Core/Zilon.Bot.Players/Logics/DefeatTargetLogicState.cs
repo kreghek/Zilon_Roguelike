@@ -13,13 +13,11 @@ namespace Zilon.Bot.Players.Logics
     {
         private const int REFRESH_COUNTER_VALUE = 3;
 
-        public IAttackTarget _target;
+        private IAttackTarget _target;
 
-        public int _refreshCounter;
+        private int _refreshCounter;
 
-        public MoveTask _moveTask;
-
-        public IdleTask _idleTask;
+        private MoveTask _moveTask;
 
         private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
@@ -141,7 +139,6 @@ namespace Zilon.Bot.Players.Logics
         {
             _refreshCounter = 0;
             _target = null;
-            _idleTask = null;
             _moveTask = null;
         }
     }

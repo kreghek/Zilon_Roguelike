@@ -50,6 +50,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
                     humanActor = await CreateSectorAsync();
 
                     gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
+                    botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
+                    botActorTaskSource.Configure(new BotSettings { Mode = mode });
 
                     _changeSector = false;
                 }

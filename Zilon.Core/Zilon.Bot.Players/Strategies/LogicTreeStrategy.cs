@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Tactics;
@@ -45,6 +46,7 @@ namespace Zilon.Bot.Players.Strategies
 
             if (transitionWasPerformed)
             {
+                Console.WriteLine(newState);
                 CurrentState = newState;
                 ResetLogicStates(_stateTree);
             }

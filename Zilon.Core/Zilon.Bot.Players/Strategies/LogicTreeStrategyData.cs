@@ -9,8 +9,10 @@ namespace Zilon.Bot.Players.Strategies
         public LogicTreeStrategyData()
         {
             ObserverdNodes = new HashSet<IMapNode>();
+            ExitNodes = new HashSet<IMapNode>();
         }
 
         public HashSet<IMapNode> ObserverdNodes { get; }
+        public HashSet<IMapNode> ExitNodes { get; }
     }
 }

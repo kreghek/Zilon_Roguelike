@@ -97,6 +97,12 @@ namespace Zilon.Bot.Players.Logics
                 {
                     edgeNodes.Add(edgeNode);
                 }
+
+                // Примечаем выходы
+                if (_map.Transitions.ContainsKey(observedNode))
+                {
+                    strategyData.ExitNodes.Add(observedNode);
+                }
             }
 
             var emptyEdgeNodes = !edgeNodes.Any();
@@ -128,21 +134,13 @@ namespace Zilon.Bot.Players.Logics
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
             for (var i = 0; i < 3; i++)
             {
-                try
+                var targetNode = _decisionSource.SelectTargetRoamingNode(availableNodesArray);
+
+                if (_map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var targetNode = _decisionSource.SelectTargetRoamingNode(availableNodesArray);
+                    var moveTask = new MoveTask(actor, targetNode, _map);
 
-                    if (_map.IsPositionAvailableFor(targetNode, actor))
-                    {
-                        var moveTask = new MoveTask(actor, targetNode, _map);
-
-                        return moveTask;
-                    }
-                }
-                catch (Exception)
-                {
-
-                    throw;
+                    return moveTask;
                 }
             }
 

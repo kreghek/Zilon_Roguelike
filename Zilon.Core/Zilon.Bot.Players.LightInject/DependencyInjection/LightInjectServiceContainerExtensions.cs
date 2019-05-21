@@ -11,7 +11,8 @@ namespace Zilon.Bot.Players.LightInject.DependencyInjection
         public static void RegisterLogicState(this IServiceRegistry serviceRegistry)
         {
             var logicTypes = GetTypes<ILogicState>();
-            var triggerTypes = GetTypes<ILogicStateTrigger>();
+            var triggerTypes = GetTypes<ILogicStateTrigger>()
+                .Where(x => !typeof(ICompositLogicStateTrigger).IsAssignableFrom(x));
 
             var allTypes = logicTypes.Union(triggerTypes);
             foreach (var logicType in allTypes)
