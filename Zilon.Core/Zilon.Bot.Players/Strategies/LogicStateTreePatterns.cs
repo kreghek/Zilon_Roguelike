@@ -58,24 +58,26 @@ namespace Zilon.Bot.Players.Strategies
 
                 var tree = new LogicStateTree();
 
-                var roamingLogic = Factory.CreateLogic<ExploreLogicState>();
-                var roamingIdleLogic = Factory.CreateLogic<IdleLogicState>();
+                var exploreLogic = Factory.CreateLogic<ExploreLogicState>();
+                var exploreIdleLogic = Factory.CreateLogic<IdleLogicState>();
                 var fightLogic = Factory.CreateLogic<DefeatTargetLogicState>();
                 var fightIdleLogic = Factory.CreateLogic<IdleLogicState>();
                 var healSelfLogic = Factory.CreateLogic<HealSelfLogicState>();
                 var eatProviantLogic = Factory.CreateLogic<EatProviantLogicState>();
                 var lootLogic = Factory.CreateLogic<LootLogicState>();
+                var exitLogic = Factory.CreateLogic<ExitLogicState>();
 
 
-                tree.StartState = roamingLogic;
+                tree.StartState = exploreLogic;
 
-                tree.Transitions.Add(roamingLogic, new LogicTransition[] {
+                tree.Transitions.Add(exploreLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<LootDetectedTrigger>(), lootLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
+                    new LogicTransition(Factory.CreateTrigger<ExploredTrigger>(), exitLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreIdleLogic)
                 });
 
                 tree.Transitions.Add(fightLogic, new LogicTransition[] {
@@ -85,12 +87,12 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
                 });
 
-                tree.Transitions.Add(roamingIdleLogic, new LogicTransition[] {
+                tree.Transitions.Add(exploreIdleLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
+                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), exploreLogic)
                 });
 
                 tree.Transitions.Add(fightIdleLogic, new LogicTransition[] {
@@ -98,24 +100,31 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
+                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), exploreLogic)
                 });
 
                 tree.Transitions.Add(healSelfLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreIdleLogic)
                 });
 
                 tree.Transitions.Add(eatProviantLogic, new LogicTransition[] {
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic),
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic)
                 });
 
                 tree.Transitions.Add(lootLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
-                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingLogic)
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic)
+                });
+
+                tree.Transitions.Add(exitLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
+                    new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic)
                 });
 
                 Debug.Assert(ValidateTree(tree), "Все используемые логики должны быть добавлены в Transitions, как ключи.");
@@ -147,9 +156,7 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<LootDetectedTrigger>(), lootLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
-                    new LogicTransition(new AndTrigger(
-                        Factory.CreateTrigger<ExploredTrigger>()
-                        ), exitLogic),
+                    new LogicTransition(Factory.CreateTrigger<ExploredTrigger>(), exitLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic)
                 });
 

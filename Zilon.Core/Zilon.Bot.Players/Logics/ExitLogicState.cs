@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -47,14 +48,17 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private MoveTask CreateMoveTask(IActor actor, IMapNode nearbyExitNode)
+        private MoveTask CreateMoveTask(IActor actor, IMapNode targetExitNode)
         {
-            if (!_map.IsPositionAvailableFor(nearbyExitNode, actor))
+            Debug.Assert((targetExitNode as HexNode)?.IsObstacle != true,
+                "Узел с выходом не должен быть препятствием.");
+
+            if (!_map.IsPositionAvailableFor(targetExitNode, actor))
             {
                 return null;
             }
 
-            var moveTask = new MoveTask(actor, nearbyExitNode, _map);
+            var moveTask = new MoveTask(actor, targetExitNode, _map);
 
             return moveTask;
         }

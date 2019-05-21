@@ -11,7 +11,7 @@ namespace Zilon.Bot.Players.Strategies
     {
         private readonly LogicStateTree _stateTree;
 
-        private LogicTreeStrategyData _strategyData;
+        private readonly LogicTreeStrategyData _strategyData;
 
         public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
@@ -46,7 +46,6 @@ namespace Zilon.Bot.Players.Strategies
 
             if (transitionWasPerformed)
             {
-                Console.WriteLine(newState);
                 CurrentState = newState;
                 ResetLogicStates(_stateTree);
             }
