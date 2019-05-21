@@ -29,69 +29,53 @@ namespace Zilon.Bot.Players.Strategies
             // Для текущего состояния проверяем каждый из переходов.
             // Если переход выстреливает, то генерируем задачу актёру.
             // Алгоритм делится на два этапа:
-            // 1. Определение текущей логики по переходам. То есть из текущей переходим до тех пор,
-            // пока у очередной логики все переходы не выстрелят. Эта логика будет зафиксирована, как текущая.
+            // 1. Для текущей логики проверяются все триггеры по порядку. Если какой-то триггер выстреливает, то связанная
+            // через переход логика фиксируется, как текущая. За одну итерацию может быть только один переход.
             // 2. Получаем задачу из текущей логики. Если текущая логика возвращает пустую задачу - значит
-            // переводим её в соответствующее состояние и ждём перехода из неё.
+            // переводим её в соответствующее состояние и ждём перехода из неё с помощью триггеров (этап 1).
             // Второй пункт означает, что каждая логика обязана выдавать хотя бы пустую задачу, если она
             // не может выполниться. И выставлять себе статус выполненной. В дереве состояний нужно следить за тем, чтобы 
             // все логики имели триггер на окончание с переходом на какую-либо задачу.
 
-            var newCurrentState = SelectCurrentState();
-            if (newCurrentState != CurrentState)
+            // После окончания всех проверок триггеров выполняется обновление состояния триггеров. Некоторые триггеры
+            // могут иметь счётчики или логику, которая выполняется при каждой итерации (считай, каждый ход).
+
+            var transitionWasPerformed = SelectCurrentState(CurrentState, out var newState);
+
+            if (transitionWasPerformed)
             {
-                CurrentState = newCurrentState;
+                CurrentState = newState;
                 ResetLogicStates(_stateTree);
             }
 
             var actorTask = CurrentState.GetTask(Actor, _strategyData);
-
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 
             return actorTask;
         }
 
-        private ILogicState SelectCurrentState()
+        private bool SelectCurrentState(ILogicState currentState, out ILogicState newState)
         {
-            // Историю переходов генерируем только для исключительных ситуаций,
-            // когда выбор логики зацикливается.
-            var stateHistory = new List<LogicStateTrack>
-            {
-                new LogicStateTrack(CurrentState, firedTrigger: null)
-            };
+            var transitionWasPerformed = false;
+            newState = null;
 
-            var currentState = CurrentState;
-            var safityCounter = 100;
-            bool anyTriggerFired;
-            do
-            {
-                var currentStateTransitions = _stateTree.Transitions[currentState];
+            var currentStateTransitions = _stateTree.Transitions[CurrentState];
 
-                anyTriggerFired = false;
-                foreach (var transition in currentStateTransitions)
+            foreach (var transition in currentStateTransitions)
+            {
+                var trigger = transition.Trigger;
+
+                var isFired = trigger.Test(Actor, currentState, _strategyData);
+                if (isFired)
                 {
-                    var trigger = transition.Trigger;
-
-                    var isFired = trigger.Test(Actor, currentState, _strategyData);
-                    if (isFired)
-                    {
-                        currentState = transition.NextState;
-                        stateHistory.Add(new LogicStateTrack(currentState, firedTrigger: trigger));
-                        anyTriggerFired = true;
-                        break;
-                    }
+                    newState = transition.NextState;
+                    transitionWasPerformed = true;
+                    break;
                 }
-
-                safityCounter--;
-            } while (anyTriggerFired && safityCounter > 0);
-
-            if (safityCounter <= 0)
-            {
-                throw new BotStrategyException(stateHistory);
             }
 
-            return currentState;
+            return transitionWasPerformed;
         }
 
         private void ResetLogicStates(LogicStateTree logicStateTree)

@@ -34,7 +34,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
 
             var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
-            botActorTaskSource.Configure(new BotSettings { Mode = "duncan" });
+            botActorTaskSource.Configure(new BotSettings { Mode = "joe" });
 
 
             while (!humanActor.Person.Survival.IsDead)
