@@ -19,7 +19,10 @@ namespace Zilon.Bot.Players
         {
             if (_botSettings == null)
             {
-                return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot);
+                return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot)
+                {
+                    WriteStateChanges = true
+                };
             }
 
             var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
@@ -27,16 +30,28 @@ namespace Zilon.Bot.Players
             {
                 case "":
                 case null:
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot);
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 case "JOE":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.JoeHumanBot);
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.JoeHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 case "DUNCAN":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DuncanHumanBot);
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DuncanHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 case "MONSTER":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster);
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 default:
                     throw new NotSupportedException();

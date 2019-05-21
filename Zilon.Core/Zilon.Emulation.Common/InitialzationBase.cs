@@ -57,7 +57,11 @@ namespace Zilon.Emulation.Common
 
         private void RegisterScopedSectorService(IServiceRegistry container)
         {
+            //TODO сделать генераторы независимыми от сектора.
+            // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
+            container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
+            container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
             container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
             container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
@@ -92,9 +96,7 @@ namespace Zilon.Emulation.Common
             container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
         }
 

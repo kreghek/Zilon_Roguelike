@@ -150,7 +150,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                     if (interiorObjectForCoords != null)
                     {
-                        isObstacle = true;
+//TODO Сделать так, чтобы укрытия не генерировались на узлах с выходами
+// Как вариант - если выбираем узел, как выход, то снимаем флаг укрытия.
+// Вообще, нужно поискать алгоритмы, которые бы расставляли укрытия и выходы, оставляя комнату проходимой.
+                        //isObstacle = true;
                     }
 
                     var node = new HexNode(nodeX, nodeY, isObstacle);
