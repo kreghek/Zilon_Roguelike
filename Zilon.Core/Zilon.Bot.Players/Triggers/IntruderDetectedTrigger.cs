@@ -44,7 +44,7 @@ namespace Zilon.Bot.Players.Triggers
             return foundIntruders.ToArray();
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
@@ -61,9 +61,14 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        public ILogicStateData CreateData(IActor actor)
+        public void Update()
         {
-            return new EmptyLogicTriggerData();
+            // Нет состояния.
+        }
+
+        public void Reset()
+        {
+            // Нет состояния.
         }
     }
 }

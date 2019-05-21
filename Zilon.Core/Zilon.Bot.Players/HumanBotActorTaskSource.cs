@@ -35,6 +35,9 @@ namespace Zilon.Bot.Players
                 case "DUNCAN":
                     return new LogicTreeStrategy(actor, LogicStateTreePatterns.DuncanHumanBot);
 
+                case "MONSTER":
+                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster);
+
                 default:
                     throw new NotSupportedException();
             }

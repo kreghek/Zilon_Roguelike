@@ -49,20 +49,9 @@ namespace Zilon.BotEnvironment
 
             var humanActor = await CreateSectorAsync();
 
-            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
-            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
             var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
-            var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
             ConfigureBot(args, botActorTaskSource);
-
-            foreach (var actor in actorManager.Items)
-            {
-                actor.Moved += Actor_Moved;
-                actor.UsedAct += Actor_UsedAct;
-                actor.DamageTaken += Actor_DamageTaken;
-                actor.Person.Survival.Dead += Survival_Dead;
-            }
 
             var botExceptionCount = 0;
             var envExceptionCount = 0;
@@ -87,6 +76,7 @@ namespace Zilon.BotEnvironment
                 {
                     AppendException(exception, scoreFilePreffix);
 
+                    var monsterActorTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("monster");
                     if (exception.ActorTaskSource != monsterActorTaskSource)
                     {
                         botExceptionCount++;
@@ -126,6 +116,7 @@ namespace Zilon.BotEnvironment
             };
 
             var mode = GetProgramArgument(args, BOT_MODE_ARG);
+            var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             WriteScores(_globalServiceContainer, scoreManager, mode, scoreFilePreffix);
 
             if (!HasProgramArgument(args, SERVER_RUN_ARG))
@@ -134,13 +125,13 @@ namespace Zilon.BotEnvironment
             }
         }
 
-        private static void ConfigureBot(string[] args, ISectorActorTaskSource monsterActorTaskSource)
+        private static void ConfigureBot(string[] args, ISectorActorTaskSource actorTaskSource)
         {
             var botSettings = new BotSettings
             {
                 Mode = GetProgramArgument(args, BOT_MODE_ARG)
             };
-            monsterActorTaskSource.Configure(botSettings);
+            actorTaskSource.Configure(botSettings);
         }
 
         private static void CheckEnvExceptions(int envExceptionCount, Exception exception)
@@ -155,6 +146,8 @@ namespace Zilon.BotEnvironment
         {
             if (_sectorServiceContainer != null && !_sectorServiceContainer.IsDisposed)
             {
+                DropActorEventSubscriptions();
+
                 _sectorServiceContainer.Dispose();
             }
 
@@ -191,7 +184,33 @@ namespace Zilon.BotEnvironment
                 sectorManager,
                 actorManager);
 
+            CreateActorEventSubscriptions();
+
             return humanActor;
+        }
+
+        private static void CreateActorEventSubscriptions()
+        {
+            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
+            foreach (var actor in actorManager.Items)
+            {
+                actor.Moved += Actor_Moved;
+                actor.UsedAct += Actor_UsedAct;
+                actor.DamageTaken += Actor_DamageTaken;
+                actor.Person.Survival.Dead += Survival_Dead;
+            }
+        }
+
+        private static void DropActorEventSubscriptions()
+        {
+            var actorManager = _sectorServiceContainer.GetInstance<IActorManager>();
+            foreach (var actor in actorManager.Items)
+            {
+                actor.Moved -= Actor_Moved;
+                actor.UsedAct -= Actor_UsedAct;
+                actor.DamageTaken -= Actor_DamageTaken;
+                actor.Person.Survival.Dead -= Survival_Dead;
+            }
         }
 
         private static void LoadBotAssembly(string botDirectory, string assemblyName,

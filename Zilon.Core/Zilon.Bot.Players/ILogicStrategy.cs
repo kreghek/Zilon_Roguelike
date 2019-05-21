@@ -10,5 +10,7 @@ namespace Zilon.Bot.Players
         ILogicState CurrentState { get; }
 
         IActorTask GetActorTask();
+
+        ILogicStrategyData StrategyData { get; }
     }
 }

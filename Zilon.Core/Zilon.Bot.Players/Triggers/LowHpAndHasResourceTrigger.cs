@@ -9,12 +9,12 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class LowHpAndHasResourceTrigger : ILogicStateTrigger
     {
-        public ILogicStateData CreateData(IActor actor)
+        public void Reset()
         {
-            return new EmptyLogicTriggerData();
+            // Нет состояния
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
@@ -37,6 +37,11 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             return true;
+        }
+
+        public void Update()
+        {
+            // Нет состояния
         }
     }
 }

@@ -9,15 +9,15 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class ThirstAndHasResourceTrigger : ILogicStateTrigger
     {
-        public ILogicStateData CreateData(IActor actor)
+        public void Reset()
         {
-            return new EmptyLogicTriggerData();
+            // Нет состояния.
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == SurvivalStatType.Water);
+               .SingleOrDefault(x => x.Type == SurvivalStatType.Water);
             if (hazardEffect == null)
             {
                 return false;
@@ -36,6 +36,11 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             return true;
+        }
+
+        public void Update()
+        {
+            // Нет состояния.
         }
     }
 }

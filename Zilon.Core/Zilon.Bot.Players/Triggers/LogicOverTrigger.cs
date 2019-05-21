@@ -4,14 +4,19 @@ namespace Zilon.Bot.Players.Triggers
 {
     public sealed class LogicOverTrigger : ILogicStateTrigger
     {
-        public ILogicStateData CreateData(IActor actor)
+        public void Reset()
         {
-            return new EmptyLogicTriggerData();
+            // Нет состояния.
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             return currentState.Complete;
+        }
+
+        public void Update()
+        {
+            // Нет состояния.
         }
     }
 }
