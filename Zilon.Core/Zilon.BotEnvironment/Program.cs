@@ -134,13 +134,13 @@ namespace Zilon.BotEnvironment
             }
         }
 
-        private static void ConfigureBot(string[] args, ISectorActorTaskSource monsterActorTaskSource)
+        private static void ConfigureBot(string[] args, ISectorActorTaskSource actorTaskSource)
         {
             var botSettings = new BotSettings
             {
                 Mode = GetProgramArgument(args, BOT_MODE_ARG)
             };
-            monsterActorTaskSource.Configure(botSettings);
+            actorTaskSource.Configure(botSettings);
         }
 
         private static void CheckEnvExceptions(int envExceptionCount, Exception exception)

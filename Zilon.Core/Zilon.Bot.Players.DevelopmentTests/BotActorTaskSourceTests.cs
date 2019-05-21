@@ -26,7 +26,11 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private bool _changeSector;
 
         [Test]
-        public async Task GetActorTasksTestAsync()
+        [TestCase("joe")]
+        [TestCase("duncan")]
+        [TestCase("")]
+        [TestCase("monster")]
+        public async Task GetActorTasksTestAsync(string mode)
         {
             var humanActor = await CreateSectorAsync();
 
@@ -34,7 +38,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
 
             var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
-            botActorTaskSource.Configure(new BotSettings { Mode = "joe" });
+            botActorTaskSource.Configure(new BotSettings { Mode = mode });
 
 
             while (!humanActor.Person.Survival.IsDead)
