@@ -35,7 +35,7 @@ namespace Zilon.Emulation.Common
         {
             RegisterClientServices(serviceRegistry);
             RegisterGameLoop(serviceRegistry);
-            RegisterSectorService(serviceRegistry);
+            RegisterScopedSectorService(serviceRegistry);
             RegisterBot(serviceRegistry);
         }
 
@@ -55,24 +55,15 @@ namespace Zilon.Emulation.Common
             container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
         }
 
-        private void RegisterSectorService(IServiceRegistry container)
+        private void RegisterScopedSectorService(IServiceRegistry container)
         {
-            container.Register<IMapFactory, RoomMapFactory>(new PerScopeLifetime());
             container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
             container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
             container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
             container.Register<ITraderManager, TraderManager>(new PerScopeLifetime());
-            container.Register<IRoomGenerator, RoomGenerator>(new PerScopeLifetime());
-            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerScopeLifetime());
-            container.Register<IScoreManager, ScoreManager>(new PerScopeLifetime());
-            container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
-            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerScopeLifetime());
-            container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
-            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerScopeLifetime());
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
-
             container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
         }
 
@@ -88,18 +79,23 @@ namespace Zilon.Emulation.Common
         {
             var dice = new Dice();
             container.Register<IDice>(factory => dice, new PerContainerLifetime());
-
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
-
             container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
             container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
             container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
-
             container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
             container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
+
+            container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
+            container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
+            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
+            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
+            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices(IServiceRegistry container)
