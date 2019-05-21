@@ -42,6 +42,7 @@
     <Compile Include="BotActorTaskSourceBase.cs" />
     <Compile Include="ILogicStrategyData.cs" />
     <Compile Include="Logics\LogicStateBase.cs" />
+    <Compile Include="Logics\ExploreLogicState.cs" />
     <Compile Include="Strategies\LogicTreeStrategyData.cs" />
     <Compile Include="MonsterBotActorTaskSource.cs" />
     <Compile Include="HumanBotActorTaskSource.cs" />

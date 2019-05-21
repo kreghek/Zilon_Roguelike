@@ -16,6 +16,7 @@ namespace Zilon.Bot.Players.Strategies
         {
             Actor = actor;
             _stateTree = stateTree;
+            _strategyData = new LogicTreeStrategyData();
 
             CurrentState = _stateTree.StartState;
         }

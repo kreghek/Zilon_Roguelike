@@ -58,7 +58,7 @@ namespace Zilon.Bot.Players.Strategies
 
                 var tree = new LogicStateTree();
 
-                var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
+                var roamingLogic = Factory.CreateLogic<ExploreLogicState>();
                 var roamingIdleLogic = Factory.CreateLogic<IdleLogicState>();
                 var fightLogic = Factory.CreateLogic<DefeatTargetLogicState>();
                 var fightIdleLogic = Factory.CreateLogic<IdleLogicState>();
@@ -131,7 +131,7 @@ namespace Zilon.Bot.Players.Strategies
 
                 var tree = new LogicStateTree();
 
-                var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
+                var roamingLogic = Factory.CreateLogic<ExploreLogicState>();
                 var fightLogic = Factory.CreateLogic<DefeatTargetLogicState>();
                 var healSelfLogic = Factory.CreateLogic<HealSelfLogicState>();
                 var eatProviantLogic = Factory.CreateLogic<EatProviantLogicState>();
