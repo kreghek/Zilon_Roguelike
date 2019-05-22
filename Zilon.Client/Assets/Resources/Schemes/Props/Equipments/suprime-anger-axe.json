@@ -2,7 +2,7 @@
   "Tags": [ "weapon" ],
   "Equip": {
     "ActSids": [
-      "chop"
+      "anger-chop"
     ],
     "SlotTypes": [ "Hand" ]
   },

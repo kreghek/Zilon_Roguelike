@@ -5,7 +5,7 @@
     "Armors": [
       {
         "Impact": "Kinetic",
-        "AbsorbtionLevel": "Lesser",
+        "AbsorbtionLevel": "Normal",
         "ArmorRank": 1
       }
     ]

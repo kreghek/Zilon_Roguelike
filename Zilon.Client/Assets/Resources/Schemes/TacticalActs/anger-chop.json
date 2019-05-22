@@ -1,12 +1,12 @@
 {
   "Name": {
-    "Ru": "Удар",
-	"En": "Blow"
+    "Ru": "Яростный рубящий удар",
+	"En": "Anger Chop"
   },
   "Stats": {
     "Efficient": {
       "Dice": 3,
-      "Count": 2
+      "Count": 3
     },
     "Range": {
       "Min": 1,
@@ -16,9 +16,9 @@
 	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
-      "Type": "Concentrated",
+      "Type": "Fury",
       "Impact":  "Kinetic",
-	  "ApRank": 2
+	  "ApRank": 5
     }
   }
 }
