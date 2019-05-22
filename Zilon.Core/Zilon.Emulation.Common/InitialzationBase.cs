@@ -3,7 +3,6 @@
 using LightInject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
