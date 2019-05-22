@@ -8,7 +8,6 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger: ILogicStateTrigger
     {
-        private const int VISIBLE_RANGE = 5;
         private readonly IActorManager _actorManager;
         private readonly ISectorMap _map;
 
@@ -33,7 +32,7 @@ namespace Zilon.Bot.Players.Triggers
                     continue;
                 }
 
-                var isVisible = CheckTargetVisible(actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -45,15 +44,7 @@ namespace Zilon.Bot.Players.Triggers
             return foundIntruders.ToArray();
         }
 
-        private bool CheckTargetVisible(IMapNode node, IMapNode target)
-        {
-            var distance = _map.DistanceBetween(node, target);
-
-            var isVisible = distance <= VISIBLE_RANGE;
-            return isVisible;
-        }
-
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
@@ -70,9 +61,14 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        public ILogicStateData CreateData(IActor actor)
+        public void Update()
         {
-            return new EmptyLogicTriggerData();
+            // Нет состояния.
+        }
+
+        public void Reset()
+        {
+            // Нет состояния.
         }
     }
 }

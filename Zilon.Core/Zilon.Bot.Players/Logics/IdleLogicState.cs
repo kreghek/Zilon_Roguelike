@@ -4,8 +4,9 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public sealed class IdleLogicState : ILogicState
+    public sealed class IdleLogicState : LogicStateBase
     {
+        private IdleTask IdleTask;
         private readonly IDecisionSource _decisionSource;
 
         public IdleLogicState(IDecisionSource decisionSource)
@@ -13,28 +14,25 @@ namespace Zilon.Bot.Players.Logics
             _decisionSource = decisionSource;
         }
 
-        public bool Complete { get; private set; }
-
-        public ILogicStateData CreateData(IActor actor)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
-            return new IdleLogicData();
-        }
-
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
-        {
-            var logicData = (IdleLogicData)data;
-            if (logicData.IdleTask == null)
+            if (IdleTask == null)
             {
-                logicData.IdleTask = new IdleTask(actor, _decisionSource);
+                IdleTask = new IdleTask(actor, _decisionSource);
             }
 
-            if (logicData.IdleTask.IsComplete)
+            if (IdleTask.IsComplete)
             {
                 Complete = true;
                 return null;
             }
 
-            return logicData.IdleTask;
+            return IdleTask;
+        }
+
+        protected override void ResetData()
+        {
+            IdleTask = null;
         }
     }
 }

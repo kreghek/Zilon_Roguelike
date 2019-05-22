@@ -4,7 +4,7 @@
     "Armors": [
       {
         "Impact": "Kinetic",
-        "AbsorbtionLevel": "Lesser",
+        "AbsorbtionLevel": "Normal",
         "ArmorRank": 2
       },
 	  {
@@ -16,6 +16,6 @@
   },
   "Name": {
     "En": "Gold Armor",
-	  "Ru": "Золотая броня"
+	"Ru": "Золотая броня"
   }
 }

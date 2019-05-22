@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -8,18 +7,20 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public class BotActorTaskSource : ISectorActorTaskSource
+    public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
     {
-        private readonly HumanPlayer _player;
+        private readonly IPlayer _player;
 
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSource(HumanPlayer player)
+        public BotActorTaskSourceBase(IPlayer player)
         {
             _player = player;
 
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
+
+        public abstract void Configure(IBotSettings botSettings);
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
@@ -47,7 +48,7 @@ namespace Zilon.Bot.Players
             // ПОКА НЕ ПОНЯТНО, КАК ХРАНИТЬ И ПЕРЕДАВАТЬ СОСТОЯНИЕ. СОСТОЯНИЕ МОЖЕТ БЫТЬ СОЗДАНО ИЗ СЕЛЕКТОРА.
             // Все селекторы организованы в список в логике. Каждый селектор указывает на логику, которая будет
             // выбрана текущей в случае выполнения условия. Селекторы упорядочены по приоритету в рамках каждой логики.
-            // Услоя перехода грубо делятся на две категории:
+            // Условия перехода делятся на две категории:
             // -- Определённое состояние окружения или актёра.
             // -- Окончание выполнения текущей логики (например, логика преследования или ожидания зависят от счётчика).
             // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
@@ -59,7 +60,7 @@ namespace Zilon.Bot.Players
                 {
                     // Создаём стратегию для текущего актёра.
                     // Добавляем созданную стратегию в словарь стратегий.
-                    logicStrategy = new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster);
+                    logicStrategy = GetLogicStrategy(actor);
                     _actorStrategies[actor] = logicStrategy;
                 }
 
@@ -79,5 +80,7 @@ namespace Zilon.Bot.Players
 
             return new IActorTask[0];
         }
+
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

@@ -4,18 +4,34 @@ namespace Zilon.Bot.Players.Triggers
 {
     public sealed class CounterOverTrigger : ILogicStateTrigger
     {
-        public ILogicStateData CreateData(IActor actor)
+        private const int COUNTER_INITIAL_VALUE = 3;
+
+        public CounterOverTrigger()
         {
-            return new CounterTriggerData(3);
+            Counter = COUNTER_INITIAL_VALUE;
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStateData data)
+        public int Counter { get; private set; }
+        public bool CounterIsOver => Counter <= 0;
+
+        public void Reset()
         {
-            var triggerData = (CounterTriggerData)data;
+            Counter = COUNTER_INITIAL_VALUE;
+        }
 
-            triggerData.CounterDown();
+        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        {
+            return CounterIsOver;
+        }
 
-            return triggerData.CounterIsOver;
+        private void CounterDown()
+        {
+            Counter--;
+        }
+
+        public void Update()
+        {
+            CounterDown();
         }
     }
 }

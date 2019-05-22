@@ -36,30 +36,43 @@
     <Reference Include="System.Linq.Expressions" />
     <Reference Include="System.Runtime" />
     <Reference Include="System.Threading.Tasks" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmptyLogicTriggerData.cs" />
-    <Compile Include="BotActorTaskSource.cs" />
+    <Compile Include="BotActorTaskSourceBase.cs" />
+    <Compile Include="ILogicStrategyData.cs" />
+    <Compile Include="Logics\EquipBetterPropLogicState.cs" />
+    <Compile Include="Logics\ExitLogicState.cs" />
+    <Compile Include="Logics\LogicStateBase.cs" />
+    <Compile Include="Logics\ExploreLogicState.cs" />
+    <Compile Include="Strategies\LogicTreeStrategyData.cs" />
+    <Compile Include="MonsterBotActorTaskSource.cs" />
+    <Compile Include="HumanBotActorTaskSource.cs" />
     <Compile Include="ILogicState.cs" />
     <Compile Include="ILogicStateFactory.cs" />
     <Compile Include="ILogicStateTrigger.cs" />
-    <Compile Include="ILogicStateData.cs" />
     <Compile Include="ILogicStrategy.cs" />
-    <Compile Include="Logics\IdleLogicData.cs" />
-    <Compile Include="Logics\DefeateTargetLogicData.cs" />
-    <Compile Include="Logics\RoamingLogicData.cs" />
+    <Compile Include="LogicHelper.cs" />
+    <Compile Include="Logics\EatProviantLogicState.cs" />
+    <Compile Include="Logics\HealSelfLogicState.cs" />
+    <Compile Include="Logics\LootLogicState.cs" />
+    <Compile Include="LootHelper.cs" />
+    <Compile Include="Strategies\BotStrategyException.cs" />
+    <Compile Include="Strategies\LogicStateTrack.cs" />
     <Compile Include="Strategies\LogicStateTree.cs" />
     <Compile Include="Strategies\LogicStateTreePatterns.cs" />
+    <Compile Include="Triggers\AndTrigger.cs" />
     <Compile Include="Triggers\CounterOverTrigger.cs" />
-    <Compile Include="Triggers\CounterTriggerData.cs" />
+    <Compile Include="ICompositLogicStateTrigger.cs" />
+    <Compile Include="Triggers\ExploredTrigger.cs" />
+    <Compile Include="Triggers\HasBetterEquipmentTrigger.cs" />
+    <Compile Include="Triggers\LootDetectedTrigger.cs" />
+    <Compile Include="Triggers\ResourceFinder.cs" />
+    <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
     <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
     <Compile Include="Triggers\LogicOverTrigger.cs" />
-    <Compile Include="Triggers\ObserveLogicData.cs" />
-    <Compile Include="Triggers\PersuitNearbyIntruderData.cs" />
+    <Compile Include="Triggers\HungryAndHasResourceTrigger.cs" />
+    <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
     <Compile Include="Logics\IdleLogicState.cs" />
     <Compile Include="Logics\DefeatTargetLogicState.cs" />
     <Compile Include="Logics\RoamingLogicState.cs" />

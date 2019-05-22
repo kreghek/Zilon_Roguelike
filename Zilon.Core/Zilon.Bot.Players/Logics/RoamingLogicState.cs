@@ -8,8 +8,11 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public sealed class RoamingLogicState : ILogicState
+    public sealed class RoamingLogicState : LogicStateBase
     {
+        private MoveTask _moveTask;
+        private IdleTask _idleTask;
+
         private readonly IDecisionSource _decisionSource;
         private readonly ISectorMap _map;
 
@@ -19,62 +22,10 @@ namespace Zilon.Bot.Players.Logics
             _map = sectorManager.CurrentSector.Map;
         }
 
-        public bool Complete { get; private set; }
-
-        public ILogicStateData CreateData(IActor actor)
+        protected override void ResetData()
         {
-            //TODO Нужно при создании данных выбирать целевой узел.
-            // Логика будет считаться выполненной при достижении или невозможности достижения
-            // узла в созданных данных.
-            return new RoamingLogicData();
-        }
-
-        public IActorTask GetTask(IActor actor, ILogicStateData data)
-        {
-            var logicData = (RoamingLogicData)data;
-            if (logicData.MoveTask == null)
-            {
-                logicData.MoveTask = CreateBypassMoveTask(actor);
-
-                if (logicData.MoveTask != null)
-                {
-                    return logicData.MoveTask;
-                }
-                else
-                {
-                    // Это может произойти, если актёр не выбрал следующий узел.
-                    // Тогда переводим актёра в режим ожидания.
-
-                    logicData.IdleTask = new IdleTask(actor, _decisionSource);
-                    return logicData.IdleTask;
-                }
-            }
-            else
-            {
-                if (!logicData.MoveTask.IsComplete)
-                {
-                    // Если команда на перемещение к целевой точке патруля не закончена,
-                    // тогда продолжаем её.
-                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                    if (!logicData.MoveTask.CanExecute())
-                    {
-                        logicData.MoveTask = CreateBypassMoveTask(actor);
-                    }
-
-                    if (logicData.MoveTask != null)
-                    {
-                        return logicData.MoveTask;
-                    }
-
-                    logicData.IdleTask = new IdleTask(actor, _decisionSource);
-                    return logicData.IdleTask;
-                }
-                else
-                {
-                    Complete = true;
-                    return null;
-                }
-            }
+            _moveTask = null;
+            _idleTask = null;
         }
 
         private MoveTask CreateBypassMoveTask(IActor actor)
@@ -95,6 +46,53 @@ namespace Zilon.Bot.Players.Logics
             }
 
             return null;
+        }
+
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        {
+            if (_moveTask == null)
+            {
+                _moveTask = CreateBypassMoveTask(actor);
+
+                if (_moveTask != null)
+                {
+                    return _moveTask;
+                }
+                else
+                {
+                    // Это может произойти, если актёр не выбрал следующий узел.
+                    // Тогда переводим актёра в режим ожидания.
+
+                    _idleTask = new IdleTask(actor, _decisionSource);
+                    return _idleTask;
+                }
+            }
+            else
+            {
+                if (!_moveTask.IsComplete)
+                {
+                    // Если команда на перемещение к целевой точке патруля не закончена,
+                    // тогда продолжаем её.
+                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                    if (!_moveTask.CanExecute())
+                    {
+                        _moveTask = CreateBypassMoveTask(actor);
+                    }
+
+                    if (_moveTask != null)
+                    {
+                        return _moveTask;
+                    }
+
+                    _idleTask = new IdleTask(actor, _decisionSource);
+                    return _idleTask;
+                }
+                else
+                {
+                    Complete = true;
+                    return null;
+                }
+            }
         }
     }
 }

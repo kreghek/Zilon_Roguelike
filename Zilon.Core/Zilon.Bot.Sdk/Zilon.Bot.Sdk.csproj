@@ -36,8 +36,14 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActorTaskSourceTypeAttribute.cs" />
+    <Compile Include="BotRegistrationAttribute.cs" />
+    <Compile Include="BotSettings.cs" />
+    <Compile Include="ConfigureAuxServicesAttribute.cs" />
+    <Compile Include="IBotSettings.cs" />
     <Compile Include="ISectorActorTaskSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterAuxServicesAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
