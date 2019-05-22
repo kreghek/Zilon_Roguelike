@@ -188,6 +188,7 @@ namespace Zilon.Bot.Players.Strategies
                 });
 
                 tree.Transitions.Add(equipLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic)
                 });
 
@@ -195,6 +196,7 @@ namespace Zilon.Bot.Players.Strategies
                     new LogicTransition(Factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
                     new LogicTransition(Factory.CreateTrigger<HungryAndHasResourceTrigger>(), eatProviantLogic),
                     new LogicTransition(Factory.CreateTrigger<ThirstAndHasResourceTrigger>(), eatProviantLogic),
+                    new LogicTransition(Factory.CreateTrigger<HasBetterEquipmentTrigger>(), equipLogic),
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), exploreLogic)
                 });
 

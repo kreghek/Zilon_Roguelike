@@ -27,8 +27,10 @@ namespace Zilon.Bot.Players.Logics
 
                     if (availableEquipments.Any())
                     {
-                        Complete = true;
-                        return new EquipTask(actor, availableEquipments.FirstOrDefault(), i);
+                        var targetEquipmentFromInventory = availableEquipments.First();
+                        var targetSlotIndex = i;
+
+                        return new EquipTask(actor, targetEquipmentFromInventory, targetSlotIndex);
                     }
                 }
             }
