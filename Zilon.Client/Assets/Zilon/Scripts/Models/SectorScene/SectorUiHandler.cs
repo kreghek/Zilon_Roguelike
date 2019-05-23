@@ -9,7 +9,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 
-public class UiHandler : MonoBehaviour
+public class SectorUiHandler : MonoBehaviour
 {
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
