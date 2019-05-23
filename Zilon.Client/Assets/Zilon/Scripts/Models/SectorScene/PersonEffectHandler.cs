@@ -4,17 +4,13 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Client;
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 
 public class PersonEffectHandler : MonoBehaviour
 {
     [UsedImplicitly]
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
-
-    [UsedImplicitly]
-    [NotNull] [Inject] private readonly IActorManager _actorManager;
+    [NotNull] [Inject] private readonly HumanPlayer _player;
 
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
@@ -24,17 +20,13 @@ public class PersonEffectHandler : MonoBehaviour
     {
         UpdateEffects();
 
-        var person = _playerState.ActiveActor.Actor.Person;
+        var person = _player.MainPerson;
         person.Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
     }
 
     public void OnDestroy()
     {
-        // Делаем так, потому что при смене сектора _playerState.ActiveActor может быть обнулён.
-        foreach (var actor in _actorManager.Items)
-        {
-            actor.Person.Survival.StatCrossKeyValue -= Survival_StatCrossKeyValue;
-        }
+        _player.MainPerson.Survival.StatCrossKeyValue -= Survival_StatCrossKeyValue;
     }
 
     private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
@@ -49,7 +41,7 @@ public class PersonEffectHandler : MonoBehaviour
             Destroy(childTrasform.gameObject);
         }
 
-        var person = _playerState.ActiveActor.Actor.Person;
+        var person = _player.MainPerson;
 
         var effects = person.Effects;
 
