@@ -10,9 +10,15 @@ public class SceneLoader : MonoBehaviour
     private bool loadScene = false;
 
     public string scene;
+
     [SerializeField]
     private Text loadingText;
 
+
+    public void LoadScene()
+    {
+        gameObject.SetActive(true);
+    }
 
     // Updates once per frame
     private void Update()

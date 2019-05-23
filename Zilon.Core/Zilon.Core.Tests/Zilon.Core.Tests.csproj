@@ -112,6 +112,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomMapFactoryTests.cs" />
     <Compile Include="MapGenerators\MapRegionHelperTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />
+    <Compile Include="MapGenerators\WildStyle\WildMapFactoryTests.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\DefeatActorJobProgressTests.cs" />

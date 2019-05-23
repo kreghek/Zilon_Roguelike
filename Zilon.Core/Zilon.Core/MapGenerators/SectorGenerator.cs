@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators.PrimitiveStyle;
-using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -125,9 +125,8 @@ namespace Zilon.Core.MapGenerators
         /// </remarks>
         public async Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
         {
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await WildMapFactory.CreateAsync(30);
             var sector = _sectorFactory.Create(map);
-
             return sector;
         }
     }

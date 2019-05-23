@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Zilon.Core.MapGenerators.RoomStyle
+namespace Zilon.Core.MapGenerators
 {
     /// <summary>
     /// Данные по переходу из данной комнаты.

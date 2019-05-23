@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
 {

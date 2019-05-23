@@ -244,7 +244,7 @@ internal class SectorVM : MonoBehaviour
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
         var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
-            .SingleOrDefault(x=>x.IsStart).Nodes
+            .SingleOrDefault(x => x.IsStart).Nodes
             .First();
 
         var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
