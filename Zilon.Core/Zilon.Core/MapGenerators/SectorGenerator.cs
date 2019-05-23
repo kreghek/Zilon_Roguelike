@@ -125,7 +125,7 @@ namespace Zilon.Core.MapGenerators
         /// </remarks>
         public async Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
         {
-            var map = await WildMapFactory.CreateAsync(10);
+            var map = await WildMapFactory.CreateAsync(30);
             var sector = _sectorFactory.Create(map);
             return sector;
         }
