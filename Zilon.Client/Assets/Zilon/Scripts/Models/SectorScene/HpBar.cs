@@ -1,37 +1,39 @@
 ﻿using System.Linq;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
 
-using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 
+/// <summary>
+/// Скрипт для визуализации полоски здоровья.
+/// </summary>
 public class HpBar : MonoBehaviour
 {
     public Image BarImage;
     public Text Text;
 
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly HumanPlayer _player;
 
 
     public void Update()
     {
-        if (_playerState.ActiveActor == null)
+        if (_player.MainPerson == null)
         {
-            // Активного актёра может не быть, потому что игрока убили и занулили это свойство.
+            // Главного персонажа может не быть, потому что персонажа ещё не создали.
             BarImage.fillAmount = 0;
 
             return;
         }
 
-        var actorVm = _playerState.ActiveActor;
-        var person = actorVm.Actor.Person;
-
+        var person = _player.MainPerson;
 
         var hpStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
-
 
         var hpPercentage = CalcPercentage(hpStat.Value, hpStat.Range.Max);
 
@@ -40,13 +42,13 @@ public class HpBar : MonoBehaviour
         Text.text = $"{hpStat.Value}/{hpStat.Range.Max}";
     }
 
-    private float CalcPercentage(float actorHp, float personHp)
+    private float CalcPercentage(float currentHp, float maxHp)
     {
-        if (personHp <= 0)
+        if (maxHp <= 0)
         {
             return 0;
         }
 
-        return actorHp / personHp;
+        return currentHp / maxHp;
     }
 }
