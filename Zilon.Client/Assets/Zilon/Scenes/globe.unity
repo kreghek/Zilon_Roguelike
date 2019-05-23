@@ -164,7 +164,7 @@ MonoBehaviour:
   HumanGroupPrefab: {fileID: 114608583235101136, guid: a8cba799ff5227f49bbf6822a03853d7,
     type: 3}
   Camera: {fileID: 1272584972}
-  SceneLoader: {fileID: 993256678}
+  SectorSceneLoader: {fileID: 993256678}
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,9 +334,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 227365881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82181501504aa784fa6c65cf0bc10933, type: 3}
+  m_Script: {fileID: 11500000, guid: b6531109d17b6414cb2b45f5651804c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SectorSceneLoader: {fileID: 993256678}
 --- !u!1 &388563769
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,8 +521,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: NextTurn
+      - m_Target: {fileID: 227365886}
+        m_MethodName: EnterButtonHandler
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
