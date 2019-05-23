@@ -1,18 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GlobeUiHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public SceneLoader SectorSceneLoader;
 
-    // Update is called once per frame
-    void Update()
+    public void EnterButtonHandler()
     {
-        
+        SectorSceneLoader.LoadScene();
     }
 }

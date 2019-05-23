@@ -23,7 +23,7 @@ public class GlobeWorldVM : MonoBehaviour
     public MapLocationConnector ConnectorPrefab;
     public GroupVM HumanGroupPrefab;
     public GlobalFollowCamera Camera;
-    public SceneLoader SceneLoader;
+    public SceneLoader SectorSceneLoader;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -188,6 +188,6 @@ public class GlobeWorldVM : MonoBehaviour
 
     private void StartLoadScene()
     {
-        SceneLoader.gameObject.SetActive(true);
+        SectorSceneLoader.LoadScene();
     }
 }
