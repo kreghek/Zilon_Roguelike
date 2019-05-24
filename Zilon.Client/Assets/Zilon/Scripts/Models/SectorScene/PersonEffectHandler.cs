@@ -21,12 +21,23 @@ public class PersonEffectHandler : MonoBehaviour
         UpdateEffects();
 
         var person = _player.MainPerson;
-        person.Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+
+//TODO Не очень надёжное решение.
+// Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
+        if (person != null)
+        {
+            person.Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+        }
     }
 
     public void OnDestroy()
     {
-        _player.MainPerson.Survival.StatCrossKeyValue -= Survival_StatCrossKeyValue;
+        var person = _player.MainPerson;
+
+        if (person != null)
+        {
+            person.Survival.StatCrossKeyValue -= Survival_StatCrossKeyValue;
+        }
     }
 
     private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
@@ -42,6 +53,11 @@ public class PersonEffectHandler : MonoBehaviour
         }
 
         var person = _player.MainPerson;
+
+        if (person == null)
+        {
+            return;
+        }
 
         var effects = person.Effects;
 
