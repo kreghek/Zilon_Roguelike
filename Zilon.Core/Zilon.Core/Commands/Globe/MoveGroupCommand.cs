@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -34,7 +35,18 @@ namespace Zilon.Core.Commands.Globe
         /// </returns>
         public bool CanExecute()
         {
-            return true;
+            if (_player.MainPerson == null)
+            {
+                throw new CommandCantExecuteException();
+            }
+
+            var effects = _player.MainPerson.Effects;
+            var hasSurvivalHazardEffects = effects.Items.OfType<SurvivalStatHazardEffect>()
+                .Where(x=>x.Level >= SurvivalStatHazardLevel.Max);
+
+            var hasSurvivalHazards = hasSurvivalHazardEffects.Any();
+
+            return !hasSurvivalHazards;
         }
 
         /// <summary>Выполнение команды.</summary>

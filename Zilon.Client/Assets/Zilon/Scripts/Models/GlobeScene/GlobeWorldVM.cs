@@ -182,8 +182,15 @@ public class GlobeWorldVM : MonoBehaviour
 
     private void LocationViewModel_OnSelect(object sender, EventArgs e)
     {
-        _globeUiState.SelectedViewModel = (MapLocation)sender;
-        _clientCommandExecutor.Push(_moveGroupCommand);
+        if (_moveGroupCommand.CanExecute())
+        {
+            _globeUiState.SelectedViewModel = (MapLocation)sender;
+            _clientCommandExecutor.Push(_moveGroupCommand);
+        }
+        else
+        {
+            Debug.Log("Попытка перемещения с критическим уровнем голода/жажды.");
+        }
     }
 
     private void StartLoadScene()

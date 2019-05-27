@@ -70,6 +70,7 @@
     <Compile Include="Client\PropTransferMachineStores.cs" />
     <Compile Include="Client\IUiState.cs" />
     <Compile Include="Client\UiStateBase.cs" />
+    <Compile Include="Commands\CommandCantExecuteException.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
