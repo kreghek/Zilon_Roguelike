@@ -138,8 +138,6 @@ namespace Zilon.Core.WorldGeneration
                             var node = new GlobeRegionNode(x, y, locationScheme);
                             region.AddNode(node);
                         }
-
-                        
                     }
                 }
             }

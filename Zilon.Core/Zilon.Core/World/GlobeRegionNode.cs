@@ -6,7 +6,7 @@ namespace Zilon.Core.World
     /// <summary>
     /// Узел локации провинции в графе провинции.
     /// </summary>
-    public class GlobeRegionNode : HexNode
+    public sealed class GlobeRegionNode : HexNode
     {
         /// <summary>
         /// Конструктор узла провинции.
