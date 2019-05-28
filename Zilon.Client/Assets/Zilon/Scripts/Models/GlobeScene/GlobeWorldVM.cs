@@ -87,6 +87,8 @@ public class GlobeWorldVM : MonoBehaviour
         var currentGlobeCell = _player.Terrain;
         _region = _globeManager.Regions[currentGlobeCell];
 
+
+        // Создание визуализации ущлов провинции.
         _locationNodeViewModels = new List<MapLocation>(100);
         foreach (GlobeRegionNode globeRegionNode in _region.Nodes)
         {
@@ -102,6 +104,7 @@ public class GlobeWorldVM : MonoBehaviour
             locationViewModel.OnHover += LocationViewModel_OnHover;
         }
 
+        // Создание коннекторов между узлами провинции.
         var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
         while (openNodeViewModels.Any())
         {
@@ -116,6 +119,35 @@ public class GlobeWorldVM : MonoBehaviour
                 var connectorViewModel = connectorObject.GetComponent<MapLocationConnector>();
                 connectorViewModel.gameObject1 = currentNodeViewModel.gameObject;
                 connectorViewModel.gameObject2 = neibourNodeViewModel.gameObject;
+            }
+        }
+
+        // Создание визуализаций соседних провинций
+        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (var offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                if (offsetX == 0 && offsetY == 0)
+                {
+                    // Это нулевое смещение от текущего элемента.
+                    // Пропускаем, т.к. текущий элемент уже есть.
+                    continue;
+                }
+
+                var terrainX = _player.Terrain.Coords.X + offsetX;
+                var terrainY = _player.Terrain.Coords.Y + offsetY;
+
+                if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
+                    terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
+                    _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
+                    terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
+                {
+                    var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
+
+                    var neiborRegion = _globeManager.Regions[terrainCell];
+
+                    // Ищем узел текущей провинции, являющийся соседним с узлом соседней провинции.
+                }
             }
         }
 
