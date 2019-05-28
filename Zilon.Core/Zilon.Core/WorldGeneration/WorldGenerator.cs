@@ -14,7 +14,7 @@ namespace Zilon.Core.WorldGeneration
     /// <summary>
     /// Экземпляр генератора мира с историей.
     /// </summary>
-    /// <seealso cref="Zilon.Core.WorldGeneration.IWorldGenerator" />
+    /// <seealso cref="IWorldGenerator" />
     public class WorldGenerator : IWorldGenerator
     {
         private const int Size = 10;
@@ -110,33 +110,47 @@ namespace Zilon.Core.WorldGeneration
                     //    continue;
                     //}
 
-                    var hasDundeonRoll = _dice.Roll(100);
-                    if (hasDundeonRoll > 90)
+                    var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
+
+                    if (isBorder)
                     {
-                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                        var locationSid = locationSchemeSids[locationSidIndex];
-                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                        var node = new GlobeRegionNode(x, y, locationScheme);
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                        var node = new GlobeRegionNode(x, y, locationScheme)
+                        {
+                            IsBorder = isBorder
+                        };
                         region.AddNode(node);
                     }
                     else
                     {
-                        var hasCityRoll = _dice.Roll(100);
-
-                        if (hasCityRoll > 90)
+                        var hasDundeonRoll = _dice.Roll(100);
+                        if (hasDundeonRoll > 90)
                         {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsTown = true
-                            };
+                            var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                            var locationSid = locationSchemeSids[locationSidIndex];
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                            var node = new GlobeRegionNode(x, y, locationScheme);
                             region.AddNode(node);
                         }
                         else
                         {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme);
-                            region.AddNode(node);
+                            var hasCityRoll = _dice.Roll(100);
+
+                            if (hasCityRoll > 90)
+                            {
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                                var node = new GlobeRegionNode(x, y, locationScheme)
+                                {
+                                    IsTown = true
+                                };
+                                region.AddNode(node);
+                            }
+                            else
+                            {
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                                var node = new GlobeRegionNode(x, y, locationScheme);
+                                region.AddNode(node);
+                            }
                         }
                     }
                 }
