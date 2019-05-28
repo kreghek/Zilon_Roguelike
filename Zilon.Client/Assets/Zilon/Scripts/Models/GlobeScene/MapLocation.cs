@@ -13,6 +13,8 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     public GlobeRegionNode Node { get; set; }
 
+    public GlobeRegion ParentRegion { get; set; }
+
     public void Start()
     {
         if (Node.Scheme.Sid == "forest")

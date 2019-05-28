@@ -88,16 +88,18 @@ public class GlobeWorldVM : MonoBehaviour
         _region = _globeManager.Regions[currentGlobeCell];
 
 
-        // Создание визуализации ущлов провинции.
+        // Создание визуализации узлов провинции.
         _locationNodeViewModels = new List<MapLocation>(100);
         foreach (GlobeRegionNode globeRegionNode in _region.Nodes)
         {
-            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
+            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + _player.Terrain.Coords.X * 20, 
+                globeRegionNode.OffsetY + _player.Terrain.Coords.Y * 20);
 
             var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
             locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
             var locationViewModel = locationObject.GetComponent<MapLocation>();
             locationViewModel.Node = globeRegionNode;
+            locationViewModel.ParentRegion = _region;
             _locationNodeViewModels.Add(locationViewModel);
 
             locationViewModel.OnSelect += LocationViewModel_OnSelect;
@@ -123,6 +125,8 @@ public class GlobeWorldVM : MonoBehaviour
         }
 
         // Создание визуализаций соседних провинций
+        var currentRegion = _globeManager.Regions[_player.Terrain];
+        var currentBorderNodes = currentRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder).ToArray();
         for (var offsetX = -1; offsetX <= 1; offsetX++)
         {
             for (var offsetY = -1; offsetY <= 1; offsetY++)
@@ -144,9 +148,27 @@ public class GlobeWorldVM : MonoBehaviour
                 {
                     var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
 
-                    var neiborRegion = _globeManager.Regions[terrainCell];
+                    var neighborRegion = _globeManager.Regions[terrainCell];
 
                     // Ищем узел текущей провинции, являющийся соседним с узлом соседней провинции.
+                    var neighborBorderNodes = neighborRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder);
+
+                    foreach (var neighborBorderNode in neighborBorderNodes)
+                    {
+
+                        var worldCoords = HexHelper.ConvertToWorld(neighborBorderNode.OffsetX + terrainX * 20,
+                            neighborBorderNode.OffsetY + terrainY * 20);
+
+                        var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
+                        locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
+                        var locationViewModel = locationObject.GetComponent<MapLocation>();
+                        locationViewModel.Node = neighborBorderNode;
+                        locationViewModel.ParentRegion = neighborRegion;
+                        _locationNodeViewModels.Add(locationViewModel);
+
+                        locationViewModel.OnSelect += LocationViewModel_OnSelect;
+                        locationViewModel.OnHover += LocationViewModel_OnHover;
+                    }
                 }
             }
         }
