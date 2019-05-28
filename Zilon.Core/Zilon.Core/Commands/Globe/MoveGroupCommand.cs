@@ -72,6 +72,11 @@ namespace Zilon.Core.Commands.Globe
                 }
 
                 _player.GlobeNode = globeNode;
+
+                for (var i = 0; i < 150; i++)
+                {
+                    _player.MainPerson.Survival.Update();
+                }
             }
         }
     }
