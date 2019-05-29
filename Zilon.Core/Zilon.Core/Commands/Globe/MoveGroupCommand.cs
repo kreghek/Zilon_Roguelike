@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
@@ -58,20 +59,38 @@ namespace Zilon.Core.Commands.Globe
             var currentGlobeCell = _player.Terrain;
             var region = _worldManager.Regions[currentGlobeCell];
 
-            var neighborNodes = region.GetNext(currentNode);
-            var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
-
-            if (selectedIsNeighbor)
+            if (region == selectedNodeViewModel.ParentRegion)
             {
-                var globeNode = selectedNodeViewModel.Node;
+                // Значит путешествие внутри одной провинции.
 
+                var neighborNodes = region.GetNext(currentNode);
+                var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
 
-                if (globeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+                if (selectedIsNeighbor)
                 {
-                    ScoreManager?.CountPlace(globeNode);
-                }
+                    var globeNode = selectedNodeViewModel.Node;
 
-                _player.GlobeNode = globeNode;
+
+                    if (globeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+                    {
+                        ScoreManager?.CountPlace(globeNode);
+                    }
+
+                    _player.GlobeNode = globeNode;
+
+                    for (var i = 0; i < 150; i++)
+                    {
+                        _player.MainPerson.Survival.Update();
+                    }
+                }
+            }
+            else
+            {
+                Debug.Assert(selectedNodeViewModel.ParentRegion == null, "Для узла должна быть задана провинция.");
+
+                _player.GlobeNode = selectedNodeViewModel.Node;
+                //TODO Выборку ячейки мира по узлу провиции нужно упростить.
+                _player.Terrain = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
 
                 for (var i = 0; i < 150; i++)
                 {

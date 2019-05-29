@@ -55,27 +55,31 @@ public class GlobeWorldVM : MonoBehaviour
             var firstNode = (GlobeRegionNode)createdRegion.Nodes.First();
 
             _player.GlobeNode = firstNode;
+        }
 
-            for (var offsetX = -1; offsetX <= 1; offsetX++)
+        // Создание соседних регионов
+        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (var offsetY = -1; offsetY <= 1; offsetY++)
             {
-                for (var offsetY = -1; offsetY <= 1; offsetY++)
+                if (offsetX == 0 && offsetY == 0)
                 {
-                    if (offsetX == 0 && offsetY == 0)
-                    {
-                        // Это нулевое смещение от текущего элемента.
-                        // Пропускаем, т.к. текущий элемент уже есть.
-                        continue;
-                    }
+                    // Это нулевое смещение от текущего элемента.
+                    // Пропускаем, т.к. текущий элемент уже есть.
+                    continue;
+                }
 
-                    var terrainX = _player.Terrain.Coords.X + offsetX;
-                    var terrainY = _player.Terrain.Coords.Y + offsetY;
+                var terrainX = _player.Terrain.Coords.X + offsetX;
+                var terrainY = _player.Terrain.Coords.Y + offsetY;
 
-                    if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
-                        terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
-                        _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
-                        terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
+                if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
+                    terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
+                    _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
+                    terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
+                {
+                    var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
+                    if (!_globeManager.Regions.ContainsKey(terrainCell))
                     {
-                        var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
                         var createdNeiborRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, terrainCell);
 
                         _globeManager.Regions[terrainCell] = createdNeiborRegion;
