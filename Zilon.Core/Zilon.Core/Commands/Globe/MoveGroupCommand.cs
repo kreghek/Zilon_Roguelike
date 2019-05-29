@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Client;
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -88,13 +89,30 @@ namespace Zilon.Core.Commands.Globe
             {
                 Debug.Assert(selectedNodeViewModel.ParentRegion == null, "Для узла должна быть задана провинция.");
 
-                _player.GlobeNode = selectedNodeViewModel.Node;
+                var currentTerrainNode = _player.GlobeNode;
+                var currentTerrainCell = _player.Terrain;
                 //TODO Выборку ячейки мира по узлу провиции нужно упростить.
-                _player.Terrain = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
-
-                for (var i = 0; i < 150; i++)
+                var neighborTerrainCell = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
+                var regionNodeOffsetX = neighborTerrainCell.Coords.X - currentTerrainCell.Coords.X;
+                var regionNodeOffsetY = neighborTerrainCell.Coords.Y - currentTerrainCell.Coords.Y;
+                var neighborRegionBorderNodes = selectedNodeViewModel.ParentRegion
+                    .Nodes.OfType<GlobeRegionNode>()
+                    .Where(x => x.IsBorder).ToArray();
+                var transitionNodes = neighborRegionBorderNodes.Where(x => x.CubeCoords
+                .DistanceTo(
+                    HexHelper.ConvertToCube(
+                        currentTerrainNode.OffsetX + regionNodeOffsetX * 20,
+                        currentTerrainNode.OffsetY + regionNodeOffsetY * 20
+                        )) <= 1);
+                if (transitionNodes.Contains(selectedNodeViewModel.Node))
                 {
-                    _player.MainPerson.Survival.Update();
+                    _player.GlobeNode = selectedNodeViewModel.Node;
+                    _player.Terrain = neighborTerrainCell;
+
+                    for (var i = 0; i < 150; i++)
+                    {
+                        _player.MainPerson.Survival.Update();
+                    }
                 }
             }
         }
