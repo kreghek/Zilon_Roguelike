@@ -6,7 +6,7 @@ namespace Zilon.Core.World
     /// <summary>
     /// Узел локации провинции в графе провинции.
     /// </summary>
-    public class GlobeRegionNode : HexNode
+    public sealed class GlobeRegionNode : HexNode
     {
         /// <summary>
         /// Конструктор узла провинции.
@@ -28,5 +28,14 @@ namespace Zilon.Core.World
         /// Является ли локация фрагментом города.
         /// </summary>
         public bool IsTown { get; set; }
+
+        /// <summary>
+        /// Является ли узел провинции пограничным с другой провинцией.
+        /// </summary>
+        /// <remarks>
+        /// Нужен, чтобы покрыть требование, что подземелья и города не могут генерироваться на границе провинций.
+        /// Нужен для оптимизации выбора узлов для построения переходов между провинциями.
+        /// </remarks>
+        public bool IsBorder { get; set; }
     }
 }

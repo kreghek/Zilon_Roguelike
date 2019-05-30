@@ -196,6 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 160909241}
   - component: {fileID: 160909242}
+  - component: {fileID: 160909243}
   m_Layer: 0
   m_Name: Sector
   m_TagString: Untagged
@@ -230,6 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf15af3146e78954c8b4317c9016b85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PersonCreator: {fileID: 160909243}
   MapNodePrefab: {fileID: 114589536202888380, guid: 7530a5176654a524c98e481412758610,
     type: 3}
   ActorPrefab: {fileID: 114531107507698972, guid: 80a421927c97aa74dafb7098a38e3afc,
@@ -248,6 +250,18 @@ MonoBehaviour:
     type: 3}
   HitSfx: {fileID: 6212818204964042155, guid: 49a1aaca0afae8b4fadb8526a171bbeb, type: 3}
   SceneLoader: {fileID: 1698614930}
+--- !u!114 &160909243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160909240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f65dd0ad6ffff8408511d1f262348cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &187834198
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ namespace Zilon.Core.WorldGeneration
     /// <summary>
     /// Экземпляр генератора мира с историей.
     /// </summary>
-    /// <seealso cref="Zilon.Core.WorldGeneration.IWorldGenerator" />
+    /// <seealso cref="IWorldGenerator" />
     public class WorldGenerator : IWorldGenerator
     {
         private const int Size = 10;
@@ -22,7 +22,8 @@ namespace Zilon.Core.WorldGeneration
         private const int HistoryIterationCount = 40;
         private const int StartAgentCount = 40;
         private const int LocationBaseSize = 20;
-
+        private const string CITY_SCHEME_SID = "city";
+        private const string WILD_SCHEME_SID = "forest";
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
 
@@ -100,42 +101,57 @@ namespace Zilon.Core.WorldGeneration
             {
                 for (var y = 0; y < LocationBaseSize; y++)
                 {
+                    // Эти строки вставляют непроходимые места в карте.
+                    // Сейчас это не безопасно, потому что могут генерироваться изолированные
+                    // куски карты провинции.
                     //var hasNodeRoll = _dice.Roll(6);
                     //if (hasNodeRoll <= 2)
                     //{
                     //    continue;
                     //}
 
-                    var hasDundeonRoll = _dice.Roll(100);
-                    if (hasDundeonRoll > 90)
+                    var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
+
+                    if (isBorder)
                     {
-                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                        var locationSid = locationSchemeSids[locationSidIndex];
-                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                        var node = new GlobeRegionNode(x, y, locationScheme);
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                        var node = new GlobeRegionNode(x, y, locationScheme)
+                        {
+                            IsBorder = isBorder
+                        };
                         region.AddNode(node);
                     }
                     else
                     {
-                        var hasCityRoll = _dice.Roll(100);
-
-                        if (hasCityRoll > 90)
+                        var hasDundeonRoll = _dice.Roll(100);
+                        if (hasDundeonRoll > 90)
                         {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>("city");
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsTown = true
-                            };
+                            var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                            var locationSid = locationSchemeSids[locationSidIndex];
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                            var node = new GlobeRegionNode(x, y, locationScheme);
                             region.AddNode(node);
                         }
                         else
                         {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>("forest");
-                            var node = new GlobeRegionNode(x, y, locationScheme);
-                            region.AddNode(node);
-                        }
+                            var hasCityRoll = _dice.Roll(100);
 
-                        
+                            if (hasCityRoll > 90)
+                            {
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                                var node = new GlobeRegionNode(x, y, locationScheme)
+                                {
+                                    IsTown = true
+                                };
+                                region.AddNode(node);
+                            }
+                            else
+                            {
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                                var node = new GlobeRegionNode(x, y, locationScheme);
+                                region.AddNode(node);
+                            }
+                        }
                     }
                 }
             }

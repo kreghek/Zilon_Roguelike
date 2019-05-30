@@ -92,6 +92,7 @@
     <Compile Include="Commands\CommandTestBase.cs" />
     <Compile Include="Commands\EquipCommandTests.cs" />
     <Compile Include="Commands\AttackCommandTests.cs" />
+    <Compile Include="Commands\Globe\RegionTransitionHelperTests.cs" />
     <Compile Include="Commands\MoveCommandTests.cs" />
     <Compile Include="Commands\NextTurnCommandTests.cs" />
     <Compile Include="Commands\OpenContainerCommandTests.cs" />
