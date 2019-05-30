@@ -14,6 +14,8 @@ namespace Zilon.Core.Commands.Globe
             IEnumerable<GlobeRegionNode> targetRegionBorderNodes,
             TerrainCell targetNeighborTerrainCell)
         {
+            const int REGION_SIZE = 20;
+
             var regionNodeOffsetX = targetNeighborTerrainCell.Coords.X - currentTerrainCell.Coords.X;
             var regionNodeOffsetY = targetNeighborTerrainCell.Coords.Y - currentTerrainCell.Coords.Y;
 
@@ -21,8 +23,8 @@ namespace Zilon.Core.Commands.Globe
                 new
                 {
                     RegionOffsetCoords = new OffsetCoords(
-                    node.OffsetX + regionNodeOffsetX * 20,
-                    node.OffsetY + regionNodeOffsetY * 20
+                        regionNodeOffsetX >= 0 ? node.OffsetX + regionNodeOffsetX * REGION_SIZE : -(REGION_SIZE - node.OffsetX),
+                        regionNodeOffsetY >= 0 ? node.OffsetY + regionNodeOffsetY * REGION_SIZE : -(REGION_SIZE - node.OffsetY)
                     ),
                     Node = node
                 });
