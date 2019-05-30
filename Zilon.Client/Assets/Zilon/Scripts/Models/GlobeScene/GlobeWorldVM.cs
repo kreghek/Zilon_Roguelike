@@ -7,6 +7,7 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
@@ -24,6 +25,7 @@ public class GlobeWorldVM : MonoBehaviour
     public GroupVM HumanGroupPrefab;
     public GlobalFollowCamera Camera;
     public SceneLoader SectorSceneLoader;
+    public SceneLoader GlobeSceneLoader;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -251,6 +253,12 @@ public class GlobeWorldVM : MonoBehaviour
         else
         {
             MoveGroupViewModel(_player.GlobeNode);
+
+            if (!_region.Nodes.Contains(_player.GlobeNode))
+            {
+                // Значит провинция сменилась.
+                GlobeSceneLoader.LoadScene();
+            }
         }
     }
 
