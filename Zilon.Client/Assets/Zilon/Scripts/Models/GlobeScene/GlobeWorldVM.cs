@@ -40,6 +40,8 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
     [Inject] private readonly IGlobeUiState _globeUiState;
 
+    public PlayerPersonCreator PersonCreator;
+
     private async void Start()
     {
         if (_globeManager.Globe == null)
@@ -178,6 +180,11 @@ public class GlobeWorldVM : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if (_player.MainPerson == null)
+        {
+            _player.MainPerson = PersonCreator.CreatePlayerPerson();
         }
 
         var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);

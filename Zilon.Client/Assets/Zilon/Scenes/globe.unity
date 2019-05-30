@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 160909241}
   - component: {fileID: 160909242}
   - component: {fileID: 160909243}
+  - component: {fileID: 160909244}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -223,6 +224,7 @@ MonoBehaviour:
   Camera: {fileID: 1272584972}
   SectorSceneLoader: {fileID: 993256678}
   GlobeSceneLoader: {fileID: 163599790}
+  PersonCreator: {fileID: 160909244}
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +235,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d92b3ec529b121548a5db9c68cabde6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &160909244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160909240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f65dd0ad6ffff8408511d1f262348cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &163599788
@@ -356,6 +370,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 871715391520555518, guid: f853e159661bfb941bbf3451443069fe,
+        type: 3}
+      propertyPath: scene
+      value: globe
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f853e159661bfb941bbf3451443069fe, type: 3}
