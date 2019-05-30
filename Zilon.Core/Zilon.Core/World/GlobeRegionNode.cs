@@ -28,5 +28,13 @@ namespace Zilon.Core.World
         /// Является ли локация фрагментом города.
         /// </summary>
         public bool IsTown { get; set; }
+
+        /// <summary>
+        /// Текущее состояние монстров в текущем узле. Может быть null.
+        /// </summary>
+        /// <remarks>
+        /// Если не равно null, то указывает сектору, каких монстров нужно создать.
+        /// </remarks>
+        public GlobeRegionNodeMonsterState MonsterState { get; set; }
     }
 }

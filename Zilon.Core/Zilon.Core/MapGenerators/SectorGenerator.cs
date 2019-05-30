@@ -127,6 +127,15 @@ namespace Zilon.Core.MapGenerators
         {
             var map = await WildMapFactory.CreateAsync(30);
             var sector = _sectorFactory.Create(map);
+
+            if (globeNode.MonsterState != null)
+            {
+                _monsterGenerator.CreateMonsters(sector,
+                    _monsterPlayer,
+                    new[] { map.Regions[1] },
+                    globeNode.MonsterState.MonsterPersons);
+            }
+
             return sector;
         }
     }

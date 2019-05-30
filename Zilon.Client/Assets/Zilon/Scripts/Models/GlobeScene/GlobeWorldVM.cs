@@ -164,6 +164,11 @@ public class GlobeWorldVM : MonoBehaviour
         }
         else
         {
+            if (_player.GlobeNode.MonsterState != null)
+            {
+                StartLoadScene();
+            }
+
             MoveGroupViewModel(_player.GlobeNode);
         }
     }
@@ -186,6 +191,9 @@ public class GlobeWorldVM : MonoBehaviour
         {
             _globeUiState.SelectedViewModel = (MapLocation)sender;
             _clientCommandExecutor.Push(_moveGroupCommand);
+
+            var currentRegion = _globeManager.Regions[_player.Terrain];
+            _globeManager.UpdateRegionNodes(currentRegion);
         }
         else
         {
