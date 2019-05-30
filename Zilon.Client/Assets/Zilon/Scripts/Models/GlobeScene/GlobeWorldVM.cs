@@ -168,6 +168,7 @@ public class GlobeWorldVM : MonoBehaviour
                         var locationViewModel = locationObject.GetComponent<MapLocation>();
                         locationViewModel.Node = neighborBorderNode;
                         locationViewModel.ParentRegion = neighborRegion;
+                        locationViewModel.OtherRegion = true;
                         _locationNodeViewModels.Add(locationViewModel);
 
                         locationViewModel.OnSelect += LocationViewModel_OnSelect;
