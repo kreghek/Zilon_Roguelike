@@ -7,6 +7,7 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
@@ -24,6 +25,7 @@ public class GlobeWorldVM : MonoBehaviour
     public GroupVM HumanGroupPrefab;
     public GlobalFollowCamera Camera;
     public SceneLoader SectorSceneLoader;
+    public SceneLoader GlobeSceneLoader;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -37,6 +39,8 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly ICommandManager _clientCommandExecutor;
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
     [Inject] private readonly IGlobeUiState _globeUiState;
+
+    public PlayerPersonCreator PersonCreator;
 
     private async void Start()
     {
@@ -57,24 +61,60 @@ public class GlobeWorldVM : MonoBehaviour
             _player.GlobeNode = firstNode;
         }
 
+        // Создание соседних регионов
+        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (var offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                if (offsetX == 0 && offsetY == 0)
+                {
+                    // Это нулевое смещение от текущего элемента.
+                    // Пропускаем, т.к. текущий элемент уже есть.
+                    continue;
+                }
+
+                var terrainX = _player.Terrain.Coords.X + offsetX;
+                var terrainY = _player.Terrain.Coords.Y + offsetY;
+
+                if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
+                    terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
+                    _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
+                    terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
+                {
+                    var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
+                    if (!_globeManager.Regions.ContainsKey(terrainCell))
+                    {
+                        var createdNeiborRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, terrainCell);
+
+                        _globeManager.Regions[terrainCell] = createdNeiborRegion;
+                    }
+                }
+            }
+        }
+
         var currentGlobeCell = _player.Terrain;
         _region = _globeManager.Regions[currentGlobeCell];
 
+
+        // Создание визуализации узлов провинции.
         _locationNodeViewModels = new List<MapLocation>(100);
         foreach (GlobeRegionNode globeRegionNode in _region.Nodes)
         {
-            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
+            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + _player.Terrain.Coords.X * 20, 
+                globeRegionNode.OffsetY + _player.Terrain.Coords.Y * 20);
 
             var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
             locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
             var locationViewModel = locationObject.GetComponent<MapLocation>();
             locationViewModel.Node = globeRegionNode;
+            locationViewModel.ParentRegion = _region;
             _locationNodeViewModels.Add(locationViewModel);
 
             locationViewModel.OnSelect += LocationViewModel_OnSelect;
             locationViewModel.OnHover += LocationViewModel_OnHover;
         }
 
+        // Создание коннекторов между узлами провинции.
         var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
         while (openNodeViewModels.Any())
         {
@@ -90,6 +130,61 @@ public class GlobeWorldVM : MonoBehaviour
                 connectorViewModel.gameObject1 = currentNodeViewModel.gameObject;
                 connectorViewModel.gameObject2 = neibourNodeViewModel.gameObject;
             }
+        }
+
+        // Создание визуализаций соседних провинций
+        var currentRegion = _globeManager.Regions[_player.Terrain];
+        var currentBorderNodes = currentRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder).ToArray();
+        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (var offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                if (offsetX == 0 && offsetY == 0)
+                {
+                    // Это нулевое смещение от текущего элемента.
+                    // Пропускаем, т.к. текущий элемент уже есть.
+                    continue;
+                }
+
+                var terrainX = _player.Terrain.Coords.X + offsetX;
+                var terrainY = _player.Terrain.Coords.Y + offsetY;
+
+                if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
+                    terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
+                    _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
+                    terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
+                {
+                    var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
+
+                    var neighborRegion = _globeManager.Regions[terrainCell];
+
+                    // Ищем узел текущей провинции, являющийся соседним с узлом соседней провинции.
+                    var neighborBorderNodes = neighborRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder);
+
+                    foreach (var neighborBorderNode in neighborBorderNodes)
+                    {
+
+                        var worldCoords = HexHelper.ConvertToWorld(neighborBorderNode.OffsetX + terrainX * 20,
+                            neighborBorderNode.OffsetY + terrainY * 20);
+
+                        var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
+                        locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
+                        var locationViewModel = locationObject.GetComponent<MapLocation>();
+                        locationViewModel.Node = neighborBorderNode;
+                        locationViewModel.ParentRegion = neighborRegion;
+                        locationViewModel.OtherRegion = true;
+                        _locationNodeViewModels.Add(locationViewModel);
+
+                        locationViewModel.OnSelect += LocationViewModel_OnSelect;
+                        locationViewModel.OnHover += LocationViewModel_OnHover;
+                    }
+                }
+            }
+        }
+
+        if (_player.MainPerson == null)
+        {
+            _player.MainPerson = PersonCreator.CreatePlayerPerson();
         }
 
         var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
@@ -170,6 +265,12 @@ public class GlobeWorldVM : MonoBehaviour
             }
 
             MoveGroupViewModel(_player.GlobeNode);
+
+            if (!_region.Nodes.Contains(_player.GlobeNode))
+            {
+                // Значит провинция сменилась.
+                GlobeSceneLoader.LoadScene();
+            }
         }
     }
 

@@ -13,6 +13,10 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     public GlobeRegionNode Node { get; set; }
 
+    public GlobeRegion ParentRegion { get; set; }
+
+    public bool OtherRegion { get; set; }
+
     public void Start()
     {
         if (Node.Scheme.Sid == "forest")
@@ -29,6 +33,11 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         {
             var sprite = Resources.Load<Sprite>("Globe/gungeon");
             Icon.sprite = sprite;
+        }
+
+        if (OtherRegion)
+        {
+            Icon.color = Color.cyan;
         }
     }
 

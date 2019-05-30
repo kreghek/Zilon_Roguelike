@@ -72,6 +72,7 @@
     <Compile Include="Client\UiStateBase.cs" />
     <Compile Include="Commands\CommandCantExecuteException.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
+    <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\PropMetrics.cs" />

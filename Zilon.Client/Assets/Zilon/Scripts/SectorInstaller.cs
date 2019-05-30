@@ -44,7 +44,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
              });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
-        Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
