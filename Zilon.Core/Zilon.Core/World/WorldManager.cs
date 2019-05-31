@@ -12,6 +12,8 @@ namespace Zilon.Core.World
 {
     public sealed class WorldManager : IWorldManager
     {
+        private const int SPAWN_SUCCESS_ROLL = 5;
+        private const int MONSTER_NODE_LIMIT = 100;
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
 
@@ -33,7 +35,10 @@ namespace Zilon.Core.World
 
             var nodeWithMonsters = region.RegionNodes.Where(x => x.MonsterState != null);
 
-            var monsterLimitIsReached = nodeWithMonsters.Count() >= 100;
+            var monsterLimitIsReached = nodeWithMonsters.Count() >= MONSTER_NODE_LIMIT;
+
+            // Наборы монстров для генерации в узлах.
+            var monsterSets = CreateMonsterSets();
 
             foreach (var node in region.RegionNodes)
             {
@@ -41,25 +46,112 @@ namespace Zilon.Core.World
                 {
                     if (!monsterLimitIsReached)
                     {
-                        var spawnMonsterRoll = _dice.Roll(6);
+                        var spawnMonsterRoll = _dice.RollD6();
 
-                        if (spawnMonsterRoll >= 5)
+                        if (spawnMonsterRoll >= SPAWN_SUCCESS_ROLL)
                         {
+                            var monsterSetRoll = _dice.Roll(0, monsterSets.Count() - 1);
+                            var rolledMonsterSet = monsterSets[monsterSetRoll];
+
+                            var monsterCount = rolledMonsterSet.MonsterSchemes.Count();
+
                             node.MonsterState = new GlobeRegionNodeMonsterState
                             {
-                                MonsterPersons = new MonsterPerson[5]
+                                MonsterPersons = new MonsterPerson[monsterCount]
                             };
 
                             // Генерируем персонажей монстров.
-                            for (var i = 0; i < 5; i++)
+                            for (var monsterIndex = 0; monsterIndex < monsterCount; monsterIndex++)
                             {
-                                var person = new MonsterPerson(_schemeService.GetScheme<IMonsterScheme>("rat"));
-                                node.MonsterState.MonsterPersons[i] = person;
+                                var monsterScheme = rolledMonsterSet.MonsterSchemes[monsterIndex];
+                                var person = new MonsterPerson(monsterScheme);
+                                node.MonsterState.MonsterPersons[monsterIndex] = person;
                             }
                         }
                     }
                 }
             }
+        }
+
+        private MonsterSet[] CreateMonsterSets()
+        {
+            return new[] {
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("rat-human-slayer"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat"),
+                        _schemeService.GetScheme<IMonsterScheme>("rat")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("genomass"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave"),
+
+                        _schemeService.GetScheme<IMonsterScheme>("genomass"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave"),
+                        _schemeService.GetScheme<IMonsterScheme>("gemonass-slave")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("infernal-bard"),
+                        _schemeService.GetScheme<IMonsterScheme>("archidemon")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman"),
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman"),
+
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman"),
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman"),
+
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman"),
+                        _schemeService.GetScheme<IMonsterScheme>("demon-spearman")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("hell-rock")
+                    }
+                },
+
+                new MonsterSet{
+                    MonsterSchemes = new[]{
+                        _schemeService.GetScheme<IMonsterScheme>("hell-rock"),
+                        _schemeService.GetScheme<IMonsterScheme>("hell-rock")
+                    }
+                },
+            };
         }
     }
 }
