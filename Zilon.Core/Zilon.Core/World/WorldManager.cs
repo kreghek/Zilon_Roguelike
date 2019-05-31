@@ -10,10 +10,14 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.World
 {
+    /// <summary>
+    /// Базовая реализация сервиса для работы с глобальным миром.
+    /// </summary>
     public sealed class WorldManager : IWorldManager
     {
         private const int SPAWN_SUCCESS_ROLL = 5;
         private const int MONSTER_NODE_LIMIT = 100;
+
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
 
@@ -25,9 +29,20 @@ namespace Zilon.Core.World
             Regions = new Dictionary<TerrainCell, GlobeRegion>();
         }
 
+        /// <summary>
+        /// Глобальная карта.
+        /// </summary>
         public Globe Globe { get; set; }
+
+        /// <summary>
+        /// Текущие сгенерированые провинции относительно ячеек глобальной карты.
+        /// </summary>
         public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
 
+        /// <summary>
+        /// Обновление состояния узлов провинции.
+        /// </summary>
+        /// <param name="region">Провинция, которая обновляется.</param>
         public void UpdateRegionNodes(GlobeRegion region)
         {
             // Подсчитываем узлы, занятые монстрами.
@@ -73,6 +88,8 @@ namespace Zilon.Core.World
             }
         }
 
+        //TODO Вынести в отдельную схему.
+        // Решить, куда лучше. В подсхему сектора узла провинции или сделать отдельно.
         private MonsterSet[] CreateMonsterSets()
         {
             return new[] {
