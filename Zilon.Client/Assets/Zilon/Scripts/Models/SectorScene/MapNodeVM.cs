@@ -108,6 +108,9 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             case "forest":
                 return WallSprites[0];
 
+            case "elder-place":
+                return WallSprites[2];
+
             default:
                 return WallSprites[1];
         }
