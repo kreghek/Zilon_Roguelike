@@ -172,12 +172,54 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
+        private IActor CreateMonster(MonsterPerson person, IMapNode startNode, IBotPlayer botPlayer)
+        {
+            var actor = new Actor(person, botPlayer, startNode);
+            _actorManager.Add(actor);
+            return actor;
+        }
+
         private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
         {
             var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;
+        }
+
+        public void CreateMonsters(ISector sector, IBotPlayer monsterPlayer, IEnumerable<MapRegion> monsterRegions, IEnumerable<MonsterPerson> monsterPersons)
+        {
+            if (sector == null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (monsterPlayer == null)
+            {
+                throw new ArgumentNullException(nameof(monsterPlayer));
+            }
+
+            if (monsterRegions == null)
+            {
+                throw new ArgumentNullException(nameof(monsterRegions));
+            }
+
+            if (monsterPersons == null)
+            {
+                throw new ArgumentNullException(nameof(monsterPersons));
+            }
+
+            var freeNodes = new List<IMapNode>(monsterRegions.SelectMany(x=>x.Nodes));
+
+            foreach (var monsterPerson in monsterPersons)
+            {
+                var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
+
+                var monsterNode = freeNodes[rollIndex];
+                var monster = CreateMonster(monsterPerson, monsterNode, monsterPlayer);
+
+                freeNodes.Remove(monster.Node);
+            }
         }
     }
 }

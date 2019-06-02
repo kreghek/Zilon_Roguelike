@@ -434,7 +434,10 @@
     <Compile Include="WorldGeneration\TerrainCell.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
+    <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
     <Compile Include="World\IWorldManager.cs" />
+    <Compile Include="World\MonsterSet.cs" />
+    <Compile Include="World\WildMeetingEventArgs.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>

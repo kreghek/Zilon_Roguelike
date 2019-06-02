@@ -37,5 +37,13 @@ namespace Zilon.Core.World
         /// Нужен для оптимизации выбора узлов для построения переходов между провинциями.
         /// </remarks>
         public bool IsBorder { get; set; }
+
+        /// <summary>
+        /// Текущее состояние монстров в текущем узле. Может быть null.
+        /// </summary>
+        /// <remarks>
+        /// Если не равно null, то указывает сектору, каких монстров нужно создать.
+        /// </remarks>
+        public GlobeRegionNodeMonsterState MonsterState { get; set; }
     }
 }

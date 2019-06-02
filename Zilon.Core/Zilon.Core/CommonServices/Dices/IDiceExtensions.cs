@@ -28,5 +28,20 @@ namespace Zilon.Core.CommonServices.Dices
 
             return roll - 1 + min;
         }
+
+        public static int RollD6(this IDice dice)
+        {
+            return dice.Roll(6);
+        }
+
+        public static int Roll2D6(this IDice dice)
+        {
+            return dice.Roll(6) + dice.Roll(6);
+        }
+
+        public static int RollD3(this IDice dice)
+        {
+            return dice.Roll(6);
+        }
     }
 }
