@@ -276,6 +276,7 @@ internal class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
+            mapNodeVm.LocaltionScheme = _sectorManager.CurrentSector.Scheme;
 
             if (map.Transitions.ContainsKey(node))
             {
