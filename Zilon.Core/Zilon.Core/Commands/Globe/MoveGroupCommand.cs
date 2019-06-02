@@ -11,6 +11,7 @@ namespace Zilon.Core.Commands.Globe
 {
     public class MoveGroupCommand : ICommand
     {
+        private const int TRAVEL_TURNS = 50;
         private readonly HumanPlayer _player;
         private readonly IWorldManager _worldManager;
         private readonly IGlobeUiState _globeUiState;
@@ -77,11 +78,7 @@ namespace Zilon.Core.Commands.Globe
                     }
 
                     _player.GlobeNode = globeNode;
-
-                    for (var i = 0; i < 150; i++)
-                    {
-                        _player.MainPerson.Survival.Update();
-                    }
+                    UpdateSurvivals();
                 }
             }
             else
@@ -101,11 +98,16 @@ namespace Zilon.Core.Commands.Globe
                     _player.GlobeNode = selectedNodeViewModel.Node;
                     _player.Terrain = targetNeighborTerrainCell;
 
-                    for (var i = 0; i < 150; i++)
-                    {
-                        _player.MainPerson.Survival.Update();
-                    }
+                    UpdateSurvivals();
                 }
+            }
+        }
+
+        private void UpdateSurvivals()
+        {
+            for (var i = 0; i < TRAVEL_TURNS; i++)
+            {
+                _player.MainPerson.Survival.Update();
             }
         }
     }

@@ -595,10 +595,10 @@ MonoBehaviour:
   InteriorObjectSpriteRenderer: {fileID: 1901971452904963968}
   FloorSprites:
   - {fileID: 21300000, guid: a18cfc181f02d274894748e7dc8aa87c, type: 3}
-  - {fileID: 21300000, guid: df03e1ee35885934e95321ed7fbcb6ad, type: 3}
-  - {fileID: 21300000, guid: 71e0048456c2283458a0c8d6cb6f6512, type: 3}
-  - {fileID: 21300000, guid: cc206a82ca2d5de4a97a2917e31e9de4, type: 3}
-  - {fileID: 21300000, guid: 0192612741d4f4c40b552daf98eb9a83, type: 3}
+  - {fileID: 21300000, guid: d0ef3125618ef7543802ddceb0a24c2d, type: 3}
+  - {fileID: 21300000, guid: e777644fdc923a846b82ca22b6906aaa, type: 3}
+  - {fileID: 21300000, guid: 7017c2e471201914a9b9acb2b93a3743, type: 3}
+  - {fileID: 21300000, guid: 7d01302488b0a5145bc02fb80012e5bc, type: 3}
   WallSprites:
   - {fileID: 0}
   - {fileID: 21300000, guid: e89639e3d1e82264f8b0fa7cd284fb5a, type: 3}
