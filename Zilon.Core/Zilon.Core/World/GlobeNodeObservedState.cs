@@ -3,7 +3,6 @@
     public enum GlobeNodeObservedState
     {
         Hidden = 0,
-        CanBeVisited = 1,
-        Visited = 2
+        Visited = 1
     }
 }
