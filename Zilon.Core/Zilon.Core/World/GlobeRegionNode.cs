@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.World
@@ -8,6 +10,8 @@ namespace Zilon.Core.World
     /// </summary>
     public sealed class GlobeRegionNode : HexNode
     {
+        private GlobeNodeObservedState _observedState;
+
         /// <summary>
         /// Конструктор узла провинции.
         /// </summary>
@@ -49,6 +53,28 @@ namespace Zilon.Core.World
         /// <summary>
         /// Состояние разведки данного узла группой игрока.
         /// </summary>
-        public GlobeNodeObservedState ObservedState { get; set; }
+        public GlobeNodeObservedState ObservedState
+        {
+            get => _observedState;
+            set
+            {
+                var oldValue = _observedState;
+                _observedState = value;
+                if (_observedState != oldValue)
+                {
+                    DoObservedStateChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Выстреливает, когда изменяется состояние исследования узла.
+        /// </summary>
+        public event EventHandler ObservedStateChanged;
+
+        private void DoObservedStateChanged()
+        {
+            ObservedStateChanged?.Invoke(this, new EventArgs());
+        }
     }
 }

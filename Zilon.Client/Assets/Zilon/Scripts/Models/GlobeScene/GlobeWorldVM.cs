@@ -61,11 +61,6 @@ public class GlobeWorldVM : MonoBehaviour
             _player.GlobeNode = firstNode;
 
             firstNode.ObservedState = GlobeNodeObservedState.Visited;
-
-            foreach (GlobeRegionNode neighborNode in createdRegion.GetNext(firstNode))
-            {
-                neighborNode.ObservedState = GlobeNodeObservedState.CanBeVisited;
-            }
         }
 
         // Создание соседних регионов
