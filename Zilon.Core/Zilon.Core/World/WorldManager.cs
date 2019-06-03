@@ -65,26 +65,61 @@ namespace Zilon.Core.World
 
                         if (spawnMonsterRoll >= SPAWN_SUCCESS_ROLL)
                         {
-                            var monsterSetRoll = _dice.Roll(0, monsterSets.Count() - 1);
-                            var rolledMonsterSet = monsterSets[monsterSetRoll];
-
-                            var monsterCount = rolledMonsterSet.MonsterSchemes.Count();
-
-                            node.MonsterState = new GlobeRegionNodeMonsterState
-                            {
-                                MonsterPersons = new MonsterPerson[monsterCount]
-                            };
-
-                            // Генерируем персонажей монстров.
-                            for (var monsterIndex = 0; monsterIndex < monsterCount; monsterIndex++)
-                            {
-                                var monsterScheme = rolledMonsterSet.MonsterSchemes[monsterIndex];
-                                var person = new MonsterPerson(monsterScheme);
-                                node.MonsterState.MonsterPersons[monsterIndex] = person;
-                            }
+                            CreateNodeMonsterState(monsterSets, node);
                         }
                     }
                 }
+                else
+                {
+                    // В метод передём только состояние, как минимальные данные,
+                    // которые там нужны.
+                    // Внутри метода он может зануляться, поэтому передаём по ссылке.
+                    var monsterState = node.MonsterState;
+                    UpdateNodeMonsterState(ref monsterState);
+                    node.MonsterState = monsterState;
+                }
+            }
+        }
+
+        private void UpdateNodeMonsterState(ref GlobeRegionNodeMonsterState MonsterState)
+        {
+            // И состояния ментров отсеиваем всех мёртвых монстров.
+            var aliveMonsterPersons = new List<MonsterPerson>();
+            foreach (var monsterPerson in MonsterState.MonsterPersons)
+            {
+                if (!monsterPerson.Survival.IsDead)
+                {
+                    aliveMonsterPersons.Add(monsterPerson);
+                }
+            }
+
+            // Если игрок убил всех монстров в узле, то подчищаем состояние монстров в узле.
+            // Потому что null означает, что туда можно сгенерировать новых монстров
+            // + снижает текущий счётчик узлов с монстрами.
+            if (!aliveMonsterPersons.Any())
+            {
+                MonsterState = null;
+            }
+        }
+
+        private void CreateNodeMonsterState(MonsterSet[] monsterSets, GlobeRegionNode node)
+        {
+            var monsterSetRoll = _dice.Roll(0, monsterSets.Count() - 1);
+            var rolledMonsterSet = monsterSets[monsterSetRoll];
+
+            var monsterCount = rolledMonsterSet.MonsterSchemes.Count();
+
+            node.MonsterState = new GlobeRegionNodeMonsterState
+            {
+                MonsterPersons = new MonsterPerson[monsterCount]
+            };
+
+            // Генерируем персонажей монстров.
+            for (var monsterIndex = 0; monsterIndex < monsterCount; monsterIndex++)
+            {
+                var monsterScheme = rolledMonsterSet.MonsterSchemes[monsterIndex];
+                var person = new MonsterPerson(monsterScheme);
+                node.MonsterState.MonsterPersons[monsterIndex] = person;
             }
         }
 
