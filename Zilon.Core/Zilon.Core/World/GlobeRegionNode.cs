@@ -45,5 +45,10 @@ namespace Zilon.Core.World
         /// Если не равно null, то указывает сектору, каких монстров нужно создать.
         /// </remarks>
         public GlobeRegionNodeMonsterState MonsterState { get; set; }
+
+        /// <summary>
+        /// Состояние разведки данного узла группой игрока.
+        /// </summary>
+        public GlobeNodeObservedState ObservedState { get; set; }
     }
 }

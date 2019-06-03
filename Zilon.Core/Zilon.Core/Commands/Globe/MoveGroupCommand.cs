@@ -78,6 +78,28 @@ namespace Zilon.Core.Commands.Globe
                     }
 
                     _player.GlobeNode = globeNode;
+
+                    // Обновление состояния разведки узлов провинции
+                    globeNode.ObservedState = GlobeNodeObservedState.Visited;
+                    foreach (GlobeRegionNode neighborNode in selectedNodeViewModel.ParentRegion.GetNext(globeNode))
+                    {
+                        neighborNode.ObservedState = GlobeNodeObservedState.CanBeVisited;
+                    }
+
+                    // Обновление состояния разведки узлов соседних провинций
+                    var currentTerrainNode = _player.GlobeNode;
+                    var currentTerrainCell = _player.Terrain;
+                    //TODO Выборку ячейки мира по узлу провиции нужно упростить.
+                    var targetNeighborTerrainCell = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
+                    var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
+                                                                                    currentTerrainCell,
+                                                                                    selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder),
+                                                                                    targetNeighborTerrainCell);
+                    foreach (var transitionNode in transitionNodes)
+                    {
+                        transitionNode.ObservedState = GlobeNodeObservedState.CanBeVisited;
+                    }
+
                     UpdateSurvivals();
                 }
             }
@@ -97,6 +119,22 @@ namespace Zilon.Core.Commands.Globe
                 {
                     _player.GlobeNode = selectedNodeViewModel.Node;
                     _player.Terrain = targetNeighborTerrainCell;
+
+                    // Обновление состояния разведки узлов провинции
+                    selectedNodeViewModel.Node.ObservedState = GlobeNodeObservedState.Visited;
+                    foreach (GlobeRegionNode neighborNode in selectedNodeViewModel.ParentRegion.GetNext(selectedNodeViewModel.Node))
+                    {
+                        neighborNode.ObservedState = GlobeNodeObservedState.CanBeVisited;
+                    }
+
+                    transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(_player.GlobeNode,
+                                                                                    _player.Terrain,
+                                                                                    selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder),
+                                                                                    targetNeighborTerrainCell);
+                    foreach (var transitionNode in transitionNodes)
+                    {
+                        transitionNode.ObservedState = GlobeNodeObservedState.CanBeVisited;
+                    }
 
                     UpdateSurvivals();
                 }
