@@ -131,6 +131,14 @@ public class GlobeWorldVM : MonoBehaviour
                 var connectorViewModel = connectorObject.GetComponent<MapLocationConnector>();
                 connectorViewModel.gameObject1 = currentNodeViewModel.gameObject;
                 connectorViewModel.gameObject2 = neibourNodeViewModel.gameObject;
+
+                currentNodeViewModel.NextNodes.Add(neibourNodeViewModel);
+                neibourNodeViewModel.NextNodes.Add(currentNodeViewModel);
+
+                currentNodeViewModel.Connectors.Add(connectorViewModel);
+                neibourNodeViewModel.Connectors.Add(connectorViewModel);
+
+                connectorViewModel.gameObject.SetActive(false);
             }
         }
 
