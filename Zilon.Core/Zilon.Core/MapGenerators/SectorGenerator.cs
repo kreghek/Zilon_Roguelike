@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -96,15 +96,26 @@ namespace Zilon.Core.MapGenerators
         /// </remarks>
         public async Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
         {
-            var map = await SquareMapFactory.CreateAsync(10);
+            var townScheme = new TownSectorScheme
+            {
+                RegionCount = 10,
+                RegionSize = 10
+            };
+
+            var map = await _mapFactory.CreateAsync(townScheme);
 
             var sector = _sectorFactory.Create(map);
 
-
-            var traderDropTable = _schemeService.GetScheme<IDropTableScheme>("trader");
-            var trader = new Trader(traderDropTable, map.Nodes.ElementAt(10), _dropResolver);
-            _traderManager.Add(trader);
-            map.HoldNode(trader.Node, trader);
+            foreach (var region in sector.Map.Regions)
+            {
+                for (var i = 0; i < 2; i++)
+                {
+                    var traderDropTable = _schemeService.GetScheme<IDropTableScheme>("trader");
+                    var trader = new Trader(traderDropTable, region.Nodes.ElementAt(3 * i), _dropResolver);
+                    _traderManager.Add(trader);
+                    map.HoldNode(trader.Node, trader);
+                }
+            }
 
             map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
 
