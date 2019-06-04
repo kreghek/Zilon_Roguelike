@@ -45,6 +45,11 @@ namespace Zilon.Core.Tactics
 
         public bool CanBeDamaged()
         {
+            if (Person.Survival == null)
+            {
+                return false;
+            }
+
             return !Person.Survival.IsDead;
         }
 
@@ -137,7 +142,7 @@ namespace Zilon.Core.Tactics
 
         public void TakeDamage(int value)
         {
-            Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
+            Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
             DoDamageTaken(value);
         }
 
@@ -206,17 +211,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue + 1);
                     break;
 
@@ -236,17 +241,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 
@@ -278,17 +283,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue - 1);
                     break;
 
@@ -308,17 +313,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 

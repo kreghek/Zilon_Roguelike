@@ -60,6 +60,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
         Container.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
         Container.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
+        Container.Bind<ICitizenGenerator>().To<CitizenGenerator>().AsSingle();
+        Container.Bind<ICitizenGeneratorRandomSource>().To<CitizenGeneratorRandomSource>().AsSingle();
 
 
         // Специализированные сервисы для Ui.

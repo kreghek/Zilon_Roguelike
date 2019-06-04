@@ -80,8 +80,12 @@
     <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\CitizenGenerator.cs" />
+    <Compile Include="MapGenerators\CitizenGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IChestGenerator.cs" />
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\ICitizenGenerator.cs" />
+    <Compile Include="MapGenerators\ICitizenGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
@@ -101,8 +105,10 @@
     <Compile Include="OffsetCoordsExtensions.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
+    <Compile Include="Persons\IPersonExtensions.cs" />
     <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
+    <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />

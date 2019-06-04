@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             }
 
             var actorTasks = new List<IActorTask>();
-            if (actor.Person.Survival.IsDead)
+            if (actor.Person.CheckIsDead())
             {
                 _logicDict.Remove(actor);
                 //TODO Избавиться от этой зависимости.

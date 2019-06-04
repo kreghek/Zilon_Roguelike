@@ -241,7 +241,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
                     continue;
                 }
 
-                if (target.Person.Survival.IsDead)
+                if (target.Person.CheckIsDead())
                 {
                     continue;
                 }

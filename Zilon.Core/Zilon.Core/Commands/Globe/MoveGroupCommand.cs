@@ -114,7 +114,7 @@ namespace Zilon.Core.Commands.Globe
         {
             for (var i = 0; i < TRAVEL_TURNS; i++)
             {
-                _player.MainPerson.Survival.Update();
+                _player.MainPerson.Survival?.Update();
             }
         }
     }
