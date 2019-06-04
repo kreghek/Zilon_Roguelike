@@ -3,6 +3,7 @@
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
@@ -73,7 +74,7 @@ namespace Assets.Zilon.Scripts.Services
             CreateWindowHandler<WinModalBody>(WinModalPrefab.gameObject);
         }
 
-        public void ShowTraderModal(ITrader trader)
+        public void ShowTraderModal(CitizenPerson trader)
         {
             var modalBody = CreateWindowHandler<TraderModalBody>(TraderModalPrefab.gameObject);
             modalBody.Init(trader);

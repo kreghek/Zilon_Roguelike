@@ -224,7 +224,7 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private void DamageActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            var targetIsDeadLast = targetActor.Person.Survival.IsDead;
+            var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
             var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
             var usedDefences = GetCurrentDefences(targetActor, offenceType);
@@ -255,7 +255,7 @@ namespace Zilon.Core.Tactics
                     }
                 }
 
-                if (!targetIsDeadLast && targetActor.Person.Survival.IsDead)
+                if (!targetIsDeadLast && targetActor.Person.CheckIsDead())
                 {
                     CountTargetActorDefeat(actor, targetActor);
                 }
@@ -305,7 +305,7 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            targetActor.Person.Survival.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
+            targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>

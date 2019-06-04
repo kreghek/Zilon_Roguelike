@@ -87,7 +87,7 @@ namespace Zilon.Core.World
             var aliveMonsterPersons = new List<MonsterPerson>();
             foreach (var monsterPerson in MonsterState.MonsterPersons)
             {
-                if (!monsterPerson.Survival.IsDead)
+                if (!monsterPerson.CheckIsDead())
                 {
                     aliveMonsterPersons.Add(monsterPerson);
                 }

@@ -51,6 +51,33 @@ namespace Zilon.Bot.Players.Strategies
             }
         }
 
+        public static LogicStateTree Citizen
+        {
+            get
+            {
+
+                var tree = new LogicStateTree();
+
+                var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
+                var roamingIdleLogic = Factory.CreateLogic<IdleLogicState>();
+
+                tree.StartState = roamingLogic;
+
+                tree.Transitions.Add(roamingLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
+                });
+
+
+                tree.Transitions.Add(roamingIdleLogic, new LogicTransition[] {
+                    new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
+                });
+
+                Debug.Assert(ValidateTree(tree), "Все используемые логики должны быть добавлены в Transitions, как ключи.");
+
+                return tree;
+            }
+        }
+
         public static LogicStateTree JoeHumanBot
         {
             get

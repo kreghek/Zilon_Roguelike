@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Client
 {
@@ -18,7 +19,7 @@ namespace Zilon.Core.Client
 
         void ShowWinModal();
 
-        void ShowTraderModal(ITrader trader);
+        void ShowTraderModal(CitizenPerson trader);
 
         void ShowQuitComfirmationModal();
 

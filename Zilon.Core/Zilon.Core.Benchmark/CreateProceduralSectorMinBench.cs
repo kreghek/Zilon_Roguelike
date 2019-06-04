@@ -106,6 +106,9 @@ namespace Zilon.Core.Benchmark
             _container.Register(factory => CreateFakeChestGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             _container.Register(factory => CreateFakeMonsterGeneratorRandomSource(), new PerContainerLifetime());
+            _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            //TODO Сделать фейковый генератор
+            _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
@@ -118,7 +121,6 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());

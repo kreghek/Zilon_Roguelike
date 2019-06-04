@@ -275,9 +275,10 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            Container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             Container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
+            Container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop()
