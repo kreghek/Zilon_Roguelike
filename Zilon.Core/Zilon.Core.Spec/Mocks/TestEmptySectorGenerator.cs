@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -12,7 +13,6 @@ namespace Zilon.Core.Spec.Mocks
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IMapFactory _mapFactory;
@@ -20,7 +20,6 @@ namespace Zilon.Core.Spec.Mocks
 
         public TestEmptySectorGenerator(IActorManager actorManager,
             IPropContainerManager propContainerManager,
-            ITraderManager traderManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IMapFactory mapFactory,
@@ -28,7 +27,6 @@ namespace Zilon.Core.Spec.Mocks
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _traderManager = traderManager;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _mapFactory = mapFactory;
