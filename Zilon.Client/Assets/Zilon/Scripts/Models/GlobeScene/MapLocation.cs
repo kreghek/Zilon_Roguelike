@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -17,6 +18,15 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     public bool OtherRegion { get; set; }
 
+    public List<MapLocation> NextNodes { get; }
+    public List<MapLocationConnector> Connectors { get; }
+
+    public MapLocation()
+    {
+        NextNodes = new List<MapLocation>();
+        Connectors = new List<MapLocationConnector>();
+    }
+
     public void Start()
     {
         if (Node.Scheme.Sid == "forest")
@@ -24,7 +34,7 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
             var sprite = Resources.Load<Sprite>("Globe/forest");
             Icon.sprite = sprite;
         }
-        else if(Node.Scheme.Sid == "city")
+        else if (Node.Scheme.Sid == "city")
         {
             var sprite = Resources.Load<Sprite>("Globe/city");
             Icon.sprite = sprite;
@@ -39,6 +49,19 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         {
             Icon.color = Color.cyan;
         }
+
+        if (Node == null)
+        {
+            throw new ArgumentNullException(nameof(Node));
+        }
+
+        Node.ObservedStateChanged += Node_ObservedStateChanged;
+        UpdateObservedState();
+    }
+
+    private void Node_ObservedStateChanged(object sender, EventArgs e)
+    {
+        UpdateObservedState();
     }
 
     public void OnMouseDown()
@@ -51,8 +74,65 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         OnHover?.Invoke(this, new EventArgs());
     }
 
-    internal void SetAvailableState(bool state)
+    public void OnDestroy()
     {
-        Icon.color = state ? Color.white : Color.gray;
+        Node.ObservedStateChanged -= Node_ObservedStateChanged;
+    }
+
+    internal void UpdateObservedState()
+    {
+        if (Node.ObservedState == GlobeNodeObservedState.Visited)
+        {
+            gameObject.SetActive(true);
+            Icon.color = Color.white;
+
+            foreach (var nextNode in NextNodes)
+            {
+                if (nextNode.Node.ObservedState == GlobeNodeObservedState.Hidden)
+                {
+                    nextNode.gameObject.SetActive(true);
+                    nextNode.Icon.color = Color.grey;
+                }
+                else
+                {
+                    nextNode.gameObject.SetActive(true);
+                    nextNode.Icon.color = Color.white;
+                }
+
+                // Визуализируем коннекторы
+                foreach (var connector in Connectors)
+                {
+                    connector.gameObject.SetActive(false);
+
+                    if (connector.gameObject1 == gameObject || connector.gameObject2 == gameObject)
+                    {
+                        connector.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            foreach (var nextNode in NextNodes)
+            {
+                if (nextNode.Node.ObservedState == GlobeNodeObservedState.Visited)
+                {
+                    gameObject.SetActive(true);
+                    Icon.color = Color.grey;
+
+                    // Визуализируем коннекторы
+                    foreach (var connector in Connectors)
+                    {
+                        connector.gameObject.SetActive(false);
+
+                        if (connector.gameObject1 == gameObject || connector.gameObject2 == gameObject)
+                        {
+                            connector.gameObject.SetActive(true);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

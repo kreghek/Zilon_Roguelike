@@ -78,6 +78,10 @@ namespace Zilon.Core.Commands.Globe
                     }
 
                     _player.GlobeNode = globeNode;
+
+                    // Обновление состояния разведки узлов провинции
+                    globeNode.ObservedState = GlobeNodeObservedState.Visited;
+
                     UpdateSurvivals();
                 }
             }
@@ -97,6 +101,9 @@ namespace Zilon.Core.Commands.Globe
                 {
                     _player.GlobeNode = selectedNodeViewModel.Node;
                     _player.Terrain = targetNeighborTerrainCell;
+
+                    // Обновление состояния разведки узлов провинции
+                    selectedNodeViewModel.Node.ObservedState = GlobeNodeObservedState.Visited;
 
                     UpdateSurvivals();
                 }

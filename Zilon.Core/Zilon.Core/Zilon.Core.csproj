@@ -432,6 +432,7 @@
     <Compile Include="WorldGeneration\RealmRelations.cs" />
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
