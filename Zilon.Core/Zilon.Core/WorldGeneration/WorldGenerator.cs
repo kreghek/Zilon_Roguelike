@@ -24,6 +24,8 @@ namespace Zilon.Core.WorldGeneration
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
         private const string WILD_SCHEME_SID = "forest";
+        private const int BORDER_SIZE = 1;
+
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
 
@@ -97,6 +99,8 @@ namespace Zilon.Core.WorldGeneration
             };
             var region = new GlobeRegion(LocationBaseSize);
 
+            var homeOffsetCoords = GetHomeCoords(LocationBaseSize);
+            var startOffsetCoords = GetStartCoords(LocationBaseSize);
             for (var x = 0; x < LocationBaseSize; x++)
             {
                 for (var y = 0; y < LocationBaseSize; y++)
@@ -110,7 +114,7 @@ namespace Zilon.Core.WorldGeneration
                     //    continue;
                     //}
 
-                    var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
+                    var isBorder = x == 0 || x == LocationBaseSize - BORDER_SIZE || y == 0 || y == LocationBaseSize - BORDER_SIZE;
 
                     if (isBorder)
                     {
@@ -123,33 +127,55 @@ namespace Zilon.Core.WorldGeneration
                     }
                     else
                     {
-                        var hasDundeonRoll = _dice.Roll(100);
-                        if (hasDundeonRoll > 90)
+                        if (x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
                         {
-                            var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                            var locationSid = locationSchemeSids[locationSidIndex];
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                            var node = new GlobeRegionNode(x, y, locationScheme);
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsTown = true,
+                                IsHome = true
+                            };
+                            region.AddNode(node);
+                        }
+                        else if (x == startOffsetCoords.X && y == startOffsetCoords.Y)
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsStart = true
+                            };
                             region.AddNode(node);
                         }
                         else
                         {
-                            var hasCityRoll = _dice.Roll(100);
-
-                            if (hasCityRoll > 90)
+                            var hasDundeonRoll = _dice.Roll(100);
+                            if (hasDundeonRoll > 90)
                             {
-                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                                var node = new GlobeRegionNode(x, y, locationScheme)
-                                {
-                                    IsTown = true
-                                };
+                                var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                                var locationSid = locationSchemeSids[locationSidIndex];
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                                var node = new GlobeRegionNode(x, y, locationScheme);
                                 region.AddNode(node);
                             }
                             else
                             {
-                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                                var node = new GlobeRegionNode(x, y, locationScheme);
-                                region.AddNode(node);
+                                var hasCityRoll = _dice.Roll(100);
+
+                                if (hasCityRoll > 90)
+                                {
+                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                                    var node = new GlobeRegionNode(x, y, locationScheme)
+                                    {
+                                        IsTown = true
+                                    };
+                                    region.AddNode(node);
+                                }
+                                else
+                                {
+                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                                    var node = new GlobeRegionNode(x, y, locationScheme);
+                                    region.AddNode(node);
+                                }
                             }
                         }
                     }
@@ -159,6 +185,44 @@ namespace Zilon.Core.WorldGeneration
             return Task.FromResult(region);
         }
 
+        private OffsetCoords GetHomeCoords(int locationBaseSize)
+        {
+            var homeX = GetHomeCoordsComponent(locationBaseSize);
+            var homeY = GetHomeCoordsComponent(locationBaseSize);
+            return new OffsetCoords(homeX, homeY);
+        }
+
+        private OffsetCoords GetStartCoords(int locationBaseSize)
+        {
+            var startX = locationBaseSize / 2;
+            var startY = locationBaseSize / 2;
+            return new OffsetCoords(startX, startY);
+        }
+
+        private int GetHomeCoordsComponent(int locationBaseSize)
+        {
+            // Стараемся выбрать победный узел с краю, но не на границе.
+            var leftBorder = locationBaseSize / 4;
+            var rigthBorder = locationBaseSize * 3 / 4;
+
+            var safityCounter = 100;
+            while (safityCounter > 0)
+            {
+                var component = _dice.Roll(BORDER_SIZE, locationBaseSize - 1 - BORDER_SIZE);
+
+                // Определение, что выбранная координата внутри диапазона.
+                var isInner = leftBorder <= component && component <= rigthBorder;
+                if (!isInner)
+                {
+                    return component;
+                }
+
+                safityCounter--;
+            }
+
+            // Если попали сюда, то возвращаем фиксированную центральную точку.
+            return locationBaseSize / 2;
+        }
 
         private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
         {

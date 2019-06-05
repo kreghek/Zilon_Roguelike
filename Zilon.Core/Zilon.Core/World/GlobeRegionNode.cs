@@ -34,6 +34,11 @@ namespace Zilon.Core.World
         public bool IsTown { get; set; }
 
         /// <summary>
+        /// Является ли город победным узлом.
+        /// </summary>
+        public bool IsHome { get; set; }
+
+        /// <summary>
         /// Является ли узел провинции пограничным с другой провинцией.
         /// </summary>
         /// <remarks>
@@ -41,6 +46,11 @@ namespace Zilon.Core.World
         /// Нужен для оптимизации выбора узлов для построения переходов между провинциями.
         /// </remarks>
         public bool IsBorder { get; set; }
+
+        /// <summary>
+        /// Является ли узел стартовым для группы игрока.
+        /// </summary>
+        public bool IsStart { get; set; }
 
         /// <summary>
         /// Текущее состояние монстров в текущем узле. Может быть null.

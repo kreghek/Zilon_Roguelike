@@ -455,6 +455,7 @@ GameObject:
   - component: {fileID: 227365883}
   - component: {fileID: 227365882}
   - component: {fileID: 227365886}
+  - component: {fileID: 227365887}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -538,6 +539,7 @@ RectTransform:
   - {fileID: 184889604}
   - {fileID: 993256677}
   - {fileID: 163599789}
+  - {fileID: 1201988760}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -559,6 +561,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SectorSceneLoader: {fileID: 993256678}
+--- !u!114 &227365887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 227365881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ca840f9c3775f40836b2045008cba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WindowsParent: {fileID: 1201988759}
+  ModalPrefab: {fileID: 114999240963392250, guid: a9f7f5629d4bd3243a95fb1d88123a2b,
+    type: 3}
+  QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
+    type: 3}
+  ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
+    type: 3}
 --- !u!1 &307106404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,6 +1095,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92dee9394f6dd54e81fdee54b8f4a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1201988759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1201988760}
+  m_Layer: 5
+  m_Name: Windows
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1201988760
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201988759}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 227365885}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1272584967
 GameObject:
   m_ObjectHideFlags: 0

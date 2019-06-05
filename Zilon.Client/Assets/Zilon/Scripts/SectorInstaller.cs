@@ -9,6 +9,7 @@ using Zenject;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;

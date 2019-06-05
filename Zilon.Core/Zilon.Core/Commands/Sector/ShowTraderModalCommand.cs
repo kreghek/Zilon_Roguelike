@@ -3,6 +3,7 @@
 using JetBrains.Annotations;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Commands

@@ -9,10 +9,12 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -39,6 +41,8 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly ICommandManager _clientCommandExecutor;
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
     [Inject] private readonly IGlobeUiState _globeUiState;
+    [Inject] private readonly IGlobeModalManager _globeModalManager;
+    [Inject] private readonly IScoreManager _scoreManager;
 
     public PlayerPersonCreator PersonCreator;
 
@@ -56,11 +60,11 @@ public class GlobeWorldVM : MonoBehaviour
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
-            var firstNode = (GlobeRegionNode)createdRegion.Nodes.First();
+            var startNode = createdRegion.RegionNodes.SingleOrDefault(x => x.IsStart);
 
-            _player.GlobeNode = firstNode;
+            _player.GlobeNode = startNode;
 
-            firstNode.ObservedState = GlobeNodeObservedState.Visited;
+            startNode.ObservedState = GlobeNodeObservedState.Visited;
         }
 
         // Создание соседних регионов
@@ -203,6 +207,7 @@ public class GlobeWorldVM : MonoBehaviour
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
         Camera.Target = groupObject;
+        Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
@@ -265,7 +270,16 @@ public class GlobeWorldVM : MonoBehaviour
 
         if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
         {
-            StartLoadScene();
+            if (!_player.GlobeNode.IsHome)
+            {
+                StartLoadScene();
+            }
+            else
+            {
+                MoveGroupViewModel(_player.GlobeNode);
+                _scoreManager.CountHome();
+                _globeModalManager.ShowScoreModal();
+            }
         }
         else
         {

@@ -38,6 +38,11 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         {
             var sprite = Resources.Load<Sprite>("Globe/city");
             Icon.sprite = sprite;
+
+            if (Node.IsHome)
+            {
+                gameObject.transform.localScale = new Vector3(2, 2, 2);
+            }
         }
         else
         {
@@ -81,6 +86,13 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     internal void UpdateObservedState()
     {
+        //if (Node.IsHome)
+        //{
+        //    //TODO Для отладки, убрать после завершения работ по отработки победного конца.
+        //    gameObject.SetActive(true);
+        //    return;
+        //}
+
         if (Node.ObservedState == GlobeNodeObservedState.Visited)
         {
             gameObject.SetActive(true);
