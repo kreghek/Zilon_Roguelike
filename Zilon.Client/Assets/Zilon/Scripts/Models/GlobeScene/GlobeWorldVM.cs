@@ -28,6 +28,7 @@ public class GlobeWorldVM : MonoBehaviour
     public GlobalFollowCamera Camera;
     public SceneLoader SectorSceneLoader;
     public SceneLoader GlobeSceneLoader;
+    public GameObject MapBackground;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -208,6 +209,10 @@ public class GlobeWorldVM : MonoBehaviour
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
         Camera.Target = groupObject;
         Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
+
+        //TODO Заменить эту конструкцию на более стабильную.
+        var startNodeViewModel = _locationNodeViewModels.Single(x => x.Node.IsStart);
+        MapBackground.transform.position = startNodeViewModel.transform.position;
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
