@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 
 public class GameOverEffect : MonoBehaviour
 {

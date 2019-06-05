@@ -9,10 +9,12 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -39,6 +41,8 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly ICommandManager _clientCommandExecutor;
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
     [Inject] private readonly IGlobeUiState _globeUiState;
+    [Inject] private readonly IGlobeModalManager _globeModalManager;
+    [Inject] private readonly IScoreManager _scoreManager;
 
     public PlayerPersonCreator PersonCreator;
 
@@ -273,7 +277,8 @@ public class GlobeWorldVM : MonoBehaviour
             else
             {
                 MoveGroupViewModel(_player.GlobeNode);
-                Debug.Log("Home");
+                _scoreManager.CountHome();
+                _globeModalManager.ShowScoreModal();
             }
         }
         else

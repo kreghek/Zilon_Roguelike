@@ -1,13 +1,13 @@
 ﻿using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Client
+namespace Zilon.Core.Client.Windows
 {
     /// <summary>
     /// Менеджер модальных окон.
     /// Реализация на клиенте.
     /// </summary>
-    public interface ISectorModalManager
+    public interface ISectorModalManager: ICommonModalManager
     {
         void ShowContainerModal(PropTransferMachine transferMachine);
         
@@ -17,12 +17,6 @@ namespace Zilon.Core.Client
 
         void ShowInstructionModal();
 
-        void ShowWinModal();
-
         void ShowTraderModal(CitizenPerson trader);
-
-        void ShowQuitComfirmationModal();
-
-        void ShowScoreModal();
     }
 }

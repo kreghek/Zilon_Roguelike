@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppException.cs" />
+    <Compile Include="Client\Windows\ICommonModalManager.cs" />
     <Compile Include="Client\Sector\FloorPropContainer.cs" />
     <Compile Include="Client\Globe\GlobeUiState.cs" />
     <Compile Include="Client\Sector\IActorViewModel.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Client\PropTransferMachineStores.cs" />
     <Compile Include="Client\IUiState.cs" />
     <Compile Include="Client\UiStateBase.cs" />
+    <Compile Include="Client\Windows\IGlobeModalManager.cs" />
     <Compile Include="Commands\CommandCantExecuteException.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
@@ -135,11 +137,12 @@
     <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
-    <Compile Include="Client\Sector\ISectorModalManager.cs" />
+    <Compile Include="Client\Windows\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
     <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />

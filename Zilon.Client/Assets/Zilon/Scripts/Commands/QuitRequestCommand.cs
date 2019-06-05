@@ -1,6 +1,6 @@
 ﻿using Zenject;
 
-using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 
 namespace Assets.Zilon.Scripts.Commands

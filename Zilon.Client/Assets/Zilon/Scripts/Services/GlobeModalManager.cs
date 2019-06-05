@@ -2,15 +2,12 @@
 
 using Zenject;
 
-using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Persons;
-using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SectorModalManager : MonoBehaviour, ISectorModalManager, ICommonModalManager
+    public class GlobeModalManager : MonoBehaviour, IGlobeModalManager
     {
         // ReSharper disable UnassignedField.Global
         // ReSharper disable MemberCanBePrivate.Global
@@ -18,18 +15,6 @@ namespace Assets.Zilon.Scripts.Services
         public GameObject WindowsParent;
 
         public ModalDialog ModalPrefab;
-
-        public ContainerModalBody ContainerModalPrefab;
-
-        public InventoryModalBody InventoryModalPrefab;
-
-        public PerksModalBody PerksModalPrefab;
-
-        public InstructionModalBody InstructionModalPrefab;
-
-        public WinModalBody WinModalPrefab;
-
-        public TraderModalBody TraderModalPrefab;
 
         public QuitModalBody QuitModalPrefab;
 
@@ -43,43 +28,6 @@ namespace Assets.Zilon.Scripts.Services
 
 #pragma warning restore 649
         // ReSharper disable once UnusedMember.Global
-
-        public void ShowContainerModal(PropTransferMachine transferMachine)
-        {
-            var modalBody = CreateWindowHandler<ContainerModalBody>(ContainerModalPrefab.gameObject);
-
-            modalBody.Init(transferMachine);
-        }
-
-        public void ShowInventoryModal(IActor actor)
-        {
-            var modalBody = CreateWindowHandler<InventoryModalBody>(InventoryModalPrefab.gameObject);
-
-            modalBody.Init();
-        }
-
-        public void ShowPerksModal(IActor actor)
-        {
-            var modalBody = CreateWindowHandler<PerksModalBody>(PerksModalPrefab.gameObject);
-
-            modalBody.Init(actor);
-        }
-
-        public void ShowInstructionModal()
-        {
-            CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
-        }
-
-        public void ShowWinModal()
-        {
-            CreateWindowHandler<WinModalBody>(WinModalPrefab.gameObject);
-        }
-
-        public void ShowTraderModal(CitizenPerson trader)
-        {
-            var modalBody = CreateWindowHandler<TraderModalBody>(TraderModalPrefab.gameObject);
-            modalBody.Init(trader);
-        }
 
         public void ShowQuitComfirmationModal()
         {
