@@ -96,19 +96,42 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         if (Node.ObservedState == GlobeNodeObservedState.Visited)
         {
             gameObject.SetActive(true);
-            Icon.color = Color.white;
+
+            if (!OtherRegion)
+            {
+                Icon.color = Color.white;
+            }
+            else
+            {
+                Icon.color = Color.cyan;
+            }
 
             foreach (var nextNode in NextNodes)
             {
                 if (nextNode.Node.ObservedState == GlobeNodeObservedState.Hidden)
                 {
                     nextNode.gameObject.SetActive(true);
-                    nextNode.Icon.color = Color.grey;
+                    if (!nextNode.OtherRegion)
+                    {
+                        nextNode.Icon.color = Color.grey;
+                    }
+                    else
+                    {
+                        nextNode.Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
+                    }
                 }
                 else
                 {
                     nextNode.gameObject.SetActive(true);
-                    nextNode.Icon.color = Color.white;
+
+                    if (!nextNode.OtherRegion)
+                    {
+                        nextNode.Icon.color = Color.white;
+                    }
+                    else
+                    {
+                        nextNode.Icon.color = Color.cyan;
+                    }
                 }
 
                 // Визуализируем коннекторы
@@ -131,7 +154,15 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
                 if (nextNode.Node.ObservedState == GlobeNodeObservedState.Visited)
                 {
                     gameObject.SetActive(true);
-                    Icon.color = Color.grey;
+
+                    if (!OtherRegion)
+                    {
+                        Icon.color = Color.grey;
+                    }
+                    else
+                    {
+                        Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
+                    }
 
                     // Визуализируем коннекторы
                     foreach (var connector in Connectors)
