@@ -100,6 +100,7 @@ namespace Zilon.Core.WorldGeneration
             var region = new GlobeRegion(LocationBaseSize);
 
             var homeOffsetCoords = GetHomeCoords(LocationBaseSize);
+            var startOffsetCoords = GetStartCoords(LocationBaseSize);
             for (var x = 0; x < LocationBaseSize; x++)
             {
                 for (var y = 0; y < LocationBaseSize; y++)
@@ -133,6 +134,15 @@ namespace Zilon.Core.WorldGeneration
                             {
                                 IsTown = true,
                                 IsHome = true
+                            };
+                            region.AddNode(node);
+                        }
+                        else if (x == startOffsetCoords.X && y == startOffsetCoords.Y)
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsStart = true
                             };
                             region.AddNode(node);
                         }
@@ -182,6 +192,13 @@ namespace Zilon.Core.WorldGeneration
             return new OffsetCoords(homeX, homeY);
         }
 
+        private OffsetCoords GetStartCoords(int locationBaseSize)
+        {
+            var startX = locationBaseSize / 2;
+            var startY = locationBaseSize / 2;
+            return new OffsetCoords(startX, startY);
+        }
+
         private int GetHomeCoordsComponent(int locationBaseSize)
         {
             // Стараемся выбрать победный узел с краю, но не на границе.
@@ -193,7 +210,7 @@ namespace Zilon.Core.WorldGeneration
             {
                 var component = _dice.Roll(BORDER_SIZE, locationBaseSize - 1 - BORDER_SIZE);
 
-                if (leftBorder <= component && component <= rigthBorder)
+                if (leftBorder < component && component < rigthBorder)
                 {
                     return component;
                 }

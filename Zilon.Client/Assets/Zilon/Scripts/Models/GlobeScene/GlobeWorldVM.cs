@@ -56,11 +56,11 @@ public class GlobeWorldVM : MonoBehaviour
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
-            var firstNode = (GlobeRegionNode)createdRegion.Nodes.First();
+            var startNode = createdRegion.RegionNodes.SingleOrDefault(x => x.IsStart);
 
-            _player.GlobeNode = firstNode;
+            _player.GlobeNode = startNode;
 
-            firstNode.ObservedState = GlobeNodeObservedState.Visited;
+            startNode.ObservedState = GlobeNodeObservedState.Visited;
         }
 
         // Создание соседних регионов

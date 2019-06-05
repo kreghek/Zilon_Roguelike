@@ -48,6 +48,11 @@ namespace Zilon.Core.World
         public bool IsBorder { get; set; }
 
         /// <summary>
+        /// Является ли узел стартовым для группы игрока.
+        /// </summary>
+        public bool IsStart { get; set; }
+
+        /// <summary>
         /// Текущее состояние монстров в текущем узле. Может быть null.
         /// </summary>
         /// <remarks>

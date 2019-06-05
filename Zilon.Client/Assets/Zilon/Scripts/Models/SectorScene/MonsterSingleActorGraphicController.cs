@@ -8,6 +8,8 @@ using Zilon.Core.Tactics;
 public class MonsterSingleActorGraphicController : MonoBehaviour
 {
     public IActor Actor { get; set; }
+
+    private const int TRADER_VISUAL_COUNT = 4;
     public ActorGraphicBase Graphic;
 
     public void Start()
@@ -24,7 +26,9 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
                 break;
 
             case CitizenPerson _:
-                var visualIndex = UnityEngine.Random.Range(1, 5);
+                // +1, потому что рандом по целым числам исключет максимум.
+                const int maxIndexRandomValue = TRADER_VISUAL_COUNT + 1;
+                var visualIndex = UnityEngine.Random.Range(1, maxIndexRandomValue);
                 SetCitizenVisualProp(visualIndex);
                 break;
 
