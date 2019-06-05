@@ -86,12 +86,12 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     internal void UpdateObservedState()
     {
-        if (Node.IsHome)
-        {
-            //TODO Для отладки, убрать после завершения работ по отработки победного конца.
-            gameObject.SetActive(true);
-            return;
-        }
+        //if (Node.IsHome)
+        //{
+        //    //TODO Для отладки, убрать после завершения работ по отработки победного конца.
+        //    gameObject.SetActive(true);
+        //    return;
+        //}
 
         if (Node.ObservedState == GlobeNodeObservedState.Visited)
         {
