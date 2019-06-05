@@ -28,6 +28,7 @@ public class GlobeWorldVM : MonoBehaviour
     public GlobalFollowCamera Camera;
     public SceneLoader SectorSceneLoader;
     public SceneLoader GlobeSceneLoader;
+    public GameObject MapBackground;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -131,22 +132,14 @@ public class GlobeWorldVM : MonoBehaviour
             var neighborViewModels = openNodeViewModels.Where(x => neighbors.Contains(x.Node)).ToArray();
             foreach (var neibourNodeViewModel in neighborViewModels)
             {
-                var connectorObject = _container.InstantiatePrefab(ConnectorPrefab, transform);
-                var connectorViewModel = connectorObject.GetComponent<MapLocationConnector>();
-                connectorViewModel.gameObject1 = currentNodeViewModel.gameObject;
-                connectorViewModel.gameObject2 = neibourNodeViewModel.gameObject;
-
-                currentNodeViewModel.NextNodes.Add(neibourNodeViewModel);
-                neibourNodeViewModel.NextNodes.Add(currentNodeViewModel);
-
-                currentNodeViewModel.Connectors.Add(connectorViewModel);
-                neibourNodeViewModel.Connectors.Add(connectorViewModel);
-
-                connectorViewModel.gameObject.SetActive(false);
+                CreateConnector(currentNodeViewModel, neibourNodeViewModel);
             }
         }
 
         // Создание визуализаций соседних провинций
+        var currentRegionBorders = _region.RegionNodes.Where(x => x.IsBorder).ToArray();
+        // TODO в открытые можно помещать только бордюр для экономии.
+        openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
         var currentRegion = _globeManager.Regions[_player.Terrain];
         var currentBorderNodes = currentRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder).ToArray();
         for (var offsetX = -1; offsetX <= 1; offsetX++)
@@ -178,6 +171,19 @@ public class GlobeWorldVM : MonoBehaviour
                     foreach (var neighborBorderNode in neighborBorderNodes)
                     {
 
+                        var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(neighborBorderNode,
+                                                                                            terrainCell,
+                                                                                            currentRegionBorders,
+                                                                                            _player.Terrain);
+
+                        if (!transitionNodes.Any())
+                        {
+                            // Этот узел соседней провинции не имеет переходов в текущую.
+                            // Соответственно, из текущей провинции никто не будет иметь переходов в этот узел соседней провинции.
+                            // Значит его можно вообще не отрисовывать.
+                            continue;
+                        }
+
                         var worldCoords = HexHelper.ConvertToWorld(neighborBorderNode.OffsetX + terrainX * 20,
                             neighborBorderNode.OffsetY + terrainY * 20);
 
@@ -191,6 +197,14 @@ public class GlobeWorldVM : MonoBehaviour
 
                         locationViewModel.OnSelect += LocationViewModel_OnSelect;
                         locationViewModel.OnHover += LocationViewModel_OnHover;
+
+                        // Создаём коннекторы от всех пограничных узлов,
+                        // имеющий переходв в текущий узел соседней провинции.
+                        var openTransitionNodes = openNodeViewModels.Where(x => transitionNodes.Contains(x.Node));
+                        foreach (var openTransitionNode in openTransitionNodes)
+                        {
+                            CreateConnector(openTransitionNode, locationViewModel);
+                        }
                     }
                 }
             }
@@ -209,8 +223,28 @@ public class GlobeWorldVM : MonoBehaviour
         Camera.Target = groupObject;
         Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
+        //TODO Заменить эту конструкцию на более стабильную.
+        var startNodeViewModel = _locationNodeViewModels.Single(x => x.Node.IsStart);
+        MapBackground.transform.position = startNodeViewModel.transform.position;
+
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private void CreateConnector(MapLocation currentNodeViewModel, MapLocation neibourNodeViewModel)
+    {
+        var connectorObject = _container.InstantiatePrefab(ConnectorPrefab, transform);
+        var connectorViewModel = connectorObject.GetComponent<MapLocationConnector>();
+        connectorViewModel.gameObject1 = currentNodeViewModel.gameObject;
+        connectorViewModel.gameObject2 = neibourNodeViewModel.gameObject;
+
+        currentNodeViewModel.NextNodes.Add(neibourNodeViewModel);
+        neibourNodeViewModel.NextNodes.Add(currentNodeViewModel);
+
+        currentNodeViewModel.Connectors.Add(connectorViewModel);
+        neibourNodeViewModel.Connectors.Add(connectorViewModel);
+
+        connectorViewModel.gameObject.SetActive(false);
     }
 
     private void LocationViewModel_OnHover(object sender, EventArgs e)
