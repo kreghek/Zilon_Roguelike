@@ -210,7 +210,9 @@ namespace Zilon.Core.WorldGeneration
             {
                 var component = _dice.Roll(BORDER_SIZE, locationBaseSize - 1 - BORDER_SIZE);
 
-                if (leftBorder < component && component < rigthBorder)
+                // Определение, что выбранная координата внутри диапазона.
+                var isInner = leftBorder <= component && component <= rigthBorder;
+                if (!isInner)
                 {
                     return component;
                 }
