@@ -203,6 +203,7 @@ public class GlobeWorldVM : MonoBehaviour
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
         Camera.Target = groupObject;
+        Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
