@@ -265,7 +265,15 @@ public class GlobeWorldVM : MonoBehaviour
 
         if (_player.GlobeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
         {
-            StartLoadScene();
+            if (!_player.GlobeNode.IsHome)
+            {
+                StartLoadScene();
+            }
+            else
+            {
+                MoveGroupViewModel(_player.GlobeNode);
+                Debug.Log("Home");
+            }
         }
         else
         {

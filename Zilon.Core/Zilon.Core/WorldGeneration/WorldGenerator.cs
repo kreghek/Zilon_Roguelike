@@ -97,6 +97,7 @@ namespace Zilon.Core.WorldGeneration
             };
             var region = new GlobeRegion(LocationBaseSize);
 
+            var homeOffsetCoords = GetHomeCoords(LocationBaseSize);
             for (var x = 0; x < LocationBaseSize; x++)
             {
                 for (var y = 0; y < LocationBaseSize; y++)
@@ -123,33 +124,46 @@ namespace Zilon.Core.WorldGeneration
                     }
                     else
                     {
-                        var hasDundeonRoll = _dice.Roll(100);
-                        if (hasDundeonRoll > 90)
+                        if (x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
                         {
-                            var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                            var locationSid = locationSchemeSids[locationSidIndex];
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                            var node = new GlobeRegionNode(x, y, locationScheme);
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsTown = true,
+                                IsHome = true
+                            };
                             region.AddNode(node);
                         }
                         else
                         {
-                            var hasCityRoll = _dice.Roll(100);
-
-                            if (hasCityRoll > 90)
+                            var hasDundeonRoll = _dice.Roll(100);
+                            if (hasDundeonRoll > 90)
                             {
-                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                                var node = new GlobeRegionNode(x, y, locationScheme)
-                                {
-                                    IsTown = true
-                                };
+                                var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                                var locationSid = locationSchemeSids[locationSidIndex];
+                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                                var node = new GlobeRegionNode(x, y, locationScheme);
                                 region.AddNode(node);
                             }
                             else
                             {
-                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                                var node = new GlobeRegionNode(x, y, locationScheme);
-                                region.AddNode(node);
+                                var hasCityRoll = _dice.Roll(100);
+
+                                if (hasCityRoll > 90)
+                                {
+                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                                    var node = new GlobeRegionNode(x, y, locationScheme)
+                                    {
+                                        IsTown = true
+                                    };
+                                    region.AddNode(node);
+                                }
+                                else
+                                {
+                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                                    var node = new GlobeRegionNode(x, y, locationScheme);
+                                    region.AddNode(node);
+                                }
                             }
                         }
                     }
@@ -159,6 +173,13 @@ namespace Zilon.Core.WorldGeneration
             return Task.FromResult(region);
         }
 
+        private OffsetCoords GetHomeCoords(int locationBaseSize)
+        {
+            // Исключем пограничные узлы.
+            var homeX = _dice.Roll(1, locationBaseSize - 2);
+            var homeY = _dice.Roll(1, locationBaseSize - 2);
+            return new OffsetCoords(homeX, homeY);
+        }
 
         private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
         {

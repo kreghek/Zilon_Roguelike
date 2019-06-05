@@ -34,6 +34,11 @@ namespace Zilon.Core.World
         public bool IsTown { get; set; }
 
         /// <summary>
+        /// Является ли город победным узлом.
+        /// </summary>
+        public bool IsHome { get; set; }
+
+        /// <summary>
         /// Является ли узел провинции пограничным с другой провинцией.
         /// </summary>
         /// <remarks>

@@ -38,6 +38,11 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
         {
             var sprite = Resources.Load<Sprite>("Globe/city");
             Icon.sprite = sprite;
+
+            if (Node.IsHome)
+            {
+                gameObject.transform.localScale = new Vector3(2, 2, 2);
+            }
         }
         else
         {
