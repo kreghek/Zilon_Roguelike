@@ -24,6 +24,8 @@ namespace Zilon.Core.WorldGeneration
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
         private const string WILD_SCHEME_SID = "forest";
+        private const int BORDER_SIZE = 1;
+
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
 
@@ -111,7 +113,7 @@ namespace Zilon.Core.WorldGeneration
                     //    continue;
                     //}
 
-                    var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
+                    var isBorder = x == 0 || x == LocationBaseSize - BORDER_SIZE || y == 0 || y == LocationBaseSize - BORDER_SIZE;
 
                     if (isBorder)
                     {
@@ -175,10 +177,32 @@ namespace Zilon.Core.WorldGeneration
 
         private OffsetCoords GetHomeCoords(int locationBaseSize)
         {
-            // Исключем пограничные узлы.
-            var homeX = _dice.Roll(1, locationBaseSize - 2);
-            var homeY = _dice.Roll(1, locationBaseSize - 2);
+            var homeX = GetHomeCoordsComponent(locationBaseSize);
+            var homeY = GetHomeCoordsComponent(locationBaseSize);
             return new OffsetCoords(homeX, homeY);
+        }
+
+        private int GetHomeCoordsComponent(int locationBaseSize)
+        {
+            // Стараемся выбрать победный узел с краю, но не на границе.
+            var leftBorder = locationBaseSize / 4;
+            var rigthBorder = locationBaseSize * 3 / 4;
+
+            var safityCounter = 100;
+            while (safityCounter > 0)
+            {
+                var component = _dice.Roll(BORDER_SIZE, locationBaseSize - 1 - BORDER_SIZE);
+
+                if (leftBorder <= component && component <= rigthBorder)
+                {
+                    return component;
+                }
+
+                safityCounter--;
+            }
+
+            // Если попали сюда, то возвращаем фиксированную центральную точку.
+            return locationBaseSize / 2;
         }
 
         private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
