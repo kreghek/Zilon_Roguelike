@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
@@ -71,10 +72,74 @@ namespace Zilon.Core.WorldGeneration
             // обработка итераций
             ProcessIterations(globe, cardQueue);
 
+
+            globe.StartProvince = GetStartProvinceCoords(globe);
+            globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
+
             agentsClock.Stop();
             Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
 
             return Task.FromResult(globe);
+        }
+
+        private TerrainCell GetStartProvinceCoords(Globe globe)
+        {
+            // Выбираем основной город, являющийся стартовым.
+            // По городу определяем провинцию.
+
+            var availableStartLocalities = globe.Localities;
+
+            Locality startLocality;
+            if (availableStartLocalities.Any())
+            {
+                var startLocalityIndex = _dice.Roll(0, availableStartLocalities.Count() - 1);
+                startLocality = availableStartLocalities[startLocalityIndex];
+            }
+            else
+            {
+                startLocality = globe.Localities.FirstOrDefault();
+            }
+
+            if (startLocality == null)
+            {
+                //TODO Создать отдельный класс исключений GlobeGenerationException.
+                throw new InvalidOperationException("Не удалось выбрать стартовую локацию.");
+            }
+
+            return startLocality.Cell;
+        }
+
+        //TODO Постараться объединить GetStartProvinceCoords и GetHomeProvinceCoords
+        private TerrainCell GetHomeProvinceCoords(Globe globe, TerrainCell startProvince)
+        {
+            // Выбираем основной город, являющийся стартовым.
+            // По городу определяем провинцию.
+
+            var currentCubeCoords = HexHelper.ConvertToCube(startProvince.Coords);
+            var availableLocalities = globe.Localities
+                .Where(x => x.Cell != startProvince)
+                .Where(x => HexHelper.ConvertToCube(x.Cell.Coords).DistanceTo(currentCubeCoords) > 2)
+                .Where(x => HexHelper.ConvertToCube(x.Cell.Coords).DistanceTo(currentCubeCoords) <= 5)
+                .ToArray();
+
+            Locality selectedLocality;
+            if (availableLocalities.Any())
+            {
+                var localityIndex = _dice.Roll(0, availableLocalities.Count() - 1);
+                selectedLocality = availableLocalities[localityIndex];
+            }
+            else
+            {
+                selectedLocality = globe.Localities.LastOrDefault();
+            }
+
+            if (selectedLocality == null)
+            {
+                //TODO Создать отдельный класс исключений GlobeGenerationException.
+                throw new InvalidOperationException("Не удалось выбрать локацию для дома.");
+            }
+
+            return selectedLocality.Cell;
         }
 
         /// <summary>
@@ -99,8 +164,21 @@ namespace Zilon.Core.WorldGeneration
             };
             var region = new GlobeRegion(LocationBaseSize);
 
-            var homeOffsetCoords = GetHomeCoords(LocationBaseSize);
-            var startOffsetCoords = GetStartCoords(LocationBaseSize);
+            var isStartCell = globe.StartProvince == cell;
+            OffsetCoords startOffsetCoords = null;
+            if (isStartCell)
+            {
+                startOffsetCoords = GetStartCoords(LocationBaseSize);
+            }
+
+            var isHomeCell = globe.HomeProvince == cell;
+            OffsetCoords homeOffsetCoords = null;
+            if (isHomeCell)
+            {
+                homeOffsetCoords = GetHomeCoords(LocationBaseSize);
+            }
+
+            
             for (var x = 0; x < LocationBaseSize; x++)
             {
                 for (var y = 0; y < LocationBaseSize; y++)
@@ -127,22 +205,22 @@ namespace Zilon.Core.WorldGeneration
                     }
                     else
                     {
-                        if (x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
+                        if (isStartCell && x == startOffsetCoords.X && y == startOffsetCoords.Y)
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsStart = true
+                            };
+                            region.AddNode(node);
+                        }
+                        else if (isHomeCell && x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
                         {
                             var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
                             var node = new GlobeRegionNode(x, y, locationScheme)
                             {
                                 IsTown = true,
                                 IsHome = true
-                            };
-                            region.AddNode(node);
-                        }
-                        else if (x == startOffsetCoords.X && y == startOffsetCoords.Y)
-                        {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsStart = true
                             };
                             region.AddNode(node);
                         }
@@ -306,7 +384,7 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.LocalitiesCells[locality.Cell] = locality;
 
-                globe.scanResult.Free.Remove(locality.Cell);
+                globe.ScanResult.Free.Remove(locality.Cell);
             }
         }
 
@@ -323,7 +401,7 @@ namespace Zilon.Core.WorldGeneration
                         Coords = new OffsetCoords(i, j)
                     };
 
-                    globe.scanResult.Free.Add(globe.Terrain[i][j]);
+                    globe.ScanResult.Free.Add(globe.Terrain[i][j]);
                 }
             }
 

@@ -11,6 +11,11 @@
             return new CubeCoords(x, y, z);
         }
 
+        public static CubeCoords ConvertToCube(OffsetCoords offsetCoords)
+        {
+            return ConvertToCube(offsetCoords.X, offsetCoords.Y);
+        }
+
         public static OffsetCoords ConvertToOffset(CubeCoords cube)
         {
             var col = cube.X + (cube.Z - (cube.Z & 1)) / 2;
