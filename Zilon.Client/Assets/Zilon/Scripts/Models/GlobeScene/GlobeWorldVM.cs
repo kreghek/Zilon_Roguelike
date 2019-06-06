@@ -80,6 +80,9 @@ public class GlobeWorldVM : MonoBehaviour
             await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
         }
 
+        Debug.Log($"Current: {currentGlobeCell}");
+        Debug.Log($"Current: {_globeManager.Globe.HomeProvince}");
+
         _region = currentRegion;
 
         // Создание визуализации узлов провинции.
