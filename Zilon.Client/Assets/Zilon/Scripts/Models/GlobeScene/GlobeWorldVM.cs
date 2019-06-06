@@ -7,7 +7,7 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 
 using Zenject;
-
+using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
@@ -58,6 +58,7 @@ public class GlobeWorldVM : MonoBehaviour
             _player.Terrain = startCell;
 
             var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
+            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
@@ -68,40 +69,18 @@ public class GlobeWorldVM : MonoBehaviour
             startNode.ObservedState = GlobeNodeObservedState.Visited;
         }
 
-        // Создание соседних регионов
-        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        var currentGlobeCell = _player.Terrain;
+        if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
-            for (var offsetY = -1; offsetY <= 1; offsetY++)
-            {
-                if (offsetX == 0 && offsetY == 0)
-                {
-                    // Это нулевое смещение от текущего элемента.
-                    // Пропускаем, т.к. текущий элемент уже есть.
-                    continue;
-                }
+            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, currentGlobeCell);
 
-                var terrainX = _player.Terrain.Coords.X + offsetX;
-                var terrainY = _player.Terrain.Coords.Y + offsetY;
+            _globeManager.Regions[_player.Terrain] = createdRegion;
 
-                if (_globeManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
-                    terrainX <= _globeManager.Globe.Terrain.GetUpperBound(0) &&
-                    _globeManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
-                    terrainY <= _globeManager.Globe.Terrain[0].GetUpperBound(0))
-                {
-                    var terrainCell = _globeManager.Globe.Terrain[terrainX][terrainY];
-                    if (!_globeManager.Regions.ContainsKey(terrainCell))
-                    {
-                        var createdNeiborRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, terrainCell);
-
-                        _globeManager.Regions[terrainCell] = createdNeiborRegion;
-                    }
-                }
-            }
+            // Создание соседних регионов
+            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
         }
 
-        var currentGlobeCell = _player.Terrain;
-        _region = _globeManager.Regions[currentGlobeCell];
-
+        _region = currentRegion;
 
         // Создание визуализации узлов провинции.
         _locationNodeViewModels = new List<MapLocation>(100);
@@ -140,7 +119,6 @@ public class GlobeWorldVM : MonoBehaviour
         var currentRegionBorders = _region.RegionNodes.Where(x => x.IsBorder).ToArray();
         // TODO в открытые можно помещать только бордюр для экономии.
         openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
-        var currentRegion = _globeManager.Regions[_player.Terrain];
         var currentBorderNodes = currentRegion.Nodes.OfType<GlobeRegionNode>().Where(x => x.IsBorder).ToArray();
         for (var offsetX = -1; offsetX <= 1; offsetX++)
         {
@@ -229,6 +207,41 @@ public class GlobeWorldVM : MonoBehaviour
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private static async System.Threading.Tasks.Task CreateNeighborRegionsAsync(OffsetCoords playerCoords,
+        IWorldManager worldManager,
+        IWorldGenerator worldGenerator)
+    {
+        for (var offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (var offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                if (offsetX == 0 && offsetY == 0)
+                {
+                    // Это нулевое смещение от текущего элемента.
+                    // Пропускаем, т.к. текущий элемент уже есть.
+                    continue;
+                }
+
+                var terrainX = playerCoords.X + offsetX;
+                var terrainY = playerCoords.Y + offsetY;
+
+                if (worldManager.Globe.Terrain.GetLowerBound(0) <= terrainX &&
+                    terrainX <= worldManager.Globe.Terrain.GetUpperBound(0) &&
+                    worldManager.Globe.Terrain[0].GetLowerBound(0) <= terrainY &&
+                    terrainY <= worldManager.Globe.Terrain[0].GetUpperBound(0))
+                {
+                    var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
+                    if (!worldManager.Regions.ContainsKey(terrainCell))
+                    {
+                        var createdNeiborRegion = await worldGenerator.GenerateRegionAsync(worldManager.Globe, terrainCell);
+
+                        worldManager.Regions[terrainCell] = createdNeiborRegion;
+                    }
+                }
+            }
+        }
     }
 
     private void CreateConnector(MapLocation currentNodeViewModel, MapLocation neibourNodeViewModel)
