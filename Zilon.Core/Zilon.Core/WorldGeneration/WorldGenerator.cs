@@ -164,8 +164,21 @@ namespace Zilon.Core.WorldGeneration
             };
             var region = new GlobeRegion(LocationBaseSize);
 
-            var homeOffsetCoords = GetHomeCoords(LocationBaseSize);
-            var startOffsetCoords = GetStartCoords(LocationBaseSize);
+            var isStartCell = globe.StartProvince == cell;
+            OffsetCoords startOffsetCoords = null;
+            if (isStartCell)
+            {
+                startOffsetCoords = GetStartCoords(LocationBaseSize);
+            }
+
+            var isHomeCell = globe.HomeProvince == cell;
+            OffsetCoords homeOffsetCoords = null;
+            if (isHomeCell)
+            {
+                homeOffsetCoords = GetHomeCoords(LocationBaseSize);
+            }
+
+            
             for (var x = 0; x < LocationBaseSize; x++)
             {
                 for (var y = 0; y < LocationBaseSize; y++)
@@ -192,22 +205,22 @@ namespace Zilon.Core.WorldGeneration
                     }
                     else
                     {
-                        if (x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
+                        if (isStartCell && x == startOffsetCoords.X && y == startOffsetCoords.Y)
+                        {
+                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                            var node = new GlobeRegionNode(x, y, locationScheme)
+                            {
+                                IsStart = true
+                            };
+                            region.AddNode(node);
+                        }
+                        else if (isHomeCell && x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
                         {
                             var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
                             var node = new GlobeRegionNode(x, y, locationScheme)
                             {
                                 IsTown = true,
                                 IsHome = true
-                            };
-                            region.AddNode(node);
-                        }
-                        else if (x == startOffsetCoords.X && y == startOffsetCoords.Y)
-                        {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsStart = true
                             };
                             region.AddNode(node);
                         }
