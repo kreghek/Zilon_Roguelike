@@ -53,11 +53,11 @@ public class GlobeWorldVM : MonoBehaviour
         {
             _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
 
-            var firstLocality = _globeManager.Globe.Localities.First();
+            var startCell = _globeManager.Globe.StartProvince;
 
-            _player.Terrain = firstLocality.Cell;
+            _player.Terrain = startCell;
 
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, firstLocality.Cell);
+            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
