@@ -292,10 +292,23 @@ namespace Zilon.Core.WorldGeneration
             // Пока костыльное решение из расчёта, что во всех паттернах будет 3 объекта интереса.
 
             var townIndex = _dice.Roll(0, 2);
+
+            var rotateValueIndex = _dice.Roll(0, (int)MatrixRotation.ConterClockwise90);
+            var rotatedPatternValues = MatrixHelper.Rotate(pattern.Values, (MatrixRotation)rotateValueIndex);
+            ApplyRegionPatternInner(regionDraft, rotatedPatternValues, insertX, insertY, townIndex);
+        }
+
+        private static void ApplyRegionPatternInner(GlobeRegionDraftValue[,] regionDraft,
+                                                    GlobeRegionPatternValue[,] patternValues,
+                                                    int insertX,
+                                                    int insertY,
+                                                    int townIndex)
+        {
             var interestObjectCounter = 0;
-            for (var x = pattern.Values.GetLowerBound(0); x < pattern.Values.GetUpperBound(0); x++)
+
+            for (var x = patternValues.GetLowerBound(0); x < patternValues.GetUpperBound(0); x++)
             {
-                for (var y = pattern.Values.GetLowerBound(1); y < pattern.Values.GetUpperBound(1); y++)
+                for (var y = patternValues.GetLowerBound(1); y < patternValues.GetUpperBound(1); y++)
                 {
                     GlobeRegionDraftValue draftValue = null;
 
@@ -304,7 +317,7 @@ namespace Zilon.Core.WorldGeneration
                     // А пустота (null) будет означать, что ничего делать не нужно (transparent).
                     // Потому что будут ещё шаблоны, накладываемые поверх всех в случайные места, чтобы генерировать дополнительные 
                     // мусорные объекты.
-                    var patternValue = pattern.Values[x, y];
+                    var patternValue = patternValues[x, y];
                     if (patternValue == null)
                     {
                         draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Wild);
