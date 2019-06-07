@@ -171,16 +171,15 @@ namespace Zilon.Core.WorldGeneration
             // Пока не вращаем и не искажаем.
             // Там, где может быть объект, гарантированно создаём один город и два подземелья.
             var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
-            // Вставляем паттерны в указанные области
-            var defaultPattern = GlobeRegionPatterns.Default;
             var startPattern = GlobeRegionPatterns.Start;
             var homePattern = GlobeRegionPatterns.Home;
-            var patternSize = defaultPattern.Values.GetUpperBound(0);
+            var patternSize = GetDefaultPattrn().Values.GetUpperBound(0);
 
-            ApplyRegionPattern(ref regionDraft, defaultPattern, 1, 1);
-            ApplyRegionPattern(ref regionDraft, defaultPattern, LocationBaseSize - patternSize - 1, 1);
-            ApplyRegionPattern(ref regionDraft, defaultPattern, 1, LocationBaseSize - patternSize - 1);
-            ApplyRegionPattern(ref regionDraft, defaultPattern, LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
+            // Вставляем паттерны в указанные области
+            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
+            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, 1);
+            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, LocationBaseSize - patternSize - 1);
+            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
             if (isStartCell)
             {
                 ApplyRegionPattern(ref regionDraft, startPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
@@ -191,7 +190,7 @@ namespace Zilon.Core.WorldGeneration
             }
             else
             {
-                ApplyRegionPattern(ref regionDraft, defaultPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
             }
 
 
@@ -227,7 +226,7 @@ namespace Zilon.Core.WorldGeneration
                     {
                         var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
                         node = new GlobeRegionNode(x, y, locationScheme);
-                        
+
                     }
                     else if (currentPatternValue.IsStart)
                     {
@@ -274,6 +273,17 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return Task.FromResult(region);
+        }
+
+        private GlobeRegionPattern GetDefaultPattrn()
+        {
+            var defaultPatterns = new[] {
+                GlobeRegionPatterns.Angle,
+                GlobeRegionPatterns.Tringle
+            };
+            var defaultPatternIndex = _dice.Roll(0, defaultPatterns.Length - 1);
+            var defaultPattern = defaultPatterns[defaultPatternIndex];
+            return defaultPattern;
         }
 
         /// <summary>

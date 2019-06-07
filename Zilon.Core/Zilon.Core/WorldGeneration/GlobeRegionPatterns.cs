@@ -2,7 +2,7 @@
 {
     public static class GlobeRegionPatterns
     {
-        public static GlobeRegionPattern Default
+        public static GlobeRegionPattern Angle
         {
             get
             {
@@ -20,6 +20,24 @@
             }
         }
 
+        public static GlobeRegionPattern Tringle
+        {
+            get
+            {
+                return new GlobeRegionPattern
+                {
+                    Values = new GlobeRegionPatternValue[,]{
+                        { null, null, null, null, null, null },
+                        { null, null, new GlobeRegionPatternValue(true), null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, new GlobeRegionPatternValue(true), null, null, new GlobeRegionPatternValue(true), null },
+                        { null, null, null, null, null, null },
+                    }
+                };
+            }
+        }
+
         public static GlobeRegionPattern Start
         {
             get
@@ -28,9 +46,9 @@
                 {
                     Values = new GlobeRegionPatternValue[,]{
                         { null, null, null, null, null, null },
-                        { null, null, null, null, new GlobeRegionPatternValue(true), null },
                         { null, null, null, null, null, null },
                         { null, null, null, null, null, null },
+                        { null, new GlobeRegionPatternValue(true), null, null, null, null },
                         { null, new GlobeRegionPatternValue(true){ IsStart = true }, null, null, new GlobeRegionPatternValue(true), null },
                         { null, null, null, null, null, null },
                     }
