@@ -165,100 +165,110 @@ namespace Zilon.Core.WorldGeneration
             var region = new GlobeRegion(LocationBaseSize);
 
             var isStartCell = globe.StartProvince == cell;
-            OffsetCoords startOffsetCoords = null;
+            var isHomeCell = globe.HomeProvince == cell;
+
+            // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
+            // Пока не вращаем и не искажаем.
+            // Там, где может быть объект, гарантированно создаём один город и два подземелья.
+            var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
+            // Вставляем паттерны в указанные области
+            var defaultPattern = GlobeRegionPatterns.Default;
+            var startPattern = GlobeRegionPatterns.Start;
+            var homePattern = GlobeRegionPatterns.Home;
+            var patternSize = defaultPattern.Values.GetUpperBound(0);
+
+            ApplyRegionPattern(ref regionDraft, defaultPattern, 1, 1);
+            ApplyRegionPattern(ref regionDraft, defaultPattern, LocationBaseSize - patternSize - 1, 1);
+            ApplyRegionPattern(ref regionDraft, defaultPattern, 1, LocationBaseSize - patternSize - 1);
+            ApplyRegionPattern(ref regionDraft, defaultPattern, LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
             if (isStartCell)
             {
-                startOffsetCoords = GetStartCoords(LocationBaseSize);
+                ApplyRegionPattern(ref regionDraft, startPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+            }
+            else if (isHomeCell)
+            {
+                ApplyRegionPattern(ref regionDraft, homePattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+            }
+            else
+            {
+                ApplyRegionPattern(ref regionDraft, defaultPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
             }
 
-            var isHomeCell = globe.HomeProvince == cell;
-            OffsetCoords homeOffsetCoords = null;
-            if (isHomeCell)
-            {
-                homeOffsetCoords = GetHomeCoords(LocationBaseSize);
-            }
 
-            
-            for (var x = 0; x < LocationBaseSize; x++)
+            for (var x = regionDraft.GetLowerBound(0); x < regionDraft.GetUpperBound(0); x++)
             {
-                for (var y = 0; y < LocationBaseSize; y++)
+                for (var y = regionDraft.GetLowerBound(1); y < regionDraft.GetUpperBound(1); y++)
                 {
-                    // Эти строки вставляют непроходимые места в карте.
-                    // Сейчас это не безопасно, потому что могут генерироваться изолированные
-                    // куски карты провинции.
-                    // Дополнительно этот фрагмент может создать края провинции,
-                    // которые не будут совпадать при переходе.
-                    // Второе можно быстро решить, запретив делать непроходимые узлы на границе.
-                    //var hasNodeRoll = _dice.Roll(6);
-                    //if (hasNodeRoll <= 2)
-                    //{
-                    //    continue;
-                    //}
-
+                    // Определяем, является ли узел граничным.
+                    // На граничных узлах ничего не создаём.
+                    // Потому что это может вызвать трудности при переходах между провинциями.
+                    // Например, игрок при переходе сразу может попасть в данж или город.
+                    // Не отлажен механиз перехода, если часть узлов соседней провинции отсутствует.
                     var isBorder = x == 0 || x == LocationBaseSize - BORDER_SIZE || y == 0 || y == LocationBaseSize - BORDER_SIZE;
-
                     if (isBorder)
                     {
                         var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                        var node = new GlobeRegionNode(x, y, locationScheme)
+                        var borderNode = new GlobeRegionNode(x, y, locationScheme)
                         {
                             IsBorder = isBorder
                         };
-                        region.AddNode(node);
+                        region.AddNode(borderNode);
+                        continue;
+                    }
+
+                    var currentPatternValue = regionDraft[x, y];
+                    GlobeRegionNode node = null;
+                    if (currentPatternValue == null)
+                    {
+                        // Ничего не делаем.
+                        // Это генерирует остутствие узла, что сейчас значит непроходимый узел.
+                    }
+                    else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Wild))
+                    {
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                        node = new GlobeRegionNode(x, y, locationScheme);
+                        
+                    }
+                    else if (currentPatternValue.IsStart)
+                    {
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                        node = new GlobeRegionNode(x, y, locationScheme)
+                        {
+                            IsStart = true
+                        };
+                    }
+                    else if (currentPatternValue.IsHome)
+                    {
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                        node = new GlobeRegionNode(x, y, locationScheme)
+                        {
+                            IsTown = true,
+                            IsHome = true
+                        };
+                    }
+                    else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Town))
+                    {
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
+                        node = new GlobeRegionNode(x, y, locationScheme)
+                        {
+                            IsTown = true
+                        };
+                    }
+                    else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Dungeon))
+                    {
+                        var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
+                        var locationSid = locationSchemeSids[locationSidIndex];
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
+                        node = new GlobeRegionNode(x, y, locationScheme);
                     }
                     else
                     {
-                        if (isStartCell && x == startOffsetCoords.X && y == startOffsetCoords.Y)
-                        {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsStart = true
-                            };
-                            region.AddNode(node);
-                        }
-                        else if (isHomeCell && x == homeOffsetCoords.X && y == homeOffsetCoords.Y)
-                        {
-                            var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                            var node = new GlobeRegionNode(x, y, locationScheme)
-                            {
-                                IsTown = true,
-                                IsHome = true
-                            };
-                            region.AddNode(node);
-                        }
-                        else
-                        {
-                            var hasDundeonRoll = _dice.Roll(100);
-                            if (hasDundeonRoll > 90)
-                            {
-                                var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
-                                var locationSid = locationSchemeSids[locationSidIndex];
-                                var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                                var node = new GlobeRegionNode(x, y, locationScheme);
-                                region.AddNode(node);
-                            }
-                            else
-                            {
-                                var hasCityRoll = _dice.Roll(100);
+                        Debug.Assert(true, "При генерации провинции должны все исходы быть предусмотрены.");
+                    }
 
-                                if (hasCityRoll > 90)
-                                {
-                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                                    var node = new GlobeRegionNode(x, y, locationScheme)
-                                    {
-                                        IsTown = true
-                                    };
-                                    region.AddNode(node);
-                                }
-                                else
-                                {
-                                    var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                                    var node = new GlobeRegionNode(x, y, locationScheme);
-                                    region.AddNode(node);
-                                }
-                            }
-                        }
+                    if (node != null)
+                    {
+                        region.AddNode(node);
                     }
                 }
             }
@@ -266,43 +276,69 @@ namespace Zilon.Core.WorldGeneration
             return Task.FromResult(region);
         }
 
-        private OffsetCoords GetHomeCoords(int locationBaseSize)
+        /// <summary>
+        /// Применяет шаблон участка провинции на черновик провинции в указанных координатах.
+        /// </summary>
+        /// <param name="regionDraft"> Черновик провинции.
+        /// Отмечен ref, чтобы было видно, что метод именяет этот объект. </param>
+        /// <param name="pattern"> Шаблон, применяемый на черновик. </param>
+        /// <param name="insertX"> Х-координата применения шаблона. </param>
+        /// <param name="insertY"> Y-координата применения шаблона. </param>
+        private void ApplyRegionPattern(ref GlobeRegionDraftValue[,] regionDraft,
+                                         GlobeRegionPattern pattern,
+                                         int insertX,
+                                         int insertY)
         {
-            var homeX = GetHomeCoordsComponent(locationBaseSize);
-            var homeY = GetHomeCoordsComponent(locationBaseSize);
-            return new OffsetCoords(homeX, homeY);
-        }
+            // Пока костыльное решение из расчёта, что во всех паттернах будет 3 объекта интереса.
 
-        private OffsetCoords GetStartCoords(int locationBaseSize)
-        {
-            var startX = locationBaseSize / 2;
-            var startY = locationBaseSize / 2;
-            return new OffsetCoords(startX, startY);
-        }
-
-        private int GetHomeCoordsComponent(int locationBaseSize)
-        {
-            // Стараемся выбрать победный узел с краю, но не на границе.
-            var leftBorder = locationBaseSize / 4;
-            var rigthBorder = locationBaseSize * 3 / 4;
-
-            var safityCounter = 100;
-            while (safityCounter > 0)
+            var townIndex = _dice.Roll(0, 2);
+            var interestObjectCounter = 0;
+            for (var x = pattern.Values.GetLowerBound(0); x < pattern.Values.GetUpperBound(0); x++)
             {
-                var component = _dice.Roll(BORDER_SIZE, locationBaseSize - 1 - BORDER_SIZE);
-
-                // Определение, что выбранная координата внутри диапазона.
-                var isInner = leftBorder <= component && component <= rigthBorder;
-                if (!isInner)
+                for (var y = pattern.Values.GetLowerBound(1); y < pattern.Values.GetUpperBound(1); y++)
                 {
-                    return component;
+                    GlobeRegionDraftValue draftValue = null;
+
+                    // TODO Для диких секторов нужно ввести отдельное значение шаблона.
+                    // Потому что в шаблонах планируются ещё пустые (непроходимые) узлы. Но и для них будет специальное значение.
+                    // А пустота (null) будет означать, что ничего делать не нужно (transparent).
+                    // Потому что будут ещё шаблоны, накладываемые поверх всех в случайные места, чтобы генерировать дополнительные 
+                    // мусорные объекты.
+                    var patternValue = pattern.Values[x, y];
+                    if (patternValue == null)
+                    {
+                        draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Wild);
+                    }
+                    else if (patternValue.IsStart)
+                    {
+                        draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Dungeon)
+                        {
+                            IsStart = true
+                        };
+                    }
+                    else if (patternValue.IsHome)
+                    {
+                        draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Town)
+                        {
+                            IsHome = true
+                        };
+                    }
+                    else if (patternValue.HasObject)
+                    {
+                        if (interestObjectCounter == townIndex)
+                        {
+                            draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Town);
+                        }
+                        else
+                        {
+                            draftValue = new GlobeRegionDraftValue(GlobeRegionDraftValueType.Dungeon);
+                        }
+                        interestObjectCounter++;
+                    }
+
+                    regionDraft[x + insertX, y + insertY] = draftValue;
                 }
-
-                safityCounter--;
             }
-
-            // Если попали сюда, то возвращаем фиксированную центральную точку.
-            return locationBaseSize / 2;
         }
 
         private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
