@@ -13,13 +13,13 @@
         /// <returns> Возращает повёрнутую матрицу. </returns>
         public static T[,] RotateClockwise<T>(T[,] sourceMatrix)
         {
-            var n = sourceMatrix.GetUpperBound(0);
-            var m = sourceMatrix.GetUpperBound(1);
+            var n = sourceMatrix.GetUpperBound(0) - sourceMatrix.GetLowerBound(0) + 1;
+            var m = sourceMatrix.GetUpperBound(1) - sourceMatrix.GetLowerBound(1) + 1;
             T[,] ret = new T[m, n];
 
-            for (int i = 0; i < m; ++i)
+            for (int i = 0; i < m; i++)
             {
-                for (int j = 0; j < n; ++j)
+                for (int j = 0; j < n; j++)
                 {
                     ret[i, j] = sourceMatrix[n - j - 1, i];
                 }

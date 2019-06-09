@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
@@ -25,7 +26,6 @@ namespace Zilon.Core.WorldGeneration
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
         private const string WILD_SCHEME_SID = "forest";
-        private const int BORDER_SIZE = 1;
 
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
@@ -173,7 +173,11 @@ namespace Zilon.Core.WorldGeneration
             var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
             var startPattern = GlobeRegionPatterns.Start;
             var homePattern = GlobeRegionPatterns.Home;
-            var patternSize = GetDefaultPattrn().Values.GetUpperBound(0);
+            // Расчитываем размер паттернов.
+            // Исходим из того, что пока все паттерны квадратные и одинаковые по размеру.
+            // Поэтому размер произвольного паттерна будет справедлив для всех остальных.
+            // Паттерн старта выбран произвольно.
+            var patternSize = startPattern.Values.GetUpperBound(0) - startPattern.Values.GetLowerBound(0) + 1;
 
             // Вставляем паттерны в указанные области
             ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
@@ -194,16 +198,16 @@ namespace Zilon.Core.WorldGeneration
             }
 
 
-            for (var x = regionDraft.GetLowerBound(0); x < regionDraft.GetUpperBound(0); x++)
+            for (var x = regionDraft.GetLowerBound(0); x <= regionDraft.GetUpperBound(0); x++)
             {
-                for (var y = regionDraft.GetLowerBound(1); y < regionDraft.GetUpperBound(1); y++)
+                for (var y = regionDraft.GetLowerBound(1); y <= regionDraft.GetUpperBound(1); y++)
                 {
                     // Определяем, является ли узел граничным.
                     // На граничных узлах ничего не создаём.
                     // Потому что это может вызвать трудности при переходах между провинциями.
                     // Например, игрок при переходе сразу может попасть в данж или город.
                     // Не отлажен механиз перехода, если часть узлов соседней провинции отсутствует.
-                    var isBorder = x == 0 || x == LocationBaseSize - BORDER_SIZE || y == 0 || y == LocationBaseSize - BORDER_SIZE;
+                    var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
                     if (isBorder)
                     {
                         var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
@@ -219,14 +223,16 @@ namespace Zilon.Core.WorldGeneration
                     GlobeRegionNode node = null;
                     if (currentPatternValue == null)
                     {
-                        // Ничего не делаем.
-                        // Это генерирует остутствие узла, что сейчас значит непроходимый узел.
+                        // Это означает, что сюда не был применен ни один шаблон.
+                        // Значит генерируем просто дикий сектор.
+                        var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+                        node = new GlobeRegionNode(x, y, locationScheme);
                     }
                     else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Wild))
                     {
+                        // Дикий сектор был указан явно одним из шаблонов.
                         var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
                         node = new GlobeRegionNode(x, y, locationScheme);
-
                     }
                     else if (currentPatternValue.IsStart)
                     {
@@ -316,9 +322,9 @@ namespace Zilon.Core.WorldGeneration
         {
             var interestObjectCounter = 0;
 
-            for (var x = patternValues.GetLowerBound(0); x < patternValues.GetUpperBound(0); x++)
+            for (var x = patternValues.GetLowerBound(0); x <= patternValues.GetUpperBound(0); x++)
             {
-                for (var y = patternValues.GetLowerBound(1); y < patternValues.GetUpperBound(1); y++)
+                for (var y = patternValues.GetLowerBound(1); y <= patternValues.GetUpperBound(1); y++)
                 {
                     GlobeRegionDraftValue draftValue = null;
 
