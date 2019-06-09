@@ -283,10 +283,14 @@ namespace Zilon.Core.WorldGeneration
 
         private GlobeRegionPattern GetDefaultPattrn()
         {
-            var defaultPatterns = new[] {
+            var defaultPatterns = new[] 
+            {
                 GlobeRegionPatterns.Angle,
-                GlobeRegionPatterns.Tringle
+                GlobeRegionPatterns.Tringle,
+                GlobeRegionPatterns.Linear,
+                GlobeRegionPatterns.Diagonal
             };
+
             var defaultPatternIndex = _dice.Roll(0, defaultPatterns.Length - 1);
             var defaultPattern = defaultPatterns[defaultPatternIndex];
             return defaultPattern;
@@ -306,12 +310,31 @@ namespace Zilon.Core.WorldGeneration
                                          int insertY)
         {
             // Пока костыльное решение из расчёта, что во всех паттернах будет 3 объекта интереса.
-
-            var townIndex = _dice.Roll(0, 2);
+            var townCount = CountTownPlaces(pattern.Values);
+            var townIndex = _dice.Roll(0, townCount - 1);
 
             var rotateValueIndex = _dice.Roll(0, (int)MatrixRotation.ConterClockwise90);
             var rotatedPatternValues = MatrixHelper.Rotate(pattern.Values, (MatrixRotation)rotateValueIndex);
             ApplyRegionPatternInner(regionDraft, rotatedPatternValues, insertX, insertY, townIndex);
+        }
+
+        private static int CountTownPlaces(GlobeRegionPatternValue[,] patternValues)
+        {
+            var counter = 0;
+            foreach (var value in patternValues)
+            {
+                if (value == null)
+                {
+                    continue;
+                }
+
+                if (value.HasObject)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
         }
 
         private static void ApplyRegionPatternInner(GlobeRegionDraftValue[,] regionDraft,
