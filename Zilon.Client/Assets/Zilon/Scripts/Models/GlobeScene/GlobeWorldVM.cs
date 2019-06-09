@@ -62,7 +62,7 @@ public class GlobeWorldVM : MonoBehaviour
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
-            var startNode = createdRegion.RegionNodes.SingleOrDefault(x => x.IsStart);
+            var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
 
             _player.GlobeNode = startNode;
 

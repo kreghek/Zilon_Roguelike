@@ -76,6 +76,8 @@
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="Common\MatrixHelper.cs" />
+    <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
@@ -428,6 +430,11 @@
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
     <Compile Include="WorldGeneration\DirectBitmap.cs" />
+    <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
+    <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
+    <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
+    <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
+    <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />

@@ -103,6 +103,7 @@
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
+    <Compile Include="Common\MatrixHelperTests.cs" />
     <Compile Include="Common\RangeExtensionsTests.cs" />
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
