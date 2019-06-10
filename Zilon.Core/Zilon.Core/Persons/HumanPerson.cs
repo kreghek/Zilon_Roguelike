@@ -74,6 +74,7 @@ namespace Zilon.Core.Persons
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+            CalcSurvivalStats();
         }
 
         public HumanPerson(IPersonScheme scheme,
@@ -174,9 +175,9 @@ namespace Zilon.Core.Persons
                     AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
                 
-                case PersonRuleType.Undefined:
-                default:
-                    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
+                //case PersonRuleType.Undefined:
+                //default:
+                //    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
             }
         }
 
@@ -362,25 +363,41 @@ namespace Zilon.Core.Persons
             // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
             // На вход принимает SurvivalData. SurvivalData дожен содержать метод увеличение диапазона характеристики.
             Survival.ResetStats();
-            var equipmentBonuses = GetSurvivalBonusesFromEquipments();
-            var perkBonuses = GetSurvivalBonusesFromPerks();
-            ApplySurvivalBonuses(equipmentBonuses);
+            var bonusList = new List<SurvivalStatBonus>();
+            FillSurvivalBonusesFromEquipments(ref bonusList);
+            FillSurvivalBonusesFromPerks(ref bonusList);
+            ApplySurvivalBonuses(bonusList);
         }
 
-        private IEnumerable<SurvivalStatBonus> GetSurvivalBonusesFromPerks()
+        private void FillSurvivalBonusesFromPerks([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            var bonuses = new List<SurvivalStatBonus>();
             if (EvolutionData == null)
             {
-                return bonuses;
+                return;
             }
 
-            foreach (var perk in EvolutionData.Perks)
+            var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+            foreach (var archievedPerk in archievedPerks)
             {
-                perk.
-            }
+                var currentLevel = archievedPerk.CurrentLevel;
+                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
 
-            return bonuses;
+                if (currentLevelScheme.Rules == null)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i <= currentLevel.Sub; i++)
+                {
+                    foreach (var rule in currentLevelScheme.Rules)
+                    {
+                        if (rule.Type == PersonRuleType.Health)
+                        {
+                            BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
+                        }
+                    }
+                }
+            }
         }
 
         private void ApplySurvivalBonuses(IEnumerable<SurvivalStatBonus> bonuses)
@@ -396,9 +413,8 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private IEnumerable<SurvivalStatBonus> GetSurvivalBonusesFromEquipments()
+        private void FillSurvivalBonusesFromEquipments([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            var bonuses = new List<SurvivalStatBonus>();
             for (var i = 0; i < EquipmentCarrier.Count(); i++)
             {
                 var equipment = EquipmentCarrier[i];
@@ -419,7 +435,7 @@ namespace Zilon.Core.Persons
                     switch (rule.Type)
                     {
                         case EquipCommonRuleType.Health:
-                            BonusToHealth(rule.Level, rule.Direction, bonuses);
+                            BonusToHealth(rule.Level, rule.Direction, ref bonusList);
                             break;
 
                         case EquipCommonRuleType.HealthIfNoBody:
@@ -440,18 +456,24 @@ namespace Zilon.Core.Persons
 
                             if (requirementsCompleted)
                             {
-                                BonusToHealth(rule.Level, rule.Direction, bonuses);
+                                BonusToHealth(rule.Level, rule.Direction, ref bonusList);
                             }
 
                             break;
                     }
                 }
             }
-
-            return bonuses;
         }
 
-        private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction, List<SurvivalStatBonus> bonuses)
+        /// <summary>
+        /// Помещает в список бонус на ХП.
+        /// </summary>
+        /// <param name="level"> Уровень бонуса. </param>
+        /// <param name="direction"> Направление бонуса. </param>
+        /// <param name="bonuses"> Аккумулирующий список бонусов.
+        /// Отмечен ref, чтобы показать, что изменяется внутри метода. </param>
+        private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
+            ref List<SurvivalStatBonus> bonuses)
         {
             var hpStatType = SurvivalStatType.Health;
             var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == hpStatType);
@@ -486,6 +508,7 @@ namespace Zilon.Core.Persons
                 if (currentBonus == null)
                 {
                     currentBonus = new SurvivalStatBonus(hpStatType);
+                    bonuses.Add(currentBonus);
                 }
                 currentBonus.Bonus += bonus;
             }

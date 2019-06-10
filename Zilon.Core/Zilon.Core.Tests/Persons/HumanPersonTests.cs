@@ -144,6 +144,72 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
+        /// Тест проверяет, что при получении перка характеристики персонажа пересчитываются.
+        /// </summary>
+        [Test]
+        public void HumanPerson_HpPerk_HealthIncreased()
+        {
+            // ARRANGE
+
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var personScheme = new PersonScheme
+            {
+                Hp = 10,
+                Slots = slotSchemes
+            };
+
+            var defaultActScheme = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme()
+            };
+
+            var perkMock = new Mock<IPerk>();
+            perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
+            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme
+            {
+                Levels = new[] {
+                    new PerkLevelSubScheme{
+                        Rules = new []{
+                            new PerkRuleSubScheme{
+                                Type = PersonRuleType.Health,
+                                Level = PersonRuleLevel.Lesser
+                            }
+                        }
+                    }
+                }
+            });
+            var perk = perkMock.Object;
+
+            var stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 }
+            };
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+
+
+            // ACT
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+
+
+
+            // ASSERT
+            var testedStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            testedStat.Value.Should().Be(11);
+        }
+
+        /// <summary>
         /// Тест проверяет, что если экипировать предмет с бронёй,
         /// то броня будет записана в боевые характеристики персонажа.
         /// </summary>
