@@ -14,6 +14,7 @@ namespace Zilon.Core.Components
     {
         Undefined,
         Melee,
-        Ballistic
+        Ballistic,
+        Health
     }
 }

@@ -26,6 +26,7 @@ namespace Zilon.Core.Schemes
         OneUseHits, // задамажить одним использованием скилла
         OneUseDefeats, // уничтожить одним использованием скилла
         DefeatClasses,  // Повергнуть персонажей указанных поколений,
-        Craft
+        Craft,
+        ConsumeProviant
     }
 }
