@@ -1,0 +1,22 @@
+{
+  "Name": {
+    "Ru": "Здоровье",
+	"En": "Vitality"
+  },
+  "Levels":[
+    {
+	  "Rules": [
+	    {
+		  "Type": "Melee",
+		  "Level": "Normal"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "Defeats",
+		  "Value": 5
+		}
+	  ]
+	}
+  ]
+}

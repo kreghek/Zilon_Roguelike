@@ -15,6 +15,8 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
+        private readonly IPerkResolver _perkResolver;
+
         public event EventHandler Moved;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
         public event EventHandler<UsedActEventArgs> UsedAct;
@@ -41,6 +43,12 @@ namespace Zilon.Core.Tactics
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
         }
 
         public bool CanBeDamaged()
@@ -126,6 +134,12 @@ namespace Zilon.Core.Tactics
             if (useData.Consumable)
             {
                 ConsumeResource(usedProp);
+            }
+
+            if (_perkResolver != null)
+            {
+                var consumeProgress = new ConsumeProviantJobProgress();
+                _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
             }
         }
 
