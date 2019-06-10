@@ -78,6 +78,7 @@
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
+    <Compile Include="Common\MobTags.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
