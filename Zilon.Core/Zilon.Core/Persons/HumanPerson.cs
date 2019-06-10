@@ -537,6 +537,8 @@ namespace Zilon.Core.Persons
             }
 
             TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+
+            CalcSurvivalStats();
         }
 
         private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
