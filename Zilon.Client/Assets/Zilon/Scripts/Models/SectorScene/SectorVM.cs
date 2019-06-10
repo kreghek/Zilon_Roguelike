@@ -90,6 +90,8 @@ internal class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
+    [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
+
     [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
@@ -244,9 +246,8 @@ internal class SectorVM : MonoBehaviour
             .First();
 
         var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
-            personScheme,
             _actorManager,
-            _survivalRandomSource,
+            _perkResolver,
             playerActorStartNode,
             nodeViewModels);
 
@@ -505,9 +506,8 @@ internal class SectorVM : MonoBehaviour
     }
 
     private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
-        [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
-        [NotNull] ISurvivalRandomSource survivalRandomSource,
+        [NotNull] IPerkResolver perkResolver,
         [NotNull] IMapNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
@@ -516,7 +516,7 @@ internal class SectorVM : MonoBehaviour
             _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode);
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
 
         actorManager.Add(actor);
 

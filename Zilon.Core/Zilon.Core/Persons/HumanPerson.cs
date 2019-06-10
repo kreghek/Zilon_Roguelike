@@ -519,6 +519,8 @@ namespace Zilon.Core.Persons
             ClearCalculatedStats();
 
             CalcCombatStats();
+
+            CalcSurvivalStats();
         }
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)

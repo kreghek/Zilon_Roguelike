@@ -7,13 +7,41 @@
     {
 	  "Rules": [
 	    {
-		  "Type": "Melee",
-		  "Level": "Normal"
+		  "Type": "Health",
+		  "Level": "Lesser"
 		}
 	  ],
 	  "Jobs": [
 	    {
-		  "Type": "Defeats",
+		  "Type": "ConsumeProviant",
+		  "Value": 5
+		}
+	  ]
+	},
+	{
+	  "Rules": [
+	    {
+		  "Type": "Health",
+		  "Level": "Lesser"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "ConsumeProviant",
+		  "Value": 5
+		}
+	  ]
+	},
+	{
+	  "Rules": [
+	    {
+		  "Type": "Health",
+		  "Level": "Lesser"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "ConsumeProviant",
 		  "Value": 5
 		}
 	  ]
