@@ -160,6 +160,7 @@ namespace Zilon.BotEnvironment
             var survivalRandomSource = _globalServiceContainer.GetInstance<ISurvivalRandomSource>();
             var propFactory = _globalServiceContainer.GetInstance<IPropFactory>();
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
+            var perkResolver = _globalServiceContainer.GetInstance<IPerkResolver>();
 
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
             var sectorManager = _sectorServiceContainer.GetInstance<ISectorManager>();
@@ -182,7 +183,8 @@ namespace Zilon.BotEnvironment
                 survivalRandomSource,
                 propFactory,
                 sectorManager,
-                actorManager);
+                actorManager,
+                perkResolver);
 
             CreateActorEventSubscriptions();
 
@@ -443,7 +445,8 @@ namespace Zilon.BotEnvironment
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
             ISectorManager sectorManager,
-            IActorManager actorManager)
+            IActorManager actorManager,
+            IPerkResolver perkResolver)
         {
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
@@ -512,7 +515,7 @@ namespace Zilon.BotEnvironment
                 AddResourceToActor(inventory, "med-kit", 1, schemeService, propFactory);
             }
 
-            var actor = new Actor(humanPlayer.MainPerson, humanPlayer, playerActorStartNode);
+            var actor = new Actor(humanPlayer.MainPerson, humanPlayer, playerActorStartNode, perkResolver);
 
             actorManager.Add(actor);
 
