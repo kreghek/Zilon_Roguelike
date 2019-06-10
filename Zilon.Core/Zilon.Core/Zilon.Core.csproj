@@ -117,6 +117,8 @@
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalStatBonus.cs" />
+    <Compile Include="Persons\TakeHitJobProgress.cs" />
+    <Compile Include="Persons\TakeDamageJobProgress.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />

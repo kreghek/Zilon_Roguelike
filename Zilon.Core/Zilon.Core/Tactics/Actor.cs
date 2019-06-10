@@ -157,6 +157,16 @@ namespace Zilon.Core.Tactics
         public void TakeDamage(int value)
         {
             Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
+
+            if (_perkResolver != null && Person.EvolutionData != null)
+            {
+                var takeDamageProgress = new TakeDamageJobProgress(value);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.EvolutionData);
+
+                var takeHitProgress = new TakeHitJobProgress();
+                _perkResolver.ApplyProgress(takeHitProgress, Person.EvolutionData);
+            }
+
             DoDamageTaken(value);
         }
 
