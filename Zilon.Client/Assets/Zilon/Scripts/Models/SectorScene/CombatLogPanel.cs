@@ -43,6 +43,7 @@ public class CombatLogPanel : MonoBehaviour
         else
         {
             LogText.color = new Color(LogText.color.r, LogText.color.g, LogText.color.b, 0);
+            LogText.text = string.Empty;
         }
     }
 
