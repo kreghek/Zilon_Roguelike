@@ -21,13 +21,13 @@ public class SectorUiHandler : MonoBehaviour
 
     [NotNull] [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
 
-    [NotNull] [Inject(Id = "show-perks-command")] private readonly ICommand _showPerksCommand;
+    [NotNull] [Inject(Id = "show-perks-command")] private readonly ICommand _showPersonModalCommand;
 
     [NotNull] [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
 
     public Button NextTurnButton;
     public Button InventoryButton;
-    public Button PerksButton;
+    public Button PersonButton;
 
     public void FixedUpdate()
     {
@@ -41,9 +41,9 @@ public class SectorUiHandler : MonoBehaviour
             InventoryButton.interactable = _showInventoryCommand.CanExecute();
         }
 
-        if (PerksButton != null)
+        if (PersonButton != null)
         {
-            PerksButton.interactable = _showPerksCommand.CanExecute();
+            PersonButton.interactable = _showPersonModalCommand.CanExecute();
         }
     }
 
@@ -67,14 +67,14 @@ public class SectorUiHandler : MonoBehaviour
         _clientCommandExecutor.Push(_showInventoryCommand);
     }
 
-    public void ShowPerksButton_Handler()
+    public void ShowPersonModalButton_Handler()
     {
         if (_playerState.ActiveActor == null)
         {
             return;
         }
 
-        _clientCommandExecutor.Push(_showPerksCommand);
+        _clientCommandExecutor.Push(_showPersonModalCommand);
     }
 
     public void ExitGame_Handler()

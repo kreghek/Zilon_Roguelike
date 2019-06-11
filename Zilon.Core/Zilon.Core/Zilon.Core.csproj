@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppException.cs" />
+    <Compile Include="Client\Sector\IPerkViewModel.cs" />
     <Compile Include="Client\Windows\ICommonModalManager.cs" />
     <Compile Include="Client\Sector\FloorPropContainer.cs" />
     <Compile Include="Client\Globe\GlobeUiState.cs" />
