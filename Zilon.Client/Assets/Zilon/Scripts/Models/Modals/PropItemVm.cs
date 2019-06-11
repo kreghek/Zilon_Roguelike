@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 
-public class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
+public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
     public Text CountText;
     public Text DurableStatusText;
