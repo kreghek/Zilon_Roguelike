@@ -2949,14 +2949,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6964048, g: 0.8207547, b: 0.63879496, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 8aec57d5fc6353e428d269c42ee29891, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4da8047fe25300d44bd382b7a49be847, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
