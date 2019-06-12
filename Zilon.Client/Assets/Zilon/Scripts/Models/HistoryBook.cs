@@ -18,7 +18,7 @@ public class HistoryBook : MonoBehaviour
 
         foreach (var iterationHistoryGroup in iterationHistory)
         {
-            HistoryText.text += $"{iterationHistoryGroup.Key} iteration" + Environment.NewLine;
+            HistoryText.text += $"Season {iterationHistoryGroup.Key + 1}" + Environment.NewLine;
             foreach (var historyItem in iterationHistoryGroup)
             {
                 HistoryText.text += historyItem.Event + Environment.NewLine;

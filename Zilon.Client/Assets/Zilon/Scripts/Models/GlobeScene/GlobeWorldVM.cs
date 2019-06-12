@@ -29,7 +29,6 @@ public class GlobeWorldVM : MonoBehaviour
     public SceneLoader SectorSceneLoader;
     public SceneLoader GlobeSceneLoader;
     public GameObject MapBackground;
-    public HistoryBook HistoryBook;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -54,7 +53,9 @@ public class GlobeWorldVM : MonoBehaviour
         {
             var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
             _globeManager.Globe = globwGenerationResult.Globe;
-            HistoryBook.SetHistory(globwGenerationResult.History);
+            _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
+            //TODO Эту строку нужно убрать.
+            // Модал с историей будет вызываться из извентаря при использовании книги истории.
 
             var startCell = _globeManager.Globe.StartProvince;
 
@@ -70,6 +71,8 @@ public class GlobeWorldVM : MonoBehaviour
             _player.GlobeNode = startNode;
 
             startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+            _globeModalManager.ShowHistoryBookModal();
         }
 
         var currentGlobeCell = _player.Terrain;

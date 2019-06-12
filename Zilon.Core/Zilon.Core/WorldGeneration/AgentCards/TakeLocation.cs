@@ -96,8 +96,12 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                 if (globe.LocalitiesCells.TryGetValue(freeLocaltion1, out var otherCheckLocality))
                 {
-                    targetLocality = otherCheckLocality;
-                    break;
+                    // Захватываем только города, которые не принадлежат нашему государству.
+                    if (otherCheckLocality.Owner != agent.Realm)
+                    {
+                        targetLocality = otherCheckLocality;
+                        break;
+                    }
                 }
             }
 

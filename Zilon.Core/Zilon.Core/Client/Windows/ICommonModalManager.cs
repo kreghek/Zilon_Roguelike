@@ -5,5 +5,7 @@
         void ShowQuitComfirmationModal();
 
         void ShowScoreModal();
+
+        void ShowHistoryBookModal();
     }
 }
