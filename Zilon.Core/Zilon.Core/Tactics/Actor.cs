@@ -15,6 +15,8 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
+        private readonly IPerkResolver _perkResolver;
+
         public event EventHandler Moved;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
         public event EventHandler<UsedActEventArgs> UsedAct;
@@ -41,6 +43,12 @@ namespace Zilon.Core.Tactics
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
         }
 
         public bool CanBeDamaged()
@@ -127,6 +135,12 @@ namespace Zilon.Core.Tactics
             {
                 ConsumeResource(usedProp);
             }
+
+            if (_perkResolver != null)
+            {
+                var consumeProgress = new ConsumeProviantJobProgress();
+                _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+            }
         }
 
         private void ConsumeResource(IProp usedProp)
@@ -143,6 +157,16 @@ namespace Zilon.Core.Tactics
         public void TakeDamage(int value)
         {
             Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
+
+            if (_perkResolver != null && Person.EvolutionData != null)
+            {
+                var takeDamageProgress = new TakeDamageJobProgress(value);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.EvolutionData);
+
+                var takeHitProgress = new TakeHitJobProgress();
+                _perkResolver.ApplyProgress(takeHitProgress, Person.EvolutionData);
+            }
+
             DoDamageTaken(value);
         }
 

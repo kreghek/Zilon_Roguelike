@@ -128,12 +128,13 @@ namespace Zilon.Core.Spec.Contexts
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
             var humanPlayer = Container.GetInstance<HumanPlayer>();
+            var perkResolver = Container.GetInstance<IPerkResolver>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -215,7 +216,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
-            [NotNull] IMapNode startNode)
+            [NotNull] IMapNode startNode,
+            [NotNull] IPerkResolver perkResolver)
         {
 
             var schemeService = Container.GetInstance<ISchemeService>();
@@ -233,7 +235,7 @@ namespace Zilon.Core.Spec.Contexts
                 survivalRandomSource,
                 inventory);
 
-            var actor = new Actor(person, player, startNode);
+            var actor = new Actor(person, player, startNode, perkResolver);
 
             return actor;
         }

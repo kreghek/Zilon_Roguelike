@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppException.cs" />
+    <Compile Include="Client\Sector\IPerkViewModel.cs" />
     <Compile Include="Client\Windows\ICommonModalManager.cs" />
     <Compile Include="Client\Sector\FloorPropContainer.cs" />
     <Compile Include="Client\Globe\GlobeUiState.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
@@ -116,6 +118,9 @@
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
+    <Compile Include="Persons\SurvivalStatBonus.cs" />
+    <Compile Include="Persons\TakeHitJobProgress.cs" />
+    <Compile Include="Persons\TakeDamageJobProgress.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />

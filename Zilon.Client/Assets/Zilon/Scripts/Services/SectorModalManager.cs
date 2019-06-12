@@ -23,11 +23,9 @@ namespace Assets.Zilon.Scripts.Services
 
         public InventoryModalBody InventoryModalPrefab;
 
-        public PerksModalBody PerksModalPrefab;
+        public PerksModalBody PersonModalPrefab;
 
         public InstructionModalBody InstructionModalPrefab;
-
-        public WinModalBody WinModalPrefab;
 
         public TraderModalBody TraderModalPrefab;
 
@@ -60,7 +58,7 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowPerksModal(IActor actor)
         {
-            var modalBody = CreateWindowHandler<PerksModalBody>(PerksModalPrefab.gameObject);
+            var modalBody = CreateWindowHandler<PerksModalBody>(PersonModalPrefab.gameObject);
 
             modalBody.Init(actor);
         }
@@ -68,11 +66,6 @@ namespace Assets.Zilon.Scripts.Services
         public void ShowInstructionModal()
         {
             CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
-        }
-
-        public void ShowWinModal()
-        {
-            CreateWindowHandler<WinModalBody>(WinModalPrefab.gameObject);
         }
 
         public void ShowTraderModal(CitizenPerson trader)
