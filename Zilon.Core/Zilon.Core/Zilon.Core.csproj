@@ -435,6 +435,8 @@
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
     <Compile Include="WorldGeneration\DirectBitmap.cs" />
+    <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
+    <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />

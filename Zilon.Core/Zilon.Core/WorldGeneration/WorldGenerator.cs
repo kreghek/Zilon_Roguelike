@@ -56,6 +56,8 @@ namespace Zilon.Core.WorldGeneration
                 Terrain = new TerrainCell[Size][]
             };
 
+            var globeHistory = new GlobeGenerationHistory();
+
             var realmTask = CreateRealms(globe);
             var terrainTask = CreateTerrain(globe);
 
@@ -70,7 +72,7 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
-            ProcessIterations(globe, cardQueue);
+            ProcessIterations(globe, cardQueue, globeHistory);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
@@ -393,9 +395,9 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue, GlobeGenerationHistory globeHistory)
         {
-            for (var year = 0; year < HistoryIterationCount; year++)
+            for (var iteration = 0; iteration < HistoryIterationCount; iteration++)
             {
                 foreach (var agent in globe.Agents.ToArray())
                 {
@@ -403,7 +405,13 @@ namespace Zilon.Core.WorldGeneration
 
                     if (card.CanUse(agent, globe))
                     {
-                        card.Use(agent, globe, _dice);
+                        var result = card.Use(agent, globe, _dice);
+
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            var historyItem = new GlobeGenerationHistoryItem(result, iteration);
+                            globeHistory.Items.Add(historyItem);
+                        }
                     }
 
                     cardQueue.Enqueue(card);
@@ -434,7 +442,7 @@ namespace Zilon.Core.WorldGeneration
                 var agent = new Agent
                 {
                     Name = $"agent {i}",
-                    Localtion = locality.Cell,
+                    Location = locality.Cell,
                     Realm = locality.Owner
                 };
 
