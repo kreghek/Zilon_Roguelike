@@ -11,7 +11,7 @@ using Zilon.Core.WorldGeneration;
 
 public class GlobeMinimap : MonoBehaviour
 {
-    private const int CELL_SIZE = 4;
+    private const int CELL_SIZE = 8;
 
     public Image MinimapContent;
 
@@ -87,10 +87,10 @@ public class GlobeMinimap : MonoBehaviour
             DrawPlayer(_realmTexture, playerCellCoords.X, playerCellCoords.Y);
         }
 
-        _realmTexture.filterMode = FilterMode.Point;
+        _realmTexture.filterMode = FilterMode.Trilinear;
         _realmTexture.Apply();
 
-        _branchesTexture.filterMode = FilterMode.Point;
+        _branchesTexture.filterMode = FilterMode.Trilinear;
         _branchesTexture.Apply();
     }
 
