@@ -96,9 +96,12 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 // Популяция нового нас.пункта минимальна.
                 // Одна единица популяци из текущего нас.пункта снимается.
                 // Считается, что часть жителей мигрировали для начала строительства нового нас.пункта.
+
+                var localityName = globe.GetLocalityName(dice);
+
                 var createdLocality = new Locality
                 {
-                    Name = currentLocality.Name + " " + agent.Name,
+                    Name = localityName,
                     Branches = new Dictionary<BranchType, int> { { firstBranch.Key, 1 } },
                     Cell = freeLocaltion,
 

@@ -54,7 +54,9 @@ namespace Zilon.Core.WorldGeneration
         {
             var globe = new Globe
             {
-                Terrain = new TerrainCell[WORLD_SIZE][]
+                Terrain = new TerrainCell[WORLD_SIZE][],
+                agentNameGenerator = new RandomName(_dice),
+                cityNameGenerator = new CityNameGenerator(_dice)
             };
 
             var globeHistory = new GlobeGenerationHistory();
@@ -438,13 +440,12 @@ namespace Zilon.Core.WorldGeneration
 
         private void CreateStartAgents(Globe globe)
         {
-            var agentNameGenerator = new RandomName(_dice);
             for (var i = 0; i < StartAgentCount; i++)
             {
                 var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
                 var locality = globe.Localities[rolledLocalityIndex];
 
-                var agentName = agentNameGenerator.Generate(Sex.Male, 1);
+                var agentName = globe.agentNameGenerator.Generate(Sex.Male, 1);
 
                 var agent = new Agent
                 {
@@ -472,9 +473,7 @@ namespace Zilon.Core.WorldGeneration
                 var randomX = _dice.Roll(0, WORLD_SIZE - 1);
                 var randomY = _dice.Roll(0, WORLD_SIZE - 1);
 
-                var localityNameIndex = _dice.Roll(0, _openLocalityNames.Count - 1);
-                var localityName = _openLocalityNames[localityNameIndex];
-                _openLocalityNames.RemoveAt(localityNameIndex);
+                var localityName = globe.GetLocalityName(_dice);
 
                 var locality = new Locality()
                 {
@@ -545,59 +544,6 @@ namespace Zilon.Core.WorldGeneration
             "Eagle Home Keepers",
             "Cult of Liquid DOG",
             "Free Сities Сouncil"
-        };
-
-        private readonly List<string> _openLocalityNames = new List<string> {
-            "Shurstin",
-            "Eyhosall",
-            "Slahross",
-            "Triadgend",
-            "Khaacshire",
-            "Blanbu",
-            "Feigh",
-            "Firie",
-            "Anceron",
-            "Arkvine",
-            "Mosfield",
-            "Haburgh",
-            "Ubludmore",
-            "Cufson",
-            "Peegow",
-            "Oyhul",
-            "Zok",
-            "Ofok",
-            "Andover",
-            "Ockta",
-            "Yaastin",
-            "Yhoifcester",
-            "Lueby",
-            "Praswell",
-            "Luenross",
-            "Klille",
-            "Hery",
-            "Glolk",
-            "Urydale",
-            "Entoson",
-            "Flennard",
-            "Votron",
-            "Pheving",
-            "Cluross",
-            "Gierfield",
-            "Zeley",
-            "Ayark",
-            "Arathe",
-            "Ontdiff",
-            "Olisgend",
-            "Hubridge",
-            "Kheudale",
-            "Phamgan",
-            "Cekmery",
-            "Cepham",
-            "Zhurgh",
-            "Dento",
-            "Foni",
-            "Eysall",
-            "Edoson"
         };
     }
 }

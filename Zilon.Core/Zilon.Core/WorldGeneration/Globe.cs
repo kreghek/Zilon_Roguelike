@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -11,6 +13,10 @@ namespace Zilon.Core.WorldGeneration
     /// </summary>
     public class Globe
     {
+        public RandomName agentNameGenerator;
+
+        public CityNameGenerator cityNameGenerator;
+
         public TerrainCell[][] Terrain { get; set; }
         public List<Realm> Realms = new List<Realm>();
 
@@ -61,6 +67,11 @@ namespace Zilon.Core.WorldGeneration
                 realmBmp.Bitmap.Save(Path.Combine(path, "realms.bmp"), ImageFormat.Bmp);
                 branchmBmp.Bitmap.Save(Path.Combine(path, "branches.bmp"), ImageFormat.Bmp);
             }
+        }
+
+        public string GetLocalityName(IDice _dice)
+        {
+            return cityNameGenerator.Generate();
         }
     }
 }
