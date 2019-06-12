@@ -49,7 +49,7 @@ namespace Zilon.Core.WorldGeneration
         /// <returns>
         /// Возвращает объект игрового мира.
         /// </returns>
-        public Task<Globe> GenerateGlobeAsync()
+        public Task<GlobeGenerationResult> GenerateGlobeAsync()
         {
             var globe = new Globe
             {
@@ -81,7 +81,8 @@ namespace Zilon.Core.WorldGeneration
             agentsClock.Stop();
             Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
 
-            return Task.FromResult(globe);
+            var result = new GlobeGenerationResult(globe, globeHistory);
+            return Task.FromResult(result);
         }
 
         private TerrainCell GetStartProvinceCoords(Globe globe)

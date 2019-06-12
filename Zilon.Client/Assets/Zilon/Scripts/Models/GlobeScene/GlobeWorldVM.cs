@@ -29,6 +29,7 @@ public class GlobeWorldVM : MonoBehaviour
     public SceneLoader SectorSceneLoader;
     public SceneLoader GlobeSceneLoader;
     public GameObject MapBackground;
+    public HistoryBook HistoryBook;
 
     private GroupVM _groupViewModel;
     private GlobeRegion _region;
@@ -51,7 +52,9 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.Globe == null)
         {
-            _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
+            var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+            _globeManager.Globe = globwGenerationResult.Globe;
+            HistoryBook.SetHistory(globwGenerationResult.History);
 
             var startCell = _globeManager.Globe.StartProvince;
 

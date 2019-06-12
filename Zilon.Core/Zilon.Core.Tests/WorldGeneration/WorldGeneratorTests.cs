@@ -23,8 +23,8 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
-            globe.Save(@"c:\worldgen");
+            var result = await generator.GenerateGlobeAsync();
+            result.Globe.Save(@"c:\worldgen");
         }
 
         [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
@@ -35,9 +35,9 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
+            var result = await generator.GenerateGlobeAsync();
 
-            var region = generator.GenerateRegionAsync(globe, globe.Localities.First().Cell);
+            var region = generator.GenerateRegionAsync(result.Globe, result.Globe.Localities.First().Cell);
         }
 
         [Test]
@@ -48,11 +48,11 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
+            var result = await generator.GenerateGlobeAsync();
 
 
             // ACT
-            var region = await generator.GenerateRegionAsync(globe, globe.StartProvince);
+            var region = await generator.GenerateRegionAsync(result.Globe, result.Globe.StartProvince);
 
 
 
