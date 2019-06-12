@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {
@@ -31,13 +32,15 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
 
+            var agentNameGenerator = new RandomName(dice);
+
             if (highestBranchs.Any())
             {
                 var firstBranch = highestBranchs.First();
 
                 var agentDisciple = new Agent
                 {
-                    Name = agent.Name + " disciple",
+                    Name = agentNameGenerator.Generate(Sex.Male, 1),
                     Location = agent.Location,
                     Realm = agent.Realm,
                     Hp = 3

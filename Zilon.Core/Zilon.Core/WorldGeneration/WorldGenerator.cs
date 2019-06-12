@@ -10,6 +10,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
+using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -286,7 +287,7 @@ namespace Zilon.Core.WorldGeneration
 
         private GlobeRegionPattern GetDefaultPattrn()
         {
-            var defaultPatterns = new[] 
+            var defaultPatterns = new[]
             {
                 GlobeRegionPatterns.Angle,
                 GlobeRegionPatterns.Tringle,
@@ -437,14 +438,17 @@ namespace Zilon.Core.WorldGeneration
 
         private void CreateStartAgents(Globe globe)
         {
+            var agentNameGenerator = new RandomName(_dice);
             for (var i = 0; i < StartAgentCount; i++)
             {
                 var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
                 var locality = globe.Localities[rolledLocalityIndex];
 
+                var agentName = agentNameGenerator.Generate(Sex.Male, 1);
+
                 var agent = new Agent
                 {
-                    Name = $"agent {i}",
+                    Name = agentName,
                     Location = locality.Cell,
                     Realm = locality.Owner
                 };
@@ -468,9 +472,13 @@ namespace Zilon.Core.WorldGeneration
                 var randomX = _dice.Roll(0, WORLD_SIZE - 1);
                 var randomY = _dice.Roll(0, WORLD_SIZE - 1);
 
+                var localityNameIndex = _dice.Roll(0, _openLocalityNames.Count - 1);
+                var localityName = _openLocalityNames[localityNameIndex];
+                _openLocalityNames.RemoveAt(localityNameIndex);
+
                 var locality = new Locality()
                 {
-                    Name = $"L{i}",
+                    Name = localityName,
                     Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
                     Population = 3
@@ -518,7 +526,7 @@ namespace Zilon.Core.WorldGeneration
             {
                 var realm = new Realm
                 {
-                    Name = $"realm {i}",
+                    Name = _realmNames[i],
                     Color = realmColors[i]
                 };
 
@@ -527,5 +535,69 @@ namespace Zilon.Core.WorldGeneration
 
             return Task.CompletedTask;
         }
+
+        private readonly string[] _realmNames = new[] {
+            "Sons Of The Law",
+            "Gaarn Folk",
+            "Sun'Ost Union",
+            "Hellgrimar Republik",
+            "Anklav Of The Seven Seas",
+            "Eagle Home Keepers",
+            "Cult of Liquid DOG",
+            "Free Сities Сouncil"
+        };
+
+        private readonly List<string> _openLocalityNames = new List<string> {
+            "Shurstin",
+            "Eyhosall",
+            "Slahross",
+            "Triadgend",
+            "Khaacshire",
+            "Blanbu",
+            "Feigh",
+            "Firie",
+            "Anceron",
+            "Arkvine",
+            "Mosfield",
+            "Haburgh",
+            "Ubludmore",
+            "Cufson",
+            "Peegow",
+            "Oyhul",
+            "Zok",
+            "Ofok",
+            "Andover",
+            "Ockta",
+            "Yaastin",
+            "Yhoifcester",
+            "Lueby",
+            "Praswell",
+            "Luenross",
+            "Klille",
+            "Hery",
+            "Glolk",
+            "Urydale",
+            "Entoson",
+            "Flennard",
+            "Votron",
+            "Pheving",
+            "Cluross",
+            "Gierfield",
+            "Zeley",
+            "Ayark",
+            "Arathe",
+            "Ontdiff",
+            "Olisgend",
+            "Hubridge",
+            "Kheudale",
+            "Phamgan",
+            "Cekmery",
+            "Cepham",
+            "Zhurgh",
+            "Dento",
+            "Foni",
+            "Eysall",
+            "Edoson"
+        };
     }
 }

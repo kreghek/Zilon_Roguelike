@@ -444,6 +444,7 @@
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
@@ -467,6 +468,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
