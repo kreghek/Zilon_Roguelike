@@ -48,22 +48,22 @@
                 /// <summary>
                 /// Трусливые крысы.
                 /// </summary>
-                public const string Cowardly = "cowardly";
+                public const string Cowardly = "cowardly-rat";
 
                 /// <summary>
                 /// Адские крысы.
                 /// </summary>
-                public const string Hell = "hell";
+                public const string Hell = "hell-rat";
 
                 /// <summary>
                 /// Лунные крысы.
                 /// </summary>
-                public const string Moon = "moon";
+                public const string Moon = "moon-rat";
 
                 /// <summary>
                 /// Крысы-мутанты.
                 /// </summary>
-                public const string Mutant = "mutant";
+                public const string Mutant = "mutant-rat";
             }
         }
     }
