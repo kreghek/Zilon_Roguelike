@@ -83,6 +83,7 @@ public sealed class PlayerPersonCreator : MonoBehaviour
         AddResourceToActor(inventory, "packed-food", 1);
         AddResourceToActor(inventory, "water-bottle", 1);
         AddResourceToActor(inventory, "med-kit", 1);
+        AddResourceToActor(inventory, "history-book", 1);
 
         return person;
     }

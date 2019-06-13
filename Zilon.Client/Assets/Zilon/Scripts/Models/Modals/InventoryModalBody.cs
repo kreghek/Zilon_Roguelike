@@ -17,6 +17,8 @@ using Zilon.Core.Props;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
+    private const string HISTORY_BOOK_SID = "history-book";
+
     private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
@@ -25,12 +27,14 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public InventorySlotVm EquipmentSlotPrefab;
     public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
+    public GameObject ReadButton;
 
     [NotNull] [Inject] private DiContainer _diContainer;
     [NotNull] [Inject] private ISectorUiState _playerState;
     [NotNull] [Inject] private IInventoryState _inventoryState;
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -70,8 +74,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void Init()
     {
-        // изначально скрываем кнопку использования
+        // Изначально скрываем все кнопки.
+        // Потому что изначально никакой предмет не должен быть выбран.
+        // Поэтому не ясно, какие действия доступны.
         UseButton.SetActive(false);
+        ReadButton.SetActive(false);
 
         var actor = _playerState.ActiveActor.Actor;
         var inventory = actor.Person.Inventory;
@@ -196,7 +203,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     private void PropItem_Click(object sender, EventArgs e)
     {
         var currentItemVm = (PropItemVm)sender;
-        var parentTransform = currentItemVm.transform.parent;
         foreach (var propViewModel in _propViewModels)
         {
             var isSelected = propViewModel == currentItemVm;
@@ -206,6 +212,9 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         // этот фрагмент - не дубликат
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
+
+        var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
+        ReadButton.SetActive(canRead);
         // --- этот фрагмент - не дубликат
 
         _inventoryState.SelectedProp = currentItemVm;
@@ -214,5 +223,13 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public void UseButton_Handler()
     {
         _commandManager.Push(_useSelfCommand);
+    }
+
+    public void ReadButton_Handler()
+    {
+        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
+        {
+            _commandManager.Push(_showHistoryCommand);
+        }
     }
 }
