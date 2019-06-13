@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.WorldGeneration
             result.Globe.Save(@"c:\worldgen");
         }
 
-        //[Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
+        [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
         [Test]
         public async Task GenerateAsync_ShowHistory()
         {

@@ -41,54 +41,59 @@ public sealed class PlayerPersonCreator : MonoBehaviour
         switch (classRoll)
         {
             case 1:
-                AddEquipmentToActor(person.EquipmentCarrier, 2, "short-sword");
-                AddEquipmentToActor(person.EquipmentCarrier, 1, "steel-armor");
-                AddEquipmentToActor(person.EquipmentCarrier, 3, "wooden-shield");
+                AddEquipment(person.EquipmentCarrier, 2, "short-sword");
+                AddEquipment(person.EquipmentCarrier, 1, "steel-armor");
+                AddEquipment(person.EquipmentCarrier, 3, "wooden-shield");
                 break;
 
             case 2:
-                AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe");
-                AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe");
-                AddEquipmentToActor(person.EquipmentCarrier, 0, "highlander-helmet");
+                AddEquipment(person.EquipmentCarrier, 2, "battle-axe");
+                AddEquipment(person.EquipmentCarrier, 3, "battle-axe");
+                AddEquipment(person.EquipmentCarrier, 0, "highlander-helmet");
                 break;
 
             case 3:
-                AddEquipmentToActor(person.EquipmentCarrier, 2, "bow");
-                AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-jacket");
-                AddEquipmentToActor(inventory, "short-sword");
-                AddResourceToActor(inventory, "arrow", 10);
+                AddEquipment(person.EquipmentCarrier, 2, "bow");
+                AddEquipment(person.EquipmentCarrier, 1, "leather-jacket");
+                AddEquipment(inventory, "short-sword");
+                AddResource(inventory, "arrow", 10);
                 break;
 
             case 4:
-                AddEquipmentToActor(person.EquipmentCarrier, 2, "fireball-staff");
-                AddEquipmentToActor(person.EquipmentCarrier, 1, "scholar-robe");
-                AddEquipmentToActor(person.EquipmentCarrier, 0, "wizard-hat");
-                AddResourceToActor(inventory, "mana", 15);
+                AddEquipment(person.EquipmentCarrier, 2, "fireball-staff");
+                AddEquipment(person.EquipmentCarrier, 1, "scholar-robe");
+                AddEquipment(person.EquipmentCarrier, 0, "wizard-hat");
+                AddResource(inventory, "mana", 15);
                 break;
 
             case 5:
-                AddEquipmentToActor(person.EquipmentCarrier, 2, "pistol");
-                AddEquipmentToActor(person.EquipmentCarrier, 0, "elder-hat");
-                AddResourceToActor(inventory, "bullet-45", 5);
+                AddEquipment(person.EquipmentCarrier, 2, "pistol");
+                AddEquipment(person.EquipmentCarrier, 0, "elder-hat");
+                AddResource(inventory, "bullet-45", 5);
 
-                AddResourceToActor(inventory, "packed-food", 1);
-                AddResourceToActor(inventory, "water-bottle", 1);
-                AddResourceToActor(inventory, "med-kit", 1);
+                AddResource(inventory, "packed-food", 1);
+                AddResource(inventory, "water-bottle", 1);
+                AddResource(inventory, "med-kit", 1);
 
-                AddResourceToActor(inventory, "mana", 5);
-                AddResourceToActor(inventory, "arrow", 3);
+                AddResource(inventory, "mana", 5);
+                AddResource(inventory, "arrow", 3);
                 break;
         }
 
-        AddResourceToActor(inventory, "packed-food", 1);
-        AddResourceToActor(inventory, "water-bottle", 1);
-        AddResourceToActor(inventory, "med-kit", 1);
-        AddResourceToActor(inventory, "history-book", 1);
+        AddResource(inventory, "packed-food", 1);
+        AddResource(inventory, "water-bottle", 1);
+        AddResource(inventory, "med-kit", 1);
 
         return person;
     }
 
-    private void AddEquipmentToActor(Inventory inventory, string equipmentSid)
+    public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
+    {
+        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        AddResource(inventory, resourceSid, count);
+    }
+
+    private void AddEquipment(Inventory inventory, string equipmentSid)
     {
         try
         {
@@ -102,7 +107,7 @@ public sealed class PlayerPersonCreator : MonoBehaviour
         }
     }
 
-    private void AddEquipmentToActor(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid)
+    private void AddEquipment(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid)
     {
         try
         {
@@ -116,7 +121,7 @@ public sealed class PlayerPersonCreator : MonoBehaviour
         }
     }
 
-    private void AddResourceToActor(Inventory inventory, string resourceSid, int count)
+    private void AddResource(Inventory inventory, string resourceSid, int count)
     {
         try
         {

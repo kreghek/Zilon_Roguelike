@@ -24,5 +24,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] TransSectorSids { get; set; }
         public bool IsStart { get; set; }
         public int RegionChestCountRatio { get; set; }
+        public int MinRegionMonsterCount { get; }
     }
 }
