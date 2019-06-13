@@ -10,6 +10,7 @@ namespace Zilon.Core.WorldGeneration
         public Agent()
         {
             Hp = 3;
+            Skills = new Dictionary<BranchType, int>();
         }
 
         public string Name { get; set; }
@@ -17,7 +18,7 @@ namespace Zilon.Core.WorldGeneration
         /// <summary>
         /// Текущее местоположение деятеля.
         /// </summary>
-        public TerrainCell Localtion { get; set; }
+        public TerrainCell Location { get; set; }
 
         /// <summary>
         /// Государтсво, на которое работает данный деятель.
@@ -33,7 +34,7 @@ namespace Zilon.Core.WorldGeneration
 
         public override string ToString()
         {
-            return $"{Name} [{Realm}] {Localtion}";
+            return $"{Name} [{Realm}] {Location}";
         }
     }
 }

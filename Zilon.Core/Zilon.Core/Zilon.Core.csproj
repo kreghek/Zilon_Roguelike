@@ -81,6 +81,7 @@
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
@@ -435,12 +436,17 @@
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
     <Compile Include="WorldGeneration\DirectBitmap.cs" />
+    <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
+    <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
+    <Compile Include="WorldGeneration\GlobeGenerationResult.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
+    <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
@@ -464,6 +470,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

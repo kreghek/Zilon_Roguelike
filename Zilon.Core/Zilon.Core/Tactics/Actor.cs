@@ -134,12 +134,12 @@ namespace Zilon.Core.Tactics
             if (useData.Consumable)
             {
                 ConsumeResource(usedProp);
-            }
 
-            if (_perkResolver != null)
-            {
-                var consumeProgress = new ConsumeProviantJobProgress();
-                _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+                if (_perkResolver != null)
+                {
+                    var consumeProgress = new ConsumeProviantJobProgress();
+                    _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+                }
             }
         }
 
