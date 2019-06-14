@@ -1,5 +1,5 @@
 {
-  "Tags": [ "weapon", "ranged" ],
+  "Tags": [ "weapon", "ranged", "wand" ],
   "Equip": {
     "ActSids": [
       "fireball"
