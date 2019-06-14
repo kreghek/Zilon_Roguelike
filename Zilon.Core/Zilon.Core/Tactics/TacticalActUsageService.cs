@@ -281,9 +281,18 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
+            if (actor.Person == null)
+            {
+                // Это может происходить в тестах,
+                // если в моках не определили персонажа.
+                //TODO Поискать решение, как всегда быть уверенным, что персонаж указан в боевых условиях, и может быть null в тестах.
+                //TODO Эта же проверка нужна в CountActorDefeat (учёт убиства актёра).
+                return;
+            }
+
             var evolutionData = actor.Person.EvolutionData;
 
-            //TODO Такую же проверку добавить в CountActorDefeat
+            //TODO Такую же проверку добавить в CountActorDefeat (учёт убиства актёра).
             if (evolutionData == null)
             {
                 return;
