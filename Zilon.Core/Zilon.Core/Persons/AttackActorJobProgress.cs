@@ -56,28 +56,39 @@ namespace Zilon.Core.Persons
                             // Засчитываем прогресс, если у оружия, которым было произведено действие,
                             // есть все указанные теги.
 
-                            var weaponHasAllTags = true;
-                            foreach (var tag in jobData.WeaponTags)
+                            Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
+                            if (jobData.WeaponTags.Any())
                             {
-                                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
-                                if (string.IsNullOrWhiteSpace(tag))
-                                {
-                                    continue;
-                                }
 
-                                if (_tacticalAct.Equipment.Scheme.Tags != null)
+                                var weaponHasAllTags = true;
+                                foreach (var tag in jobData.WeaponTags)
                                 {
-                                    if (!_tacticalAct.Equipment.Scheme.Tags.Contains(tag))
+                                    Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
+                                    if (string.IsNullOrWhiteSpace(tag))
+                                    {
+                                        continue;
+                                    }
+
+                                    if (_tacticalAct.Equipment == null)
                                     {
                                         weaponHasAllTags = false;
                                         break;
                                     }
-                                }
-                            }
 
-                            if (weaponHasAllTags)
-                            {
-                                job.Progress++;
+                                    if (_tacticalAct.Equipment.Scheme.Tags != null)
+                                    {
+                                        if (!_tacticalAct.Equipment.Scheme.Tags.Contains(tag))
+                                        {
+                                            weaponHasAllTags = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (weaponHasAllTags)
+                                {
+                                    job.Progress++;
+                                }
                             }
                         }
                         else if (jobData.MonsterTags != null)

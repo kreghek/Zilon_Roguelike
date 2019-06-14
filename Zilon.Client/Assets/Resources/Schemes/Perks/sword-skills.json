@@ -1,0 +1,22 @@
+{
+  "Name": {
+    "Ru": "Навыки владения мечами",
+	"En": "Sword Skills"
+  },
+  "Levels":[
+    {
+	  "Rules": [
+	    
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "AttacksActor",
+		  "Value": 30,
+		  "Data":[
+			"{\"WeaponTags\":[\"sword\"]}"
+		  ]
+		}
+	  ]
+	}
+  ]
+}
