@@ -244,6 +244,8 @@ namespace Zilon.Core.Tactics
 
                 targetActor.TakeDamage(actEfficient);
 
+                CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
+
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
                     var damagedEquipment = GetDamagedEquipment(targetActor);
@@ -269,6 +271,27 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private void CountTargetActorAttack(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        {
+            if (actor.Person is MonsterPerson)
+            {
+                // Монстры не могут прокачиваться.
+                return;
+            }
+
+            var evolutionData = actor.Person.EvolutionData;
+
+            //TODO Такую же проверку добавить в CountActorDefeat
+            if (evolutionData == null)
+            {
+                return;
+            }
+
+            var progress = new AttackActorJobProgress(targetActor, tacticalAct);
+
+            _perkResolver.ApplyProgress(progress, evolutionData);
         }
 
         private Equipment GetDamagedEquipment(IActor targetActor)

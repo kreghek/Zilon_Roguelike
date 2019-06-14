@@ -108,6 +108,8 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="Persons\AttackActorJobData.cs" />
+    <Compile Include="Persons\AttackActorJobProgress.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
