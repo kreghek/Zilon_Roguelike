@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Мантикора",
-	"En": "Manticore"
+    "En": "Manticore"
   },
   "Hp": 60,
   "PrimaryAct": {
@@ -17,9 +17,15 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 75
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "beast",
+    "flying"
+  ]
 }

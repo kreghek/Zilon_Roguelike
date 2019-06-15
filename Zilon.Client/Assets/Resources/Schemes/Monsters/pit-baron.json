@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Барон Ямы",
-	"En": "Pit Baron"
+    "En": "Pit Baron"
   },
   "Hp": 20,
   "PrimaryAct": {
@@ -17,9 +17,15 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 200
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 200,
+  "Tags": [
+    "human",
+    "eldrich"
+  ]
 }

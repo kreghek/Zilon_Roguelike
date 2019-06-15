@@ -1,4 +1,8 @@
 {
+  "Name": {
+    "Ru": "Ночной убийца",
+    "En": "Night stalker"
+  },
   "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
@@ -13,8 +17,8 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -24,6 +28,15 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "default", "champion-loot" ],
-  "BaseScore": 200
+  "DropTableSids": [
+    "survival",
+    "default",
+    "champion-loot"
+  ],
+  "BaseScore": 200,
+  "Tags": [
+    "eldrich",
+    "human",
+    "flying"
+  ]
 }

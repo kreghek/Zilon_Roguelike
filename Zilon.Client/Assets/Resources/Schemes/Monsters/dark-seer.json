@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Темный провидец",
-	"En": "Dark seer"
+    "En": "Dark seer"
   },
   "Hp": 3,
   "PrimaryAct": {
@@ -17,23 +17,22 @@
       "Type": "Shadow",
       "Impact": "Psy"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
-      {
-        "Type": "FuryDefence",
-        "Level": "Grand"
-      }
-    ],
-	"Defenses": [
       {
         "Type": "ShadowDefence",
         "Level": "Normal"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-   "BaseScore": 75
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "unclean"
+  ]
 }
