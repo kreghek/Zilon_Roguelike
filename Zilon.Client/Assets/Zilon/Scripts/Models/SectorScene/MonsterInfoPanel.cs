@@ -31,7 +31,7 @@ public class MonsterInfoPanel : MonoBehaviour
 
             if (actorViewModel.Actor.Person is MonsterPerson monsterPerson)
             {
-                MonsterNameText.text = monsterPerson.Scheme.Name.En ?? monsterPerson.Scheme.Name.Ru;
+                MonsterNameText.text = monsterPerson.Scheme.Name?.En ?? monsterPerson.Scheme.Name?.Ru ?? "[No Name]";
 
                 var hpStat = monsterPerson.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
                 if (hpStat != null)
