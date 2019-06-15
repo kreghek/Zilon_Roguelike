@@ -4,6 +4,8 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Newtonsoft.Json;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons.Auxiliary;
@@ -70,7 +72,8 @@ namespace Zilon.Core.Persons
             ClearCalculatedStats();
             CalcCombatStats();
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+            var perks = GetPerksSafe();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
             Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
@@ -137,7 +140,7 @@ namespace Zilon.Core.Persons
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private void CalcPerkBonuses(Dictionary<SkillStatType, float> bonusDict)
         {
-            var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+            var archievedPerks = EvolutionData.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -353,9 +356,21 @@ namespace Zilon.Core.Persons
 
             CalcCombatStats();
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+            var perks = GetPerksSafe();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
 
             CalcSurvivalStats();
+        }
+
+        private IEnumerable<IPerk> GetPerksSafe()
+        {
+            var perks = EvolutionData?.GetArchievedPerks();
+            if (perks == null)
+            {
+                perks = new IPerk[0];
+            }
+
+            return perks;
         }
 
         private void CalcSurvivalStats()
@@ -376,7 +391,7 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var archievedPerks = EvolutionData.Perks.Where(x => x.CurrentLevel != null).ToArray();
+            var archievedPerks = EvolutionData.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -520,6 +535,9 @@ namespace Zilon.Core.Persons
 
             CalcCombatStats();
 
+            var perks = GetPerksSafe();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+
             CalcSurvivalStats();
         }
 
@@ -538,12 +556,16 @@ namespace Zilon.Core.Persons
                 CalcCombatStats();
             }
 
-            TacticalActCarrier.Acts = CalcActs(EquipmentCarrier);
+            var perks = GetPerksSafe();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
 
             CalcSurvivalStats();
         }
 
-        private ITacticalAct[] CalcActs(IEnumerable<Equipment> equipments)
+        private static ITacticalAct[] CalcActs(ITacticalActScheme defaultActScheme,
+            IEnumerable<Equipment> equipments, 
+            EffectCollection effects,
+            IEnumerable<IPerk> perks)
         {
             if (equipments == null)
             {
@@ -552,7 +574,7 @@ namespace Zilon.Core.Persons
 
             var actList = new List<ITacticalAct>();
 
-            var defaultAct = CreateTacticalAct(_defaultActScheme, Effects, equipment: null);
+            var defaultAct = CreateTacticalAct(defaultActScheme, equipment: null, effects: effects, perks: perks);
             actList.Insert(0, defaultAct);
 
             foreach (var equipment in equipments)
@@ -564,7 +586,7 @@ namespace Zilon.Core.Persons
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var act = CreateTacticalAct(actScheme, Effects, equipment);
+                    var act = CreateTacticalAct(actScheme, equipment, effects, perks);
 
                     actList.Insert(0, act);
                 }
@@ -573,42 +595,152 @@ namespace Zilon.Core.Persons
             return actList.ToArray();
         }
 
-        private ITacticalAct CreateTacticalAct(ITacticalActScheme scheme, EffectCollection effects, Equipment equipment)
+        private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
+            [NotNull] Equipment equipment,
+            [NotNull] EffectCollection effects,
+            [NotNull, ItemNotNull] IEnumerable<IPerk> perks)
+        {
+            var toHitModifierValue = 0;
+            var efficientModifierValue = 0;
+            var efficientRollUnmodified = scheme.Stats.Efficient;
+            CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
+            CalcPerkBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
+
+            var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
+            var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
+                efficientRollUnmodified.Count,
+                efficientModifierValue);
+
+            return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
+        }
+
+        private static void CalcPerkBonusesOnTacticalAct([NotNull, ItemNotNull] IEnumerable<IPerk> archievedPerks,
+            [NotNull] Equipment equipment,
+            ref int toHitModifierValue,
+            ref int efficientModifierValue)
+        {
+            foreach (var perk in archievedPerks)
+            {
+                var currentLevel = perk.CurrentLevel;
+                var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
+
+                if (currentLevelScheme.Rules == null)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i <= currentLevel.Sub; i++)
+                {
+                    foreach (var rule in currentLevelScheme.Rules)
+                    {
+                        switch (rule.Type)
+                        {
+                            case PersonRuleType.Damage:
+                                if (string.IsNullOrWhiteSpace(rule.Params))
+                                {
+                                    switch (rule.Level)
+                                    {
+                                        case PersonRuleLevel.Lesser:
+                                            efficientModifierValue++;
+                                            break;
+
+                                        case PersonRuleLevel.Normal:
+                                            efficientModifierValue += 3;
+                                            break;
+
+                                        case PersonRuleLevel.Grand:
+                                            efficientModifierValue += 5;
+                                            break;
+
+                                        case PersonRuleLevel.Absolute:
+                                            efficientModifierValue += 10;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
+                                    if (damagePerkParams.WeaponTags != null && equipment != null)
+                                    {
+                                        var hasAllTags = true;
+                                        foreach (var requiredTag in damagePerkParams.WeaponTags)
+                                        {
+                                            if (equipment.Scheme.Tags?.Contains(requiredTag) != true)
+                                            {
+                                                hasAllTags = false;
+                                                break;
+                                            }
+                                        }
+
+                                        if (hasAllTags)
+                                        {
+                                            switch (rule.Level)
+                                            {
+                                                case PersonRuleLevel.Lesser:
+                                                    efficientModifierValue++;
+                                                    break;
+
+                                                case PersonRuleLevel.Normal:
+                                                    efficientModifierValue += 3;
+                                                    break;
+
+                                                case PersonRuleLevel.Grand:
+                                                    efficientModifierValue += 5;
+                                                    break;
+
+                                                case PersonRuleLevel.Absolute:
+                                                    efficientModifierValue += 10;
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void CalcSurvivalHazardOnTacticalAct(EffectCollection effects,
+            ref int toHitModifierValue,
+            ref int efficientModifierValue)
         {
             var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
-                .OrderByDescending(x => x.Level).FirstOrDefault();
+                            .OrderByDescending(x => x.Level).FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
             {
-                return new TacticalAct(scheme, scheme.Stats.Efficient, new Roll(6, 1), equipment);
+                return;
+            }
+
+            var effecientDebuffRule = greaterSurvivalEffect.Rules
+                .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+
+            var toHitDebuffRule = greaterSurvivalEffect.Rules
+                .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
+
+            if (effecientDebuffRule != null)
+            {
+                efficientModifierValue += -1;
+            }
+
+            if (toHitDebuffRule != null)
+            {
+                toHitModifierValue += -1;
+            }
+        }
+
+        private static Roll CreateTacticalActRoll(int dice, int count, int modifierValue)
+        {
+            if (modifierValue == 0)
+            {
+                return new Roll(dice, count);
             }
             else
             {
-                var effecientBuffRule = greaterSurvivalEffect.Rules
-                    .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
-
-                var toHitBuffRule = greaterSurvivalEffect.Rules
-                    .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
-
-                var efficientRoll = scheme.Stats.Efficient;
-                if (effecientBuffRule != null)
-                {
-                    var modifiers = new RollModifiers(-1);
-                    efficientRoll = new Roll(efficientRoll.Dice, efficientRoll.Count, modifiers);
-                }
-
-                Roll toHitRoll;
-                if (toHitBuffRule == null)
-                {
-                    toHitRoll = new Roll(6, 1);
-                }
-                else
-                {
-                    var modifiers = new RollModifiers(-1);
-                    toHitRoll = new Roll(6, 1, modifiers);
-                }
-
-                return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
+                var modifier = new RollModifiers(modifierValue);
+                return new Roll(dice, count, modifier);
             }
         }
 

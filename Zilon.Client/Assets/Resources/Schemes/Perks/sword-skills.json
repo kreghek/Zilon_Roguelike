@@ -6,7 +6,11 @@
   "Levels":[
     {
 	  "Rules": [
-	    
+	    {
+			"Type": "Damage",
+			"Level": "Lesser",
+			"Params": "{\"WeaponTags\":[\"sword\"]}"
+		}
 	  ],
 	  "Jobs": [
 	    {

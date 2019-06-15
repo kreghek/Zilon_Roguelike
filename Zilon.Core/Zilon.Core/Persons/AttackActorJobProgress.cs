@@ -33,8 +33,7 @@ namespace Zilon.Core.Persons
 
                 if (job.Scheme.Data == null)
                 {
-                    job.Progress++;
-                    modifiedJobs.Add(job);
+                    AddProgress(job, modifiedJobs);
                 }
                 else
                 {
@@ -87,7 +86,7 @@ namespace Zilon.Core.Persons
 
                                 if (weaponHasAllTags)
                                 {
-                                    job.Progress++;
+                                    AddProgress(job, modifiedJobs);
                                 }
                             }
                         }
@@ -108,6 +107,12 @@ namespace Zilon.Core.Persons
             }
 
             return modifiedJobs.ToArray();
+        }
+
+        private static void AddProgress(IJob job, List<IJob> modifiedJobs)
+        {
+            job.Progress++;
+            modifiedJobs.Add(job);
         }
     }
 }

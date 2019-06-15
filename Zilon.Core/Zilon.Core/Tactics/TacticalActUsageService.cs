@@ -217,7 +217,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Наносит урон актёру.
+        /// Производит попытку нанесения урона целевову актёру с учётом обороны и брони.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
@@ -231,7 +231,7 @@ namespace Zilon.Core.Tactics
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
-            var factToHitRoll = _actUsageRandomSource.RollToHit();
+            var factToHitRoll = _actUsageRandomSource.RollToHit(tacticalActRoll.TacticalAct.ToHit);
 
             if (factToHitRoll >= successToHitRoll)
             {
