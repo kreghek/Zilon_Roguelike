@@ -1,7 +1,7 @@
 {
   "Name": {
-    "Ru": "Навыки владения мечами",
-	"En": "Sword Skills"
+    "Ru": "Навыки владения булавами",
+	"En": "Mace Skills"
   },
   "Levels":[
     {
@@ -9,7 +9,7 @@
 	    {
 			"Type": "ToHit",
 			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"sword\"]}"
+			"Params": "{\"WeaponTags\":[\"mace\"]}"
 		}
 	  ],
 	  "Jobs": [
@@ -17,7 +17,7 @@
 		  "Type": "AttacksActor",
 		  "Value": 30,
 		  "Data":[
-			"{\"WeaponTags\":[\"sword\"]}"
+			"{\"WeaponTags\":[\"mace\"]}"
 		  ]
 		}
 	  ]
@@ -27,12 +27,12 @@
 	    {
 			"Type": "Damage",
 			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"sword\"]}"
+			"Params": "{\"WeaponTags\":[\"mace\"]}"
 		},
 		 {
 			"Type": "ToHit",
 			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"sword\"]}"
+			"Params": "{\"WeaponTags\":[\"mace\"]}"
 		}
 	  ],
 	  "Jobs": [
@@ -40,7 +40,7 @@
 		  "Type": "AttacksActor",
 		  "Value": 100,
 		  "Data":[
-			"{\"WeaponTags\":[\"sword\"]}"
+			"{\"WeaponTags\":[\"mace\"]}"
 		  ]
 		}
 	  ]

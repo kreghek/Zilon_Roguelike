@@ -636,70 +636,81 @@ namespace Zilon.Core.Persons
                         switch (rule.Type)
                         {
                             case PersonRuleType.Damage:
-                                if (string.IsNullOrWhiteSpace(rule.Params))
-                                {
-                                    switch (rule.Level)
-                                    {
-                                        case PersonRuleLevel.Lesser:
-                                            efficientModifierValue++;
-                                            break;
+                                efficientModifierValue = GetRollModifierByPerkRule(equipment, efficientModifierValue, rule);
+                                break;
 
-                                        case PersonRuleLevel.Normal:
-                                            efficientModifierValue += 3;
-                                            break;
-
-                                        case PersonRuleLevel.Grand:
-                                            efficientModifierValue += 5;
-                                            break;
-
-                                        case PersonRuleLevel.Absolute:
-                                            efficientModifierValue += 10;
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
-                                    if (damagePerkParams.WeaponTags != null && equipment != null)
-                                    {
-                                        var hasAllTags = true;
-                                        foreach (var requiredTag in damagePerkParams.WeaponTags)
-                                        {
-                                            if (equipment.Scheme.Tags?.Contains(requiredTag) != true)
-                                            {
-                                                hasAllTags = false;
-                                                break;
-                                            }
-                                        }
-
-                                        if (hasAllTags)
-                                        {
-                                            switch (rule.Level)
-                                            {
-                                                case PersonRuleLevel.Lesser:
-                                                    efficientModifierValue++;
-                                                    break;
-
-                                                case PersonRuleLevel.Normal:
-                                                    efficientModifierValue += 3;
-                                                    break;
-
-                                                case PersonRuleLevel.Grand:
-                                                    efficientModifierValue += 5;
-                                                    break;
-
-                                                case PersonRuleLevel.Absolute:
-                                                    efficientModifierValue += 10;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                }
+                            case PersonRuleType.ToHit:
+                                toHitModifierValue = GetRollModifierByPerkRule(equipment, toHitModifierValue, rule);
                                 break;
                         }
                     }
                 }
             }
+        }
+
+        private static int GetRollModifierByPerkRule(Equipment equipment, int efficientModifierValue, PerkRuleSubScheme rule)
+        {
+            if (string.IsNullOrWhiteSpace(rule.Params))
+            {
+                switch (rule.Level)
+                {
+                    case PersonRuleLevel.Lesser:
+                        efficientModifierValue++;
+                        break;
+
+                    case PersonRuleLevel.Normal:
+                        efficientModifierValue += 3;
+                        break;
+
+                    case PersonRuleLevel.Grand:
+                        efficientModifierValue += 5;
+                        break;
+
+                    case PersonRuleLevel.Absolute:
+                        efficientModifierValue += 10;
+                        break;
+                }
+            }
+            else
+            {
+                var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
+                if (damagePerkParams.WeaponTags != null && equipment != null)
+                {
+                    var hasAllTags = true;
+                    foreach (var requiredTag in damagePerkParams.WeaponTags)
+                    {
+                        if (equipment.Scheme.Tags?.Contains(requiredTag) != true)
+                        {
+                            hasAllTags = false;
+                            break;
+                        }
+                    }
+
+                    if (hasAllTags)
+                    {
+                        switch (rule.Level)
+                        {
+                            case PersonRuleLevel.Lesser:
+                                efficientModifierValue++;
+                                break;
+
+                            case PersonRuleLevel.Normal:
+                                efficientModifierValue += 3;
+                                break;
+
+                            case PersonRuleLevel.Grand:
+                                efficientModifierValue += 5;
+                                break;
+
+                            case PersonRuleLevel.Absolute:
+                                efficientModifierValue += 10;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return efficientModifierValue;
         }
 
         private static void CalcSurvivalHazardOnTacticalAct(EffectCollection effects,

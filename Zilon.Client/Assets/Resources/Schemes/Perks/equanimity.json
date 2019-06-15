@@ -1,20 +1,20 @@
 {
   "Name": {
-    "Ru": "Боевые догмы",
-	"En": "Battle Dogmas"
+    "Ru": "Хладнокровие",
+	"En": "Equanimity"
   },
   "Levels":[
     {
 	  "Rules": [
 	    {
-		  "Type": "Damage",
+		  "Type": "ToHit",
 		  "Level": "Lesser"
 		}
 	  ],
 	  "Jobs": [
 	    {
-		  "Type": "Defeats",
-		  "Value": 50
+		  "Type": "AttacksActor",
+		  "Value": 600
 		}
 	  ]
 	}
