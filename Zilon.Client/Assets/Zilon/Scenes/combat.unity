@@ -496,6 +496,8 @@ MonoBehaviour:
     type: 3}
   ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
     type: 3}
+  HistoryModalPrefab: {fileID: 1119981412910000720, guid: 6fa0c247d7bb44b449bd6bae21992f19,
+    type: 3}
 --- !u!1 &269743640
 GameObject:
   m_ObjectHideFlags: 0

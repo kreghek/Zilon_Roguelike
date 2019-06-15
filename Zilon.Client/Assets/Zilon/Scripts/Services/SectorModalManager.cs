@@ -33,6 +33,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public ScoreModalBody ScoreModalPrefab;
 
+        public HistoryModalBody HistoryModalPrefab;
+
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
@@ -83,6 +85,12 @@ namespace Assets.Zilon.Scripts.Services
         public void ShowScoreModal()
         {
             var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
+            modalBody.Init();
+        }
+
+        public void ShowHistoryBookModal()
+        {
+            var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
             modalBody.Init();
         }
 

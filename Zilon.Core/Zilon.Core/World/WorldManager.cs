@@ -40,6 +40,11 @@ namespace Zilon.Core.World
         public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
 
         /// <summary>
+        /// История генерации мира.
+        /// </summary>
+        public GlobeGenerationHistory GlobeGenerationHistory { get; set; }
+
+        /// <summary>
         /// Обновление состояния узлов провинции.
         /// </summary>
         /// <param name="region">Провинция, которая обновляется.</param>
