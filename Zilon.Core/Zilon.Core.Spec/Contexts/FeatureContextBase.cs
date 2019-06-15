@@ -325,7 +325,7 @@ namespace Zilon.Core.Spec.Contexts
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                 .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-            actUsageRandomSourceMock.Setup(x => x.RollToHit())
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                 .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
                 .Returns(4);

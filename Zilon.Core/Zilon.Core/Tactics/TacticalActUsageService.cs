@@ -217,7 +217,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Наносит урон актёру.
+        /// Производит попытку нанесения урона целевову актёру с учётом обороны и брони.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
@@ -231,7 +231,7 @@ namespace Zilon.Core.Tactics
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
-            var factToHitRoll = _actUsageRandomSource.RollToHit();
+            var factToHitRoll = _actUsageRandomSource.RollToHit(tacticalActRoll.TacticalAct.ToHit);
 
             if (factToHitRoll >= successToHitRoll)
             {
@@ -243,6 +243,8 @@ namespace Zilon.Core.Tactics
                 }
 
                 targetActor.TakeDamage(actEfficient);
+
+                CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
@@ -269,6 +271,36 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private void CountTargetActorAttack(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        {
+            if (actor.Person is MonsterPerson)
+            {
+                // Монстры не могут прокачиваться.
+                return;
+            }
+
+            if (actor.Person == null)
+            {
+                // Это может происходить в тестах,
+                // если в моках не определили персонажа.
+                //TODO Поискать решение, как всегда быть уверенным, что персонаж указан в боевых условиях, и может быть null в тестах.
+                //TODO Эта же проверка нужна в CountActorDefeat (учёт убиства актёра).
+                return;
+            }
+
+            var evolutionData = actor.Person.EvolutionData;
+
+            //TODO Такую же проверку добавить в CountActorDefeat (учёт убиства актёра).
+            if (evolutionData == null)
+            {
+                return;
+            }
+
+            var progress = new AttackActorJobProgress(targetActor, tacticalAct);
+
+            _perkResolver.ApplyProgress(progress, evolutionData);
         }
 
         private Equipment GetDamagedEquipment(IActor targetActor)
