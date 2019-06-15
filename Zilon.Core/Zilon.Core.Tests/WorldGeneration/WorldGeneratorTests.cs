@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,14 +18,41 @@ namespace Zilon.Core.Tests.WorldGeneration
     {
         [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
         [Test]
-        public async Task GenerateAsyncTest()
+        public async Task GenerateAsync_SaveMapToPng()
         {
             var dice = new Dice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
-            globe.Save(@"c:\worldgen");
+            var result = await generator.GenerateGlobeAsync();
+            result.Globe.Save(@"c:\worldgen");
+        }
+
+        [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
+        [Test]
+        public async Task GenerateAsync_ShowHistory()
+        {
+            var dice = new Dice();
+            var schemeService = CreateSchemeService();
+            var generator = new WorldGenerator(dice, schemeService);
+
+            var result = await generator.GenerateGlobeAsync();
+
+            var historyText = string.Empty;
+
+            var iterationHistory = result.History.Items.GroupBy(x => x.Iteration).OrderBy(x => x.Key);
+
+            foreach (var iterationHistoryGroup in iterationHistory)
+            {
+                historyText += $"{iterationHistoryGroup.Key} iteration" + Environment.NewLine;
+                foreach (var historyItem in iterationHistoryGroup)
+                {
+                    historyText += historyItem.Event + Environment.NewLine;
+                }
+            }
+
+            Console.WriteLine(historyText);
+
         }
 
         [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
@@ -35,9 +63,9 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
+            var result = await generator.GenerateGlobeAsync();
 
-            var region = generator.GenerateRegionAsync(globe, globe.Localities.First().Cell);
+            var region = generator.GenerateRegionAsync(result.Globe, result.Globe.Localities.First().Cell);
         }
 
         [Test]
@@ -48,11 +76,11 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var globe = await generator.GenerateGlobeAsync();
+            var result = await generator.GenerateGlobeAsync();
 
 
             // ACT
-            var region = await generator.GenerateRegionAsync(globe, globe.StartProvince);
+            var region = await generator.GenerateRegionAsync(result.Globe, result.Globe.StartProvince);
 
 
 

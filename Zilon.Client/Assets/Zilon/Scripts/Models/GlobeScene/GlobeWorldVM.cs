@@ -51,7 +51,11 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.Globe == null)
         {
-            _globeManager.Globe = await _globeGenerator.GenerateGlobeAsync();
+            var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+            _globeManager.Globe = globwGenerationResult.Globe;
+            _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
+            //TODO Эту строку нужно убрать.
+            // Модал с историей будет вызываться из извентаря при использовании книги истории.
 
             var startCell = _globeManager.Globe.StartProvince;
 
@@ -67,6 +71,8 @@ public class GlobeWorldVM : MonoBehaviour
             _player.GlobeNode = startNode;
 
             startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+            _globeModalManager.ShowHistoryBookModal();
         }
 
         var currentGlobeCell = _player.Terrain;
@@ -75,10 +81,10 @@ public class GlobeWorldVM : MonoBehaviour
             var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, currentGlobeCell);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
-
-            // Создание соседних регионов
-            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
         }
+
+        // Создание соседних регионов
+        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
 
         Debug.Log($"Current: {currentGlobeCell}");
         Debug.Log($"Current: {_globeManager.Globe.HomeProvince}");

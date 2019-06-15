@@ -446,9 +446,20 @@ internal class SectorVM : MonoBehaviour
         if (_humanPlayer.GlobeNode == null)
         {
             // intro
-            _humanPlayer.SectorSid = null;
-            SceneManager.LoadScene("globe");
-            return;
+
+            if (e.Transition.SectorSid == null)
+            {
+                PersonCreator.AddResourceToCurrentPerson("history-book");
+                _humanPlayer.SectorSid = null;
+                SceneManager.LoadScene("globe");
+                return;
+            }
+            else
+            {
+                _humanPlayer.SectorSid = e.Transition.SectorSid;
+                StartLoadScene();
+                return;
+            }
         }
 
         var currentLocation = _humanPlayer.GlobeNode.Scheme;

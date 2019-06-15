@@ -10,6 +10,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
+using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -19,9 +20,9 @@ namespace Zilon.Core.WorldGeneration
     /// <seealso cref="IWorldGenerator" />
     public class WorldGenerator : IWorldGenerator
     {
-        private const int Size = 10;
-        private const int StartRealmCount = 4;
-        private const int HistoryIterationCount = 40;
+        private const int WORLD_SIZE = 40;
+        private const int START_ITERATION_REALMS = 8;
+        private const int HISTORY_ITERATION_COUNT = 400;
         private const int StartAgentCount = 40;
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
@@ -49,12 +50,16 @@ namespace Zilon.Core.WorldGeneration
         /// <returns>
         /// Возвращает объект игрового мира.
         /// </returns>
-        public Task<Globe> GenerateGlobeAsync()
+        public Task<GlobeGenerationResult> GenerateGlobeAsync()
         {
             var globe = new Globe
             {
-                Terrain = new TerrainCell[Size][]
+                Terrain = new TerrainCell[WORLD_SIZE][],
+                agentNameGenerator = new RandomName(_dice),
+                cityNameGenerator = new CityNameGenerator(_dice)
             };
+
+            var globeHistory = new GlobeGenerationHistory();
 
             var realmTask = CreateRealms(globe);
             var terrainTask = CreateTerrain(globe);
@@ -70,7 +75,7 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
-            ProcessIterations(globe, cardQueue);
+            ProcessIterations(globe, cardQueue, globeHistory);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
@@ -79,7 +84,8 @@ namespace Zilon.Core.WorldGeneration
             agentsClock.Stop();
             Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
 
-            return Task.FromResult(globe);
+            var result = new GlobeGenerationResult(globe, globeHistory);
+            return Task.FromResult(result);
         }
 
         private TerrainCell GetStartProvinceCoords(Globe globe)
@@ -283,7 +289,7 @@ namespace Zilon.Core.WorldGeneration
 
         private GlobeRegionPattern GetDefaultPattrn()
         {
-            var defaultPatterns = new[] 
+            var defaultPatterns = new[]
             {
                 GlobeRegionPatterns.Angle,
                 GlobeRegionPatterns.Tringle,
@@ -393,9 +399,9 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue, GlobeGenerationHistory globeHistory)
         {
-            for (var year = 0; year < HistoryIterationCount; year++)
+            for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
                 foreach (var agent in globe.Agents.ToArray())
                 {
@@ -403,7 +409,15 @@ namespace Zilon.Core.WorldGeneration
 
                     if (card.CanUse(agent, globe))
                     {
-                        card.Use(agent, globe, _dice);
+                        var result = card.Use(agent, globe, _dice);
+
+                        //TODO Переработать историю.
+                        // Сейчас вообще нерабочий вариант. Оставляю только для логов.
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            var historyItem = new GlobeGenerationHistoryItem(result, iteration);
+                            globeHistory.Items.Add(historyItem);
+                        }
                     }
 
                     cardQueue.Enqueue(card);
@@ -431,10 +445,12 @@ namespace Zilon.Core.WorldGeneration
                 var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
                 var locality = globe.Localities[rolledLocalityIndex];
 
+                var agentName = globe.agentNameGenerator.Generate(Sex.Male, 1);
+
                 var agent = new Agent
                 {
-                    Name = $"agent {i}",
-                    Localtion = locality.Cell,
+                    Name = agentName,
+                    Location = locality.Cell,
                     Realm = locality.Owner
                 };
 
@@ -452,14 +468,16 @@ namespace Zilon.Core.WorldGeneration
 
         private void CreateStartLocalities(Globe globe)
         {
-            for (var i = 0; i < StartRealmCount; i++)
+            for (var i = 0; i < START_ITERATION_REALMS; i++)
             {
-                var randomX = _dice.Roll(0, Size - 1);
-                var randomY = _dice.Roll(0, Size - 1);
+                var randomX = _dice.Roll(0, WORLD_SIZE - 1);
+                var randomY = _dice.Roll(0, WORLD_SIZE - 1);
+
+                var localityName = globe.GetLocalityName(_dice);
 
                 var locality = new Locality()
                 {
-                    Name = $"L{i}",
+                    Name = localityName,
                     Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
                     Population = 3
@@ -481,11 +499,11 @@ namespace Zilon.Core.WorldGeneration
 
         private Task CreateTerrain(Globe globe)
         {
-            for (var i = 0; i < Size; i++)
+            for (var i = 0; i < WORLD_SIZE; i++)
             {
-                globe.Terrain[i] = new TerrainCell[Size];
+                globe.Terrain[i] = new TerrainCell[WORLD_SIZE];
 
-                for (var j = 0; j < Size; j++)
+                for (var j = 0; j < WORLD_SIZE; j++)
                 {
                     globe.Terrain[i][j] = new TerrainCell
                     {
@@ -501,12 +519,13 @@ namespace Zilon.Core.WorldGeneration
 
         private Task CreateRealms(Globe globe)
         {
-            var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow };
-            for (var i = 0; i < StartRealmCount; i++)
+            var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow,
+            Color.Beige, Color.LightGray, Color.Magenta, Color.Cyan};
+            for (var i = 0; i < START_ITERATION_REALMS; i++)
             {
                 var realm = new Realm
                 {
-                    Name = $"realm {i}",
+                    Name = _realmNames[i],
                     Color = realmColors[i]
                 };
 
@@ -515,5 +534,16 @@ namespace Zilon.Core.WorldGeneration
 
             return Task.CompletedTask;
         }
+
+        private readonly string[] _realmNames = new[] {
+            "Sons Of The Law",
+            "Gaarn Folk",
+            "Sun'Ost Union",
+            "Hellgrimar Republik",
+            "Anklav Of The Seven Seas",
+            "Eagle Home Keepers",
+            "Cult of Liquid DOG",
+            "Free Сities Сouncil"
+        };
     }
 }

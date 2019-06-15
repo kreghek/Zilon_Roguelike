@@ -53,7 +53,9 @@ namespace Zilon.Core.MapGenerators
             {
                 var freeNodes = new List<IMapNode>(region.Nodes);
 
-                var monsterCount = _generatorRandomSource.RollRegionCount(sectorScheme.RegionMonsterCount);
+                var monsterCount = _generatorRandomSource.RollRegionCount(
+                    sectorScheme.MinRegionMonsterCount,
+                    sectorScheme.RegionMonsterCount);
 
                 for (int i = 0; i < monsterCount; i++)
                 {

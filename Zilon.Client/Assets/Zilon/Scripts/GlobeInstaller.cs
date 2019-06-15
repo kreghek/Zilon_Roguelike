@@ -1,3 +1,4 @@
+using Assets.Zilon.Scripts.Commands;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -28,6 +29,7 @@ public class GlobeInstaller : MonoInstaller
             });
 
         Container.Bind<IGlobeModalManager>().FromInstance(GetGlobeModalManager()).AsSingle();
+        Container.Bind<ICommand>().WithId("show-history-command").To<GlobeShowHistoryCommand>().AsSingle();
     }
 
     private GlobeModalManager GetGlobeModalManager()

@@ -20,6 +20,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public ScoreModalBody ScoreModalPrefab;
 
+        public HistoryModalBody HistoryModalPrefab;
+
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
@@ -41,6 +43,14 @@ namespace Assets.Zilon.Scripts.Services
             modalBody.Init();
         }
 
+        public void ShowHistoryBookModal()
+        {
+            var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
+            modalBody.Init();
+        }
+
+        //TODO Сделать параметр от типа T. Чтобы нельзя было скормить префаб, неприводимый к Т.
+        // Это же позволит избегать ошибок, возникающих при копировании этих однообразных методов.
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
         {
             var modal = InstantiateModalDialog();

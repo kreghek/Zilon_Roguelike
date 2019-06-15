@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var randomSourceMock = new Mock<MonsterGeneratorRandomSource>(dice).As<IMonsterGeneratorRandomSource>();
             randomSourceMock.CallBase = true;
             randomSourceMock.Setup(x => x.RollRarity()).Returns(2);
-            randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(20);
+            randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(20);
             var randomSource = randomSourceMock.Object;
 
             var actorList = new List<IActor>();

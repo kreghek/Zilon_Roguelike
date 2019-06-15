@@ -157,7 +157,7 @@ namespace Zilon.Core.Benchmark
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
-            mock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(5);
+            mock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(5);
             mock.Setup(x => x.RollMonsterScheme(It.IsAny<IEnumerable<IMonsterScheme>>()))
                 .Returns<IEnumerable<IMonsterScheme>>(sids => sids.First());
             mock.Setup(x => x.RollRarity()).Returns(2);

@@ -32,7 +32,7 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
 		if (perk.CurrentLevel != null)
 		{
 			LevelText.gameObject.SetActive(true);
-			LevelText.text = $"{perk.CurrentLevel.Primary} +{perk.CurrentLevel.Sub}";
+			LevelText.text = $"{perk.CurrentLevel.Primary + 1} +{perk.CurrentLevel.Sub + 1}";
 		}
 		else
 		{
