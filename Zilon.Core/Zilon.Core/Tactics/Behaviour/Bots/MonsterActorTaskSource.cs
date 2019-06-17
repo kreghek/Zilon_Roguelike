@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
@@ -7,13 +7,22 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     public class MonsterActorTaskSource : IActorTaskSource
     {
         private readonly Dictionary<IActor, IBotLogic> _logicDict;
-        private readonly IBotPlayer _player;
+        private readonly IPlayer _player;
         private readonly IDecisionSource _decisionSource;
         private readonly ITacticalActUsageService _actService;
         private readonly ISectorManager _sectorManager;
         private readonly IActorManager _actorManager;
 
         public MonsterActorTaskSource(IBotPlayer player,
+            IDecisionSource decisionSource,
+            ITacticalActUsageService actService,
+            ISectorManager sectorManager,
+            IActorManager actorManager): this((IPlayer)player, decisionSource, actService, sectorManager, actorManager)
+        {
+
+        }
+
+        protected MonsterActorTaskSource(IPlayer player,
             IDecisionSource decisionSource,
             ITacticalActUsageService actService,
             ISectorManager sectorManager,
@@ -29,15 +38,18 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
+            // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
             if (actor.Owner != _player)
             {
                 return new IActorTask[0];
             }
 
             var actorTasks = new List<IActorTask>();
-            if (actor.Person.Survival.IsDead)
+            if (actor.Person.CheckIsDead())
             {
                 _logicDict.Remove(actor);
+                //TODO Избавиться от этой зависимости.
+                // Лучше в секторе подписаться на смерть актёра и удалять там из списка маршрутов.
                 _sectorManager.CurrentSector.PatrolRoutes.Remove(actor);
             }
             else

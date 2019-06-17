@@ -4,8 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
-
-using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -23,7 +22,6 @@ namespace Zilon.Core.Tactics
     {
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
-        private readonly ITraderManager _traderManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
@@ -63,14 +61,12 @@ namespace Zilon.Core.Tactics
         public Sector(ISectorMap map,
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
-            ITraderManager traderManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
-            _traderManager = traderManager;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _equipmentDurableService = equipmentDurableService;
@@ -94,6 +90,8 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         public void Update()
         {
+            UpdateScores();
+
             UpdateSurvivals();
 
             UpdateActorEffects();
@@ -104,14 +102,28 @@ namespace Zilon.Core.Tactics
             DetectSectorExit();
         }
 
+        private void UpdateScores()
+        {
+            if (ScoreManager != null)
+            {
+                ScoreManager.CountTurn(Scheme);
+            }
+        }
+
         private void UpdateActorEffects()
         {
-            foreach (var actor in _actorManager.Items)
+            foreach (var actor in _actorManager.Items.ToArray())
             {
                 var effects = actor.Person.Effects;
+
+                if (effects == null)
+                {
+                    continue;
+                }
+
                 foreach (var effect in effects.Items)
                 {
-                    if (effect is ISurvivalStatEffect actorEffect)
+                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
                     {
                         actorEffect.Apply(actor.Person.Survival);
                     }
@@ -220,20 +232,10 @@ namespace Zilon.Core.Tactics
             {
                 Map.HoldNode(actor.Node, actor);
 
-                actor.Person.Survival.Dead += ActorState_Dead;
-
-                if (actor.Owner is HumanPlayer)
+                if (actor.Person.Survival != null)
                 {
-                    actor.Moved += HumanActor_Moved;
+                    actor.Person.Survival.Dead += ActorState_Dead;
                 }
-            }
-        }
-
-        private void HumanActor_Moved(object sender, EventArgs e)
-        {
-            if (ScoreManager != null)
-            {
-                ScoreManager.CountTurn(Scheme);
             }
         }
 
@@ -242,8 +244,12 @@ namespace Zilon.Core.Tactics
             var actor = _actorManager.Items.Single(x => x.Person.Survival == sender);
             Map.ReleaseNode(actor.Node, actor);
             _actorManager.Remove(actor);
-            actor.Person.Survival.Dead -= ActorState_Dead;
-            actor.Moved -= HumanActor_Moved;
+
+            if (actor.Person.Survival != null)
+            {
+                actor.Person.Survival.Dead -= ActorState_Dead;
+            }
+
             ProcessMonsterDeath(actor);
         }
 

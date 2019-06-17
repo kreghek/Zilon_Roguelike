@@ -1,4 +1,9 @@
 {
+  "Name":
+  {
+    "Ru": "Ночной Сталкер",
+	"En": "Night Stalker"
+  },
   "Hp": 8,
   "PrimaryAct": {
     "Efficient": {

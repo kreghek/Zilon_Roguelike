@@ -144,6 +144,158 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
+        /// Тест проверяет, что при получении перка на здоровье характеристики персонажа
+        /// пересчитываются - хп увеличивается.
+        /// </summary>
+        [Test]
+        public void HumanPerson_HpPerk_HealthIncreased()
+        {
+            // ARRANGE
+
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var personScheme = new PersonScheme
+            {
+                Hp = 10,
+                Slots = slotSchemes
+            };
+
+            var defaultActScheme = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme()
+            };
+
+            var perkMock = new Mock<IPerk>();
+            perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
+            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme
+            {
+                Levels = new[] {
+                    new PerkLevelSubScheme{
+                        Rules = new []{
+                            new PerkRuleSubScheme{
+                                Type = PersonRuleType.Health,
+                                Level = PersonRuleLevel.Lesser
+                            }
+                        }
+                    }
+                }
+            });
+            var perk = perkMock.Object;
+
+            var stats = new SkillStatItem[0];
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+
+
+            // ACT
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+
+
+
+            // ASSERT
+            var testedStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            testedStat.Value.Should().Be(11);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при получении перка на увеличение урона для экипировки
+        /// с определёнными тегами модификатор броса на эффективность действия увеличивается.
+        /// </summary>
+        [Test]
+        public void HumanPerson_SwordSkillsPerk_DamageOfActIsIncreased()
+        {
+            // ARRANGE
+
+            var slotSchemes = new[] {
+                new PersonSlotSubScheme{
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var personScheme = new PersonScheme
+            {
+                Hp = 10,
+                Slots = slotSchemes
+            };
+
+            var defaultActScheme = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme()
+            };
+
+            var perkMock = new Mock<IPerk>();
+            perkMock.SetupGet(x => x.CurrentLevel).Returns(new PerkLevel(0, 0));
+            perkMock.SetupGet(x => x.Scheme).Returns(new PerkScheme
+            {
+                Levels = new[] {
+                    new PerkLevelSubScheme{
+                        Rules = new []{
+                            new PerkRuleSubScheme{
+                                Type = PersonRuleType.Damage,
+                                Level = PersonRuleLevel.Absolute,
+                                Params = "{\"WeaponTags\":[\"sword\"]}"
+                            }
+                        }
+                    }
+                }
+            });
+            var perk = perkMock.Object;
+
+            var stats = new SkillStatItem[0];
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var swordScheme = new TestPropScheme
+            {
+                Tags = new[] { "sword" },
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[] { EquipmentSlotTypes.Hand }
+                }
+            };
+
+            var swordAct = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Effect = TacticalActEffectType.Damage,
+                    Efficient = new Roll(1, 1)
+                }
+            };
+
+            var equipment = new Equipment(swordScheme, new ITacticalActScheme[] { swordAct });
+
+
+
+            // ACT
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+            person.EquipmentCarrier[0] = equipment;
+
+
+
+            // ASSERT
+            var testedAct = person.TacticalActCarrier.Acts[0];
+            testedAct.Efficient.Modifiers.ResultBuff.Should().Be(10);
+        }
+
+        /// <summary>
         /// Тест проверяет, что если экипировать предмет с бронёй,
         /// то броня будет записана в боевые характеристики персонажа.
         /// </summary>

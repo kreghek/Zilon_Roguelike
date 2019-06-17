@@ -17,7 +17,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        public static void RemoveAgentToCell(Dictionary<TerrainCell, List<Agent>> cells, TerrainCell cell, Agent agent)
+        public static void RemoveAgentFromCell(Dictionary<TerrainCell, List<Agent>> cells, TerrainCell cell, Agent agent)
         {
             if (cells.TryGetValue(cell, out var list))
             {

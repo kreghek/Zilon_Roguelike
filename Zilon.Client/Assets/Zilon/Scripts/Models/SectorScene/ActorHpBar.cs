@@ -14,28 +14,35 @@ public class ActorHpBar : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Actor != null)
+        if (Actor == null)
         {
-            var hpStat = Actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            return;
+        }
 
-            if (hpStat.Value == hpStat.Range.Max || hpStat.Value <= 0)
+
+        var hpStat = Actor.Person.Survival?.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+        if (hpStat == null)
+        {
+            return;
+        }
+
+        if (hpStat.Value == hpStat.Range.Max || hpStat.Value <= 0)
+        {
+            foreach (var obj in Objects)
             {
-                foreach (var obj in Objects)
-                {
-                    obj.SetActive(false);
-                }
+                obj.SetActive(false);
             }
-            else
+        }
+        else
+        {
+            foreach (var obj in Objects)
             {
-                foreach (var obj in Objects)
-                {
-                    obj.SetActive(true);
-                }
-
-                var hpPercent = (float)hpStat.Value / hpStat.Range.Max;
-
-                Bar.transform.localScale = new Vector3(hpPercent, 0.1f, 1);
+                obj.SetActive(true);
             }
+
+            var hpPercent = (float)hpStat.Value / hpStat.Range.Max;
+
+            Bar.transform.localScale = new Vector3(hpPercent, 0.1f, 1);
         }
     }
 }

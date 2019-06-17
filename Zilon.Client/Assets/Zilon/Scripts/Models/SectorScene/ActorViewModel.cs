@@ -52,7 +52,10 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void Start()
     {
         Actor.Moved += Actor_Moved;
-        Actor.Person.Survival.Dead += Survival_Dead;
+        if (Actor.Person.Survival != null)
+        {
+            Actor.Person.Survival.Dead += Survival_Dead;
+        }
         Actor.DamageTaken += Actor_DamageTaken;
         Actor.OnArmorPassed += Actor_OnArmorPassed;
         Actor.OnDefence += Actor_OnDefence;
@@ -73,7 +76,10 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void OnDestroy()
     {
         Actor.Moved -= Actor_Moved;
-        Actor.Person.Survival.Dead -= Survival_Dead;
+        if (Actor.Person.Survival != null)
+        {
+            Actor.Person.Survival.Dead -= Survival_Dead;
+        }
         Actor.DamageTaken -= Actor_DamageTaken;
         Actor.OnArmorPassed -= Actor_OnArmorPassed;
         Actor.OnDefence -= Actor_OnDefence;

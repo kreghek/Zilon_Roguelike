@@ -16,6 +16,8 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
+        private readonly IPerkResolver _perkResolver;
+
         public event EventHandler Moved;
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
         public event EventHandler<UsedActEventArgs> UsedAct;
@@ -44,8 +46,19 @@ namespace Zilon.Core.Tactics
             Node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
+        }
+
         public bool CanBeDamaged()
         {
+            if (Person.Survival == null)
+            {
+                return false;
+            }
+
             return !Person.Survival.IsDead;
         }
 
@@ -117,6 +130,12 @@ namespace Zilon.Core.Tactics
             if (useData.Consumable)
             {
                 ConsumeResource(usedProp);
+
+                if (_perkResolver != null)
+                {
+                    var consumeProgress = new ConsumeProviantJobProgress();
+                    _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+                }
             }
         }
 
@@ -133,7 +152,17 @@ namespace Zilon.Core.Tactics
 
         public void TakeDamage(TacticalActRoll tacticalActRoll)
         {
-            Person.Survival.DecreaseStat(SurvivalStatType.Health, value);
+            Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
+
+            if (_perkResolver != null && Person.EvolutionData != null)
+            {
+                var takeDamageProgress = new TakeDamageJobProgress(value);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.EvolutionData);
+
+                var takeHitProgress = new TakeHitJobProgress();
+                _perkResolver.ApplyProgress(takeHitProgress, Person.EvolutionData);
+            }
+
             DoDamageTaken(value);
         }
 
@@ -202,17 +231,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.RestoreStat(statType,
+                    Person.Survival?.RestoreStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue + 1);
                     break;
 
@@ -232,17 +261,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.RestoreStat(SurvivalStatType.Health,
+                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 
@@ -274,17 +303,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.DecreaseStat(statType,
+                    Person.Survival?.DecreaseStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue - 1);
                     break;
 
@@ -304,17 +333,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival.DecreaseStat(SurvivalStatType.Health,
+                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 

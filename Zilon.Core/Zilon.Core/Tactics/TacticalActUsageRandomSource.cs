@@ -20,9 +20,9 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Бросок проверки на попадание действием.</summary>
         /// <returns>Возвращает результат броска D6.</returns>
-        public int RollToHit()
+        public int RollToHit(Roll roll)
         {
-            return RollD6();
+            return RollWithModifiers(roll);
         }
 
         /// <summary>
@@ -31,6 +31,11 @@ namespace Zilon.Core.Tactics
         /// <param name="roll">Характеристики броска.</param>
         /// <returns>Возвращает случайное значение эффективности использования.</returns>
         public int RollEfficient(Roll roll)
+        {
+            return RollWithModifiers(roll);
+        }
+
+        private int RollWithModifiers(Roll roll)
         {
             var sum = 0;
             for (var i = 0; i < roll.Count; i++)
@@ -77,6 +82,11 @@ namespace Zilon.Core.Tactics
         public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
         {
             var count = armorEquipments.Count();
+            if (count == 0)
+            {
+                return null;
+            }
+
             var rollIndex = _dice.Roll(0, count - 1);
             return armorEquipments.ElementAt(rollIndex);
         }

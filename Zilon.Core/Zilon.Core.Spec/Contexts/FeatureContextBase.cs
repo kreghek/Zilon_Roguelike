@@ -128,12 +128,13 @@ namespace Zilon.Core.Spec.Contexts
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
             var humanPlayer = Container.GetInstance<HumanPlayer>();
+            var perkResolver = Container.GetInstance<IPerkResolver>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -215,7 +216,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
-            [NotNull] IMapNode startNode)
+            [NotNull] IMapNode startNode,
+            [NotNull] IPerkResolver perkResolver)
         {
 
             var schemeService = Container.GetInstance<ISchemeService>();
@@ -233,7 +235,7 @@ namespace Zilon.Core.Spec.Contexts
                 survivalRandomSource,
                 inventory);
 
-            var actor = new Actor(person, player, startNode);
+            var actor = new Actor(person, player, startNode, perkResolver);
 
             return actor;
         }
@@ -275,9 +277,10 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            Container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             Container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
+            Container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop()
@@ -322,7 +325,7 @@ namespace Zilon.Core.Spec.Contexts
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                 .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-            actUsageRandomSourceMock.Setup(x => x.RollToHit())
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                 .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
                 .Returns(4);

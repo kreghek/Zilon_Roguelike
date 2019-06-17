@@ -1,0 +1,53 @@
+{
+  "Name": {
+    "Ru": "Первые шрамы",
+	"En": "First Scars"
+  },
+  "Description":{
+    "Ru": "Шрамы горорят о том, сколько ударов точно можно выдержать."
+  },
+  "Levels":[
+    {
+	  "Rules": [
+	    {
+		  "Type": "Health",
+		  "Level": "Lesser"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "ReceiveHits",
+		  "Value": 10
+		}
+	  ]
+	},
+	{
+	  "Rules": [
+	    {
+		  "Type": "Health",
+		  "Level": "Lesser"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "ReceiveHits",
+		  "Value": 30
+		}
+	  ]
+	},
+	{
+	  "Rules": [
+	    {
+		  "Type": "Health",
+		  "Level": "Lesser"
+		}
+	  ],
+	  "Jobs": [
+	    {
+		  "Type": "ReceiveHits",
+		  "Value": 150
+		}
+	  ]
+	}
+  ]
+}

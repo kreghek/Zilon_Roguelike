@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core
+﻿using System;
+
+namespace Zilon.Core
 {
     public static class OffsetCoordsExtensions
     {

@@ -3,6 +3,8 @@
 using JetBrains.Annotations;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Commands
 {
@@ -33,8 +35,8 @@ namespace Zilon.Core.Commands
         /// </summary>
         public override void Execute()
         {
-            var targetTraderViewModel = (ITraderViewModel)_playerState.HoverViewModel;
-            var trader = targetTraderViewModel.Trader;
+            var targetTraderViewModel = (IActorViewModel)_playerState.HoverViewModel;
+            var trader = targetTraderViewModel.Actor.Person as CitizenPerson;
 
             ModalManager.ShowTraderModal(trader);
         }
@@ -47,8 +49,8 @@ namespace Zilon.Core.Commands
         /// </returns>
         public override bool CanExecute()
         {
-            var targetTraderViewModel = _playerState.HoverViewModel as ITraderViewModel;
-            var trader = targetTraderViewModel?.Trader;
+            var targetTraderViewModel = _playerState.HoverViewModel as IActorViewModel;
+            var trader = targetTraderViewModel?.Actor.Person as CitizenPerson;
 
             return trader != null;
         }

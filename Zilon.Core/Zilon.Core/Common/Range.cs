@@ -43,5 +43,10 @@ namespace Zilon.Core.Common
             var isLessThat = value.CompareTo(Max) <= 0;
             return isMoreThat && isLessThat;
         }
+
+        public override string ToString()
+        {
+            return $"{Min} - {Max}";
+        }
     }
 }
