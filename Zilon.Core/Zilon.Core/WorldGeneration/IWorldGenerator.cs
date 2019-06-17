@@ -16,7 +16,7 @@ namespace Zilon.Core.WorldGeneration
         /// Создание игрового мира с историей и граф провинций.
         /// </summary>
         /// <returns> Возвращает объект игрового мира. </returns>
-        Task<Globe> GenerateGlobeAsync();
+        Task<GlobeGenerationResult> GenerateGlobeAsync();
 
         /// <summary>
         /// Создание 

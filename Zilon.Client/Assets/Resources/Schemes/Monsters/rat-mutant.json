@@ -3,7 +3,7 @@
     "Ru": "Крыса-Мутант",
 	"En": "Rat Mutant"
   },
-  "Hp": 6,
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -23,6 +23,10 @@
   "Defense": {
     "Defenses": [
       {
+        "Type": "TacticalDefence",
+        "Level": "Normal"
+      },
+	  {
         "Type": "FuryDefence",
         "Level": "Lesser"
       }

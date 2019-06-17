@@ -14,14 +14,16 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return true;
         }
 
-        public void Use(Agent agent, Globe globe, IDice dice)
+        public string Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            string history = null;
+
+            globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
             var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
             if (!realmLocalities.Any())
             {
-                return;
+                return history;
             }
 
             var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
@@ -29,12 +31,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             if (currentLocality != null)
             {
-                Helper.RemoveAgentToCell(globe.AgentCells, agent.Localtion, agent);
+                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
             }
 
-            agent.Localtion = rolledTransportLocality.Cell;
+            agent.Location = rolledTransportLocality.Cell;
 
-            Helper.AddAgentToCell(globe.AgentCells, agent.Localtion, agent);
+            Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+
+            return $"{agent} was change current location. Now he is in {agent.Location}.";
         }
     }
 }

@@ -8,12 +8,11 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -28,7 +27,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
         Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
-        Container.Bind<ITraderManager>().To<TraderManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
@@ -44,7 +42,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
              });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
-        Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
@@ -61,6 +58,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
         Container.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
         Container.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
+        Container.Bind<ICitizenGenerator>().To<CitizenGenerator>().AsSingle();
+        Container.Bind<ICitizenGeneratorRandomSource>().To<CitizenGeneratorRandomSource>().AsSingle();
 
 
         // Специализированные сервисы для Ui.
@@ -79,6 +78,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("show-history-command").To<SectorShowHistoryCommand>().AsSingle();
 
         // Специализированные команды для Ui.
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();

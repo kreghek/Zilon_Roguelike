@@ -21,6 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{04A0FDB6-44FE-49A4-879B-3C53860DE840}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\Core.dgml = Docs\Core.dgml
+		Tests.md = Tests.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmark", "Zilon.Core.Benchmark\Zilon.Core.Benchmark.csproj", "{66CE455F-3F1F-4DC2-BCAE-F8243686FF54}"

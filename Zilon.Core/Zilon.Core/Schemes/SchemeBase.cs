@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -26,7 +27,8 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// В конкретных реализациях схем используется по-разному.
         /// </remarks>
-        public LocalizedStringSubScheme Name { get; set; }
+        [JsonProperty]
+        public virtual LocalizedStringSubScheme Name { get; protected set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -35,7 +37,8 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
-        public LocalizedStringSubScheme Description { get; }
+        [JsonProperty]
+        public virtual LocalizedStringSubScheme Description { get; protected set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -44,7 +47,8 @@ namespace Zilon.Core.Schemes
         /// <remarks>
         /// Если установлен, то схема игнорируется службой схем
         /// </remarks>
-        public bool Disabled { get; }
+        [JsonProperty]
+        public virtual bool Disabled { get; protected set; }
 
         /// <summary>
         /// Строковое представление рецепта.

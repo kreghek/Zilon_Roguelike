@@ -7,7 +7,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 

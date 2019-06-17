@@ -1,5 +1,5 @@
 {
-  "Tags": [ "weapon" ],
+  "Tags": [ "weapon", "mace" ],
   "Equip": {
     "ActSids": [
       "blow"

@@ -27,6 +27,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
+        Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
 
