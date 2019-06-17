@@ -12,11 +12,20 @@ using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
+//TODO Попробовать объедининть с PerkInfoPopup
+/// <summary>
+/// Всплывающее окно с краткой информацией о предмете.
+/// </summary>
+/// <remarks>
+/// Для подробной информации будет использовать отдельный модал.
+/// </remarks>
 public class PropInfoPopup : MonoBehaviour
 {
     [Inject] private ISchemeService _schemeService;
 
     public Text NameText;
+    public Text TagsText;
+    public Text DescriptionText;
     public Text StatText;
 
     public IPropViewModelDescription PropViewModel { get; set; }
@@ -33,7 +42,7 @@ public class PropInfoPopup : MonoBehaviour
         if (propViewModel?.Prop != null)
         {
             gameObject.SetActive(true);
-            ShowPropStats(propViewModel);
+            ShowPropInfo(propViewModel);
         }
         else
         {
@@ -41,14 +50,39 @@ public class PropInfoPopup : MonoBehaviour
         }
     }
 
-    private void ShowPropStats(IPropViewModelDescription propViewModel)
+    private void ShowPropInfo(IPropViewModelDescription propViewModel)
     {
-        NameText.text = propViewModel.Prop.Scheme.Name.En ?? propViewModel.Prop.Scheme.Name.Ru;
+        var prop = propViewModel.Prop;
+        var propScheme = prop.Scheme;
+
+        NameText.text = propScheme.Name?.En ?? propScheme.Name?.Ru ?? "[noname]";
+        WritePropTags(prop);
+        DescriptionText.text = propScheme.Description?.En ?? propScheme.Description?.Ru;
+
+        WritePropStats(prop);
+    }
+
+    private void WritePropTags(IProp prop)
+    {
+        TagsText.text = null;
+
+        if (prop.Scheme.Tags == null)
+        {
+            return;
+        }
+
+        var filteredTags = prop.Scheme.Tags.Where(x => !string.IsNullOrWhiteSpace(x));
+        var tagsText = string.Join(" ", filteredTags);
+
+        TagsText.text = tagsText;
+    }
+
+    private void WritePropStats(IProp prop)
+    {
         StatText.text = null;
+        var propScheme = prop.Scheme;
 
-        var propScheme = propViewModel.Prop.Scheme;
-
-        switch (propViewModel.Prop)
+        switch (prop)
         {
             case Equipment equipment:
 

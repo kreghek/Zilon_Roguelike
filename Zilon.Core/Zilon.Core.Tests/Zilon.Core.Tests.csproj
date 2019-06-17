@@ -92,6 +92,7 @@
     <Compile Include="Commands\CommandTestBase.cs" />
     <Compile Include="Commands\EquipCommandTests.cs" />
     <Compile Include="Commands\AttackCommandTests.cs" />
+    <Compile Include="Commands\Globe\RegionTransitionHelperTests.cs" />
     <Compile Include="Commands\MoveCommandTests.cs" />
     <Compile Include="Commands\NextTurnCommandTests.cs" />
     <Compile Include="Commands\OpenContainerCommandTests.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
+    <Compile Include="Common\MatrixHelperTests.cs" />
     <Compile Include="Common\RangeExtensionsTests.cs" />
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomMapFactoryTests.cs" />
     <Compile Include="MapGenerators\MapRegionHelperTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />
+    <Compile Include="MapGenerators\WildStyle\WildMapFactoryTests.cs" />
     <Compile Include="PerkHelperTests.cs" />
     <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
     <Compile Include="Persons\DefeatActorJobProgressTests.cs" />

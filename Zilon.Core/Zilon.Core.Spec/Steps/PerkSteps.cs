@@ -16,11 +16,9 @@ namespace Zilon.Core.Spec.Steps
 
         }
 
-        [Given(@"У актёра игрока прогресс перка на убийство (.*) из (.*)")]
-        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, int perkGoal)
+        [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
+        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, string perkSid)
         {
-            const string perkSid = "battle-dogmas";
-
             var actor = Context.GetActiveActor();
 
             var perk = actor.Person.EvolutionData.Perks.Single(x => x.Scheme.Sid == perkSid);
@@ -28,12 +26,12 @@ namespace Zilon.Core.Spec.Steps
             perk.CurrentJobs[0].Progress = perkProgress;
         }
 
-        [Then(@"перк на убийство должен быть прокачен")]
-        public void ThenПеркНаУбийствоДолженБытьПрокачен()
+        [Then(@"Перк (.+) должен быть прокачен")]
+        public void ThenПеркДолженБытьПрокачен(string perkSid)
         {
             var actor = Context.GetActiveActor();
 
-            var perk = actor.Person.EvolutionData.Perks[0];
+            var perk = actor.Person.EvolutionData.Perks.Single(x=>x.Scheme.Sid == perkSid);
 
             perk.CurrentLevel.Should().NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
             perk.CurrentLevel.Primary.Should().Be(0);
