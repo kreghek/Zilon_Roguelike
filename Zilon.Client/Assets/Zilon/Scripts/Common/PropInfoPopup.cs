@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
@@ -13,6 +12,13 @@ using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
+//TODO Попробовать объедининть с PerkInfoPopup
+/// <summary>
+/// Всплывающее окно с краткой информацией о предмете.
+/// </summary>
+/// <remarks>
+/// Для подробной информации будет использовать отдельный модал.
+/// </remarks>
 public class PropInfoPopup : MonoBehaviour
 {
     [Inject] private ISchemeService _schemeService;

@@ -11,6 +11,10 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
+//TODO Вынести в корневой функционал
+/// <summary>
+/// Отдельный сервис для создания персонажа игрока в новой игре.
+/// </summary>
 public sealed class PlayerPersonCreator : MonoBehaviour
 {
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
@@ -87,6 +91,16 @@ public sealed class PlayerPersonCreator : MonoBehaviour
         return person;
     }
 
+    //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
+    /// <summary>
+    /// Добавляет ресурс созданному персонажу игрока.
+    /// </summary>
+    /// <param name="resourceSid"> Идентификатор предмета. </param>
+    /// <param name="count"> Количество ресурсво. </param>
+    /// <remarks>
+    /// Используется, чтобы добавить персонажу игрока книгу истории, когда он
+    /// выходит из стартовой локации, и начинается создание мира.
+    /// </remarks>
     public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
     {
         var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;

@@ -218,6 +218,15 @@ public class GlobeWorldVM : MonoBehaviour
         MoveGroupViewModel(_player.GlobeNode);
     }
 
+    //TODO Попробовать сделать загрузку всех провинций параллельно.
+    // Выглядит так, что каждый запуск метода не зависит от предыдущих запусков.
+    /// <summary>
+    /// Создание соседних провинций.
+    /// </summary>
+    /// <param name="playerCoords"> Текущии координаты игрока. </param>
+    /// <param name="worldManager"> Менеджер мира. </param>
+    /// <param name="worldGenerator"> Генератор мира, используемый для создания новых провинций. </param>
+    /// <returns> Возвращает объект Task. </returns>
     private static async System.Threading.Tasks.Task CreateNeighborRegionsAsync(OffsetCoords playerCoords,
         IWorldManager worldManager,
         IWorldGenerator worldGenerator)

@@ -9,6 +9,11 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 
+//TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
+//Тогда этот объект станет не нужным.
+/// <summary>
+/// Скрипт для обработки UI на глобальной карте.
+/// </summary>
 public class SectorUiHandler : MonoBehaviour
 {
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;

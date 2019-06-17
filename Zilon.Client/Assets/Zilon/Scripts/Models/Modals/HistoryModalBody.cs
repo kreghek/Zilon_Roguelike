@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Linq;
+
 using Assets.Zilon.Scripts;
 
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
 
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
+/// <summary>
+/// Тело модала для работы с историей мира.
+/// </summary>
+/// <remarks>
+/// Сейчас отображает только миникарту мира и выборку некоторых сущностей:
+/// - Все государства.
+/// - Первый из отсортированных по влиянию агент каждого государства.
+/// - Первый из отсортированных по численности город каждого государства.
+/// </remarks>
 public class HistoryModalBody : MonoBehaviour, IModalWindowHandler
 {
     public GlobeMinimap Minimap;

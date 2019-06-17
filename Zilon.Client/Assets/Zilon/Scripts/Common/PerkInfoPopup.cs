@@ -10,6 +10,12 @@ using Zenject;
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
+/// <summary>
+/// Всплывающее окно с краткой информацией о перке.
+/// </summary>
+/// <remarks>
+/// Для подробной информации будет использовать отдельный модал.
+/// </remarks>
 public class PerkInfoPopup : MonoBehaviour
 {
     [Inject] private ISchemeService _schemeService;
