@@ -4,15 +4,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Скрипт для загрузки другой сцены. Название сцены берётся из параметра скрипта и задаётся в редакторе.
+/// </summary>
+/// <remarks>
+/// Сейчас используется в момент перехода между глобальной картой и сектором.
+/// 
+/// Загрузка новой сцены происходит асинхронно. В момент загрузки выводит индикатор загрузки.
+/// </remarks>
 public class SceneLoader : MonoBehaviour
 {
 
     private bool loadScene = false;
 
     public string scene;
+
     [SerializeField]
     private Text loadingText;
 
+
+    public void LoadScene()
+    {
+        gameObject.SetActive(true);
+    }
 
     // Updates once per frame
     private void Update()

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -27,7 +27,7 @@ namespace Zilon.Bot.Players.Triggers
                     continue;
                 }
 
-                if (target.Person.Survival.IsDead)
+                if (target.Person.CheckIsDead())
                 {
                     continue;
                 }

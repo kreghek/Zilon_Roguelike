@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 using Zenject;
 
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
@@ -16,7 +17,9 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     public Text DetailsText;
 
-    [Inject] IScoreManager _scoreManager;
+    [Inject] readonly IScoreManager _scoreManager;
+
+    [Inject] readonly HumanPlayer _humanPlayer;
 
     public string Caption => "Scores";
 
@@ -27,7 +30,15 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
 
-        DetailsText.text = "YOU DIED" + "\n" + "\n";
+        if (_humanPlayer.MainPerson.Survival.IsDead)
+        {
+            DetailsText.text = "YOU DIED" + "\n" + "\n";
+        }
+
+        if (_scoreManager.Achievements.HasFlag(ScoreAchievements.HomeFound))
+        {
+            DetailsText.text = "HOME FOUND" + "\n" + "\n";
+        }
 
         DetailsText.text += "=== You survived ===" + "\n";
         var minutesTotal = _scoreManager.Turns * 2;

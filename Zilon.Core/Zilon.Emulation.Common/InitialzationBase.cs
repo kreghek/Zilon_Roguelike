@@ -61,11 +61,11 @@ namespace Zilon.Emulation.Common
             container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
             container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
             container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
+            container.Register<ICitizenGenerator, CitizenGenerator>(new PerScopeLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
             container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
             container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
-            container.Register<ITraderManager, TraderManager>(new PerScopeLifetime());
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
             container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
         }
@@ -97,6 +97,7 @@ namespace Zilon.Emulation.Common
             container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
         }
 
         private void RegisterClientServices(IServiceRegistry container)

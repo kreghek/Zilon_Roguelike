@@ -19,8 +19,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Бросок проверки на попадание действием.
         /// </summary>
+        /// <param name="roll"> Характеристики броска. </param>
         /// <returns> Возвращает результат броска D6. </returns>
-        int RollToHit();
+        int RollToHit(Roll roll);
 
         /// <summary>
         /// Бросок проверки на защиту бронёй.

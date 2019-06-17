@@ -10,8 +10,8 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics;
 
 public class TraderModalBody : MonoBehaviour, IModalWindowHandler
 {
@@ -23,7 +23,7 @@ public class TraderModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly DiContainer _diContainer;
 
-    private ITrader _trader;
+    private CitizenPerson _trader;
 
     public event EventHandler Closed;
 
@@ -34,7 +34,7 @@ public class TraderModalBody : MonoBehaviour, IModalWindowHandler
 
     public string Caption { get => "Trader"; }
 
-    public void Init(ITrader trader)
+    public void Init(CitizenPerson trader)
     {
         _trader = trader ?? throw new ArgumentNullException(nameof(trader));
 
