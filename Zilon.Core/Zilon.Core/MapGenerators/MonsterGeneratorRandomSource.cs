@@ -44,13 +44,14 @@ namespace Zilon.Core.MapGenerators
         }
 
         /// <summary>Выбирает случайное количество монстров в секторе.</summary>
+        /// <param name="regionMinCount">Минимальное количество монстров в секторе.</param>
         /// <param name="regionMaxCount">Максимальное количество монстров в секторе.</param>
         /// <returns>
         /// Возвращает слуяайное количество монстров в секторе от 0 до указанного максимального числа.
         /// </returns>
-        public int RollRegionCount(int regionMaxCount)
+        public int RollRegionCount(int regionMinCount, int regionMaxCount)
         {
-            return _dice.Roll(0, regionMaxCount);
+            return _dice.Roll(regionMinCount, regionMaxCount);
         }
     }
 }

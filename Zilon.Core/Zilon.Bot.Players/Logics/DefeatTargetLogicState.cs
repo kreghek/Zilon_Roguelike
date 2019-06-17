@@ -54,7 +54,7 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                if (target.Person.Survival.IsDead)
+                if (target.Person.CheckIsDead())
                 {
                     continue;
                 }

@@ -39,6 +39,13 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Посещённые места.</summary>
         public ISet<GlobeRegionNode> Places { get; }
+        public ScoreAchievements Achievements { get; private set; }
+
+        public void CountHome()
+        {
+            Achievements |= ScoreAchievements.HomeFound;
+            BaseScores *= 2;
+        }
 
         /// <summary>Засчитать убийство монстра.</summary>
         /// <param name="monster">Монстр, убитый игроком.</param>

@@ -3,7 +3,7 @@
     "Ru": "Скелет-Воин",
 	"En": "Skeleton Warrior"
   },
-  "Hp": 15,
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,

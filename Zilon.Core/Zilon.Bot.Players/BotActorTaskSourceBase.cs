@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -54,7 +55,7 @@ namespace Zilon.Bot.Players
             // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
             // то выполнять переход на стартовую логику.
 
-            if (!actor.Person.Survival.IsDead)
+            if (!actor.Person.CheckIsDead())
             {
                 if (!_actorStrategies.TryGetValue(actor, out var logicStrategy))
                 {

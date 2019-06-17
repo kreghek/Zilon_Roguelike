@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
 
