@@ -70,6 +70,12 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
         }
     }
 
+    //TODO Метод должен быть статическим с параметром sectorSid.
+    //TODO Указывать тип пола в схеме сектора.
+    /// <summary>
+    /// Выбирает спрайт пола текущего сектора.
+    /// </summary>
+    /// <returns> Возвращает подходящий объект спрайта. </returns>
     private Sprite GetFloorSprite()
     {
         switch (LocaltionScheme.Sid)
@@ -101,6 +107,12 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
         }
     }
 
+    //TODO Метод должен быть статическим с параметром sectorSid.
+    //TODO Указывать тип стен в схеме сектора.
+    /// <summary>
+    /// Выбирает спрайт стены текущего сектора.
+    /// </summary>
+    /// <returns> Возвращает подходящий объект спрайта. </returns>
     private Sprite GetWallSprite()
     {
         switch (LocaltionScheme.Sid)

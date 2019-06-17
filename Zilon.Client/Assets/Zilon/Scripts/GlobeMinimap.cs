@@ -9,6 +9,9 @@ using Zilon.Core.Players;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
+/// <summary>
+/// Скрипт для работы с миникартой мира.
+/// </summary>
 public class GlobeMinimap : MonoBehaviour
 {
     private const int CELL_SIZE = 8;
@@ -29,6 +32,14 @@ public class GlobeMinimap : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Инициализация текстур, содержащих карту. Формированно вызывается из клиентского кода
+    /// когда объект Globe создан.
+    /// </summary>
+    /// <remarks>
+    /// Это нужно, потому что сначала создаётся объект миникарты в момент создания модели глобальной карты,
+    /// а только потом модель генерирует мир. После создания мира ещё раз вызывается этот метод.
+    /// </remarks>
     public void InitMapTextures()
     {
         var globe = _worldManager.Globe;
@@ -94,12 +105,18 @@ public class GlobeMinimap : MonoBehaviour
         _branchesTexture.Apply();
     }
 
+    /// <summary>
+    /// Включает отображение политической карты. Это используется по умолчанию.
+    /// </summary>
     public void ShowRealms()
     {
         var miniMap = Sprite.Create(_realmTexture, new Rect(0, 0, _realmTexture.width, _realmTexture.height), new Vector2(0, 0));
         MinimapContent.sprite = miniMap;
     }
 
+    /// <summary>
+    /// Включает отображение карты специализаций.
+    /// </summary>
     public void ShowBranches()
     {
         var miniMap = Sprite.Create(_branchesTexture, new Rect(0, 0, _realmTexture.width, _realmTexture.height), new Vector2(0, 0));
@@ -143,32 +160,4 @@ public class GlobeMinimap : MonoBehaviour
             }
         }
     }
-
-    //public void FixedUpdate()
-    //{
-    //    if (passMatrix == null)
-    //        return;
-
-    //    for (int y = 0; y < caveHeight; y++)
-    //    {
-    //        for (int x = 0; x < caveWidth; x++)
-    //        {
-    //            if (passMatrix[x][y] != 0)
-    //            {
-    //                DrawBlock(MinimapContent.sprite.texture, x, y);
-    //            }
-    //            else
-    //            {
-    //                ClearBlock(MinimapContent.sprite.texture, x, y);
-    //            }
-
-    //            if (Player.Cell == new Vector3(x, y, 0))
-    //            {
-    //                DrawPlayer(MinimapContent.sprite.texture, x, y);
-    //            }
-    //        }
-    //    }
-
-    //    MinimapContent.sprite.texture.Apply();
-    //}
 }

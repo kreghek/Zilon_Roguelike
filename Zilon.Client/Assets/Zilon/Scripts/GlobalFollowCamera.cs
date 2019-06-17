@@ -17,7 +17,14 @@ public class GlobalFollowCamera : MonoBehaviour
             Time.deltaTime * 3);
     }
 
-
+    //TODO Сделать тоже самое для камеры сектора.
+    /// <summary>
+    /// Формированное перемещение камеры в указанные координаты.
+    /// </summary>
+    /// <param name="target"> Целевые координаты карты. </param>
+    /// <remarks>
+    /// Используется установки камера в момент загрузки сцены.
+    /// </remarks>
     public void SetPosition(Transform target)
     {
         transform.position = target.position + new Vector3(0, 0, -10);

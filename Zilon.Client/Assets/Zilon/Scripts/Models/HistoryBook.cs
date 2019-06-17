@@ -6,10 +6,20 @@ using UnityEngine.UI;
 
 using Zilon.Core.WorldGeneration;
 
+/// <summary>
+/// Скрипт для вывода истории создания мира.
+/// </summary>
+/// <remarks>
+/// Сейчас не используется.
+/// </remarks>
 public class HistoryBook : MonoBehaviour
 {
     public Text HistoryText;
 
+    /// <summary>
+    /// Устанавливает объект истории для отображения.
+    /// </summary>
+    /// <param name="globeGenerationHistory"> Объект истории мира. </param>
     public void SetHistory(GlobeGenerationHistory globeGenerationHistory)
     {
         HistoryText.text = string.Empty;

@@ -8,6 +8,12 @@ using UnityEngine.UI;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Persons;
 
+/// <summary>
+/// Модель перка.
+/// </summary>
+/// <remarks>
+/// Сейчас используется только в окне персонажа.
+/// </remarks>
 public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkViewModelDescription {
 
 	public Text LevelText;

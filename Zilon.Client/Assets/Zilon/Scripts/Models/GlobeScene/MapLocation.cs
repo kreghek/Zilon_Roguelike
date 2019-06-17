@@ -6,6 +6,9 @@ using UnityEngine;
 using Zilon.Core.Client;
 using Zilon.Core.World;
 
+/// <summary>
+/// Модель узла провинции на глобальной карте.
+/// </summary>
 public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 {
     public event EventHandler OnSelect;
@@ -86,13 +89,6 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
     internal void UpdateObservedState()
     {
-        //if (Node.IsHome)
-        //{
-        //    //TODO Для отладки, убрать после завершения работ по отработки победного конца.
-        //    gameObject.SetActive(true);
-        //    return;
-        //}
-
         if (Node.ObservedState == GlobeNodeObservedState.Visited)
         {
             gameObject.SetActive(true);

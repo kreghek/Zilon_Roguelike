@@ -6,6 +6,12 @@ using Zenject;
 
 using Zilon.Core.Client.Windows;
 
+/// <summary>
+/// Скрипт, отвечающий за эффект, когда игрок проигрывает.
+/// 
+/// Сейчас просто отображает окно результатов.
+/// Потенциально, будет закрашивать экран в красный и запускать проигрышный трек.
+/// </summary>
 public class GameOverEffect : MonoBehaviour
 {
     [NotNull] [Inject]

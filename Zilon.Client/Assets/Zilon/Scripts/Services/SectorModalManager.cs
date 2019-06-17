@@ -9,6 +9,9 @@ using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
 {
+    /// <summary>
+    /// Менеджер модальных окон для сектора.
+    /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
     public class SectorModalManager : MonoBehaviour, ISectorModalManager, ICommonModalManager
     {
