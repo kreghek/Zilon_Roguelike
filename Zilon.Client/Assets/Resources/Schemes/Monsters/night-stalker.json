@@ -1,6 +1,6 @@
 {
   "Name": {
-    "Ru": "Ночной сталкер",
+    "Ru": "Ночной убийца",
     "En": "Night stalker"
   },
   "Hp": 8,
@@ -35,8 +35,9 @@
   ],
   "BaseScore": 200,
   "Tags": [
-    "eldrich",
+    "eldritch",
     "human",
-    "flying"
+    "flying",
+    "rare"
   ]
 }
