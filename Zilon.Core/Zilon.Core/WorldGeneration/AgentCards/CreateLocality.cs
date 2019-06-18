@@ -19,7 +19,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         public bool CanUse(Agent agent, Globe globe)
         {
             var hasCurrentLocality = globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
-            if (currentLocality != null)
+            if (hasCurrentLocality)
             {
                 if (currentLocality.Population >= 2)
                 {
