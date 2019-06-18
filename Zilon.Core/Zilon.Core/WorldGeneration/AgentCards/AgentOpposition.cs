@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 
@@ -22,7 +23,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var availableTargets = globe.Agents.Where(x => x != agent && x.Hp > 0).ToArray();
+            var availableTargets = GetAvailableAgents(agent, globe.Agents);
             if (availableTargets.Any())
             {
                 var agentRollIndex = dice.Roll(0, availableTargets.Count() - 1);
@@ -35,6 +36,26 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                     globe.AgentCells.Remove(targetAgent.Location);
                 }
             }
+        }
+
+        private List<Agent> GetAvailableAgents(Agent currentAgent, IEnumerable<Agent> agents)
+        {
+            var result = new List<Agent>();
+
+            foreach (var agent in agents)
+            {
+                if (agent != currentAgent)
+                {
+                    continue;
+                }
+
+                if (0 < agent.Hp)
+                {
+                    result.Add(agent);
+                }
+            }
+
+            return result;
         }
     }
 }
