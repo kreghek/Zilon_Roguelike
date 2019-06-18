@@ -30,7 +30,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return false;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
@@ -38,7 +38,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                                     .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1);
             if (!highestBranchs.Any())
             {
-                return null;
+                return;
             }
 
             var firstBranch = highestBranchs.First();
@@ -88,7 +88,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 }
             }
 
-            string history;
             if (freeLocaltion != null)
             {
                 // Свободный узел был найден.
@@ -114,8 +113,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 globe.Localities.Add(createdLocality);
                 globe.LocalitiesCells[freeLocaltion] = createdLocality;
                 globe.ScanResult.Free.Remove(freeLocaltion);
-
-                history = $"{agent} fonded {createdLocality}";
             }
             else
             {
@@ -132,11 +129,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 agent.Location = rolledTransportLocality.Cell;
 
                 Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
-
-                history = $"{agent} change location to {rolledTransportLocality} trying to start new life.";
             }
-
-            return history;
         }
     }
 }

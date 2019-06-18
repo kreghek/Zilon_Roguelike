@@ -20,10 +20,8 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return true;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
-            string history = null;
-
             var availableTargets = globe.Agents.Where(x => x != agent && x.Hp > 0).ToArray();
             if (availableTargets.Any())
             {
@@ -31,18 +29,12 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 var targetAgent = availableTargets[agentRollIndex];
                 targetAgent.Hp--;
 
-                history = $"{agent} opposed {targetAgent}.";
-
                 if (targetAgent.Hp <= 0)
                 {
                     globe.Agents.Remove(targetAgent);
                     globe.AgentCells.Remove(targetAgent.Location);
-
-                    history += $" This brought the {targetAgent} out of the game.";
                 }
             }
-
-            return history;
         }
     }
 }

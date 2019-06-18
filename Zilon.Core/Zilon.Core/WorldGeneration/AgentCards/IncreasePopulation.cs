@@ -19,11 +19,10 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return currentLocality.Population <= 5;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
             currentLocality.Population++;
-            return $"{agent} increased {currentLocality} population. Now {currentLocality}: {currentLocality.Population}.";
         }
     }
 }

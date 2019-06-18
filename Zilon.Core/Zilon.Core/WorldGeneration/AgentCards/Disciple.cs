@@ -27,7 +27,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return highestBranchs.Any() && agent.Hp < 1;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
@@ -51,14 +51,10 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 globe.Agents.Add(agent);
 
                 Helper.AddAgentToCell(globe.AgentCells, agentDisciple.Location, agent);
-
-                return $"{agent} has a follower. Meeting {agentDisciple}. His branch is: {firstBranch.Key}.";
             }
             else
             {
                 globe.AgentCrisys++;
-
-                return null;
             }
         }
     }

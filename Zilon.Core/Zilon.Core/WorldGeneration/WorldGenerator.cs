@@ -59,8 +59,6 @@ namespace Zilon.Core.WorldGeneration
                 cityNameGenerator = new CityNameGenerator(_dice)
             };
 
-            var globeHistory = new GlobeGenerationHistory();
-
             var realmTask = CreateRealms(globe);
             var terrainTask = CreateTerrain(globe);
 
@@ -75,7 +73,7 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
-            ProcessIterations(globe, cardQueue, globeHistory);
+            ProcessIterations(globe, cardQueue);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
@@ -84,6 +82,8 @@ namespace Zilon.Core.WorldGeneration
             agentsClock.Stop();
             Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
 
+            // Сейчас история пустая. Пока не разработаны требования, как лучше сделать.
+            var globeHistory = new GlobeGenerationHistory();
             var result = new GlobeGenerationResult(globe, globeHistory);
             return Task.FromResult(result);
         }
@@ -399,7 +399,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue, GlobeGenerationHistory globeHistory)
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
         {
             for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
@@ -409,15 +409,7 @@ namespace Zilon.Core.WorldGeneration
 
                     if (card.CanUse(agent, globe))
                     {
-                        var result = card.Use(agent, globe, _dice);
-
-                        //TODO Переработать историю.
-                        // Сейчас вообще нерабочий вариант. Оставляю только для логов.
-                        if (!string.IsNullOrWhiteSpace(result))
-                        {
-                            var historyItem = new GlobeGenerationHistoryItem(result, iteration);
-                            globeHistory.Items.Add(historyItem);
-                        }
+                        card.Use(agent, globe, _dice);
                     }
 
                     cardQueue.Enqueue(card);

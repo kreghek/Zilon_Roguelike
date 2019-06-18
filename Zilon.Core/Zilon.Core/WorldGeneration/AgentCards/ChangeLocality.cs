@@ -15,16 +15,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return true;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
-            string history = null;
-
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
             var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
             if (rolledTransportLocality == null)
             {
-                return history;
+                return;
             }
 
             if (currentLocality != null)
@@ -35,8 +33,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             agent.Location = rolledTransportLocality.Cell;
 
             Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
-
-            return $"{agent} was change current location. Now he is in {agent.Location}.";
         }
     }
 }

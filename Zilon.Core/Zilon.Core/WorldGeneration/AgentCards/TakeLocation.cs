@@ -26,15 +26,13 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return targetLocality != null;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             var targetLocality = GetNeighborLocality(agent, globe);
 
             targetLocality.Population--;
 
             targetLocality.Owner = agent.Realm;
-
-            var history = $"{agent} conquered {targetLocality} for his realm {agent.Realm}.";
 
             var otherAgentHistory = new List<string>();
             if (globe.AgentCells.TryGetValue(targetLocality.Cell, out var otherAgentsInLocality))
@@ -51,11 +49,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 }
             }
 
-            history += " " + string.Join(" ", otherAgentHistory);
-
             agent.Location = targetLocality.Cell;
-
-            return history;
         }
 
         private static Locality GetNeighborLocality(Agent agent, Globe globe)
