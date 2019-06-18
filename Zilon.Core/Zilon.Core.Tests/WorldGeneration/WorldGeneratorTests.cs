@@ -16,16 +16,22 @@ namespace Zilon.Core.Tests.WorldGeneration
     [TestFixture()]
     public class WorldGeneratorTests
     {
-        [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
+        /// <summary>
+        /// Тест проверяет, что при создании мира не происходит исключений.
+        /// </summary>
+        /// <returns></returns>
         [Test]
-        public async Task GenerateAsync_SaveMapToPng()
+        [Category("longtime")]
+        public async Task GenerateAsync_FixedDice_NoExceptions()
         {
-            var dice = new Dice();
+            var dice = new Dice(1);
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
             var result = await generator.GenerateGlobeAsync();
-            result.Globe.Save(@"c:\worldgen");
+            //result.Globe.Save(@"c:\worldgen");
+
+            result.Should().NotBeNull();
         }
 
         [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]

@@ -42,6 +42,14 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        [Category("benchmark")]
+        public void CreateGlobe()
+        {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<CreateGlobeBench>(config);
+        }
+
+        [Test]
         public void Move1_TestAsync()
         {
             var bench = new MoveBench();
@@ -79,6 +87,14 @@ namespace Zilon.Core.Benchmark
             var bench = new CreateProceduralSectorMaxBench();
             bench.IterationSetup();
             await bench.CreateAsync();
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task CreateGlobe_TestAsync()
+        {
+            var bench = new CreateGlobeBench();
+            bench.IterationSetup();
+            await bench.Run();
         }
 
         private Config CreateBenchConfig()

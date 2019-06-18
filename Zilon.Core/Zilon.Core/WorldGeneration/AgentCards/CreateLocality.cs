@@ -121,11 +121,13 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             {
                 // Если не удалось найти свободный узел,
                 // то агент перемещается в произвольный населённый пункт своего государства.
-                var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm).ToArray();
-                var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
-                var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
 
-                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
+
+                if (currentLocality != null)
+                {
+                    Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                }
 
                 agent.Location = rolledTransportLocality.Cell;
 

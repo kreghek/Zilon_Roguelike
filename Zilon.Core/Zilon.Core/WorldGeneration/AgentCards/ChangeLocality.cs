@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 
@@ -20,14 +21,11 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
-            if (!realmLocalities.Any())
+            var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
+            if (rolledTransportLocality == null)
             {
                 return history;
             }
-
-            var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
-            var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
 
             if (currentLocality != null)
             {
