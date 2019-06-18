@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Летучая мышь",
-	"En": "Bat"
+    "En": "Bat"
   },
   "Hp": 2,
   "PrimaryAct": {
@@ -13,13 +13,19 @@
       "Min": 1,
       "Max": 1
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
     }
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 25
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 25,
+  "Tags": [
+    "flying",
+    "beast"
+  ]
 }

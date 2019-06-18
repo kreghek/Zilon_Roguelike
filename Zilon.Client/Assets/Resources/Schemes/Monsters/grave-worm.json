@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Могильный червь",
-	"En": "Grave worm"
+    "En": "Grave worm"
   },
   "Hp": 3,
   "PrimaryAct": {
@@ -17,9 +17,15 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 30
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 30,
+  "Tags": [
+    "beast",
+    "undead"
+  ]
 }

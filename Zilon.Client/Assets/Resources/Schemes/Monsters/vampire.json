@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Вампир",
-	"En": "Vampire"
+    "En": "Vampire"
   },
   "Hp": 30,
   "PrimaryAct": {
@@ -17,9 +17,15 @@
       "Type": "Tricky",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 75
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "undead",
+    "flying"
+  ]
 }
