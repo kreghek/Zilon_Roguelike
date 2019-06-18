@@ -41,11 +41,11 @@ namespace Zilon.Core.Benchmark
 
             for (var i = 0; i < 100; i++)
             {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
-                var moveTargetNode = nextNodes.First();
+                var currentActorNode = playerState.ActiveActor.Actor.Node;
+                var nextNodes = sectorManager.CurrentSector.Map.GetNext(currentActorNode);
+                var moveTargetNode = (HexNode)nextNodes.First();
 
-                playerState.HoverViewModel = new TestNodeViewModel
+                playerState.SelectedViewModel = new TestNodeViewModel
                 {
                     Node = moveTargetNode
                 };
@@ -108,8 +108,9 @@ namespace Zilon.Core.Benchmark
         }
 
         [IterationSetup]
-        public async System.Threading.Tasks.Task IterationSetupAsync()
+        public void IterationSetup()
         {
+
             _container = new ServiceContainer();
 
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
@@ -130,6 +131,8 @@ namespace Zilon.Core.Benchmark
             _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
             _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
@@ -211,7 +214,7 @@ namespace Zilon.Core.Benchmark
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);
             humanPlayer.GlobeNode = globeNode;
 
-            await sectorManager.CreateSectorAsync();
+            sectorManager.CreateSectorAsync().Wait();
 
 
 
