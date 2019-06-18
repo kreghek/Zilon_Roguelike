@@ -129,6 +129,11 @@ namespace Zilon.BotMassLauncher
 
         private static string GetProgramArgument(string[] args, string testArg)
         {
+            if (args == null)
+            {
+                return null;
+            }
+
             foreach (var arg in args)
             {
                 var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);

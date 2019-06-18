@@ -42,6 +42,14 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        public void Move1_TestAsync()
+        {
+            var bench = new MoveBench();
+            bench.IterationSetup();
+            bench.Move1();
+        }
+
+        [Test]
         public void Move100_TestAsync()
         {
             var bench = new MoveBench();

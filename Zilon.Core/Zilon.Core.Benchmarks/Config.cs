@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
+﻿using System.Linq;
 
 using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Columns;
@@ -10,20 +8,18 @@ using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 
-namespace Zilon.Core.Benchmark
+namespace Zilon.Core.Benchmarks
 {
     internal class Config : ManualConfig
     {
-        public Config(string buildNumber)
+        public Config(string buildNumber, int iterationCount, string monoRuntimePath, string benchArtifactsPath)
         {
-            var iterationCount = int.Parse(ConfigurationManager.AppSettings["IterationCount"]);
-            var monoRuntimeName = ConfigurationManager.AppSettings["MonoRuntimeName"];
-            var monoRuntimePath = ConfigurationManager.AppSettings["MonoRuntimePath"];
+            var monoRuntimeName = "Mono";
 
-            Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
-            Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
-            Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
-            //Add(Job.Default.With(Runtime.Core).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
+            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            //Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
+            Add(Job.Default.With(Runtime.Core).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
             //Add(Job.Default.With(Runtime.CoreRT).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
 
             Add(ConsoleLogger.Default);
@@ -36,7 +32,7 @@ namespace Zilon.Core.Benchmark
             Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
             Add(EnvironmentAnalyser.Default);
             UnionRule = ConfigUnionRule.AlwaysUseLocal;
-            ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
+            ArtifactsPath = benchArtifactsPath;
         }
     }
 }

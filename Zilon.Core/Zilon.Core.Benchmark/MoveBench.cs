@@ -83,7 +83,7 @@ namespace Zilon.Core.Benchmark
                 var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
-                playerState.HoverViewModel = new TestNodeViewModel
+                playerState.SelectedViewModel = new TestNodeViewModel
                 {
                     Node = moveTargetNode
                 };
@@ -198,6 +198,7 @@ namespace Zilon.Core.Benchmark
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
+                        RegionMonsterCount = 0,
 
                         RegionCount = 20,
                         RegionSize = 20,
@@ -206,7 +207,7 @@ namespace Zilon.Core.Benchmark
 
                         ChestDropTableSids = new[] {"survival", "default" },
                         RegionChestCountRatio = 9,
-                        TotalChestCount = 20
+                        TotalChestCount = 0
                     }
                }
             };
