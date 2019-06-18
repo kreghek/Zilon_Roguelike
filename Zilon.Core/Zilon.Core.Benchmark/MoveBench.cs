@@ -37,10 +37,6 @@ namespace Zilon.Core.Benchmark
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 100; i++)
@@ -56,7 +52,7 @@ namespace Zilon.Core.Benchmark
 
                 commandManger.Push(moveCommand);
 
-                ICommand command = null;
+                ICommand command;
                 do
                 {
                     command = commandManger.Pop();
@@ -79,10 +75,6 @@ namespace Zilon.Core.Benchmark
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 1; i++)
@@ -98,7 +90,7 @@ namespace Zilon.Core.Benchmark
 
                 commandManger.Push(moveCommand);
 
-                ICommand command = null;
+                ICommand command;
                 do
                 {
                     command = commandManger.Pop();
