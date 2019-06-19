@@ -106,25 +106,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
+            var wasTransported = TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
 
-            if (rolledTransportLocality == null)
+            if (!wasTransported)
             {
                 // Агент переходит в государство-захватчик.
                 // При этом получает урон.
                 agent.Hp -= 2;
                 agent.Realm = realm;
-            }
-            else
-            {
-                if (currentLocality != null)
-                {
-                    Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
-                }
-
-                agent.Location = rolledTransportLocality.Cell;
-
-                Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
             }
         }
     }

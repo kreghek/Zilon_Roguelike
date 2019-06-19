@@ -16,20 +16,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
-            if (rolledTransportLocality == null)
-            {
-                return;
-            }
-
-            if (currentLocality != null)
-            {
-                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
-            }
-
-            agent.Location = rolledTransportLocality.Cell;
-
-            Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+            TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
         }
     }
 }

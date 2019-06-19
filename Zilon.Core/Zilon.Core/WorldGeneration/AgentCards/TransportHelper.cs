@@ -44,5 +44,37 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             return rolledTransportLocality;
         }
+
+        /// <summary>
+        /// Выполняет перемещение агента в произвольный нас.пункт текущего государства, если это возможно.
+        /// </summary>
+        /// <param name="globe"> Мир. </param>
+        /// <param name="dice"> Сервис случайностей. </param>
+        /// <param name="agent"> Агент для перемещения. </param>
+        /// <param name="currentLocality"> Текущая позиция агента. </param>
+        /// <returns> Возвращает true в случае успешного перемещения. Иначе - false. </returns>
+        /// <remarks>
+        /// Агент перемещается, если найден подходящий нас. пункт. Иначе остаётся в текущем.
+        /// </remarks>
+        public static bool TransportAgentToRandomLocality(Globe globe, IDice dice, Agent agent, Locality currentLocality)
+        {
+            var targetLocality = RollTargetLocality(globe, dice, agent, currentLocality);
+
+            if (targetLocality == null)
+            {
+                return false;
+            }
+
+            if (currentLocality != null)
+            {
+                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+            }
+
+            agent.Location = targetLocality.Cell;
+
+            Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+
+            return true;
+        }
     }
 }

@@ -34,14 +34,17 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var highestBranchs = agent.Skills.OrderBy(x => x.Value)
-                                    .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1);
+            var highestBranchs = agent.Skills
+                                    .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1)
+                                    .OrderBy(x => x.Value);
+
             if (!highestBranchs.Any())
             {
                 return;
             }
 
             var firstBranch = highestBranchs.First();
+
 
             // Обнаружение свободных узлов для размещения населённого пункта.
             // Свободные узлы ишутся от текущей локации агента.
@@ -59,22 +62,8 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 var freeY = scanOffsetCoords.Y;
 
                 // Убеждаемся, что проверяемый узел находится в границах мира.
-                if (freeX < 0)
-                {
-                    continue;
-                }
-
-                if (freeX >= globe.Terrain.Length)
-                {
-                    continue;
-                }
-
-                if (freeY < 0)
-                {
-                    continue;
-                }
-
-                if (freeY >= globe.Terrain[freeX].Length)
+                var isPointInside = IsPointInsideWorld(freeX, freeY, globe.Terrain);
+                if (!isPointInside)
                 {
                     continue;
                 }
@@ -119,17 +108,33 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 // Если не удалось найти свободный узел,
                 // то агент перемещается в произвольный населённый пункт своего государства.
 
-                var rolledTransportLocality = TransportHelper.RollTargetLocality(globe, dice, agent, currentLocality);
-
-                if (currentLocality != null)
-                {
-                    Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
-                }
-
-                agent.Location = rolledTransportLocality.Cell;
-
-                Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+                TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
             }
+        }
+
+        private static bool IsPointInsideWorld(int freeX, int freeY, TerrainCell[][] terrain)
+        {
+            if (freeX < 0)
+            {
+                return false;
+            }
+
+            if (freeX >= terrain.Length)
+            {
+                return false;
+            }
+
+            if (freeY < 0)
+            {
+                return false;
+            }
+
+            if (freeY >= terrain[freeX].Length)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
