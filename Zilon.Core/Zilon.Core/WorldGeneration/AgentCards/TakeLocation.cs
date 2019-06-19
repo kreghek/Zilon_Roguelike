@@ -101,19 +101,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return targetLocality;
         }
 
-        private static CubeCoords[] GetRandomCoords(int coordRollIndex)
-        {
-            var coords = HexHelper.GetOffsetClockwise();
-            var shuffledCoords = new CubeCoords[6];
-            for (var i = 0; i < 6; i++)
-            {
-                var coordRollIndexOffset = (coordRollIndex + i) % 6;
-                shuffledCoords[coordRollIndexOffset] = coords[i];
-            }
-
-            return shuffledCoords;
-        }
-
         private void TransferAgent(Agent agent, Globe globe, Realm realm, IDice dice)
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
@@ -127,6 +114,20 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 agent.Hp -= 2;
                 agent.Realm = realm;
             }
+        }
+
+        private static CubeCoords[] GetRandomCoords(int coordRollIndex)
+        {
+            var coords = HexHelper.GetOffsetClockwise();
+            var count = coords.Length;
+            var shuffledCoords = new CubeCoords[count];
+            for (var i = 0; i < count; i++)
+            {
+                var coordRollIndexOffset = (coordRollIndex + i) % count;
+                shuffledCoords[coordRollIndexOffset] = coords[i];
+            }
+
+            return shuffledCoords;
         }
     }
 }
