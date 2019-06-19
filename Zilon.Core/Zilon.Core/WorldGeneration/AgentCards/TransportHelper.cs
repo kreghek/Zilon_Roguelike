@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 
@@ -20,9 +19,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         /// <returns> Возвращает новый населённый пункт или null, если такой невозможно выбрать. </returns>
         public static Locality RollTargetLocality(Globe globe, IDice dice, Agent agent, Locality currentLocality)
         {
-            var availableTransportLocalities = new List<Locality>();
-            foreach (var locality in globe.Localities)
+            var count = globe.Localities.Count();
+            var currentIndex = dice.Roll(0, count - 1);
+            var startIndex = currentIndex;
+            Locality targetLocality = null;
+            while (targetLocality != null)
             {
+                var locality = globe.Localities[currentIndex];
+
                 if (locality == currentLocality)
                 {
                     continue;
@@ -30,19 +34,25 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                 if (locality.Owner == agent.Realm)
                 {
-                    availableTransportLocalities.Add(locality);
+                    targetLocality = locality;
+                }
+
+                currentIndex++;
+                if (currentIndex >= count)
+                {
+                    currentIndex = 0;
+                }
+
+                if (startIndex == currentIndex)
+                {
+                    // Достигли точки, с которой начали обход.
+                    // Значит не нашли подходящего агента.
+
+                    break;
                 }
             }
 
-            if (!availableTransportLocalities.Any())
-            {
-                return null;
-            }
-
-            var rolledTransportLocalityIndex = dice.Roll(0, availableTransportLocalities.Count() - 1);
-            var rolledTransportLocality = availableTransportLocalities[rolledTransportLocalityIndex];
-
-            return rolledTransportLocality;
+            return currentLocality;
         }
 
         /// <summary>
