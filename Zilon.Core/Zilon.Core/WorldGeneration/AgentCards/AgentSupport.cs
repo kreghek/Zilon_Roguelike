@@ -22,33 +22,44 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var availableTargets = GetAvailableAgents(agent, globe.Agents);
-            if (availableTargets.Any())
+            var targetAgent = GetTargetAgent(agent, globe.Agents, dice);
+            if (targetAgent != null)
             {
-                var agentRollIndex = dice.Roll(0, availableTargets.Count() - 1);
-                var targetAgent = availableTargets[agentRollIndex];
                 targetAgent.Hp++;
             }
         }
 
-        private List<Agent> GetAvailableAgents(Agent currentAgent, IEnumerable<Agent> agents)
+        private Agent GetTargetAgent(Agent currentAgent, List<Agent> agents, IDice dice)
         {
-            var result = new List<Agent>();
-
-            foreach (var agent in agents)
+            var agentCount = agents.Count();
+            var agentIndex = dice.Roll(0, agentCount - 1);
+            var startIndex = agentIndex;
+            Agent targetAgent = null;
+            while (targetAgent != null)
             {
-                if (agent != currentAgent)
+                var agent = agents[agentIndex];
+
+                if (agent != currentAgent && (0 <= agent.Hp && agent.Hp <= 2))
                 {
-                    continue;
+                    targetAgent = agent;
                 }
 
-                if (0 <= agent.Hp && agent.Hp <= 2)
+                agentIndex++;
+                if (agentIndex >= agentCount)
                 {
-                    result.Add(agent);
+                    agentIndex = 0;
+                }
+
+                if (startIndex == agentIndex)
+                {
+                    // Достигли точки, с которой начали обход.
+                    // Значит не нашли подходящего агента.
+
+                    break;
                 }
             }
 
-            return result;
+            return targetAgent;
         }
     }
 }

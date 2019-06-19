@@ -22,7 +22,7 @@ namespace Zilon.Core.WorldGeneration
     {
         private const int WORLD_SIZE = 40;
         private const int START_ITERATION_REALMS = 8;
-        private const int HISTORY_ITERATION_COUNT = 40_000;
+        private const int HISTORY_ITERATION_COUNT = 40000;
         private const int StartAgentCount = 40;
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
@@ -403,8 +403,15 @@ namespace Zilon.Core.WorldGeneration
         {
             for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
+
                 foreach (var agent in globe.Agents.ToArray())
                 {
+                    var useCardRoll = _dice.Roll2D6();
+                    if (useCardRoll > 7)
+                    {
+                        continue;
+                    }
+
                     var card = cardQueue.Dequeue();
 
                     if (card.CanUse(agent, globe))
