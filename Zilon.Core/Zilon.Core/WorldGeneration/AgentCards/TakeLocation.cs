@@ -107,7 +107,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var shuffledCoords = new CubeCoords[6];
             for (var i = 0; i < 6; i++)
             {
-                var coordRollIndexOffset = (coordRollIndex + 1) % 6;
+                var coordRollIndexOffset = (coordRollIndex + i) % 6;
                 shuffledCoords[coordRollIndexOffset] = coords[i];
             }
 
