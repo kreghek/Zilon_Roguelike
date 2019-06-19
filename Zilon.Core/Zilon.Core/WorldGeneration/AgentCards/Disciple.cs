@@ -32,7 +32,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
 
-            var agentNameGenerator = globe.agentNameGenerator;
+            var agentNameGenerator = new RandomName(dice);
 
             if (highestBranchs.Any())
             {

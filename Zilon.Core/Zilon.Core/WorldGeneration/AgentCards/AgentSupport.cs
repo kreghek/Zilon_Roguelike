@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 
@@ -22,44 +21,15 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var targetAgent = GetTargetAgent(agent, globe.Agents, dice);
-            if (targetAgent != null)
+            string history = null;
+
+            var availableTargets = globe.Agents.Where(x => x != agent && x.Hp >= 0 && x.Hp <= 2).ToArray();
+            if (availableTargets.Any())
             {
+                var agentRollIndex = dice.Roll(0, availableTargets.Count() - 1);
+                var targetAgent = availableTargets[agentRollIndex];
                 targetAgent.Hp++;
             }
-        }
-
-        private Agent GetTargetAgent(Agent currentAgent, List<Agent> agents, IDice dice)
-        {
-            var agentCount = agents.Count();
-            var agentIndex = dice.Roll(0, agentCount - 1);
-            var startIndex = agentIndex;
-            Agent targetAgent = null;
-            while (targetAgent != null)
-            {
-                var agent = agents[agentIndex];
-
-                if (agent != currentAgent && (0 <= agent.Hp && agent.Hp <= 2))
-                {
-                    targetAgent = agent;
-                }
-
-                agentIndex++;
-                if (agentIndex >= agentCount)
-                {
-                    agentIndex = 0;
-                }
-
-                if (startIndex == agentIndex)
-                {
-                    // Достигли точки, с которой начали обход.
-                    // Значит не нашли подходящего агента.
-
-                    break;
-                }
-            }
-
-            return targetAgent;
         }
     }
 }

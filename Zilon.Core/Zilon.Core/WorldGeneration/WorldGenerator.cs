@@ -22,7 +22,7 @@ namespace Zilon.Core.WorldGeneration
     {
         private const int WORLD_SIZE = 40;
         private const int START_ITERATION_REALMS = 8;
-        private const int HISTORY_ITERATION_COUNT = 40000;
+        private const int HISTORY_ITERATION_COUNT = 40_000;
         private const int StartAgentCount = 40;
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
