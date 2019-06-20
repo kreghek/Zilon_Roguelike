@@ -31,8 +31,6 @@ namespace Zilon.Core.Benchmarks
     {
         private IServiceProvider _serviceProvider;
 
-        public static string[] BenchArgs { get; set; }
-
         [Benchmark(Description = "Move100")]
         public void Move100()
         {
@@ -139,7 +137,7 @@ namespace Zilon.Core.Benchmarks
             serviceCollection.AddSingleton<HumanPlayer>();
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
 
-            serviceCollection.AddSingleton<ISchemeLocator>(factory => CreateSchemeLocator(BenchArgs));
+            serviceCollection.AddSingleton<ISchemeLocator>(factory => CreateSchemeLocator());
 
             serviceCollection.AddSingleton<IGameLoop, GameLoop>();
             serviceCollection.AddSingleton<ICommandManager, QueueCommandManager>();
@@ -254,34 +252,11 @@ namespace Zilon.Core.Benchmarks
             };
         }
 
-        private FileSchemeLocator CreateSchemeLocator(string[] args)
+        private FileSchemeLocator CreateSchemeLocator()
         {
-            //var schemePath = GetProgramArgument(args, "SchemeCatalog");
-            var schemePath = @"C:\PROJECTS\Zilon_Roguelike\Zilon.Client\Assets\Resources\Schemes";
+            var schemePath = Environment.GetEnvironmentVariable("zilon_SchemeCatalog");
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
-        }
-
-        private static string GetProgramArgument(string[] args, string testArg)
-        {
-            if (args == null)
-            {
-                return null;
-            }
-
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
-                }
-            }
-
-            return null;
         }
 
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,

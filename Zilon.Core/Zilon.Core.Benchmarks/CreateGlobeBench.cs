@@ -13,8 +13,6 @@ namespace Zilon.Core.Benchmarks
 {
     public class CreateGlobeBench
     {
-        private IServiceProvider _serviceProvider;
-
         private IWorldGenerator _generator;
 
         [Benchmark(Description = "CreateGlobeBench")]
@@ -43,7 +41,7 @@ namespace Zilon.Core.Benchmarks
 
         private FileSchemeLocator CreateSchemeLocator()
         {
-            var schemePath = @"C:\PROJECTS\Zilon_Roguelike\Zilon.Client\Assets\Resources\Schemes";
+            var schemePath = Environment.GetEnvironmentVariable("zilon_SchemeCatalog");
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
         }

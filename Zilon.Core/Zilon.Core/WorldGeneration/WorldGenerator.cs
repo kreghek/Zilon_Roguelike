@@ -80,7 +80,7 @@ namespace Zilon.Core.WorldGeneration
             globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
 
             agentsClock.Stop();
-            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
+            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "ms");
 
             // Сейчас история пустая. Пока не разработаны требования, как лучше сделать.
             var globeHistory = new GlobeGenerationHistory();
