@@ -16,6 +16,9 @@ namespace Zilon.Core.Benchmarks
         {
             var monoRuntimeName = "Mono";
 
+            // В этих бенчах не удаётся запустить ничего, кроме корки.
+            // Раскомментировать, когда будет ясно, как исправить.
+
             //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
             //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
             //Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));

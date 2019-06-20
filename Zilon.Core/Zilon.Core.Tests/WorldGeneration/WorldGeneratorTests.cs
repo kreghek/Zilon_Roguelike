@@ -29,6 +29,8 @@ namespace Zilon.Core.Tests.WorldGeneration
             var generator = new WorldGenerator(dice, schemeService);
 
             var result = await generator.GenerateGlobeAsync();
+            //TODO Вынести в отдельное приложение.
+            // Суть приложения - генерировать мир и просматривать результат и историю генерации.
             //result.Globe.Save(@"c:\worldgen");
 
             result.Should().NotBeNull();
