@@ -59,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.Developme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Emulation.Common", "Zilon.Emulation.Common\Zilon.Emulation.Common.csproj", "{36013151-86C1-431E-ABC6-AFF816D4E015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks", "Zilon.Core.Benchmarks\Zilon.Core.Benchmarks.csproj", "{19DD1935-D6CA-41A2-9F59-AF6D8F487301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.NetCore", "Zilon.Core.Benchmarks.NetCore\Zilon.Core.Benchmarks.NetCore.csproj", "{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,10 +127,10 @@ Global
 		{36013151-86C1-431E-ABC6-AFF816D4E015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36013151-86C1-431E-ABC6-AFF816D4E015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36013151-86C1-431E-ABC6-AFF816D4E015}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19DD1935-D6CA-41A2-9F59-AF6D8F487301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19DD1935-D6CA-41A2-9F59-AF6D8F487301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19DD1935-D6CA-41A2-9F59-AF6D8F487301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19DD1935-D6CA-41A2-9F59-AF6D8F487301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,7 +151,7 @@ Global
 		{49B389A3-F804-4C6C-B6E1-B68A5F309A7D} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{B0CDC661-4458-4E1E-9375-F949F3EFB567} = {65115D33-2698-4BCE-9B94-A187A740CDE0}
 		{36013151-86C1-431E-ABC6-AFF816D4E015} = {49B389A3-F804-4C6C-B6E1-B68A5F309A7D}
-		{19DD1935-D6CA-41A2-9F59-AF6D8F487301} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
+		{C1CEF5A7-9767-49A7-9CB3-A88E2D2F52C3} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}

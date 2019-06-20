@@ -11,7 +11,7 @@ namespace Zilon.Core.Benchmarks
             var schemePath = GetProgramArgument(args, "SchemeCatalog");
 
             var monoPath = GetProgramArgument(args, "MonoPath");
-            var artefactsPath = GetProgramArgument(args, "ArtefactPaths");
+            var artefactsPath = GetProgramArgument(args, "ArtefactsPath");
             var iterationCount = int.Parse(GetProgramArgument(args, "IterationCount"));
 
             var config = CreateBenchConfig(monoPath, artefactsPath, schemePath, iterationCount);
