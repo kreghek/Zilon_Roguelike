@@ -14,16 +14,22 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
-
-            return currentLocality.Population <= 5;
+            if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
+            {
+                return currentLocality.Population <= 5;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
-            currentLocality.Population++;
-            return $"{agent} increased {currentLocality} population. Now {currentLocality}: {currentLocality.Population}.";
+            if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
+            {
+                currentLocality.Population++;
+            }
         }
     }
 }

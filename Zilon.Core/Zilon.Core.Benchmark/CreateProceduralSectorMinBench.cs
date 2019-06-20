@@ -110,6 +110,8 @@ namespace Zilon.Core.Benchmark
             //TODO Сделать фейковый генератор
             _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
