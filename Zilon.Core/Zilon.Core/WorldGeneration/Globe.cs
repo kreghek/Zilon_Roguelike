@@ -44,23 +44,25 @@ namespace Zilon.Core.WorldGeneration
             using (var realmBmp = new DirectBitmap(Terrain.Length, Terrain[0].Length))
             using (var branchmBmp = new DirectBitmap(Terrain.Length, Terrain[0].Length))
             {
-                for (var i = 0; i < Terrain.Length; i++)
+                for (var x = 0; x < Terrain.Length; x++)
                 {
-                    for (var j = 0; j < Terrain[0].Length; j++)
+                    for (var y = 0; y < Terrain[0].Length; y++)
                     {
-                        var cell = Terrain[i][j];
+                        var cell = Terrain[x][y];
                         if (LocalitiesCells.TryGetValue(cell, out var locality))
                         {
-                            var branch = locality.Branches.Single(x => x.Value > 0);
+                            var branch = locality.Branches.Single(b => b.Value > 0);
 
                             var owner = locality.Owner;
-                            realmBmp.SetPixel(i, j, owner.Color);
-                            branchmBmp.SetPixel(i, j, branchColors[(int)branch.Key]);
+                            var mainColor = owner.Banner.MainColor;
+                            var drawingColor = Color.FromArgb(mainColor.R, mainColor.G, mainColor.B);
+                            realmBmp.SetPixel(x, y, drawingColor);
+                            branchmBmp.SetPixel(x, y, branchColors[(int)branch.Key]);
                         }
                         else
                         {
-                            realmBmp.SetPixel(i, j, Color.White);
-                            branchmBmp.SetPixel(i, j, Color.White);
+                            realmBmp.SetPixel(x, y, Color.White);
+                            branchmBmp.SetPixel(x, y, Color.White);
                         }
                     }
                 }
