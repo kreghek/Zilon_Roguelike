@@ -44,6 +44,7 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly IGlobeUiState _globeUiState;
     [Inject] private readonly IGlobeModalManager _globeModalManager;
     [Inject] private readonly IScoreManager _scoreManager;
+    [Inject] private readonly ProgressStorageService _progressStorageService;
 
     public PlayerPersonCreator PersonCreator;
 
@@ -51,26 +52,30 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.Globe == null)
         {
-            var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
-            _globeManager.Globe = globwGenerationResult.Globe;
-            _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
+            if (!_progressStorageService.Load())
+            {
 
-            var startCell = _globeManager.Globe.StartProvince;
+                var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+                _globeManager.Globe = globwGenerationResult.Globe;
+                _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
 
-            _player.Terrain = startCell;
+                var startCell = _globeManager.Globe.StartProvince;
 
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
-            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+                _player.Terrain = startCell;
 
-            _globeManager.Regions[_player.Terrain] = createdRegion;
+                var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
+                await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
 
-            var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
+                _globeManager.Regions[_player.Terrain] = createdRegion;
 
-            _player.GlobeNode = startNode;
+                var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
 
-            startNode.ObservedState = GlobeNodeObservedState.Visited;
+                _player.GlobeNode = startNode;
 
-            _globeModalManager.ShowHistoryBookModal();
+                startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+                _globeModalManager.ShowHistoryBookModal();
+            }
         }
 
         var currentGlobeCell = _player.Terrain;
@@ -292,6 +297,12 @@ public class GlobeWorldVM : MonoBehaviour
         {
             ExecuteCommands();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        var globe = _globeManager.Globe;
+        _progressStorageService.Save(globe);
     }
 
     private void ExecuteCommands()
