@@ -96,6 +96,10 @@ namespace Zilon.Core.WorldGeneration
             var agentDict = Agents.ToDictionary(storedAgent => storedAgent.Id);
             RestoreAgents(out globe.Agents, Agents, globe.Terrain, realmDict);
 
+            globe.AgentCrisys = AgentCrisys;
+            globe.HomeProvince = globe.Terrain[HomeProvince.Coords.X][HomeProvince.Coords.Y];
+            globe.StartProvince = globe.Terrain[StartProvince.Coords.X][StartProvince.Coords.Y];
+
             return globe;
         }
 

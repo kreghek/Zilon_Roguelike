@@ -33,12 +33,14 @@ namespace Zilon.Core.Tests.ProgressStoring
         {
             // ARRANGE
             var globe = new Globe();
-            globe.Terrain = new TerrainCell[][] {
+            globe.Terrain = new TerrainCell[][]
+            {
                 new TerrainCell[] { new TerrainCell{ Coords = new OffsetCoords(0, 0)}, new TerrainCell { Coords = new OffsetCoords(1, 0) } },
                 new TerrainCell[] { new TerrainCell{ Coords = new OffsetCoords(0, 1)}, new TerrainCell { Coords = new OffsetCoords(1, 1) } }
             };
 
-            globe.Realms = new List<Realm> {
+            globe.Realms = new List<Realm>
+            {
                 new Realm{
                     Name = "realm-name",
                     Banner = new RealmBanner{ MainColor = new Color(0, 0, 0) }
@@ -47,16 +49,21 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             var flattenTerrain = globe.Terrain.SelectMany(x => x).ToArray();
 
-            globe.Localities = new List<Locality> {
-                new Locality(){
+            globe.Localities = new List<Locality>
+            {
+                new Locality()
+                {
                     Name = "capital",
-                    Cell = flattenTerrain.Single(x=>x.Coords.X == 0 && x.Coords.Y == 0),
+                    Cell = flattenTerrain.Single(x => x.Coords.X == 0 && x.Coords.Y == 0),
                     Owner = globe.Realms.First(),
                     Population = 1,
                     Branches = new Dictionary<BranchType, int>{ { BranchType.Agricultural, 1 } }
                 }
             };
             globe.LocalitiesCells = globe.Localities.ToDictionary(x => x.Cell, x => x);
+
+            globe.HomeProvince = globe.Localities.First().Cell;
+            globe.StartProvince = globe.Localities.Last().Cell;
 
             // Создание модели хранения
             var storageData = GlobeStorageData.Create(globe);
@@ -82,10 +89,6 @@ namespace Zilon.Core.Tests.ProgressStoring
                 options.Excluding(g => g.ScanResult);
                 options.Excluding(g => g.cityNameGenerator);
                 options.Excluding(g => g.agentNameGenerator);
-
-                options.Excluding(g => g.AgentCrisys);
-                options.Excluding(g => g.StartProvince);
-                options.Excluding(g => g.HomeProvince);
 
                 return options;
             });
