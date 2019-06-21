@@ -83,7 +83,6 @@ namespace Zilon.Core.Tests.ProgressStoring
                 options.Excluding(g => g.cityNameGenerator);
                 options.Excluding(g => g.agentNameGenerator);
 
-                options.Excluding(g => g.AgentCells);
                 options.Excluding(g => g.AgentCrisys);
                 options.Excluding(g => g.StartProvince);
                 options.Excluding(g => g.HomeProvince);
