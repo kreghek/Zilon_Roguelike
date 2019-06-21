@@ -8,8 +8,9 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 
 using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
-namespace Zilon.Core.WorldGeneration.Tests
+namespace Zilon.Core.Tests.ProgressStoring
 {
     [TestFixture()]
     public class GlobeStorageDataTests
@@ -66,8 +67,8 @@ namespace Zilon.Core.WorldGeneration.Tests
             // Десериализуем
             var deserializedStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(serialized);
 
-            
-            
+
+
             // ACT
 
             // Восстанавливаем мир
@@ -76,8 +77,6 @@ namespace Zilon.Core.WorldGeneration.Tests
 
 
             // ASSERT
-            restoredGlobe.LocalitiesCells.Should().BeEquivalentTo(globe.LocalitiesCells);
-
             restoredGlobe.Should().BeEquivalentTo(globe, options =>
             {
                 options.Excluding(g => g.ScanResult);
