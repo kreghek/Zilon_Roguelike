@@ -88,9 +88,6 @@ namespace Zilon.Core.Tests.ProgressStoring
                 options.Excluding(g => g.StartProvince);
                 options.Excluding(g => g.HomeProvince);
 
-                options.Using<Dictionary<TerrainCell, Locality>>(x => x.Subject.Equals(x.Expectation))
-                .WhenTypeIs<Dictionary<TerrainCell, Locality>>();
-
                 return options;
             });
         }

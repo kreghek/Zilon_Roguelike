@@ -91,18 +91,27 @@ namespace Zilon.Core.WorldGeneration
 
             globe.Realms = realmDict.Select(x => x.Value).ToList();
 
-            RestoreLocalities(globe, globe.Terrain, realmDict, Localities);
+            RestoreLocalities(out globe.Localities, out globe.LocalitiesCells, Localities, globe.Terrain, realmDict);
 
             return globe;
         }
 
-        private static void RestoreLocalities(Globe globe,
+        /// <summary>
+        /// Восстанавливает нас.пункты в указанные коллекции.
+        /// </summary>
+        /// <param name="localities"> Целевая коллекция населённых пунктов. </param>
+        /// <param name="localityCells"> Соответствующая целевая коллекция кеша узлов населённых пунктов. </param>
+        /// <param name="storedLocalities"> Данные сохранения по нас.пунктам. </param>
+        /// <param name="terrain"> Территория мира. </param>
+        /// <param name="realmsDict"> Словарь государств. Нужен, чтобы знать id государств, которые были в файле сохранения. </param>
+        private static void RestoreLocalities(out List<Locality> localities,
+            out Dictionary<TerrainCell, Locality> localityCells,
+            LocalityStorageData[] storedLocalities,
             TerrainCell[][] terrain,
-            Dictionary<string, Realm> realmsDict,
-            LocalityStorageData[] storedLocalities)
+            Dictionary<string, Realm> realmsDict)
         {
-            globe.Localities = new List<Locality>(storedLocalities.Length);
-            globe.LocalitiesCells = new Dictionary<TerrainCell, Locality>(storedLocalities.Length);
+            localities = new List<Locality>(storedLocalities.Length);
+            localityCells = new Dictionary<TerrainCell, Locality>(storedLocalities.Length);
 
             var flattenTerrain = terrain.SelectMany(x => x).ToArray();
             foreach (var storedLocality in storedLocalities)
@@ -117,8 +126,8 @@ namespace Zilon.Core.WorldGeneration
                     Branches = storedLocality.Branches.ToDictionary(x => x.Type, x => x.Value)
                 };
 
-                globe.Localities.Add(locality);
-                globe.LocalitiesCells.Add(localityCell, locality);
+                localities.Add(locality);
+                localityCells.Add(localityCell, locality);
             }
         }
     }
