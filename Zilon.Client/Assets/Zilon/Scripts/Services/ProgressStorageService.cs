@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+
 using Newtonsoft.Json;
+
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
@@ -34,11 +33,11 @@ namespace Assets.Zilon.Scripts.Services
         [Inject]
         private HumanPlayer _humanPlayer;
 
-        public void SaveGlobe(Globe globe)
+        public void SaveGlobe()
         {
-            var storageDataObject = GlobeStorageData.Create(globe);
+            var storageDataObject = GlobeStorageData.Create(_worldManager.Globe);
 
-            var jsonString = JsonConvert.SerializeObject(storageDataObject);
+            var jsonString = JsonConvert.SerializeObject(storageDataObject, Formatting.Indented);
 
             var dataPath = Path.Combine(Application.persistentDataPath, "Globe.txt");
             using (var streamWriter = File.CreateText(dataPath))
@@ -68,11 +67,11 @@ namespace Assets.Zilon.Scripts.Services
         }
 
 
-        public void SavePlayer(HumanPlayer player)
+        public void SavePlayer()
         {
-            var storageDataObject = HumanPersonStorageData.Create(player.MainPerson);
+            var storageDataObject = HumanPersonStorageData.Create(_humanPlayer.MainPerson);
 
-            var jsonString = JsonConvert.SerializeObject(storageDataObject);
+            var jsonString = JsonConvert.SerializeObject(storageDataObject, Formatting.Indented);
 
             var dataPath = Path.Combine(Application.persistentDataPath, "Person.txt");
             using (var streamWriter = File.CreateText(dataPath))

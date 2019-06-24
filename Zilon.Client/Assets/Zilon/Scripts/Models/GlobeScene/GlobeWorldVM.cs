@@ -206,7 +206,10 @@ public class GlobeWorldVM : MonoBehaviour
 
         if (_player.MainPerson == null)
         {
-            _player.MainPerson = PersonCreator.CreatePlayerPerson();
+            if (!_progressStorageService.LoadPlayer())
+            {
+                _player.MainPerson = PersonCreator.CreatePlayerPerson();
+            }
         }
 
         var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
@@ -305,8 +308,8 @@ public class GlobeWorldVM : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        var globe = _globeManager.Globe;
-        _progressStorageService.SaveGlobe(globe);
+        _progressStorageService.SaveGlobe();
+        _progressStorageService.SavePlayer();
     }
 
     private void ExecuteCommands()

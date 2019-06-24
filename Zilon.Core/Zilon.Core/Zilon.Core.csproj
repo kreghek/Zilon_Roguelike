@@ -125,6 +125,7 @@
     <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />
     <Compile Include="ProgressStoring\HumanPersonStorageData.cs" />
     <Compile Include="ProgressStoring\HumanSurvivalStatStorageData.cs" />
     <Compile Include="ProgressStoring\LocalityBranchStorageData.cs" />
