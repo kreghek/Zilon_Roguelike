@@ -52,7 +52,7 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.Globe == null)
         {
-            if (!_progressStorageService.Load())
+            if (!_progressStorageService.LoadGlobe())
             {
 
                 var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
@@ -302,7 +302,7 @@ public class GlobeWorldVM : MonoBehaviour
     private void OnApplicationQuit()
     {
         var globe = _globeManager.Globe;
-        _progressStorageService.Save(globe);
+        _progressStorageService.SaveGlobe(globe);
     }
 
     private void ExecuteCommands()

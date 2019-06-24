@@ -102,6 +102,8 @@ internal class SectorVM : MonoBehaviour
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
+    [Inject] private readonly ProgressStorageService _progressStorageService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -452,12 +454,14 @@ internal class SectorVM : MonoBehaviour
                 PersonCreator.AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
+                OnApplicationQuit();
                 return;
             }
             else
             {
                 _humanPlayer.SectorSid = e.Transition.SectorSid;
                 StartLoadScene();
+                OnApplicationQuit();
                 return;
             }
         }
@@ -467,6 +471,7 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            OnApplicationQuit();
             return;
         }
 
@@ -474,11 +479,13 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            OnApplicationQuit();
         }
         else
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
             StartLoadScene();
+            OnApplicationQuit();
         }
     }
 
@@ -524,7 +531,10 @@ internal class SectorVM : MonoBehaviour
     {
         if (_humanPlayer.MainPerson == null)
         {
-            _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+            if (!_progressStorageService.LoadPlayer())
+            {
+                _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+            }
         }
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
@@ -638,5 +648,10 @@ internal class SectorVM : MonoBehaviour
     private void StartLoadScene()
     {
         SceneLoader.gameObject.SetActive(true);
+    }
+
+    private void OnApplicationQuit()
+    {
+        _progressStorageService.SavePlayer(_humanPlayer);
     }
 }
