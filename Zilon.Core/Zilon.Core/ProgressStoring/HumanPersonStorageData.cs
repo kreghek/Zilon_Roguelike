@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -10,6 +11,7 @@ namespace Zilon.Core.ProgressStoring
     {
         public HumanSurvivalStatStorageData[] Survival { get; set; }
         public PropStorageData[] Equipments { get; set; }
+        public PropStorageData[] Inventory { get; set; }
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
@@ -26,6 +28,41 @@ namespace Zilon.Core.ProgressStoring
                 Sid = x.Scheme.Sid,
                 Durable = x.Durable.Value
             }).ToArray();
+
+            storageData.Inventory = humanPerson.Inventory.CalcActualItems().Select(CreatePropStorageData).ToArray();
+
+            return storageData;
+        }
+
+        private static PropStorageData CreateEquipmentStorageData(IProp prop)
+        {
+            if (prop == null)
+            {
+                return null;
+            }
+
+            return CreatePropStorageData(prop);
+        }
+
+        private static PropStorageData CreatePropStorageData(IProp prop)
+        {
+            var storageData = new PropStorageData
+            {
+                Sid = prop.Scheme.Sid
+            };
+
+            switch (prop)
+            {
+                case Equipment equipment:
+                    storageData.Type = PropType.Equipment;
+                    storageData.Durable = equipment.Durable.Value;
+                    break;
+
+                case Resource resource:
+                    storageData.Type = PropType.Resource;
+                    storageData.Count = resource.Count;
+                    break;
+            }
 
             return storageData;
         }
@@ -52,8 +89,32 @@ namespace Zilon.Core.ProgressStoring
 
             foreach (var survivalStoredItem in storedPerson.Survival)
             {
-                var stat = person.Survival.Stats.Single(x=>x.Type == survivalStoredItem.Type);
+                var stat = person.Survival.Stats.Single(x => x.Type == survivalStoredItem.Type);
                 stat.Value = survivalStoredItem.Value;
+            }
+
+            foreach (var storedProp in storedPerson.Inventory)
+            {
+                var propScheme = schemeService.GetScheme<IPropScheme>(storedProp.Sid);
+                IProp prop;
+                switch (storedProp.Type)
+                {
+                    case PropType.Resource:
+                        prop = propFactory.CreateResource(propScheme, storedProp.Count);
+                        break;
+
+                    case PropType.Equipment:
+                        var equipment = propFactory.CreateEquipment(propScheme);
+                        equipment.Durable.Value = storedProp.Durable;
+                        prop = equipment;
+
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+
+                inventory.Add(prop);
             }
 
             for (var i = 0; i < storedPerson.Equipments.Length; i++)

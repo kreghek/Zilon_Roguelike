@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.ProgressStoring
 {

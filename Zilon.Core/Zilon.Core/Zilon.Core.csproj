@@ -132,6 +132,7 @@
     <Compile Include="ProgressStoring\AgentStorageData.cs" />
     <Compile Include="ProgressStoring\LocalityStorageData.cs" />
     <Compile Include="ProgressStoring\PropStorageData.cs" />
+    <Compile Include="ProgressStoring\PropType.cs" />
     <Compile Include="ProgressStoring\RealmStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />

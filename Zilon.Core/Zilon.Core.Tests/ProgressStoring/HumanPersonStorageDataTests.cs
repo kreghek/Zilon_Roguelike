@@ -51,7 +51,10 @@ namespace Zilon.Core.Tests.ProgressStoring
                     Equip = new TestPropEquipSubScheme{
                         SlotTypes = new[]{ EquipmentSlotTypes.Head }
                     }
-                } }
+                }},
+                { "res", new TestPropScheme {
+                    Sid = "res"
+                }}
             };
 
             var schemeServiceMock = new Mock<ISchemeService>();
@@ -84,6 +87,17 @@ namespace Zilon.Core.Tests.ProgressStoring
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);
             helm.Durable.Value = helm.Durable.Range.Max / 2;
             person.EquipmentCarrier[0] = helm;
+
+            // Инвентарь
+            var equipment1 = propFactory.CreateEquipment(propSchemes["helm"]);
+            inventory.Add(equipment1);
+
+            var equipment2 = propFactory.CreateEquipment(propSchemes["helm"]);
+            equipment2.Durable.Value = helm.Durable.Range.Max / 2;
+            inventory.Add(equipment2);
+
+            var resource = propFactory.CreateResource(propSchemes["res"], 1);
+            inventory.Add(resource);
 
 
             var storageData = HumanPersonStorageData.Create(person);
