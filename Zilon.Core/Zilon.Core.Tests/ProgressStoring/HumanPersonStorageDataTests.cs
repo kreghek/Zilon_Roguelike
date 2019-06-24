@@ -81,6 +81,7 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             // Назначаем экипировку
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);
+            helm.Durable.Value = helm.Durable.Range.Max / 2;
             person.EquipmentCarrier[0] = helm;
 
 

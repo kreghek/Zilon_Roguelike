@@ -16,7 +16,8 @@ namespace Zilon.Core.ProgressStoring
 
             storageData.Equipments = humanPerson.EquipmentCarrier.Select(x => x == null ? null : new PropStorageData
             {
-                Sid = x.Scheme.Sid
+                Sid = x.Scheme.Sid,
+                Durable = x.Durable.Value
             }).ToArray();
 
             return storageData;
@@ -54,6 +55,7 @@ namespace Zilon.Core.ProgressStoring
                 var equipmentScheme = schemeService.GetScheme<IPropScheme>(storedEquipment.Sid);
 
                 var equipment = propFactory.CreateEquipment(equipmentScheme);
+                equipment.Durable.Value = storedEquipment.Durable;
 
                 person.EquipmentCarrier[i] = equipment;
                 //TODO Уменьшать прочность согласно сохранённым данным
