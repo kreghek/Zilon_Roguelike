@@ -55,27 +55,31 @@ public class GlobeWorldVM : MonoBehaviour
             if (!_progressStorageService.LoadGlobe())
             {
 
-                var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
-                _globeManager.Globe = globwGenerationResult.Globe;
-                _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
-
-                var startCell = _globeManager.Globe.StartProvince;
-
-                _player.Terrain = startCell;
-
-                var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
-                await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
-
-                _globeManager.Regions[_player.Terrain] = createdRegion;
-
-                var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
-
-                _player.GlobeNode = startNode;
-
-                startNode.ObservedState = GlobeNodeObservedState.Visited;
-
-                _globeModalManager.ShowHistoryBookModal();
+                var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+                _globeManager.Globe = globeGenerationResult.Globe;
+                _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
             }
+            else
+            {
+                _globeManager.GlobeGenerationHistory = new GlobeGenerationHistory();
+            }
+
+            var startCell = _globeManager.Globe.StartProvince;
+
+            _player.Terrain = startCell;
+
+            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
+            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+
+            _globeManager.Regions[_player.Terrain] = createdRegion;
+
+            var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
+
+            _player.GlobeNode = startNode;
+
+            startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+            _globeModalManager.ShowHistoryBookModal();
         }
 
         var currentGlobeCell = _player.Terrain;
