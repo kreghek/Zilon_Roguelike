@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using FluentAssertions;
 
 using Moq;
@@ -77,6 +77,7 @@ namespace Zilon.Core.Tests.ProgressStoring
                                          evolutionData,
                                          survivalRandomSource,
                                          inventory);
+            person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
 
 
             // Назначаем экипировку

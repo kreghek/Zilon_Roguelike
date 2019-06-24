@@ -8,11 +8,18 @@ namespace Zilon.Core.ProgressStoring
 {
     public class HumanPersonStorageData
     {
+        public HumanSurvivalStatStorageData[] Survival { get; set; }
         public PropStorageData[] Equipments { get; set; }
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
             var storageData = new HumanPersonStorageData();
+
+            storageData.Survival = humanPerson.Survival.Stats.Select(x => new HumanSurvivalStatStorageData
+            {
+                Type = x.Type,
+                Value = x.Value
+            }).ToArray();
 
             storageData.Equipments = humanPerson.EquipmentCarrier.Select(x => x == null ? null : new PropStorageData
             {
@@ -42,6 +49,12 @@ namespace Zilon.Core.ProgressStoring
                                          evolutionData,
                                          survivalRandomSource,
                                          inventory);
+
+            foreach (var survivalStoredItem in storedPerson.Survival)
+            {
+                var stat = person.Survival.Stats.Single(x=>x.Type == survivalStoredItem.Type);
+                stat.Value = survivalStoredItem.Value;
+            }
 
             for (var i = 0; i < storedPerson.Equipments.Length; i++)
             {
