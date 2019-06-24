@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -12,6 +13,7 @@ namespace Zilon.Core.ProgressStoring
         public HumanSurvivalStatStorageData[] Survival { get; set; }
         public PropStorageData[] Equipments { get; set; }
         public PropStorageData[] Inventory { get; set; }
+        public PerkStorageData[] Perks { get; set; }
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
@@ -23,15 +25,30 @@ namespace Zilon.Core.ProgressStoring
                 Value = x.Value
             }).ToArray();
 
-            storageData.Equipments = humanPerson.EquipmentCarrier.Select(x => x == null ? null : new PropStorageData
-            {
-                Sid = x.Scheme.Sid,
-                Durable = x.Durable.Value
-            }).ToArray();
+            storageData.Equipments = humanPerson.EquipmentCarrier.Select(CreateEquipmentStorageData).ToArray();
 
             storageData.Inventory = humanPerson.Inventory.CalcActualItems().Select(CreatePropStorageData).ToArray();
 
+            storageData.Perks = humanPerson.EvolutionData.Perks.Select(CreatePerkStorageData).ToArray();
+
             return storageData;
+        }
+
+        private static PerkStorageData CreatePerkStorageData(IPerk x)
+        {
+            return new PerkStorageData
+            {
+                Sid = x.Scheme.Sid,
+                Level = x.CurrentLevel?.Primary,
+                SubLevel = x.CurrentLevel?.Sub,
+                Jobs = x.CurrentJobs.Select(job => new PerkJobStorageData
+                {
+                    Type = job.Scheme.Type,
+                    Scope = job.Scheme.Scope,
+                    Progress = job.Progress,
+                    IsComplete = job.IsComplete
+                }).ToArray()
+            };
         }
 
         private static PropStorageData CreateEquipmentStorageData(IProp prop)
@@ -134,6 +151,34 @@ namespace Zilon.Core.ProgressStoring
                 person.EquipmentCarrier[i] = equipment;
                 //TODO Уменьшать прочность согласно сохранённым данным
             }
+
+            var perksFromSave = new List<IPerk>();
+            foreach (var storedPerk in storedPerson.Perks)
+            {
+                var perkScheme = schemeService.GetScheme<IPerkScheme>(storedPerk.Sid);
+
+                var perk = new Perk
+                {
+                    Scheme = perkScheme
+                };
+
+                if (storedPerk.Level != null)
+                {
+                    perk.CurrentLevel = new PerkLevel(storedPerk.Level.Value, storedPerk.SubLevel.Value);
+                }
+
+                // TODO Доработать, когда будет доработана прокачка больше, чем на один лвл
+                var currentLevelScheme = perkScheme.Levels[0];
+
+                perk.CurrentJobs = currentLevelScheme.Jobs.Select(job => new PerkJob(job)
+                {
+                    IsComplete = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).IsComplete,
+                    Progress = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress,
+                }).ToArray();
+
+                perksFromSave.Add(perk);
+            }
+            evolutionData.SetPerksForced(perksFromSave);
 
             return person;
         }

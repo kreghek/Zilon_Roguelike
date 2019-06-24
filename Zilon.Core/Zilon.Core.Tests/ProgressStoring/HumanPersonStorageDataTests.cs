@@ -57,6 +57,20 @@ namespace Zilon.Core.Tests.ProgressStoring
                 }}
             };
 
+            var perkSchemes = new Dictionary<string, IPerkScheme>
+            {
+                { "perk1", new TestPerkScheme{
+                    Sid = "perk1",
+                    Levels = new PerkLevelSubScheme[]{
+                        new PerkLevelSubScheme{
+                            Jobs = new[]{
+                                new TestJobSubScheme{Type = JobType.Defeats, Value = 100 }
+                            }
+                        }
+                    }
+                } }
+            };
+
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetScheme<IPersonScheme>(It.IsAny<string>()))
                 .Returns<string>(sid => personSchemes[sid]);
@@ -64,6 +78,10 @@ namespace Zilon.Core.Tests.ProgressStoring
                 .Returns<string>(sid => tacticalActSchemes[sid]);
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.IsAny<string>()))
                 .Returns<string>(sid => propSchemes[sid]);
+            schemeServiceMock.Setup(x => x.GetScheme<IPerkScheme>(It.IsAny<string>()))
+                .Returns<string>(sid => perkSchemes[sid]);
+            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
+                .Returns(perkSchemes.Values.ToArray());
             var schemeService = schemeServiceMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -99,6 +117,8 @@ namespace Zilon.Core.Tests.ProgressStoring
             var resource = propFactory.CreateResource(propSchemes["res"], 1);
             inventory.Add(resource);
 
+            evolutionData.Perks.First().CurrentJobs.First().Progress = 13;
+
 
             var storageData = HumanPersonStorageData.Create(person);
 
@@ -120,9 +140,7 @@ namespace Zilon.Core.Tests.ProgressStoring
             // ASSERT
             restoredPerson.Should().BeEquivalentTo(person, options =>
             {
-                options.Excluding(g => g.CombatStats);
                 options.Excluding(g => g.Effects);
-                options.Excluding(g => g.EvolutionData);
 
                 return options;
             });

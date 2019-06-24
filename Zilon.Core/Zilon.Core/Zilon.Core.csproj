@@ -131,6 +131,8 @@
     <Compile Include="ProgressStoring\AgentSkillStorageData.cs" />
     <Compile Include="ProgressStoring\AgentStorageData.cs" />
     <Compile Include="ProgressStoring\LocalityStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkJobStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkStorageData.cs" />
     <Compile Include="ProgressStoring\PropStorageData.cs" />
     <Compile Include="ProgressStoring\PropType.cs" />
     <Compile Include="ProgressStoring\RealmStorageData.cs" />
