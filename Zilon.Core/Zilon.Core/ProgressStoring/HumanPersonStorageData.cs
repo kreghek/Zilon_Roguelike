@@ -96,6 +96,8 @@ namespace Zilon.Core.ProgressStoring
 
             var evolutionData = new EvolutionData(schemeService);
 
+            RestoreEvolutionData(schemeService, storedPerson, evolutionData);
+
             var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
             var person = new HumanPerson(personScheme,
@@ -152,6 +154,13 @@ namespace Zilon.Core.ProgressStoring
                 //TODO Уменьшать прочность согласно сохранённым данным
             }
 
+            return person;
+        }
+
+        private static void RestoreEvolutionData(ISchemeService schemeService,
+            HumanPersonStorageData storedPerson,
+            EvolutionData evolutionData)
+        {
             var perksFromSave = new List<IPerk>();
             foreach (var storedPerk in storedPerson.Perks)
             {
@@ -179,8 +188,6 @@ namespace Zilon.Core.ProgressStoring
                 perksFromSave.Add(perk);
             }
             evolutionData.SetPerksForced(perksFromSave);
-
-            return person;
         }
     }
 }
