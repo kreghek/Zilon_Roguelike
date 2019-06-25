@@ -455,7 +455,7 @@
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
-    <Compile Include="WorldGeneration\Helper.cs" />
+    <Compile Include="WorldGeneration\CacheHelper.cs" />
     <Compile Include="WorldGeneration\IAgentCard.cs" />
     <Compile Include="WorldGeneration\Locality.cs" />
     <Compile Include="WorldGeneration\Realm.cs" />

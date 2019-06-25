@@ -87,12 +87,12 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             if (currentLocality != null)
             {
-                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                CacheHelper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
             }
 
             agent.Location = targetLocality.Cell;
 
-            Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+            CacheHelper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
 
             return true;
         }

@@ -73,7 +73,11 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
+            CacheHelper.PrepareDict(globe.AgentCells, globe.Terrain);
+
             ProcessIterations(globe, cardQueue);
+
+            CacheHelper.ClearDict(globe.AgentCells);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
@@ -455,7 +459,7 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.Agents.Add(agent);
 
-                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
+                CacheHelper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>
