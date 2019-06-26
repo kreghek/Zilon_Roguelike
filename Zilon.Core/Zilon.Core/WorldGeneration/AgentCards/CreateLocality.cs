@@ -19,7 +19,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         public bool CanUse(Agent agent, Globe globe)
         {
             var hasCurrentLocality = globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
-            if (currentLocality != null)
+            if (hasCurrentLocality)
             {
                 if (currentLocality.Population >= 2)
                 {
@@ -30,18 +30,21 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return false;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var highestBranchs = agent.Skills.OrderBy(x => x.Value)
-                                    .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1);
+            var highestBranchs = agent.Skills
+                                    .Where(x => /*x.Key != BranchType.Politics &&*/ x.Value >= 1)
+                                    .OrderBy(x => x.Value);
+
             if (!highestBranchs.Any())
             {
-                return null;
+                return;
             }
 
             var firstBranch = highestBranchs.First();
+
 
             // Обнаружение свободных узлов для размещения населённого пункта.
             // Свободные узлы ишутся от текущей локации агента.
@@ -59,22 +62,8 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 var freeY = scanOffsetCoords.Y;
 
                 // Убеждаемся, что проверяемый узел находится в границах мира.
-                if (freeX < 0)
-                {
-                    continue;
-                }
-
-                if (freeX >= globe.Terrain.Length)
-                {
-                    continue;
-                }
-
-                if (freeY < 0)
-                {
-                    continue;
-                }
-
-                if (freeY >= globe.Terrain[freeX].Length)
+                var isPointInside = IsPointInsideWorld(freeX, freeY, globe.Terrain);
+                if (!isPointInside)
                 {
                     continue;
                 }
@@ -88,7 +77,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 }
             }
 
-            string history;
             if (freeLocaltion != null)
             {
                 // Свободный узел был найден.
@@ -114,27 +102,39 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 globe.Localities.Add(createdLocality);
                 globe.LocalitiesCells[freeLocaltion] = createdLocality;
                 globe.ScanResult.Free.Remove(freeLocaltion);
-
-                history = $"{agent} fonded {createdLocality}";
             }
             else
             {
                 // Если не удалось найти свободный узел,
                 // то агент перемещается в произвольный населённый пункт своего государства.
-                var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm).ToArray();
-                var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
-                var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
 
-                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
+            }
+        }
 
-                agent.Location = rolledTransportLocality.Cell;
-
-                Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
-
-                history = $"{agent} change location to {rolledTransportLocality} trying to start new life.";
+        private static bool IsPointInsideWorld(int freeX, int freeY, TerrainCell[][] terrain)
+        {
+            if (freeX < 0)
+            {
+                return false;
             }
 
-            return history;
+            if (freeX >= terrain.Length)
+            {
+                return false;
+            }
+
+            if (freeY < 0)
+            {
+                return false;
+            }
+
+            if (freeY >= terrain[freeX].Length)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

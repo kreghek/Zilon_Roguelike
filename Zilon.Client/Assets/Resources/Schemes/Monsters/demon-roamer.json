@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Бродяга демонов",
-	"En": "Demon Roamer"
+    "En": "Demon Roamer"
   },
   "Hp": 4,
   "PrimaryAct": {
@@ -17,9 +17,15 @@
       "Type": "Rapid",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 30
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 30,
+  "Tags": [
+    "demon",
+    "unclean"
+  ]
 }

@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Скелет-Бугай",
-	"En": "Skeleton Grunt"
+    "En": "Skeleton Grunt"
   },
   "Hp": 10,
   "PrimaryAct": {
@@ -17,8 +17,8 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -26,12 +26,17 @@
         "Type": "TacticalDefence",
         "Level": "Normal"
       },
-	  {
+      {
         "Type": "TrickyDefence",
         "Level": "Normal"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 50
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 50,
+  "Tags": [
+    "undead"
+  ]
 }

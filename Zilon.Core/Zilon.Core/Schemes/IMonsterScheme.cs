@@ -4,8 +4,13 @@
     /// Схема монстра.
     /// </summary>
     /// <seealso cref="Zilon.Core.Schemes.IScheme" />
-    public interface IMonsterScheme: IScheme
+    public interface IMonsterScheme : IScheme
     {
+        /// <summary>
+        /// Базовые очки, начисляемые за убиство монстра.
+        /// </summary>
+        int BaseScore { get; }
+
         /// <summary>
         /// Характеристики обороны монстра.
         /// </summary>
@@ -27,8 +32,8 @@
         ITacticalActStatsSubScheme PrimaryAct { get; }
 
         /// <summary>
-        /// Базовые очки, начисляемые за убиство монстра.
+        /// Теги для классификации монстров.
         /// </summary>
-        int BaseScore { get; }
+        string[] Tags { get; }
     }
 }

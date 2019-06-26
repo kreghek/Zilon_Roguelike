@@ -37,26 +37,22 @@ namespace Zilon.Core.Benchmark
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 100; i++)
             {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
-                var moveTargetNode = nextNodes.First();
+                var currentActorNode = playerState.ActiveActor.Actor.Node;
+                var nextNodes = sectorManager.CurrentSector.Map.GetNext(currentActorNode);
+                var moveTargetNode = (HexNode)nextNodes.First();
 
-                playerState.HoverViewModel = new TestNodeViewModel
+                playerState.SelectedViewModel = new TestNodeViewModel
                 {
                     Node = moveTargetNode
                 };
 
                 commandManger.Push(moveCommand);
 
-                ICommand command = null;
+                ICommand command;
                 do
                 {
                     command = commandManger.Pop();
@@ -79,10 +75,6 @@ namespace Zilon.Core.Benchmark
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var humanPlayer = _container.GetInstance<HumanPlayer>();
-            var actorManager = _container.GetInstance<IActorManager>();
-            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 1; i++)
@@ -91,14 +83,14 @@ namespace Zilon.Core.Benchmark
                 var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
-                playerState.HoverViewModel = new TestNodeViewModel
+                playerState.SelectedViewModel = new TestNodeViewModel
                 {
                     Node = moveTargetNode
                 };
 
                 commandManger.Push(moveCommand);
 
-                ICommand command = null;
+                ICommand command;
                 do
                 {
                     command = commandManger.Pop();
@@ -116,8 +108,9 @@ namespace Zilon.Core.Benchmark
         }
 
         [IterationSetup]
-        public async System.Threading.Tasks.Task IterationSetupAsync()
+        public void IterationSetup()
         {
+
             _container = new ServiceContainer();
 
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
@@ -138,6 +131,8 @@ namespace Zilon.Core.Benchmark
             _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
             _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
@@ -203,6 +198,7 @@ namespace Zilon.Core.Benchmark
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
+                        RegionMonsterCount = 0,
 
                         RegionCount = 20,
                         RegionSize = 20,
@@ -211,7 +207,7 @@ namespace Zilon.Core.Benchmark
 
                         ChestDropTableSids = new[] {"survival", "default" },
                         RegionChestCountRatio = 9,
-                        TotalChestCount = 20
+                        TotalChestCount = 0
                     }
                }
             };
@@ -219,7 +215,7 @@ namespace Zilon.Core.Benchmark
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);
             humanPlayer.GlobeNode = globeNode;
 
-            await sectorManager.CreateSectorAsync();
+            sectorManager.CreateSectorAsync().Wait();
 
 
 
