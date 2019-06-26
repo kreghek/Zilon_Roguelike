@@ -454,7 +454,7 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.Agents.Add(agent);
 
-                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
+                CacheHelper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>
