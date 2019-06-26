@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
@@ -23,44 +23,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         /// Метод среди них выбирает только тот, который подходит.
         /// Таким является не текущий случайный нас.пункт государсва агента.
         /// </remarks>
-        public static Locality RollTargetLocality(List<Locality> localities, IDice dice, Realm agentRealm, Locality currentLocality)
+        public static Locality RollTargetLocality(List<Locality> localities,
+                                                  IDice dice,
+                                                  Realm agentRealm,
+                                                  Locality currentLocality)
         {
-            var count = localities.Count();
-            var currentIndex = dice.Roll(0, count - 1);
-            var startIndex = currentIndex;
-            Locality targetLocality = null;
-            while (targetLocality == null)
-            {
-                var locality = localities[currentIndex];
-
-                currentIndex++;
-
-                // Зацикливаем индекс
-                if (currentIndex >= count)
-                {
-                    currentIndex = 0;
-                }
-
-                // Проверяем обход всего набора
-                if (startIndex == currentIndex)
-                {
-                    // Достигли точки, с которой начали обход.
-                    // Значит не нашли подходящего агента.
-
-                    break;
-                }
-
-                if (locality == currentLocality)
-                {
-                    continue;
-                }
-
-                if (locality.Owner == agentRealm)
-                {
-                    targetLocality = locality;
-                    break;
-                }
-            }
+            var targetLocality = ListHelper.RollRandom(localities,
+                dice,
+                locality => locality.Owner == agentRealm && locality != currentLocality);
 
             return targetLocality;
         }
