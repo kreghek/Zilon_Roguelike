@@ -77,6 +77,7 @@
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
@@ -436,6 +437,7 @@
     <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
+    <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
@@ -454,7 +456,7 @@
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
-    <Compile Include="WorldGeneration\Helper.cs" />
+    <Compile Include="WorldGeneration\CacheHelper.cs" />
     <Compile Include="WorldGeneration\IAgentCard.cs" />
     <Compile Include="WorldGeneration\Locality.cs" />
     <Compile Include="WorldGeneration\Realm.cs" />

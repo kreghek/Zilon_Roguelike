@@ -162,6 +162,7 @@
     <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
     <Compile Include="Tactics\TacticalActUsageServiceTests.cs" />
     <Compile Include="Tactics\TransitionDetectionTests.cs" />
+    <Compile Include="WorldGeneration\AgentCards\TransportHelperTests.cs" />
     <Compile Include="WorldGeneration\WorldGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>

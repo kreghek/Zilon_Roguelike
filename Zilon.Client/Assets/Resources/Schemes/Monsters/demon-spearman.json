@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Копейщик демонов",
-	"En": "Demon Spearman"
+    "En": "Demon Spearman"
   },
   "Hp": 5,
   "PrimaryAct": {
@@ -17,23 +17,23 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
-      {
-        "Type": "FuryDefence",
-        "Level": "Lesser"
-      }
-    ],
-	"Defenses": [
       {
         "Type": "ShadowDefence",
         "Level": "Lesser"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 50
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 50,
+  "Tags": [
+    "demon",
+    "unclean"
+  ]
 }

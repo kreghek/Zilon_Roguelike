@@ -2,6 +2,8 @@
 
 namespace Zilon.Core.WorldGeneration
 {
+    //TODO Переработать историю.
+    // Сейчас вообще нерабочий вариант.
     public sealed class GlobeGenerationHistoryItem
     {
         public GlobeGenerationHistoryItem(string historyEvent, int iteration)

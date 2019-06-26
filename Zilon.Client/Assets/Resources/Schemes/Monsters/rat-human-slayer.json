@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Крыса людо-убийца",
-	"En": "Rat Human Slayer"
+    "En": "Rat Human Slayer"
   },
   "Hp": 8,
   "PrimaryAct": {
@@ -17,8 +17,8 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -28,6 +28,15 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "default", "champion-loot" ],
-  "BaseScore": 250
+  "DropTableSids": [
+    "survival",
+    "default",
+    "champion-loot"
+  ],
+  "BaseScore": 250,
+  "Tags": [
+    "mutant",
+    "beast",
+    "unclean"
+  ]
 }

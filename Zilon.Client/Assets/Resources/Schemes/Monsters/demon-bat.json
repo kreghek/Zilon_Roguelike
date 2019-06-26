@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Демоническая летучая мышь",
-	"En": "Demon Bat"
+    "En": "Demon Bat"
   },
   "Hp": 4,
   "PrimaryAct": {
@@ -17,23 +17,25 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
-      {
-        "Type": "FuryDefence",
-        "Level": "Lesser"
-      }
-    ],
-	"Defenses": [
       {
         "Type": "ShadowDefence",
         "Level": "Lesser"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 30
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 30,
+  "Tags": [
+    "demon",
+    "flying",
+    "unclean",
+    "beast"
+  ]
 }

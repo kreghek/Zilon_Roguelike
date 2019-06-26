@@ -8,7 +8,7 @@ namespace Zilon.Core.WorldGeneration
     public interface IAgentCard
     {
         bool CanUse(Agent agent, Globe globe);
-        string Use(Agent agent, Globe globe, IDice dice);
+        void Use(Agent agent, Globe globe, IDice dice);
         int PowerCost { get; }
     }
 }

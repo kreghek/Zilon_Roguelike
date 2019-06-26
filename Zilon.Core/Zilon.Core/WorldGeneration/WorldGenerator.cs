@@ -22,7 +22,7 @@ namespace Zilon.Core.WorldGeneration
     {
         private const int WORLD_SIZE = 40;
         private const int START_ITERATION_REALMS = 8;
-        private const int HISTORY_ITERATION_COUNT = 400;
+        private const int HISTORY_ITERATION_COUNT = 40_000;
         private const int StartAgentCount = 40;
         private const int LocationBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
@@ -59,8 +59,6 @@ namespace Zilon.Core.WorldGeneration
                 cityNameGenerator = new CityNameGenerator(_dice)
             };
 
-            var globeHistory = new GlobeGenerationHistory();
-
             var realmTask = CreateRealms(globe);
             var terrainTask = CreateTerrain(globe);
 
@@ -75,15 +73,17 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
-            ProcessIterations(globe, cardQueue, globeHistory);
+            ProcessIterations(globe, cardQueue);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
             globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
 
             agentsClock.Stop();
-            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "s");
+            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "ms");
 
+            // Сейчас история пустая. Пока не разработаны требования, как лучше сделать.
+            var globeHistory = new GlobeGenerationHistory();
             var result = new GlobeGenerationResult(globe, globeHistory);
             return Task.FromResult(result);
         }
@@ -399,25 +399,24 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue, GlobeGenerationHistory globeHistory)
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
         {
             for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
+
                 foreach (var agent in globe.Agents.ToArray())
                 {
+                    var useCardRoll = _dice.Roll2D6();
+                    if (useCardRoll > 7)
+                    {
+                        continue;
+                    }
+
                     var card = cardQueue.Dequeue();
 
                     if (card.CanUse(agent, globe))
                     {
-                        var result = card.Use(agent, globe, _dice);
-
-                        //TODO Переработать историю.
-                        // Сейчас вообще нерабочий вариант. Оставляю только для логов.
-                        if (!string.IsNullOrWhiteSpace(result))
-                        {
-                            var historyItem = new GlobeGenerationHistoryItem(result, iteration);
-                            globeHistory.Items.Add(historyItem);
-                        }
+                        card.Use(agent, globe, _dice);
                     }
 
                     cardQueue.Enqueue(card);
@@ -456,7 +455,7 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.Agents.Add(agent);
 
-                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
+                CacheHelper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>
