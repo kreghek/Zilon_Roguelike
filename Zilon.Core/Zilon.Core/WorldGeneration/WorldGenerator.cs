@@ -64,8 +64,6 @@ namespace Zilon.Core.WorldGeneration
 
             Task.WaitAll(realmTask, terrainTask);
 
-            CacheHelper.PrepareDict(globe.AgentCells, globe.Terrain);
-
             CreateStartLocalities(globe);
             CreateStartAgents(globe);
 
@@ -75,13 +73,11 @@ namespace Zilon.Core.WorldGeneration
             var cardQueue = CreateAgentCardQueue();
 
             // обработка итераций
-
             ProcessIterations(globe, cardQueue);
+
 
             globe.StartProvince = GetStartProvinceCoords(globe);
             globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
-
-            CacheHelper.ClearDict(globe.AgentCells);
 
             agentsClock.Stop();
             Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "ms");
@@ -459,7 +455,7 @@ namespace Zilon.Core.WorldGeneration
 
                 globe.Agents.Add(agent);
 
-                CacheHelper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
+                Helper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
 
                 var rolledBranchIndex = _dice.Roll(0, 7);
                 agent.Skills = new Dictionary<BranchType, int>

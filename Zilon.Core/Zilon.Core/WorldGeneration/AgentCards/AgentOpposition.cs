@@ -32,7 +32,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 if (targetAgent.Hp <= 0)
                 {
                     globe.Agents.Remove(targetAgent);
-                    CacheHelper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                    globe.AgentCells.Remove(targetAgent.Location);
                 }
             }
         }

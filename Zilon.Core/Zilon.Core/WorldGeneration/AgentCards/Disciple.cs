@@ -50,7 +50,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                 globe.Agents.Add(agent);
 
-                CacheHelper.AddAgentToCell(globe.AgentCells, agentDisciple.Location, agent);
+                Helper.AddAgentToCell(globe.AgentCells, agentDisciple.Location, agent);
             }
             else
             {
