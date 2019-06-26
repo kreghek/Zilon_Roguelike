@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Архидемон",
-	"En": "Archdemon"
+    "En": "Archdemon"
   },
   "Hp": 100,
   "PrimaryAct": {
@@ -13,8 +13,8 @@
       "Min": 1,
       "Max": 1
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "Offence": {
       "Type": "Shadow",
       "Impact": "Psy"
@@ -23,17 +23,18 @@
   "Defense": {
     "Defenses": [
       {
-        "Type": "FuryDefence",
-        "Level": "Normal"
-      }
-    ],
-	"Defenses": [
-      {
         "Type": "ShadowDefence",
         "Level": "Normal"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 600
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 600,
+  "Tags": [
+    "demon",
+    "unclean",
+    "rare"
+  ]
 }

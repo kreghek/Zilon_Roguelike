@@ -54,8 +54,6 @@ public class GlobeWorldVM : MonoBehaviour
             var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
             _globeManager.Globe = globwGenerationResult.Globe;
             _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
-            //TODO Эту строку нужно убрать.
-            // Модал с историей будет вызываться из извентаря при использовании книги истории.
 
             var startCell = _globeManager.Globe.StartProvince;
 

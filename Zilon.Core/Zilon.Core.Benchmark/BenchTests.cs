@@ -7,10 +7,10 @@ using NUnit.Framework;
 namespace Zilon.Core.Benchmark
 {
     [TestFixture]
-    [Category("benchmark")]
     public class BenchTests
     {
         [Test]
+        [Category("benchmark")]
         public void Move()
         {
             var config = CreateBenchConfig();
@@ -18,6 +18,7 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        [Category("benchmark")]
         public void CreateProceduralMinSector()
         {
             var config = CreateBenchConfig();
@@ -25,6 +26,7 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        [Category("benchmark")]
         public void CreateProceduralSector()
         {
             var config = CreateBenchConfig();
@@ -32,10 +34,35 @@ namespace Zilon.Core.Benchmark
         }
 
         [Test]
+        [Category("benchmark")]
         public void CreateProceduralMaxSector()
         {
             var config = CreateBenchConfig();
             BenchmarkRunner.Run<CreateProceduralSectorMaxBench>(config);
+        }
+
+        [Test]
+        [Category("benchmark")]
+        public void CreateGlobe()
+        {
+            var config = CreateBenchConfig();
+            BenchmarkRunner.Run<CreateGlobeBench>(config);
+        }
+
+        [Test]
+        public void Move1_TestAsync()
+        {
+            var bench = new MoveBench();
+            bench.IterationSetup();
+            bench.Move1();
+        }
+
+        [Test]
+        public void Move100_TestAsync()
+        {
+            var bench = new MoveBench();
+            bench.IterationSetup();
+            bench.Move100();
         }
 
         [Test]
@@ -62,7 +89,16 @@ namespace Zilon.Core.Benchmark
             await bench.CreateAsync();
         }
 
-        private Config CreateBenchConfig() {
+        [Test]
+        public async System.Threading.Tasks.Task CreateGlobe_TestAsync()
+        {
+            var bench = new CreateGlobeBench();
+            bench.IterationSetup();
+            await bench.Run();
+        }
+
+        private Config CreateBenchConfig()
+        {
             var buildNumber = TestContext.Parameters["buildNumber"];
 
             Console.WriteLine($"buildNumber: {buildNumber}");

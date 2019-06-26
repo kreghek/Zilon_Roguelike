@@ -19,7 +19,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             return true;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
             string history = null;
 
@@ -29,11 +29,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 var agentRollIndex = dice.Roll(0, availableTargets.Count() - 1);
                 var targetAgent = availableTargets[agentRollIndex];
                 targetAgent.Hp++;
-
-                history = $"{agent} supported {targetAgent}.";
             }
-
-            return history;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -22,6 +23,11 @@ namespace Zilon.Core.WorldGeneration
             if (cells.TryGetValue(cell, out var list))
             {
                 list.Remove(agent);
+
+                if (!list.Any())
+                {
+                    cells.Remove(cell);
+                }
             }
         }
     }

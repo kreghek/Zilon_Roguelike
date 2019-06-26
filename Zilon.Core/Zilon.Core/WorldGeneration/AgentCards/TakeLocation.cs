@@ -21,20 +21,18 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            var targetLocality = GetNeighborLocality(agent, globe);
+            var targetLocality = GetNeighborLocality(agent, globe, 0);
 
             return targetLocality != null;
         }
 
-        public string Use(Agent agent, Globe globe, IDice dice)
+        public void Use(Agent agent, Globe globe, IDice dice)
         {
-            var targetLocality = GetNeighborLocality(agent, globe);
+            var targetLocality = GetNeighborLocality(agent, globe, dice.Roll(0, 5));
 
             targetLocality.Population--;
 
             targetLocality.Owner = agent.Realm;
-
-            var history = $"{agent} conquered {targetLocality} for his realm {agent.Realm}.";
 
             var otherAgentHistory = new List<string>();
             if (globe.AgentCells.TryGetValue(targetLocality.Cell, out var otherAgentsInLocality))
@@ -51,18 +49,13 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 }
             }
 
-            history += " " + string.Join(" ", otherAgentHistory);
-
             agent.Location = targetLocality.Cell;
-
-            return history;
         }
 
-        private static Locality GetNeighborLocality(Agent agent, Globe globe)
+        private static Locality GetNeighborLocality(Agent agent, Globe globe, int coordRollIndex)
         {
             Locality targetLocality = null;
-
-            var nextCoords = HexHelper.GetOffsetClockwise().OrderBy(item => Guid.NewGuid()).ToArray();
+            CubeCoords[] nextCoords = GetRandomCoords(coordRollIndex);
             var agentCubeCoords = HexHelper.ConvertToCube(agent.Location.Coords.X, agent.Location.Coords.Y);
             for (var i = 0; i < nextCoords.Length; i++)
             {
@@ -112,25 +105,29 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         {
             globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
-            if (!realmLocalities.Any())
+            var wasTransported = TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
+
+            if (!wasTransported)
             {
+                // Агент переходит в государство-захватчик.
+                // При этом получает урон.
                 agent.Hp -= 2;
                 agent.Realm = realm;
-                return;
             }
+        }
 
-            var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
-            var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
-
-            if (currentLocality != null)
+        private static CubeCoords[] GetRandomCoords(int coordRollIndex)
+        {
+            var coords = HexHelper.GetOffsetClockwise();
+            var count = coords.Length;
+            var shuffledCoords = new CubeCoords[count];
+            for (var i = 0; i < count; i++)
             {
-                Helper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
+                var coordRollIndexOffset = (coordRollIndex + i) % count;
+                shuffledCoords[coordRollIndexOffset] = coords[i];
             }
 
-            agent.Location = rolledTransportLocality.Cell;
-
-            Helper.AddAgentToCell(globe.AgentCells, agent.Location, agent);
+            return shuffledCoords;
         }
     }
 }

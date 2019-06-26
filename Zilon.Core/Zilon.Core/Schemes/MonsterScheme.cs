@@ -1,24 +1,17 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Схема монстра.
     /// </summary>
     public sealed class MonsterScheme : SchemeBase, IMonsterScheme
     {
         /// <summary>
-        /// Хитпоинты монстра.
+        /// Базовые очки, начисляемые за убиство монстра.
         /// </summary>
         [JsonProperty]
-        public int Hp { get; private set; }
-
-        /// <summary>
-        /// Основное действие монстра.
-        /// </summary>
-        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
-        [JsonProperty]
-        public ITacticalActStatsSubScheme PrimaryAct { get; private set; }
+        public int BaseScore { get; private set; }
 
         /// <summary>
         /// Способности к обороне монстра против атакующих действий противника.
@@ -34,9 +27,20 @@ namespace Zilon.Core.Schemes
         public string[] DropTableSids { get; private set; }
 
         /// <summary>
-        /// Базовые очки, начисляемые за убиство монстра.
+        /// Хитпоинты монстра.
         /// </summary>
         [JsonProperty]
-        public int BaseScore { get; private set; }
+        public int Hp { get; private set; }
+
+        /// <summary>
+        /// Основное действие монстра.
+        /// </summary>
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
+        [JsonProperty]
+        public ITacticalActStatsSubScheme PrimaryAct { get; private set; }
+
+        /// <inheritdoc/>
+        [JsonProperty]
+        public string[] Tags { get; private set; }
     }
 }
