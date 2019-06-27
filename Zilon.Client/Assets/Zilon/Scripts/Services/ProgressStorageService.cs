@@ -102,6 +102,17 @@ namespace Assets.Zilon.Scripts.Services
             return region;
         }
 
+        public void Destroy()
+        {
+            DeleteFile("Globe.txt");
+            DeleteFile("Person.txt");
+            var regionFiles = Directory.EnumerateFiles(Application.persistentDataPath, "Region*.txt");
+            foreach (var regionFile in regionFiles)
+            {
+                DeleteFile(regionFile);
+            }
+        }
+
         private void SaveInner(object storageDataObject, string fileName)
         {
             var jsonString = JsonConvert.SerializeObject(storageDataObject, Formatting.Indented);
@@ -126,6 +137,15 @@ namespace Assets.Zilon.Scripts.Services
                 string jsonString = streamReader.ReadToEnd();
                 var storageDataObject = JsonConvert.DeserializeObject<T>(jsonString);
                 return storageDataObject;
+            }
+        }
+
+        private void DeleteFile(string fileName)
+        {
+            var dataPath = Path.Combine(Application.persistentDataPath, fileName);
+            if (File.Exists(dataPath))
+            {
+                File.Delete(dataPath);
             }
         }
     }

@@ -568,6 +568,8 @@ internal class SectorVM : MonoBehaviour
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
+
+        _progressStorageService.Destroy();
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
