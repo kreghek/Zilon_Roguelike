@@ -130,6 +130,7 @@
     <Compile Include="ProgressStoring\GlobeRegionNodeStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />
     <Compile Include="ProgressStoring\HumanPersonStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanPlayerStorageData.cs" />
     <Compile Include="ProgressStoring\HumanSurvivalStatStorageData.cs" />
     <Compile Include="ProgressStoring\LocalityBranchStorageData.cs" />
     <Compile Include="ProgressStoring\AgentSkillStorageData.cs" />

@@ -531,7 +531,7 @@ internal class SectorVM : MonoBehaviour
     {
         if (_humanPlayer.MainPerson == null)
         {
-            if (!_progressStorageService.LoadPlayer())
+            if (!_progressStorageService.LoadPerson())
             {
                 _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
             }

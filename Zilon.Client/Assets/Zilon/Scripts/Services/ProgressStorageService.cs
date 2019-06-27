@@ -61,14 +61,14 @@ namespace Assets.Zilon.Scripts.Services
             return true;
         }
 
-        public void SavePlayer()
+        public void SavePerson()
         {
             var storageDataObject = HumanPersonStorageData.Create(_humanPlayer.MainPerson);
 
             SaveInner(storageDataObject, "Person.txt");
         }
 
-        public bool LoadPlayer()
+        public bool LoadPerson()
         {
             var storageDataObject = LoadInner<HumanPersonStorageData>("Person.txt");
             if (storageDataObject == null)
@@ -100,6 +100,25 @@ namespace Assets.Zilon.Scripts.Services
             var region = storageDataObject.Restore(_schemeService);
 
             return region;
+        }
+
+        public void SavePlayer()
+        {
+            var storageData = HumanPlayerStorageData.Create(_humanPlayer);
+            SaveInner(storageData, "Player.txt");
+        }
+
+        public bool LoadPlayer()
+        {
+            var storageDataObject = LoadInner<HumanPlayerStorageData>("Player.txt");
+            if (storageDataObject == null)
+            {
+                return false;
+            }
+
+            storageDataObject.Restore(_humanPlayer, _worldManager.Globe, _worldManager);
+
+            return true;
         }
 
         public void Destroy()

@@ -58,6 +58,11 @@ public class GlobeWorldVM : MonoBehaviour
                 var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
                 _globeManager.Globe = globeGenerationResult.Globe;
                 _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
+
+                if (!_progressStorageService.LoadPlayer())
+                {
+
+                }
             }
             else
             {
@@ -206,7 +211,7 @@ public class GlobeWorldVM : MonoBehaviour
 
         if (_player.MainPerson == null)
         {
-            if (!_progressStorageService.LoadPlayer())
+            if (!_progressStorageService.LoadPerson())
             {
                 _player.MainPerson = PersonCreator.CreatePlayerPerson();
             }
