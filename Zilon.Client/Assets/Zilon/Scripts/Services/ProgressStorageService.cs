@@ -11,6 +11,7 @@ using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -33,6 +34,9 @@ namespace Assets.Zilon.Scripts.Services
         [Inject]
         private HumanPlayer _humanPlayer;
 
+        [Inject]
+        private IScoreManager _scoreManager;
+
         public void Save()
         {
             if (_worldManager.Globe != null)
@@ -40,6 +44,7 @@ namespace Assets.Zilon.Scripts.Services
                 SaveGlobe();
 
                 SavePlayer();
+                SaveScores();
 
                 if (_worldManager.Regions != null)
                 {
@@ -146,6 +151,8 @@ namespace Assets.Zilon.Scripts.Services
 
             storageDataObject.Restore(_humanPlayer, _worldManager.Globe, _worldManager);
 
+            LoadScores();
+
             return true;
         }
 
@@ -153,11 +160,35 @@ namespace Assets.Zilon.Scripts.Services
         {
             DeleteFile("Globe.txt");
             DeleteFile("Person.txt");
+            DeleteFile("Player.txt");
+            DeleteFile("Scores.txt");
             var regionFiles = Directory.EnumerateFiles(Application.persistentDataPath, "Region*.txt");
             foreach (var regionFile in regionFiles)
             {
                 DeleteFile(regionFile);
             }
+        }
+
+        public void SaveScores()
+        {
+            var storageDataObject = ScoresStorageData.Create(_scoreManager.Scores);
+
+            SaveInner(storageDataObject, "Scores.txt");
+        }
+
+        public bool LoadScores()
+        {
+            var storageDataObject = LoadInner<ScoresStorageData>("Scores.txt");
+            if (storageDataObject == null)
+            {
+                return false;
+            }
+
+            var score = storageDataObject.Restore(_schemeService);
+
+            _scoreManager.Scores = score;
+
+            return true;
         }
 
         private void SaveInner(object storageDataObject, string fileName)
@@ -178,8 +209,6 @@ namespace Assets.Zilon.Scripts.Services
             {
                 return null;
             }
-
-            Debug.Log(dataPath);
 
             using (var streamReader = File.OpenText(dataPath))
             {

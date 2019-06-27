@@ -229,7 +229,7 @@ public class GlobeWorldVM : MonoBehaviour
         Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
         //TODO Заменить эту конструкцию на более стабильную.
-        var startNodeViewModel = _locationNodeViewModels.Single(x => x.Node.IsStart);
+        var startNodeViewModel = _locationNodeViewModels.Skip(_locationNodeViewModels.Count() / 2).First();
         MapBackground.transform.position = startNodeViewModel.transform.position;
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;

@@ -141,6 +141,8 @@
     <Compile Include="ProgressStoring\PropStorageData.cs" />
     <Compile Include="ProgressStoring\PropType.cs" />
     <Compile Include="ProgressStoring\RealmStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoreSidCounterStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoresStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
+    <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
