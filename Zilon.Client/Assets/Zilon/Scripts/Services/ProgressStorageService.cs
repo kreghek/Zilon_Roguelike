@@ -33,71 +33,98 @@ namespace Assets.Zilon.Scripts.Services
         [Inject]
         private HumanPlayer _humanPlayer;
 
+        public void Save()
+        {
+            SaveGlobe();
+            SavePlayer();
+        }
+
         public void SaveGlobe()
         {
             var storageDataObject = GlobeStorageData.Create(_worldManager.Globe);
 
-            var jsonString = JsonConvert.SerializeObject(storageDataObject, Formatting.Indented);
-
-            var dataPath = Path.Combine(Application.persistentDataPath, "Globe.txt");
-            using (var streamWriter = File.CreateText(dataPath))
-            {
-                streamWriter.Write(jsonString);
-            }
+            SaveInner(storageDataObject, "Globe.txt");
         }
 
         public bool LoadGlobe()
         {
-            var dataPath = Path.Combine(Application.persistentDataPath, "Globe.txt");
-            if (!File.Exists(dataPath))
+            var storageDataObject = LoadInner<GlobeStorageData>("Globe.txt");
+            if (storageDataObject == null)
             {
                 return false;
             }
 
-            using (var streamReader = File.OpenText(dataPath))
-            {
-                string jsonString = streamReader.ReadToEnd();
-                var storageDataObject = JsonConvert.DeserializeObject<GlobeStorageData>(jsonString);
-                var globe = storageDataObject.Restore();
+            var globe = storageDataObject.Restore();
 
-                _worldManager.Globe = globe;
-            }
+            _worldManager.Globe = globe;
 
             return true;
         }
-
 
         public void SavePlayer()
         {
             var storageDataObject = HumanPersonStorageData.Create(_humanPlayer.MainPerson);
 
+            SaveInner(storageDataObject, "Person.txt");
+        }
+
+        public bool LoadPlayer()
+        {
+            var storageDataObject = LoadInner<HumanPersonStorageData>("Person.txt");
+            if (storageDataObject == null)
+            {
+                return false;
+            }
+
+            var person = storageDataObject.Restore(_schemeService, _survivalRandomSource, _propFactory);
+
+            _humanPlayer.MainPerson = person;
+
+            return true;
+        }
+
+        public void SaveGlobeRegion(GlobeRegion globeRegion, TerrainCell terrainCell)
+        {
+            var strageDataObject = GlobeRegionStorageData.Create(globeRegion, terrainCell);
+            SaveInner(strageDataObject, $"Region{terrainCell}.txt");
+        }
+
+        public bool LoadRegion(TerrainCell terrainCell)
+        {
+            var storageDataObject = LoadInner<GlobeRegionNodeStorageData>($"Region{terrainCell}.txt");
+            if (storageDataObject == null)
+            {
+                return false;
+            }
+
+            storageDataObject.Restore();
+        }
+
+        private void SaveInner(object storageDataObject, string fileName)
+        {
             var jsonString = JsonConvert.SerializeObject(storageDataObject, Formatting.Indented);
 
-            var dataPath = Path.Combine(Application.persistentDataPath, "Person.txt");
+            var dataPath = Path.Combine(Application.persistentDataPath, fileName);
             using (var streamWriter = File.CreateText(dataPath))
             {
                 streamWriter.Write(jsonString);
             }
         }
 
-        public bool LoadPlayer()
+        private T LoadInner<T>(string fileName) where T : class
         {
-            var dataPath = Path.Combine(Application.persistentDataPath, "Person.txt");
+            var dataPath = Path.Combine(Application.persistentDataPath, fileName);
             if (!File.Exists(dataPath))
             {
-                return false;
+                return null;
             }
 
             using (var streamReader = File.OpenText(dataPath))
             {
                 string jsonString = streamReader.ReadToEnd();
-                var storageDataObject = JsonConvert.DeserializeObject<HumanPersonStorageData>(jsonString);
-                var person = storageDataObject.Restore(_schemeService, _survivalRandomSource, _propFactory);
-
-                _humanPlayer.MainPerson = person;
+                var storageDataObject = JsonConvert.DeserializeObject<T>(jsonString);
+                return storageDataObject;
             }
-
-            return true;
         }
     }
 }
