@@ -59,38 +59,41 @@ public class GlobeWorldVM : MonoBehaviour
                 _globeManager.Globe = globeGenerationResult.Globe;
                 _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
 
-                if (!_progressStorageService.LoadPlayer())
-                {
+                var startCell = _globeManager.Globe.StartProvince;
 
-                }
+                _player.Terrain = startCell;
+
+                var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator, _progressStorageService);
+                await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
+
+                _globeManager.Regions[_player.Terrain] = createdRegion;
+
+
+                var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
+
+                _player.GlobeNode = startNode;
+
+                startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+                _globeModalManager.ShowHistoryBookModal();
             }
             else
             {
                 _globeManager.GlobeGenerationHistory = new GlobeGenerationHistory();
+
+                if (!_progressStorageService.LoadPlayer())
+                {
+                    var startCell = _globeManager.Globe.StartProvince;
+
+                    _player.Terrain = startCell;
+                }
             }
-
-            var startCell = _globeManager.Globe.StartProvince;
-
-            _player.Terrain = startCell;
-
-            var createdRegion = await GetRegionAsync(_globeManager.Globe, startCell, _globeGenerator, _progressStorageService);
-            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
-
-            _globeManager.Regions[_player.Terrain] = createdRegion;
-
-            var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
-
-            _player.GlobeNode = startNode;
-
-            startNode.ObservedState = GlobeNodeObservedState.Visited;
-
-            _globeModalManager.ShowHistoryBookModal();
         }
 
         var currentGlobeCell = _player.Terrain;
         if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
-            var createdRegion = await GetRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
+            var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
         }
@@ -233,17 +236,11 @@ public class GlobeWorldVM : MonoBehaviour
         MoveGroupViewModel(_player.GlobeNode);
     }
 
-    private static async System.Threading.Tasks.Task<GlobeRegion> GetRegionAsync(Globe globe,
+    private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
         TerrainCell startCell,
         IWorldGenerator globeGenerator,
         ProgressStorageService progressStorageService)
     {
-        var region = progressStorageService.LoadRegion(startCell);
-        if (region != null)
-        {
-            return region;
-        }
-
         return await globeGenerator.GenerateRegionAsync(globe, startCell);
     }
 
@@ -283,7 +280,7 @@ public class GlobeWorldVM : MonoBehaviour
                     var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
                     if (!worldManager.Regions.ContainsKey(terrainCell))
                     {
-                        var createdNeiborRegion = await GetRegionAsync(worldManager.Globe, terrainCell, worldGenerator, progressStorageService);
+                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, worldGenerator, progressStorageService);
 
                         worldManager.Regions[terrainCell] = createdNeiborRegion;
                     }
@@ -328,8 +325,7 @@ public class GlobeWorldVM : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _progressStorageService.SaveGlobe();
-        _progressStorageService.SavePlayer();
+        _progressStorageService.Save();
     }
 
     private void ExecuteCommands()

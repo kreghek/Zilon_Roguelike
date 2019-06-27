@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using System.Linq;
 using Newtonsoft.Json;
 
 using UnityEngine;
@@ -35,8 +35,25 @@ namespace Assets.Zilon.Scripts.Services
 
         public void Save()
         {
-            SaveGlobe();
-            SavePlayer();
+            if (_worldManager.Globe != null)
+            {
+                SaveGlobe();
+
+                SavePlayer();
+
+                if (_worldManager.Regions != null)
+                {
+                    foreach (var region in _worldManager.Regions)
+                    {
+                        SaveGlobeRegion(region.Value, region.Key);
+                    }
+                }
+
+                if (_humanPlayer.MainPerson != null)
+                {
+                    SavePerson();
+                }
+            }
         }
 
         public void SaveGlobe()
@@ -57,6 +74,17 @@ namespace Assets.Zilon.Scripts.Services
             var globe = storageDataObject.Restore();
 
             _worldManager.Globe = globe;
+
+            var terrainCells = globe.Terrain.SelectMany(x => x).ToArray();
+
+            foreach (var cell in terrainCells)
+            {
+                var region =  LoadRegion(cell);
+                if (region != null)
+                {
+                    _worldManager.Regions[cell] = region;
+                }
+            }
 
             return true;
         }
@@ -150,6 +178,8 @@ namespace Assets.Zilon.Scripts.Services
             {
                 return null;
             }
+
+            Debug.Log(dataPath);
 
             using (var streamReader = File.OpenText(dataPath))
             {

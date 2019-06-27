@@ -654,7 +654,6 @@ internal class SectorVM : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _progressStorageService.SavePlayer();
-        _progressStorageService.SaveGlobe();
+        _progressStorageService.Save();
     }
 }
