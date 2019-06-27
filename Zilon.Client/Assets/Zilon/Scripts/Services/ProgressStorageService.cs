@@ -89,15 +89,17 @@ namespace Assets.Zilon.Scripts.Services
             SaveInner(strageDataObject, $"Region{terrainCell}.txt");
         }
 
-        public bool LoadRegion(TerrainCell terrainCell)
+        public GlobeRegion LoadRegion(TerrainCell terrainCell)
         {
-            var storageDataObject = LoadInner<GlobeRegionNodeStorageData>($"Region{terrainCell}.txt");
+            var storageDataObject = LoadInner<GlobeRegionStorageData>($"Region{terrainCell}.txt");
             if (storageDataObject == null)
             {
-                return false;
+                return null;
             }
 
-            storageDataObject.Restore();
+            var region = storageDataObject.Restore(_schemeService);
+
+            return region;
         }
 
         private void SaveInner(object storageDataObject, string fileName)

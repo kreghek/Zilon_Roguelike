@@ -68,8 +68,8 @@ public class GlobeWorldVM : MonoBehaviour
 
             _player.Terrain = startCell;
 
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
-            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+            var createdRegion = await GetRegionAsync(_globeManager.Globe, startCell, _globeGenerator, _progressStorageService);
+            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
 
@@ -85,13 +85,13 @@ public class GlobeWorldVM : MonoBehaviour
         var currentGlobeCell = _player.Terrain;
         if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, currentGlobeCell);
+            var createdRegion = await GetRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
         }
 
         // Создание соседних регионов
-        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
         Debug.Log($"Current: {currentGlobeCell}");
         Debug.Log($"Current: {_globeManager.Globe.HomeProvince}");
@@ -228,6 +228,20 @@ public class GlobeWorldVM : MonoBehaviour
         MoveGroupViewModel(_player.GlobeNode);
     }
 
+    private static async System.Threading.Tasks.Task<GlobeRegion> GetRegionAsync(Globe globe,
+        TerrainCell startCell,
+        IWorldGenerator globeGenerator,
+        ProgressStorageService progressStorageService)
+    {
+        var region = progressStorageService.LoadRegion(startCell);
+        if (region != null)
+        {
+            return region;
+        }
+
+        return await globeGenerator.GenerateRegionAsync(globe, startCell);
+    }
+
     //TODO Попробовать сделать загрузку всех провинций параллельно.
     // Выглядит так, что каждый запуск метода не зависит от предыдущих запусков.
     /// <summary>
@@ -239,7 +253,8 @@ public class GlobeWorldVM : MonoBehaviour
     /// <returns> Возвращает объект Task. </returns>
     private static async System.Threading.Tasks.Task CreateNeighborRegionsAsync(OffsetCoords playerCoords,
         IWorldManager worldManager,
-        IWorldGenerator worldGenerator)
+        IWorldGenerator worldGenerator,
+        ProgressStorageService progressStorageService)
     {
         for (var offsetX = -1; offsetX <= 1; offsetX++)
         {
@@ -263,7 +278,7 @@ public class GlobeWorldVM : MonoBehaviour
                     var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
                     if (!worldManager.Regions.ContainsKey(terrainCell))
                     {
-                        var createdNeiborRegion = await worldGenerator.GenerateRegionAsync(worldManager.Globe, terrainCell);
+                        var createdNeiborRegion = await GetRegionAsync(worldManager.Globe, terrainCell, worldGenerator, progressStorageService);
 
                         worldManager.Regions[terrainCell] = createdNeiborRegion;
                     }
