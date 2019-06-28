@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -108,8 +109,11 @@ namespace Zilon.Core.ProgressStoring
 
             foreach (var survivalStoredItem in storedPerson.Survival)
             {
+                var normalizedValueShare = RangeHelper.NormalizeShare(survivalStoredItem.Value);
+
                 var stat = person.Survival.Stats.Single(x => x.Type == survivalStoredItem.Type);
-                stat.SetShare(survivalStoredItem.Value);
+
+                stat.SetShare(normalizedValueShare);
             }
 
             foreach (var storedProp in storedPerson.Inventory)

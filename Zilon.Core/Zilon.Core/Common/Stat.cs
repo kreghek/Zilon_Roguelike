@@ -92,6 +92,16 @@ namespace Zilon.Core.Common
         /// <param name="value"> Значение в диапазоне [0..1]. </param>
         public void SetShare(float value)
         {
+            if (value < 0)
+            {
+                throw new ArgumentException("Значение не может быть меньше 0.", nameof(value));
+            }
+
+            if (value > 1)
+            {
+                throw new ArgumentException("Значение не может быть больше 1.", nameof(value));
+            }
+
             ValueShare = value;
         }
     }
