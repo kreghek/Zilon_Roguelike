@@ -53,16 +53,10 @@ namespace Zilon.Core.Commands
             var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel == null)
             {
-                throw new Exception();
                 return false;
             }
 
             CreatePath(nodeViewModel);
-            if (!Path.Any())
-            {
-                throw new Exception();
-            }
-
             return Path.Any();
         }
 
