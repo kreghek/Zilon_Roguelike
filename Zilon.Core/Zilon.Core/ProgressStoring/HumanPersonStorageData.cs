@@ -22,7 +22,7 @@ namespace Zilon.Core.ProgressStoring
             storageData.Survival = humanPerson.Survival.Stats.Select(x => new HumanSurvivalStatStorageData
             {
                 Type = x.Type,
-                Value = x.Value
+                Value = x.ValueShare
             }).ToArray();
 
             storageData.Equipments = humanPerson.EquipmentCarrier.Select(CreateEquipmentStorageData).ToArray();
@@ -109,7 +109,7 @@ namespace Zilon.Core.ProgressStoring
             foreach (var survivalStoredItem in storedPerson.Survival)
             {
                 var stat = person.Survival.Stats.Single(x => x.Type == survivalStoredItem.Type);
-                stat.Value = survivalStoredItem.Value;
+                stat.SetShare(survivalStoredItem.Value);
             }
 
             foreach (var storedProp in storedPerson.Inventory)
