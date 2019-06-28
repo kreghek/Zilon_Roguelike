@@ -37,6 +37,12 @@ namespace Assets.Zilon.Scripts.Services
         [Inject]
         private IScoreManager _scoreManager;
 
+        public bool HasSaves()
+        {
+            var dataPath = Path.Combine(Application.persistentDataPath, "Globe.txt");
+            return File.Exists(dataPath);
+        }
+
         public void Save()
         {
             if (_worldManager.Globe != null)
