@@ -454,14 +454,14 @@ internal class SectorVM : MonoBehaviour
                 PersonCreator.AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
-                OnApplicationQuit();
+                SaveGameProgress();
                 return;
             }
             else
             {
                 _humanPlayer.SectorSid = e.Transition.SectorSid;
                 StartLoadScene();
-                OnApplicationQuit();
+                SaveGameProgress();
                 return;
             }
         }
@@ -471,7 +471,7 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
-            OnApplicationQuit();
+            SaveGameProgress();
             return;
         }
 
@@ -479,13 +479,13 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
-            OnApplicationQuit();
+            SaveGameProgress();
         }
         else
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
             StartLoadScene();
-            OnApplicationQuit();
+            SaveGameProgress();
         }
     }
 
@@ -652,7 +652,7 @@ internal class SectorVM : MonoBehaviour
         SceneLoader.gameObject.SetActive(true);
     }
 
-    private void OnApplicationQuit()
+    private void SaveGameProgress()
     {
         _progressStorageService.Save();
     }
