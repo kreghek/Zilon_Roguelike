@@ -173,6 +173,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
+    <Compile Include="Tactics\IUseActResolver.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
@@ -415,7 +416,7 @@
     <Compile Include="Players\PlayerBase.cs" />
     <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
-    <Compile Include="Tactics\Behaviour\AttackTask.cs" />
+    <Compile Include="Tactics\Behaviour\DamageActorTask.cs" />
     <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTaskSource.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\TransitionDetection.cs" />
+    <Compile Include="Tactics\UseActResolver.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />

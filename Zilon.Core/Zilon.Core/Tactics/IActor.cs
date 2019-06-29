@@ -78,12 +78,30 @@ namespace Zilon.Core.Tactics
         event EventHandler<ArmorEventArgs> OnArmorPassed;
 
         /// <summary>
-        /// Приенение действия к указанной цели.
+        /// Атака указанного актёра.
         /// </summary>
-        /// <param name="target"> Цель действия. </param>
-        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+        /// <param name="target">Целевой актёр.</param>
+        /// <param name="usedTacticalActs">Используемые для атаки действия.</param>
+        void AttackActor(IActor target, UsedTacticalActs usedTacticalActs, IUseActResolver useActResolver);
 
+        /// <summary>
+        /// Атака указанный статический объект (не актёра).
+        /// </summary>
+        /// <param name="target">Целевой объект.</param>
+        /// <param name="usedTacticalActs">Используемые для атаки дейсвтия.</param>
+        void AttackStaticObject(IAttackTarget target, UsedTacticalActs usedTacticalActs, IUseActResolver useActResolver);
+
+        /// <summary>
+        /// Лечение указанного актёра.
+        /// </summary>
+        /// <param name="target">Целевой актёр. Актёр может применить действие на себя.</param>
+        /// <param name="usedTacticalActs">Применяемые действия.</param>
+        void HealActor(IActor target, UsedTacticalActs usedTacticalActs, IUseActResolver useActResolver);
+
+        /// <summary>
+        /// Использование предмета из инвентаря на себя.
+        /// </summary>
+        /// <param name="usedProp">Используемый предмет.</param>
         void UseProp(IProp usedProp);
 
         /// <summary>
