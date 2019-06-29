@@ -263,7 +263,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(attackerActor);
 
-            var attackIntention = new Intention<DamageActorTask>(a => new DamageActorTask(a, targetActor, usageService));
+            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService));
 
 
 
@@ -274,7 +274,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ASSERT
             tasks.Should().NotBeNullOrEmpty();
-            tasks[0].Should().BeOfType<DamageActorTask>();
+            tasks[0].Should().BeOfType<AttackTask>();
         }
 
         /// <summary>

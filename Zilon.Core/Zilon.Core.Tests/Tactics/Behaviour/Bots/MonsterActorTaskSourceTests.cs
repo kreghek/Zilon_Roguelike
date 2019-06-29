@@ -104,7 +104,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour.Bots
 
             // ASSERT
             // бот должен начать двигаться к игроку.
-            tasks[0].Should().BeOfType<DamageActorTask>();
+            tasks[0].Should().BeOfType<AttackTask>();
 
             Action act = () =>
             {

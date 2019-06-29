@@ -21,7 +21,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     [TestFixture]
     public class AttackTaskTests
     {
-        private DamageActorTask _attackTask;
+        private AttackTask _attackTask;
         private IActor _actor;
         private IMap _testMap;
 
@@ -70,7 +70,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // Создаём саму команду
-            _attackTask = new DamageActorTask(_actor, target, actService);
+            _attackTask = new AttackTask(_actor, target, actService);
 
             Action act = () =>
             {

@@ -155,6 +155,18 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        private int GetUseFactRoll()
+        {
+            var roll = _actUsageRandomSource.RollUseSecondaryAct();
+            return roll;
+        }
+
+        private int GetUseSuccessRoll()
+        {
+            // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
+            return 5;
+        }
+
         /// <summary>
         /// Возвращает случайное значение эффективность действия.
         /// </summary>
