@@ -461,7 +461,6 @@ internal class SectorVM : MonoBehaviour
             {
                 _humanPlayer.SectorSid = e.Transition.SectorSid;
                 StartLoadScene();
-                SaveGameProgress();
                 return;
             }
         }
@@ -485,7 +484,6 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
             StartLoadScene();
-            SaveGameProgress();
         }
     }
 
