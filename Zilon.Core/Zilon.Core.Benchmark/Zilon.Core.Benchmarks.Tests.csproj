@@ -177,6 +177,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
+      <Project>{218b22dd-5bf3-4a86-b979-7e6f534f3f52}</Project>
+      <Name>Zilon.Bot.Players</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
+      <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
+      <Name>Zilon.Bot.Sdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
       <Project>{53AF1D62-18D8-4252-B09A-1CC50724BE92}</Project>
       <Name>Zilon.Core.Tests.Common</Name>

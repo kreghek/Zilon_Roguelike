@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
-
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -244,9 +244,6 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IMapNode startNode)
         {
-            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
-
-
             var monsterPerson = new MonsterPerson(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
@@ -366,7 +363,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<HumanPlayer>(new PerContainerLifetime());
             Container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
             Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            Container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
+            Container.Register<MonsterBotActorTaskSource>(new PerContainerLifetime());
         }
 
         private void RegisterWorldServices()

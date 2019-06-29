@@ -303,8 +303,6 @@
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
     <Compile Include="Schemes\PerkRuleSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\AgressiveLogicBase.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\RoamingLogic.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IIntention.cs" />
     <Compile Include="Tactics\Behaviour\Intention.cs" />
@@ -363,7 +361,6 @@
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\PatrolLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\HandOpenContainerMethod.cs" />
@@ -416,7 +413,6 @@
     <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTask.cs" />
