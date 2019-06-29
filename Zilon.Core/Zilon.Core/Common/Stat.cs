@@ -12,7 +12,6 @@ namespace Zilon.Core.Common
     /// </remarks>
     public class Stat
     {
-        private float _rawValue;
 
         /// <summary>
         /// Конструирует объект статы.
@@ -34,29 +33,29 @@ namespace Zilon.Core.Common
         {
             get
             {
-                if (_rawValue == 1)
+                if (ValueShare == 1)
                 {
                     return Range.Max;
                 }
 
-                if (_rawValue == 0)
+                if (ValueShare == 0)
                 {
                     return Range.Min;
                 }
 
-                var result = Math.Round((Range.Max - Range.Min) * _rawValue + Range.Min);
+                var result = Math.Round((Range.Max - Range.Min) * ValueShare + Range.Min);
                 return (int)result;
             }
             set
             {
                 if (Range.Max == Range.Min)
                 {
-                    _rawValue = 1;
+                    ValueShare = 1;
                     return;
                 }
 
                 var boundedValue = Range.GetBounded(value);
-                _rawValue = (boundedValue - Range.Min) / (float)(Range.Max - Range.Min);
+                ValueShare = (boundedValue - Range.Min) / (float)(Range.Max - Range.Min);
             }
         }
 
@@ -80,6 +79,30 @@ namespace Zilon.Core.Common
             }
 
             Range = new Range<int>(min, max);
+        }
+
+        /// <summary>
+        /// Значение в долях. Значение [0..1] в текущем диапазоне.
+        /// </summary>
+        public float ValueShare { get; private set; }
+
+        /// <summary>
+        /// Устанавливает текущее значение в долях.
+        /// </summary>
+        /// <param name="value"> Значение в диапазоне [0..1]. </param>
+        public void SetShare(float value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Значение не может быть меньше 0.", nameof(value));
+            }
+
+            if (value > 1)
+            {
+                throw new ArgumentException("Значение не может быть больше 1.", nameof(value));
+            }
+
+            ValueShare = value;
         }
     }
 }

@@ -102,6 +102,8 @@ internal class SectorVM : MonoBehaviour
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
+    [Inject] private readonly ProgressStorageService _progressStorageService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -452,6 +454,7 @@ internal class SectorVM : MonoBehaviour
                 PersonCreator.AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
+                SaveGameProgress();
                 return;
             }
             else
@@ -467,6 +470,7 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            SaveGameProgress();
             return;
         }
 
@@ -474,6 +478,7 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            SaveGameProgress();
         }
         else
         {
@@ -524,7 +529,10 @@ internal class SectorVM : MonoBehaviour
     {
         if (_humanPlayer.MainPerson == null)
         {
-            _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+            if (!_progressStorageService.LoadPerson())
+            {
+                _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+            }
         }
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
@@ -558,6 +566,8 @@ internal class SectorVM : MonoBehaviour
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
+
+        _progressStorageService.Destroy();
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
@@ -638,5 +648,10 @@ internal class SectorVM : MonoBehaviour
     private void StartLoadScene()
     {
         SceneLoader.gameObject.SetActive(true);
+    }
+
+    private void SaveGameProgress()
+    {
+        _progressStorageService.Save();
     }
 }

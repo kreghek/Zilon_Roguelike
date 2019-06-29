@@ -16,30 +16,26 @@ namespace Zilon.Core.Tactics
         private const int PLACE_SCORES = 100;
         private const int MONSTER_DEFAULT_BASE_SCORE = 25;
 
-        private float _turnCounter = 0;
-
         public ScoreManager()
         {
-            Frags = new Dictionary<IMonsterScheme, int>();
-            PlaceTypes = new Dictionary<ILocationScheme, int>();
-            Places = new HashSet<GlobeRegionNode>();
+            Scores = new Scores();
         }
 
         /// <summary>Базовые очки, набранные игроком.</summary>
-        public int BaseScores { get; private set; }
+        public int BaseScores { get => Scores.BaseScores; private set => Scores.BaseScores = value; }
 
         /// <summary>Фраги по схемам монстров, добытые игроком.</summary>
-        public IDictionary<IMonsterScheme, int> Frags { get; }
+        public IDictionary<IMonsterScheme, int> Frags { get => Scores.Frags; }
 
         /// <summary>Счётчик ходов по типам секторов.</summary>
-        public IDictionary<ILocationScheme, int> PlaceTypes { get; }
+        public IDictionary<ILocationScheme, int> PlaceTypes { get => Scores.PlaceTypes; }
 
         /// <summary>Шаги, прожитые персонажем.</summary>
-        public int Turns { get; set; }
+        public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
         /// <summary>Посещённые места.</summary>
-        public ISet<GlobeRegionNode> Places { get; }
-        public ScoreAchievements Achievements { get; private set; }
+        public ISet<GlobeRegionNode> Places { get => Scores.Places; }
+        public ScoreAchievements Achievements { get => Scores.Achievements; private set=> Scores.Achievements = value; }
 
         public void CountHome()
         {
@@ -83,10 +79,10 @@ namespace Zilon.Core.Tactics
         /// <summary>Засчитать один прожитый шаг.</summary>
         public void CountTurn(ILocationScheme sectorScheme)
         {
-            _turnCounter += TURN_INC;
-            if (_turnCounter >= 1)
+            Scores.TurnCounter += TURN_INC;
+            if (Scores.TurnCounter >= 1)
             {
-                _turnCounter -= 1;
+                Scores.TurnCounter -= 1;
                 BaseScores++;
             }
 
@@ -109,5 +105,7 @@ namespace Zilon.Core.Tactics
             Turns = 0;
             Places.Clear();
         }
+
+        public Scores Scores { get; set; }
     }
 }

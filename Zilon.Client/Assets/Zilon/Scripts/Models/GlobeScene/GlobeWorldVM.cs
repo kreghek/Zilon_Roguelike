@@ -44,6 +44,7 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly IGlobeUiState _globeUiState;
     [Inject] private readonly IGlobeModalManager _globeModalManager;
     [Inject] private readonly IScoreManager _scoreManager;
+    [Inject] private readonly ProgressStorageService _progressStorageService;
 
     public PlayerPersonCreator PersonCreator;
 
@@ -51,38 +52,54 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (_globeManager.Globe == null)
         {
-            var globwGenerationResult = await _globeGenerator.GenerateGlobeAsync();
-            _globeManager.Globe = globwGenerationResult.Globe;
-            _globeManager.GlobeGenerationHistory = globwGenerationResult.History;
+            if (!_progressStorageService.LoadGlobe())
+            {
 
-            var startCell = _globeManager.Globe.StartProvince;
+                var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+                _globeManager.Globe = globeGenerationResult.Globe;
+                _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
 
-            _player.Terrain = startCell;
+                var startCell = _globeManager.Globe.StartProvince;
 
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, startCell);
-            await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+                _player.Terrain = startCell;
 
-            _globeManager.Regions[_player.Terrain] = createdRegion;
+                var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator, _progressStorageService);
+                await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
-            var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
+                _globeManager.Regions[_player.Terrain] = createdRegion;
 
-            _player.GlobeNode = startNode;
 
-            startNode.ObservedState = GlobeNodeObservedState.Visited;
+                var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
 
-            _globeModalManager.ShowHistoryBookModal();
+                _player.GlobeNode = startNode;
+
+                startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+                _globeModalManager.ShowHistoryBookModal();
+            }
+            else
+            {
+                _globeManager.GlobeGenerationHistory = new GlobeGenerationHistory();
+
+                if (!_progressStorageService.LoadPlayer())
+                {
+                    var startCell = _globeManager.Globe.StartProvince;
+
+                    _player.Terrain = startCell;
+                }
+            }
         }
 
         var currentGlobeCell = _player.Terrain;
         if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
-            var createdRegion = await _globeGenerator.GenerateRegionAsync(_globeManager.Globe, currentGlobeCell);
+            var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
         }
 
         // Создание соседних регионов
-        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator);
+        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
         Debug.Log($"Current: {currentGlobeCell}");
         Debug.Log($"Current: {_globeManager.Globe.HomeProvince}");
@@ -197,7 +214,10 @@ public class GlobeWorldVM : MonoBehaviour
 
         if (_player.MainPerson == null)
         {
-            _player.MainPerson = PersonCreator.CreatePlayerPerson();
+            if (!_progressStorageService.LoadPerson())
+            {
+                _player.MainPerson = PersonCreator.CreatePlayerPerson();
+            }
         }
 
         var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
@@ -209,11 +229,19 @@ public class GlobeWorldVM : MonoBehaviour
         Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
         //TODO Заменить эту конструкцию на более стабильную.
-        var startNodeViewModel = _locationNodeViewModels.Single(x => x.Node.IsStart);
+        var startNodeViewModel = _locationNodeViewModels.Skip(_locationNodeViewModels.Count() / 2).First();
         MapBackground.transform.position = startNodeViewModel.transform.position;
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
+        TerrainCell startCell,
+        IWorldGenerator globeGenerator,
+        ProgressStorageService progressStorageService)
+    {
+        return await globeGenerator.GenerateRegionAsync(globe, startCell);
     }
 
     //TODO Попробовать сделать загрузку всех провинций параллельно.
@@ -227,7 +255,8 @@ public class GlobeWorldVM : MonoBehaviour
     /// <returns> Возвращает объект Task. </returns>
     private static async System.Threading.Tasks.Task CreateNeighborRegionsAsync(OffsetCoords playerCoords,
         IWorldManager worldManager,
-        IWorldGenerator worldGenerator)
+        IWorldGenerator worldGenerator,
+        ProgressStorageService progressStorageService)
     {
         for (var offsetX = -1; offsetX <= 1; offsetX++)
         {
@@ -251,7 +280,7 @@ public class GlobeWorldVM : MonoBehaviour
                     var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
                     if (!worldManager.Regions.ContainsKey(terrainCell))
                     {
-                        var createdNeiborRegion = await worldGenerator.GenerateRegionAsync(worldManager.Globe, terrainCell);
+                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, worldGenerator, progressStorageService);
 
                         worldManager.Regions[terrainCell] = createdNeiborRegion;
                     }
@@ -292,6 +321,11 @@ public class GlobeWorldVM : MonoBehaviour
         {
             ExecuteCommands();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        _progressStorageService.Save();
     }
 
     private void ExecuteCommands()

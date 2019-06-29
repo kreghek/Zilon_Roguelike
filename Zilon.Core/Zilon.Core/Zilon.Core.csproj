@@ -126,6 +126,23 @@
     <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionNodeStorageData.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanPersonStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanPlayerStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanSurvivalStatStorageData.cs" />
+    <Compile Include="ProgressStoring\LocalityBranchStorageData.cs" />
+    <Compile Include="ProgressStoring\AgentSkillStorageData.cs" />
+    <Compile Include="ProgressStoring\AgentStorageData.cs" />
+    <Compile Include="ProgressStoring\LocalityStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkJobStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkStorageData.cs" />
+    <Compile Include="ProgressStoring\PropStorageData.cs" />
+    <Compile Include="ProgressStoring\PropType.cs" />
+    <Compile Include="ProgressStoring\RealmStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoreSidCounterStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoresStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
@@ -158,6 +175,7 @@
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\IUseActResolver.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
+    <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
@@ -452,6 +470,7 @@
     <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
+    <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
@@ -465,12 +484,14 @@
     <Compile Include="WorldGeneration\RealmRelations.cs" />
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\Color.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
     <Compile Include="World\IWorldManager.cs" />
     <Compile Include="World\MonsterSet.cs" />
+    <Compile Include="World\RealmBanner.cs" />
     <Compile Include="World\WildMeetingEventArgs.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>

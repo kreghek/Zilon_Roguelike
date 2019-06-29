@@ -6,8 +6,10 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.WorldGeneration;
+using Zilon.Core.WorldGeneration.AgentCards;
 
-namespace Zilon.Core.WorldGeneration.AgentCards.Tests
+namespace Zilon.Core.Tests.WorldGeneration.AgentCards
 {
     [TestFixture]
     public class TransportHelperTests
