@@ -114,7 +114,7 @@ namespace Zilon.Core.Commands
             var targetActorViewModel = (IActorViewModel)PlayerState.SelectedViewModel;
 
             var targetActor = targetActorViewModel.Actor;
-            var intention = new Intention<DamageActorTask>(a => new DamageActorTask(a, targetActor, _tacticalActUsageService));
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention);
         }
     }
