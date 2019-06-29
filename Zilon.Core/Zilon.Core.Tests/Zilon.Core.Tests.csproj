@@ -128,6 +128,9 @@
     <Compile Include="Persons\SurvivalDataTests.cs" />
     <Compile Include="Persons\TestCases\EquipmentCarrierTestsCaseSource.cs" />
     <Compile Include="Persons\TestCases\SurvivalStatTestCasesSource.cs" />
+    <Compile Include="ProgressStoring\GlobeStorageDataTests.cs" />
+    <Compile Include="ProgressStoring\HumanPersonStorageDataTests.cs" />
+    <Compile Include="ProgressStoring\HumanPlayerStorageDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Props\PropStoreBaseTests.cs" />
     <Compile Include="Schemes\MonsterSchemeTests.cs" />

@@ -42,6 +42,22 @@ namespace Zilon.Core.Players
         /// </summary>
         public string SectorSid { get; set; }
 
+        /// <summary>
+        /// Событие выстреливает, если зменяется узел группы игрока на глобальной карте.
+        /// </summary>
         public event EventHandler GlobeNodeChanged;
+
+        /// <summary>
+        /// Сохранение текущего состояния группы игрока.
+        /// </summary>
+        /// <remarks>
+        /// Сохраняет:
+        /// 1. Состояние персонажа игрока.
+        /// 2. Текущее положение группы игрока.
+        /// </remarks>
+        public void Save()
+        {
+            
+        }
     }
 }
