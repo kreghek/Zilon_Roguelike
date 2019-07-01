@@ -158,11 +158,14 @@
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
+    <Compile Include="Tactics\ActorInteractionBus.cs" />
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
+    <Compile Include="Tactics\IActorInteractionBus.cs" />
+    <Compile Include="Tactics\IActorInteractionEvent.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
     <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
@@ -172,6 +175,7 @@
     <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
