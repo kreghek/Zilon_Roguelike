@@ -9,6 +9,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.LightInject;
 using Zilon.Core.Client;
@@ -16,7 +17,6 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -39,11 +39,12 @@ namespace Zilon.Core.Spec.Contexts
 
         public ServiceContainer Container { get; }
 
-        public List<VisualEventInfo> VisualEvents { get; }
+        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
 
         protected FeatureContextBase()
         {
             Container = new ServiceContainer();
+            RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
 
             RegisterSchemeService();
             RegisterSectorService();
@@ -56,7 +57,13 @@ namespace Zilon.Core.Spec.Contexts
 
             InitClientServices();
 
-            VisualEvents = new List<VisualEventInfo>();
+            var eventMessageBus = Container.GetInstance<IActorInteractionBus>();
+            eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+        }
+
+        private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+        {
+            RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
         }
 
         public async Task CreateSectorAsync(int mapSize)
@@ -172,14 +179,7 @@ namespace Zilon.Core.Spec.Contexts
             var monster = CreateMonsterActor(botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
-            monster.OnDefence += Monster_OnDefence;
-
             actorManager.Add(monster);
-        }
-
-        private void Monster_OnDefence(object sender, EventArgs e)
-        {
-            VisualEvents.Add(new VisualEventInfo((IActor)sender, e, nameof(IActor.OnDefence)));
         }
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
@@ -291,6 +291,7 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
             Container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
             Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
+            Container.Register<IActorInteractionBus, ActorInteractionBus>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop()

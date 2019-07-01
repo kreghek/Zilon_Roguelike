@@ -58,11 +58,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         /// <summary>
-        /// Событие выстреливает, когда персонаж успешно отражает наступление.
-        /// </summary>
-        event EventHandler<DefenceEventArgs> OnDefence;
-
-        /// <summary>
         /// Происходит, когда актёр выполняет действие.
         /// </summary>
         event EventHandler<UsedActEventArgs> UsedAct;
@@ -71,11 +66,6 @@ namespace Zilon.Core.Tactics
         /// Происходит, когда актёр получает урон.
         /// </summary>
         event EventHandler<DamageTakenEventArgs> DamageTaken;
-
-        /// <summary>
-        /// Происходит, когда актёр успешно использует броню.
-        /// </summary>
-        event EventHandler<ArmorEventArgs> OnArmorPassed;
 
         /// <summary>
         /// Приенение действия к указанной цели.
