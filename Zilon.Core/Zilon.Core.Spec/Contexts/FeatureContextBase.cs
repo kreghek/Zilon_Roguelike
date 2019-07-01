@@ -62,10 +62,22 @@ namespace Zilon.Core.Spec.Contexts
         public async Task CreateSectorAsync(int mapSize)
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
-            mapFactory.SetFunc(async () =>
+            mapFactory.SetFunc(() =>
             {
-                var map = await SquareMapFactory.CreateAsync(mapSize);
-                return map;
+                ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
+
+                MapFiller.FillSquareMap(map, mapSize);
+
+                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+                {
+                    IsStart = true,
+                    IsOut = true,
+                    ExitNodes = new[] { map.Nodes.Last() }
+                };
+
+                map.Regions.Add(mapRegion);
+
+                return Task.FromResult(map);
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();

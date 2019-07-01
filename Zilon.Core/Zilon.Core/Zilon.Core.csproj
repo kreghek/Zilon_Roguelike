@@ -176,8 +176,11 @@
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\Spatial\HexMapNodeDistanceCalculator.cs" />
+    <Compile Include="Tactics\Spatial\IMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorGraphMapGeneric.cs" />
     <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\Sector\UseSelfCommand.cs" />
