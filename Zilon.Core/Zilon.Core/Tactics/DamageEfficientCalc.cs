@@ -11,5 +11,7 @@
         public int ActEfficientArmorBlocked { get; internal set; }
 
         public int ResultEfficient => ActEfficientArmorBlocked;
+
+        public bool UsedArmor { get; internal set; }
     }
 }

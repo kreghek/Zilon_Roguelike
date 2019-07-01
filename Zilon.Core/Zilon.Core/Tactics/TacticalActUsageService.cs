@@ -448,6 +448,7 @@ namespace Zilon.Core.Tactics
                 damageEfficientCalcResult.SuccessArmorSaveRoll = successArmorSaveRoll;
                 if (factArmorSaveRoll >= successArmorSaveRoll)
                 {
+                    damageEfficientCalcResult.UsedArmor = true;
                     var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
                     damageEfficientCalcResult.ArmorAbsorbtion = armorAbsorbtion;
                     actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);

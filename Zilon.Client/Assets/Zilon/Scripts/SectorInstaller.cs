@@ -47,6 +47,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
+        Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
         // генерация сектора
         Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();

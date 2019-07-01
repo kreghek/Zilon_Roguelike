@@ -15,6 +15,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 public class ActorViewModel : MonoBehaviour, IActorViewModel
@@ -27,6 +28,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     [NotNull] [Inject] private readonly ILogService _logService;
 
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
+
+    [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
 
     public ActorGraphicBase GraphicRoot;
     public ActorHpBar ActorHpBar;
@@ -56,9 +59,9 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         {
             Actor.Person.Survival.Dead += Survival_Dead;
         }
-        Actor.DamageTaken += Actor_DamageTaken;
-        Actor.OnArmorPassed += Actor_OnArmorPassed;
-        Actor.OnDefence += Actor_OnDefence;
+
+        _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
+
         Actor.OpenedContainer += Actor_OpenedContainer;
 
         if (ActorHpBar != null)
@@ -72,6 +75,29 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
     }
 
+    private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    {
+        switch (e.ActorInteractionEvent)
+        {
+            case DamageActorInteractionEvent damageActorInteractionEvent:
+                _logService.Log($"{damageActorInteractionEvent.Actor} take damage {damageActorInteractionEvent.DamageEfficientCalcResult.ResultEfficient}");
+
+                if (damageActorInteractionEvent.DamageEfficientCalcResult.UsedArmor)
+                {
+                    _logService.Log($"{damageActorInteractionEvent.TargetActor} successfully used armor rank: {damageActorInteractionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {damageActorInteractionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {damageActorInteractionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
+                }
+                break;
+
+            case DodgeActorInteractionEvent dodgeActorInteractionEvent:
+                _logService.Log($"{dodgeActorInteractionEvent.Actor} defends {dodgeActorInteractionEvent.PersonDefenceItem}, roll: {dodgeActorInteractionEvent.FactToHitRoll}, success: {dodgeActorInteractionEvent.SuccessToHitRoll}");
+                break;
+
+            case PureMissActorInteractionEvent pureMissActorInteractionEvent:
+                _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
+                break;
+        }
+    }
+
     [UsedImplicitly]
     public void OnDestroy()
     {
@@ -80,10 +106,10 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         {
             Actor.Person.Survival.Dead -= Survival_Dead;
         }
-        Actor.DamageTaken -= Actor_DamageTaken;
-        Actor.OnArmorPassed -= Actor_OnArmorPassed;
-        Actor.OnDefence -= Actor_OnDefence;
+
         Actor.OpenedContainer -= Actor_OpenedContainer;
+
+        _actorInteractionBus.NewEvent -= ActorInteractionBus_NewEvent;
     }
 
     [UsedImplicitly]
@@ -158,21 +184,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         _moveCommandBlocker = new MoveCommandBlocker();
         _commandBlockerService.AddBlocker(_moveCommandBlocker);
         GraphicRoot.ProcessMove(_targetPosition);
-    }
-
-    private void Actor_OnDefence(object sender, DefenceEventArgs e)
-    {
-        _logService.Log($"{sender} defends {e.PrefferedDefenceItem}, roll: {e.FactToHitRoll}, success: {e.SuccessToHitRoll}.");
-    }
-
-    private void Actor_OnArmorPassed(object sender, ArmorEventArgs e)
-    {
-        _logService.Log($"{sender} successfully used armor rank: {e.ArmorRank}, roll: {e.FactRoll}, success: {e.SuccessRoll}.");
-    }
-
-    private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
-    {
-        _logService.Log($"{sender} take damage {e.Value}");
     }
 
     private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
