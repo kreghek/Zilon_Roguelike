@@ -159,9 +159,14 @@
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Tactics\ActorInteractionBus.cs" />
+    <Compile Include="Tactics\ActorInteractionEventBase.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\DodgeActorInteractionEvent.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\PureMissActorInteractionEvent.cs" />
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\DamageActorInteractionEvent.cs" />
+    <Compile Include="Tactics\DamageEfficientCalc.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
     <Compile Include="Tactics\IActorInteractionBus.cs" />

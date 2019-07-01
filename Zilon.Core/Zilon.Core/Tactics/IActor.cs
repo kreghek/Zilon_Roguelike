@@ -85,15 +85,5 @@ namespace Zilon.Core.Tactics
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
-
-        /// <summary>
-        /// Вызывается службой действий в случае успешной обороны.
-        /// </summary>
-        void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll);
-
-        /// <summary>
-        /// Вызывается службой действий в случае успешного использования брони.
-        /// </summary>
-        void ProcessArmor(int armorRank, int successRoll, int factRoll);
     }
 }

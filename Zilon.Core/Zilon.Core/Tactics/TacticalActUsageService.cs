@@ -6,6 +6,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -22,6 +23,11 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
+
+        /// <summary>
+        /// Шина событий возаимодействия актёров.
+        /// </summary>
+        public IActorInteractionBus ActorInteractionBus { get; set; }
 
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
@@ -235,7 +241,15 @@ namespace Zilon.Core.Tactics
 
             if (factToHitRoll >= successToHitRoll)
             {
-                int actEfficient = CalcEfficient(targetActor, tacticalActRoll);
+                var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
+                var actEfficient = damageEfficientCalcResult.ResultEfficient;
+
+                ProcessSuccessfulAttackEvent(
+                    actor,
+                    targetActor,
+                    damageEfficientCalcResult,
+                    successToHitRoll,
+                    factToHitRoll);
 
                 if (actEfficient <= 0)
                 {
@@ -266,11 +280,79 @@ namespace Zilon.Core.Tactics
             {
                 if (prefferedDefenceItem != null)
                 {
-                    targetActor.ProcessDefence(prefferedDefenceItem,
+                    // Это промах, потому что целевой актёр увернулся.
+                    ProcessAttackDodgeEvent(actor,
+                        targetActor,
+                        prefferedDefenceItem,
+                        successToHitRoll,
+                        factToHitRoll);
+                }
+                else
+                {
+                    // Это промах чистой воды.
+                    ProcessPureMissEvent(actor,
+                        targetActor,
                         successToHitRoll,
                         factToHitRoll);
                 }
             }
+        }
+
+        private void ProcessSuccessfulAttackEvent(
+            IActor actor,
+            IActor targetActor,
+            DamageEfficientCalc damageEfficientCalcResult,
+            int successToHitRoll,
+            int factToHitRoll)
+        {
+            if (ActorInteractionBus == null)
+            {
+                return;
+            }
+
+            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
+            {
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
+            };
+            ActorInteractionBus.PushEvent(damageEvent);
+        }
+
+        private void ProcessPureMissEvent(IActor actor, IActor targetActor, int successToHitRoll, int factToHitRoll)
+        {
+            if (ActorInteractionBus == null)
+            {
+                return;
+            }
+
+            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
+            {
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
+            };
+
+            ActorInteractionBus.PushEvent(damageEvent);
+        }
+
+        private void ProcessAttackDodgeEvent(
+            IActor actor,
+            IActor targetActor,
+            PersonDefenceItem personDefenceItem,
+            int successToHitRoll,
+            int factToHitRoll)
+        {
+            if (ActorInteractionBus == null)
+            {
+                return;
+            }
+
+            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
+            {
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
+            };
+
+            ActorInteractionBus.PushEvent(interactEvent);
         }
 
         private void CountTargetActorAttack(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
@@ -346,10 +428,14 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Целевой актёр. </param>
         /// <param name="tacticalActRoll"> Результат броска исходной эфективности действия. </param>
         /// <returns> Возвращает числовое значение эффективности действия. </returns>
-        private int CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
+        private DamageEfficientCalc CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
+            var damageEfficientCalcResult = new DamageEfficientCalc();
+
+            var actApRank = GetActApRank(tacticalActRoll.TacticalAct); ;
+            damageEfficientCalcResult.ActApRank = actApRank;
             var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+            damageEfficientCalcResult.ArmorRank = armorRank;
 
             var actEfficientArmorBlocked = tacticalActRoll.Efficient;
             var rankDiff = actApRank - armorRank;
@@ -357,17 +443,20 @@ namespace Zilon.Core.Tactics
             if (armorRank != null && rankDiff < 10)
             {
                 var factArmorSaveRoll = RollArmorSave();
+                damageEfficientCalcResult.FactArmorSaveRoll = factArmorSaveRoll;
                 var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
+                damageEfficientCalcResult.SuccessArmorSaveRoll = successArmorSaveRoll;
                 if (factArmorSaveRoll >= successArmorSaveRoll)
                 {
                     var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                    damageEfficientCalcResult.ArmorAbsorbtion = armorAbsorbtion;
                     actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                 }
-
-                targetActor.ProcessArmor(armorRank.Value, successArmorSaveRoll, factArmorSaveRoll);
             }
 
-            return actEfficientArmorBlocked;
+            damageEfficientCalcResult.ActEfficientArmorBlocked = actEfficientArmorBlocked;
+
+            return damageEfficientCalcResult;
         }
 
         /// <summary>
