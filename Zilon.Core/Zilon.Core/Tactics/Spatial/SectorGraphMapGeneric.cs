@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Zilon.Core.MapGenerators;
 
@@ -15,7 +14,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public SectorGraphMap()
         {
-            _nodeDistanceCalculator = Activator.CreateInstance<TNodeDistanceCalculator>();
+            _nodeDistanceCalculator = new TNodeDistanceCalculator();
 
             Transitions = new Dictionary<IMapNode, RoomTransition>();
         }
