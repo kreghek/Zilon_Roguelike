@@ -12,6 +12,6 @@
 
         public int ResultEfficient => ActEfficientArmorBlocked;
 
-        public bool UsedArmor { get; internal set; }
+        public bool TargetSuccessfullUsedArmor { get; internal set; }
     }
 }

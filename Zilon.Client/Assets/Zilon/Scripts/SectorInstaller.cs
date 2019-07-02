@@ -40,6 +40,11 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
                      i.EquipmentDurableService = equipmentDurableService;
                  }
 
+                 var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
+                 if (actorInteractionBus != null)
+                 {
+                     i.ActorInteractionBus = actorInteractionBus;
+                 }
              });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();

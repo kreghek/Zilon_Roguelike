@@ -77,12 +77,19 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
     {
+        // Обрабатываем только те сообщения, которые были инициированы текущим актёром.
+        // Остальные игнорируем. Их обработают другие модели актёров аналогичном образом, только для своих актёров.
+        if (e.ActorInteractionEvent.Actor != Actor)
+        {
+            return;
+        }
+
         switch (e.ActorInteractionEvent)
         {
             case DamageActorInteractionEvent damageActorInteractionEvent:
-                _logService.Log($"{damageActorInteractionEvent.Actor} take damage {damageActorInteractionEvent.DamageEfficientCalcResult.ResultEfficient}");
+                _logService.Log($"{damageActorInteractionEvent.Actor} damage {damageActorInteractionEvent.TargetActor} on {damageActorInteractionEvent.DamageEfficientCalcResult.ResultEfficient}");
 
-                if (damageActorInteractionEvent.DamageEfficientCalcResult.UsedArmor)
+                if (damageActorInteractionEvent.DamageEfficientCalcResult.TargetSuccessfullUsedArmor)
                 {
                     _logService.Log($"{damageActorInteractionEvent.TargetActor} successfully used armor rank: {damageActorInteractionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {damageActorInteractionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {damageActorInteractionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
                 }
