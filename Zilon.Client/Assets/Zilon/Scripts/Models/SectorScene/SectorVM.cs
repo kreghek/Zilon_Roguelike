@@ -31,12 +31,11 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once ArrangeTypeModifiers
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once UnusedMember.Global
-internal class SectorVM : MonoBehaviour
+public class SectorVM : MonoBehaviour
 {
     public PlayerPersonCreator PersonCreator;
 
     private readonly List<MapNodeVM> _nodeViewModels;
-    private readonly List<ActorViewModel> _actorViewModels;
     private readonly List<ContainerVm> _containerViewModels;
 
     private bool _interuptCommands;
@@ -124,10 +123,12 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
+    public List<ActorViewModel> ActorViewModels { get; }
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
-        _actorViewModels = new List<ActorViewModel>();
+        ActorViewModels = new List<ActorViewModel>();
         _containerViewModels = new List<ContainerVm>();
     }
 
@@ -257,7 +258,7 @@ internal class SectorVM : MonoBehaviour
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
 
-        _actorViewModels.Add(playerActorViewModel);
+        ActorViewModels.Add(playerActorViewModel);
     }
 
     private List<MapNodeVM> InitNodeViewModels()
@@ -325,7 +326,7 @@ internal class SectorVM : MonoBehaviour
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
 
-            _actorViewModels.Add(actorViewModel);
+            ActorViewModels.Add(actorViewModel);
         }
     }
 
@@ -382,7 +383,7 @@ internal class SectorVM : MonoBehaviour
 
         actorViewModel.Selected += TraderViewModel_Selected;
         
-        _actorViewModels.Add(actorViewModel);
+        ActorViewModels.Add(actorViewModel);
     }
 
     private void TraderViewModel_Selected(object sender, EventArgs e)
@@ -578,11 +579,11 @@ internal class SectorVM : MonoBehaviour
         var targetHexNode = e.Target.Node as HexNode;
 
         // Визуализируем удар.
-        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
 
         if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Damage)
         {
-            var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+            var targetViewModel = ActorViewModels.Single(x => x.Actor == e.Target);
 
             actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
 
@@ -617,8 +618,8 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateBullet(IActor actor, IAttackTarget target)
     {
-        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
-        var targetViewModel = _actorViewModels.Single(x => x.Actor == target);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+        var targetViewModel = ActorViewModels.Single(x => x.Actor == target);
 
         var bulletTracer = Instantiate(GunShootTracer, transform);
         bulletTracer.FromPosition = actorViewModel.transform.position;

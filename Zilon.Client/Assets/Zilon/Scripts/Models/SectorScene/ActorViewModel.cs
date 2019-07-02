@@ -25,15 +25,10 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
-    [NotNull] [Inject] private readonly ILogService _logService;
-
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
-
-    [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
 
     public ActorGraphicBase GraphicRoot;
     public ActorHpBar ActorHpBar;
-    public DamageIndicator DamageIndicatorPrefab;
 
     private readonly List<HitSfx> _effectList;
 
@@ -61,8 +56,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
             Actor.Person.Survival.Dead += Survival_Dead;
         }
 
-        _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
-
         Actor.OpenedContainer += Actor_OpenedContainer;
         Actor.DamageTaken += Actor_DamageTaken;
 
@@ -77,43 +70,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
     }
 
-    private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
-    {
-        var damageIndicator = Instantiate(DamageIndicatorPrefab);
-        damageIndicator.transform.SetParent(transform.parent);
-        damageIndicator.Init(this, e.Value);
-    }
-
-    private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
-    {
-        // Обрабатываем только те сообщения, которые были инициированы текущим актёром.
-        // Остальные игнорируем. Их обработают другие модели актёров аналогичном образом, только для своих актёров.
-        if (e.ActorInteractionEvent.Actor != Actor)
-        {
-            return;
-        }
-
-        switch (e.ActorInteractionEvent)
-        {
-            case DamageActorInteractionEvent damageActorInteractionEvent:
-                _logService.Log($"{damageActorInteractionEvent.Actor} damage {damageActorInteractionEvent.TargetActor} on {damageActorInteractionEvent.DamageEfficientCalcResult.ResultEfficient}");
-
-                if (damageActorInteractionEvent.DamageEfficientCalcResult.TargetSuccessfullUsedArmor)
-                {
-                    _logService.Log($"{damageActorInteractionEvent.TargetActor} successfully used armor rank: {damageActorInteractionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {damageActorInteractionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {damageActorInteractionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
-                }
-                break;
-
-            case DodgeActorInteractionEvent dodgeActorInteractionEvent:
-                _logService.Log($"{dodgeActorInteractionEvent.Actor} defends {dodgeActorInteractionEvent.PersonDefenceItem}, roll: {dodgeActorInteractionEvent.FactToHitRoll}, success: {dodgeActorInteractionEvent.SuccessToHitRoll}");
-                break;
-
-            case PureMissActorInteractionEvent pureMissActorInteractionEvent:
-                _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
-                break;
-        }
-    }
-
     [UsedImplicitly]
     public void OnDestroy()
     {
@@ -125,8 +81,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
 
         Actor.OpenedContainer -= Actor_OpenedContainer;
-
-        _actorInteractionBus.NewEvent -= ActorInteractionBus_NewEvent;
     }
 
     [UsedImplicitly]
