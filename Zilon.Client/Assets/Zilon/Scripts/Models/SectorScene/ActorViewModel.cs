@@ -33,6 +33,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     public ActorGraphicBase GraphicRoot;
     public ActorHpBar ActorHpBar;
+    public DamageIndicator DamageIndicatorPrefab;
 
     private readonly List<HitSfx> _effectList;
 
@@ -63,6 +64,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
 
         Actor.OpenedContainer += Actor_OpenedContainer;
+        Actor.DamageTaken += Actor_DamageTaken;
 
         if (ActorHpBar != null)
         {
@@ -73,6 +75,13 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
                 ActorHpBar.gameObject.SetActive(false);
             }
         }
+    }
+
+    private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
+    {
+        var damageIndicator = Instantiate(DamageIndicatorPrefab);
+        damageIndicator.transform.SetParent(transform.parent);
+        damageIndicator.Init(this, e.Value);
     }
 
     private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
@@ -109,6 +118,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void OnDestroy()
     {
         Actor.Moved -= Actor_Moved;
+        Actor.DamageTaken -= Actor_DamageTaken;
         if (Actor.Person.Survival != null)
         {
             Actor.Person.Survival.Dead -= Survival_Dead;
