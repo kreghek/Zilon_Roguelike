@@ -20,6 +20,7 @@ public sealed class SceneDirector : MonoBehaviour
 
     public SectorVM SectorViewModel;
     public DamageIndicator DamageIndicatorPrefab;
+    public BlockIndicator BlockIndicatorPrefab;
     public PureMissIndicator PureMissIndicatorPrefab;
     public DodgeIndicator DodgeIndicatorPrefab;
     public BloodTracker BloodTrackerPrefab;
@@ -68,11 +69,17 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
-
+        // Урон выводим, только если он был больше нуля.
+        // В ином случае считаем, что цель заблокировала урон.
         if (interactionEvent.DamageEfficientCalcResult.ResultEfficient > 0)
         {
+            CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
             CreateBloodTracker(damagedActorViewModel);
+        }
+        else
+        {
+            CreateNoDamageIndicator(damagedActorViewModel, BlockIndicatorPrefab);
+            //TODO Вместо крови выводить трекер блока - белые искры.
         }
     }
 
@@ -86,7 +93,7 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateMissIndicator(actorViewModel, PureMissIndicatorPrefab);
+        CreateNoDamageIndicator(actorViewModel, PureMissIndicatorPrefab);
     }
 
     private void CreateDodgeIndication(DodgeActorInteractionEvent interactionEvent)
@@ -99,7 +106,7 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateMissIndicator(actorViewModel, DodgeIndicatorPrefab);
+        CreateNoDamageIndicator(actorViewModel, DodgeIndicatorPrefab);
     }
 
     private void CreateBloodTracker(ActorViewModel damagedActorViewModel)
@@ -119,7 +126,7 @@ public sealed class SceneDirector : MonoBehaviour
         damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
 
-    private void CreateMissIndicator(ActorViewModel actorViewModel, MissIndicatorBase missIndicatorPrefab)
+    private void CreateNoDamageIndicator(ActorViewModel actorViewModel, NoDamageIndicatorBase missIndicatorPrefab)
     {
         var indicator = Instantiate(missIndicatorPrefab);
         indicator.transform.SetParent(SectorViewModel.transform);

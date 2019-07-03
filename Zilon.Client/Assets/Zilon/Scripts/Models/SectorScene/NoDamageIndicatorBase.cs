@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MissIndicatorBase : MonoBehaviour
+public class NoDamageIndicatorBase : MonoBehaviour
 {
     private const float LIFETIME = 1;
     private const string INDICATOR_SORTING_LAYER = "SceneIndication";
