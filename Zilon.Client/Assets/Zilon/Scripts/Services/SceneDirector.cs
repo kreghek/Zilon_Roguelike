@@ -20,6 +20,7 @@ public sealed class SceneDirector : MonoBehaviour
 
     public SectorVM SectorViewModel;
     public DamageIndicator DamageIndicatorPrefab;
+    public BloodTracker BloodTrackerPrefab;
 
     public void Start()
     {
@@ -38,13 +39,7 @@ public sealed class SceneDirector : MonoBehaviour
                     _logService.Log($"{interactionEvent.TargetActor} successfully used armor rank: {interactionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {interactionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {interactionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
                 }
 
-                var damagedActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.TargetActor);
-                if (damagedActorViewModel != null)
-                {
-                    var damageIndicator = Instantiate(DamageIndicatorPrefab);
-                    damageIndicator.transform.SetParent(SectorViewModel.transform);
-                    damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
-                }
+                CreateDamageIndication(interactionEvent);
                 break;
 
             case DodgeActorInteractionEvent dodgeActorInteractionEvent:
@@ -55,6 +50,39 @@ public sealed class SceneDirector : MonoBehaviour
                 _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
                 break;
         }
+    }
+
+    private void CreateDamageIndication(DamageActorInteractionEvent interactionEvent)
+    {
+        var damagedActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.TargetActor);
+        if (damagedActorViewModel == null)
+        {
+            return;
+        }
+
+        CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
+
+        if (interactionEvent.DamageEfficientCalcResult.ResultEfficient > 0)
+        {
+            CreateBloodTracker(damagedActorViewModel);
+        }
+    }
+
+    private void CreateBloodTracker(ActorViewModel damagedActorViewModel)
+    {
+        var bloodTracker = Instantiate(BloodTrackerPrefab);
+        bloodTracker.transform.SetParent(SectorViewModel.transform);
+        var randomOffset = Random.insideUnitCircle * 0.2f;
+        var offsetVector = new Vector3(randomOffset.x, randomOffset.y);
+        bloodTracker.transform.position = damagedActorViewModel.transform.position + offsetVector;
+        bloodTracker.transform.Rotate(Vector3.up, Random.Range(0, 360));
+    }
+
+    private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
+    {
+        var damageIndicator = Instantiate(DamageIndicatorPrefab);
+        damageIndicator.transform.SetParent(SectorViewModel.transform);
+        damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
 }
 
