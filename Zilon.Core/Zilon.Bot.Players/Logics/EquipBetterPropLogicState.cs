@@ -13,8 +13,9 @@ namespace Zilon.Bot.Players.Logics
     {
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
-            var currentInventoryEquipments = actor.Person.Inventory.CalcActualItems().OfType<Equipment>();
-            var emptyEquipmentSlots = new List<PersonSlotSubScheme>();
+            var inventory = actor.Person.Inventory;
+            var currentInventoryProps = inventory.CalcActualItems();
+            var currentInventoryEquipments = currentInventoryProps.OfType<Equipment>().ToArray();
 
             for (int i = 0; i < actor.Person.EquipmentCarrier.Slots.Length; i++)
             {
@@ -23,7 +24,8 @@ namespace Zilon.Bot.Players.Logics
                 if (equiped == null)
                 {
                     var availableEquipments = currentInventoryEquipments
-                        .Where(x => (x.Scheme.Equip.SlotTypes[0] & slot.Types) > 0);
+                        .Where(x => (x.Scheme.Equip.SlotTypes[0] & slot.Types) > 0)
+                        .ToArray();
 
                     if (availableEquipments.Any())
                     {

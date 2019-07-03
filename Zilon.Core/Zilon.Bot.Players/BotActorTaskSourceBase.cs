@@ -72,7 +72,7 @@ namespace Zilon.Bot.Players
                     return new IActorTask[0];
                 }
 
-                return new IActorTask[] { actorTask };
+                return new[] { actorTask };
             }
             else
             {

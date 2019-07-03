@@ -121,7 +121,7 @@ namespace Zilon.Bot.Players.Logics
         private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData)
         {
             IEnumerable<IMapNode> availableNodes;
-            var edgeNodes = WriteObservedNodes(actor, strategyData);
+            var edgeNodes = WriteObservedNodes(actor, strategyData).ToArray();
             if (edgeNodes.Any())
             {
                 availableNodes = edgeNodes;
