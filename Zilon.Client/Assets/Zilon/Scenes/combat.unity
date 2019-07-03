@@ -293,6 +293,8 @@ MonoBehaviour:
     type: 3}
   BloodTrackerPrefab: {fileID: 4422862086212521914, guid: 0b987638bf2e60c45b077f4eb7b377f0,
     type: 3}
+  BlockSparksPrefab: {fileID: 5693981553541839669, guid: 8499d56e88c77d548b5fc26f815893c0,
+    type: 3}
 --- !u!1 &187834198
 GameObject:
   m_ObjectHideFlags: 0

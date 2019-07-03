@@ -134,13 +134,8 @@ public sealed class SceneDirector : MonoBehaviour
         var attackerPosition = attackerActorViewModel.transform.position;
 
         blockSparks.transform.position = targetPosition;
-
-        var sparksVector = Vector3.RotateTowards(
-            attackerPosition,
-            targetPosition,
-            Mathf.PI * 2,
-            Mathf.PI * 2);
-        blockSparks.transform.Rotate(sparksVector);
+        // Искры летят в сторону атакующего
+        blockSparks.transform.LookAt(attackerPosition);
     }
 
     private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
