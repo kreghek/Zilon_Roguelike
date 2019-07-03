@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using JetBrains.Annotations;
 
@@ -15,13 +16,14 @@ using Zilon.Core.Players;
 /// </summary>
 public class HpBar : MonoBehaviour
 {
-    private const float CURRENT_HP_FILL_SPEED = 0.5f;
+    private const float CURRENT_HP_FILL_SPEED = 1.5f;
 
     private HumanPerson _lastHumanPerson;
-    private 
+    private float _lastPercentage;
 
     public Image BarImage;
     public Text Text;
+    public HpBarHighlighter Highlighter;
 
     [NotNull] [Inject] private readonly HumanPlayer _player;
 
@@ -52,6 +54,22 @@ public class HpBar : MonoBehaviour
         BarImage.fillAmount = Mathf.Lerp(BarImage.fillAmount, hpPercentage, Time.deltaTime * CURRENT_HP_FILL_SPEED);
 
         Text.text = $"{hpStat.Value}/{hpStat.Range.Max}";
+
+        if (_lastHumanPerson != null && _lastHumanPerson == person)
+        {
+            if (_lastPercentage > hpPercentage)
+            {
+                HighlightHp();
+            }
+        }
+
+        _lastHumanPerson = person;
+        _lastPercentage = hpPercentage;
+    }
+
+    private void HighlightHp()
+    {
+        Highlighter.StartHighlighting();
     }
 
     private float CalcPercentage(float currentHp, float maxHp)
