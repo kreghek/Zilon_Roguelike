@@ -33,12 +33,12 @@ namespace Zilon.Core.Common
         {
             get
             {
-                if (ValueShare == 1)
+                if (ValueShare >= 1)
                 {
                     return Range.Max;
                 }
 
-                if (ValueShare == 0)
+                if (ValueShare <= 0)
                 {
                     return Range.Min;
                 }
