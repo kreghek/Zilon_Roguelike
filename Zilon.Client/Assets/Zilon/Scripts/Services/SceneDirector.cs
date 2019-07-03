@@ -1,51 +1,60 @@
-﻿using System;
+﻿using System.Linq;
+
+using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
+
 using UnityEngine;
+
 using Zenject;
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 
-namespace Assets.Zilon.Scripts.Services
+
+public sealed class SceneDirector : MonoBehaviour
 {
-    public sealed class SceneDirector: MonoBehaviour
+    [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
+
+    [NotNull] [Inject] private readonly ILogService _logService;
+
+    public SectorVM SectorViewModel;
+    public DamageIndicator DamageIndicatorPrefab;
+
+    public void Start()
     {
-        [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
+        _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
+    }
 
-        [NotNull] [Inject] private readonly ILogService _logService;
-
-        public SectorVM SectorViewModel;
-        public DamageIndicator DamageIndicatorPrefab;
-
-        public void Start() {
-            _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
-        }
-
-        private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    {
+        switch (e.ActorInteractionEvent)
         {
-            switch (e.ActorInteractionEvent)
-            {
-                case DamageActorInteractionEvent damageActorInteractionEvent:
-                    _logService.Log($"{damageActorInteractionEvent.Actor} damage {damageActorInteractionEvent.TargetActor} on {damageActorInteractionEvent.DamageEfficientCalcResult.ResultEfficient}");
+            case DamageActorInteractionEvent interactionEvent:
+                _logService.Log($"{interactionEvent.Actor} damage {interactionEvent.TargetActor} on {interactionEvent.DamageEfficientCalcResult.ResultEfficient}");
 
-                    if (damageActorInteractionEvent.DamageEfficientCalcResult.TargetSuccessfullUsedArmor)
-                    {
-                        _logService.Log($"{damageActorInteractionEvent.TargetActor} successfully used armor rank: {damageActorInteractionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {damageActorInteractionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {damageActorInteractionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
-                    }
+                if (interactionEvent.DamageEfficientCalcResult.TargetSuccessfullUsedArmor)
+                {
+                    _logService.Log($"{interactionEvent.TargetActor} successfully used armor rank: {interactionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {interactionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {interactionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
+                }
 
+                var damagedActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.TargetActor);
+                if (damagedActorViewModel != null)
+                {
                     var damageIndicator = Instantiate(DamageIndicatorPrefab);
-                    damageIndicator.transform.SetParent(transform.parent);
-                    damageIndicator.Init(this, e.Value);
-                    break;
+                    damageIndicator.transform.SetParent(SectorViewModel.transform.parent);
+                    damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+                }
+                break;
 
-                case DodgeActorInteractionEvent dodgeActorInteractionEvent:
-                    _logService.Log($"{dodgeActorInteractionEvent.Actor} defends {dodgeActorInteractionEvent.PersonDefenceItem}, roll: {dodgeActorInteractionEvent.FactToHitRoll}, success: {dodgeActorInteractionEvent.SuccessToHitRoll}");
-                    break;
+            case DodgeActorInteractionEvent dodgeActorInteractionEvent:
+                _logService.Log($"{dodgeActorInteractionEvent.Actor} defends {dodgeActorInteractionEvent.PersonDefenceItem}, roll: {dodgeActorInteractionEvent.FactToHitRoll}, success: {dodgeActorInteractionEvent.SuccessToHitRoll}");
+                break;
 
-                case PureMissActorInteractionEvent pureMissActorInteractionEvent:
-                    _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
-                    break;
-            }
+            case PureMissActorInteractionEvent pureMissActorInteractionEvent:
+                _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
+                break;
         }
     }
 }
+

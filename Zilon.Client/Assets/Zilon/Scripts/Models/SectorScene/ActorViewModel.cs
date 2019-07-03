@@ -15,7 +15,6 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 public class ActorViewModel : MonoBehaviour, IActorViewModel
@@ -57,7 +56,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
 
         Actor.OpenedContainer += Actor_OpenedContainer;
-        Actor.DamageTaken += Actor_DamageTaken;
 
         if (ActorHpBar != null)
         {
@@ -74,7 +72,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void OnDestroy()
     {
         Actor.Moved -= Actor_Moved;
-        Actor.DamageTaken -= Actor_DamageTaken;
+
         if (Actor.Person.Survival != null)
         {
             Actor.Person.Survival.Dead -= Survival_Dead;
