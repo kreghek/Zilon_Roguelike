@@ -140,16 +140,13 @@
     <Compile Include="Services\MapGenerators\SquareMapFactoryTests.cs" />
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\RoamingLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\EquipTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveIntentionTests.cs" />
     <Compile Include="Tactics\PropContainerManagerTests.cs" />
     <Compile Include="Tactics\ActorManagerTests.cs" />
     <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\PatrolLogicTests.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\IdleTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSourceTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
     <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
     <Compile Include="Tactics\DropResolverTests.cs" />
