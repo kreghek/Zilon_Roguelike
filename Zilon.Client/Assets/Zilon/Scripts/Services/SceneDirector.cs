@@ -24,6 +24,7 @@ public sealed class SceneDirector : MonoBehaviour
     public PureMissIndicator PureMissIndicatorPrefab;
     public DodgeIndicator DodgeIndicatorPrefab;
     public BloodTracker BloodTrackerPrefab;
+    public BlockSparks BlockSparksPrefab;
 
     public void Start()
     {
@@ -79,7 +80,12 @@ public sealed class SceneDirector : MonoBehaviour
         else
         {
             CreateNoDamageIndicator(damagedActorViewModel, BlockIndicatorPrefab);
-            //TODO Вместо крови выводить трекер блока - белые искры.
+
+            var attackActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.Actor);
+            if (attackActorViewModel != null)
+            {
+                CreateBlockSparks(damagedActorViewModel, attackActorViewModel);
+            }
         }
     }
 
@@ -117,6 +123,24 @@ public sealed class SceneDirector : MonoBehaviour
         var offsetVector = new Vector3(randomOffset.x, randomOffset.y);
         bloodTracker.transform.position = damagedActorViewModel.transform.position + offsetVector;
         bloodTracker.transform.Rotate(Vector3.up, Random.Range(0, 360));
+    }
+
+    private void CreateBlockSparks(ActorViewModel damagedActorViewModel, ActorViewModel attackerActorViewModel)
+    {
+        var blockSparks = Instantiate(BlockSparksPrefab);
+        blockSparks.transform.SetParent(SectorViewModel.transform);
+
+        var targetPosition = damagedActorViewModel.transform.position;
+        var attackerPosition = attackerActorViewModel.transform.position;
+
+        blockSparks.transform.position = targetPosition;
+
+        var sparksVector = Vector3.RotateTowards(
+            attackerPosition,
+            targetPosition,
+            Mathf.PI * 2,
+            Mathf.PI * 2);
+        blockSparks.transform.Rotate(sparksVector);
     }
 
     private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
