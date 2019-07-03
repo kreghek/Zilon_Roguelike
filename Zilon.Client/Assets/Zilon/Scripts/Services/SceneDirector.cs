@@ -42,7 +42,7 @@ public sealed class SceneDirector : MonoBehaviour
                 if (damagedActorViewModel != null)
                 {
                     var damageIndicator = Instantiate(DamageIndicatorPrefab);
-                    damageIndicator.transform.SetParent(SectorViewModel.transform.parent);
+                    damageIndicator.transform.SetParent(SectorViewModel.transform);
                     damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
                 }
                 break;
