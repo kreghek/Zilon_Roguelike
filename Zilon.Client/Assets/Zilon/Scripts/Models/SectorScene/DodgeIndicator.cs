@@ -1,4 +1,4 @@
-﻿public class DodgeIndicator : MissIndicatorBase
+﻿public class DodgeIndicator : NoDamageIndicatorBase
 {
     
 }

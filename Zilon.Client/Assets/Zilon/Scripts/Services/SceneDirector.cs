@@ -20,9 +20,11 @@ public sealed class SceneDirector : MonoBehaviour
 
     public SectorVM SectorViewModel;
     public DamageIndicator DamageIndicatorPrefab;
+    public BlockIndicator BlockIndicatorPrefab;
     public PureMissIndicator PureMissIndicatorPrefab;
     public DodgeIndicator DodgeIndicatorPrefab;
     public BloodTracker BloodTrackerPrefab;
+    public BlockSparks BlockSparksPrefab;
 
     public void Start()
     {
@@ -68,11 +70,22 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
-
+        // Урон выводим, только если он был больше нуля.
+        // В ином случае считаем, что цель заблокировала урон.
         if (interactionEvent.DamageEfficientCalcResult.ResultEfficient > 0)
         {
+            CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
             CreateBloodTracker(damagedActorViewModel);
+        }
+        else
+        {
+            CreateNoDamageIndicator(damagedActorViewModel, BlockIndicatorPrefab);
+
+            var attackActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.Actor);
+            if (attackActorViewModel != null)
+            {
+                CreateBlockSparks(damagedActorViewModel, attackActorViewModel);
+            }
         }
     }
 
@@ -86,7 +99,7 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateMissIndicator(actorViewModel, PureMissIndicatorPrefab);
+        CreateNoDamageIndicator(actorViewModel, PureMissIndicatorPrefab);
     }
 
     private void CreateDodgeIndication(DodgeActorInteractionEvent interactionEvent)
@@ -99,7 +112,7 @@ public sealed class SceneDirector : MonoBehaviour
             return;
         }
 
-        CreateMissIndicator(actorViewModel, DodgeIndicatorPrefab);
+        CreateNoDamageIndicator(actorViewModel, DodgeIndicatorPrefab);
     }
 
     private void CreateBloodTracker(ActorViewModel damagedActorViewModel)
@@ -112,6 +125,19 @@ public sealed class SceneDirector : MonoBehaviour
         bloodTracker.transform.Rotate(Vector3.up, Random.Range(0, 360));
     }
 
+    private void CreateBlockSparks(ActorViewModel damagedActorViewModel, ActorViewModel attackerActorViewModel)
+    {
+        var blockSparks = Instantiate(BlockSparksPrefab);
+        blockSparks.transform.SetParent(SectorViewModel.transform);
+
+        var targetPosition = damagedActorViewModel.transform.position;
+        var attackerPosition = attackerActorViewModel.transform.position;
+
+        blockSparks.transform.position = targetPosition;
+        // Искры летят в сторону атакующего
+        blockSparks.transform.LookAt(attackerPosition);
+    }
+
     private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
     {
         var damageIndicator = Instantiate(DamageIndicatorPrefab);
@@ -119,7 +145,7 @@ public sealed class SceneDirector : MonoBehaviour
         damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
 
-    private void CreateMissIndicator(ActorViewModel actorViewModel, MissIndicatorBase missIndicatorPrefab)
+    private void CreateNoDamageIndicator(ActorViewModel actorViewModel, NoDamageIndicatorBase missIndicatorPrefab)
     {
         var indicator = Instantiate(missIndicatorPrefab);
         indicator.transform.SetParent(SectorViewModel.transform);

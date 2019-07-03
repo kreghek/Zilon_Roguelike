@@ -285,11 +285,15 @@ MonoBehaviour:
   SectorViewModel: {fileID: 160909242}
   DamageIndicatorPrefab: {fileID: 5023906599018047539, guid: d9fcfc120daf1f643aa51f3e381ac4b1,
     type: 3}
+  BlockIndicatorPrefab: {fileID: 1358782669580686191, guid: 31be2c49056c93443827d0debe81ee3e,
+    type: 3}
   PureMissIndicatorPrefab: {fileID: 3992633758801902236, guid: 0839018129cdccf4ea9eaa9ae3152064,
     type: 3}
   DodgeIndicatorPrefab: {fileID: 1133109617804023082, guid: c6b24ee5780567f4f88e27dc926fb21e,
     type: 3}
   BloodTrackerPrefab: {fileID: 4422862086212521914, guid: 0b987638bf2e60c45b077f4eb7b377f0,
+    type: 3}
+  BlockSparksPrefab: {fileID: 5693981553541839669, guid: 8499d56e88c77d548b5fc26f815893c0,
     type: 3}
 --- !u!1 &187834198
 GameObject:

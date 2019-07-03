@@ -1,4 +1,4 @@
-﻿public class PureMissIndicator : MissIndicatorBase
+﻿public class PureMissIndicator : NoDamageIndicatorBase
 {
     
 }
