@@ -14,6 +14,12 @@ namespace Zilon.Bot.Players.Logics
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            if (hpStat == null)
+            {
+                Complete = true;
+                return null;
+            }
+
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
             var isLowHp = hpStatCoeff <= 0.5f;
             if (!isLowHp)
