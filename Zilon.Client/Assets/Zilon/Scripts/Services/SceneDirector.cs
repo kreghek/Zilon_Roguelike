@@ -20,6 +20,8 @@ public sealed class SceneDirector : MonoBehaviour
 
     public SectorVM SectorViewModel;
     public DamageIndicator DamageIndicatorPrefab;
+    public PureMissIndicator PureMissIndicatorPrefab;
+    public DodgeIndicator DodgeIndicatorPrefab;
     public BloodTracker BloodTrackerPrefab;
 
     public void Start()
@@ -42,18 +44,24 @@ public sealed class SceneDirector : MonoBehaviour
                 CreateDamageIndication(interactionEvent);
                 break;
 
-            case DodgeActorInteractionEvent dodgeActorInteractionEvent:
-                _logService.Log($"{dodgeActorInteractionEvent.Actor} defends {dodgeActorInteractionEvent.PersonDefenceItem}, roll: {dodgeActorInteractionEvent.FactToHitRoll}, success: {dodgeActorInteractionEvent.SuccessToHitRoll}");
+            case DodgeActorInteractionEvent interactionEvent:
+                _logService.Log($"{interactionEvent.Actor} defends {interactionEvent.PersonDefenceItem}, roll: {interactionEvent.FactToHitRoll}, success: {interactionEvent.SuccessToHitRoll}");
+
+                CreateDodgeIndication(interactionEvent);
                 break;
 
-            case PureMissActorInteractionEvent pureMissActorInteractionEvent:
-                _logService.Log($"{pureMissActorInteractionEvent.Actor} missed.");
+            case PureMissActorInteractionEvent interactionEvent:
+                _logService.Log($"{interactionEvent.Actor} missed.");
+
+                CreateMissIndication(interactionEvent);
                 break;
         }
     }
 
     private void CreateDamageIndication(DamageActorInteractionEvent interactionEvent)
     {
+        // Индикатор урона выводим над целевым актёром.
+        // Потому что это он получил урон.
         var damagedActorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.TargetActor);
         if (damagedActorViewModel == null)
         {
@@ -66,6 +74,32 @@ public sealed class SceneDirector : MonoBehaviour
         {
             CreateBloodTracker(damagedActorViewModel);
         }
+    }
+
+    private void CreateMissIndication(PureMissActorInteractionEvent interactionEvent)
+    {
+        // Индикатор промаха выводим над актёром, который совершал действие.
+        // Потому что это он промазал.
+        var actorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.Actor);
+        if (actorViewModel == null)
+        {
+            return;
+        }
+
+        CreateMissIndicator(actorViewModel, PureMissIndicatorPrefab);
+    }
+
+    private void CreateDodgeIndication(DodgeActorInteractionEvent interactionEvent)
+    {
+        // Индикатор уклонения выводим над целевым актёром.
+        // Потому что это он уклонился.
+        var actorViewModel = SectorViewModel.ActorViewModels.SingleOrDefault(x => x.Actor == interactionEvent.TargetActor);
+        if (actorViewModel == null)
+        {
+            return;
+        }
+
+        CreateMissIndicator(actorViewModel, DodgeIndicatorPrefab);
     }
 
     private void CreateBloodTracker(ActorViewModel damagedActorViewModel)
@@ -83,6 +117,13 @@ public sealed class SceneDirector : MonoBehaviour
         var damageIndicator = Instantiate(DamageIndicatorPrefab);
         damageIndicator.transform.SetParent(SectorViewModel.transform);
         damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+    }
+
+    private void CreateMissIndicator(ActorViewModel actorViewModel, MissIndicatorBase missIndicatorPrefab)
+    {
+        var indicator = Instantiate(missIndicatorPrefab);
+        indicator.transform.SetParent(SectorViewModel.transform);
+        indicator.Init(actorViewModel);
     }
 }
 
