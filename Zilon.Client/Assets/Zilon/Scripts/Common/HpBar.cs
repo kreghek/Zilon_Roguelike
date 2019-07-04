@@ -59,7 +59,7 @@ public class HpBar : MonoBehaviour
         {
             if (_lastPercentage > hpPercentage)
             {
-                HighlightHp();
+                HighlightHp(_lastPercentage, hpPercentage);
             }
         }
 
@@ -67,9 +67,20 @@ public class HpBar : MonoBehaviour
         _lastPercentage = hpPercentage;
     }
 
-    private void HighlightHp()
+    private void HighlightHp(float lastPercentage, float currentPercentage)
     {
-        Highlighter.StartHighlighting();
+        var level = HpBarHighlighter.HighLightLevel.Warning;
+        var damagePercentage = lastPercentage - currentPercentage;
+        if (damagePercentage >= 30)
+        {
+            level = HpBarHighlighter.HighLightLevel.Critical;
+        }
+        else if (currentPercentage < 30)
+        {
+            level = HpBarHighlighter.HighLightLevel.Critical;
+        }
+
+        Highlighter.StartHighlighting(level);
     }
 
     private float CalcPercentage(float currentHp, float maxHp)
