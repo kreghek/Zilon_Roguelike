@@ -1,0 +1,13 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "steel-helmet",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}

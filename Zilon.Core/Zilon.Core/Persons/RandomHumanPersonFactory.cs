@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -14,20 +13,22 @@ namespace Zilon.Core.Persons
         private const int BODY_SLOT_INDEX = 1;
         private const int MAIN_HAND_SLOT_INDEX = 2;
         private const int OFF_HAND_SLOT_INDEX = 3;
-
-        private readonly IDice _dice;
+        private const string HEAD_DROP_SID = "start-heads";
+        private const string MAIN_WEAPON_DROP_SID = "start-main-weapons";
+        private const string BODY_DROP_SID = "start-armors";
+        private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
+        private const string START_PROP_DROP_SID = "start-props";
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
 
-        public RandomHumanPersonFactory(IDice dice,
+        public RandomHumanPersonFactory(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
             IDropResolver dropResolver)
         {
-            _dice = dice;
             _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
             _survivalRandomSource = survivalRandomSource ?? throw new System.ArgumentNullException(nameof(survivalRandomSource));
             _propFactory = propFactory ?? throw new System.ArgumentNullException(nameof(propFactory));
@@ -87,27 +88,27 @@ namespace Zilon.Core.Persons
 
         private IDropTableScheme GetHeads()
         {
-            return _schemeService.GetScheme<IDropTableScheme>("start-heads");
+            return _schemeService.GetScheme<IDropTableScheme>(HEAD_DROP_SID);
         }
 
         private IDropTableScheme GetMainWeapons()
         {
-            return _schemeService.GetScheme<IDropTableScheme>("start-main-weapons");
+            return _schemeService.GetScheme<IDropTableScheme>(MAIN_WEAPON_DROP_SID);
         }
 
         private IDropTableScheme GetArmors()
         {
-            return _schemeService.GetScheme<IDropTableScheme>("start-armors");
+            return _schemeService.GetScheme<IDropTableScheme>(BODY_DROP_SID);
         }
 
         private IDropTableScheme GetOffWeapons()
         {
-            return _schemeService.GetScheme<IDropTableScheme>("start-off-weapons");
+            return _schemeService.GetScheme<IDropTableScheme>(OFF_WEAPON_DROP_SID);
         }
 
         private IDropTableScheme GetStartProps()
         {
-            return _schemeService.GetScheme<IDropTableScheme>("start-off-weapons");
+            return _schemeService.GetScheme<IDropTableScheme>(START_PROP_DROP_SID);
         }
 
         private void AddEquipment(IEquipmentCarrier equipmentCarrier, int slotIndex, Equipment equipment)

@@ -1,0 +1,27 @@
+{
+  "Rolls": 3,
+  "Records": [
+    {
+      "SchemeSid": "kalin-cheese",
+	  "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "water-bottle",
+	  "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "med-kit",
+	  "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 10
+    },
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}

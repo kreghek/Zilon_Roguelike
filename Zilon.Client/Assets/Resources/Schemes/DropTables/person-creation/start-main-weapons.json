@@ -1,0 +1,38 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "battle-axe",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "short-sword",
+      "Weight": 10
+    },
+    {
+      "SchemeSid": "pistol",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+    {
+      "SchemeSid": "rush-sword",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}
