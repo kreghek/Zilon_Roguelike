@@ -73,17 +73,53 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        private void FillSlot(HumanPerson person, IDropTableScheme mainWeaponDropScheme, int slotIndex)
+        private void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
         {
+            // Генерируем предметы.
+            // Выбираем предмет, как экипировку в слот.
+            // Если он может быть экипирован, то устанавливаем в слот.
+            // Остальные дропнутые предметы складываем просто в инвентарь.
+            // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
+
             var inventory = person.Inventory;
-            var mainWeaponEquipments = _dropResolver.Resolve(new[] { mainWeaponDropScheme });
-            var usedMainWeaponEquipment = mainWeaponEquipments.OfType<Equipment>().FirstOrDefault();
-            AddEquipment(person.EquipmentCarrier, slotIndex, usedMainWeaponEquipment);
-            var unusedMainWeaponDrops = mainWeaponEquipments.Where(x => x != usedMainWeaponEquipment).ToArray();
-            foreach (var prop in unusedMainWeaponDrops)
+            var dropedProps = _dropResolver.Resolve(new[] { dropScheme });
+            var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
+            if (usedEquipment != null)
             {
-                AddPropToInventory(inventory, prop);
+
+                var canBeEquiped = CanBeEquiped(person.EquipmentCarrier, slotIndex, usedEquipment);
+                if (canBeEquiped)
+                {
+                    AddEquipment(person.EquipmentCarrier, slotIndex, usedEquipment);
+                    var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
+                    foreach (var prop in unusedMainWeaponDrops)
+                    {
+                        AddPropToInventory(inventory, prop);
+                    }
+                }
+                else
+                {
+                    foreach (var prop in dropedProps)
+                    {
+                        AddPropToInventory(inventory, prop);
+                    }
+                }
             }
+            else
+            {
+                foreach (var prop in dropedProps)
+                {
+                    AddPropToInventory(inventory, prop);
+                }
+            }
+        }
+
+        private static bool CanBeEquiped(
+            IEquipmentCarrier equipmentCarrier,
+            int slotIndex,
+            Equipment equipment)
+        {
+            return EquipmentCarrierHelper.CanBeEquiped(equipmentCarrier, slotIndex, equipment);
         }
 
         private IDropTableScheme GetHeads()
