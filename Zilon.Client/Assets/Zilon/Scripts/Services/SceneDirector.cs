@@ -118,11 +118,7 @@ public sealed class SceneDirector : MonoBehaviour
     private void CreateBloodTracker(ActorViewModel damagedActorViewModel)
     {
         var bloodTracker = Instantiate(BloodTrackerPrefab);
-        bloodTracker.transform.SetParent(SectorViewModel.transform);
-        var randomOffset = Random.insideUnitCircle * 0.2f;
-        var offsetVector = new Vector3(randomOffset.x, randomOffset.y);
-        bloodTracker.transform.position = damagedActorViewModel.transform.position + offsetVector;
-        bloodTracker.transform.Rotate(Vector3.up, Random.Range(0, 360));
+        bloodTracker.Init(SectorViewModel.transform, damagedActorViewModel);
     }
 
     private void CreateBlockSparks(ActorViewModel damagedActorViewModel, ActorViewModel attackerActorViewModel)
