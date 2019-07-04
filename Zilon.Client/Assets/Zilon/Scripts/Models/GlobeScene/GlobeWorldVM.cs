@@ -13,6 +13,7 @@ using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -44,9 +45,8 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly IGlobeUiState _globeUiState;
     [Inject] private readonly IGlobeModalManager _globeModalManager;
     [Inject] private readonly IScoreManager _scoreManager;
+    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
     [Inject] private readonly ProgressStorageService _progressStorageService;
-
-    public PlayerPersonCreator PersonCreator;
 
     private async void Start()
     {
@@ -216,7 +216,7 @@ public class GlobeWorldVM : MonoBehaviour
         {
             if (!_progressStorageService.LoadPerson())
             {
-                _player.MainPerson = PersonCreator.CreatePlayerPerson();
+                _player.MainPerson = _humanPersonFactory.Create();
             }
         }
 

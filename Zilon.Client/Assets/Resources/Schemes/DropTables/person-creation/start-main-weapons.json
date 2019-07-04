@@ -9,6 +9,10 @@
       "SchemeSid": "short-sword",
       "Weight": 10
     },
+	{
+      "SchemeSid": "mace",
+      "Weight": 10
+    },
     {
       "SchemeSid": "pistol",
       "Weight": 5,
@@ -18,6 +22,40 @@
 			"Records":[
 				{
 				  "SchemeSid": "bullet-45",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "bow",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "fireball-staff",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "mana",
 				  "MinCount": 8,
 				  "MaxCount": 15,
 				  "Weight": 5

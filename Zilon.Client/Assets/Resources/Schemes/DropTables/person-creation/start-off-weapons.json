@@ -10,6 +10,10 @@
       "Weight": 10
     },
 	{
+      "SchemeSid": "mace",
+      "Weight": 10
+    },
+	{
       "SchemeSid": "wooden-shield",
       "Weight": 10
     },
