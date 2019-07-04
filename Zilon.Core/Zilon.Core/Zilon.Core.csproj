@@ -109,6 +109,9 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="PersonDialogs\Answer.cs" />
+    <Compile Include="PersonDialogs\Dialog.cs" />
+    <Compile Include="PersonDialogs\Question.cs" />
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
@@ -508,5 +511,6 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
