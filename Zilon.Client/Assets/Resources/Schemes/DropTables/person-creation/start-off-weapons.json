@@ -1,0 +1,25 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "battle-axe",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "short-sword",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "mace",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "wooden-shield",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}

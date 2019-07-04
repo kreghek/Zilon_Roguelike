@@ -25,6 +25,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
+        Container.Bind<IHumanPersonFactory>().To<RandomHumanPersonFactory>().AsSingle();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();

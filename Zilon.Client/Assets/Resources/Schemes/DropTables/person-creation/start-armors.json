@@ -1,0 +1,25 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "steel-armor",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "scholar-robe",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "leather-jacket",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "gold-armor",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": null,
+      "Weight": 50
+    }
+  ]
+}
