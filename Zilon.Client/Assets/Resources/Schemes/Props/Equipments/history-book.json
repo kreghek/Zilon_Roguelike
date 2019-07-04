@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "sword" ],
+  "Equip": {
+    "ActSids": [
+      "slash"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "history-book",
+	"En": "history-book"
+  }
+}
