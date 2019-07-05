@@ -2,6 +2,10 @@
 {
     public sealed class Dialog
     {
-        public Question[] Questions { get; set; }
+        public DialogNode RootNode { get; set; }
+
+        public DialogNode[] Nodes { get; set; }
+
+        public DialogTransition[] Transitions { get; set; }
     }
 }
