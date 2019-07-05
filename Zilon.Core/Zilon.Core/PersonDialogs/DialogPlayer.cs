@@ -20,8 +20,6 @@ namespace Zilon.Core.PersonDialogs
         {
             var node = dialog.RootNode;
 
-            DialogNode[] nodes = null;
-
             if (currentNode != null)
             {
                 node = currentNode;
