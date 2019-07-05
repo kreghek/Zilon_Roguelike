@@ -68,6 +68,32 @@
       "SchemeSid": "rush-sword",
       "Weight": 2
     },
+	
+	{ "SchemeSid": "blade-of-mutnov-king", "Weight": 10},
+{ "SchemeSid": "bocken", "Weight": 10},
+{ "SchemeSid": "claw-sword", "Weight": 10},
+{ "SchemeSid": "club", "Weight": 10},
+{ "SchemeSid": "crimson-slaughter", "Weight": 10},
+{ "SchemeSid": "defiler-blade", "Weight": 10},
+{ "SchemeSid": "dikatan", "Weight": 10},
+{ "SchemeSid": "dual-blade", "Weight": 10},
+{ "SchemeSid": "epee", "Weight": 10},
+{ "SchemeSid": "glaive", "Weight": 10},
+{ "SchemeSid": "hell-blade", "Weight": 10},
+{ "SchemeSid": "high-sword", "Weight": 10},
+{ "SchemeSid": "history-book", "Weight": 10},
+{ "SchemeSid": "katana", "Weight": 10},
+{ "SchemeSid": "knight-sword", "Weight": 10},
+{ "SchemeSid": "lord-sword", "Weight": 10},
+{ "SchemeSid": "noble-sword", "Weight": 10},
+{ "SchemeSid": "nocturnal-sing", "Weight": 10},
+{ "SchemeSid": "nord-sword", "Weight": 10},
+{ "SchemeSid": "rough-sword", "Weight": 10},
+{ "SchemeSid": "split-sword", "Weight": 10},
+{ "SchemeSid": "stick", "Weight": 10},
+{ "SchemeSid": "wide-sword", "Weight": 10},
+
+	
 	{
       "SchemeSid": null,
       "Weight": 10
