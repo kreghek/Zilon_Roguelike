@@ -76,6 +76,7 @@
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
@@ -109,6 +110,11 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="PersonDialogs\DialogFactory.cs" />
+    <Compile Include="PersonDialogs\DialogPlayer.cs" />
+    <Compile Include="PersonDialogs\DialogTransition.cs" />
+    <Compile Include="PersonDialogs\Dialog.cs" />
+    <Compile Include="PersonDialogs\DialogNode.cs" />
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />

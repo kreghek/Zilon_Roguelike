@@ -32,6 +32,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public TraderModalBody TraderModalPrefab;
 
+        public DialogModalBody DialogModalPrefab;
+
         public QuitModalBody QuitModalPrefab;
 
         public ScoreModalBody ScoreModalPrefab;
@@ -95,6 +97,12 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
             modalBody.Init();
+        }
+
+        public void ShowDialogModal(CitizenPerson citizen)
+        {
+            var modalBody = CreateWindowHandler<DialogModalBody>(DialogModalPrefab.gameObject);
+            modalBody.Init(citizen);
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-
+using Zilon.Core.MapGenerators;
+using Zilon.Core.PersonDialogs;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -32,8 +33,24 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
+        public Dialog Dialog { get; }
+
+        public CitizenType CitizenType { get; }
+
+        public CitizenPerson()
+        {
+            CitizenType = CitizenType.Unintresting;
+        }
+
+        public CitizenPerson(Dialog dialog)
+        {
+            CitizenType = CitizenType.QuestGiver;
+            Dialog = dialog;
+        }
+
         public CitizenPerson(IDropTableScheme goodsDropTable, IDropResolver dropResolver)
         {
+            CitizenType = CitizenType.Trader;
             _goodsDropTable = goodsDropTable;
             _dropResolver = dropResolver;
         }

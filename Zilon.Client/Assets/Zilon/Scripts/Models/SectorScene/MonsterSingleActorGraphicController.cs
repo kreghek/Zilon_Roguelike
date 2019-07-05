@@ -25,11 +25,9 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
                 SetMonsterVisualProp(monsterPerson.Scheme.Sid);
                 break;
 
-            case CitizenPerson _:
-                // +1, потому что рандом по целым числам исключет максимум.
-                const int maxIndexRandomValue = TRADER_VISUAL_COUNT + 1;
-                var visualIndex = UnityEngine.Random.Range(1, maxIndexRandomValue);
-                SetCitizenVisualProp(visualIndex);
+            case CitizenPerson citizenPerson:
+                var citizenType = citizenPerson.CitizenType;
+                SetCitizenVisualProp((int)citizenType);
                 break;
 
             default:
