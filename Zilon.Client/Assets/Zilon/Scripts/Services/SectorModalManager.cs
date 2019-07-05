@@ -101,8 +101,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowDialogModal(CitizenPerson citizen)
         {
-            var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
-            modalBody.Init();
+            var modalBody = CreateWindowHandler<DialogModalBody>(DialogModalPrefab.gameObject);
+            modalBody.Init(citizen);
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler

@@ -21,12 +21,8 @@ public class DialogModalBody : MonoBehaviour, IModalWindowHandler
 
     public event EventHandler Closed;
 
-    public DialogModalBody()
-    {
 
-    }
-
-    public string Caption { get => "Trader"; }
+    public string Caption { get => "Dialog"; }
 
     public void Init(CitizenPerson questGiver)
     {
@@ -51,22 +47,30 @@ public class DialogModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (Transform transitionTransform in DialogTransitionParent)
         {
-            var viewModel = transitionTransform.GetComponent<DialogTransitionViewModel>();
-            RemoveTransitionControl(viewModel);
+            var transitionViewModel = transitionTransform.GetComponent<DialogTransitionViewModel>();
+            transitionViewModel.Clicked -= TransitionViewModel_Clicked;
+            RemoveTransitionControl(transitionViewModel);
         }
 
         var availableTransitions = DialogPlayer.GetAvailableTransitions(_dialog, _currentDialogNode);
         foreach (var transition in availableTransitions)
         {
-            CreateTransitionViewModel(transition);
+            CreateTransitionViewModel(transition, DialogTransitionParent);
         }
     }
 
-    private void CreateTransitionViewModel(DialogTransition transition)
+    private void CreateTransitionViewModel(DialogTransition transition, Transform parentPosition)
     {
-        var transitionViewModel = Instantiate(DialogTransitionViewModelPrefab);
+        var transitionViewModel = Instantiate(DialogTransitionViewModelPrefab, parentPosition);
         transitionViewModel.Init(transition);
         transitionViewModel.transform.SetParent(DialogTransitionParent);
+        transitionViewModel.Clicked += TransitionViewModel_Clicked;
+    }
+
+    private void TransitionViewModel_Clicked(object sender, EventArgs e)
+    {
+        var transitionViewModel = sender as DialogTransitionViewModel;
+        SelectTransition(transitionViewModel.DialogTransition);
     }
 
     private void RemoveTransitionControl(DialogTransitionViewModel transitionViewModel)
@@ -83,6 +87,4 @@ public class DialogModalBody : MonoBehaviour, IModalWindowHandler
     {
 
     }
-
-
 }

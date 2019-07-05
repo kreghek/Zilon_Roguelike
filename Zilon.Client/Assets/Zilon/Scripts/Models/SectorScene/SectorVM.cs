@@ -124,7 +124,7 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _showTraderModalCommand;
 
     [NotNull]
-    [Inject(Id = "show-dialog-command")]
+    [Inject(Id = "show-dialog-modal-command")]
     private readonly ICommand _showDialogCommand;
 
     public List<ActorViewModel> ActorViewModels { get; }
