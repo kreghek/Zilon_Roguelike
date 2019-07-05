@@ -6,17 +6,12 @@ namespace Zilon.Core.PersonDialogs
     {
         public static DialogNode SelectNode(Dialog dialog, DialogNode currentNode, DialogTransition selectedTransition)
         {
-            if (currentNode == null)
-            {
-                return dialog.RootNode;
-            }
-
             var transitionNode = selectedTransition.TargetNode;
 
             return transitionNode;
         }
 
-        public static DialogNode[] GetAvailableTransitions(Dialog dialog, DialogNode currentNode)
+        public static DialogTransition[] GetAvailableTransitions(Dialog dialog, DialogNode currentNode)
         {
             var node = dialog.RootNode;
 
@@ -25,7 +20,7 @@ namespace Zilon.Core.PersonDialogs
                 node = currentNode;
             }
 
-            return dialog.Transitions.Where(x => x.StartNode == currentNode).Select(x => x.TargetNode).ToArray();
+            return dialog.Transitions.Where(x => x.StartNode == currentNode).ToArray();
         }
     }
 }

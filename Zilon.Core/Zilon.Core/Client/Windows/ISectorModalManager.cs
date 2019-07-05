@@ -18,5 +18,7 @@ namespace Zilon.Core.Client.Windows
         void ShowInstructionModal();
 
         void ShowTraderModal(CitizenPerson trader);
+
+        void ShowDialogModal(CitizenPerson trader);
     }
 }
