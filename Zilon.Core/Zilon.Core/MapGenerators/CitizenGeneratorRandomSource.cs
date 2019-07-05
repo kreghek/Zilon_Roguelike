@@ -11,6 +11,12 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
         }
 
+        public CitizenType RollCitizenType()
+        {
+            var rollIndex = _dice.Roll(1, 3);
+            return (CitizenType)rollIndex;
+        }
+
         /// <inheridoc />
         public int RollNodeIndex(int nodeCount)
         {

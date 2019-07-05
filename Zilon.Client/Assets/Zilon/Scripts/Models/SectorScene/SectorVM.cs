@@ -123,6 +123,10 @@ public class SectorVM : MonoBehaviour
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
+    [NotNull]
+    [Inject(Id = "show-dialog-modal-command")]
+    private readonly ICommand _showDialogCommand;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public SectorVM()
@@ -390,17 +394,39 @@ public class SectorVM : MonoBehaviour
     {
         var traderViewModel = sender as ActorViewModel;
 
-        _playerState.HoverViewModel = traderViewModel;
+        _playerState.SelectedViewModel = traderViewModel;
 
-        if (traderViewModel != null)
+        var citizen = traderViewModel.Actor.Person as CitizenPerson;
+        if (citizen != null)
         {
-            _clientCommandExecutor.Push(_showTraderModalCommand);
+            switch (citizen.CitizenType)
+            {
+                case CitizenType.Unintresting:
+                    // Этот тип жителей не интерактивен.
+                    break;
+
+                case CitizenType.Trader:
+                    if (_showTraderModalCommand.CanExecute())
+                    {
+                        _clientCommandExecutor.Push(_showTraderModalCommand);
+                    }
+                    break;
+
+                case CitizenType.QuestGiver:
+                    if (_showDialogCommand.CanExecute())
+                    {
+                        _clientCommandExecutor.Push(_showDialogCommand);
+                    }
+                    break;
+            }
+
+            
         }
     }
 
     private ContainerVm GetContainerPrefab(IPropContainer container)
     {
-        if (container is ILootContainer lootContainer)
+        if (container is ILootContainer)
         {
             return LootPrefab;
         }
@@ -541,7 +567,7 @@ public class SectorVM : MonoBehaviour
 
         _playerState.SelectedViewModel = actorViewModel;
 
-        if (actorViewModel != null)
+        if (_attackCommand.CanExecute())
         {
             _clientCommandExecutor.Push(_attackCommand);
         }

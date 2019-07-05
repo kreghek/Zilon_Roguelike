@@ -205,7 +205,6 @@ GameObject:
   m_Component:
   - component: {fileID: 160909241}
   - component: {fileID: 160909242}
-  - component: {fileID: 160909243}
   - component: {fileID: 160909244}
   m_Layer: 0
   m_Name: Sector
@@ -257,18 +256,6 @@ MonoBehaviour:
     type: 3}
   HitSfx: {fileID: 6212818204964042155, guid: 49a1aaca0afae8b4fadb8526a171bbeb, type: 3}
   SceneLoader: {fileID: 1698614930}
---- !u!114 &160909243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160909240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f65dd0ad6ffff8408511d1f262348cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &160909244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,6 +483,8 @@ MonoBehaviour:
   InstructionModalPrefab: {fileID: 77522310, guid: b999b3ffad113624c9528851766fedff,
     type: 3}
   TraderModalPrefab: {fileID: 391459472281275467, guid: 925b2a6ed0fec2648844b346b66ee74b,
+    type: 3}
+  DialogModalPrefab: {fileID: 3308749736226327152, guid: 9c5432e265d0ecd4facb152e063f0aa0,
     type: 3}
   QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
     type: 3}
@@ -3184,11 +3173,11 @@ RectTransform:
   m_Father: {fileID: 269743641}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 448.20004, y: 0}
-  m_SizeDelta: {x: 250.6, y: 30}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 250.59998, y: 30}
+  m_Pivot: {x: 1, y: 1}
 --- !u!222 &1809942185
 CanvasRenderer:
   m_ObjectHideFlags: 0
