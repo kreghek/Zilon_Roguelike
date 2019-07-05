@@ -109,7 +109,11 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="PersonDialogGeneration\DialogFragmentDraft.cs" />
+    <Compile Include="PersonDialogGeneration\DialogFragmentPattern.cs" />
+    <Compile Include="PersonDialogGeneration\DialogComponentPattern.cs" />
     <Compile Include="PersonDialogs\DialogFactory.cs" />
+    <Compile Include="PersonDialogGeneration\DialogGenerator.cs" />
     <Compile Include="PersonDialogs\DialogPlayer.cs" />
     <Compile Include="PersonDialogs\DialogTransition.cs" />
     <Compile Include="PersonDialogs\Dialog.cs" />
