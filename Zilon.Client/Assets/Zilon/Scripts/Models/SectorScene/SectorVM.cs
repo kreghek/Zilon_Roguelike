@@ -33,8 +33,6 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once UnusedMember.Global
 public class SectorVM : MonoBehaviour
 {
-    public PlayerPersonCreator PersonCreator;
-
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ContainerVm> _containerViewModels;
 
@@ -102,6 +100,8 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
     [Inject] private readonly ProgressStorageService _progressStorageService;
+
+    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -452,7 +452,7 @@ public class SectorVM : MonoBehaviour
 
             if (e.Transition.SectorSid == null)
             {
-                PersonCreator.AddResourceToCurrentPerson("history-book");
+                AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
                 SaveGameProgress();
@@ -485,6 +485,36 @@ public class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
             StartLoadScene();
+        }
+    }
+
+    //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
+    /// <summary>
+    /// Добавляет ресурс созданному персонажу игрока.
+    /// </summary>
+    /// <param name="resourceSid"> Идентификатор предмета. </param>
+    /// <param name="count"> Количество ресурсво. </param>
+    /// <remarks>
+    /// Используется, чтобы добавить персонажу игрока книгу истории, когда он
+    /// выходит из стартовой локации, и начинается создание мира.
+    /// </remarks>
+    public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
+    {
+        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        AddResource(inventory, resourceSid, count);
+    }
+
+    private void AddResource(Inventory inventory, string resourceSid, int count)
+    {
+        try
+        {
+            var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+            var resource = _propFactory.CreateResource(resourceScheme, count);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {resourceSid}");
         }
     }
 
@@ -532,7 +562,7 @@ public class SectorVM : MonoBehaviour
         {
             if (!_progressStorageService.LoadPerson())
             {
-                _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+                _humanPlayer.MainPerson = _humanPersonFactory.Create();
             }
         }
 

@@ -117,16 +117,20 @@
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
+    <Compile Include="Persons\CreatePersonException.cs" />
     <Compile Include="Persons\DamagePerkParams.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\IEvolutionDataExtensions.cs" />
+    <Compile Include="Persons\IHumanPersonFactory.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
     <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
+    <Compile Include="Persons\ClassHumanPersonFactory.cs" />
+    <Compile Include="Persons\RandomHumanPersonFactory.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
@@ -513,6 +517,8 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persons\HumanPersonGeneration\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
