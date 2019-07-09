@@ -134,7 +134,7 @@ namespace Zilon.Core.Tactics
             catch (Exception)
             {
                 //TODO Оборачивать в доменное исключение. Создать собственный тип.
-                throw new Exception($"Ошибка при обработке записи дропа {record}");
+                throw new Exception($"Ошибка при обработке записи дропа {record.SchemeSid}");
             }
         }
 
