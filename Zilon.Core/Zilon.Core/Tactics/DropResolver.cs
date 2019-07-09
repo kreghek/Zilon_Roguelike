@@ -57,6 +57,8 @@ namespace Zilon.Core.Tactics
 
                     if (recMod.Record.Extra != null)
                     {
+                        //TODO Доделать учёт Rolls для экстра.
+                        // Сейчас все экстра гарантированно выпадают по разу.
                         openDropTables.AddRange(recMod.Record.Extra);
                     }
                 }
@@ -101,30 +103,38 @@ namespace Zilon.Core.Tactics
 
         private IProp GenerateProp(IDropTableRecordSubScheme record)
         {
-            var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
-            var propClass = GetPropClass(scheme);
-
-            switch (propClass)
+            try
             {
-                case PropClass.Equipment:
-                    var equipment = _propFactory.CreateEquipment(scheme);
-                    return equipment;
+                var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
+                var propClass = GetPropClass(scheme);
 
-                case PropClass.Resource:
-                    var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
-                    var resource = _propFactory.CreateResource(scheme, rolledCount);
-                    return resource;
+                switch (propClass)
+                {
+                    case PropClass.Equipment:
+                        var equipment = _propFactory.CreateEquipment(scheme);
+                        return equipment;
 
-                case PropClass.Concept:
+                    case PropClass.Resource:
+                        var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
+                        var resource = _propFactory.CreateResource(scheme, rolledCount);
+                        return resource;
 
-                    throw new ArgumentException($"Пока концепты не поддерживаются.");
+                    case PropClass.Concept:
 
-                    var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
+                        throw new ArgumentException($"Пока концепты не поддерживаются.");
 
-                    return new Concept(scheme, propScheme);
+                        var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
 
-                default:
-                    throw new ArgumentException($"Неизвестный класс {propClass} объекта {scheme}.");
+                        return new Concept(scheme, propScheme);
+
+                    default:
+                        throw new ArgumentException($"Неизвестный класс {propClass} объекта {scheme}.");
+                }
+            }
+            catch (Exception)
+            {
+                //TODO Оборачивать в доменное исключение. Создать собственный тип.
+                throw new Exception($"Ошибка при обработке записи дропа {record}");
             }
         }
 
