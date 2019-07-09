@@ -19,7 +19,7 @@ public class PersonGenerator : MonoBehaviour
 
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
-    private const float SPAWN_SPEED = 1f;
+    private const float SPAWN_SPEED = 5f;
     private const int SPAWN_MATRIX_WIDTH = 5;
     private const int SPAWN_MATRIX_HEIGHT = 5;
 
@@ -54,6 +54,12 @@ public class PersonGenerator : MonoBehaviour
         {
             _spawnCounter = 0;
             SpawnNewPerson();
+
+            _spawnIndex++;
+            if (_spawnIndex >= SPAWN_MATRIX_WIDTH * SPAWN_MATRIX_HEIGHT)
+            {
+                _spawnIndex = 0;
+            }
         }
     }
 
@@ -63,6 +69,12 @@ public class PersonGenerator : MonoBehaviour
 
         var actorViewModel = CreateHumanActorViewModel(person, _humanPlayer, _node);
 
+        if (_persons[_spawnIndex] != null)
+        {
+            Destroy(_persons[_spawnIndex]);
+        }
+
+        _persons[_spawnIndex] = actorViewModel.gameObject;
     }
 
     private ActorViewModel CreateHumanActorViewModel(
@@ -81,6 +93,11 @@ public class PersonGenerator : MonoBehaviour
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;
         graphicController.Graphic = actorGraphic;
+
+        var position = new Vector3(_spawnIndex % SPAWN_MATRIX_WIDTH,
+            _spawnIndex * -1 / SPAWN_MATRIX_WIDTH);
+        actorViewModel.transform.position = position * 0.9f;
+        actorViewModel.Actor = actor;
 
         return actorViewModel;
     }
