@@ -16,6 +16,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Spec.Steps
@@ -104,12 +105,14 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Монстр Id:(.*) успешно обороняется")]
         public void ThenМонстрIdУспешноОбороняется(int monsterId)
         {
-            var visual = Context.VisualEvents.Last();
-
-            visual.EventName.Should().Be(nameof(IActor.OnDefence));
-
             var monster = Context.GetMonsterById(monsterId);
-            visual.Actor.Should().BeSameAs(monster);
+
+            // Проверяем наличие события успешной обороны.
+            var monsterDodgeEvent = Context.RaisedActorInteractionEvents
+                .OfType<DodgeActorInteractionEvent>()
+                .SingleOrDefault(x=>x.TargetActor == monster);
+
+            monsterDodgeEvent.Should().NotBeNull();
         }
 
         [Then(@"Тактическое умение (.*) имеет дебафф на эффективность")]

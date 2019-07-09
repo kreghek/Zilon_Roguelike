@@ -161,10 +161,10 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
         /// <param name="node1">Узел графа карты.</param>
         /// <param name="node2">Узел графа карты.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public override void RemoveEdge(IMapNode node1, IMapNode node2)
         {
-            throw new NotImplementedException();
+            // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
+            // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
         }
 
         public void SaveToFile(string fileName)

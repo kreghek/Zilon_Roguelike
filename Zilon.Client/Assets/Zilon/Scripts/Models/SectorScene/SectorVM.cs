@@ -31,12 +31,9 @@ using Zilon.Core.Tactics.Spatial;
 // ReSharper disable once ArrangeTypeModifiers
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once UnusedMember.Global
-internal class SectorVM : MonoBehaviour
+public class SectorVM : MonoBehaviour
 {
-    public PlayerPersonCreator PersonCreator;
-
     private readonly List<MapNodeVM> _nodeViewModels;
-    private readonly List<ActorViewModel> _actorViewModels;
     private readonly List<ContainerVm> _containerViewModels;
 
     private bool _interuptCommands;
@@ -102,6 +99,10 @@ internal class SectorVM : MonoBehaviour
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
+    [Inject] private readonly ProgressStorageService _progressStorageService;
+
+    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -122,10 +123,16 @@ internal class SectorVM : MonoBehaviour
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
+    [NotNull]
+    [Inject(Id = "show-dialog-modal-command")]
+    private readonly ICommand _showDialogCommand;
+
+    public List<ActorViewModel> ActorViewModels { get; }
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
-        _actorViewModels = new List<ActorViewModel>();
+        ActorViewModels = new List<ActorViewModel>();
         _containerViewModels = new List<ContainerVm>();
     }
 
@@ -255,7 +262,7 @@ internal class SectorVM : MonoBehaviour
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
 
-        _actorViewModels.Add(playerActorViewModel);
+        ActorViewModels.Add(playerActorViewModel);
     }
 
     private List<MapNodeVM> InitNodeViewModels()
@@ -323,7 +330,7 @@ internal class SectorVM : MonoBehaviour
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
 
-            _actorViewModels.Add(actorViewModel);
+            ActorViewModels.Add(actorViewModel);
         }
     }
 
@@ -380,24 +387,46 @@ internal class SectorVM : MonoBehaviour
 
         actorViewModel.Selected += TraderViewModel_Selected;
         
-        _actorViewModels.Add(actorViewModel);
+        ActorViewModels.Add(actorViewModel);
     }
 
     private void TraderViewModel_Selected(object sender, EventArgs e)
     {
         var traderViewModel = sender as ActorViewModel;
 
-        _playerState.HoverViewModel = traderViewModel;
+        _playerState.SelectedViewModel = traderViewModel;
 
-        if (traderViewModel != null)
+        var citizen = traderViewModel.Actor.Person as CitizenPerson;
+        if (citizen != null)
         {
-            _clientCommandExecutor.Push(_showTraderModalCommand);
+            switch (citizen.CitizenType)
+            {
+                case CitizenType.Unintresting:
+                    // Этот тип жителей не интерактивен.
+                    break;
+
+                case CitizenType.Trader:
+                    if (_showTraderModalCommand.CanExecute())
+                    {
+                        _clientCommandExecutor.Push(_showTraderModalCommand);
+                    }
+                    break;
+
+                case CitizenType.QuestGiver:
+                    if (_showDialogCommand.CanExecute())
+                    {
+                        _clientCommandExecutor.Push(_showDialogCommand);
+                    }
+                    break;
+            }
+
+            
         }
     }
 
     private ContainerVm GetContainerPrefab(IPropContainer container)
     {
-        if (container is ILootContainer lootContainer)
+        if (container is ILootContainer)
         {
             return LootPrefab;
         }
@@ -449,9 +478,10 @@ internal class SectorVM : MonoBehaviour
 
             if (e.Transition.SectorSid == null)
             {
-                PersonCreator.AddResourceToCurrentPerson("history-book");
+                AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
+                SaveGameProgress();
                 return;
             }
             else
@@ -467,6 +497,7 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            SaveGameProgress();
             return;
         }
 
@@ -474,11 +505,42 @@ internal class SectorVM : MonoBehaviour
         {
             _humanPlayer.SectorSid = null;
             SceneManager.LoadScene("globe");
+            SaveGameProgress();
         }
         else
         {
             _humanPlayer.SectorSid = e.Transition.SectorSid;
             StartLoadScene();
+        }
+    }
+
+    //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
+    /// <summary>
+    /// Добавляет ресурс созданному персонажу игрока.
+    /// </summary>
+    /// <param name="resourceSid"> Идентификатор предмета. </param>
+    /// <param name="count"> Количество ресурсво. </param>
+    /// <remarks>
+    /// Используется, чтобы добавить персонажу игрока книгу истории, когда он
+    /// выходит из стартовой локации, и начинается создание мира.
+    /// </remarks>
+    public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
+    {
+        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        AddResource(inventory, resourceSid, count);
+    }
+
+    private void AddResource(Inventory inventory, string resourceSid, int count)
+    {
+        try
+        {
+            var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+            var resource = _propFactory.CreateResource(resourceScheme, count);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {resourceSid}");
         }
     }
 
@@ -505,7 +567,7 @@ internal class SectorVM : MonoBehaviour
 
         _playerState.SelectedViewModel = actorViewModel;
 
-        if (actorViewModel != null)
+        if (_attackCommand.CanExecute())
         {
             _clientCommandExecutor.Push(_attackCommand);
         }
@@ -524,7 +586,10 @@ internal class SectorVM : MonoBehaviour
     {
         if (_humanPlayer.MainPerson == null)
         {
-            _humanPlayer.MainPerson = PersonCreator.CreatePlayerPerson();
+            if (!_progressStorageService.LoadPerson())
+            {
+                _humanPlayer.MainPerson = _humanPersonFactory.Create();
+            }
         }
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
@@ -558,6 +623,8 @@ internal class SectorVM : MonoBehaviour
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
+
+        _progressStorageService.Destroy();
     }
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
@@ -568,11 +635,11 @@ internal class SectorVM : MonoBehaviour
         var targetHexNode = e.Target.Node as HexNode;
 
         // Визуализируем удар.
-        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
 
         if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Damage)
         {
-            var targetViewModel = _actorViewModels.Single(x => x.Actor == e.Target);
+            var targetViewModel = ActorViewModels.Single(x => x.Actor == e.Target);
 
             actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
 
@@ -607,8 +674,8 @@ internal class SectorVM : MonoBehaviour
 
     private void CreateBullet(IActor actor, IAttackTarget target)
     {
-        var actorViewModel = _actorViewModels.Single(x => x.Actor == actor);
-        var targetViewModel = _actorViewModels.Single(x => x.Actor == target);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+        var targetViewModel = ActorViewModels.Single(x => x.Actor == target);
 
         var bulletTracer = Instantiate(GunShootTracer, transform);
         bulletTracer.FromPosition = actorViewModel.transform.position;
@@ -638,5 +705,10 @@ internal class SectorVM : MonoBehaviour
     private void StartLoadScene()
     {
         SceneLoader.gameObject.SetActive(true);
+    }
+
+    private void SaveGameProgress()
+    {
+        _progressStorageService.Save();
     }
 }

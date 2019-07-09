@@ -91,6 +91,7 @@ namespace Zilon.Emulation.Common
             container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
             container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
             container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
+            container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(new PerContainerLifetime());
 
             container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());

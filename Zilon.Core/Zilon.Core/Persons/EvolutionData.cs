@@ -52,6 +52,18 @@ namespace Zilon.Core.Persons
             DoPerkArchieved(perk);
         }
 
+        /// <summary>
+        /// Этот метод формированно устанавливает перки персонажа с их состоянием.
+        /// Используется для восстановления персонажа из сохранения.
+        /// </summary>
+        /// <param name="perks"> Набор перков с их состоянием, который нужно восстановить. </param>
+        public void SetPerksForced(IEnumerable<IPerk> perks)
+        {
+            Perks = perks.ToArray();
+
+            UpdatePerks();
+        }
+
         private void DoPerkArchieved(IPerk perk)
         {
             var eventArgs = new PerkEventArgs(perk);
@@ -76,6 +88,7 @@ namespace Zilon.Core.Persons
                     continue;
                 }
 
+                //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
                 var perk = new Perk
                 {
                     Scheme = perkScheme,

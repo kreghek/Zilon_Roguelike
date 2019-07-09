@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.WildStyle

@@ -6,8 +6,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using Microsoft.Extensions.DependencyInjection;
-
-
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -145,7 +144,7 @@ namespace Zilon.Core.Benchmarks
             serviceCollection.AddSingleton<IActorManager, ActorManager>();
             serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
-            serviceCollection.AddSingleton<MonsterActorTaskSource>();
+            serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
             serviceCollection.AddSingleton<ISectorGenerator, SectorGenerator>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>();
@@ -245,7 +244,7 @@ namespace Zilon.Core.Benchmarks
             // Он сам внедряет зависимости свойств. Опасная вещь.
             // DI корки так не делает.
             var gameLoop = _serviceProvider.GetService<IGameLoop>();
-            var monsterTaskSource = _serviceProvider.GetService<MonsterActorTaskSource>();
+            var monsterTaskSource = _serviceProvider.GetService<MonsterBotActorTaskSource>();
             gameLoop.ActorTaskSources = new IActorTaskSource[] {
                 humanActorTaskSource,
                 monsterTaskSource

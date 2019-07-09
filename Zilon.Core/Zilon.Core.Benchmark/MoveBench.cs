@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using LightInject;
-
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -36,7 +36,7 @@ namespace Zilon.Core.Benchmark
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
+            var moveCommand = _container.GetInstance<MoveCommand>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 100; i++)
@@ -74,7 +74,7 @@ namespace Zilon.Core.Benchmark
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
+            var moveCommand = _container.GetInstance<MoveCommand>();
             var commandManger = _container.GetInstance<ICommandManager>();
 
             for (var i = 0; i < 1; i++)
@@ -145,7 +145,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
+            _container.Register<MonsterBotActorTaskSource>(lifetime: new PerContainerLifetime());
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
@@ -161,28 +161,13 @@ namespace Zilon.Core.Benchmark
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
 
             // Комманды актёра.
-            _container.Register<ICommand, MoveCommand>(serviceName: "move-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, AttackCommand>(serviceName: "attack-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, OpenContainerCommand>(serviceName: "open-container-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, NextTurnCommand>(serviceName: "next-turn-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, UseSelfCommand>(serviceName: "use-self-command", lifetime: new PerContainerLifetime());
-
-            // Комадны для UI.
-            _container.Register<ICommand, ShowContainerModalCommand>(serviceName: "show-container-modal-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowInventoryModalCommand>(serviceName: "show-inventory-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowPerksModalCommand>(serviceName: "show-perks-command", lifetime: new PerContainerLifetime());
-
-            // Специализированные команды для Ui.
-            _container.Register<ICommand, EquipCommand>(serviceName: "show-container-modal-command");
-            _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
-
-
+            _container.Register<MoveCommand>(lifetime: new PerContainerLifetime());
 
 
 
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
-            var moveCommand = _container.GetInstance<ICommand>("move-command");
+            var moveCommand = _container.GetInstance<MoveCommand>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();

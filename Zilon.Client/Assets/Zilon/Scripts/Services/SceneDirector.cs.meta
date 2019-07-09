@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a707d754e7056044b9bcb7932763b244
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - SectorViewModel: {instanceID: 0}
+  - DamageIndicatorPrefab: {fileID: 5023906599018047539, guid: d9fcfc120daf1f643aa51f3e381ac4b1,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

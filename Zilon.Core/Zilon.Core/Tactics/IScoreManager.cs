@@ -50,5 +50,7 @@ namespace Zilon.Core.Tactics
 
         /// <summary> Обнуление текущих очков. </summary>
         void ResetScores();
+
+        Scores Scores { get; set; }
     }
 }

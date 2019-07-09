@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -525,7 +524,7 @@ namespace Zilon.Core.WorldGeneration
                 var realm = new Realm
                 {
                     Name = _realmNames[i],
-                    Color = realmColors[i]
+                    Banner = new RealmBanner { MainColor = realmColors[i] }
                 };
 
                 globe.Realms.Add(realm);

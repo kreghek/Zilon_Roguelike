@@ -24,8 +24,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
-    [NotNull] [Inject] private readonly ILogService _logService;
-
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     public ActorGraphicBase GraphicRoot;
@@ -56,9 +54,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         {
             Actor.Person.Survival.Dead += Survival_Dead;
         }
-        Actor.DamageTaken += Actor_DamageTaken;
-        Actor.OnArmorPassed += Actor_OnArmorPassed;
-        Actor.OnDefence += Actor_OnDefence;
+
         Actor.OpenedContainer += Actor_OpenedContainer;
 
         if (ActorHpBar != null)
@@ -76,13 +72,12 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void OnDestroy()
     {
         Actor.Moved -= Actor_Moved;
+
         if (Actor.Person.Survival != null)
         {
             Actor.Person.Survival.Dead -= Survival_Dead;
         }
-        Actor.DamageTaken -= Actor_DamageTaken;
-        Actor.OnArmorPassed -= Actor_OnArmorPassed;
-        Actor.OnDefence -= Actor_OnDefence;
+
         Actor.OpenedContainer -= Actor_OpenedContainer;
     }
 
@@ -158,21 +153,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         _moveCommandBlocker = new MoveCommandBlocker();
         _commandBlockerService.AddBlocker(_moveCommandBlocker);
         GraphicRoot.ProcessMove(_targetPosition);
-    }
-
-    private void Actor_OnDefence(object sender, DefenceEventArgs e)
-    {
-        _logService.Log($"{sender} defends {e.PrefferedDefenceItem}, roll: {e.FactToHitRoll}, success: {e.SuccessToHitRoll}.");
-    }
-
-    private void Actor_OnArmorPassed(object sender, ArmorEventArgs e)
-    {
-        _logService.Log($"{sender} successfully used armor rank: {e.ArmorRank}, roll: {e.FactRoll}, success: {e.SuccessRoll}.");
-    }
-
-    private void Actor_DamageTaken(object sender, DamageTakenEventArgs e)
-    {
-        _logService.Log($"{sender} take damage {e.Value}");
     }
 
     private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)

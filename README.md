@@ -6,3 +6,5 @@ GamePlay Video
 https://www.youtube.com/watch?v=KJJ2ab35eFg
 
 Roguelike-like game
+
+[Бортовой журнал развития проекта (на русском)](https://lastimperialvagabond.home.blog)
