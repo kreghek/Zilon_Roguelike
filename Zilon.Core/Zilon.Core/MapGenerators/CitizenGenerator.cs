@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using Zilon.Core.PersonDialogs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -55,23 +57,59 @@ namespace Zilon.Core.MapGenerators
                     var objectNode = MapRegionHelper.FindNonBlockedNode(openNodes[rollIndex], map, openNodes);
                     if (objectNode == null)
                     {
-                        // в этом случае будет сгенерировано на один сундук меньше.
-                        // узел, с которого не удаётся найти подходящий узел, удаляем,
-                        // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
+                        // В этом случае будет сгенерировано на одного жителя меньше.
+                        // Узел, с которого не удаётся найти подходящий узел, удаляем,
+                        // Чтобы больше его не анализировать, т.к. всё равно будет такой же неудачный исход.
                         openNodes.Remove(openNodes[rollIndex]);
                         continue;
                     }
 
                     openNodes.Remove(objectNode);
                     var traderDropTable = _schemeService.GetScheme<IDropTableScheme>("trader");
-                    CreateMonster(traderDropTable, objectNode, botPlayer);
+
+                    var rollCitizenType = _citizenGeneratorRandomSource.RollCitizenType();
+
+                    switch (rollCitizenType)
+                    {
+                        case CitizenType.Unintresting:
+                            CreateCitizen(objectNode, botPlayer);
+                            break;
+
+                        case CitizenType.Trader:
+                            CreateCitizen(traderDropTable, objectNode, botPlayer);
+                            break;
+
+                        case CitizenType.QuestGiver:
+                            CreateCitizen(DialogFactory.Create(), objectNode, botPlayer);
+                            break;
+
+                        default:
+                            //TODO Завести тип исключения на генерацию персонажей мирных жителей.
+                            throw new System.Exception();
+                    }
                 }
             }
         }
 
-        private IActor CreateMonster(IDropTableScheme traderDropTable, IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateCitizen(IDropTableScheme traderDropTable, IMapNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson(traderDropTable, _dropResolver);
+            var actor = new Actor(person, botPlayer, startNode);
+            _actorManager.Add(actor);
+            return actor;
+        }
+
+        private IActor CreateCitizen(IMapNode startNode, IBotPlayer botPlayer)
+        {
+            var person = new CitizenPerson();
+            var actor = new Actor(person, botPlayer, startNode);
+            _actorManager.Add(actor);
+            return actor;
+        }
+
+        private IActor CreateCitizen(Dialog dialog, IMapNode startNode, IBotPlayer botPlayer)
+        {
+            var person = new CitizenPerson(dialog);
             var actor = new Actor(person, botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;

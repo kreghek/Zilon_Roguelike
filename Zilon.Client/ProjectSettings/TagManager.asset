@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: SceneIndication
+    uniqueID: 631733791
+    locked: 0
   - name: Modal Dialogs
     uniqueID: 2776013175
     locked: 0

@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
-
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -85,6 +85,13 @@ namespace Zilon.Core.Benchmark
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
+
+            var gameLoop = _container.GetInstance<IGameLoop>();
+            var monsterTaskSource = _container.GetInstance<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] {
+                humanActorTaskSource,
+                monsterTaskSource
+            };
         }
 
         [IterationSetup]
@@ -123,7 +130,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
+            _container.Register<MonsterBotActorTaskSource>(lifetime: new PerContainerLifetime());
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
@@ -138,22 +145,6 @@ namespace Zilon.Core.Benchmark
 
             // Специализированные сервисы для Ui.
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
-
-            // Комманды актёра.
-            _container.Register<ICommand, MoveCommand>(serviceName: "move-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, AttackCommand>(serviceName: "attack-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, OpenContainerCommand>(serviceName: "open-container-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, NextTurnCommand>(serviceName: "next-turn-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, UseSelfCommand>(serviceName: "use-self-command", lifetime: new PerContainerLifetime());
-
-            // Комадны для UI.
-            _container.Register<ICommand, ShowContainerModalCommand>(serviceName: "show-container-modal-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowInventoryModalCommand>(serviceName: "show-inventory-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowPerksModalCommand>(serviceName: "show-perks-command", lifetime: new PerContainerLifetime());
-
-            // Специализированные команды для Ui.
-            _container.Register<ICommand, EquipCommand>(serviceName: "show-container-modal-command");
-            _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
         }
 
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()

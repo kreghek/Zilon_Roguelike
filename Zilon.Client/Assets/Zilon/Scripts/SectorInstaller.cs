@@ -40,6 +40,11 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
                      i.EquipmentDurableService = equipmentDurableService;
                  }
 
+                 var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
+                 if (actorInteractionBus != null)
+                 {
+                     i.ActorInteractionBus = actorInteractionBus;
+                 }
              });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
@@ -47,6 +52,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
+        Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
         // генерация сектора
         Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
@@ -78,6 +84,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("show-dialog-modal-command").To<ShowDialogModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-history-command").To<SectorShowHistoryCommand>().AsSingle();
 
         // Специализированные команды для Ui.

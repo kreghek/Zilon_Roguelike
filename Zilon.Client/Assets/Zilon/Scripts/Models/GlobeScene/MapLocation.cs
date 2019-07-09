@@ -6,6 +6,8 @@ using UnityEngine;
 using Zilon.Core.Client;
 using Zilon.Core.World;
 
+using Color = UnityEngine.Color;
+
 /// <summary>
 /// Модель узла провинции на глобальной карте.
 /// </summary>

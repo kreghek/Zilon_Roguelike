@@ -21,8 +21,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            string history = null;
-
             var availableTargets = globe.Agents.Where(x => x != agent && x.Hp >= 0 && x.Hp <= 2).ToArray();
             if (availableTargets.Any())
             {

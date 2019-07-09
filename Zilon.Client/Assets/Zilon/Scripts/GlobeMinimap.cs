@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
+
 using Zilon.Core.Players;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
+
+using Color = UnityEngine.Color;
 
 /// <summary>
 /// Скрипт для работы с миникартой мира.
@@ -53,17 +54,7 @@ public class GlobeMinimap : MonoBehaviour
 
         _realmTexture = new Texture2D(globeWidth * CELL_SIZE, globeHeight * CELL_SIZE, TextureFormat.ARGB32, false);
         _branchesTexture = new Texture2D(globeWidth * CELL_SIZE, globeHeight * CELL_SIZE, TextureFormat.ARGB32, false);
-        var openRealmColors = new List<Color> {
-            Color.red,
-            Color.blue,
-            Color.gray,
-            Color.yellow,
-            Color.magenta,
-            Color.green,
-            Color.cyan,
-            new Color(1, 0.5f, 0.3f)
-        };
-        var usedRealmColors = new Dictionary<Realm, Color>();
+
         for (int y = 0; y < globeHeight; y++)
         {
             for (int x = 0; x < globeWidth; x++)
@@ -74,12 +65,11 @@ public class GlobeMinimap : MonoBehaviour
                     var branch = locality.Branches.Single(b => b.Value > 0);
                     var owner = locality.Owner;
 
-                    if (!usedRealmColors.TryGetValue(owner, out var realmColor))
-                    {
-                        var newRealmColor = openRealmColors[0];
-                        usedRealmColors[owner] = newRealmColor;
-                        openRealmColors.RemoveAt(0);
-                    }
+                    var mainRealmColor = owner.Banner.MainColor;
+                    var realmColor = new Color(
+                        mainRealmColor.R / 255f,
+                        mainRealmColor.G / 255f,
+                        mainRealmColor.B / 255f);
 
                     DrawBlock(_realmTexture, x, y, realmColor);
                     DrawBlock(_branchesTexture, x, y, branchColors[(int)branch.Key]);

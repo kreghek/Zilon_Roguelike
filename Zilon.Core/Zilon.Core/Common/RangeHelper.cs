@@ -34,5 +34,25 @@ namespace Zilon.Core.Common
 
             return new OrientedRange<T>(min, max, isAsc);
         }
+
+        /// <summary>
+        /// Нормальзует значение в диапазоне долей. Это диапазон [0..1].
+        /// </summary>
+        /// <param name="value"> Корректируемое значение. </param>
+        /// <returns> Возвращает значение в диапазоне [0..1]. </returns>
+        public static float NormalizeShare(float value)
+        {
+            if (value < 0)
+            {
+                return 0;
+            }
+
+            if (value > 1)
+            {
+                return 1;
+            }
+
+            return value;
+        }
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
@@ -109,23 +110,49 @@
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />
+    <Compile Include="PersonDialogs\DialogFactory.cs" />
+    <Compile Include="PersonDialogs\DialogPlayer.cs" />
+    <Compile Include="PersonDialogs\DialogTransition.cs" />
+    <Compile Include="PersonDialogs\Dialog.cs" />
+    <Compile Include="PersonDialogs\DialogNode.cs" />
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
+    <Compile Include="Persons\CreatePersonException.cs" />
     <Compile Include="Persons\DamagePerkParams.cs" />
     <Compile Include="Persons\EquipmentCarrierBase.cs" />
     <Compile Include="Persons\EquipmentCarrierHelper.cs" />
     <Compile Include="Persons\IEvolutionDataExtensions.cs" />
+    <Compile Include="Persons\IHumanPersonFactory.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
     <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
+    <Compile Include="Persons\ClassHumanPersonFactory.cs" />
+    <Compile Include="Persons\RandomHumanPersonFactory.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
     <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionNodeStorageData.cs" />
+    <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanPersonStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanPlayerStorageData.cs" />
+    <Compile Include="ProgressStoring\HumanSurvivalStatStorageData.cs" />
+    <Compile Include="ProgressStoring\LocalityBranchStorageData.cs" />
+    <Compile Include="ProgressStoring\AgentSkillStorageData.cs" />
+    <Compile Include="ProgressStoring\AgentStorageData.cs" />
+    <Compile Include="ProgressStoring\LocalityStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkJobStorageData.cs" />
+    <Compile Include="ProgressStoring\PerkStorageData.cs" />
+    <Compile Include="ProgressStoring\PropStorageData.cs" />
+    <Compile Include="ProgressStoring\PropType.cs" />
+    <Compile Include="ProgressStoring\RealmStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoreSidCounterStorageData.cs" />
+    <Compile Include="ProgressStoring\ScoresStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
@@ -141,11 +168,19 @@
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
+    <Compile Include="Tactics\ActorInteractionBus.cs" />
+    <Compile Include="Tactics\ActorInteractionEventBase.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\DodgeActorInteractionEvent.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\PureMissActorInteractionEvent.cs" />
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
+    <Compile Include="Tactics\ActorInteractionEvents\DamageActorInteractionEvent.cs" />
+    <Compile Include="Tactics\DamageEfficientCalc.cs" />
     <Compile Include="Tactics\DamageTakenEventArgs.cs" />
     <Compile Include="Tactics\DefenceEventArgs.cs" />
+    <Compile Include="Tactics\IActorInteractionBus.cs" />
+    <Compile Include="Tactics\IActorInteractionEvent.cs" />
     <Compile Include="Tactics\ILootContainer.cs" />
     <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
@@ -155,11 +190,16 @@
     <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
+    <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\Spatial\HexMapNodeDistanceCalculator.cs" />
+    <Compile Include="Tactics\Spatial\IMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
+    <Compile Include="Tactics\Spatial\SectorGraphMapGeneric.cs" />
     <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
     <Compile Include="Tactics\SectorManager.cs" />
     <Compile Include="Commands\Sector\UseSelfCommand.cs" />
@@ -285,8 +325,6 @@
     <Compile Include="Schemes\PerkLevelSubScheme.cs" />
     <Compile Include="Schemes\PerkRuleSubScheme.cs" />
     <Compile Include="Schemes\PerkScheme.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\AgressiveLogicBase.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\RoamingLogic.cs" />
     <Compile Include="Tactics\Behaviour\IHumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IIntention.cs" />
     <Compile Include="Tactics\Behaviour\Intention.cs" />
@@ -345,7 +383,6 @@
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\PatrolLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
     <Compile Include="Tactics\Behaviour\HandOpenContainerMethod.cs" />
@@ -398,7 +435,6 @@
     <Compile Include="Schemes\FileSchemeLocator.cs" />
     <Compile Include="Tactics\Actor.cs" />
     <Compile Include="Tactics\Behaviour\AttackTask.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\MonsterActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\HumanActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTaskSource.cs" />
     <Compile Include="Tactics\Behaviour\IActorTask.cs" />
@@ -450,6 +486,7 @@
     <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
+    <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
@@ -463,12 +500,14 @@
     <Compile Include="WorldGeneration\RealmRelations.cs" />
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\Color.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
     <Compile Include="World\IWorldManager.cs" />
     <Compile Include="World\MonsterSet.cs" />
+    <Compile Include="World\RealmBanner.cs" />
     <Compile Include="World\WildMeetingEventArgs.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
@@ -478,6 +517,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Persons\HumanPersonGeneration\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

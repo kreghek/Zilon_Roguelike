@@ -58,11 +58,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
         /// <summary>
-        /// Событие выстреливает, когда персонаж успешно отражает наступление.
-        /// </summary>
-        event EventHandler<DefenceEventArgs> OnDefence;
-
-        /// <summary>
         /// Происходит, когда актёр выполняет действие.
         /// </summary>
         event EventHandler<UsedActEventArgs> UsedAct;
@@ -73,11 +68,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<DamageTakenEventArgs> DamageTaken;
 
         /// <summary>
-        /// Происходит, когда актёр успешно использует броню.
-        /// </summary>
-        event EventHandler<ArmorEventArgs> OnArmorPassed;
-
-        /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
         /// <param name="target"> Цель действия. </param>
@@ -85,15 +75,5 @@ namespace Zilon.Core.Tactics
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
-
-        /// <summary>
-        /// Вызывается службой действий в случае успешной обороны.
-        /// </summary>
-        void ProcessDefence(PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll);
-
-        /// <summary>
-        /// Вызывается службой действий в случае успешного использования брони.
-        /// </summary>
-        void ProcessArmor(int armorRank, int successRoll, int factRoll);
     }
 }

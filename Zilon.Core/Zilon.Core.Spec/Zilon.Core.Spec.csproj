@@ -191,6 +191,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj">
+      <Project>{1325f406-e074-438f-9a8f-28b9f411cadf}</Project>
+      <Name>Zilon.Bot.Players.LightInject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
+      <Project>{218B22DD-5BF3-4A86-B979-7E6F534F3F52}</Project>
+      <Name>Zilon.Bot.Players</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
       <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>
       <Name>Zilon.Core.Tests.Common</Name>
