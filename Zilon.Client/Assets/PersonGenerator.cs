@@ -20,8 +20,8 @@ public class PersonGenerator : MonoBehaviour
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
     private const float SPAWN_SPEED = 5f;
-    private const int SPAWN_MATRIX_WIDTH = 5;
-    private const int SPAWN_MATRIX_HEIGHT = 5;
+    private const int SPAWN_MATRIX_WIDTH = 21;
+    private const int SPAWN_MATRIX_HEIGHT = 8;
 
     private float _spawnCounter;
     private int _spawnIndex;
