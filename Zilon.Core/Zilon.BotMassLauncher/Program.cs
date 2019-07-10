@@ -23,8 +23,8 @@ namespace Zilon.BotMassLauncher
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            _pathToEnv = ConfigurationManager.AppSettings["env"];
-            _launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _pathToEnv = GetProgramArgument(args, "env");
+            _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
             _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
