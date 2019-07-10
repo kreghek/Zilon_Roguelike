@@ -21,6 +21,18 @@
       "SchemeSid": "highlander-helmet",
       "Weight": 2
     },
+	
+	
+	{
+      "SchemeSid": "tactical-helmet",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "gold-helmet",
+      "Weight": 10
+    },
+	
+	
 	{
       "SchemeSid": null,
       "Weight": 50
