@@ -40,8 +40,10 @@ namespace Zilon.BotEnvironment
         {
             var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
+            var schemeCatalogPath = GetProgramArgument(args, "schemeCatalogPath");
+
             _globalServiceContainer = new ServiceContainer();
-            _startUp = new Startup();
+            _startUp = new Startup(schemeCatalogPath);
             _startUp.RegisterServices(_globalServiceContainer);
 
             LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", _globalServiceContainer, _globalServiceContainer);
@@ -352,7 +354,7 @@ namespace Zilon.BotEnvironment
 
         private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix, string mode, string summary)
         {
-            var path = SCORE_FILE_PATH;
+            var path = Path.Combine(@"c:\", "bot-output", SCORE_FILE_PATH);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

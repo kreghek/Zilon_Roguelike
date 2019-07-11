@@ -19,6 +19,13 @@ namespace Zilon.Emulation.Common
 {
     public abstract class InitialzationBase
     {
+        private readonly string _catalogPath;
+
+        protected InitialzationBase(string catalogPath)
+        {
+            _catalogPath = catalogPath;
+        }
+
         public void RegisterServices(IServiceRegistry serviceRegistry)
         {
             RegisterSchemeService(serviceRegistry);
@@ -42,9 +49,7 @@ namespace Zilon.Emulation.Common
         {
             container.Register<ISchemeLocator>(factory =>
             {
-                var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
-
-                var schemeLocator = new FileSchemeLocator(schemePath);
+                var schemeLocator = new FileSchemeLocator(_catalogPath);
 
                 return schemeLocator;
             }, new PerContainerLifetime());

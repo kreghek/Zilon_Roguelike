@@ -13,6 +13,8 @@ namespace Zilon.BotEnvironment
 {
     public static class DatabaseContext
     {
+        private const string SCORE_FILE_PATH = "bot-scores";
+
         public static void AppendScores(IScoreManager scoreManager,
             IServiceFactory serviceFactory,
             string scoreFilePreffix,
@@ -22,18 +24,19 @@ namespace Zilon.BotEnvironment
             var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
             var fragSum = scoreManager.Frags.Sum(x => x.Value);
 
-
+            var path = Path.Combine(@"c:\", "bot-output", SCORE_FILE_PATH);
             var baseName = "BotScores.db3";
-            if (!File.Exists(baseName))
+            var dbPath = Path.Combine(path, baseName);
+            if (!File.Exists(dbPath))
             {
-                SQLiteConnection.CreateFile(baseName);
+                SQLiteConnection.CreateFile(dbPath);
             }
 
 
             var factory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
             using (var connection = (SQLiteConnection)factory.CreateConnection())
             {
-                connection.ConnectionString = "Data Source = " + baseName;
+                connection.ConnectionString = "Data Source = " + dbPath;
                 connection.Open();
 
                 CreateScoresTableIfNotExists(connection);

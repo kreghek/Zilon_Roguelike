@@ -6,6 +6,10 @@ namespace Zilon.Bot
 {
     class Startup: InitialzationBase
     {
+        public Startup(string catalogPath) : base(catalogPath)
+        {
+        }
+
         public override void ConfigureAux(IServiceFactory serviceFactory)
         {
             

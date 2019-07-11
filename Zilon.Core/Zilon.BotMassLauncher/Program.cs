@@ -16,11 +16,14 @@ namespace Zilon.BotMassLauncher
         private static bool _isInfinite;
         private static ulong _infiniteCounter;
         private static string _botMode;
+        private static string _schemeCatlogPath;
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
         static void Main(string[] args)
         {
+            Console.WriteLine("[x] START");
+
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             _pathToEnv = GetProgramArgument(args, "env");
@@ -30,6 +33,8 @@ namespace Zilon.BotMassLauncher
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");
             _botMode = GetProgramArgument(args, "mode");
+
+            _schemeCatlogPath = GetProgramArgument(args, "schemeCatalogPath");
 
             _shutdownTokenSource = new CancellationTokenSource();
             _shutdownToken = _shutdownTokenSource.Token;
@@ -111,10 +116,21 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg}"
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath}",
+
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 };
 
                 process.Start();
+
+                var output = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
+
+                Console.WriteLine("[x]OUTPUT");
+                Console.WriteLine(output);
+                Console.WriteLine("[x]ERROR");
+                Console.WriteLine(error);
 
                 process.WaitForExit(30000);
             }
