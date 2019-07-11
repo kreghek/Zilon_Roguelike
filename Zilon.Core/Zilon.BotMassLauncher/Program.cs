@@ -29,7 +29,7 @@ namespace Zilon.BotMassLauncher
 
             _pathToEnv = GetProgramArgument(args, "env");
             _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
-            _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
+            _scorePreffix = GenerateUniquePreffix();
 
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");
@@ -66,6 +66,20 @@ namespace Zilon.BotMassLauncher
 
 
             Console.WriteLine($"[x] COMPLETE");
+        }
+
+        private static string GenerateUniquePreffix()
+        {
+            var time = DateTime.UtcNow;
+            var year = time.Year;
+            var month = time.Month;
+            var day = time.Day;
+
+            var hours = time.Hour;
+            var minute = time.Minute;
+            var second = time.Second;
+
+            return $"{year:0000}{month:00}{day:00}_{hours:00}{minute:00}{second:00}";
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
