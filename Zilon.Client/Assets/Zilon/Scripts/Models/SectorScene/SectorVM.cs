@@ -598,6 +598,7 @@ public class SectorVM : MonoBehaviour
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
+        actorViewModel.PlayerState = _playerState;
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
         actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
         actorViewModel.GraphicRoot = actorGraphic;
