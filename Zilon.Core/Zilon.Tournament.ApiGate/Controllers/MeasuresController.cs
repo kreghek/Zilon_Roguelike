@@ -32,26 +32,75 @@ namespace Zilon.Tournament.ApiGate.Controllers
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"SELECT [Name],[Mode],[Preffix],[AvgScores] FROM v_measures";
+                    command.CommandText = $@"SELECT [Name]
+                            ,[Mode]
+                            ,AVG([MinScores]) AS MinScores
+                            ,AVG([AvgScores]) AS AvgScores
+                            ,AVG([MaxScores]) AS MaxScores
+                            ,AVG([MinTurns]) AS MinTurns
+                            ,AVG([AvgTurns]) AS AvgTurns
+                            ,AVG([MaxTurns]) AS MaxTurns
+                            ,AVG([MinFrags]) AS MinFrags
+                            ,AVG([AvgFrags]) AS AvgFrags
+                            ,AVG([MaxFrags]) AS MaxFrags
+                            ,AVG([AvgIterationDuration]) AS AvgIterationDuration
+                            FROM v_measures
+                            GROUP BY [Name], [Mode]";
                     command.CommandType = CommandType.Text;
                     var reader = command.ExecuteReader();
-                    while (reader.Read())
+
+                    using (var diffCommand = connection.CreateCommand())
                     {
-                        var measure = ReadSingleRow((IDataRecord)reader);
+                        diffCommand.CommandText = $@"SELECT
+                            [MinScores]*1.0   AS MinScores
+                            ,[AvgScores]*1.0  AS AvgScores
+                            ,[MaxScores]*1.0  AS MaxScores
+                            ,[MinTurns]*1.0  AS MinTurns
+                            ,[AvgTurns]*1.0  AS AvgTurns
+                            ,[MaxTurns]*1.0  AS MaxTurns
+                            ,[MinFrags]*1.0  AS MinFrags
+                            ,[AvgFrags]*1.0  AS AvgFrags
+                            ,[MaxFrags]*1.0  AS MaxFrags
+                            ,[AvgIterationDuration]*1.0 AS AvgIterationDuration
+                            FROM v_measures WHERE [Name]='{reader["Name"]}' AND [Mode]='{reader["Mode"]}' ORDER BY [Preffix] DESC LIMIT 1";
+                        diffCommand.CommandType = CommandType.Text;
+                        var diffReader = diffCommand.ExecuteReader();
+
+                        var measure = new Measure
+                        {
+                            BotName = (string)reader["Name"],
+                            BotMode = (string)reader["Mode"],
+
+                            MinScores = GetMeasureValue(reader, diffReader, "MinScores"),
+                            AvgScores = GetMeasureValue(reader, diffReader, "AvgScores"),
+                            MaxScores = GetMeasureValue(reader, diffReader, "MaxScores"),
+
+                            MinTurns = GetMeasureValue(reader, diffReader, "MinTurns"),
+                            AvgTurns = GetMeasureValue(reader, diffReader, "AvgTurns"),
+                            MaxTurns = GetMeasureValue(reader, diffReader, "MaxTurns"),
+
+                            MinFrags = GetMeasureValue(reader, diffReader, "MinFrags"),
+                            AvgFrags = GetMeasureValue(reader, diffReader, "AvgFrags"),
+                            MaxFrags = GetMeasureValue(reader, diffReader, "MaxFrags"),
+
+                            AvgIterationDuration = GetMeasureValue(reader, diffReader, "AvgIterationDuration")
+                        };
+
                         resultList.Add(measure);
                     }
                 }
+
+                
             }
 
             return resultList;
         }
 
-        private static Measure ReadSingleRow(IDataRecord record)
+        private static MeasureValue GetMeasureValue(DbDataReader reader, DbDataReader diffReader, string fieldName)
         {
-            return new Measure
-            {
-                AvgScores = (double)record["AvgScores"]
-            };
+            var value = (double)reader[fieldName];
+            var lastValue = (double)diffReader[fieldName];
+            return new MeasureValue { TotalValue = value, LastValue = lastValue };
         }
     }
 }

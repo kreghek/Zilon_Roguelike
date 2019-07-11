@@ -40,7 +40,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
                             FileName = $"{appPath}Zilon.BotMassLauncher.exe",
                             UseShellExecute = false,
                             CreateNoWindow = true,
-                            Arguments = $"parallel=10 mode=duncan env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                            Arguments = $"parallel=10 mode=duncan env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
                             RedirectStandardOutput = true,
                             RedirectStandardError = true
                         };

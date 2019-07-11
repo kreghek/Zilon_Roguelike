@@ -367,57 +367,57 @@ namespace Zilon.BotEnvironment
             string mode,
             string summary)
         {
-            if (!Directory.Exists(scorePath))
-            {
-                Directory.CreateDirectory(scorePath);
-            }
+            //if (!Directory.Exists(scorePath))
+            //{
+            //    Directory.CreateDirectory(scorePath);
+            //}
 
-            var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
-            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
-            var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
-            using (var file = new StreamWriter(filename, append: true))
-            {
-                var fragSum = scoreManager.Frags.Sum(x => x.Value);
-                file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
-            }
+            //var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
+            //var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            //var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
+            //using (var file = new StreamWriter(filename, append: true))
+            //{
+            //    var fragSum = scoreManager.Frags.Sum(x => x.Value);
+            //    file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
+            //}
 
             DatabaseContext.AppendScores(scorePath, scoreManager, serviceFactory, scoreFilePreffix, mode, summary);
         }
 
         private static void AppendFail(string scorePath, IServiceFactory serviceFactory, string scoreFilePreffix)
         {
-            Console.WriteLine("[x] Bot task source error limit reached");
+            //Console.WriteLine("[x] Bot task source error limit reached");
 
-            if (!Directory.Exists(scorePath))
-            {
-                Directory.CreateDirectory(scorePath);
-            }
+            //if (!Directory.Exists(scorePath))
+            //{
+            //    Directory.CreateDirectory(scorePath);
+            //}
 
-            var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
-            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
-            var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
-            using (var file = new StreamWriter(filename, append: true))
-            {
-                file.WriteLine($"-1");
-            }
+            //var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
+            //var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            //var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
+            //using (var file = new StreamWriter(filename, append: true))
+            //{
+            //    file.WriteLine($"-1");
+            //}
         }
 
         private static void AppendException(string scorePath, Exception exception, string scoreFilePreffix)
         {
-            if (!Directory.Exists(scorePath))
-            {
-                Directory.CreateDirectory(scorePath);
-            }
+            //if (!Directory.Exists(scorePath))
+            //{
+            //    Directory.CreateDirectory(scorePath);
+            //}
 
-            var botTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
-            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
-            var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
-            using (var file = new StreamWriter(filename, append: true))
-            {
-                file.WriteLine(DateTime.UtcNow);
-                file.WriteLine(exception);
-                file.WriteLine();
-            }
+            //var botTaskSource = _sectorServiceContainer.GetInstance<IActorTaskSource>("bot");
+            //var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            //var filename = Path.Combine(scorePath, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
+            //using (var file = new StreamWriter(filename, append: true))
+            //{
+            //    file.WriteLine(DateTime.UtcNow);
+            //    file.WriteLine(exception);
+            //    file.WriteLine();
+            //}
         }
 
         private static string GetScoreFilePreffix(string scoreFilePreffix)
