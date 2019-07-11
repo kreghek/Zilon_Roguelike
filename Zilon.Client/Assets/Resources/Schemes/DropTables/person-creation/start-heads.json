@@ -22,16 +22,14 @@
       "Weight": 2
     },
 	
-	
 	{
       "SchemeSid": "tactical-helmet",
-      "Weight": 10
+      "Weight": 3
     },
 	{
       "SchemeSid": "gold-helmet",
-      "Weight": 10
+      "Weight": 2
     },
-	
 	
 	{
       "SchemeSid": null,
