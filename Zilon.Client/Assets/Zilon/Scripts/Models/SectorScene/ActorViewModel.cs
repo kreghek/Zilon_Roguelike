@@ -22,8 +22,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
 
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
-
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     public ActorGraphicBase GraphicRoot;
@@ -45,6 +43,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     public IActor Actor { get; set; }
 
+    public ISectorUiState PlayerState { get; set; }
 
     [UsedImplicitly]
     public void Start()
@@ -61,7 +60,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         {
             ActorHpBar.Actor = Actor;
 
-            if (ReferenceEquals(_playerState.ActiveActor, this))
+            if (PlayerState != null && ReferenceEquals(PlayerState.ActiveActor, this))
             {
                 ActorHpBar.gameObject.SetActive(false);
             }
@@ -138,9 +137,9 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
         Destroy(GetComponent<Collider2D>());
 
-        if (_playerState.ActiveActor.Equals(this))
+        if (PlayerState != null && ReferenceEquals(PlayerState.ActiveActor, this))
         {
-            _playerState.ActiveActor = null;
+            PlayerState.ActiveActor = null;
         }
     }
 

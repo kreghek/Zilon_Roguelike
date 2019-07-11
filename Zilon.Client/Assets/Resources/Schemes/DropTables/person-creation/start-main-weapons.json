@@ -13,6 +13,10 @@
       "SchemeSid": "mace",
       "Weight": 10
     },
+	{
+      "SchemeSid": "tribal-spear",
+      "Weight": 5
+    },
     {
       "SchemeSid": "pistol",
       "Weight": 5,
@@ -69,29 +73,51 @@
       "Weight": 2
     },
 	
-	{ "SchemeSid": "blade-of-mutnov-king", "Weight": 10},
-{ "SchemeSid": "bocken", "Weight": 10},
-{ "SchemeSid": "claw-sword", "Weight": 10},
-{ "SchemeSid": "club", "Weight": 10},
-{ "SchemeSid": "crimson-slaughter", "Weight": 10},
-{ "SchemeSid": "defiler-blade", "Weight": 10},
-{ "SchemeSid": "dikatan", "Weight": 10},
-{ "SchemeSid": "dual-blade", "Weight": 10},
-{ "SchemeSid": "epee", "Weight": 10},
-{ "SchemeSid": "glaive", "Weight": 10},
-{ "SchemeSid": "hell-blade", "Weight": 10},
-{ "SchemeSid": "high-sword", "Weight": 10},
-{ "SchemeSid": "history-book", "Weight": 10},
-{ "SchemeSid": "katana", "Weight": 10},
-{ "SchemeSid": "knight-sword", "Weight": 10},
-{ "SchemeSid": "lord-sword", "Weight": 10},
-{ "SchemeSid": "noble-sword", "Weight": 10},
-{ "SchemeSid": "nocturnal-sing", "Weight": 10},
-{ "SchemeSid": "nord-sword", "Weight": 10},
-{ "SchemeSid": "rough-sword", "Weight": 10},
-{ "SchemeSid": "split-sword", "Weight": 10},
-{ "SchemeSid": "stick", "Weight": 10},
-{ "SchemeSid": "wide-sword", "Weight": 10},
+	{ "SchemeSid": "blade-of-mutnov-king", "Weight": 2},
+{ "SchemeSid": "bocken", "Weight": 2},
+{ "SchemeSid": "claw-sword", "Weight": 2},
+{ "SchemeSid": "club", "Weight": 2},
+{ "SchemeSid": "crimson-slaughter", "Weight": 2},
+{ "SchemeSid": "defiler-blade", "Weight": 2},
+{ "SchemeSid": "dikatan", "Weight": 2},
+{ "SchemeSid": "dual-blade", "Weight": 2},
+{ "SchemeSid": "epee", "Weight": 2},
+{ "SchemeSid": "glaive", "Weight": 2},
+{ "SchemeSid": "hell-blade", "Weight": 2},
+{ "SchemeSid": "high-sword", "Weight": 2},
+{ "SchemeSid": "katana", "Weight": 2},
+{ "SchemeSid": "knight-sword", "Weight": 2},
+{ "SchemeSid": "lord-sword", "Weight": 2},
+{ "SchemeSid": "noble-sword", "Weight": 2},
+{ "SchemeSid": "nocturnal-sing", "Weight": 2},
+{ "SchemeSid": "nord-sword", "Weight": 2},
+{ "SchemeSid": "rough-sword", "Weight": 2},
+{ "SchemeSid": "split-sword", "Weight": 2},
+{ "SchemeSid": "stick", "Weight": 2},
+{ "SchemeSid": "wide-sword", "Weight": 2},
+
+{ "SchemeSid": "knobstick", "Weight": 5},
+{ "SchemeSid": "heal-staff", "Weight": 5},
+{ "SchemeSid": "anger-axe", "Weight": 5},
+{ "SchemeSid": "suprime-anger-axe", "Weight": 5},
+
+{
+  "SchemeSid": "composite-bow",
+  "Weight": 5,
+  "Extra":[
+	{
+		"Rolls": 1,
+		"Records":[
+			{
+			  "SchemeSid": "arrow",
+			  "MinCount": 8,
+			  "MaxCount": 15,
+			  "Weight": 5
+			}
+		]
+	}
+  ]
+},
 
 	
 	{
