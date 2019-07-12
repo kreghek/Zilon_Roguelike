@@ -44,11 +44,14 @@ namespace Zilon.BotEnvironment
 
             var scorePath = GetProgramArgument(args, OUTPUT_ARG);
 
+            var botCatalog = GetProgramArgument(args, "botCatalog");
+            var botAssembly = GetProgramArgument(args, "botAssembly");
+
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup(schemeCatalogPath);
             _startUp.RegisterServices(_globalServiceContainer);
 
-            LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", _globalServiceContainer, _globalServiceContainer);
+            LoadBotAssembly(botCatalog, botAssembly, _globalServiceContainer, _globalServiceContainer);
 
             var humanActor = await CreateSectorAsync();
 

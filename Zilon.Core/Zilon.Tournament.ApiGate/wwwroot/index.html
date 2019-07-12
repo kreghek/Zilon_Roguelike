@@ -9,7 +9,12 @@
         }
     </style>
     <script>
-        setInterval(function () {
+
+        sendRequest();
+
+        setInterval(sendRequest, 10000);
+
+        function sendRequest() {
             var xhr = new XMLHttpRequest();
             var url = "/api/measures";
             xhr.open("GET", url, true);
@@ -21,7 +26,7 @@
                 }
             };
             xhr.send();
-        }, 10000);
+        }
 
 
         function CreateTableFromJSON(json) {

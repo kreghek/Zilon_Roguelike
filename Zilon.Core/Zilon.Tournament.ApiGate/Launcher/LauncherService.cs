@@ -29,6 +29,13 @@ namespace Zilon.Tournament.ApiGate.Launcher
             var schemeCatalogPath = Environment.GetEnvironmentVariable("SCHEME_CATALOG_PATH");
             var outputCatalog = Environment.GetEnvironmentVariable("BOT_OUTPUT_CATALOG");
 
+            var modes = new[] { "joe", "duncan" };
+            var modeMaxIndex = modes.Length - 1;
+            var modeIndex = 0;
+
+            var botCatalog = "cdt";
+            var botAssembly = "Zilon.Bot.Players.LightInject.dll";
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
@@ -40,7 +47,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
                             FileName = $"{appPath}Zilon.BotMassLauncher.exe",
                             UseShellExecute = false,
                             CreateNoWindow = true,
-                            Arguments = $"parallel=10 mode=duncan env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                            Arguments = $"parallel=10 mode={modes[modeIndex]} botCatalog={botCatalog} botAssembly={botAssembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
                             RedirectStandardOutput = true,
                             RedirectStandardError = true
                         };
@@ -55,6 +62,12 @@ namespace Zilon.Tournament.ApiGate.Launcher
                 }
                 catch (Exception e)
                 {
+                }
+
+                modeIndex++;
+                if (modeIndex > modeMaxIndex)
+                {
+                    modeIndex = 0;
                 }
             }
             _logger.LogDebug("Launcher service is stopping");

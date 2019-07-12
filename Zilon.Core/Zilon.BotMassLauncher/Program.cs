@@ -17,6 +17,8 @@ namespace Zilon.BotMassLauncher
         private static ulong _infiniteCounter;
         private static string _botMode;
         private static string _scorePath;
+        private static string _botCatalog;
+        private static string _botAssembly;
         private static string _schemeCatlogPath;
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
@@ -35,6 +37,9 @@ namespace Zilon.BotMassLauncher
             _isInfinite = HasProgramArgument(args, "infinite");
             _botMode = GetProgramArgument(args, "mode");
             _scorePath = GetProgramArgument(args, "output");
+
+            _botCatalog = GetProgramArgument(args, "botCatalog");
+            _botAssembly = GetProgramArgument(args, "botAssembly");
 
             _schemeCatlogPath = GetProgramArgument(args, "schemeCatalogPath");
 
@@ -132,7 +137,7 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath}",
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
 
                     RedirectStandardOutput = true,
                     RedirectStandardError = true

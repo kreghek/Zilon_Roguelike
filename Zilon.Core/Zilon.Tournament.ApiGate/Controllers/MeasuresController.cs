@@ -49,9 +49,11 @@ namespace Zilon.Tournament.ApiGate.Controllers
                     command.CommandType = CommandType.Text;
                     var reader = command.ExecuteReader();
 
-                    using (var diffCommand = connection.CreateCommand())
+                    while (reader.Read())
                     {
-                        diffCommand.CommandText = $@"SELECT
+                        using (var diffCommand = connection.CreateCommand())
+                        {
+                            diffCommand.CommandText = $@"SELECT
                             [MinScores]*1.0   AS MinScores
                             ,[AvgScores]*1.0  AS AvgScores
                             ,[MaxScores]*1.0  AS MaxScores
@@ -63,30 +65,31 @@ namespace Zilon.Tournament.ApiGate.Controllers
                             ,[MaxFrags]*1.0  AS MaxFrags
                             ,[AvgIterationDuration]*1.0 AS AvgIterationDuration
                             FROM v_measures WHERE [Name]='{reader["Name"]}' AND [Mode]='{reader["Mode"]}' ORDER BY [Preffix] DESC LIMIT 1";
-                        diffCommand.CommandType = CommandType.Text;
-                        var diffReader = diffCommand.ExecuteReader();
+                            diffCommand.CommandType = CommandType.Text;
+                            var diffReader = diffCommand.ExecuteReader();
 
-                        var measure = new Measure
-                        {
-                            BotName = (string)reader["Name"],
-                            BotMode = (string)reader["Mode"],
+                            var measure = new Measure
+                            {
+                                BotName = (string)reader["Name"],
+                                BotMode = (string)reader["Mode"],
 
-                            MinScores = GetMeasureValue(reader, diffReader, "MinScores"),
-                            AvgScores = GetMeasureValue(reader, diffReader, "AvgScores"),
-                            MaxScores = GetMeasureValue(reader, diffReader, "MaxScores"),
+                                MinScores = GetMeasureValue(reader, diffReader, "MinScores"),
+                                AvgScores = GetMeasureValue(reader, diffReader, "AvgScores"),
+                                MaxScores = GetMeasureValue(reader, diffReader, "MaxScores"),
 
-                            MinTurns = GetMeasureValue(reader, diffReader, "MinTurns"),
-                            AvgTurns = GetMeasureValue(reader, diffReader, "AvgTurns"),
-                            MaxTurns = GetMeasureValue(reader, diffReader, "MaxTurns"),
+                                MinTurns = GetMeasureValue(reader, diffReader, "MinTurns"),
+                                AvgTurns = GetMeasureValue(reader, diffReader, "AvgTurns"),
+                                MaxTurns = GetMeasureValue(reader, diffReader, "MaxTurns"),
 
-                            MinFrags = GetMeasureValue(reader, diffReader, "MinFrags"),
-                            AvgFrags = GetMeasureValue(reader, diffReader, "AvgFrags"),
-                            MaxFrags = GetMeasureValue(reader, diffReader, "MaxFrags"),
+                                MinFrags = GetMeasureValue(reader, diffReader, "MinFrags"),
+                                AvgFrags = GetMeasureValue(reader, diffReader, "AvgFrags"),
+                                MaxFrags = GetMeasureValue(reader, diffReader, "MaxFrags"),
 
-                            AvgIterationDuration = GetMeasureValue(reader, diffReader, "AvgIterationDuration")
-                        };
+                                AvgIterationDuration = GetMeasureValue(reader, diffReader, "AvgIterationDuration")
+                            };
 
-                        resultList.Add(measure);
+                            resultList.Add(measure);
+                        }
                     }
                 }
 
