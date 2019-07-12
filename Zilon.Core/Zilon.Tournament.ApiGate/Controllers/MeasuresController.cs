@@ -34,18 +34,19 @@ namespace Zilon.Tournament.ApiGate.Controllers
                 {
                     command.CommandText = $@"SELECT [Name]
                             ,[Mode]
-                            ,AVG([MinScores]) AS MinScores
+                            ,MIN([MinScores])*1.0 AS MinScores
                             ,AVG([AvgScores]) AS AvgScores
-                            ,AVG([MaxScores]) AS MaxScores
-                            ,AVG([MinTurns]) AS MinTurns
+                            ,MAX([MaxScores])*1.0 AS MaxScores
+                            ,MIN([MinTurns])*1.0 AS MinTurns
                             ,AVG([AvgTurns]) AS AvgTurns
-                            ,AVG([MaxTurns]) AS MaxTurns
-                            ,AVG([MinFrags]) AS MinFrags
+                            ,MAX([MaxTurns])*1.0 AS MaxTurns
+                            ,MIN([MinFrags])*1.0 AS MinFrags
                             ,AVG([AvgFrags]) AS AvgFrags
-                            ,AVG([MaxFrags]) AS MaxFrags
+                            ,MAX([MaxFrags])*1.0 AS MaxFrags
                             ,AVG([AvgIterationDuration]) AS AvgIterationDuration
                             FROM v_measures
-                            GROUP BY [Name], [Mode]";
+                            GROUP BY [Name], [Mode]
+                            ORDER BY AvgScores DESC";
                     command.CommandType = CommandType.Text;
                     var reader = command.ExecuteReader();
 
