@@ -80,20 +80,20 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8329274697263400341}
-  m_Text: Block
+  m_Text: Block!
   m_OffsetZ: 5
   m_CharacterSize: 0.5
   m_LineSpacing: 1
   m_Anchor: 7
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 50
+  m_FontSize: 25
   m_FontStyle: 0
   m_RichText: 0
   m_Font: {fileID: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 3197803162
 --- !u!114 &1358782669580686191
 MonoBehaviour:
   m_ObjectHideFlags: 0
