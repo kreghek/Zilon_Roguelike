@@ -68,6 +68,8 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             var decorIndex = UnityEngine.Random.Range(0, FloorDecorSprites.Length);
             FloorDecorRenderer.sprite = FloorDecorSprites[decorIndex];
         }
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, Node.OffsetY);
     }
 
     //TODO Метод должен быть статическим с параметром sectorSid.

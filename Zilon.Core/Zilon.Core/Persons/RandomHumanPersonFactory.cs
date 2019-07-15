@@ -47,24 +47,24 @@ namespace Zilon.Core.Persons
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
 
-            var headDropScheme = GetHeads();
-            FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
+            //var headDropScheme = GetHeads();
+            //FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
 
-            var armorDropScheme = GetArmors();
-            FillSlot(person, armorDropScheme, BODY_SLOT_INDEX);
+            //var armorDropScheme = GetArmors();
+            //FillSlot(person, armorDropScheme, BODY_SLOT_INDEX);
 
-            var mainWeaponDropScheme = GetMainWeapons();
-            FillSlot(person, mainWeaponDropScheme, MAIN_HAND_SLOT_INDEX);
+            //var mainWeaponDropScheme = GetMainWeapons();
+            //FillSlot(person, mainWeaponDropScheme, MAIN_HAND_SLOT_INDEX);
 
-            var offWeaponDropScheme = GetOffWeapons();
-            FillSlot(person, offWeaponDropScheme, OFF_HAND_SLOT_INDEX);
+            //var offWeaponDropScheme = GetOffWeapons();
+            //FillSlot(person, offWeaponDropScheme, OFF_HAND_SLOT_INDEX);
 
-            var startPropDropScheme = GetStartProps();
-            var startProps = _dropResolver.Resolve(new[] { startPropDropScheme });
-            foreach (var prop in startProps)
-            {
-                AddPropToInventory(inventory, prop);
-            }
+            //var startPropDropScheme = GetStartProps();
+            //var startProps = _dropResolver.Resolve(new[] { startPropDropScheme });
+            //foreach (var prop in startProps)
+            //{
+            //    AddPropToInventory(inventory, prop);
+            //}
 
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
