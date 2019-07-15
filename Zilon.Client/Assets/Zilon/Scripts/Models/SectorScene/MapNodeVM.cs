@@ -48,7 +48,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 
             wallObj.SetActive(hasWall);
 
-            wallObj.GetComponent<SpriteRenderer>().sprite = GetWallSprite();
+            //wallObj.GetComponent<SpriteRenderer>().sprite = GetWallSprite();
         }
 
         FloorSpriteRenderer.sprite = GetFloorSprite();
