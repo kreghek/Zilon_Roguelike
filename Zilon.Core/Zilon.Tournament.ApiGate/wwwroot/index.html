@@ -65,9 +65,23 @@
 
                     if (typeof (value) == "string") {
                         tabCell.innerHTML = value;
+
+                         if (col[j] == "botName") {
+                            tabCell.innerHTML = "<div style='font-size: xx-large; font-weight: bold;'>" + tabCell.innerHTML + "</div>";
+                        }
                     }
                     else if (typeof (value) == "object") {
-                        tabCell.innerHTML = Number((value.totalValue).toFixed(2));
+                        var totalValue = (value.totalValue).toFixed(2);
+                        var lastValue = (value.lastValue).toFixed(2);
+
+                        tabCell.innerHTML = totalValue + " " + 
+                            "<div style='font-size: x-small; display: inline; color: gray;'>(" +
+                            lastValue +
+                            ")</div>";
+
+                        if (col[j] == "avgScores") {
+                            tabCell.innerHTML = "<div style='font-size: xx-large; font-weight: bold;'>" + tabCell.innerHTML + "</div>";
+                        }
                     }
                 }
             }

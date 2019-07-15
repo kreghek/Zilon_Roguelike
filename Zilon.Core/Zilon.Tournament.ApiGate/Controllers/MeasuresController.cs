@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Zilon.Tournament.ApiGate.Models;
 
 namespace Zilon.Tournament.ApiGate.Controllers
@@ -65,7 +64,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
                             ,[AvgFrags]*1.0  AS AvgFrags
                             ,[MaxFrags]*1.0  AS MaxFrags
                             ,[AvgIterationDuration]*1.0 AS AvgIterationDuration
-                            FROM v_measures WHERE [Name]='{reader["Name"]}' AND [Mode]='{reader["Mode"]}' ORDER BY [Preffix] DESC LIMIT 1";
+                            FROM v_measures WHERE [Name]='{reader["Name"]}' AND [Mode]='{reader["Mode"]}' ORDER BY [Preffix] DESC LIMIT 1 OFFSET 1";
                             diffCommand.CommandType = CommandType.Text;
                             var diffReader = diffCommand.ExecuteReader();
 
@@ -102,9 +101,20 @@ namespace Zilon.Tournament.ApiGate.Controllers
 
         private static MeasureValue GetMeasureValue(DbDataReader reader, DbDataReader diffReader, string fieldName)
         {
-            var value = (double)reader[fieldName];
-            var lastValue = (double)diffReader[fieldName];
+            var value = GetValue(reader, fieldName);
+            var lastValue = GetValue(diffReader, fieldName);
             return new MeasureValue { TotalValue = value, LastValue = lastValue };
+        }
+
+        private static double GetValue(DbDataReader diffReader, string fieldName)
+        {
+            double lastValue = 0;
+            if (diffReader.HasRows)
+            {
+                lastValue = (double)diffReader[fieldName];
+            }
+
+            return lastValue;
         }
     }
 }
