@@ -21,7 +21,8 @@ namespace Zilon.Tournament.ApiGate.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadBotAsync()
         {
-            var root = @"c:\bots";
+            var appPath = Environment.GetEnvironmentVariable("APP_PATH");
+            var botRootCatalog = Path.Combine(appPath, "bots");
 
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
@@ -50,12 +51,20 @@ namespace Zilon.Tournament.ApiGate.Controllers
                 {
                     if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
                     {
-                        var id = await FileRepository.AddFileToStorageAsync(
-                            context,
-                            fileName,
-                            section,
-                            root);
-                        return new JsonResult(id);
+
+                        using (var copyStream = new MemoryStream())
+                        {
+                            await section.Body.CopyToAsync(copyStream);
+
+                            copyStream.Seek(0, SeekOrigin.Begin);
+                            var botFullNameAndPath = Path.Combine(botRootCatalog, fileName);
+                            using (var targetStream = System.IO.File.Create(botRootCatalog))
+                            {
+                                await copyStream.CopyToAsync(targetStream);
+                            }
+                        }
+
+
                     }
                 }
 

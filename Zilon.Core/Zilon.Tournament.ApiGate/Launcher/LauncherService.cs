@@ -30,7 +30,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
         {
             _logger.LogDebug("Launcher Service is starting");
 
-            var appPath = "C:\\PROJECTS\\Zilon_Roguelike\\Zilon.Core\\Zilon.Tournament.ApiGate\\bin\\Debug\\netcoreapp2.2\\";
+            var appPath = Environment.GetEnvironmentVariable("APP_PATH");
             var schemeCatalogPath = Environment.GetEnvironmentVariable("SCHEME_CATALOG_PATH");
             var outputCatalog = Environment.GetEnvironmentVariable("BOT_OUTPUT_CATALOG");
 
