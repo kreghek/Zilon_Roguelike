@@ -9,6 +9,7 @@ public class EffectViewModel : MonoBehaviour
 {
     public Image EffectIcon;
     public Image Background;
+    public Text NameText;
 
     public Sprite HungerSprite;
     public Sprite ThristSprite;
@@ -22,6 +23,61 @@ public class EffectViewModel : MonoBehaviour
         Level = level;
         SelectIcon(type);
         HighlightLevel(level);
+        ShowText();
+    }
+
+    private void ShowText()
+    {
+        var effectText = string.Empty;
+        switch (Level)
+        {
+            case SurvivalStatHazardLevel.Lesser:
+                effectText = "Weak";
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText += " Hunger";
+                            break;
+
+                    case SurvivalStatType.Water:
+                        effectText += " Thrist";
+                        break;
+                }
+
+                NameText.color = Color.gray;
+                break;
+
+            case SurvivalStatHazardLevel.Strong:
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText = "Hunger";
+                        break;
+
+                    case SurvivalStatType.Water:
+                        effectText = "Thrist";
+                        break;
+                }
+
+                NameText.color = Color.red;
+                break;
+
+            case SurvivalStatHazardLevel.Max:
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText = "Starvation!";
+                        break;
+
+                    case SurvivalStatType.Water:
+                        effectText = "Dehydration!";
+                        break;
+                }
+                NameText.color = Color.red;
+                break;
+        }
+
+        NameText.text = effectText;
     }
 
     private void HighlightLevel(SurvivalStatHazardLevel level)
