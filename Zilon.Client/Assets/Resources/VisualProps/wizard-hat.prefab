@@ -7,11 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3948944916926042920, guid: dd95a8a0e72f45d46a65c062235de2ee,
-        type: 3}
-      propertyPath: m_Name
-      value: wizard-hat
-      objectReference: {fileID: 0}
     - target: {fileID: 3947166536749008254, guid: dd95a8a0e72f45d46a65c062235de2ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -25,7 +20,7 @@ PrefabInstance:
     - target: {fileID: 3947166536749008254, guid: dd95a8a0e72f45d46a65c062235de2ee,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3947166536749008254, guid: dd95a8a0e72f45d46a65c062235de2ee,
         type: 3}
@@ -67,6 +62,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3948944916926042920, guid: dd95a8a0e72f45d46a65c062235de2ee,
+        type: 3}
+      propertyPath: m_Name
+      value: wizard-hat
+      objectReference: {fileID: 0}
     - target: {fileID: 3764418354155932040, guid: dd95a8a0e72f45d46a65c062235de2ee,
         type: 3}
       propertyPath: m_Sprite
@@ -87,6 +87,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764418354155932040, guid: dd95a8a0e72f45d46a65c062235de2ee,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd95a8a0e72f45d46a65c062235de2ee, type: 3}
