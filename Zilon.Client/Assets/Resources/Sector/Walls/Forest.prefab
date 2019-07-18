@@ -43,12 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6653e41f8a26f44ea5959296a28651a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftTopWall: {fileID: 21300000, guid: 1221094616408c94da8fbd2f43d7c50c, type: 3}
-  LeftWall: {fileID: 21300000, guid: c945559d68c8d5f45bf79394c14bc42b, type: 3}
-  LeftBottomWall: {fileID: 21300000, guid: cbb10de3812aad14294a70dc287e1480, type: 3}
-  RightTopWall: {fileID: 21300000, guid: 7dc08516b93fea649a8a643def47a086, type: 3}
-  RightWall: {fileID: 21300000, guid: 640bc01090e4a4f46a9941271d50cab8, type: 3}
-  RightBottomWall: {fileID: 21300000, guid: 2f8d8a28b4d1d1942984e22e2848c799, type: 3}
+  LeftTopWall: {fileID: 0}
+  LeftWall: {fileID: 0}
+  LeftBottomWall: {fileID: 0}
+  RightTopWall: {fileID: 0}
+  RightWall: {fileID: 0}
+  RightBottomWall: {fileID: 0}
   Floor: {fileID: 21300000, guid: d0ef3125618ef7543802ddceb0a24c2d, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
