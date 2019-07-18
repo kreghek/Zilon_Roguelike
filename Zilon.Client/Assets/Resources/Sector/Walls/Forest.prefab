@@ -50,12 +50,8 @@ MonoBehaviour:
   RightWall: {fileID: 0}
   RightBottomWall: {fileID: 0}
   Floor: {fileID: 21300000, guid: d0ef3125618ef7543802ddceb0a24c2d, type: 3}
-  InteriorObjectSprites:
-  - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
-  - {fileID: 21300002, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
-  - {fileID: 21300004, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
+  InteriorObjectSprites: []
   FloorDecorSprites:
   - {fileID: 21300016, guid: 29697fc5bc676f743b7f083e965d1e46, type: 3}
   - {fileID: 21300008, guid: 29697fc5bc676f743b7f083e965d1e46, type: 3}
   - {fileID: 21300030, guid: 29697fc5bc676f743b7f083e965d1e46, type: 3}
-  - {fileID: 21300120, guid: 29697fc5bc676f743b7f083e965d1e46, type: 3}
