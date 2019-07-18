@@ -14,13 +14,11 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     public SpriteRenderer FloorSpriteRenderer;
     public SpriteRenderer FloorDecorRenderer;
     public SpriteRenderer InteriorObjectSpriteRenderer;
-    public Sprite[] FloorSprites;
-    public Sprite[] WallSprites;
-    public Sprite[] InteriorObjectSprites;
-    public Sprite[] FloorDecorSprites;
     public GameObject[] Walls;
     public bool IsExit;
     public GameObject ExitMarker;
+
+    private SectorWalls _walls;
     
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }
@@ -35,6 +33,8 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     {
         var neighborCubePositions = HexHelper.GetOffsetClockwise();
 
+        var walls = GetWalls(LocaltionScheme.Sid);
+
         for (var i = 0; i < 6; i++)
         {
             var wallObj = Walls[i];
@@ -48,84 +48,79 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 
             wallObj.SetActive(hasWall);
 
-            wallObj.GetComponent<SpriteRenderer>().sprite = GetWallSprite();
+            var wallSprite = walls.Walls[i];
+
+            if (wallSprite != null)
+            {
+                wallObj.GetComponent<SpriteRenderer>().sprite = walls.Walls[i];
+            }
+            else
+            {
+                Destroy(wallObj.GetComponent<SpriteRenderer>());
+            }
         }
 
-        FloorSpriteRenderer.sprite = GetFloorSprite();
+        FloorSpriteRenderer.sprite = walls.Floor;
 
         ExitMarker.SetActive(IsExit);
 
         if (Node.IsObstacle)
         {
-            var selectedInteriorObjectSpriteIndex = UnityEngine.Random.Range(0, InteriorObjectSprites.Length);
-            var selectedInteriorObjectSprite = InteriorObjectSprites[selectedInteriorObjectSpriteIndex];
+            var selectedInteriorObjectSpriteIndex = UnityEngine.Random.Range(0, walls.InteriorObjectSprites.Length);
+            var selectedInteriorObjectSprite = walls.InteriorObjectSprites[selectedInteriorObjectSpriteIndex];
             InteriorObjectSpriteRenderer.sprite = selectedInteriorObjectSprite;
         }
 
         var hasFloorDecor = UnityEngine.Random.Range(0, 100) > 90;
         if (hasFloorDecor)
         {
-            var decorIndex = UnityEngine.Random.Range(0, FloorDecorSprites.Length);
-            FloorDecorRenderer.sprite = FloorDecorSprites[decorIndex];
+            var decorIndex = UnityEngine.Random.Range(0, walls.FloorDecorSprites.Length);
+            FloorDecorRenderer.sprite = walls.FloorDecorSprites[decorIndex];
         }
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, Node.OffsetY);
     }
 
-    //TODO Метод должен быть статическим с параметром sectorSid.
+
     //TODO Указывать тип пола в схеме сектора.
-    /// <summary>
-    /// Выбирает спрайт пола текущего сектора.
-    /// </summary>
-    /// <returns> Возвращает подходящий объект спрайта. </returns>
-    private Sprite GetFloorSprite()
+    private static SectorWalls GetWalls(string locationSid)
     {
-        switch (LocaltionScheme.Sid)
+        var wallsPath = "Sector/Walls";
+        string wallsSid;
+
+        switch (locationSid)
         {
             case "rat-hole":
             case "rat-kingdom":
             case "genomass-cave":
             case "intro":
-                return FloorSprites[0];
+            default:
+                wallsSid = "Cave";
+                break;
 
             case "city":
-                return FloorSprites[0];
+                wallsSid = "City";
+                break;
 
             case "forest":
-                return FloorSprites[1];
+                wallsSid = "Forest";
+                break;
 
             case "crypt":
-                return FloorSprites[2];
+                wallsSid = "Crypt";
+                break;
 
             case "demon-dungeon":
             case "demon-lair":
-                return FloorSprites[3];
+                wallsSid = "Demon";
+                break;
 
             case "elder-place":
-                return FloorSprites[4];
-
-            default:
-                return FloorSprites[0];
+                wallsSid = "Elder";
+                break;
         }
-    }
 
-    //TODO Метод должен быть статическим с параметром sectorSid.
-    //TODO Указывать тип стен в схеме сектора.
-    /// <summary>
-    /// Выбирает спрайт стены текущего сектора.
-    /// </summary>
-    /// <returns> Возвращает подходящий объект спрайта. </returns>
-    private Sprite GetWallSprite()
-    {
-        switch (LocaltionScheme.Sid)
-        {
-            case "forest":
-                return WallSprites[0];
-
-            case "elder-place":
-                return WallSprites[2];
-
-            default:
-                return WallSprites[1];
-        }
+        return Resources.Load<SectorWalls>($"{wallsPath}/{wallsSid}");
     }
 
     public void OnMouseDown()

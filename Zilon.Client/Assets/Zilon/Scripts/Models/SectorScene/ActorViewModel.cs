@@ -84,17 +84,19 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public void FixedUpdate()
     {
         //TODO Можно вынести в отдельный компонент, который уничтожается после выполнения движения.
-        if (_moveCounter != null)
+        if (_moveCounter == null)
         {
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
-            _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
+            return;
+        }
 
-            if (_moveCounter >= END_MOVE_COUNTER)
-            {
-                _moveCounter = null;
-                _moveCommandBlocker.Release();
-                _moveCommandBlocker = null;
-            }
+        transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
+        _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
+
+        if (_moveCounter >= END_MOVE_COUNTER)
+        {
+            _moveCounter = null;
+            _moveCommandBlocker.Release();
+            _moveCommandBlocker = null;
         }
     }
 
@@ -146,9 +148,9 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private void Actor_Moved(object sender, EventArgs e)
     {
         _moveCounter = 0;
-        var actorNode = (HexNode)Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorNode.OffsetX, actorNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
+        var actorHexNode = (HexNode)Actor.Node;
+        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetX, actorHexNode.OffsetY);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetY - 0.26f);
         _moveCommandBlocker = new MoveCommandBlocker();
         _commandBlockerService.AddBlocker(_moveCommandBlocker);
         GraphicRoot.ProcessMove(_targetPosition);

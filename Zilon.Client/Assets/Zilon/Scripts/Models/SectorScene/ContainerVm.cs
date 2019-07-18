@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 public class ContainerVm : MonoBehaviour, IContainerViewModel
 {
@@ -22,6 +23,9 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
     {
         SpriteRenderer.sprite = ClosedSprite;
         Container.Opened += Container_Opened;
+
+        var hexNode = (HexNode)Container.Node;
+        transform.position = new Vector3(transform.position.x, transform.position.y, hexNode.OffsetY);
     }
 
     public void OnMouseDown()
