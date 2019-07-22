@@ -18,16 +18,11 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 {
-    public static int Count;
-
-    public int CurrentCount;
-
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
     [NotNull] [Inject] private readonly ICommandManager _comamndManager;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
+    public IActor Actor { get; set; }
     public int SlotIndex;
 
     public GameObject DenyBorder;
@@ -40,8 +35,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     {
         get
         {
-            var actor = _playerState.ActiveActor.Actor;
-            var prop = actor.Person.EquipmentCarrier[SlotIndex];
+            var prop = Actor.Person.EquipmentCarrier[SlotIndex];
             return prop;
         }
     }
@@ -52,9 +46,6 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     public void Start()
     {
-        CurrentCount = Count;
-        Count++;
-
         ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
 
         UpdateSlotIcon();
@@ -74,9 +65,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     private void UpdateSlotIcon()
     {
-        var actor = _playerState.ActiveActor.Actor;
-
-        var currentEquipment = actor.Person.EquipmentCarrier[SlotIndex];
+        var currentEquipment = Actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
             if (IconImage != null)
@@ -144,13 +133,11 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     private void InitEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ClearEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 }

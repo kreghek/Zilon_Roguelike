@@ -14,11 +14,13 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 
 public class InventoryHandler : MonoBehaviour
 {
     private const string HISTORY_BOOK_SID = "history-book";
 
+    private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
@@ -53,8 +55,8 @@ public class InventoryHandler : MonoBehaviour
         UseButton.SetActive(false);
         ReadButton.SetActive(false);
 
-        var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
+        _actor = _playerState.ActiveActor.Actor;
+        var inventory = _actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
@@ -64,8 +66,7 @@ public class InventoryHandler : MonoBehaviour
 
     public void OnDestroy()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
+        var inventory = _actor.Person.Inventory;
 
         inventory.Added -= Inventory_Added;
         inventory.Removed -= Inventory_Removed;
@@ -83,6 +84,7 @@ public class InventoryHandler : MonoBehaviour
         {
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
+            slotViewModel.Actor = actorViewModel.Actor;
             slotViewModel.SlotIndex = i;
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += Slot_Click;
