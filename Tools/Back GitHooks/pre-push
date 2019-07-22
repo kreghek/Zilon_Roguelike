@@ -1,0 +1,124 @@
+#!/bin/bash
+
+# Полный путь к проекту. Последний слеш не нужен.
+PathToProject='[project-path]'
+# Полный путь к ReSharperCLT https://www.jetbrains.com/resharper/features/command-line.html
+PathToReSharperClt="$PathToProject\Tools\working-directory\resharper-clt"
+# Полный путь к файлу отчёта инспектора ReSharper
+PathToInspectionOutput="$PathToProject\Tools\working-directory\inspector-reports\inspections.log"
+
+RED="\033[0;31m"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+NC="\033[0m" # No Color
+
+# Выполняем проверку последнего коммита, который пушится.
+# Если это WIP, то не выполняем дальнейшую проверку.
+CurrentBranch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+LastCommit=$(git log origin..$CurrentBranch -1 --pretty=%B)
+WipCommentPattern='WIP.+'
+
+echo -e "${YELLOW}Анализ коммита $LastCommit из ветки $CurrentBranch.${NC}"
+
+if [[ $LastCommit =~ $WipCommentPattern ]]; then
+	exit 0
+fi
+
+# Это функции звукового уведомления при ошибке пуша. Может быть использовано, потому что пуш может выполняться долго.
+# Чтобы отключить звуковые уведомления, можно закоментировать тело функции SpeechError.
+function Speech {
+	PowerShell -Command "Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('$1');"
+}
+
+function SpeechError {
+	Speech 'Внимание! Вторжение низкокачественного кода в master.'
+}
+
+PathToSolutionFile="$PathToProject\Zilon.Core\Zilon.Core.sln"
+
+# Выполняем сборку солюшна в отладочной конфигурации
+
+#Небольшая оптимизация сборки
+DOTNET_CLI_TELEMETRY_OPTOUT=1
+DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+
+echo -e "${YELLOW}Выполняем сборку солюшна $PathToSolutionFile в отладочной конфигурации${NC}"
+# TODO Исправить кодировку вывода результатов сборки
+# Вывод сборки будет искажённым.
+# Есть проблема в репе корки https://github.com/dotnet/cli/issues/7913. Вероятнее всего, нужно будет ждать решения.
+dotnet build $PathToSolutionFile
+
+# $? это переменная оболочки, которая хранит код ошибки последней операции.
+# В нашем случае это сборка проекта.
+rc=$?
+if [[ $rc != 0 ]] ; then
+	echo -e "${RED}Не удалось собрать проект.${NC}"
+	echo -e "Исправьте проблемы и попробуйте снова запушить."
+	echo -e "Рекомендация: Из студии пересобрать весь солюшн."
+	echo ""
+	
+	SpeechError
+	
+	exit $rc
+fi
+
+# Запуск тестов
+
+PathToTestProjectFile="$PathToProject\Zilon.Core\Zilon.Core.sln"
+echo -e "${YELLOW}Запуск тестов $PathToTestProjectFile${NC}"
+dotnet test $PathToTestProjectFile
+
+rc=$?
+if [[ $rc != 0 ]] ; then
+	echo -e "${RED}Тесты провалены.${NC}"
+	echo -e "Исправьте проблемы и попробуйте снова запушить."
+	echo -e "Рекомендация: Из студии выполнить все тесты и убедиться, что они проходят."
+	echo ""
+	
+	SpeechError
+	
+	exit $rc
+fi
+
+# Запускаем анализ инспектора.
+
+echo -e "${YELLOW}Запускаем анализ инспектора на солюшне $PathToSolutionFile${NC}"
+"$PathToReSharperClt\InspectCode.exe" "$PathToSolutionFile" -o="$PathToInspectionOutput" -s=WARNING -f=text --verbosity=warn --swea
+
+# Перебираем все строки в отчёте инспектора.
+# Первая строка в отчёте всегда содержит Solution Tap.Zis3.Server\src\Tap.Zis3.sln.
+# Это не является замечанием инспектора. Игнорируем эту строку.
+# Остальные строки в отчёте выводим в консоль.
+# Если есть замечания инспектора, то запоминаем это.
+
+NotInspectorWarningPattern='Solution.+'
+HasInspectorErrors=false
+
+if [ -e "$PathToInspectionOutput" ]; then
+	echo >&2 'ЗАМЕЧАНИЯ ИНСПЕКТОРА'
+	echo >&2 '============================'
+	while IFS= read -r line
+	do
+		# Игнорируем только строку из регулярки. Потому что она является заголовочной.
+		# Остальные считаем замечаниями инспектора.
+		if [[ ! $line =~ $NotInspectorWarningPattern ]]; then
+			HasInspectorErrors=true
+			echo >&2 "$line"
+		fi
+	done < "$PathToInspectionOutput"
+	
+	echo >&2 '============================'
+	
+	# Если в отчёте были замечания, то не позволяем запушить (exit 1).
+	if [ $HasInspectorErrors = true ] ; then
+		echo >&2 "${RED}Чтобы запушить, нужно сначала исправить замечания инспектоар ReSharper${NC}."
+		echo >&2 'Замечания можно посмотреть в отчёте'
+		echo >&2 "$PathToInspectionOutput"
+		
+		SpeechError
+		
+		exit 1
+	fi
+fi
+
+exit 0
