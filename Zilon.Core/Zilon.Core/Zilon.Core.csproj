@@ -191,6 +191,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
+    <Compile Include="Tactics\PropContainerStyle.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
