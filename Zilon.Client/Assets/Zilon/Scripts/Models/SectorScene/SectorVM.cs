@@ -431,7 +431,12 @@ public class SectorVM : MonoBehaviour
             return LootPrefab;
         }
 
-        return ChestPrefab;
+        if (container.Purpose == PropContainerPurpose.Treasures)
+        {
+            return ChestPrefab;
+        }
+
+        return LootPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
