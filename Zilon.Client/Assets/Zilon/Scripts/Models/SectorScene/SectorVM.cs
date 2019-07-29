@@ -192,7 +192,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_humanPlayer.SectorSid == "intro")
+        if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
         {
             _sectorModalManager.ShowInstructionModal();
         }
