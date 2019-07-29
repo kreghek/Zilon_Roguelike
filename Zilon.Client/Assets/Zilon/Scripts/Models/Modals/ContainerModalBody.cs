@@ -125,8 +125,7 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
             PropTransferMachineStores.Inventory);
     }
 
-    // ReSharper disable once UnusedMember.Global
-    public void TakeAll()
+    private void TakeAll()
     {
         var props = _transferMachine.Container.CalcActualItems();
         foreach (var prop in props)
@@ -137,6 +136,11 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         }
 
         _clientCommandExecutor.Push(_propTransferCommand);
+    }
+
+    public void CloseWindows()
+    {
+        Closed?.Invoke(this, new EventArgs());
     }
 
     public void ApplyChanges()
