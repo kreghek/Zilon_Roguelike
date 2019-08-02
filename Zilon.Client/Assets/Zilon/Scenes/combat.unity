@@ -259,6 +259,8 @@ MonoBehaviour:
   ContainerPopupPrefab: {fileID: 5671305565860823964, guid: 1d97a6ec2dadba54ea63cd68310cfcf8,
     type: 3}
   WindowCanvas: {fileID: 227365884}
+  FoundNothingIndicatorPrefab: {fileID: 7517115147975470495, guid: 3118e367336d83b4082d94d0a4d3dbf6,
+    type: 3}
 --- !u!114 &160909244
 MonoBehaviour:
   m_ObjectHideFlags: 0

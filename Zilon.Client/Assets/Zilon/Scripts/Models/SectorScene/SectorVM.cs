@@ -63,6 +63,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public Canvas WindowCanvas;
 
+    [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -461,12 +463,24 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
+        var props = e.Container.Content.CalcActualItems();
+        if (props.Any())
+        {
+            var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
 
-        var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
+            var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
-        var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
-        containerPopup.Init(transferMachine);
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+            containerPopup.Init(transferMachine);
+        }
+        else
+        {
+            var indicator = Instantiate<FoundNothingIndicator>(FoundNothingIndicatorPrefab, transform);
+
+            var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
+
+            indicator.Init(actorViewModel);
+        }
     }
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
