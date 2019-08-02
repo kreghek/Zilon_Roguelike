@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts;
-
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -15,9 +13,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
 
-// ReSharper disable once ClassNeverInstantiated.Global
-// ReSharper disable once CheckNamespace
-public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
+public class ContainerPopup : MonoBehaviour
 {
     private List<PropItemVm> _containerViewModels;
 
@@ -29,8 +25,6 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
 
     [NotNull] public Transform ContainerItemsParent;
 
-    public Text InfoText;
-
     public PropInfoPopup PropInfoPopup;
 
     // ReSharper restore MemberCanBePrivate.Global
@@ -40,14 +34,6 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject(Id = "prop-transfer-command")] private readonly ICommand _propTransferCommand;
 
     [NotNull] private PropTransferMachine _transferMachine;
-
-    public event EventHandler Closed;
-
-    public string Caption => "Loot";
-
-#pragma warning restore 649
-    // ReSharper restore UnassignedField.Global
-    // ReSharper restore NotNullMemberIsNotInitialized
 
     public void Init(PropTransferMachine transferMachine)
     {
@@ -64,16 +50,6 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
     private void UpdateProps()
     {
         var containerItems = _transferMachine.Container.CalcActualItems();
-
-        if (containerItems.Any())
-        {
-            InfoText.text = "You found:";
-        }
-        else
-        {
-            InfoText.text = "You found: Nothing";
-        }
-
 
         UpdatePropsInner(ContainerItemsParent, containerItems, ContainerPropItem_Click, _containerViewModels);
     }
@@ -136,21 +112,6 @@ public class ContainerModalBody : MonoBehaviour, IModalWindowHandler
         }
 
         _clientCommandExecutor.Push(_propTransferCommand);
-    }
-
-    public void CloseWindows()
-    {
-        Closed?.Invoke(this, new EventArgs());
-    }
-
-    public void ApplyChanges()
-    {
-        
-    }
-
-    public void CancelChanges()
-    {
-        throw new NotImplementedException();
     }
 
     public void OnDestroy()

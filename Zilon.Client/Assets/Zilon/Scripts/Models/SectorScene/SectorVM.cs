@@ -59,6 +59,10 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public SceneLoader SceneLoader;
 
+    [NotNull] public ContainerPopup ContainerPopupPrefab;
+
+    [NotNull] public Canvas WindowCanvas;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -66,8 +70,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
-
-    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -83,8 +85,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
-    [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
-
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
@@ -92,8 +92,6 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
-
-    [Inject] private readonly IBotPlayer _botPlayer;
 
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
@@ -456,12 +454,19 @@ public class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
+        var actor = sender as IActor;
+
         if (!(e.Result is SuccessOpenContainerResult))
         {
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        _clientCommandExecutor.Push(_showContainerModalCommand);
+        var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
+
+        var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
+
+        var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+        containerPopup.Init(transferMachine);
     }
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)

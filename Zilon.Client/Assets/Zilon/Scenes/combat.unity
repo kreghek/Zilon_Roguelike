@@ -256,6 +256,9 @@ MonoBehaviour:
     type: 3}
   HitSfx: {fileID: 6212818204964042155, guid: 49a1aaca0afae8b4fadb8526a171bbeb, type: 3}
   SceneLoader: {fileID: 1698614930}
+  ContainerPopupPrefab: {fileID: 5671305565860823964, guid: 1d97a6ec2dadba54ea63cd68310cfcf8,
+    type: 3}
+  WindowCanvas: {fileID: 227365884}
 --- !u!114 &160909244
 MonoBehaviour:
   m_ObjectHideFlags: 0
