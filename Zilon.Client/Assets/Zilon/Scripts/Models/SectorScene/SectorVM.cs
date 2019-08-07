@@ -55,6 +55,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
+    [NotNull] public ContainerVm TrashPrefab;
+
     [NotNull] public HitSfx HitSfx;
 
     [NotNull] public SceneLoader SceneLoader;
@@ -436,7 +438,7 @@ public class SectorVM : MonoBehaviour
             return ChestPrefab;
         }
 
-        return LootPrefab;
+        return TrashPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
