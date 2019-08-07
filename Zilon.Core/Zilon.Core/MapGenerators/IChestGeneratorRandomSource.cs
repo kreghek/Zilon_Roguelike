@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MapGenerators
+﻿using Zilon.Core.Tactics;
+
+namespace Zilon.Core.MapGenerators
 {
     /// <summary>
     /// Источник рандома для генератора сундуков в секторе.
@@ -18,5 +20,11 @@
         /// <param name="nodeCount"> Колчество узлов, из которых выбирать. </param>
         /// <returns> Возвращает индекс случайного узла для размещения сундука. </returns>
         int RollNodeIndex(int nodeCount);
+
+        /// <summary>
+        /// Выбирает назначение контейнера.
+        /// </summary>
+        /// <returns>Возвращает значение перечисления, указывающее текущую редкость контейнера.</returns>
+        PropContainerPurpose RollPurpose();
     }
 }

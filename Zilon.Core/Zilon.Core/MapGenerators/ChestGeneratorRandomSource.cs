@@ -1,5 +1,6 @@
 ﻿using System;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -53,6 +54,17 @@ namespace Zilon.Core.MapGenerators
         {
             var rolledIndex = _dice.Roll(0, nodeCount - 1);
             return rolledIndex;
+        }
+
+        public PropContainerPurpose RollPurpose()
+        {
+            var roll = _dice.Roll(100);
+            if (roll > 90)
+            {
+                return PropContainerPurpose.Treasures;
+            }
+
+            return PropContainerPurpose.Trash;
         }
     }
 }
