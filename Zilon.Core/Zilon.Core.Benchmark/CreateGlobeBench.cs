@@ -15,10 +15,16 @@ namespace Zilon.Core.Benchmark
     {
         private IWorldGenerator _generator;
 
+        [Params(1, 10)]
+        public int SequenceSize;
+
         [Benchmark(Description = "CreateGlobeBench")]
         public async Task Run()
         {
-            await _generator.GenerateGlobeAsync();
+            for (int i = 0; i < SequenceSize; i++)
+            {
+                await _generator.GenerateGlobeAsync();
+            }
         }
 
         [IterationSetup]

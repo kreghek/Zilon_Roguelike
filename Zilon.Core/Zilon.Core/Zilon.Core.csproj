@@ -489,6 +489,7 @@
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\LocalityHelper.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
