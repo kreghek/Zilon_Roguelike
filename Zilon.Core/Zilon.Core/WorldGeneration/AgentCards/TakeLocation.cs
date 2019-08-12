@@ -21,12 +21,9 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            var globeSize = globe.Terrain.Count() * globe.Terrain[0].Count();
-            var realmLocalitiesLimit = globeSize / globe.Realms.Count;
-
             // Можем выполнять захват, если не превышен лимит городов текущего государства.
-            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm);
-            if (realmLocalities.Count() >= realmLocalitiesLimit)
+            var realmLocalityLimitReached = LocalityHelper.LimitIsReached(agent, globe);
+            if (realmLocalityLimitReached)
             {
                 return false;
             }
