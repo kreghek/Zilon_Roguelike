@@ -61,6 +61,12 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public SceneLoader SceneLoader;
 
+    [NotNull] public ContainerPopup ContainerPopupPrefab;
+
+    [NotNull] public Canvas WindowCanvas;
+
+    [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -68,8 +74,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
-
-    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -85,8 +89,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
-    [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
-
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
@@ -94,8 +96,6 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
-
-    [Inject] private readonly IBotPlayer _botPlayer;
 
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
@@ -194,10 +194,11 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_humanPlayer.SectorSid == "intro")
-        {
-            _sectorModalManager.ShowInstructionModal();
-        }
+        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
+        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
+        //{
+        //    _sectorModalManager.ShowInstructionModal();
+        //}
     }
 
     private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -463,12 +464,31 @@ public class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
+        var actor = sender as IActor;
+
         if (!(e.Result is SuccessOpenContainerResult))
         {
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        _clientCommandExecutor.Push(_showContainerModalCommand);
+        var props = e.Container.Content.CalcActualItems();
+        if (props.Any())
+        {
+            var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
+
+            var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
+
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+            containerPopup.Init(transferMachine);
+        }
+        else
+        {
+            var indicator = Instantiate<FoundNothingIndicator>(FoundNothingIndicatorPrefab, transform);
+
+            var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
+
+            indicator.Init(actorViewModel);
+        }
     }
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
