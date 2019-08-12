@@ -66,5 +66,10 @@ namespace Zilon.Core.Tactics
         /// Открытие контейнера.
         /// </summary>
         void Open();
+
+        /// <summary>
+        /// Назначение сундука.
+        /// </summary>
+        PropContainerPurpose Purpose { get; }
     }
 }
