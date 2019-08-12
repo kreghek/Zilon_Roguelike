@@ -21,6 +21,16 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
+            var globeSize = globe.Terrain.Count() * globe.Terrain[0].Count();
+            var realmLocalitiesLimit = globeSize / globe.Realms.Count;
+
+            // Можем выполнять захват, если не превышен лимит городов текущего государства.
+            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm);
+            if (realmLocalities.Count() >= realmLocalitiesLimit)
+            {
+                return false;
+            }
+
             var targetLocality = GetNeighborLocality(agent, globe, 0);
 
             return targetLocality != null;
@@ -55,7 +65,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         private static Locality GetNeighborLocality(Agent agent, Globe globe, int coordRollIndex)
         {
             Locality targetLocality = null;
-            CubeCoords[] nextCoords = GetRandomCoords(coordRollIndex);
+            var nextCoords = GetRandomCoords(coordRollIndex);
             var agentCubeCoords = HexHelper.ConvertToCube(agent.Location.Coords.X, agent.Location.Coords.Y);
             for (var i = 0; i < nextCoords.Length; i++)
             {
@@ -92,8 +102,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                     // Захватываем только города, которые не принадлежат нашему государству.
                     if (otherCheckLocality.Owner != agent.Realm)
                     {
-                        targetLocality = otherCheckLocality;
-                        break;
+                        // Захватываем город, если он не последний у вражеского государства
+                        // Это нужно будет переделать, потому что это разрушает идею о возникновении и падении империй.
+                        var otherRealmLocalities = globe.Localities.Where(x => x.Owner == otherCheckLocality.Owner);
+                        if (otherRealmLocalities.Count() > 1)
+                        {
+                            targetLocality = otherCheckLocality;
+                            break;
+                        }
                     }
                 }
             }
