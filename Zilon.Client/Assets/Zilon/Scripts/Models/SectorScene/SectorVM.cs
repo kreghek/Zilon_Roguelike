@@ -194,10 +194,11 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
-        {
-            _sectorModalManager.ShowInstructionModal();
-        }
+        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
+        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
+        //{
+        //    _sectorModalManager.ShowInstructionModal();
+        //}
     }
 
     private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
