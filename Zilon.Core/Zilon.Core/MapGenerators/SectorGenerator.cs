@@ -64,12 +64,12 @@ namespace Zilon.Core.MapGenerators
 
             var monsterRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
+            _chestGenerator.CreateChests(map, sectorScheme, monsterRegions);
+
             _monsterGenerator.CreateMonsters(sector,
                 _botPlayer,
                 monsterRegions,
                 sectorScheme);
-
-            _chestGenerator.CreateChests(map, sectorScheme, monsterRegions);
 
             return sector;
         }
