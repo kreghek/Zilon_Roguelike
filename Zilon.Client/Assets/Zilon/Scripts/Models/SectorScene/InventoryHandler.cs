@@ -73,6 +73,8 @@ public class InventoryHandler : MonoBehaviour
             var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
             propViewModel.SetSelectedState(isSelected);
         }
+
+        PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
     }
 
     public void OnDestroy()
@@ -155,12 +157,13 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
-    private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
-    {
-        var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
-        UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    }
+    //TODO Возможно, нужно будет устранить, т.к. больше не используется.
+    //private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
+    //{
+    //    var actor = _playerState.ActiveActor.Actor;
+    //    var inventory = actor.Person.Inventory;
+    //    UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+    //}
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
     {
