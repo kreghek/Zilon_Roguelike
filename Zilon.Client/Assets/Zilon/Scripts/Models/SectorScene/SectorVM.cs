@@ -185,7 +185,7 @@ public class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    private async void Awake()
+    public async void Awake()
     {
         await InitServicesAsync();
 
