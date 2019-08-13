@@ -103,7 +103,13 @@ public class InventoryHandler : MonoBehaviour
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += Slot_Click;
             slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
+            slotViewModel.MouseExit += SlotViewModel_MouseExit;
         }
+    }
+
+    private void SlotViewModel_MouseExit(object sender, EventArgs e)
+    {
+        PropInfoPopup.SetPropViewModel(null);
     }
 
     private void SlotViewModel_MouseEnter(object sender, EventArgs e)
