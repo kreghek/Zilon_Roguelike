@@ -66,6 +66,14 @@ public class InventoryHandler : MonoBehaviour
         _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _inventoryState.SelectedProp = null;
+        }
+    }
+
     private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
     {
         foreach (var propViewModel in _propViewModels)
@@ -225,9 +233,17 @@ public class InventoryHandler : MonoBehaviour
 
         var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
         ReadButton.SetActive(canRead);
-        // --- этот фрагмент - не дубликат
 
-        _inventoryState.SelectedProp = currentItemVm;
+        if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemVm))
+        {
+            _inventoryState.SelectedProp = currentItemVm;
+        }
+        else
+        {
+            _inventoryState.SelectedProp = null;
+        }
+
+        // --- этот фрагмент - не дубликат
     }
 
     public void UseButton_Handler()
