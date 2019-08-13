@@ -130,6 +130,8 @@ public class SectorVM : MonoBehaviour
 
     public List<ActorViewModel> ActorViewModels { get; }
 
+    public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();

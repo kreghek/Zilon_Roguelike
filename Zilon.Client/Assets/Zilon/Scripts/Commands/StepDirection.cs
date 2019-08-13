@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Commands
+﻿namespace Assets.Zilon.Scripts.Commands
 {
     public enum StepDirection
     {
