@@ -121,10 +121,6 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _openContainerCommand;
 
     [NotNull]
-    [Inject(Id = "show-container-modal-command")]
-    private readonly ICommand _showContainerModalCommand;
-
-    [NotNull]
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
@@ -133,6 +129,8 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _showDialogCommand;
 
     public List<ActorViewModel> ActorViewModels { get; }
+
+    public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
 
     public SectorVM()
     {
