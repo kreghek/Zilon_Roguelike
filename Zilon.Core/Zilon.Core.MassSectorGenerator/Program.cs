@@ -40,12 +40,31 @@ namespace Zilon.Core.MassSectorGenerator
                     var sector = await sectorFactory.GenerateDungeonAsync(sectorLevel);
 
                     // Проверка
+
                     var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
                     var allContainers = containerManager.Items;
                     foreach (var container in allContainers)
                     {
                         var hex = (HexNode)container.Node;
                         if (hex.IsObstacle)
+                        {
+                            throw new System.Exception();
+                        }
+                    }
+
+                    var actorManager = scopeContainer.GetInstance<IPropContainerManager>();
+                    var allMonsters = actorManager.Items;
+                    var containerNodes = allContainers.Select(x => x.Node);
+                    foreach (var actor in allMonsters)
+                    {
+                        var hex = (HexNode)actor.Node;
+                        if (hex.IsObstacle)
+                        {
+                            throw new System.Exception();
+                        }
+
+                        var monsterIsOnContainer = containerNodes.Contains(actor.Node);
+                        if (monsterIsOnContainer)
                         {
                             throw new System.Exception();
                         }
