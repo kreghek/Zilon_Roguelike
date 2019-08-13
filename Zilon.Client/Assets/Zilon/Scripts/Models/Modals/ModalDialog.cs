@@ -11,6 +11,14 @@ public class ModalDialog : MonoBehaviour
     public GameObject Body;
     private IModalWindowHandler _windowHandler;
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Close();
+        }
+    }
+
     public IModalWindowHandler WindowHandler
     {
         get => _windowHandler;
