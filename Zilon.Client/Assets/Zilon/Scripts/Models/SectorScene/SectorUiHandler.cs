@@ -7,7 +7,6 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Tactics;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
 //Тогда этот объект станет не нужным.
@@ -16,8 +15,6 @@ using Zilon.Core.Tactics;
 /// </summary>
 public class SectorUiHandler : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
-
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
@@ -49,6 +46,19 @@ public class SectorUiHandler : MonoBehaviour
         if (PersonButton != null)
         {
             PersonButton.interactable = _showPersonModalCommand.CanExecute();
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            NextTurn();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ShowPersonModalButton_Handler();
         }
     }
 
