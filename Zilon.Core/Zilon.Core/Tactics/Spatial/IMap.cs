@@ -46,12 +46,19 @@ namespace Zilon.Core.Tactics.Spatial
         IList<MapRegion> Regions { get; }
 
         /// <summary>
-        /// Проверяет, является ли данная ячейка доступной для текущего актёра.
+        /// Проверяет, является ли данный узел доступным для текущего актёра.
         /// </summary>
-        /// <param name="targetNode"> Целевая ячейка. </param>
+        /// <param name="targetNode"> Целевой узел. </param>
         /// <param name="actor"> Проверяемый актёр. </param>
         /// <returns>true, если указанный узел проходим для актёра. Иначе - false. </returns>
         bool IsPositionAvailableFor(IMapNode targetNode, IActor actor);
+
+        /// <summary>
+        /// Проверяет, является ли данный узел доступным для текущего контейнера.
+        /// </summary>
+        /// <param name="targetNode"> Целевой узел. </param>
+        /// <returns>true, если указанный узел подходит для размещения контейнера. Иначе - false. </returns>
+        bool IsPositionAvailableForContainer(IMapNode targetNode);
 
         /// <summary>
         /// Указывает, что узел карты освобождён одним из блоков.

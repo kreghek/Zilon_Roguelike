@@ -48,6 +48,7 @@ namespace Zilon.Core.MapGenerators
 
                 var availableNodes = from node in region.Nodes
                                      where !map.Transitions.Keys.Contains(node)
+                                     where map.IsPositionAvailableForContainer(node)
                                      select node;
                 var openNodes = new List<IMapNode>(availableNodes);
                 for (var i = 0; i < rolledCount; i++)
