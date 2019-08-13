@@ -20,6 +20,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
         private readonly IActorManager _actorManager;
+        private readonly IPropContainerManager _propContainerManager;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
@@ -29,11 +30,13 @@ namespace Zilon.Core.MapGenerators
         /// <param name="actorManager"> Менеджер актёров, в который размещаются монстры. </param>
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterGeneratorRandomSource generatorRandomSource,
-            IActorManager actorManager)
+            IActorManager actorManager,
+            IPropContainerManager propContainerManager)
         {
             _schemeService = schemeService;
             _generatorRandomSource = generatorRandomSource;
             _actorManager = actorManager;
+            _propContainerManager = propContainerManager;
         }
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
@@ -51,7 +54,11 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var region in monsterRegions)
             {
-                var freeNodes = new List<IMapNode>(region.Nodes);
+                var regionNodes = region.Nodes;
+                var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+                var availableMonsterNodes = regionNodes.Except(containerNodes);
+
+                var freeNodes = new List<IMapNode>(availableMonsterNodes);
 
                 var monsterCount = _generatorRandomSource.RollRegionCount(
                     sectorScheme.MinRegionMonsterCount,

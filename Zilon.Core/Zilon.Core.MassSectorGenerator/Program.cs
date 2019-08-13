@@ -52,7 +52,7 @@ namespace Zilon.Core.MassSectorGenerator
                         }
                     }
 
-                    var actorManager = scopeContainer.GetInstance<IPropContainerManager>();
+                    var actorManager = scopeContainer.GetInstance<IActorManager>();
                     var allMonsters = actorManager.Items;
                     var containerNodes = allContainers.Select(x => x.Node);
                     foreach (var actor in allMonsters)
