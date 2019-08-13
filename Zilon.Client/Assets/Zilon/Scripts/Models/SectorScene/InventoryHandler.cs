@@ -62,6 +62,17 @@ public class InventoryHandler : MonoBehaviour
         inventory.Added += Inventory_Added;
         inventory.Removed += Inventory_Removed;
         inventory.Changed += Inventory_Changed;
+
+        _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+    }
+
+    private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
+    {
+        foreach (var propViewModel in _propViewModels)
+        {
+            var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+            propViewModel.SetSelectedState(isSelected);
+        }
     }
 
     public void OnDestroy()
@@ -72,6 +83,7 @@ public class InventoryHandler : MonoBehaviour
         inventory.Removed -= Inventory_Removed;
         inventory.Changed -= Inventory_Changed;
 
+        _inventoryState.SelectedPropChanged -= InventoryState_SelectedPropChanged;
         _inventoryState.SelectedProp = null;
     }
 

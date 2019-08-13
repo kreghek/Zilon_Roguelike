@@ -77,6 +77,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
@@ -87,7 +89,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
-    [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
+    //TODO Вернуть, когда будет придуман туториал
+    //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
@@ -199,6 +202,13 @@ public class SectorVM : MonoBehaviour
         //{
         //    _sectorModalManager.ShowInstructionModal();
         //}
+
+        _gameLoop.Updated += GameLoop_Updated;
+    }
+
+    private void GameLoop_Updated(object sender, EventArgs e)
+    {
+        _inventoryState.SelectedProp = null;
     }
 
     private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -245,6 +255,8 @@ public class SectorVM : MonoBehaviour
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
+
+        _gameLoop.Updated -= GameLoop_Updated;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
