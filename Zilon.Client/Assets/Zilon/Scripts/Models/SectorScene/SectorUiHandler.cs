@@ -55,6 +55,11 @@ public class SectorUiHandler : MonoBehaviour
         {
             NextTurn();
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ShowPersonModalButton_Handler();
+        }
     }
 
     public void NextTurn()
