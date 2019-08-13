@@ -52,8 +52,6 @@ namespace Zilon.Core.Commands
 
             var intention = new Intention<UsePropTask>(a => new UsePropTask(a, usableProp));
             PlayerState.TaskSource.Intent(intention);
-
-            _inventoryState.SelectedProp = null;
         }
     }
 }

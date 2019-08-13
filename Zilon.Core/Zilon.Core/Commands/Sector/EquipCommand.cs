@@ -95,7 +95,6 @@ namespace Zilon.Core.Commands
             var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
             PlayerState.TaskSource.Intent(intention);
 
-            _inventoryState.SelectedProp = null;
         }
 
         private Equipment GetInventorySelectedEquipment()
