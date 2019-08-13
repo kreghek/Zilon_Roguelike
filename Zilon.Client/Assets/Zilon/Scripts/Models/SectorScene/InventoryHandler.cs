@@ -66,6 +66,14 @@ public class InventoryHandler : MonoBehaviour
         _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _inventoryState.SelectedProp = null;
+        }
+    }
+
     private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
     {
         foreach (var propViewModel in _propViewModels)
@@ -73,6 +81,8 @@ public class InventoryHandler : MonoBehaviour
             var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
             propViewModel.SetSelectedState(isSelected);
         }
+
+        PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
     }
 
     public void OnDestroy()
@@ -101,7 +111,13 @@ public class InventoryHandler : MonoBehaviour
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += Slot_Click;
             slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
+            slotViewModel.MouseExit += SlotViewModel_MouseExit;
         }
+    }
+
+    private void SlotViewModel_MouseExit(object sender, EventArgs e)
+    {
+        PropInfoPopup.SetPropViewModel(null);
     }
 
     private void SlotViewModel_MouseEnter(object sender, EventArgs e)
@@ -155,12 +171,13 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
-    private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
-    {
-        var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
-        UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    }
+    //TODO Возможно, нужно будет устранить, т.к. больше не используется.
+    //private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
+    //{
+    //    var actor = _playerState.ActiveActor.Actor;
+    //    var inventory = actor.Person.Inventory;
+    //    UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+    //}
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
     {
@@ -216,9 +233,17 @@ public class InventoryHandler : MonoBehaviour
 
         var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
         ReadButton.SetActive(canRead);
-        // --- этот фрагмент - не дубликат
 
-        _inventoryState.SelectedProp = currentItemVm;
+        if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemVm))
+        {
+            _inventoryState.SelectedProp = currentItemVm;
+        }
+        else
+        {
+            _inventoryState.SelectedProp = null;
+        }
+
+        // --- этот фрагмент - не дубликат
     }
 
     public void UseButton_Handler()
