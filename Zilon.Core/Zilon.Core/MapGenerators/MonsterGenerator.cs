@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -79,29 +80,30 @@ namespace Zilon.Core.MapGenerators
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
 
+                    //TODO Восстановить патруллирование марштуров позже
                     // первый монстр ходит по маршруту
                     // остальные бродят произвольно
-                    if (i == 0)
-                    {
-                        // генерируем маршрут обхода
-                        var startPatrolNode = region.Nodes.First();
-                        var endPatrolNode = region.Nodes.Last();
+                    //if (i == 0)
+                    //{
+                    //    // генерируем маршрут обхода
+                    //    var startPatrolNode = region.Nodes.First();
+                    //    var endPatrolNode = region.Nodes.Last();
 
-                        // генерируем моснтра
-                        var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
-                        var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
-                        sector.PatrolRoutes[monster] = patrolRoute;
+                    //    // генерируем моснтра
+                    //    var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
+                    //    var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
+                    //    sector.PatrolRoutes[monster] = patrolRoute;
 
-                        freeNodes.Remove(monster.Node);
-                    }
-                    else
-                    {
+                    //    freeNodes.Remove(monster.Node);
+                    //}
+                    //else
+                    //{
                         var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                         var monsterNode = freeNodes[rollIndex];
                         var monster = CreateMonster(monsterScheme, monsterNode, monsterPlayer);
 
                         freeNodes.Remove(monster.Node);
-                    }
+                    //}
                 }
             }
         }
