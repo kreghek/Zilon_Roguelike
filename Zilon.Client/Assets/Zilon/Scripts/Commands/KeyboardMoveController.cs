@@ -19,7 +19,14 @@ using Zilon.Core.Tactics.Spatial;
 
 public class KeyboardMoveController : MonoBehaviour
 {
+    /// <summary>
+    /// Интервал в секундах.
+    /// </summary>
+    private const float MOVE_COMMAND_INTERVAL = 1f;
+
     public SectorVM SectorViewModel;
+
+    private float _moveCommandCounter = 0;
 
     private readonly Dictionary<StepDirection, int> _stepDirectionIndexes = new Dictionary<StepDirection, int> {
         { StepDirection.Left, 0 },
@@ -66,9 +73,24 @@ public class KeyboardMoveController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Эта проверка нужна для избежания ошибки при выполнении команды.
+        // Предположительно, ошибка происходит, потому что _commandBlockerService.HasBlockers
+        // ещё не выставлен, а уже отправлен второй запрос на команду.
+        //TODO Убедиться в достоверности утверждения выше.
+
+        _moveCommandCounter += Time.deltaTime;
+        if (_moveCommandCounter <= MOVE_COMMAND_INTERVAL)
+        {
+            return;
+        }
+
         if (!_commandBlockerService.HasBlockers)
         {
             var direction = GetDirectionByKeyboard();
+
+            // Сброс интервала только когда пользователь совершил перемещение
+            // То есть нажал на стрелки.
+            _moveCommandCounter = 0;
 
             if (direction == StepDirection.Undefined)
             {

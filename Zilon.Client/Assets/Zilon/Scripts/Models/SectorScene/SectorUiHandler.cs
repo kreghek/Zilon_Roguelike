@@ -51,7 +51,7 @@ public class SectorUiHandler : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Keypad5))
         {
             NextTurn();
         }
