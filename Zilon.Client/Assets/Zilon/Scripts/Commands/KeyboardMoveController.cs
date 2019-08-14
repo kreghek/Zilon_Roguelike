@@ -20,9 +20,10 @@ using Zilon.Core.Tactics.Spatial;
 public class KeyboardMoveController : MonoBehaviour
 {
     /// <summary>
-    /// Интервал в секундах.
+    /// Интервал в секундах. Должен быть равен времени, пока персонаж
+    /// визуально перемещается между узлами.
     /// </summary>
-    private const float MOVE_COMMAND_INTERVAL = 1f;
+    private const float MOVE_COMMAND_INTERVAL = 0.3f;
 
     public SectorVM SectorViewModel;
 
