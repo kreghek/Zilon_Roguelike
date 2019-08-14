@@ -36,7 +36,14 @@ public class KeyboardMoveController : MonoBehaviour
         { KeyCode.Keypad9, StepDirection.RightTop },
         { KeyCode.Keypad6, StepDirection.Right },
         { KeyCode.Keypad3, StepDirection.RightBottom },
-        { KeyCode.Keypad1, StepDirection.LeftBottom }
+        { KeyCode.Keypad1, StepDirection.LeftBottom },
+
+        { KeyCode.A, StepDirection.Left },
+        { KeyCode.Q, StepDirection.LeftTop },
+        { KeyCode.W, StepDirection.RightTop },
+        { KeyCode.S, StepDirection.Right },
+        { KeyCode.X, StepDirection.RightBottom },
+        { KeyCode.Z, StepDirection.LeftBottom }
     };
 
     [Inject]
@@ -68,7 +75,15 @@ public class KeyboardMoveController : MonoBehaviour
                 return;
             }
 
-            var targetNode = GetTargetNode(direction);
+            var actorHexNode = _sectorUiState.ActiveActor.Actor.Node as HexNode;
+
+            var targetNode = GetTargetNode(actorHexNode, direction);
+
+            if (actorHexNode == targetNode)
+            {
+                //TODO Нужно обосновать наличие этого выхода.
+                return;
+            }
 
             var targetNodeViewModel = SectorViewModel.NodeViewModels.SingleOrDefault(x => ReferenceEquals(x.Node, targetNode));
 
@@ -106,20 +121,18 @@ public class KeyboardMoveController : MonoBehaviour
         return KeyCode.None;
     }
 
-    private IMapNode GetTargetNode(StepDirection direction)
+    private IMapNode GetTargetNode(HexNode actorHexNode, StepDirection direction)
     {
         if (direction == StepDirection.Undefined)
         {
             throw new ArgumentException("Не определено направление.", nameof(direction));
         }
 
-        var node = _sectorUiState.ActiveActor.Actor.Node as HexNode;
-
-        var neighborNodes = _sectorManager.CurrentSector.Map.GetNext(node).OfType<HexNode>();
+        var neighborNodes = _sectorManager.CurrentSector.Map.GetNext(actorHexNode).OfType<HexNode>();
         var directions = HexHelper.GetOffsetClockwise();
 
         var stepDirectionIndex = _stepDirectionIndexes[direction];
-        var targetCubeCoords = node.CubeCoords + directions[stepDirectionIndex];
+        var targetCubeCoords = actorHexNode.CubeCoords + directions[stepDirectionIndex];
 
         var targetNode = neighborNodes.SingleOrDefault(x => x.CubeCoords == targetCubeCoords);
         return targetNode;
