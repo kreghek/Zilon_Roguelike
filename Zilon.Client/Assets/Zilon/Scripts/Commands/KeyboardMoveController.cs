@@ -94,12 +94,13 @@ public class KeyboardMoveController : MonoBehaviour
 
     private static KeyCode DetectPressedKeyOrButton()
     {
-        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        var allKeyCodes = Enum.GetValues(typeof(KeyCode));
+        foreach (KeyCode keyCode in allKeyCodes)
         {
-            if (Input.GetKeyDown(kcode))
-                return kcode;
-
-
+            if (Input.GetKey(keyCode))
+            {
+                return keyCode;
+            }
         }
 
         return KeyCode.None;
