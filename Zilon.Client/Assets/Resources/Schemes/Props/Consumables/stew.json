@@ -1,14 +1,14 @@
 {
   "Name": {
-    "En": "Kalin Cheese",
-    "Ru": "Калинский сыр"
+    "En": "Stew",
+    "Ru": "Рагу"
   },
   "Use": {
     "Consumable": true,
     "CommonRules": [
       {
         "Type": "Satiety",
-        "Level": "Lesser"
+        "Level": "Normal"
       },
 	  {
         "Type": "Health",
@@ -20,11 +20,15 @@
   "Craft": {
     "Sources": [
       {
-        "PropSid": "acid",
-        "Count": 1
+        "PropSid": "potatus",
+        "Count": 2
       },
       {
-        "PropSid": "vege-milk",
+        "PropSid": "water-bottle",
+        "Count": 1
+      },
+	  {
+        "PropSid": "strong-fuel",
         "Count": 1
       },
     ],
