@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Рубящий удар"
+    "Ru": "Рубящий удар",
+	"En": "Slash"
   },
   "Stats": {
     "Efficient": {
@@ -11,10 +12,13 @@
       "Min": 1,
       "Max": 1
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Tactical",
-      "Impact":  "Kinetic"
+      "Impact":  "Kinetic",
+	  "ApRank": 2
     }
   }
 }

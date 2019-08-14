@@ -16,9 +16,10 @@ public class ActorGraphicBase : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    public virtual void ProcessHit()
+    public virtual void ProcessHit(Vector3 targetPosition)
     {
         PlayHit();
+        RotateTo(targetPosition);
     }
 
     public virtual void ProcessDeath(GameObject rootObject, bool isRootRotting)
@@ -26,6 +27,16 @@ public class ActorGraphicBase : MonoBehaviour
         _rootObject = rootObject;
         _isRootRotting = isRootRotting;
         PlayDeath();
+    }
+
+    public virtual void ProcessMove(Vector3 targetPosition)
+    {
+        RotateTo(targetPosition);
+    }
+
+    public virtual void ProcessInteractive(Vector3 targetPosition)
+    {
+        RotateTo(targetPosition);
     }
 
     private void PlayHit()
@@ -38,8 +49,22 @@ public class ActorGraphicBase : MonoBehaviour
         Animator.Play("HumanoidDeath");
     }
 
+    private void RotateTo(Vector3 targetPosition)
+    {
+        var direction = transform.position - targetPosition;
+        if (direction.x >= 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+    }
+
     private void StartRotting()
     {
+        // Вызывается, как событие анимации.
         var corpse = gameObject.AddComponent<Rotting>();
         corpse.RootObject = _rootObject;
         corpse.RootRotting = _isRootRotting;

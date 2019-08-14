@@ -59,9 +59,6 @@ public class HumanActorGraphicController : MonoBehaviour
         var equipmentCarrier = Actor.Person.EquipmentCarrier;
         for (var slotIndex = 0; slotIndex < equipmentCarrier.Slots.Length; slotIndex++)
         {
-            var slot = equipmentCarrier.Slots[slotIndex];
-            var types = slot.Types;
-
             if (_visualSlots.TryGetValue(slotIndex, out VisualPropHolder holder))
             {
                 foreach (Transform visualProp in holder.transform)

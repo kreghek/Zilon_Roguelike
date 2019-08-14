@@ -17,6 +17,8 @@ namespace Zilon.Core.Tactics
         /// <summary>Шаги, прожитые персонажем.</summary>
         int Turns { get; }
 
+        ScoreAchievements Achievements { get; }
+
         /// <summary>Фраги по схемам монстров, добытые игроком.</summary>
         IDictionary<IMonsterScheme, int> Frags { get; }
 
@@ -40,5 +42,15 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
         void CountPlace(GlobeRegionNode regionNode);
+
+        /// <summary>
+        /// Засчитывает посещение победного узла.
+        /// </summary>
+        void CountHome();
+
+        /// <summary> Обнуление текущих очков. </summary>
+        void ResetScores();
+
+        Scores Scores { get; set; }
     }
 }

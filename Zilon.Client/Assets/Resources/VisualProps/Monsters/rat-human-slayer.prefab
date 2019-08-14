@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 439324133137549306}
-  m_LocalRotation: {x: -0, y: -0, z: -0.89138305, w: 0.45325077}
-  m_LocalPosition: {x: 0.133, y: -0.142, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.14417718, w: 0.9895519}
+  m_LocalPosition: {x: -0.125, y: -0.13, z: 0}
   m_LocalScale: {x: 0.3600717, y: 0.36487842, z: 1}
   m_Children: []
   m_Father: {fileID: 4316621229199028}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -126.09501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 16.579}
 --- !u!212 &3595450496675811004
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -68,12 +68,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300168, guid: 288c0870db3dd254fab189ab6cbb0f85, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e8cbe497a1af7cd4ab13345527de7393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.34, y: 0.34}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -103,13 +103,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568519349983147431}
-  m_LocalRotation: {x: -0, y: -0, z: -0.76459277, w: 0.6445138}
-  m_LocalPosition: {x: 0.264, y: -0.071, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.030830259, w: 0.99952465}
+  m_LocalPosition: {x: -0.255, y: -0.067, z: 0}
   m_LocalScale: {x: 0.36, y: 0.3648, z: 1}
   m_Children: []
   m_Father: {fileID: 4316621229199028}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -99.742004}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -3.5330002}
 --- !u!212 &270550528371311504
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -147,12 +147,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300168, guid: 288c0870db3dd254fab189ab6cbb0f85, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e8cbe497a1af7cd4ab13345527de7393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.34, y: 0.34}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -165,46 +165,60 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1481664540224024}
+    - target: {fileID: 3341399921365361410, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_Name
       value: rat-human-slayer
       objectReference: {fileID: 0}
-    - target: {fileID: 4316621229199028}
+    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_LocalScale.x
       value: 1.34
       objectReference: {fileID: 0}
-    - target: {fileID: 4316621229199028}
+    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_LocalScale.y
       value: 1.46
       objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4391c0519f93a814eba20042d051f562,
         type: 3}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_Size.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_Size.y
-      value: 0.3359375
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_Color.r
       value: 0.990566
       objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_Color.g
       value: 0.5934051
       objectReference: {fileID: 0}
-    - target: {fileID: 212029691314796988}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
       propertyPath: m_Color.b
       value: 0.5934051
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.3359375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481664540224024}
+      propertyPath: m_Name
+      value: rat-human-slayer
       objectReference: {fileID: 0}
     - target: {fileID: 1481664540224024}
       propertyPath: m_Name
@@ -217,6 +231,14 @@ PrefabInstance:
     - target: {fileID: 1481664540224024}
       propertyPath: m_Name
       value: moon-rat
+      objectReference: {fileID: 0}
+    - target: {fileID: 4316621229199028}
+      propertyPath: m_LocalScale.x
+      value: 1.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 4316621229199028}
+      propertyPath: m_LocalScale.y
+      value: 1.46
       objectReference: {fileID: 0}
     - target: {fileID: 4316621229199028}
       propertyPath: m_LocalScale.x
@@ -288,6 +310,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212029691314796988}
+      propertyPath: m_Color.r
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 212029691314796988}
+      propertyPath: m_Color.g
+      value: 0.5934051
+      objectReference: {fileID: 0}
+    - target: {fileID: 212029691314796988}
+      propertyPath: m_Color.b
+      value: 0.5934051
+      objectReference: {fileID: 0}
+    - target: {fileID: 212029691314796988}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4391c0519f93a814eba20042d051f562,
@@ -304,54 +338,20 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3341399921365361410, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Name
-      value: rat-human-slayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 3338609776835135406, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
+    - target: {fileID: 212029691314796988}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4391c0519f93a814eba20042d051f562,
         type: 3}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.990566
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.5934051
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.5934051
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
+    - target: {fileID: 212029691314796988}
       propertyPath: m_Size.x
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
+    - target: {fileID: 212029691314796988}
       propertyPath: m_Size.y
       value: 0.3359375
       objectReference: {fileID: 0}
-    - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
-        type: 3}
+    - target: {fileID: 212029691314796988}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}

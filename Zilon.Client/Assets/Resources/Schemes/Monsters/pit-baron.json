@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Барон Ямы",
+    "En": "Pit Baron"
+  },
+  "Hp": 20,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -12,7 +16,16 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 200,
+  "Tags": [
+    "rare",
+    "demon"
+  ]
 }

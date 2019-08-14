@@ -24,6 +24,12 @@ namespace Zilon.Core.Benchmark
             Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
             Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
 
+            // В этих бенчах корку не удаётся запустить.
+            // Предположительно, не получается найти инструмент для сборки бенча под корку.
+            // Раскомментировать, когда будет ясно, как исправить.
+            //Add(Job.Default.With(Runtime.Core).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            //Add(Job.Default.With(Runtime.CoreRT).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+
             Add(ConsoleLogger.Default);
             Add(TargetMethodColumn.Method,
                 JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Runtime"),
@@ -35,11 +41,6 @@ namespace Zilon.Core.Benchmark
             Add(EnvironmentAnalyser.Default);
             UnionRule = ConfigUnionRule.AlwaysUseLocal;
             ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
-        }
-
-        private object Mono()
-        {
-            throw new NotImplementedException();
         }
     }
 }

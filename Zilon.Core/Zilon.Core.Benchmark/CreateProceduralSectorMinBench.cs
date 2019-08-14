@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
-
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -36,7 +36,7 @@ namespace Zilon.Core.Benchmark
         public async System.Threading.Tasks.Task CreateAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var playerState = _container.GetInstance<ISectorUiState>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
@@ -84,6 +84,13 @@ namespace Zilon.Core.Benchmark
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
+
+            var gameLoop = _container.GetInstance<IGameLoop>();
+            var monsterTaskSource = _container.GetInstance<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] {
+                humanActorTaskSource,
+                monsterTaskSource
+            };
         }
 
         [IterationSetup]
@@ -106,7 +113,12 @@ namespace Zilon.Core.Benchmark
             _container.Register(factory => CreateFakeChestGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             _container.Register(factory => CreateFakeMonsterGeneratorRandomSource(), new PerContainerLifetime());
+            _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            //TODO Сделать фейковый генератор
+            _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
@@ -115,12 +127,11 @@ namespace Zilon.Core.Benchmark
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
-            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            _container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
+            _container.Register<MonsterBotActorTaskSource>(lifetime: new PerContainerLifetime());
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
@@ -154,7 +165,7 @@ namespace Zilon.Core.Benchmark
         private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
-            mock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(0);
+            mock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(0);
             return mock.Object;
         }
 

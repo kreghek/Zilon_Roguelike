@@ -1,12 +1,15 @@
 ﻿using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+
 using BenchmarkDotNet.Attributes;
 
 using JetBrains.Annotations;
 
 using LightInject;
 
+using Zilon.Bot.Players;
+using Zilon.Bot.Sdk;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
@@ -34,7 +37,7 @@ namespace Zilon.Core.Benchmark
         public async Task CreateAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var playerState = _container.GetInstance<ISectorUiState>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
@@ -82,6 +85,14 @@ namespace Zilon.Core.Benchmark
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
+
+
+            var gameLoop = _container.GetInstance<IGameLoop>();
+            var monsterTaskSource = _container.GetInstance<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] {
+                humanActorTaskSource,
+                monsterTaskSource
+            };
         }
 
         [IterationSetup]
@@ -102,6 +113,8 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
             _container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
             _container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             _container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
@@ -113,18 +126,19 @@ namespace Zilon.Core.Benchmark
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
-            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            _container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());
+            _container.Register<MonsterBotActorTaskSource>(lifetime: new PerContainerLifetime());
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
 
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
@@ -132,22 +146,6 @@ namespace Zilon.Core.Benchmark
 
             // Специализированные сервисы для Ui.
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
-
-            // Комманды актёра.
-            _container.Register<ICommand, MoveCommand>(serviceName: "move-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, AttackCommand>(serviceName: "attack-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, OpenContainerCommand>(serviceName: "open-container-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, NextTurnCommand>(serviceName: "next-turn-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, UseSelfCommand>(serviceName: "use-self-command", lifetime: new PerContainerLifetime());
-
-            // Комадны для UI.
-            _container.Register<ICommand, ShowContainerModalCommand>(serviceName: "show-container-modal-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowInventoryModalCommand>(serviceName: "show-inventory-command", lifetime: new PerContainerLifetime());
-            _container.Register<ICommand, ShowPerksModalCommand>(serviceName: "show-perks-command", lifetime: new PerContainerLifetime());
-
-            // Специализированные команды для Ui.
-            _container.Register<ICommand, EquipCommand>(serviceName: "show-container-modal-command");
-            _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
         }
 
         private FileSchemeLocator CreateSchemeLocator()

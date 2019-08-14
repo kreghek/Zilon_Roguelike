@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using JetBrains.Annotations;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Интерфейс для указания намерений игрока.
@@ -11,6 +13,6 @@
         /// <param name="currentTask"> Текущая задача в источнике команд. </param>
         /// <param name="actor"> Активный актёр игрока. </param>
         /// <returns> Возвращает задачу для указанного актёра. </returns>
-        IActorTask CreateActorTask(IActorTask currentTask, IActor actor);
+        IActorTask CreateActorTask([CanBeNull] IActorTask currentTask, [NotNull] IActor actor);
     }
 }

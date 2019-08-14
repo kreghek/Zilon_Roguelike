@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts;
+using Assets.Zilon.Scripts.Models;
 
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
-    private IActor _actor;
+    private const string HISTORY_BOOK_SID = "history-book";
+
     private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
     public Transform EquipmentSlotsParent;
     public InventorySlotVm EquipmentSlotPrefab;
+    public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
-    public Text DetailText;
+    public GameObject ReadButton;
 
     [NotNull] [Inject] private DiContainer _diContainer;
-    [NotNull] [Inject] private IPlayerState _playerState;
+    [NotNull] [Inject] private ISectorUiState _playerState;
     [NotNull] [Inject] private IInventoryState _inventoryState;
     [NotNull] [Inject] private ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -59,17 +61,27 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
             slotViewModel.SlotIndex = i;
             slotViewModel.SlotTypes = slots[i].Types;
-            slotViewModel.Click += SlotOnClick;
+            slotViewModel.Click += Slot_Click;
+            slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
         }
     }
 
-    public void Init(IActor actor)
+    private void SlotViewModel_MouseEnter(object sender, EventArgs e)
     {
-        // изначально скрываем кнопку использования
-        UseButton.SetActive(false);
+        var currentItemVm = (IPropViewModelDescription)sender;
+        PropInfoPopup.SetPropViewModel(currentItemVm);
+    }
 
-        _actor = actor;
-        var inventory = _actor.Person.Inventory;
+    public void Init()
+    {
+        // Изначально скрываем все кнопки.
+        // Потому что изначально никакой предмет не должен быть выбран.
+        // Поэтому не ясно, какие действия доступны.
+        UseButton.SetActive(false);
+        ReadButton.SetActive(false);
+
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
@@ -79,7 +91,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        var inventory = _actor.Person.Inventory;
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         inventory.Added -= Inventory_Added;
         inventory.Removed -= Inventory_Removed;
         inventory.Changed -= Inventory_Changed;
@@ -96,7 +109,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         throw new NotImplementedException();
     }
 
-    private void SlotOnClick(object sender, EventArgs e)
+    private void Slot_Click(object sender, EventArgs e)
     {
         var slotVm = sender as InventorySlotVm;
         if (slotVm == null)
@@ -115,7 +128,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
             _propViewModels.Remove(propViewModel);
             Destroy(propViewModel.gameObject);
 
-            if (_inventoryState.SelectedProp == propViewModel)
+            var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+            if (isRemovedPropWasSelected)
             {
                 _inventoryState.SelectedProp = null;
                 UseButton.SetActive(false);
@@ -142,7 +156,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
     {
-        var inventory = _actor.Person.Inventory;
+        var actor = _playerState.ActiveActor.Actor;
+        var inventory = actor.Person.Inventory;
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
     }
 
@@ -167,15 +182,27 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     {
         var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
         propItemViewModel.Init(prop);
-        propItemViewModel.Click += PropItemOnClick;
+        propItemViewModel.Click += PropItem_Click;
+        propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
+        propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
         _propViewModels.Add(propItemViewModel);
     }
 
-    //TODO Дубликат с ContainerModalBody.PropItemOnClick
-    private void PropItemOnClick(object sender, EventArgs e)
+    private void PropItemViewModel_MouseExit(object sender, EventArgs e)
+    {
+        PropInfoPopup.SetPropViewModel(null);
+    }
+
+    private void PropItemViewModel_MouseEnter(object sender, EventArgs e)
     {
         var currentItemVm = (PropItemVm)sender;
-        var parentTransform = currentItemVm.transform.parent;
+        PropInfoPopup.SetPropViewModel(currentItemVm);
+    }
+
+    //TODO Дубликат с ContainerModalBody.PropItemOnClick
+    private void PropItem_Click(object sender, EventArgs e)
+    {
+        var currentItemVm = (PropItemVm)sender;
         foreach (var propViewModel in _propViewModels)
         {
             var isSelected = propViewModel == currentItemVm;
@@ -186,8 +213,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
 
-        var propTitle = currentItemVm.Prop.Scheme.Name.En ?? currentItemVm.Prop.Scheme.Name.Ru;
-        DetailText.text = propTitle;
+        var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
+        ReadButton.SetActive(canRead);
         // --- этот фрагмент - не дубликат
 
         _inventoryState.SelectedProp = currentItemVm;
@@ -196,5 +223,13 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public void UseButton_Handler()
     {
         _commandManager.Push(_useSelfCommand);
+    }
+
+    public void ReadButton_Handler()
+    {
+        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
+        {
+            _commandManager.Push(_showHistoryCommand);
+        }
     }
 }

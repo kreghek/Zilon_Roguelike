@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Глашатай Ада",
-	"En": "Hell herald"
+    "En": "Hell herald"
   },
   "Hp": 5,
   "PrimaryAct": {
@@ -16,8 +16,16 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 30
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 30,
+  "Tags": [
+    "demon",
+    "unclean"
+  ]
 }

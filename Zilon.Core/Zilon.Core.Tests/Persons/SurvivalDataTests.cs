@@ -24,14 +24,41 @@ namespace Zilon.Core.Tests.Persons
         public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
         {
             // ARRANGE
+            const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
+
+            const int MIN_STAT_VALUE = 0;
+            const int MAX_STAT_VALUE = 1;
+            const int START_STAT_VALUE = MAX_STAT_VALUE;
+
+            const int LESSER_SURVIVAL_STAT_KEYPOINT = 0;
+            const SurvivalStatHazardLevel LESSER_SURVIVAL_STAT_KEYPOINT_TYPE = SurvivalStatHazardLevel.Lesser;
+
+            const int STAT_RATE = 1;
+
+            const int EXPECTED_SURVIVAL_STAT_KEYPOINT = LESSER_SURVIVAL_STAT_KEYPOINT;
+
+            const int FAKE_ROLL_SURVIVAL_RESULT = 6;
+
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
+                .Returns(FAKE_ROLL_SURVIVAL_RESULT);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            ISurvivalData survivalData = new HumanSurvivalData(_personScheme, survivalRandomSource);
+            var survivalStats = new SurvivalStat[] {
+                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
+                    Type = STAT_TYPE,
+                    Rate = STAT_RATE,
+                    KeyPoints = new[]{
+                        new SurvivalStatKeyPoint(
+                            LESSER_SURVIVAL_STAT_KEYPOINT_TYPE,
+                            LESSER_SURVIVAL_STAT_KEYPOINT)
+                    }
+                }
+            };
 
-            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = 1;
+            var survivalData = new HumanSurvivalData(_personScheme,
+                survivalStats,
+                survivalRandomSource);
 
 
 
@@ -45,8 +72,9 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
-                    args.KeyPoints.FirstOrDefault().Value == 0);
+                    args.Stat.Type == STAT_TYPE &&
+                    args.KeyPoints.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE &&
+                    args.KeyPoints.FirstOrDefault().Value == EXPECTED_SURVIVAL_STAT_KEYPOINT);
             }
         }
 

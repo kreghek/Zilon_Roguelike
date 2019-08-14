@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core
 {
     public sealed class OffsetCoords
     {
@@ -18,8 +20,7 @@
 
         public override bool Equals(object obj)
         {
-            var coords = (OffsetCoords) obj;
-            return coords != null &&
+            return obj is OffsetCoords coords &&
                    X == coords.X &&
                    Y == coords.Y;
         }
@@ -30,6 +31,16 @@
             hashCode = hashCode * -1521134295 + X.GetHashCode();
             hashCode = hashCode * -1521134295 + Y.GetHashCode();
             return hashCode;
+        }
+
+        public static bool operator ==(OffsetCoords left, OffsetCoords right)
+        {
+            return EqualityComparer<OffsetCoords>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(OffsetCoords left, OffsetCoords right)
+        {
+            return !(left == right);
         }
     }
 }

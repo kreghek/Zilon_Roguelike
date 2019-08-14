@@ -12,7 +12,7 @@ using Zilon.Core.Client;
 // ReSharper disable once UnusedMember.Global
 public class FollowingCamera : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     // ReSharper disable once UnusedMember.Local
     private void Update()
@@ -31,8 +31,11 @@ public class FollowingCamera : MonoBehaviour
         var actorViewModel = _playerState.ActiveActor;
         var actorViewModelMonobehaviour = (ActorViewModel)actorViewModel;
 
+        var targetPosition = actorViewModelMonobehaviour.transform.position;
+        var cameraPlanePosition = new Vector3(targetPosition.x, targetPosition.y, -10);
+
         transform.position = Vector3.Lerp(transform.position,
-            actorViewModelMonobehaviour.transform.position + new Vector3(0, 0, -10),
+            cameraPlanePosition,
             Time.deltaTime * 3);
     }
 }

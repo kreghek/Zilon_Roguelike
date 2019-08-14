@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Безумный удар топором"
+    "Ru": "Рубящий удар",
+	"En": "Chop"
   },
   "Stats": {
     "Efficient": {
@@ -11,10 +12,13 @@
       "Min": 1,
       "Max": 1
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Fury",
-      "Impact":  "Kinetic"
+      "Impact":  "Kinetic",
+	  "ApRank": 2
     }
   }
 }

@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Раб древних",
-	"En": "Elder slave"
+    "En": "Elder slave"
   },
   "Hp": 6,
   "PrimaryAct": {
@@ -16,8 +16,16 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 75
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "eldritch",
+    "human"
+  ]
 }

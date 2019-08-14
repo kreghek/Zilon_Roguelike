@@ -1,13 +1,24 @@
 {
   "Name": {
-    "En": "Медпакет"
+    "En": "Medkit",
+	"Ru": "Медпакет"
   },
   "Use": {
     "Consumable": true,
     "CommonRules": [
       {
         "Type": "Health",
-        "Level": "Lesser"
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Thirst",
+        "Level": "Lesser",
+		"Direction": "Negative"
+      },
+	  {
+        "Type": "Satiety",
+        "Level": "Lesser",
+		"Direction": "Negative"
       }
     ]
   }

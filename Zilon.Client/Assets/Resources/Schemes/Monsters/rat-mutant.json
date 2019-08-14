@@ -1,9 +1,9 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Крыса-Мутант",
-	"En": "Rat Mutant"
+    "En": "Rat Mutant"
   },
-  "Hp": 6,
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -16,16 +16,30 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Normal"
+      },
       {
         "Type": "FuryDefence",
         "Level": "Lesser"
       }
     ]
   },
-  "DropTableSids": [ "survival", "survival", "default" ],
-  "BaseScore": 100
+  "DropTableSids": [
+    "survival",
+    "survival",
+    "default"
+  ],
+  "BaseScore": 100,
+  "Tags": [
+    "mutant",
+    "beast"
+  ]
 }

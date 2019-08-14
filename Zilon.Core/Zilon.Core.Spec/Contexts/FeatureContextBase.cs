@@ -10,12 +10,13 @@ using LightInject;
 
 using Moq;
 
+using Zilon.Bot.Players;
+using Zilon.Bot.Players.LightInject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -38,11 +39,12 @@ namespace Zilon.Core.Spec.Contexts
 
         public ServiceContainer Container { get; }
 
-        public List<VisualEventInfo> VisualEvents { get; }
+        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
 
         protected FeatureContextBase()
         {
             Container = new ServiceContainer();
+            RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
 
             RegisterSchemeService();
             RegisterSectorService();
@@ -55,16 +57,34 @@ namespace Zilon.Core.Spec.Contexts
 
             InitClientServices();
 
-            VisualEvents = new List<VisualEventInfo>();
+            var eventMessageBus = Container.GetInstance<IActorInteractionBus>();
+            eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+        }
+
+        private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+        {
+            RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
         }
 
         public async Task CreateSectorAsync(int mapSize)
         {
             var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
-            mapFactory.SetFunc(async () =>
+            mapFactory.SetFunc(() =>
             {
-                var map = await SquareMapFactory.CreateAsync(mapSize);
-                return map;
+                ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
+
+                MapFiller.FillSquareMap(map, mapSize);
+
+                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+                {
+                    IsStart = true,
+                    IsOut = true,
+                    ExitNodes = new[] { map.Nodes.Last() }
+                };
+
+                map.Regions.Add(mapRegion);
+
+                return Task.FromResult(map);
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();
@@ -104,7 +124,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetActiveActor()
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
@@ -122,18 +142,19 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var schemeService = Container.GetInstance<ISchemeService>();
             var sectorManager = Container.GetInstance<ISectorManager>();
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
             var actorManager = Container.GetInstance<IActorManager>();
             var humanPlayer = Container.GetInstance<HumanPlayer>();
+            var perkResolver = Container.GetInstance<IPerkResolver>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode);
+            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -158,14 +179,7 @@ namespace Zilon.Core.Spec.Contexts
             var monster = CreateMonsterActor(botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
-            monster.OnDefence += Monster_OnDefence;
-
             actorManager.Add(monster);
-        }
-
-        private void Monster_OnDefence(object sender, EventArgs e)
-        {
-            VisualEvents.Add(new VisualEventInfo((IActor)sender, e, nameof(IActor.OnDefence)));
         }
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
@@ -215,7 +229,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
-            [NotNull] IMapNode startNode)
+            [NotNull] IMapNode startNode,
+            [NotNull] IPerkResolver perkResolver)
         {
 
             var schemeService = Container.GetInstance<ISchemeService>();
@@ -233,7 +248,7 @@ namespace Zilon.Core.Spec.Contexts
                 survivalRandomSource,
                 inventory);
 
-            var actor = new Actor(person, player, startNode);
+            var actor = new Actor(person, player, startNode, perkResolver);
 
             return actor;
         }
@@ -242,9 +257,6 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IMapNode startNode)
         {
-            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
-
-
             var monsterPerson = new MonsterPerson(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
@@ -275,9 +287,11 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
             Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            Container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             Container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
+            Container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
+            Container.Register<IActorInteractionBus, ActorInteractionBus>(new PerContainerLifetime());
         }
 
         private void RegisterGameLoop()
@@ -307,6 +321,9 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
             Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
             Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+
+            Container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
+            Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
         }
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
@@ -319,7 +336,7 @@ namespace Zilon.Core.Spec.Contexts
             var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                 .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-            actUsageRandomSourceMock.Setup(x => x.RollToHit())
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                 .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
                 .Returns(4);
@@ -341,7 +358,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterClientServices()
         {
-            Container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            Container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
@@ -360,7 +377,9 @@ namespace Zilon.Core.Spec.Contexts
             Container.Register<HumanPlayer>(new PerContainerLifetime());
             Container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
             Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            Container.Register<IActorTaskSource, MonsterActorTaskSource>("monster", new PerContainerLifetime());
+            Container.Register<MonsterBotActorTaskSource>(new PerContainerLifetime());
+            RegisterManager.RegisterBot(Container);
+            RegisterManager.ConfigureAuxServices(Container);
         }
 
         private void RegisterWorldServices()
@@ -371,7 +390,7 @@ namespace Zilon.Core.Spec.Contexts
         private void InitClientServices()
         {
             var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
 
             playerState.TaskSource = humanTaskSource;
         }

@@ -14,7 +14,7 @@ public class MapLocationConnector : MonoBehaviour
         line.positionCount = 2;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Check if the GameObjects are not null
         if (gameObject1 != null && gameObject2 != null)
@@ -23,5 +23,7 @@ public class MapLocationConnector : MonoBehaviour
             line.SetPosition(0, gameObject1.transform.position);
             line.SetPosition(1, gameObject2.transform.position);
         }
+
+        line.enabled = gameObject1.activeInHierarchy && gameObject2.activeInHierarchy;
     }
 }

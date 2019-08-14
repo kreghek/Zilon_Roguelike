@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Геномасса",
-	"En": "Genomass"
+    "En": "Genomass"
   },
   "Hp": 3,
   "PrimaryAct": {
@@ -16,8 +16,17 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 25
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 25,
+  "Tags": [
+    "mutant",
+    "undead",
+    "formless"
+  ]
 }

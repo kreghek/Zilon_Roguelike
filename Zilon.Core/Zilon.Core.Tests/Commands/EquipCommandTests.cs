@@ -56,7 +56,7 @@ namespace Zilon.Core.Tests.Commands
                 {
                     Consumable = true,
                     CommonRules = new ConsumeCommonRule[] {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
                     }
                 }
             };
@@ -106,7 +106,7 @@ namespace Zilon.Core.Tests.Commands
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);
         }
 
-        protected override void RegisterSpecificServices(IMap testMap, Mock<IPlayerState> playerStateMock)
+        protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var propScheme = new TestPropScheme
             {

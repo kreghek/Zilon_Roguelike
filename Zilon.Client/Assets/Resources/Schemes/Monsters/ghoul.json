@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Гуль",
-	"En": "Ghoul"
+    "En": "Ghoul"
   },
   "Hp": 5,
   "PrimaryAct": {
@@ -16,8 +16,17 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 50
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 50,
+  "Tags": [
+    "unclean",
+    "undead",
+    "mutant"
+  ]
 }

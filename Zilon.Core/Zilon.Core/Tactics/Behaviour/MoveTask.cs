@@ -91,26 +91,17 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private void CreatePath()
         {
-            var startNode = Actor.Node;
-            var finishNode = TargetNode;
-
-            _path.Clear();
-
             var context = new PathFindingContext(Actor)
             {
                 TargetNode = TargetNode
             };
 
-            var astar = new AStar(_map, context, startNode, finishNode);
-            var resultState = astar.Run();
-            if (resultState == State.GoalFound)
-            {
-                var foundPath = astar.GetPath().Skip(1).ToArray();
-                foreach (var pathNode in foundPath)
-                {
-                    _path.Add((HexNode)pathNode);
-                }
-            }
+            var startNode = Actor.Node;
+            var finishNode = TargetNode;
+
+            _path.Clear();
+
+            _map.FindPath(startNode, finishNode, context, _path);
         }
 
         public override string ToString()

@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: aparker/circleci-dotnet-mono:latest
+    steps:
+      - checkout
+      - run: msbuild Zilon.Core/Zilon.Core.sln /t:Restore
+      - run: msbuild Zilon.Core/Zilon.Core.sln /t:Build

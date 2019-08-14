@@ -1,8 +1,12 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Скелет чемпиона",
+    "En": "Skeleton Champion"
+  },
+  "Hp": 20,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -12,7 +16,15 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "undead"
+  ]
 }

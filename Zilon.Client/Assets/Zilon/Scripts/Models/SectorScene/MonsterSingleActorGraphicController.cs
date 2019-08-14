@@ -8,6 +8,8 @@ using Zilon.Core.Tactics;
 public class MonsterSingleActorGraphicController : MonoBehaviour
 {
     public IActor Actor { get; set; }
+
+    private const int TRADER_VISUAL_COUNT = 4;
     public ActorGraphicBase Graphic;
 
     public void Start()
@@ -17,16 +19,23 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
             throw new InvalidOperationException("Не указан персонаж.");
         }
 
-        var monsterPerson = Actor.Person as MonsterPerson;
-        if (monsterPerson == null)
+        switch (Actor.Person)
         {
-            throw new NotSupportedException($"Тип персонажа {Actor.Person} не поддерживается ");
-        }
+            case MonsterPerson monsterPerson:
+                SetMonsterVisualProp(monsterPerson.Scheme.Sid);
+                break;
 
-        SetVisualProp(monsterPerson.Scheme.Sid, 0);
+            case CitizenPerson citizenPerson:
+                var citizenType = citizenPerson.CitizenType;
+                SetCitizenVisualProp((int)citizenType);
+                break;
+
+            default:
+                throw new NotSupportedException($"Тип персонажа {Actor.Person} не поддерживается ");
+        }
     }
 
-    private void SetVisualProp(string propSid, int slotIndex)
+    private void SetMonsterVisualProp(string propSid)
     {
         var monoGraphics = (MonoActorGraphic)Graphic;
         var holder = monoGraphics.VisualPropHolder;
@@ -41,5 +50,22 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
             Instantiate(visualPropResource, holder.transform);
         }
         
+    }
+
+    private void SetCitizenVisualProp(int traderVisualIndex)
+    {
+        var monoGraphics = (MonoActorGraphic)Graphic;
+        var holder = monoGraphics.VisualPropHolder;
+        var visualPropResource = Resources.Load<VisualProp>($"VisualProps/Traders/trader{traderVisualIndex}");
+        if (visualPropResource != null)
+        {
+            Instantiate(visualPropResource, holder.transform);
+        }
+        else
+        {
+            visualPropResource = Resources.Load<VisualProp>($"VisualProps/Monsters/undef");
+            Instantiate(visualPropResource, holder.transform);
+        }
+
     }
 }

@@ -5,17 +5,20 @@
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
-      "Count": 1
+      "Dice": 3,
+      "Count": 2
     },
     "Range": {
       "Min": 1,
       "Max": 1
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
-      "Type": "Fury",
-      "Impact":  "Kinetic"
+      "Type": "Concentrated",
+      "Impact":  "Kinetic",
+	  "ApRank": 2
     }
   }
 }

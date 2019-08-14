@@ -1,0 +1,99 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "battle-axe",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "short-sword",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "mace",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "tribal-spear",
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "pistol",
+      "Weight": 2,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "bow",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "fireball-staff",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+    },
+    {
+      "SchemeSid": "rush-sword",
+      "Weight": 2
+    },
+	{
+	  "SchemeSid": "composite-bow",
+	  "Weight": 2,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+	},
+
+	
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}

@@ -55,6 +55,12 @@
         int RegionSize { get; }
 
         /// <summary>
+        /// Минимальное количество монстров в регионе сектора.
+        /// </summary>
+        int MinRegionMonsterCount { get; }
+
+        //TODO Переименовать в MaxRegionMonsterCount.
+        /// <summary>
         /// Максимальное количество монстров в регионе сектора.
         /// </summary>
         int RegionMonsterCount { get; }

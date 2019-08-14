@@ -26,8 +26,6 @@ namespace Zilon.Core.Tactics.Spatial
 
         public int Id { get; }
 
-        public string TransSectorSid { get; set; }
-
         public bool IsOut { get; set; }
 
         public bool IsStart { get; set; }

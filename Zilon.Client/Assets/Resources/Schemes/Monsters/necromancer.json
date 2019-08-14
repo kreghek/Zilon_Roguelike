@@ -1,9 +1,13 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Некромант",
+    "En": "Necromancer"
+  },
+  "Hp": 10,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 2
     },
     "Range": {
       "Min": 1,
@@ -12,7 +16,17 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "eldritch",
+    "human",
+    "unclean"
+  ]
 }

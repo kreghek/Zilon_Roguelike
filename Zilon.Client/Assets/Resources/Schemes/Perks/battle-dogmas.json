@@ -1,19 +1,20 @@
 {
   "Name": {
-    "Ru": "Тест"
+    "Ru": "Боевые догмы",
+	"En": "Battle Dogmas"
   },
   "Levels":[
     {
 	  "Rules": [
 	    {
-		  "Type": "Melee",
-		  "Level": "Normal"
+		  "Type": "Damage",
+		  "Level": "Lesser"
 		}
 	  ],
 	  "Jobs": [
 	    {
 		  "Type": "Defeats",
-		  "Value": 5
+		  "Value": 50
 		}
 	  ]
 	}

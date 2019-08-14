@@ -4,7 +4,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -14,20 +13,23 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class HumanSurvivalData : ISurvivalData
     {
+        private const int START_SURVIVAL_STAT = 150;
+        private const int MIN_SURVIVAL_STAT = -150;
+        private const int MAX_SURVIVAL_STAT = 300;
+        private const int MAX_SURVIVAL_STAT_KEYPOINT = -100;
+        private const int STRONG_SURVIVAL_STAT_KEYPOINT = -50;
+        private const int LESSER_SURVIVAL_STAT_KEYPOINT = 0;
+        private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
         {
-            if (personScheme == null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
+            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
 
             Stats = new[] {
-                new SurvivalStat(personScheme.Hp, 0, personScheme.Hp){
+                new SurvivalStat(_personScheme.Hp, 0, _personScheme.Hp){
                     Type = SurvivalStatType.Health
                 },
                 CreateStat(SurvivalStatType.Satiety),
@@ -35,12 +37,34 @@ namespace Zilon.Core.Persons
             };
         }
 
+        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
+            [NotNull] IEnumerable<SurvivalStat> stats,
+            [NotNull] ISurvivalRandomSource randomSource)
+        {
+            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+
+            Stats = stats.ToArray();
+        }
+
+        /// <summary>Текущие характеристики.</summary>
         public SurvivalStat[] Stats { get; }
+
+        /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
 
+        /// <summary>
+        /// Событие, которое происходит, если значение характеристики
+        /// пересекает ключевое значение (мин/макс/четверти/0).
+        /// </summary>
         public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
+
+        /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;
 
+        /// <summary>Пополнение запаса характеристики.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Значение, на которое восстанавливается текущий запас.</param>
         public void RestoreStat(SurvivalStatType type, int value)
         {
             ValidateStatChangeValue(value);
@@ -52,6 +76,9 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>Снижение характеристики.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Значение, на которое снижается текущий запас.</param>
         public void DecreaseStat(SurvivalStatType type, int value)
         {
             ValidateStatChangeValue(value);
@@ -63,6 +90,9 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>Форсированно установить запас здоровья.</summary>
+        /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
+        /// <param name="value">Целевое значение запаса характеристики.</param>
         public void SetStatForce(SurvivalStatType type, int value)
         {
             var stat = Stats.SingleOrDefault(x => x.Type == type);
@@ -72,6 +102,7 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <summary>Обновление состояния данных о выживании.</summary>
         public void Update()
         {
             foreach (var stat in Stats)
@@ -85,7 +116,7 @@ namespace Zilon.Core.Persons
                 }
             }
         }
-        
+
         private void ValidateStatChangeValue(int value)
         {
             if (value == 0)
@@ -115,22 +146,7 @@ namespace Zilon.Core.Persons
 
         private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
         {
-            var diff = RangeHelper.CreateNormalized(oldValue, stat.Value);
-
-            var orientedKeyPoints = stat.KeyPoints;
-            if (!diff.IsAcs)
-            {
-                orientedKeyPoints = stat.KeyPoints.Reverse().ToArray();
-            }
-
-            var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
-            foreach (var keyPoint in orientedKeyPoints)
-            {
-                if (diff.Contains(keyPoint.Value))
-                {
-                    crossedKeyPoints.Add(keyPoint);
-                }
-            }
+            var crossedKeyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, stat.Value);
 
             if (crossedKeyPoints.Any())
             {
@@ -148,7 +164,7 @@ namespace Zilon.Core.Persons
             {
                 return;
             }
-            
+
             var hp = stat.Value;
             if (hp <= 0)
             {
@@ -164,14 +180,14 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat CreateStat(SurvivalStatType type)
         {
-            var stat = new SurvivalStat(150, -150, 300)
+            var stat = new SurvivalStat(START_SURVIVAL_STAT, MIN_SURVIVAL_STAT, MAX_SURVIVAL_STAT)
             {
                 Type = type,
                 Rate = 1,
                 KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -100),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -50),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0)
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, MAX_SURVIVAL_STAT_KEYPOINT),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, STRONG_SURVIVAL_STAT_KEYPOINT),
+                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, LESSER_SURVIVAL_STAT_KEYPOINT)
                     }
             };
             return stat;
@@ -188,6 +204,12 @@ namespace Zilon.Core.Persons
         {
             // В будущем этот порог будет расчитываться, исходя из характеристик, перков и экипировки персонажа.
             return 4;
+        }
+
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        public void ResetStats()
+        {
+            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, _personScheme.Hp);
         }
     }
 }

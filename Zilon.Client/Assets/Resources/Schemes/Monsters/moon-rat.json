@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Лунная крыса",
-	"En": "Moon Rat"
+    "En": "Moon Rat"
   },
   "Hp": 5,
   "PrimaryAct": {
@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -26,6 +28,14 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "survival", "default" ],
-  "BaseScore": 120
+  "DropTableSids": [
+    "survival",
+    "survival",
+    "default"
+  ],
+  "BaseScore": 120,
+  "Tags": [
+    "beast",
+    "rare"
+  ]
 }

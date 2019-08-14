@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {
@@ -16,25 +14,9 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            globe.LocalitiesCells.TryGetValue(agent.Localtion, out var currentLocality);
+            globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
 
-            var realmLocalities = globe.Localities.Where(x => x.Owner == agent.Realm && currentLocality != x).ToArray();
-            if (!realmLocalities.Any())
-            {
-                return;
-            }
-
-            var rolledTransportLocalityIndex = dice.Roll(0, realmLocalities.Length - 1);
-            var rolledTransportLocality = realmLocalities[rolledTransportLocalityIndex];
-
-            if (currentLocality != null)
-            {
-                Helper.RemoveAgentToCell(globe.AgentCells, agent.Localtion, agent);
-            }
-
-            agent.Localtion = rolledTransportLocality.Cell;
-
-            Helper.AddAgentToCell(globe.AgentCells, agent.Localtion, agent);
+            TransportHelper.TransportAgentToRandomLocality(globe, dice, agent, currentLocality);
         }
     }
 }

@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Хеллрок",
-	"En": "Hell rock"
+    "En": "Hell rock"
   },
   "Hp": 50,
   "PrimaryAct": {
@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -24,16 +26,22 @@
         "Type": "TacticalDefence",
         "Level": "Grand"
       },
-	  {
+      {
         "Type": "TrickyDefence",
         "Level": "Grand"
       },
-	  {
+      {
         "Type": "ShadowDefence",
         "Level": "Grand"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 100
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 100,
+  "Tags": [
+    "undead",
+    "demon"
+  ]
 }

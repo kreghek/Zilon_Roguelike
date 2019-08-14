@@ -11,6 +11,8 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
   }
 }

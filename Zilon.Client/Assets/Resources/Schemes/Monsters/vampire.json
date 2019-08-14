@@ -1,18 +1,31 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Вампир",
+    "En": "Vampire"
+  },
+  "Hp": 30,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 2
     },
     "Range": {
       "Min": 1,
       "Max": 1
     },
     "Offence": {
-      "Type": "Tactical",
+      "Type": "Tricky",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "undead",
+    "flying"
+  ]
 }

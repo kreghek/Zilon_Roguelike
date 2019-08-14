@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged", "wand" ],
+  "Equip": {
+    "ActSids": [
+      "lesser-heal"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "En": "Heal Staff",
+    "Ru": "Посох лечения"
+  }
+}

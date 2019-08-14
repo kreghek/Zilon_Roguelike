@@ -98,5 +98,27 @@ namespace Zilon.Core.Persons
 
             return true;
         }
+
+        public static bool CanBeEquiped(IEquipmentCarrier equipmentCarrier, int slotIndex, Equipment equipment)
+        {
+            var slot = equipmentCarrier.Slots[slotIndex];
+
+            if (!CheckSlotCompability(equipment, slot))
+            {
+                return false;
+            }
+
+            if (!CheckDualCompability(equipmentCarrier, equipment, slot, slotIndex))
+            {
+                return false;
+            }
+
+            if (!CheckShieldCompability(equipmentCarrier, equipment, slot, slotIndex))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

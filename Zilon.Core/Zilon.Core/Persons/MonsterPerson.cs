@@ -62,7 +62,7 @@ namespace Zilon.Core.Persons
 
         public override string ToString()
         {
-            return $"{Scheme} Id:{Id}";
+            return $"{Scheme?.Name?.En}";
         }
     }
 }

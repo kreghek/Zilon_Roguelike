@@ -4,6 +4,12 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {
+    /// <summary>
+    /// Карточка, когда один агент поддерживает другого.
+    /// </summary>
+    /// <remarks>
+    /// Поддержка выражается в увеличение количества ХП целевого агента.
+    /// </remarks>
     public sealed class AgentSupport : IAgentCard
     {
         public int PowerCost { get; }

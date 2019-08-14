@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
             else
             {
-                UnequipSlot();
+                Actor.Person.UnequipProp(_slotIndex);
             }
         }
 
@@ -85,21 +85,6 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 equipmentCarrier[_slotIndex] = _equipment;
             }
-        }
-
-        private void UnequipSlot()
-        {
-            var equipmentCarrier = Actor.Person.EquipmentCarrier;
-
-            var currentEquipment = equipmentCarrier[_slotIndex];
-
-            if (currentEquipment == null)
-            {
-                throw new InvalidOperationException($"Попытка обнулить слот {_slotIndex} без экипировки.");
-            }
-
-            equipmentCarrier[_slotIndex] = null;
-            Actor.Person.Inventory.Add(currentEquipment);
         }
 
         /// <summary>

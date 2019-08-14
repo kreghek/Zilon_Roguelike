@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -29,36 +29,21 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, что при атаке, если не мешают стены, не выбрасывается исключение.
         /// </summary>
         [Test]
-        public void AttackTask_NoWall_NotThrowsInvalidOperationException()
-        {
-            Action act = () =>
-            {
-                // ACT
-                _attackTask.Execute();
-            };
-
-
-
-            // ASSERT
-            act.Should().NotThrow<InvalidOperationException>();
-        }
-
-        [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task AttackTask_NoWall_NotThrowsInvalidOperationException()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
             _testMap = await SquareMapFactory.CreateAsync(3);
 
-            var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
+            var tacticalActMock = new Mock<ITacticalAct>();
+            tacticalActMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
             });
-            var act = actMock.Object;
+            var tacticalAct = tacticalActMock.Object;
 
             var actCarrierMock = new Mock<ITacticalActCarrier>();
             actCarrierMock.SetupGet(x => x.Acts)
-                .Returns(new[] { act });
+                .Returns(new[] { tacticalAct });
             var actCarrier = actCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
@@ -86,6 +71,17 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // Создаём саму команду
             _attackTask = new AttackTask(_actor, target, actService);
+
+            Action act = () =>
+            {
+                // ACT
+                _attackTask.Execute();
+            };
+
+
+
+            // ASSERT
+            act.Should().NotThrow<InvalidOperationException>();
         }
     }
 }

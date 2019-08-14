@@ -10,6 +10,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
+    /// <summary>
+    /// Реализация фабрики карты, онованной на комнатах.
+    /// </summary>
+    /// <seealso cref="Zilon.Core.MapGenerators.IMapFactory" />
     public class RoomMapFactory : IMapFactory
     {
         private const int RoomMinSize = 2;
@@ -53,7 +57,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var regionIdCounter = 1;
             foreach (var room in rooms)
             {
-                var region = new MapRegion(regionIdCounter, room.Nodes.Cast<IMapNode>().ToArray());
+                var passableRoomNodes = room.Nodes.Where(x => !x.IsObstacle);
+                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IMapNode>().ToArray());
                 regionIdCounter++;
                 map.Regions.Add(region);
 

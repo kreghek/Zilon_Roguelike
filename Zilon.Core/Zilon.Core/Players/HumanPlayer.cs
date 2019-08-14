@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -8,8 +10,10 @@ namespace Zilon.Core.Players
     /// Класс игрока. Содержат данные игрока, переходящие между глобальной и локальной картами.
     /// </summary>
     /// <seealso cref="PlayerBase" />
-    public class HumanPlayer: PlayerBase
+    public class HumanPlayer : PlayerBase
     {
+        private GlobeRegionNode _globeNode;
+
         /// <summary>
         /// Текущая провинция группы игрока.
         /// </summary>
@@ -18,7 +22,15 @@ namespace Zilon.Core.Players
         /// <summary>
         /// Текущая локация группы игрока. Узел провинции.
         /// </summary>
-        public GlobeRegionNode GlobeNode { get; set; }
+        public GlobeRegionNode GlobeNode
+        {
+            get => _globeNode;
+            set
+            {
+                _globeNode = value;
+                GlobeNodeChanged?.Invoke(this, new EventArgs());
+            }
+        }
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.
@@ -29,5 +41,23 @@ namespace Zilon.Core.Players
         /// Текущий идентфиикатор сектора внутри локации, где сейчас находится группа игрока.
         /// </summary>
         public string SectorSid { get; set; }
+
+        /// <summary>
+        /// Событие выстреливает, если зменяется узел группы игрока на глобальной карте.
+        /// </summary>
+        public event EventHandler GlobeNodeChanged;
+
+        /// <summary>
+        /// Сохранение текущего состояния группы игрока.
+        /// </summary>
+        /// <remarks>
+        /// Сохраняет:
+        /// 1. Состояние персонажа игрока.
+        /// 2. Текущее положение группы игрока.
+        /// </remarks>
+        public void Save()
+        {
+            
+        }
     }
 }

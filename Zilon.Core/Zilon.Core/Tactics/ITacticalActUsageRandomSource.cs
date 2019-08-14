@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System.Collections.Generic;
+using Zilon.Core.Common;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics
 {
@@ -17,8 +19,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Бросок проверки на попадание действием.
         /// </summary>
+        /// <param name="roll"> Характеристики броска. </param>
         /// <returns> Возвращает результат броска D6. </returns>
-        int RollToHit();
+        int RollToHit(Roll roll);
 
         /// <summary>
         /// Бросок проверки на защиту бронёй.
@@ -34,5 +37,11 @@ namespace Zilon.Core.Tactics
         /// Используется для проверки удара вторым оружием.
         /// </remarks>
         int RollUseSecondaryAct();
+
+        /// <summary>Выбирает среди надетых предметов случайный предмет,
+        /// который был повреждён в результате действия.</summary>
+        /// <param name="armorEquipments">Доступные предметы экипировки.</param>
+        /// <returns> Случайный экипированный предмет, который был повреждён. </returns>
+        Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments);
     }
 }

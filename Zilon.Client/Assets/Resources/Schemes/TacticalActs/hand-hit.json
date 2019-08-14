@@ -11,10 +11,13 @@
       "Min": 1,
       "Max": 1
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Tactical",
-      "Impact": "Kinetic"
+      "Impact": "Kinetic",
+	  "ApRank": 1
     }
   }
 }

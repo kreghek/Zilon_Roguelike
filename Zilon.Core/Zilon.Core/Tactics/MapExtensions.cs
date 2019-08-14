@@ -23,9 +23,12 @@ namespace Zilon.Core.Tactics
                                  end = neighborNode
                              };
 
-            var foundNode = foundToEnd.Single();
+            var foundNode = foundToEnd.SingleOrDefault();
 
-            map.RemoveEdge(foundNode.start, foundNode.end);
+            if (foundNode != null)
+            {
+                map.RemoveEdge(foundNode.start, foundNode.end);
+            }
         }
     }
 }

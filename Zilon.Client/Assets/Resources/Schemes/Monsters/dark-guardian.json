@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Темный гвардеец",
-	"En": "Dark guardian"
+    "En": "Dark guardian"
   },
   "Hp": 8,
   "PrimaryAct": {
@@ -16,22 +16,24 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
-      {
-        "Type": "FuryDefence",
-        "Level": "Grand"
-      }
-    ],
-	"Defenses": [
       {
         "Type": "ShadowDefence",
         "Level": "Lesser"
       }
     ]
   },
-  "DropTableSids": [ "survival" ],
-   "BaseScore": 75
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "unclean",
+    "eldritch"
+  ]
 }

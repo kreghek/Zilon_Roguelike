@@ -62,7 +62,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"В выбранном сундуке лут")]
         public void ThenВВыбранномСундукеЛут(Table table)
         {
-            var playerState = Context.Container.GetInstance<IPlayerState>();
+            var playerState = Context.Container.GetInstance<ISectorUiState>();
             var selectedChest = (playerState.HoverViewModel as IContainerViewModel).Container;
 
             // lootProps будет изменяться

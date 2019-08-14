@@ -9,6 +9,15 @@
       {
         "Type": "Satiety",
         "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      },
+	  {
+        "Type": "Thirst",
+        "Level": "Lesser",
+		"Direction": "Negative"
       }
     ]
   }

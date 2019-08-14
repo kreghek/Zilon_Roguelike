@@ -19,6 +19,6 @@ namespace Zilon.Core.MapGenerators
         /// <param name="map"> Карта сектора. Нужна для определения доступного места для сундука. </param>
         /// <param name="sectorSubScheme"> Схема сектора. По сути - настройки для размещения сундуков. </param>
         /// <param name="regions"> Регионы, в которых возможно размещение сундуков. </param>
-        void CreateChests(IMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions);
+        void CreateChests(ISectorMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions);
     }
 }

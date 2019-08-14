@@ -1,0 +1,24 @@
+{
+  "Name": {
+    "En": "Northerner Ale",
+    "Ru": "Эль серерян"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Thirst",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      },
+	  {
+        "Type": "Satiety",
+        "Level": "Lesser",
+		"Direction": "Negative"
+      }
+    ]
+  }
+}

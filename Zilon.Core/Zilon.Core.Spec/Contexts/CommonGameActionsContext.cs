@@ -16,7 +16,7 @@ namespace Zilon.Core.Spec.Contexts
     {
         public void MoveOnceActiveActor(OffsetCoords targetCoords)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var moveCommand = Container.GetInstance<ICommand>("move");
             var sectorManager = Container.GetInstance<ISectorManager>();
 
@@ -33,6 +33,7 @@ namespace Zilon.Core.Spec.Contexts
             };
 
             playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
 
             moveCommand.Execute();
         }
@@ -54,9 +55,9 @@ namespace Zilon.Core.Spec.Contexts
             useSelfCommand.Execute();
         }
 
-        internal void HoverNode(int x, int y)
+        internal void ClickOnNode(int x, int y)
         {
-            var playerState = Container.GetInstance<IPlayerState>();
+            var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;
@@ -67,6 +68,7 @@ namespace Zilon.Core.Spec.Contexts
             var nodeViewModel = nodeViewModelMock.Object;
 
             playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
         }
     }
 }

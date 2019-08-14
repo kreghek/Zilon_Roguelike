@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Дервиш",
-	"En": "Dervish"
+    "En": "Dervish"
   },
   "Hp": 50,
   "PrimaryAct": {
@@ -16,8 +16,17 @@
     "Offence": {
       "Type": "Fury",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 150
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 150,
+  "Tags": [
+    "unclean",
+    "undead",
+    "human"
+  ]
 }

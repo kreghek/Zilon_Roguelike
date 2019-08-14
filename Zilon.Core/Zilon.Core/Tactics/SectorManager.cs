@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISectorManager" />
     public class SectorManager : ISectorManager
     {
-        private const string IntrolLocationSid = "intro";
+        private const string INTRO_LOCATION_SID = "intro";
         private readonly IWorldManager _worldManager;
         private readonly ISectorGenerator _generator;
         private readonly HumanPlayer _humanPlayer;
@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics
             _worldManager = worldManager ?? throw new ArgumentNullException(nameof(worldManager));
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
             _humanPlayer = humanPlayer ?? throw new ArgumentNullException(nameof(humanPlayer));
-            _schemeService = schemeService;
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Zilon.Core.Tactics
             ILocationScheme scheme = null;
             if (_humanPlayer.GlobeNode == null)
             {
-                scheme = _schemeService.GetScheme<ILocationScheme>(IntrolLocationSid);
+                scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
             }
             else
             {

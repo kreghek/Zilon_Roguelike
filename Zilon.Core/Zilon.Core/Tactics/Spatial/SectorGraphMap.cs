@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -11,6 +10,11 @@ namespace Zilon.Core.Tactics.Spatial
         public SectorGraphMap()
         {
             Transitions = new Dictionary<IMapNode, RoomTransition>();
+        }
+
+        public int DistanceBetween(IMapNode currentNode, IMapNode targetNode)
+        {
+            return 0;
         }
     }
 }

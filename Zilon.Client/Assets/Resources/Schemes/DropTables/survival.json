@@ -25,6 +25,12 @@
       "MaxCount": 1,
       "Weight": 3
     },
+	{
+      "SchemeSid": "northerner-ale",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 3
+    },
     {
       "SchemeSid": "med-kit",
       "MinCount": 1,

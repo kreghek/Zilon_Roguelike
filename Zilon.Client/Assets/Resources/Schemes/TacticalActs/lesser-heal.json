@@ -1,0 +1,19 @@
+{
+  "Name": {
+    "Ru": "Лечение малых ран",
+    "En":  "Heal lesser wounds"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 2,
+      "Count": 1
+    },
+	"Targets": "Self",
+	"Effect": "Heal",
+    "HitCount": 1
+  },
+  "Constrains": {
+    "PropResourceType": "mana",
+    "PropResourceCount": 1
+  }
+}

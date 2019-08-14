@@ -25,10 +25,13 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
+        Container.Bind<IHumanPersonFactory>().To<RandomHumanPersonFactory>().AsSingle();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
+        Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
+        Container.Bind<ProgressStorageService>().AsSingle();
 
 
         Container.Bind<HumanPlayer>().AsSingle();
@@ -41,7 +44,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
-
 
         Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
     }

@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Скелет-Воин",
+    "En": "Skeleton Warrior"
+  },
+  "Hp": 8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -12,7 +16,27 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Normal"
+      },
+      {
+        "Type": "TrickyDefence",
+        "Level": "Normal"
+      }
+    ]
+  },
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "undead"
+  ]
 }

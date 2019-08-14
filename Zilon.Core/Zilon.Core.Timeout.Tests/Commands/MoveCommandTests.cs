@@ -39,7 +39,7 @@ namespace Zilon.Core.Commands.Tests
         public async System.Threading.Tasks.Task MoveCommandTestAsync()
         {
             var sectorManager = _container.GetInstance<ISectorManager>();
-            var playerState = _container.GetInstance<IPlayerState>();
+            var playerState = _container.GetInstance<ISectorUiState>();
             var moveCommand = _container.GetInstance<ICommand>("move-command");
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
@@ -91,10 +91,13 @@ namespace Zilon.Core.Commands.Tests
             var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
             var moveTargetNode = nextNodes.First();
 
-            playerState.HoverViewModel = new TestNodeViewModel
+            var nodeViewModel = new TestNodeViewModel
             {
                 Node = moveTargetNode
             };
+
+            playerState.HoverViewModel = nodeViewModel;
+            playerState.SelectedViewModel = nodeViewModel;
 
             commandManger.Push(moveCommand);
 
@@ -169,6 +172,8 @@ namespace Zilon.Core.Commands.Tests
             _container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             _container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
+            _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
+            _container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ISectorFactory, SectorFactory>(new PerContainerLifetime());
 
             _container.Register<HumanPlayer>(new PerContainerLifetime());
@@ -178,9 +183,8 @@ namespace Zilon.Core.Commands.Tests
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
-            _container.Register<IPlayerState, PlayerState>(new PerContainerLifetime());
+            _container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
             _container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
-            _container.Register<ITraderManager, TraderManager>(new PerContainerLifetime());
             _container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
             _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
             _container.Register<IActorTaskSource, MonsterActorTaskSource>(serviceName: "monster", lifetime: new PerContainerLifetime());

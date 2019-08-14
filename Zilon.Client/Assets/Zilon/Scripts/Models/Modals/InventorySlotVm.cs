@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Models;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -11,34 +13,39 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
-public class InventorySlotVm : MonoBehaviour
+public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 {
-    public static int Count;
-
-    public int CurrentCount;
-
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
     [NotNull] [Inject] private readonly ICommandManager _comamndManager;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly IPlayerState _playerState;
     [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
 
+    public IActor Actor { get; set; }
     public int SlotIndex;
-    
+
     public GameObject DenyBorder;
     public Image IconImage;
     public EquipmentSlotTypes SlotTypes;
     public Sprite[] TypeBackgrounds;
 
+    public Vector3 Position => GetComponent<RectTransform>().position;
+    public IProp Prop
+    {
+        get
+        {
+            var prop = Actor.Person.EquipmentCarrier[SlotIndex];
+            return prop;
+        }
+    }
+
     public event EventHandler Click;
+    public event EventHandler MouseEnter;
+    public event EventHandler MouseExit;
 
     public void Start()
     {
-        CurrentCount = Count;
-        Count++;
-
         ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
 
         UpdateSlotIcon();
@@ -58,9 +65,7 @@ public class InventorySlotVm : MonoBehaviour
 
     private void UpdateSlotIcon()
     {
-        var actor = _playerState.ActiveActor.Actor;
-
-        var currentEquipment = actor.Person.EquipmentCarrier[SlotIndex];
+        var currentEquipment = Actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
             if (IconImage != null)
@@ -110,6 +115,16 @@ public class InventorySlotVm : MonoBehaviour
         Click?.Invoke(this, new EventArgs());
     }
 
+    public void OnMouseEnter()
+    {
+        MouseEnter?.Invoke(this, new EventArgs());
+    }
+
+    public void OnMouseExit()
+    {
+        MouseExit?.Invoke(this, new EventArgs());
+    }
+
     public void ApplyEquipment()
     {
         _comamndManager.Push(_equipCommand);
@@ -118,13 +133,11 @@ public class InventorySlotVm : MonoBehaviour
 
     private void InitEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ClearEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 }

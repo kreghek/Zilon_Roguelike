@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Zilon.Core.World;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -8,7 +8,8 @@ namespace Zilon.Core.WorldGeneration
     public class Realm
     {
         public string Name { get; set; }
-        public Color Color;
+
+        public RealmBanner Banner { get; set; }
 
         public override string ToString()
         {

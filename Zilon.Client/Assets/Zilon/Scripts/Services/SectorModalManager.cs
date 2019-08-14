@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
 {
+    /// <summary>
+    /// Менеджер модальных окон для сектора.
+    /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SectorModalManager : MonoBehaviour, ISectorModalManager
+    public class SectorModalManager : MonoBehaviour, ISectorModalManager, ICommonModalManager
     {
         // ReSharper disable UnassignedField.Global
         // ReSharper disable MemberCanBePrivate.Global
@@ -19,15 +26,19 @@ namespace Assets.Zilon.Scripts.Services
 
         public InventoryModalBody InventoryModalPrefab;
 
-        public PerksModalBody PerksModalPrefab;
+        public PerksModalBody PersonModalPrefab;
 
         public InstructionModalBody InstructionModalPrefab;
 
         public TraderModalBody TraderModalPrefab;
 
+        public DialogModalBody DialogModalPrefab;
+
         public QuitModalBody QuitModalPrefab;
 
         public ScoreModalBody ScoreModalPrefab;
+
+        public HistoryModalBody HistoryModalPrefab;
 
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
@@ -49,22 +60,22 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<InventoryModalBody>(InventoryModalPrefab.gameObject);
 
-            modalBody.Init(actor);
+            modalBody.Init();
         }
 
         public void ShowPerksModal(IActor actor)
         {
-            var modalBody = CreateWindowHandler<PerksModalBody>(PerksModalPrefab.gameObject);
+            var modalBody = CreateWindowHandler<PerksModalBody>(PersonModalPrefab.gameObject);
 
             modalBody.Init(actor);
         }
 
         public void ShowInstructionModal()
         {
-            var modalBody = CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+            CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
         }
 
-        public void ShowTraderModal(ITrader trader)
+        public void ShowTraderModal(CitizenPerson trader)
         {
             var modalBody = CreateWindowHandler<TraderModalBody>(TraderModalPrefab.gameObject);
             modalBody.Init(trader);
@@ -80,6 +91,18 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
             modalBody.Init();
+        }
+
+        public void ShowHistoryBookModal()
+        {
+            var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
+            modalBody.Init();
+        }
+
+        public void ShowDialogModal(CitizenPerson citizen)
+        {
+            var modalBody = CreateWindowHandler<DialogModalBody>(DialogModalPrefab.gameObject);
+            modalBody.Init(citizen);
         }
 
         private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler

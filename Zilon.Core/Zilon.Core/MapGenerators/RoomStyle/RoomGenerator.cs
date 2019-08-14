@@ -135,13 +135,30 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         private void CreateOneRoomNodes(ISectorMap map, HashSet<string> edgeHash, Room room, Size cellSize)
         {
+            var interiorObjects = _randomSource.RollInteriorObjects(room.Width, room.Height);
+
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
                     var nodeX = x + room.PositionX * cellSize.Width;
                     var nodeY = y + room.PositionY * cellSize.Height;
-                    var node = new HexNode(nodeX, nodeY);
+
+                    var isObstacle = false;
+                    var interiorObjectForCoords = interiorObjects
+                        .SingleOrDefault(o => o.Coords.CompsEqual(x, y));
+
+                    if (interiorObjectForCoords != null)
+                    {
+//TODO Сделать так, чтобы укрытия не генерировались на узлах с выходами
+// Как вариант - если выбираем узел, как выход, то снимаем флаг укрытия.
+// Вообще, нужно поискать алгоритмы, которые бы расставляли укрытия и выходы, оставляя комнату проходимой.
+                        isObstacle = true;
+                    }
+
+                    var node = new HexNode(nodeX, nodeY, isObstacle);
+
+
                     room.Nodes.Add(node);
                     map.AddNode(node);
 
@@ -163,7 +180,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             if (room.Transitions.Any())
             {
                 //TODO Отфильтровать узлы, которые на входах в коридор
-                var openRoomNodes = new List<HexNode>(room.Nodes);
+                var availableNodes = room.Nodes.Where(x => !x.IsObstacle);
+                var openRoomNodes = new List<HexNode>(availableNodes);
                 foreach (var transition in room.Transitions)
                 {
                     var transitionNode = _randomSource.RollTransitionNode(openRoomNodes);

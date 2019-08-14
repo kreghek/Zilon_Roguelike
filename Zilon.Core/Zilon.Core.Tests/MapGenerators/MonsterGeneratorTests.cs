@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var randomSourceMock = new Mock<MonsterGeneratorRandomSource>(dice).As<IMonsterGeneratorRandomSource>();
             randomSourceMock.CallBase = true;
             randomSourceMock.Setup(x => x.RollRarity()).Returns(2);
-            randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>())).Returns(20);
+            randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(20);
             var randomSource = randomSourceMock.Object;
 
             var actorList = new List<IActor>();
@@ -55,9 +55,13 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
+            var propContainerMock = new Mock<IPropContainerManager>();
+            var propContainer = propContainerMock.Object;
+            propContainerMock.SetupGet(x => x.Items).Returns(new IPropContainer[0]);
             var monsterGenerator = new MonsterGenerator(schemeService,
                 randomSource,
-                actorManager);
+                actorManager,
+                propContainer);
 
 
             var map = await SquareMapFactory.CreateAsync(20);

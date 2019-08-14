@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Крыса",
-	"En": "Rat"
+    "En": "Rat"
   },
   "Hp": 2,
   "PrimaryAct": {
@@ -16,8 +16,15 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 25
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 25,
+  "Tags": [
+    "beast"
+  ]
 }

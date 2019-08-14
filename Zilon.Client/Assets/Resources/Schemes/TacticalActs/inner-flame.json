@@ -12,10 +12,13 @@
       "Min": 1,
       "Max": 8
     },
+	"Effect": "Damage",
+	"Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Shadow",
-      "Impact":  "Psy"
+      "Impact":  "Psy",
+	  "ApRank": 1
     }
   },
   "Constrains": {

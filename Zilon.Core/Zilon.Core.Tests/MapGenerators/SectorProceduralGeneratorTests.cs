@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
@@ -24,7 +25,7 @@ namespace Zilon.Core.Tests.MapGenerators
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
-        /// Тест проверяет, что для различных карт генератор сектора работает без ошибок.
+        /// Тест проверяет, что для различных карт в виде змейки генерация работает без ошибок.
         /// </summary>
         [Test]
         public void Create_DifferentMaps_NoExceptions()
@@ -33,9 +34,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new TestSnakeRoomGenerator();
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
+            var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
 
@@ -61,6 +61,7 @@ namespace Zilon.Core.Tests.MapGenerators
         [TestCase(3257)]
         [TestCase(636)]
         [TestCase(100000)]
+
         public void Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
@@ -71,39 +72,20 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(schemeService, botPlayer, mapFactory);
+            var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
 
 
             // ACT
-            Func<Task> act = async () =>
-            {
-                var sector = await generator.GenerateDungeonAsync(sectorScheme);
-            };
+            generator.GenerateDungeonAsync(sectorScheme).Wait();
 
 
-
-            // ASSERT
-            act.Should().NotThrow();
         }
 
-        private static SectorGenerator CreateGenerator(ISchemeService schemeService,
-            IBotPlayer botPlayer,
+        private static SectorGenerator CreateGenerator(IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
-            var dropResolverMock = new Mock<IDropResolver>();
-            var dropResolver = dropResolverMock.Object;
-
-            var actorManagerMock = new Mock<IActorManager>();
-            var actorManager = actorManagerMock.Object;
-
-            var propContainerManagerMock = new Mock<IPropContainerManager>();
-            var propContainerManager = propContainerManagerMock.Object;
-
-            var tradeManagerMock = new Mock<ITraderManager>();
-            var tradeManager = tradeManagerMock.Object;
-
             var chestGeneratorMock = new Mock<IChestGenerator>();
             var chestGenerator = chestGeneratorMock.Object;
 
@@ -113,14 +95,15 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorFactoryMock = new Mock<ISectorFactory>();
             var sectorFactory = sectorFactoryMock.Object;
 
+            var citizenGeneratorMock = new Mock<ICitizenGenerator>();
+            var citizenGenerator = citizenGeneratorMock.Object;
+
             return new SectorGenerator(mapFactory,
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,
-                botPlayer,
-                schemeService,
-                tradeManager,
-                dropResolver);
+                citizenGenerator,
+                botPlayer);
         }
 
 

@@ -1,0 +1,24 @@
+{
+  "Name": {
+    "Ru": "Стремительный удар с плеча",
+	"En": "Rush Slash"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 2
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Rapid",
+      "Impact":  "Kinetic",
+	  "ApRank": 2
+    }
+  }
+}

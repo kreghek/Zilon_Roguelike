@@ -12,9 +12,9 @@ using Zilon.Core.Props;
 
 public class NoBulletHandler : MonoBehaviour
 {
-    public Image IconSprite;
+    public GameObject Content;
 
-    [Inject] [NotNull] private IPlayerState _playerState;
+    [Inject] [NotNull] private ISectorUiState _playerState;
 
     private void Start()
     {
@@ -39,11 +39,11 @@ public class NoBulletHandler : MonoBehaviour
                                     where resource.Count >= activeAct.Constrains.PropResourceCount
                                     select resource;
 
-            IconSprite.enabled = !bulletInInventory.Any();
+            Content.SetActive(!bulletInInventory.Any());
         }
         else
         {
-            IconSprite.enabled = false;
+            Content.SetActive(false);
         }
     }
 }

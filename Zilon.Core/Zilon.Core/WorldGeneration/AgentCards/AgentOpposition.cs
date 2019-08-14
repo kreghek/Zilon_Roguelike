@@ -4,6 +4,13 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {
+    /// <summary>
+    /// Карта, в результате которой один агент входит в оппозицию другому агенту.
+    /// </summary>
+    /// <remarks>
+    /// Оппозиция выражается снятием одного очка ХП другого агента.
+    /// Если ХП агента падает до 0, то он выходит из игрового мира.
+    /// </remarks>
     public sealed class AgentOpposition : IAgentCard
     {
         public int PowerCost { get; }
@@ -25,7 +32,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 if (targetAgent.Hp <= 0)
                 {
                     globe.Agents.Remove(targetAgent);
-                    globe.AgentCells.Remove(targetAgent.Localtion);
+                    CacheHelper.RemoveAgentFromCell(globe.AgentCells, agent.Location, agent);
                 }
             }
         }

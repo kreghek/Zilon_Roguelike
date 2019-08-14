@@ -1,5 +1,9 @@
 {
-  "Hp": 2,
+  "Name": {
+    "Ru": "Зомби",
+    "En": "Zombi"
+  },
+  "Hp": 10,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -12,7 +16,15 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ]
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "undead"
+  ]
 }

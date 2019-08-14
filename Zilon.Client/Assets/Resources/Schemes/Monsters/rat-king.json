@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Крысиный король",
-	"En": "Rat King"
+    "En": "Rat King"
   },
   "Hp": 12,
   "PrimaryAct": {
@@ -16,7 +16,9 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
   "Defense": {
     "Defenses": [
@@ -26,6 +28,16 @@
       }
     ]
   },
-  "DropTableSids": [ "survival", "default", "champion-loot" ],
-  "BaseScore": 250
+  "DropTableSids": [
+    "survival",
+    "default",
+    "champion-loot"
+  ],
+  "BaseScore": 250,
+  "Tags": [
+    "rare",
+    "mutant",
+    "beast",
+    "unclean"
+  ]
 }

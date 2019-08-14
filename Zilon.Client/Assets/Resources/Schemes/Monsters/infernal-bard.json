@@ -1,7 +1,7 @@
 {
-  "Name":{
+  "Name": {
     "Ru": "Инфернальный бард",
-	"En": "infernal bard"
+    "En": "infernal bard"
   },
   "Hp": 3,
   "PrimaryAct": {
@@ -16,8 +16,16 @@
     "Offence": {
       "Type": "Tricky",
       "Impact": "Psy"
-    }
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
   },
-  "DropTableSids": [ "survival" ],
-  "BaseScore": 50
+  "DropTableSids": [
+    "survival"
+  ],
+  "BaseScore": 50,
+  "Tags": [
+    "unclean",
+    "demon"
+  ]
 }
