@@ -162,6 +162,6 @@ public class PropInfoPopup : MonoBehaviour
 
     private static string GetDirectionString(PersonRuleDirection direction)
     {
-        return direction == PersonRuleDirection.Positive ? string.Empty : "-";
+        return direction == PersonRuleDirection.Negative ? "-" : string.Empty;
     }
 }
