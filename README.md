@@ -9,4 +9,4 @@
 [Бортовой журнал развития проекта (на русском)](https://lastimperialvagabond.home.blog)
 
 GamePlay Video
-https://www.youtube.com/watch?v=KJJ2ab35eFg
+[![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
