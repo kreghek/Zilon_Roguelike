@@ -4,12 +4,12 @@
     "Rules": [
 	  {
 	    "Type": "Health",
-		"Level": "Lesser"
+		"Level": "Normal"
 	  }
 	]
   },
   "Name": {
-    "En": "Higea ring",
-    "Ru": "Кольцо Гигеи"
+    "En": "Taurus stim",
+    "Ru": "Бычий стимулятор"
   }
 }
