@@ -503,6 +503,7 @@
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
     <Compile Include="World\Color.cs" />
+    <Compile Include="World\GlobeHelper.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />

@@ -164,6 +164,8 @@
     <Compile Include="Tactics\TransitionDetectionTests.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelperTests.cs" />
     <Compile Include="WorldGeneration\WorldGeneratorTests.cs" />
+    <Compile Include="World\GlobeHelperTestCaseSource.cs" />
+    <Compile Include="World\GlobeHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
