@@ -27,9 +27,15 @@ public class SectorUiHandler : MonoBehaviour
 
     [NotNull] [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
 
+
+    [NotNull]
+    [Inject(Id = "sector-transition-move-command")]
+    private readonly ICommand _sectorTransitionMoveCommand;
+
     public Button NextTurnButton;
     public Button InventoryButton;
     public Button PersonButton;
+    public Button SectorTransitionMoveButton;
 
     public void FixedUpdate()
     {
@@ -47,6 +53,11 @@ public class SectorUiHandler : MonoBehaviour
         {
             PersonButton.interactable = _showPersonModalCommand.CanExecute();
         }
+
+        if (SectorTransitionMoveButton != null)
+        {
+            SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+        }
     }
 
     public void Update()
@@ -59,6 +70,11 @@ public class SectorUiHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             ShowPersonModalButton_Handler();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SectorTransitionMoveButton_Handler();
         }
     }
 
@@ -95,5 +111,10 @@ public class SectorUiHandler : MonoBehaviour
     public void ExitGame_Handler()
     {
         _clientCommandExecutor.Push(_quitRequestCommand);
+    }
+
+    public void SectorTransitionMoveButton_Handler()
+    {
+        _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
     }
 }

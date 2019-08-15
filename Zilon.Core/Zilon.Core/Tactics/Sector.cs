@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -17,7 +17,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Базовая реализация сектора.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Tactics.ISector" />
+    /// <seealso cref="ISector" />
     public class Sector : ISector
     {
         private readonly IActorManager _actorManager;
@@ -99,7 +99,7 @@ namespace Zilon.Core.Tactics
             UpdateEquipments();
 
             // Определяем, не покинули ли актёры игрока сектор.
-            DetectSectorExit();
+            //DetectSectorExit();
         }
 
         private void UpdateScores()
@@ -173,16 +173,16 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
         /// </summary>
-        private void DetectSectorExit()
-        {
-            var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
-            var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
+        //private void DetectSectorExit()
+        //{
+        //    var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
+        //    var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
 
-            if (detectedTransition != null)
-            {
-                DoActorExit(detectedTransition);
-            }
-        }
+        //    if (detectedTransition != null)
+        //    {
+        //        DoActorExit(detectedTransition);
+        //    }
+        //}
 
 
         private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -299,6 +299,11 @@ namespace Zilon.Core.Tactics
         {
             var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
+        }
+
+        public void UseTransition(RoomTransition transition)
+        {
+            DoActorExit(transition);
         }
     }
 }

@@ -78,6 +78,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("use-self-command").To<UseSelfCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("sector-transition-move-command").To<SectorTransitionMoveCommand>().AsSingle();
 
         // Комадны для UI.
         Container.Bind<ICommand>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();

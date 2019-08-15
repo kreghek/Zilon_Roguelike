@@ -76,6 +76,7 @@
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\ListHelper.cs" />
