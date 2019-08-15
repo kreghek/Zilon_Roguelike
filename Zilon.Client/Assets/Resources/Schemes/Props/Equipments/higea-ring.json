@@ -1,0 +1,15 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "Health",
+		"Level": "Normal"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Higea ring",
+    "Ru": "Кольцо Гигеи"
+  }
+}
