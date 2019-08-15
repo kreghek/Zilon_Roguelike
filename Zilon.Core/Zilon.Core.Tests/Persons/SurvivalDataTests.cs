@@ -37,7 +37,10 @@ namespace Zilon.Core.Tests.Persons
 
             const int EXPECTED_SURVIVAL_STAT_KEYPOINT = LESSER_SURVIVAL_STAT_KEYPOINT;
 
-            const int FAKE_ROLL_SURVIVAL_RESULT = 6;
+            // 1 при броске на снижение означает, что тест на снижение не пройден.
+            // Потому что нужно 4+ по умолчанию, чтобы пройти.
+            // Значит характеристика будет снижена.
+            const int FAKE_ROLL_SURVIVAL_RESULT = 1;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))

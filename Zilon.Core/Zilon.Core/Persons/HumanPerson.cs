@@ -419,11 +419,12 @@ namespace Zilon.Core.Persons
         {
             foreach (var bonus in bonuses)
             {
-                var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
-                if (hpStat != null)
+                var stat = Survival.Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
+                if (stat != null)
                 {
-                    var normalizedBonus = (int)Math.Round(bonus.Bonus, MidpointRounding.AwayFromZero);
-                    hpStat.ChangeStatRange(hpStat.Range.Min, hpStat.Range.Max + normalizedBonus);
+                    var normalizedBonus = (int)Math.Round(bonus.ValueBonus, MidpointRounding.AwayFromZero);
+                    stat.ChangeStatRange(stat.Range.Min, stat.Range.Max + normalizedBonus);
+                    stat.DownPassRoll -= (int)Math.Round(bonus.DownPassBonus, MidpointRounding.AwayFromZero);
                 }
             }
         }
@@ -475,9 +476,31 @@ namespace Zilon.Core.Persons
                             }
 
                             break;
+
+                        case EquipCommonRuleType.HungerResistance:
+                            BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                            break;
                     }
                 }
             }
+        }
+
+        private void BonusToDownPass(
+            SurvivalStatType statType,
+            PersonRuleLevel level,
+            PersonRuleDirection direction,
+            ref List<SurvivalStatBonus> bonuses)
+        {
+            var stat = Survival.Stats.SingleOrDefault(x => x.Type == statType);
+
+            var currentBonus = new SurvivalStatBonus(statType) {
+                //TODO Доделать с учётом уровня и направления
+                DownPassBonus = 1
+            };
+            
+            stat.DownPassRoll--;
+
+            bonuses.Add(currentBonus);
         }
 
         /// <summary>
@@ -490,7 +513,7 @@ namespace Zilon.Core.Persons
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            var hpStatType = SurvivalStatType.Health;
+            const SurvivalStatType hpStatType = SurvivalStatType.Health;
             var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == hpStatType);
             if (hpStat != null)
             {
@@ -525,7 +548,7 @@ namespace Zilon.Core.Persons
                     currentBonus = new SurvivalStatBonus(hpStatType);
                     bonuses.Add(currentBonus);
                 }
-                currentBonus.Bonus += bonus;
+                currentBonus.ValueBonus += bonus;
             }
         }
 
