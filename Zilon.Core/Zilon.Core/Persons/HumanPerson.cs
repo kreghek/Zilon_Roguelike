@@ -496,7 +496,7 @@ namespace Zilon.Core.Persons
             var stat = Survival.Stats.SingleOrDefault(x => x.Type == statType);
 
             var currentBonusValue = 0;
-            var directionQuaff = direction == PersonRuleDirection.Positive ? 1 : -1;
+            var directionQuaff = direction == PersonRuleDirection.Negative ? -1 : 1;
 
             switch (level)
             {
