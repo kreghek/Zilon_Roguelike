@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using JetBrains.Annotations;
@@ -177,10 +178,10 @@ namespace Zilon.Core.Persons
                 case PersonRuleType.Ballistic:
                     AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
-                
-                //case PersonRuleType.Undefined:
-                //default:
-                //    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
+
+                    //case PersonRuleType.Undefined:
+                    //default:
+                    //    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
             }
         }
 
@@ -324,10 +325,10 @@ namespace Zilon.Core.Persons
 
                 case PersonRuleLevel.None:
                     throw new NotSupportedException();
-                
+
                 case PersonRuleLevel.Absolute:
                     throw new NotSupportedException();
-                
+
                 default:
                     throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
             }
@@ -422,9 +423,10 @@ namespace Zilon.Core.Persons
                 var stat = Survival.Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
                 if (stat != null)
                 {
-                    var normalizedBonus = (int)Math.Round(bonus.ValueBonus, MidpointRounding.AwayFromZero);
-                    stat.ChangeStatRange(stat.Range.Min, stat.Range.Max + normalizedBonus);
-                    stat.DownPassRoll -= (int)Math.Round(bonus.DownPassBonus, MidpointRounding.AwayFromZero);
+                    var normalizedValueBonus = (int)Math.Round(bonus.ValueBonus, MidpointRounding.AwayFromZero);
+                    stat.ChangeStatRange(stat.Range.Min, stat.Range.Max + normalizedValueBonus);
+                    var normalizedDropPassBonus = (int)Math.Round(bonus.DownPassBonus, MidpointRounding.AwayFromZero);
+                    stat.DownPassRoll = SurvivalStat.DEFAULT_DOWN_PASS_VALUE - normalizedDropPassBonus;
                 }
             }
         }
@@ -493,12 +495,37 @@ namespace Zilon.Core.Persons
         {
             var stat = Survival.Stats.SingleOrDefault(x => x.Type == statType);
 
-            var currentBonus = new SurvivalStatBonus(statType) {
-                //TODO Доделать с учётом уровня и направления
-                DownPassBonus = 1
+            var currentBonusValue = 0;
+            var directionQuaff = direction == PersonRuleDirection.Positive ? 1 : -1;
+
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    currentBonusValue = 1 * directionQuaff;
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    currentBonusValue = 2 * directionQuaff;
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    currentBonusValue = 5 * directionQuaff;
+                    break;
+
+                case PersonRuleLevel.Absolute:
+                    currentBonusValue = 10 * directionQuaff;
+                    break;
+
+                case PersonRuleLevel.None:
+                default:
+                    Debug.Fail("Предположительно, это ошибка.");
+                    break;
+            }
+
+            var currentBonus = new SurvivalStatBonus(statType)
+            {
+                DownPassBonus = currentBonusValue
             };
-            
-            stat.DownPassRoll--;
 
             bonuses.Add(currentBonus);
         }
@@ -542,7 +569,7 @@ namespace Zilon.Core.Persons
                     bonus *= -1;
                 }
 
-                var currentBonus = bonuses.SingleOrDefault(x=>x.SurvivalStatType == hpStatType);
+                var currentBonus = bonuses.SingleOrDefault(x => x.SurvivalStatType == hpStatType);
                 if (currentBonus == null)
                 {
                     currentBonus = new SurvivalStatBonus(hpStatType);
@@ -586,7 +613,7 @@ namespace Zilon.Core.Persons
         }
 
         private static ITacticalAct[] CalcActs(ITacticalActScheme defaultActScheme,
-            IEnumerable<Equipment> equipments, 
+            IEnumerable<Equipment> equipments,
             EffectCollection effects,
             IEnumerable<IPerk> perks)
         {
