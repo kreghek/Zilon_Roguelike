@@ -68,5 +68,25 @@
       "SchemeSid": "iron-ring",
       "Weight": 2
     },
+	{
+      "SchemeSid": "hihea-ring",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "hunger-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "thrist-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "taurus-stim",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "power-shield-generator",
+      "Weight": 1
+    }
   ]
 }

@@ -29,7 +29,9 @@
     ]
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"champion-loot",
+	"demon"
   ],
   "BaseScore": 600,
   "Tags": [

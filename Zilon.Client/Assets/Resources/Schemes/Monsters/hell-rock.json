@@ -37,7 +37,10 @@
     ]
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"champion-loot",
+	"hellrock-loot",
+	"demon"
   ],
   "BaseScore": 100,
   "Tags": [

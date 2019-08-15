@@ -22,6 +22,7 @@
   },
   "DropTableSids": [
     "survival"
+	"champion-loot"
   ],
   "BaseScore": 75,
   "Tags": [
