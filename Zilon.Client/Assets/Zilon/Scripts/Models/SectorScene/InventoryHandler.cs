@@ -83,6 +83,9 @@ public class InventoryHandler : MonoBehaviour
         }
 
         PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
+
+        UseButton.SetActive(false);
+        ReadButton.SetActive(false);
     }
 
     public void OnDestroy()
