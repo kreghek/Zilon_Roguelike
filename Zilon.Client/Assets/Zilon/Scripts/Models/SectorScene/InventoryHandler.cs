@@ -83,6 +83,8 @@ public class InventoryHandler : MonoBehaviour
         }
 
         PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
+
+        UpdateUseButtonsState(_inventoryState.SelectedProp?.Prop);
     }
 
     public void OnDestroy()
@@ -152,6 +154,8 @@ public class InventoryHandler : MonoBehaviour
                 UseButton.SetActive(false);
             }
         }
+
+        UpdateItemsParentObject();
     }
 
     private void Inventory_Changed(object sender, PropStoreEventArgs e)
@@ -169,15 +173,16 @@ public class InventoryHandler : MonoBehaviour
         {
             CreatePropObject(InventoryItemsParent, newProp);
         }
+
+        UpdateItemsParentObject();
     }
 
-    //TODO Возможно, нужно будет устранить, т.к. больше не используется.
-    //private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
-    //{
-    //    var actor = _playerState.ActiveActor.Actor;
-    //    var inventory = actor.Person.Inventory;
-    //    UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    //}
+    private void UpdateItemsParentObject()
+    {
+        var inventory = _actor.Person.Inventory;
+        var inventoryProps = inventory.CalcActualItems();
+        RecalcItemsObject(InventoryItemsParent, inventoryProps);
+    }
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
     {
@@ -191,6 +196,11 @@ public class InventoryHandler : MonoBehaviour
             CreatePropObject(itemsParent, prop);
         }
 
+        RecalcItemsObject(itemsParent, props);
+    }
+
+    private static void RecalcItemsObject(Transform itemsParent, IEnumerable<IProp> props)
+    {
         var parentRect = itemsParent.GetComponent<RectTransform>();
         var rowCount = (int)Math.Ceiling(props.Count() / 4f);
         parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);
@@ -220,23 +230,19 @@ public class InventoryHandler : MonoBehaviour
     //TODO Дубликат с ContainerModalBody.PropItemOnClick
     private void PropItem_Click(object sender, EventArgs e)
     {
-        var currentItemVm = (PropItemVm)sender;
+        var currentItemViewModel = (PropItemVm)sender;
         foreach (var propViewModel in _propViewModels)
         {
-            var isSelected = propViewModel == currentItemVm;
+            var isSelected = propViewModel == currentItemViewModel;
             propViewModel.SetSelectedState(isSelected);
         }
 
         // этот фрагмент - не дубликат
-        var canUseProp = currentItemVm.Prop.Scheme.Use != null;
-        UseButton.SetActive(canUseProp);
+        UpdateUseButtonsState(currentItemViewModel.Prop);
 
-        var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
-        ReadButton.SetActive(canRead);
-
-        if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemVm))
+        if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemViewModel))
         {
-            _inventoryState.SelectedProp = currentItemVm;
+            _inventoryState.SelectedProp = currentItemViewModel;
         }
         else
         {
@@ -244,6 +250,22 @@ public class InventoryHandler : MonoBehaviour
         }
 
         // --- этот фрагмент - не дубликат
+    }
+
+    private void UpdateUseButtonsState(IProp currentItem)
+    {
+        if (currentItem == null)
+        {
+            UseButton.SetActive(false);
+            ReadButton.SetActive(false);
+            return;
+        }
+
+        var canUseProp = currentItem.Scheme.Use != null;
+        UseButton.SetActive(canUseProp);
+
+        var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
+        ReadButton.SetActive(canRead);
     }
 
     public void UseButton_Handler()
