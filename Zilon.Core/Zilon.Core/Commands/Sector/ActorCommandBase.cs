@@ -21,5 +21,9 @@ namespace Zilon.Core.Commands
             SectorManager = sectorManager;
             PlayerState = playerState;
         }
+
+        public IActor Actor => PlayerState.ActiveActor.Actor;
+
+        public IActorViewModel ActorViewModel => PlayerState.ActiveActor;
     }
 }
