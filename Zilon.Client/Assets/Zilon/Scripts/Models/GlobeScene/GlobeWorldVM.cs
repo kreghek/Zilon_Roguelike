@@ -228,26 +228,15 @@ public class GlobeWorldVM : MonoBehaviour
         Camera.Target = groupObject;
         Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
 
-        var centerLocationNode = GetCenterLocationNode(_locationNodeViewModels);
-        MapBackground.transform.position = centerLocationNode.transform.position;
+        var nodes = _locationNodeViewModels.Select(x=>x.Node);
+        var centerLocationNode = GlobeHelper.GetCenterLocationNode(nodes);
+        var centerLocationNodeViewModel = _locationNodeViewModels
+            .Single(nodeViewModel => nodeViewModel.Node.OffsetX == centerLocationNode.OffsetX &&
+            nodeViewModel.Node.OffsetY == centerLocationNode.OffsetY);
+        MapBackground.transform.position = centerLocationNodeViewModel.transform.position;
 
         _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
         MoveGroupViewModel(_player.GlobeNode);
-    }
-
-    private static MapLocation GetCenterLocationNode(IEnumerable<MapLocation> locationNodeViewModels)
-    {
-        var sortedNodes = locationNodeViewModels
-            .OrderBy(nodeViewModel => nodeViewModel.Node.OffsetX)
-            .ThenBy(nodeViewModel => nodeViewModel.Node.OffsetY);
-
-        var count = sortedNodes.Count();
-
-        var offsetToCenter = count / 2;
-
-        var centerNode = sortedNodes.Skip(offsetToCenter).First();
-
-        return centerNode;
     }
 
     private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
