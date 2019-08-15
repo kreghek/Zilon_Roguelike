@@ -254,6 +254,13 @@ public class InventoryHandler : MonoBehaviour
 
     private void UpdateUseButtonsState(IProp currentItem)
     {
+        if (currentItem == null)
+        {
+            UseButton.SetActive(false);
+            ReadButton.SetActive(false);
+            return;
+        }
+
         var canUseProp = currentItem.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
 
