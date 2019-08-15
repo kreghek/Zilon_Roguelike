@@ -70,6 +70,10 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
 
+            var ringScheme = _schemeService.GetScheme<IPropScheme>("iron-ring");
+            var ironRing = _propFactory.CreateEquipment(ringScheme);
+            AddPropToInventory(inventory, ironRing);
+
             return person;
         }
 

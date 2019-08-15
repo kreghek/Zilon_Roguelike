@@ -63,6 +63,10 @@
     {
       "SchemeSid": "rush-sword",
       "Weight": 10
-    }
+    },
+	{
+      "SchemeSid": "iron-ring",
+      "Weight": 2
+    },
   ]
 }
