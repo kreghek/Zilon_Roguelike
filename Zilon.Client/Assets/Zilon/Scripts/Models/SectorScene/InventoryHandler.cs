@@ -152,6 +152,8 @@ public class InventoryHandler : MonoBehaviour
                 UseButton.SetActive(false);
             }
         }
+
+        UpdateItemsParentObject();
     }
 
     private void Inventory_Changed(object sender, PropStoreEventArgs e)
@@ -169,15 +171,16 @@ public class InventoryHandler : MonoBehaviour
         {
             CreatePropObject(InventoryItemsParent, newProp);
         }
+
+        UpdateItemsParentObject();
     }
 
-    //TODO Возможно, нужно будет устранить, т.к. больше не используется.
-    //private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
-    //{
-    //    var actor = _playerState.ActiveActor.Actor;
-    //    var inventory = actor.Person.Inventory;
-    //    UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    //}
+    private void UpdateItemsParentObject()
+    {
+        var inventory = _actor.Person.Inventory;
+        var inventoryProps = inventory.CalcActualItems();
+        RecalcItemsObject(InventoryItemsParent, inventoryProps);
+    }
 
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
     {
@@ -191,6 +194,11 @@ public class InventoryHandler : MonoBehaviour
             CreatePropObject(itemsParent, prop);
         }
 
+        RecalcItemsObject(itemsParent, props);
+    }
+
+    private static void RecalcItemsObject(Transform itemsParent, IEnumerable<IProp> props)
+    {
         var parentRect = itemsParent.GetComponent<RectTransform>();
         var rowCount = (int)Math.Ceiling(props.Count() / 4f);
         parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (40 + 5) * rowCount);

@@ -3907,7 +3907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 415948494916139211}
   - component: {fileID: 417998404293299417}
-  - component: {fileID: 526533922047458613}
   - component: {fileID: 494389376244259080}
   - component: {fileID: 494389376244259081}
   m_Layer: 5
@@ -4139,27 +4138,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &526533922047458613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494389376244259079}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80fa8d6733c21d54bac310b685fab9ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InventoryItemsParent: {fileID: 8793239036720348483}
-  PropItemPrefab: {fileID: 114613642215259830, guid: 9df811c63157b584ab5d7b6f68283596,
-    type: 3}
-  EquipmentSlotsParent: {fileID: 416002536143104123}
-  EquipmentSlotPrefab: {fileID: 114484836081510712, guid: b298bf1766f105b4391c0f53bef7b137,
-    type: 3}
-  PropInfoPopup: {fileID: 2026651271}
-  UseButton: {fileID: 494489783201524395}
-  ReadButton: {fileID: 3085203293368607607}
 --- !u!114 &526621939483846495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4237,7 +4215,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 526533922047458613}
+      - m_Target: {fileID: 0}
         m_MethodName: UseButton_Handler
         m_Mode: 1
         m_Arguments:
@@ -4374,7 +4352,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 526533922047458613}
+      - m_Target: {fileID: 0}
         m_MethodName: ReadButton_Handler
         m_Mode: 1
         m_Arguments:
@@ -4487,8 +4465,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3931888545114695314}
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
-  m_Value: 0.9999997
-  m_Size: 0.65373325
+  m_Value: 1
+  m_Size: 0.6537333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
