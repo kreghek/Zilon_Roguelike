@@ -3,6 +3,8 @@
   "Records": [
 	{
       "SchemeSid": "fire-eye",
+	  "MinCount": 1,
+	  "MaxCount": 1,
       "Weight": 10
     },
 	
