@@ -933,6 +933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418371951}
   - component: {fileID: 418371950}
+  - component: {fileID: 418371952}
   m_Layer: 0
   m_Name: BackgroundMusic
   m_TagString: Untagged
@@ -950,7 +951,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0d73f3bab30296e45a8d3dcdd3a3e2c4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4b0de299cb087714fbcabc0f76f37c0d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1050,6 +1051,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &418371952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418371949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc40be9e8a5271443887c9a18b5b57af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioSource: {fileID: 418371950}
+  PacificMusic: {fileID: 8300000, guid: 0d73f3bab30296e45a8d3dcdd3a3e2c4, type: 3}
+  DungeionMusic: {fileID: 8300000, guid: 4b0de299cb087714fbcabc0f76f37c0d, type: 3}
 --- !u!1 &544933904
 GameObject:
   m_ObjectHideFlags: 0
@@ -4697,7 +4713,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6537333
+  m_Size: 0.65373325
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
