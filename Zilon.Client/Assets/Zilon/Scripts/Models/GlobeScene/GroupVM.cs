@@ -8,7 +8,7 @@ public class GroupVM : MonoBehaviour
     public bool IsSelected { get; private set; }
     public bool IsMoving { get; set; }
     public MapLocation CurrentLocation { get; set; }
-    public event EventHandler OnSelect;
+    //public event EventHandler OnSelect;
 
     // Update is called once per frame
     void Update()
@@ -20,19 +20,19 @@ public class GroupVM : MonoBehaviour
         }
     }
 
-    void OnMouseDown()
-    {
-        if (!IsSelected)
-        {
-            IsSelected = true;
-            OnSelect(this, new EventArgs());
-        }
-    }
+    //void OnMouseDown()
+    //{
+    //    if (!IsSelected)
+    //    {
+    //        IsSelected = true;
+    //        OnSelect.Invoke(this, new EventArgs());
+    //    }
+    //}
 
-    public void SetSelectState(bool state)
-    {
-        Icon.color = state ? Color.white : Color.gray;
+    //public void SetSelectState(bool state)
+    //{
+    //    Icon.color = state ? Color.white : Color.gray;
 
-        IsSelected = state;
-    }
+    //    IsSelected = state;
+    //}
 }
