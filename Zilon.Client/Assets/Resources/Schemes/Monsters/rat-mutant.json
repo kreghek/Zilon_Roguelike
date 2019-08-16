@@ -34,7 +34,7 @@
   },
   "DropTableSids": [
     "survival",
-    "survival",
+    "champion-loot",
     "default"
   ],
   "BaseScore": 100,
