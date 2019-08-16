@@ -87,6 +87,14 @@
 	{
       "SchemeSid": "power-shield-generator",
       "Weight": 1
-    }
+    },
+	{
+	  "SchemeSid": "fire-opal-necklace",
+      "Weight": 2
+	},
+	{
+	  "SchemeSid": "law-codex",
+      "Weight": 1
+	}
   ]
 }

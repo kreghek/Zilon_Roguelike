@@ -3,12 +3,17 @@
   "Records": [
 	{
       "SchemeSid": "fire-eye",
-      "Weight": 1
+      "Weight": 10
     },
 	
 	{
+	  "SchemeSid": "fire-opal-necklace",
+      "Weight": 1
+	},
+	
+	{
       "SchemeSid": null,
-      "Weight": 5
+      "Weight": 50
     }
   ]
 }
