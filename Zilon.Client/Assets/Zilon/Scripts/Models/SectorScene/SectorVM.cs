@@ -15,7 +15,6 @@ using Zenject;
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators;
@@ -637,7 +636,7 @@ public class SectorVM : MonoBehaviour
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
         actorViewModel.PlayerState = _playerState;
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-        actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
+        actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
         actorViewModel.GraphicRoot = actorGraphic;
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
