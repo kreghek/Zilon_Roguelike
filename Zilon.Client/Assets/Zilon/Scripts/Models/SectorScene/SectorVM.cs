@@ -506,6 +506,8 @@ public class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
+        _playerState.SelectedViewModel = null;
+        _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
         if (_humanPlayer.GlobeNode == null)
