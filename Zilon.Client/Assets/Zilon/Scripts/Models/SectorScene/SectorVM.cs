@@ -201,6 +201,9 @@ public class SectorVM : MonoBehaviour
         //}
 
         _gameLoop.Updated += GameLoop_Updated;
+
+        //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
+        _commandBlockerService.DropBlockers();
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
