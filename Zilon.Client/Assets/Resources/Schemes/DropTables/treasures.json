@@ -60,6 +60,10 @@
 		}
 	  ]
     },
+	{
+      "SchemeSid": "wood-shield",
+      "Weight": 20
+    },
     {
       "SchemeSid": "rush-sword",
       "Weight": 10

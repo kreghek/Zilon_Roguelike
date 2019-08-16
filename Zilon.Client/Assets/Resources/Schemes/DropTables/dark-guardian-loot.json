@@ -5,7 +5,10 @@
       "SchemeSid": "highlander-helmet",
       "Weight": 5
     },
-	
+	{
+      "SchemeSid": "wood-shield",
+      "Weight": 10
+    },
 	{
       "SchemeSid": null,
       "Weight": 95
