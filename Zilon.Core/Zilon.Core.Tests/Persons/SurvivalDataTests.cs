@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Tests.Persons
 {
@@ -37,7 +38,10 @@ namespace Zilon.Core.Tests.Persons
 
             const int EXPECTED_SURVIVAL_STAT_KEYPOINT = LESSER_SURVIVAL_STAT_KEYPOINT;
 
-            const int FAKE_ROLL_SURVIVAL_RESULT = 6;
+            // 1 при броске на снижение означает, что тест на снижение не пройден.
+            // Потому что нужно 4+ по умолчанию, чтобы пройти.
+            // Значит характеристика будет снижена.
+            const int FAKE_ROLL_SURVIVAL_RESULT = 1;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
@@ -76,6 +80,50 @@ namespace Zilon.Core.Tests.Persons
                     args.KeyPoints.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE &&
                     args.KeyPoints.FirstOrDefault().Value == EXPECTED_SURVIVAL_STAT_KEYPOINT);
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что характеристика с изменённым DownPass корректно
+        /// изменяется при указанных результатах броска кости.
+        /// </summary>
+        [Test]
+        [TestCaseSource(typeof(SurvivalDataTestCasesSource), nameof(SurvivalDataTestCasesSource.DownPassTestCases))]
+        public int Update_ModifiedDownPass_StatDownCorrectly(int statDownPass, int downPassRoll)
+        {
+            // ARRANGE
+
+            const int STAT_RATE = 1;
+            const int MIN_STAT_VALUE = 0;
+            const int MAX_STAT_VALUE = 1;
+            const int START_STAT_VALUE = MAX_STAT_VALUE;
+            const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
+                .Returns(downPassRoll);
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var survivalStats = new SurvivalStat[] {
+                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
+                    Type = STAT_TYPE,
+                    Rate = STAT_RATE,
+                    DownPassRoll = statDownPass
+                }
+            };
+
+            var survivalData = new HumanSurvivalData(_personScheme,
+                survivalStats,
+                survivalRandomSource);
+
+
+
+            // ACT
+            survivalData.Update();
+
+
+
+            // ASSERT
+            return survivalStats[0].Value;
         }
 
         /// <summary>

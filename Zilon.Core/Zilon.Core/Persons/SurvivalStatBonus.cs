@@ -9,6 +9,8 @@
 
         public SurvivalStatType SurvivalStatType { get; }
 
-        public float Bonus { get; set; }
+        public float ValueBonus { get; set; }
+
+        public float DownPassBonus { get; set; }
     }
 }

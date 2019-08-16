@@ -19,8 +19,11 @@ namespace Zilon.Core.Persons
         private const int MAX_SURVIVAL_STAT_KEYPOINT = -100;
         private const int STRONG_SURVIVAL_STAT_KEYPOINT = -50;
         private const int LESSER_SURVIVAL_STAT_KEYPOINT = 0;
+
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+
+        private readonly Dictionary<SurvivalStatType, int> _modifiedStatPass;
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
@@ -35,6 +38,8 @@ namespace Zilon.Core.Persons
                 CreateStat(SurvivalStatType.Satiety),
                 CreateStat(SurvivalStatType.Water)
             };
+
+            _modifiedStatPass = new Dictionary<SurvivalStatType, int>();
         }
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
@@ -107,10 +112,15 @@ namespace Zilon.Core.Persons
         {
             foreach (var stat in Stats)
             {
-                var roll = _randomSource.RollSurvival(stat);
-                var successRoll = GetSuccessRoll();
+                if (stat.Rate == 0)
+                {
+                    continue;
+                }
 
-                if (roll >= successRoll)
+                var roll = _randomSource.RollSurvival(stat);
+                var statDownRoll = GetStatDownRoll(stat);
+
+                if (roll < statDownRoll)
                 {
                     ChangeStatInner(stat, -stat.Rate);
                 }
@@ -200,16 +210,20 @@ namespace Zilon.Core.Persons
         }
 
 
-        private static int GetSuccessRoll()
+        private int GetStatDownRoll(SurvivalStat stat)
         {
-            // В будущем этот порог будет расчитываться, исходя из характеристик, перков и экипировки персонажа.
-            return 4;
+            return stat.DownPassRoll;
         }
 
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         public void ResetStats()
         {
             Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, _personScheme.Hp);
+
+            foreach (var stat in Stats)
+            {
+                stat.DownPassRoll = SurvivalStat.DEFAULT_DOWN_PASS_VALUE;
+            }
         }
     }
 }

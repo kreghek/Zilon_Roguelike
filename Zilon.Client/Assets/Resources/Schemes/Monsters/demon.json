@@ -29,7 +29,8 @@
     ]
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"demon"
   ],
   "BaseScore": 40,
   "Tags": [

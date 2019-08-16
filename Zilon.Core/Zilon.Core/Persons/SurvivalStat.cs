@@ -7,6 +7,8 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalStat: Stat
     {
+        public const int DEFAULT_DOWN_PASS_VALUE = 4;
+
         /// <summary>
         /// Конструирует объект статы выживания.
         /// </summary>
@@ -15,7 +17,7 @@ namespace Zilon.Core.Persons
         /// <param name="max"> Минимальное значение статы. </param>
         public SurvivalStat(int startValue, int min, int max): base(startValue, min, max)
         {
-
+            DownPassRoll = DEFAULT_DOWN_PASS_VALUE;
         }
 
         /// <summary>
@@ -28,6 +30,11 @@ namespace Zilon.Core.Persons
         /// Скорость снижения характеристики за ход.
         /// </summary>
         public int Rate { get; set; }
+
+        /// <summary>
+        /// Бросок кости, при проходит тест на снижение характеристики. То есть характеристикиа не снижается.
+        /// </summary>
+        public int DownPassRoll { get; set; }
 
         /// <summary> Набор ключевых точек характеристики. </summary>
         public SurvivalStatKeyPoint[] KeyPoints { get; set; }

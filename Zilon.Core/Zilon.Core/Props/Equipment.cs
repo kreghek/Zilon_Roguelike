@@ -50,6 +50,10 @@ namespace Zilon.Core.Props
             Durable = new Stat(EQUIPMENT_DURABLE, 0, EQUIPMENT_DURABLE);
         }
 
+        public Equipment(IPropScheme propScheme) : this(propScheme, new ITacticalActScheme[0])
+        {
+        }
+
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts,
             [NotNull] string name) :
@@ -69,7 +73,7 @@ namespace Zilon.Core.Props
             {
                 return $"{_name} {base.ToString()}";
             }
-            
+
             return base.ToString();
         }
     }
