@@ -43,7 +43,12 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            var actorNode = Actor.Node;
+            if (CurrentActor == null)
+            {
+                return false;
+            }
+
+            var actorNode = CurrentActor.Node;
             var map = SectorManager.CurrentSector.Map;
 
             var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
@@ -59,7 +64,7 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var actorNode = Actor.Node;
+            var actorNode = CurrentActor.Node;
             var map = SectorManager.CurrentSector.Map;
 
             var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
