@@ -6,7 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 
 using UnityEngine;
-
+using Zilon.Core.ProgressStoring;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -23,7 +23,8 @@ public class ScoreStorage
             CreateScoresTableIfNotExists(connection);
 
             var fragSum = scores.Frags.Sum(x => x.Value);
-            var summarySerialized = JsonConvert.SerializeObject(scores);
+            var scoreStorageData = ScoresStorageData.Create(scores);
+            var summarySerialized = JsonConvert.SerializeObject(scoreStorageData);
             var textSummary = TextSummaryHelper.CreateTextSummary(scores);
             using (var command = new SQLiteCommand(connection))
             {
