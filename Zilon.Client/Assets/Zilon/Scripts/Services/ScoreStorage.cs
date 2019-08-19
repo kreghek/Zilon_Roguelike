@@ -3,6 +3,8 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 
+using Newtonsoft.Json;
+
 using UnityEngine;
 
 using Zilon.Core.Scoring;
@@ -21,11 +23,12 @@ public class ScoreStorage
             CreateScoresTableIfNotExists(connection);
 
             var fragSum = scores.Frags.Sum(x => x.Value);
+            var summarySerialized = JsonConvert.SerializeObject(scores);
             var textSummary = TextSummaryHelper.CreateTextSummary(scores);
             using (var command = new SQLiteCommand(connection))
             {
-                command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
-                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, {scores.Turns}, {fragSum}, '{textSummary}')";
+                command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, Summary, TextSummary)
+                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
                 command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
             }
@@ -47,6 +50,7 @@ public class ScoreStorage
                         Scores INTEGER NULL,
                         Turns INTEGER NULL,
                         Frags INTEGER NULL,
+                        Summary TEXT NULL,
                         TextSummary TEXT NULL
                     );";
             command.CommandType = CommandType.Text;
