@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 160909242}
   - component: {fileID: 160909243}
   - component: {fileID: 160909244}
+  - component: {fileID: 160909245}
   m_Layer: 0
   m_Name: Sector
   m_TagString: Untagged
@@ -377,6 +378,18 @@ MonoBehaviour:
     type: 3}
   BlockSparksPrefab: {fileID: 5693981553541839669, guid: 8499d56e88c77d548b5fc26f815893c0,
     type: 3}
+--- !u!114 &160909245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160909240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c8bfba41f805645bee4f199e935adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &187834198
 GameObject:
   m_ObjectHideFlags: 0
