@@ -32,6 +32,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
         Container.Bind<ProgressStorageService>().AsSingle();
+        Container.Bind<ScoreStorage>().AsSingle();
 
 
         Container.Bind<HumanPlayer>().AsSingle();
