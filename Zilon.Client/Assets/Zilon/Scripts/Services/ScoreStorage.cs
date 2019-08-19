@@ -2,10 +2,10 @@
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 using UnityEngine;
 
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
 public class ScoreStorage
@@ -21,7 +21,7 @@ public class ScoreStorage
             CreateScoresTableIfNotExists(connection);
 
             var fragSum = scores.Frags.Sum(x => x.Value);
-            var textSummary = CreateTextSummary(scores);
+            var textSummary = TextSummaryHelper.CreateTextSummary(scores);
             using (var command = new SQLiteCommand(connection))
             {
                 command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
@@ -32,42 +32,6 @@ public class ScoreStorage
 
             connection.Close();
         }
-    }
-
-    private static string CreateTextSummary(Scores scores)
-    {
-        var summaryStringBuilder = new StringBuilder();
-
-        summaryStringBuilder.AppendLine("YOU (BOT) DIED");
-
-        summaryStringBuilder.AppendLine($"SCORES: {scores.BaseScores}");
-
-        summaryStringBuilder.AppendLine("=== You survived ===");
-        var minutesTotal = scores.Turns * 2;
-        var hoursTotal = minutesTotal / 60f;
-        var daysTotal = hoursTotal / 24f;
-        var days = (int)daysTotal;
-        var hours = (int)(hoursTotal - days * 24);
-
-        summaryStringBuilder.AppendLine($"{days} days {hours} hours");
-        summaryStringBuilder.AppendLine($"Turns: {scores.Turns}");
-
-        summaryStringBuilder.AppendLine("=== You visited ===");
-
-        summaryStringBuilder.AppendLine($"{scores.Places.Count} places");
-
-        foreach (var placeType in scores.PlaceTypes)
-        {
-            summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
-        }
-
-        summaryStringBuilder.AppendLine("=== You killed ===");
-        foreach (var frag in scores.Frags)
-        {
-            summaryStringBuilder.AppendLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
-        }
-
-        return summaryStringBuilder.ToString();
     }
 
     private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
