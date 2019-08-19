@@ -50,6 +50,9 @@ public class GlobeWorldVM : MonoBehaviour
 
     private async void Start()
     {
+        //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
+        _commandBlockerService.DropBlockers();
+
         if (_globeManager.Globe == null)
         {
             if (!_progressStorageService.LoadGlobe())

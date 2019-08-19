@@ -201,6 +201,9 @@ public class SectorVM : MonoBehaviour
         //}
 
         _gameLoop.Updated += GameLoop_Updated;
+
+        //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
+        _commandBlockerService.DropBlockers();
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
@@ -327,7 +330,7 @@ public class SectorVM : MonoBehaviour
 
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
             actorViewModel.GraphicRoot = actorGraphic;
-            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
             graphicController.Actor = monsterActor;
@@ -386,7 +389,7 @@ public class SectorVM : MonoBehaviour
 
         var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
         actorViewModel.GraphicRoot = actorGraphic;
-        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
         var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
         graphicController.Actor = actor;
@@ -506,6 +509,8 @@ public class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
+        _playerState.SelectedViewModel = null;
+        _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
         if (_humanPlayer.GlobeNode == null)
