@@ -1,8 +1,9 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-
+using Assets.Zilon.Scripts.Services;
 using Newtonsoft.Json;
 
 using UnityEngine;
@@ -36,6 +37,47 @@ public class ScoreStorage
 
             connection.Close();
         }
+    }
+
+    public ScoresRecord[] ReadScores()
+    {
+        var recordList = new List<ScoresRecord>();
+
+        var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
+        var connectionString = $"URI=file:{pathToDb}";
+        using (var connection = new SQLiteConnection(connectionString))
+        {
+            connection.Open();
+
+            CreateScoresTableIfNotExists(connection);
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT Name, Scores, TextSummary FROM [Scores]";
+                command.CommandType = CommandType.Text;
+                using (var reader = command.ExecuteReader())
+                {
+                    var number = 1;
+
+                    while (reader.Read())
+                    {
+                        var record = new ScoresRecord
+                        {
+                            Number = number,
+                            Name = reader.GetString(0),
+                            Scores = reader.GetInt32(1)
+                        };
+
+                        recordList.Add(record);
+
+                        number++;
+                    }
+                }
+            }
+            connection.Close();
+        }
+
+        return recordList.ToArray();
     }
 
     private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
