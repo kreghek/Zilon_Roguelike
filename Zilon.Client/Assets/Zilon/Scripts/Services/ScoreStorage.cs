@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System.Data;
+﻿using System.Data.SQLite;
 using System.IO;
-using System.Data.SQLite;
+
+using UnityEngine;
 
 public class ScoreStorage : MonoBehaviour
 {
     void Start()
     {
-        Debug.Log(Application.persistentDataPath);
-        var connectionString = "URI=file:" + Application.persistentDataPath + "/mydb.db";
+        var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
+        var connectionString = $"URI=file:{pathToDb}";
         var connection = new SQLiteConnection(connectionString);
         connection.Open();
         var command = connection.CreateCommand();
