@@ -43,12 +43,22 @@ namespace Zilon.Core.MassSectorGenerator
 
                     // Проверка сундуков.
                     // Сундуки не должны генерироваться на узлы, которые являются препятствием.
+                    // Сундуки не должны генерироваться на узлы с выходом.
                     var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
                     var allContainers = containerManager.Items;
                     foreach (var container in allContainers)
                     {
+                        // Проверяем, что сундук не стоит на препятствии.
                         var hex = (HexNode)container.Node;
                         if (hex.IsObstacle)
+                        {
+                            throw new System.Exception();
+                        }
+
+                        // Проверяем, что сундук не на клетке с выходом.
+                        var transitionNodes = sector.Map.Transitions.Keys;
+                        var chestOnTransitionNode = transitionNodes.Contains(container.Node);
+                        if (chestOnTransitionNode)
                         {
                             throw new System.Exception();
                         }
