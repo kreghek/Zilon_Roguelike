@@ -41,6 +41,8 @@ namespace Zilon.Core.MassSectorGenerator
 
                     // Проверка
 
+                    // Проверка сундуков.
+                    // Сундуки не должны генерироваться на узлы, которые являются препятствием.
                     var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
                     var allContainers = containerManager.Items;
                     foreach (var container in allContainers)
@@ -52,6 +54,9 @@ namespace Zilon.Core.MassSectorGenerator
                         }
                     }
 
+                    // Проверка монстров.
+                    // Монстры не должны генерироваться на узлах с препятствием.
+                    // Монстры не должны генерироваться на узлах с сундуками.
                     var actorManager = scopeContainer.GetInstance<IActorManager>();
                     var allMonsters = actorManager.Items;
                     var containerNodes = allContainers.Select(x => x.Node);
