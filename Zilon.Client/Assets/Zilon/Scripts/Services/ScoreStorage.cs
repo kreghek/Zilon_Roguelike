@@ -56,7 +56,7 @@ namespace Assets.Zilon.Scripts.Services
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT Name, Scores, TextSummary FROM [Scores]";
+                    command.CommandText = "SELECT Name, Scores, TextSummary FROM [Scores] ORDER BY Scores DESC";
                     command.CommandType = CommandType.Text;
                     using (var reader = command.ExecuteReader())
                     {
