@@ -38,6 +38,7 @@ namespace Zilon.Core.MassSectorGenerator
                 {
                     var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
                     var sector = await sectorFactory.GenerateDungeonAsync(sectorLevel);
+                    sector.Scheme = sectorScheme;
 
                     // Проверка
 
@@ -52,7 +53,7 @@ namespace Zilon.Core.MassSectorGenerator
                         var hex = (HexNode)container.Node;
                         if (hex.IsObstacle)
                         {
-                            throw new System.Exception();
+                            throw new Exception();
                         }
 
                         // Проверяем, что сундук не на клетке с выходом.
@@ -60,7 +61,7 @@ namespace Zilon.Core.MassSectorGenerator
                         var chestOnTransitionNode = transitionNodes.Contains(container.Node);
                         if (chestOnTransitionNode)
                         {
-                            throw new System.Exception();
+                            throw new Exception();
                         }
                     }
 
@@ -75,13 +76,34 @@ namespace Zilon.Core.MassSectorGenerator
                         var hex = (HexNode)actor.Node;
                         if (hex.IsObstacle)
                         {
-                            throw new System.Exception();
+                            throw new Exception();
                         }
 
                         var monsterIsOnContainer = containerNodes.Contains(actor.Node);
                         if (monsterIsOnContainer)
                         {
-                            throw new System.Exception();
+                            throw new Exception();
+                        }
+                    }
+
+                    // Проверка переходов.
+                    // Все переходы на уровне должны либо вести на глобальную карту,
+                    // либо на корректный уровень сектора.
+                    var transitions = sector.Map.Transitions.Values;
+                    foreach (var transition in transitions)
+                    {
+                        var targetSectorSid = transition.SectorSid;
+                        if (targetSectorSid == null)
+                        {
+                            // Это значит, что переход на глобальную карту.
+                            // Нормальная ситуация, проверяем следующий переход.
+                            continue;
+                        }
+
+                        var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
+                        if (sectorLevelBySid == null)
+                        {
+                            throw new Exception($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
                         }
                     }
                 }
