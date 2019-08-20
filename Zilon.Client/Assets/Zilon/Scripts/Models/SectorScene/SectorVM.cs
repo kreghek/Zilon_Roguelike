@@ -107,6 +107,8 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
+    [Inject] private readonly ScoreStorage _scoreStorage;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -663,6 +665,9 @@ public class SectorVM : MonoBehaviour
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
+        var scores = _scoreManager.Scores;
+        _scoreStorage.AppendScores("test", scores);
+
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
 
