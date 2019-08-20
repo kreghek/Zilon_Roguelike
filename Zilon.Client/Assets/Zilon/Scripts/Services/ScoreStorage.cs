@@ -83,6 +83,57 @@ namespace Assets.Zilon.Scripts.Services
             return recordList.ToArray();
         }
 
+        public AggregateScores ReadAggregateScores()
+        {
+            // По умолчанию все значения пустые.
+            // Предположительно, это будет использовать в самом начале игры, когда нет записей.
+            var aggregateScores = new AggregateScores();
+
+            var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
+            var connectionString = $"URI=file:{pathToDb}";
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                CreateScoresTableIfNotExists(connection);
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = @"SELECT
+                            MIN([Scores]) AS MinScores
+                            ,ROUND(AVG([Scores]), 1) AS AvgScores
+                            ,MAX([Scores]) AS MaxScores
+                            ,MIN([Turns]) AS MinTurns
+                            ,ROUND(AVG([Turns]), 1) AS AvgTurns
+                            ,MAX([Turns]) AS MaxTurns
+                            ,MIN([Frags]) AS MinFrags
+                            ,ROUND(AVG([Frags]), 1) AS AvgFrags
+                            ,MAX([Frags]) AS MaxFrags
+                        FROM [Scores]
+                        GROUP BY [Name] ,[Preffix] ,[Mode]";
+                    command.CommandType = CommandType.Text;
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            aggregateScores = new AggregateScores
+                            {
+                                AvgScores = reader.GetFloat(1),
+                                MaxScores = reader.GetFloat(2),
+                                AvgTurns = reader.GetFloat(4),
+                                MaxTurns = reader.GetFloat(5),
+                                AvgFrags = reader.GetFloat(7),
+                                MaxFrags = reader.GetFloat(8)
+                            };
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return aggregateScores;
+        }
+
         private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
         {
             using (var command = new SQLiteCommand(connection))
