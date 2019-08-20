@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Zilon.Scripts.Services;
+
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Zenject;
@@ -9,13 +11,11 @@ public class ScoresHandler : MonoBehaviour
     public Transform ScoreRecordParent;
 
     [Inject]
-    private ScoreStorage _scoreStorage;
+    private readonly ScoreStorage _scoreStorage;
 
     public void Awake()
     {
         var scoreRecords = _scoreStorage.ReadScores();
-
-        Debug.Log($"Records {scoreRecords.Length}");
 
         foreach (var record in scoreRecords)
         {
