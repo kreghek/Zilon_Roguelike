@@ -164,6 +164,7 @@
     <Compile Include="Tactics\TacticalActUsageServiceTests.cs" />
     <Compile Include="Tactics\TransitionDetectionTests.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelperTests.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerCrysisTests.cs" />
     <Compile Include="WorldGeneration\LocalityTests.cs" />
     <Compile Include="WorldGeneration\WorldGeneratorTests.cs" />
     <Compile Include="World\GlobeHelperTestCaseSource.cs" />

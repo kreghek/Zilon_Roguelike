@@ -9,9 +9,18 @@ namespace Zilon.Core.WorldGeneration
     {
         public LocalityStats()
         {
-            Resources = new Dictionary<LocalityResource, int>();
+            Resources = new Dictionary<LocalityResource, int> {
+                { LocalityResource.Food, 0 },
+                { LocalityResource.Energy, 0 },
+                { LocalityResource.Goods, 0 },
+                { LocalityResource.LivingPlaces, 0 },
+                { LocalityResource.Manufacture, 0 }
+            };
         }
 
+        /// <summary>
+        /// Текущие ресурсы города.
+        /// </summary>
         public Dictionary<LocalityResource, int> Resources { get; }
 
         ///// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.WorldGeneration.LocalityHazards;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -14,6 +15,7 @@ namespace Zilon.Core.WorldGeneration
             Regions = new List<LocalityRegion>();
             Stats = new LocalityStats();
             CurrentPopulation = new List<Population>();
+            Hazards = new List<ICrysis>();
         }
 
         public string Name { get; set; }
@@ -45,6 +47,8 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public LocalityStats Stats { get; private set; }
 
+        public List<ICrysis> Hazards { get; }
+
         public override string ToString()
         {
             return $"{Name} [{Owner}] ({Branches.First().Key})";
@@ -56,7 +60,11 @@ namespace Zilon.Core.WorldGeneration
         public void Update()
         {
             UpdatePopulation();
+            UpdateRegions();
+        }
 
+        private void UpdateRegions()
+        {
             foreach (var region in Regions)
             {
                 // Для жилых мест отдельная логика.

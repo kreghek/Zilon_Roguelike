@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -42,6 +43,11 @@ namespace Zilon.Core.CommonServices.Dices
         public static int RollD3(this IDice dice)
         {
             return dice.Roll(6);
+        }
+
+        public static int RollArrayIndex(this IDice dice, IList list)
+        {
+            return dice.Roll(0, list.Count - 1);
         }
     }
 }

@@ -499,6 +499,11 @@
     <Compile Include="WorldGeneration\LocalityEventCards\PlagueLocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\FamineLocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\PopulationGrowthLocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerCrysis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerMonitor.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrysis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrysisMonitor.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrysisRandomSource.cs" />
     <Compile Include="WorldGeneration\LocalityHelper.cs" />
     <Compile Include="WorldGeneration\LocalityRegion.cs" />
     <Compile Include="WorldGeneration\LocalityResource.cs" />
