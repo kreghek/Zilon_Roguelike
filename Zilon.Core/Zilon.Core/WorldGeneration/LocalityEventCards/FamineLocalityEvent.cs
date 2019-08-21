@@ -2,6 +2,9 @@
 
 namespace Zilon.Core.WorldGeneration.LocalityEventCards
 {
+    /// <summary>
+    /// В городе начинается мор из-за какой-то болезни.
+    /// </summary>
     public sealed class FamineLocalityEvent : ILocalityEventCard
     {
         public bool CanUse(Locality locality, Globe globe)

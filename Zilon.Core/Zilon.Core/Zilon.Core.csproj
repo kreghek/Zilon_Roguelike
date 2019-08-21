@@ -492,6 +492,7 @@
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="WorldGeneration\ILocalityEventCard.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\LocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\NewActivistEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\AccidentLocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\PlagueLocalityEvent.cs" />
