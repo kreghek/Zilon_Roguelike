@@ -9,6 +9,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
+using Zilon.Core.WorldGeneration.LocalityEventCards;
 using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
@@ -69,10 +70,11 @@ namespace Zilon.Core.WorldGeneration
             var agentsClock = new Stopwatch();
             agentsClock.Start();
 
-            var cardQueue = CreateAgentCardQueue();
+            var agentCardQueue = CreateAgentCardQueue();
+            var localityEventCardQueue = CreateLocalityEventCardQueue();
 
             // обработка итераций
-            ProcessIterations(globe, cardQueue);
+            ProcessIterations(globe, agentCardQueue, localityEventCardQueue);
 
 
             globe.StartProvince = GetStartProvinceCoords(globe);
@@ -85,6 +87,17 @@ namespace Zilon.Core.WorldGeneration
             var globeHistory = new GlobeGenerationHistory();
             var result = new GlobeGenerationResult(globe, globeHistory);
             return Task.FromResult(result);
+        }
+
+        private Queue<ILocalityEventCard> CreateLocalityEventCardQueue()
+        {
+            return new Queue<ILocalityEventCard>(new ILocalityEventCard[] {
+                new PopulationGrowthLocalityEvent(),
+                new AccidentLocalityEvent(),
+                new FamineLocalityEvent(),
+                new NewActivistEvent(),
+                new PlagueLocalityEvent(),
+            });
         }
 
         private TerrainCell GetStartProvinceCoords(Globe globe)
@@ -398,29 +411,62 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void ProcessIterations(Globe globe, Queue<IAgentCard> cardQueue)
+        private void ProcessIterations(Globe globe, Queue<IAgentCard> agentCardQueue, Queue<ILocalityEventCard> localityEventCardQueue)
         {
             for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
+                // События городов
+                ProcessLocalitiesIterations(globe, localityEventCardQueue);
 
-                foreach (var agent in globe.Agents.ToArray())
-                {
-                    var useCardRoll = _dice.Roll2D6();
-                    if (useCardRoll > 7)
-                    {
-                        continue;
-                    }
-
-                    var card = cardQueue.Dequeue();
-
-                    if (card.CanUse(agent, globe))
-                    {
-                        card.Use(agent, globe, _dice);
-                    }
-
-                    cardQueue.Enqueue(card);
-                }
+                // Обработка агентов мира
+                ProcessAgentIterations(globe, agentCardQueue);
             }
+        }
+
+        private void ProcessLocalitiesIterations(Globe globe, Queue<ILocalityEventCard> localityEventCardQueue)
+        {
+            foreach (var locality in globe.Localities.ToArray())
+            {
+                ProcessLocality(locality, globe, localityEventCardQueue);
+            }
+        }
+
+        private void ProcessLocality(Locality locality, Globe globe, Queue<ILocalityEventCard> localityEventCardQueue)
+        {
+            var card = localityEventCardQueue.Dequeue();
+
+            if (card.CanUse(locality, globe))
+            {
+                card.Use(locality, globe, _dice);
+            }
+
+            localityEventCardQueue.Enqueue(card);
+        }
+
+        private void ProcessAgentIterations(Globe globe, Queue<IAgentCard> cardQueue)
+        {
+            foreach (var agent in globe.Agents.ToArray())
+            {
+                var useCardRoll = _dice.Roll2D6();
+                if (useCardRoll > 7)
+                {
+                    continue;
+                }
+
+                ProcessAgent(globe, cardQueue, agent);
+            }
+        }
+
+        private void ProcessAgent(Globe globe, Queue<IAgentCard> cardQueue, Agent agent)
+        {
+            var card = cardQueue.Dequeue();
+
+            if (card.CanUse(agent, globe))
+            {
+                card.Use(agent, globe, _dice);
+            }
+
+            cardQueue.Enqueue(card);
         }
 
         private static Queue<IAgentCard> CreateAgentCardQueue()
