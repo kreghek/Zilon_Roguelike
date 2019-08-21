@@ -427,12 +427,6 @@ namespace Zilon.Core.WorldGeneration
         {
             foreach (var locality in globe.Localities.ToArray())
             {
-                var useCardRoll = _dice.Roll2D6();
-                if (useCardRoll > 7)
-                {
-                    continue;
-                }
-
                 ProcessLocality(locality, globe, localityEventCardQueue);
             }
         }
