@@ -512,33 +512,34 @@ namespace Zilon.Core.WorldGeneration
 
         private void CreateStartLocalities(Globe globe)
         {
-            for (var i = 0; i < START_ITERATION_REALMS; i++)
-            {
-                var randomX = _dice.Roll(0, WORLD_SIZE - 1);
-                var randomY = _dice.Roll(0, WORLD_SIZE - 1);
+            throw new NotImplementedException();
+            //for (var i = 0; i < START_ITERATION_REALMS; i++)
+            //{
+            //    var randomX = _dice.Roll(0, WORLD_SIZE - 1);
+            //    var randomY = _dice.Roll(0, WORLD_SIZE - 1);
 
-                var localityName = globe.GetLocalityName(_dice);
+            //    var localityName = globe.GetLocalityName(_dice);
 
-                var locality = new Locality()
-                {
-                    Name = localityName,
-                    Cell = globe.Terrain[randomX][randomY],
-                    Owner = globe.Realms[i],
-                    Population = 3
-                };
+            //    var locality = new Locality()
+            //    {
+            //        Name = localityName,
+            //        Cell = globe.Terrain[randomX][randomY],
+            //        Owner = globe.Realms[i],
+            //        Population = 3
+            //    };
 
-                var rolledBranchIndex = _dice.Roll(0, 7);
-                locality.Branches = new Dictionary<BranchType, int>
-                        {
-                            { (BranchType)rolledBranchIndex, 1 }
-                        };
+            //    var rolledBranchIndex = _dice.Roll(0, 7);
+            //    locality.Branches = new Dictionary<BranchType, int>
+            //            {
+            //                { (BranchType)rolledBranchIndex, 1 }
+            //            };
 
-                globe.Localities.Add(locality);
+            //    globe.Localities.Add(locality);
 
-                globe.LocalitiesCells[locality.Cell] = locality;
+            //    globe.LocalitiesCells[locality.Cell] = locality;
 
-                globe.ScanResult.Free.Remove(locality.Cell);
-            }
+            //    globe.ScanResult.Free.Remove(locality.Cell);
+            //}
         }
 
         private Task CreateTerrain(Globe globe)

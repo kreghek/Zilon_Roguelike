@@ -11,7 +11,7 @@ namespace Zilon.Core.WorldGeneration.LocalityEventCards
 
         public void Use(Locality locality, Globe globe, IDice dice)
         {
-            locality.Population++;
+            //locality.Population++;
 
             // Возможно, следует добавить вероятность появления нового деятеля.
         }

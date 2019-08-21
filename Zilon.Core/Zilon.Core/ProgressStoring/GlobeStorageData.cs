@@ -45,7 +45,7 @@ namespace Zilon.Core.WorldGeneration
                     Name = locality.Name,
                     Coords = locality.Cell.Coords,
                     RealmId = realmDict[locality.Owner].Id,
-                    Population = locality.Population,
+                    //Population = locality.Population,
                     Branches = locality.Branches.Select(x => new LocalityBranchStorageData { Type = x.Key, Value = x.Value }).ToArray()
                 });
 
@@ -150,7 +150,7 @@ namespace Zilon.Core.WorldGeneration
                     Name = storedLocality.Name,
                     Cell = localityCell,
                     Owner = realmsDict[storedLocality.RealmId],
-                    Population = storedLocality.Population,
+                    //Population = storedLocality.Population,
                     Branches = storedLocality.Branches.ToDictionary(x => x.Type, x => x.Value)
                 };
 

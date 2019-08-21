@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.WorldGeneration.LocalityStructures
 {
@@ -8,6 +9,19 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
     /// </summary>
     public class BasicLocalityStructure : ILocalityStructure
     {
+        public BasicLocalityStructure(
+            string name,
+            Dictionary<PopulationSpecializations, int> requiredPopulation,
+            Dictionary<LocalityResource, int> requiredResources,
+            Dictionary<LocalityResource, int> productResources
+            )
+        {
+            RequiredPopulation = requiredPopulation ?? throw new ArgumentNullException(nameof(requiredPopulation));
+            RequiredResources = requiredResources ?? throw new ArgumentNullException(nameof(requiredResources));
+            ProductResources = productResources ?? throw new ArgumentNullException(nameof(productResources));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
         /// <summary>
         /// Требования структуры к работникам.
         /// </summary>
@@ -31,6 +45,6 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
         /// <summary>
         /// Специальное наименование.
         /// </summary>
-        public string SpeciaName { get; }
+        public string SpeciaName { get; set; }
     }
 }

@@ -7,6 +7,11 @@ namespace Zilon.Core.WorldGeneration
     /// </summary>
     public sealed class LocalityStats
     {
+        public LocalityStats()
+        {
+            Resources = new Dictionary<LocalityResource, int>();
+        }
+
         public Dictionary<LocalityResource, int> Resources { get; }
 
         ///// <summary>

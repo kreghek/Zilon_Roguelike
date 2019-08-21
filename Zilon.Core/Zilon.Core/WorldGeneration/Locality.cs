@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Zilon.Core.WorldGeneration
@@ -54,6 +55,8 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public void Update()
         {
+            UpdatePopulation();
+
             foreach (var region in Regions)
             {
                 // Для жилых мест отдельная логика.
@@ -66,6 +69,15 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
+        private void UpdatePopulation()
+        {
+            // Изымаем столько товаров и еды, сколько населения в городе.
+            var populationCount = CurrentPopulation.Count();
+
+            RemoveResource(LocalityResource.Food, populationCount);
+            RemoveResource(LocalityResource.Goods, populationCount);
+        }
+
         private static void ProduceResources(List<ILocalityStructure> structures, LocalityStats stats)
         {
             // Все структуры, которые получили обеспечение, производят ресурс
@@ -73,10 +85,12 @@ namespace Zilon.Core.WorldGeneration
             {
                 foreach (var productResource in structure.ProductResources)
                 {
-                    if (stats.Resources.ContainsKey(productResource.Key))
+                    if (!stats.Resources.ContainsKey(productResource.Key))
                     {
-                        stats.Resources[productResource.Key] += productResource.Value;
+                        stats.Resources[productResource.Key] = 0;
                     }
+
+                    stats.Resources[productResource.Key] += productResource.Value;
                 }
             }
         }
@@ -107,6 +121,16 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return suppliedStructures;
+        }
+
+        private void RemoveResource(LocalityResource resource, int count)
+        {
+            if (!Stats.Resources.ContainsKey(resource))
+            {
+                Stats.Resources[resource] = 0;
+            }
+
+            Stats.Resources[resource] -= count;
         }
     }
 }
