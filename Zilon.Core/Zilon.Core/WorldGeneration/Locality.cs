@@ -15,7 +15,7 @@ namespace Zilon.Core.WorldGeneration
             Regions = new List<LocalityRegion>();
             Stats = new LocalityStats();
             CurrentPopulation = new List<Population>();
-            Hazards = new List<ICrysis>();
+            Crises = new List<ICrysis>();
         }
 
         public string Name { get; set; }
@@ -47,7 +47,7 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public LocalityStats Stats { get; private set; }
 
-        public List<ICrysis> Hazards { get; }
+        public List<ICrysis> Crises { get; }
 
         public override string ToString()
         {

@@ -1,4 +1,4 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
@@ -10,6 +10,8 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
         {
             _crysisRandomSource = crysisRandomSource;
         }
+
+        public Type CrysisType => typeof(HungerCrysis);
 
         public ICrysis Analyze(Locality locality)
         {

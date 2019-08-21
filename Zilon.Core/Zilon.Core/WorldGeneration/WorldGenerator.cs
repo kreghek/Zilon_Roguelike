@@ -10,6 +10,8 @@ using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
 using Zilon.Core.WorldGeneration.LocalityEventCards;
+using Zilon.Core.WorldGeneration.LocalityHazards;
+using Zilon.Core.WorldGeneration.LocalityStructures;
 using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
@@ -30,6 +32,7 @@ namespace Zilon.Core.WorldGeneration
 
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
+        private readonly ICrysisRandomSource _crysisRandomSource;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -42,6 +45,8 @@ namespace Zilon.Core.WorldGeneration
         {
             _dice = dice;
             _schemeService = schemeService;
+
+            _crysisRandomSource = new CrysisRandomSource(dice);
         }
 
         /// <summary>
@@ -433,14 +438,42 @@ namespace Zilon.Core.WorldGeneration
 
         private void ProcessLocality(Locality locality, Globe globe, Queue<ILocalityEventCard> localityEventCardQueue)
         {
-            var card = localityEventCardQueue.Dequeue();
+            locality.Update();
 
-            if (card.CanUse(locality, globe))
+            var crysisMonitors = new ICrysisMonitor[]
+                { new HungerMonitor(_crysisRandomSource) };
+
+            CrisisMonitoring(locality, crysisMonitors);
+
+            ApplyCrises(locality);
+        }
+
+        private static void ApplyCrises(Locality locality)
+        {
+            foreach (var crisis in locality.Crises)
             {
-                card.Use(locality, globe, _dice);
+                crisis.Update(locality);
             }
+        }
 
-            localityEventCardQueue.Enqueue(card);
+        private static void CrisisMonitoring(Locality locality, ICrysisMonitor[] crysisMonitors)
+        {
+            var currentCrisesTypes = locality.Crises.Select(x => x.GetType());
+
+            foreach (var monitor in crysisMonitors)
+            {
+                if (currentCrisesTypes.Contains(monitor.CrysisType))
+                {
+                    // Один и тот же кризис у города не может наступить дважды.
+                    continue;
+                }
+
+                var crysis = monitor.Analyze(locality);
+                if (crysis != null)
+                {
+                    locality.Crises.Add(crysis);
+                }
+            }
         }
 
         private void ProcessAgentIterations(Globe globe, Queue<IAgentCard> cardQueue)
@@ -459,14 +492,14 @@ namespace Zilon.Core.WorldGeneration
 
         private void ProcessAgent(Globe globe, Queue<IAgentCard> cardQueue, Agent agent)
         {
-            var card = cardQueue.Dequeue();
+            //var card = cardQueue.Dequeue();
 
-            if (card.CanUse(agent, globe))
-            {
-                card.Use(agent, globe, _dice);
-            }
+            //if (card.CanUse(agent, globe))
+            //{
+            //    card.Use(agent, globe, _dice);
+            //}
 
-            cardQueue.Enqueue(card);
+            //cardQueue.Enqueue(card);
         }
 
         private static Queue<IAgentCard> CreateAgentCardQueue()
@@ -512,34 +545,69 @@ namespace Zilon.Core.WorldGeneration
 
         private void CreateStartLocalities(Globe globe)
         {
-            throw new NotImplementedException();
-            //for (var i = 0; i < START_ITERATION_REALMS; i++)
-            //{
-            //    var randomX = _dice.Roll(0, WORLD_SIZE - 1);
-            //    var randomY = _dice.Roll(0, WORLD_SIZE - 1);
+            for (var i = 0; i < START_ITERATION_REALMS; i++)
+            {
+                var randomX = _dice.Roll(0, WORLD_SIZE - 1);
+                var randomY = _dice.Roll(0, WORLD_SIZE - 1);
 
-            //    var localityName = globe.GetLocalityName(_dice);
+                var localityName = globe.GetLocalityName(_dice);
 
-            //    var locality = new Locality()
-            //    {
-            //        Name = localityName,
-            //        Cell = globe.Terrain[randomX][randomY],
-            //        Owner = globe.Realms[i],
-            //        Population = 3
-            //    };
+                // ====================
 
-            //    var rolledBranchIndex = _dice.Roll(0, 7);
-            //    locality.Branches = new Dictionary<BranchType, int>
-            //            {
-            //                { (BranchType)rolledBranchIndex, 1 }
-            //            };
 
-            //    globe.Localities.Add(locality);
+                var locality = new Locality()
+                {
+                    Name = localityName,
+                    Cell = globe.Terrain[randomX][randomY],
+                    Owner = globe.Realms[i]
+                };
 
-            //    globe.LocalitiesCells[locality.Cell] = locality;
+                var settlerCamp = new BasicLocalityStructure(name: "Settler Camp",
+                    requiredPopulation: new Dictionary<PopulationSpecializations, int> {
+                    { PopulationSpecializations.Workers, 1 },
+                    { PopulationSpecializations.Peasants, 1 },
+                    { PopulationSpecializations.Servants, 1 }
+                    },
+                    requiredResources: new Dictionary<LocalityResource, int> {
+                    { LocalityResource.Energy, 1 }
+                    },
+                    productResources: new Dictionary<LocalityResource, int> {
+                    { LocalityResource.Energy, 1 },
+                    { LocalityResource.Food, 3 },
+                    { LocalityResource.Goods, 3 },
+                    { LocalityResource.LivingPlaces, 3 },
+                    { LocalityResource.Manufacture, 1 },
+                    });
 
-            //    globe.ScanResult.Free.Remove(locality.Cell);
-            //}
+                var region = new LocalityRegion();
+                region.Structures.Add(settlerCamp);
+
+                locality.Regions.Add(region);
+
+                locality.CurrentPopulation.AddRange(new Population[] {
+                    new Population{Specialization = PopulationSpecializations.Peasants },
+                    new Population{Specialization = PopulationSpecializations.Workers },
+                    new Population{Specialization = PopulationSpecializations.Servants },
+                });
+
+                locality.Stats.Resources[LocalityResource.Energy] = 1;
+                locality.Stats.Resources[LocalityResource.Food] = 3;
+                locality.Stats.Resources[LocalityResource.Goods] = 3;
+                locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
+
+
+                var rolledBranchIndex = _dice.Roll(0, 7);
+                locality.Branches = new Dictionary<BranchType, int>
+                        {
+                            { (BranchType)rolledBranchIndex, 1 }
+                        };
+
+                globe.Localities.Add(locality);
+
+                globe.LocalitiesCells[locality.Cell] = locality;
+
+                globe.ScanResult.Free.Remove(locality.Cell);
+            }
         }
 
         private Task CreateTerrain(Globe globe)
