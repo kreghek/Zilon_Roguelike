@@ -23,8 +23,6 @@ namespace Zilon.Core.Persons
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
-        private readonly Dictionary<SurvivalStatType, int> _modifiedStatPass;
-
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
         {
@@ -38,8 +36,6 @@ namespace Zilon.Core.Persons
                 CreateStat(SurvivalStatType.Satiety),
                 CreateStat(SurvivalStatType.Water)
             };
-
-            _modifiedStatPass = new Dictionary<SurvivalStatType, int>();
         }
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
