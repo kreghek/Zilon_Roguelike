@@ -476,7 +476,7 @@
     <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
     <Compile Include="WorldGeneration\AgentCards\CreateLocalityStructure.cs" />
     <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
-    <Compile Include="WorldGeneration\AgentCards\Hunt.cs" />
+    <Compile Include="WorldGeneration\AgentCards\FindResource.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
@@ -512,6 +512,7 @@
     <Compile Include="WorldGeneration\LocalityRegion.cs" />
     <Compile Include="WorldGeneration\LocalityResource.cs" />
     <Compile Include="WorldGeneration\LocalityStats.cs" />
+    <Compile Include="WorldGeneration\LocalityStructureRepository.cs" />
     <Compile Include="WorldGeneration\LocalityStructures\BasicLocalityStructure.cs" />
     <Compile Include="WorldGeneration\LocalityStructures\LivingSector.cs" />
     <Compile Include="WorldGeneration\LocalityStructures\SettlerCamp.cs" />

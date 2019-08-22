@@ -512,7 +512,7 @@ namespace Zilon.Core.WorldGeneration
                 //new AgentSupport(),
                 //new Disciple(),
                 //new TakeLocation()
-                new Hunt()
+                new FindResource()
             });
         }
 
