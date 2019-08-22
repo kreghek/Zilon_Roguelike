@@ -77,5 +77,25 @@ namespace Zilon.Core.WorldGeneration
         ///// Запас товаров народного потребления, которые город может хранить.
         ///// </summary>
         //public int GoodsLimit { get; set; }
+
+        public void AddResource(LocalityResource resource, int count)
+        {
+            Resources[resource] += count;
+        }
+
+        public int GetResource(LocalityResource resource)
+        {
+            return Resources[resource];
+        }
+
+        public void RemoveResource(LocalityResource resource, int count)
+        {
+            if (!Resources.ContainsKey(resource))
+            {
+                Resources[resource] = 0;
+            }
+
+            Resources[resource] -= count;
+        }
     }
 }

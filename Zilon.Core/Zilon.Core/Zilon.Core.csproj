@@ -470,11 +470,13 @@
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
+    <Compile Include="WorldGeneration\AgentCards\AgentLocalityHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentOpposition.cs" />
     <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
     <Compile Include="WorldGeneration\AgentCards\CreateLocalityStructure.cs" />
     <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
+    <Compile Include="WorldGeneration\AgentCards\Hunt.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />

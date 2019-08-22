@@ -492,26 +492,27 @@ namespace Zilon.Core.WorldGeneration
 
         private void ProcessAgent(Globe globe, Queue<IAgentCard> cardQueue, Agent agent)
         {
-            //var card = cardQueue.Dequeue();
+            var card = cardQueue.Dequeue();
 
-            //if (card.CanUse(agent, globe))
-            //{
-            //    card.Use(agent, globe, _dice);
-            //}
+            if (card.CanUse(agent, globe))
+            {
+                card.Use(agent, globe, _dice);
+            }
 
-            //cardQueue.Enqueue(card);
+            cardQueue.Enqueue(card);
         }
 
         private static Queue<IAgentCard> CreateAgentCardQueue()
         {
             return new Queue<IAgentCard>(new IAgentCard[] {
-                new ChangeLocality(),
-                new CreateLocality(),
-                new IncreasePopulation(),
-                new AgentOpposition(),
-                new AgentSupport(),
-                new Disciple(),
-                new TakeLocation()
+                //new ChangeLocality(),
+                //new CreateLocality(),
+                //new IncreasePopulation(),
+                //new AgentOpposition(),
+                //new AgentSupport(),
+                //new Disciple(),
+                //new TakeLocation()
+                new Hunt()
             });
         }
 

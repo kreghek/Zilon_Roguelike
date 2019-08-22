@@ -68,10 +68,10 @@ namespace Zilon.Core.WorldGeneration
             foreach (var region in Regions)
             {
                 // Проверяем, хватает ли денег для этого района.
-                var money = GetResource(LocalityResource.Money);
+                var money = Stats.GetResource(LocalityResource.Money);
                 if (money >= region.MaintenanceCost)
                 {
-                    RemoveResource(LocalityResource.Money, region.MaintenanceCost);
+                    Stats.RemoveResource(LocalityResource.Money, region.MaintenanceCost);
                 }
                 else
                 {
@@ -97,11 +97,11 @@ namespace Zilon.Core.WorldGeneration
 
         private void RealizeManufacture()
         {
-            var manufacture = GetResource(LocalityResource.Manufacture);
+            var manufacture = Stats.GetResource(LocalityResource.Manufacture);
             if (manufacture > 0)
             {
-                RemoveResource(LocalityResource.Manufacture, manufacture);
-                AddResource(LocalityResource.Money, manufacture);
+                Stats.RemoveResource(LocalityResource.Manufacture, manufacture);
+                Stats.AddResource(LocalityResource.Money, manufacture);
             }
         }
 
@@ -110,8 +110,8 @@ namespace Zilon.Core.WorldGeneration
             // Изымаем столько товаров и еды, сколько населения в городе.
             var populationCount = CurrentPopulation.Count();
 
-            RemoveResource(LocalityResource.Food, populationCount);
-            RemoveResource(LocalityResource.Goods, populationCount);
+            Stats.RemoveResource(LocalityResource.Food, populationCount);
+            Stats.RemoveResource(LocalityResource.Goods, populationCount);
         }
 
         private static void ProduceResources(List<ILocalityStructure> structures, LocalityStats stats)
@@ -141,10 +141,10 @@ namespace Zilon.Core.WorldGeneration
             foreach (var structure in structures)
             {
                 // Проверяем, хватает ли денег для содержанния этой структуры.
-                var money = GetResource(LocalityResource.Money);
+                var money = Stats.GetResource(LocalityResource.Money);
                 if (money >= structure.MaintenanceCost)
                 {
-                    RemoveResource(LocalityResource.Money, structure.MaintenanceCost);
+                    Stats.RemoveResource(LocalityResource.Money, structure.MaintenanceCost);
                 }
                 else
                 {
@@ -170,26 +170,6 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return suppliedStructures;
-        }
-
-        private void AddResource(LocalityResource resource, int count)
-        {
-            Stats.Resources[resource] += count;
-        }
-
-        private int GetResource(LocalityResource resource)
-        {
-            return Stats.Resources[resource];
-        }
-
-        private void RemoveResource(LocalityResource resource, int count)
-        {
-            if (!Stats.Resources.ContainsKey(resource))
-            {
-                Stats.Resources[resource] = 0;
-            }
-
-            Stats.Resources[resource] -= count;
         }
     }
 }
