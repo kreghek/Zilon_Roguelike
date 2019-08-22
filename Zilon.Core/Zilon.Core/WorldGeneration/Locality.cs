@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.WorldGeneration.LocalityHazards;
 
 namespace Zilon.Core.WorldGeneration
@@ -14,8 +15,8 @@ namespace Zilon.Core.WorldGeneration
         {
             Regions = new List<LocalityRegion>();
             Stats = new LocalityStats();
-            CurrentPopulation = new List<Population>();
-            Crises = new List<ICrysis>();
+            CurrentPopulation = new List<PopulationUnit>();
+            Crises = new List<ICrisis>();
         }
 
         public string Name { get; set; }
@@ -30,7 +31,7 @@ namespace Zilon.Core.WorldGeneration
         /// Суммарно единиц популяции не должно быть больше, чем места для проживания.
         /// Иначе начнётся перенаселение. Тогда жители могут организовать миграционнуб группу и покинуть город.
         /// </summary>
-        public List<Population> CurrentPopulation { get; }
+        public List<PopulationUnit> CurrentPopulation { get; }
 
         public Dictionary<BranchType, int> Branches { get; set; }
 
@@ -50,7 +51,7 @@ namespace Zilon.Core.WorldGeneration
         /// <summary>
         /// Текущие кризисы в городе.
         /// </summary>
-        public List<ICrysis> Crises { get; }
+        public List<ICrisis> Crises { get; }
 
         /// <summary>
         /// Текущий управляющий в городе.
@@ -120,6 +121,17 @@ namespace Zilon.Core.WorldGeneration
 
             Stats.RemoveResource(LocalityResource.Food, populationCount);
             Stats.RemoveResource(LocalityResource.Goods, populationCount);
+
+            // Рассчитываем рост населения
+            UpdatePopulationGrowth();
+        }
+
+        private void UpdatePopulationGrowth()
+        {
+            foreach (var unit in CurrentPopulation)
+            {
+                unit.UpdateGrowth();
+            }
         }
 
         private static void ProduceResources(List<ILocalityStructure> structures, LocalityStats stats)

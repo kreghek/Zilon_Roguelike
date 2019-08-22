@@ -2,9 +2,9 @@
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
-    public interface ICrysisMonitor
+    public interface ICrisisMonitor
     {
-        ICrysis Analyze(Locality locality);
+        ICrisis Analyze(Locality locality);
 
         Type CrysisType { get; }
     }

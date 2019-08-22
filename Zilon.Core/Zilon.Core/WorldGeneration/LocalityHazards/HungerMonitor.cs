@@ -2,24 +2,24 @@
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
-    public sealed class HungerMonitor : ICrysisMonitor
+    public sealed class HungerMonitor : ICrisisMonitor
     {
-        private readonly ICrysisRandomSource _crysisRandomSource;
+        private readonly ICrisisRandomSource _crysisRandomSource;
 
-        public HungerMonitor(ICrysisRandomSource crysisRandomSource)
+        public HungerMonitor(ICrisisRandomSource crysisRandomSource)
         {
             _crysisRandomSource = crysisRandomSource;
         }
 
-        public Type CrysisType => typeof(HungerCrysis);
+        public Type CrysisType => typeof(HungerCrisis);
 
-        public ICrysis Analyze(Locality locality)
+        public ICrisis Analyze(Locality locality)
         {
             var food = locality.Stats.Resources[LocalityResource.Food];
 
             if (food < 0)
             {
-                return new HungerCrysis(_crysisRandomSource);
+                return new HungerCrisis(_crysisRandomSource);
             }
 
             return null;

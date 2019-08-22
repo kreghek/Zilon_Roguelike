@@ -32,7 +32,7 @@ namespace Zilon.Core.WorldGeneration
 
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
-        private readonly ICrysisRandomSource _crysisRandomSource;
+        private readonly ICrisisRandomSource _crysisRandomSource;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -440,8 +440,11 @@ namespace Zilon.Core.WorldGeneration
         {
             locality.Update();
 
-            var crysisMonitors = new ICrysisMonitor[]
-                { new HungerMonitor(_crysisRandomSource) };
+            var crysisMonitors = new ICrisisMonitor[]
+                {
+                    new HungerMonitor(_crysisRandomSource),
+                    new PopulationGrowthMonitor(_crysisRandomSource)
+                };
 
             CrisisMonitoring(locality, crysisMonitors);
 
@@ -456,7 +459,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private static void CrisisMonitoring(Locality locality, ICrysisMonitor[] crysisMonitors)
+        private static void CrisisMonitoring(Locality locality, ICrisisMonitor[] crysisMonitors)
         {
             var currentCrisesTypes = locality.Crises.Select(x => x.GetType());
 
@@ -591,10 +594,10 @@ namespace Zilon.Core.WorldGeneration
 
                 locality.Regions.Add(region);
 
-                locality.CurrentPopulation.AddRange(new Population[] {
-                    new Population{Specialization = PopulationSpecializations.Peasants },
-                    new Population{Specialization = PopulationSpecializations.Workers },
-                    new Population{Specialization = PopulationSpecializations.Servants },
+                locality.CurrentPopulation.AddRange(new PopulationUnit[] {
+                    new PopulationUnit{Specialization = PopulationSpecializations.Peasants },
+                    new PopulationUnit{Specialization = PopulationSpecializations.Workers },
+                    new PopulationUnit{Specialization = PopulationSpecializations.Servants },
                 });
 
                 locality.Stats.Resources[LocalityResource.Energy] = 1;

@@ -18,22 +18,22 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards.Tests
 
             var locality = new Locality();
 
-            locality.CurrentPopulation.AddRange(new Population[] {
-                new Population{Specialization = PopulationSpecializations.Servants },
-                new Population{Specialization = PopulationSpecializations.Peasants },
-                new Population{Specialization = PopulationSpecializations.Workers },
-                new Population{Specialization = PopulationSpecializations.Servants },
+            locality.CurrentPopulation.AddRange(new PopulationUnit[] {
+                new PopulationUnit{Specialization = PopulationSpecializations.Servants },
+                new PopulationUnit{Specialization = PopulationSpecializations.Peasants },
+                new PopulationUnit{Specialization = PopulationSpecializations.Workers },
+                new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
             locality.Stats.Resources[LocalityResource.Food] = -1;
 
 
-            var crysisRandomSourceMock = new Mock<ICrysisRandomSource>();
+            var crysisRandomSourceMock = new Mock<ICrisisRandomSource>();
             crysisRandomSourceMock.Setup(x => x.RollDeathPass()).Returns(1);
-            crysisRandomSourceMock.Setup(x => x.RollDeadPopulationIndex(It.IsAny<IEnumerable<Population>>())).Returns(0);
+            crysisRandomSourceMock.Setup(x => x.RollDeadPopulationIndex(It.IsAny<IEnumerable<PopulationUnit>>())).Returns(0);
             var crysisRandomSource = crysisRandomSourceMock.Object;
 
-            var hunger = new HungerCrysis(crysisRandomSource);
+            var hunger = new HungerCrisis(crysisRandomSource);
 
 
 

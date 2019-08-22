@@ -2,10 +2,10 @@
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
-    public interface ICrysisRandomSource
+    public interface ICrisisRandomSource
     {
         int RollDeathPass();
 
-        int RollDeadPopulationIndex(IEnumerable<Population> availablePopulation);
+        int RollDeadPopulationIndex(IEnumerable<PopulationUnit> availablePopulation);
     }
 }

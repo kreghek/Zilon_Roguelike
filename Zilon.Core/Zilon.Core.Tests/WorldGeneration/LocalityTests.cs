@@ -44,10 +44,10 @@ namespace Zilon.Core.WorldGeneration.Tests
 
             locality.Regions.Add(region);
 
-            locality.CurrentPopulation.AddRange(new Population[] {
-                new Population{Specialization = PopulationSpecializations.Peasants },
-                new Population{Specialization = PopulationSpecializations.Workers },
-                new Population{Specialization = PopulationSpecializations.Servants },
+            locality.CurrentPopulation.AddRange(new PopulationUnit[] {
+                new PopulationUnit{Specialization = PopulationSpecializations.Peasants },
+                new PopulationUnit{Specialization = PopulationSpecializations.Workers },
+                new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
             locality.Stats.Resources[LocalityResource.Energy] = 1;
@@ -105,10 +105,10 @@ namespace Zilon.Core.WorldGeneration.Tests
 
             locality.Regions.Add(region);
 
-            locality.CurrentPopulation.AddRange(new Population[] {
-                new Population{Specialization = PopulationSpecializations.Peasants },
-                new Population{Specialization = PopulationSpecializations.Workers },
-                new Population{Specialization = PopulationSpecializations.Servants },
+            locality.CurrentPopulation.AddRange(new PopulationUnit[] {
+                new PopulationUnit{Specialization = PopulationSpecializations.Peasants },
+                new PopulationUnit{Specialization = PopulationSpecializations.Workers },
+                new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
             locality.Stats.Resources[LocalityResource.Energy] = 1;

@@ -504,11 +504,12 @@
     <Compile Include="WorldGeneration\LocalityEventCards\FamineLocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityEventCards\PopulationGrowthLocalityEvent.cs" />
     <Compile Include="WorldGeneration\LocalityHazards\CrysisRandomSource.cs" />
-    <Compile Include="WorldGeneration\LocalityHazards\HungerCrysis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerCrisis.cs" />
     <Compile Include="WorldGeneration\LocalityHazards\HungerMonitor.cs" />
-    <Compile Include="WorldGeneration\LocalityHazards\ICrysis.cs" />
-    <Compile Include="WorldGeneration\LocalityHazards\ICrysisMonitor.cs" />
-    <Compile Include="WorldGeneration\LocalityHazards\ICrysisRandomSource.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisisMonitor.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisisRandomSource.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\PopulationGrowthMonitor.cs" />
     <Compile Include="WorldGeneration\LocalityHelper.cs" />
     <Compile Include="WorldGeneration\LocalityRegion.cs" />
     <Compile Include="WorldGeneration\LocalityResource.cs" />
@@ -520,7 +521,7 @@
     <Compile Include="WorldGeneration\MigrantGroup.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
-    <Compile Include="WorldGeneration\Population.cs" />
+    <Compile Include="WorldGeneration\PopulationUnit.cs" />
     <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />

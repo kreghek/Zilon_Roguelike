@@ -18,6 +18,10 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             var balanceDict = CalcDifference(productionDict, consumptionDict);
 
+            // Учитываем, что излишки промышленности реализуются в деньги
+            AddResource(balanceDict, LocalityResource.Money, balanceDict[LocalityResource.Manufacture]);
+            balanceDict[LocalityResource.Manufacture] = 0;
+
             return balanceDict;
         }
 
@@ -59,9 +63,11 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         private static void FillConsumption(Locality locality, Dictionary<LocalityResource, int> dict)
         {
-            // Население потребляем жилые места
+            // Население потребляем жилые места, еду и товары
             var populationCount = locality.CurrentPopulation.Count();
             AddResource(dict, LocalityResource.LivingPlaces, populationCount);
+            AddResource(dict, LocalityResource.Goods, populationCount);
+            AddResource(dict, LocalityResource.Food, populationCount);
 
             foreach (var region in locality.Regions)
             {

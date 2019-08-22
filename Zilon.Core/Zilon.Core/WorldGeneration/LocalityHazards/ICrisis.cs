@@ -3,7 +3,7 @@
     /// <summary>
     /// Кризис, который возникает в городе.
     /// </summary>
-    public interface ICrysis
+    public interface ICrisis
     {
         /// <summary>
         /// Обновление состояния кризиса.

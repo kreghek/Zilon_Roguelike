@@ -6,7 +6,7 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
-    public sealed class CrysisRandomSource : ICrysisRandomSource
+    public sealed class CrysisRandomSource : ICrisisRandomSource
     {
         private readonly IDice _dice;
 
@@ -15,7 +15,7 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public int RollDeadPopulationIndex(IEnumerable<Population> availablePopulation)
+        public int RollDeadPopulationIndex(IEnumerable<PopulationUnit> availablePopulation)
         {
             return _dice.RollArrayIndex(availablePopulation.ToArray());
         }

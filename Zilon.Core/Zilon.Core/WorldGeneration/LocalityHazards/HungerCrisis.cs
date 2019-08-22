@@ -8,11 +8,11 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
     /// Если в городе еды меньше, чем требуется населению, то за каждую недостающую единицу
     /// еды с вероятностью 7+ при 2D6 умрёт случайная единица населения.
     /// </summary>
-    public sealed class HungerCrysis : ICrysis
+    public sealed class HungerCrisis : ICrisis
     {
-        private readonly ICrysisRandomSource _crysisRandomSource;
+        private readonly ICrisisRandomSource _crysisRandomSource;
 
-        public HungerCrysis(ICrysisRandomSource crysisRandomSource)
+        public HungerCrisis(ICrisisRandomSource crysisRandomSource)
         {
             _crysisRandomSource = crysisRandomSource;
         }
