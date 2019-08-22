@@ -573,7 +573,10 @@ namespace Zilon.Core.WorldGeneration
                     { LocalityResource.Food, 3 },
                     { LocalityResource.Goods, 3 },
                     { LocalityResource.LivingPlaces, 3 },
-                    { LocalityResource.Manufacture, 1 },
+                        // Производит 2 единицы, потому что:
+                        // 1 для содержания района.
+                        // 1 для содержания самого строения.
+                    { LocalityResource.Manufacture, 2 },
                     });
 
                 var region = new LocalityRegion();

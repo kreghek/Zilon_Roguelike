@@ -87,6 +87,21 @@ namespace Zilon.Core.WorldGeneration
 
                 var suppliedStructures = SupplyStructures(region.Structures);
                 ProduceResources(suppliedStructures, Stats);
+
+                // Реализация производства.
+                // Избыточное производтство даёт деньги. Предполагается, что избыточное производство
+                // народ пускает на улучшение благосостояния.
+                RealizeManufacture();
+            }
+        }
+
+        private void RealizeManufacture()
+        {
+            var manufacture = GetResource(LocalityResource.Manufacture);
+            if (manufacture > 0)
+            {
+                RemoveResource(LocalityResource.Manufacture, manufacture);
+                AddResource(LocalityResource.Money, manufacture);
             }
         }
 
@@ -155,6 +170,11 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return suppliedStructures;
+        }
+
+        private void AddResource(LocalityResource resource, int count)
+        {
+            Stats.Resources[resource] += count;
         }
 
         private int GetResource(LocalityResource resource)
