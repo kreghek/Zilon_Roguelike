@@ -492,26 +492,26 @@ namespace Zilon.Core.WorldGeneration
 
         private void ProcessAgent(Globe globe, Queue<IAgentCard> cardQueue, Agent agent)
         {
-            var card = cardQueue.Dequeue();
+            //var card = cardQueue.Dequeue();
 
-            if (card.CanUse(agent, globe))
-            {
-                card.Use(agent, globe, _dice);
-            }
+            //if (card.CanUse(agent, globe))
+            //{
+            //    card.Use(agent, globe, _dice);
+            //}
 
-            cardQueue.Enqueue(card);
+            //cardQueue.Enqueue(card);
         }
 
         private static Queue<IAgentCard> CreateAgentCardQueue()
         {
             return new Queue<IAgentCard>(new IAgentCard[] {
-                //new ChangeLocality(),
-                //new CreateLocality(),
-                //new IncreasePopulation(),
-                //new AgentOpposition(),
-                //new AgentSupport(),
-                //new Disciple(),
-                //new TakeLocation()
+                new ChangeLocality(),
+                new CreateLocality(),
+                new IncreasePopulation(),
+                new AgentOpposition(),
+                new AgentSupport(),
+                new Disciple(),
+                new TakeLocation()
             });
         }
 
@@ -552,9 +552,6 @@ namespace Zilon.Core.WorldGeneration
 
                 var localityName = globe.GetLocalityName(_dice);
 
-                // ====================
-
-
                 var locality = new Locality()
                 {
                     Name = localityName,
@@ -594,6 +591,7 @@ namespace Zilon.Core.WorldGeneration
                 locality.Stats.Resources[LocalityResource.Food] = 3;
                 locality.Stats.Resources[LocalityResource.Goods] = 3;
                 locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
+                locality.Stats.Resources[LocalityResource.Money] = 2;
 
 
                 var rolledBranchIndex = _dice.Roll(0, 7);

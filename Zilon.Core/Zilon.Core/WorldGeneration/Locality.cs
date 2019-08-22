@@ -67,6 +67,19 @@ namespace Zilon.Core.WorldGeneration
         {
             foreach (var region in Regions)
             {
+                // Проверяем, хватает ли денег для этого района.
+                var money = GetResource(LocalityResource.Money);
+                if (money >= region.MaintenanceCost)
+                {
+                    RemoveResource(LocalityResource.Money, region.MaintenanceCost);
+                }
+                else
+                {
+                    // Не хватает денег на содержание этого района.
+                    // Все его строения не работают.
+                    continue;
+                }
+
                 // Для жилых мест отдельная логика.
                 // Их потребляет только население, а производят структуры.
                 // Поэтому зануляем перед обработкой структур города. Далее структуры выставят текущее значение.
@@ -112,6 +125,19 @@ namespace Zilon.Core.WorldGeneration
             // Струкруты, которые получили обеспечение, затем производят ресурсы.
             foreach (var structure in structures)
             {
+                // Проверяем, хватает ли денег для содержанния этой структуры.
+                var money = GetResource(LocalityResource.Money);
+                if (money >= structure.MaintenanceCost)
+                {
+                    RemoveResource(LocalityResource.Money, structure.MaintenanceCost);
+                }
+                else
+                {
+                    // Не хватает денег на содержание этой структуры.
+                    // Она ничего не производит в эту итерацию.
+                    continue;
+                }
+
                 // Проверка наличия необходимых ресурсов.
                 foreach (var requiredResource in structure.RequiredResources)
                 {
@@ -129,6 +155,11 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return suppliedStructures;
+        }
+
+        private int GetResource(LocalityResource resource)
+        {
+            return Stats.Resources[resource];
         }
 
         private void RemoveResource(LocalityResource resource, int count)

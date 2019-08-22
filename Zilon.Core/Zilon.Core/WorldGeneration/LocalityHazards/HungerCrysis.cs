@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Zilon.Core.WorldGeneration.LocalityHazards
 {
@@ -18,6 +19,13 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
 
         public bool Update(Locality locality)
         {
+            // Если в городе нет населения, то не может быть и голода.
+            // Сразу указываем, что этот кризис кончился.
+            if (!locality.CurrentPopulation.Any())
+            {
+                return false;
+            }
+
             var currentFood = locality.Stats.Resources[LocalityResource.Food];
             if (currentFood >= 0)
             {
@@ -28,6 +36,15 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
             var populationDown = Math.Abs(currentFood);
             for (var i = 0; i < populationDown; i++)
             {
+                // Если в городе нет населения, то не может быть и голода.
+                // Сразу указываем, что этот кризис кончился.
+                // В этом случае голод не успел разрешиться, как всё население уже вымерло.
+                // То есть голод был очень сильным (или население очень слабым).
+                if (!locality.CurrentPopulation.Any())
+                {
+                    return false;
+                }
+
                 var deadPopulationRoll = _crysisRandomSource.RollDeathPass();
                 var deathPassSuccess = GetDeathPass();
                 if (deadPopulationRoll < deathPassSuccess)

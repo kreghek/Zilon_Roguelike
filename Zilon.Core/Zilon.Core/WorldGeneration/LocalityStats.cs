@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -9,13 +11,23 @@ namespace Zilon.Core.WorldGeneration
     {
         public LocalityStats()
         {
-            Resources = new Dictionary<LocalityResource, int> {
-                { LocalityResource.Food, 0 },
-                { LocalityResource.Energy, 0 },
-                { LocalityResource.Goods, 0 },
-                { LocalityResource.LivingPlaces, 0 },
-                { LocalityResource.Manufacture, 0 }
-            };
+            Resources = new Dictionary<LocalityResource, int>();
+            FillResources();
+        }
+
+        /// <summary>
+        /// Этот метод выполняем для того, чтобы словарь всегда содержал все ресурсы.
+        /// Чтобы не нужно было каждый раз проверять наличие ключа.
+        /// </summary>
+        private void FillResources()
+        {
+            var allAvailableResources = Enum.GetValues(typeof(LocalityResource))
+                            .Cast<LocalityResource>()
+                            .Where(x => x != LocalityResource.Undefined);
+            foreach (var resource in allAvailableResources)
+            {
+                Resources[resource] = 0;
+            }
         }
 
         /// <summary>

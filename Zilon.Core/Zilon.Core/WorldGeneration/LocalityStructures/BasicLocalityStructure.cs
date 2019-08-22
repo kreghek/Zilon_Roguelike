@@ -46,5 +46,12 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
         /// Специальное наименование.
         /// </summary>
         public string SpeciaName { get; set; }
+
+        /// <summary>
+        /// Стоимость содержания структуры каждую итерацию.
+        /// Сейчас для всех одна единица денег.
+        /// Позже нужно будет сделать вариативность.
+        /// </summary>
+        public int MaintenanceCost => 1;
     }
 }

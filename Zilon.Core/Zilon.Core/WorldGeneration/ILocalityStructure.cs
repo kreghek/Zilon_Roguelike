@@ -31,6 +31,12 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         Dictionary<LocalityResource, int> ProductResources { get; }
 
+        /// <summary>
+        /// Стоимость содержания структуры. Требуется каждую итерацию.
+        /// Если для структуры не выделены средства на содержание, то оно не работает текущую итерацию.
+        /// </summary>
+        int MaintenanceCost { get; }
+
         ///// <summary>
         ///// Обновляет лимиты запасов города.
         ///// </summary>

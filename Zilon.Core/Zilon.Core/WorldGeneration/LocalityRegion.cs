@@ -17,5 +17,12 @@ namespace Zilon.Core.WorldGeneration
         }
 
         public List<ILocalityStructure> Structures { get; }
+
+        /// <summary>
+        /// Содержание региона в деньгах.
+        /// Выплачивается каждую итерацию.
+        /// Если денег не хватает, то все строения региона перестают функционировать.
+        /// </summary>
+        public int MaintenanceCost => 1;
     }
 }
