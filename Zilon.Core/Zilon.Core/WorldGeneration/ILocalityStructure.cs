@@ -37,6 +37,11 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         int MaintenanceCost { get; }
 
+        /// <summary>
+        /// Информация о конструировании структуры.
+        /// </summary>
+        UnderConstructionData UnderConstructionData { get; }
+
         ///// <summary>
         ///// Обновляет лимиты запасов города.
         ///// </summary>

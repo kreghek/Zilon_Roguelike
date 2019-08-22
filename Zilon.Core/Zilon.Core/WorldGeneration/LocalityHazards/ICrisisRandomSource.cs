@@ -7,5 +7,6 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
         int RollDeathPass();
 
         int RollDeadPopulationIndex(IEnumerable<PopulationUnit> availablePopulation);
+        int RollGrowth();
     }
 }

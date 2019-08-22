@@ -524,6 +524,7 @@
     <Compile Include="WorldGeneration\PopulationUnit.cs" />
     <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
+    <Compile Include="WorldGeneration\UnderConstructionData.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
     <Compile Include="WorldGeneration\CacheHelper.cs" />

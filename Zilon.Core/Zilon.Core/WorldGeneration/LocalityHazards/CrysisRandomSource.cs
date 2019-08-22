@@ -24,5 +24,10 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
         {
             return _dice.Roll2D6();
         }
+
+        public int RollGrowth()
+        {
+            return _dice.Roll2D6();
+        }
     }
 }

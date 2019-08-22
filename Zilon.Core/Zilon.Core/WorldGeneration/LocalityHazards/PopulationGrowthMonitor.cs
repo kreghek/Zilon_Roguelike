@@ -24,10 +24,21 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
 
             foreach (var unit in unitsForGrowth)
             {
-                CreatePopulationUnit(locality, unit);
+                var growthRoll = _crysisRandomSource.RollGrowth();
+                var successGrowthRoll = GetSuccessGrowthRoll();
+
+                if (growthRoll >= successGrowthRoll)
+                {
+                    CreatePopulationUnit(locality, unit);
+                }
             }
 
             return null;
+        }
+
+        private static int GetSuccessGrowthRoll()
+        {
+            return 7;
         }
 
         private void CreatePopulationUnit(Locality locality, PopulationUnit unit)
