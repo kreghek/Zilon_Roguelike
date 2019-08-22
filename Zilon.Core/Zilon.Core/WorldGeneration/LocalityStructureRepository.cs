@@ -50,7 +50,7 @@ namespace Zilon.Core.WorldGeneration
                     { LocalityResource.Manufacture, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Energy, 1 }
+                    { LocalityResource.Energy, 15 }
                     });
 
                 return structure;
@@ -141,6 +141,54 @@ namespace Zilon.Core.WorldGeneration
                     },
                     productResources: new Dictionary<LocalityResource, int> {
                     { LocalityResource.LivingPlaces, 5 }
+                    });
+
+                return structure;
+            }
+        }
+
+        /// <summary>
+        /// Монетный двор.
+        /// </summary>
+        public static ILocalityStructure Mint
+        {
+            // С трудом представляю, как монетный двор может начать приносить золото в казну города.
+            //TODO Заменить на что-то другое
+            get
+            {
+                var structure = new BasicLocalityStructure(name: "Mint",
+                    requiredPopulation: new Dictionary<PopulationSpecializations, int> {
+                        { PopulationSpecializations.Workers, 1 },
+                        { PopulationSpecializations.Servants, 1 }
+                    },
+                    requiredResources: new Dictionary<LocalityResource, int> {
+                        { LocalityResource.Energy, 1 }
+                    },
+                    productResources: new Dictionary<LocalityResource, int> {
+                        { LocalityResource.Money, 3 }
+                    });
+
+                return structure;
+            }
+        }
+
+        /// <summary>
+        /// Городской рынок.
+        /// </summary>
+        public static ILocalityStructure TownMarket
+        {
+            get
+            {
+                var structure = new BasicLocalityStructure(name: "Town Market",
+                    requiredPopulation: new Dictionary<PopulationSpecializations, int> {
+                        { PopulationSpecializations.Servants, 1 }
+                    },
+                    requiredResources: new Dictionary<LocalityResource, int> {
+                        { LocalityResource.Energy, 1 },
+                        { LocalityResource.Goods, 1 }
+                    },
+                    productResources: new Dictionary<LocalityResource, int> {
+                        { LocalityResource.Money, 5 }
                     });
 
                 return structure;

@@ -36,10 +36,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            // Выбор здания для строительства.
-            // Происходит по одному алгоритму:
-            // Каждое второе здание будет электростанция. Чтобы город не остался без энергии.
-
             var currentAgentLocality = AgentLocalityHelper.GetCurrentLocality(agent, globe);
 
             // Выбираем произвольный свободный район города.
@@ -51,7 +47,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 return;
             }
 
-            var isEnergyStructure = targetRegion.Structures.Count % 2 != 0;
+            var isEnergyStructure = targetRegion.Structures.Count == 1;
 
             if (isEnergyStructure)
             {
@@ -59,7 +55,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             }
             else
             {
-                var structureRoll = dice.Roll(0, 4);
+                var structureRoll = dice.Roll(0, 6);
                 ILocalityStructure targetStructure;
 
                 switch (structureRoll)
@@ -82,6 +78,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
                     case 4:
                         targetStructure = LocalityStructureRepository.LivingSector;
+                        break;
+
+                    case 5:
+                        targetStructure = LocalityStructureRepository.TownMarket;
+                        break;
+
+                    case 6:
+                        targetStructure = LocalityStructureRepository.Mint;
                         break;
 
                     default:

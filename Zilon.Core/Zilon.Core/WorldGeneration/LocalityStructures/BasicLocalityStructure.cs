@@ -53,5 +53,10 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
         /// Позже нужно будет сделать вариативность.
         /// </summary>
         public int MaintenanceCost => 1;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
