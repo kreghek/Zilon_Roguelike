@@ -512,7 +512,8 @@ namespace Zilon.Core.WorldGeneration
                 //new AgentSupport(),
                 //new Disciple(),
                 //new TakeLocation()
-                new FindResource()
+                new FindResource(),
+                new CreateLocalityStructure()
             });
         }
 
@@ -520,7 +521,7 @@ namespace Zilon.Core.WorldGeneration
         {
             for (var i = 0; i < StartAgentCount; i++)
             {
-                var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
+                var rolledLocalityIndex = _dice.RollArrayIndex(globe.Localities);
                 var locality = globe.Localities[rolledLocalityIndex];
 
                 var agentName = globe.agentNameGenerator.Generate(Sex.Male, 1);
@@ -531,6 +532,11 @@ namespace Zilon.Core.WorldGeneration
                     Location = locality.Cell,
                     Realm = locality.Owner
                 };
+
+                if (locality.Head == null)
+                {
+                    locality.Head = agent;
+                }
 
                 globe.Agents.Add(agent);
 

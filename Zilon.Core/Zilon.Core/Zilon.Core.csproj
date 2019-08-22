@@ -478,6 +478,7 @@
     <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
     <Compile Include="WorldGeneration\AgentCards\FindResource.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
+    <Compile Include="WorldGeneration\AgentCards\LocalityBalanceHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
     <Compile Include="WorldGeneration\Army.cs" />

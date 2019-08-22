@@ -47,7 +47,15 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public LocalityStats Stats { get; private set; }
 
+        /// <summary>
+        /// Текущие кризисы в городе.
+        /// </summary>
         public List<ICrysis> Crises { get; }
+
+        /// <summary>
+        /// Текущий управляющий в городе.
+        /// </summary>
+        public Agent Head { get; set; }
 
         public override string ToString()
         {
