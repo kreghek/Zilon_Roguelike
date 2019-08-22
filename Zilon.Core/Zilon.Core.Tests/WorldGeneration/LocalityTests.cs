@@ -36,7 +36,7 @@ namespace Zilon.Core.WorldGeneration.Tests
                     { LocalityResource.Food, 3 },
                     { LocalityResource.Goods, 3 },
                     { LocalityResource.LivingPlaces, 3 },
-                    { LocalityResource.Manufacture, 1 },
+                    { LocalityResource.Manufacture, 2 },
                 });
 
             var region = new LocalityRegion();
@@ -54,6 +54,7 @@ namespace Zilon.Core.WorldGeneration.Tests
             locality.Stats.Resources[LocalityResource.Food] = 3;
             locality.Stats.Resources[LocalityResource.Goods] = 3;
             locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
+            locality.Stats.Resources[LocalityResource.Money] = 2;
 
 
 
@@ -68,7 +69,8 @@ namespace Zilon.Core.WorldGeneration.Tests
             locality.Stats.Resources[LocalityResource.Goods].Should().Be(3);
             locality.Stats.Resources[LocalityResource.LivingPlaces].Should().Be(3);
 
-            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(1);
+            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(0);
+            locality.Stats.Resources[LocalityResource.Money].Should().Be(2);
         }
 
         /// <summary>
@@ -95,7 +97,7 @@ namespace Zilon.Core.WorldGeneration.Tests
                     { LocalityResource.Food, 3 },
                     { LocalityResource.Goods, 3 },
                     { LocalityResource.LivingPlaces, 3 },
-                    { LocalityResource.Manufacture, 1 },
+                    { LocalityResource.Manufacture, 2 },
                 });
 
             var region = new LocalityRegion();
@@ -113,6 +115,7 @@ namespace Zilon.Core.WorldGeneration.Tests
             locality.Stats.Resources[LocalityResource.Food] = 3;
             locality.Stats.Resources[LocalityResource.Goods] = 3;
             locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
+            locality.Stats.Resources[LocalityResource.Money] = 2;
 
 
 
@@ -128,7 +131,8 @@ namespace Zilon.Core.WorldGeneration.Tests
             locality.Stats.Resources[LocalityResource.Goods].Should().Be(3);
             locality.Stats.Resources[LocalityResource.LivingPlaces].Should().Be(3);
 
-            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(2);
+            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(0);
+            locality.Stats.Resources[LocalityResource.Money].Should().Be(2);
         }
     }
 }
