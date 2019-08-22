@@ -26,5 +26,47 @@
     {
       "Types": "Aux"
     }
+  ],
+  "SurvivalStats": [
+    {
+      "Type": "Satiety",
+      "MinValue": -3000,
+      "MaxValue": 120,
+      "StartValue": 50,
+      "KeyPoints": [
+        {
+          "Level": "Lesser",
+          "Value": 0
+        },
+        {
+          "Level": "Strong",
+          "Value": -360
+        },
+        {
+          "Level": "Max",
+          "Value": -2520
+        }
+      ]
+    },
+	{
+      "Type": "Hydration",
+      "MinValue": -1200,
+      "MaxValue": 60,
+      "StartValue": 25,
+      "KeyPoints": [
+        {
+          "Level": "Lesser",
+          "Value": 0
+        },
+        {
+          "Level": "Strong",
+          "Value": -180
+        },
+        {
+          "Level": "Max",
+          "Value": -1080
+        }
+      ]
+    }
   ]
 }
