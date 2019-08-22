@@ -135,6 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Props\PropStoreBaseTests.cs" />
     <Compile Include="Schemes\MonsterSchemeTests.cs" />
+    <Compile Include="Schemes\PersonSchemeTests.cs" />
     <Compile Include="Schemes\PropSchemeTests.cs" />
     <Compile Include="Schemes\PerkSchemeTests.cs" />
     <Compile Include="Schemes\SchemeServiceTests.cs" />
@@ -172,6 +173,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="README.md" />
+    <EmbeddedResource Include="Schemes\human-person.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
