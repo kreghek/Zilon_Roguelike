@@ -67,6 +67,26 @@
           "Value": -1080
         }
       ]
+    },
+	{
+      "Type": "Intoxication",
+      "MinValue": 0,
+      "MaxValue": 120,
+      "StartValue": 0,
+      "KeyPoints": [
+        {
+          "Level": "Lesser",
+          "Value": 50
+        },
+        {
+          "Level": "Strong",
+          "Value": 75
+        },
+        {
+          "Level": "Max",
+          "Value": 100
+        }
+      ]
     }
   ]
 }

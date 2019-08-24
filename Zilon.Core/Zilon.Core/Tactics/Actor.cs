@@ -93,7 +93,7 @@ namespace Zilon.Core.Tactics
                                 break;
 
                             case ConsumeCommonRuleType.Thirst:
-                                RestoreStat(SurvivalStatType.Water, rule.Level);
+                                RestoreStat(SurvivalStatType.Hydration, rule.Level);
                                 break;
 
                             case ConsumeCommonRuleType.Health:
@@ -113,7 +113,7 @@ namespace Zilon.Core.Tactics
                                 break;
 
                             case ConsumeCommonRuleType.Thirst:
-                                DecreaseStat(SurvivalStatType.Water, rule.Level);
+                                DecreaseStat(SurvivalStatType.Hydration, rule.Level);
                                 break;
 
                             case ConsumeCommonRuleType.Health:
@@ -203,8 +203,8 @@ namespace Zilon.Core.Tactics
                     RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
                     break;
 
-                case SurvivalStatType.Water:
-                    RestoreSurvivalStatInner(SurvivalStatType.Water, level);
+                case SurvivalStatType.Hydration:
+                    RestoreSurvivalStatInner(SurvivalStatType.Hydration, level);
                     break;
 
                 case SurvivalStatType.Health:
@@ -275,8 +275,8 @@ namespace Zilon.Core.Tactics
                     DecreaseSurvivalStatInner(SurvivalStatType.Satiety, level);
                     break;
 
-                case SurvivalStatType.Water:
-                    DecreaseSurvivalStatInner(SurvivalStatType.Water, level);
+                case SurvivalStatType.Hydration:
+                    DecreaseSurvivalStatInner(SurvivalStatType.Hydration, level);
                     break;
 
                 case SurvivalStatType.Health:

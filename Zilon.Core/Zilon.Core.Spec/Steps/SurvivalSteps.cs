@@ -102,7 +102,7 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 case "вода":
-                    statType = SurvivalStatType.Water;
+                    statType = SurvivalStatType.Hydration;
                     break;
 
                 default:
@@ -171,7 +171,7 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -191,7 +191,7 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Water).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
                     break;
 
                 default:
@@ -211,7 +211,7 @@ namespace Zilon.Core.Spec.Steps
                     break;
 
                 case "вода":
-                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Water);
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Hydration);
                     break;
 
                 default:
@@ -272,17 +272,17 @@ namespace Zilon.Core.Spec.Steps
 
                 case "Слабая жажда":
                     level = SurvivalStatHazardLevel.Lesser;
-                    stat = SurvivalStatType.Water;
+                    stat = SurvivalStatType.Hydration;
                     break;
 
                 case "Жажда":
                     level = SurvivalStatHazardLevel.Strong;
-                    stat = SurvivalStatType.Water;
+                    stat = SurvivalStatType.Hydration;
                     break;
 
                 case "Обезвоживание":
                     level = SurvivalStatHazardLevel.Max;
-                    stat = SurvivalStatType.Water;
+                    stat = SurvivalStatType.Hydration;
                     break;
 
                 default:

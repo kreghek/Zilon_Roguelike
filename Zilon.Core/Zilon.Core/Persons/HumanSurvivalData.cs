@@ -29,18 +29,32 @@ namespace Zilon.Core.Persons
             // Выставляем сытость/упоённость
             if (personScheme.SurvivalStats != null)
             {
-                var satiety = CreateStat(SurvivalStatType.Satiety,
+                CreateStatFromScheme(personScheme.SurvivalStats,
+                    SurvivalStatType.Satiety,
                     PersonSurvivalStatType.Satiety,
-                    personScheme.SurvivalStats);
-                statList.Add(satiety);
+                    statList);
 
-                var hydration = CreateStat(SurvivalStatType.Water,
+                CreateStatFromScheme(personScheme.SurvivalStats,
+                    SurvivalStatType.Hydration,
                     PersonSurvivalStatType.Hydration,
-                    personScheme.SurvivalStats);
-                statList.Add(hydration);
+                    statList);
+
+                CreateStatFromScheme(personScheme.SurvivalStats,
+                    SurvivalStatType.Intoxication,
+                    PersonSurvivalStatType.Intoxication,
+                    statList);
             }
 
             Stats = statList.ToArray();
+        }
+
+        private static void CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
+            SurvivalStatType statType,
+            PersonSurvivalStatType schemeStatType,
+            List<SurvivalStat> statList)
+        {
+            var stat = CreateStat(statType, schemeStatType, survivalStats);
+            statList.Add(stat);
         }
 
         private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)

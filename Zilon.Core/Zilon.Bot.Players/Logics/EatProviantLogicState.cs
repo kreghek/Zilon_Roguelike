@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
                 return eatFoodTask;
             }
 
-            var drinkWaterTask = CheckHazard(actor, SurvivalStatType.Water, ConsumeCommonRuleType.Thirst);
+            var drinkWaterTask = CheckHazard(actor, SurvivalStatType.Hydration, ConsumeCommonRuleType.Thirst);
             if (drinkWaterTask != null)
             {
                 return drinkWaterTask;
