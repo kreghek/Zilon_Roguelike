@@ -23,6 +23,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Достаточность воды.
         /// </summary>
-        Hydration
+        Hydration,
+
+        /// <summary>
+        /// Интоксикация персонажа.
+        /// </summary>
+        Intoxication
     }
 }

@@ -167,13 +167,13 @@ namespace Zilon.Core.Tests.Persons
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = stat.KeyPoints[1].Value;
-            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Water);
+            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Hydration);
             stat2.Value = stat2.KeyPoints[1].Value;
 
             // ACT
             using (var monitor = survivalData.Monitor())
             {
-                survivalData.RestoreStat(SurvivalStatType.Water, 3);
+                survivalData.RestoreStat(SurvivalStatType.Hydration, 3);
 
 
 

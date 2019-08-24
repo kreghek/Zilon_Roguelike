@@ -13,6 +13,7 @@ public class EffectViewModel : MonoBehaviour
 
     public Sprite HungerSprite;
     public Sprite ThristSprite;
+    public Sprite IntoxicationSprite;
 
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
@@ -39,8 +40,12 @@ public class EffectViewModel : MonoBehaviour
                         effectText += " Hunger";
                             break;
 
-                    case SurvivalStatType.Water:
+                    case SurvivalStatType.Hydration:
                         effectText += " Thrist";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += " Intoxication";
                         break;
                 }
 
@@ -54,8 +59,12 @@ public class EffectViewModel : MonoBehaviour
                         effectText = "Hunger";
                         break;
 
-                    case SurvivalStatType.Water:
+                    case SurvivalStatType.Hydration:
                         effectText = "Thrist";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += "Intoxication";
                         break;
                 }
 
@@ -69,8 +78,12 @@ public class EffectViewModel : MonoBehaviour
                         effectText = "Starvation!";
                         break;
 
-                    case SurvivalStatType.Water:
+                    case SurvivalStatType.Hydration:
                         effectText = "Dehydration!";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += "Strong Intoxication!";
                         break;
                 }
                 NameText.color = Color.red;
@@ -109,8 +122,12 @@ public class EffectViewModel : MonoBehaviour
                 EffectIcon.sprite = HungerSprite;
                 break;
 
-            case SurvivalStatType.Water:
+            case SurvivalStatType.Hydration:
                 EffectIcon.sprite = ThristSprite;
+                break;
+
+            case SurvivalStatType.Intoxication:
+                EffectIcon.sprite = IntoxicationSprite;
                 break;
 
             default:

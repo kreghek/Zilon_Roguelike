@@ -21,8 +21,13 @@
         Satiety,
 
         /// <summary>
-        /// Достаточность воды.
+        /// Достаточность воды. Напоенность, упитость.
         /// </summary>
-        Water
+        Hydration,
+
+        /// <summary>
+        /// Интоксикация персонажа.
+        /// </summary>
+        Intoxication
     }
 }
