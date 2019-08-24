@@ -70,11 +70,15 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
 
-            var s = _schemeService.GetScheme<IPropScheme>("closed-leather-helmet");
-            var prop1 = _propFactory.CreateEquipment(s);
-            AddPropToInventory(inventory, prop1);
 
             return person;
+        }
+
+        private void AddEquipment(Inventory inventory, string sid)
+        {
+            var scheme = _schemeService.GetScheme<IPropScheme>(sid);
+            var prop = _propFactory.CreateEquipment(scheme);
+            AddPropToInventory(inventory, prop);
         }
 
         private void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
