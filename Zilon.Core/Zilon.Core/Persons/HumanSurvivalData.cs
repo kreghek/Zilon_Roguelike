@@ -54,7 +54,10 @@ namespace Zilon.Core.Persons
             List<SurvivalStat> statList)
         {
             var stat = CreateStat(statType, schemeStatType, survivalStats);
-            statList.Add(stat);
+            if (stat != null)
+            {
+                statList.Add(stat);
+            }
         }
 
         private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)
@@ -218,27 +221,41 @@ namespace Zilon.Core.Persons
             var statScheme = survivalStats.SingleOrDefault(x => x.Type == schemeStatType);
             if (statScheme == null)
             {
-                throw new InvalidOperationException("Для схемы персонажа должна быть задана схема характеристик выживания.");
+                return null;
             }
 
-            var keyPoints = new SurvivalStatKeyPoint[0];
+            var keyPointList = new List<SurvivalStatKeyPoint>();
             if (statScheme.KeyPoints != null)
             {
-                keyPoints = new[]{
-                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints)),
-                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints)),
-                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints))
-                };
+                AddKeyPoint(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keyPointList);
+                AddKeyPoint(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keyPointList);
+                AddKeyPoint(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keyPointList);
             }
 
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
             {
                 Type = type,
                 Rate = 1,
-                KeyPoints = keyPoints
+                KeyPoints = keyPointList.ToArray()
             };
 
             return stat;
+        }
+
+        private static void AddKeyPoint(
+            SurvivalStatHazardLevel max1,
+            PersonSurvivalStatKeypointLevel max2,
+            IPersonSurvivalStatKeyPointSubScheme[] keyPoints,
+            List<SurvivalStatKeyPoint> keyPointList)
+        {
+            var schemeKeyPoint = GetKeyPointSchemeValue(max2, keyPoints);
+            if (schemeKeyPoint == null)
+            {
+                return;
+            }
+
+            var keyPoint = new SurvivalStatKeyPoint(max1, schemeKeyPoint.Value);
+            keyPointList.Add(keyPoint);
         }
 
         private void DoStatCrossKeyPoint(SurvivalStat stat, IEnumerable<SurvivalStatKeyPoint> keyPoints)
@@ -264,9 +281,9 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static int GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel level, IPersonSurvivalStatKeyPointSubScheme[] keyPoints)
+        private static int? GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel level, IPersonSurvivalStatKeyPointSubScheme[] keyPoints)
         {
-            return keyPoints.Single(x => x.Level == level).Value;
+            return keyPoints.SingleOrDefault(x => x.Level == level)?.Value;
         }
     }
 }
