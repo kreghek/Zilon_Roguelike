@@ -7,5 +7,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string DefaultAct { get; set; }
         public int Hp { get; set; }
         public PersonSlotSubScheme[] Slots { get; set; }
+        public IPersonSurvivalStatSubScheme[] SurvivalStats { get; set; }
     }
 }

@@ -6,7 +6,7 @@
     public enum SurvivalStatType
     {
         /// <summary>
-        /// Не определена.
+        /// Не определена. Скорее всего, ошибка.
         /// </summary>
         Undefined,
 

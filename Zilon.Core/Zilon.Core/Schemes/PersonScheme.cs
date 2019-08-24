@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -23,5 +24,14 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [UsedImplicitly]
         public PersonSlotSubScheme[] Slots { get; set; }
+
+        /// <summary>
+        /// Характеристики выживания персонажа.
+        /// Такие, как запас сытости/гидратации.
+        /// </summary>
+        [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatSubScheme[]>))]
+        [JsonProperty]
+        [UsedImplicitly]
+        public IPersonSurvivalStatSubScheme[] SurvivalStats { get; private set; }
     }
 }

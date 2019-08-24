@@ -13,17 +13,8 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class HumanSurvivalData : ISurvivalData
     {
-        private const int START_SURVIVAL_STAT = 150;
-        private const int MIN_SURVIVAL_STAT = -150;
-        private const int MAX_SURVIVAL_STAT = 300;
-        private const int MAX_SURVIVAL_STAT_KEYPOINT = -100;
-        private const int STRONG_SURVIVAL_STAT_KEYPOINT = -50;
-        private const int LESSER_SURVIVAL_STAT_KEYPOINT = 0;
-
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
-
-        private readonly Dictionary<SurvivalStatType, int> _modifiedStatPass;
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource)
@@ -31,15 +22,35 @@ namespace Zilon.Core.Persons
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
 
-            Stats = new[] {
-                new SurvivalStat(_personScheme.Hp, 0, _personScheme.Hp){
-                    Type = SurvivalStatType.Health
-                },
-                CreateStat(SurvivalStatType.Satiety),
-                CreateStat(SurvivalStatType.Water)
+            // Устанавливаем характеристики выживания персонажа
+            var statList = new List<SurvivalStat>();
+            SetHitPointsStat(_personScheme, statList);
+
+            // Выставляем сытость/упоённость
+            if (personScheme.SurvivalStats != null)
+            {
+                var satiety = CreateStat(SurvivalStatType.Satiety,
+                    PersonSurvivalStatType.Satiety,
+                    personScheme.SurvivalStats);
+                statList.Add(satiety);
+
+                var hydration = CreateStat(SurvivalStatType.Water,
+                    PersonSurvivalStatType.Hydration,
+                    personScheme.SurvivalStats);
+                statList.Add(hydration);
+            }
+
+            Stats = statList.ToArray();
+        }
+
+        private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)
+        {
+            var hpStat = new SurvivalStat(personScheme.Hp, 0, personScheme.Hp)
+            {
+                Type = SurvivalStatType.Health
             };
 
-            _modifiedStatPass = new Dictionary<SurvivalStatType, int>();
+            statList.Add(hpStat);
         }
 
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
@@ -188,18 +199,31 @@ namespace Zilon.Core.Persons
             Dead?.Invoke(this, new EventArgs());
         }
 
-        private static SurvivalStat CreateStat(SurvivalStatType type)
+        private static SurvivalStat CreateStat(SurvivalStatType type, PersonSurvivalStatType schemeStatType, IPersonSurvivalStatSubScheme[] survivalStats)
         {
-            var stat = new SurvivalStat(START_SURVIVAL_STAT, MIN_SURVIVAL_STAT, MAX_SURVIVAL_STAT)
+            var statScheme = survivalStats.SingleOrDefault(x => x.Type == schemeStatType);
+            if (statScheme == null)
+            {
+                throw new InvalidOperationException("Для схемы персонажа должна быть задана схема характеристик выживания.");
+            }
+
+            var keyPoints = new SurvivalStatKeyPoint[0];
+            if (statScheme.KeyPoints != null)
+            {
+                keyPoints = new[]{
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints)),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints)),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints))
+                };
+            }
+
+            var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
             {
                 Type = type,
                 Rate = 1,
-                KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, MAX_SURVIVAL_STAT_KEYPOINT),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, STRONG_SURVIVAL_STAT_KEYPOINT),
-                        new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, LESSER_SURVIVAL_STAT_KEYPOINT)
-                    }
+                KeyPoints = keyPoints
             };
+
             return stat;
         }
 
@@ -224,6 +248,11 @@ namespace Zilon.Core.Persons
             {
                 stat.DownPassRoll = SurvivalStat.DEFAULT_DOWN_PASS_VALUE;
             }
+        }
+
+        private static int GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel level, IPersonSurvivalStatKeyPointSubScheme[] keyPoints)
+        {
+            return keyPoints.Single(x => x.Level == level).Value;
         }
     }
 }

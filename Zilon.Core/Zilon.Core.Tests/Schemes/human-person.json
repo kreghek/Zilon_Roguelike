@@ -31,12 +31,12 @@
     {
       "Type": "Satiety",
       "MinValue": -3000,
-      "MaxValue": 500,
-      "StartValue": 250,
+      "MaxValue": 150,
+      "StartValue": 50,
       "KeyPoints": [
         {
           "Level": "Lesser",
-          "Value": 0
+          "Value": -60
         },
         {
           "Level": "Strong",
@@ -45,26 +45,6 @@
         {
           "Level": "Max",
           "Value": -2520
-        }
-      ]
-    },
-	{
-      "Type": "Hydration",
-      "MinValue": -1200,
-      "MaxValue": 130,
-      "StartValue": 100,
-      "KeyPoints": [
-        {
-          "Level": "Lesser",
-          "Value": 0
-        },
-        {
-          "Level": "Strong",
-          "Value": -180
-        },
-        {
-          "Level": "Max",
-          "Value": -1080
         }
       ]
     }
