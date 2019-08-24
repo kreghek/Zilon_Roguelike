@@ -16,6 +16,8 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         _draggedPropItem.Init(PropItemViewModel.Prop);
 
         PropItemViewModel.IconImage.color = new Color(1, 1, 1, 0.5f);
+        PropItemViewModel.SelectAsDrag = true;
+        PropItemViewModel.Click_Handler();
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -26,6 +28,7 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         }
 
         PropItemViewModel.IconImage.color = new Color(1, 1, 1, 1);
+        PropItemViewModel.SelectAsDrag = false;
     }
 
     public void OnDrag(PointerEventData eventData)

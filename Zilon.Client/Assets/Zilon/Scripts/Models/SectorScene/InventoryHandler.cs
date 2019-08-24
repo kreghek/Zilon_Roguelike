@@ -30,11 +30,12 @@ public class InventoryHandler : MonoBehaviour
     public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
     public GameObject ReadButton;
+    public GameObject UsePropDropArea;
 
-    [NotNull] [Inject] private DiContainer _diContainer;
-    [NotNull] [Inject] private ISectorUiState _playerState;
-    [NotNull] [Inject] private IInventoryState _inventoryState;
-    [NotNull] [Inject] private ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly DiContainer _diContainer;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+    [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
     [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
@@ -84,7 +85,7 @@ public class InventoryHandler : MonoBehaviour
 
         PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
 
-        UpdateUseButtonsState(_inventoryState.SelectedProp?.Prop);
+        UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
     }
 
     public void OnDestroy()
@@ -238,7 +239,9 @@ public class InventoryHandler : MonoBehaviour
         }
 
         // этот фрагмент - не дубликат
-        UpdateUseButtonsState(currentItemViewModel.Prop);
+        // Не понимаю назначение этого фрагмента.
+        // Разобраться "зачем" и вставить развёрнутое пояснение.
+        UpdateUseControlsState(currentItemViewModel);
 
         if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemViewModel))
         {
@@ -252,20 +255,34 @@ public class InventoryHandler : MonoBehaviour
         // --- этот фрагмент - не дубликат
     }
 
-    private void UpdateUseButtonsState(IProp currentItem)
+    private void UpdateUseControlsState(PropItemVm currentItemViewModel)
     {
-        if (currentItem == null)
+        if (currentItemViewModel.Prop == null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
             return;
         }
 
-        var canUseProp = currentItem.Scheme.Use != null;
-        UseButton.SetActive(canUseProp);
+        if (currentItemViewModel.SelectAsDrag)
+        {
+            UseButton.SetActive(false);
+            ReadButton.SetActive(false);
 
-        var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
-        ReadButton.SetActive(canRead);
+            UsePropDropArea.SetActive(true);
+        }
+        else
+        {
+            UsePropDropArea.SetActive(false);
+
+            var currentItem = currentItemViewModel.Prop;
+
+            var canUseProp = currentItem.Scheme.Use != null;
+            UseButton.SetActive(canUseProp);
+
+            var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
+            ReadButton.SetActive(canRead);
+        }
     }
 
     public void UseButton_Handler()

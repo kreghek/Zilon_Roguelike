@@ -24,6 +24,8 @@ public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewMod
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
 
+    public bool SelectAsDrag;
+
     public void Init(IProp prop)
     {
         Prop = prop;
