@@ -21,24 +21,44 @@ namespace Zilon.Core.Persons
             int leftValue,
             int rightValue)
         {
-            var diff = RangeHelper.CreateNormalized(leftValue, rightValue);
-
-            var orientedKeyPoints = keyPoints;
-            if (!diff.IsAcs)
+            if (leftValue == rightValue)
             {
-                orientedKeyPoints = keyPoints.Reverse().ToArray();
+                return new SurvivalStatKeyPoint[0];
             }
 
             var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
-            foreach (var keyPoint in orientedKeyPoints)
+            var step = leftValue < rightValue ? 1 : -1;
+            for (var currentValue = leftValue; currentValue != rightValue; currentValue += step)
             {
-                if (diff.Contains(keyPoint.Value))
+                foreach (var keyPoint in keyPoints)
                 {
-                    crossedKeyPoints.Add(keyPoint);
+                    if (keyPoint.Value == currentValue)
+                    {
+                        crossedKeyPoints.Add(keyPoint);
+                    }
                 }
             }
 
             return crossedKeyPoints;
+
+            //var diff = RangeHelper.CreateNormalized(leftValue, rightValue);
+
+            //var orientedKeyPoints = keyPoints;
+            //if (!diff.IsAcs)
+            //{
+            //    orientedKeyPoints = keyPoints.Reverse().ToArray();
+            //}
+
+            //var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
+            //foreach (var keyPoint in orientedKeyPoints)
+            //{
+            //    if (diff.Contains(keyPoint.Value))
+            //    {
+            //        crossedKeyPoints.Add(keyPoint);
+            //    }
+            //}
+
+            //return crossedKeyPoints;
         }
     }
 }

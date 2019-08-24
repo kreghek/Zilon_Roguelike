@@ -230,6 +230,13 @@ namespace Zilon.Core.Persons
                 AddKeyPoint(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keyPointList);
                 AddKeyPoint(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keyPointList);
                 AddKeyPoint(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keyPointList);
+
+                //Ниже пока не актуально. Алгоритм работает так, что ему не важен порядок ключевых точек.
+                //// По условиям работы с о схемами, в схемах ключевые значения
+                //// могут быть в любом порядке.
+                //// При создании ключевых точек их нужно сортировать по возрастанию, чтобы корректно
+                //// обрабатываться пересечение ключевых точек.
+                //keyPointList.Sort((a, b) => a.Value.CompareTo(b.Value));
             }
 
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
