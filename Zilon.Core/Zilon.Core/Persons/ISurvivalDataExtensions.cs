@@ -14,7 +14,8 @@ namespace Zilon.Core.Persons
         /// <param name="keyPoints">Набор ключевых точек.</param>
         /// <param name="leftValue">The left value.</param>
         /// <param name="rightValue">The right value.</param>
-        /// <returns> Возвращает набор точек, значения которых попадает в указанный диапазон. </returns>
+        /// <returns> Возвращает набор точек, значения которых попадает в указанный диапазон.
+        /// Точки возвращаются в том порядке, в котором пересекаются, если двигаться от левого значения к правому. </returns>
         public static IEnumerable<SurvivalStatKeyPoint> CalcKeyPointsInRange(
             this SurvivalStatKeyPoint[] keyPoints,
             int leftValue,

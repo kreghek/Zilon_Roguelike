@@ -122,6 +122,7 @@
     <Compile Include="Persons\EquipmentTests.cs" />
     <Compile Include="Persons\EvolutionDataTests.cs" />
     <Compile Include="Persons\HumanPersonTests.cs" />
+    <Compile Include="Persons\ISurvivalDataExtensionsTests.cs" />
     <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PerkResolverTests.cs" />
     <Compile Include="Persons\SurvivalStatTests.cs" />
