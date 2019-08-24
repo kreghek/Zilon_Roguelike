@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PropBeginDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private DraggedPropItem _draggedPropItem;
 
