@@ -100,6 +100,10 @@ namespace Zilon.Core.Tactics
                                 RestoreStat(SurvivalStatType.Health, rule.Level);
                                 break;
 
+                            case ConsumeCommonRuleType.Intoxication:
+                                RiseStat(SurvivalStatType.Intoxication, rule.Level);
+                                break;
+
                             case ConsumeCommonRuleType.Undefined:
                             default:
                                 throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
@@ -195,6 +199,18 @@ namespace Zilon.Core.Tactics
             return $"{Person}";
         }
 
+        /// <summary>
+        /// Метод введён специально для повышения уровня интоксикации.
+        /// Так как глупо выглядит ResToreStat для повышения интоксикации.
+        /// Просто семантически более удобная обёртка.
+        /// </summary>
+        /// <param name="statType"> Характеристика, повышаемая методом. </param>
+        /// <param name="level"> Уровень увеличения. </param>
+        private void RiseStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            RestoreStat(statType, level);
+        }
+
         private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
         {
             switch (statType)
@@ -205,6 +221,10 @@ namespace Zilon.Core.Tactics
 
                 case SurvivalStatType.Hydration:
                     RestoreSurvivalStatInner(SurvivalStatType.Hydration, level);
+                    break;
+
+                case SurvivalStatType.Intoxication:
+                    RiseIntoxicationLevel(level);
                     break;
 
                 case SurvivalStatType.Health:
@@ -260,6 +280,30 @@ namespace Zilon.Core.Tactics
                 case PersonRuleLevel.Grand:
                     Person.Survival?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void RiseIntoxicationLevel(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE);
                     break;
 
                 default:

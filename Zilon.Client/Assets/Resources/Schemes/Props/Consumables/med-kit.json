@@ -11,14 +11,8 @@
         "Level": "Normal"
       },
 	  {
-        "Type": "Thirst",
-        "Level": "Lesser",
-		"Direction": "Negative"
-      },
-	  {
-        "Type": "Satiety",
-        "Level": "Lesser",
-		"Direction": "Negative"
+        "Type": "Intoxication",
+        "Level": "Normal"
       }
     ]
   }
