@@ -31,8 +31,8 @@
     {
       "Type": "Satiety",
       "MinValue": -3000,
-      "MaxValue": 120,
-      "StartValue": 150,
+      "MaxValue": 500,
+      "StartValue": 250,
       "KeyPoints": [
         {
           "Level": "Lesser",
@@ -51,8 +51,8 @@
 	{
       "Type": "Hydration",
       "MinValue": -1200,
-      "MaxValue": 60,
-      "StartValue": 50,
+      "MaxValue": 130,
+      "StartValue": 100,
       "KeyPoints": [
         {
           "Level": "Lesser",
