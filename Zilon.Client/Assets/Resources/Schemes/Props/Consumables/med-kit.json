@@ -8,11 +8,11 @@
     "CommonRules": [
       {
         "Type": "Health",
-        "Level": "Normal"
+        "Level": "Grand"
       },
 	  {
         "Type": "Intoxication",
-        "Level": "Normal"
+        "Level": "Lesser"
       }
     ]
   }
