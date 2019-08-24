@@ -6,12 +6,12 @@
       {
         "Impact": "Kinetic",
         "AbsorbtionLevel": "Lesser",
-        "ArmorRank": 2
+        "ArmorRank": 1
       }
     ]
   },
   "Name": {
-    "En": "Leather helmet",
-    "Ru": "Кожанный шлем"
+    "En": "Knitted Hat",
+    "Ru": "Вязанная шапка"
   }
 }
