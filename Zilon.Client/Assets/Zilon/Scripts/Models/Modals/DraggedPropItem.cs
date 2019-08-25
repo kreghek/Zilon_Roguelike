@@ -15,15 +15,19 @@ public class DraggedPropItem : MonoBehaviour
     public string Sid;
 
     public IProp Prop { get; private set; }
+
+    public PropItemVm PropItemViewModel { get; set; }
+
     public Vector3 Position => GetComponent<RectTransform>().position;
 
     public event EventHandler Click;
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
 
-    public void Init(IProp prop)
+    public void Init(PropItemVm propItemViewModel)
     {
-        Prop = prop;
+        PropItemViewModel = propItemViewModel;
+        Prop = PropItemViewModel?.Prop;
 
         UpdateProp();
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Models;
 
 using JetBrains.Annotations;
@@ -257,7 +256,7 @@ public class InventoryHandler : MonoBehaviour
 
     private void UpdateUseControlsState(PropItemVm currentItemViewModel)
     {
-        if (currentItemViewModel.Prop == null)
+        if (currentItemViewModel?.Prop == null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);

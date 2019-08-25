@@ -13,7 +13,7 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         var parentCanvas = FindObjectOfType<Canvas>();
 
         _draggedPropItem = Instantiate(DraggedPropItemPrefab, parentCanvas.transform);
-        _draggedPropItem.Init(PropItemViewModel.Prop);
+        _draggedPropItem.Init(PropItemViewModel);
 
         PropItemViewModel.IconImage.color = new Color(1, 1, 1, 0.5f);
         PropItemViewModel.SelectAsDrag = true;
