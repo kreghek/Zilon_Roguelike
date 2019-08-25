@@ -3,12 +3,13 @@
 using Assets.Zilon.Scripts.Models;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 
-public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
+public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription, IPointerDownHandler
 {
     public Text CountText;
     public Text DurableStatusText;
@@ -92,5 +93,18 @@ public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewMod
     {
         var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
         return iconSprite;
+    }
+
+    float lastClick = 0f;
+    float interval = 0.4f;
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if ((lastClick + interval) > Time.time)
+        {
+            Debug.Log("double click");
+        }
+
+        lastClick = Time.time;
     }
 }
