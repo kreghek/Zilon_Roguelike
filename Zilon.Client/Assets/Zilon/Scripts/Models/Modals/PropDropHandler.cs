@@ -20,6 +20,8 @@ public class PropDropHandler : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         var droppedPropItem = eventData.pointerDrag?.GetComponent<PropItemVm>();
+        _inventoryState.SelectedProp = droppedPropItem;
+
         var prop = droppedPropItem?.Prop;
 
         if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))

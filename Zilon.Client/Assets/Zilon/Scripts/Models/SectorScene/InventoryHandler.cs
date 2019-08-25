@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
-
+using Assets.Zilon.Scripts.Models.Modals;
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -213,9 +213,24 @@ public class InventoryHandler : MonoBehaviour
         var propItemViewModel = propItemViewModelObj.GetComponent<PropItemVm>();
         propItemViewModel.Init(prop);
         propItemViewModel.Click += PropItem_Click;
+        //TODO Переделать
+        //
+        propItemViewModel.DraggingStateChanged += PropItemViewModel_DraggingStateChanged;
         propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
         propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
         _propViewModels.Add(propItemViewModel);
+    }
+
+    private void PropItemViewModel_DraggingStateChanged(object sender, PropDraggingStateEventArgs e)
+    {
+        var currentItemViewModel = (PropItemVm)sender;
+        foreach (var propViewModel in _propViewModels)
+        {
+            var isSelected = propViewModel == currentItemViewModel;
+            propViewModel.SetSelectedState(isSelected);
+        }
+
+        UpdateUseControlsState(currentItemViewModel);
     }
 
     private void PropItemViewModel_MouseExit(object sender, EventArgs e)

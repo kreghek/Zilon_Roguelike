@@ -1,11 +1,11 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
-using JetBrains.Annotations;
+using Assets.Zilon.Scripts.Models.Modals;
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 
@@ -24,6 +24,7 @@ public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewMod
     public event EventHandler Click;
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
+    public event EventHandler<PropDraggingStateEventArgs> DraggingStateChanged;
 
     public bool SelectAsDrag;
 
@@ -37,6 +38,22 @@ public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewMod
     public void SetSelectedState(bool value)
     {
         SelectedBorder.gameObject.SetActive(value);
+    }
+
+    public void SetDraggingState(bool value)
+    {
+        SelectAsDrag = value;
+
+        if (value)
+        {
+            IconImage.color = new Color(1, 1, 1, 0.5f);
+        }
+        else
+        {
+            IconImage.color = new Color(1, 1, 1, 1f);
+        }
+
+        DraggingStateChanged?.Invoke(this, new PropDraggingStateEventArgs(value));
     }
 
     public void Click_Handler()

@@ -37,9 +37,7 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         _draggedPropItem = draggedPropItemObj.GetComponent<DraggedPropItem>();
         _draggedPropItem.Init(PropItemViewModel);
 
-        PropItemViewModel.IconImage.color = new Color(1, 1, 1, 0.5f);
-        PropItemViewModel.SelectAsDrag = true;
-        PropItemViewModel.Click_Handler();
+        PropItemViewModel.SetDraggingState(true);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -49,14 +47,16 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
             Destroy(_draggedPropItem.gameObject);
         }
 
-        PropItemViewModel.IconImage.color = new Color(1, 1, 1, 1);
-        PropItemViewModel.SelectAsDrag = false;
+        PropItemViewModel.SetDraggingState(false);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (_draggedPropItem != null)
         {
+            // Это преобразование нужно для того, чтобы объект перетаскиваемого предмета корректно отрисовывался под курсором.
+            // Если сделать просто _draggedPropItem.transform.position = Input.mousePosition, как это показывают в мануалах,
+            // то объект вообще будет иметь координаты, далёкие от канваса.
             var parentRect = (RectTransform)_draggedPropItem.transform.parent;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.main, out var posInParent);
 
