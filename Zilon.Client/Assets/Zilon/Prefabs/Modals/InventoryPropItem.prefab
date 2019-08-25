@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01e402c6f908ae44c9e31ad4f428e155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PropItemViewModel: {fileID: 114613642215259830}
 --- !u!114 &5500246394821530162
 MonoBehaviour:
   m_ObjectHideFlags: 0

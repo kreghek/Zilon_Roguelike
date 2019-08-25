@@ -26,6 +26,8 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     {
         if ((lastClick + interval) > Time.time)
         {
+            _inventoryState.SelectedProp = PropItemViewModel;
+
             var prop = PropItemViewModel?.Prop;
 
             if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))

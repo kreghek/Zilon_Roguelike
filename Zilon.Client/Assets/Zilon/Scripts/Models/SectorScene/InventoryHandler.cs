@@ -208,7 +208,9 @@ public class InventoryHandler : MonoBehaviour
 
     private void CreatePropObject(Transform itemsParent, IProp prop)
     {
-        var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
+        var propItemViewModelObj = _diContainer.InstantiatePrefab(PropItemPrefab, itemsParent);
+
+        var propItemViewModel = propItemViewModelObj.GetComponent<PropItemVm>();
         propItemViewModel.Init(prop);
         propItemViewModel.Click += PropItem_Click;
         propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
@@ -238,10 +240,11 @@ public class InventoryHandler : MonoBehaviour
         }
 
         // этот фрагмент - не дубликат
-        // Не понимаю назначение этого фрагмента.
-        // Разобраться "зачем" и вставить развёрнутое пояснение.
         UpdateUseControlsState(currentItemViewModel);
 
+        // В сервисе InventoryState указываем, что текущий предмет выбран.
+        // Текущий - это тот, на который только что кликнули.
+        // Если он уже выбран, то сбрасываем выделение.
         if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemViewModel))
         {
             _inventoryState.SelectedProp = currentItemViewModel;
