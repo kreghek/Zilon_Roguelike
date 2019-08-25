@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,6 +22,12 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         {
             Debug.LogError("Была ошибка при удалении.");
             Destroy(_draggedPropItem.gameObject);
+        }
+
+        // Эта проверка будет до задачи экипировки через dnd
+        if (PropItemViewModel.Prop.Scheme.Use != null)
+        {
+            return;
         }
 
         var parentCanvas = FindObjectOfType<Canvas>();
