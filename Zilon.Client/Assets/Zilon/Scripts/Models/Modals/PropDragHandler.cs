@@ -25,7 +25,7 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
         }
 
         // Эта проверка будет до задачи экипировки через dnd
-        if (PropItemViewModel.Prop.Scheme.Use != null)
+        if (PropItemViewModel.Prop.Scheme.Use == null)
         {
             return;
         }
