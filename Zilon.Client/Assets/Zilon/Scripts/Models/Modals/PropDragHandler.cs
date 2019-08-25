@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 using UnityEngine.EventSystems;
+
+using Zenject;
 
 public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -8,11 +11,23 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
     public PropItemVm PropItemViewModel;
     public DraggedPropItem DraggedPropItemPrefab;
 
+    [NotNull] [Inject] private readonly DiContainer _diContainer;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // Этот блок на свякий случай.
+        // Прецедентов не было, но удаление может сломаться.
+        if (_draggedPropItem != null)
+        {
+            Debug.LogError("Была ошибка при удалении.");
+            Destroy(_draggedPropItem.gameObject);
+        }
+
         var parentCanvas = FindObjectOfType<Canvas>();
 
-        _draggedPropItem = Instantiate(DraggedPropItemPrefab, parentCanvas.transform);
+        var draggedPropItemObj = _diContainer.InstantiatePrefab(DraggedPropItemPrefab, parentCanvas.transform);
+
+        _draggedPropItem = draggedPropItemObj.GetComponent<DraggedPropItem>();
         _draggedPropItem.Init(PropItemViewModel);
 
         PropItemViewModel.IconImage.color = new Color(1, 1, 1, 0.5f);

@@ -28,11 +28,15 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
         {
             _inventoryState.SelectedProp = PropItemViewModel;
 
-            var prop = PropItemViewModel?.Prop;
+            var prop = PropItemViewModel.Prop;
 
             if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))
             {
-                UseProp();
+                var canUseProp = prop.Scheme.Use != null;
+                if (canUseProp)
+                {
+                    UseProp();
+                }
             }
             else
             {

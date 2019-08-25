@@ -19,14 +19,16 @@ public class PropDropHandler : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("asdf");
-
-        var droppedPropItem = eventData.pointerDrag?.GetComponent<DraggedPropItem>();
+        var droppedPropItem = eventData.pointerDrag?.GetComponent<PropItemVm>();
         var prop = droppedPropItem?.Prop;
 
         if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))
         {
-            UseProp();
+            var canUseProp = prop.Scheme.Use != null;
+            if (canUseProp)
+            {
+                UseProp();
+            }
         }
         else
         {
