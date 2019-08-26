@@ -114,7 +114,20 @@ public class InventoryHandler : MonoBehaviour
             slotViewModel.Click += Slot_Click;
             slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
             slotViewModel.MouseExit += SlotViewModel_MouseExit;
+            slotViewModel.DraggingStateChanged += SlotViewModel_DraggingStateChanged;
         }
+    }
+
+    private void SlotViewModel_DraggingStateChanged(object sender, PropDraggingStateEventArgs e)
+    {
+        //var currentItemViewModel = (PropItemVm)sender;
+        //foreach (var propViewModel in _propViewModels)
+        //{
+        //    var isSelected = propViewModel == currentItemViewModel;
+        //    propViewModel.SetSelectedState(isSelected);
+        //}
+
+        //UpdateUseControlsState(currentItemViewModel);
     }
 
     private void SlotViewModel_MouseExit(object sender, EventArgs e)

@@ -1,5 +1,4 @@
 ﻿using Assets.Zilon.Scripts.Services;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -25,9 +24,22 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
         if (equipCommand.CanExecute())
         {
             var droppedPropItem = eventData.pointerDrag?.GetComponent<PropItemVm>();
-            _inventoryState.SelectedProp = droppedPropItem;
+            if (droppedPropItem != null)
+            {
+                // Значит экипировка произошла из инвентаря.
+                _inventoryState.SelectedProp = droppedPropItem;
 
-            _commandManager.Push(equipCommand);
+                _commandManager.Push(equipCommand);
+
+                return;
+            }
+
+            var draggedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
+            if (draggedInventorySlot != null)
+            {
+                Debug.Log("123");
+                return;
+            }
         }
     }
 }

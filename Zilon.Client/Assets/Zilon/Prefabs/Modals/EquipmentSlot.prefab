@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 4063666282255933052}
   - component: {fileID: 7745337546213181574}
   - component: {fileID: 2547320450842014439}
+  - component: {fileID: 2319514356437487859}
   m_Layer: 5
   m_Name: EquipmentSlot
   m_TagString: Untagged
@@ -147,6 +148,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9155e055b7ee49f4cbdabd4b1ee4c15a, type: 3}
   - {fileID: 21300000, guid: f599478103ed1ce4a8733fbaa75132c0, type: 3}
   - {fileID: 21300000, guid: 2bbeafd6942b10d4a8a90fae5fcb7df9, type: 3}
+  SelectAsDrag: 0
 --- !u!114 &114889429254206848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +276,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd9b8fd20663df4c95d29effdfde25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InventorySlotViewModel: {fileID: 114484836081510712}
+--- !u!114 &2319514356437487859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168523480684566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8729f2ceb489e1d41a95667219e8a1d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DraggedPropItemPrefab: {fileID: 1744148937314468465, guid: f74069ac61475f9488e2bf1993a82297,
+    type: 3}
   InventorySlotViewModel: {fileID: 114484836081510712}
 --- !u!1 &1331298518315526
 GameObject:

@@ -16,8 +16,6 @@ public class DraggedPropItem : MonoBehaviour
 
     public IProp Prop { get; private set; }
 
-    public PropItemVm PropItemViewModel { get; set; }
-
     public Vector3 Position => GetComponent<RectTransform>().position;
 
     public event EventHandler Click;
@@ -26,8 +24,14 @@ public class DraggedPropItem : MonoBehaviour
 
     public void Init(PropItemVm propItemViewModel)
     {
-        PropItemViewModel = propItemViewModel;
-        Prop = PropItemViewModel?.Prop;
+        Prop = propItemViewModel?.Prop;
+
+        UpdateProp();
+    }
+
+    public void Init(InventorySlotVm inventorySlotViewModel)
+    {
+        Prop = inventorySlotViewModel?.Prop;
 
         UpdateProp();
     }

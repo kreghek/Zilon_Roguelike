@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Models.Modals;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -46,6 +47,10 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     public event EventHandler Click;
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
+    public event EventHandler<PropDraggingStateEventArgs> DraggingStateChanged;
+
+    public bool SelectAsDrag;
+
 
     public void Start()
     {
@@ -142,5 +147,21 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     private void ClearEventHandlers()
     {
         Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+    }
+
+    public void SetDraggingState(bool value)
+    {
+        SelectAsDrag = value;
+
+        if (value)
+        {
+            IconImage.color = new Color(1, 1, 1, 0.5f);
+        }
+        else
+        {
+            IconImage.color = new Color(1, 1, 1, 1f);
+        }
+
+        DraggingStateChanged?.Invoke(this, new PropDraggingStateEventArgs(value));
     }
 }
