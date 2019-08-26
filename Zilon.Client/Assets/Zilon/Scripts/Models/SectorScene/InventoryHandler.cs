@@ -281,7 +281,7 @@ public class InventoryHandler : MonoBehaviour
             return;
         }
 
-        if (currentItemViewModel.SelectAsDrag)
+        if (currentItemViewModel.SelectAsDrag && currentItemViewModel.Prop.Scheme.Use != null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);

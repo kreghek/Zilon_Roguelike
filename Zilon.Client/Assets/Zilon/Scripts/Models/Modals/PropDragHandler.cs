@@ -7,6 +7,8 @@ using Zenject;
 
 public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    private const string HISTORY_BOOK_SID = "history-book";
+
     private DraggedPropItem _draggedPropItem;
 
     public PropItemVm PropItemViewModel;
@@ -24,8 +26,13 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
             Destroy(_draggedPropItem.gameObject);
         }
 
-        // Эта проверка будет до задачи экипировки через dnd
-        if (PropItemViewModel.Prop.Scheme.Use == null)
+        var propScheme = PropItemViewModel.Prop.Scheme;
+        var canUse = propScheme.Use != null;
+        var canRead = propScheme.Sid == HISTORY_BOOK_SID;
+        var canEquip = propScheme.Equip != null;
+
+        var canDnd = canUse || canRead || canEquip;
+        if (!canDnd)
         {
             return;
         }
