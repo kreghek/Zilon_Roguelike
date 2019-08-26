@@ -18,8 +18,6 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("1234");
-
         var slotIndex = InventorySlotViewModel.SlotIndex;
 
         var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
