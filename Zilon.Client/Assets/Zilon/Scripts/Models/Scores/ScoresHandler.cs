@@ -17,6 +17,10 @@ public class ScoresHandler : MonoBehaviour
     {
         var scoreRecords = _scoreStorage.ReadScores();
 
+        var parentRect = ScoreRecordParent.GetComponent<RectTransform>();
+        var rowCount = scoreRecords.Length;
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (60 + 5) * rowCount);
+
         foreach (var record in scoreRecords)
         {
             var row = Instantiate(ScoresTableRowPrefab, ScoreRecordParent);
