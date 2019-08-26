@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,6 +8,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Props;
 
 public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 {
@@ -37,6 +39,10 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
                 {
                     UseProp();
                 }
+                else if (prop.Scheme.Equip != null)
+                {
+                    EquipProp(prop);
+                }
             }
             else
             {
@@ -45,6 +51,14 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
         }
 
         lastClick = Time.time;
+    }
+
+    /// <summary>
+    /// Метод выбирает слот по типу
+    /// </summary>
+    private void EquipProp(IProp prop)
+    {
+        throw new NotImplementedException();
     }
 
     private void UseProp()
