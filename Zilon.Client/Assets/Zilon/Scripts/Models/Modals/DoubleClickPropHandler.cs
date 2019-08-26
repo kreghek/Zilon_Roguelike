@@ -54,7 +54,9 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     }
 
     /// <summary>
-    /// Метод выбирает слот по типу
+    /// Метод выбирает слот по типу предмета. Выбор слота выполняется на основе команды на экипировку.
+    /// Выбор слота происходит по следующему алгоритму:
+    /// 1. Создаётся набор команд 
     /// </summary>
     private void EquipProp(IProp prop)
     {

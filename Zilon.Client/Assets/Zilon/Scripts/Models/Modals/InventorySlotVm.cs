@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
-
+using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -20,7 +20,9 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 {
     [NotNull] [Inject] private readonly ICommandManager _comamndManager;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
+    [NotNull] [Inject] private readonly SpecialCommandManager _specialCommandManager;
+
+    [NotNull] private ICommand _equipCommand;
 
     public IActor Actor { get; set; }
     public int SlotIndex;
@@ -46,7 +48,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     public void Start()
     {
-        ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
+        _equipCommand = _specialCommandManager.GetEquipCommand(SlotIndex);
 
         UpdateSlotIcon();
         InitEventHandlers();
