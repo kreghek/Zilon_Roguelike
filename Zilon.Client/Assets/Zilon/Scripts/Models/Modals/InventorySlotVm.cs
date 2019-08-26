@@ -2,6 +2,7 @@
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -18,9 +19,9 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 {
-    [NotNull] [Inject] private readonly ICommandManager _comamndManager;
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly SpecialCommandManager _specialCommandManager;
+    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly IInventoryState _inventoryState;
+    [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
     [NotNull] private ICommand _equipCommand;
 
