@@ -1,22 +1,19 @@
-﻿using JetBrains.Annotations;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-
 using Zenject;
-using Zilon.Core.Client;
 
-public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+//TODO Объединить *DragHandler
+// PropDragHandler и InventorySlotDragHandler.
+// У них много общего. И достаточно сложная логика.
+public class InventorySlotDragHandler : UIBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private const string HISTORY_BOOK_SID = "history-book";
+    [Inject]
+    private DiContainer _diContainer;
+
+    public DraggedPropItem DraggedPropItemPrefab;
+    public InventorySlotVm InventorySlotViewModel;
 
     private DraggedPropItem _draggedPropItem;
-
-    public PropItemVm PropItemViewModel;
-    public DraggedPropItem DraggedPropItemPrefab;
-
-    [Inject] private readonly DiContainer _diContainer;
-    [Inject] private readonly IInventoryState _inventoryState;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -28,36 +25,14 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
             Destroy(_draggedPropItem.gameObject);
         }
 
-        var propScheme = PropItemViewModel.Prop.Scheme;
-        var canUse = propScheme.Use != null;
-        var canRead = propScheme.Sid == HISTORY_BOOK_SID;
-        var canEquip = propScheme.Equip != null;
-
-        var canDnd = canUse || canRead || canEquip;
-        if (!canDnd)
-        {
-            return;
-        }
-
         var parentCanvas = FindObjectOfType<Canvas>();
 
         var draggedPropItemObj = _diContainer.InstantiatePrefab(DraggedPropItemPrefab, parentCanvas.transform);
 
         _draggedPropItem = draggedPropItemObj.GetComponent<DraggedPropItem>();
-        _draggedPropItem.Init(PropItemViewModel);
-        
-        PropItemViewModel.SetDraggingState(true);
-        _inventoryState.SelectedProp = PropItemViewModel;
-    }
+        _draggedPropItem.Init(InventorySlotViewModel);
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (_draggedPropItem != null)
-        {
-            Destroy(_draggedPropItem.gameObject);
-        }
-
-        PropItemViewModel.SetDraggingState(false);
+        InventorySlotViewModel.SetDraggingState(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -72,5 +47,15 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
 
             _draggedPropItem.transform.localPosition = posInParent;
         }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (_draggedPropItem != null)
+        {
+            Destroy(_draggedPropItem.gameObject);
+        }
+
+        InventorySlotViewModel.SetDraggingState(false);
     }
 }

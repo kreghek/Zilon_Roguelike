@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,10 +15,13 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
     private const string HISTORY_BOOK_SID = "history-book";
 
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [Inject] private readonly ISectorUiState _playerState;
+    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly IInventoryState _inventoryState;
+    [Inject] private readonly SpecialCommandManager _specialCommandManager;
+
+    [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
+    [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public PropItemVm PropItemViewModel;
 
@@ -37,6 +40,10 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
                 {
                     UseProp();
                 }
+                else if (prop.Scheme.Equip != null)
+                {
+                    EquipProp(PropItemViewModel);
+                }
             }
             else
             {
@@ -45,6 +52,32 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
         }
 
         lastClick = Time.time;
+    }
+
+    /// <summary>
+    /// Метод выбирает слот по типу предмета. Выбор слота выполняется на основе команды на экипировку.
+    /// 1. Перебираем все слоты персонажа.
+    /// 2. Если экипировка возможна в текущий слот, то 3.
+    /// 3. Выполняем команду на экипировку в текущий слот.
+    /// </summary>
+    private void EquipProp(IPropItemViewModel propItemViewModel)
+    {
+        _inventoryState.SelectedProp = propItemViewModel;
+
+        var actor = _playerState.ActiveActor.Actor;
+        var person = actor.Person;
+        var personSlots = person.EquipmentCarrier.Slots;
+
+        for (var slotIndex = 0; slotIndex < personSlots.Length; slotIndex++)
+        {
+            var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
+            if (equipCommand.CanExecute())
+            {
+                _commandManager.Push(equipCommand);
+
+                break;
+            }
+        }
     }
 
     private void UseProp()
