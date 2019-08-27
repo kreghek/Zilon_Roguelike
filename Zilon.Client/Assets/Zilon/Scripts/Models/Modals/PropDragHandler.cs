@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Zenject;
+using Zilon.Core.Client;
 
 public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -14,7 +15,8 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
     public PropItemVm PropItemViewModel;
     public DraggedPropItem DraggedPropItemPrefab;
 
-    [NotNull] [Inject] private readonly DiContainer _diContainer;
+    [Inject] private readonly DiContainer _diContainer;
+    [Inject] private readonly IInventoryState _inventoryState;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -43,8 +45,9 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
 
         _draggedPropItem = draggedPropItemObj.GetComponent<DraggedPropItem>();
         _draggedPropItem.Init(PropItemViewModel);
-
+        
         PropItemViewModel.SetDraggingState(true);
+        _inventoryState.SelectedProp = PropItemViewModel;
     }
 
     public void OnEndDrag(PointerEventData eventData)
