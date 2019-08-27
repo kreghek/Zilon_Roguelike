@@ -6,6 +6,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Props;
 
 public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 {
@@ -34,10 +35,14 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
                 return;
             }
 
-            var draggedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
-            if (draggedInventorySlot != null)
+            var droppedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
+            if (droppedInventorySlot != null)
             {
-                Debug.Log("123");
+                var droppedProp = droppedInventorySlot.Prop;
+
+
+                // Экипировка из слота экипировки в другой слот пока не сделана
+
                 return;
             }
         }
