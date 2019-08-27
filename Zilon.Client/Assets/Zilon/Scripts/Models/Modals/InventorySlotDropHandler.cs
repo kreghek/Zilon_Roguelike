@@ -38,10 +38,9 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
             var droppedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
             if (droppedInventorySlot != null)
             {
-                var droppedProp = droppedInventorySlot.Prop;
+                _inventoryState.SelectedProp = droppedInventorySlot;
 
-
-                // Экипировка из слота экипировки в другой слот пока не сделана
+                _commandManager.Push(equipCommand);
 
                 return;
             }

@@ -18,7 +18,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
-public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
+public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
     [Inject] private readonly ICommandManager _comamndManager;
     [Inject] private readonly IInventoryState _inventoryState;
