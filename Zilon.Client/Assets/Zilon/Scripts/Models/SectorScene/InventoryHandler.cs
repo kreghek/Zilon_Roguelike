@@ -30,6 +30,7 @@ public class InventoryHandler : MonoBehaviour
     public GameObject UseButton;
     public GameObject ReadButton;
     public GameObject UsePropDropArea;
+    public GameObject DeequipPropDropArea;
 
     [NotNull] [Inject] private readonly DiContainer _diContainer;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
@@ -48,12 +49,7 @@ public class InventoryHandler : MonoBehaviour
     public void Start()
     {
         CreateSlots();
-
-        // Изначально скрываем все кнопки.
-        // Потому что изначально никакой предмет не должен быть выбран.
-        // Поэтому не ясно, какие действия доступны.
-        UseButton.SetActive(false);
-        ReadButton.SetActive(false);
+        StartUpControls();
 
         _actor = _playerState.ActiveActor.Actor;
         var inventory = _actor.Person.Inventory;
@@ -64,6 +60,25 @@ public class InventoryHandler : MonoBehaviour
         inventory.Changed += Inventory_Changed;
 
         _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+    }
+
+    /// <summary>
+    /// Первоначальная настройка всех элементов UI.
+    /// Приводим к первоначальному виду, чтобы было сложнее забыть что-нибудь отключить/скрыть
+    /// во время разработки.
+    /// </summary>
+    private void StartUpControls()
+    {
+        // Изначально скрываем все кнопки.
+        // Потому что изначально никакой предмет не должен быть выбран.
+        // Поэтому не ясно, какие действия доступны.
+        UseButton.SetActive(false);
+        ReadButton.SetActive(false);
+
+        // Скрываем все области сброса.
+        // Потому что изначально никто никакие предметы не перетаскивает.
+        DeequipPropDropArea.SetActive(false);
+        UsePropDropArea.SetActive(false);
     }
 
     public void Update()
@@ -120,14 +135,7 @@ public class InventoryHandler : MonoBehaviour
 
     private void SlotViewModel_DraggingStateChanged(object sender, PropDraggingStateEventArgs e)
     {
-        //var currentItemViewModel = (PropItemVm)sender;
-        //foreach (var propViewModel in _propViewModels)
-        //{
-        //    var isSelected = propViewModel == currentItemViewModel;
-        //    propViewModel.SetSelectedState(isSelected);
-        //}
-
-        //UpdateUseControlsState(currentItemViewModel);
+        DeequipPropDropArea.SetActive(e.Dragging);
     }
 
     private void SlotViewModel_MouseExit(object sender, EventArgs e)
