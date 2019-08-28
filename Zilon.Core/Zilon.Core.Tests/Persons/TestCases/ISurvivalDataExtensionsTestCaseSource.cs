@@ -22,7 +22,25 @@ namespace Zilon.Core.Tests.Persons.TestCases
                     0, 51,
                     SurvivalStatHazardLevel.Lesser,
                     SurvivalStatHazardLevel.Strong,
-                    SurvivalStatHazardLevel.Undefined);
+                    null);
+
+                yield return new TestCaseData(25, 50, 100,
+                    99, 100,
+                    SurvivalStatHazardLevel.Max,
+                    null,
+                    null);
+
+                yield return new TestCaseData(1, 2, 3,
+                    0, 3,
+                    SurvivalStatHazardLevel.Lesser,
+                    SurvivalStatHazardLevel.Strong,
+                    SurvivalStatHazardLevel.Max);
+
+                yield return new TestCaseData(-25, -50, -100,
+                    0, -51,
+                    SurvivalStatHazardLevel.Lesser,
+                    SurvivalStatHazardLevel.Strong,
+                    null);
             }
         }
     }
