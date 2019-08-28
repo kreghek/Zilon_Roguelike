@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
             var currentEffects = new EffectCollection();
 
             var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType,
-                SurvivalStatHazardLevel.Strong,
+                SurvivalStatHazardLevel.Max,
                 survivalRandomSource);
 
             currentEffects.Add(testedEffect);
@@ -132,6 +132,55 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
                     new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 5),
                     new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 0),
                     new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -10)
+                }
+            };
+
+
+
+            // ACT
+            PersonEffectHelper.UpdateSurvivalEffect(currentEffects,
+                stat,
+                new[] { stat.KeyPoints[2] },
+                survivalRandomSource);
+
+
+
+            // ASSERT
+            var factEffect = currentEffects.Items
+                .OfType<SurvivalStatHazardEffect>()
+                .Single(x => x.Type == expectedSurvivalHazardType);
+
+            factEffect.Level.Should().Be(SurvivalStatHazardLevel.Strong);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка эффекта выше уровнем,
+        /// то эффект снижает уровень.
+        /// </summary>
+        [Test]
+        public void UpdateSurvivalEffect_HasMaxEffectAndValueMoreThatKeyValue_HasStrongEffect2()
+        {
+            //ARRANGE
+
+            const SurvivalStatType expectedSurvivalHazardType = SurvivalStatType.Intoxication;
+
+            var survivalRandomSource = CreateMaxRollsRandomSource();
+
+            var currentEffects = new EffectCollection();
+
+            var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType,
+                SurvivalStatHazardLevel.Max,
+                survivalRandomSource);
+
+            currentEffects.Add(testedEffect);
+
+            var stat = new SurvivalStat(110, 0, 150)
+            {
+                Type = expectedSurvivalHazardType,
+                KeyPoints = new[] {
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 30),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 60),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, 111)
                 }
             };
 
