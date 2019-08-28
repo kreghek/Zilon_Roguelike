@@ -1,6 +1,10 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using System;
+
+using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
 
 public class AggragateScoresHandler : MonoBehaviour
@@ -17,7 +21,17 @@ public class AggragateScoresHandler : MonoBehaviour
 
     public void Awake()
     {
-        var aggregareResults = _scoreStorage.ReadAggregateScores();
+        AggregateScores aggregareResults;
+
+        try
+        {
+            aggregareResults = _scoreStorage.ReadAggregateScores();
+        }
+        catch (Exception exception)
+        {
+            aggregareResults = new AggregateScores();
+            Debug.LogError("Не удалось выполнить чтение результатов из БД\n" + exception.ToString());
+        }
 
         AvgScoresText.text = $"Avg Scores: {aggregareResults.AvgScores:F2}";
         MaxScoresText.text = $"Max Scores: {aggregareResults.MaxScores:F2}";
