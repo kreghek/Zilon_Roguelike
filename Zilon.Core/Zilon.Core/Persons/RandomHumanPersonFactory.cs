@@ -68,7 +68,7 @@ namespace Zilon.Core.Persons
 
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
-            AddResource(inventory, "med-kit", 3);
+            AddResource(inventory, "med-kit", 1);
 
 
             return person;
