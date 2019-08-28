@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+
+using Mono.Data.SqliteClient;
 
 using Newtonsoft.Json;
 
@@ -20,7 +21,7 @@ namespace Assets.Zilon.Scripts.Services
         {
             var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
             var connectionString = $"URI=file:{pathToDb}";
-            using (var connection = new SQLiteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -30,7 +31,7 @@ namespace Assets.Zilon.Scripts.Services
                 var scoreStorageData = ScoresStorageData.Create(scores);
                 var summarySerialized = JsonConvert.SerializeObject(scoreStorageData);
                 var textSummary = TextSummaryHelper.CreateTextSummary(scores);
-                using (var command = new SQLiteCommand(connection))
+                using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, Summary, TextSummary)
                     VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
@@ -48,7 +49,7 @@ namespace Assets.Zilon.Scripts.Services
 
             var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
             var connectionString = $"URI=file:{pathToDb}";
-            using (var connection = new SQLiteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -91,7 +92,7 @@ namespace Assets.Zilon.Scripts.Services
 
             var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
             var connectionString = $"URI=file:{pathToDb}";
-            using (var connection = new SQLiteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -134,9 +135,9 @@ namespace Assets.Zilon.Scripts.Services
             return aggregateScores;
         }
 
-        private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
+        private static void CreateScoresTableIfNotExists(SqliteConnection connection)
         {
-            using (var command = new SQLiteCommand(connection))
+            using (var command = connection.CreateCommand())
             {
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS [Scores](
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
