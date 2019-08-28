@@ -10,8 +10,8 @@
         public const int HpNormalRestoreValue = 4;
         public const int HpGrandRestoreValue = 9;
 
-        public const int INTOXICATION_RISE_LESSER_VALUE = 30;
-        public const int INTOXICATION_RISE_NORMAL_VALUE = 90;
+        public const int INTOXICATION_RISE_LESSER_VALUE = 25;
+        public const int INTOXICATION_RISE_NORMAL_VALUE = 55;
         public const int INTOXICATION_RISE_GRAND_VALUE = 120;
     }
 }

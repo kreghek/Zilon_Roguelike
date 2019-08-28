@@ -1,63 +1,51 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Persons;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+
 using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Persons.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class ISurvivalDataExtensionsTests
     {
-        [Test()]
-        public void CalcKeyPointsInRange_2PositiveKeyPointsRise_RaisedStrongKeyPoint()
+        /// <summary>
+        /// Тест проверяет, что при изменении значения в указанном диапазоне
+        /// мы проходим через все предполагаемые ключевые точки.
+        /// </summary>
+        [Test]
+        [TestCaseSource(typeof(ISurvivalDataExtensionsTestCaseSource), nameof(ISurvivalDataExtensionsTestCaseSource.CalcKeyPointTestCases))]
+        public void CalcKeyPointsInRange_TestCases(int lesserKeyPoint, int strongKeyPoint, int maxKeyPoint,
+            int minValue, int maxValue,
+            SurvivalStatHazardLevel? passedKeyPoint0,
+            SurvivalStatHazardLevel? passedKeyPoint1,
+            SurvivalStatHazardLevel? passedKeyPoint2)
         {
             // ARRANGE
 
             var keyPoints = new[] {
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 25),
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 50),
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, 100)
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, lesserKeyPoint),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, strongKeyPoint),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, maxKeyPoint)
             };
 
 
 
             // ACT
-            var crossedKeyPoints = keyPoints.CalcKeyPointsInRange(0, 51);
+
+            var crossedKeyPoints = keyPoints.CalcKeyPointsInRange(minValue, maxValue);
 
 
 
             // ASSERT
-            var materializedFactCrossedKeyPoints = crossedKeyPoints.ToArray();
-            materializedFactCrossedKeyPoints[0].Level.Should().Be(SurvivalStatHazardLevel.Lesser);
-            materializedFactCrossedKeyPoints[1].Level.Should().Be(SurvivalStatHazardLevel.Strong);
-        }
+            var expectedKeyPointsWithNulls = new[] { passedKeyPoint0, passedKeyPoint1, passedKeyPoint2 };
+            var expectedKeyPoints = expectedKeyPointsWithNulls.Where(x => x != null).Select(x => x.Value).ToArray();
 
-        [Test()]
-        public void CalcKeyPointsInRange_2NegativeKeyPointsRise_RaisedStrongKeyPoint()
-        {
-            // ARRANGE
+            var factKeyPoints = crossedKeyPoints.Select(x => x.Level).ToArray();
 
-            var keyPoints = new[] {
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, -25),
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -50),
-                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -100)
-            };
-
-
-
-            // ACT
-            var crossedKeyPoints = keyPoints.CalcKeyPointsInRange(0, -51);
-
-
-
-            // ASSERT
-            var materializedFactCrossedKeyPoints = crossedKeyPoints.ToArray();
-            materializedFactCrossedKeyPoints[0].Level.Should().Be(SurvivalStatHazardLevel.Lesser);
-            materializedFactCrossedKeyPoints[1].Level.Should().Be(SurvivalStatHazardLevel.Strong);
+            factKeyPoints.Should().BeEquivalentTo(expectedKeyPoints);
         }
     }
 }

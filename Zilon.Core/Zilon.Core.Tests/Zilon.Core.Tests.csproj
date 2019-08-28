@@ -128,6 +128,7 @@
     <Compile Include="Persons\SurvivalStatTests.cs" />
     <Compile Include="Persons\SurvivalDataTests.cs" />
     <Compile Include="Persons\TestCases\EquipmentCarrierTestsCaseSource.cs" />
+    <Compile Include="Persons\TestCases\ISurvivalDataExtensionsTestCaseSource.cs" />
     <Compile Include="Persons\TestCases\SurvivalDataTestCasesSource.cs" />
     <Compile Include="Persons\TestCases\SurvivalStatTestCasesSource.cs" />
     <Compile Include="ProgressStoring\GlobeStorageDataTests.cs" />

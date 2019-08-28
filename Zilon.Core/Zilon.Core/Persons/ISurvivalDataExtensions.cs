@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -16,7 +17,7 @@ namespace Zilon.Core.Persons
         /// <param name="rightValue">The right value.</param>
         /// <returns> Возвращает набор точек, значения которых попадает в указанный диапазон.
         /// Точки возвращаются в том порядке, в котором пересекаются, если двигаться от левого значения к правому. </returns>
-        public static IEnumerable<SurvivalStatKeyPoint> CalcKeyPointsInRange(
+        public static SurvivalStatKeyPoint[] CalcKeyPointsInRange(
             this SurvivalStatKeyPoint[] keyPoints,
             int leftValue,
             int rightValue)
@@ -28,7 +29,11 @@ namespace Zilon.Core.Persons
 
             var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
             var step = leftValue < rightValue ? 1 : -1;
-            for (var currentValue = leftValue; currentValue != rightValue; currentValue += step)
+            var steps = Math.Abs(leftValue - rightValue) + 1;
+            var stepCounter = 0;
+
+            var currentValue = leftValue;
+            do
             {
                 foreach (var keyPoint in keyPoints)
                 {
@@ -37,9 +42,12 @@ namespace Zilon.Core.Persons
                         crossedKeyPoints.Add(keyPoint);
                     }
                 }
-            }
 
-            return crossedKeyPoints;
+                currentValue += step;
+                stepCounter++;
+            } while (stepCounter< steps);
+
+            return crossedKeyPoints.ToArray();
 
             //var diff = RangeHelper.CreateNormalized(leftValue, rightValue);
 
