@@ -19,7 +19,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         /// то эффект изымается.
         /// </summary>
         [Test]
-        public void UpdateSurvivalEffect_HasLesserEffectAndValueMoreThatKetValue_HasNoEffect()
+        public void UpdateSurvivalEffect_HasLesserEffectAndValueMoreThatKetValueInNegativeKeyPoints_HasNoEffect()
         {
             //ARRANGE
 
@@ -32,7 +32,8 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(1, -10, 10)
+            // Значение - 1, а ключевая точка - 0
+            var stat = new SurvivalStat(startValue: 1, min: -10, max: 10)
             {
                 Type = SurvivalStatType.Satiety,
                 KeyPoints = new[] {
@@ -58,10 +59,10 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
         /// <summary>
         /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка эффекта выше уровнем,
-        /// то эффект снижает уровень.
+        /// то эффект снижает уровень. Рассматриваем отрицательные значения ключевых точек.
         /// </summary>
         [Test]
-        public void UpdateSurvivalEffect_HasStrongEffectAndValueMoreThatKeyValue_HasLesserEffect()
+        public void UpdateSurvivalEffect_HasStrongEffectAndValueMoreThatKeyValueInNegativeKeyPoints_HasLesserEffect()
         {
             //ARRANGE
 
@@ -72,12 +73,16 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
             var currentEffects = new EffectCollection();
 
             var testedEffect = new SurvivalStatHazardEffect(expectedSurvivalHazardType,
-                SurvivalStatHazardLevel.Lesser,
+                SurvivalStatHazardLevel.Strong,
                 survivalRandomSource);
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(-5, -10, 10)
+            // Предполагаем, что первоначально эффект был Strong на -10.
+            // Затем значение изменилось на -5.
+            // Мы прошли ключевую точку -10 Strong на увеличение.
+            // Это должно снизить уровень эффекта на Lesser.
+            var stat = new SurvivalStat(startValue: -5, min: -10, max: 10)
             {
                 Type = expectedSurvivalHazardType,
                 KeyPoints = new[] {
@@ -109,7 +114,7 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         /// то эффект снижает уровень.
         /// </summary>
         [Test]
-        public void UpdateSurvivalEffect_HasMaxEffectAndValueMoreThatKeyValue_HasStrongEffect()
+        public void UpdateSurvivalEffect_HasMaxEffectAndValueMoreThatKeyValueInNegativeKeyPoints_HasStrongEffect()
         {
             //ARRANGE
 
@@ -125,12 +130,19 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
-            var stat = new SurvivalStat(-5, -10, 10)
+            // Предполагаем, что первоначально эффект был Max на -10.
+            // Затем значение изменилось на -5.
+            // Мы прошли ключевую точку -10 Max на увеличение.
+            // Это должно снизить уровень эффекта на Strong.
+            var stat = new SurvivalStat(startValue: -5, min: -10, max: 10)
             {
                 Type = expectedSurvivalHazardType,
                 KeyPoints = new[] {
-                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 5),
-                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 0),
+                    // Внимание!
+                    // Сейчас все ключевые чтоки должны быть либо слева от нуля включая ноль.
+                    // Либо справа от нуля.
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 0),
+                    new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, -2),
                     new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, -10)
                 }
             };
@@ -154,11 +166,11 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
         }
 
         /// <summary>
-        /// Тест проверяет, что если значение увеличилось выше, чем ключевая точка эффекта выше уровнем,
-        /// то эффект снижает уровень.
+        /// Тест проверяет, что при прохождении ключевой точки Max эффект понижает уровень.
+        /// Данный тест работает с положительными ключевыми точками.
         /// </summary>
         [Test]
-        public void UpdateSurvivalEffect_HasMaxEffectAndValueMoreThatKeyValue_HasStrongEffect2()
+        public void UpdateSurvivalEffect_HasMaxEffectAndValueLessThatKeyValueInPositiveKeyPoints_HasStrongEffect()
         {
             //ARRANGE
 
@@ -174,6 +186,9 @@ namespace Zilon.Core.Tests.Persons.Auxiliary
 
             currentEffects.Add(testedEffect);
 
+            // Предполагаем, что первоначально эффект был Max на 111.
+            // Затем значение изменилось на 110. Мы прошли ключевую точку 111 Max в сторону меньшего уровня.
+            // Это должно снизить уровень эффекта на Strong.
             var stat = new SurvivalStat(110, 0, 150)
             {
                 Type = expectedSurvivalHazardType,
