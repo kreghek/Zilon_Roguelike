@@ -711,7 +711,7 @@ MonoBehaviour:
   InventoryButton: {fileID: 1793996589}
   PersonButton: {fileID: 1724347674}
   SectorTransitionMoveButton: {fileID: 299468032}
-  CityQuickExitButton: {fileID: 0}
+  CityQuickExitButton: {fileID: 185488352}
 --- !u!114 &227365887
 MonoBehaviour:
   m_ObjectHideFlags: 0
