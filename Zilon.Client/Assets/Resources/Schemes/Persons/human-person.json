@@ -71,7 +71,7 @@
 	{
       "Type": "Intoxication",
       "MinValue": 0,
-      "MaxValue": 150,
+      "MaxValue": 130,
       "StartValue": 0,
       "KeyPoints": [
         {
@@ -80,11 +80,11 @@
         },
         {
           "Level": "Strong",
-          "Value": 110
+          "Value": 60
         },
         {
           "Level": "Max",
-          "Value": 130
+          "Value": 111
         }
       ]
     }

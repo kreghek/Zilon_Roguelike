@@ -23,7 +23,7 @@ namespace Zilon.Core.Persons.Auxiliary
         public static void UpdateSurvivalEffect(
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints,
+            [NotNull] [ItemNotNull] SurvivalStatKeyPoint[] keyPoints,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
@@ -59,13 +59,11 @@ namespace Zilon.Core.Persons.Auxiliary
                                 break;
 
                             case SurvivalStatHazardLevel.Undefined:
-                                throw new NotSupportedException();
-                            
                             case SurvivalStatHazardLevel.Lesser:
-                                throw new NotSupportedException();
-                            
                             default:
-                                throw new InvalidOperationException("Уровень эффекта, который не обрабатывается.");
+                                // Для Lesser уже выполняется обработка выше.
+                                // Для остальных уровней - в отдельных блоках case.
+                                throw new NotSupportedException("Уровень эффекта, который не обрабатывается.");
                         }
                     }
                 }

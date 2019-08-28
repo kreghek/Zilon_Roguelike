@@ -37,6 +37,54 @@ namespace Zilon.Core.Persons.Tests
         }
 
         [Test()]
+        public void CalcKeyPointsInRange_2PositiveKeyPointsRise_RaisedStrongKeyPoint2()
+        {
+            // ARRANGE
+
+            var keyPoints = new[] {
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 25),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 50),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, 100)
+            };
+
+
+
+            // ACT
+            var crossedKeyPoints = keyPoints.CalcKeyPointsInRange(100, 99);
+
+
+
+            // ASSERT
+            var materializedFactCrossedKeyPoints = crossedKeyPoints.ToArray();
+            materializedFactCrossedKeyPoints[0].Level.Should().Be(SurvivalStatHazardLevel.Max);
+        }
+
+        [Test()]
+        public void CalcKeyPointsInRange_2PositiveKeyPointsRise_RaisedStrongKeyPoint3()
+        {
+            // ARRANGE
+
+            var keyPoints = new[] {
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Lesser, 1),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Strong, 2),
+                new SurvivalStatKeyPoint(SurvivalStatHazardLevel.Max, 3)
+            };
+
+
+
+            // ACT
+            var crossedKeyPoints = keyPoints.CalcKeyPointsInRange(0, 3);
+
+
+
+            // ASSERT
+            var materializedFactCrossedKeyPoints = crossedKeyPoints.ToArray();
+            materializedFactCrossedKeyPoints[0].Level.Should().Be(SurvivalStatHazardLevel.Lesser);
+            materializedFactCrossedKeyPoints[1].Level.Should().Be(SurvivalStatHazardLevel.Strong);
+            materializedFactCrossedKeyPoints[2].Level.Should().Be(SurvivalStatHazardLevel.Max);
+        }
+
+        [Test()]
         public void CalcKeyPointsInRange_2NegativeKeyPointsRise_RaisedStrongKeyPoint()
         {
             // ARRANGE

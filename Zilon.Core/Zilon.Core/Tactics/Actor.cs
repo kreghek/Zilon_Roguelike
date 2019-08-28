@@ -293,17 +293,17 @@ namespace Zilon.Core.Tactics
             {
                 case PersonRuleLevel.Lesser:
                     Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE);
+                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
                     Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE);
+                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
                     Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE);
+                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
                     break;
 
                 default:

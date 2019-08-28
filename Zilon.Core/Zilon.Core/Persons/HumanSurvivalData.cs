@@ -265,7 +265,7 @@ namespace Zilon.Core.Persons
             keyPointList.Add(keyPoint);
         }
 
-        private void DoStatCrossKeyPoint(SurvivalStat stat, IEnumerable<SurvivalStatKeyPoint> keyPoints)
+        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint[] keyPoints)
         {
             var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
             StatCrossKeyValue?.Invoke(this, args);

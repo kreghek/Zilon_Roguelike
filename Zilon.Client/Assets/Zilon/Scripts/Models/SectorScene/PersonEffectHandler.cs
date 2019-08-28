@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+using JetBrains.Annotations;
 
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class PersonEffectHandler : MonoBehaviour
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
 
+    public int Intoxication;
+
     [UsedImplicitly]
     public void Start()
     {
@@ -30,6 +33,15 @@ public class PersonEffectHandler : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        var person = _player.MainPerson;
+        if (person != null)
+        {
+            Intoxication = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Intoxication).Value;
+        }
+    }
+
     public void OnDestroy()
     {
         var person = _player.MainPerson;
@@ -42,6 +54,14 @@ public class PersonEffectHandler : MonoBehaviour
 
     private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
     {
+        if (e.Stat.Type == SurvivalStatType.Intoxication)
+        {
+            foreach (var keyPoint in e.KeyPoints)
+            {
+                Debug.Log(keyPoint.Level + " " + keyPoint.Value);
+            }
+        }
+
         UpdateEffects();
     }
 
