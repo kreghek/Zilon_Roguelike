@@ -666,7 +666,15 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         var scores = _scoreManager.Scores;
-        _scoreStorage.AppendScores("test", scores);
+
+        try
+        {
+            _scoreStorage.AppendScores("test", scores);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError("Не удалось выполнить запись результатов в БД\n" + exception.ToString());
+        }
 
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
