@@ -998,6 +998,25 @@ namespace Zilon.Core.Tests.Persons
                     {
                         Types = EquipmentSlotTypes.Aux
                     }
+                },
+
+                SurvivalStats = new[]
+                {
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Satiety,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0                        
+                    },
+
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Hydration,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0
+                    }
                 }
             };
 

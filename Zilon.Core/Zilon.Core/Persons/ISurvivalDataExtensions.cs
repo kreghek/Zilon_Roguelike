@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -14,30 +15,58 @@ namespace Zilon.Core.Persons
         /// <param name="keyPoints">Набор ключевых точек.</param>
         /// <param name="leftValue">The left value.</param>
         /// <param name="rightValue">The right value.</param>
-        /// <returns> Возвращает набор точек, значения которых попадает в указанный диапазон. </returns>
-        public static IEnumerable<SurvivalStatKeyPoint> CalcKeyPointsInRange(
+        /// <returns> Возвращает набор точек, значения которых попадает в указанный диапазон.
+        /// Точки возвращаются в том порядке, в котором пересекаются, если двигаться от левого значения к правому. </returns>
+        public static SurvivalStatKeyPoint[] CalcKeyPointsInRange(
             this SurvivalStatKeyPoint[] keyPoints,
             int leftValue,
             int rightValue)
         {
-            var diff = RangeHelper.CreateNormalized(leftValue, rightValue);
-
-            var orientedKeyPoints = keyPoints;
-            if (!diff.IsAcs)
+            if (leftValue == rightValue)
             {
-                orientedKeyPoints = keyPoints.Reverse().ToArray();
+                return new SurvivalStatKeyPoint[0];
             }
 
             var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
-            foreach (var keyPoint in orientedKeyPoints)
-            {
-                if (diff.Contains(keyPoint.Value))
-                {
-                    crossedKeyPoints.Add(keyPoint);
-                }
-            }
+            var step = leftValue < rightValue ? 1 : -1;
+            var steps = Math.Abs(leftValue - rightValue) + 1;
+            var stepCounter = 0;
 
-            return crossedKeyPoints;
+            var currentValue = leftValue;
+            do
+            {
+                foreach (var keyPoint in keyPoints)
+                {
+                    if (keyPoint.Value == currentValue)
+                    {
+                        crossedKeyPoints.Add(keyPoint);
+                    }
+                }
+
+                currentValue += step;
+                stepCounter++;
+            } while (stepCounter< steps);
+
+            return crossedKeyPoints.ToArray();
+
+            //var diff = RangeHelper.CreateNormalized(leftValue, rightValue);
+
+            //var orientedKeyPoints = keyPoints;
+            //if (!diff.IsAcs)
+            //{
+            //    orientedKeyPoints = keyPoints.Reverse().ToArray();
+            //}
+
+            //var crossedKeyPoints = new List<SurvivalStatKeyPoint>();
+            //foreach (var keyPoint in orientedKeyPoints)
+            //{
+            //    if (diff.Contains(keyPoint.Value))
+            //    {
+            //        crossedKeyPoints.Add(keyPoint);
+            //    }
+            //}
+
+            //return crossedKeyPoints;
         }
     }
 }

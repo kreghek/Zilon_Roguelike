@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.Persons.TestCases;
 
@@ -166,13 +167,13 @@ namespace Zilon.Core.Tests.Persons
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
             stat.Value = stat.KeyPoints[1].Value;
-            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Water);
+            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Hydration);
             stat2.Value = stat2.KeyPoints[1].Value;
 
             // ACT
             using (var monitor = survivalData.Monitor())
             {
-                survivalData.RestoreStat(SurvivalStatType.Water, 3);
+                survivalData.RestoreStat(SurvivalStatType.Hydration, 3);
 
 
 
@@ -246,7 +247,59 @@ namespace Zilon.Core.Tests.Persons
         [SetUp]
         public void SetUp()
         {
-            _personScheme = new TestPersonScheme();
+            _personScheme = new TestPersonScheme {
+                SurvivalStats = new[] {
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Satiety,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0,
+                        KeyPoints = new []{
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Value = 0
+                            },
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Value = -25
+                            },
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Value = -75
+                            }
+                        }
+                    },
+
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Hydration,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0,
+                        KeyPoints = new []{
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Value = 0
+                            },
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Value = -25
+                            },
+                            new TestPersonSurvivalStatKeyPointSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Value = -75
+                            }
+                        }
+                    }
+                }
+            };
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             _survivalRandomSource = survivalRandomSourceMock.Object;

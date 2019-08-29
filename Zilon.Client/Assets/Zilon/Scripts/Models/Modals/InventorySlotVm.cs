@@ -1,6 +1,8 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Models.Modals;
+using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -16,11 +18,13 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
-public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
+public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    [NotNull] [Inject] private readonly ICommandManager _comamndManager;
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
+    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly IInventoryState _inventoryState;
+    [Inject] private readonly SpecialCommandManager _specialCommandManager;
+
+    [NotNull] private ICommand _equipCommand;
 
     public IActor Actor { get; set; }
     public int SlotIndex;
@@ -43,10 +47,14 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     public event EventHandler Click;
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
+    public event EventHandler<PropDraggingStateEventArgs> DraggingStateChanged;
+
+    public bool SelectAsDrag;
+
 
     public void Start()
     {
-        ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
+        _equipCommand = _specialCommandManager.GetEquipCommand(SlotIndex);
 
         UpdateSlotIcon();
         InitEventHandlers();
@@ -139,5 +147,21 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     private void ClearEventHandlers()
     {
         Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+    }
+
+    public void SetDraggingState(bool value)
+    {
+        SelectAsDrag = value;
+
+        if (value)
+        {
+            IconImage.color = new Color(1, 1, 1, 0.5f);
+        }
+        else
+        {
+            IconImage.color = new Color(1, 1, 1, 1f);
+        }
+
+        DraggingStateChanged?.Invoke(this, new PropDraggingStateEventArgs(value));
     }
 }

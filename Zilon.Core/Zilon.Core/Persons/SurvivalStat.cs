@@ -7,6 +7,10 @@ namespace Zilon.Core.Persons
     /// </summary>
     public sealed class SurvivalStat: Stat
     {
+        /// <summary>
+        /// Значение броска по умолчанию для снижения характеристики.
+        /// Нужно выбросить столько или больше, чтобы характеристика не снижалась.
+        /// </summary>
         public const int DEFAULT_DOWN_PASS_VALUE = 4;
 
         /// <summary>
@@ -36,7 +40,11 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int DownPassRoll { get; set; }
 
-        /// <summary> Набор ключевых точек характеристики. </summary>
+        /// <summary> Набор ключевых точек характеристики.
+        /// Внимание!
+        /// Сейчас все ключевые чтоки должны быть либо слева от нуля включая ноль.
+        /// Либо справа от нуля.
+        /// </summary>
         public SurvivalStatKeyPoint[] KeyPoints { get; set; }
     }
 }
