@@ -491,6 +491,9 @@
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
+    <Compile Include="WorldGeneration\AgentActions\BuildLocalityStructureAction.cs" />
+    <Compile Include="WorldGeneration\AgentActions\CollectResourceAction.cs" />
+    <Compile Include="WorldGeneration\AgentActions\ReGoapActionBase.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentLocalityHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
@@ -503,6 +506,8 @@
     <Compile Include="WorldGeneration\AgentCards\LocalityBalanceHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
+    <Compile Include="WorldGeneration\AgentGoals\BuildLocalityStructureGoal.cs" />
+    <Compile Include="WorldGeneration\AgentGoals\ReGoapGoalBase.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
