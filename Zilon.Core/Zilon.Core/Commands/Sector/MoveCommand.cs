@@ -18,7 +18,10 @@ namespace Zilon.Core.Commands
     {
         private readonly IActorManager _actorManager;
 
-        public List<IMapNode> Path { get; }
+        /// <summary>
+        /// Текущий путь, по которому будет перемещаться персонаж.
+        /// </summary>
+        public IList<IMapNode> Path { get; }
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -143,7 +146,7 @@ namespace Zilon.Core.Commands
             var foundPath = astar.GetPath().Skip(1).ToArray();
             foreach (var pathNode in foundPath)
             {
-                Path.Add((HexNode)pathNode);
+                Path.Add(pathNode);
             }
         }
 

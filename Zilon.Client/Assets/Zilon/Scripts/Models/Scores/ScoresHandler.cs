@@ -1,4 +1,6 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using System;
+
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +17,21 @@ public class ScoresHandler : MonoBehaviour
 
     public void Awake()
     {
-        var scoreRecords = _scoreStorage.ReadScores();
+        ScoresRecord[] scoreRecords;
+
+        try
+        {
+            scoreRecords = _scoreStorage.ReadScores();
+        }
+        catch (Exception exception)
+        {
+            scoreRecords = new ScoresRecord[0];
+            Debug.LogError("Не удалось выполнить чтение результатов из БД\n" + exception.ToString());
+        }
+
+        var parentRect = ScoreRecordParent.GetComponent<RectTransform>();
+        var rowCount = scoreRecords.Length;
+        parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (60 + 5) * rowCount);
 
         foreach (var record in scoreRecords)
         {

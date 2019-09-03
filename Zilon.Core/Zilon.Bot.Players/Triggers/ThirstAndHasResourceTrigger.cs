@@ -17,7 +17,7 @@ namespace Zilon.Bot.Players.Triggers
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
-               .SingleOrDefault(x => x.Type == SurvivalStatType.Water);
+               .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
             if (hazardEffect == null)
             {
                 return false;

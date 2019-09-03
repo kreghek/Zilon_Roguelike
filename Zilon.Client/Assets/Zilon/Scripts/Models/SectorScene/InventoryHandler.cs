@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Models;
-
+using Assets.Zilon.Scripts.Models.Modals;
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -30,11 +29,13 @@ public class InventoryHandler : MonoBehaviour
     public PropInfoPopup PropInfoPopup;
     public GameObject UseButton;
     public GameObject ReadButton;
+    public GameObject UsePropDropArea;
+    public GameObject DeequipPropDropArea;
 
-    [NotNull] [Inject] private DiContainer _diContainer;
-    [NotNull] [Inject] private ISectorUiState _playerState;
-    [NotNull] [Inject] private IInventoryState _inventoryState;
-    [NotNull] [Inject] private ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly DiContainer _diContainer;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+    [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
     [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
@@ -48,12 +49,7 @@ public class InventoryHandler : MonoBehaviour
     public void Start()
     {
         CreateSlots();
-
-        // Изначально скрываем все кнопки.
-        // Потому что изначально никакой предмет не должен быть выбран.
-        // Поэтому не ясно, какие действия доступны.
-        UseButton.SetActive(false);
-        ReadButton.SetActive(false);
+        StartUpControls();
 
         _actor = _playerState.ActiveActor.Actor;
         var inventory = _actor.Person.Inventory;
@@ -64,6 +60,25 @@ public class InventoryHandler : MonoBehaviour
         inventory.Changed += Inventory_Changed;
 
         _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+    }
+
+    /// <summary>
+    /// Первоначальная настройка всех элементов UI.
+    /// Приводим к первоначальному виду, чтобы было сложнее забыть что-нибудь отключить/скрыть
+    /// во время разработки.
+    /// </summary>
+    private void StartUpControls()
+    {
+        // Изначально скрываем все кнопки.
+        // Потому что изначально никакой предмет не должен быть выбран.
+        // Поэтому не ясно, какие действия доступны.
+        UseButton.SetActive(false);
+        ReadButton.SetActive(false);
+
+        // Скрываем все области сброса.
+        // Потому что изначально никто никакие предметы не перетаскивает.
+        DeequipPropDropArea.SetActive(false);
+        UsePropDropArea.SetActive(false);
     }
 
     public void Update()
@@ -84,7 +99,7 @@ public class InventoryHandler : MonoBehaviour
 
         PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
 
-        UpdateUseButtonsState(_inventoryState.SelectedProp?.Prop);
+        UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
     }
 
     public void OnDestroy()
@@ -114,7 +129,13 @@ public class InventoryHandler : MonoBehaviour
             slotViewModel.Click += Slot_Click;
             slotViewModel.MouseEnter += SlotViewModel_MouseEnter;
             slotViewModel.MouseExit += SlotViewModel_MouseExit;
+            slotViewModel.DraggingStateChanged += SlotViewModel_DraggingStateChanged;
         }
+    }
+
+    private void SlotViewModel_DraggingStateChanged(object sender, PropDraggingStateEventArgs e)
+    {
+        DeequipPropDropArea.SetActive(e.Dragging);
     }
 
     private void SlotViewModel_MouseExit(object sender, EventArgs e)
@@ -208,12 +229,29 @@ public class InventoryHandler : MonoBehaviour
 
     private void CreatePropObject(Transform itemsParent, IProp prop)
     {
-        var propItemViewModel = Instantiate(PropItemPrefab, itemsParent);
+        var propItemViewModelObj = _diContainer.InstantiatePrefab(PropItemPrefab, itemsParent);
+
+        var propItemViewModel = propItemViewModelObj.GetComponent<PropItemVm>();
         propItemViewModel.Init(prop);
         propItemViewModel.Click += PropItem_Click;
+        //TODO Переделать
+        //
+        propItemViewModel.DraggingStateChanged += PropItemViewModel_DraggingStateChanged;
         propItemViewModel.MouseEnter += PropItemViewModel_MouseEnter;
         propItemViewModel.MouseExit += PropItemViewModel_MouseExit;
         _propViewModels.Add(propItemViewModel);
+    }
+
+    private void PropItemViewModel_DraggingStateChanged(object sender, PropDraggingStateEventArgs e)
+    {
+        var currentItemViewModel = (PropItemVm)sender;
+        foreach (var propViewModel in _propViewModels)
+        {
+            var isSelected = propViewModel == currentItemViewModel;
+            propViewModel.SetSelectedState(isSelected);
+        }
+
+        UpdateUseControlsState(currentItemViewModel);
     }
 
     private void PropItemViewModel_MouseExit(object sender, EventArgs e)
@@ -238,8 +276,11 @@ public class InventoryHandler : MonoBehaviour
         }
 
         // этот фрагмент - не дубликат
-        UpdateUseButtonsState(currentItemViewModel.Prop);
+        UpdateUseControlsState(currentItemViewModel);
 
+        // В сервисе InventoryState указываем, что текущий предмет выбран.
+        // Текущий - это тот, на который только что кликнули.
+        // Если он уже выбран, то сбрасываем выделение.
         if (!ReferenceEquals(_inventoryState.SelectedProp, currentItemViewModel))
         {
             _inventoryState.SelectedProp = currentItemViewModel;
@@ -252,20 +293,34 @@ public class InventoryHandler : MonoBehaviour
         // --- этот фрагмент - не дубликат
     }
 
-    private void UpdateUseButtonsState(IProp currentItem)
+    private void UpdateUseControlsState(PropItemVm currentItemViewModel)
     {
-        if (currentItem == null)
+        if (currentItemViewModel?.Prop == null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
             return;
         }
 
-        var canUseProp = currentItem.Scheme.Use != null;
-        UseButton.SetActive(canUseProp);
+        if (currentItemViewModel.SelectAsDrag && currentItemViewModel.Prop.Scheme.Use != null)
+        {
+            UseButton.SetActive(false);
+            ReadButton.SetActive(false);
 
-        var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
-        ReadButton.SetActive(canRead);
+            UsePropDropArea.SetActive(true);
+        }
+        else
+        {
+            UsePropDropArea.SetActive(false);
+
+            var currentItem = currentItemViewModel.Prop;
+
+            var canUseProp = currentItem.Scheme.Use != null;
+            UseButton.SetActive(canUseProp);
+
+            var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
+            ReadButton.SetActive(canRead);
+        }
     }
 
     public void UseButton_Handler()
