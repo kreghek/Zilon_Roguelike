@@ -9,12 +9,14 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class ExitLogicState : LogicStateBase
     {
+        private readonly ISector _sector;
         private readonly ISectorMap _map;
 
         private MoveTask _moveTask;
 
         public ExitLogicState(ISectorManager sectorManager)
         {
+            _sector = sectorManager.CurrentSector;
             _map = sectorManager.CurrentSector.Map;
         }
 
@@ -22,6 +24,14 @@ namespace Zilon.Bot.Players.Logics
         {
             if (!strategyData.ExitNodes.Any())
             {
+                Complete = true;
+                return null;
+            }
+
+            var actorNode = actor.Node;
+            if (_map.Transitions.TryGetValue(actorNode, out var currentTransition))
+            {
+                _sector.UseTransition(currentTransition);
                 Complete = true;
                 return null;
             }

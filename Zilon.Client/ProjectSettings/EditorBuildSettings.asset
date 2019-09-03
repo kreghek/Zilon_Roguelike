@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Zilon/Scenes/globe.unity
     guid: 380d1fcc57970684ba510afd99f0ecdd
+  - enabled: 1
+    path: Assets/Zilon/Scenes/scores.unity
+    guid: 721f50cc8827c684bac660610525f7a9
   m_configObjects: {}

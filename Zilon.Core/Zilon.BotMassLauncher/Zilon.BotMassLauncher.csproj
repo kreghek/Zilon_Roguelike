@@ -50,5 +50,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zilon.BotEnvironment\Zilon.BotEnvironment.csproj">
+      <Project>{b7efec00-e068-4510-b18d-3bf8a2e8245b}</Project>
+      <Name>Zilon.BotEnvironment</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

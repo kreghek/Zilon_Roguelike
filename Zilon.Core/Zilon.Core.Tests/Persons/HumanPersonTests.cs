@@ -975,5 +975,95 @@ namespace Zilon.Core.Tests.Persons
             hpStat.Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
             hpStat.Value.Should().Be(EXPECTED_PERSON_HP);
         }
+
+        /// <summary>
+        /// Тест проверяет, что если экипировать предмет бонусом к здоровью,
+        /// то здоровье персонажа остаётся текущим.
+        /// </summary>
+        [Test]
+        public void HumanPerson_EquipPropWithHungerResistance_DownPassOfSatietyDescreased()
+        {
+            // ARRANGE
+
+            const int START_PERSON_HP = 10;
+            const int EXPECTED_DOWNPASS = 2;
+
+            
+
+            var personScheme = new TestPersonScheme
+            {
+                Hp = START_PERSON_HP,
+                Slots = new[]{
+                    new PersonSlotSubScheme
+                    {
+                        Types = EquipmentSlotTypes.Aux
+                    }
+                },
+
+                SurvivalStats = new[]
+                {
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Satiety,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0                        
+                    },
+
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Hydration,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0
+                    }
+                }
+            };
+
+            var defaultAct = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Efficient = new Roll(6, 1)
+                }
+            };
+
+            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionData = evolutionDataMock.Object;
+
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            var person = new HumanPerson(personScheme, defaultAct, evolutionData, survivalRandomSource);
+
+            var armorPropScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    Rules = new[]
+                    {
+                        new PersonRule(EquipCommonRuleType.HungerResistance, PersonRuleLevel.Normal)
+                    },
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Aux
+                    }
+                }
+            };
+
+            var satietyStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+
+            var armorProp = new Equipment(armorPropScheme);
+
+
+
+            // ACT
+            person.EquipmentCarrier[0] = armorProp;
+
+
+
+            // ASSERT
+            satietyStat.DownPassRoll.Should().Be(EXPECTED_DOWNPASS);
+        }
     }
 }

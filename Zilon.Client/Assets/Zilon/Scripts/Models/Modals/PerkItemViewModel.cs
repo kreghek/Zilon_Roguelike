@@ -14,11 +14,12 @@ using Zilon.Core.Persons;
 /// <remarks>
 /// Сейчас используется только в окне персонажа.
 /// </remarks>
-public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkViewModelDescription {
+public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkViewModelDescription
+{
 
-	public Text LevelText;
-	public Image IconImage;
-	public Image SelectedBorder;
+    public Text LevelText;
+    public Image IconImage;
+    public Image SelectedBorder;
 
     public Vector3 Position => GetComponent<RectTransform>().position;
     public IPerk Perk { get; private set; }
@@ -28,23 +29,23 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
     public event EventHandler MouseExit;
 
     public void Init(IPerk perk)
-	{
+    {
         Perk = perk;
 
-		var iconSprite = CalcIcon(perk);
+        var iconSprite = CalcIcon(perk);
 
-		IconImage.sprite = iconSprite;
+        IconImage.sprite = iconSprite;
 
-		if (perk.CurrentLevel != null)
-		{
-			LevelText.gameObject.SetActive(true);
-			LevelText.text = $"{perk.CurrentLevel.Primary + 1} +{perk.CurrentLevel.Sub + 1}";
-		}
-		else
-		{
-			LevelText.gameObject.SetActive(false);
-		}
-	}
+        if (perk.CurrentLevel != null)
+        {
+            LevelText.gameObject.SetActive(true);
+            LevelText.text = $"{perk.CurrentLevel.Primary + 1} +{perk.CurrentLevel.Sub + 1}";
+        }
+        else
+        {
+            LevelText.gameObject.SetActive(false);
+        }
+    }
 
     public void Click_Handler()
     {
@@ -62,8 +63,8 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
     }
 
     private Sprite CalcIcon(IPerk perk)
-	{
-		var iconSprite = Resources.Load<Sprite>($"Icons/perks/{perk.Scheme.Sid}");
-		return iconSprite;
-	}
+    {
+        var iconSprite = Resources.Load<Sprite>($"Icons/perks/{perk.Scheme.Sid}");
+        return iconSprite;
+    }
 }

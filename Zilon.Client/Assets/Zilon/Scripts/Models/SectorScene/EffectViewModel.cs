@@ -9,9 +9,11 @@ public class EffectViewModel : MonoBehaviour
 {
     public Image EffectIcon;
     public Image Background;
+    public Text NameText;
 
     public Sprite HungerSprite;
     public Sprite ThristSprite;
+    public Sprite IntoxicationSprite;
 
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
@@ -22,6 +24,73 @@ public class EffectViewModel : MonoBehaviour
         Level = level;
         SelectIcon(type);
         HighlightLevel(level);
+        ShowText();
+    }
+
+    private void ShowText()
+    {
+        var effectText = string.Empty;
+        switch (Level)
+        {
+            case SurvivalStatHazardLevel.Lesser:
+                effectText = "Weak";
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText += " Hunger";
+                            break;
+
+                    case SurvivalStatType.Hydration:
+                        effectText += " Thrist";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += " Intoxication";
+                        break;
+                }
+
+                NameText.color = Color.gray;
+                break;
+
+            case SurvivalStatHazardLevel.Strong:
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText = "Hunger";
+                        break;
+
+                    case SurvivalStatType.Hydration:
+                        effectText = "Thrist";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += "Intoxication";
+                        break;
+                }
+
+                NameText.color = Color.red;
+                break;
+
+            case SurvivalStatHazardLevel.Max:
+                switch (Type)
+                {
+                    case SurvivalStatType.Satiety:
+                        effectText = "Starvation!";
+                        break;
+
+                    case SurvivalStatType.Hydration:
+                        effectText = "Dehydration!";
+                        break;
+
+                    case SurvivalStatType.Intoxication:
+                        effectText += "Strong Intoxication!";
+                        break;
+                }
+                NameText.color = Color.red;
+                break;
+        }
+
+        NameText.text = effectText;
     }
 
     private void HighlightLevel(SurvivalStatHazardLevel level)
@@ -53,8 +122,12 @@ public class EffectViewModel : MonoBehaviour
                 EffectIcon.sprite = HungerSprite;
                 break;
 
-            case SurvivalStatType.Water:
+            case SurvivalStatType.Hydration:
                 EffectIcon.sprite = ThristSprite;
+                break;
+
+            case SurvivalStatType.Intoxication:
+                EffectIcon.sprite = IntoxicationSprite;
                 break;
 
             default:

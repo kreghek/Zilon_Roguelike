@@ -29,9 +29,10 @@
     ]
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"demon"
   ],
-  "BaseScore": 50,
+  "BaseScore": 90,
   "Tags": [
     "demon",
     "unclean"

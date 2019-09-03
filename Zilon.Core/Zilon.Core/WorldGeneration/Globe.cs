@@ -37,7 +37,7 @@ namespace Zilon.Core.WorldGeneration
 
         public TerrainCell HomeProvince { get; set; }
 
-        public void Save(string path)
+        public void Save(string path, string realmFileName = null, string branchFileName = null)
         {
             var branchColors = new[] { Color.Red, Color.Blue, Color.Green, Color.Yellow,
                 Color.Black, Color.Magenta, Color.Maroon, Color.LightGray };
@@ -67,8 +67,11 @@ namespace Zilon.Core.WorldGeneration
                     }
                 }
 
-                realmBmp.Bitmap.Save(Path.Combine(path, "realms.bmp"), ImageFormat.Bmp);
-                branchmBmp.Bitmap.Save(Path.Combine(path, "branches.bmp"), ImageFormat.Bmp);
+                realmFileName = realmFileName ?? "realms.bmp";
+                realmBmp.Bitmap.Save(Path.Combine(path, realmFileName), ImageFormat.Bmp);
+
+                branchFileName = branchFileName ?? "branches.bmp";
+                branchmBmp.Bitmap.Save(Path.Combine(path, branchFileName), ImageFormat.Bmp);
             }
         }
 

@@ -27,24 +27,24 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Rat Kingdom Suare"
+				"En": "Rat Kingdom Square"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
-			"ChampionMonsterSids": null,
+			"ChampionMonsterSids": ["rat-human-slayer", "night-stalker"],
 			"RegionCount": 10,
 			"RegionSize": 5,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3", "lvl-barracks"],
+			"TransSectorSids": ["lvl-throne", "lvl-barracks"],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
 			"ChestDropTableSids": ["survival", "default"]
 		},
 		{
-			"Sid": "lvl3",
+			"Sid": "lvl-throne",
 			"Name":{
 				"En": "Rat Kingdom Throne"
 			},
@@ -77,7 +77,7 @@
 			"RegionChestCountRatio": 9,
 			"ChestDropTableSids": ["survival", "default"],
 			
-			"TransSectorSids": ["lvl3", "lvl-barracks"]
+			"TransSectorSids": ["lvl-throne", "lvl-barracks"]
 		}
 	]
 }

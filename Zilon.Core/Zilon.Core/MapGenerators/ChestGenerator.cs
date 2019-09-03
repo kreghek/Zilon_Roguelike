@@ -15,7 +15,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IPropContainerManager _propContainerManager;
         private readonly IChestGeneratorRandomSource _chestGeneratorRandomSource;
 
-        public ChestGenerator(ISchemeService schemeService, 
+        public ChestGenerator(ISchemeService schemeService,
             IDropResolver dropResolver,
             IPropContainerManager propContainerManager,
             IChestGeneratorRandomSource chestGeneratorRandomSource)
@@ -34,7 +34,8 @@ namespace Zilon.Core.MapGenerators
         /// <param name="regions">Регионы, в которых возможно размещение сундуков.</param>
         public void CreateChests(ISectorMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
         {
-            var dropTables = GetDropTables(sectorSubScheme);
+            var trashDropTables = GetTrashDropTables(sectorSubScheme);
+            var treasuresDropTable = GetTreasuresDropTable();
             var chestCounter = sectorSubScheme.TotalChestCount;
 
             //TODO В схемах хранить уже приведённое значение пропорции.
@@ -47,10 +48,13 @@ namespace Zilon.Core.MapGenerators
 
                 var availableNodes = from node in region.Nodes
                                      where !map.Transitions.Keys.Contains(node)
+                                     where map.IsPositionAvailableForContainer(node)
                                      select node;
                 var openNodes = new List<IMapNode>(availableNodes);
                 for (var i = 0; i < rolledCount; i++)
                 {
+                    var containerPurpose = _chestGeneratorRandomSource.RollPurpose();
+
                     // Выбрать из коллекции доступных узлов
                     var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(openNodes.Count);
                     var containerNode = MapRegionHelper.FindNonBlockedNode(openNodes[rollIndex], map, openNodes);
@@ -64,10 +68,29 @@ namespace Zilon.Core.MapGenerators
                     }
 
                     openNodes.Remove(containerNode);
-                    var container = new DropTablePropChest(containerNode,
-                        dropTables,
-                        _dropResolver);
+
+                    IPropContainer container;
+                    switch (containerPurpose)
+                    {
+                        case PropContainerPurpose.Trash:
+                            container = new DropTablePropChest(containerNode, trashDropTables, _dropResolver)
+                            {
+                                Purpose = PropContainerPurpose.Trash
+                            };
+                            break;
+
+                        case PropContainerPurpose.Treasures:
+                            container = new DropTablePropChest(containerNode, treasuresDropTable, _dropResolver)
+                            {
+                                Purpose = PropContainerPurpose.Treasures
+                            };
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Не корректное назначение {containerPurpose}.");
+                    }
                     _propContainerManager.Add(container);
+
 
                     chestCounter--;
 
@@ -80,7 +103,12 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private IDropTableScheme[] GetDropTables(ISectorSubScheme sectorSubScheme)
+        private IDropTableScheme[] GetTreasuresDropTable()
+        {
+            return new[] { _schemeService.GetScheme<IDropTableScheme>("treasures") };
+        }
+
+        private IDropTableScheme[] GetTrashDropTables(ISectorSubScheme sectorSubScheme)
         {
             var dropTables = new List<IDropTableScheme>();
             foreach (var chestDropSid in sectorSubScheme.ChestDropTableSids)

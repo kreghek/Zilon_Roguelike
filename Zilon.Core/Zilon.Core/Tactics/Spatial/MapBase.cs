@@ -166,5 +166,7 @@ namespace Zilon.Core.Tactics.Spatial
                 }
             }
         }
+
+        public abstract bool IsPositionAvailableForContainer(IMapNode targetNode);
     }
 }

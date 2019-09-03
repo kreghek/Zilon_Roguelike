@@ -91,7 +91,7 @@ namespace Zilon.Core.Schemes
             return _dict.Values.ToArray();
         }
 
-        private string CalcDirectory()
+        private static string CalcDirectory()
         {
             var type = typeof(TSchemeImpl);
             var typeName = type.Name;

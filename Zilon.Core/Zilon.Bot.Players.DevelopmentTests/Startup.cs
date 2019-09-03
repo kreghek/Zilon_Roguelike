@@ -11,6 +11,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
 {
     class Startup: InitialzationBase
     {
+        public Startup(string catalogPath) : base(catalogPath)
+        {
+        }
+
         public override void ConfigureAux(IServiceFactory serviceFactory)
         {
             LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();

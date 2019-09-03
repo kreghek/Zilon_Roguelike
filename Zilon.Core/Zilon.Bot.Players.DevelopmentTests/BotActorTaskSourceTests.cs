@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using LightInject;
 
 using NUnit.Framework;
+
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -63,8 +65,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [SetUp]
         public void StartUp()
         {
+            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+
             _globalServiceContainer = new ServiceContainer();
-            _startUp = new Startup();
+            _startUp = new Startup(schemePath);
             _startUp.RegisterServices(_globalServiceContainer);
         }
 

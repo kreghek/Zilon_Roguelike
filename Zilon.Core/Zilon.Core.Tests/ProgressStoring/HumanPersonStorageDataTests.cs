@@ -40,6 +40,16 @@ namespace Zilon.Core.Tests.ProgressStoring
                     DefaultAct = "default",
                     Slots = new[] {
                         new PersonSlotSubScheme { Types = EquipmentSlotTypes.Head },
+                    },
+                    SurvivalStats = new[]{
+                        new TestPersonSurvivalStatSubScheme
+                        {
+                            Type = PersonSurvivalStatType.Satiety
+                        },
+                        new TestPersonSurvivalStatSubScheme
+                        {
+                            Type = PersonSurvivalStatType.Hydration
+                        }
                     }
                 } }
             };

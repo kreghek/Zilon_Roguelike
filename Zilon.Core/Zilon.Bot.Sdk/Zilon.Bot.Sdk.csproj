@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActorTaskSourceTypeAttribute.cs" />
+    <Compile Include="AvailableModesAttribute.cs" />
     <Compile Include="BotRegistrationAttribute.cs" />
     <Compile Include="BotSettings.cs" />
     <Compile Include="ConfigureAuxServicesAttribute.cs" />

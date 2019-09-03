@@ -21,7 +21,8 @@
     "Targets": "Enemy"
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"demon"
   ],
   "BaseScore": 50,
   "Tags": [

@@ -55,9 +55,13 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
+            var propContainerMock = new Mock<IPropContainerManager>();
+            var propContainer = propContainerMock.Object;
+            propContainerMock.SetupGet(x => x.Items).Returns(new IPropContainer[0]);
             var monsterGenerator = new MonsterGenerator(schemeService,
                 randomSource,
-                actorManager);
+                actorManager,
+                propContainer);
 
 
             var map = await SquareMapFactory.CreateAsync(20);
