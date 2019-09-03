@@ -1,6 +1,8 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Models.Modals;
+using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -16,18 +18,15 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
-public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
+public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    public static int Count;
+    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly IInventoryState _inventoryState;
+    [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
-    public int CurrentCount;
+    [NotNull] private ICommand _equipCommand;
 
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
-    [NotNull] [Inject] private readonly ICommandManager _comamndManager;
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
-    [NotNull] [Inject(Id = "equip-command")] private readonly ICommand _equipCommand;
-
+    public IActor Actor { get; set; }
     public int SlotIndex;
 
     public GameObject DenyBorder;
@@ -40,8 +39,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     {
         get
         {
-            var actor = _playerState.ActiveActor.Actor;
-            var prop = actor.Person.EquipmentCarrier[SlotIndex];
+            var prop = Actor.Person.EquipmentCarrier[SlotIndex];
             return prop;
         }
     }
@@ -49,13 +47,14 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
     public event EventHandler Click;
     public event EventHandler MouseEnter;
     public event EventHandler MouseExit;
+    public event EventHandler<PropDraggingStateEventArgs> DraggingStateChanged;
+
+    public bool SelectAsDrag;
+
 
     public void Start()
     {
-        CurrentCount = Count;
-        Count++;
-
-        ((EquipCommand)_equipCommand).SlotIndex = SlotIndex;
+        _equipCommand = _specialCommandManager.GetEquipCommand(SlotIndex);
 
         UpdateSlotIcon();
         InitEventHandlers();
@@ -74,9 +73,7 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     private void UpdateSlotIcon()
     {
-        var actor = _playerState.ActiveActor.Actor;
-
-        var currentEquipment = actor.Person.EquipmentCarrier[SlotIndex];
+        var currentEquipment = Actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
             if (IconImage != null)
@@ -144,13 +141,27 @@ public class InventorySlotVm : MonoBehaviour, IPropViewModelDescription
 
     private void InitEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ClearEventHandlers()
     {
-        var actor = _playerState.ActiveActor.Actor;
-        actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+    }
+
+    public void SetDraggingState(bool value)
+    {
+        SelectAsDrag = value;
+
+        if (value)
+        {
+            IconImage.color = new Color(1, 1, 1, 0.5f);
+        }
+        else
+        {
+            IconImage.color = new Color(1, 1, 1, 1f);
+        }
+
+        DraggingStateChanged?.Invoke(this, new PropDraggingStateEventArgs(value));
     }
 }

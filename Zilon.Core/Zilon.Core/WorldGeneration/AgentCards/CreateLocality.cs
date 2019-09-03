@@ -18,6 +18,14 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
+            // Можем выполнять захват, если не превышен лимит городов текущего государства.
+            var realmLocalityLimitReached = LocalityHelper.LimitIsReached(agent, globe);
+            if (realmLocalityLimitReached)
+            {
+                return false;
+            }
+
+            // Создать город можно только из населения текущего нас.пункта.
             var hasCurrentLocality = globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality);
             if (hasCurrentLocality)
             {

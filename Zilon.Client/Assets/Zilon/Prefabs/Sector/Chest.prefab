@@ -7,16 +7,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2515722162260508225, guid: 986532577328c6040bf3fc3bcb2a5cc4,
-        type: 3}
-      propertyPath: m_Name
-      value: Chest
-      objectReference: {fileID: 0}
     - target: {fileID: 2554224989729426615, guid: 986532577328c6040bf3fc3bcb2a5cc4,
         type: 3}
       propertyPath: SpriteRenderer
       value: 
       objectReference: {fileID: 212032180092053188}
+    - target: {fileID: 2515722162260508225, guid: 986532577328c6040bf3fc3bcb2a5cc4,
+        type: 3}
+      propertyPath: m_Name
+      value: Chest
+      objectReference: {fileID: 0}
     - target: {fileID: 2313445789548539083, guid: 986532577328c6040bf3fc3bcb2a5cc4,
         type: 3}
       propertyPath: m_Sprite
@@ -92,6 +92,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2466392188260355177, guid: 986532577328c6040bf3fc3bcb2a5cc4,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 986532577328c6040bf3fc3bcb2a5cc4, type: 3}

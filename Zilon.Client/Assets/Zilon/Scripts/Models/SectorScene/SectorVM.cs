@@ -15,7 +15,6 @@ using Zenject;
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators;
@@ -55,9 +54,17 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public ContainerVm LootPrefab;
 
+    [NotNull] public ContainerVm TrashPrefab;
+
     [NotNull] public HitSfx HitSfx;
 
     [NotNull] public SceneLoader SceneLoader;
+
+    [NotNull] public ContainerPopup ContainerPopupPrefab;
+
+    [NotNull] public Canvas WindowCanvas;
+
+    [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
@@ -67,9 +74,9 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
-    [NotNull] [Inject] private readonly ISectorGenerator _sectorGenerator;
-
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
+
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
 
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
 
@@ -81,9 +88,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
-    [NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
-
-    [NotNull] [Inject] private readonly ISurvivalRandomSource _survivalRandomSource;
+    //TODO Вернуть, когда будет придуман туториал
+    //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
@@ -93,8 +99,6 @@ public class SectorVM : MonoBehaviour
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
 
-    [Inject] private readonly IBotPlayer _botPlayer;
-
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
@@ -102,6 +106,8 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+
+    [Inject] private readonly ScoreStorage _scoreStorage;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -116,10 +122,6 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _openContainerCommand;
 
     [NotNull]
-    [Inject(Id = "show-container-modal-command")]
-    private readonly ICommand _showContainerModalCommand;
-
-    [NotNull]
     [Inject(Id = "show-trader-modal-command")]
     private readonly ICommand _showTraderModalCommand;
 
@@ -128,6 +130,8 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _showDialogCommand;
 
     public List<ActorViewModel> ActorViewModels { get; }
+
+    public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
 
     public SectorVM()
     {
@@ -180,7 +184,7 @@ public class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    private async void Awake()
+    public async void Awake()
     {
         await InitServicesAsync();
 
@@ -192,10 +196,21 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        if (_humanPlayer.SectorSid == "intro")
-        {
-            _sectorModalManager.ShowInstructionModal();
-        }
+        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
+        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
+        //{
+        //    _sectorModalManager.ShowInstructionModal();
+        //}
+
+        _gameLoop.Updated += GameLoop_Updated;
+
+        //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
+        _commandBlockerService.DropBlockers();
+    }
+
+    private void GameLoop_Updated(object sender, EventArgs e)
+    {
+        _inventoryState.SelectedProp = null;
     }
 
     private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
@@ -242,6 +257,8 @@ public class SectorVM : MonoBehaviour
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
+
+        _gameLoop.Updated -= GameLoop_Updated;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
@@ -315,7 +332,7 @@ public class SectorVM : MonoBehaviour
 
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
             actorViewModel.GraphicRoot = actorGraphic;
-            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
             graphicController.Actor = monsterActor;
@@ -374,7 +391,7 @@ public class SectorVM : MonoBehaviour
 
         var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
         actorViewModel.GraphicRoot = actorGraphic;
-        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
         var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
         graphicController.Actor = actor;
@@ -431,7 +448,12 @@ public class SectorVM : MonoBehaviour
             return LootPrefab;
         }
 
-        return ChestPrefab;
+        if (container.Purpose == PropContainerPurpose.Treasures)
+        {
+            return ChestPrefab;
+        }
+
+        return TrashPrefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
@@ -456,12 +478,31 @@ public class SectorVM : MonoBehaviour
 
     private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
+        var actor = sender as IActor;
+
         if (!(e.Result is SuccessOpenContainerResult))
         {
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        _clientCommandExecutor.Push(_showContainerModalCommand);
+        var props = e.Container.Content.CalcActualItems();
+        if (props.Any())
+        {
+            var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
+
+            var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
+
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+            containerPopup.Init(transferMachine);
+        }
+        else
+        {
+            var indicator = Instantiate<FoundNothingIndicator>(FoundNothingIndicatorPrefab, transform);
+
+            var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
+
+            indicator.Init(actorViewModel);
+        }
     }
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
@@ -470,6 +511,8 @@ public class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
+        _playerState.SelectedViewModel = null;
+        _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
         if (_humanPlayer.GlobeNode == null)
@@ -600,7 +643,7 @@ public class SectorVM : MonoBehaviour
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
         actorViewModel.PlayerState = _playerState;
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-        actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
+        actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
         actorViewModel.GraphicRoot = actorGraphic;
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
@@ -622,6 +665,17 @@ public class SectorVM : MonoBehaviour
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
+        var scores = _scoreManager.Scores;
+
+        try
+        {
+            _scoreStorage.AppendScores("test", scores);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError("Не удалось выполнить запись результатов в БД\n" + exception.ToString());
+        }
+
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
 

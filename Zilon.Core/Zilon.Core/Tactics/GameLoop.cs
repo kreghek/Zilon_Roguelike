@@ -12,6 +12,8 @@ namespace Zilon.Core.Tactics
         private readonly ISectorManager _sectorManager;
         private readonly IActorManager _actorManager;
 
+        public event EventHandler Updated;
+
         public GameLoop(ISectorManager sectorManager, IActorManager actorManager)
         {
             _sectorManager = sectorManager;
@@ -46,6 +48,8 @@ namespace Zilon.Core.Tactics
             }
 
             _sectorManager.CurrentSector.Update();
+
+            Updated?.Invoke(this, new EventArgs());
         }
 
         private void ProcessActor(IActor actor)

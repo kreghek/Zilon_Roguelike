@@ -3,10 +3,18 @@
   "Records": [
     {
       "SchemeSid": "steel-helmet",
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "leather-helmet",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "closed-leather-helmet",
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "knitted-hat",
       "Weight": 10
     },
 	{

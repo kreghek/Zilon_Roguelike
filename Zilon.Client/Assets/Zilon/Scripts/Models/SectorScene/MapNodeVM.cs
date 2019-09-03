@@ -17,8 +17,6 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     public GameObject[] Walls;
     public bool IsExit;
     public GameObject ExitMarker;
-
-    private SectorWalls _walls;
     
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }

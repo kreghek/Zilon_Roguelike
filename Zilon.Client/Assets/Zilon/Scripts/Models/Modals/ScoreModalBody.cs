@@ -68,11 +68,11 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        SceneManager.LoadScene("title");
+        SceneManager.LoadScene("scores");
     }
 
     public void CancelChanges()
     {
-        SceneManager.LoadScene("title");
+        throw new NotSupportedException();
     }
 }

@@ -1,0 +1,104 @@
+{
+  "Rolls": 2,
+  "Records": [
+    {
+      "SchemeSid": "battle-axe",
+      "Weight": 10
+    },
+    {
+      "SchemeSid": "gold-armor",
+      "Weight": 10
+    },
+
+    {
+      "SchemeSid": "gold-helmet",
+      "Weight": 10
+    },
+    {
+      "SchemeSid": "pistol",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "heal-staff",
+      "Weight": 5,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mana",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
+    },
+	{
+      "SchemeSid": "wooden-shield",
+      "Weight": 20
+    },
+    {
+      "SchemeSid": "rush-sword",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "iron-ring",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "higea-ring",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "hunger-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "thrist-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "taurus-stim",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "power-shield-generator",
+      "Weight": 1
+    },
+	{
+	  "SchemeSid": "fire-opal-necklace",
+      "Weight": 2
+	},
+	{
+	  "SchemeSid": "law-codex",
+      "Weight": 1
+	}
+  ]
+}

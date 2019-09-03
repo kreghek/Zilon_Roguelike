@@ -2,5 +2,8 @@
 /Zilon.Client/Assets/db.bytes
 /Zilon.Client/Assets/db.bytes.meta
 /Zilon.Client/Packages
+/Zilon.Core/*.leu
+/Builds/x64
+/Builds/x86
 
 /Tools/working-directory

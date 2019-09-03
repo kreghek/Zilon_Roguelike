@@ -32,7 +32,11 @@ public class SectorGameCursor : MonoBehaviour
             return;
         }
 
-        if (_playerState.HoverViewModel is IMapNodeViewModel)
+        if (_playerState.HoverViewModel is IContainerViewModel)
+        {
+            SpriteRenderer.sprite = InteractiveCursorSprite;
+        }
+        else if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
             if (!_moveCommand.CanExecute())
             {
@@ -52,10 +56,6 @@ public class SectorGameCursor : MonoBehaviour
                     SpriteRenderer.sprite = CantMoveCursorSprite;
                 }
             }
-        }
-        else if (_playerState.HoverViewModel is IContainerViewModel)
-        {
-            SpriteRenderer.sprite = InteractiveCursorSprite;
         }
     }
 

@@ -6,7 +6,7 @@
     public enum SurvivalStatType
     {
         /// <summary>
-        /// Не определена.
+        /// Не определена. Скорее всего, ошибка.
         /// </summary>
         Undefined,
 
@@ -21,8 +21,13 @@
         Satiety,
 
         /// <summary>
-        /// Достаточность воды.
+        /// Достаточность воды. Напоенность, упитость.
         /// </summary>
-        Water
+        Hydration,
+
+        /// <summary>
+        /// Интоксикация персонажа.
+        /// </summary>
+        Intoxication
     }
 }

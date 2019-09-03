@@ -28,4 +28,14 @@ public class TitleHandler : MonoBehaviour
     {
         Application.OpenURL("https://github.com/kreghek/Zilon_Roguelike");
     }
+
+    public void OpenVkUrlHandler()
+    {
+        Application.OpenURL("https://vk.com/last_imperial_vagabond");
+    }
+
+    public void OpenBlogUrlHandler()
+    {
+        Application.OpenURL("https://lastimperialvagabond.home.blog/");
+    }
 }

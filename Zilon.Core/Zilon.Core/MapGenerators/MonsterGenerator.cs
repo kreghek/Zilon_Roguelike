@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -20,6 +21,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
         private readonly IActorManager _actorManager;
+        private readonly IPropContainerManager _propContainerManager;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
@@ -29,11 +31,13 @@ namespace Zilon.Core.MapGenerators
         /// <param name="actorManager"> Менеджер актёров, в который размещаются монстры. </param>
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterGeneratorRandomSource generatorRandomSource,
-            IActorManager actorManager)
+            IActorManager actorManager,
+            IPropContainerManager propContainerManager)
         {
             _schemeService = schemeService;
             _generatorRandomSource = generatorRandomSource;
             _actorManager = actorManager;
+            _propContainerManager = propContainerManager;
         }
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
@@ -51,7 +55,11 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var region in monsterRegions)
             {
-                var freeNodes = new List<IMapNode>(region.Nodes);
+                var regionNodes = region.Nodes;
+                var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+                var availableMonsterNodes = regionNodes.Except(containerNodes);
+
+                var freeNodes = new List<IMapNode>(availableMonsterNodes);
 
                 var monsterCount = _generatorRandomSource.RollRegionCount(
                     sectorScheme.MinRegionMonsterCount,
@@ -72,29 +80,30 @@ namespace Zilon.Core.MapGenerators
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
 
+                    //TODO Восстановить патруллирование марштуров позже
                     // первый монстр ходит по маршруту
                     // остальные бродят произвольно
-                    if (i == 0)
-                    {
-                        // генерируем маршрут обхода
-                        var startPatrolNode = region.Nodes.First();
-                        var endPatrolNode = region.Nodes.Last();
+                    //if (i == 0)
+                    //{
+                    //    // генерируем маршрут обхода
+                    //    var startPatrolNode = region.Nodes.First();
+                    //    var endPatrolNode = region.Nodes.Last();
 
-                        // генерируем моснтра
-                        var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
-                        var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
-                        sector.PatrolRoutes[monster] = patrolRoute;
+                    //    // генерируем моснтра
+                    //    var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
+                    //    var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
+                    //    sector.PatrolRoutes[monster] = patrolRoute;
 
-                        freeNodes.Remove(monster.Node);
-                    }
-                    else
-                    {
+                    //    freeNodes.Remove(monster.Node);
+                    //}
+                    //else
+                    //{
                         var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                         var monsterNode = freeNodes[rollIndex];
                         var monster = CreateMonster(monsterScheme, monsterNode, monsterPlayer);
 
                         freeNodes.Remove(monster.Node);
-                    }
+                    //}
                 }
             }
         }
