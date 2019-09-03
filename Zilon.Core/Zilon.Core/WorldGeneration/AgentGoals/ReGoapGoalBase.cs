@@ -19,20 +19,18 @@ namespace Zilon.Core.WorldGeneration.AgentGoals
         protected Queue<ReGoapActionState<T, W>> plan;
         protected IGoapPlanner<T, W> planner;
 
-        #region UnityFunctions
-        protected virtual void Awake()
+        protected ReGoapGoalBase()
         {
             goal = ReGoapState<T, W>.Instantiate();
         }
 
+        #region UnityFunctions
+       
         protected virtual void OnDestroy()
         {
             goal.Recycle();
         }
 
-        protected virtual void Start()
-        {
-        }
         #endregion
 
         #region IReGoapGoal

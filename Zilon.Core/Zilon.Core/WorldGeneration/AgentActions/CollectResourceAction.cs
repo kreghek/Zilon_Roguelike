@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using ReGoap.Core;
 
 namespace Zilon.Core.WorldGeneration.AgentActions
@@ -11,7 +9,7 @@ namespace Zilon.Core.WorldGeneration.AgentActions
     {
         private Dictionary<string, List<ReGoapState<string, object>>> settingsPerResource;
 
-        public CollectResourceAction()
+        public CollectResourceAction(): base()
         {
             settingsPerResource = new Dictionary<string, List<ReGoapState<string, object>>>();
         }

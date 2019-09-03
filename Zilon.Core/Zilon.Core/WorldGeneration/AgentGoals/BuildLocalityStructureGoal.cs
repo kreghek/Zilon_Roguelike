@@ -2,9 +2,9 @@
 {
     public class BuildLocalityStructureGoal: ReGoapGoalBase<string, object>
     {
-        protected override void Awake()
+
+        public BuildLocalityStructureGoal(): base()
         {
-            base.Awake();
             goal.Set("myRequirement", true);
         }
     }

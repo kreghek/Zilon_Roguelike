@@ -74,7 +74,7 @@ namespace Zilon.Core.WorldGeneration
         public int StatesWarmupCount = 10000;
 
         #region UnityFunctions
-        protected virtual void Awake()
+        public virtual void Awake()
         {
             ReGoapNode<T, W>.Warmup(NodeWarmupCount);
             ReGoapState<T, W>.Warmup(StatesWarmupCount);
@@ -131,7 +131,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        protected virtual void Update()
+        public virtual void Update()
         {
             ReGoapLogger.Level = LogLevel;
             if (doneWorks.Count > 0)

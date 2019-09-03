@@ -508,9 +508,14 @@
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
     <Compile Include="WorldGeneration\AgentGoals\BuildLocalityStructureGoal.cs" />
     <Compile Include="WorldGeneration\AgentGoals\ReGoapGoalBase.cs" />
+    <Compile Include="WorldGeneration\AgentMemories\BuilderMemory.cs" />
+    <Compile Include="WorldGeneration\AgentMemories\ReGoapMemory.cs" />
+    <Compile Include="WorldGeneration\AgentMemories\ReGoapMemoryAdvanced.cs" />
+    <Compile Include="WorldGeneration\AgentPlanningManager.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
     <Compile Include="WorldGeneration\BranchType.cs" />
     <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
+    <Compile Include="WorldGeneration\BuilderAgent.cs" />
     <Compile Include="WorldGeneration\DirectBitmap.cs" />
     <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
     <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
@@ -521,6 +526,7 @@
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
+    <Compile Include="WorldGeneration\GoapAgent.cs" />
     <Compile Include="WorldGeneration\ILocalityEventCard.cs" />
     <Compile Include="WorldGeneration\ILocalityStructure.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
@@ -550,6 +556,7 @@
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
     <Compile Include="WorldGeneration\PopulationUnit.cs" />
     <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
+    <Compile Include="WorldGeneration\ReGoapAgentAdvanced.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
     <Compile Include="WorldGeneration\UnderConstructionData.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />

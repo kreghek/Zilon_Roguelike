@@ -25,8 +25,7 @@ namespace Zilon.Core.WorldGeneration.AgentActions
 
         public bool enabled = true;
 
-        #region UnityFunctions
-        protected virtual void Awake()
+        protected ReGoapActionBase()
         {
             enabled = false;
 
@@ -35,12 +34,6 @@ namespace Zilon.Core.WorldGeneration.AgentActions
 
             settings = ReGoapState<T, W>.Instantiate();
         }
-
-        protected virtual void Start()
-        {
-
-        }
-        #endregion
 
         public virtual bool IsActive()
         {

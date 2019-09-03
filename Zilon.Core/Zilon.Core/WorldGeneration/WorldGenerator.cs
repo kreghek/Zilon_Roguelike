@@ -9,6 +9,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
+using Zilon.Core.WorldGeneration.AgentMemories;
 using Zilon.Core.WorldGeneration.LocalityEventCards;
 using Zilon.Core.WorldGeneration.LocalityHazards;
 using Zilon.Core.WorldGeneration.LocalityStructures;
@@ -77,6 +78,23 @@ namespace Zilon.Core.WorldGeneration
 
             var agentCardQueue = CreateAgentCardQueue();
             var localityEventCardQueue = CreateLocalityEventCardQueue();
+
+            var builderMemory = new BuilderMemory();
+
+            builderMemory.Awake();
+
+            var goapAgent = new BuilderAgent(builderMemory);
+
+            
+
+            _planningManager = new ReGoapPlannerManager<string, object>();
+
+            goapAgent.Awake();            
+            _planningManager.Awake();
+
+            goapAgent.Start();
+
+            _planningManager.Update();
 
             // обработка итераций
             ProcessIterations(globe, agentCardQueue, localityEventCardQueue);
@@ -669,5 +687,6 @@ namespace Zilon.Core.WorldGeneration
             "Cult of Liquid DOG",
             "Free Сities Сouncil"
         };
+        private ReGoapPlannerManager<string, object> _planningManager;
     }
 }
