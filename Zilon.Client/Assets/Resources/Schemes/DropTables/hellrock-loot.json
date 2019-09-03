@@ -1,0 +1,19 @@
+{
+  "Rolls": 1,
+  "Records": [
+    
+	{
+      "SchemeSid": "hunger-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "thrist-moderator",
+      "Weight": 1
+    },
+	
+	{
+      "SchemeSid": null,
+      "Weight": 10
+    }
+  ]
+}

@@ -13,9 +13,13 @@
       "SchemeSid": "mace",
       "Weight": 10
     },
+	{
+      "SchemeSid": "tribal-spear",
+      "Weight": 5
+    },
     {
       "SchemeSid": "pistol",
-      "Weight": 5,
+      "Weight": 2,
 	  "Extra":[
 		{
 			"Rolls": 1,
@@ -68,6 +72,25 @@
       "SchemeSid": "rush-sword",
       "Weight": 2
     },
+	{
+	  "SchemeSid": "composite-bow",
+	  "Weight": 2,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "arrow",
+				  "MinCount": 8,
+				  "MaxCount": 15,
+				  "Weight": 5
+				}
+			]
+		}
+	  ]
+	},
+
+	
 	{
       "SchemeSid": null,
       "Weight": 10

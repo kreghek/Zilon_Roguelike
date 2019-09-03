@@ -24,7 +24,11 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
 
-            return highestBranchs.Any() && agent.Hp < 1;
+            var hasSpeciality = highestBranchs.Any();
+            var notDead = agent.Hp < 1;
+            var agentNotLimitReached = globe.Agents.Count() <= 120;
+
+            return hasSpeciality && notDead && agentNotLimitReached;
         }
 
         public void Use(Agent agent, Globe globe, IDice dice)
@@ -32,7 +36,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
             var highestBranchs = agent.Skills.OrderBy(x => x.Value)
                                     .Where(x => x.Value >= 1);
 
-            var agentNameGenerator = new RandomName(dice);
+            var agentNameGenerator = globe.agentNameGenerator;
 
             if (highestBranchs.Any())
             {

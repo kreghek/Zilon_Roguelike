@@ -17,6 +17,17 @@
       "SchemeSid": "gold-armor",
       "Weight": 2
     },
+	
+	{
+      "SchemeSid": "quilted-coat",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "master-robe",
+      "Weight": 2
+    },
+	
+	
 	{
       "SchemeSid": null,
       "Weight": 50

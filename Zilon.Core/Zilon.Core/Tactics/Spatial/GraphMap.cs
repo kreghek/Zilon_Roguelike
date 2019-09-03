@@ -94,5 +94,10 @@ namespace Zilon.Core.Tactics.Spatial
         {
             return Nodes.Contains(node);
         }
+
+        public override bool IsPositionAvailableForContainer(IMapNode targetNode)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

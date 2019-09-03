@@ -88,7 +88,7 @@ namespace Zilon.Core.Commands
         }
 
         private bool CheckPropResource(IPropStore inventory,
-            string usedPropResourceType, 
+            string usedPropResourceType,
             int usedPropResourceCount)
         {
             var propResources = from prop in inventory.CalcActualItems()

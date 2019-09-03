@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1481664540224024}
+      propertyPath: m_Name
+      value: rat
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481664540224024}
+      propertyPath: m_Name
+      value: moon-rat
+      objectReference: {fileID: 0}
     - target: {fileID: 3341399921365361410, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_Name
@@ -56,15 +64,7 @@ PrefabInstance:
     - target: {fileID: 3218681713425117350, guid: 37a5033bd6585c642a46999f2431e910,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481664540224024}
-      propertyPath: m_Name
-      value: rat
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481664540224024}
-      propertyPath: m_Name
-      value: moon-rat
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4316621229199028}
       propertyPath: m_LocalPosition.x

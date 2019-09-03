@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
     {
         [ExcludeFromCodeCoverage]
         public SurvivalStatChangedEventArgs([NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints)
+            [NotNull] [ItemNotNull] SurvivalStatKeyPoint[] keyPoints)
         {
             Stat = stat ?? throw new ArgumentNullException(nameof(stat));
             KeyPoints = keyPoints ?? throw new ArgumentNullException(nameof(keyPoints));
@@ -27,6 +27,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Ключевые точки, которые были пересечены.
         /// </summary>
-        public IEnumerable<SurvivalStatKeyPoint> KeyPoints { get; }
+        public SurvivalStatKeyPoint[] KeyPoints { get; }
     }
 }

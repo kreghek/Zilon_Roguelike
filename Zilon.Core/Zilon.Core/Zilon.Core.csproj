@@ -76,6 +76,8 @@
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
+    <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
+    <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
@@ -161,16 +163,23 @@
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Props\IEquipmentDurableService.cs" />
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
+    <Compile Include="Schemes\IPersonSurvivalStatKeyPointSubScheme.cs" />
+    <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
     <Compile Include="Schemes\EquipCommonRuleType.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
     <Compile Include="Schemes\ISectorSubScheme.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatKeypointLevel.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatKeyPointSubScheme.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatSubScheme.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatType.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
+    <Compile Include="Scoring\TextSummaryHelper.cs" />
     <Compile Include="Tactics\ActorInteractionBus.cs" />
     <Compile Include="Tactics\ActorInteractionEventBase.cs" />
     <Compile Include="Tactics\ActorInteractionEvents\DodgeActorInteractionEvent.cs" />
@@ -194,6 +203,7 @@
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
     <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
+    <Compile Include="Tactics\PropContainerPurpose.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
@@ -491,6 +501,7 @@
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\LocalityHelper.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
@@ -504,6 +515,7 @@
     <Compile Include="WorldGeneration\RealmRelationType.cs" />
     <Compile Include="WorldGeneration\TerrainCell.cs" />
     <Compile Include="World\Color.cs" />
+    <Compile Include="World\GlobeHelper.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
