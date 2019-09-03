@@ -448,10 +448,10 @@ namespace Zilon.Core.WorldGeneration
 
             CrisisMonitoring(locality, crysisMonitors);
 
-            ApplyCrises(locality);
+            UpdateCrises(locality);
         }
 
-        private static void ApplyCrises(Locality locality)
+        private static void UpdateCrises(Locality locality)
         {
             foreach (var crisis in locality.Crises)
             {
