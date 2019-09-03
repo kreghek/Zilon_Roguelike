@@ -60,9 +60,45 @@
 		}
 	  ]
     },
+	{
+      "SchemeSid": "wooden-shield",
+      "Weight": 20
+    },
     {
       "SchemeSid": "rush-sword",
       "Weight": 10
-    }
+    },
+	{
+      "SchemeSid": "iron-ring",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "higea-ring",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "hunger-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "thrist-moderator",
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "taurus-stim",
+      "Weight": 2
+    },
+	{
+      "SchemeSid": "power-shield-generator",
+      "Weight": 1
+    },
+	{
+	  "SchemeSid": "fire-opal-necklace",
+      "Weight": 2
+	},
+	{
+	  "SchemeSid": "law-codex",
+      "Weight": 1
+	}
   ]
 }

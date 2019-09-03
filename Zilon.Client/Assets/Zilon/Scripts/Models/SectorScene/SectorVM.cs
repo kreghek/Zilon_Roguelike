@@ -15,7 +15,6 @@ using Zenject;
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators;
@@ -107,6 +106,8 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+
+    [Inject] private readonly ScoreStorage _scoreStorage;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -202,6 +203,9 @@ public class SectorVM : MonoBehaviour
         //}
 
         _gameLoop.Updated += GameLoop_Updated;
+
+        //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
+        _commandBlockerService.DropBlockers();
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
@@ -328,7 +332,7 @@ public class SectorVM : MonoBehaviour
 
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
             actorViewModel.GraphicRoot = actorGraphic;
-            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+            actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
             graphicController.Actor = monsterActor;
@@ -387,7 +391,7 @@ public class SectorVM : MonoBehaviour
 
         var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
         actorViewModel.GraphicRoot = actorGraphic;
-        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, 0);
+        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
         var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
         graphicController.Actor = actor;
@@ -507,6 +511,8 @@ public class SectorVM : MonoBehaviour
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
+        _playerState.SelectedViewModel = null;
+        _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
         if (_humanPlayer.GlobeNode == null)
@@ -637,7 +643,7 @@ public class SectorVM : MonoBehaviour
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
         actorViewModel.PlayerState = _playerState;
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-        actorGraphic.transform.position = new Vector3(0, 0.2f, 0);
+        actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
         actorViewModel.GraphicRoot = actorGraphic;
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
@@ -659,6 +665,17 @@ public class SectorVM : MonoBehaviour
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
+        var scores = _scoreManager.Scores;
+
+        try
+        {
+            _scoreStorage.AppendScores("test", scores);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError("Не удалось выполнить запись результатов в БД\n" + exception.ToString());
+        }
+
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
 

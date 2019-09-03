@@ -131,10 +131,10 @@ namespace Zilon.Core.Tactics
                         throw new ArgumentException($"Неизвестный класс {propClass} объекта {scheme}.");
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 //TODO Оборачивать в доменное исключение. Создать собственный тип.
-                throw new Exception($"Ошибка при обработке записи дропа {record.SchemeSid}");
+                throw new Exception($"Ошибка при обработке записи дропа {record.SchemeSid}", exception);
             }
         }
 

@@ -12,6 +12,7 @@ namespace Zilon.Core.Schemes
         {
             Type = type;
             Level = level;
+            Direction = direction;
         }
 
         public EquipCommonRuleType Type { get; }

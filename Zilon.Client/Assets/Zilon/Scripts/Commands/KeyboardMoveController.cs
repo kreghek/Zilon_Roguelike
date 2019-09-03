@@ -19,7 +19,15 @@ using Zilon.Core.Tactics.Spatial;
 
 public class KeyboardMoveController : MonoBehaviour
 {
+    /// <summary>
+    /// Интервал в секундах. Должен быть равен времени, пока персонаж
+    /// визуально перемещается между узлами.
+    /// </summary>
+    private const float MOVE_COMMAND_INTERVAL = 0.3f;
+
     public SectorVM SectorViewModel;
+
+    private float _moveCommandCounter = 0;
 
     private readonly Dictionary<StepDirection, int> _stepDirectionIndexes = new Dictionary<StepDirection, int> {
         { StepDirection.Left, 0 },
@@ -36,7 +44,14 @@ public class KeyboardMoveController : MonoBehaviour
         { KeyCode.Keypad9, StepDirection.RightTop },
         { KeyCode.Keypad6, StepDirection.Right },
         { KeyCode.Keypad3, StepDirection.RightBottom },
-        { KeyCode.Keypad1, StepDirection.LeftBottom }
+        { KeyCode.Keypad1, StepDirection.LeftBottom },
+
+        { KeyCode.A, StepDirection.Left },
+        { KeyCode.Q, StepDirection.LeftTop },
+        { KeyCode.W, StepDirection.RightTop },
+        { KeyCode.S, StepDirection.Right },
+        { KeyCode.X, StepDirection.RightBottom },
+        { KeyCode.Z, StepDirection.LeftBottom }
     };
 
     [Inject]
@@ -59,16 +74,39 @@ public class KeyboardMoveController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Эта проверка нужна для избежания ошибки при выполнении команды.
+        // Предположительно, ошибка происходит, потому что _commandBlockerService.HasBlockers
+        // ещё не выставлен, а уже отправлен второй запрос на команду.
+        //TODO Убедиться в достоверности утверждения выше.
+
+        _moveCommandCounter += Time.deltaTime;
+        if (_moveCommandCounter <= MOVE_COMMAND_INTERVAL)
+        {
+            return;
+        }
+
         if (!_commandBlockerService.HasBlockers)
         {
             var direction = GetDirectionByKeyboard();
+
+            // Сброс интервала только когда пользователь совершил перемещение
+            // То есть нажал на стрелки.
+            _moveCommandCounter = 0;
 
             if (direction == StepDirection.Undefined)
             {
                 return;
             }
 
-            var targetNode = GetTargetNode(direction);
+            var actorHexNode = _sectorUiState.ActiveActor.Actor.Node as HexNode;
+
+            var targetNode = GetTargetNode(actorHexNode, direction);
+
+            if (actorHexNode == targetNode)
+            {
+                //TODO Нужно обосновать наличие этого выхода.
+                return;
+            }
 
             var targetNodeViewModel = SectorViewModel.NodeViewModels.SingleOrDefault(x => ReferenceEquals(x.Node, targetNode));
 
@@ -94,31 +132,30 @@ public class KeyboardMoveController : MonoBehaviour
 
     private static KeyCode DetectPressedKeyOrButton()
     {
-        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        var allKeyCodes = Enum.GetValues(typeof(KeyCode));
+        foreach (KeyCode keyCode in allKeyCodes)
         {
-            if (Input.GetKeyDown(kcode))
-                return kcode;
-
-
+            if (Input.GetKey(keyCode))
+            {
+                return keyCode;
+            }
         }
 
         return KeyCode.None;
     }
 
-    private IMapNode GetTargetNode(StepDirection direction)
+    private IMapNode GetTargetNode(HexNode actorHexNode, StepDirection direction)
     {
         if (direction == StepDirection.Undefined)
         {
             throw new ArgumentException("Не определено направление.", nameof(direction));
         }
 
-        var node = _sectorUiState.ActiveActor.Actor.Node as HexNode;
-
-        var neighborNodes = _sectorManager.CurrentSector.Map.GetNext(node).OfType<HexNode>();
+        var neighborNodes = _sectorManager.CurrentSector.Map.GetNext(actorHexNode).OfType<HexNode>();
         var directions = HexHelper.GetOffsetClockwise();
 
         var stepDirectionIndex = _stepDirectionIndexes[direction];
-        var targetCubeCoords = node.CubeCoords + directions[stepDirectionIndex];
+        var targetCubeCoords = actorHexNode.CubeCoords + directions[stepDirectionIndex];
 
         var targetNode = neighborNodes.SingleOrDefault(x => x.CubeCoords == targetCubeCoords);
         return targetNode;

@@ -122,7 +122,8 @@ public class PropInfoPopup : MonoBehaviour
                     foreach (var rule in propScheme.Equip.Rules)
                     {
                         var sign = GetDirectionString(rule.Direction);
-                        descriptionLines.Add($"Bonus: {rule.Type}: {sign}{rule.Level}");
+                        var bonusString = GetBonusString(rule.Direction);
+                        descriptionLines.Add($"{bonusString}: {rule.Type}: {sign}{rule.Level}");
                     }
                 }
 
@@ -162,6 +163,21 @@ public class PropInfoPopup : MonoBehaviour
 
     private static string GetDirectionString(PersonRuleDirection direction)
     {
-        return direction == PersonRuleDirection.Positive ? string.Empty : "-";
+        if (direction == PersonRuleDirection.Negative)
+        {
+            return "-";
+        }
+
+        return string.Empty;
+    }
+
+    private static string GetBonusString(PersonRuleDirection direction)
+    {
+        if (direction == PersonRuleDirection.Negative)
+        {
+            return "Penalty";
+        }
+
+        return "Bonus";
     }
 }

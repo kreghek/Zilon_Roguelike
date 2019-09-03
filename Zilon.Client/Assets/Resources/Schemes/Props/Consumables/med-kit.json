@@ -8,17 +8,11 @@
     "CommonRules": [
       {
         "Type": "Health",
+        "Level": "Grand"
+      },
+	  {
+        "Type": "Intoxication",
         "Level": "Normal"
-      },
-	  {
-        "Type": "Thirst",
-        "Level": "Lesser",
-		"Direction": "Negative"
-      },
-	  {
-        "Type": "Satiety",
-        "Level": "Lesser",
-		"Direction": "Negative"
       }
     ]
   },
