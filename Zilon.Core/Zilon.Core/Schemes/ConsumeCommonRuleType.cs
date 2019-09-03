@@ -20,6 +20,11 @@
         /// <summary>
         /// Влияет на здоровье.
         /// </summary>
-        Health
+        Health,
+
+        /// <summary>
+        /// Влияние на уровень интоксикации персонажа.
+        /// </summary>
+        Intoxication
     }
 }

@@ -3,10 +3,18 @@
   "Records": [
     {
       "SchemeSid": "steel-helmet",
-      "Weight": 10
+      "Weight": 5
     },
 	{
       "SchemeSid": "leather-helmet",
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "closed-leather-helmet",
+      "Weight": 5
+    },
+	{
+      "SchemeSid": "knitted-hat",
       "Weight": 10
     },
 	{
@@ -21,6 +29,16 @@
       "SchemeSid": "highlander-helmet",
       "Weight": 2
     },
+	
+	{
+      "SchemeSid": "tactical-helmet",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "gold-helmet",
+      "Weight": 2
+    },
+	
 	{
       "SchemeSid": null,
       "Weight": 50

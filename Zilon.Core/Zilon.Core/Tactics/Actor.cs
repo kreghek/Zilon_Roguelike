@@ -93,11 +93,15 @@ namespace Zilon.Core.Tactics
                                 break;
 
                             case ConsumeCommonRuleType.Thirst:
-                                RestoreStat(SurvivalStatType.Water, rule.Level);
+                                RestoreStat(SurvivalStatType.Hydration, rule.Level);
                                 break;
 
                             case ConsumeCommonRuleType.Health:
                                 RestoreStat(SurvivalStatType.Health, rule.Level);
+                                break;
+
+                            case ConsumeCommonRuleType.Intoxication:
+                                RiseStat(SurvivalStatType.Intoxication, rule.Level);
                                 break;
 
                             case ConsumeCommonRuleType.Undefined:
@@ -113,7 +117,7 @@ namespace Zilon.Core.Tactics
                                 break;
 
                             case ConsumeCommonRuleType.Thirst:
-                                DecreaseStat(SurvivalStatType.Water, rule.Level);
+                                DecreaseStat(SurvivalStatType.Hydration, rule.Level);
                                 break;
 
                             case ConsumeCommonRuleType.Health:
@@ -195,6 +199,18 @@ namespace Zilon.Core.Tactics
             return $"{Person}";
         }
 
+        /// <summary>
+        /// Метод введён специально для повышения уровня интоксикации.
+        /// Так как глупо выглядит ResToreStat для повышения интоксикации.
+        /// Просто семантически более удобная обёртка.
+        /// </summary>
+        /// <param name="statType"> Характеристика, повышаемая методом. </param>
+        /// <param name="level"> Уровень увеличения. </param>
+        private void RiseStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            RestoreStat(statType, level);
+        }
+
         private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
         {
             switch (statType)
@@ -203,8 +219,12 @@ namespace Zilon.Core.Tactics
                     RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
                     break;
 
-                case SurvivalStatType.Water:
-                    RestoreSurvivalStatInner(SurvivalStatType.Water, level);
+                case SurvivalStatType.Hydration:
+                    RestoreSurvivalStatInner(SurvivalStatType.Hydration, level);
+                    break;
+
+                case SurvivalStatType.Intoxication:
+                    RiseIntoxicationLevel(level);
                     break;
 
                 case SurvivalStatType.Health:
@@ -267,6 +287,30 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        private void RiseIntoxicationLevel(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
         private void DecreaseStat(SurvivalStatType statType, PersonRuleLevel level)
         {
             switch (statType)
@@ -275,8 +319,8 @@ namespace Zilon.Core.Tactics
                     DecreaseSurvivalStatInner(SurvivalStatType.Satiety, level);
                     break;
 
-                case SurvivalStatType.Water:
-                    DecreaseSurvivalStatInner(SurvivalStatType.Water, level);
+                case SurvivalStatType.Hydration:
+                    DecreaseSurvivalStatInner(SurvivalStatType.Hydration, level);
                     break;
 
                 case SurvivalStatType.Health:

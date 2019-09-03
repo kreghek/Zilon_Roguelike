@@ -18,12 +18,13 @@ namespace Zilon.Core.Persons.Auxiliary
         /// </summary>
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
-        /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик. </param>
+        /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик.
+        /// Передаются ключевые точки в порядке их прохождения.</param>
         /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalEffect(
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] IEnumerable<SurvivalStatKeyPoint> keyPoints,
+            [NotNull] [ItemNotNull] SurvivalStatKeyPoint[] keyPoints,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
@@ -31,12 +32,24 @@ namespace Zilon.Core.Persons.Auxiliary
             var statType = stat.Type;
             var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
 
+            // Эффект выставляем на основе последней проёденной ключевой точки.
+            // Потому что сюда передаются ключевые точки в порядке их прохождения.
             var keyPoint = keyPoints.Last();
 
             if (currentTypeEffect != null)
             {
                 // Эффект уже существует. Изменим его уровень.
-                if (stat.Value <= keyPoint.Value)
+
+                // ! Костыль. Нужно переделать на отрезки вместо ключевых точек.
+                // Так мы определяем поведение в зависимости от характеристики.
+                // По сути, для сытости и упитости будем использовать старый алгоритм (чем ниже значение, тем выше уровень угрозы).
+                // А для интоксикации, наоборот, чем выше значение.
+                // Это возможно, потому что сейчас все ключевые точки расположены либо слева лиюо справа от нуля.
+                // Дальше нужно будет переделать на отрезки, когда будут как положительные, так и отрицательные ключевые точки.
+                // Это произойдёт, когда будет введено, например, обжорство. Ключевая точка, когда персонаж употребил слишком много еды.
+                var upRise = keyPoint.Value <= 0 ? stat.Value <= keyPoint.Value : stat.Value >= keyPoint.Value;
+
+                if (upRise)
                 {
                     currentTypeEffect.Level = keyPoint.Level;
                 }
@@ -59,13 +72,11 @@ namespace Zilon.Core.Persons.Auxiliary
                                 break;
 
                             case SurvivalStatHazardLevel.Undefined:
-                                throw new NotSupportedException();
-                            
                             case SurvivalStatHazardLevel.Lesser:
-                                throw new NotSupportedException();
-                            
                             default:
-                                throw new InvalidOperationException("Уровень эффекта, который не обрабатывается.");
+                                // Для Lesser уже выполняется обработка выше.
+                                // Для остальных уровней - в отдельных блоках case.
+                                throw new NotSupportedException("Уровень эффекта, который не обрабатывается.");
                         }
                     }
                 }

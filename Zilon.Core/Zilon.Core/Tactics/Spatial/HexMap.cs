@@ -225,9 +225,15 @@ namespace Zilon.Core.Tactics.Spatial
 
         private static bool CheckNodeIsObstable(IMapNode targetNode)
         {
-            var hex = targetNode as HexNode;
+            var hex = (HexNode)targetNode;
             var hexIsObstacle = hex.IsObstacle;
             return hexIsObstacle;
+        }
+
+        public override bool IsPositionAvailableForContainer(IMapNode targetNode)
+        {
+            var isObstacle = CheckNodeIsObstable(targetNode);
+            return !isObstacle;
         }
 
         private struct SegmentKey

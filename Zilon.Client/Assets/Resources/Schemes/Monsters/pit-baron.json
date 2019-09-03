@@ -21,7 +21,9 @@
     "Targets": "Enemy"
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"champion-loot",
+	"demon"
   ],
   "BaseScore": 200,
   "Tags": [

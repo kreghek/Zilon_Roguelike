@@ -29,7 +29,8 @@
     ]
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"dark-guardian-loot"
   ],
   "BaseScore": 75,
   "Tags": [

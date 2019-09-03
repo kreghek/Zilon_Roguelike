@@ -13,6 +13,16 @@
         /// <summary>
         /// Влияет на здоровье, если нет доспеха на тело.
         /// </summary>
-        HealthIfNoBody
+        HealthIfNoBody,
+
+        /// <summary>
+        /// Влияет на шанс снижения характеристики - сытость.
+        /// </summary>
+        HungerResistance,
+
+        /// <summary>
+        /// Влияет на шанс снижения характеристики - вода.
+        /// </summary>
+        ThristResistance
     }
 }

@@ -27,10 +27,10 @@ public class MonsterInfoPanel : MonoBehaviour
     {
         if (_playerState.HoverViewModel is IActorViewModel actorViewModel)
         {
-            PaneContent.SetActive(true);
-
             if (actorViewModel.Actor.Person is MonsterPerson monsterPerson)
             {
+                PaneContent.SetActive(true);
+
                 MonsterNameText.text = monsterPerson.Scheme.Name?.En ?? monsterPerson.Scheme.Name?.Ru ?? "[No Name]";
 
                 var hpStat = monsterPerson.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);

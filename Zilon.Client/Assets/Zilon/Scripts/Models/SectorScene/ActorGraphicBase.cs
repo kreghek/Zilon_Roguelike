@@ -62,7 +62,9 @@ public class ActorGraphicBase : MonoBehaviour
         }
     }
 
+#pragma warning disable IDE0051 // Remove unused private members
     private void StartRotting()
+#pragma warning restore IDE0051 // Remove unused private members
     {
         // Вызывается, как событие анимации.
         var corpse = gameObject.AddComponent<Rotting>();

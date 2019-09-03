@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
@@ -21,5 +23,17 @@ namespace Zilon.Core.Commands
             SectorManager = sectorManager;
             PlayerState = playerState;
         }
+
+        /// <summary>
+        /// Текущий активный актёр.
+        /// </summary>
+        [CanBeNull]
+        public IActor CurrentActor => PlayerState.ActiveActor?.Actor;
+
+        /// <summary>
+        /// Модель представления текущего актёра.
+        /// </summary>
+        [CanBeNull]
+        public IActorViewModel CurrentActorViewModel => PlayerState.ActiveActor;
     }
 }
