@@ -54,6 +54,8 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
         /// </summary>
         public int MaintenanceCost => 1;
 
+        public UnderConstructionData UnderConstructionData { get; }
+
         public override string ToString()
         {
             return Name;

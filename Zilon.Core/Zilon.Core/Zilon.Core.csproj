@@ -86,6 +86,22 @@
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
+    <Compile Include="Goap\Core\IReGoapAction.cs" />
+    <Compile Include="Goap\Core\IReGoapAgent.cs" />
+    <Compile Include="Goap\Core\IReGoapAgentHelper.cs" />
+    <Compile Include="Goap\Core\IReGoapGoal.cs" />
+    <Compile Include="Goap\Core\IReGoapMemory.cs" />
+    <Compile Include="Goap\Core\IReGoapSensor.cs" />
+    <Compile Include="Goap\Core\ReGoapActionState.cs" />
+    <Compile Include="Goap\Core\ReGoapState.cs" />
+    <Compile Include="Goap\Planner\AStar.cs" />
+    <Compile Include="Goap\Planner\FastPriorityQueue.cs" />
+    <Compile Include="Goap\Planner\IGoapPlanner.cs" />
+    <Compile Include="Goap\Planner\PlanDebugger.cs" />
+    <Compile Include="Goap\Planner\ReGoapNode.cs" />
+    <Compile Include="Goap\Planner\ReGoapPlanner.cs" />
+    <Compile Include="Goap\Planner\ReGoapPlannerSettings.cs" />
+    <Compile Include="Goap\Utilities\ReGoapLogger.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\CitizenGenerator.cs" />
@@ -561,6 +577,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persons\HumanPersonGeneration\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
