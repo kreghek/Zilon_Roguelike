@@ -88,6 +88,11 @@ namespace Zilon.Core.WorldGeneration
             
 
             _planningManager = new ReGoapPlannerManager<string, object>();
+            _planningManager.PlannerSettings = new ReGoap.Planner.ReGoapPlannerSettings
+            {
+                PlanningEarlyExit = true,
+                UsingDynamicActions = true
+            };
 
             goapAgent.Awake();            
             _planningManager.Awake();
