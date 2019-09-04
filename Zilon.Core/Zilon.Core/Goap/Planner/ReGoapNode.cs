@@ -166,10 +166,13 @@ namespace ReGoap.Planner
                     var precond = possibleAction.GetPreconditions(stackData);
                     var effects = possibleAction.GetEffects(stackData);
 
-                    if (effects.HasAny(Goal) && // any effect is the current Goal
+                    var anyEffectIsGoal = effects.HasAny(Goal);
+                    var conditionsAreSatisfied = possibleAction.CheckProceduralCondition(stackData);
+
+                    if (anyEffectIsGoal && // any effect is the current Goal
                         !Goal.HasAnyConflict(effects, precond) && // no precondition is conflicting with the Goal or has conflict but the effects fulfils the Goal
                         !Goal.HasAnyConflict(effects) && // no effect is conflicting with the Goal
-                        possibleAction.CheckProceduralCondition(stackData))
+                        conditionsAreSatisfied)
                     {
                         var newGoal = Goal;
                         expandList.Add(Instantiate(planner, newGoal, this, possibleAction, settings));

@@ -5,7 +5,7 @@
 
         public BuildLocalityStructureGoal(): base()
         {
-            goal.Set("myRequirement", true);
+            goal.Set("buildStructure", true);
         }
     }
 }

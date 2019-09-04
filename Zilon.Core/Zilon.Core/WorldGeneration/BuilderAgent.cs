@@ -35,8 +35,8 @@ namespace Zilon.Core.WorldGeneration
             base.RefreshActionsSet();
 
             actions = new List<IReGoapAction<string, object>>(new IReGoapAction<string, object>[] {
-                new AgentActions.CollectResourceAction(),
-                new AgentActions.BuildLocalityStructureAction()
+                new AgentActions.CollectResourceAction() { Name = "Collect Resources" },
+                new AgentActions.BuildLocalityStructureAction() { Name = "Build" }
             });
         }
     }

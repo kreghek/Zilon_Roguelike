@@ -100,6 +100,9 @@ namespace Zilon.Core.WorldGeneration
             goapAgent.Start();
 
             _planningManager.Update();
+            _planningManager.Update();
+
+
 
             // обработка итераций
             ProcessIterations(globe, agentCardQueue, localityEventCardQueue);
