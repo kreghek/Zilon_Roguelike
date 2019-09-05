@@ -1,14 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using ReGoap.Core;
+using Zilon.Core.WorldGeneration.AgentCards;
+using Zilon.Core.WorldGeneration.LocalityStructures;
 
 namespace Zilon.Core.WorldGeneration.AgentActions
 {
     public sealed class BuildLocalityStructureAction: ReGoapActionBase<string, object>
     {
+        private readonly Locality _locality;
+        private readonly BasicLocalityStructure _localityStructure;
+
+        public BuildLocalityStructureAction(Locality locality, BasicLocalityStructure localityStructure)
+        {
+            _locality = locality;
+            _localityStructure = localityStructure;
+        }
+
         public override bool CheckProceduralCondition(GoapActionStackData<string, object> stackData)
         {
-            return base.CheckProceduralCondition(stackData);// && stackData.settings.HasKey("bank");
+            // Условия:
+            // Город должен выдержать новое здание. Это значит, что баланс города должен покрывать потребности.
+            // В городе должны быть ресурсы для начала строительства структуры.
+            // В городе должно быть население, способное работать в новом здании.
+
+            // Получаем текущий баланс города.
+            // Если баланс города удовлетворяет требованям городской структуры,
+            // то условия пройдены.
+
+            // Учитываем только баланс с учётом других зданий.
+            // На агентов - не рассчитываем.
+
+            var localityBalance = LocalityBalanceHelper.CalcBalance(_locality);
+            var hasEnoughtResourceBalance = CheckBalance(localityBalance, _localityStructure);
+
+            return base.CheckProceduralCondition(stackData) && stackData.settings.HasKey("bank");
+        }
+
+        private bool CheckBalance(Dictionary<LocalityResource, int> balance, ILocalityStructure structure)
+        {
+            foreach (var resource in structure.RequiredResources)
+            {
+                if (!balance.TryGetValue(resource.Key, out int currentResourceBalance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override List<ReGoapState<string, object>> GetSettings(GoapActionStackData<string, object> stackData)
@@ -19,7 +58,7 @@ namespace Zilon.Core.WorldGeneration.AgentActions
 
             foreach (var pair in stackData.goalState.GetValues())
             {
-                if (pair.Key == "buildStructure")
+                if (pair.Key.Contains("buildStructure"))
                 {
                     //var resourceName = pair.Key.Substring(17);
                     //if (settingsPerResource.ContainsKey(resourceName))
@@ -45,6 +84,11 @@ namespace Zilon.Core.WorldGeneration.AgentActions
 
         public override ReGoapState<string, object> GetEffects(GoapActionStackData<string, object> stackData)
         {
+            // В качестве эффектов будет:
+            // Изменение баланса города.
+            // Указываем, что это здание есть в городе. Наличие здания в городе указываем через счётчик.
+            // Указываем, что из города изымаются ресурсы, требуемые для начала строительства.
+
             //if (stackData.settings.HasKey("resourceName"))
             //    effects.Set("collectedResource" + stackData.settings.Get("resourceName") as string, true);
 
