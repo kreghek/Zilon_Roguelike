@@ -31,19 +31,29 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             // Учитываем только баланс с учётом других зданий.
             // На агентов - не рассчитываем.
 
-            var localityBalance = LocalityBalanceHelper.CalcBalance(_locality);
-            var hasEnoughtResourceBalance = CheckBalance(localityBalance, _localityStructure);
+            var hasEnounghBalance = CheckLocalityBalance(stackData);
+            if (!hasEnounghBalance)
+            {
+                return false;
+            }
 
-            return base.CheckProceduralCondition(stackData) && stackData.settings.HasKey("bank");
+            // Все условия этого действия проверены.
+            // Проверяем ещё родительские.
+
+            return base.CheckProceduralCondition(stackData);
         }
 
-        private bool CheckBalance(Dictionary<LocalityResource, int> balance, ILocalityStructure structure)
+        private bool CheckLocalityBalance(GoapActionStackData<string, object> stackData)
         {
-            foreach (var resource in structure.RequiredResources)
+            foreach (var requiredResource in _localityStructure.RequiredResources)
             {
-                if (!balance.TryGetValue(resource.Key, out int currentResourceBalance))
+                if (stackData.settings.HasKey($"locality_{_locality.Name}_has_{requiredResource.Key}_balance"))
                 {
-                    return false;
+                    var balance = stackData.settings.Get($"locality_{_locality.Name}_has_{requiredResource.Key}_balance") as int?;
+                    if (balance.Value < requiredResource.Value)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -89,10 +99,17 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             // Указываем, что это здание есть в городе. Наличие здания в городе указываем через счётчик.
             // Указываем, что из города изымаются ресурсы, требуемые для начала строительства.
 
-            //if (stackData.settings.HasKey("resourceName"))
-            //    effects.Set("collectedResource" + stackData.settings.Get("resourceName") as string, true);
+            foreach (var product in _localityStructure.ProductResources)
+            {
+                if (stackData.settings.HasKey($"locality_{_locality.Name}_has_{product.Key}_balance"))
+                {
+                    var balance = stackData.settings.Get($"locality_{_locality.Name}_has_{product.Key}_balance") as int?;
+                    balance += product.Value;
+                    effects.Set($"locality_{_locality.Name}_has_{product.Key}_balance", balance);
+                }
+            }
 
-            effects.Set("buildStructure", true);
+            effects.Set($"buildStructure_{_localityStructure.SpeciaName}_IN_{_locality.Name}", true);
 
             return effects;
         }
