@@ -5,9 +5,9 @@ namespace Zilon.Core.WorldGeneration.AgentGoals
     public class BuildLocalityStructureGoal: ReGoapGoalBase<string, object>
     {
 
-        public BuildLocalityStructureGoal(Locality locality, BasicLocalityStructure localityStructure): base()
+        public BuildLocalityStructureGoal(Locality locality, ILocalityStructure localityStructure): base()
         {
-            goal.Set($"buildStructure_{localityStructure.SpeciaName}_IN_{locality.Name}", true);
+            goal.Set($"structure_{localityStructure.Name}_in_{locality.Name}", true);
         }
     }
 }

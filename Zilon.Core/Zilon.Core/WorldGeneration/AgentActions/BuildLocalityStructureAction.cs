@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using ReGoap.Core;
-using Zilon.Core.WorldGeneration.AgentCards;
-using Zilon.Core.WorldGeneration.LocalityStructures;
 
 namespace Zilon.Core.WorldGeneration.AgentActions
 {
     public sealed class BuildLocalityStructureAction: ReGoapActionBase<string, object>
     {
         private readonly Locality _locality;
-        private readonly BasicLocalityStructure _localityStructure;
+        private readonly ILocalityStructure _localityStructure;
 
-        public BuildLocalityStructureAction(Locality locality, BasicLocalityStructure localityStructure)
+        public BuildLocalityStructureAction(Locality locality, ILocalityStructure localityStructure)
         {
             _locality = locality;
             _localityStructure = localityStructure;
@@ -62,34 +61,39 @@ namespace Zilon.Core.WorldGeneration.AgentActions
 
         public override List<ReGoapState<string, object>> GetSettings(GoapActionStackData<string, object> stackData)
         {
-            // Здесь должен быть ключ buildStructure.
-            // Чтобы при построении плана от цели это действие
-            // смогло быть сопоставлено с целью
+            // Похоже, что здесь подготавливается состояние, которое нужно текущеу действию.
+            // Состояние можно готовить на основе переданного - текущее.
+            var results = new List<ReGoapState<string, object>>() {
+                stackData.currentState.Clone()
+            };
+            return results;
 
-            foreach (var pair in stackData.goalState.GetValues())
-            {
-                if (pair.Key.Contains("buildStructure"))
-                {
-                    //var resourceName = pair.Key.Substring(17);
-                    //if (settingsPerResource.ContainsKey(resourceName))
-                    //    return settingsPerResource[resourceName];
-                    var results = new List<ReGoapState<string, object>>();
-                    //settings.Set("resourceName", resourceName);
-                    // push all available banks
-                    //foreach (var banksPair in (Dictionary<Bank, Vector3>)stackData.currentState.Get("banks"))
-                    //{
-                    //    settings.Set("bank", banksPair.Key);
-                    //    settings.Set("bankPosition", banksPair.Value);
-                    //    results.Add(settings.Clone());
-                    //}
-                    //settingsPerResource[resourceName] = results;
+            //foreach (var pair in stackData.goalState.GetValues())
+            //{
 
-                    // Не понятно, для чего это делается.
-                    results.Add(settings.Clone());
-                    return results;
-                }
-            }
-            return base.GetSettings(stackData);
+            //    if (pair.Key.Contains("buildStructure"))
+            //    {
+            //        var clone = settings.Clone();
+            //        //var resourceName = pair.Key.Substring(17);
+            //        //if (settingsPerResource.ContainsKey(resourceName))
+            //        //    return settingsPerResource[resourceName];
+            //        var results = new List<ReGoapState<string, object>>();
+            //        //settings.Set("resourceName", resourceName);
+            //        // push all available banks
+            //        //foreach (var banksPair in (Dictionary<Bank, Vector3>)stackData.currentState.Get("banks"))
+            //        //{
+            //        //    settings.Set("bank", banksPair.Key);
+            //        //    settings.Set("bankPosition", banksPair.Value);
+            //        //    results.Add(settings.Clone());
+            //        //}
+            //        //settingsPerResource[resourceName] = results;
+
+            //        // Не понятно, для чего это делается.
+            //        results.Add(settings.Clone());
+            //        return results;
+            //    }
+            //}
+            //return base.GetSettings(stackData);
         }
 
         public override ReGoapState<string, object> GetEffects(GoapActionStackData<string, object> stackData)
@@ -109,7 +113,7 @@ namespace Zilon.Core.WorldGeneration.AgentActions
                 }
             }
 
-            effects.Set($"buildStructure_{_localityStructure.SpeciaName}_IN_{_locality.Name}", true);
+            effects.Set($"structure_{_localityStructure.Name}_in_{_locality.Name}", true);
 
             return effects;
         }
@@ -120,6 +124,12 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             //    preconditions.Set("isAtPosition", stackData.settings.Get("bankPosition"));
             //if (stackData.settings.HasKey("resourceName"))
             //    preconditions.Set("hasResource" + stackData.settings.Get("resourceName") as string, true);
+
+            foreach (var requiredResource in _localityStructure.RequiredResources)
+            {
+                preconditions.Set($"locality_{_locality.Name}_has_{requiredResource.Key}_balance", requiredResource.Value);
+            }
+
             return preconditions;
         }
 

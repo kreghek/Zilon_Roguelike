@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using ReGoap.Core;
-
+using Zilon.Core.WorldGeneration.AgentActions;
+using Zilon.Core.WorldGeneration.AgentGoals;
 using Zilon.Core.WorldGeneration.AgentMemories;
 
 namespace Zilon.Core.WorldGeneration
@@ -9,10 +10,14 @@ namespace Zilon.Core.WorldGeneration
     class BuilderAgent: ReGoapAgentAdvanced<string, object>
     {
         private readonly BuilderMemory _memory;
+        private readonly Globe _globe;
+        private readonly Agent _agent;
 
-        public BuilderAgent(BuilderMemory memory)
+        public BuilderAgent(BuilderMemory memory, Globe globe, Agent agent)
         {
             _memory = memory;
+            _globe = globe;
+            _agent = agent;
         }
 
         public override void RefreshMemory()
@@ -25,9 +30,18 @@ namespace Zilon.Core.WorldGeneration
         {
             base.RefreshGoalsSet();
 
-            goals = new List<IReGoapGoal<string, object>>(
-                new IReGoapGoal<string, object>[] { new AgentGoals.BuildLocalityStructureGoal() }
-                );
+            var agentRealm = _agent.Realm;
+            var realmLocalities = _globe.Localities.Where(x => x.Owner == agentRealm).ToArray();
+
+            goals = new List<IReGoapGoal<string, object>>();
+
+            foreach (var locality in realmLocalities)
+            {
+                foreach (var structure in LocalityStructureRepository.All)
+                {
+                    goals.Add(new BuildLocalityStructureGoal(locality, structure));
+                }
+            }
         }
 
         public override void RefreshActionsSet()
@@ -35,9 +49,19 @@ namespace Zilon.Core.WorldGeneration
             base.RefreshActionsSet();
 
             actions = new List<IReGoapAction<string, object>>(new IReGoapAction<string, object>[] {
-                new AgentActions.CollectResourceAction() { Name = "Collect Resources" },
-                new AgentActions.BuildLocalityStructureAction() { Name = "Build" }
+                new CollectResourceAction() { Name = "Collect Resources" }
             });
+
+            var agentRealm = _agent.Realm;
+            var realmLocalities = _globe.Localities.Where(x => x.Owner == agentRealm).ToArray();
+
+            foreach (var locality in realmLocalities)
+            {
+                foreach (var structure in LocalityStructureRepository.All)
+                {
+                    actions.Add(new BuildLocalityStructureAction(locality, structure){ Name = $"Build {structure.Name} in {locality}" });
+                }
+            }
         }
     }
 }

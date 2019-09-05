@@ -79,11 +79,19 @@ namespace Zilon.Core.WorldGeneration
             var agentCardQueue = CreateAgentCardQueue();
             var localityEventCardQueue = CreateLocalityEventCardQueue();
 
-            var builderMemory = new BuilderMemory();
+            var memory = new BuilderMemory();
+            memory.Awake();
 
-            builderMemory.Awake();
+            var firstAgentLocality = globe.LocalitiesCells[globe.Agents.First().Location];
+            foreach (var resource in firstAgentLocality.Stats.Resources)
+            {
+                memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
+            }
+            
 
-            var goapAgent = new BuilderAgent(builderMemory);
+            
+
+            var goapAgent = new BuilderAgent(memory, globe, globe.Agents.First());
 
             
 
