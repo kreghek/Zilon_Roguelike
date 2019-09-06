@@ -81,8 +81,18 @@ namespace ReGoap.Planner
                 }
 
                 goalState = goalState.Clone();
+
+                // Через А* выполняется поиск от узла текущей цели до (предположительно) текущего состояния.
+                // leaf (предположительно) будет содержать текущее состояние.
+                // Путь от leaf до goalNode - это итоговый план.
+                var goalNode = ReGoapNode<T, W>.Instantiate(this, goalState, null, null, null);
                 var leaf = (ReGoapNode<T, W>)astar.Run(
-                    ReGoapNode<T, W>.Instantiate(this, goalState, null, null, null), goalState, settings.MaxIterations, settings.PlanningEarlyExit, debugPlan : settings.DebugPlan);
+                    goalNode,
+                    goalState,
+                    settings.MaxIterations,
+                    settings.PlanningEarlyExit,
+                    debugPlan: settings.DebugPlan);
+
                 if (leaf == null)
                 {
                     currentGoal = null;

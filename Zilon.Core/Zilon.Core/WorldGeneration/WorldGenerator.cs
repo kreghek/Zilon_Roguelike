@@ -82,18 +82,17 @@ namespace Zilon.Core.WorldGeneration
             var memory = new BuilderMemory();
             memory.Awake();
 
+            // Временное состояние мира.
+            // Берём первого попавшегося агента. Потому что на основе этого агента работает goap-агент.
+            // Указываем, что в городе, в котором этот агент работает, баланс ресурсов с запасом.
+            // Это нужно, чтобы удовлетворить условия действия на строительсво любой структуры.
             var firstAgentLocality = globe.LocalitiesCells[globe.Agents.First().Location];
             foreach (var resource in firstAgentLocality.Stats.Resources)
             {
                 memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
             }
-            
-
-            
 
             var goapAgent = new BuilderAgent(memory, globe, globe.Agents.First());
-
-            
 
             _planningManager = new ReGoapPlannerManager<string, object>();
             _planningManager.PlannerSettings = new ReGoap.Planner.ReGoapPlannerSettings

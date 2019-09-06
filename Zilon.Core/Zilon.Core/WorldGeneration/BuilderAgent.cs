@@ -40,6 +40,9 @@ namespace Zilon.Core.WorldGeneration
                 foreach (var structure in LocalityStructureRepository.All)
                 {
                     goals.Add(new BuildLocalityStructureGoal(locality, structure));
+
+                    // Пока просто выбираем целью строительство первого попавшегося здания.
+                    return;
                 }
             }
         }
