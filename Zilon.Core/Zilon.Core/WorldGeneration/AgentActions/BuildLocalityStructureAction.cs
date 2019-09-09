@@ -16,10 +16,10 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             _localityStructure = localityStructure;
 
             // precond
-            foreach (var requiredResource in _localityStructure.RequiredResources)
-            {
-                preconditions.Set($"locality_{_locality.Name}_has_{requiredResource.Key}_balance", requiredResource.Value);
-            }
+            //foreach (var requiredResource in _localityStructure.RequiredResources)
+            //{
+            //    preconditions.Set($"locality_{_locality.Name}_has_{requiredResource.Key}_balance", requiredResource.Value);
+            //}
 
             // effects
             //foreach (var product in _localityStructure.ProductResources)

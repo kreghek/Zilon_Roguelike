@@ -7,7 +7,7 @@ using Zilon.Core.WorldGeneration.AgentMemories;
 
 namespace Zilon.Core.WorldGeneration
 {
-    class BuilderAgent: ReGoapAgentAdvanced<string, object>
+    public class BuilderAgent: ReGoapAgentAdvanced<string, object>
     {
         private readonly BuilderMemory _memory;
         private readonly Globe _globe;
