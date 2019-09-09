@@ -82,7 +82,8 @@ namespace ReGoap.Planner
 
             // additionally calculate the goal without any world effect to understand if we are done
             var diff = ReGoapState<T, W>.Instantiate();
-            Goal.MissingDifference(planner.GetCurrentAgent().GetMemory().GetWorldState(), ref diff);
+            var worlState = planner.GetCurrentAgent().GetMemory().GetWorldState();
+            Goal.MissingDifference(worlState, ref diff);
             goalMergedWithWorld = diff;
         }
 

@@ -52,7 +52,7 @@ namespace Zilon.Core.WorldGeneration
             base.RefreshActionsSet();
 
             actions = new List<IReGoapAction<string, object>>(new IReGoapAction<string, object>[] {
-                new CollectResourceAction() { Name = "Collect Resources" }
+                //new CollectResourceAction() { Name = "Collect Resources" }
             });
 
             var agentRealm = _agent.Realm;
@@ -60,10 +60,13 @@ namespace Zilon.Core.WorldGeneration
 
             foreach (var locality in realmLocalities)
             {
-                foreach (var structure in LocalityStructureRepository.All)
-                {
-                    actions.Add(new BuildLocalityStructureAction(locality, structure){ Name = $"Build {structure.Name} in {locality}" });
-                }
+                var structure = LocalityStructureRepository.GarmentFactory;
+                actions.Add(new BuildLocalityStructureAction(locality, structure) { Name = $"Build {structure.Name} in {locality}" });
+
+                //foreach (var structure in LocalityStructureRepository.All)
+                //{
+                //    actions.Add(new BuildLocalityStructureAction(locality, structure){ Name = $"Build {structure.Name} in {locality}" });
+                //}
             }
         }
     }

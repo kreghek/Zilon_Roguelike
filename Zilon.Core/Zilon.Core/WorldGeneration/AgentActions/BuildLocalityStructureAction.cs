@@ -22,17 +22,17 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             }
 
             // effects
-            foreach (var product in _localityStructure.ProductResources)
-            {
-                effects.Set($"locality_{_locality.Name}_has_{product.Key}_balance", product.Value);
+            //foreach (var product in _localityStructure.ProductResources)
+            //{
+            //    effects.Set($"locality_{_locality.Name}_has_{product.Key}_balance", product.Value);
 
-                //if (stackData.settings.HasKey($"locality_{_locality.Name}_has_{product.Key}_balance"))
-                //{
-                //    var balance = stackData.settings.Get($"locality_{_locality.Name}_has_{product.Key}_balance") as int?;
-                //    balance += product.Value;
-                //    effects.Set($"locality_{_locality.Name}_has_{product.Key}_balance", balance);
-                //}
-            }
+            //    //if (stackData.settings.HasKey($"locality_{_locality.Name}_has_{product.Key}_balance"))
+            //    //{
+            //    //    var balance = stackData.settings.Get($"locality_{_locality.Name}_has_{product.Key}_balance") as int?;
+            //    //    balance += product.Value;
+            //    //    effects.Set($"locality_{_locality.Name}_has_{product.Key}_balance", balance);
+            //    //}
+            //}
 
             effects.Set($"structure_{_localityStructure.Name}_in_{_locality.Name}", true);
         }
