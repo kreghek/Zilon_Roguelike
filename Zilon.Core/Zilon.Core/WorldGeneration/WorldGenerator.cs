@@ -9,7 +9,6 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.AgentCards;
-using Zilon.Core.WorldGeneration.AgentMemories;
 using Zilon.Core.WorldGeneration.LocalityEventCards;
 using Zilon.Core.WorldGeneration.LocalityHazards;
 using Zilon.Core.WorldGeneration.LocalityStructures;
@@ -78,38 +77,6 @@ namespace Zilon.Core.WorldGeneration
 
             var agentCardQueue = CreateAgentCardQueue();
             var localityEventCardQueue = CreateLocalityEventCardQueue();
-
-            var memory = new BuilderMemory();
-            memory.Awake();
-
-            // Временное состояние мира.
-            // Берём первого попавшегося агента. Потому что на основе этого агента работает goap-агент.
-            // Указываем, что в городе, в котором этот агент работает, баланс ресурсов с запасом.
-            // Это нужно, чтобы удовлетворить условия действия на строительсво любой структуры.
-            var firstAgentLocality = globe.LocalitiesCells[globe.Agents.First().Location];
-            foreach (var resource in firstAgentLocality.Stats.Resources)
-            {
-                memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
-            }
-
-            var goapAgent = new BuilderAgent(memory, globe, globe.Agents.First());
-
-            _planningManager = new ReGoapPlannerManager<string, object>();
-            _planningManager.PlannerSettings = new ReGoap.Planner.ReGoapPlannerSettings
-            {
-                PlanningEarlyExit = true,
-                UsingDynamicActions = true
-            };
-
-            goapAgent.Awake();            
-            _planningManager.Awake();
-
-            goapAgent.Start();
-
-            _planningManager.Update();
-            _planningManager.Update();
-
-
 
             // обработка итераций
             ProcessIterations(globe, agentCardQueue, localityEventCardQueue);
@@ -702,6 +669,5 @@ namespace Zilon.Core.WorldGeneration
             "Cult of Liquid DOG",
             "Free Сities Сouncil"
         };
-        private ReGoapPlannerManager<string, object> _planningManager;
     }
 }
