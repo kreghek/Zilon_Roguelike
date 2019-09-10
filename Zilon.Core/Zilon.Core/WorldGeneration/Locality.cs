@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.WorldGeneration.LocalityHazards;
@@ -60,7 +59,7 @@ namespace Zilon.Core.WorldGeneration
 
         public override string ToString()
         {
-            return $"{Name} [{Owner}] ({Branches.First().Key})";
+            return $"{Name} [{Owner}] ({Branches?.FirstOrDefault().Key})";
         }
 
         /// <summary>

@@ -194,5 +194,16 @@ namespace Zilon.Core.WorldGeneration
                 return structure;
             }
         }
+
+        public static ILocalityStructure[] All => new ILocalityStructure[] {
+            GarmentFactory,
+            IronMine,
+            LivingSector,
+            LumberGenerator,
+            Mint,
+            PigFarm,
+            SettlerCamp,
+            TownMarket
+        };
     }
 }
