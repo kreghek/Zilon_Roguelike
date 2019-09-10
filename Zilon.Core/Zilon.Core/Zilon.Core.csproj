@@ -500,6 +500,7 @@
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
+    <Compile Include="WorldGeneration\IGlobeEntity.cs" />
     <Compile Include="WorldGeneration\ILocalityEventCard.cs" />
     <Compile Include="WorldGeneration\ILocalityStructure.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
@@ -527,6 +528,7 @@
     <Compile Include="WorldGeneration\MigrantGroup.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
+    <Compile Include="WorldGeneration\PopulationRace.cs" />
     <Compile Include="WorldGeneration\PopulationUnit.cs" />
     <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
