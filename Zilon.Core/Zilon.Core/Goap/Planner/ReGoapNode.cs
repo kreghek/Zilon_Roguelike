@@ -176,7 +176,15 @@ namespace ReGoap.Planner
                         conditionsAreSatisfied)
                     {
                         var newGoal = Goal;
-                        expandList.Add(Instantiate(planner, newGoal, this, possibleAction, settings));
+
+                        var node = Instantiate(
+                            planner: planner,
+                            newGoal: newGoal,
+                            parent: this,
+                            action: possibleAction,
+                            actionSettings: settings);
+
+                        expandList.Add(node);
                     }
                 }
             }

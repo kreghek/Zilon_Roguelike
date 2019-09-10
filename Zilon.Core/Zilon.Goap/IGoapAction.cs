@@ -2,8 +2,8 @@
 {
     public interface IGoapAction
     {
-        IGoapConnItem[] Effects { get; }
+        IEffects Effects { get; }
 
-        IGoapConnItem[] Conditions { get; }
+        IPreconditions Rpeconditions { get; }
     }
 }

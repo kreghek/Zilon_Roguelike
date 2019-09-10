@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Goap
 {
-    public interface IGoapConnItem
+    public interface IState
     {
     }
 }
