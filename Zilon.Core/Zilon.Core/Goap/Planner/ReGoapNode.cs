@@ -83,6 +83,12 @@ namespace ReGoap.Planner
             // additionally calculate the goal without any world effect to understand if we are done
             var diff = ReGoapState<T, W>.Instantiate();
             var worlState = planner.GetCurrentAgent().GetMemory().GetWorldState();
+
+            // Рассчитываем разницу между целевым состоянием и состояним мира.
+            // Если разница нулевая, то считается, что из этого узла можно добраться до узла цели.
+            // Узлами являются действия.
+            // В diff будет всё, что есть в Goal и нет в состоянии мира.
+
             Goal.MissingDifference(worlState, ref diff);
             goalMergedWithWorld = diff;
         }

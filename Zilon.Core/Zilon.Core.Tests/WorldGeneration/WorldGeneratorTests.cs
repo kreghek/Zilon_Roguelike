@@ -80,7 +80,7 @@ namespace Zilon.Core.Tests.WorldGeneration
             var firstAgentLocality = locality;
             foreach (var resource in firstAgentLocality.Stats.Resources)
             {
-                memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
+                //memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
             }
 
             var goapAgent = new BuilderAgent(memory, globe, agent);

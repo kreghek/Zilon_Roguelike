@@ -90,48 +90,48 @@ namespace Zilon.Core.WorldGeneration.AgentActions
             return true;
         }
 
-        public override List<ReGoapState<string, object>> GetSettings(GoapActionStackData<string, object> stackData)
-        {
-            if (_settingsList.Count == 0)
-                CalculateSettingsList(stackData);
-            return _settingsList;
+        //public override List<ReGoapState<string, object>> GetSettings(GoapActionStackData<string, object> stackData)
+        //{
+        //    if (_settingsList.Count == 0)
+        //        CalculateSettingsList(stackData);
+        //    return _settingsList;
 
 
 
-            //// Похоже, что здесь подготавливается состояние, которое нужно текущеу действию.
-            //// Состояние можно готовить на основе переданного - текущее.
-            //var results = new List<ReGoapState<string, object>>() {
-            //    stackData.currentState.Clone()
-            //};
-            //return results;
+        //    //// Похоже, что здесь подготавливается состояние, которое нужно текущеу действию.
+        //    //// Состояние можно готовить на основе переданного - текущее.
+        //    //var results = new List<ReGoapState<string, object>>() {
+        //    //    stackData.currentState.Clone()
+        //    //};
+        //    //return results;
 
-            //foreach (var pair in stackData.goalState.GetValues())
-            //{
+        //    //foreach (var pair in stackData.goalState.GetValues())
+        //    //{
 
-            //    if (pair.Key.Contains("buildStructure"))
-            //    {
-            //        var clone = settings.Clone();
-            //        //var resourceName = pair.Key.Substring(17);
-            //        //if (settingsPerResource.ContainsKey(resourceName))
-            //        //    return settingsPerResource[resourceName];
-            //        var results = new List<ReGoapState<string, object>>();
-            //        //settings.Set("resourceName", resourceName);
-            //        // push all available banks
-            //        //foreach (var banksPair in (Dictionary<Bank, Vector3>)stackData.currentState.Get("banks"))
-            //        //{
-            //        //    settings.Set("bank", banksPair.Key);
-            //        //    settings.Set("bankPosition", banksPair.Value);
-            //        //    results.Add(settings.Clone());
-            //        //}
-            //        //settingsPerResource[resourceName] = results;
+        //    //    if (pair.Key.Contains("buildStructure"))
+        //    //    {
+        //    //        var clone = settings.Clone();
+        //    //        //var resourceName = pair.Key.Substring(17);
+        //    //        //if (settingsPerResource.ContainsKey(resourceName))
+        //    //        //    return settingsPerResource[resourceName];
+        //    //        var results = new List<ReGoapState<string, object>>();
+        //    //        //settings.Set("resourceName", resourceName);
+        //    //        // push all available banks
+        //    //        //foreach (var banksPair in (Dictionary<Bank, Vector3>)stackData.currentState.Get("banks"))
+        //    //        //{
+        //    //        //    settings.Set("bank", banksPair.Key);
+        //    //        //    settings.Set("bankPosition", banksPair.Value);
+        //    //        //    results.Add(settings.Clone());
+        //    //        //}
+        //    //        //settingsPerResource[resourceName] = results;
 
-            //        // Не понятно, для чего это делается.
-            //        results.Add(settings.Clone());
-            //        return results;
-            //    }
-            //}
-            //return base.GetSettings(stackData);
-        }
+        //    //        // Не понятно, для чего это делается.
+        //    //        results.Add(settings.Clone());
+        //    //        return results;
+        //    //    }
+        //    //}
+        //    //return base.GetSettings(stackData);
+        //}
 
         private void CalculateSettingsList(GoapActionStackData<string, object> stackData)
         {
@@ -184,39 +184,60 @@ namespace Zilon.Core.WorldGeneration.AgentActions
         //    return effects;
         //}
 
-        //public override ReGoapState<string, object> GetPreconditions(GoapActionStackData<string, object> stackData)
-        //{
-        //    // Как минимум в одном случае:
-        //    // Этот метод на вход принимает состояние мира.
-        //    // На выход выдаёт предусловия действия в объекте состояния.
-        //    // Затем расчитывается разница между этим состоянием и состоянием мира.
-        //    // Разница должна быть нулевой, чтобы считать текущее действие - как финишное действие плана.
+        public override ReGoapState<string, object> GetPreconditions(GoapActionStackData<string, object> stackData)
+        {
+            var state = ReGoapState<string, object>.Instantiate();
 
-        //    // То есть в текущем методе мы из состояния мира
-        //    // вырезаем все ключи, оставляя только те, которые бьются предусловиями.
+            var keys = _localityStructure.RequiredResources.Select(x => $"locality_{_locality.Name}_has_{x.Key}_balance");
+            foreach (var pair in stackData.currentState.GetValues().ToArray())
+            {
+                
+                    state.Set(pair.Key, pair.Value);
+                
+            }
 
-        //    var keys = _localityStructure.RequiredResources.Select(x => $"locality_{_locality.Name}_has_{x.Key}_balance");
+            foreach (var requiredResource in _localityStructure.RequiredResources)
+            {
+                var localityBalance = (int?)state.Get($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
+                if (localityBalance == null || localityBalance.Value < requiredResource.Value)
+                {
+                    state.Remove($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
+                }
+            }
 
-        //    var precond = stackData.currentState.Clone();
-        //    foreach (var pair in precond.GetValues().ToArray())
-        //    {
-        //        if (!keys.Contains(pair.Key))
-        //        {
-        //            precond.Remove(pair.Key);
-        //        }
-        //    }
+            return state;
 
-        //    foreach (var requiredResource in _localityStructure.RequiredResources)
-        //    {
-        //        var localityBalance = (int?)precond.Get($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
-        //        if (localityBalance == null || localityBalance.Value < requiredResource.Value)
-        //        {
-        //            precond.Remove($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
-        //        }
-        //    }
+            // Как минимум в одном случае:
+            // Этот метод на вход принимает состояние мира.
+            // На выход выдаёт предусловия действия в объекте состояния.
+            // Затем расчитывается разница между этим состоянием и состоянием мира.
+            // Разница должна быть нулевой, чтобы считать текущее действие - как финишное действие плана.
 
-        //    return precond;
-        //}
+            // То есть в текущем методе мы из состояния мира
+            // вырезаем все ключи, оставляя только те, которые бьются предусловиями.
+
+
+
+            var precond = stackData.currentState.Clone();
+            foreach (var pair in precond.GetValues().ToArray())
+            {
+                if (!keys.Contains(pair.Key))
+                {
+                    precond.Remove(pair.Key);
+                }
+            }
+
+            foreach (var requiredResource in _localityStructure.RequiredResources)
+            {
+                var localityBalance = (int?)precond.Get($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
+                if (localityBalance == null || localityBalance.Value < requiredResource.Value)
+                {
+                    precond.Remove($"locality_{_locality.Name}_has_{requiredResource.Key}_balance");
+                }
+            }
+
+            return precond;
+        }
 
         public override void Run(
             IReGoapAction<string, object> previous,
