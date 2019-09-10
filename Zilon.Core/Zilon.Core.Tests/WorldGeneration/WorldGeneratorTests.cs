@@ -54,6 +54,70 @@ namespace Zilon.Core.Tests.WorldGeneration
             };
             _planningManager.Awake();
 
+
+            var memory = new BuilderMemory();
+            memory.Awake();
+
+            var realm = new Realm();
+            var agent = new Agent()
+            {
+                Realm = realm
+            };
+            var locality = new Locality()
+            {
+                Owner = realm
+            };
+            var globe = new Globe()
+            {
+                Agents = new System.Collections.Generic.List<Agent> { agent },
+                Localities = new System.Collections.Generic.List<Locality> { locality }
+            };
+
+            // Временное состояние мира.
+            // Берём первого попавшегося агента. Потому что на основе этого агента работает goap-агент.
+            // Указываем, что в городе, в котором этот агент работает, баланс ресурсов с запасом.
+            // Это нужно, чтобы удовлетворить условия действия на строительсво любой структуры.
+            var firstAgentLocality = locality;
+            foreach (var resource in firstAgentLocality.Stats.Resources)
+            {
+                memory.GetWorldState().Set($"locality_{firstAgentLocality.Name}_has_{resource.Key}_balance", 1000);
+            }
+
+            var goapAgent = new BuilderAgent(memory, globe, agent);
+
+
+
+            goapAgent.Awake();
+
+
+            goapAgent.Start();
+
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            _planningManager.Update();
+
+
+            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + "ms");
+        }
+
+        /// <summary>
+        /// Временный тест. Нужен для примерного замера производительности на 12000 агентов.
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        [Category("longtime")]
+        public async Task GoapTest_Time()
+        {
+            var _planningManager = new ReGoapPlannerManager<string, object>();
+            _planningManager.PlannerSettings = new ReGoap.Planner.ReGoapPlannerSettings
+            {
+                PlanningEarlyExit = true,
+                UsingDynamicActions = true
+            };
+            _planningManager.Awake();
+
             for (var i = 0; i < 15000; i++)
             {
                 var memory = new BuilderMemory();
@@ -93,7 +157,7 @@ namespace Zilon.Core.Tests.WorldGeneration
 
                 goapAgent.Start();
 
-                
+
             }
 
             var stopwatch = new Stopwatch();
