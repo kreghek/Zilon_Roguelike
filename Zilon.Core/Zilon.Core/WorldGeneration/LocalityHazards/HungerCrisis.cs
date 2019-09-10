@@ -26,7 +26,7 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
                 return false;
             }
 
-            var currentFood = locality.Stats.Resources[LocalityResource.Food];
+            var currentFood = locality.Stats.ResourcesBalance[LocalityResource.Food];
             if (currentFood >= 0)
             {
                 return false;

@@ -25,7 +25,7 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards.Tests
                 new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
-            locality.Stats.Resources[LocalityResource.Food] = -1;
+            locality.Stats.ResourcesBalance[LocalityResource.Food] = -1;
 
 
             var crysisRandomSourceMock = new Mock<ICrisisRandomSource>();

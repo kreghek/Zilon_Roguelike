@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.WorldGeneration
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.WorldGeneration
 {
     /// <summary>
     /// Единица населения города или группы мигрантов.
@@ -78,22 +80,6 @@
         /// </remarks>
         public float Power => GetAgePower(Age) * Health * POWER_COEF;
 
-        private float GetAgePower(float age)
-        {
-            if (age < 40)
-            {
-                return Lerp(MIN_AGE_POWER, MAX_AGE_POWER, age / (PROF_AGE - NOOBIE_AGE));
-            }
-            else if (age < 60)
-            {
-                return Lerp(MAX_AGE_POWER, OLDMAN_AGE_POWER, age / (OLDMAN_AGE - PROF_AGE));
-            }
-            else
-            {
-                return OLDMAN_AGE_POWER;
-            }
-        }
-
         /// <summary>
         /// Средний возраст единицы населения.
         /// </summary>
@@ -121,9 +107,33 @@
             PopulationGrowthCounter = 1 - PopulationGrowthCounter;
         }
 
+        /// <summary>
+        /// Назначение населения по структурам.
+        /// </summary>
+        /// <remarks>
+        /// Это перечень структур, на которых задействована текущая единица населения.
+        /// </remarks>
+        public List<ILocalityStructure> Assigments { get; }
+
         private float Lerp(float firstFloat, float secondFloat, float by)
         {
             return firstFloat * (1 - by) + secondFloat * by;
+        }
+
+        private float GetAgePower(float age)
+        {
+            if (age < 40)
+            {
+                return Lerp(MIN_AGE_POWER, MAX_AGE_POWER, age / (PROF_AGE - NOOBIE_AGE));
+            }
+            else if (age < 60)
+            {
+                return Lerp(MAX_AGE_POWER, OLDMAN_AGE_POWER, age / (OLDMAN_AGE - PROF_AGE));
+            }
+            else
+            {
+                return OLDMAN_AGE_POWER;
+            }
         }
     }
 }

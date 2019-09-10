@@ -11,8 +11,67 @@ namespace Zilon.Core.WorldGeneration
     {
         public LocalityStats()
         {
-            Resources = new Dictionary<LocalityResource, int>();
+            ResourcesBalance = new Dictionary<LocalityResource, int>();
             FillResources();
+        }
+
+        /// <summary>
+        /// Баланс ресурсов на текущую итерацию мира.
+        /// </summary>
+        /// <remarks>
+        /// Баланс применяется в начале итерации.
+        /// 
+        /// Далее, в зависимости от эффекта баланса, начинают работать здания и происходить
+        /// различные городские события.
+        /// 
+        /// Положительный баланс пополняет запасы города.
+        /// Отрицательный баланс снижает запасы и накладывает штрафы на население и работу построек.
+        /// 
+        /// Максимальное население в городе. Места проживания.
+        /// Если фактическое население превышает максимальное население в городе,
+        /// то начинается перенаселение. Жители начинают мигрировать.
+        /// Вырастает вероятность возникновения антисанитарии, криминала и т.д.
+        /// 
+        /// Еда. Каждую итерацию одна единица населения будет требовать одной единицы пищи при подсчёте баланса.
+        /// Если баланс еды отрицательный, то в городе начинается голод. Вероятность возникновения голода выше,
+        /// если остаётся меньше запасов еды.
+        /// 
+        /// Энергия. Каждое здание требует единицу энергии. Вся вырабатываемая энергия распределяется между зданиями в городе.
+        /// Если здание получет меньше энергии, чем требуется, то его вырботка снижается.
+        /// Для жилых секторов нехватка энергии влияет по особому (пока не ясно как).
+        /// 
+        /// Обеспечение населения города товарами (не едой).
+        /// Товары народного потребления требуются каждой единице населения при расчёте баланса.
+        /// Если баланс товаров опускается ниже нуля, начинается дефицит.
+        /// При дефиците население начинает мигрировать в другой город.
+        /// В режиме приключений в городе не будут продавать определённые товары.
+        /// </remarks>
+        public Dictionary<LocalityResource, int> ResourcesBalance { get; }
+
+        /// <summary>
+        /// Хранимые запасы ресурсов.
+        /// Сейчас ограничения на хранение ресурсов захардкожены. Далее будут изменяться городскими структурами.
+        /// </summary>
+        public Dictionary<LocalityResource, int> ResourcesStorage { get; }
+
+        public void AddResource(LocalityResource resource, int count)
+        {
+            ResourcesBalance[resource] += count;
+        }
+
+        public int GetResource(LocalityResource resource)
+        {
+            return ResourcesBalance[resource];
+        }
+
+        public void RemoveResource(LocalityResource resource, int count)
+        {
+            if (!ResourcesBalance.ContainsKey(resource))
+            {
+                ResourcesBalance[resource] = 0;
+            }
+
+            ResourcesBalance[resource] -= count;
         }
 
         /// <summary>
@@ -26,76 +85,8 @@ namespace Zilon.Core.WorldGeneration
                             .Where(x => x != LocalityResource.Undefined);
             foreach (var resource in allAvailableResources)
             {
-                Resources[resource] = 0;
+                ResourcesBalance[resource] = 0;
             }
-        }
-
-        /// <summary>
-        /// Текущие ресурсы города.
-        /// </summary>
-        public Dictionary<LocalityResource, int> Resources { get; }
-
-        ///// <summary>
-        ///// Максимальное население в городе. Места проживания.
-        ///// Если фактическое население превышает максимальное население в городе,
-        ///// то начинается перенаселение. Жители начинают мигрировать.
-        ///// Вырастает вероятность возникновения антисанитарии, криминала и т.д.
-        ///// </summary>
-        //public int PopulationLimit { get; set; }
-
-        ///// <summary>
-        ///// Текущий запас еды в городе.
-        ///// Каждую итерацию одна единица населения будет требовать одной единицы пищи.
-        ///// </summary>
-        //public int CurrentFood { get; set; }
-
-        ///// <summary>
-        ///// Максимальный запас еды, который можно хранить в городе.
-        ///// </summary>
-        //public int FoodLimit { get; set; }
-
-        ///// <summary>
-        ///// Текущий запас энергии в городе.
-        ///// </summary>
-        //public int CurrentEnergy { get; set; }
-
-        ///// <summary>
-        ///// Максимальный запас энергии, который город может хранить.
-        ///// </summary>
-        //public int EnergyLimit { get; set; }
-
-        ///// <summary>
-        ///// Обеспечение населения города товарами (не едой).
-        ///// Товары народного потребления требуются каждой единице населения.
-        ///// Если баланс товаров опускается ниже нуля, начинается дефицит.
-        ///// При дефиците население начинает мигрировать в другой город.
-        ///// В режиме приключений в городе не будут продавать определённые товары.
-        ///// </summary>
-        //public int CurrentGoods { get; set; }
-
-        ///// <summary>
-        ///// Запас товаров народного потребления, которые город может хранить.
-        ///// </summary>
-        //public int GoodsLimit { get; set; }
-
-        public void AddResource(LocalityResource resource, int count)
-        {
-            Resources[resource] += count;
-        }
-
-        public int GetResource(LocalityResource resource)
-        {
-            return Resources[resource];
-        }
-
-        public void RemoveResource(LocalityResource resource, int count)
-        {
-            if (!Resources.ContainsKey(resource))
-            {
-                Resources[resource] = 0;
-            }
-
-            Resources[resource] -= count;
         }
     }
 }

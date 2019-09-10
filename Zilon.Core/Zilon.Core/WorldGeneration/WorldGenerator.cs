@@ -600,11 +600,11 @@ namespace Zilon.Core.WorldGeneration
                     new PopulationUnit{Specialization = PopulationSpecializations.Servants },
                 });
 
-                locality.Stats.Resources[LocalityResource.Energy] = 1;
-                locality.Stats.Resources[LocalityResource.Food] = 3;
-                locality.Stats.Resources[LocalityResource.Goods] = 3;
-                locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
-                locality.Stats.Resources[LocalityResource.Money] = 2;
+                locality.Stats.ResourcesBalance[LocalityResource.Energy] = 1;
+                locality.Stats.ResourcesBalance[LocalityResource.Food] = 3;
+                locality.Stats.ResourcesBalance[LocalityResource.Goods] = 3;
+                locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 3;
+                locality.Stats.ResourcesBalance[LocalityResource.Money] = 2;
 
 
                 var rolledBranchIndex = _dice.Roll(0, 7);

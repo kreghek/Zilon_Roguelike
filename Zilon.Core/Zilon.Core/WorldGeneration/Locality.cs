@@ -73,8 +73,25 @@ namespace Zilon.Core.WorldGeneration
 
         private void UpdateRegions()
         {
+            // В этом методе рассчитываем, как отработали районы города.
+            // Для этого считаем потребление и расход всех ресурсов от строений района.
+            // В итоге получаем баланс ресурсов. В зависимости от баланса в городе и его районах происходят события.
+
+            var baseConsumption = new Dictionary<LocalityResource, float>();
+
             foreach (var region in Regions)
             {
+                // Работа всех зданий в зависимости от текущего баланса.
+
+                // Расчёт потребления всех ресурсов всеми строениями при нормальных, кроме жилых мест.
+                foreach (var structure in region.Structures)
+                {
+                    foreach (var requiredResource in structure.RequiredResources)
+                    {
+                        AddResource(baseConsumption, requiredResource.Key, requiredResource.Value);
+                    }
+                }
+
                 // Проверяем, хватает ли денег для этого района.
                 var money = Stats.GetResource(LocalityResource.Money);
                 if (money >= region.MaintenanceCost)
@@ -91,7 +108,7 @@ namespace Zilon.Core.WorldGeneration
                 // Для жилых мест отдельная логика.
                 // Их потребляет только население, а производят структуры.
                 // Поэтому зануляем перед обработкой структур города. Далее структуры выставят текущее значение.
-                Stats.Resources[LocalityResource.LivingPlaces] = 0;
+                Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 0;
 
                 var suppliedStructures = SupplyStructures(region.Structures);
                 ProduceResources(suppliedStructures, Stats);
@@ -140,12 +157,12 @@ namespace Zilon.Core.WorldGeneration
             {
                 foreach (var productResource in structure.ProductResources)
                 {
-                    if (!stats.Resources.ContainsKey(productResource.Key))
+                    if (!stats.ResourcesBalance.ContainsKey(productResource.Key))
                     {
-                        stats.Resources[productResource.Key] = 0;
+                        stats.ResourcesBalance[productResource.Key] = 0;
                     }
 
-                    stats.Resources[productResource.Key] += productResource.Value;
+                    stats.ResourcesBalance[productResource.Key] += productResource.Value;
                 }
             }
         }
@@ -176,12 +193,12 @@ namespace Zilon.Core.WorldGeneration
                 foreach (var requiredResource in structure.RequiredResources)
                 {
                     var requiredResourceType = requiredResource.Key;
-                    if (Stats.Resources.ContainsKey(requiredResourceType))
+                    if (Stats.ResourcesBalance.ContainsKey(requiredResourceType))
                     {
-                        if (Stats.Resources[requiredResourceType] >= requiredResource.Value)
+                        if (Stats.ResourcesBalance[requiredResourceType] >= requiredResource.Value)
                         {
                             suppliedStructures.Add(structure);
-                            Stats.Resources[requiredResourceType] -= requiredResource.Value;
+                            Stats.ResourcesBalance[requiredResourceType] -= requiredResource.Value;
                         }
                     }
 
@@ -189,6 +206,26 @@ namespace Zilon.Core.WorldGeneration
             }
 
             return suppliedStructures;
+        }
+
+        public void AddResource(Dictionary<LocalityResource, float> dict, LocalityResource resource, int amount)
+        {
+            dict[resource] += amount;
+        }
+
+        public float GetResource(Dictionary<LocalityResource, float> dict, LocalityResource resource)
+        {
+            return dict[resource];
+        }
+
+        public void RemoveResource(Dictionary<LocalityResource, float> dict, LocalityResource resource, float amount)
+        {
+            if (!dict.ContainsKey(resource))
+            {
+                dict[resource] = 0;
+            }
+
+            dict[resource] -= amount;
         }
     }
 }

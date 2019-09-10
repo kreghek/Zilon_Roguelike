@@ -50,11 +50,11 @@ namespace Zilon.Core.WorldGeneration.Tests
                 new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
-            locality.Stats.Resources[LocalityResource.Energy] = 1;
-            locality.Stats.Resources[LocalityResource.Food] = 3;
-            locality.Stats.Resources[LocalityResource.Goods] = 3;
-            locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
-            locality.Stats.Resources[LocalityResource.Money] = 2;
+            locality.Stats.ResourcesBalance[LocalityResource.Energy] = 1;
+            locality.Stats.ResourcesBalance[LocalityResource.Food] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.Goods] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.Money] = 2;
 
 
 
@@ -64,13 +64,13 @@ namespace Zilon.Core.WorldGeneration.Tests
 
 
             // ASSERT
-            locality.Stats.Resources[LocalityResource.Energy].Should().Be(1);
-            locality.Stats.Resources[LocalityResource.Food].Should().Be(3);
-            locality.Stats.Resources[LocalityResource.Goods].Should().Be(3);
-            locality.Stats.Resources[LocalityResource.LivingPlaces].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.Energy].Should().Be(1);
+            locality.Stats.ResourcesBalance[LocalityResource.Food].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.Goods].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces].Should().Be(3);
 
-            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(0);
-            locality.Stats.Resources[LocalityResource.Money].Should().Be(2);
+            locality.Stats.ResourcesBalance[LocalityResource.Manufacture].Should().Be(0);
+            locality.Stats.ResourcesBalance[LocalityResource.Money].Should().Be(2);
         }
 
         /// <summary>
@@ -111,11 +111,11 @@ namespace Zilon.Core.WorldGeneration.Tests
                 new PopulationUnit{Specialization = PopulationSpecializations.Servants },
             });
 
-            locality.Stats.Resources[LocalityResource.Energy] = 1;
-            locality.Stats.Resources[LocalityResource.Food] = 3;
-            locality.Stats.Resources[LocalityResource.Goods] = 3;
-            locality.Stats.Resources[LocalityResource.LivingPlaces] = 3;
-            locality.Stats.Resources[LocalityResource.Money] = 2;
+            locality.Stats.ResourcesBalance[LocalityResource.Energy] = 1;
+            locality.Stats.ResourcesBalance[LocalityResource.Food] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.Goods] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 3;
+            locality.Stats.ResourcesBalance[LocalityResource.Money] = 2;
 
 
 
@@ -126,13 +126,13 @@ namespace Zilon.Core.WorldGeneration.Tests
 
 
             // ASSERT
-            locality.Stats.Resources[LocalityResource.Energy].Should().Be(1);
-            locality.Stats.Resources[LocalityResource.Food].Should().Be(3);
-            locality.Stats.Resources[LocalityResource.Goods].Should().Be(3);
-            locality.Stats.Resources[LocalityResource.LivingPlaces].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.Energy].Should().Be(1);
+            locality.Stats.ResourcesBalance[LocalityResource.Food].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.Goods].Should().Be(3);
+            locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces].Should().Be(3);
 
-            locality.Stats.Resources[LocalityResource.Manufacture].Should().Be(0);
-            locality.Stats.Resources[LocalityResource.Money].Should().Be(2);
+            locality.Stats.ResourcesBalance[LocalityResource.Manufacture].Should().Be(0);
+            locality.Stats.ResourcesBalance[LocalityResource.Money].Should().Be(2);
         }
     }
 }
