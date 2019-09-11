@@ -31,6 +31,11 @@ namespace Zilon.Core.WorldGeneration
             // Но это учесть позже.
 
             PopulationGrowthRate = 1f / 782;
+
+            Assigments = new List<ILocalityStructure>();
+
+            Age = NOOBIE_AGE;
+            Health = 1;
         }
 
         /// <summary>
@@ -124,11 +129,13 @@ namespace Zilon.Core.WorldGeneration
         {
             if (age < 40)
             {
-                return Lerp(MIN_AGE_POWER, MAX_AGE_POWER, age / (PROF_AGE - NOOBIE_AGE));
+                var t = (age - NOOBIE_AGE) / (PROF_AGE - NOOBIE_AGE);
+                return Lerp(MIN_AGE_POWER, MAX_AGE_POWER, t);
             }
             else if (age < 60)
             {
-                return Lerp(MAX_AGE_POWER, OLDMAN_AGE_POWER, age / (OLDMAN_AGE - PROF_AGE));
+                var t = (age - PROF_AGE) / (OLDMAN_AGE - PROF_AGE);
+                return Lerp(MAX_AGE_POWER, OLDMAN_AGE_POWER, t);
             }
             else
             {

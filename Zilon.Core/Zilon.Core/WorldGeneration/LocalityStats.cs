@@ -55,7 +55,7 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public Dictionary<LocalityResource, float> ResourcesStorage { get; }
 
-        public void AddResource(LocalityResource resource, int count)
+        public void AddResource(LocalityResource resource, float count)
         {
             ResourcesLastIteration[resource] += count;
         }
@@ -65,7 +65,7 @@ namespace Zilon.Core.WorldGeneration
             return ResourcesLastIteration[resource];
         }
 
-        public void RemoveResource(LocalityResource resource, int count)
+        public void RemoveResource(LocalityResource resource, float count)
         {
             if (!ResourcesLastIteration.ContainsKey(resource))
             {

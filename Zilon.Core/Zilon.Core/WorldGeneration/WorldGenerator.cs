@@ -583,6 +583,7 @@ namespace Zilon.Core.WorldGeneration
                 foreach (var population in locality.CurrentPopulation)
                 {
                     population.Assigments.Add(settlerCamp);
+                    population.Age = 25;
                 }
 
                 locality.Stats.ResourcesLastIteration[LocalityResource.Energy] = 1;

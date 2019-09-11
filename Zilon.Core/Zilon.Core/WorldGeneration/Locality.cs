@@ -70,7 +70,7 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public void Update()
         {
-            UpdatePopulation();
+            //UpdatePopulation();
             UpdateRegions();
         }
 
@@ -133,7 +133,6 @@ namespace Zilon.Core.WorldGeneration
         {
             // В этом методе рассчитываем, как отработали районы города.
             // Для этого считаем потребление и расход всех ресурсов от строений района.
-            // В итоге получаем баланс ресурсов. В зависимости от баланса в городе и его районах происходят события.
 
             // Расчёт потребления всех ресурсов, кроме жилых мест, всеми строениями при нормальном снабжении.
             var baseConsumption = new Dictionary<LocalityResource, List<Comsumption>>();
@@ -158,6 +157,12 @@ namespace Zilon.Core.WorldGeneration
             var availableResources = new Dictionary<LocalityResource, float>();
             foreach (var lastIterationResource in Stats.ResourcesLastIteration)
             {
+                if (lastIterationResource.Key == LocalityResource.LivingPlaces)
+                {
+                    // Жилые места не участвуют в производстве.
+                    continue;
+                }
+
                 availableResources[lastIterationResource.Key] = lastIterationResource.Value;
             }
 
@@ -255,9 +260,15 @@ namespace Zilon.Core.WorldGeneration
                     var totalStructureEfficient = regionMaintance * structureResourceAllocation * factPopulationPower;
 
                     // Заполняем ресурсы, добытые за эту итерацию.
-                    foreach (var resource in Stats.ResourcesLastIteration)
+                    foreach (var resource in Stats.ResourcesLastIteration.Keys.ToArray())
                     {
-                        Stats.ResourcesLastIteration[resource.Key] = 0;
+                        if (resource == LocalityResource.LivingPlaces)
+                        {
+                            // Жилые места не используются для производства.
+                            continue;
+                        }
+
+                        Stats.ResourcesLastIteration[resource] = 0;
                     }
 
                     foreach (var production in structure.ProductResources)
