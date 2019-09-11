@@ -70,7 +70,7 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public void Update()
         {
-            //UpdatePopulation();
+            UpdatePopulation();
             UpdateRegions();
         }
 
@@ -118,14 +118,6 @@ namespace Zilon.Core.WorldGeneration
             {
                 return !(left == right);
             }
-        }
-
-        private class ConsumerEfficient
-        {
-            public LocalityResource Resource;
-            public float ResourceAllocation;
-            public float WorkerPower;
-            public float RegionMaintance;
         }
 
 
@@ -302,36 +294,6 @@ namespace Zilon.Core.WorldGeneration
 
                 Stats.ResourcesStorage[remainResource.Key] += remainResource.Value;
             }
-
-            //foreach (var region in Regions)
-            //{
-
-            //    // Проверяем, хватает ли денег для этого района.
-            //    var money = Stats.GetResource(LocalityResource.Money);
-            //    if (money >= region.MaintenanceCost)
-            //    {
-            //        Stats.RemoveResource(LocalityResource.Money, region.MaintenanceCost);
-            //    }
-            //    else
-            //    {
-            //        // Не хватает денег на содержание этого района.
-            //        // Все его строения не работают.
-            //        continue;
-            //    }
-
-            //    // Для жилых мест отдельная логика.
-            //    // Их потребляет только население, а производят структуры.
-            //    // Поэтому зануляем перед обработкой структур города. Далее структуры выставят текущее значение.
-            //    Stats.ResourcesLastIteration[LocalityResource.LivingPlaces] = 0;
-
-            //    var suppliedStructures = SupplyStructures(region.Structures);
-            //    ProduceResources(suppliedStructures, Stats);
-
-            //    // Реализация производства.
-            //    // Избыточное производтство даёт деньги. Предполагается, что избыточное производство
-            //    // народ пускает на улучшение благосостояния.
-            //    RealizeManufacture();
-            //}
         }
 
         private static void AddComsumption(
@@ -377,6 +339,11 @@ namespace Zilon.Core.WorldGeneration
         private void UpdatePopulation()
         {
             // Изымаем столько товаров и еды, сколько населения в городе.
+            // Логика аналогична производству товаров.
+            // Все доступные для населения ресурсы складываются из произведённых ресурсов в прошлую итерацию
+            // и запасов со складов.
+            // Население потребляет еду и товары народного потребления (Goods).
+
             var populationCount = CurrentPopulation.Count();
 
             Stats.RemoveResource(LocalityResource.Food, populationCount);
@@ -394,82 +361,9 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private static void ProduceResources(List<ILocalityStructure> structures, LocalityStats stats)
-        {
-            // Все структуры, которые получили обеспечение, производят ресурс
-            foreach (var structure in structures)
-            {
-                foreach (var productResource in structure.ProductResources)
-                {
-                    if (!stats.ResourcesLastIteration.ContainsKey(productResource.Key))
-                    {
-                        stats.ResourcesLastIteration[productResource.Key] = 0;
-                    }
-
-                    stats.ResourcesLastIteration[productResource.Key] += productResource.Value;
-                }
-            }
-        }
-
-        private List<ILocalityStructure> SupplyStructures(List<ILocalityStructure> structures)
-        {
-            // Структуры, которые получили обеспечение.
-            var suppliedStructures = new List<ILocalityStructure>();
-
-            // Изымаем все ресурсы текущй структурой.
-            // Струкруты, которые получили обеспечение, затем производят ресурсы.
-            foreach (var structure in structures)
-            {
-                // Проверяем, хватает ли денег для содержанния этой структуры.
-                var money = Stats.GetResource(LocalityResource.Money);
-                if (money >= structure.MaintenanceCost)
-                {
-                    Stats.RemoveResource(LocalityResource.Money, structure.MaintenanceCost);
-                }
-                else
-                {
-                    // Не хватает денег на содержание этой структуры.
-                    // Она ничего не производит в эту итерацию.
-                    continue;
-                }
-
-                // Проверка наличия необходимых ресурсов.
-                foreach (var requiredResource in structure.RequiredResources)
-                {
-                    var requiredResourceType = requiredResource.Key;
-                    if (Stats.ResourcesLastIteration.ContainsKey(requiredResourceType))
-                    {
-                        if (Stats.ResourcesLastIteration[requiredResourceType] >= requiredResource.Value)
-                        {
-                            suppliedStructures.Add(structure);
-                            Stats.ResourcesLastIteration[requiredResourceType] -= requiredResource.Value;
-                        }
-                    }
-
-                }
-            }
-
-            return suppliedStructures;
-        }
-
         public void AddResource(Dictionary<LocalityResource, float> dict, LocalityResource resource, int amount)
         {
             dict[resource] += amount;
-        }
-
-        public float GetResource(Dictionary<LocalityResource, float> dict, LocalityResource resource)
-        {
-            return dict[resource];
-        }
-
-        public void RemoveResource(Dictionary<LocalityResource, float> dict, LocalityResource resource, float amount)
-        {
-            if (!dict.ContainsKey(resource))
-            {
-                dict[resource] = 0;
-            }
-
-            dict[resource] -= amount;
         }
     }
 }
