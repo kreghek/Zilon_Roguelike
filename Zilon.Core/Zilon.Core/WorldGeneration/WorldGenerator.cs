@@ -570,7 +570,8 @@ namespace Zilon.Core.WorldGeneration
                 };
 
                 var region = new LocalityRegion();
-                region.Structures.Add(LocalityStructureRepository.SettlerCamp);
+                var settlerCamp = LocalityStructureRepository.SettlerCamp;
+                region.Structures.Add(settlerCamp);
 
                 locality.Regions.Add(region);
 
@@ -579,12 +580,16 @@ namespace Zilon.Core.WorldGeneration
                     new PopulationUnit{Specialization = PopulationSpecializations.Workers },
                     new PopulationUnit{Specialization = PopulationSpecializations.Servants },
                 });
+                foreach (var population in locality.CurrentPopulation)
+                {
+                    population.Assigments.Add(settlerCamp);
+                }
 
-                locality.Stats.ResourcesBalance[LocalityResource.Energy] = 1;
-                locality.Stats.ResourcesBalance[LocalityResource.Food] = 3;
-                locality.Stats.ResourcesBalance[LocalityResource.Goods] = 3;
-                locality.Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 3;
-                locality.Stats.ResourcesBalance[LocalityResource.Money] = 2;
+                locality.Stats.ResourcesLastIteration[LocalityResource.Energy] = 1;
+                locality.Stats.ResourcesLastIteration[LocalityResource.Food] = 3;
+                locality.Stats.ResourcesLastIteration[LocalityResource.Goods] = 3;
+                locality.Stats.ResourcesLastIteration[LocalityResource.LivingPlaces] = 3;
+                locality.Stats.ResourcesLastIteration[LocalityResource.Money] = 2;
 
 
                 var rolledBranchIndex = _dice.Roll(0, 7);

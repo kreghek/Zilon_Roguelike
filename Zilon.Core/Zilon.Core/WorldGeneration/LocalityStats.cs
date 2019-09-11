@@ -11,12 +11,13 @@ namespace Zilon.Core.WorldGeneration
     {
         public LocalityStats()
         {
-            ResourcesBalance = new Dictionary<LocalityResource, int>();
+            ResourcesLastIteration = new Dictionary<LocalityResource, float>();
+            ResourcesStorage = new Dictionary<LocalityResource, float>();
             FillResources();
         }
 
         /// <summary>
-        /// Баланс ресурсов на текущую итерацию мира.
+        /// Ресурсы, добытые в прошлой итерации мира.
         /// </summary>
         /// <remarks>
         /// Баланс применяется в начале итерации.
@@ -46,32 +47,32 @@ namespace Zilon.Core.WorldGeneration
         /// При дефиците население начинает мигрировать в другой город.
         /// В режиме приключений в городе не будут продавать определённые товары.
         /// </remarks>
-        public Dictionary<LocalityResource, int> ResourcesBalance { get; }
+        public Dictionary<LocalityResource, float> ResourcesLastIteration { get; }
 
         /// <summary>
         /// Хранимые запасы ресурсов.
         /// Сейчас ограничения на хранение ресурсов захардкожены. Далее будут изменяться городскими структурами.
         /// </summary>
-        public Dictionary<LocalityResource, int> ResourcesStorage { get; }
+        public Dictionary<LocalityResource, float> ResourcesStorage { get; }
 
         public void AddResource(LocalityResource resource, int count)
         {
-            ResourcesBalance[resource] += count;
+            ResourcesLastIteration[resource] += count;
         }
 
-        public int GetResource(LocalityResource resource)
+        public float GetResource(LocalityResource resource)
         {
-            return ResourcesBalance[resource];
+            return ResourcesLastIteration[resource];
         }
 
         public void RemoveResource(LocalityResource resource, int count)
         {
-            if (!ResourcesBalance.ContainsKey(resource))
+            if (!ResourcesLastIteration.ContainsKey(resource))
             {
-                ResourcesBalance[resource] = 0;
+                ResourcesLastIteration[resource] = 0;
             }
 
-            ResourcesBalance[resource] -= count;
+            ResourcesLastIteration[resource] -= count;
         }
 
         /// <summary>
@@ -85,7 +86,8 @@ namespace Zilon.Core.WorldGeneration
                             .Where(x => x != LocalityResource.Undefined);
             foreach (var resource in allAvailableResources)
             {
-                ResourcesBalance[resource] = 0;
+                ResourcesLastIteration[resource] = 0;
+                ResourcesStorage[resource] = 0;
             }
         }
     }

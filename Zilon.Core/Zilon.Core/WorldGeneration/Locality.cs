@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.WorldGeneration.LocalityHazards;
@@ -10,6 +11,8 @@ namespace Zilon.Core.WorldGeneration
     /// </summary>
     public class Locality
     {
+        private const float STORAGE_RESOURCE_RESERVE = 0.3f;
+
         public Locality()
         {
             Regions = new List<LocalityRegion>();
@@ -71,53 +74,283 @@ namespace Zilon.Core.WorldGeneration
             UpdateRegions();
         }
 
+        /// <summary>
+        /// Информация о потреблении ресурса.
+        /// </summary>
+        private class Comsumption
+        {
+            /// <summary>
+            /// Объем потребления ресурса текущей структурой или районом.
+            /// </summary>
+            public float Amount;
+
+            public LocalityRegion Region;
+
+            public ILocalityStructure Structure;
+        }
+
+        private struct ConsumerKey
+        {
+            public ILocalityStructure Structure;
+            public LocalityRegion Region;
+
+            public override bool Equals(object obj)
+            {
+                return obj is ConsumerKey key &&
+                       EqualityComparer<ILocalityStructure>.Default.Equals(Structure, key.Structure) &&
+                       EqualityComparer<LocalityRegion>.Default.Equals(Region, key.Region);
+            }
+
+            public override int GetHashCode()
+            {
+                var hashCode = 1065899251;
+                hashCode = hashCode * -1521134295 + EqualityComparer<ILocalityStructure>.Default.GetHashCode(Structure);
+                hashCode = hashCode * -1521134295 + EqualityComparer<LocalityRegion>.Default.GetHashCode(Region);
+                return hashCode;
+            }
+
+            public static bool operator ==(ConsumerKey left, ConsumerKey right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ConsumerKey left, ConsumerKey right)
+            {
+                return !(left == right);
+            }
+        }
+
+        private class ConsumerEfficient
+        {
+            public LocalityResource Resource;
+            public float ResourceAllocation;
+            public float WorkerPower;
+            public float RegionMaintance;
+        }
+
+
         private void UpdateRegions()
         {
             // В этом методе рассчитываем, как отработали районы города.
             // Для этого считаем потребление и расход всех ресурсов от строений района.
             // В итоге получаем баланс ресурсов. В зависимости от баланса в городе и его районах происходят события.
 
-            var baseConsumption = new Dictionary<LocalityResource, float>();
-
+            // Расчёт потребления всех ресурсов, кроме жилых мест, всеми строениями при нормальном снабжении.
+            var baseConsumption = new Dictionary<LocalityResource, List<Comsumption>>();
             foreach (var region in Regions)
             {
-                // Работа всех зданий в зависимости от текущего баланса.
-
-                // Расчёт потребления всех ресурсов всеми строениями при нормальных, кроме жилых мест.
+                AddComsumption(baseConsumption, region, LocalityResource.Money, region.MaintenanceCost);
                 foreach (var structure in region.Structures)
                 {
                     foreach (var requiredResource in structure.RequiredResources)
                     {
-                        AddResource(baseConsumption, requiredResource.Key, requiredResource.Value);
+                        AddComsumption(baseConsumption, structure, requiredResource.Key, requiredResource.Value);
+                    }
+
+                    AddComsumption(baseConsumption, structure, LocalityResource.Money, structure.MaintenanceCost);
+                }
+            }
+
+            // Распределение ресурсов между районами и строениями.
+            // Для этого сначала получаем все доступные ресурсы на эту итерацию.
+            // Доступные ресурсы - это ресурсы с прошлой итерации + (ресурсы со складов * К).
+            // Где К - коэффициент, указывающий долю ресурсов от требуемого потребления, которая будет поставляться со складов.
+            var availableResources = new Dictionary<LocalityResource, float>();
+            foreach (var lastIterationResource in Stats.ResourcesLastIteration)
+            {
+                availableResources[lastIterationResource.Key] = lastIterationResource.Value;
+            }
+
+            // Извлекаем ресурсы из хранилища на основе требований к потреблению.
+            foreach (var consumption in baseConsumption)
+            {
+                if (!availableResources.ContainsKey(consumption.Key))
+                {
+                    availableResources[consumption.Key] = 0;
+                }
+
+                Stats.ResourcesStorage.TryGetValue(consumption.Key, out var availableStorageResource);
+
+                var sumConsumption = consumption.Value.Sum(x => x.Amount);
+                var storageResource = Math.Min(sumConsumption * STORAGE_RESOURCE_RESERVE, availableStorageResource);
+
+                availableResources[consumption.Key] += storageResource;
+            }
+
+            var resourceAllocation = new Dictionary<LocalityResource, float>();
+            foreach (var consumption in baseConsumption)
+            {
+                // Суммарное потребление нужно, чтобы получить количество долей, 
+                // на которые нужно разделить существующие ресурсты.
+                var sumConsumptionUnits = consumption.Value.Sum(x => x.Amount);
+
+                var availableResource = availableResources[consumption.Key];
+                // Предоставляем ресурсов не больше, чем требуется.
+                // Иначе будет сверхпроизводительность. И остатки не будут складироваться.
+                var normalizedAvailableResource = Math.Min(availableResource, sumConsumptionUnits);
+
+                // На каждую единицу потреблностей будет предоставлена resourcePerUnit ресурса.
+                // Эта величина так же показывает процент обеспечения ресурсами.
+                var resourcePerUnit = normalizedAvailableResource / sumConsumptionUnits;
+                resourceAllocation[consumption.Key] = resourcePerUnit;
+            }
+
+            // Рассчитываем эффективность работы районов и структур с учётом снабжения и населения.
+            // Рассчитываем текущую выработку ресурсов городом на следующую итерацию.
+            // Выработку сразу помещаем в словарь с выработкой на следующую итерацию.
+            foreach (var region in Regions)
+            {
+                var regionMaintance = resourceAllocation[LocalityResource.Money];
+
+                foreach (var structure in region.Structures)
+                {
+                    // Снабжение структуры ресурсами.
+                    var structureResourceAllocation = 1f;
+
+                    foreach (var requiredResource in structure.RequiredResources)
+                    {
+                        structureResourceAllocation *= resourceAllocation[requiredResource.Key];
+                    }
+
+                    // Обеспечение структуры работниками.
+                    // Здесь получаем суммарную эффективность всех бригад на данной структуре
+                    // с учётом потребностей.
+                    // Суммарная производительность всех бригад делится на требуемое количество бригад.
+
+                    var structurePopulationUnits = CurrentPopulation.Where(x => x.Assigments.Contains(structure));
+
+                    var structurePopulationUnitsBySpecialization = structurePopulationUnits
+                        .GroupBy(x => x.Specialization)
+                        .ToDictionary(x => x.Key, x => x.ToArray());
+
+                    // Рассчитываем суммарную эффективность населения по каждой специализации.
+                    var factPopulationPower = 1f;
+                    foreach (var specKey in structurePopulationUnitsBySpecialization)
+                    {
+                        var requiredSpecialization = specKey.Key;
+                        var requiredSpecialistCount = structure.RequiredPopulation[requiredSpecialization];
+
+                        // Рассчитываем суммарную эффективность, которую выдают текущей структуре все
+                        // назначенные бригады специалистов.
+                        var factSpecialists = specKey.Value;
+                        var specialistPower = 0f;
+                        foreach (var specialistUnit in factSpecialists)
+                        {
+                            // Специалисты поровну распределяют свою эффективность между всеми назначенными строениями.
+                            var powerPerStructure = specialistUnit.Power / specialistUnit.Assigments.Count();
+
+                            specialistPower += powerPerStructure;
+                        }
+
+                        // Насколько эффективно фактически отрабатывают спечиалисты с учётом требуемых мест.
+                        var factSpecialistEfficient = specialistPower / requiredSpecialistCount;
+
+                        // Учитываем эффективность бригад текущей специальности в суммарной эффективности всех рабочих.
+                        factPopulationPower *= factSpecialistEfficient;
+                    }
+
+
+                    // Итоговая производительность структуры.
+                    // Производим продукцию с учётом общей эффективности структуры.
+                    var totalStructureEfficient = regionMaintance * structureResourceAllocation * factPopulationPower;
+
+                    // Заполняем ресурсы, добытые за эту итерацию.
+                    foreach (var resource in Stats.ResourcesLastIteration)
+                    {
+                        Stats.ResourcesLastIteration[resource.Key] = 0;
+                    }
+
+                    foreach (var production in structure.ProductResources)
+                    {
+                        var factProduction = production.Value * totalStructureEfficient;
+
+                        if (!Stats.ResourcesLastIteration.ContainsKey(production.Key))
+                        {
+                            Stats.ResourcesLastIteration[production.Key] = 0;
+                        }
+
+                        Stats.ResourcesLastIteration[production.Key] += factProduction;
+                    }
+
+                    // Извлекаем ресурсы на производство из доступных ресурсов.
+                    foreach (var consumedResource in structure.RequiredResources)
+                    {
+                        availableResources[consumedResource.Key] -= consumedResource.Value * resourceAllocation[consumedResource.Key];
                     }
                 }
-
-                // Проверяем, хватает ли денег для этого района.
-                var money = Stats.GetResource(LocalityResource.Money);
-                if (money >= region.MaintenanceCost)
-                {
-                    Stats.RemoveResource(LocalityResource.Money, region.MaintenanceCost);
-                }
-                else
-                {
-                    // Не хватает денег на содержание этого района.
-                    // Все его строения не работают.
-                    continue;
-                }
-
-                // Для жилых мест отдельная логика.
-                // Их потребляет только население, а производят структуры.
-                // Поэтому зануляем перед обработкой структур города. Далее структуры выставят текущее значение.
-                Stats.ResourcesBalance[LocalityResource.LivingPlaces] = 0;
-
-                var suppliedStructures = SupplyStructures(region.Structures);
-                ProduceResources(suppliedStructures, Stats);
-
-                // Реализация производства.
-                // Избыточное производтство даёт деньги. Предполагается, что избыточное производство
-                // народ пускает на улучшение благосостояния.
-                RealizeManufacture();
             }
+
+
+            // Всё, что осталось от текущих доступных ресурсов помещается на склады.
+            foreach (var remainResource in availableResources)
+            {
+                if (!Stats.ResourcesStorage.ContainsKey(remainResource.Key))
+                {
+                    Stats.ResourcesStorage[remainResource.Key] = 0;
+                }
+
+                Stats.ResourcesStorage[remainResource.Key] += remainResource.Value;
+            }
+
+            //foreach (var region in Regions)
+            //{
+
+            //    // Проверяем, хватает ли денег для этого района.
+            //    var money = Stats.GetResource(LocalityResource.Money);
+            //    if (money >= region.MaintenanceCost)
+            //    {
+            //        Stats.RemoveResource(LocalityResource.Money, region.MaintenanceCost);
+            //    }
+            //    else
+            //    {
+            //        // Не хватает денег на содержание этого района.
+            //        // Все его строения не работают.
+            //        continue;
+            //    }
+
+            //    // Для жилых мест отдельная логика.
+            //    // Их потребляет только население, а производят структуры.
+            //    // Поэтому зануляем перед обработкой структур города. Далее структуры выставят текущее значение.
+            //    Stats.ResourcesLastIteration[LocalityResource.LivingPlaces] = 0;
+
+            //    var suppliedStructures = SupplyStructures(region.Structures);
+            //    ProduceResources(suppliedStructures, Stats);
+
+            //    // Реализация производства.
+            //    // Избыточное производтство даёт деньги. Предполагается, что избыточное производство
+            //    // народ пускает на улучшение благосостояния.
+            //    RealizeManufacture();
+            //}
+        }
+
+        private static void AddComsumption(
+            Dictionary<LocalityResource, List<Comsumption>> baseConsumption,
+            ILocalityStructure structure,
+            LocalityResource resource,
+            float resourceConsumption)
+        {
+            if (!baseConsumption.TryGetValue(resource, out var consumptionList))
+            {
+                consumptionList = new List<Comsumption>();
+                baseConsumption[resource] = consumptionList;
+            }
+
+            consumptionList.Add(new Comsumption() { Amount = resourceConsumption, Structure = structure });
+        }
+
+        private static void AddComsumption(
+            Dictionary<LocalityResource, List<Comsumption>> baseConsumption,
+            LocalityRegion region,
+            LocalityResource resource,
+            float resourceConsumption)
+        {
+            if (!baseConsumption.TryGetValue(resource, out var consumptionList))
+            {
+                consumptionList = new List<Comsumption>();
+                baseConsumption[resource] = consumptionList;
+            }
+
+            consumptionList.Add(new Comsumption() { Amount = resourceConsumption, Region = region });
         }
 
         private void RealizeManufacture()
@@ -157,12 +390,12 @@ namespace Zilon.Core.WorldGeneration
             {
                 foreach (var productResource in structure.ProductResources)
                 {
-                    if (!stats.ResourcesBalance.ContainsKey(productResource.Key))
+                    if (!stats.ResourcesLastIteration.ContainsKey(productResource.Key))
                     {
-                        stats.ResourcesBalance[productResource.Key] = 0;
+                        stats.ResourcesLastIteration[productResource.Key] = 0;
                     }
 
-                    stats.ResourcesBalance[productResource.Key] += productResource.Value;
+                    stats.ResourcesLastIteration[productResource.Key] += productResource.Value;
                 }
             }
         }
@@ -193,12 +426,12 @@ namespace Zilon.Core.WorldGeneration
                 foreach (var requiredResource in structure.RequiredResources)
                 {
                     var requiredResourceType = requiredResource.Key;
-                    if (Stats.ResourcesBalance.ContainsKey(requiredResourceType))
+                    if (Stats.ResourcesLastIteration.ContainsKey(requiredResourceType))
                     {
-                        if (Stats.ResourcesBalance[requiredResourceType] >= requiredResource.Value)
+                        if (Stats.ResourcesLastIteration[requiredResourceType] >= requiredResource.Value)
                         {
                             suppliedStructures.Add(structure);
-                            Stats.ResourcesBalance[requiredResourceType] -= requiredResource.Value;
+                            Stats.ResourcesLastIteration[requiredResourceType] -= requiredResource.Value;
                         }
                     }
 

@@ -42,6 +42,11 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         UnderConstructionData UnderConstructionData { get; }
 
+        /// <summary>
+        /// Требования структуры к работникам.
+        /// </summary>
+        Dictionary<PopulationSpecializations, int> RequiredPopulation { get; }
+
         ///// <summary>
         ///// Обновляет лимиты запасов города.
         ///// </summary>

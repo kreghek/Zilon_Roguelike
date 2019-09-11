@@ -15,7 +15,7 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
 
         public ICrisis Analyze(Locality locality)
         {
-            var food = locality.Stats.ResourcesBalance[LocalityResource.Food];
+            var food = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
 
             if (food < 0)
             {
