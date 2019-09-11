@@ -70,8 +70,27 @@ namespace Zilon.Core.WorldGeneration
         /// </summary>
         public void Update()
         {
-            UpdatePopulation();
-            UpdateRegions();
+            // Считаем общее потребление всех ресурсов всем источниками:
+            // район, структуры района и население.
+            // Исходя из общего потребления будут расчитываться ресурсы, изъятые со складов.
+            // А так же эффективность работы сначала населения, а затем - структур города.
+            var totalConsumption = new Dictionary<LocalityResource, List<Comsumption>>();
+            foreach (var region in Regions)
+            {
+                AddComsumption(totalConsumption, region, LocalityResource.Money, region.MaintenanceCost);
+                foreach (var structure in region.Structures)
+                {
+                    foreach (var requiredResource in structure.RequiredResources)
+                    {
+                        AddComsumption(totalConsumption, structure, requiredResource.Key, requiredResource.Value);
+                    }
+
+                    AddComsumption(totalConsumption, structure, LocalityResource.Money, structure.MaintenanceCost);
+                }
+            }
+
+            UpdatePopulation(totalConsumption);
+            UpdateStructures(totalConsumption);
         }
 
         /// <summary>
@@ -87,6 +106,11 @@ namespace Zilon.Core.WorldGeneration
             public LocalityRegion Region;
 
             public ILocalityStructure Structure;
+
+            /// <summary>
+            /// Указывает, что потребителем ресурса является население.
+            /// </summary>
+            public bool Population;
         }
 
         private struct ConsumerKey
@@ -121,27 +145,10 @@ namespace Zilon.Core.WorldGeneration
         }
 
 
-        private void UpdateRegions()
+        private void UpdateStructures(Dictionary<LocalityResource, List<Comsumption>> totalConsumption)
         {
-            // В этом методе рассчитываем, как отработали районы города.
-            // Для этого считаем потребление и расход всех ресурсов от строений района.
-
-            // Расчёт потребления всех ресурсов, кроме жилых мест, всеми строениями при нормальном снабжении.
-            var baseConsumption = new Dictionary<LocalityResource, List<Comsumption>>();
-            foreach (var region in Regions)
-            {
-                AddComsumption(baseConsumption, region, LocalityResource.Money, region.MaintenanceCost);
-                foreach (var structure in region.Structures)
-                {
-                    foreach (var requiredResource in structure.RequiredResources)
-                    {
-                        AddComsumption(baseConsumption, structure, requiredResource.Key, requiredResource.Value);
-                    }
-
-                    AddComsumption(baseConsumption, structure, LocalityResource.Money, structure.MaintenanceCost);
-                }
-            }
-
+            // В этом методе рассчитываем, как отработали все структуры города.
+            
             // Распределение ресурсов между районами и строениями.
             // Для этого сначала получаем все доступные ресурсы на эту итерацию.
             // Доступные ресурсы - это ресурсы с прошлой итерации + (ресурсы со складов * К).
@@ -159,7 +166,7 @@ namespace Zilon.Core.WorldGeneration
             }
 
             // Извлекаем ресурсы из хранилища на основе требований к потреблению.
-            foreach (var consumption in baseConsumption)
+            foreach (var consumption in totalConsumption)
             {
                 if (!availableResources.ContainsKey(consumption.Key))
                 {
@@ -167,15 +174,15 @@ namespace Zilon.Core.WorldGeneration
                 }
 
                 Stats.ResourcesStorage.TryGetValue(consumption.Key, out var availableStorageResource);
-
                 var sumConsumption = consumption.Value.Sum(x => x.Amount);
                 var storageResource = Math.Min(sumConsumption * STORAGE_RESOURCE_RESERVE, availableStorageResource);
 
                 availableResources[consumption.Key] += storageResource;
             }
 
-            var resourceAllocation = new Dictionary<LocalityResource, float>();
-            foreach (var consumption in baseConsumption)
+            // Расчитываем фактическое распределение ресурса на единицу требований.
+            var resourceAllocationPerUnit = new Dictionary<LocalityResource, float>();
+            foreach (var consumption in totalConsumption)
             {
                 // Суммарное потребление нужно, чтобы получить количество долей, 
                 // на которые нужно разделить существующие ресурсты.
@@ -189,7 +196,7 @@ namespace Zilon.Core.WorldGeneration
                 // На каждую единицу потреблностей будет предоставлена resourcePerUnit ресурса.
                 // Эта величина так же показывает процент обеспечения ресурсами.
                 var resourcePerUnit = normalizedAvailableResource / sumConsumptionUnits;
-                resourceAllocation[consumption.Key] = resourcePerUnit;
+                resourceAllocationPerUnit[consumption.Key] = resourcePerUnit;
             }
 
             // Рассчитываем эффективность работы районов и структур с учётом снабжения и населения.
@@ -197,7 +204,7 @@ namespace Zilon.Core.WorldGeneration
             // Выработку сразу помещаем в словарь с выработкой на следующую итерацию.
             foreach (var region in Regions)
             {
-                var regionMaintance = resourceAllocation[LocalityResource.Money];
+                var regionMaintance = resourceAllocationPerUnit[LocalityResource.Money];
 
                 foreach (var structure in region.Structures)
                 {
@@ -206,7 +213,7 @@ namespace Zilon.Core.WorldGeneration
 
                     foreach (var requiredResource in structure.RequiredResources)
                     {
-                        structureResourceAllocation *= resourceAllocation[requiredResource.Key];
+                        structureResourceAllocation *= resourceAllocationPerUnit[requiredResource.Key];
                     }
 
                     // Обеспечение структуры работниками.
@@ -278,7 +285,7 @@ namespace Zilon.Core.WorldGeneration
                     // Извлекаем ресурсы на производство из доступных ресурсов.
                     foreach (var consumedResource in structure.RequiredResources)
                     {
-                        availableResources[consumedResource.Key] -= consumedResource.Value * resourceAllocation[consumedResource.Key];
+                        availableResources[consumedResource.Key] -= consumedResource.Value * resourceAllocationPerUnit[consumedResource.Key];
                     }
                 }
             }
@@ -336,7 +343,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private void UpdatePopulation()
+        private void UpdatePopulation(Dictionary<LocalityResource, List<Comsumption>> totalConsumption)
         {
             // Изымаем столько товаров и еды, сколько населения в городе.
             // Логика аналогична производству товаров.
