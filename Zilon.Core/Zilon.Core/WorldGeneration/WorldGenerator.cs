@@ -569,28 +569,8 @@ namespace Zilon.Core.WorldGeneration
                     Owner = globe.Realms[i]
                 };
 
-                var settlerCamp = new BasicLocalityStructure(name: "Settler Camp",
-                    requiredPopulation: new Dictionary<PopulationSpecializations, int> {
-                    { PopulationSpecializations.Workers, 1 },
-                    { PopulationSpecializations.Peasants, 1 },
-                    { PopulationSpecializations.Servants, 1 }
-                    },
-                    requiredResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Energy, 1 }
-                    },
-                    productResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Energy, 1 },
-                    { LocalityResource.Food, 3 },
-                    { LocalityResource.Goods, 3 },
-                    { LocalityResource.LivingPlaces, 3 },
-                        // Производит 2 единицы, потому что:
-                        // 1 для содержания района.
-                        // 1 для содержания самого строения.
-                    { LocalityResource.Manufacture, 2 },
-                    });
-
                 var region = new LocalityRegion();
-                region.Structures.Add(settlerCamp);
+                region.Structures.Add(LocalityStructureRepository.SettlerCamp);
 
                 locality.Regions.Add(region);
 

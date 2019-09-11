@@ -47,11 +47,11 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                 return;
             }
 
-            var isEnergyStructure = targetRegion.Structures.Count == 1;
+            var isFoodStructure = targetRegion.Structures.Count == 1;
 
-            if (isEnergyStructure)
+            if (isFoodStructure)
             {
-                targetRegion.Structures.Add(LocalityStructureRepository.LumberGenerator);
+                targetRegion.Structures.Add(LocalityStructureRepository.PigFarm);
             }
             else
             {

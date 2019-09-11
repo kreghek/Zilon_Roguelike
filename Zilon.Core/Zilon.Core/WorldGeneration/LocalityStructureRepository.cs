@@ -20,9 +20,9 @@ namespace Zilon.Core.WorldGeneration
                     { LocalityResource.Energy, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Energy, 1 },
-                    { LocalityResource.Food, 3 },
-                    { LocalityResource.Goods, 3 },
+                    { LocalityResource.Energy, 5 },
+                    { LocalityResource.Food, 15 },
+                    { LocalityResource.Goods, 15 },
                     { LocalityResource.LivingPlaces, 3 },
                         // Производит 2 единицы, потому что:
                         // 1 для содержания района.
@@ -73,7 +73,7 @@ namespace Zilon.Core.WorldGeneration
                         { LocalityResource.Energy, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                        { LocalityResource.Food, 1 }
+                        { LocalityResource.Food, 10 }
                     });
 
                 return structure;
@@ -97,7 +97,7 @@ namespace Zilon.Core.WorldGeneration
                         { LocalityResource.Manufacture, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Goods, 1 }
+                    { LocalityResource.Goods, 10 }
                     });
 
                 return structure;
@@ -120,7 +120,7 @@ namespace Zilon.Core.WorldGeneration
                         { LocalityResource.Energy, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                    { LocalityResource.Manufacture, 2 }
+                    { LocalityResource.Manufacture, 20 }
                     });
 
                 return structure;
@@ -165,7 +165,7 @@ namespace Zilon.Core.WorldGeneration
                         { LocalityResource.Energy, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                        { LocalityResource.Money, 3 }
+                        { LocalityResource.Money, 30 }
                     });
 
                 return structure;
@@ -181,14 +181,14 @@ namespace Zilon.Core.WorldGeneration
             {
                 var structure = new BasicLocalityStructure(name: "Town Market",
                     requiredPopulation: new Dictionary<PopulationSpecializations, int> {
-                        { PopulationSpecializations.Servants, 1 }
+                        { PopulationSpecializations.Servants, 3 }
                     },
                     requiredResources: new Dictionary<LocalityResource, int> {
                         { LocalityResource.Energy, 1 },
                         { LocalityResource.Goods, 1 }
                     },
                     productResources: new Dictionary<LocalityResource, int> {
-                        { LocalityResource.Money, 5 }
+                        { LocalityResource.Money, 50 }
                     });
 
                 return structure;
