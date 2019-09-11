@@ -36,6 +36,7 @@ namespace Zilon.Core.WorldGeneration
 
             Age = NOOBIE_AGE;
             Health = 1;
+            Morale = 1;
         }
 
         /// <summary>
@@ -68,6 +69,17 @@ namespace Zilon.Core.WorldGeneration
         public float Health { get; set; }
 
         /// <summary>
+        /// Моральный дух единицы населения.
+        /// </summary>
+        /// <remarks>
+        /// Базовое значение - 1f.
+        /// Моральный дух падает, когда население недостаточно снабжается ресурсом (едой, народными товарами).
+        /// Восстанавливается, когда снабжение нормальное.
+        /// Если моральный дух низкий - в городе может начаться кризис.
+        /// </remarks>
+        public float Morale { get; set; }
+
+        /// <summary>
         /// Эффективность единицы населения. 
         /// </summary>
         /// <remarks>
@@ -83,7 +95,7 @@ namespace Zilon.Core.WorldGeneration
         /// 
         /// Так же эффективность зависит от здоровья. Чем ниже здоровье, тем ниже эффетивность.
         /// </remarks>
-        public float Power => GetAgePower(Age) * Health * POWER_COEF;
+        public float Power => GetAgePower(Age) * Health * Morale * POWER_COEF;
 
         /// <summary>
         /// Средний возраст единицы населения.

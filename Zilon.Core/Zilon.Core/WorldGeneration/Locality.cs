@@ -344,6 +344,12 @@ namespace Zilon.Core.WorldGeneration
             // и запасов со складов.
             // Население потребляет еду и товары народного потребления (Goods).
 
+            // Из доступных ресурсов - всё, что было добыто на прошлом ходу + половина требуемых ресурсов со склада.
+            // Некоторые ресурсы могут быть нужны и населению и производству.
+            // В этом случае все доступные ресурсы делим пропорционально.
+            var availableResources = new Dictionary<LocalityResource, float>();
+
+
             var populationCount = CurrentPopulation.Count();
 
             Stats.RemoveResource(LocalityResource.Food, populationCount);
