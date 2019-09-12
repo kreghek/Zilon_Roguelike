@@ -134,6 +134,7 @@
     <Compile Include="Persons\ClassHumanPersonFactory.cs" />
     <Compile Include="Persons\RandomHumanPersonFactory.cs" />
     <Compile Include="Persons\SurvivalRandomSource.cs" />
+    <Compile Include="Persons\HpSurvivalStat.cs" />
     <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />

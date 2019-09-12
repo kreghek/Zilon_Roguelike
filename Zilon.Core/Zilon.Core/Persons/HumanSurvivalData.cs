@@ -62,10 +62,13 @@ namespace Zilon.Core.Persons
 
         private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)
         {
-            var hpStat = new SurvivalStat(personScheme.Hp, 0, personScheme.Hp)
+            var hpStat = new HpSurvivalStat(personScheme.Hp, 0, personScheme.Hp)
             {
                 Type = SurvivalStatType.Health
             };
+
+            // Размечаем хп ключевыми точками
+
 
             statList.Add(hpStat);
         }
@@ -227,9 +230,9 @@ namespace Zilon.Core.Persons
             var keyPointList = new List<SurvivalStatKeyPoint>();
             if (statScheme.KeyPoints != null)
             {
-                AddKeyPoint(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keyPointList);
-                AddKeyPoint(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keyPointList);
-                AddKeyPoint(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keyPointList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keyPointList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keyPointList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keyPointList);
 
                 //Ниже пока не актуально. Алгоритм работает так, что ему не важен порядок ключевых точек.
                 //// По условиям работы с о схемами, в схемах ключевые значения
@@ -249,7 +252,7 @@ namespace Zilon.Core.Persons
             return stat;
         }
 
-        private static void AddKeyPoint(
+        private static void AddKeyPointFromScheme(
             SurvivalStatHazardLevel max1,
             PersonSurvivalStatKeypointLevel max2,
             IPersonSurvivalStatKeyPointSubScheme[] keyPoints,

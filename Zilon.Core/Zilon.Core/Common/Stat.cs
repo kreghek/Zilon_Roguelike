@@ -69,7 +69,7 @@ namespace Zilon.Core.Common
         /// </summary>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        public void ChangeStatRange(int min, int max)
+        public virtual void ChangeStatRange(int min, int max)
         {
             if (min >= max)
             {

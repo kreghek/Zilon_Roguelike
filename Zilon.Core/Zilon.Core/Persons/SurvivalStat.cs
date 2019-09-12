@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Текущие показатели характеристики модуля выживания.
     /// </summary>
-    public sealed class SurvivalStat: Stat
+    public class SurvivalStat: Stat
     {
         /// <summary>
         /// Значение броска по умолчанию для снижения характеристики.
