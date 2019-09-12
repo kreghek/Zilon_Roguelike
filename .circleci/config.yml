@@ -19,7 +19,7 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:restore
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
-      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests/bin/Release/Test.Net45.dll --where "cat != real-schemes"
+      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --where "cat != real-schemes"
 
 workflows:
   version: 2
