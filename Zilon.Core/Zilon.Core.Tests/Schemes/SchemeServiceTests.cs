@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -142,7 +140,6 @@ namespace Zilon.Core.Tests.Schemes
 
 
             // ASSERT
-            var allTasks = new List<Task>();
             foreach (var dropTable in dropTables)
             {
                 CheckDropTableScheme(dropTable, schemeService);
@@ -151,7 +148,7 @@ namespace Zilon.Core.Tests.Schemes
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
