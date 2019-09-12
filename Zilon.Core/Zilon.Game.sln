@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9F18603
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests.Common", "Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{53AF1D62-18D8-4252-B09A-1CC50724BE92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +31,17 @@ Global
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0192DB6B-EAE2-430A-BC52-148EEC878151} = {C9F18603-1C4A-46D8-B5EA-32DFA1B77851}
+		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {C9F18603-1C4A-46D8-B5EA-32DFA1B77851}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}

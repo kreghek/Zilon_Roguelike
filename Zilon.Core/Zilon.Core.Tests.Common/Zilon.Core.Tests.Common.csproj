@@ -61,6 +61,7 @@
     <Compile Include="Schemes\TestSectorSubScheme.cs" />
     <Compile Include="Schemes\TestTacticalActConstrainsSubScheme.cs" />
     <Compile Include="TestActorViewModel.cs" />
+    <Compile Include="TestCategories.cs" />
     <Compile Include="TestContainerViewModel.cs" />
     <Compile Include="Schemes\TestMonsterScheme.cs" />
     <Compile Include="Schemes\TestTacticalActOffenceSubScheme.cs" />
