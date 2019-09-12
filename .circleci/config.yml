@@ -5,5 +5,5 @@ jobs:
       - image: aparker/circleci-dotnet-mono:latest
     steps:
       - checkout
-      - run: msbuild Zilon.Core/Zilon.Core.sln /t:Restore
-      - run: msbuild Zilon.Core/Zilon.Core.sln /t:Build
+      - run: msbuild Zilon.Core/Zilon.Game.sln /t:Restore
+      - run: msbuild Zilon.Core/Zilon.Game.sln /t:Build
