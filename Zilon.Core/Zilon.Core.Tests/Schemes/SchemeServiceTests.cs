@@ -15,6 +15,7 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Tests.Schemes
 {
     [TestFixture]
+    [Category("real-schemes")]
     public class SchemeServiceTests
     {
         /// <summary>
