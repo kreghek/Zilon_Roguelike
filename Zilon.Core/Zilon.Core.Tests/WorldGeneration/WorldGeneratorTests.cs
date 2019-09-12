@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
-    
+
     [TestFixture]
     [Category(TestCategories.REAL_RESOURCE)]
     public class WorldGeneratorTests
@@ -101,7 +100,7 @@ namespace Zilon.Core.Tests.WorldGeneration
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
