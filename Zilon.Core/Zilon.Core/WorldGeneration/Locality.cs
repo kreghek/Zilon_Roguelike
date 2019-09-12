@@ -89,6 +89,10 @@ namespace Zilon.Core.WorldGeneration
                 }
             }
 
+            // Нужные населению ресурсы
+            AddPopulationComsumption(totalConsumption, LocalityResource.Food, CurrentPopulation.Count());
+            AddPopulationComsumption(totalConsumption, LocalityResource.Goods, CurrentPopulation.Count());
+
             UpdatePopulation(totalConsumption);
             UpdateStructures(totalConsumption);
         }
@@ -110,7 +114,7 @@ namespace Zilon.Core.WorldGeneration
             /// <summary>
             /// Указывает, что потребителем ресурса является население.
             /// </summary>
-            public bool Population;
+            public bool IsPopulation;
         }
 
         private struct ConsumerKey
@@ -199,6 +203,14 @@ namespace Zilon.Core.WorldGeneration
                 resourceAllocationPerUnit[consumption.Key] = resourcePerUnit;
             }
 
+            // -------- Потребление ресурсов населением
+            var populationNeedResources = new[] { LocalityResource.Food, LocalityResource.Goods };
+            var populationCount = CurrentPopulation.Count();
+            foreach (var needResource in populationNeedResources)
+            {
+                availableResources[needResource] -= populationCount * resourceAllocationPerUnit[needResource];
+            }
+
             // Рассчитываем эффективность работы районов и структур с учётом снабжения и населения.
             // Рассчитываем текущую выработку ресурсов городом на следующую итерацию.
             // Выработку сразу помещаем в словарь с выработкой на следующую итерацию.
@@ -227,7 +239,8 @@ namespace Zilon.Core.WorldGeneration
                         .GroupBy(x => x.Specialization)
                         .ToDictionary(x => x.Key, x => x.ToArray());
 
-                    // Рассчитываем суммарную эффективность населения по каждой специализации.
+                    // Рассчитываем итоговую эффективность специалистов из населения на текущей структуре.
+                    // Итоговая эффективность равна минимальной эффетивности бригады.
                     var factPopulationPower = 1f;
                     foreach (var specKey in structurePopulationUnitsBySpecialization)
                     {
@@ -318,6 +331,20 @@ namespace Zilon.Core.WorldGeneration
             consumptionList.Add(new Comsumption() { Amount = resourceConsumption, Structure = structure });
         }
 
+        private static void AddPopulationComsumption(
+            Dictionary<LocalityResource, List<Comsumption>> baseConsumption,
+            LocalityResource resource,
+            float resourceConsumption)
+        {
+            if (!baseConsumption.TryGetValue(resource, out var consumptionList))
+            {
+                consumptionList = new List<Comsumption>();
+                baseConsumption[resource] = consumptionList;
+            }
+
+            consumptionList.Add(new Comsumption() { Amount = resourceConsumption, IsPopulation = true });
+        }
+
         private static void AddComsumption(
             Dictionary<LocalityResource, List<Comsumption>> baseConsumption,
             LocalityRegion region,
@@ -354,13 +381,9 @@ namespace Zilon.Core.WorldGeneration
             // Из доступных ресурсов - всё, что было добыто на прошлом ходу + половина требуемых ресурсов со склада.
             // Некоторые ресурсы могут быть нужны и населению и производству.
             // В этом случае все доступные ресурсы делим пропорционально.
-            var availableResources = new Dictionary<LocalityResource, float>();
-
-
-            var populationCount = CurrentPopulation.Count();
-
-            Stats.RemoveResource(LocalityResource.Food, populationCount);
-            Stats.RemoveResource(LocalityResource.Goods, populationCount);
+            
+            // ----------
+            // Потребление ресурсов населением происходит рядом с потреблением городскими структурами.
 
             // Рассчитываем рост населения
             UpdatePopulationGrowth();

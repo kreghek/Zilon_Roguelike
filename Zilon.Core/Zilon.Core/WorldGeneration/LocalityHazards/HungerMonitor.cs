@@ -15,9 +15,13 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
 
         public ICrisis Analyze(Locality locality)
         {
-            var food = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
+            var lastIterationFood = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
 
-            if (food < 0)
+            locality.Stats.ResourcesStorage.TryGetValue(LocalityResource.Food, out var availableFoodFromStorage);
+
+            var sumFood = lastIterationFood + Math.Min(availableFoodFromStorage, locality.CurrentPopulation.Count * 0.5f);
+
+            if (sumFood < locality.CurrentPopulation.Count)
             {
                 return new HungerCrisis(_crysisRandomSource);
             }

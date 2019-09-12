@@ -172,7 +172,9 @@ namespace Zilon.Core.WorldGeneration.Tests
             locality.Stats.ResourcesLastIteration[LocalityResource.LivingPlaces] = 3;
             locality.Stats.ResourcesLastIteration[LocalityResource.Money] = 2;
 
-            for (var i = 0; i < 100; i++)
+            var targetYears = 60;
+            // 52 - это недели в году. Одна итерация - одна неделя.
+            for (var i = 0; i < 52 * targetYears; i++)
             {
                 locality.Update();
 
@@ -190,9 +192,13 @@ namespace Zilon.Core.WorldGeneration.Tests
 
         private static void UpdateCrises(Locality locality)
         {
-            foreach (var crisis in locality.Crises)
+            foreach (var crisis in locality.Crises.ToArray())
             {
-                crisis.Update(locality);
+                var crisisContinues = crisis.Update(locality);
+                if (!crisisContinues)
+                {
+                    locality.Crises.Remove(crisis);
+                }
             }
         }
 

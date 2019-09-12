@@ -453,9 +453,13 @@ namespace Zilon.Core.WorldGeneration
 
         private static void UpdateCrises(Locality locality)
         {
-            foreach (var crisis in locality.Crises)
+            foreach (var crisis in locality.Crises.ToArray())
             {
-                crisis.Update(locality);
+                var crisisContinues = crisis.Update(locality);
+                if (!crisisContinues)
+                {
+                    locality.Crises.Remove(crisis);
+                }
             }
         }
 

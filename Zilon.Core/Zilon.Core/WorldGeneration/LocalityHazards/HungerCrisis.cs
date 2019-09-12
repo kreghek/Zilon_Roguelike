@@ -26,14 +26,21 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
                 return false;
             }
 
-            var currentFood = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
-            if (currentFood >= 0)
+            var lastIterationFood = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
+
+            locality.Stats.ResourcesStorage.TryGetValue(LocalityResource.Food, out var availableFoodFromStorage);
+
+            var sumFood = lastIterationFood + Math.Min(availableFoodFromStorage, locality.CurrentPopulation.Count * 0.5f);
+
+            var hungerPopulationCount = locality.CurrentPopulation.Count - sumFood;
+
+            if (hungerPopulationCount <= 0)
             {
                 return false;
             }
 
             // Голод забирает столько населения, сколько пищи не хватает.
-            var populationDown = Math.Abs(currentFood);
+            var populationDown = (int)Math.Ceiling(hungerPopulationCount);
             for (var i = 0; i < populationDown; i++)
             {
                 // Если в городе нет населения, то не может быть и голода.
