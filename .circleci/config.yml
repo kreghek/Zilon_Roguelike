@@ -22,7 +22,7 @@ jobs:
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   build_Win_x64:
     docker:
-      - image: gableroux/unity3d:latest
+      - image: gableroux/unity3d:2018.3.4f1
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
             git clone https://github.com/qwertyuu/unity-ci-build-scripts.git
       - run:
           name: Getting build scripts for your unity version if possible
-          command: UNITY_VERSION=2019.3.0a7; if [ $(git ls-remote https://github.com/qwertyuu/unity-ci-build-scripts.git "$UNITY_VERSION" | wc -l) -eq 1 ]; then cd unity-ci-build-scripts && git pull origin "$UNITY_VERSION" && cd ..; fi
+          command: UNITY_VERSION=2018.3.4f1; if [ $(git ls-remote https://github.com/qwertyuu/unity-ci-build-scripts.git "$UNITY_VERSION" | wc -l) -eq 1 ]; then cd unity-ci-build-scripts && git pull origin "$UNITY_VERSION" && cd ..; fi
       - run:
           name: Injecting build scripts into the project
           command: |
