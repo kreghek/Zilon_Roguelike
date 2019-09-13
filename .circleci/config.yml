@@ -23,12 +23,15 @@ jobs:
   build_Win_x64:
     docker:
       - image: gableroux/unity3d:latest
-    variables:
-      BUILD_TARGET: StandaloneWindows64
     steps:
       - checkout
-      - run: nuget restore Zilon.Core/Zilon.Game.sln
-      - run: msbuild Zilon.Core/Zilon.Game.sln /t:Build /p:Configuration=Release
+      - run:
+        environment:
+          BUILD_TARGET: StandaloneWindows64
+        command: "./ci/build.sh"
+    - store_artifacts:
+        path: "./Builds/"
+
 workflows:
   version: 2
   build_and_test:
