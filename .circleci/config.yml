@@ -38,6 +38,8 @@ jobs:
           at: /core-builds/bin
       - run:
           command: cp /core-builds/bin/* ./Zilon.Client/Assets/Plugins/
+      - run: git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp temp/* ./Zilon.Client/Assets/Plugins/
       - run:
           name: Build
           command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./Builds/ -quit -batchmode -noUpm -logFile -nographics
