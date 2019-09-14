@@ -42,12 +42,13 @@ jobs:
             apt update && apt install -y git 
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run: mkdir -p ./ClientBuilds/
       - run:
           name: Build
-          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./Builds/ -quit -batchmode -noUpm -logFile -nographics
+          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuilds/ -quit -batchmode -noUpm -logFile -nographics
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
+          command: apt update && apt -y install zip && zip -r "build.zip" ./ClientBuilds/
       - store_artifacts:
           path: build.zip
   
