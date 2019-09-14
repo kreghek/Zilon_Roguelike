@@ -13,7 +13,7 @@ jobs:
       - persist_to_workspace:
           root: bin
           paths:
-            - ./
+            - ./*
   test_45:
     working_directory: /test45
     docker:
