@@ -26,8 +26,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Getting build scripts for your unity version if possible
-          command: /opt/Unity/Editor/Unity -projectPath "Zilon.Client" -buildWindows64Player ./Builds/ -quit -batchmode -logFile "unity-build.log"
+          name: Build
+          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./Builds/ -quit -batchmode -noUpm -logFile
       - run: 
           name: Zipping build
           command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
