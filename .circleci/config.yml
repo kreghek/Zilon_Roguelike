@@ -8,7 +8,7 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Game.sln
       - run: msbuild Zilon.Core/Zilon.Game.sln /t:Build /p:Configuration=Release /p:OutputPath=core-builds
       - persist_to_workspace:
-        root: core-builds
+          root: core-builds
   test_45:
     working_directory: /test45
     docker:
