@@ -36,8 +36,7 @@ jobs:
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile .circleci/Unity_v2018.x.ulf || exit 0
       - attach_workspace:
           at: /core-builds/bin
-      - run:
-          command: cp /core-builds/bin/* ./Zilon.Client/Assets/Plugins/
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp /core-builds/bin/* ./Zilon.Client/Assets/Plugins/
       - run: git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp temp/* ./Zilon.Client/Assets/Plugins/
       - run:
