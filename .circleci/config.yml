@@ -37,7 +37,10 @@ jobs:
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp /core-builds/bin/* ./Zilon.Client/Assets/Plugins/
-      - run: git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run:
+        command: |
+          apt update && apt install -y git 
+          git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp temp/* ./Zilon.Client/Assets/Plugins/
       - run:
           name: Build
