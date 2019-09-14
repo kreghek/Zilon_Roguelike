@@ -12,6 +12,8 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
       - persist_to_workspace:
           root: bin
+          paths:
+            - ./
   test_45:
     working_directory: /test45
     docker:
