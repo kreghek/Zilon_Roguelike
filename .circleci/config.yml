@@ -22,13 +22,14 @@ jobs:
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   build_Win_x64:
     docker:
-      - image: gableroux/unity3d:2018.3.4f1
+      - image: gableroux/unity3d:2018.4.8f1
     steps:
       - checkout
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2018.x.ulf-cipher -k ${CIPHER_KEY} >> .circleci/Unity_v2018.x.ulf
       - run:
           name: Build
           command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./Builds/ -quit -batchmode -noUpm -logFile
-      - run: 
+      - run:
           name: Zipping build
           command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
       - store_artifacts:
