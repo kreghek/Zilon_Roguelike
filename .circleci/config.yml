@@ -49,5 +49,5 @@ workflows:
       - build
       - test_45
       - build_Win_x64:
-        requires:
-          - build
+          requires:
+            - build
