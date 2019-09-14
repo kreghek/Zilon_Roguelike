@@ -26,25 +26,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Fetching build scripts
-          command: |
-            apt update && apt install -y git 
-            git clone https://github.com/qwertyuu/unity-ci-build-scripts.git
-      - run:
           name: Getting build scripts for your unity version if possible
-          command: UNITY_VERSION=2018.3.4f1; if [ $(git ls-remote https://github.com/qwertyuu/unity-ci-build-scripts.git "$UNITY_VERSION" | wc -l) -eq 1 ]; then cd unity-ci-build-scripts && git pull origin "$UNITY_VERSION" && cd ..; fi
-      - run:
-          name: Injecting build scripts into the project
-          command: |
-            cp -r unity-ci-build-scripts/Assets/Editor ./Assets
-            cp -r unity-ci-build-scripts/ci ./ci
-      - run: 
-          name: Converting Unity license
-          command: chmod +x ./ci/before_script.sh && ./ci/before_script.sh
-      - run: ls -ls /usr/bin/python*
-      - run:
-          name: Building game binaries
-          command: chmod +x ./ci/build.sh && ./ci/build.sh
+          command: /opt/Unity/Editor/Unity -projectPath "Zilon.Client" -buildWindows64Player ./Builds/ -quit -batchmode -logFile "unity-build.log"
       - run: 
           name: Zipping build
           command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
