@@ -45,7 +45,7 @@ jobs:
       - run: mkdir -p ./ClientBuilds/
       - run:
           name: Build
-          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuilds/ -quit -batchmode -noUpm -logFile -nographics
+          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuilds/ -quit -batchmode -logFile -nographics
       - run:
           name: Zipping build
           command: apt update && apt -y install zip && zip -r "build.zip" ./ClientBuilds/
