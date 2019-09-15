@@ -47,7 +47,7 @@ jobs:
           command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuilds/LAST.exe -quit -batchmode -logFile -nographics
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r "build.zip" ./ClientBuilds/
+          command: apt update && apt -y install zip && zip -r build.zip ./ClientBuilds/LAST.exe
       - store_artifacts:
           path: build.zip
   
