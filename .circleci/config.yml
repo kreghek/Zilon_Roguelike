@@ -45,7 +45,7 @@ jobs:
       - run: mkdir ./ClientBuild/
       - run:
           name: Build
-          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -executeMethod UnityBuild.BuildWindows -batchmode -logFile -nographics -silent-crashes -quit
+          command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuild/LAST.exe -batchmode -logFile -nographics -quit
       - run: dir ./ClientBuild/
       - run:
           name: Zipping build

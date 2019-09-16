@@ -31,7 +31,7 @@ public class UnityBuild
         {
             scenes = scenesToBuild,
             locationPathName = Path.Combine(buildDirectory, buildName),
-            target = BuildTarget.StandaloneLinux64,
+            target = BuildTarget.StandaloneWindows64,
             options = BuildOptions.Development
         };
  
@@ -39,7 +39,7 @@ public class UnityBuild
 		
 		Debug.Log("###   DONE   ###");
  
-        Debug.Log("### SUMMARY: "+report.summary);
+        Debug.Log("### SUMMARY: "+report.summary.totalSize.ToString());
 		
 		var files = string.Join(", ", report.files.Select(x=>x.path));
 		Debug.Log("### FILES: " + files);
