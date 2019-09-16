@@ -19,7 +19,7 @@ public class UnityBuild
           "Assets/Scenes/scores"
         };
  
-        string buildsPath = "root/ClientBuild";
+        string buildsPath = "./ClientBuild";
         string buildDirectory = Path.Combine(buildsPath, $"{GameName}-Windows-{DateTime.Now.ToString("yyyy-MMM-dd HH-mm-ss")}");
  
         if (Directory.Exists(buildDirectory) == false)
@@ -31,7 +31,7 @@ public class UnityBuild
         {
             scenes = scenesToBuild,
             locationPathName = Path.Combine(buildDirectory, buildName),
-            target = BuildTarget.StandaloneWindows64,
+            target = BuildTarget.StandaloneLinux64,
             options = BuildOptions.Development
         };
  
