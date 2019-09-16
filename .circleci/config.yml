@@ -49,7 +49,7 @@ jobs:
       - run: dir ./ClientBuild/
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r LAST.zip ./ClientBuild
+          command: apt update && apt -y install zip && zip -r LAST.zip ./ClientBuild/*
       - store_artifacts:
           path: LAST.zip
   
