@@ -13,10 +13,10 @@ public class UnityBuild
 		Debug.Log("### BUILDING ###");
 		
         string[] scenesToBuild = new[]{
-          "Assets/Scenes/title",
-          "Assets/Scenes/combat",
-          "Assets/Scenes/globe",
-          "Assets/Scenes/scores"
+          "Assets/Scenes/title.unity",
+          "Assets/Scenes/combat.unity",
+          "Assets/Scenes/globe.unity",
+          "Assets/Scenes/scores.unity"
         };
  
         string buildsPath = "./ClientBuild";
