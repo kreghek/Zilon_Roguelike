@@ -9,6 +9,8 @@ public class UnityBuild
  
     public static void BuildWindows()
     {
+		Debug.Log("### BUILDING ###");
+		
         string[] scenesToBuild = new[]{
           "title",
           "combat",
@@ -32,6 +34,10 @@ public class UnityBuild
             options = BuildOptions.Development
         };
  
-        BuildPipeline.BuildPlayer(playerOptions);
+        var report = BuildPipeline.BuildPlayer(playerOptions);
+		
+		Debug.Log("###   DONE   ###");
+ 
+        Debug.Log(report);
     }
 }
