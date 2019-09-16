@@ -19,7 +19,7 @@ public class UnityBuild
           "Assets/Scenes/scores"
         };
  
-        string buildsPath = "./ClientBuild";
+        string buildsPath = "root/ClientBuild";
         string buildDirectory = Path.Combine(buildsPath, $"{GameName}-Windows-{DateTime.Now.ToString("yyyy-MMM-dd HH-mm-ss")}");
  
         if (Directory.Exists(buildDirectory) == false)
@@ -39,9 +39,9 @@ public class UnityBuild
 		
 		Debug.Log("###   DONE   ###");
  
-        Debug.Log("### SUMMARY "+report.summary);
+        Debug.Log("### SUMMARY: "+report.summary);
 		
 		var files = string.Join(", ", report.files.Select(x=>x.path));
-		Debug.Log(files);
+		Debug.Log("### FILES: " + files);
     }
 }
