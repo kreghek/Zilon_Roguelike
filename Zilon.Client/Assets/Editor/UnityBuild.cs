@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
  
 public class UnityBuild
 {
@@ -12,10 +13,10 @@ public class UnityBuild
 		Debug.Log("### BUILDING ###");
 		
         string[] scenesToBuild = new[]{
-          "title",
-          "combat",
-          "globe",
-          "scores"
+          "Assets/Scenes/title",
+          "Assets/Scenes/combat",
+          "Assets/Scenes/globe",
+          "Assets/Scenes/scores"
         };
  
         string buildsPath = "./ClientBuild";
