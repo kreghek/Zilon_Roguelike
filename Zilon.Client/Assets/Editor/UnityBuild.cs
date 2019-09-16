@@ -39,7 +39,9 @@ public class UnityBuild
 		
 		Debug.Log("###   DONE   ###");
  
-        Debug.Log(report.summary);
-		Debug.Log(report.files);
+        Debug.Log("### SUMMARY "+report.summary);
+		
+		var files = string.Join(", ", report.files.Select(x=>x.path));
+		Debug.Log(files);
     }
 }
