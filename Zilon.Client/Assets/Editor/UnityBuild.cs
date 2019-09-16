@@ -39,6 +39,7 @@ public class UnityBuild
 		
 		Debug.Log("###   DONE   ###");
  
-        Debug.Log(report);
+        Debug.Log(report.summary);
+		Debug.Log(report.files);
     }
 }
