@@ -44,7 +44,7 @@ jobs:
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
           name: Build
-          command: .circleci/build.sh
+          command: chmod +x .circleci/build.sh && .circleci/build.sh
       - run: dir ./ClientBuild/
       - run:
           name: Zipping build
