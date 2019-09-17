@@ -8,6 +8,7 @@ mkdir -p $BUILD_PATH
   -batchmode \
   -logFile /dev/stdout \
   -nographics \
+  -noUpm
   -quit
   
 UNITY_EXIT_CODE=$?
