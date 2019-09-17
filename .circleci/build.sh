@@ -3,7 +3,7 @@ BUILD_PATH=./ClientBuild
 mkdir -p $BUILD_PATH
 
 /opt/Unity/Editor/Unity \
-  -projectPath ./Zilon.Client \
+  -projectPath "./Empty/New Unity Project" \
   -buildWindows64Player $BUILD_PATH/LAST.exe \
   -batchmode \
   -logFile /dev/stdout \
