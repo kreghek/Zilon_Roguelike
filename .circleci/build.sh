@@ -1,8 +1,10 @@
-mkdir -p ./ClientBuild
+BUILD_PATH = ./ClientBuild
+
+mkdir -p $BUILD_PATH
 
 /opt/Unity/Editor/Unity \
   -projectPath ./Zilon.Client \
-  -buildWindows64Player ./ClientBuild/LAST.exe \
+  -buildWindows64Player $BUILD_PATH/LAST.exe \
   -batchmode \
   -logFile /dev/stdout \
   -nographics \
@@ -19,3 +21,6 @@ elif [ $UNITY_EXIT_CODE -eq 3 ]; then
 else
   echo "Unexpected exit code $UNITY_EXIT_CODE";
 fi
+
+ls -la $BUILD_PATH
+[ -n "$(ls -A $BUILD_PATH)" ] # fail job if build folder is empty
