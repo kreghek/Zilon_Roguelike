@@ -1,4 +1,4 @@
-BUILD_PATH = ./ClientBuild
+BUILD_PATH=./ClientBuild
 
 mkdir -p $BUILD_PATH
 
