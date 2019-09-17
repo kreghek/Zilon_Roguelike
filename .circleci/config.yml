@@ -34,6 +34,9 @@ jobs:
       - checkout
       - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> .circleci/Unity_v2019.x.ulf
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile .circleci/Unity_v2019.x.ulf || exit 0
+      - run:
+          name: Build Empty
+          command: /opt/Unity/Editor/Unity -projectPath "./Empty/New Unity Project" -buildWindows64Player ./ClientBuild/Empty.exe -batchmode -logFile ./ClientBuild/build.log -nographics -quit
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
