@@ -45,7 +45,6 @@ jobs:
             apt update && apt install -y git 
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
-      - run: mkdir ./ClientBuild/
       - run:
           name: Build
           command: /opt/Unity/Editor/Unity -projectPath ./Zilon.Client -buildWindows64Player ./ClientBuild/LAST.exe -batchmode -logFile ./ClientBuild/build.log -nographics -quit
