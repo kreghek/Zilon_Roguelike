@@ -10,6 +10,8 @@ set -e
   -logFile /dev/stdout \
   -manualLicenseFile .circleci/Unity_v2019.x.ulf
 
+echo "Run succeeded, no failures occurred";
+
 UNITY_EXIT_CODE=$?
 
 if [ $UNITY_EXIT_CODE -eq 0 ]; then
