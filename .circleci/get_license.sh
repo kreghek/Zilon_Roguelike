@@ -2,11 +2,13 @@
 
 set -e
 
-${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity} \
-    -quit \
-	-batchmode \
-	-logFile /dev/stdout \
-	-manualLicenseFile .circleci/Unity_v2019.x.ulf
+/opt/Unity/Editor/Unity \
+  -quit \
+  -batchmode \
+  -nographics \
+  -silent-crashes \
+  -logFile /dev/stdout \
+  -manualLicenseFile .circleci/Unity_v2019.x.ulf
 
 UNITY_EXIT_CODE=$?
 
