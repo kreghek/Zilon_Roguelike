@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> .circleci/Unity_v2019.x.ulf
-      - run: chmod +x .circleci/get_license.sh && .circleci/get_license.sh
+      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile /dev/stdout -manualLicenseFile .circleci/Unity_v2019.x.ulf || exit 0
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
