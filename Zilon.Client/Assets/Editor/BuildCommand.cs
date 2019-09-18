@@ -130,7 +130,7 @@ static class BuildCommand
             scenes = GetEnabledScenes(),
             options = GetBuildOptions(),
             locationPathName = fixedBuildPath,
-            target = BuildTarget.StandaloneLinux64,
+            target = BuildTarget.StandaloneWindows64,
             targetGroup = BuildTargetGroup.Standalone
         };
 

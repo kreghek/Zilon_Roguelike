@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BUILD_TARGET=StandaloneLinux64
+BUILD_TARGET=StandaloneWindows64
 BUILD_NAME=LAST
 
 
