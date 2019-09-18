@@ -125,7 +125,16 @@ static class BuildCommand
         var buildName = GetBuildName();
         var fixedBuildPath = GetFixedBuildPath(buildTarget, buildPath, buildName);
 
-        BuildPipeline.BuildPlayer(GetEnabledScenes(), fixedBuildPath, buildTarget, GetBuildOptions());
+        var buildPlayerOptions = new BuildPlayerOptions()
+        {
+            scenes = GetEnabledScenes(),
+            options = GetBuildOptions(),
+            locationPathName = fixedBuildPath,
+            target = BuildTarget.StandaloneLinux64,
+            targetGroup = BuildTargetGroup.Standalone
+        };
+
+        BuildPipeline.BuildPlayer(buildPlayerOptions);
         Console.WriteLine(":: Done with build");
     }
 
