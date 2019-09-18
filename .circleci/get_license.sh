@@ -2,8 +2,7 @@
 
 set -e
 
-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-  /opt/Unity/Editor/Unity \
+${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity} \
     -quit \
 	-batchmode \
 	-logFile /dev/stdout \
