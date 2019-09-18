@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BUILD_TARGET=StandaloneLinux64
+BUILD_TARGET=StandaloneWindows64
 BUILD_NAME=LAST
 
 
@@ -17,7 +17,7 @@ export BUILD_PATH=./Builds/$BUILD_TARGET/
 mkdir -p $BUILD_PATH
 
 ${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity} \
-  -projectPath ./Zilon.Client \
+  -projectPath Zilon.Client \
   -quit \
   -batchmode \
   -buildTarget $BUILD_TARGET \
