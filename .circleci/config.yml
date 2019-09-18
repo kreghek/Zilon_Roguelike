@@ -29,11 +29,11 @@ jobs:
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   build_Win_x64:
     docker:
-      - image: gableroux/unity3d:2018.4.8f1
+      - image: gableroux/unity3d:2019.2.2f1
     steps:
       - checkout
-      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2018.x.ulf-cipher -k ${CIPHER_KEY} >> .circleci/Unity_v2018.x.ulf
-      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile /dev/stdout -manualLicenseFile .circleci/Unity_v2018.x.ulf || exit 0
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> .circleci/Unity_v2019.x.ulf
+      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile /dev/stdout -manualLicenseFile .circleci/Unity_v2019.x.ulf || exit 0
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/

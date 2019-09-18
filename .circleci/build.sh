@@ -2,13 +2,12 @@ BUILD_PATH=./ClientBuild
 
 mkdir -p $BUILD_PATH
 
-/opt/Unity/Editor/Unity \
+${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity} \
   -projectPath "./Empty/New Unity Project" \
   -buildWindows64Player $BUILD_PATH/LAST.exe \
   -batchmode \
   -logFile /dev/stdout \
   -nographics \
-  -noUpm
   -quit
   
 UNITY_EXIT_CODE=$?
