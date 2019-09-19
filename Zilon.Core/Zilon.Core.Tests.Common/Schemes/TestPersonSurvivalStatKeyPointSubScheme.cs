@@ -6,6 +6,6 @@ namespace Zilon.Core.Tests.Common.Schemes
     {
         public PersonSurvivalStatKeypointLevel Level { get; set; }
 
-        public int Value { get; set; }
+        public int Start { get; set; }
     }
 }

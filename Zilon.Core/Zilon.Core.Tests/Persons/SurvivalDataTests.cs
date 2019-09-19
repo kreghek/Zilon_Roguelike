@@ -260,17 +260,17 @@ namespace Zilon.Core.Tests.Persons
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Value = 0
+                                Start = 0
                             },
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Value = -25
+                                Start = -25
                             },
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Value = -75
+                                Start = -75
                             }
                         }
                     },
@@ -285,17 +285,17 @@ namespace Zilon.Core.Tests.Persons
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Value = 0
+                                Start = 0
                             },
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Value = -25
+                                Start = -25
                             },
                             new TestPersonSurvivalStatKeyPointSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Value = -75
+                                Start = -75
                             }
                         }
                     }

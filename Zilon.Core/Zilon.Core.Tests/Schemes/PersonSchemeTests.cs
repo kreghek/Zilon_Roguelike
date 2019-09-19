@@ -49,15 +49,15 @@ namespace Zilon.Core.Tests.Schemes
             var expectedKeyPoints = new[] {
                 new TestPersonSurvivalStatKeyPointSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Lesser,
-                    Value = -60
+                    Start = -60
                 },
                 new TestPersonSurvivalStatKeyPointSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Strong,
-                    Value = -360
+                    Start = -360
                 },
                 new TestPersonSurvivalStatKeyPointSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Max,
-                    Value = -2520
+                    Start = -2520
                 },
             };
             factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeyPoints);
