@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,11 +8,14 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
-    [TestFixture()]
+
+    [TestFixture]
+    [Category(TestCategories.REAL_RESOURCE)]
     public class WorldGeneratorTests
     {
         /// <summary>
@@ -21,7 +23,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         /// </summary>
         /// <returns></returns>
         [Test]
-        [Category("longtime")]
+        [Category(TestCategories.LONG_RUN)]
         public async Task GenerateAsync_FixedDice_NoExceptions()
         {
             var dice = new Dice(1);
@@ -98,7 +100,7 @@ namespace Zilon.Core.Tests.WorldGeneration
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 
