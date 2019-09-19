@@ -67,9 +67,6 @@ namespace Zilon.Core.Persons
                 Type = SurvivalStatType.Health
             };
 
-            // Размечаем хп ключевыми точками
-
-
             statList.Add(hpStat);
         }
 

@@ -12,12 +12,17 @@ namespace Zilon.Core.Persons
         public HpSurvivalStat(int startValue, int min, int max) : base(startValue, min, max)
         {
             _keyPointShares = new[] { 0.75f, 0.5f, 0.25f };
+            RecalKeyPoints(min, max);
         }
 
         public override void ChangeStatRange(int min, int max)
         {
             base.ChangeStatRange(min, max);
+            RecalKeyPoints(min, max);
+        }
 
+        private void RecalKeyPoints(int min, int max)
+        {
             var statLength = max - min;
 
             var factValues = new int[_keyPointShares.Length];

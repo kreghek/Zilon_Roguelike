@@ -84,11 +84,12 @@ namespace Zilon.Core.Persons.Auxiliary
             else
             {
                 // Создаём эффект
-                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType,
+                var newEffect = new SurvivalStatHazardEffect(
+                    statType,
                     keyPoint.Level,
                     survivalRandomSource);
 
-                currentEffects.Add(newCurrentTypeEffect);
+                currentEffects.Add(newEffect);
             }
         }
 
