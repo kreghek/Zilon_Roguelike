@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+
+using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons
 {
@@ -11,12 +12,17 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class SurvivalStatChangedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="stat"></param>
+        /// <param name="keySegments"></param>
         [ExcludeFromCodeCoverage]
         public SurvivalStatChangedEventArgs([NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] SurvivalStatKeyPoint[] keyPoints)
+            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments)
         {
             Stat = stat ?? throw new ArgumentNullException(nameof(stat));
-            KeyPoints = keyPoints ?? throw new ArgumentNullException(nameof(keyPoints));
+            KeySegments = keySegments ?? throw new ArgumentNullException(nameof(keySegments));
         }
 
         /// <summary>
@@ -25,8 +31,8 @@ namespace Zilon.Core.Persons
         public SurvivalStat Stat { get; }
 
         /// <summary>
-        /// Ключевые точки, которые были пересечены.
+        /// Ключевые сегменты, которые были пересечены.
         /// </summary>
-        public SurvivalStatKeyPoint[] KeyPoints { get; }
+        public SurvivalStatKeySegment[] KeySegments { get; }
     }
 }

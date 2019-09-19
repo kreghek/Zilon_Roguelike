@@ -2,7 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -170,25 +170,25 @@ namespace Zilon.Core.Persons
 
         private void ChangeStatInner(SurvivalStat stat, int value)
         {
-            var oldValue = stat.Value;
+            var oldValueShare = stat.ValueShare;
 
             stat.Value += value;
 
-            if (stat.KeyPoints != null)
+            if (stat.KeySegments != null)
             {
-                CheckStatKeyPoints(stat, oldValue);
+                CheckStatKeyPoints(stat, oldValueShare);
             }
 
             ProcessIfHealth(stat);
         }
 
-        private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
+        private void CheckStatKeyPoints(SurvivalStat stat, float oldValueShare)
         {
-            var crossedKeyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, stat.Value);
+            var intersectedKeySegments = stat.KeySegments.CalcIntersectedSegments(oldValueShare, stat.ValueShare);
 
-            if (crossedKeyPoints.Any())
+            if (intersectedKeySegments.Any())
             {
-                DoStatCrossKeyPoint(stat, crossedKeyPoints);
+                DoStatCrossKeyPoint(stat, intersectedKeySegments);
             }
         }
 
@@ -265,9 +265,9 @@ namespace Zilon.Core.Persons
             keyPointList.Add(keyPoint);
         }
 
-        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint[] keyPoints)
+        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeySegment[] keySegments)
         {
-            var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
+            var args = new SurvivalStatChangedEventArgs(stat, keySegments);
             StatCrossKeyValue?.Invoke(this, args);
         }
 

@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Auxiliary;
+using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Tests.Persons.Auxiliary
 {

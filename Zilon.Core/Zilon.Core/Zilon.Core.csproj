@@ -133,9 +133,12 @@
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\ClassHumanPersonFactory.cs" />
     <Compile Include="Persons\RandomHumanPersonFactory.cs" />
-    <Compile Include="Persons\SurvivalRandomSource.cs" />
+    <Compile Include="Common\SegmentHelper.cs" />
+    <Compile Include="Persons\Survival\SurvivalRandomSource.cs" />
     <Compile Include="Persons\HpSurvivalStat.cs" />
-    <Compile Include="Persons\SurvivalStatBonus.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatBonus.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatKeySegment.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatKeySegmentExtensions.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
@@ -274,7 +277,7 @@
     <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
-    <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobExecutable.cs" />
@@ -289,11 +292,10 @@
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\HumanSurvivalData.cs" />
-    <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
-    <Compile Include="Persons\SurvivalStatHazardLevel.cs" />
-    <Compile Include="Persons\SurvivalStat.cs" />
-    <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
-    <Compile Include="Persons\SurvivalStatType.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatHazardLevel.cs" />
+    <Compile Include="Persons\Survival\SurvivalStat.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatChangedEventArgs.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatType.cs" />
     <Compile Include="Components\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IDropTableModificatorScheme.cs" />
@@ -530,8 +532,6 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persons\HumanPersonGeneration\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

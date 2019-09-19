@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 using JetBrains.Annotations;
+using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons.Auxiliary
 {

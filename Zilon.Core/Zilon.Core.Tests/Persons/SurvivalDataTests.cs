@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.Persons.TestCases;
@@ -78,8 +79,8 @@ namespace Zilon.Core.Tests.Persons
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
                     args.Stat.Type == STAT_TYPE &&
-                    args.KeyPoints.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE &&
-                    args.KeyPoints.FirstOrDefault().Value == EXPECTED_SURVIVAL_STAT_KEYPOINT);
+                    args.KeySegments.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE &&
+                    args.KeySegments.FirstOrDefault().Value == EXPECTED_SURVIVAL_STAT_KEYPOINT);
             }
         }
 
@@ -151,8 +152,8 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
-                    args.KeyPoints.FirstOrDefault().Value == 0);
+                    args.KeySegments.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
+                    args.KeySegments.FirstOrDefault().Value == 0);
             }
         }
 
@@ -180,8 +181,8 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
-                    args.KeyPoints.FirstOrDefault().Value == stat2.KeyPoints[1].Value);
+                    args.KeySegments.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
+                    args.KeySegments.FirstOrDefault().Value == stat2.KeyPoints[1].Value);
             }
         }
 
