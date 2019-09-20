@@ -45,7 +45,79 @@ jobs:
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
           name: Build
-          command: chmod +x .circleci/build.sh && .circleci/build.sh
+          command: chmod +x .circleci/buildWindows64.sh && .circleci/buildWindows64.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r LAST.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: LAST.zip
+  build_Win_x32:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-windows
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git 
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildWindows32.sh && .circleci/buildWindows32.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r LAST.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: LAST.zip
+  build_Linux_x64:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-windows
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git 
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildLinux64.sh && .circleci/buildLinux64.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r LAST.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: LAST.zip
+  build_Linux_x32:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-windows
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git 
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildLinux32.sh && .circleci/buildLinux32.sh
       - run:
           name: Zipping build
           command: apt update && apt -y install zip && zip -r LAST.zip ./Zilon.Client/Builds/*
