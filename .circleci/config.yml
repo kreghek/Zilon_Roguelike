@@ -192,6 +192,11 @@ workflows:
 #                - /release-.*/
 #          requires:
 #            - build
+      - deploy:
+          requires:
+            - build_Win_x64
+            - build_Win_x32
+            - build_Linux_x64
   nightly:
     triggers:
       - schedule:
