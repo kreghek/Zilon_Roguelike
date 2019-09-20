@@ -46,10 +46,9 @@ jobs:
       - run:
           name: Build
           command: chmod +x .circleci/build.sh && .circleci/build.sh
-      - run: dir ./Builds/
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r LAST.zip ./Builds/*
+          command: apt update && apt -y install zip && zip -r LAST.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: LAST.zip
   
