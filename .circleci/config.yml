@@ -129,14 +129,14 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_Linux32.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_Linux32.zip
-    deploy:
-      docker:
-        - image: alpine:latest
-      steps:
-        - attach_workspace:
-            at: /root/
-        - store_artifacts:
-          path: /root/LAST_Win64.zip
+  deploy:
+    docker:
+      - image: alpine:latest
+    steps:
+      - attach_workspace:
+          at: /root/
+      - store_artifacts:
+        path: /root/LAST_Win64.zip
   
 workflows:
   version: 2
