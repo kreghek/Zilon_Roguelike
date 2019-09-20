@@ -9,6 +9,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
@@ -109,17 +110,7 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            var stat = survival.Stats.Single(x => x.Type == statType);
-            var oldValue = stat.Value;
-
             survival.SetStatForce(statType, statValue);
-
-            var keyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, statValue);
-
-            var survivalRandomSource = Context.Container.GetInstance<ISurvivalRandomSource>();
-            var effect = new SurvivalStatHazardEffect(statType, keyPoints.First().Level, survivalRandomSource);
-
-            actor.Person.Effects.Add(effect);
         }
 
         [Given(@"Актёр имеет эффект (.*)")]

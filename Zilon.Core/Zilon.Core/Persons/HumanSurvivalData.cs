@@ -243,7 +243,7 @@ namespace Zilon.Core.Persons
             {
                 Type = type,
                 Rate = 1,
-                KeyPoints = keySegmentList.ToArray()
+                KeySegments = keySegmentList.ToArray()
             };
 
             return stat;
@@ -261,8 +261,8 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var keyPoint = new SurvivalStatKeySegment(segmentLevel, schemeKeySegment.Start);
-            keyPointList.Add(keyPoint);
+            var keySegment = new SurvivalStatKeySegment(schemeKeySegment.Start, schemeKeySegment.End, segmentLevel);
+            keyPointList.Add(keySegment);
         }
 
         private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeySegment[] keySegments)

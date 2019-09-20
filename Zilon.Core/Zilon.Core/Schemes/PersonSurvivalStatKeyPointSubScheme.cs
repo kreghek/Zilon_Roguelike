@@ -11,6 +11,10 @@ namespace Zilon.Core.Schemes
         public PersonSurvivalStatKeypointLevel Level { get; private set; }
 
         [JsonProperty]
-        public int Start { get; private set; }
+        public float Start { get; private set; }
+
+        [JsonProperty]
+        public float End { get; private set; }
+        
     }
 }
