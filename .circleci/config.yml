@@ -151,6 +151,33 @@ workflows:
                 - /release-.*/
           requires:
             - build
+      - build_Win_x32:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+      - build_Linux_x64:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+      - build_Linux_x32:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
   nightly:
     triggers:
       - schedule:
