@@ -132,7 +132,7 @@ jobs:
     steps:
       - run: mkdir -p ./builds
       - persist_to_workspace:
-          root: client
+          root: builds
           paths:
             - ./*
   deploy:
