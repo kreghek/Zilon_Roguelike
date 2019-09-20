@@ -51,6 +51,10 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_Win64.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_Win64.zip
+      - persist_to_workspace:
+          root: /root
+          paths:
+            - ./LAST_Win64.zip
   build_Win_x32:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
@@ -125,6 +129,14 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_Linux32.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_Linux32.zip
+    deploy:
+      docker:
+        - image: alpine:latest
+      steps:
+        - attach_workspace:
+            at: /root/
+        - store_artifacts:
+          path: /root/LAST_Win64.zip
   
 workflows:
   version: 2
