@@ -165,3 +165,12 @@ workflows:
       - build_Win_x64:
           requires:
             - build
+      - build_Win_x32:
+          requires:
+            - build
+      - build_Linux_x64:
+          requires:
+            - build
+      - build_Linux_x32:
+          requires:
+            - build
