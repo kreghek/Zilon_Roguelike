@@ -35,7 +35,7 @@ namespace Zilon.Core.Persons.Survival
             }
 
             var intersectedKeySegments = survivalStatKeySegments
-                .Where(x => SegmentHelper.IsIntersects(normStart, normEnd, x.Start, x.End))
+                .Where(x => SegmentHelper.IsIntersects(normStart, normEnd, x.Start, x.End - float.MinValue))
                 .ToArray();
 
             var totalIntersectedKeySegments = intersectedKeySegments;
