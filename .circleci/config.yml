@@ -56,14 +56,14 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - build:
         filters:
           branches:
             only:
               - master
               - circle-ci
               - /release-*/
-      - test_45
+      - test_45:
         filters:
           branches:
             only:
