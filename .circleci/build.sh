@@ -22,7 +22,7 @@ ${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x2
   -quit \
   -batchmode \
   -buildWindows64Player ${BUILD_PATH}LAST.exe \
-  -logFile /dev/stdout
+  -logFile /dev/stdout \
   -stackTraceLogType Full
 
 UNITY_EXIT_CODE=$?
