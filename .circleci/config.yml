@@ -62,7 +62,7 @@ workflows:
             only:
               - master
               - circle-ci
-              - /release-*/
+              - /release-.*/
       - test_45:
         filters:
           branches:
@@ -76,7 +76,7 @@ workflows:
             only:
               - master
               - circle-ci
-              - /release-*/
+              - /release-.*/
           requires:
             - build
   nightly:
