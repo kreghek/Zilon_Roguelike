@@ -136,7 +136,7 @@ jobs:
       - attach_workspace:
           at: /root/
       - store_artifacts:
-        path: /root/LAST_Win64.zip
+          path: /root/LAST_Win64.zip
   
 workflows:
   version: 2
