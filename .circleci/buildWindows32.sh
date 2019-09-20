@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROJECT_PATH=/root/project/Zilon.Client
-BUILD_TARGET=StandaloneWindows64
+BUILD_TARGET=StandaloneWindows32
 BUILD_NAME=LAST
 
 
