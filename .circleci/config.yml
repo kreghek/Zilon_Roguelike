@@ -130,7 +130,7 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
-      - run: mkdir -p ./builds
+      - run: mkdir -p /client/builds
       - persist_to_workspace:
           root: builds
           paths:
