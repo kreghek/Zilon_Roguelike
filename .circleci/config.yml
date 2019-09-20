@@ -1,6 +1,11 @@
 version: 2
 jobs:
   build:
+    branches:
+        only:
+          - master
+          - circle-ci
+          - /release-*/
     working_directory: /core-builds
     docker:
       - image: mono:latest
@@ -15,6 +20,11 @@ jobs:
           paths:
             - ./*
   test_45:
+    branches:
+        only:
+          - master
+          - circle-ci
+          - /release-*/    
     working_directory: /test45
     docker:
       - image: mono:latest
@@ -28,6 +38,11 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   build_Win_x64:
+    branches:
+        only:
+          - master
+          - circle-ci
+          - /release-*/
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
     steps:
