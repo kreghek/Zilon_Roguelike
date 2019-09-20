@@ -57,26 +57,26 @@ workflows:
   commit:
     jobs:
       - build:
-        filters:
-          branches:
-            only:
-              - master
-              - circle-ci
-              - /release-.*/
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
       - test_45:
-        filters:
-          branches:
-            only:
-              - master
-              - circle-ci
-              - /release-*/
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-*/
       - build_Win_x64:
-        filters:
-          branches:
-            only:
-              - master
-              - circle-ci
-              - /release-.*/
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
           requires:
             - build
   nightly:
