@@ -128,18 +128,16 @@ jobs:
   pre_deploy:
     working_directory: /client
     docker:
-      #TODO Вытягивать менее тяжеловесный контейнер
-      - image: gableroux/unity3d:2019.2.5f1-windows
+      - image: alpine:latest
     steps:
       - run: mkdir -p ./builds
       - persist_to_workspace:
-          root: builds
+          root: client
           paths:
             - ./*
   deploy:
     docker:
-      #TODO Вытягивать менее тяжеловесный контейнер
-      - image: gableroux/unity3d:2019.2.5f1-windows
+      - image: alpine:latest
     steps:
       - attach_workspace:
           at: /client/builds
