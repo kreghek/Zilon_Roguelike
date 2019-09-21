@@ -126,7 +126,6 @@
     <Compile Include="Persons\IEvolutionDataExtensions.cs" />
     <Compile Include="Persons\IHumanPersonFactory.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
-    <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
