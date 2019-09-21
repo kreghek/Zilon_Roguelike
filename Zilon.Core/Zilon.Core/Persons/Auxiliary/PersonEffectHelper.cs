@@ -37,8 +37,10 @@ namespace Zilon.Core.Persons.Auxiliary
 
             var currentSegments = keySegments.CalcIntersectedSegments(stat.ValueShare, stat.ValueShare);
 
-            // Точка может попадать только в один ключевой сегмент.
-            var currentSegment = currentSegments.SingleOrDefault();
+            // Если попадаем на стык с двумя сегментами, просто берём первый.
+            // Иногда это будет давать более сильный штрафной эффект,
+            // но пока не понятно, как по другому сделать отрезки.
+            var currentSegment = currentSegments.FirstOrDefault();
 
             if (currentTypeEffect != null)
             {
