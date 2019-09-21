@@ -252,7 +252,7 @@ namespace Zilon.Core.Persons
         private static void AddKeyPointFromScheme(
             SurvivalStatHazardLevel segmentLevel,
             PersonSurvivalStatKeypointLevel schemeSegmentLevel,
-            IPersonSurvivalStatKeyPointSubScheme[] keyPoints,
+            IPersonSurvivalStatKeySegmentSubScheme[] keyPoints,
             List<SurvivalStatKeySegment> keyPointList)
         {
             var schemeKeySegment = GetKeyPointSchemeValue(schemeSegmentLevel, keyPoints);
@@ -288,9 +288,9 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static IPersonSurvivalStatKeyPointSubScheme GetKeyPointSchemeValue(
+        private static IPersonSurvivalStatKeySegmentSubScheme GetKeyPointSchemeValue(
             PersonSurvivalStatKeypointLevel level,
-            IPersonSurvivalStatKeyPointSubScheme[] keyPoints)
+            IPersonSurvivalStatKeySegmentSubScheme[] keyPoints)
         {
             return keyPoints.SingleOrDefault(x => x.Level == level);
         }

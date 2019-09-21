@@ -47,15 +47,15 @@ namespace Zilon.Core.Tests.Schemes
             factPersonScheme.SurvivalStats[0].StartValue.Should().Be(50);
 
             var expectedKeyPoints = new[] {
-                new TestPersonSurvivalStatKeyPointSubScheme{
+                new TestPersonSurvivalStatKeySegmentSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Lesser,
                     Start = -60
                 },
-                new TestPersonSurvivalStatKeyPointSubScheme{
+                new TestPersonSurvivalStatKeySegmentSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Strong,
                     Start = -360
                 },
-                new TestPersonSurvivalStatKeyPointSubScheme{
+                new TestPersonSurvivalStatKeySegmentSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Max,
                     Start = -2520
                 },

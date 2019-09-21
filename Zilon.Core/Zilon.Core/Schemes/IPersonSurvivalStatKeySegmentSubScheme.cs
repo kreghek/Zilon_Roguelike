@@ -9,7 +9,7 @@
     /// Начальное значение меньше или равно конечному.
     /// </remarks>
     //TODO Проверять корректность в тестах схем.
-    public interface IPersonSurvivalStatKeyPointSubScheme
+    public interface IPersonSurvivalStatKeySegmentSubScheme
     {
         /// <summary>
         /// Уровень ключевой точки.
