@@ -43,24 +43,27 @@ namespace Zilon.Core.Tests.Schemes
             // Может не совпадать с фактическими значениями в боевой схеме.
             factPersonScheme.SurvivalStats[0].Type.Should().Be(PersonSurvivalStatType.Satiety);
             factPersonScheme.SurvivalStats[0].MinValue.Should().Be(-3000);
-            factPersonScheme.SurvivalStats[0].MaxValue.Should().Be(150);
-            factPersonScheme.SurvivalStats[0].StartValue.Should().Be(50);
+            factPersonScheme.SurvivalStats[0].MaxValue.Should().Be(500);
+            factPersonScheme.SurvivalStats[0].StartValue.Should().Be(250);
 
-            var expectedKeyPoints = new[] {
+            var expectedKeySegments = new[] {
                 new TestPersonSurvivalStatKeySegmentSubScheme{
-                    Level = PersonSurvivalStatKeypointLevel.Lesser,
-                    Start = -60
+                    Level = PersonSurvivalStatKeypointLevel.Max,
+                    Start = 0,
+                    End = 0.14f
                 },
                 new TestPersonSurvivalStatKeySegmentSubScheme{
                     Level = PersonSurvivalStatKeypointLevel.Strong,
-                    Start = -360
+                    Start = 0.14f,
+                    End = 0.75f
                 },
                 new TestPersonSurvivalStatKeySegmentSubScheme{
-                    Level = PersonSurvivalStatKeypointLevel.Max,
-                    Start = -2520
+                    Level = PersonSurvivalStatKeypointLevel.Lesser,
+                    Start = 0.75f,
+                    End = 0.86f
                 },
             };
-            factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeyPoints);
+            factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeySegments);
         }
     }
 }
