@@ -258,20 +258,23 @@ namespace Zilon.Core.Tests.Persons
                         MaxValue = 100,
                         StartValue = 0,
                         KeyPoints = new []{
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0
+                                Start = 0.25f,
+                                End = 0.75f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = -25
+                                Start = 0.12f,
+                                End = 0.25f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = -75
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     },
@@ -283,20 +286,23 @@ namespace Zilon.Core.Tests.Persons
                         MaxValue = 100,
                         StartValue = 0,
                         KeyPoints = new []{
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0
+                                Start = 0.25f,
+                                End = 0.75f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = -25
+                                Start = 0.12f,
+                                End = 0.25f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = -75
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     }
