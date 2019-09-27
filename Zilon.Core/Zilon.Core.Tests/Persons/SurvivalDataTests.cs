@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
         /// </summary>
         [Test]
-        public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
+        public void Update_StatInsideKeySegment_RaiseEventWithCorrectValues()
         {
             // ARRANGE
             const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
@@ -127,63 +127,6 @@ namespace Zilon.Core.Tests.Persons
 
             // ASSERT
             return survivalStats[0].Value;
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
-        /// </summary>
-        [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues()
-        {
-            // ARRANGE
-            var survivalData = CreateSurvivalData();
-
-            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = -1;
-
-
-
-            // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.RestoreStat(SurvivalStatType.Satiety, 1);
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
-                    .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeySegments.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser);
-            }
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
-        /// </summary>
-        [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues2()
-        {
-            // ARRANGE
-            var survivalData = CreateSurvivalData();
-
-            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = stat.KeyPoints[1].Value;
-            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Hydration);
-            stat2.Value = stat2.KeyPoints[1].Value;
-
-            // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.RestoreStat(SurvivalStatType.Hydration, 3);
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
-                    .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeySegments.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
-                    args.KeySegments.FirstOrDefault().Value == stat2.KeyPoints[1].Value);
-            }
         }
 
         /// <summary>
