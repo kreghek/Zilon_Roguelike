@@ -188,7 +188,8 @@ namespace Zilon.Core.Persons
 
             if (intersectedKeySegments.Any())
             {
-                DoStatCrossKeyPoint(stat, intersectedKeySegments);
+                var lastIntersected = intersectedKeySegments.Last();
+                DoStatCrossKeyPoint(stat, new[] { lastIntersected });
             }
         }
 

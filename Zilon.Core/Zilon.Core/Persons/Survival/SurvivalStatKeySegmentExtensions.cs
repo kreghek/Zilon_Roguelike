@@ -17,34 +17,23 @@ namespace Zilon.Core.Persons.Survival
         /// <param name="startStatValueShare"> Начальное значение характеристики выживания. </param>
         /// <param name="endStatValueShare"> Изменённое значение характеристики выживания. </param>
         /// <returns> Возвращает набор пересеченных сегментов в порядке их пересечения. </returns>
-        public static SurvivalStatKeySegment[] CalcIntersectedSegments(
+        public static IEnumerable<SurvivalStatKeySegment> CalcIntersectedSegments(
             this IEnumerable<SurvivalStatKeySegment> survivalStatKeySegments,
             float startStatValueShare,
             float endStatValueShare)
         {
             var normStart = startStatValueShare;
             var normEnd = endStatValueShare;
-            var upRise = true;
 
             // Нам нужно гарантировать, что все начальные точки меньше или равны конечным.
             if (startStatValueShare > endStatValueShare)
             {
                 normEnd = startStatValueShare;
                 normStart = endStatValueShare;
-                upRise = false;
             }
 
-            var intersectedKeySegments = survivalStatKeySegments
-                .Where(x => SegmentHelper.IsIntersects(normStart, normEnd, x.Start, x.End))
-                .ToArray();
-
-            var totalIntersectedKeySegments = intersectedKeySegments;
-            if (!upRise)
-            {
-                totalIntersectedKeySegments = intersectedKeySegments.Reverse().ToArray();
-            }
-
-            return totalIntersectedKeySegments;
+            return survivalStatKeySegments
+                .Where(x => SegmentHelper.IsIntersects(normStart, normEnd, x.Start, x.End));
         }
     }
 }

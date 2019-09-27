@@ -123,13 +123,11 @@
     <Compile Include="Persons\EquipmentTests.cs" />
     <Compile Include="Persons\EvolutionDataTests.cs" />
     <Compile Include="Persons\HumanPersonTests.cs" />
-    <Compile Include="Persons\ISurvivalDataExtensionsTests.cs" />
     <Compile Include="Persons\MonsterPersonTests.cs" />
     <Compile Include="Persons\PerkResolverTests.cs" />
     <Compile Include="Persons\SurvivalStatTests.cs" />
     <Compile Include="Persons\SurvivalDataTests.cs" />
     <Compile Include="Persons\TestCases\EquipmentCarrierTestsCaseSource.cs" />
-    <Compile Include="Persons\TestCases\ISurvivalDataExtensionsTestCaseSource.cs" />
     <Compile Include="Persons\TestCases\SurvivalDataTestCasesSource.cs" />
     <Compile Include="Persons\TestCases\SurvivalStatTestCasesSource.cs" />
     <Compile Include="ProgressStoring\GlobeStorageDataTests.cs" />
