@@ -804,7 +804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &284634006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4528,8 +4528,7 @@ MonoBehaviour:
 
     Log Entry
 
-    Log
-    Entry'
+    Log Entry'
 --- !u!222 &2126579520
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5374,6 +5373,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 415948494916139211}
     m_Modifications:
+    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
+        type: 3}
+      propertyPath: m_Name
+      value: PropInfoPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6680245457075671535, guid: 0a72ea45d960d454894b35f094304f5f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5478,16 +5487,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
-        type: 3}
-      propertyPath: m_Name
-      value: PropInfoPopup
-      objectReference: {fileID: 0}
-    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7142680303188802009, guid: 0a72ea45d960d454894b35f094304f5f,
         type: 3}

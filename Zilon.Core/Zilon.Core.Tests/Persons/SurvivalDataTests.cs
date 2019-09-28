@@ -78,7 +78,7 @@ namespace Zilon.Core.Tests.Persons
 
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
+                monitor.Should().Raise(nameof(ISurvivalData.StatChanged))
                     .WithArgs<SurvivalStatChangedEventArgs>(args =>
                     args.Stat.Type == STAT_TYPE &&
                     args.KeySegments.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE);

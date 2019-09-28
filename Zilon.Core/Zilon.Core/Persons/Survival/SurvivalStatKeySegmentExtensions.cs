@@ -35,5 +35,12 @@ namespace Zilon.Core.Persons.Survival
             return survivalStatKeySegments
                 .Where(x => SegmentHelper.IsIntersects(normStart, normEnd, x.Start, x.End));
         }
+
+        public static IEnumerable<SurvivalStatKeySegment> CalcIntersectedSegments(
+            this IEnumerable<SurvivalStatKeySegment> survivalStatKeySegments,
+            float statValueShare)
+        {
+            return CalcIntersectedSegments(survivalStatKeySegments, statValueShare, statValueShare);
+        }
     }
 }

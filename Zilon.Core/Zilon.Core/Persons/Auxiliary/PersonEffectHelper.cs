@@ -29,19 +29,18 @@ namespace Zilon.Core.Persons.Auxiliary
         {
             ThrowExceptionIfArgumentsInvalid(currentEffects, stat, keySegments, survivalRandomSource);
 
-            var statType = stat.Type;
-            var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
-
             // Эффект выставляем на основе текущего ключевого сегмента, в которое попадает значение характеристики выживания.
             // Если текущее значение не попадает ни в один сегмент, то эффект сбрасывается.
 
-            var currentSegments = keySegments.CalcIntersectedSegments(stat.ValueShare, stat.ValueShare);
+            var currentSegments = keySegments.CalcIntersectedSegments(stat.ValueShare);
 
             // Если попадаем на стык с двумя сегментами, просто берём первый.
             // Иногда это будет давать более сильный штрафной эффект,
             // но пока не понятно, как по другому сделать отрезки.
             var currentSegment = currentSegments.FirstOrDefault();
 
+            var statType = stat.Type;
+            var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
             if (currentTypeEffect != null)
             {
                 // Эффект уже существует. Изменим его уровень.

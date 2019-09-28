@@ -46,6 +46,15 @@ namespace Zilon.Core.Persons
             }
 
             Stats = statList.ToArray();
+            foreach (var stat in Stats)
+            {
+                stat.Changed += Stat_Changed;
+            }
+        }
+
+        private void Stat_Changed(object sender, EventArgs e)
+        {
+            DoStatChanged((SurvivalStat)sender);
         }
 
         private static void CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
@@ -90,7 +99,7 @@ namespace Zilon.Core.Persons
         /// Событие, которое происходит, если значение характеристики
         /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
+        public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
 
         /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;
@@ -174,23 +183,7 @@ namespace Zilon.Core.Persons
 
             stat.Value += value;
 
-            if (stat.KeySegments != null)
-            {
-                CheckStatKeyPoints(stat, oldValueShare);
-            }
-
             ProcessIfHealth(stat);
-        }
-
-        private void CheckStatKeyPoints(SurvivalStat stat, float oldValueShare)
-        {
-            var intersectedKeySegments = stat.KeySegments.CalcIntersectedSegments(oldValueShare, stat.ValueShare);
-
-            if (intersectedKeySegments.Any())
-            {
-                var lastIntersected = intersectedKeySegments.Last();
-                DoStatCrossKeyPoint(stat, new[] { lastIntersected });
-            }
         }
 
         /// <summary>
@@ -266,10 +259,10 @@ namespace Zilon.Core.Persons
             keyPointList.Add(keySegment);
         }
 
-        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeySegment[] keySegments)
+        private void DoStatChanged(SurvivalStat stat)
         {
-            var args = new SurvivalStatChangedEventArgs(stat, keySegments);
-            StatCrossKeyValue?.Invoke(this, args);
+            var args = new SurvivalStatChangedEventArgs(stat);
+            StatChanged?.Invoke(this, args);
         }
 
 

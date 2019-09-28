@@ -15,24 +15,16 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Конструктор.
         /// </summary>
-        /// <param name="stat"></param>
-        /// <param name="keySegments"></param>
+        /// <param name="stat">Характеристика, которая была изменена.</param>
         [ExcludeFromCodeCoverage]
-        public SurvivalStatChangedEventArgs([NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments)
+        public SurvivalStatChangedEventArgs([NotNull] SurvivalStat stat)
         {
             Stat = stat ?? throw new ArgumentNullException(nameof(stat));
-            KeySegments = keySegments ?? throw new ArgumentNullException(nameof(keySegments));
         }
 
         /// <summary>
         /// Характеристика, которая изменялась.
         /// </summary>
         public SurvivalStat Stat { get; }
-
-        /// <summary>
-        /// Ключевые сегменты, которые были пересечены.
-        /// </summary>
-        public SurvivalStatKeySegment[] KeySegments { get; }
     }
 }
