@@ -11,8 +11,8 @@ namespace Zilon.Core.Schemes
         public PersonSurvivalStatType Type { get; private set; }
 
         [JsonProperty]
-        [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatKeySegmentSubScheme[]>))]
-        public IPersonSurvivalStatKeySegmentSubScheme[] KeyPoints { get; private set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatKeyPointSubScheme[]>))]
+        public IPersonSurvivalStatKeyPointSubScheme[] KeyPoints { get; private set; }
 
         [JsonProperty]
         public int StartValue { get; private set; }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using JetBrains.Annotations;
-
-using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons.Auxiliary
 {
@@ -19,53 +18,77 @@ namespace Zilon.Core.Persons.Auxiliary
         /// </summary>
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
-        /// <param name="keySegments"> Ключевые сегменты, которые были пересечены при изменении характеристики.
+        /// <param name="keyPoints"> Ключевые точки, которые учавствуют в изменении характеристик.
+        /// Передаются ключевые точки в порядке их прохождения.</param>
         /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalEffect(
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments,
+            [NotNull] [ItemNotNull] SurvivalStatKeyPoint[] keyPoints,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
-            ThrowExceptionIfArgumentsInvalid(currentEffects, stat, keySegments, survivalRandomSource);
-
-            // Эффект выставляем на основе текущего ключевого сегмента, в которое попадает значение характеристики выживания.
-            // Если текущее значение не попадает ни в один сегмент, то эффект сбрасывается.
-
-            var currentSegments = keySegments.CalcIntersectedSegments(stat.ValueShare);
-
-            // Если попадаем на стык с двумя сегментами, просто берём первый.
-            // Иногда это будет давать более сильный штрафной эффект,
-            // но пока не понятно, как по другому сделать отрезки.
-            var currentSegment = currentSegments.FirstOrDefault();
+            CheckArguments(currentEffects, stat, keyPoints, survivalRandomSource);
 
             var statType = stat.Type;
             var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
+
+            // Эффект выставляем на основе последней проёденной ключевой точки.
+            // Потому что сюда передаются ключевые точки в порядке их прохождения.
+            var keyPoint = keyPoints.Last();
+
             if (currentTypeEffect != null)
             {
                 // Эффект уже существует. Изменим его уровень.
-                // Или удалим, если текущее значение не попадает ни в один из сегментов.
-                if (currentSegment == null)
+
+                // ! Костыль. Нужно переделать на отрезки вместо ключевых точек.
+                // Так мы определяем поведение в зависимости от характеристики.
+                // По сути, для сытости и упитости будем использовать старый алгоритм (чем ниже значение, тем выше уровень угрозы).
+                // А для интоксикации, наоборот, чем выше значение.
+                // Это возможно, потому что сейчас все ключевые точки расположены либо слева лиюо справа от нуля.
+                // Дальше нужно будет переделать на отрезки, когда будут как положительные, так и отрицательные ключевые точки.
+                // Это произойдёт, когда будет введено, например, обжорство. Ключевая точка, когда персонаж употребил слишком много еды.
+                var upRise = keyPoint.Value <= 0 ? stat.Value <= keyPoint.Value : stat.Value >= keyPoint.Value;
+
+                if (upRise)
                 {
-                    currentEffects.Remove(currentTypeEffect);
+                    currentTypeEffect.Level = keyPoint.Level;
                 }
                 else
                 {
-                    currentTypeEffect.Level = currentSegment.Level;
+                    if (keyPoint.Level == SurvivalStatHazardLevel.Lesser)
+                    {
+                        currentEffects.Remove(currentTypeEffect);
+                    }
+                    else
+                    {
+                        switch (keyPoint.Level)
+                        {
+                            case SurvivalStatHazardLevel.Strong:
+                                currentTypeEffect.Level = SurvivalStatHazardLevel.Lesser;
+                                break;
+
+                            case SurvivalStatHazardLevel.Max:
+                                currentTypeEffect.Level = SurvivalStatHazardLevel.Strong;
+                                break;
+
+                            case SurvivalStatHazardLevel.Undefined:
+                            case SurvivalStatHazardLevel.Lesser:
+                            default:
+                                // Для Lesser уже выполняется обработка выше.
+                                // Для остальных уровней - в отдельных блоках case.
+                                throw new NotSupportedException("Уровень эффекта, который не обрабатывается.");
+                        }
+                    }
                 }
             }
             else
             {
-                if (currentSegment != null)
-                {
-                    // Создаём эффект
-                    var newEffect = new SurvivalStatHazardEffect(
-                    statType,
-                    currentSegment.Level,
+                // Создаём эффект
+                var newCurrentTypeEffect = new SurvivalStatHazardEffect(statType,
+                    keyPoint.Level,
                     survivalRandomSource);
 
-                    currentEffects.Add(newEffect);
-                }
+                currentEffects.Add(newCurrentTypeEffect);
             }
         }
 
@@ -77,9 +100,10 @@ namespace Zilon.Core.Persons.Auxiliary
         }
 
         [ExcludeFromCodeCoverage]
-        private static void ThrowExceptionIfArgumentsInvalid(EffectCollection currentEffects,
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void CheckArguments(EffectCollection currentEffects,
             SurvivalStat stat,
-            IEnumerable<SurvivalStatKeySegment> keyPoints,
+            IEnumerable<SurvivalStatKeyPoint> keyPoints,
             ISurvivalRandomSource survivalRandomSource)
         {
             if (currentEffects == null)

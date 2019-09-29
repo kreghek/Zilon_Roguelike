@@ -96,11 +96,11 @@ public class PropInfoPopup : MonoBehaviour
                     {
                         var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
                         var actName = act.Name.En ?? act.Name.Ru;
-                        var efficient = GetEfficientString(act);
+                        var efficient = $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
                         if (act.Stats.Effect == TacticalActEffectType.Damage)
                         {
                             var actImpact = act.Stats.Offence.Impact;
-                            descriptionLines.Add($"{actName}: {actImpact} {efficient} efficient ({act.Stats.Offence.ApRank} rank)");
+                            descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offence.ApRank} rank)");
                         }
                         else if (act.Stats.Effect == TacticalActEffectType.Heal)
                         {
@@ -142,25 +142,6 @@ public class PropInfoPopup : MonoBehaviour
                 }
 
                 break;
-        }
-    }
-
-    private static string GetEfficientString(ITacticalActScheme act)
-    {
-        var efficient = act.Stats.Efficient;
-        var maxEfficientValue = efficient.Count * efficient.Dice;
-
-        if (maxEfficientValue <= 5)
-        {
-            return "low";
-        }
-        else if (6 <= maxEfficientValue && maxEfficientValue <= 8)
-        {
-            return "normal";
-        }
-        else
-        {
-            return "high";
         }
     }
 
