@@ -153,6 +153,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
       - build_Win_x32:
           filters:
             branches:
@@ -162,6 +163,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
       - build_Linux_x64:
           filters:
             branches:
@@ -171,6 +173,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
 #      - build_Linux_x32:
 #          filters:
 #            branches:
@@ -180,6 +183,7 @@ workflows:
 #                - /release-.*/
 #          requires:
 #            - build
+#            - test_45
   nightly:
     triggers:
       - schedule:
@@ -195,12 +199,16 @@ workflows:
       - build_Win_x64:
           requires:
             - build
+            - test_45
       - build_Win_x32:
           requires:
             - build
+            - test_45
       - build_Linux_x64:
           requires:
             - build
+            - test_45
 #      - build_Linux_x32:
 #          requires:
 #            - build
+#            - test_45
