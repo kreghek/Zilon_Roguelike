@@ -51,7 +51,7 @@
     <Compile Include="Schemes\TestLocationScheme.cs" />
     <Compile Include="Schemes\TestPerkScheme.cs" />
     <Compile Include="Schemes\TestPersonScheme.cs" />
-    <Compile Include="Schemes\TestPersonSurvivalStatKeyPointSubScheme.cs" />
+    <Compile Include="Schemes\TestPersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\TestPersonSurvivalStatSubScheme.cs" />
     <Compile Include="Schemes\TestPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\TestPropBulletSubScheme.cs" />

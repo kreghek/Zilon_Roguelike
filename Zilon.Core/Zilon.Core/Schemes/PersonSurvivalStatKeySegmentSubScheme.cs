@@ -5,12 +5,16 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Базовая реализация подсхемы ключевой точки характеристики выживания.
     /// </summary>
-    public sealed class PersonSurvivalStatKeyPointSubScheme : IPersonSurvivalStatKeyPointSubScheme
+    public sealed class PersonSurvivalStatKeySegmentSubScheme : IPersonSurvivalStatKeySegmentSubScheme
     {
         [JsonProperty]
         public PersonSurvivalStatKeypointLevel Level { get; private set; }
 
         [JsonProperty]
-        public int Value { get; private set; }
+        public float Start { get; private set; }
+
+        [JsonProperty]
+        public float End { get; private set; }
+        
     }
 }

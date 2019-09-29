@@ -31,20 +31,23 @@
     {
       "Type": "Satiety",
       "MinValue": -3000,
-      "MaxValue": 150,
-      "StartValue": 50,
+      "MaxValue": 500,
+      "StartValue": 250,
       "KeyPoints": [
         {
-          "Level": "Lesser",
-          "Value": -60
+          "Level": "Max",
+          "Start": 0,
+          "End": 0.14
         },
         {
           "Level": "Strong",
-          "Value": -360
+          "Start": 0.14,
+          "End": 0.75
         },
         {
-          "Level": "Max",
-          "Value": -2520
+          "Level": "Lesser",
+          "Start": 0.75,
+          "End": 0.86
         }
       ]
     }

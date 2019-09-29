@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Persons.Auxiliary;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -77,7 +78,7 @@ namespace Zilon.Core.Persons
             TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
-            Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+            Survival.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
         }
 
@@ -593,7 +594,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoints, _survivalRandomSource);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.Stat.KeySegments, _survivalRandomSource);
         }
 
 
