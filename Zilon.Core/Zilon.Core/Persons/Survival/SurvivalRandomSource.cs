@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons
 {
