@@ -1341,6 +1341,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 71150996}
     m_Modifications:
+    - target: {fileID: 1747365516061224, guid: a7048ab047ca87f4484bd8908232d163, type: 3}
+      propertyPath: m_Name
+      value: HpBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1747365516061224, guid: a7048ab047ca87f4484bd8908232d163, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224829893533863880, guid: a7048ab047ca87f4484bd8908232d163,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1446,10 +1454,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1747365516061224, guid: a7048ab047ca87f4484bd8908232d163, type: 3}
-      propertyPath: m_Name
-      value: HpBar
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7048ab047ca87f4484bd8908232d163, type: 3}
 --- !u!224 &1738120500 stripped
@@ -1549,6 +1553,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1632448946}
     m_Modifications:
+    - target: {fileID: 1598396234148746, guid: cc306c34acabd0c4baf8c060e9487004, type: 3}
+      propertyPath: m_Name
+      value: PersonEffects
+      objectReference: {fileID: 0}
     - target: {fileID: 224013231738973734, guid: cc306c34acabd0c4baf8c060e9487004,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1654,10 +1662,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1598396234148746, guid: cc306c34acabd0c4baf8c060e9487004, type: 3}
-      propertyPath: m_Name
-      value: PersonEffects
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc306c34acabd0c4baf8c060e9487004, type: 3}
 --- !u!224 &1882416875 stripped
@@ -1711,7 +1715,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
