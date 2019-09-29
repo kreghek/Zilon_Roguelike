@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
-using Zilon.Core.Persons.Survival;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -46,15 +46,6 @@ namespace Zilon.Core.Persons
             }
 
             Stats = statList.ToArray();
-            foreach (var stat in Stats)
-            {
-                stat.Changed += Stat_Changed;
-            }
-        }
-
-        private void Stat_Changed(object sender, EventArgs e)
-        {
-            DoStatChanged((SurvivalStat)sender);
         }
 
         private static void CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
@@ -71,7 +62,7 @@ namespace Zilon.Core.Persons
 
         private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)
         {
-            var hpStat = new HpSurvivalStat(personScheme.Hp, 0, personScheme.Hp)
+            var hpStat = new SurvivalStat(personScheme.Hp, 0, personScheme.Hp)
             {
                 Type = SurvivalStatType.Health
             };
@@ -99,7 +90,7 @@ namespace Zilon.Core.Persons
         /// Событие, которое происходит, если значение характеристики
         /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
+        public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
 
         /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;
@@ -179,11 +170,26 @@ namespace Zilon.Core.Persons
 
         private void ChangeStatInner(SurvivalStat stat, int value)
         {
-            var oldValueShare = stat.ValueShare;
+            var oldValue = stat.Value;
 
             stat.Value += value;
 
+            if (stat.KeyPoints != null)
+            {
+                CheckStatKeyPoints(stat, oldValue);
+            }
+
             ProcessIfHealth(stat);
+        }
+
+        private void CheckStatKeyPoints(SurvivalStat stat, int oldValue)
+        {
+            var crossedKeyPoints = stat.KeyPoints.CalcKeyPointsInRange(oldValue, stat.Value);
+
+            if (crossedKeyPoints.Any())
+            {
+                DoStatCrossKeyPoint(stat, crossedKeyPoints);
+            }
         }
 
         /// <summary>
@@ -218,12 +224,12 @@ namespace Zilon.Core.Persons
                 return null;
             }
 
-            var keySegmentList = new List<SurvivalStatKeySegment>();
+            var keyPointList = new List<SurvivalStatKeyPoint>();
             if (statScheme.KeyPoints != null)
             {
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keySegmentList);
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keySegmentList);
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keySegmentList);
+                AddKeyPoint(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keyPointList);
+                AddKeyPoint(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keyPointList);
+                AddKeyPoint(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keyPointList);
 
                 //Ниже пока не актуально. Алгоритм работает так, что ему не важен порядок ключевых точек.
                 //// По условиям работы с о схемами, в схемах ключевые значения
@@ -237,32 +243,32 @@ namespace Zilon.Core.Persons
             {
                 Type = type,
                 Rate = 1,
-                KeySegments = keySegmentList.ToArray()
+                KeyPoints = keyPointList.ToArray()
             };
 
             return stat;
         }
 
-        private static void AddKeyPointFromScheme(
-            SurvivalStatHazardLevel segmentLevel,
-            PersonSurvivalStatKeypointLevel schemeSegmentLevel,
-            IPersonSurvivalStatKeySegmentSubScheme[] keyPoints,
-            List<SurvivalStatKeySegment> keyPointList)
+        private static void AddKeyPoint(
+            SurvivalStatHazardLevel max1,
+            PersonSurvivalStatKeypointLevel max2,
+            IPersonSurvivalStatKeyPointSubScheme[] keyPoints,
+            List<SurvivalStatKeyPoint> keyPointList)
         {
-            var schemeKeySegment = GetKeyPointSchemeValue(schemeSegmentLevel, keyPoints);
-            if (schemeKeySegment == null)
+            var schemeKeyPoint = GetKeyPointSchemeValue(max2, keyPoints);
+            if (schemeKeyPoint == null)
             {
                 return;
             }
 
-            var keySegment = new SurvivalStatKeySegment(schemeKeySegment.Start, schemeKeySegment.End, segmentLevel);
-            keyPointList.Add(keySegment);
+            var keyPoint = new SurvivalStatKeyPoint(max1, schemeKeyPoint.Value);
+            keyPointList.Add(keyPoint);
         }
 
-        private void DoStatChanged(SurvivalStat stat)
+        private void DoStatCrossKeyPoint(SurvivalStat stat, SurvivalStatKeyPoint[] keyPoints)
         {
-            var args = new SurvivalStatChangedEventArgs(stat);
-            StatChanged?.Invoke(this, args);
+            var args = new SurvivalStatChangedEventArgs(stat, keyPoints);
+            StatCrossKeyValue?.Invoke(this, args);
         }
 
 
@@ -282,11 +288,9 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static IPersonSurvivalStatKeySegmentSubScheme GetKeyPointSchemeValue(
-            PersonSurvivalStatKeypointLevel level,
-            IPersonSurvivalStatKeySegmentSubScheme[] keyPoints)
+        private static int? GetKeyPointSchemeValue(PersonSurvivalStatKeypointLevel level, IPersonSurvivalStatKeyPointSubScheme[] keyPoints)
         {
-            return keyPoints.SingleOrDefault(x => x.Level == level);
+            return keyPoints.SingleOrDefault(x => x.Level == level)?.Value;
         }
     }
 }

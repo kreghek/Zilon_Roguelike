@@ -1,11 +1,11 @@
 ﻿using Zilon.Core.Common;
 
-namespace Zilon.Core.Persons.Survival
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Текущие показатели характеристики модуля выживания.
     /// </summary>
-    public class SurvivalStat : Stat
+    public sealed class SurvivalStat: Stat
     {
         /// <summary>
         /// Значение броска по умолчанию для снижения характеристики.
@@ -19,7 +19,7 @@ namespace Zilon.Core.Persons.Survival
         /// <param name="startValue"> Начальное значение. Должно быть в диапазоне [min, max]. </param>
         /// <param name="min"> Минимальное значение статы. </param>
         /// <param name="max"> Минимальное значение статы. </param>
-        public SurvivalStat(int startValue, int min, int max) : base(startValue, min, max)
+        public SurvivalStat(int startValue, int min, int max): base(startValue, min, max)
         {
             DownPassRoll = DEFAULT_DOWN_PASS_VALUE;
         }
@@ -40,9 +40,11 @@ namespace Zilon.Core.Persons.Survival
         /// </summary>
         public int DownPassRoll { get; set; }
 
-        /// <summary>
-        /// Ключевые сегменты характеристики.
+        /// <summary> Набор ключевых точек характеристики.
+        /// Внимание!
+        /// Сейчас все ключевые чтоки должны быть либо слева от нуля включая ноль.
+        /// Либо справа от нуля.
         /// </summary>
-        public SurvivalStatKeySegment[] KeySegments { get; set; }
+        public SurvivalStatKeyPoint[] KeyPoints { get; set; }
     }
 }

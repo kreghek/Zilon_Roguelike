@@ -7,7 +7,6 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -134,7 +133,8 @@ namespace Zilon.Core.Tests.Tactics
             var survivalStats = new[] {
                 new SurvivalStat(0,-10,10){
                     Type = SurvivalStatType.Satiety,
-                    Rate = 1
+                    Rate = 1,
+                    KeyPoints = new SurvivalStatKeyPoint[0]
                 }
             };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
