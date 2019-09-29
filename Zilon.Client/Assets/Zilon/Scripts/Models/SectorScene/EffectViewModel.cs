@@ -14,7 +14,6 @@ public class EffectViewModel : MonoBehaviour
     public Sprite HungerSprite;
     public Sprite ThristSprite;
     public Sprite IntoxicationSprite;
-    public Sprite InjureSprite;
 
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
@@ -37,10 +36,6 @@ public class EffectViewModel : MonoBehaviour
                 effectText = "Weak";
                 switch (Type)
                 {
-                    case SurvivalStatType.Health:
-                        effectText += " Injury";
-                        break;
-
                     case SurvivalStatType.Satiety:
                         effectText += " Hunger";
                             break;
@@ -60,10 +55,6 @@ public class EffectViewModel : MonoBehaviour
             case SurvivalStatHazardLevel.Strong:
                 switch (Type)
                 {
-                    case SurvivalStatType.Health:
-                        effectText += "Strong Injury";
-                        break;
-
                     case SurvivalStatType.Satiety:
                         effectText = "Hunger";
                         break;
@@ -83,10 +74,6 @@ public class EffectViewModel : MonoBehaviour
             case SurvivalStatHazardLevel.Max:
                 switch (Type)
                 {
-                    case SurvivalStatType.Health:
-                        effectText = "Vital Wound!";
-                        break;
-
                     case SurvivalStatType.Satiety:
                         effectText = "Starvation!";
                         break;
@@ -131,10 +118,6 @@ public class EffectViewModel : MonoBehaviour
     {
         switch (type)
         {
-            case SurvivalStatType.Health:
-                EffectIcon.sprite = InjureSprite;
-                break;
-
             case SurvivalStatType.Satiety:
                 EffectIcon.sprite = HungerSprite;
                 break;

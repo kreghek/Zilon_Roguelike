@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Persons.Survival;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     public interface ISurvivalRandomSource
     {

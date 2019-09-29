@@ -1,5 +1,4 @@
 ﻿using System;
-using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons
 {
@@ -57,8 +56,8 @@ namespace Zilon.Core.Persons
 
         /// <summary>
         /// Событие, которое происходит, если значение характеристики
-        /// изменяется.
+        /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
+        event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
     }
 }

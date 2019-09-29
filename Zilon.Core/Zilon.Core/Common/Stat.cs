@@ -12,7 +12,6 @@ namespace Zilon.Core.Common
     /// </remarks>
     public class Stat
     {
-        private float _valueShare;
 
         /// <summary>
         /// Конструирует объект статы.
@@ -70,7 +69,7 @@ namespace Zilon.Core.Common
         /// </summary>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        public virtual void ChangeStatRange(int min, int max)
+        public void ChangeStatRange(int min, int max)
         {
             if (min >= max)
             {
@@ -85,19 +84,7 @@ namespace Zilon.Core.Common
         /// <summary>
         /// Значение в долях. Значение [0..1] в текущем диапазоне.
         /// </summary>
-        public float ValueShare
-        {
-            get => _valueShare;
-            private set
-            {
-                var wasChanged = value != _valueShare;
-                _valueShare = value;
-                if (wasChanged)
-                {
-                    Changed?.Invoke(this, new EventArgs());
-                }
-            }
-        }
+        public float ValueShare { get; private set; }
 
         /// <summary>
         /// Устанавливает текущее значение в долях.
@@ -117,10 +104,5 @@ namespace Zilon.Core.Common
 
             ValueShare = value;
         }
-
-        /// <summary>
-        /// Выстреливает каждый раз, когда значение характеристики изменяется.
-        /// </summary>
-        public event EventHandler Changed;
     }
 }

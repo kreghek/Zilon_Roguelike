@@ -126,18 +126,15 @@
     <Compile Include="Persons\IEvolutionDataExtensions.cs" />
     <Compile Include="Persons\IHumanPersonFactory.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
+    <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\ClassHumanPersonFactory.cs" />
     <Compile Include="Persons\RandomHumanPersonFactory.cs" />
-    <Compile Include="Common\SegmentHelper.cs" />
-    <Compile Include="Persons\Survival\SurvivalRandomSource.cs" />
-    <Compile Include="Persons\HpSurvivalStat.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatBonus.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatKeySegment.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatKeySegmentExtensions.cs" />
+    <Compile Include="Persons\SurvivalRandomSource.cs" />
+    <Compile Include="Persons\SurvivalStatBonus.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
@@ -162,7 +159,7 @@
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Props\IEquipmentDurableService.cs" />
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
-    <Compile Include="Schemes\IPersonSurvivalStatKeySegmentSubScheme.cs" />
+    <Compile Include="Schemes\IPersonSurvivalStatKeyPointSubScheme.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
     <Compile Include="Schemes\EquipCommonRuleType.cs" />
@@ -170,7 +167,7 @@
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
     <Compile Include="Schemes\ISectorSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatKeypointLevel.cs" />
-    <Compile Include="Schemes\PersonSurvivalStatKeySegmentSubScheme.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatKeyPointSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatType.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
@@ -276,7 +273,7 @@
     <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatHazardEffect.cs" />
+    <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobExecutable.cs" />
@@ -291,10 +288,11 @@
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\HumanSurvivalData.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatHazardLevel.cs" />
-    <Compile Include="Persons\Survival\SurvivalStat.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatChangedEventArgs.cs" />
-    <Compile Include="Persons\Survival\SurvivalStatType.cs" />
+    <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
+    <Compile Include="Persons\SurvivalStatHazardLevel.cs" />
+    <Compile Include="Persons\SurvivalStat.cs" />
+    <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
+    <Compile Include="Persons\SurvivalStatType.cs" />
     <Compile Include="Components\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IDropTableModificatorScheme.cs" />
@@ -531,6 +529,8 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persons\HumanPersonGeneration\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

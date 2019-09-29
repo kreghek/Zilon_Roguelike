@@ -35,19 +35,16 @@
       "StartValue": 250,
       "KeyPoints": [
         {
-          "Level": "Max",
-          "Start": 0,
-		  "End": 0.14
+          "Level": "Lesser",
+          "Value": 0
         },
         {
           "Level": "Strong",
-          "Start": 0.14,
-		  "End": 0.75
+          "Value": -360
         },
         {
-          "Level": "Lesser",
-          "Start": 0.75,
-		  "End": 0.86
+          "Level": "Max",
+          "Value": -2520
         }
       ]
     },
@@ -58,19 +55,16 @@
       "StartValue": 100,
       "KeyPoints": [
         {
-          "Level": "Max",
-          "Start": 0,
-		  "End": 0.14
+          "Level": "Lesser",
+          "Value": 0
         },
         {
           "Level": "Strong",
-          "Start": 0.14,
-		  "End": 0.75
+          "Value": -180
         },
         {
-          "Level": "Lesser",
-          "Start": 0.75,
-		  "End": 0.86
+          "Level": "Max",
+          "Value": -1080
         }
       ]
     },
@@ -82,18 +76,15 @@
       "KeyPoints": [
         {
           "Level": "Lesser",
-          "Start": 0.23,
-		  "End": 0.46
+          "Value": 30
         },
         {
           "Level": "Strong",
-          "Start": 0.46,
-		  "End": 0.85
+          "Value": 60
         },
         {
           "Level": "Max",
-          "Start": 0.85,
-		  "End": 1
+          "Value": 111
         }
       ]
     }
