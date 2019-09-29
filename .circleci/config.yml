@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /core-builds
     docker:
-      - image: mono:latest
+      - image: mono:6.0.0.313
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core/Zilon.Core.csproj -SolutionDirectory ./Zilon.Core
@@ -17,7 +17,7 @@ jobs:
   test_45:
     working_directory: /test45
     docker:
-      - image: mono:latest
+      - image: mono:6.0.0.313
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -153,6 +153,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
       - build_Win_x32:
           filters:
             branches:
@@ -162,6 +163,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
       - build_Linux_x64:
           filters:
             branches:
@@ -171,6 +173,7 @@ workflows:
                 - /release-.*/
           requires:
             - build
+            - test_45
 #      - build_Linux_x32:
 #          filters:
 #            branches:
@@ -180,6 +183,7 @@ workflows:
 #                - /release-.*/
 #          requires:
 #            - build
+#            - test_45
   nightly:
     triggers:
       - schedule:
@@ -191,15 +195,20 @@ workflows:
                 - beta
     jobs:
       - build
+      - test_45
       - build_Win_x64:
           requires:
             - build
+            - test_45
       - build_Win_x32:
           requires:
             - build
+            - test_45
       - build_Linux_x64:
           requires:
             - build
+            - test_45
 #      - build_Linux_x32:
 #          requires:
 #            - build
+#            - test_45
