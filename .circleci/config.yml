@@ -143,12 +143,60 @@ jobs:
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
           name: Build
-          command: chmod +x .circleci/buildLinux64.sh && .circleci/buildLinux64.sh
+          command: chmod +x .circleci/buildMacOsx64.sh && .circleci/buildMacOsx64.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_Linux64.zip ./Zilon.Client/Builds/*
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsx64.zip ./Zilon.Client/Builds/*
       - store_artifacts:
-          path: /root/LAST_Linux64.zip
+          path: /root/LAST_MacOsx64.zip
+  build_MacOS_x32:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-mac
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019-mac.x.ulf-cipher -k ${CIPHER_KEY_MAC} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git 
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildMacOsx32.sh && .circleci/buildMacOsx32.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsx32.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: /root/LAST_MacOsx32.zip
+  build_MacOS_Universal:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-mac
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019-mac.x.ulf-cipher -k ${CIPHER_KEY_MAC} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git 
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildMacOsxUniversal.sh && .circleci/buildMacOsxUniversal.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: /root/LAST_MacOsxUniversal.zip
   
 workflows:
   version: 2
@@ -199,6 +247,26 @@ workflows:
             - build
             - test_45
       - build_MacOS_x64:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+            - test_45
+      - build_MacOS_x32:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+            - test_45
+      - build_MacOS_Universal:
           filters:
             branches:
               only:
