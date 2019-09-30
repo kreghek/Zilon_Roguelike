@@ -246,26 +246,27 @@ workflows:
           requires:
             - build
             - test_45
-      - build_MacOS_x64:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
-          requires:
-            - build
-            - test_45
-      - build_MacOS_x32:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
-          requires:
-            - build
-            - test_45
+#Проблема аналогична Linux32. Папка сборки остаётся пустой.
+#      - build_MacOS_x64:
+#          filters:
+#            branches:
+#              only:
+#                - master
+#                - circle-ci
+#                - /release-.*/
+#          requires:
+#            - build
+#            - test_45
+#      - build_MacOS_x32:
+#          filters:
+#            branches:
+ #             only:
+ #               - master
+ #               - circle-ci
+ #               - /release-.*/
+ #         requires:
+ #           - build
+ #           - test_45
       - build_MacOS_Universal:
           filters:
             branches:
@@ -307,6 +308,10 @@ workflows:
             - build
             - test_45
       - build_Linux_x64:
+          requires:
+            - build
+            - test_45
+      - build_MacOS_Universal:
           requires:
             - build
             - test_45
