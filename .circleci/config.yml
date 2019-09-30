@@ -216,6 +216,16 @@ workflows:
                 - master
                 - circle-ci
                 - /release-*/
+      - build_Linux_x32:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+            - test_45
       - build_Win_x64:
           filters:
             branches:
@@ -277,16 +287,6 @@ workflows:
           requires:
             - build
             - test_45
-#      - build_Linux_x32:
-#          filters:
-#            branches:
-#              only:
-#                - master
-#                - circle-ci
-#                - /release-.*/
-#          requires:
-#            - build
-#            - test_45
   nightly:
     triggers:
       - schedule:
