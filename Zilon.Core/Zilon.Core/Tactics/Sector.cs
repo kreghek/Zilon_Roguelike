@@ -121,7 +121,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                foreach (var effect in effects.Items)
+                foreach (var effect in effects.Items.ToArray())
                 {
                     if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
                     {

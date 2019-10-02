@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 using LightInject;
 
@@ -42,7 +43,7 @@ namespace Zilon.Emulation.Common
         {
             container.Register<ISchemeLocator>(factory =>
             {
-                var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
