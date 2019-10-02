@@ -13,9 +13,9 @@ namespace Zilon.Core.Tests.Props
     [TestFixture]
     public class PropStoreBaseTests
     {
-        private static TestPropScheme _resourceScheme;
-        private static TestPropScheme _equipmentScheme;
-        private static TestPropScheme _conceptScheme;
+        private TestPropScheme _resourceScheme;
+        private TestPropScheme _equipmentScheme;
+        private TestPropScheme _conceptScheme;
 
         /// <summary>
         /// Тест проверяет, что при добавлении экипировки она помещается в контейнер.
@@ -484,19 +484,19 @@ namespace Zilon.Core.Tests.Props
             return propStore;
         }
 
-        private static Equipment CreateEquipment()
+        private Equipment CreateEquipment()
         {
             var equipment = new Equipment(_equipmentScheme, new ITacticalActScheme[0]);
             return equipment;
         }
 
-        private static Resource CreateResource(int resourceInitCount)
+        private Resource CreateResource(int resourceInitCount)
         {
             var resource = new Resource(_resourceScheme, resourceInitCount);
             return resource;
         }
 
-        private static Concept CreateConcept()
+        private Concept CreateConcept()
         {
             var concent = new Concept(_conceptScheme, _equipmentScheme);
 
