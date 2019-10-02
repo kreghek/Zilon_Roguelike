@@ -153,6 +153,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
                 humanPlayer.MainPerson = person;
 
 
+                // TODO Использовать генератор персонажа, как в игре.
+                // Для этого нужно научить ботов корректно использовать оружие дальнего боя и посохи лечения.
                 var classRoll = new Random().Next(1, 3);
                 switch (classRoll)
                 {
@@ -194,6 +196,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
                         AddResourceToActor(inventory, "mana", 5, schemeService, propFactory);
                         AddResourceToActor(inventory, "arrow", 3, schemeService, propFactory);
                         break;
+
+                    default:
+                        throw new InvalidOperationException("Эта комбинация начальной экипировки не поддерживается.");
                 }
 
                 AddResourceToActor(inventory, "packed-food", 1, schemeService, propFactory);
