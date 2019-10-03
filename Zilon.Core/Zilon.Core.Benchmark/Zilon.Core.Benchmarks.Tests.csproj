@@ -163,6 +163,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BenchHelper.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CreateGlobeBench.cs" />
     <Compile Include="CreateProceduralSectorBench.cs" />
