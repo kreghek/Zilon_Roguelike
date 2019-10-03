@@ -178,6 +178,7 @@
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
+    <Compile Include="Scoring\ScoreCalculator.cs" />
     <Compile Include="Scoring\TextSummaryHelper.cs" />
     <Compile Include="Tactics\ActorInteractionBus.cs" />
     <Compile Include="Tactics\ActorInteractionEventBase.cs" />
