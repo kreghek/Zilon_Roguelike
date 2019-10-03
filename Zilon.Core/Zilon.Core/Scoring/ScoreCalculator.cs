@@ -24,7 +24,6 @@
             var hours = (int)(hoursTotal - daysCuttedFloat);
 
             return new DetailedLifetime(days, hours);
-
         }
     }
 }
