@@ -244,15 +244,6 @@ workflows:
                 - /release-*/
           requires:
             - build
-      - test_bots:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-*/
-          requires:
-            - build
       - test_specflow:
           filters:
             branches:
@@ -262,6 +253,17 @@ workflows:
                 - /release-*/
           requires:
             - build
+      - test_bots:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-*/
+          requires:
+            - build
+            - test_45
+            - test_specflow
       - build_Win_x64:
           filters:
             branches:
@@ -354,6 +356,11 @@ workflows:
       - test_specflow:
           requires:
             - build
+      - test_bots:
+          requires:
+            - build
+            - test_45
+            - test_specflow
       - build_Win_x64:
           requires:
             - build
