@@ -222,8 +222,6 @@ workflows:
                 - master
                 - circle-ci
                 - /release-.*/
-          requires:
-            - build
       - test_45:
           filters:
             branches:
@@ -231,6 +229,8 @@ workflows:
                 - master
                 - circle-ci
                 - /release-*/
+          requires:
+            - build
       - test_specflow:
           filters:
             branches:
@@ -238,6 +238,8 @@ workflows:
                 - master
                 - circle-ci
                 - /release-*/
+          requires:
+            - build
       - build_Win_x64:
           filters:
             branches:
