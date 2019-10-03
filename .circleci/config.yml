@@ -246,6 +246,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Win_x32:
           filters:
             branches:
@@ -256,6 +257,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Linux_x64:
           filters:
             branches:
@@ -266,6 +268,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
 #Проблема аналогична Linux32. Папка сборки остаётся пустой.
 #      - build_MacOS_x64:
 #          filters:
@@ -297,6 +300,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
 #      - build_Linux_x32:
 #          filters:
 #            branches:
@@ -323,18 +327,22 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Win_x32:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Linux_x64:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_MacOS_Universal:
           requires:
             - build
             - test_45
+            - test_specflow
 #      - build_Linux_x32:
 #          requires:
 #            - build
