@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -269,7 +268,7 @@ namespace Zilon.Core.Spec.Contexts
         {
             Container.Register<ISchemeLocator>(factory =>
             {
-                var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
                 var schemeLocator = new FileSchemeLocator(schemePath);
 

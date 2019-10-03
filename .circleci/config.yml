@@ -27,6 +27,19 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+  test_specflow:
+    working_directory: /test_specflow
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /p:Configuration=Release
+      - run: mono --debug /test_specflow/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
   build_Win_x64:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
@@ -40,7 +53,7 @@ jobs:
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
       - run:
           command: |
-            apt update && apt install -y git 
+            apt update && apt install -y git
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
@@ -64,7 +77,7 @@ jobs:
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
       - run:
           command: |
-            apt update && apt install -y git 
+            apt update && apt install -y git
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
@@ -88,7 +101,7 @@ jobs:
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
       - run:
           command: |
-            apt update && apt install -y git 
+            apt update && apt install -y git
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
@@ -114,7 +127,7 @@ jobs:
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
       - run:
           command: |
-            apt update && apt install -y git 
+            apt update && apt install -y git
             git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
       - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - run:
@@ -125,6 +138,78 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_Linux32.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_Linux32.zip
+  build_MacOS_x64:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-mac
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019-mac.x.ulf-cipher -k ${CIPHER_KEY_MAC} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildMacOsx64.sh && .circleci/buildMacOsx64.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsx64.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: /root/LAST_MacOsx64.zip
+  build_MacOS_x32:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-mac
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019-mac.x.ulf-cipher -k ${CIPHER_KEY_MAC} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildMacOsx32.sh && .circleci/buildMacOsx32.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsx32.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: /root/LAST_MacOsx32.zip
+  build_MacOS_Universal:
+    docker:
+      - image: gableroux/unity3d:2019.2.5f1-mac
+    steps:
+      - checkout
+      - run: mkdir -p /root/.cache/unity3d
+      - run: mkdir -p /root/.local/share/unity3d/Unity/
+      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019-mac.x.ulf-cipher -k ${CIPHER_KEY_MAC} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - attach_workspace:
+          at: /core-builds/bin
+      - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          command: |
+            apt update && apt install -y git
+            git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+      - run: cp -a temp/. ./Zilon.Client/Assets/Plugins/
+      - run:
+          name: Build
+          command: chmod +x .circleci/buildMacOsxUniversal.sh && .circleci/buildMacOsxUniversal.sh
+      - run:
+          name: Zipping build
+          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
+      - store_artifacts:
+          path: /root/LAST_MacOsxUniversal.zip
   
 workflows:
   version: 2
@@ -144,6 +229,17 @@ workflows:
                 - master
                 - circle-ci
                 - /release-*/
+          requires:
+            - build
+      - test_specflow:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-*/
+          requires:
+            - build
       - build_Win_x64:
           filters:
             branches:
@@ -154,6 +250,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Win_x32:
           filters:
             branches:
@@ -164,6 +261,7 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Linux_x64:
           filters:
             branches:
@@ -174,6 +272,39 @@ workflows:
           requires:
             - build
             - test_45
+            - test_specflow
+#Проблема аналогична Linux32. Папка сборки остаётся пустой.
+#      - build_MacOS_x64:
+#          filters:
+#            branches:
+#              only:
+#                - master
+#                - circle-ci
+#                - /release-.*/
+#          requires:
+#            - build
+#            - test_45
+#      - build_MacOS_x32:
+#          filters:
+#            branches:
+ #             only:
+ #               - master
+ #               - circle-ci
+ #               - /release-.*/
+ #         requires:
+ #           - build
+ #           - test_45
+      - build_MacOS_Universal:
+          filters:
+            branches:
+              only:
+                - master
+                - circle-ci
+                - /release-.*/
+          requires:
+            - build
+            - test_45
+            - test_specflow
 #      - build_Linux_x32:
 #          filters:
 #            branches:
@@ -195,19 +326,32 @@ workflows:
                 - beta
     jobs:
       - build
-      - test_45
+      - test_45:
+          requires:
+            - build
+      - test_specflow:
+          requires:
+            - build
       - build_Win_x64:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Win_x32:
           requires:
             - build
             - test_45
+            - test_specflow
       - build_Linux_x64:
           requires:
             - build
             - test_45
+            - test_specflow
+      - build_MacOS_Universal:
+          requires:
+            - build
+            - test_45
+            - test_specflow
 #      - build_Linux_x32:
 #          requires:
 #            - build

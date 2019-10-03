@@ -64,7 +64,7 @@ namespace Zilon.SchemeEditor
 
         private static ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 

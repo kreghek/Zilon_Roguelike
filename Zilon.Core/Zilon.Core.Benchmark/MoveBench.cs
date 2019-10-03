@@ -222,7 +222,7 @@ namespace Zilon.Core.Benchmark
 
         private FileSchemeLocator CreateSchemeLocator()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
         }
