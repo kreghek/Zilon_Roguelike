@@ -76,7 +76,11 @@ namespace Zilon.Core.Benchmark
                 .SingleOrDefault(x => x.IsStart).Nodes
                 .First();
 
-            var playerActorVm = CreateHumanActorVm(humanPlayer,
+            var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
+
+            var playerActorVm = BenchHelper.CreateHumanActorVm(humanPlayer,
+                schemeService,
+                survivalRandomSource,
                 personScheme,
                 actorManager,
                 playerActorStartNode);
@@ -121,7 +125,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<HumanPlayer>(new PerContainerLifetime());
             _container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
 
-            _container.Register<ISchemeLocator>(factory => CreateSchemeLocator(), new PerContainerLifetime());
+            _container.Register(factory => BenchHelper.CreateSchemeLocator(), new PerContainerLifetime());
 
             _container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
             _container.Register<ICommandManager, QueueCommandManager>(new PerContainerLifetime());
@@ -145,46 +149,6 @@ namespace Zilon.Core.Benchmark
 
             // Специализированные сервисы для Ui.
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
-        }
-
-        private FileSchemeLocator CreateSchemeLocator()
-        {
-            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-            var schemeLocator = new FileSchemeLocator(schemePath);
-            return schemeLocator;
-        }
-
-        private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
-        [NotNull] IPersonScheme personScheme,
-        [NotNull] IActorManager actorManager,
-        [NotNull] IMapNode startNode)
-        {
-            var schemeService = _container.GetInstance<ISchemeService>();
-            var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
-
-
-            var inventory = new Inventory();
-
-            var evolutionData = new EvolutionData(schemeService);
-
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme,
-                defaultActScheme,
-                evolutionData,
-                survivalRandomSource,
-                inventory);
-
-            var actor = new Actor(person, player, startNode);
-
-            actorManager.Add(actor);
-
-            var actorViewModel = new TestActorViewModel
-            {
-                Actor = actor
-            };
-
-            return actorViewModel;
         }
     }
 }

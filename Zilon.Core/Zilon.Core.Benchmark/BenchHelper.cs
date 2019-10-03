@@ -28,9 +28,6 @@ namespace Zilon.Core.Benchmark
             [NotNull] IActorManager actorManager,
             [NotNull] IMapNode startNode)
         {
-            //var schemeService = _container.GetInstance<ISchemeService>();
-            //var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
-
             var inventory = new Inventory();
 
             var evolutionData = new EvolutionData(schemeService);
