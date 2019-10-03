@@ -228,75 +228,42 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
+      - build
       - test_45:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-*/
           requires:
             - build
       - test_specflow:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-*/
           requires:
             - build
       - test_bots:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-*/
           requires:
             - build
             - test_45
             - test_specflow
       - build_Win_x64:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
           requires:
             - build
             - test_45
             - test_specflow
       - build_Win_x32:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
           requires:
             - build
             - test_45
             - test_specflow
       - build_Linux_x64:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
           requires:
             - build
             - test_45
             - test_specflow
+      - build_MacOS_Universal:
+          requires:
+            - build
+            - test_45
+            - test_specflow
+#      - build_Linux_x32:
+#          requires:
+#            - build
+#            - test_45
 #Проблема аналогична Linux32. Папка сборки остаётся пустой.
 #      - build_MacOS_x64:
 #          filters:
