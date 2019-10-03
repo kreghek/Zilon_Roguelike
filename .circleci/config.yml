@@ -39,7 +39,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:Configuration=Release
-      - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - run: mono --debug /test_bots/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   test_specflow:
     working_directory: /test_specflow
     docker:
