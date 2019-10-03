@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.props" Condition="Exists('..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.props')" />
+  <Import Project="..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.props" Condition="Exists('..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.props')" />
   <Import Project="..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.props" Condition="Exists('..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.props')" />
   <Import Project="..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.props')" />
   <Import Project="..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" />
@@ -103,6 +104,9 @@
     <Reference Include="TechTalk.SpecFlow, Version=3.1.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
       <HintPath>..\packages\SpecFlow.3.1.32-beta\lib\net45\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
+    <Reference Include="TechTalk.SpecFlow.NUnit.SpecFlowPlugin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecFlow.NUnit.3.1.32-beta\lib\net45\TechTalk.SpecFlow.NUnit.SpecFlowPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="Utf8Json, Version=1.3.7.0, Culture=neutral, PublicKeyToken=8a73d3ba7e392e27, processorArchitecture=MSIL">
       <HintPath>..\packages\Utf8Json.1.3.7\lib\net45\Utf8Json.dll</HintPath>
     </Reference>
@@ -123,42 +127,7 @@
     <Compile Include="Steps\BugMonsterPatrolNoExceptionsSteps.cs" />
     <Compile Include="Steps\BugMonsterPatrolNoFreezeSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCases\Chests.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Chests.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Equipment.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Equipment.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Fight.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Fight.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Monsters.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Monsters.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Perks.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Perks.feature</DependentUpon>
-    </Compile>
     <Compile Include="Contexts\CommonGameActionsContext.cs" />
-    <Compile Include="TestCases\Movement.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Movement.feature</DependentUpon>
-    </Compile>
-    <Compile Include="TestCases\Survival.feature.cs">
-      <DependentUpon>Survival.feature</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Steps\SurvivalSteps.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -166,34 +135,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="TestCases\Chests.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Chests.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Equipment.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Equipment.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Fight.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Fight.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Monsters.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Monsters.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Perks.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Perks.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Movement.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Movement.feature.cs</LastGenOutput>
-    </None>
-    <None Include="TestCases\Survival.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Survival.feature.cs</LastGenOutput>
-    </None>
+    <None Include="TestCases\Chests.feature" />
+    <None Include="TestCases\Equipment.feature" />
+    <None Include="TestCases\Fight.feature" />
+    <None Include="TestCases\Monsters.feature" />
+    <None Include="TestCases\Perks.feature" />
+    <None Include="TestCases\Movement.feature" />
+    <None Include="TestCases\Survival.feature" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj">
@@ -226,11 +174,12 @@
     <Error Condition="!Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.targets'))" />
-    <Error Condition="!Exists('..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.props'))" />
-    <Error Condition="!Exists('..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.targets'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Import Project="..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.32-beta\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
   <Import Project="..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.targets" Condition="Exists('..\packages\Microsoft.NET.Test.Sdk.15.0.0\build\net45\Microsoft.Net.Test.Sdk.targets')" />
-  <Import Project="..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.targets" Condition="Exists('..\packages\SpecRun.Runner.3.0.391\build\SpecRun.Runner.targets')" />
+  <Import Project="..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.targets" Condition="Exists('..\packages\SpecFlow.NUnit.3.1.32-beta\build\SpecFlow.NUnit.targets')" />
 </Project>

@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+﻿using System;
 using System.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using LightInject;
 
 using Moq;
+
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -178,7 +179,7 @@ namespace Zilon.Core.Benchmark
 
         private FileSchemeLocator CreateSchemeLocator()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
             var schemeLocator = new FileSchemeLocator(schemePath);
             return schemeLocator;
         }
