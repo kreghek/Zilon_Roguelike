@@ -8,6 +8,5 @@ namespace Assets.Zilon.Scripts.Services
     // ReSharper disable once ClassNeverInstantiated.Global
     public class GlobeModalManager : CommonModalManagerBase, IGlobeModalManager, ICommonModalManager
     {
-
     }
 }
