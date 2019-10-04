@@ -15,6 +15,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -314,40 +315,11 @@ namespace Zilon.BotEnvironment
 
         private static void WriteScores(IServiceFactory serviceFactory, IScoreManager scoreManager, string mode, string scoreFilePreffix)
         {
-            var summaryStringBuilder = new StringBuilder(); 
-            
-            summaryStringBuilder.AppendLine("YOU (BOT) DIED");
+            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
 
-            summaryStringBuilder.AppendLine($"SCORES: {scoreManager.BaseScores}");
+            Console.WriteLine(summaryText);
 
-            summaryStringBuilder.AppendLine("=== You survived ===");
-            var minutesTotal = scoreManager.Turns * 2;
-            var hoursTotal = minutesTotal / 60f;
-            var daysTotal = hoursTotal / 24f;
-            var days = (int)daysTotal;
-            var hours = (int)(hoursTotal - days * 24);
-
-            summaryStringBuilder.AppendLine($"{days} days {hours} hours");
-            summaryStringBuilder.AppendLine($"Turns: {scoreManager.Turns}");
-
-            summaryStringBuilder.AppendLine("=== You visited ===");
-
-            summaryStringBuilder.AppendLine($"{scoreManager.Places.Count} places");
-
-            foreach (var placeType in scoreManager.PlaceTypes)
-            {
-                summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
-            }
-
-            summaryStringBuilder.AppendLine("=== You killed ===");
-            foreach (var frag in scoreManager.Frags)
-            {
-                summaryStringBuilder.AppendLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
-            }
-
-            Console.WriteLine(summaryStringBuilder.ToString());
-
-            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryStringBuilder.ToString());
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
         }
 
         private static void AppendScores(IScoreManager scoreManager, IServiceFactory serviceFactory, string scoreFilePreffix, string mode, string summary)
