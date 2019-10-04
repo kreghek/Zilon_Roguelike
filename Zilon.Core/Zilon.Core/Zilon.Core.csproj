@@ -394,7 +394,6 @@
     <Compile Include="Tactics\ActorManager.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
