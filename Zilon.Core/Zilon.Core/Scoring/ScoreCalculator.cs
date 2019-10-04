@@ -5,6 +5,11 @@
     /// </summary>
     public static class ScoreCalculator
     {
+        /// <summary>
+        /// Разбирает ходы на отдельные значения дней, часов и т.д.
+        /// </summary>
+        /// <param name="turns"> Количество игровых ходов. </param>
+        /// <returns> Возвращает отдельный объект, хранящий ходы в отдельных компонентах. </returns>
         public static DetailedLifetime ConvertTurnsToDetailed(int turns)
         {
             var minutesTotal = turns * 2;
@@ -15,12 +20,12 @@
 
             // Замечание от lgtm
             // https://lgtm.com/rules/1506096756023/
-            // Оба числа в скобках - float. Не видно причин, почему это плохо.
+            // Оба числа в операции daysCuttedFloat - float. Не видно причин, почему это плохо.
             // Зато анализатор не беспокоится.
             // Здесь не может быть переполнения, потому что все эти числа получены из turns,
             // который является int. И дни, и часы являются результатом деления целочисленного turns.
 
-            float daysCuttedFloat = days * 24;
+            var daysCuttedFloat = (float)days * 24;
             var hours = (int)(hoursTotal - daysCuttedFloat);
 
             return new DetailedLifetime(days, hours);
