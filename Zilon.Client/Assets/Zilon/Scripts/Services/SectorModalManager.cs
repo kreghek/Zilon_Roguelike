@@ -1,8 +1,4 @@
-﻿using UnityEngine;
-
-using Zenject;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
@@ -13,15 +9,11 @@ namespace Assets.Zilon.Scripts.Services
     /// Менеджер модальных окон для сектора.
     /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SectorModalManager : MonoBehaviour, ISectorModalManager, ICommonModalManager
+    public class SectorModalManager : CommonModalManagerBase, ISectorModalManager, ICommonModalManager
     {
         // ReSharper disable UnassignedField.Global
         // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable 649
-        public GameObject WindowsParent;
-
-        public ModalDialog ModalPrefab;
-
         public ContainerModalBody ContainerModalPrefab;
 
         public InventoryModalBody InventoryModalPrefab;
@@ -34,20 +26,10 @@ namespace Assets.Zilon.Scripts.Services
 
         public DialogModalBody DialogModalPrefab;
 
-        public QuitModalBody QuitModalPrefab;
-
-        public ScoreModalBody ScoreModalPrefab;
-
-        public HistoryModalBody HistoryModalPrefab;
-
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
 
-        [Inject]
-        private DiContainer _container;
-
 #pragma warning restore 649
-        // ReSharper disable once UnusedMember.Global
 
         public void ShowContainerModal(PropTransferMachine transferMachine)
         {
@@ -81,67 +63,10 @@ namespace Assets.Zilon.Scripts.Services
             modalBody.Init(trader);
         }
 
-        public void ShowQuitComfirmationModal()
-        {
-            ShowQuitComfirmationModalInner("Quit game?", closeGame: true);
-        }
-
-        public void ShowQuitTitleComfirmationModal()
-        {
-            ShowQuitComfirmationModalInner("End game session?", closeGame: false);
-        }
-
-        public void ShowScoreModal()
-        {
-            var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
-            modalBody.Init();
-        }
-
-        public void ShowHistoryBookModal()
-        {
-            var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
-            modalBody.Init();
-        }
-
         public void ShowDialogModal(CitizenPerson citizen)
         {
             var modalBody = CreateWindowHandler<DialogModalBody>(DialogModalPrefab.gameObject);
             modalBody.Init(citizen);
-        }
-
-        private T CreateWindowHandler<T>(GameObject prefab) where T : IModalWindowHandler
-        {
-            var modal = InstantiateModalDialog();
-
-            var modalBody = InstantiateModalBody<T>(prefab, modal);
-
-            modal.WindowHandler = modalBody;
-
-            return modalBody;
-        }
-
-        private ModalDialog InstantiateModalDialog()
-        {
-            var modalObj = _container.InstantiatePrefab(ModalPrefab, WindowsParent.transform);
-
-            var modal = modalObj.GetComponent<ModalDialog>();
-
-            return modal;
-        }
-
-        private T InstantiateModalBody<T>(GameObject prefab, ModalDialog modal) where T : IModalWindowHandler
-        {
-            var parent = modal.Body.transform;
-
-            var modalBody = _container.InstantiatePrefabForComponent<T>(prefab, parent);
-
-            return modalBody;
-        }
-
-        private void ShowQuitComfirmationModalInner(string caption, bool closeGame)
-        {
-            var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
-            modalBody.Init(caption, closeGame);
         }
     }
 }
