@@ -1,5 +1,7 @@
 ﻿using System.Text;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
