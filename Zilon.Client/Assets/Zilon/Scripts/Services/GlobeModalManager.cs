@@ -36,8 +36,12 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowQuitComfirmationModal()
         {
-            var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
-            modalBody.Init();
+            ShowQuitComfirmationModalInner("Quit game?", closeGame: true);
+        }
+
+        public void ShowQuitTitleComfirmationModal()
+        {
+            ShowQuitComfirmationModalInner("End game session?", closeGame: false);
         }
 
         public void ShowScoreModal()
@@ -81,6 +85,12 @@ namespace Assets.Zilon.Scripts.Services
             var modalBody = _container.InstantiatePrefabForComponent<T>(prefab, parent);
 
             return modalBody;
+        }
+
+        private void ShowQuitComfirmationModalInner(string caption, bool closeGame)
+        {
+            var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
+            modalBody.Init(caption, closeGame);
         }
     }
 }
