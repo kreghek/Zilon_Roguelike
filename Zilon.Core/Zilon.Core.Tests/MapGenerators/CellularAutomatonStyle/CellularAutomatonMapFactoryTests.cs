@@ -14,7 +14,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
         [Test()]
         public async Task CreateAsyncTestAsync()
         {
-            var dice = new Dice(0);
+            var dice = new Dice();
 
             var mapFactory = new CellularAutomatonMapFactory(dice);
 

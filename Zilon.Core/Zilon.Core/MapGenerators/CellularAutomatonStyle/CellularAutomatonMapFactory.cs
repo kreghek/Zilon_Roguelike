@@ -47,10 +47,32 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 cellMap = newMap;
             }
 
-            PostProcessing(cellMap);
+            var draftRegions = PostProcessing(cellMap);
 
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
+
+            var regionIdCounter = 1;
+            foreach (var draftRegion in draftRegions)
+            {
+                var regionNodeList = new List<IMapNode>();
+
+                foreach (var coord in draftRegion.Coords)
+                {
+                    var node = new HexNode(coord.X, coord.Y);
+                    map.AddNode(node);
+
+                    regionNodeList.Add(node);
+                }
+
+
+                var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
+
+                regionIdCounter++;
+            }
+
+            // Добавляем узлы каридоров.
+            var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
 
             for (var x = 0; x < _mapWidth; x++)
             {
@@ -58,8 +80,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     if (cellMap[x, y])
                     {
-                        var node = new HexNode(x, y);
-                        map.AddNode(node);
+                        var offsetCoord = new OffsetCoords(x, y);
+
+                        if (!regionNodeCoords.Contains(offsetCoord))
+                        {
+                            var node = new HexNode(x, y);
+                            map.AddNode(node);
+                        }
                     }
                 }
             }
@@ -67,7 +94,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return Task.FromResult(map);
         }
 
-        private void PostProcessing(bool[,] cellMap)
+        private RegionDraft[] PostProcessing(bool[,] cellMap)
         {
             // Формирование регионов.
             // Регионы, кроме дальнейшего размещения игровых предметов,
@@ -162,11 +189,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     openRegions.Remove(nearbyOpenRegion);
                     unitedRegions.Add(nearbyOpenRegion);
                 }
-
-                
-
-                
             }
+
+            return regions.ToArray();
         }
 
         private bool[,] DoSimulationStep(bool[,] oldCellMap)

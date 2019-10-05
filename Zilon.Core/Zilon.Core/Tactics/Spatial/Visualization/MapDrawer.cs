@@ -37,7 +37,7 @@ namespace Zilon.Core.Tactics.Spatial.Visualization
                     var x = (coords[0] - info.LeftCoord) * cellSize;
                     var y = (coords[1] - info.BottomCoord) * cellSize;
 
-                    graphics.FillEllipse(Brushes.White, x, y, cellSize, cellSize);
+                    graphics.FillEllipse(Brushes.White, x, y - cellSize, cellSize, cellSize);
                 }
             }
         }
