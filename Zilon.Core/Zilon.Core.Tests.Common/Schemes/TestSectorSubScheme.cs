@@ -25,5 +25,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public bool IsStart { get; set; }
         public int RegionChestCountRatio { get; set; }
         public int MinRegionMonsterCount { get; }
+        public string MapGenerator { get; }
     }
 }

@@ -18,9 +18,9 @@ namespace Assets.Zilon.Scripts.Services
 
         public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
         {
-            switch (sectorScheme.Sid)
+            switch (sectorScheme.MapGenerator)
             {
-                case "genomass-cave":
+                case "CellularAutomaton":
                     return _caveMapFactory;
 
                 default:

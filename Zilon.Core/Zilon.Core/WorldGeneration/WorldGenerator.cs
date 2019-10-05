@@ -159,12 +159,12 @@ namespace Zilon.Core.WorldGeneration
         public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
         {
             var locationSchemeSids = new[] {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
+                //"rat-hole",
+                //"rat-kingdom",
+                //"demon-dungeon",
+                //"demon-lair",
+                //"crypt",
+                //"elder-place",
                 "genomass-cave"
             };
             var region = new GlobeRegion(LocationBaseSize);

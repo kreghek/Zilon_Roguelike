@@ -22,7 +22,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		},
 		{
 			"Sid": "lvl2",
@@ -41,7 +43,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		},
 		{
 			"Sid": "lvl3",
@@ -58,7 +62,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		},
 		{
 			"Sid": "lvl4",
@@ -75,7 +81,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		},
 		{
 			"Sid": "lvl5",
@@ -92,7 +100,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		},
 		{
 			"Sid": "lvl6",
@@ -109,7 +119,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGenerator": "CellularAutomaton"
 		}
 	]
 }

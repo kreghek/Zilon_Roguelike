@@ -112,5 +112,8 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public int RegionChestCountRatio { get; private set; }
+
+        [JsonProperty]
+        public string MapGenerator { get; private set; }
     }
 }
