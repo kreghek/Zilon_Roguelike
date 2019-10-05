@@ -13,8 +13,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     {
         private readonly IDice _dice;
         private readonly int _simulationCount = 3;
-        private int _mapWidth = 100;
-        private int _mapHeight = 100;
+        private int _mapWidth = 25;
+        private int _mapHeight = 25;
         private int _chanceToStartAlive = 45; // Процент, что на старте клетка будет живой.
         private int _deathLimit = 4;
         private int _birthLimit = 6;
