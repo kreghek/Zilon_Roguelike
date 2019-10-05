@@ -95,6 +95,7 @@
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ICitizenGenerator.cs" />
     <Compile Include="MapGenerators\ICitizenGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\IMapFactorySelector.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />

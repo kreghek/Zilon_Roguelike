@@ -17,11 +17,10 @@ namespace Zilon.Core.MapGenerators
     /// <seealso cref="ISectorGenerator" />
     public class SectorGenerator : ISectorGenerator
     {
-
-        private readonly IMapFactory _mapFactory;
         private readonly IChestGenerator _chestGenerator;
         private readonly IBotPlayer _botPlayer;
         private readonly ICitizenGenerator _citizenGenerator;
+        private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
 
@@ -35,7 +34,7 @@ namespace Zilon.Core.MapGenerators
         /// <param name="citizenGenerator"> Генератор жителей в городском квартале. </param>
         /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
-            IMapFactory mapFactory,
+            IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
@@ -43,7 +42,7 @@ namespace Zilon.Core.MapGenerators
 ,
             IBotPlayer botPlayer)
         {
-            _mapFactory = mapFactory;
+            _mapFactorySelector = mapFactorySelector;
             _sectorFactory = sectorFactory;
             _monsterGenerator = monsterGenerator;
             _chestGenerator = chestGenerator;
@@ -58,7 +57,9 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Возвращает экземпляр сектора. </returns>
         public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
         {
-            var map = await _mapFactory.CreateAsync(sectorScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(sectorScheme);
+
+            var map = await mapFactory.CreateAsync(sectorScheme);
 
             var sector = _sectorFactory.Create(map);
 
@@ -94,7 +95,9 @@ namespace Zilon.Core.MapGenerators
                 RegionSize = 10
             };
 
-            var map = await _mapFactory.CreateAsync(townScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(townScheme);
+
+            var map = await mapFactory.CreateAsync(townScheme);
 
             var sector = _sectorFactory.Create(map);
 

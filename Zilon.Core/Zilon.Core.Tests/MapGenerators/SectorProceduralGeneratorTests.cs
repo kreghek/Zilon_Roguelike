@@ -83,7 +83,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
         }
 
-        private static SectorGenerator CreateGenerator(IBotPlayer botPlayer,
+        private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
             var chestGeneratorMock = new Mock<IChestGenerator>();
@@ -98,7 +98,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var citizenGeneratorMock = new Mock<ICitizenGenerator>();
             var citizenGenerator = citizenGeneratorMock.Object;
 
-            return new SectorGenerator(mapFactory,
+            var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
+            var mapFactorySelector = mapFactorySelectorMock.Object;
+
+            return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,
