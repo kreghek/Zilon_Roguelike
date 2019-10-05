@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
@@ -25,6 +26,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         public Task<ISectorMap> CreateAsync(object options)
         {
+            var sectorScheme = (ISectorSubScheme)options;
+            var transitions = CreateTransitions(sectorScheme);
+
             var cellMap = new bool[_mapWidth, _mapHeight];
 
             // Случайное заполнение
@@ -68,6 +72,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
 
+                map.Regions.Add(region);
+
                 regionIdCounter++;
             }
 
@@ -87,6 +93,38 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                             var node = new HexNode(x, y);
                             map.AddNode(node);
                         }
+                    }
+                }
+            }
+
+            // Размещаем переходы и отмечаем стартовую комнату.
+            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
+            // Для этого сортируем все комнаты по размеру.
+            // Первую занимаем под старт.
+            // Последующие - это переходы.
+
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Count()).ToArray();
+
+            if (regionOrderedBySize.Any())
+            {
+                var startRegion = regionOrderedBySize.First();
+                startRegion.IsStart = true;
+
+                var transitionArray = transitions.ToArray();
+                for (var i = 0; i < transitionArray.Length; i++)
+                {
+                    // +1, потому что первый регион уже занят под стартовый.
+                    var transitionRegion = regionOrderedBySize[i + 1];
+
+                    var transition = transitionArray[i];
+
+                    var transitionNode = transitionRegion.Nodes.First();
+
+                    map.Transitions.Add(transitionNode, transition);
+
+                    if (transition.SectorSid == null)
+                    {
+                        transitionRegion.IsOut = true;
                     }
                 }
             }
@@ -313,6 +351,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             public OffsetCoords[] Coords { get; }
+        }
+
+        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
+        {
+            if (sectorScheme.TransSectorSids == null)
+            {
+                return new[] { RoomTransition.CreateGlobalExit() };
+            }
+
+            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
     }
 }
