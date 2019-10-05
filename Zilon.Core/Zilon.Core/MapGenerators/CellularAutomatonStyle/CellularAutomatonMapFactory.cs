@@ -51,7 +51,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 cellMap = newMap;
             }
 
-            var draftRegions = PostProcessing(cellMap);
+            var draftRegions = MakeConnectedRegions(cellMap);
 
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -78,24 +78,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             // Добавляем узлы каридоров.
-            var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
-
-            for (var x = 0; x < _mapWidth; x++)
-            {
-                for (var y = 0; y < _mapHeight; y++)
-                {
-                    if (cellMap[x, y])
-                    {
-                        var offsetCoord = new OffsetCoords(x, y);
-
-                        if (!regionNodeCoords.Contains(offsetCoord))
-                        {
-                            var node = new HexNode(x, y);
-                            map.AddNode(node);
-                        }
-                    }
-                }
-            }
+            CreateCorridors(cellMap, draftRegions, map);
 
             // Размещаем переходы и отмечаем стартовую комнату.
             // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
@@ -129,10 +112,38 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
             }
 
+            var playerActorStartNode = map.Regions
+            .SingleOrDefault(x => x.IsStart).Nodes
+            .First();
+
+            var a = map.Nodes.Single(x => x == playerActorStartNode);
+
             return Task.FromResult(map);
         }
 
-        private RegionDraft[] PostProcessing(bool[,] cellMap)
+        private void CreateCorridors(bool[,] cellMap, RegionDraft[] draftRegions, ISectorMap map)
+        {
+            var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
+
+            for (var x = 0; x < _mapWidth; x++)
+            {
+                for (var y = 0; y < _mapHeight; y++)
+                {
+                    if (cellMap[x, y])
+                    {
+                        var offsetCoord = new OffsetCoords(x, y);
+
+                        if (!regionNodeCoords.Contains(offsetCoord))
+                        {
+                            var node = new HexNode(x, y);
+                            map.AddNode(node);
+                        }
+                    }
+                }
+            }
+        }
+
+        private RegionDraft[] MakeConnectedRegions(bool[,] cellMap)
         {
             // Формирование регионов.
             // Регионы, кроме дальнейшего размещения игровых предметов,
@@ -310,7 +321,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var pixels = new Stack<OffsetCoords>();
             pixels.Push(point);
-            regionPoints.Add(point);
 
             while (pixels.Count > 0)
             {

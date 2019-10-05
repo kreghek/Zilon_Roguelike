@@ -64,6 +64,12 @@ namespace Zilon.Core.Tactics.Spatial
             var offsetY = hexNode.OffsetY;
 
             var nodeMatrix = _segmentDict.First().Value;
+
+            if (nodeMatrix[offsetX, offsetY] != null)
+            {
+                throw new InvalidOperationException($"В координатах {offsetX},{offsetY} уже есть узел графа.");
+            }
+
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 

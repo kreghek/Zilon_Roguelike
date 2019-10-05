@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial.Visualization;
+using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
 {
@@ -18,7 +19,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
 
             var mapFactory = new CellularAutomatonMapFactory(dice);
 
-            var map = await mapFactory.CreateAsync(null);
+            var sectorScheme = new TestSectorSubScheme {
+                TransSectorSids = new string[] { null }
+            };
+
+            var map = await mapFactory.CreateAsync(sectorScheme);
 
             var drawer = new MapDrawer();
 
