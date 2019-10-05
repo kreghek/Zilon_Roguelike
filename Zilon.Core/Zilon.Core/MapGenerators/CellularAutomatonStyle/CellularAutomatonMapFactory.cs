@@ -9,12 +9,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
         private readonly IDice _dice;
-        private readonly int simulationCount = 3;
-        private int mapWidth = 100;
-        private int mapHeight = 100;
-        private int chanceToStartAlive = 45; // Процент, что на старте клетка будет живой.
-        private int deathLimit = 4;
-        private int birthLimit = 6;
+        private readonly int _simulationCount = 3;
+        private int _mapWidth = 100;
+        private int _mapHeight = 100;
+        private int _chanceToStartAlive = 45; // Процент, что на старте клетка будет живой.
+        private int _deathLimit = 4;
+        private int _birthLimit = 6;
 
         public CellularAutomatonMapFactory(IDice dice)
         {
@@ -23,15 +23,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         public Task<ISectorMap> CreateAsync(object options)
         {
-            var cellMap = new bool[mapWidth, mapHeight];
+            var cellMap = new bool[_mapWidth, _mapHeight];
 
             // Случайное заполнение
-            for (var x = 0; x < mapWidth; x++)
+            for (var x = 0; x < _mapWidth; x++)
             {
-                for (var y = 0; y < mapHeight; y++)
+                for (var y = 0; y < _mapHeight; y++)
                 {
                     var blockRoll = _dice.Roll(100);
-                    if (blockRoll < chanceToStartAlive)
+                    if (blockRoll < _chanceToStartAlive)
                     {
                         cellMap[x, y] = true;
                     }
@@ -39,18 +39,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             // Несколько шагов симуляции
-            for (var i = 0; i < simulationCount; i++)
+            for (var i = 0; i < _simulationCount; i++)
             {
                 var newMap = DoSimulationStep(cellMap);
                 cellMap = newMap;
             }
 
             // Создание графа карты тектора на основе карты клеточного автомата
-            ISectorMap map = new SectorGraphMap();
+            ISectorMap map = new SectorHexMap();
 
-            for (var x = 0; x < mapWidth; x++)
+            for (var x = 0; x < _mapWidth; x++)
             {
-                for (var y = 0; y < mapHeight; y++)
+                for (var y = 0; y < _mapHeight; y++)
                 {
                     if (cellMap[x, y])
                     {
@@ -65,17 +65,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private bool[,] DoSimulationStep(bool[,] oldCellMap)
         {
-            var newCellMap = new bool[mapWidth, mapHeight];
+            var newCellMap = new bool[_mapWidth, _mapHeight];
 
-            for (var x = 0; x < mapWidth; x++)
+            for (var x = 0; x < _mapWidth; x++)
             {
-                for (var y = 0; y < mapHeight; y++)
+                for (var y = 0; y < _mapHeight; y++)
                 {
                     var aliveCount = CountAliveNeighbours(oldCellMap, x, y);
 
                     if (oldCellMap[x, y])
                     {
-                        if (aliveCount < deathLimit)
+                        if (aliveCount < _deathLimit)
                         {
                             newCellMap[x, y] = false;
                         }
@@ -86,7 +86,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
                     else
                     {
-                        if (aliveCount > birthLimit)
+                        if (aliveCount > _birthLimit)
                         {
                             newCellMap[x, y] = true;
                         }
@@ -118,7 +118,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var nX = offsetCoords.X;
                 var nY = offsetCoords.Y;
 
-                if (nX < 0 || nY < 0 || nX >= mapWidth || nY >= mapHeight)
+                if (nX < 0 || nY < 0 || nX >= _mapWidth || nY >= _mapHeight)
                 {
                     // Границу считаем живым соседом.
                     // Сделано, чтобы зполнялись углы.
