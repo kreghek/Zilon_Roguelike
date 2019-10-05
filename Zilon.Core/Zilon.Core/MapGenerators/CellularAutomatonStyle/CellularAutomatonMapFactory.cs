@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
@@ -45,7 +47,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 cellMap = newMap;
             }
 
-            // Создание графа карты тектора на основе карты клеточного автомата
+            PostProcessing(cellMap);
+
+            // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
             for (var x = 0; x < _mapWidth; x++)
@@ -61,6 +65,108 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return Task.FromResult(map);
+        }
+
+        private void PostProcessing(bool[,] cellMap)
+        {
+            // Формирование регионов.
+            // Регионы, кроме дальнейшего размещения игровых предметов,
+            // в рамках этой генерации будут служить для обнаружения
+            // изолированных регионов.
+            // В секторе не должно быть изолированых регионов, поэтому
+            // дальше все регионы объединяются в единый граф.
+            var openNodes = new List<OffsetCoords>();
+            for (var x = 0; x < _mapWidth; x++)
+            {
+                for (var y = 0; y < _mapHeight; y++)
+                {
+                    if (cellMap[x, y])
+                    {
+                        openNodes.Add(new OffsetCoords(x, y));
+                    }
+                }
+            }
+
+            // Разбиваем все проходимые (true) клетки на регионы
+            // через заливку.
+            var regions = new List<RegionDraft>();
+            while (openNodes.Any())
+            {
+                var openNode = openNodes.First();
+                var regionCoords = FloodFillRegions(cellMap, openNode);
+                var region = new RegionDraft(regionCoords.ToArray());
+
+                openNodes.RemoveAll(x => region.Coords.Contains(x));
+
+                regions.Add(region);
+            }
+
+            // Соединяем все регионы в единый граф.
+            var openRegions = new List<RegionDraft>(regions);
+            var unitedRegions = new List<RegionDraft>();
+
+            var startRegion = openRegions[0];
+            openRegions.RemoveAt(0);
+            unitedRegions.Add(startRegion);
+
+            while (openRegions.Any())
+            {
+                var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
+
+                // Ищем две самые ближние точки между объединённым регионом и 
+                // и всеми открытыми регионами.
+
+                var currentDistance = int.MaxValue;
+                OffsetCoords currentOpenRegionCoord = null;
+                OffsetCoords currentUnitedRegionCoord = null;
+                RegionDraft nearbyOpenRegion = null;
+
+                foreach (var currentOpenRegion in openRegions)
+                {
+                    foreach (var openRegionCoord in currentOpenRegion.Coords)
+                    {
+                        var openCubeCoord = HexHelper.ConvertToCube(openRegionCoord);
+
+                        foreach (var unitedRegionCoord in unitedRegionCoords)
+                        {
+                            var unitedCubeCoord = HexHelper.ConvertToCube(unitedRegionCoord);
+                            var distance = openCubeCoord.DistanceTo(unitedCubeCoord);
+
+                            if (distance < currentDistance)
+                            {
+                                currentDistance = distance;
+                                currentOpenRegionCoord = openRegionCoord;
+                                currentUnitedRegionCoord = unitedRegionCoord;
+                                nearbyOpenRegion = currentOpenRegion;
+                            }
+                        }
+                    }
+                }
+
+                // Если координаты, которые нужно соединить, найдены,
+                // то прорываем тоннель.
+                if (nearbyOpenRegion != null
+                    && currentOpenRegionCoord != null
+                     && currentUnitedRegionCoord != null)
+                {
+                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord);
+                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord);
+
+                    var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
+                    foreach (var lineItem in line)
+                    {
+                        var offsetCoords = HexHelper.ConvertToOffset(lineItem);
+                        cellMap[offsetCoords.X, offsetCoords.Y] = true;
+                    }
+
+                    openRegions.Remove(nearbyOpenRegion);
+                    unitedRegions.Add(nearbyOpenRegion);
+                }
+
+                
+
+                
+            }
         }
 
         private bool[,] DoSimulationStep(bool[,] oldCellMap)
@@ -122,7 +228,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     // Границу считаем живым соседом.
                     // Сделано, чтобы зполнялись углы.
-                    aliveCount++;
+                    //aliveCount++;
                 }
                 else if (oldCellMap[nX, nY])
                 {
@@ -131,6 +237,57 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return aliveCount;
+        }
+
+        private IEnumerable<OffsetCoords> FloodFillRegions(bool[,] cellMap, OffsetCoords point)
+        {
+            var snapshotCellmap = (bool[,])cellMap.Clone();
+
+            var regionPoints = new List<OffsetCoords>();
+
+            var pixels = new Stack<OffsetCoords>();
+            pixels.Push(point);
+            regionPoints.Add(point);
+
+            while (pixels.Count > 0)
+            {
+                var a = pixels.Pop();
+                if (a.X < _mapWidth && a.X >= 0 &&
+                        a.Y < _mapHeight && a.Y >= 0)//make sure we stay within bounds
+                {
+
+                    if (snapshotCellmap[a.X, a.Y])
+                    {
+                        regionPoints.Add(a);
+                        snapshotCellmap[a.X, a.Y] = false;
+
+                        var cubeCoords = HexHelper.ConvertToCube(a);
+                        var offsets = HexHelper.GetOffsetClockwise();
+
+                        foreach (var offset in offsets)
+                        {
+                            var neighbourCubeCoords = cubeCoords + offset;
+
+                            var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+
+                            pixels.Push(neighbourCoords);
+                        }
+
+                    }
+                }
+            }
+
+            return regionPoints;
+        }
+
+        private sealed class RegionDraft
+        {
+            public RegionDraft(OffsetCoords[] coords)
+            {
+                Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+            }
+
+            public OffsetCoords[] Coords { get; }
         }
     }
 }

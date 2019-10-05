@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -109,6 +110,7 @@
     <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
     <Compile Include="Components\PersonStatTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactoryTests.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSourceTests.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorTests.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorTests.cs" />

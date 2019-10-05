@@ -415,6 +415,7 @@
     <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\HitHelper.cs" />
     <Compile Include="Tactics\MapExtensions.cs" />
+    <Compile Include="Tactics\Spatial\Visualization\MapDrawer.cs" />
     <Compile Include="Tactics\TacticalActRoll.cs" />
     <Compile Include="Tactics\TacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
