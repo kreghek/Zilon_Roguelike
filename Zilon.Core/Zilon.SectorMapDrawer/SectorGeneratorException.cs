@@ -2,7 +2,6 @@
 
 namespace Zilon.SectorGegerator
 {
-
     [Serializable]
     public class SectorGeneratorException : Exception
     {
