@@ -2,22 +2,36 @@
 
 namespace Zilon.Core.MapGenerators
 {
+    /// <summary>
+    /// Базовый селектор фабрики карт, основанный на switch-case.
+    /// </summary>
     public abstract class SwitchMapFactorySelectorBase : IMapFactorySelector
     {
         public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
         {
             switch (sectorScheme.MapGenerator)
             {
-                case "CellularAutomaton":
+                case SchemeSectorMapGenerator.Room:
+                    return RoomMapFactory;
+
+                case SchemeSectorMapGenerator.CellularAutomaton:
                     return CellularAutomatonMapFactory;
 
+                //TODO Прописать для всех схем конкретный генератор.
+                // После явного прописывания здесь нужно будет выбрасывать исключение.
                 default:
                     return RoomMapFactory;
             }
         }
 
+        /// <summary>
+        /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
+        /// </summary>
         protected abstract IMapFactory CellularAutomatonMapFactory { get; }
 
+        /// <summary>
+        /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
+        /// </summary>
         protected abstract IMapFactory RoomMapFactory { get; }
     }
 }

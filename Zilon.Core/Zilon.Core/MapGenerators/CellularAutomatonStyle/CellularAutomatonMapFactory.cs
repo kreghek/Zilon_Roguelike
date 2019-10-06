@@ -328,33 +328,47 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             while (pixels.Count > 0)
             {
-                var a = pixels.Pop();
-                if (a.X < _mapWidth && a.X >= 0 &&
-                        a.Y < _mapHeight && a.Y >= 0)//make sure we stay within bounds
+                var currentCell = pixels.Pop();
+
+                var isInBound = IsInBounds(currentCell);
+
+                if (!isInBound)
                 {
+                    // Если текущая точка указывает за край карты, то не пытаемся её заливать.
+                    // Пропускаем.
+                    continue;
+                }
 
-                    if (snapshotCellmap[a.X, a.Y])
-                    {
-                        regionPoints.Add(a);
-                        snapshotCellmap[a.X, a.Y] = false;
+                if (!snapshotCellmap[currentCell.X, currentCell.Y])
+                {
+                    // Заливаем только живые клетки.
+                    // Мертвые клетки являются границей, они не попадают в заливку.
+                    continue;
+                }
 
-                        var cubeCoords = HexHelper.ConvertToCube(a);
-                        var offsets = HexHelper.GetOffsetClockwise();
+                regionPoints.Add(currentCell);
+                snapshotCellmap[currentCell.X, currentCell.Y] = false;
 
-                        foreach (var offset in offsets)
-                        {
-                            var neighbourCubeCoords = cubeCoords + offset;
+                var cubeCoords = HexHelper.ConvertToCube(currentCell);
+                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
 
-                            var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+                foreach (var offset in clockwiseOffsets)
+                {
+                    var neighbourCubeCoords = cubeCoords + offset;
 
-                            pixels.Push(neighbourCoords);
-                        }
+                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
-                    }
+                    pixels.Push(neighbourCoords);
                 }
             }
 
             return regionPoints;
+        }
+
+        private bool IsInBounds(OffsetCoords a)
+        {
+            return a.X < _mapWidth && a.X >= 0 &&
+                                    a.Y < _mapHeight && a.Y >= 0;
         }
 
         private sealed class RegionDraft

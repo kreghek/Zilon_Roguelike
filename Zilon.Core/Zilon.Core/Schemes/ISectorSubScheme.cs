@@ -91,7 +91,9 @@
         /// </summary>
         bool IsStart { get; }
 
-        //TODO Сделать перечислением. Перечисление будет равняться поддерживаемым генераторам.
-        string MapGenerator { get; }
+        /// <summary>
+        /// Генератор, который будет использован для генерации карты текущего сектора.
+        /// </summary>
+        SchemeSectorMapGenerator MapGenerator { get; }
     }
 }

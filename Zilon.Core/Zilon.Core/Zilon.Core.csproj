@@ -179,6 +179,7 @@
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
+    <Compile Include="Schemes\SchemeSectorMapGenerator.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Scoring\DetailedLifetime.cs" />
