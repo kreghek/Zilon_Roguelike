@@ -233,7 +233,9 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Release
       - run:
           name: Mass Launcher
-          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh      
+          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh     
+      - store_artifacts:
+          path: /test_sectorMapDrawer/maps
 workflows:
   version: 2
   commit:
