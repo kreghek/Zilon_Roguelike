@@ -103,6 +103,7 @@
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
+    <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />
     <Compile Include="MapGenerators\WildStyle\WildMapFactory.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
@@ -416,7 +417,6 @@
     <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\HitHelper.cs" />
     <Compile Include="Tactics\MapExtensions.cs" />
-    <Compile Include="Tactics\Spatial\Visualization\MapDrawer.cs" />
     <Compile Include="Tactics\TacticalActRoll.cs" />
     <Compile Include="Tactics\TacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
@@ -535,6 +535,8 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Tactics\Spatial\Visualization\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

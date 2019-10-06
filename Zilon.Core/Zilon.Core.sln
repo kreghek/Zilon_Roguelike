@@ -61,6 +61,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.MassWorldGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.MassSectorGenerator", "Zilon.Core.MassSectorGenerator\Zilon.Core.MassSectorGenerator.csproj", "{9045F970-688B-4BC0-AD3C-247CEABE94B6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.SectorGegerator", "Zilon.SectorGegerator\Zilon.SectorGegerator.csproj", "{462B31DE-5AD1-436C-86AE-590C575581CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.CommonUtilities", "Zilon.CommonUtilities\Zilon.CommonUtilities.csproj", "{B9367196-F13A-434E-9971-E823D2E2A7B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +137,14 @@ Global
 		{9045F970-688B-4BC0-AD3C-247CEABE94B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9045F970-688B-4BC0-AD3C-247CEABE94B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9045F970-688B-4BC0-AD3C-247CEABE94B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{462B31DE-5AD1-436C-86AE-590C575581CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{462B31DE-5AD1-436C-86AE-590C575581CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{462B31DE-5AD1-436C-86AE-590C575581CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{462B31DE-5AD1-436C-86AE-590C575581CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9367196-F13A-434E-9971-E823D2E2A7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9367196-F13A-434E-9971-E823D2E2A7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9367196-F13A-434E-9971-E823D2E2A7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9367196-F13A-434E-9971-E823D2E2A7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +166,8 @@ Global
 		{36013151-86C1-431E-ABC6-AFF816D4E015} = {49B389A3-F804-4C6C-B6E1-B68A5F309A7D}
 		{FE267C20-E743-4E58-9A74-49FE482FF058} = {49B389A3-F804-4C6C-B6E1-B68A5F309A7D}
 		{9045F970-688B-4BC0-AD3C-247CEABE94B6} = {49B389A3-F804-4C6C-B6E1-B68A5F309A7D}
+		{462B31DE-5AD1-436C-86AE-590C575581CB} = {0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}
+		{B9367196-F13A-434E-9971-E823D2E2A7B3} = {0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
