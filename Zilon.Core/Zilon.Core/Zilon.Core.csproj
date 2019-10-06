@@ -535,8 +535,6 @@
   <ItemGroup>
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tactics\Spatial\Visualization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -107,7 +107,7 @@ namespace Zilon.SectorGegerator
             }
             else
             {
-                if (!int.TryParse(diceSeedString, out var diceSeed))
+                if (int.TryParse(diceSeedString, out var diceSeed))
                 {
                     dice = new Dice(diceSeed);
                     Log.Info($"DICE SEED: {diceSeed}");
