@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
@@ -9,16 +10,25 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Фабрика карты на основе клеточного автомата.
+    /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
+        private readonly int SIMULATION_COUNT = 3;
+        private const int DEATH_LIMIT = 4;
+        private const int BIRTH_LIMIT = 6;
+
         private readonly IDice _dice;
-        private readonly int _simulationCount = 3;
+        
         private int _mapWidth = 25;
         private int _mapHeight = 25;
         private int _chanceToStartAlive = 45; // Процент, что на старте клетка будет живой.
-        private int _deathLimit = 4;
-        private int _birthLimit = 6;
 
+        /// <summary>
+        /// Конструктор фабрики.
+        /// </summary>
+        /// <param name="dice"> Кость для рандома. </param>
         public CellularAutomatonMapFactory(IDice dice)
         {
             _dice = dice;
@@ -45,7 +55,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             // Несколько шагов симуляции
-            for (var i = 0; i < _simulationCount; i++)
+            for (var i = 0; i < SIMULATION_COUNT; i++)
             {
                 var newMap = DoSimulationStep(cellMap);
                 cellMap = newMap;
@@ -111,12 +121,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     }
                 }
             }
-
-            var playerActorStartNode = map.Regions
-            .SingleOrDefault(x => x.IsStart).Nodes
-            .First();
-
-            var a = map.Nodes.Single(x => x == playerActorStartNode);
 
             return Task.FromResult(map);
         }
@@ -255,7 +259,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     if (oldCellMap[x, y])
                     {
-                        if (aliveCount < _deathLimit)
+                        if (aliveCount < DEATH_LIMIT)
                         {
                             newCellMap[x, y] = false;
                         }
@@ -266,7 +270,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
                     else
                     {
-                        if (aliveCount > _birthLimit)
+                        if (aliveCount > BIRTH_LIMIT)
                         {
                             newCellMap[x, y] = true;
                         }
@@ -298,15 +302,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var nX = offsetCoords.X;
                 var nY = offsetCoords.Y;
 
-                if (nX < 0 || nY < 0 || nX >= _mapWidth || nY >= _mapHeight)
+                // Границу мертвым живым соседом.
+                // Сделано, чтобы углы не заполнялись.
+
+                if (nX >= 0 && nY >= 0 && nX < _mapWidth && nY < _mapHeight)
                 {
-                    // Границу считаем живым соседом.
-                    // Сделано, чтобы зполнялись углы.
-                    //aliveCount++;
-                }
-                else if (oldCellMap[nX, nY])
-                {
-                    aliveCount++;
+                    if (oldCellMap[nX, nY])
+                    {
+                        aliveCount++;
+                    }
                 }
             }
 
