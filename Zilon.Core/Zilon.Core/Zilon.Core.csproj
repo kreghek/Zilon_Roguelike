@@ -87,6 +87,7 @@
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactory.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\RegionDraft.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\CitizenGenerator.cs" />

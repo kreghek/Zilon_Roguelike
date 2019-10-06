@@ -252,6 +252,7 @@ workflows:
             - build
             - test_45
             - test_specflow
+      - test_sectorMapDrawer
       - build_Win_x64:
           requires:
             - build
