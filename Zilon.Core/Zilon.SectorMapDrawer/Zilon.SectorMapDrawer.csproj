@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
     <Compile Include="MapDrawer.cs" />
     <Compile Include="MapFactorySelector.cs" />
     <Compile Include="SectorGeneratorException.cs" />

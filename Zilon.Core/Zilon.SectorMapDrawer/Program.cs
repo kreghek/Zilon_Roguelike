@@ -70,6 +70,8 @@ namespace Zilon.SectorGegerator
                 var sectorSchemeIndex = random.Next(0, sectorSchemes.Length);
                 var sectorScheme = sectorSchemes[sectorSchemeIndex];
 
+                Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
+
                 return sectorScheme;
             }
             else
@@ -108,6 +110,7 @@ namespace Zilon.SectorGegerator
                 if (!int.TryParse(diceSeedString, out var diceSeed))
                 {
                     dice = new Dice(diceSeed);
+                    Log.Info($"DICE SEED: {diceSeed}");
                 }
                 else
                 {
