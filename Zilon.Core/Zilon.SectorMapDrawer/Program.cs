@@ -19,25 +19,42 @@ namespace Zilon.SectorGegerator
 
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            var dice = CreateDice(args);
+            try
+            {
+                var dice = CreateDice(args);
 
-            var schemeService = CreateSchemeService(args);
+                var schemeService = CreateSchemeService(args);
 
-            var sectorScheme = GetSectorScheme(args, schemeService);
+                var sectorScheme = GetSectorScheme(args, schemeService);
 
-            var cellularAutomatonMpfactory = new CellularAutomatonMapFactory(dice);
+                var cellularAutomatonMpfactory = new CellularAutomatonMapFactory(dice);
 
-            var roomRandomSource = new RoomGeneratorRandomSource(dice);
-            var roomGeneratory = new RoomGenerator(roomRandomSource);
-            var roomMapFactory = new RoomMapFactory(roomGeneratory);
+                var roomRandomSource = new RoomGeneratorRandomSource(dice);
+                var roomGeneratory = new RoomGenerator(roomRandomSource);
+                var roomMapFactory = new RoomMapFactory(roomGeneratory);
 
-            var mapFactorySelector = new MapFactorySelector(cellularAutomatonMpfactory, roomMapFactory);
+                var mapFactorySelector = new MapFactorySelector(cellularAutomatonMpfactory, roomMapFactory);
 
-            var mapFactory = mapFactorySelector.GetMapFactory(sectorScheme);
+                var mapFactory = mapFactorySelector.GetMapFactory(sectorScheme);
 
-            var map = await mapFactory.CreateAsync(sectorScheme);
+                var map = await mapFactory.CreateAsync(sectorScheme);
 
-            SaveMapAsImage(args, map);
+                SaveMapAsImage(args, map);
+            }
+            catch(SectorGeneratorException exception)
+            {
+                // Эти исключения более-менее контролируемы.
+                Log.Error(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                // Это неконтроллируемые исключения.
+                // Но мы из всё равно отлавливаем, чтобы был корректный выход из приложения.
+                // Чтобы на стороне билд-сервера могли запуститься следующие итерации.
+                //TODO Рассмотреть вариант, когда скрипт запуск ане падает, если есть код ошибки.
+                //Тогда этот блок можно будет убрать.
+                Log.Error(exception);
+            }
         }
 
         private static void SaveMapAsImage(string[] args, Core.Tactics.Spatial.ISectorMap map)
@@ -62,7 +79,9 @@ namespace Zilon.SectorGegerator
                 // Если схемы не указаны, то берём случайную схему.
                 // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
 
-                var locationSchemes = schemeService.GetSchemes<ILocationScheme>();
+                var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
+                    .Where(x=>x.SectorLevels != null && x.SectorLevels.Any())
+                    .ToArray();
                 var locationSchemeIndex = random.Next(0, locationSchemes.Length);
                 var locationScheme = locationSchemes[locationSchemeIndex];
 
