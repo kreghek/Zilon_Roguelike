@@ -223,12 +223,24 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_MacOsxUniversal.zip
-  
+  test_sectorMapDrawer:
+    working_directory: /test_sectorMapDrawer
+    docker:
+      - image: mono:6.0.0.313
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Release
+      - run:
+          name: Mass Launcher
+          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh      
 workflows:
   version: 2
   commit:
     jobs:
       - build
+      # В итоге сделать запуск только ночами
+      - test_sectorMapDrawer
       - test_45:
           requires:
             - build
