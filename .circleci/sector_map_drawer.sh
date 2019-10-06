@@ -1,12 +1,15 @@
 #!/bin/sh
 
+set -e
+set -x
+
 mkdir -p /test_sectorMapDrawer/maps
 
 for i in $(seq 1 10); do
   diceSeed=$RANDOM
 
-  ../Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer/bin/Release/Zilon.SectorMapDrawer.exe \
+  /test_sectorMapDrawer/Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer/bin/Release/Zilon.SectorMapDrawer.exe \
     dice_seed=$diceSeed \
-    scheme_catalog="./Zilon.Client/Assets/Resources/Schemes" \
+    scheme_catalog="/test_sectorMapDrawer/Zilon.Client/Assets/Resources/Schemes" \
     out="/test_sectorMapDrawer/maps/map-$i.bmp"
 done
