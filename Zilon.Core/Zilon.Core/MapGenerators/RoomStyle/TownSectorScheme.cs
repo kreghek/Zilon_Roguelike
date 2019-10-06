@@ -16,6 +16,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public string[] TransSectorSids { get; }
         public bool IsStart { get; }
         public int MinRegionMonsterCount { get; }
-        public SchemeSectorMapGenerator MapGenerator { get; }
+        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
     }
 }

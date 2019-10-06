@@ -9,7 +9,14 @@ namespace Zilon.Core.MapGenerators
     {
         public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
         {
-            switch (sectorScheme.MapGenerator)
+            if (sectorScheme.MapGeneratorOptions == null)
+            {
+                //TODO Прописать для всех схем конкретный генератор.
+                // После явного прописывания здесь нужно будет выбрасывать исключение.
+                return RoomMapFactory;
+            }
+
+            switch (sectorScheme.MapGeneratorOptions.MapGenerator)
             {
                 case SchemeSectorMapGenerator.Room:
                     return RoomMapFactory;

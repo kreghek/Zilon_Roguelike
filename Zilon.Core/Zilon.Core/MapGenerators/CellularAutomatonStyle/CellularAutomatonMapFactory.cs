@@ -20,11 +20,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private readonly IDice _dice;
 
-        //TODO Эти параметры вынести в схему сектора
-        private int _mapWidth = 25;
-        private int _mapHeight = 25;
-        private int _chanceToStartAlive = 45; // Процент, что на старте клетка будет живой.
-
         /// <summary>
         /// Конструктор фабрики.
         /// </summary>
@@ -39,17 +34,29 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var sectorScheme = (ISectorSubScheme)options;
             var transitions = CreateTransitions(sectorScheme);
 
-            var cellMap = new bool[_mapWidth, _mapHeight];
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
+
+            var mapWidth = cellularAutomatonOptions.MapWidth;
+            var mapHeight = cellularAutomatonOptions.MapHeight;
+
+            var _chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
+
+            var mapData = new MapData
+            {
+                Matrix = new bool[mapWidth, mapHeight],
+                Width = mapWidth,
+                Height = mapHeight
+            };
 
             // Случайное заполнение
-            for (var x = 0; x < _mapWidth; x++)
+            for (var x = 0; x < mapWidth; x++)
             {
-                for (var y = 0; y < _mapHeight; y++)
+                for (var y = 0; y < mapHeight; y++)
                 {
                     var blockRoll = _dice.Roll(100);
                     if (blockRoll < _chanceToStartAlive)
                     {
-                        cellMap[x, y] = true;
+                        mapData.Matrix[x, y] = true;
                     }
                 }
             }
@@ -57,11 +64,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Несколько шагов симуляции
             for (var i = 0; i < SIMULATION_COUNT; i++)
             {
-                var newMap = DoSimulationStep(cellMap);
-                cellMap = newMap;
+                var newMap = DoSimulationStep(mapData);
+                mapData.Matrix = newMap;
             }
 
-            var draftRegions = MakeUnitedRegions(cellMap);
+            var draftRegions = MakeUnitedRegions(mapData);
 
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -87,7 +94,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             // Добавляем узлы каридоров.
-            CreateCorridors(cellMap, draftRegions, map);
+            CreateCorridors(mapData, draftRegions, map);
 
             // Размещаем переходы и отмечаем стартовую комнату.
             // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
@@ -124,13 +131,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return Task.FromResult(map);
         }
 
-        private void CreateCorridors(bool[,] cellMap, RegionDraft[] draftRegions, ISectorMap map)
+        private void CreateCorridors(MapData mapData, RegionDraft[] draftRegions, ISectorMap map)
         {
+            var cellMap = mapData.Matrix;
+            var mapWidth = mapData.Width;
+            var mapHeight = mapData.Height;
+
             var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
 
-            for (var x = 0; x < _mapWidth; x++)
+            for (var x = 0; x < mapWidth; x++)
             {
-                for (var y = 0; y < _mapHeight; y++)
+                for (var y = 0; y < mapHeight; y++)
                 {
                     if (cellMap[x, y])
                     {
@@ -146,7 +157,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private RegionDraft[] MakeUnitedRegions(bool[,] cellMap)
+        private RegionDraft[] MakeUnitedRegions(MapData mapData)
         {
             // Формирование регионов.
             // Регионы, кроме дальнейшего размещения игровых предметов,
@@ -155,11 +166,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // В секторе не должно быть изолированых регионов, поэтому
             // дальше все регионы объединяются в единый граф.
             var openNodes = new List<OffsetCoords>();
-            for (var x = 0; x < _mapWidth; x++)
+            for (var x = 0; x < mapData.Width; x++)
             {
-                for (var y = 0; y < _mapHeight; y++)
+                for (var y = 0; y < mapData.Height; y++)
                 {
-                    if (cellMap[x, y])
+                    if (mapData.Matrix[x, y])
                     {
                         openNodes.Add(new OffsetCoords(x, y));
                     }
@@ -172,7 +183,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             while (openNodes.Any())
             {
                 var openNode = openNodes.First();
-                var regionCoords = FloodFillRegions(cellMap, openNode);
+                var regionCoords = FloodFillRegions(mapData, openNode);
                 var region = new RegionDraft(regionCoords.ToArray());
 
                 openNodes.RemoveAll(x => region.Coords.Contains(x));
@@ -235,7 +246,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     foreach (var lineItem in line)
                     {
                         var offsetCoords = HexHelper.ConvertToOffset(lineItem);
-                        cellMap[offsetCoords.X, offsetCoords.Y] = true;
+                        mapData.Matrix[offsetCoords.X, offsetCoords.Y] = true;
                     }
 
                     openRegions.Remove(nearbyOpenRegion);
@@ -246,17 +257,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions.ToArray();
         }
 
-        private bool[,] DoSimulationStep(bool[,] oldCellMap)
+        private bool[,] DoSimulationStep(MapData mapData)
         {
-            var newCellMap = new bool[_mapWidth, _mapHeight];
+            var newCellMap = new bool[mapData.Width, mapData.Height];
 
-            for (var x = 0; x < _mapWidth; x++)
+            for (var x = 0; x < mapData.Width; x++)
             {
-                for (var y = 0; y < _mapHeight; y++)
+                for (var y = 0; y < mapData.Height; y++)
                 {
-                    var aliveCount = CountAliveNeighbours(oldCellMap, x, y);
+                    var aliveCount = CountAliveNeighbours(mapData, x, y);
 
-                    if (oldCellMap[x, y])
+                    if (mapData.Matrix[x, y])
                     {
                         if (aliveCount < DEATH_LIMIT)
                         {
@@ -284,7 +295,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return newCellMap;
         }
 
-        private int CountAliveNeighbours(bool[,] oldCellMap, int x, int y)
+        private int CountAliveNeighbours(MapData mapData, int x, int y)
         {
             var aliveCount = 0;
 
@@ -304,9 +315,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Границу мертвым живым соседом.
                 // Сделано, чтобы углы не заполнялись.
 
-                if (nX >= 0 && nY >= 0 && nX < _mapWidth && nY < _mapHeight)
+                if (nX >= 0 && nY >= 0 && nX < mapData.Width && nY < mapData.Height)
                 {
-                    if (oldCellMap[nX, nY])
+                    if (mapData.Matrix[nX, nY])
                     {
                         aliveCount++;
                     }
@@ -316,9 +327,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return aliveCount;
         }
 
-        private IEnumerable<OffsetCoords> FloodFillRegions(bool[,] cellMap, OffsetCoords point)
+        private IEnumerable<OffsetCoords> FloodFillRegions(MapData mapData, OffsetCoords point)
         {
-            var snapshotCellmap = (bool[,])cellMap.Clone();
+            var snapshotCellmap = (bool[,])mapData.Matrix.Clone();
 
             var regionPoints = new List<OffsetCoords>();
 
@@ -329,7 +340,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var currentCell = pixels.Pop();
 
-                var isInBound = IsInBounds(currentCell, _mapWidth, _mapHeight);
+                var isInBound = IsInBounds(currentCell, mapData.Width, mapData.Height);
 
                 if (!isInBound)
                 {
@@ -393,5 +404,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
+    }
+
+    internal class MapData {
+        public bool[,] Matrix { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
     }
 }

@@ -40,6 +40,9 @@
       <HintPath>..\packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JsonSubTypes, Version=1.6.0.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonSubTypes.1.6.0\lib\net46\JsonSubTypes.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -168,6 +171,7 @@
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
+    <Compile Include="Schemes\SectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\ISectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\ISectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
@@ -183,6 +187,7 @@
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
     <Compile Include="Schemes\SchemeSectorMapGenerator.cs" />
+    <Compile Include="Schemes\SectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Scoring\DetailedLifetime.cs" />

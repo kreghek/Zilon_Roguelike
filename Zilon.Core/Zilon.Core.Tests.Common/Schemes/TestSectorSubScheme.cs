@@ -26,5 +26,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int RegionChestCountRatio { get; set; }
         public int MinRegionMonsterCount { get; }
         public SchemeSectorMapGenerator MapGenerator { get; }
+        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
     }
 }

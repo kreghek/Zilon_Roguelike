@@ -115,5 +115,9 @@ namespace Zilon.Core.Schemes
 
         [JsonProperty]
         public SchemeSectorMapGenerator MapGenerator { get; private set; }
+
+        [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]
+        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
     }
 }
