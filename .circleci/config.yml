@@ -241,8 +241,6 @@ workflows:
   commit:
     jobs:
       - build
-      # В итоге сделать запуск только ночами
-      - test_sectorMapDrawer
       - test_45:
           requires:
             - build
@@ -339,6 +337,11 @@ workflows:
             - build
       - test_bots:
           requires:
+            - build
+            - test_45
+            - test_specflow
+      - test_sectorMapDrawer:
+           requires:
             - build
             - test_45
             - test_specflow
