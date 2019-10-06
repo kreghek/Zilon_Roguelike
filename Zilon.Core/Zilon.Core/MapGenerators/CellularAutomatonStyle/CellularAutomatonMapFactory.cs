@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private const int BIRTH_LIMIT = 6;
 
         private readonly IDice _dice;
-        
+
         //TODO Эти параметры вынести в схему сектора
         private int _mapWidth = 25;
         private int _mapHeight = 25;
@@ -79,7 +79,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     regionNodeList.Add(node);
                 }
-
 
                 var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
 
