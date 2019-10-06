@@ -8,7 +8,7 @@ mkdir -p /test_sectorMapDrawer/maps
 chmod u+x /test_sectorMapDrawer/Zilon.Core/Zilon.SectorMapDrawer/bin/Release/Zilon.SectorMapDrawer.exe
 
 for i in $(seq 1 10); do
-  diceSeed=$RANDOM
+  diceSeed=od -An -N2 -i /dev/random
 
   /test_sectorMapDrawer/Zilon.Core/Zilon.SectorMapDrawer/bin/Release/Zilon.SectorMapDrawer.exe \
     dice_seed=$diceSeed \
