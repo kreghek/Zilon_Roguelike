@@ -15,6 +15,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
         [Test()]
         public async Task CreateAsyncTestAsync()
         {
+            //TODO Вместо этого теста сделать приложение для массовой генерации секторов.
+            // Путь генерации передавать параметром приложения.
+            //TODO Добавить бенчи на создание сектора на основе клеточного автомата.
+            //TODO Добавить бенчи на перемещение по сектору на основе клеточного автомата.
+
             var dice = new Dice();
 
             var mapFactory = new CellularAutomatonMapFactory(dice);
