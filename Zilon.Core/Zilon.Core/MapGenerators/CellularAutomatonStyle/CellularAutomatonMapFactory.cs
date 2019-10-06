@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,7 +61,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 cellMap = newMap;
             }
 
-            var draftRegions = MakeConnectedRegions(cellMap);
+            var draftRegions = MakeUnitedRegions(cellMap);
 
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -147,7 +146,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private RegionDraft[] MakeConnectedRegions(bool[,] cellMap)
+        private RegionDraft[] MakeUnitedRegions(bool[,] cellMap)
         {
             // Формирование регионов.
             // Регионы, кроме дальнейшего размещения игровых предметов,
@@ -330,7 +329,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var currentCell = pixels.Pop();
 
-                var isInBound = IsInBounds(currentCell);
+                var isInBound = IsInBounds(currentCell, _mapWidth, _mapHeight);
 
                 if (!isInBound)
                 {
@@ -365,20 +364,24 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regionPoints;
         }
 
-        private bool IsInBounds(OffsetCoords a)
+        private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
-            return a.X < _mapWidth && a.X >= 0 &&
-                                    a.Y < _mapHeight && a.Y >= 0;
-        }
-
-        private sealed class RegionDraft
-        {
-            public RegionDraft(OffsetCoords[] coords)
+            if (!ValueInRange(coords.X, 0, width - 1))
             {
-                Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+                return false;
             }
 
-            public OffsetCoords[] Coords { get; }
+            if (!ValueInRange(coords.Y, 0, height - 1))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool ValueInRange(int value, int min, int max)
+        {
+            return min < value && value < max;
         }
 
         private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
