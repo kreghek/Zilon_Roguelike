@@ -11,7 +11,7 @@ for i in $(seq 1 10); do
   diceSeed=$(od -An -N2 -i /dev/random)
 
   mono --debug /test_sectorMapDrawer/Zilon.Core/Zilon.SectorMapDrawer/bin/Release/Zilon.SectorMapDrawer.exe \
-    dice_seed=$(diceSeed+0) \
+    dice_seed=$($diceSeed+0) \
     scheme_catalog="/test_sectorMapDrawer/Zilon.Client/Assets/Resources/Schemes" \
     out="/test_sectorMapDrawer/maps/map-$i.bmp"
 done
