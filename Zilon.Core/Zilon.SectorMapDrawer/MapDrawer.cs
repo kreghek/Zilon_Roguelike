@@ -36,7 +36,7 @@ namespace Zilon.SectorGegerator
                     var x = (coords[0] - info.LeftCoord) * cellSize;
                     var y = (coords[1] - info.BottomCoord) * cellSize;
 
-                    graphics.FillEllipse(Brushes.White, x, y - cellSize, cellSize, cellSize);
+                    graphics.FillEllipse(Brushes.White, x + cellSize, y + cellSize, cellSize, cellSize);
                 }
             }
         }
@@ -48,7 +48,8 @@ namespace Zilon.SectorGegerator
             var yAxisDiff = info.TopCoord - info.BottomCoord;
             var height = (yAxisDiff + 1) * cellSize;
 
-            var bitmap = new Bitmap(width, height);
+            var margin = cellSize * 2;
+            var bitmap = new Bitmap(width + margin, height + margin);
 
             return bitmap;
         }
@@ -63,8 +64,8 @@ namespace Zilon.SectorGegerator
             info.LeftCoord = xAxisOrderedNode.First().OffsetX;
             info.RightCoord = xAxisOrderedNode.Last().OffsetX;
 
-            info.BottomCoord = xAxisOrderedNode.First().OffsetY;
-            info.TopCoord = xAxisOrderedNode.Last().OffsetY;
+            info.BottomCoord = yAxisOrderedNode.First().OffsetY;
+            info.TopCoord = yAxisOrderedNode.Last().OffsetY;
 
             return info;
         }
