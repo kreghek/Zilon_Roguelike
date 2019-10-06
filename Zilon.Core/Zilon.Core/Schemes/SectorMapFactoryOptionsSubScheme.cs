@@ -9,8 +9,8 @@ namespace Zilon.Core.Schemes
         typeof(SectorCellularAutomataMapFactoryOptionsSubScheme),
         nameof(SchemeSectorMapGenerator.CellularAutomaton)
         )]
-    public sealed class SectorMapFactoryOptionsSubScheme : ISectorMapFactoryOptionsSubScheme
+    public abstract class SectorMapFactoryOptionsSubSchemeBase : ISectorMapFactoryOptionsSubScheme
     {
-        public SchemeSectorMapGenerator MapGenerator { get; }
+        public abstract SchemeSectorMapGenerator MapGenerator { get; }
     }
 }

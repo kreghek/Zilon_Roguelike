@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -327,72 +329,26 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return aliveCount;
         }
 
-        private IEnumerable<OffsetCoords> FloodFillRegions(MapData mapData, OffsetCoords point)
+        private static IEnumerable<OffsetCoords> FloodFillRegions(MapData mapData, OffsetCoords point)
         {
             var snapshotCellmap = (bool[,])mapData.Matrix.Clone();
 
-            var regionPoints = new List<OffsetCoords>();
+            var regionPoints = HexBinaryFiller.FloodFill(
+                snapshotCellmap,
+                mapData.Width,
+                mapData.Height,
+                point);
 
-            var pixels = new Stack<OffsetCoords>();
-            pixels.Push(point);
-
-            while (pixels.Count > 0)
+            // В регионе должна быть хоть одна точка - стартовая.
+            // Потому что заливка начинается с выбора незалитых точек.
+            // Если этот метод не будет возращать точки, то будет бесконечный цикл.
+            // Это критично, поэтому выбрасываем исключение.
+            if (!regionPoints.Any())
             {
-                var currentCell = pixels.Pop();
-
-                var isInBound = IsInBounds(currentCell, mapData.Width, mapData.Height);
-
-                if (!isInBound)
-                {
-                    // Если текущая точка указывает за край карты, то не пытаемся её заливать.
-                    // Пропускаем.
-                    continue;
-                }
-
-                if (!snapshotCellmap[currentCell.X, currentCell.Y])
-                {
-                    // Заливаем только живые клетки.
-                    // Мертвые клетки являются границей, они не попадают в заливку.
-                    continue;
-                }
-
-                regionPoints.Add(currentCell);
-                snapshotCellmap[currentCell.X, currentCell.Y] = false;
-
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
-
-                foreach (var offset in clockwiseOffsets)
-                {
-                    var neighbourCubeCoords = cubeCoords + offset;
-
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
-
-                    pixels.Push(neighbourCoords);
-                }
+                throw new InvalidOperationException("Должна быть залита хотя бы одна точка.");
             }
 
             return regionPoints;
-        }
-
-        private static bool IsInBounds(OffsetCoords coords, int width, int height)
-        {
-            if (!ValueInRange(coords.X, 0, width - 1))
-            {
-                return false;
-            }
-
-            if (!ValueInRange(coords.Y, 0, height - 1))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool ValueInRange(int value, int min, int max)
-        {
-            return min < value && value < max;
         }
 
         private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
@@ -404,13 +360,5 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
-    }
-
-    internal class MapData {
-        public bool[,] Matrix { get; set; }
-
-        public int Width { get; set; }
-
-        public int Height { get; set; }
     }
 }

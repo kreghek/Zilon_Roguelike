@@ -114,10 +114,7 @@ namespace Zilon.Core.Schemes
         public int RegionChestCountRatio { get; private set; }
 
         [JsonProperty]
-        public SchemeSectorMapGenerator MapGenerator { get; private set; }
-
-        [JsonProperty]
-        [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]
-        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+        [JsonConverter(typeof(ConcreteTypeConverter<SectorMapFactoryOptionsSubSchemeBase>))]
+        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; private set; }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Zilon.Core.Schemes
 {
-    public class SectorCellularAutomataMapFactoryOptionsSubScheme : ISectorCellularAutomataMapFactoryOptionsSubScheme
+    public class SectorCellularAutomataMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase, ISectorCellularAutomataMapFactoryOptionsSubScheme
     {
-        public SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.CellularAutomaton;
+        public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.CellularAutomaton;
 
         [JsonProperty]
         public int MapWidth { get; private set; }
