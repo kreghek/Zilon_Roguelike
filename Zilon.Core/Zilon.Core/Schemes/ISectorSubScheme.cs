@@ -92,8 +92,8 @@
         bool IsStart { get; }
 
         /// <summary>
-        /// Генератор, который будет использован для генерации карты текущего сектора.
+        /// параметры генерации карты.
         /// </summary>
-        SchemeSectorMapGenerator MapGenerator { get; }
+        ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
     }
 }

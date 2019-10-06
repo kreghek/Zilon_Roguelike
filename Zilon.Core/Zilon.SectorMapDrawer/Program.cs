@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Zilon.CommonUtilities;
 using Zilon.Core.CommonServices.Dices;
@@ -9,7 +10,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.SectorGegerator
 {
-    class Program
+    static class Program
     {
         private const string DICE_SEED_ARG_NAME = "dice_seed";
         private const string SCHEME_CATALOG_PATH_ARG_NAME = "scheme_catalog";
@@ -17,7 +18,7 @@ namespace Zilon.SectorGegerator
         private const string SECTOR_SCHEME_SID_ARG_NAME = "sector";
         private const string OUT_PATH_ARG_NAME = "out";
 
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
@@ -41,18 +42,20 @@ namespace Zilon.SectorGegerator
 
                 SaveMapAsImage(args, map);
             }
-            catch(SectorGeneratorException exception)
+            catch (SectorGeneratorException exception)
             {
                 // Эти исключения более-менее контролируемы.
                 Log.Error(exception.Message);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 // Это неконтроллируемые исключения.
 
                 // Мы их не отлавливаем и позволяем приложению упасть.
                 // Это нужно, чтобы выполнение на билдсервере прикратилось ошибкой.
                 // Так мы узнаем, что была какая-то проблема.
+
+                Log.Error(exception);
 
                 throw;
             }
@@ -81,7 +84,7 @@ namespace Zilon.SectorGegerator
                 // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
 
                 var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
-                    .Where(x=>x.SectorLevels != null && x.SectorLevels.Any())
+                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
                     .ToArray();
                 var locationSchemeIndex = random.Next(0, locationSchemes.Length);
                 var locationScheme = locationSchemes[locationSchemeIndex];

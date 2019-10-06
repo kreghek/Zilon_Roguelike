@@ -168,6 +168,8 @@
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
+    <Compile Include="Schemes\ISectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
+    <Compile Include="Schemes\ISectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
     <Compile Include="Schemes\EquipCommonRuleType.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />

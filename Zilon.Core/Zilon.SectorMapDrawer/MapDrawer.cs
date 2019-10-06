@@ -9,7 +9,7 @@ namespace Zilon.SectorGegerator
 {
     public sealed class MapDrawer
     {
-        private int cellSize = 10;
+        private const int CELLSIZE = 10;
 
         public Bitmap DrawMap(IMap map)
         {
@@ -33,10 +33,10 @@ namespace Zilon.SectorGegerator
                 {
                     var coords = HexHelper.ConvertToWorld(node.OffsetX, node.OffsetY);
 
-                    var x = (coords[0] - info.LeftCoord) * cellSize;
-                    var y = (coords[1] - info.BottomCoord) * cellSize;
+                    var x = (coords[0] - info.LeftCoord) * CELLSIZE;
+                    var y = (coords[1] - info.BottomCoord) * CELLSIZE;
 
-                    graphics.FillEllipse(Brushes.White, x + cellSize, y + cellSize, cellSize, cellSize);
+                    graphics.FillEllipse(Brushes.White, x + CELLSIZE, y + CELLSIZE, CELLSIZE, CELLSIZE);
                 }
             }
         }
@@ -44,11 +44,11 @@ namespace Zilon.SectorGegerator
         private Bitmap CreateBitmap(ImageInfo info)
         {
             var xAxisDiff = info.RightCoord - info.LeftCoord;
-            var width = (xAxisDiff + 1) * cellSize;
+            var width = (xAxisDiff + 1) * CELLSIZE;
             var yAxisDiff = info.TopCoord - info.BottomCoord;
-            var height = (yAxisDiff + 1) * cellSize;
+            var height = (yAxisDiff + 1) * CELLSIZE;
 
-            var margin = cellSize * 2;
+            var margin = CELLSIZE * 2;
             var bitmap = new Bitmap(width + margin, height + margin);
 
             return bitmap;
