@@ -57,16 +57,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
             var matrix = new Matrix<bool>(new bool[mapWidth, mapHeight], mapWidth, mapHeight);
+            RegionDraft[] draftRegions = Create(transitions, chanceToStartAlive, ref matrix);
 
-            var retryCounter = 0;
-            RegionDraft[] draftRegions;
-            do
+            var map = CreateSectorMap(matrix, draftRegions, transitions);
+
+            return Task.FromResult(map);
+        }
+
+        private RegionDraft[] Create(IEnumerable<RoomTransition> transitions, int chanceToStartAlive, ref Matrix<bool> matrix)
+        {
+            for(var retry = 0; retry < RETRY_LIMIT; retry++)
             {
-                if (retryCounter > RETRY_LIMIT)
-                {
-                    throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
-                }
-
                 InitStartAliveMatrix(matrix, chanceToStartAlive);
 
                 // Несколько шагов симуляции
@@ -76,6 +77,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
+                RegionDraft[] draftRegions;
                 try
                 {
                     draftRegions = MakeUnitedRegions(matrix);
@@ -96,11 +98,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     try
                     {
                         var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, targetRegionDraftCount);
-                        draftRegions = splittedDraftRegions;
 
                         // Разделение успешно выполнено.
                         // Пропускаем карту дальше.
-                        break;
+                        return splittedDraftRegions;
                     }
                     catch (CellularAutomatonException)
                     {
@@ -109,10 +110,14 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                         continue;
                     }
                 }
-            } while (true);
-            var map = CreateSectorMap(matrix, draftRegions, transitions);
+                else
+                {
+                    return draftRegions;
+                }
+            }
 
-            return Task.FromResult(map);
+            // Если цикл закончился, значит вышел лимит попыток.
+            throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
         }
 
         private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
@@ -160,7 +165,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var transitionArray = transitions.ToArray();
                 for (var i = 1; i < transitionArray.Length; i++)
                 {
-                    // +1, потому что первый регион уже занят под стартовый.
                     var transitionRegion = regionOrderedBySize[i];
 
                     var transition = transitionArray[i];
