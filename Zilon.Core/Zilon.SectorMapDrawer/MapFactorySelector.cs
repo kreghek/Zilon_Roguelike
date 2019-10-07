@@ -2,6 +2,9 @@
 
 namespace Zilon.SectorGegerator
 {
+    /// <summary>
+    /// Локальная реализация селектора, основанного на переключении в зависимости от схемы сектора.
+    /// </summary>
     class MapFactorySelector : SwitchMapFactorySelectorBase
     {
         private readonly IMapFactory _cellularAutomatorMapFactory;
@@ -14,6 +17,7 @@ namespace Zilon.SectorGegerator
         }
 
         protected override IMapFactory CellularAutomatonMapFactory { get => _cellularAutomatorMapFactory; }
+
         protected override IMapFactory RoomMapFactory { get => _roomMapfactory; }
     }
 }

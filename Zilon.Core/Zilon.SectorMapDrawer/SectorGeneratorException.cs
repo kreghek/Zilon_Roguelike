@@ -2,6 +2,9 @@
 
 namespace Zilon.SectorGegerator
 {
+    /// <summary>
+    /// Исключение, которое выбрасывается в случае предстказуемой ошибки в работе рисовальщика.
+    /// </summary>
     [Serializable]
     public class SectorGeneratorException : Exception
     {

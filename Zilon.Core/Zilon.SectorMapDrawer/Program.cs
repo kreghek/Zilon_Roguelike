@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Zilon.CommonUtilities;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Schemes;
@@ -12,10 +13,36 @@ namespace Zilon.SectorGegerator
 {
     static class Program
     {
+        /// <summary>
+        /// Зерно генерации.
+        /// Ипользуется для того, чтобы получать одинаковые результаты при одном зерне генерации.
+        /// Если значение не задано, то будет использовано случайное зерно генерации.
+        /// </summary>
         private const string DICE_SEED_ARG_NAME = "dice_seed";
+
+        /// <summary>
+        /// Путь к папке со схемами.
+        /// Обычно это путь-к-проекту/Zilon.Client/Assets/Resources/Schemes.
+        /// </summary>
         private const string SCHEME_CATALOG_PATH_ARG_NAME = "scheme_catalog";
+
+        /// <summary>
+        /// Sid локации из каталога схем.
+        /// Если это значение не задано, то будет выбрана случайная локация.
+        /// </summary>
         private const string LOCATION_SCHEME_SID_ARG_NAME = "location";
+
+        /// <summary>
+        /// Sid сектора в указанной локации.
+        /// Если это значение не задано, то будет выбран случайный сектор в выбранной локации.
+        /// Помним, что локация может быть выбрана случайно.
+        /// </summary>
         private const string SECTOR_SCHEME_SID_ARG_NAME = "sector";
+
+        /// <summary>
+        /// Полный путь и наименование выходного файла.
+        /// Выходной файл будет в формате bmp.
+        /// </summary>
         private const string OUT_PATH_ARG_NAME = "out";
 
         static async Task Main(string[] args)
@@ -27,16 +54,7 @@ namespace Zilon.SectorGegerator
                 var schemeService = CreateSchemeService(args);
 
                 var sectorScheme = GetSectorScheme(args, schemeService);
-
-                var cellularAutomatonMpfactory = new CellularAutomatonMapFactory(dice);
-
-                var roomRandomSource = new RoomGeneratorRandomSource(dice);
-                var roomGeneratory = new RoomGenerator(roomRandomSource);
-                var roomMapFactory = new RoomMapFactory(roomGeneratory);
-
-                var mapFactorySelector = new MapFactorySelector(cellularAutomatonMpfactory, roomMapFactory);
-
-                var mapFactory = mapFactorySelector.GetMapFactory(sectorScheme);
+                var mapFactory = GetMapFactory(dice, sectorScheme);
 
                 var map = await mapFactory.CreateAsync(sectorScheme);
 
@@ -59,6 +77,21 @@ namespace Zilon.SectorGegerator
 
                 throw;
             }
+        }
+
+        private static IMapFactory GetMapFactory(IDice dice, ISectorSubScheme sectorScheme)
+        {
+            var cellularAutomatonMapfactory = new CellularAutomatonMapFactory(dice);
+
+            var roomRandomSource = new RoomGeneratorRandomSource(dice);
+            var roomGeneratory = new RoomGenerator(roomRandomSource);
+            var roomMapFactory = new RoomMapFactory(roomGeneratory);
+
+            var mapFactorySelector = new MapFactorySelector(cellularAutomatonMapfactory, roomMapFactory);
+
+            var mapFactory = mapFactorySelector.GetMapFactory(sectorScheme);
+
+            return mapFactory;
         }
 
         private static void SaveMapAsImage(string[] args, Core.Tactics.Spatial.ISectorMap map)
@@ -101,7 +134,17 @@ namespace Zilon.SectorGegerator
                 // Это будет использовано для отладки.
 
                 var locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
-                var sectorScheme = locationScheme.SectorLevels.Single(x => x.Sid == sectorSchemeSid);
+                if (locationScheme == null)
+                {
+                    throw new SectorGeneratorException($"Не найдена схема локации {locationSchemeSid}.");
+                }
+
+                var sectorScheme = locationScheme.SectorLevels.SingleOrDefault(x => x.Sid == sectorSchemeSid);
+                if (sectorScheme == null)
+                {
+                    throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
+                }
+
                 return sectorScheme;
             }
         }

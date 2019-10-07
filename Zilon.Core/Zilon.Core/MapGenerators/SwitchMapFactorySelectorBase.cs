@@ -7,6 +7,12 @@ namespace Zilon.Core.MapGenerators
     /// </summary>
     public abstract class SwitchMapFactorySelectorBase : IMapFactorySelector
     {
+        /// <summary>
+        /// Возвращает генератор карты.
+        /// </summary>
+        /// <param name="sectorScheme">Схема сектора, на основе которой будет принято решение,
+        /// какой генератор карты использовать.</param>
+        /// <returns> Возвращает фабрику карт для сектора. </returns>
         public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
         {
             if (sectorScheme.MapGeneratorOptions == null)
