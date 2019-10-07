@@ -161,8 +161,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var startRegion = regionOrderedBySize.First();
                 startRegion.IsStart = true;
 
+                // Начинаем с 1, потому что 1 занять стартом.
                 var transitionArray = transitions.ToArray();
-                for (var i = 0; i < transitionArray.Length; i++)
+                for (var i = 1; i < transitionArray.Length; i++)
                 {
                     // +1, потому что первый регион уже занят под стартовый.
                     var transitionRegion = regionOrderedBySize[i + 1];
