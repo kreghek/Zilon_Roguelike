@@ -57,14 +57,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
             var matrix = new Matrix<bool>(new bool[mapWidth, mapHeight], mapWidth, mapHeight);
-            RegionDraft[] draftRegions = Create(transitions, chanceToStartAlive, ref matrix);
+            var targetRegionDraftCount = transitions.Count() + 1;
+            var draftRegions = CreateInner(targetRegionDraftCount, chanceToStartAlive, ref matrix);
 
             var map = CreateSectorMap(matrix, draftRegions, transitions);
 
             return Task.FromResult(map);
         }
 
-        private RegionDraft[] Create(IEnumerable<RoomTransition> transitions, int chanceToStartAlive, ref Matrix<bool> matrix)
+        //TODO Придумать название метода получше
+        private RegionDraft[] CreateInner(int targetRegionDraftCount, int chanceToStartAlive, ref Matrix<bool> matrix)
         {
             for(var retry = 0; retry < RETRY_LIMIT; retry++)
             {
@@ -92,7 +94,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
                 // На карте должно быть минимум столько регионов, сколько переходов.
                 // +1 - это регион старта.
-                var targetRegionDraftCount = transitions.Count() + 1;
                 if (draftRegions.Count() < targetRegionDraftCount)
                 {
                     try
@@ -270,8 +271,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     var recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
                     newDraftRegionList.Add(recreatedRegionDraft);
 
-                    var newRegionDraft = new RegionDraft(splittedCoords);
-                    newDraftRegionList.Add(newRegionDraft);
+                    foreach (var splittedCoord in splittedCoords)
+                    {
+                        var newRegionDraft = new RegionDraft(new[] { splittedCoord });
+                        newDraftRegionList.Add(newRegionDraft);
+                    }
                 }
                 else
                 {
