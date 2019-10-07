@@ -163,15 +163,18 @@ namespace Zilon.SectorGegerator
         private static IDice CreateDice(string[] args)
         {
             var diceSeedString = ArgumentHelper.GetProgramArgument(args, DICE_SEED_ARG_NAME);
+            int diceSeed;
 
             IDice dice;
             if (string.IsNullOrWhiteSpace(diceSeedString))
             {
-                dice = new Dice();
+                diceSeed = new Random().Next(int.MaxValue);
+                Log.Info($"DICE SEED: {diceSeed}");
+                dice = new Dice(diceSeed);
             }
             else
             {
-                if (int.TryParse(diceSeedString, out var diceSeed))
+                if (int.TryParse(diceSeedString, out diceSeed))
                 {
                     dice = new Dice(diceSeed);
                     Log.Info($"DICE SEED: {diceSeed}");

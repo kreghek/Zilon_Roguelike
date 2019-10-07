@@ -230,7 +230,7 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Debug
       - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
@@ -243,10 +243,10 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /p:Configuration=Debug
       - run:
           name: Mass Launcher
-          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
+          command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
 workflows:
   version: 2
   commit:
