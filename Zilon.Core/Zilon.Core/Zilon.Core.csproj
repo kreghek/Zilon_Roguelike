@@ -110,6 +110,7 @@
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
+    <Compile Include="MapGenerators\SingleMapFactorySelector.cs" />
     <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />
     <Compile Include="MapGenerators\WildStyle\WildMapFactory.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
