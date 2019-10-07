@@ -223,12 +223,39 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_MacOsxUniversal.zip
-  
+  test_sectorMapDrawer:
+    working_directory: /test_sectorMapDrawer
+    docker:
+      - image: mono:6.0.0.313
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Debug
+      - run:
+          name: Mass Launcher
+          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
+      - store_artifacts:
+          path: /test_sectorMapDrawer/maps
+  test_mass_sector_generator:
+    working_directory: /test_mass_sector_generator
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      ZILON_LIV_SCHEME_CATALOG: /test_mass_sector_generator/Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /p:Configuration=Debug
+      - run:
+          name: Mass Launcher
+          command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
 workflows:
   version: 2
   commit:
     jobs:
       - build
+      - test_sectorMapDrawer
+      - test_mass_sector_generator
       - test_45:
           requires:
             - build
@@ -245,67 +272,6 @@ workflows:
             - build
             - test_45
             - test_specflow
-      - build_Win_x32:
-          requires:
-            - build
-            - test_45
-            - test_specflow
-      - build_Linux_x64:
-          requires:
-            - build
-            - test_45
-            - test_specflow
-      - build_MacOS_Universal:
-          requires:
-            - build
-            - test_45
-            - test_specflow
-#      - build_Linux_x32:
-#          requires:
-#            - build
-#            - test_45
-#Проблема аналогична Linux32. Папка сборки остаётся пустой.
-#      - build_MacOS_x64:
-#          filters:
-#            branches:
-#              only:
-#                - master
-#                - circle-ci
-#                - /release-.*/
-#          requires:
-#            - build
-#            - test_45
-#      - build_MacOS_x32:
-#          filters:
-#            branches:
- #             only:
- #               - master
- #               - circle-ci
- #               - /release-.*/
- #         requires:
- #           - build
- #           - test_45
-      - build_MacOS_Universal:
-          filters:
-            branches:
-              only:
-                - master
-                - circle-ci
-                - /release-.*/
-          requires:
-            - build
-            - test_45
-            - test_specflow
-#      - build_Linux_x32:
-#          filters:
-#            branches:
-#              only:
-#                - master
-#                - circle-ci
-#                - /release-.*/
-#          requires:
-#            - build
-#            - test_45
   nightly:
     triggers:
       - schedule:
@@ -325,6 +291,11 @@ workflows:
             - build
       - test_bots:
           requires:
+            - build
+            - test_45
+            - test_specflow
+      - test_sectorMapDrawer:
+           requires:
             - build
             - test_45
             - test_specflow

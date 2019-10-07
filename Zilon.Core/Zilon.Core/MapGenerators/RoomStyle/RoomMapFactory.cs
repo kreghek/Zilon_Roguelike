@@ -40,7 +40,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var transitions = CreateTransitions(sectorScheme);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
 
             var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
                 RoomMinSize,
@@ -79,16 +79,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             return Task.FromResult(map);
-        }
-
-        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
-        {
-            if (sectorScheme.TransSectorSids == null)
-            {
-                return new[] { RoomTransition.CreateGlobalExit() };
-            }
-
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
 
         private static ISectorMap CreateMapInstance()

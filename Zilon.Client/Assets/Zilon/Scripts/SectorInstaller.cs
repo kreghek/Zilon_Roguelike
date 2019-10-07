@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -56,7 +57,9 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // генерация сектора
         Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
+        Container.Bind<IMapFactory>().WithId("room").To<RoomMapFactory>().AsSingle();
+        Container.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
+        Container.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
         Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();

@@ -40,6 +40,9 @@
       <HintPath>..\packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JsonSubTypes, Version=1.6.0.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonSubTypes.1.6.0\lib\net46\JsonSubTypes.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -79,13 +82,18 @@
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
+    <Compile Include="Common\Matrix.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactory.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonException.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\RegionDraft.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\CitizenGenerator.cs" />
@@ -94,13 +102,17 @@
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ICitizenGenerator.cs" />
     <Compile Include="MapGenerators\ICitizenGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\IMapFactorySelector.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
+    <Compile Include="MapGenerators\MapFactoryHelper.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
+    <Compile Include="MapGenerators\SingleMapFactorySelector.cs" />
+    <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />
     <Compile Include="MapGenerators\WildStyle\WildMapFactory.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
@@ -164,6 +176,9 @@
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
+    <Compile Include="Schemes\SectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
+    <Compile Include="Schemes\ISectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
+    <Compile Include="Schemes\ISectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
     <Compile Include="Schemes\EquipCommonRuleType.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
@@ -176,6 +191,8 @@
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
+    <Compile Include="Schemes\SchemeSectorMapGenerator.cs" />
+    <Compile Include="Schemes\SectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
     <Compile Include="Scoring\DetailedLifetime.cs" />

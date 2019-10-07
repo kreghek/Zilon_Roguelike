@@ -64,6 +64,17 @@ namespace Zilon.Core.Tactics.Spatial
             var offsetY = hexNode.OffsetY;
 
             var nodeMatrix = _segmentDict.First().Value;
+
+            if (nodeMatrix[offsetX, offsetY] != null)
+            {
+                // Эта проверка нужна, чтобы отлавливать дубликаты координат,
+                // которые могут быть созданы фабриками.
+                // Дубликаты так же попадают в регионы и могут быть сложными в отладке.
+                // Потому что искажают дальнейшую работу с картой.
+                //TODO Рассматреть вариант, когда проверка выполняется  стороне регионов.
+                throw new InvalidOperationException($"В координатах {offsetX},{offsetY} уже есть узел графа.");
+            }
+
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 

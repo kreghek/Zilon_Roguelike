@@ -68,6 +68,7 @@ namespace Zilon.Emulation.Common
             container.Register<ICitizenGenerator, CitizenGenerator>(new PerScopeLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
             container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
+            container.Register<IMapFactorySelector, SingleMapFactorySelector>(new PerScopeLifetime());
             container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());

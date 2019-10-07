@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+
 using LightInject;
+
+using Zilon.CommonUtilities;
 using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.MassWorldGenerator
@@ -13,8 +15,8 @@ namespace Zilon.Core.MassWorldGenerator
 
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            var schemeCatalog = GetProgramArgument(args, "schemeCatalog");
-            var resultPath = GetProgramArgument(args, "resultPath");
+            var schemeCatalog = ArgumentHelper.GetProgramArgument(args, "schemeCatalog");
+            var resultPath = ArgumentHelper.GetProgramArgument(args, "resultPath");
 
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup(schemeCatalog);
@@ -41,28 +43,6 @@ namespace Zilon.Core.MassWorldGenerator
                 result.Globe.Save(resultFolder, resultRealmsFile, resultBranchesFile);
                 Console.WriteLine($"Iteration {iteration:D5} complete");
             }
-        }
-
-        private static bool HasProgramArgument(string[] args, string testArg)
-        {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
-        }
-
-        private static string GetProgramArgument(string[] args, string testArg)
-        {
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }
