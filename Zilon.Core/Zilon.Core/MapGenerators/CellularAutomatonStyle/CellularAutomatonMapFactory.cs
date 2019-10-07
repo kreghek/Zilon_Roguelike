@@ -54,7 +54,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var mapWidth = cellularAutomatonOptions.MapWidth;
             var mapHeight = cellularAutomatonOptions.MapHeight;
 
-            var _chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
+            var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
             var matrix = new Matrix<bool>(new bool[mapWidth, mapHeight], mapWidth, mapHeight);
 
@@ -67,18 +67,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
                 }
 
-                // Случайное заполнение
-                for (var x = 0; x < mapWidth; x++)
-                {
-                    for (var y = 0; y < mapHeight; y++)
-                    {
-                        var blockRoll = _dice.Roll(100);
-                        if (blockRoll < _chanceToStartAlive)
-                        {
-                            matrix.Items[x, y] = true;
-                        }
-                    }
-                }
+                InitStartAliveMatrix(matrix, chanceToStartAlive);
 
                 // Несколько шагов симуляции
                 for (var i = 0; i < SIMULATION_COUNT; i++)
@@ -121,7 +110,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     }
                 }
             } while (true);
+            var map = CreateSectorMap(matrix, draftRegions, transitions);
 
+            return Task.FromResult(map);
+        }
+
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
@@ -166,7 +161,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 for (var i = 1; i < transitionArray.Length; i++)
                 {
                     // +1, потому что первый регион уже занят под стартовый.
-                    var transitionRegion = regionOrderedBySize[i + 1];
+                    var transitionRegion = regionOrderedBySize[i];
 
                     var transition = transitionArray[i];
 
@@ -181,7 +176,22 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
             }
 
-            return Task.FromResult(map);
+            return map;
+        }
+
+        private void InitStartAliveMatrix(Matrix<bool> matrix, int _chanceToStartAlive)
+        {
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    var blockRoll = _dice.Roll(100);
+                    if (blockRoll < _chanceToStartAlive)
+                    {
+                        matrix.Items[x, y] = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
