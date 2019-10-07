@@ -31,12 +31,23 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
+        /// <summary>
+        /// Создаёт карту сектора.
+        /// </summary>
+        /// <param name="options">Настройки генерации.
+        /// Должны быть типа ISectorSubScheme с заданным значением MapGeneratorOptions.
+        /// Значение MapGeneratorOptions должно быть типа ISectorCellularAutomataMapFactoryOptionsSubScheme.</param>
+        /// <returns></returns>
         public Task<ISectorMap> CreateAsync(object options)
         {
             var sectorScheme = (ISectorSubScheme)options;
             var transitions = CreateTransitions(sectorScheme);
 
             var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
+            if (cellularAutomatonOptions == null)
+            {
+                throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+            }
 
             var mapWidth = cellularAutomatonOptions.MapWidth;
             var mapHeight = cellularAutomatonOptions.MapHeight;
@@ -259,7 +270,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions.ToArray();
         }
 
-        private bool[,] DoSimulationStep(MapData mapData)
+        private static bool[,] DoSimulationStep(MapData mapData)
         {
             var newCellMap = new bool[mapData.Width, mapData.Height];
 
