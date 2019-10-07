@@ -240,6 +240,8 @@ jobs:
     working_directory: /test_mass_sector_generator
     docker:
       - image: mono:6.0.0.313
+    environment:
+      ZILON_LIV_SCHEME_CATALOG: /test_mass_sector_generator/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
