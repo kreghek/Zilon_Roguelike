@@ -254,8 +254,6 @@ workflows:
   commit:
     jobs:
       - build
-      - test_sectorMapDrawer
-      - test_mass_sector_generator
       - test_45:
           requires:
             - build
@@ -295,6 +293,11 @@ workflows:
             - test_45
             - test_specflow
       - test_sectorMapDrawer:
+           requires:
+            - build
+            - test_45
+            - test_specflow
+      - test_mass_sector_generator:
            requires:
             - build
             - test_45
