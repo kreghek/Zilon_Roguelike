@@ -43,7 +43,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         public Task<ISectorMap> CreateAsync(object options)
         {
             var sectorScheme = (ISectorSubScheme)options;
-            var transitions = CreateTransitions(sectorScheme);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
 
             var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
             if (cellularAutomatonOptions == null)
@@ -503,16 +503,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return regionPoints;
-        }
-
-        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
-        {
-            if (sectorScheme.TransSectorSids == null)
-            {
-                return new[] { RoomTransition.CreateGlobalExit() };
-            }
-
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
 
         private sealed class RegionCoords

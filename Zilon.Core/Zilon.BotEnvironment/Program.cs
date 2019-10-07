@@ -11,6 +11,7 @@ using LightInject;
 
 using Zilon.Bot;
 using Zilon.Bot.Sdk;
+using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -39,7 +40,7 @@ namespace Zilon.BotEnvironment
 
         static async Task Main(string[] args)
         {
-            var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
+            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup();
@@ -115,11 +116,11 @@ namespace Zilon.BotEnvironment
                 iterationCounter++;
             };
 
-            var mode = GetProgramArgument(args, BOT_MODE_ARG);
+            var mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG);
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             WriteScores(_globalServiceContainer, scoreManager, mode, scoreFilePreffix);
 
-            if (!HasProgramArgument(args, SERVER_RUN_ARG))
+            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();
             }
@@ -129,7 +130,7 @@ namespace Zilon.BotEnvironment
         {
             var botSettings = new BotSettings
             {
-                Mode = GetProgramArgument(args, BOT_MODE_ARG)
+                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
             };
             actorTaskSource.Configure(botSettings);
         }
@@ -273,29 +274,6 @@ namespace Zilon.BotEnvironment
                 if (specificAttr != null)
                 {
                     return method;
-                }
-            }
-
-            return null;
-        }
-
-
-        private static bool HasProgramArgument(string[] args, string testArg)
-        {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
-        }
-
-        private static string GetProgramArgument(string[] args, string testArg)
-        {
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
                 }
             }
 

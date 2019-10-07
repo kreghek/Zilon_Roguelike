@@ -106,6 +106,7 @@
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
+    <Compile Include="MapGenerators\MapFactoryHelper.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
