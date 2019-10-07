@@ -29,7 +29,7 @@
 				"MapGenerator": "CellularAutomaton",
 				"MapWidth": 25,
 				"MapHeight": 25,
-				"ChanceToStartAlive": 45,
+				"ChanceToStartAlive": 30,
 			}
 		},
 		{

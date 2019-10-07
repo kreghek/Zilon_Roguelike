@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
@@ -18,6 +20,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private readonly int SIMULATION_COUNT = 3;
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;
+        private const int RETRY_LIMIT = 3;
 
         private readonly IDice _dice;
 
@@ -55,35 +58,69 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var matrix = new Matrix<bool>(new bool[mapWidth, mapHeight], mapWidth, mapHeight);
 
-            // Случайное заполнение
-            for (var x = 0; x < mapWidth; x++)
+            var retryCounter = 0;
+            RegionDraft[] draftRegions;
+            do
             {
-                for (var y = 0; y < mapHeight; y++)
+                if (retryCounter > RETRY_LIMIT)
                 {
-                    var blockRoll = _dice.Roll(100);
-                    if (blockRoll < _chanceToStartAlive)
+                    throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
+                }
+
+                // Случайное заполнение
+                for (var x = 0; x < mapWidth; x++)
+                {
+                    for (var y = 0; y < mapHeight; y++)
                     {
-                        matrix.Items[x, y] = true;
+                        var blockRoll = _dice.Roll(100);
+                        if (blockRoll < _chanceToStartAlive)
+                        {
+                            matrix.Items[x, y] = true;
+                        }
                     }
                 }
-            }
 
-            // Несколько шагов симуляции
-            for (var i = 0; i < SIMULATION_COUNT; i++)
-            {
-                var newMap = DoSimulationStep(matrix);
-                matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
-            }
+                // Несколько шагов симуляции
+                for (var i = 0; i < SIMULATION_COUNT; i++)
+                {
+                    var newMap = DoSimulationStep(matrix);
+                    matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
+                }
 
-            var draftRegions = MakeUnitedRegions(matrix);
+                try
+                {
+                    draftRegions = MakeUnitedRegions(matrix);
+                }
+                catch (CellularAutomatonException)
+                {
+                    // Это означает, что при текущих стартовых данных невозможно создать подходящую карту.
+                    // Запускаем следующую итерацю.
+                    continue;
+                }
 
-            // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
-            // На карте должно быть минимум столько регионов, сколько переходов.
-            // +1 - это регион старта.
-            if (draftRegions.Count() < transitions.Count() + 1)
-            {
-                var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, transitions.Count());
-            }
+                // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
+                // На карте должно быть минимум столько регионов, сколько переходов.
+                // +1 - это регион старта.
+                var targetRegionDraftCount = transitions.Count() + 1;
+                if (draftRegions.Count() < targetRegionDraftCount)
+                {
+                    try
+                    {
+                        var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, targetRegionDraftCount);
+                        draftRegions = splittedDraftRegions;
+
+                        // Разделение успешно выполнено.
+                        // Пропускаем карту дальше.
+                        break;
+                    }
+                    catch (CellularAutomatonException)
+                    {
+                        // Это означает, что при текущих стартовых данных невозможно создать подходящую карту.
+                        // Запускаем следующую итерацю.
+                        continue;
+                    }
+                }
+            } while (true);
 
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -154,12 +191,80 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// </summary>
         /// <param name="draftRegions"> Текущие регионы на карте. </param>
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
-        /// <returns></returns>
-        private RegionDraft[] SplitRegionsForTransitions(RegionDraft[] draftRegions, int targetRegionCount)
+        /// <returns> Возвращает новый массив черновиков регионов. </returns>
+        private RegionDraft[] SplitRegionsForTransitions(
+            [NotNull, ItemNotNull] RegionDraft[] draftRegions,
+            int targetRegionCount)
         {
+            if (draftRegions == null)
+            {
+                throw new ArgumentNullException(nameof(draftRegions));
+            }
+
+            if (targetRegionCount <= 0)
+            {
+                throw new ArgumentException(nameof(targetRegionCount));
+            }
+
+            var regionCountDiff = targetRegionCount - draftRegions.Count();
+            if (regionCountDiff <= 0)
+            {
+                return (RegionDraft[])draftRegions.Clone();
+            }
+
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
-            var availableCoords = availableSplitRegions.SelectMany(x => x.Coords);
-            var openCoords = new List<OffsetCoords>(availableCoords);
+            var availableCoords = from region in availableSplitRegions
+                                  from coord in region.Coords.Skip(1)
+                                  select new RegionCoords(coord, region);
+
+            if (availableCoords.Count() < regionCountDiff)
+            {
+                // Возможна ситуация, когда в принципе клеток меньше,
+                // чем требуется регионов.
+                // Даже если делать по одной клетки на регион.
+                // В этом случае ничего сделать нельзя.
+                // Передаём проблему вызывающему коду.
+                throw new CellularAutomatonException("Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
+            }
+
+            var openRegionCoords = new List<RegionCoords>(availableCoords);
+            var usedRegionCoords = new List<RegionCoords>();
+
+            for (var i = 0; i < regionCountDiff; i++)
+            {
+                var coordRollIndex = _dice.Roll(0, openRegionCoords.Count - 1);
+                var regionCoordPair = openRegionCoords[coordRollIndex];
+                openRegionCoords.RemoveAt(coordRollIndex);
+                usedRegionCoords.Add(regionCoordPair);
+            }
+
+            var newDraftRegionList = new List<RegionDraft>();
+            var regionGroups = usedRegionCoords.GroupBy(x => x.Region)
+                .ToDictionary(x => x.Key, x => x.AsEnumerable());
+
+            foreach (var draftRegion in draftRegions)
+            {
+                if (regionGroups.TryGetValue(draftRegion, out var splittedRegionCoords))
+                {
+                    var splittedCoords = splittedRegionCoords.Select(x => x.Coords).ToArray();
+
+                    var newCoordsOfCurrentRegion = draftRegion.Coords
+                        .Except(splittedCoords)
+                        .ToArray();
+
+                    var recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
+                    newDraftRegionList.Add(recreatedRegionDraft);
+
+                    var newRegionDraft = new RegionDraft(splittedCoords);
+                    newDraftRegionList.Add(newRegionDraft);
+                }
+                else
+                {
+                    newDraftRegionList.Add(draftRegion);
+                }
+            }
+
+            return newDraftRegionList.ToArray();
         }
 
         private static void CreateCorridors(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
@@ -206,6 +311,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                         openNodes.Add(new OffsetCoords(x, y));
                     }
                 }
+            }
+
+            if (!openNodes.Any())
+            {
+                throw new CellularAutomatonException("Ни одна из клеток не выжила.");
             }
 
             // Разбиваем все проходимые (true) клетки на регионы
@@ -388,6 +498,19 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+        }
+
+        private sealed class RegionCoords
+        {
+            public RegionCoords(OffsetCoords coords, RegionDraft region)
+            {
+                Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+                Region = region ?? throw new ArgumentNullException(nameof(region));
+            }
+
+            public OffsetCoords Coords { get; }
+
+            public RegionDraft Region { get; }
         }
     }
 }
