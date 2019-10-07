@@ -77,6 +77,14 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var draftRegions = MakeUnitedRegions(matrix);
 
+            // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
+            // На карте должно быть минимум столько регионов, сколько переходов.
+            // +1 - это регион старта.
+            if (draftRegions.Count() < transitions.Count() + 1)
+            {
+                var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, transitions.Count());
+            }
+
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
@@ -136,6 +144,22 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return Task.FromResult(map);
+        }
+
+        /// <summary>
+        /// Метод отделяет от существующих регионов ячйки таким образом,
+        /// чтобы суммарно на карте число регионов равнялось числу переходов + 1 (за стартовый).
+        /// Сейчас все отщеплённые регионы в первую отщепляются от произвольных.
+        /// Уже одноклеточные регионы не участвуют в расщеплении.
+        /// </summary>
+        /// <param name="draftRegions"> Текущие регионы на карте. </param>
+        /// <param name="targetRegionCount"> Целевое число регионов. </param>
+        /// <returns></returns>
+        private RegionDraft[] SplitRegionsForTransitions(RegionDraft[] draftRegions, int targetRegionCount)
+        {
+            var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
+            var availableCoords = availableSplitRegions.SelectMany(x => x.Coords);
+            var openCoords = new List<OffsetCoords>(availableCoords);
         }
 
         private static void CreateCorridors(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
