@@ -110,6 +110,11 @@ namespace Zilon.Core.MassSectorGenerator
 
                 Console.WriteLine($"Iteration {iteration:D5} complete");
                 Console.WriteLine($"{sectorScheme.Name.En} Level {sectorLevelIndex}");
+
+                if (iteration >= 1000)
+                {
+                    break;
+                }
             }
         }
     }

@@ -236,12 +236,24 @@ jobs:
           command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
       - store_artifacts:
           path: /test_sectorMapDrawer/maps
+  test_mass_sector_generator:
+    working_directory: /test_mass_sector_generator
+    docker:
+      - image: mono:6.0.0.313
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /p:Configuration=Release
+      - run:
+          name: Mass Launcher
+          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
 workflows:
   version: 2
   commit:
     jobs:
       - build
       - test_sectorMapDrawer
+      - test_mass_sector_generator
       - test_45:
           requires:
             - build
