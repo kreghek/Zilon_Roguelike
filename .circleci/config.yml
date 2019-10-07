@@ -241,6 +241,7 @@ workflows:
   commit:
     jobs:
       - build
+      - test_sectorMapDrawer
       - test_45:
           requires:
             - build
