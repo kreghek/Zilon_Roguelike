@@ -7,11 +7,11 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.SectorGegerator
 {
-    public sealed class MapDrawer
+    public static class MapDrawer
     {
         private const int CELLSIZE = 10;
 
-        public Bitmap DrawMap(IMap map)
+        public static Bitmap DrawMap(IMap map)
         {
             var hexNodes = map.Nodes.OfType<HexNode>();
 
@@ -24,7 +24,7 @@ namespace Zilon.SectorGegerator
             return bitmap;
         }
 
-        private void DrawAllNodes(IEnumerable<HexNode> nodes, Bitmap bitmap, ImageInfo info)
+        private static void DrawAllNodes(IEnumerable<HexNode> nodes, Bitmap bitmap, ImageInfo info)
         {
             using (var graphics = Graphics.FromImage(bitmap))
             {
@@ -41,7 +41,7 @@ namespace Zilon.SectorGegerator
             }
         }
 
-        private Bitmap CreateBitmap(ImageInfo info)
+        private static Bitmap CreateBitmap(ImageInfo info)
         {
             var xAxisDiff = info.RightCoord - info.LeftCoord;
             var width = (xAxisDiff + 1) * CELLSIZE;

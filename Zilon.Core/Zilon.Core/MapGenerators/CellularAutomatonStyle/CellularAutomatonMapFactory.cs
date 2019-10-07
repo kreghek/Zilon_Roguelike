@@ -133,7 +133,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return Task.FromResult(map);
         }
 
-        private void CreateCorridors(MapData mapData, RegionDraft[] draftRegions, ISectorMap map)
+        private static void CreateCorridors(MapData mapData, RegionDraft[] draftRegions, ISectorMap map)
         {
             var cellMap = mapData.Matrix;
             var mapWidth = mapData.Width;
@@ -159,7 +159,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private RegionDraft[] MakeUnitedRegions(MapData mapData)
+        private static RegionDraft[] MakeUnitedRegions(MapData mapData)
         {
             // Формирование регионов.
             // Регионы, кроме дальнейшего размещения игровых предметов,
@@ -297,7 +297,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return newCellMap;
         }
 
-        private int CountAliveNeighbours(MapData mapData, int x, int y)
+        private static int CountAliveNeighbours(MapData mapData, int x, int y)
         {
             var aliveCount = 0;
 
@@ -333,10 +333,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             var snapshotCellmap = (bool[,])mapData.Matrix.Clone();
 
+            var matrix = new Matrix<bool>(snapshotCellmap, mapData.Width, mapData.Height);
+
             var regionPoints = HexBinaryFiller.FloodFill(
-                snapshotCellmap,
-                mapData.Width,
-                mapData.Height,
+                matrix,
                 point);
 
             // В регионе должна быть хоть одна точка - стартовая.

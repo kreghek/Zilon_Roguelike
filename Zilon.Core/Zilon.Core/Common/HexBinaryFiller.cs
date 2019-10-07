@@ -11,14 +11,12 @@ namespace Zilon.Core.Common
         /// <summary>
         /// Выполняет заливку области в поле шестиугольников.
         /// </summary>
-        /// <param name="cells"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
-        /// <param name="width"> Ширина поля. </param>
-        /// <param name="height"> Высота поля. </param>
+        /// <param name="matrix"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
         /// <param name="point"> Точка, с которой начинается заливка. Должна указывать на ячейку со значением <b>true</b>. </param>
         /// <returns> Возвращает точки, которые были залиты. </returns>
-        public static IEnumerable<OffsetCoords> FloodFill(bool[,] cells, int width, int height, OffsetCoords point)
+        public static IEnumerable<OffsetCoords> FloodFill(Matrix<bool> matrix, OffsetCoords point)
         {
-            var snapshotCellmap = (bool[,])cells.Clone();
+            var snapshotCellmap = (bool[,])matrix.Items.Clone();
 
             var regionPoints = new List<OffsetCoords>();
 
@@ -29,7 +27,7 @@ namespace Zilon.Core.Common
             {
                 var currentCell = openPoints.Pop();
 
-                var isInBound = IsInBounds(currentCell, width, height);
+                var isInBound = IsInBounds(currentCell, matrix.Width, matrix.Height);
 
                 if (!isInBound)
                 {

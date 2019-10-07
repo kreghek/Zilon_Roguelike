@@ -63,9 +63,7 @@ namespace Zilon.SectorGegerator
 
         private static void SaveMapAsImage(string[] args, Core.Tactics.Spatial.ISectorMap map)
         {
-            var drawer = new MapDrawer();
-
-            var bmp = drawer.DrawMap(map);
+            var bmp = MapDrawer.DrawMap(map);
 
             var outPath = ArgumentHelper.GetProgramArgument(args, OUT_PATH_ARG_NAME);
 
