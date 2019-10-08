@@ -63,16 +63,16 @@ namespace Zilon.Emulation.Common
         {
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
-            container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
-            container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
-            container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
-            container.Register<ICitizenGenerator, CitizenGenerator>(new PerScopeLifetime());
-            container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
-            container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
-            container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
-            container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
-            container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
-            container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
+            RegisterScoped<ISectorGenerator, SectorGenerator>(container);
+            RegisterScoped<IMonsterGenerator, MonsterGenerator>(container);
+            RegisterScoped<IChestGenerator, ChestGenerator>(container);
+            RegisterScoped<ICitizenGenerator, CitizenGenerator>(container);
+            RegisterScoped<ISectorFactory, SectorFactory>(container);
+            RegisterScoped<ISectorManager, InfiniteSectorManager>(container);
+            RegisterScoped<IActorManager, ActorManager>(container);
+            RegisterScoped<IPropContainerManager, PropContainerManager>(container);
+            RegisterScoped<ITacticalActUsageService, TacticalActUsageService>(container);
+            RegisterScoped<IActorTaskSource, MonsterBotActorTaskSource>(container, "monster");
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
@@ -122,5 +122,15 @@ namespace Zilon.Emulation.Common
         }
 
         protected abstract void RegisterBot(IServiceRegistry container);
+
+        private void RegisterScoped<TService, TImplementation>(IServiceRegistry container) where TImplementation : TService
+        {
+            container.Register<TService, TImplementation>(new PerScopeLifetime());
+        }
+
+        private void RegisterScoped<TService, TImplementation>(IServiceRegistry container, string name) where TImplementation : TService
+        {
+            container.Register<TService, TImplementation>(name, new PerScopeLifetime());
+        }
     }
 }
