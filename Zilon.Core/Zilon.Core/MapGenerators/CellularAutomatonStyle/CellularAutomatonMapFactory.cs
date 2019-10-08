@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -162,11 +163,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var startRegion = regionOrderedBySize.First();
                 startRegion.IsStart = true;
 
-                // Начинаем с 1, потому что 1 занять стартом.
                 var transitionArray = transitions.ToArray();
-                for (var i = 1; i < transitionArray.Length; i++)
+                // Пропускаем 1, потому что 1 занять стартом.
+                var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
+
+                Debug.Assert(trasitionRegionDrafts.Count() >= transitionArray.Count(),
+                    "Должно быть достаточно регионов для размещения всех переходов.");
+
+                for (var i = 0; i < transitionArray.Length; i++)
                 {
-                    var transitionRegion = regionOrderedBySize[i];
+                    var transitionRegion = trasitionRegionDrafts[i];
 
                     var transition = transitionArray[i];
 
@@ -178,6 +184,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     {
                         transitionRegion.IsOut = true;
                     }
+
+                    transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
+                                                  where map.Transitions.Keys.Contains(regionNode)
+                                                  select regionNode).ToArray();
                 }
             }
 
@@ -406,6 +416,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     foreach (var lineItem in line)
                     {
                         var offsetCoords = HexHelper.ConvertToOffset(lineItem);
+
                         matrix.Items[offsetCoords.X, offsetCoords.Y] = true;
                     }
 

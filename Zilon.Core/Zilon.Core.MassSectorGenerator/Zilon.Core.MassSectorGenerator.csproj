@@ -36,6 +36,9 @@
     <Reference Include="LightInject, Version=5.1.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LightInject.5.1.8\lib\net46\LightInject.dll</HintPath>
     </Reference>
+    <Reference Include="LightInject.Annotation, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LightInject.Annotation.1.1.0\lib\net46\LightInject.Annotation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
+      <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj">

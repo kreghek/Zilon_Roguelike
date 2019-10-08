@@ -72,6 +72,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
         {
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup();
+            _globalServiceContainer.EnableAnnotatedConstructorInjection();
             _startUp.RegisterServices(_globalServiceContainer);
         }
 
