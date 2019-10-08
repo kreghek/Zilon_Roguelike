@@ -37,6 +37,9 @@ namespace Zilon.Core.LogicCalculations
                 case PersonRuleLevel.Absolute:
                     currentModifierValue += 10;
                     break;
+
+                default:
+                    throw new NotSupportedException("Этот уровень правила не обрабатывается.");
             }
 
             return currentModifierValue;
