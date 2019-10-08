@@ -7,6 +7,7 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -20,7 +21,7 @@ namespace Zilon.Emulation.Common
 {
     public abstract class InitialzationBase
     {
-        public void RegisterServices(IServiceRegistry serviceRegistry)
+        public virtual void RegisterServices(IServiceRegistry serviceRegistry)
         {
             RegisterSchemeService(serviceRegistry);
             RegisterAuxServices(serviceRegistry);
@@ -68,7 +69,6 @@ namespace Zilon.Emulation.Common
             container.Register<ICitizenGenerator, CitizenGenerator>(new PerScopeLifetime());
             container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
             container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
-            container.Register<IMapFactorySelector, SingleMapFactorySelector>(new PerScopeLifetime());
             container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
             container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
             container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
@@ -98,7 +98,9 @@ namespace Zilon.Emulation.Common
             container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
             container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(new PerContainerLifetime());
 
-            container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
+            container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
+            container.Register<IMapFactory, RoomMapFactory>("room", new PerContainerLifetime());
+            container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());

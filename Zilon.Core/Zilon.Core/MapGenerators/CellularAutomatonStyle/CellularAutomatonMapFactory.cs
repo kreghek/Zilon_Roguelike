@@ -178,6 +178,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     {
                         transitionRegion.IsOut = true;
                     }
+
+                    transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
+                                                  where map.Transitions.Keys.Contains(regionNode)
+                                                  select regionNode).ToArray();
                 }
             }
 
