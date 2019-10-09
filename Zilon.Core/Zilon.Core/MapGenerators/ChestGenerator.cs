@@ -44,6 +44,21 @@ namespace Zilon.Core.MapGenerators
             {
                 var maxChestCountRaw = region.Nodes.Count() * countChestRatioNormal;
                 var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
+
+                if (region.Nodes.Count() <= 1)
+                {
+                    // Для регионов, где только один узел,
+                    // не создаём сундуки, иначе проход может быть загорожен.
+                    // Актуально для фабрики карт на основе клеточного автомата,
+                    // потому что он может генерить регионы из одного узла.
+
+                    //TODO Попробовать проверять соседей узла.
+                    // Возможно, одноклеточный регион находится в конце тупика.
+                    // Тогда в нём можно разместить сундук.
+                    // Критерий доступности такого региона - у узла только одни сосед.
+                    continue;
+                }
+
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
 
                 var availableNodes = from node in region.Nodes
