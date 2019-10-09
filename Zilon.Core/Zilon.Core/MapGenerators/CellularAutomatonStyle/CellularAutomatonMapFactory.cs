@@ -18,7 +18,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
-        private readonly int SIMULATION_COUNT = 3;
+        private readonly int SIMULATION_COUNT = 2;
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;
         private const int RETRY_LIMIT = 3;
