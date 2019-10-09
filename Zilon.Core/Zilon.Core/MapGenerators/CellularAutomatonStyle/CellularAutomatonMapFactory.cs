@@ -24,14 +24,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private const int RETRY_LIMIT = 3;
 
         private readonly IDice _dice;
+        private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
 
         /// <summary>
         /// Конструктор фабрики.
         /// </summary>
         /// <param name="dice"> Кость для рандома. </param>
-        public CellularAutomatonMapFactory(IDice dice)
+        public CellularAutomatonMapFactory(IDice dice, IInteriorObjectRandomSource interiorObjectRandomSource)
         {
             _dice = dice;
+            _interiorObjectRandomSource = interiorObjectRandomSource;
         }
 
         /// <summary>
