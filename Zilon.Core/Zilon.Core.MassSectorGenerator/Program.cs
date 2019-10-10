@@ -7,6 +7,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.MassSectorGenerator
 {
@@ -43,6 +44,8 @@ namespace Zilon.Core.MassSectorGenerator
 
                     // Проверка
 
+                    CheckNodes(sector, scopeContainer);
+
                     CheckChests(scopeContainer, sector);
 
                     CheckMonsters(scopeContainer);
@@ -56,6 +59,37 @@ namespace Zilon.Core.MassSectorGenerator
                 if (iteration >= 100)
                 {
                     break;
+                }
+            }
+        }
+
+        private static void CheckNodes(ISector sector, Scope scopeContainer)
+        {
+            // Проверяем проходимость карты.
+            // Для этого убеждаемся, что из любого узла есть путь до любого другого.
+            // При поиске пути:
+            // - Считаем непроходимыме все статические объекты. Это декоратиные препятствия и сундуки.
+            // - Игнорируем все перемещаемые. Например, монстров.
+
+            var allNodes = sector.Map.Nodes.ToArray();
+            var containerNodes = scopeContainer.GetInstance<IPropContainerManager>();
+
+            foreach (var startNode in allNodes)
+            {
+                foreach (var endNode in allNodes)
+                {
+                    if (startNode == endNode)
+                    {
+                        // Не ищем путь из узла до самого себя.
+                        continue;
+                    }
+
+                    var astar = new AStarSimpleHex(sector.Map, containerNodes, startNode, endNode);
+                    var result = astar.Run();
+                    if (result != State.GoalFound)
+                    {
+                        throw new Exception();
+                    }
                 }
             }
         }

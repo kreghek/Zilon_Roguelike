@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
     /// <summary>
     /// Interface to setup and run the AStar algorithm.
     /// </summary>
-    public sealed class AStar
+    public sealed class AStarSimpleHex
     {
         /// <summary>
         /// The open list.
@@ -19,7 +20,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
 
 
         private readonly IMap _map;
-        private readonly IPathFindingContext _context;
+        private readonly IPropContainerManager _propContainerManager;
+        private readonly IMapNode[] _containerNodes;
         private readonly Dictionary<IMapNode, AStarData> _dataDict;
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        public AStar(IMap map, IPathFindingContext context, IMapNode start, IMapNode goal)
+        public AStarSimpleHex(IMap map, IPropContainerManager propContainerManager, IMapNode start, IMapNode goal)
         {
             if (start == null)
             {
@@ -57,7 +59,9 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             _dataDict = new Dictionary<IMapNode, AStarData>();
 
             _map = map ?? throw new System.ArgumentNullException(nameof(map));
-            _context = context ?? throw new System.ArgumentNullException(nameof(context));
+            _propContainerManager = propContainerManager;
+
+            _containerNodes = _propContainerManager.Items.Select(x => x.Node).ToArray();
 
             Reset(start, goal);
         }
@@ -196,41 +200,24 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var actualNeighbors = new List<IMapNode>();
             foreach (var testedNeighbor in neighbors)
             {
-                if (_context.TargetNode == null)
+                var hexNode = (HexNode)testedNeighbor;
+
+                if (hexNode.IsObstacle)
                 {
-                    if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
-                    {
-                        continue;
-                    }
+                    // Препятсвия не могут быть доступным соседом.
+                    continue;
                 }
-                else
+
+                if (_containerNodes.Contains(testedNeighbor))
                 {
-                    var isNotAvailable = !IsAvailable(map, testedNeighbor);
-                    if (isNotAvailable)
-                    {
-                        continue;
-                    }
+                    // Соседи, занятые контейнером, не могут быть доступными.
+                    continue;
                 }
 
                 actualNeighbors.Add(testedNeighbor);
             }
 
             return actualNeighbors.ToArray();
-        }
-
-        private bool IsAvailable(IMap map, IMapNode testedNeighbor)
-        {
-            if (_context.TargetNode == testedNeighbor)
-            {
-                return true;
-            }
-
-            if (map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -249,15 +236,13 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             var path = new List<IMapNode>();
             while (next != null)
             {
-                if (_map.IsPositionAvailableFor(next, _context.Actor))
-                {
-                    path.Add(next);
-                }
+                path.Add(next);
 
                 var nextData = GetData(next);
 
                 next = nextData.Parent;
             }
+
             path.Reverse();
             return path.ToArray();
         }

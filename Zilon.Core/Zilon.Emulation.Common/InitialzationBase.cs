@@ -100,9 +100,10 @@ namespace Zilon.Emulation.Common
 
             container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
             container.Register<IMapFactory, RoomMapFactory>("room", new PerContainerLifetime());
-            container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", new PerContainerLifetime());
+            container.Register<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());

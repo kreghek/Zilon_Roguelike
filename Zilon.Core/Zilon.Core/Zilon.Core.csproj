@@ -233,6 +233,7 @@
     <Compile Include="Tactics\Spatial\HexMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\IMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
+    <Compile Include="Tactics\Spatial\PathFinding\AStarSimpleHex.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMap.cs" />
     <Compile Include="Tactics\Spatial\SectorGraphMapGeneric.cs" />
     <Compile Include="Tactics\Spatial\SectorHexMap.cs" />
