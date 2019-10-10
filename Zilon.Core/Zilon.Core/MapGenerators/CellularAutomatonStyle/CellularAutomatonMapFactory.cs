@@ -59,7 +59,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
-            var matrix = new Matrix<bool>(new bool[matrixWidth, matrixHeight], matrixWidth, matrixHeight);
+            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
             var targetRegionDraftCount = transitions.Count() + 1;
             var draftRegions = CreateInner(targetRegionDraftCount, chanceToStartAlive, ref matrix);
 
