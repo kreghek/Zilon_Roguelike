@@ -95,6 +95,7 @@
     <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactory.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonException.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\IInteriorObjectRandomSource.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectRandomSource.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\RegionDraft.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectMeta.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />

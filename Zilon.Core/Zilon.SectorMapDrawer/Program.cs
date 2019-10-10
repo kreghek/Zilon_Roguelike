@@ -81,7 +81,8 @@ namespace Zilon.SectorGegerator
 
         private static IMapFactory GetMapFactory(IDice dice, ISectorSubScheme sectorScheme)
         {
-            var cellularAutomatonMapfactory = new CellularAutomatonMapFactory(dice);
+            var cellularAutomatonInteriorGenerator = new InteriorObjectRandomSource();
+            var cellularAutomatonMapfactory = new CellularAutomatonMapFactory(dice, cellularAutomatonInteriorGenerator);
 
             var roomRandomSource = new RoomGeneratorRandomSource(dice);
             var roomGeneratory = new RoomGenerator(roomRandomSource);
