@@ -71,7 +71,7 @@ namespace Zilon.Core.MassSectorGenerator
             // - Считаем непроходимыме все статические объекты. Это декоратиные препятствия и сундуки.
             // - Игнорируем все перемещаемые. Например, монстров.
 
-            var allNodes = sector.Map.Nodes.ToArray();
+            var allNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
             var containerNodes = scopeContainer.GetInstance<IPropContainerManager>();
 
             foreach (var startNode in allNodes)
