@@ -54,12 +54,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
-            var mapWidth = cellularAutomatonOptions.MapWidth;
-            var mapHeight = cellularAutomatonOptions.MapHeight;
+            var matrixWidth = cellularAutomatonOptions.MapWidth;
+            var matrixHeight = cellularAutomatonOptions.MapHeight;
 
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
-            var matrix = new Matrix<bool>(new bool[mapWidth, mapHeight], mapWidth, mapHeight);
+            var matrix = new Matrix<bool>(new bool[matrixWidth, matrixHeight], matrixWidth, matrixHeight);
             var targetRegionDraftCount = transitions.Count() + 1;
             var draftRegions = CreateInner(targetRegionDraftCount, chanceToStartAlive, ref matrix);
 
