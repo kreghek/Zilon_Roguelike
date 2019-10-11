@@ -88,7 +88,6 @@ namespace Zilon.Core.Spec.Contexts
             });
 
             var sectorManager = Container.GetInstance<ISectorManager>();
-            var sectorGenerator = Container.GetInstance<ISectorGenerator>();
             var humanPlayer = Container.GetInstance<HumanPlayer>();
 
             var locationScheme = new TestLocationScheme

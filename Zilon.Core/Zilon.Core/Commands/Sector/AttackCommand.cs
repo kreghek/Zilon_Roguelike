@@ -94,7 +94,9 @@ namespace Zilon.Core.Commands
             var propResources = from prop in inventory.CalcActualItems()
                                 let propResource = prop as Resource
                                 where propResource != null
-                                where propResource.Scheme.Bullet?.Caliber == usedPropResourceType
+                                //TODO propResource проверка не нужна, потому что выше есть propResource != null
+                                // Переписать этот блок более очевидно
+                                where propResource?.Scheme.Bullet?.Caliber == usedPropResourceType
                                 select propResource;
 
             var preferredPropResource = propResources.FirstOrDefault();

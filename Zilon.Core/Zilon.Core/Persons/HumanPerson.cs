@@ -495,8 +495,6 @@ namespace Zilon.Core.Persons
             PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            var stat = Survival.Stats.SingleOrDefault(x => x.Type == statType);
-
             var currentBonusValue = 0;
             var directionQuaff = direction == PersonRuleDirection.Negative ? -1 : 1;
 

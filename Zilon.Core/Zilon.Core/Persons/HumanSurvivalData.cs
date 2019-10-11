@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
@@ -179,8 +180,6 @@ namespace Zilon.Core.Persons
 
         private void ChangeStatInner(SurvivalStat stat, int value)
         {
-            var oldValueShare = stat.ValueShare;
-
             stat.Value += value;
 
             ProcessIfHealth(stat);

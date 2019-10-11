@@ -31,18 +31,16 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
         }
 
         IDice _dice;
-        List<string> Male;
-        List<string> Female;
-        List<string> Last;
+        private readonly List<string> _male;
+        private readonly List<string> _female;
+        private readonly List<string> _last;
 
         /// <summary>
         /// Initialises a new instance of the RandomName class.
         /// </summary>
-        /// <param name="rand">A Random that is used to pick names</param>
         public RandomName(IDice dice)
         {
             _dice = dice;
-            NameList l = new NameList();
 
             JsonSerializer serializer = new JsonSerializer();
 
@@ -50,16 +48,16 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
             var resourceName = "Zilon.Core.WorldGeneration.NameGeneration.names.json";
 
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(stream))
             using (JsonReader jreader = new JsonTextReader(reader))
             {
-                l = serializer.Deserialize<NameList>(jreader);
-            }
+                var nameList = serializer.Deserialize<NameList>(jreader);
 
-            Male = new List<string>(l.boys);
-            Female = new List<string>(l.girls);
-            Last = new List<string>(l.last);
+                _male = new List<string>(nameList.boys);
+                _female = new List<string>(nameList.girls);
+                _last = new List<string>(nameList.last);
+            }
         }
 
         /// <summary>
@@ -71,8 +69,8 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
         /// <returns>The random name as a string</returns>
         public string Generate(Sex sex, int middle = 0, bool isInital = false)
         {
-            string first = sex == Sex.Male ? Male[_dice.Roll(0, Male.Count - 1)] : Female[_dice.Roll(0, Female.Count - 1)]; // determines if we should select a name from male or female, and randomly picks
-            string last = Last[_dice.Roll(0, Last.Count - 1)]; // gets the last name
+            var first = sex == Sex.Male ? _male[_dice.Roll(0, _male.Count - 1)] : _female[_dice.Roll(0, _female.Count - 1)]; // determines if we should select a name from male or female, and randomly picks
+            var last = _last[_dice.Roll(0, _last.Count - 1)]; // gets the last name
 
             List<string> middles = new List<string>();
 
@@ -84,11 +82,11 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
                 }
                 else
                 {
-                    middles.Add(sex == Sex.Male ? Male[_dice.Roll(0 ,Male.Count - 1)] : Female[_dice.Roll(0 , Female.Count - 1)]); // randomly selects a name that fits with the sex of the person
+                    middles.Add(sex == Sex.Male ? _male[_dice.Roll(0, _male.Count - 1)] : _female[_dice.Roll(0, _female.Count - 1)]); // randomly selects a name that fits with the sex of the person
                 }
             }
 
-            StringBuilder b = new StringBuilder();
+            var b = new StringBuilder();
             b.Append(first + " "); // put a space after our names;
             foreach (string m in middles)
             {
