@@ -51,9 +51,11 @@
   <ItemGroup>
     <Compile Include="Args.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MapDrawer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectorGeneratorException.cs" />
+    <Compile Include="SectorSchemeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

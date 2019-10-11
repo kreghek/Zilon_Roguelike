@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 using LightInject;
@@ -24,6 +25,7 @@ namespace Zilon.Core.MassSectorGenerator
         static async System.Threading.Tasks.Task Main(string[] args)
         {
             var diceSeed = GetDiceSeed(args);
+            var outputPath = GetOutputPath(args);
 
             var startUp = new Startup(diceSeed);
             var serviceContainer = new ServiceContainer();
@@ -32,28 +34,61 @@ namespace Zilon.Core.MassSectorGenerator
 
             var schemeService = serviceContainer.GetInstance<ISchemeService>();
 
-            var sectorScheme = GetSectorScheme(args, schemeService);
+            var sectorSchemeResult = GetSectorScheme(args, schemeService);
 
             using (var scopeContainer = serviceContainer.BeginScope())
             {
                 var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
-                var sector = await sectorFactory.GenerateDungeonAsync(sectorScheme);
-                sector.Scheme = sectorScheme;
+                var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector);
+                sector.Scheme = sectorSchemeResult.Location;
 
                 // Проверка
 
-                CheckNodes(sector, scopeContainer);
+                try
+                {
+                    CheckNodes(sector, scopeContainer);
 
-                CheckChests(scopeContainer, sector);
+                    CheckChests(scopeContainer, sector);
 
-                CheckMonsters(scopeContainer);
+                    CheckMonsters(scopeContainer);
 
-                CheckTransitions(sector);
+                    CheckTransitions(sector);
+                }
+                catch (Exception exception)
+                {
+                    //TODO Ввести свой тип исключений
+                    // CheckSectorException: SectorGenerationException
+                    Log.Error(exception);
+                }
+
+                if (outputPath != null)
+                {
+                    SaveMapAsImage(sector.Map, outputPath);
+                }
             }
 
-
-
             serviceContainer.Dispose();
+        }
+
+        private static string GetOutputPath(string[] args)
+        {
+            var outputPath = ArgumentHelper.GetProgramArgument(args, Args.OUT_PATH_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                return null;
+            }
+
+            try
+            {
+                Path.GetFullPath(outputPath);
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception);
+                return null;
+            }
+
+            return outputPath;
         }
 
         private static int GetDiceSeed(string[] args)
@@ -68,7 +103,7 @@ namespace Zilon.Core.MassSectorGenerator
             return diceSeed;
         }
 
-        private static ISectorSubScheme GetSectorScheme(string[] args, ISchemeService schemeService)
+        private static SectorSchemeResult GetSectorScheme(string[] args, ISchemeService schemeService)
         {
             var locationSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.LOCATION_SCHEME_SID_ARG_NAME);
             var sectorSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.SECTOR_SCHEME_SID_ARG_NAME);
@@ -89,7 +124,9 @@ namespace Zilon.Core.MassSectorGenerator
 
                 Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
 
-                return sectorScheme;
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
             }
             else
             {
@@ -108,7 +145,9 @@ namespace Zilon.Core.MassSectorGenerator
                     throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
                 }
 
-                return sectorScheme;
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
             }
         }
 
@@ -258,6 +297,13 @@ namespace Zilon.Core.MassSectorGenerator
                     throw new Exception();
                 }
             }
+        }
+
+        private static void SaveMapAsImage(ISectorMap map, string outputPath)
+        {
+            var bmp = MapDrawer.DrawMap(map);
+
+            bmp.Save(outputPath);
         }
     }
 }
