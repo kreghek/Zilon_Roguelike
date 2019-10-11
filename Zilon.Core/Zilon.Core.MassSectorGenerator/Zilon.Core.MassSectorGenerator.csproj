@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Args.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SectorGeneratorException.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +61,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.CommonUtilities\Zilon.CommonUtilities.csproj">
+      <Project>{B9367196-F13A-434E-9971-E823D2E2A7B3}</Project>
+      <Name>Zilon.CommonUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
       <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>

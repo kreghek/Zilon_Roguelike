@@ -3,6 +3,7 @@ using System.Linq;
 
 using LightInject;
 
+using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -13,53 +14,101 @@ namespace Zilon.Core.MassSectorGenerator
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main()
+        private readonly static Random _random;
+
+        static Program()
         {
-            var startUp = new Startup();
+            _random = new Random();
+        }
+
+        static async System.Threading.Tasks.Task Main(string[] args)
+        {
+            var diceSeed = GetDiceSeed(args);
+
+            var startUp = new Startup(diceSeed);
             var serviceContainer = new ServiceContainer();
             serviceContainer.EnableAnnotatedConstructorInjection();
             startUp.RegisterServices(serviceContainer);
 
             var schemeService = serviceContainer.GetInstance<ISchemeService>();
-            var allLocations = schemeService.GetSchemes<ILocationScheme>()
-                .Where(x => x.SectorLevels != null).ToArray();
 
-            var random = new Random();
-            var iteration = 0;
-            while (true)
+            var sectorScheme = GetSectorScheme(args, schemeService);
+
+            using (var scopeContainer = serviceContainer.BeginScope())
             {
-                var schemeCount = allLocations.Length;
-                var randomSchemeIndex = random.Next(0, schemeCount);
-                var sectorScheme = allLocations[randomSchemeIndex];
-                var sectorLevelIndex = random.Next(0, sectorScheme.SectorLevels.Length);
-                var sectorLevel = sectorScheme.SectorLevels[sectorLevelIndex];
+                var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
+                var sector = await sectorFactory.GenerateDungeonAsync(sectorScheme);
+                sector.Scheme = sectorScheme;
 
-                iteration++;
+                // Проверка
 
-                using (var scopeContainer = serviceContainer.BeginScope())
+                CheckNodes(sector, scopeContainer);
+
+                CheckChests(scopeContainer, sector);
+
+                CheckMonsters(scopeContainer);
+
+                CheckTransitions(sector);
+            }
+
+
+
+            serviceContainer.Dispose();
+        }
+
+        private static int GetDiceSeed(string[] args)
+        {
+            var diceSeedString = ArgumentHelper.GetProgramArgument(args, Args.DICE_SEED_ARG_NAME);
+
+            if (!int.TryParse(diceSeedString, out var diceSeed))
+            {
+                throw new SectorGeneratorException($"Зерно рандома задано некорректно: {diceSeedString}.");
+            }
+
+            return diceSeed;
+        }
+
+        private static ISectorSubScheme GetSectorScheme(string[] args, ISchemeService schemeService)
+        {
+            var locationSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.LOCATION_SCHEME_SID_ARG_NAME);
+            var sectorSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.SECTOR_SCHEME_SID_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(locationSchemeSid) && string.IsNullOrWhiteSpace(sectorSchemeSid))
+            {
+                // Если схемы не указаны, то берём случайную схему.
+                // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
+
+                var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
+                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
+                    .ToArray();
+                var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
+                var locationScheme = locationSchemes[locationSchemeIndex];
+
+                var sectorSchemes = locationScheme.SectorLevels;
+                var sectorSchemeIndex = _random.Next(0, sectorSchemes.Length);
+                var sectorScheme = sectorSchemes[sectorSchemeIndex];
+
+                Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
+
+                return sectorScheme;
+            }
+            else
+            {
+                // Если схемы заданы, то строим карту на их основе.
+                // Это будет использовано для отладки.
+
+                var locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
+                if (locationScheme == null)
                 {
-                    var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
-                    var sector = await sectorFactory.GenerateDungeonAsync(sectorLevel);
-                    sector.Scheme = sectorScheme;
-
-                    // Проверка
-
-                    CheckNodes(sector, scopeContainer);
-
-                    CheckChests(scopeContainer, sector);
-
-                    CheckMonsters(scopeContainer);
-
-                    CheckTransitions(sector);
+                    throw new SectorGeneratorException($"Не найдена схема локации {locationSchemeSid}.");
                 }
 
-                Console.WriteLine($"Iteration {iteration:D5} complete");
-                Console.WriteLine($"{sectorScheme.Name.En} Level {sectorLevelIndex}");
-
-                if (iteration >= 100)
+                var sectorScheme = locationScheme.SectorLevels.SingleOrDefault(x => x.Sid == sectorSchemeSid);
+                if (sectorScheme == null)
                 {
-                    break;
+                    throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
                 }
+
+                return sectorScheme;
             }
         }
 

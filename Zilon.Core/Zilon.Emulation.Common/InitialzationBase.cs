@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 
 using LightInject;
 
@@ -21,6 +20,17 @@ namespace Zilon.Emulation.Common
 {
     public abstract class InitialzationBase
     {
+        public int? DiceSeed { get; set; }
+
+        protected InitialzationBase()
+        { 
+        }
+
+        protected InitialzationBase(int diceSeed)
+        {
+            DiceSeed = diceSeed;
+        }
+
         public virtual void RegisterServices(IServiceRegistry serviceRegistry)
         {
             RegisterSchemeService(serviceRegistry);
@@ -85,7 +95,7 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = new Dice();
+            var dice = CreateDice();
             container.Register<IDice>(factory => dice, new PerContainerLifetime());
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
@@ -107,6 +117,23 @@ namespace Zilon.Emulation.Common
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
             container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
+        }
+
+        private IDice CreateDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new Dice(diceSeedFact);
+            }
+            else
+            {
+                dice = new Dice(DiceSeed.Value);
+            }
+
+            return dice;
         }
 
         private void RegisterClientServices(IServiceRegistry container)
