@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-
+using System.Threading.Tasks;
 using LightInject;
 
 using Zilon.CommonUtilities;
@@ -44,30 +44,52 @@ namespace Zilon.Core.MassSectorGenerator
 
                 // Проверка
 
-                try
-                {
-                    CheckNodes(sector, scopeContainer);
+                var checkTask = CheckSectorAsync(scopeContainer, sector);
+                var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
-                    CheckChests(scopeContainer, sector);
-
-                    CheckMonsters(scopeContainer);
-
-                    CheckTransitions(sector);
-                }
-                catch (Exception exception)
-                {
-                    //TODO Ввести свой тип исключений
-                    // CheckSectorException: SectorGenerationException
-                    Log.Error(exception);
-                }
-
-                if (outputPath != null)
-                {
-                    SaveMapAsImage(sector.Map, outputPath);
-                }
+                await Task.WhenAll(checkTask, saveTask);
             }
 
             serviceContainer.Dispose();
+        }
+
+        private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
+        {
+            if (outputPath != null)
+            {
+                SaveMapAsImage(sector.Map, outputPath);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static async Task CheckSectorAsync(Scope scopeContainer, ISector sector)
+        {
+            Task allTasks = null;
+
+            try
+            {
+                var checkNodesTask = CheckNodesAsync(sector, scopeContainer);
+
+                var checkChestsTask = CheckChestsAsync(scopeContainer, sector);
+
+                var checkMonstersTask = CheckMonstersAsync(scopeContainer);
+
+                var checkTransitionsTask = CheckTransitionsAsync(sector);
+
+                allTasks = Task.WhenAll(checkNodesTask, checkChestsTask, checkMonstersTask, checkTransitionsTask);
+
+                await allTasks;
+            }
+            catch (SectorValidationException)
+            {
+                Log.Error("Сектор содержит ошибки:");
+
+                foreach (var inner in allTasks.Exception.InnerExceptions)
+                {
+                    Log.Error(inner);
+                }
+            }
         }
 
         private static string GetOutputPath(string[] args)
@@ -151,7 +173,7 @@ namespace Zilon.Core.MassSectorGenerator
             }
         }
 
-        private static void CheckNodes(ISector sector, Scope scopeContainer)
+        private static Task CheckNodesAsync(ISector sector, Scope scopeContainer)
         {
             // Проверяем проходимость карты.
             // Для этого убеждаемся, что из любого узла есть путь до любого другого.
@@ -176,13 +198,15 @@ namespace Zilon.Core.MassSectorGenerator
                     var result = astar.Run();
                     if (result != State.GoalFound)
                     {
-                        throw new Exception();
+                        throw new SectorValidationException();
                     }
                 }
             }
+
+            return Task.CompletedTask;
         }
 
-        private static void CheckTransitions(ISector sector)
+        private static Task CheckTransitionsAsync(ISector sector)
         {
             var transitions = sector.Map.Transitions.Values;
 
@@ -209,7 +233,7 @@ namespace Zilon.Core.MassSectorGenerator
                 {
                     // Хоть один регион должен быть отмечен, как стартовый.
                     // Чтобы клиенты знали, где размещать персонажа после генерации.
-                    throw new Exception($"Не задан стартовый регион.");
+                    throw new SectorValidationException($"Не задан стартовый регион.");
                 }
 
                 if (!hasTransitionInregionsNodes)
@@ -218,13 +242,13 @@ namespace Zilon.Core.MassSectorGenerator
                     //TODO Рассмотреть вариант упрощения
                     // В секторе уже есть информация об узлах с переходами.
                     // Выглядит, как дублирование.
-                    throw new Exception($"Не указан ни один регион с узламы перехода.");
+                    throw new SectorValidationException($"Не указан ни один регион с узламы перехода.");
                 }
             }
             else
             {
                 // Если в секторе нет переходов, то будет невозможно его покинуть.
-                throw new Exception("В секторе не найдены переходы.");
+                throw new SectorValidationException("В секторе не найдены переходы.");
             }
 
             // Все переходы на уровне должны либо вести на глобальную карту,
@@ -243,12 +267,14 @@ namespace Zilon.Core.MassSectorGenerator
                 var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
                 if (sectorLevelBySid == null)
                 {
-                    throw new Exception($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
+                    throw new SectorValidationException($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
                 }
             }
+
+            return Task.CompletedTask;
         }
 
-        private static void CheckMonsters(Scope scopeContainer)
+        private static Task CheckMonstersAsync(Scope scopeContainer)
         {
             var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
             var allContainers = containerManager.Items;
@@ -263,18 +289,20 @@ namespace Zilon.Core.MassSectorGenerator
                 var hex = (HexNode)actor.Node;
                 if (hex.IsObstacle)
                 {
-                    throw new Exception();
+                    throw new SectorValidationException();
                 }
 
                 var monsterIsOnContainer = containerNodes.Contains(actor.Node);
                 if (monsterIsOnContainer)
                 {
-                    throw new Exception();
+                    throw new SectorValidationException();
                 }
             }
+
+            return Task.CompletedTask;
         }
 
-        private static void CheckChests(Scope scopeContainer, ISector sector)
+        private static Task CheckChestsAsync(Scope scopeContainer, ISector sector)
         {
             // Сундуки не должны генерироваться на узлы, которые являются препятствием.
             // Сундуки не должны генерироваться на узлы с выходом.
@@ -286,7 +314,7 @@ namespace Zilon.Core.MassSectorGenerator
                 var hex = (HexNode)container.Node;
                 if (hex.IsObstacle)
                 {
-                    throw new Exception();
+                    throw new SectorValidationException();
                 }
 
                 // Проверяем, что сундук не на клетке с выходом.
@@ -294,9 +322,11 @@ namespace Zilon.Core.MassSectorGenerator
                 var chestOnTransitionNode = transitionNodes.Contains(container.Node);
                 if (chestOnTransitionNode)
                 {
-                    throw new Exception();
+                    throw new SectorValidationException();
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
