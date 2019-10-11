@@ -108,7 +108,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var hashKey1 = $"{node}-{neighbor}";
             edgeHash.Add(hashKey1);
 
-            var edge = new Edge(node, neighbor);
             targetMap.AddEdge(node, neighbor);
         }
 

@@ -67,8 +67,6 @@ namespace Zilon.BotEnvironment
                         .Single(x => x.Type == SurvivalStatType.Health)
                         .Value;
 
-                    var hexNode = (HexNode)humanActor.Node;
-
                     Console.WriteLine($"Current HP: {humanPersonHp} Node {humanActor.Node}");
 
                     gameLoop.Update();
@@ -156,11 +154,8 @@ namespace Zilon.BotEnvironment
 
             _startUp.ConfigureAux(_sectorServiceContainer);
 
-            var schemeService = _globalServiceContainer.GetInstance<ISchemeService>();
             var humanPlayer = _globalServiceContainer.GetInstance<HumanPlayer>();
-            var survivalRandomSource = _globalServiceContainer.GetInstance<ISurvivalRandomSource>();
             var personFactory = _globalServiceContainer.GetInstance<IHumanPersonFactory>();
-            var propFactory = _globalServiceContainer.GetInstance<IPropFactory>();
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             var perkResolver = _globalServiceContainer.GetInstance<IPerkResolver>();
 
@@ -287,7 +282,7 @@ namespace Zilon.BotEnvironment
 
         private static void Actor_Moved(object sender, EventArgs e)
         {
-            var actor = sender as IActor;
+            var actor = (IActor)sender;
             Console.WriteLine($"{actor} moved {actor.Node}");
         }
 
