@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -7,6 +6,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using LightInject;
+
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -110,7 +110,6 @@ namespace Zilon.Core.Benchmark
         [IterationSetup]
         public void IterationSetup()
         {
-
             _container = new ServiceContainer();
 
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
@@ -156,25 +155,18 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
-
             // Специализированные сервисы для Ui.
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
 
             // Комманды актёра.
             _container.Register<MoveCommand>(lifetime: new PerContainerLifetime());
 
-
-
             var sectorManager = _container.GetInstance<ISectorManager>();
             var playerState = _container.GetInstance<ISectorUiState>();
-            var moveCommand = _container.GetInstance<MoveCommand>();
             var schemeService = _container.GetInstance<ISchemeService>();
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var commandManger = _container.GetInstance<ICommandManager>();
-
-            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
             var locationScheme = new TestLocationScheme
             {

@@ -43,7 +43,6 @@ namespace Zilon.Core.Benchmark
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
             var locationScheme = new TestLocationScheme
             {

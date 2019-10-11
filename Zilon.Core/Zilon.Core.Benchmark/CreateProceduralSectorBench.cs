@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
-
-using JetBrains.Annotations;
 
 using LightInject;
 
@@ -21,8 +18,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
 
@@ -41,7 +36,6 @@ namespace Zilon.Core.Benchmark
             var humanPlayer = _container.GetInstance<HumanPlayer>();
             var actorManager = _container.GetInstance<IActorManager>();
             var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
-            var sectorGenerator = _container.GetInstance<ISectorGenerator>();
 
             var locationScheme = new TestLocationScheme
             {
