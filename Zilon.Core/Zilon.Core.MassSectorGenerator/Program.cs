@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -47,8 +48,8 @@ namespace Zilon.Core.MassSectorGenerator
                 // Проверка
 
                 var sectorValidators = GetValidatorsInAssembly();
-
                 var checkTask = CheckSectorAsync(sectorValidators, scopeContainer, sector);
+
                 var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
                 await Task.WhenAll(checkTask, saveTask);
@@ -81,32 +82,40 @@ namespace Zilon.Core.MassSectorGenerator
 
         private static Task CheckSectorAsync(ISectorValidator[] validators, Scope scopeContainer, ISector sector)
         {
-            var checkTasks = validators.Select(x => x.Validate(sector, scopeContainer));
-
-            var allTasks = Task.WhenAll(checkTasks);
-
-            try
+            return Task.Run(() =>
             {
-                allTasks.Wait();
-            }
-            catch (AggregateException exception)
-            {
-                Log.Error("Сектор содержит ошибки:");
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
 
-                foreach (var inner in exception.InnerExceptions)
+                var checkTasks = validators.Select(x => x.Validate(sector, scopeContainer));
+
+                var allTasks = Task.WhenAll(checkTasks);
+
+                try
                 {
-                    if (inner is SectorValidationException)
+                    allTasks.Wait();
+                }
+                catch (AggregateException exception)
+                {
+                    Log.Error("Сектор содержит ошибки:");
+
+                    foreach (var inner in exception.InnerExceptions)
                     {
-                        Log.Error(inner);
-                    }
-                    else
-                    {
-                        throw;
+                        if (inner is SectorValidationException)
+                        {
+                            Log.Error(inner);
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
-            }
 
-            return Task.CompletedTask;
+                stopWatch.Stop();
+
+                Log.Info($"CHECK DURATION: {stopWatch.Elapsed.TotalSeconds} SEC");
+            });
         }
 
         private static string GetOutputPath(string[] args)

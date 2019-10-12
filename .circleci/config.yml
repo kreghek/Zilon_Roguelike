@@ -236,19 +236,6 @@ jobs:
           command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
       - store_artifacts:
           path: /root/LAST_MacOsxUniversal.zip
-  test_sectorMapDrawer:
-    working_directory: /test_sectorMapDrawer
-    docker:
-      - image: mono:6.0.0.313
-    steps:
-      - checkout
-      - run: nuget restore Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.SectorMapDrawer/Zilon.SectorMapDrawer.csproj /p:Configuration=Debug
-      - run:
-          name: Mass Launcher
-          command: chmod +x .circleci/sector_map_drawer.sh && .circleci/sector_map_drawer.sh
-      - store_artifacts:
-          path: /test_sectorMapDrawer/maps
   test_mass_sector_generator:
     working_directory: /test_mass_sector_generator
     docker:
@@ -262,6 +249,8 @@ jobs:
       - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
+      - store_artifacts:
+          path: /test_mass_sector_generator/maps
 workflows:
   version: 2
   commit:
@@ -308,11 +297,6 @@ workflows:
             - build
       - test_bots:
           requires:
-            - build
-            - test_45
-            - test_specflow
-      - test_sectorMapDrawer:
-           requires:
             - build
             - test_45
             - test_specflow
