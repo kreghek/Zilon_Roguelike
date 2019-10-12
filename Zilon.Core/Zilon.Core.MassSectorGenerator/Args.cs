@@ -10,12 +10,6 @@
         public const string DICE_SEED_ARG_NAME = "dice_seed";
 
         /// <summary>
-        /// Путь к папке со схемами.
-        /// Обычно это путь-к-проекту/Zilon.Client/Assets/Resources/Schemes.
-        /// </summary>
-        public const string SCHEME_CATALOG_PATH_ARG_NAME = "scheme_catalog";
-
-        /// <summary>
         /// Sid локации из каталога схем.
         /// Если это значение не задано, то будет выбрана случайная локация.
         /// </summary>
