@@ -63,16 +63,16 @@ namespace Zilon.Core.MapGenerators
 
             var sector = _sectorFactory.Create(map);
 
-            //var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
+            var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
-            //var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
-            //_chestGenerator.CreateChests(map, sectorScheme, chestRegions);
+            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
+            _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
 
-            //var monsterRegions = gameObjectRegions.ToArray();
-            //_monsterGenerator.CreateMonsters(sector,
-            //    _botPlayer,
-            //    monsterRegions,
-            //    sectorScheme);
+            var monsterRegions = gameObjectRegions.ToArray();
+            _monsterGenerator.CreateMonsters(sector,
+                _botPlayer,
+                monsterRegions,
+                sectorScheme);
 
             return sector;
         }

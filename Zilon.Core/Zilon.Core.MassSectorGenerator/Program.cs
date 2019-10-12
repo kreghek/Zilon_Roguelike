@@ -200,10 +200,15 @@ namespace Zilon.Core.MassSectorGenerator
 
             return Task.Run(() =>
             {
-                var allNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
-                var containerNodes = scopeContainer.GetInstance<IPropContainerManager>();
+                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
+                var containerNodes = containerManager.Items.Select(x=>x.Node);
 
-                var parallelResult = Parallel.ForEach(allNodes, startNode => {
+                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
+                var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
+                var allNodes = allNonContainerNodes.ToArray();
+
+                var parallelResult = Parallel.ForEach(allNodes, startNode =>
+                {
                     foreach (var goalNode in allNodes)
                     {
                         if (startNode == goalNode)
@@ -212,7 +217,7 @@ namespace Zilon.Core.MassSectorGenerator
                             continue;
                         }
 
-                        var astar = new AStarSimpleHex(sector.Map, containerNodes, startNode, goalNode);
+                        var astar = new AStarSimpleHex(sector.Map, containerManager, startNode, goalNode);
                         var result = astar.Run();
                         if (result != State.GoalFound)
                         {
