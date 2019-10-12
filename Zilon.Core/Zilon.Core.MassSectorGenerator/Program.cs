@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+
 using LightInject;
 
 using Zilon.CommonUtilities;
@@ -44,13 +46,27 @@ namespace Zilon.Core.MassSectorGenerator
 
                 // Проверка
 
-                var checkTask = CheckSectorAsync(scopeContainer, sector);
+                var sectorValidators = GetValidatorsInAssembly();
+
+                var checkTask = CheckSectorAsync(sectorValidators, scopeContainer, sector);
                 var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
                 await Task.WhenAll(checkTask, saveTask);
             }
 
             serviceContainer.Dispose();
+        }
+
+        private static ISectorValidator[] GetValidatorsInAssembly()
+        {
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            var validatorTypes = thisAssembly.GetTypes()
+                .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
+                .Where(x => !x.IsInterface && !x.IsAbstract);
+
+            var validators = validatorTypes.Select(x => Activator.CreateInstance(x)).Cast<ISectorValidator>();
+
+            return validators.ToArray();
         }
 
         private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
@@ -63,17 +79,11 @@ namespace Zilon.Core.MassSectorGenerator
             return Task.CompletedTask;
         }
 
-        private static Task CheckSectorAsync(Scope scopeContainer, ISector sector)
+        private static Task CheckSectorAsync(ISectorValidator[] validators, Scope scopeContainer, ISector sector)
         {
-            var checkNodesTask = CheckNodesAsync(sector, scopeContainer);
+            var checkTasks = validators.Select(x => x.Validate(sector, scopeContainer));
 
-            var checkChestsTask = CheckChestsAsync(scopeContainer, sector);
-
-            var checkMonstersTask = CheckMonstersAsync(scopeContainer);
-
-            var checkTransitionsTask = CheckTransitionsAsync(sector);
-
-            var allTasks = Task.WhenAll(checkNodesTask, checkChestsTask, checkMonstersTask, checkTransitionsTask);
+            var allTasks = Task.WhenAll(checkTasks);
 
             try
             {
@@ -188,170 +198,6 @@ namespace Zilon.Core.MassSectorGenerator
 
                 return result;
             }
-        }
-
-        private static Task CheckNodesAsync(ISector sector, Scope scopeContainer)
-        {
-            // Проверяем проходимость карты.
-            // Для этого убеждаемся, что из любого узла есть путь до любого другого.
-            // При поиске пути:
-            // - Считаем непроходимыме все статические объекты. Это декоратиные препятствия и сундуки.
-            // - Игнорируем все перемещаемые. Например, монстров.
-
-            return Task.Run(() =>
-            {
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-                var containerNodes = containerManager.Items.Select(x=>x.Node);
-
-                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
-                var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
-                var allNodes = allNonContainerNodes.ToArray();
-
-                var parallelResult = Parallel.ForEach(allNodes, startNode =>
-                {
-                    foreach (var goalNode in allNodes)
-                    {
-                        if (startNode == goalNode)
-                        {
-                            // Не ищем путь из узла до самого себя.
-                            continue;
-                        }
-
-                        var astar = new AStarSimpleHex(sector.Map, containerManager, startNode, goalNode);
-                        var result = astar.Run();
-                        if (result != State.GoalFound)
-                        {
-                            throw new SectorValidationException();
-                        }
-                    }
-                });
-            });
-        }
-
-        private static Task CheckTransitionsAsync(ISector sector)
-        {
-            return Task.Run(() =>
-            {
-                var transitions = sector.Map.Transitions.Values;
-
-                // В секторе должны быть выходы.
-
-                if (transitions.Any())
-                {
-                    var hasStartRegion = false;
-                    var hasTransitionInregionsNodes = false;
-                    foreach (var region in sector.Map.Regions)
-                    {
-                        if (region.IsStart)
-                        {
-                            hasStartRegion = true;
-                        }
-
-                        if ((region.ExitNodes?.Any()).GetValueOrDefault())
-                        {
-                            hasTransitionInregionsNodes = true;
-                        }
-                    }
-
-                    if (!hasStartRegion)
-                    {
-                        // Хоть один регион должен быть отмечен, как стартовый.
-                        // Чтобы клиенты знали, где размещать персонажа после генерации.
-                        throw new SectorValidationException($"Не задан стартовый регион.");
-                    }
-
-                    if (!hasTransitionInregionsNodes)
-                    {
-                        // Переходы должны быть явно обозначены в регионах.
-                        //TODO Рассмотреть вариант упрощения
-                        // В секторе уже есть информация об узлах с переходами.
-                        // Выглядит, как дублирование.
-                        throw new SectorValidationException($"Не указан ни один регион с узламы перехода.");
-                    }
-                }
-                else
-                {
-                    // Если в секторе нет переходов, то будет невозможно его покинуть.
-                    throw new SectorValidationException("В секторе не найдены переходы.");
-                }
-
-                // Все переходы на уровне должны либо вести на глобальную карту,
-                // либо на корректный уровень сектора.
-
-                foreach (var transition in transitions)
-                {
-                    var targetSectorSid = transition.SectorSid;
-                    if (targetSectorSid == null)
-                    {
-                        // Это значит, что переход на глобальную карту.
-                        // Нормальная ситуация, проверяем следующий переход.
-                        continue;
-                    }
-
-                    var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
-                    if (sectorLevelBySid == null)
-                    {
-                        throw new SectorValidationException($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
-                    }
-                }
-            });
-        }
-
-        private static Task CheckMonstersAsync(Scope scopeContainer)
-        {
-            return Task.Run(() =>
-            {
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-                var allContainers = containerManager.Items;
-
-                // Монстры не должны генерироваться на узлах с препятствием.
-                // Монстры не должны генерироваться на узлах с сундуками.
-                var actorManager = scopeContainer.GetInstance<IActorManager>();
-                var allMonsters = actorManager.Items;
-                var containerNodes = allContainers.Select(x => x.Node);
-                foreach (var actor in allMonsters)
-                {
-                    var hex = (HexNode)actor.Node;
-                    if (hex.IsObstacle)
-                    {
-                        throw new SectorValidationException();
-                    }
-
-                    var monsterIsOnContainer = containerNodes.Contains(actor.Node);
-                    if (monsterIsOnContainer)
-                    {
-                        throw new SectorValidationException();
-                    }
-                }
-            });
-        }
-
-        private static Task CheckChestsAsync(Scope scopeContainer, ISector sector)
-        {
-            return Task.Run(() =>
-            {
-                // Сундуки не должны генерироваться на узлы, которые являются препятствием.
-                // Сундуки не должны генерироваться на узлы с выходом.
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-                var allContainers = containerManager.Items;
-                foreach (var container in allContainers)
-                {
-                    // Проверяем, что сундук не стоит на препятствии.
-                    var hex = (HexNode)container.Node;
-                    if (hex.IsObstacle)
-                    {
-                        throw new SectorValidationException();
-                    }
-
-                    // Проверяем, что сундук не на клетке с выходом.
-                    var transitionNodes = sector.Map.Transitions.Keys;
-                    var chestOnTransitionNode = transitionNodes.Contains(container.Node);
-                    if (chestOnTransitionNode)
-                    {
-                        throw new SectorValidationException();
-                    }
-                }
-            });
         }
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)

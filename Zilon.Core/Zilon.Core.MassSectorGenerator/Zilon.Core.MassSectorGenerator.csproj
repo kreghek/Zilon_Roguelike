@@ -51,13 +51,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Args.cs" />
+    <Compile Include="ISectorValidator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MapDrawer.cs" />
+    <Compile Include="SectorValidators\ChestValidator.cs" />
+    <Compile Include="SectorValidators\MonsterValidator.cs" />
+    <Compile Include="SectorValidators\PassMapValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectorGeneratorException.cs" />
     <Compile Include="SectorSchemeResult.cs" />
     <Compile Include="SectorValidationException.cs" />
+    <Compile Include="SectorValidators\TransitionValidator.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

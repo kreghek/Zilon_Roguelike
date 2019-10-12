@@ -195,7 +195,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
         {
             var hexCurrent = (HexNode)current;
-            var neighbors = map.GetNext(hexCurrent);
+            var neighbors = map.GetNext(hexCurrent).ToArray();
 
             var actualNeighbors = new List<IMapNode>();
             foreach (var testedNeighbor in neighbors)
