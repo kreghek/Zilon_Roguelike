@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
-
+using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tactics.Spatial.PathFinding;
@@ -28,24 +30,32 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
                 var allNodes = allNonContainerNodes.ToArray();
 
-                var parallelResult = Parallel.ForEach(allNodes, startNode =>
+                var matrix = new Matrix<bool>(1000, 1000);
+                foreach (var node in allNodes)
                 {
-                    foreach (var goalNode in allNodes)
-                    {
-                        if (startNode == goalNode)
-                        {
-                            // Не ищем путь из узла до самого себя.
-                            continue;
-                        }
+                    var x = node.OffsetX;
+                    var y = node.OffsetY;
+                    matrix.Items[x, y] = true;
+                }
 
-                        var astar = new AStarSimpleHex(sector.Map, containerManager, startNode, goalNode);
-                        var result = astar.Run();
-                        if (result != State.GoalFound)
-                        {
-                            throw new SectorValidationException();
-                        }
+                var startNode = allNodes.First();
+                var startPoint = new OffsetCoords(startNode.OffsetX, startNode.OffsetY);
+                var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
+
+                foreach (var point in floodPoints)
+                {
+                    matrix.Items[point.X, point.Y] = false;
+                }
+
+                foreach (var node in allNodes)
+                {
+                    var x = node.OffsetX;
+                    var y = node.OffsetY;
+                    if (matrix.Items[x, y])
+                    {
+                        throw new SectorValidationException($"Точка ({x}, {y}) недоступна для прохода.");
                     }
-                });
+                }
             });
         }
     }

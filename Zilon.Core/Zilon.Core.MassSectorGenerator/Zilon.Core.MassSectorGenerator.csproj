@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="mass.ps1" />
     <None Include="packages.config" />
     <None Include="readme.md" />
   </ItemGroup>
