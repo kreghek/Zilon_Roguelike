@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core
 {
-    public sealed class OffsetCoords
+    public sealed class OffsetCoords : IEquatable<OffsetCoords>
     {
         public int X { get; }
         public int Y { get; }
@@ -18,13 +19,6 @@ namespace Zilon.Core
             return $"({X}, {Y})";
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is OffsetCoords coords &&
-                   X == coords.X &&
-                   Y == coords.Y;
-        }
-
         public override int GetHashCode()
         {
             var hashCode = 1861411795;
@@ -33,9 +27,39 @@ namespace Zilon.Core
             return hashCode;
         }
 
+        public bool Equals(OffsetCoords other)
+        {
+            if ((Object)this == (Object)other)
+            {
+                return true;
+            }
+
+            if (other is null)
+            {
+                return false;
+            }
+
+            return this.X == other.X && this.Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is OffsetCoords coords && Equals(coords);
+        }
+
         public static bool operator ==(OffsetCoords left, OffsetCoords right)
         {
-            return EqualityComparer<OffsetCoords>.Default.Equals(left, right);
+            if ((Object)left == (Object)right)
+            {
+                return true;
+            }
+
+            if (left is null || right is null)
+            {
+                return false;
+            }
+
+            return left.Equals(right); ;
         }
 
         public static bool operator !=(OffsetCoords left, OffsetCoords right)
