@@ -59,7 +59,7 @@ namespace Zilon.Core
                 return false;
             }
 
-            return left.Equals(right); ;
+            return left.Equals(right);
         }
 
         public static bool operator !=(OffsetCoords left, OffsetCoords right)
