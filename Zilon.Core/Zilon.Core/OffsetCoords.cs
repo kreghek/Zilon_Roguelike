@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Zilon.Core
 {
@@ -32,17 +31,7 @@ namespace Zilon.Core
 
         public bool Equals(OffsetCoords other)
         {
-            if ((Object)this == (Object)other)
-            {
-                return true;
-            }
-
-            if (other is null)
-            {
-                return false;
-            }
-
-            return this.X == other.X && this.Y == other.Y;
+            return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj)
