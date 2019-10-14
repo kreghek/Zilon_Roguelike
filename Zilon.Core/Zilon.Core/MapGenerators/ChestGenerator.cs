@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
+    /// <summary>
+    /// Сервис для генерации сундуков в секторе.
+    /// </summary>
     public class ChestGenerator : IChestGenerator
     {
         private readonly ISchemeService _schemeService;
@@ -83,6 +87,17 @@ namespace Zilon.Core.MapGenerators
                         continue;
                     }
 
+                    // Проверка, что сундук не перегораживает проход.
+                        var isValid = CheckMap(map, (HexNode)containerNode);
+                    if (!isValid)
+                    {
+                        // в этом случае будет сгенерировано на один сундук меньше.
+                        // узел, с которого не удаётся найти подходящий узел, удаляем,
+                        // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
+                        openNodes.Remove(openNodes[rollIndex]);
+                        continue;
+                    }
+
                     openNodes.Remove(containerNode);
 
                     IPropContainer container;
@@ -117,6 +132,47 @@ namespace Zilon.Core.MapGenerators
                     }
                 }
             }
+        }
+
+        private bool CheckMap(ISectorMap map, HexNode containerNode)
+        {
+            var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+
+            var allNonObstacleNodes = map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
+            var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
+            var allNodes = allNonContainerNodes.ToArray();
+
+            var matrix = new Matrix<bool>(1000, 1000);
+            foreach (var node in allNodes)
+            {
+                var x = node.OffsetX;
+                var y = node.OffsetY;
+                matrix.Items[x, y] = true;
+            }
+
+            // Закрываем проверяемый узел
+            matrix.Items[containerNode.OffsetX, containerNode.OffsetY] = true;
+
+            var startNode = allNodes.First();
+            var startPoint = new OffsetCoords(startNode.OffsetX, startNode.OffsetY);
+            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
+
+            foreach (var point in floodPoints)
+            {
+                matrix.Items[point.X, point.Y] = false;
+            }
+
+            foreach (var node in allNodes)
+            {
+                var x = node.OffsetX;
+                var y = node.OffsetY;
+                if (matrix.Items[x, y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private IDropTableScheme[] GetTreasuresDropTable()
