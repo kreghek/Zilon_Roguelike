@@ -64,10 +64,42 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
         /// Returns a new random name
         /// </summary>
         /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
+        /// <returns>The random name as a string</returns>
+        public string Generate(Sex sex)
+        {
+            return Generate(sex, 0, false);
+        }
+
+        /// <summary>
+        /// Returns a new random name
+        /// </summary>
+        /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
+        /// <param name="middle">How many middle names do generate</param>
+        /// <returns>The random name as a string</returns>
+        public string Generate(Sex sex, int middle)
+        {
+            return Generate(sex, middle, false);
+        }
+
+        /// <summary>
+        /// Returns a new random name
+        /// </summary>
+        /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
+        /// <param name="isInital">Should the middle names be initials or not?</param>
+        /// <returns>The random name as a string</returns>
+        public string Generate(Sex sex, bool isInital)
+        {
+            return Generate(sex, 0, isInital);
+        }
+
+        /// <summary>
+        /// Returns a new random name
+        /// </summary>
+        /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
         /// <param name="middle">How many middle names do generate</param>
         /// <param name="isInital">Should the middle names be initials or not?</param>
         /// <returns>The random name as a string</returns>
-        public string Generate(Sex sex, int middle = 0, bool isInital = false)
+        public string Generate(Sex sex, int middle, bool isInital)
         {
             var first = sex == Sex.Male ? _male[_dice.Roll(0, _male.Count - 1)] : _female[_dice.Roll(0, _female.Count - 1)]; // determines if we should select a name from male or female, and randomly picks
             var last = _last[_dice.Roll(0, _last.Count - 1)]; // gets the last name
@@ -102,35 +134,55 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
         /// </summary>
         /// <param name="number">The number of names to be generated</param>
         /// <param name="maxMiddleNames">The maximum number of middle names</param>
+        /// <returns>List of strings of names</returns>
+        public List<string> RandomNames(int number, int maxMiddleNames)
+        {
+            return RandomNames(number, maxMiddleNames, null, null);
+        }
+
+        /// <summary>
+        /// Generates a list of random names
+        /// </summary>
+        /// <param name="number">The number of names to be generated</param>
+        /// <param name="maxMiddleNames">The maximum number of middle names</param>
+        /// <param name="sex">The sex of the names, if null sex is randomised</param>
+        /// <returns>List of strings of names</returns>
+        public List<string> RandomNames(int number, int maxMiddleNames, Sex? sex)
+        {
+            return RandomNames(number, maxMiddleNames, sex, null);
+        }
+
+        /// <summary>
+        /// Generates a list of random names
+        /// </summary>
+        /// <param name="number">The number of names to be generated</param>
+        /// <param name="maxMiddleNames">The maximum number of middle names</param>
+        /// <param name="initials">Should the middle names have initials, if null this will be randomised</param>
+        /// <returns>List of strings of names</returns>
+        public List<string> RandomNames(int number, int maxMiddleNames, bool? initials)
+        {
+            return RandomNames(number, maxMiddleNames, null, initials);
+        }
+
+        /// <summary>
+        /// Generates a list of random names
+        /// </summary>
+        /// <param name="number">The number of names to be generated</param>
+        /// <param name="maxMiddleNames">The maximum number of middle names</param>
         /// <param name="sex">The sex of the names, if null sex is randomised</param>
         /// <param name="initials">Should the middle names have initials, if null this will be randomised</param>
         /// <returns>List of strings of names</returns>
-        public List<string> RandomNames(int number, int maxMiddleNames, Sex? sex = null, bool? initials = null)
+        public List<string> RandomNames(int number, int maxMiddleNames, Sex? sex, bool? initials)
         {
-            List<string> names = new List<string>();
+            List<string> names = new List<string>(number);
 
             for (int i = 0; i < number; i++)
             {
-                if (sex != null && initials != null)
-                {
-                    names.Add(Generate((Sex)sex, _dice.Roll(0, maxMiddleNames + 1 - 1), (bool)initials));
-                }
-                else if (sex != null)
-                {
-                    bool init = _dice.Roll(0, 2 - 1) != 0;
-                    names.Add(Generate((Sex)sex, _dice.Roll(0, maxMiddleNames + 1 - 1), init));
-                }
-                else if (initials != null)
-                {
-                    Sex s = (Sex)_dice.Roll(0, 2 - 1);
-                    names.Add(Generate(s, _dice.Roll(0, maxMiddleNames + 1 - 1), (bool)initials));
-                }
-                else
-                {
-                    Sex s = (Sex)_dice.Roll(0, 2 - 1);
-                    bool init = _dice.Roll(0, 2 - 1) != 0;
-                    names.Add(Generate(s, _dice.Roll(0, maxMiddleNames + 1 - 1), init));
-                }
+                Sex s = sex != null ? sex.Value : (Sex)_dice.Roll(0, 2 - 1);
+                bool init = initials != null ? (bool)initials : (_dice.Roll(0, 2 - 1) != 0);
+                int middle = _dice.Roll(0, maxMiddleNames + 1 - 1);
+
+                names.Add(Generate(s, middle, init));
             }
 
             return names;
