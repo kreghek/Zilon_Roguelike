@@ -67,7 +67,9 @@ namespace Zilon.Core.MassSectorGenerator
                 var width = info.RightCoord - info.LeftCoord;
                 for (var i = 0; i <= width; i++)
                 {
-                    var xNumberCoord = checked(i * CELLSIZE);
+                    // Приводим к float, чтобы избежать переполнения при умножении int.
+                    // https://lgtm.com/rules/1506096756023/
+                    var xNumberCoord = (float)i * CELLSIZE;
                     graphics.DrawString(i.ToString(), font, Brushes.White, xNumberCoord + MARGIN, 0);
                 }
 
@@ -75,7 +77,10 @@ namespace Zilon.Core.MassSectorGenerator
                 for (var i = 0; i <= height; i++)
                 {
                     var ratio = 3f / 4;
-                    var yMarginCoord = checked(i * CELLSIZE * ratio);
+                    // Приводим к float, чтобы избежать переполнения при умножении int.
+                    // Здесь от float мы всё равно не избавимся из-за ratio.
+                    // https://lgtm.com/rules/1506096756023/
+                    var yMarginCoord = (float)i * CELLSIZE * ratio;
                     graphics.DrawString(i.ToString(), font, Brushes.White, MARGIN, yMarginCoord + MARGIN);
                 }
             }
