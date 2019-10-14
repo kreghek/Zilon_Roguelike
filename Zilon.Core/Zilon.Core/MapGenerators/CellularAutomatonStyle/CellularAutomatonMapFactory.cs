@@ -379,8 +379,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // и всеми открытыми регионами.
 
                 var currentDistance = int.MaxValue;
-                OffsetCoords currentOpenRegionCoord = null;
-                OffsetCoords currentUnitedRegionCoord = null;
+                OffsetCoords? currentOpenRegionCoord = null;
+                OffsetCoords? currentUnitedRegionCoord = null;
                 RegionDraft nearbyOpenRegion = null;
 
                 foreach (var currentOpenRegion in openRegions)
@@ -411,8 +411,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     && currentOpenRegionCoord != null
                      && currentUnitedRegionCoord != null)
                 {
-                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord);
-                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord);
+                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
+                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
 
                     var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
                     foreach (var lineItem in line)
@@ -526,7 +526,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             public RegionCoords(OffsetCoords coords, RegionDraft region)
             {
-                Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+                Coords = coords;
                 Region = region ?? throw new ArgumentNullException(nameof(region));
             }
 

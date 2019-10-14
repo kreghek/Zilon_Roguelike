@@ -2,7 +2,7 @@
 
 namespace Zilon.Core
 {
-    public sealed class OffsetCoords
+    public struct OffsetCoords
     {
         public int X { get; }
         public int Y { get; }
@@ -27,15 +27,18 @@ namespace Zilon.Core
 
         public override int GetHashCode()
         {
-            var hashCode = 1861411795;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            return hashCode;
+            unchecked
+            {
+                var hashCode = 1861411795;
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                return hashCode;
+            }
         }
 
         public static bool operator ==(OffsetCoords left, OffsetCoords right)
         {
-            return EqualityComparer<OffsetCoords>.Default.Equals(left, right);
+            return left.Equals(right);
         }
 
         public static bool operator !=(OffsetCoords left, OffsetCoords right)

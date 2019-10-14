@@ -11,6 +11,7 @@ namespace Zilon.Core.MassSectorGenerator
     {
         private const int CELLSIZE = 10;
         private const int MARGIN = 10;
+        private const int AXIS_FONT_SIZE = 6;
 
         public static Bitmap DrawNodes(IEnumerable<HexNode> nodes)
         {
@@ -61,18 +62,20 @@ namespace Zilon.Core.MassSectorGenerator
 
         private static void DrawAxisNumbers(ImageInfo info, Graphics graphics)
         {
-            using (var font = new Font(SystemFonts.DefaultFont.FontFamily, 6, FontStyle.Regular))
+            using (var font = new Font(SystemFonts.DefaultFont.FontFamily, AXIS_FONT_SIZE, FontStyle.Regular))
             {
-                for (var i = 0; i <= info.RightCoord - info.LeftCoord; i++)
+                var width = info.RightCoord - info.LeftCoord;
+                for (var i = 0; i <= width; i++)
                 {
-                    var xNumberCoord = i * CELLSIZE;
+                    var xNumberCoord = checked(i * CELLSIZE);
                     graphics.DrawString(i.ToString(), font, Brushes.White, xNumberCoord + MARGIN, 0);
                 }
 
-                for (var i = 0; i <= info.TopCoord - info.BottomCoord; i++)
+                var height = info.TopCoord - info.BottomCoord;
+                for (var i = 0; i <= height; i++)
                 {
                     var ratio = 3f / 4;
-                    var yMarginCoord = i * CELLSIZE * ratio;
+                    var yMarginCoord = checked(i * CELLSIZE * ratio);
                     graphics.DrawString(i.ToString(), font, Brushes.White, MARGIN, yMarginCoord + MARGIN);
                 }
             }

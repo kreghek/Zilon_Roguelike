@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// </remarks>
         public InteriorObjectMeta(OffsetCoords coords)
         {
-            Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+            Coords = coords;
         }
 
         /// <summary>

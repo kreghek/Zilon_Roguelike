@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7</LangVersion>
     <DocumentationFile>..\..\Zilon.Client\Assets\Plugins\Zilon.Core.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
