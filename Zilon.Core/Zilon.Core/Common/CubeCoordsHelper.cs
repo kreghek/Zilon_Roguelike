@@ -65,14 +65,30 @@ namespace Zilon.Core.Common
 
             var list = new List<CubeCoords>();
 
-            for (var i = 0; i <= n; i++)
+            // Первую итерацию выполняем отдельно.
+            // В ней всегда берём t=0
+            AddPointToList(a, b, list, 0);
+
+            // Последующие итерации начинаем с 1,
+            // т.к. первую итерацию обработали.
+            for (var i = 1; i <= n; i++)
             {
-                LerpCube(a, b, 1.0f / n * i, out float cubeX, out float cubeY, out float cubeZ);
-                var point = RoundCube(cubeX, cubeY, cubeZ);
-                list.Add(point);
+                // t принимает значения 0..1.
+                // Мы делим 1 на количество шагов n.
+                // И  берём i-тый шаг.
+                var t = 1.0f / n * i;
+
+                AddPointToList(a, b, list, t);
             }
 
             return list.ToArray();
+        }
+
+        private static void AddPointToList(CubeCoords a, CubeCoords b, List<CubeCoords> list, float t)
+        {
+            LerpCube(a, b, t, out float cubeX, out float cubeY, out float cubeZ);
+            var point = RoundCube(cubeX, cubeY, cubeZ);
+            list.Add(point);
         }
     }
 }
