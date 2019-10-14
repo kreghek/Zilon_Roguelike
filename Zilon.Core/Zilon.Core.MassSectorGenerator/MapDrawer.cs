@@ -10,6 +10,7 @@ namespace Zilon.Core.MassSectorGenerator
     public static class MapDrawer
     {
         private const int CELLSIZE = 10;
+        private const int MARGIN = 10;
 
         public static Bitmap DrawNodes(IEnumerable<HexNode> nodes)
         {
@@ -48,7 +49,7 @@ namespace Zilon.Core.MassSectorGenerator
 
                     var cellBrush = !node.IsObstacle ? Brushes.White : Brushes.Gray;
 
-                    graphics.FillEllipse(cellBrush, x + CELLSIZE, y + CELLSIZE, CELLSIZE, CELLSIZE);
+                    graphics.FillEllipse(cellBrush, x + MARGIN, y + MARGIN, CELLSIZE, CELLSIZE);
                 }
             }
         }
@@ -64,12 +65,15 @@ namespace Zilon.Core.MassSectorGenerator
             {
                 for (var i = 0; i <= info.RightCoord - info.LeftCoord; i++)
                 {
-                    graphics.DrawString(i.ToString(), font, Brushes.White, i * CELLSIZE + CELLSIZE, 0);
+                    var xNumberCoord = i * CELLSIZE;
+                    graphics.DrawString(i.ToString(), font, Brushes.White, xNumberCoord + MARGIN, 0);
                 }
 
                 for (var i = 0; i <= info.TopCoord - info.BottomCoord; i++)
                 {
-                    graphics.DrawString(i.ToString(), font, Brushes.White, CELLSIZE, (i * CELLSIZE) * 3f / 4 + CELLSIZE);
+                    var ratio = 3f / 4;
+                    var yMarginCoord = i * CELLSIZE * ratio;
+                    graphics.DrawString(i.ToString(), font, Brushes.White, MARGIN, yMarginCoord + MARGIN);
                 }
             }
         }
@@ -81,8 +85,8 @@ namespace Zilon.Core.MassSectorGenerator
             var yAxisDiff = info.TopCoord - info.BottomCoord;
             var height = (yAxisDiff + 1) * CELLSIZE;
 
-            var margin = CELLSIZE * 2;
-            var bitmap = new Bitmap(width + margin, height + margin);
+            var twoSideMargin = MARGIN * 2;
+            var bitmap = new Bitmap(width + twoSideMargin, height + twoSideMargin);
 
             return bitmap;
         }
