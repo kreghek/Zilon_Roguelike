@@ -1,13 +1,11 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
+
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
