@@ -12,7 +12,8 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.ProgressStoring
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class GlobeStorageDataTests
     {
         /// <summary>

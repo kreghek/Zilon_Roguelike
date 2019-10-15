@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using FluentAssertions;
 
 using Moq;
@@ -7,6 +8,7 @@ using Moq;
 using Newtonsoft.Json;
 
 using NUnit.Framework;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
@@ -16,7 +18,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.ProgressStoring
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HumanPersonStorageDataTests
     {
         [Test()]
