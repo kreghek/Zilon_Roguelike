@@ -71,7 +71,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         //TODO Придумать название метода получше
         private RegionDraft[] CreateInner(int targetRegionDraftCount, int chanceToStartAlive, ref Matrix<bool> matrix)
         {
-            for(var retry = 0; retry < RETRY_LIMIT; retry++)
+            for (var retry = 0; retry < RETRY_LIMIT; retry++)
             {
                 InitStartAliveMatrix(matrix, chanceToStartAlive);
 
@@ -124,10 +124,14 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
         }
 
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
+
+            var allCoords = draftRegions.SelectMany(x => x.Coords).ToArray();
+            var interiorCoords = _interiorObjectRandomSource.RollInteriorObjects(allCoords);
+            var interiorCoordHashset = interiorCoords.ToDictionary(x => x.Coords, x => x);
 
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
@@ -136,7 +140,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 foreach (var coord in draftRegion.Coords)
                 {
-                    var node = new HexNode(coord.X, coord.Y);
+                    var isObstacle = interiorCoordHashset.ContainsKey(coord);
+
+                    var node = new HexNode(coord.X, coord.Y, isObstacle);
                     map.AddNode(node);
 
                     regionNodeList.Add(node);

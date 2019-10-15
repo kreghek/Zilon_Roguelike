@@ -88,7 +88,7 @@ namespace Zilon.Core.MapGenerators
                     }
 
                     // Проверка, что сундук не перегораживает проход.
-                        var isValid = CheckMap(map, (HexNode)containerNode);
+                    var isValid = CheckMap(map, (HexNode)containerNode);
                     if (!isValid)
                     {
                         // в этом случае будет сгенерировано на один сундук меньше.
@@ -151,7 +151,7 @@ namespace Zilon.Core.MapGenerators
             }
 
             // Закрываем проверяемый узел
-            matrix.Items[containerNode.OffsetX, containerNode.OffsetY] = true;
+            matrix.Items[containerNode.OffsetX, containerNode.OffsetY] = false;
 
             var startNode = allNodes.First();
             var startPoint = new OffsetCoords(startNode.OffsetX, startNode.OffsetY);

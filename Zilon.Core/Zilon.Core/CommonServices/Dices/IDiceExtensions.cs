@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -65,6 +67,23 @@ namespace Zilon.Core.CommonServices.Dices
             }
 
             return dice.Roll(6);
+        }
+
+        public static T RollFromList<T>(this IDice dice, IList<T> list)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var rollIndex = dice.Roll(0, list.Count - 1);
+            var item = list[rollIndex];
+            return item;
         }
     }
 }

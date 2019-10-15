@@ -211,9 +211,10 @@ namespace Zilon.Core.MassSectorGenerator
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
         {
-            var bmp = MapDrawer.DrawMap(map);
-
-            bmp.Save(outputPath);
+            using (var bmp = MapDrawer.DrawMap(map))
+            {
+                bmp.Save(outputPath);
+            }
         }
     }
 }
