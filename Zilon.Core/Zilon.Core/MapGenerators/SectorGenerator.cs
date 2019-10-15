@@ -27,7 +27,7 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создаёт экземпляр <see cref="SectorGenerator"/>.
         /// </summary>
-        /// <param name="mapFactory"> Фабрика карты. Сейчас используется <see cref="RoomMapFactory"/>. </param>
+        /// <param name="mapFactorySelector"> Сервис для выбора фабрики для создания карты. </param>
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
@@ -65,23 +65,8 @@ namespace Zilon.Core.MapGenerators
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
-            //if (sectorScheme.MapGeneratorOptions is ISectorCellularAutomataMapFactoryOptionsSubScheme)
-            //{
-            //    // Сейчас при расстановке сундуков на карте, сгенерированной клеточным автоматом,
-            //    // велик шанс, что будет перекрыт коридор между комнатами.
-            //    // Быстрого решения этой проблемы нет.
-            //    // В текущем состоянии клиент игры слишком долго генерирует стартовый сектор
-            //    // (если вообще генерирует, результатов дождаться не удалось).
-            //    // При этом в тестах сектор создаётся за доли секунды.
-            //    // Сейчас сундуки вообще отключены для карт на основе клеточного автомата,
-            //    // чтобы клиент был минимально работоспособным.
-            //    // Позже, когда решение будет найдено, нужно будет убрать это условие.
-            //}
-            //else
-            {
-                var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
-                _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
-            }
+            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
+            _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,
