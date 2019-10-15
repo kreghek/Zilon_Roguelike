@@ -12,7 +12,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
     public class SchemeServiceTests
     {

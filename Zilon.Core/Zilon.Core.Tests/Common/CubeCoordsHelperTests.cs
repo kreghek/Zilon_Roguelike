@@ -9,7 +9,7 @@ using Zilon.Core.Tests.Common.TestCases;
 
 namespace Zilon.Core.Tests.Common
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class CubeCoordsHelperTests
     {
         /// <summary>

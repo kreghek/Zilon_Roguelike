@@ -23,7 +23,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     /// (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
     /// (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
     /// </remarks>
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class EquipTaskTests
     {
         /// <summary>

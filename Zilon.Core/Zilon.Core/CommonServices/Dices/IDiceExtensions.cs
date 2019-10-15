@@ -2,6 +2,9 @@
 
 namespace Zilon.Core.CommonServices.Dices
 {
+    /// <summary>
+    /// Вспомогательные расширения сервиса для работы с игральной костью.
+    /// </summary>
     public static class DiceExtensions
     {
         /// <summary>
@@ -18,6 +21,11 @@ namespace Zilon.Core.CommonServices.Dices
                 throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.", nameof(max));
             }
 
+            if (dice == null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             if (min == max)
             {
                 return min;
@@ -31,16 +39,31 @@ namespace Zilon.Core.CommonServices.Dices
 
         public static int RollD6(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6);
         }
 
         public static int Roll2D6(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6) + dice.Roll(6);
         }
 
         public static int RollD3(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6);
         }
     }

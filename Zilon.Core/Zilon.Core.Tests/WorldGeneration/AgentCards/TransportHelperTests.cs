@@ -11,7 +11,7 @@ using Zilon.Core.WorldGeneration.AgentCards;
 
 namespace Zilon.Core.Tests.WorldGeneration.AgentCards
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class TransportHelperTests
     {
         /// <summary>

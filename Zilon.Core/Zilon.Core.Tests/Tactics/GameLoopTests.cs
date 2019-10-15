@@ -13,7 +13,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class GameLoopTests
     {
         /// <summary>

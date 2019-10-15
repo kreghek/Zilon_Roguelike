@@ -21,7 +21,7 @@ using Zilon.Core.Tests.MapGenerators.RoomStyle;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class SectorProceduralGeneratorTests
     {
         /// <summary>

@@ -14,7 +14,7 @@ using Zilon.Core.WorldGeneration;
 namespace Zilon.Core.Tests.WorldGeneration
 {
 
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
     public class WorldGeneratorTests
     {

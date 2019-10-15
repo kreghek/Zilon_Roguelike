@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Zilon.Core.Benchmark
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class BenchTests
     {
         [Test]

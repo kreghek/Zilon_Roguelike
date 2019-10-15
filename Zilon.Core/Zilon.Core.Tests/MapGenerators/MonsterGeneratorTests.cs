@@ -20,7 +20,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class MonsterGeneratorTests
     {
         /// <summary>

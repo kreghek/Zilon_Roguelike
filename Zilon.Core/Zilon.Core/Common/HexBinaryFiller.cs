@@ -16,6 +16,11 @@ namespace Zilon.Core.Common
         /// <returns> Возвращает точки, которые были залиты. </returns>
         public static IEnumerable<OffsetCoords> FloodFill(Matrix<bool> matrix, OffsetCoords point)
         {
+            if (matrix is null)
+            {
+                throw new System.ArgumentNullException(nameof(matrix));
+            }
+
             var snapshotCellmap = (bool[,])matrix.Items.Clone();
 
             var regionPoints = new List<OffsetCoords>();

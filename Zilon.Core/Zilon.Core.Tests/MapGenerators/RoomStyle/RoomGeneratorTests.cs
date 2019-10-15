@@ -14,6 +14,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class RoomGeneratorTests
     {
         /// <summary>
@@ -50,6 +51,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// </summary>
         [Test]
         [Category("integration")]
+        [Parallelizable]
         public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
         {
             // ARRANGE

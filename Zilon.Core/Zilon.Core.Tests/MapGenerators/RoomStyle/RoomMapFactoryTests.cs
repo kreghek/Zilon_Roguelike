@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using NUnit.Framework;
@@ -14,7 +15,8 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
-    public class DungeonMapFactoryTests
+    [Parallelizable(ParallelScope.All)]
+    public class RoomMapFactoryTests
     {
         /// <summary>
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
@@ -49,7 +51,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         [TestCase(1)]
         [TestCase(8674)]
         [TestCase(1000)]
-        public void Create_RealRandom_NoExceptions(int diceSeed)
+        [Parallelizable]
+        public void Create_RealRoomRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
@@ -76,7 +79,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public async Task Create_RealRandom_NoOverlapNodesAsync()
+        [Parallelizable]
+        public async Task Create_RealRoomRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
             var dice = new Dice(3245);

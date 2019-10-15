@@ -18,7 +18,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class HumanPlayerStorageDataTests
     {
         [Test]

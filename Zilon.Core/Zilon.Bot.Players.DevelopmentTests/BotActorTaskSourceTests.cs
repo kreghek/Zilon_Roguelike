@@ -17,7 +17,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class BotActorTaskSourceTests
     {
         private ServiceContainer _globalServiceContainer;
