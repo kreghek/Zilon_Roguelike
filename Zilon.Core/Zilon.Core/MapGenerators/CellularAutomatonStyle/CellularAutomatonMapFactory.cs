@@ -237,7 +237,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             if (targetRegionCount <= 0)
             {
-                throw new ArgumentException(nameof(targetRegionCount));
+                throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
             }
 
             var regionCountDiff = targetRegionCount - draftRegions.Count();
