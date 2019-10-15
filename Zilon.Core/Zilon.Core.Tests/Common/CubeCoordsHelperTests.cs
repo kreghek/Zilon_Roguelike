@@ -24,38 +24,38 @@ namespace Zilon.Core.Tests.Common
             var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
             var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
-
-
             // ACT
             var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
 
-
-
             // ASSERT
+            var neibourOffsets = HexHelper.GetOffsetClockwise();
+
             foreach (var coord in line)
             {
                 var sameCoords = line.Where(x => x == coord);
                 sameCoords.Count().Should().Be(1);
 
-                // Проверяем, что у каждой точки линии есть соседи,
-                // т.е. нет изолированных разорванных точк.
-                var neibourOffsets = HexHelper.GetOffsetClockwise();
-                var hasNeighbor = false;
-
-                foreach (var neibourOffset in neibourOffsets)
+                if (line.Count() > 1)
                 {
-                    var neighborCoord = coord + neibourOffset;
-                    var foundCoords = line.Where(x => x == neighborCoord);
+                    // Проверяем, что у каждой точки линии есть соседи,
+                    // т.е. нет изолированных разорванных точк.
+                    var hasNeighbor = false;
 
-                    var hasNeighborInThisDirection = foundCoords.Any();
-
-                    if (hasNeighborInThisDirection)
+                    foreach (var neibourOffset in neibourOffsets)
                     {
-                        hasNeighbor = true;
-                    }
-                }
+                        var neighborCoord = coord + neibourOffset;
+                        var foundCoords = line.Where(x => x == neighborCoord);
 
-                hasNeighbor.Should().Be(true);
+                        var hasNeighborInThisDirection = foundCoords.Any();
+
+                        if (hasNeighborInThisDirection)
+                        {
+                            hasNeighbor = true;
+                        }
+                    }
+
+                    hasNeighbor.Should().Be(true, "Линия должна быть непрерывной.");
+                }
             }
         }
 

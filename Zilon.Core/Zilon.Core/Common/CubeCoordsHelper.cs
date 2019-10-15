@@ -49,7 +49,9 @@ namespace Zilon.Core.Common
                 rz = -rx - ry;
             }
 
-            return new CubeCoords((int)rx, (int)ry, (int)rz);
+            var cube = new CubeCoords((int)rx, (int)ry, (int)rz);
+
+            return cube;
         }
 
         /// <summary>
