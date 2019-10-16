@@ -13,7 +13,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         {
             return Task.Run(() =>
             {
-                throw new System.Exception();
+                throw new SectorValidationException();
 
                 var transitions = sector.Map.Transitions.Values;
 
