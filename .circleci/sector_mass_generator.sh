@@ -1,4 +1,4 @@
-﻿#!/bin/sh
+#!/bin/sh
 
 set -e
 set -x
@@ -12,7 +12,7 @@ for i in $(seq 1 100); do
   echo "======= $i ========="
   
   mono --debug /test_mass_sector_generator/Zilon.Core/Zilon.Core.MassSectorGenerator/bin/Debug/Zilon.Core.MassSectorGenerator.exe \
-    out="/test_mass_sector_generator/maps/map-$i.bmp"
+    out="/test_mass_sector_generator/maps/map-$i.bmp" || true
 	
   EXIT_CODE=$?
   

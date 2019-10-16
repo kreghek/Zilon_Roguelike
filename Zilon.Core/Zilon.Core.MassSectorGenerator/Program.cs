@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -105,11 +107,9 @@ namespace Zilon.Core.MassSectorGenerator
                         {
                             Log.Error(inner);
                         }
-                        else
-                        {
-                            throw;
-                        }
                     }
+
+                    throw;
                 }
 
                 stopWatch.Stop();
@@ -213,7 +213,11 @@ namespace Zilon.Core.MassSectorGenerator
         {
             using (var bmp = MapDrawer.DrawMap(map))
             {
-                bmp.Save(outputPath);
+                var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format1bppIndexed);
+                using (var newBitmap = new Bitmap(bmp.Width, bmp.Height, bmpData.Stride, PixelFormat.Format1bppIndexed, bmpData.Scan0))
+                {
+                    newBitmap.Save(outputPath);
+                }
             }
         }
     }
