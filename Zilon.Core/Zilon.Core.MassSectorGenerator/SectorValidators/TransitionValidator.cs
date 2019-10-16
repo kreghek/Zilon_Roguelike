@@ -7,6 +7,9 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
+    /// <summary>
+    /// Валидатор переходов из сектора.
+    /// </summary>
     class TransitionValidator : ISectorValidator
     {
         public Task Validate(ISector sector, Scope scopeContainer)

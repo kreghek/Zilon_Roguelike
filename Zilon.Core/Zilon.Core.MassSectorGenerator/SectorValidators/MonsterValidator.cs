@@ -8,6 +8,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
+    /// <summary>
+    /// Валидатор корректности расстановки моснтров в секторе.
+    /// </summary>
     class MonsterValidator : ISectorValidator
     {
         public Task Validate(ISector sector, Scope scopeContainer)

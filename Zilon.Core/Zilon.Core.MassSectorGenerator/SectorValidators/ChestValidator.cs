@@ -8,6 +8,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
+    /// <summary>
+    /// Валидатор контейнеров в секторе.
+    /// </summary>
     class ChestValidator : ISectorValidator
     {
         public Task Validate(ISector sector, Scope scopeContainer)
@@ -18,24 +21,72 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 // Сундуки не должны генерироваться на узлы с выходом.
                 var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
                 var allContainers = containerManager.Items;
+                var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
                 foreach (var container in allContainers)
                 {
-                    // Проверяем, что сундук не стоит на препятствии.
                     var hex = (HexNode)container.Node;
-                    if (hex.IsObstacle)
-                    {
-                        throw new SectorValidationException();
-                    }
 
-                    // Проверяем, что сундук не на клетке с выходом.
-                    var transitionNodes = sector.Map.Transitions.Keys;
-                    var chestOnTransitionNode = transitionNodes.Contains(container.Node);
-                    if (chestOnTransitionNode)
-                    {
-                        throw new SectorValidationException();
-                    }
+                    ValidateObstacleOverlap(hex);
+
+                    ValidateTransitionOverlap(sector, container);
+
+                    ValidatePassability(hex, sector.Map, allContainerNodes);
                 }
             });
+        }
+
+        /// <summary>
+        /// Проверяем, что сундук не на клетке с выходом.
+        /// </summary>
+        private static void ValidateTransitionOverlap(ISector sector, IPropContainer container)
+        {
+            var transitionNodes = sector.Map.Transitions.Keys;
+            var chestOnTransitionNode = transitionNodes.Contains(container.Node);
+            if (chestOnTransitionNode)
+            {
+                throw new SectorValidationException();
+            }
+        }
+
+        /// <summary>
+        /// Проверяем, что сундук не стоит на препятствии.
+        /// </summary>
+        private static void ValidateObstacleOverlap(HexNode hex)
+        {
+            if (hex.IsObstacle)
+            {
+                throw new SectorValidationException();
+            }
+        }
+
+        /// <summary>
+        /// Проверяем, что к сундуку есть подход.
+        /// </summary>
+        private static void ValidatePassability(
+            HexNode currentContainerHex,
+            ISectorMap sectorMap,
+            IMapNode[] allContainerNodes)
+        {
+            var neighborNodes = sectorMap.GetNext(currentContainerHex);
+            var hasFreeNeighbor = false;
+            foreach (var neighborNode in neighborNodes)
+            {
+                var neighborHex = (HexNode)neighborNode;
+
+                var isObstacle = neighborHex.IsObstacle;
+                var isContainer = allContainerNodes.Contains(neighborHex);
+
+                if (!isObstacle && !isContainer)
+                {
+                    hasFreeNeighbor = true;
+                    break;
+                }
+            }
+
+            if (!hasFreeNeighbor)
+            {
+                throw new SectorValidationException($"Контейнер {currentContainerHex} не имеет подступов.");
+            }
         }
     }
 }
