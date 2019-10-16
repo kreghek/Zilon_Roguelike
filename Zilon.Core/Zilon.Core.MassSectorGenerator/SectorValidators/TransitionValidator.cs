@@ -13,6 +13,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         {
             return Task.Run(() =>
             {
+                throw new System.Exception();
+
                 var transitions = sector.Map.Transitions.Values;
 
                 // В секторе должны быть выходы.
