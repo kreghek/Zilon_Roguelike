@@ -59,9 +59,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
-            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
             var targetRegionDraftCount = transitions.Count() + 1;
-            var draftRegions = CreateInner(targetRegionDraftCount, chanceToStartAlive, ref matrix);
+            var createResult = CreateInner(
+                targetRegionDraftCount,
+                chanceToStartAlive,
+                matrixWidth,
+                matrixHeight);
+
+            var matrix = createResult.Matrix;
+            var draftRegions = createResult.Regions;
 
             var map = CreateSectorMap(matrix, draftRegions, transitions);
 
@@ -69,8 +75,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         //TODO Придумать название метода получше
-        private RegionDraft[] CreateInner(int targetRegionDraftCount, int chanceToStartAlive, ref Matrix<bool> matrix)
+        private CreateMatrixResult CreateInner(int targetRegionDraftCount, int chanceToStartAlive, int matrixWidth, int matrixHeight)
         {
+            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
+
             for (var retry = 0; retry < RETRY_LIMIT; retry++)
             {
                 InitStartAliveMatrix(matrix, chanceToStartAlive);
@@ -107,7 +115,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                         // Разделение успешно выполнено.
                         // Пропускаем карту дальше.
-                        return splittedDraftRegions;
+                        var result = new CreateMatrixResult(matrixWithMargins, splittedDraftRegions);
+                        return result;
                     }
                     catch (CellularAutomatonException)
                     {
@@ -118,7 +127,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
                 else
                 {
-                    return draftRegions;
+                    var result = new CreateMatrixResult(matrixWithMargins, draftRegions);
+                    return result;
                 }
             }
 
@@ -542,6 +552,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             public OffsetCoords Coords { get; }
 
             public RegionDraft Region { get; }
+        }
+
+        private sealed class CreateMatrixResult
+        {
+            public CreateMatrixResult(Matrix<bool> matrix, RegionDraft[] regions)
+            {
+                Matrix = matrix ?? throw new ArgumentNullException(nameof(matrix));
+                Regions = regions ?? throw new ArgumentNullException(nameof(regions));
+            }
+
+            public Matrix<bool> Matrix { get; }
+            public RegionDraft[] Regions { get; }
         }
     }
 }
