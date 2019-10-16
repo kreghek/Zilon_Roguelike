@@ -105,11 +105,9 @@ namespace Zilon.Core.MassSectorGenerator
                         {
                             Log.Error(inner);
                         }
-                        else
-                        {
-                            throw;
-                        }
                     }
+
+                    throw;
                 }
 
                 stopWatch.Stop();
