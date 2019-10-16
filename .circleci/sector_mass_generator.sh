@@ -17,8 +17,9 @@ for i in $(seq 1 100); do
   EXIT_CODE=$?
   
   if [ $EXIT_CODE -eq 0 ]; then
+    echo "Iteration successfull";
   else
-    TOTAL_EXIT_CODE=1
+    TOTAL_EXIT_CODE=1;
   fi
   
   echo "--------------------"
