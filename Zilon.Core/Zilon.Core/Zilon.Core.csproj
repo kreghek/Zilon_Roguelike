@@ -86,6 +86,7 @@
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\Matrix.cs" />
+    <Compile Include="Common\MatrixExtensions.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />

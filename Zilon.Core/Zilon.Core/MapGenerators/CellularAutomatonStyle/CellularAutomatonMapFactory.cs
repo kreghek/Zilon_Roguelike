@@ -82,10 +82,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
+                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
+
                 RegionDraft[] draftRegions;
                 try
                 {
-                    draftRegions = MakeUnitedRegions(matrix);
+                    draftRegions = MakeUnitedRegions(matrixWithMargins);
                 }
                 catch (CellularAutomatonException)
                 {
@@ -338,6 +340,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // изолированных регионов.
             // В секторе не должно быть изолированых регионов, поэтому
             // дальше все регионы объединяются в единый граф.
+
             var openNodes = new List<OffsetCoords>();
             for (var x = 0; x < matrix.Width; x++)
             {
