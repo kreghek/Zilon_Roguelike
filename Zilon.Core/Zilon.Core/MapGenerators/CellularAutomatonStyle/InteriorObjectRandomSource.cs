@@ -6,15 +6,27 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Базовая реализация источника рандома при работе с элементами интерьера.
+    /// </summary>
     public class InteriorObjectRandomSource : IInteriorObjectRandomSource
     {
         private readonly IDice _dice;
 
+        /// <summary>
+        /// Кнструктор.
+        /// </summary>
+        /// <param name="dice"> Кость, используемая, как источник рандома. </param>
         public InteriorObjectRandomSource(IDice dice)
         {
             _dice = dice;
         }
 
+        /// <summary>
+        /// Случайный выбор координат для размещения элемента интерьера.
+        /// </summary>
+        /// <param name="regionDraftCoords"> Координаты региона, среди которых можно выбирать позиции элементов интерьера. </param>
+        /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
         public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords)
         {
             var availableCoords = GetAvailableCoords(regionDraftCoords);

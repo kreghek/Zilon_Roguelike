@@ -46,6 +46,13 @@ namespace Zilon.Core.CommonServices.Dices
             return dice.Roll(6);
         }
 
+        /// <summary>
+        /// Выбирает случайное значение из списка.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <returns> Случайный элемент из списка. </returns>
         public static T RollFromList<T>(this IDice dice, IList<T> list)
         {
             if (dice is null)

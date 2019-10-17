@@ -84,6 +84,13 @@ namespace Zilon.Core.Common
             return list.ToArray();
         }
 
+        /// <summary>
+        /// Рассчитывает интерполяцией и добавляет в общий список ячейку шестигранного поля.
+        /// </summary>
+        /// <param name="a">Начальное значение. В t=0.0.</param>
+        /// <param name="b">Конечное значение. В t=1.0.</param>
+        /// <param name="list">Существующий список координат.</param>
+        /// <param name="t">Параметр интерполяции.</param>
         private static void AddPointToList(CubeCoords a, CubeCoords b, List<CubeCoords> list, float t)
         {
             LerpCube(a, b, t, out float cubeX, out float cubeY, out float cubeZ);

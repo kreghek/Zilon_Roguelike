@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -e
-set -x
 
 mkdir -p /test_mass_sector_generator/maps
 
