@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -42,6 +44,30 @@ namespace Zilon.Core.CommonServices.Dices
         public static int RollD3(this IDice dice)
         {
             return dice.Roll(6);
+        }
+
+        /// <summary>
+        /// Выбирает случайное значение из списка.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <returns> Случайный элемент из списка. </returns>
+        public static T RollFromList<T>(this IDice dice, IList<T> list)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var rollIndex = dice.Roll(0, list.Count - 1);
+            var item = list[rollIndex];
+            return item;
         }
     }
 }

@@ -1,179 +1,217 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 using LightInject;
 
+using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.MassSectorGenerator
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main()
+        private readonly static Random _random;
+
+        static Program()
         {
-            var startUp = new Startup();
+            _random = new Random();
+        }
+
+        static async Task Main(string[] args)
+        {
+            var diceSeed = GetDiceSeed(args);
+            var outputPath = GetOutputPath(args);
+
+            var startUp = new Startup(diceSeed);
             var serviceContainer = new ServiceContainer();
             serviceContainer.EnableAnnotatedConstructorInjection();
             startUp.RegisterServices(serviceContainer);
 
             var schemeService = serviceContainer.GetInstance<ISchemeService>();
-            var allLocations = schemeService.GetSchemes<ILocationScheme>()
-                .Where(x => x.SectorLevels != null).ToArray();
 
-            var random = new Random();
-            var iteration = 0;
-            while (true)
+            var sectorSchemeResult = GetSectorScheme(args, schemeService);
+
+            using (var scopeContainer = serviceContainer.BeginScope())
             {
-                var schemeCount = allLocations.Length;
-                var randomSchemeIndex = random.Next(0, schemeCount);
-                var sectorScheme = allLocations[randomSchemeIndex];
-                var sectorLevelIndex = random.Next(0, sectorScheme.SectorLevels.Length);
-                var sectorLevel = sectorScheme.SectorLevels[sectorLevelIndex];
+                var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
+                var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector);
+                sector.Scheme = sectorSchemeResult.Location;
 
-                iteration++;
+                // Проверка
 
-                using (var scopeContainer = serviceContainer.BeginScope())
-                {
-                    var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
-                    var sector = await sectorFactory.GenerateDungeonAsync(sectorLevel);
-                    sector.Scheme = sectorScheme;
+                var sectorValidators = GetValidatorsInAssembly();
+                var checkTask = CheckSectorAsync(sectorValidators, scopeContainer, sector);
 
-                    // Проверка
+                var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
-                    CheckChests(scopeContainer, sector);
-
-                    CheckMonsters(scopeContainer);
-
-                    CheckTransitions(sector);
-                }
-
-                Console.WriteLine($"Iteration {iteration:D5} complete");
-                Console.WriteLine($"{sectorScheme.Name.En} Level {sectorLevelIndex}");
-
-                if (iteration >= 100)
-                {
-                    break;
-                }
+                await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
             }
+
+            serviceContainer.Dispose();
         }
 
-        private static void CheckTransitions(ISector sector)
+        private static ISectorValidator[] GetValidatorsInAssembly()
         {
-            var transitions = sector.Map.Transitions.Values;
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            var validatorTypes = thisAssembly.GetTypes()
+                .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
+                .Where(x => !x.IsInterface && !x.IsAbstract);
 
-            // В секторе должны быть выходы.
+            var validators = validatorTypes.Select(x => Activator.CreateInstance(x)).Cast<ISectorValidator>();
 
-            if (transitions.Any())
+            return validators.ToArray();
+        }
+
+        private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
+        {
+            if (outputPath != null)
             {
-                var hasStartRegion = false;
-                var hasTransitionInregionsNodes = false;
-                foreach (var region in sector.Map.Regions)
+                SaveMapAsImage(sector.Map, outputPath);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static Task CheckSectorAsync(ISectorValidator[] validators, Scope scopeContainer, ISector sector)
+        {
+            return Task.Run(() =>
+            {
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+
+                var checkTasks = validators.Select(x => x.Validate(sector, scopeContainer));
+
+                var allTasks = Task.WhenAll(checkTasks);
+
+                try
                 {
-                    if (region.IsStart)
+                    allTasks.Wait();
+                }
+                catch (AggregateException exception)
+                {
+                    Log.Error("Сектор содержит ошибки:");
+
+                    foreach (var inner in exception.InnerExceptions)
                     {
-                        hasStartRegion = true;
+                        if (inner is SectorValidationException)
+                        {
+                            Log.Error(inner);
+                        }
                     }
 
-                    if ((region.ExitNodes?.Any()).GetValueOrDefault())
-                    {
-                        hasTransitionInregionsNodes = true;
-                    }
+                    throw;
                 }
 
-                if (!hasStartRegion)
-                {
-                    // Хоть один регион должен быть отмечен, как стартовый.
-                    // Чтобы клиенты знали, где размещать персонажа после генерации.
-                    throw new Exception($"Не задан стартовый регион.");
-                }
+                stopWatch.Stop();
 
-                if (!hasTransitionInregionsNodes)
-                {
-                    // Переходы должны быть явно обозначены в регионах.
-                    //TODO Рассмотреть вариант упрощения
-                    // В секторе уже есть информация об узлах с переходами.
-                    // Выглядит, как дублирование.
-                    throw new Exception($"Не указан ни один регион с узламы перехода.");
-                }
+                Log.Info($"CHECK DURATION: {stopWatch.Elapsed.TotalSeconds} SEC");
+            });
+        }
+
+        private static string GetOutputPath(string[] args)
+        {
+            var outputPath = ArgumentHelper.GetProgramArgument(args, Args.OUT_PATH_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                return null;
+            }
+
+            try
+            {
+                Path.GetFullPath(outputPath);
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception);
+                return null;
+            }
+
+            return outputPath;
+        }
+
+        private static int GetDiceSeed(string[] args)
+        {
+            var diceSeedString = ArgumentHelper.GetProgramArgument(args, Args.DICE_SEED_ARG_NAME);
+
+            int diceSeed;
+            if (string.IsNullOrWhiteSpace(diceSeedString))
+            {
+                diceSeed = _random.Next(0, int.MaxValue);
             }
             else
             {
-                // Если в секторе нет переходов, то будет невозможно его покинуть.
-                throw new Exception("В секторе не найдены переходы.");
+                if (!int.TryParse(diceSeedString, out diceSeed))
+                {
+                    throw new SectorGeneratorException($"Зерно рандома задано некорректно: {diceSeedString}.");
+                }
             }
 
-            // Все переходы на уровне должны либо вести на глобальную карту,
-            // либо на корректный уровень сектора.
+            Log.Info($"DICE SEED: {diceSeed}");
 
-            foreach (var transition in transitions)
+            return diceSeed;
+        }
+
+        private static SectorSchemeResult GetSectorScheme(string[] args, ISchemeService schemeService)
+        {
+            var locationSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.LOCATION_SCHEME_SID_ARG_NAME);
+            var sectorSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.SECTOR_SCHEME_SID_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(locationSchemeSid) && string.IsNullOrWhiteSpace(sectorSchemeSid))
             {
-                var targetSectorSid = transition.SectorSid;
-                if (targetSectorSid == null)
+                // Если схемы не указаны, то берём случайную схему.
+                // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
+
+                var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
+                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
+                    .ToArray();
+                var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
+                var locationScheme = locationSchemes[locationSchemeIndex];
+
+                var sectorSchemes = locationScheme.SectorLevels;
+                var sectorSchemeIndex = _random.Next(0, sectorSchemes.Length);
+                var sectorScheme = sectorSchemes[sectorSchemeIndex];
+
+                Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
+
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
+            }
+            else
+            {
+                // Если схемы заданы, то строим карту на их основе.
+                // Это будет использовано для отладки.
+
+                var locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
+                if (locationScheme == null)
                 {
-                    // Это значит, что переход на глобальную карту.
-                    // Нормальная ситуация, проверяем следующий переход.
-                    continue;
+                    throw new SectorGeneratorException($"Не найдена схема локации {locationSchemeSid}.");
                 }
 
-                var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
-                if (sectorLevelBySid == null)
+                var sectorScheme = locationScheme.SectorLevels.SingleOrDefault(x => x.Sid == sectorSchemeSid);
+                if (sectorScheme == null)
                 {
-                    throw new Exception($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
+                    throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
                 }
+
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
             }
         }
 
-        private static void CheckMonsters(Scope scopeContainer)
+        private static void SaveMapAsImage(ISectorMap map, string outputPath)
         {
-            var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-            var allContainers = containerManager.Items;
-
-            // Монстры не должны генерироваться на узлах с препятствием.
-            // Монстры не должны генерироваться на узлах с сундуками.
-            var actorManager = scopeContainer.GetInstance<IActorManager>();
-            var allMonsters = actorManager.Items;
-            var containerNodes = allContainers.Select(x => x.Node);
-            foreach (var actor in allMonsters)
+            using (var bmp = MapDrawer.DrawMap(map))
             {
-                var hex = (HexNode)actor.Node;
-                if (hex.IsObstacle)
-                {
-                    throw new Exception();
-                }
-
-                var monsterIsOnContainer = containerNodes.Contains(actor.Node);
-                if (monsterIsOnContainer)
-                {
-                    throw new Exception();
-                }
-            }
-        }
-
-        private static void CheckChests(Scope scopeContainer, ISector sector)
-        {
-            // Сундуки не должны генерироваться на узлы, которые являются препятствием.
-            // Сундуки не должны генерироваться на узлы с выходом.
-            var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-            var allContainers = containerManager.Items;
-            foreach (var container in allContainers)
-            {
-                // Проверяем, что сундук не стоит на препятствии.
-                var hex = (HexNode)container.Node;
-                if (hex.IsObstacle)
-                {
-                    throw new Exception();
-                }
-
-                // Проверяем, что сундук не на клетке с выходом.
-                var transitionNodes = sector.Map.Transitions.Keys;
-                var chestOnTransitionNode = transitionNodes.Contains(container.Node);
-                if (chestOnTransitionNode)
-                {
-                    throw new Exception();
-                }
+                bmp.Save(outputPath);
             }
         }
     }

@@ -61,6 +61,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
         Container.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
         Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IInteriorObjectRandomSource>().To<InteriorObjectRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
         Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();

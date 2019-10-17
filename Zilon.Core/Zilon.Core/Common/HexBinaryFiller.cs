@@ -55,7 +55,10 @@ namespace Zilon.Core.Common
 
                     var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
-                    openPoints.Push(neighbourCoords);
+                    if (!openPoints.Contains(neighbourCoords))
+                    {
+                        openPoints.Push(neighbourCoords);
+                    }
                 }
             }
 

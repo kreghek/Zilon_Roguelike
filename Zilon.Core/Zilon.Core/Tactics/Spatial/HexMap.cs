@@ -263,22 +263,30 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                if (!(obj is SegmentKey))
-                {
-                    return false;
-                }
-
-                var key = (SegmentKey)obj;
-                return X == key.X &&
+                return obj is SegmentKey key &&
+                       X == key.X &&
                        Y == key.Y;
             }
 
             public override int GetHashCode()
             {
-                var hashCode = 1502939027;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                return hashCode;
+                unchecked
+                {
+                    var hashCode = 1861411795;
+                    hashCode = hashCode * -1521134295 + X.GetHashCode();
+                    hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            public static bool operator ==(SegmentKey left, SegmentKey right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(SegmentKey left, SegmentKey right)
+            {
+                return !(left == right);
             }
         }
     }

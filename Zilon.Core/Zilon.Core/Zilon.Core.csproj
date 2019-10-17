@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7</LangVersion>
     <DocumentationFile>..\..\Zilon.Client\Assets\Plugins\Zilon.Core.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -85,6 +86,7 @@
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\Matrix.cs" />
+    <Compile Include="Common\MatrixExtensions.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
@@ -94,7 +96,10 @@
     <Compile Include="LogicCalculations\RuleCalculations.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactory.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonException.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\IInteriorObjectRandomSource.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectRandomSource.cs" />
     <Compile Include="MapGenerators\CellularAutomatonStyle\RegionDraft.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectMeta.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\CitizenGenerator.cs" />

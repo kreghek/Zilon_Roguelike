@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Zilon.SectorGegerator
+namespace Zilon.Core.MassSectorGenerator
 {
     public static class Log
     {
-        public static void Info(string message) {
+        public static void Info(string message)
+        {
             Console.WriteLine(message);
         }
 

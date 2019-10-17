@@ -145,10 +145,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     var nodeY = y + room.PositionY * cellSize.Height;
 
                     var isObstacle = false;
-                    var interiorObjectForCoords = interiorObjects
+                    var interiorObjectMetas = interiorObjects
                         .SingleOrDefault(o => o.Coords.CompsEqual(x, y));
 
-                    if (interiorObjectForCoords != null)
+                    if (interiorObjectMetas != null)
                     {
                         //TODO Сделать так, чтобы укрытия не генерировались на узлах с выходами
                         // Как вариант - если выбираем узел, как выход, то снимаем флаг укрытия.

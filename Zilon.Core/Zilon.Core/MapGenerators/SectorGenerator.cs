@@ -27,7 +27,7 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создаёт экземпляр <see cref="SectorGenerator"/>.
         /// </summary>
-        /// <param name="mapFactory"> Фабрика карты. Сейчас используется <see cref="RoomMapFactory"/>. </param>
+        /// <param name="mapFactorySelector"> Сервис для выбора фабрики для создания карты. </param>
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
@@ -65,7 +65,7 @@ namespace Zilon.Core.MapGenerators
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
-            var chestRegions = gameObjectRegions.Where(x=>x.Nodes.Count() > 4);
+            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
             _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
 
             var monsterRegions = gameObjectRegions.ToArray();
