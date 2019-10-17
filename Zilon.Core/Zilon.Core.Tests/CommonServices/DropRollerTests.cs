@@ -10,7 +10,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.CommonServices
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class DropRollerTests
     {
         /// <summary>

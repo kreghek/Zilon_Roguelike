@@ -10,7 +10,7 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class IdleTaskTests
     {
         /// <summary>

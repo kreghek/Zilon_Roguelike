@@ -6,7 +6,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class PerkHelperTests
     {
         private TestPerkScheme _perkScheme;

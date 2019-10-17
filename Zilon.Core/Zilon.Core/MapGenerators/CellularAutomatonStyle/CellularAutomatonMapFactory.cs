@@ -30,6 +30,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// Конструктор фабрики.
         /// </summary>
         /// <param name="dice"> Кость для рандома. </param>
+        /// <param name="interiorObjectRandomSource"> Источник рандома для элементов интерьера. </param>
         public CellularAutomatonMapFactory(IDice dice, IInteriorObjectRandomSource interiorObjectRandomSource)
         {
             _dice = dice;
@@ -45,6 +46,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <returns></returns>
         public Task<ISectorMap> CreateAsync(object options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             var sectorScheme = (ISectorSubScheme)options;
             var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
 
@@ -249,7 +255,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             if (targetRegionCount <= 0)
             {
-                throw new ArgumentException(nameof(targetRegionCount));
+                throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
             }
 
             var regionCountDiff = targetRegionCount - draftRegions.Count();

@@ -12,7 +12,7 @@
 
 //namespace Zilon.Core.Tests.Persons.Auxiliary
 //{
-//    [TestFixture]
+//    [TestFixture][Parallelizable(ParallelScope.All)]
 //    public class PersonEffectHelperTests
 //    {
 //        /// <summary>

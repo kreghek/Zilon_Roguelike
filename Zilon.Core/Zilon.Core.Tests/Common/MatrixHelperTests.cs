@@ -6,7 +6,8 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Tests.Common
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class MatrixHelperTests
     {
         /// <summary>
@@ -28,12 +29,8 @@ namespace Zilon.Core.Tests.Common
                 { 9, 6, 3 }
             };
 
-
-
             // ACT
             var fact = MatrixHelper.RotateClockwise(source);
-
-
 
             // ASSERT
             fact.Should().BeEquivalentTo(expected);

@@ -5,7 +5,7 @@ using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class SurvivalStatTests
     {
         /// <summary>

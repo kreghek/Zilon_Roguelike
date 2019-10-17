@@ -22,6 +22,11 @@ namespace Zilon.Core.CommonServices
                 throw new ArgumentOutOfRangeException(nameof(roll), "Результат выбора записи в таблице дропа не может быть 0.");
             }
 
+            if (records == null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
             var pointer = 1;
 
             foreach (var record in records)

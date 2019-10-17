@@ -20,6 +20,11 @@
         /// </remarks>
         public static Matrix<T> CreateMatrixWithVerticalMargins<T>(this Matrix<T> matrix)
         {
+            if (matrix is null)
+            {
+                throw new System.ArgumentNullException(nameof(matrix));
+            }
+
             const int MARGIN = 1;
 
             var sumMargin = MARGIN * 2;

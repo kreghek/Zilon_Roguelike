@@ -12,7 +12,7 @@ using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class EquipmentCarrierTests
     {
         /// <summary>

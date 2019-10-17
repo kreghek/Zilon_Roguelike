@@ -9,7 +9,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class EvolutionDataTests
     {
         /// <summary>
