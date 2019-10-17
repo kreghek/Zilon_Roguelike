@@ -44,7 +44,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return rolledCoordsList.ToArray();
         }
 
-        private IEnumerable<OffsetCoords> GetAvailableCoords(OffsetCoords[] regionDraftCoords)
+        private static IEnumerable<OffsetCoords> GetAvailableCoords(OffsetCoords[] regionDraftCoords)
         {
             var coordHash = new HashSet<OffsetCoords>(regionDraftCoords);
 

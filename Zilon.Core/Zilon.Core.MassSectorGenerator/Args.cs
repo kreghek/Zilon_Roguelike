@@ -1,6 +1,9 @@
 ﻿namespace Zilon.Core.MassSectorGenerator
 {
-    class Args
+    /// <summary>
+    /// Аргументы, используемые в текущем консольном приложении.
+    /// </summary>
+    static class Args
     {
         /// <summary>
         /// Зерно генерации.
