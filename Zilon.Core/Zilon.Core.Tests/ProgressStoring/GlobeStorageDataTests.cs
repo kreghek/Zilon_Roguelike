@@ -75,14 +75,10 @@ namespace Zilon.Core.Tests.ProgressStoring
             // Десериализуем
             var deserializedStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(serialized);
 
-
-
             // ACT
 
             // Восстанавливаем мир
             var restoredGlobe = deserializedStorageData.Restore();
-
-
 
             // ASSERT
             restoredGlobe.Should().BeEquivalentTo(globe, options =>

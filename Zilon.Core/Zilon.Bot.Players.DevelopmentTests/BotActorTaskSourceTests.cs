@@ -46,7 +46,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
             botActorTaskSource.Configure(new BotSettings { Mode = mode });
 
-
             while (!humanActor.Person.Survival.IsDead)
             {
                 gameLoop.Update();
@@ -152,7 +151,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
                 var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
 
                 humanPlayer.MainPerson = person;
-
 
                 // TODO Использовать генератор персонажа, как в игре.
                 // Для этого нужно научить ботов корректно использовать оружие дальнего боя и посохи лечения.

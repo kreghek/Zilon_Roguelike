@@ -28,15 +28,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
-
-
             // ACT
             Func<Task> act = async () =>
             {
                 var map = await factory.CreateAsync(sectorScheme);
             };
-
-
 
             // ARRANGE
             act.Should().NotThrow();
@@ -61,15 +57,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
-
-
             // ACT
             Func<Task> act = async () =>
             {
                 var map = await factory.CreateAsync(sectorScheme);
             };
-
-
 
             // ARRANGE
             act.Should().NotThrow();
@@ -89,12 +81,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
-
-
             // ACT
             var map = await factory.CreateAsync(sectorScheme);
-
-
 
             // ARRANGE
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();

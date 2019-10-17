@@ -29,12 +29,8 @@ namespace Zilon.Core.Tests.Common
                 { 9, 6, 3 }
             };
 
-
-
             // ACT
             var fact = MatrixHelper.RotateClockwise(source);
-
-
 
             // ASSERT
             fact.Should().BeEquivalentTo(expected);

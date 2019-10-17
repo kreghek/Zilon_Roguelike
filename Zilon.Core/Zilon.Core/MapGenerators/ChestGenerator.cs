@@ -122,7 +122,6 @@ namespace Zilon.Core.MapGenerators
                     }
                     _propContainerManager.Add(container);
 
-
                     chestCounter--;
 
                     if (chestCounter <= 0)

@@ -71,13 +71,9 @@ namespace Zilon.Core.Tests.Common
             var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
             var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
-
-
             // ACT
             var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
             var reverseLine = CubeCoordsHelper.CubeDrawLine(finishCubeCoords, startCubeCoords);
-
-
 
             // ASSERT
             for (int i = 0; i < line.Length; i++)

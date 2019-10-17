@@ -29,7 +29,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var generator = new RoomGenerator(random);
             var graphMap = new SectorHexMap();
 
-
             // ACT
             Action act = () =>
             {
@@ -39,12 +38,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
 
-
-
             // ASSERT
             act.Should().NotThrow();
         }
-
 
         /// <summary>
         /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
@@ -59,7 +55,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var generator = new RoomGenerator(random);
             var graphMap = new SectorHexMap();
 
-
             // ACT
             Action act = () =>
             {
@@ -69,12 +64,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
 
-
-
             // ASSERT
             act.Should().NotThrow();
         }
-
 
         /// <summary>
         /// Тест проверяет, что если в схеме сектора обозначены переходы,
@@ -98,12 +90,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
             var expectedTransitions = new[] { transition };
 
-
-
             // ACT
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
-
-
 
             // ASSERT
             factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(availableTransitions);

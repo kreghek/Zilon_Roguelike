@@ -53,12 +53,8 @@ namespace Zilon.Core.Tests.Persons
                 survivalStats,
                 survivalRandomSource);
 
-
-
             // ACT
             survivalData.Update();
-
-
 
             // ASSERT
             return survivalStats[0].Value;
@@ -83,12 +79,8 @@ namespace Zilon.Core.Tests.Persons
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
 
-
-
             // ACT
             survivalData.RestoreStat(SurvivalStatType.Health, restoreHpValue);
-
-
 
             // ASSERT
             var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
@@ -110,13 +102,10 @@ namespace Zilon.Core.Tests.Persons
 
             var survivalData = CreateSurvivalData();
 
-
             // ACT
             using (var monitor = survivalData.Monitor())
             {
                 survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(HumanSurvivalData.Dead));
@@ -190,7 +179,6 @@ namespace Zilon.Core.Tests.Persons
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             _survivalRandomSource = survivalRandomSourceMock.Object;
         }
-
 
         private ISurvivalData CreateSurvivalData()
         {

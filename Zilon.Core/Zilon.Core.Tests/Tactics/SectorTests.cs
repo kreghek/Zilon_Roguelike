@@ -59,12 +59,8 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = CreateActorMock();
             innerActorList.Add(actorMock.Object);
 
-
-
             // ACT
             sector.Update();
-
-
 
             // ASSERT
             _survivalDataMock.Verify(x => x.Update(), Times.Once);
@@ -108,14 +104,10 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Owner).Returns(new Mock<HumanPlayer>().Object);
             innerActorList.Add(actorMock.Object);
 
-
-
             // ACT
             using (var monitor = sector.Monitor())
             {
                 sector.Update();
-
-
 
                 // ASSERT
                 monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
@@ -143,8 +135,6 @@ namespace Zilon.Core.Tests.Tactics
 
             var effectCollection = new EffectCollection();
             personMock.SetupGet(x => x.Effects).Returns(effectCollection);
-
-
 
             return actorMock;
         }
