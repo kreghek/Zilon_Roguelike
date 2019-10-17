@@ -52,7 +52,7 @@ namespace Zilon.Core.MassSectorGenerator
 
                 var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
-                await Task.WhenAll(checkTask, saveTask);
+                await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
             }
 
             serviceContainer.Dispose();
@@ -105,11 +105,9 @@ namespace Zilon.Core.MassSectorGenerator
                         {
                             Log.Error(inner);
                         }
-                        else
-                        {
-                            throw;
-                        }
                     }
+
+                    throw;
                 }
 
                 stopWatch.Stop();

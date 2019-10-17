@@ -9,6 +9,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
+    /// <summary>
+    /// Валидатор проходимости карты сектора.
+    /// </summary>
     class PassMapValidator : ISectorValidator
     {
         public Task Validate(ISector sector, Scope scopeContainer)

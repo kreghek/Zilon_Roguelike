@@ -4,6 +4,9 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MassSectorGenerator
 {
+    /// <summary>
+    /// Результат выбора сектора. Используется масс-генератором при выборе случайной локации и сектора.
+    /// </summary>
     public sealed class SectorSchemeResult
     {
         public SectorSchemeResult(ILocationScheme location, ISectorSubScheme sector)

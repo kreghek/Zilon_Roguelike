@@ -95,7 +95,7 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = CreateDice();
+            var dice = CreateRandomSeedAndDice();
             container.Register<IDice>(factory => dice, new PerContainerLifetime());
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
@@ -119,7 +119,12 @@ namespace Zilon.Emulation.Common
             container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
         }
 
-        private IDice CreateDice()
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndDice()
         {
             IDice dice;
             if (DiceSeed == null)
