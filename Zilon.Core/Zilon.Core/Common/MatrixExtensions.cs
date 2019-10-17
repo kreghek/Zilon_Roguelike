@@ -21,7 +21,10 @@
         public static Matrix<T> CreateMatrixWithVerticalMargins<T>(this Matrix<T> matrix)
         {
             const int MARGIN = 1;
-            var marginMatrix = new Matrix<T>(matrix.Width + MARGIN * 2, matrix.Height);
+
+            var sumMargin = MARGIN * 2;
+            var marginMatrix = new Matrix<T>(matrix.Width + sumMargin, matrix.Height);
+
             for (var x = 0; x < matrix.Width; x++)
             {
                 for (var y = 0; y < matrix.Height; y++)
