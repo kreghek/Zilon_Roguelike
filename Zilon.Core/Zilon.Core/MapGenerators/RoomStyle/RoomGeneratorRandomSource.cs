@@ -3,6 +3,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -15,10 +16,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
         private readonly IDice _dice;
+        private readonly IRandomNumberGenerator _randomNumberGenerator;
 
-        public RoomGeneratorRandomSource(IDice dice)
+        public RoomGeneratorRandomSource(IDice dice, IRandomNumberGenerator randomNumberGenerator)
         {
             _dice = dice;
+            _randomNumberGenerator = randomNumberGenerator;
         }
 
         /// <summary>
@@ -196,8 +199,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </remarks>
         public Size RollRoomSize(int minSize, int maxSize)
         {
-            var rollWidth = _dice.Roll(2, maxSize);
-            var rollHeight = _dice.Roll(2, maxSize);
+            var diffSize = maxSize - minSize;
+
+            var rollDiffWidth = _randomNumberGenerator.Next() * diffSize;
+            var rollDiffHeight = _randomNumberGenerator.Next() * diffSize;
+
+            var rollWidth = (int)rollDiffWidth + minSize;
+            var rollHeight = (int)rollDiffHeight + minSize;
 
             return new Size(rollWidth, rollHeight);
         }

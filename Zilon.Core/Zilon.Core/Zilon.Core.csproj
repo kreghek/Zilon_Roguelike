@@ -88,6 +88,7 @@
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="CommonServices\IRandomNumberGenerator.cs" />
     <Compile Include="CommonServices\RandomNumberGenerator.cs" />
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />

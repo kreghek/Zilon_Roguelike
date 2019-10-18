@@ -9,7 +9,7 @@ namespace Zilon.Core.CommonServices
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
     /// </summary>
-    public sealed class RandomNumberGenerator
+    public sealed class RandomNumberGenerator : IRandomNumberGenerator
     {
         /* The original seed used by this number generator */
         private readonly uint _seed;
