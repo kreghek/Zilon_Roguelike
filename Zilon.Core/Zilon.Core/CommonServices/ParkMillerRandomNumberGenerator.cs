@@ -9,7 +9,7 @@ namespace Zilon.Core.CommonServices
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
     /// </summary>
-    public sealed class RandomNumberGenerator : IRandomNumberGenerator
+    public sealed class ParkMillerRandomNumberGenerator : IRandomNumberGenerator
     {
         /* The original seed used by this number generator */
         private readonly uint _seed;
@@ -19,14 +19,14 @@ namespace Zilon.Core.CommonServices
         /// Конструктор генератора.
         /// </summary>
         /// <param name="dice"> Игральная кость для выбора случайного зерна генератора. </param>
-        public RandomNumberGenerator([NotNull] IDice dice)
+        public ParkMillerRandomNumberGenerator([NotNull] IDice dice)
         {
             if (dice is null)
             {
                 throw new ArgumentNullException(nameof(dice));
             }
 
-            var seed = dice.Roll(int.MaxValue);
+            var seed = dice.Roll(int.MaxValue - 1);
             _seed = (uint)seed;
 
             Reset();
@@ -36,7 +36,7 @@ namespace Zilon.Core.CommonServices
         /// Конструктор генератора.
         /// </summary>
         /// <param name="seed">Зерно генератора.</param>
-        public RandomNumberGenerator(uint seed)
+        public ParkMillerRandomNumberGenerator(uint seed)
         {
             _seed = seed;
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.CommonServices
         /// Получение следующего значения последовательности случайных чисел в диапазоне [0..1].
         /// </summary>
         /// <returns> Возвращает случайное число в диапазоне [0..1]. </returns>
-        public double Next()
+        private double Next()
         {
             unchecked
             {
@@ -56,6 +56,18 @@ namespace Zilon.Core.CommonServices
                 var b = a + 0.000000000233;
                 return b;
             }
+        }
+
+        public double[] GetSequence(int count)
+        {
+            var sequence = new double[count];
+            for (var i = 0; i < count; i++)
+            {
+                var next = Next();
+                sequence[i] = next;
+            }
+
+            return sequence;
         }
 
         /// <summary>

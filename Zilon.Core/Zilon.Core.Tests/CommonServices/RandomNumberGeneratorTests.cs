@@ -21,15 +21,12 @@ namespace Zilon.Core.Tests.CommonServices
             [Values(1, 10, 100, 1000)] int count)
         {
             // ARRANGE
-            var rng = new RandomNumberGenerator(seed);
+            var rng = new ParkMillerRandomNumberGenerator(seed);
 
             // ACT
             Action act = () =>
             {
-                for (var i = 0; i < count; i++)
-                {
-                    var randomValue = rng.Next();
-                }
+                var randomValues = rng.GetSequence(count);
             };
 
             // ASSERT

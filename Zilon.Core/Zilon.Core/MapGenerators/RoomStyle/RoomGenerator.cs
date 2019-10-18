@@ -56,6 +56,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var startAssigned = false;
 
+            var rolledRoomSizeList = _randomSource.RollRoomSize(roomMinSize, roomMaxSize, roomCount);
+
             for (var i = 0; i < roomCount; i++)
             {
                 var rolledPosition = roomMatrixCoords[i];
@@ -68,7 +70,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                var rolledSize = _randomSource.RollRoomSize(roomMinSize, roomMaxSize);
+                var rolledSize = rolledRoomSizeList[i];
 
                 room.Width = rolledSize?.Width ?? 0;
                 room.Height = rolledSize?.Height ?? 0;
@@ -100,6 +102,21 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
         public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
+            if (map is null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
+            if (rooms is null)
+            {
+                throw new ArgumentNullException(nameof(rooms));
+            }
+
+            if (edgeHash is null)
+            {
+                throw new ArgumentNullException(nameof(edgeHash));
+            }
+
             var cellSize = CalcCellSize(rooms);
 
             foreach (var room in rooms)

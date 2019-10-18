@@ -4,6 +4,7 @@ using LightInject;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
@@ -96,7 +97,8 @@ namespace Zilon.Emulation.Common
         private void RegisterAuxServices(IServiceRegistry container)
         {
             var dice = CreateRandomSeedAndDice();
-            container.Register<IDice>(factory => dice, new PerContainerLifetime());
+            container.Register(factory => dice, new PerContainerLifetime());
+            container.Register<IRandomNumberGenerator, GaussRandomNumberGenerator>(new PerContainerLifetime());
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
             container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());

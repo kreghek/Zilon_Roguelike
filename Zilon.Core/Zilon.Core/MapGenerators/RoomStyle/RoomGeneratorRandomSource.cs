@@ -197,17 +197,29 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <remarks>
         /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
         /// </remarks>
-        public Size RollRoomSize(int minSize, int maxSize)
+        public Size[] RollRoomSize(int minSize, int maxSize, int count)
         {
-            var diffSize = maxSize - minSize;
+            var sizeList = new Size[count];
 
-            var rollDiffWidth = _randomNumberGenerator.Next() * diffSize;
-            var rollDiffHeight = _randomNumberGenerator.Next() * diffSize;
+            var sequenceWidth = _randomNumberGenerator.GetSequence(count);
+            var sequenceHeight = _randomNumberGenerator.GetSequence(count);
 
-            var rollWidth = (int)rollDiffWidth + minSize;
-            var rollHeight = (int)rollDiffHeight + minSize;
+            for (var i = 0; i < count; i++)
+            {
+                var diffSize = maxSize - minSize;
 
-            return new Size(rollWidth, rollHeight);
+                var rollDiffWidth = sequenceWidth[i] * diffSize;
+                var rollDiffHeight = sequenceHeight[i] * diffSize;
+
+                var rollWidth = (int)rollDiffWidth + minSize;
+                var rollHeight = (int)rollDiffHeight + minSize;
+
+                var size = new Size(rollWidth, rollHeight);
+
+                sizeList[i] = size;
+            }
+
+            return sizeList;
         }
 
         public HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes)
