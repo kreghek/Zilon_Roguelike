@@ -1,42 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Zilon.Core.CommonServices
 {
     public class RandomNumberGenerator
     {
-        uint init_seed;  // Initial random seed value
-        uint cur_seed;   // Current random seed value
-        uint num_draws;  // Dimensionality of the RNG
+        /* The original seed used by this number generator */
+        protected uint seed;
+        protected uint walkingNumber;
 
-        public virtual uint get_random_seed() => cur_seed;
+        /**
+         * Setups the random number generator given a seed.
+         * If no seed is provided then a random seed is selected.
+         * @param   seed
+         */
+        public RandomNumberGenerator(uint seed = 0)
+        {
+            if (seed == 0)
+                seed = (uint)(uint.MaxValue * (new Random()).NextDouble());
 
+            walkingNumber = this.seed = seed;
+        }
 
-        public void set_random_seed(uint _seed) => cur_seed = _seed;
+        public uint random()
+        {
+            walkingNumber = (walkingNumber * 16807) % 2147483647;
+            return (uint)(walkingNumber / 0x7FFFFFFF + 0.000000000233);
+        }
 
-        public void reset_random_seed() => cur_seed = init_seed;
-
-        public void set_num_draws(uint _num_draws) => num_draws = _num_draws;
-
-        /// <summary>
-        /// Obtain a random integer (needed for creating random uniforms)
-        /// </summary>
-        public virtual uint get_random_integer() => 0;
-
-        /// <summary>
-        /// Fills a vector with uniform random variables on the open interval (0,1)
-        /// </summary>
-        /// <param name="draws"></param>
-        public virtual void get_uniform_draws(double[] draws) => 0;
-    }
-
-    public class LinearCongruentialGenerator : RandomNumberGenerator
-    {
-        private int max_multiplier;
-
-
+        public void reset()
+        {
+            walkingNumber = seed;
+        }
     }
 }
