@@ -11,6 +11,7 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
+using Zilon.Core.CommonServices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -63,6 +64,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
         Container.Bind<IInteriorObjectRandomSource>().To<InteriorObjectRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
+        Container.Bind<IRandomNumberGenerator>().To<GaussRandomNumberGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
         Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();
         Container.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
