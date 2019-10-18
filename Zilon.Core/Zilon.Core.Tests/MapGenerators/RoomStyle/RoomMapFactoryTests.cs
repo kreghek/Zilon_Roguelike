@@ -6,6 +6,7 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Schemes;
@@ -52,7 +53,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
-            var randomSource = new RoomGeneratorRandomSource(dice);
+            var randomGenerator = new GaussRandomNumberGenerator(dice);
+            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
@@ -76,7 +78,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             // ARRANGE
             var dice = new Dice(3245);
-            var randomSource = new RoomGeneratorRandomSource(dice);
+            var randomGenerator = new GaussRandomNumberGenerator(dice);
+            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();

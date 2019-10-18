@@ -8,6 +8,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -62,7 +63,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
             var dice = new Dice(diceSeed);
-            var randomSource = new RoomGeneratorRandomSource(dice);
+            var randomGenerator = new GaussRandomNumberGenerator(dice);
+            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
             var roomGenerator = new RoomGenerator(randomSource);
             var mapFactory = new RoomMapFactory(roomGenerator);
 
