@@ -1,35 +1,72 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
+using Zilon.Core.CommonServices.Dices;
+
 namespace Zilon.Core.CommonServices
 {
-    public class RandomNumberGenerator
+    /// <summary>
+    /// Генератор случайных числе Парка-Миллера.
+    /// </summary>
+    public sealed class RandomNumberGenerator
     {
         /* The original seed used by this number generator */
-        protected uint seed;
-        protected uint walkingNumber;
+        private readonly uint _seed;
+        private uint _walkingNumber;
 
-        /**
-         * Setups the random number generator given a seed.
-         * If no seed is provided then a random seed is selected.
-         * @param   seed
-         */
-        public RandomNumberGenerator(uint seed = 0)
+        /// <summary>
+        /// Конструктор генератора.
+        /// </summary>
+        /// <param name="dice"> Игральная кость для выбора случайного зерна генератора. </param>
+        public RandomNumberGenerator([NotNull] IDice dice)
         {
-            if (seed == 0)
-                seed = (uint)(uint.MaxValue * (new Random()).NextDouble());
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
 
-            walkingNumber = this.seed = seed;
+            var seed = dice.Roll(int.MaxValue);
+            _seed = (uint)seed;
+
+            Reset();
         }
 
-        public uint random()
+        /// <summary>
+        /// Конструктор генератора.
+        /// </summary>
+        /// <param name="seed">Зерно генератора.</param>
+        public RandomNumberGenerator(uint seed)
         {
-            walkingNumber = (walkingNumber * 16807) % 2147483647;
-            return (uint)(walkingNumber / 0x7FFFFFFF + 0.000000000233);
+            _seed = seed;
+
+            Reset();
         }
 
-        public void reset()
+        /// <summary>
+        /// Получение следующего значения последовательности случайных чисел в диапазоне [0..1].
+        /// </summary>
+        /// <returns> Возвращает случайное число в диапазоне [0..1]. </returns>
+        public double Next()
         {
-            walkingNumber = seed;
+            unchecked
+            {
+                _walkingNumber = (_walkingNumber * 16807) % 2147483647;
+                var a = (double)_walkingNumber / 0x7FFFFFFF;
+                var b = a + 0.000000000233;
+                return b;
+            }
+        }
+
+        /// <summary>
+        /// Сброс генератора к стартовому состоянию.
+        /// </summary>
+        /// <remarks>
+        /// После сброса последовательность случайных числе будет генерироваться заново.
+        /// </remarks>
+        public void Reset()
+        {
+            _walkingNumber = _seed;
         }
     }
 }
