@@ -42,26 +42,36 @@ namespace Zilon.Core.CommonServices
         {
             var sequence = new double[count];
 
-            // -1 из-за недостатка Dice.
-            // Он добавляет +1.
-            var maxDiceVal = int.MaxValue - 1;
             for (int n = 0; n < count; n++)
             {
-                var dSumm = 0.0;
-                for (int i = 0; i < 12; i++)
-                {
-                    var r = (double)_dice.Roll(maxDiceVal) / maxDiceVal;
-                    dSumm += r;
-                }
-                var a = SIGMA * (dSumm - 6.0f);
-                var randomRaw = MV + a;
-                var randomAbs = Math.Abs(randomRaw);
+                var rand = GetNextDouble(_dice);
 
-                // Нормализауем зерультат, чтобы он был в диапазоне [0..1]
-                sequence[n] = randomRaw;
+                sequence[n] = rand;
             }
 
             return sequence;
+        }
+
+        private static double GetNextDouble(IDice dice)
+        {
+            var maxDiceVal = 1000_000;
+            var next = (double)dice.Roll(maxDiceVal) / maxDiceVal;
+            return next;
+        }
+
+        private static double GetNext(IDice dice)
+        {
+            double v1, v2, s;
+            do
+            {
+                v1 = 2.0f * GetNextDouble(dice) - 1.0f;
+                v2 = 2.0f * GetNextDouble(dice) - 1.0f;
+                s = v1 * v1 + v2 * v2;
+            } while (s >= 1.0f || s == 0f);
+
+            s = Math.Sqrt((-2.0f * Math.Log(s)) / s);
+
+            return v1 * s;
         }
     }
 }
