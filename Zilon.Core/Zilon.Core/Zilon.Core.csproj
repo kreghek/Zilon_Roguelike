@@ -124,6 +124,8 @@
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorBase.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomHelper.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
     <Compile Include="MapGenerators\SingleMapFactorySelector.cs" />
     <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />

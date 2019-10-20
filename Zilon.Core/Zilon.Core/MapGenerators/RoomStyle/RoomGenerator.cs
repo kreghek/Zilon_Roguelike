@@ -5,7 +5,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -13,7 +12,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// <summary>
     /// Генератор карты с комнатами.
     /// </summary>
-    public sealed class RoomGenerator : IRoomGenerator
+    public sealed class RoomGenerator : RoomGeneratorBase
     {
         private readonly IRoomGeneratorRandomSource _randomSource;
 
@@ -37,7 +36,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+        public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
             int roomMaxSize,
             IEnumerable<RoomTransition> availableTransitions)
@@ -100,7 +99,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        public override void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             if (map is null)
             {
@@ -117,19 +116,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new ArgumentNullException(nameof(edgeHash));
             }
 
-            var cellSize = CalcCellSize(rooms);
+            var cellSize = RoomHelper.CalcCellSize(rooms);
 
             foreach (var room in rooms)
             {
                 CreateOneRoomNodes(map, edgeHash, room, cellSize);
             }
-        }
-
-        private Size CalcCellSize(IEnumerable<Room> rooms)
-        {
-            var maxWidth = rooms.Max(x => x.Width);
-            var maxHeight = rooms.Max(x => x.Height);
-            return new Size(maxWidth, maxHeight);
         }
 
         /// <summary>
@@ -138,7 +130,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Существующие комнаты.</param>
         /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var roomNet = _randomSource.RollRoomNet(rooms, 1);
             foreach (var roomPair in roomNet)
@@ -178,20 +170,15 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     room.Nodes.Add(node);
                     map.AddNode(node);
 
-                    var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
-
-                    foreach (var neighbor in neighbors)
-                    {
-                        var isExists = IsExistsEdge(edgeHash, node, neighbor);
-
-                        if (!isExists)
-                        {
-                            AddEdgeToMap(map, edgeHash, node, neighbor);
-                        }
-                    }
+                    RoomHelper.AddAllNeighborToMap(map, edgeHash, room, node);
                 }
             }
 
+            CreateTransitions(map, room);
+        }
+
+        private void CreateTransitions(ISectorMap map, Room room)
+        {
             // создаём переходы, если они есть в данной комнате
             if (room.Transitions.Any())
             {
@@ -204,83 +191,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     map.Transitions.Add(transitionNode, transition);
                     openRoomNodes.Remove(transitionNode);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Создаёт на карте ребро, соединяющее два узла этой карты.
-        /// </summary>
-        /// <param name="targetMap"> Целевая карта, для которой нужно создать ребро. </param>
-        /// <param name="edgeHash"> Хеш ребер карты. </param>
-        /// <param name="node"> Исходное ребро карты. </param>
-        /// <param name="neighbor"> Соседнее ребро карты, с которым будет соединено исходное. </param>
-        private static void AddEdgeToMap(IMap targetMap, HashSet<string> edgeHash, HexNode node, HexNode neighbor)
-        {
-            var hashKey1 = $"{node}-{neighbor}";
-            edgeHash.Add(hashKey1);
-
-            targetMap.AddEdge(node, neighbor);
-        }
-
-        /// <summary>
-        /// Возвращает ребро, соединяющее указанные узлы.
-        /// </summary>
-        /// <param name="edgeHash"> Хеш ребер карты. </param>
-        /// <param name="node"> Искомый узел. </param>
-        /// <param name="neighbor"> Узел, с которым соединён искомый. </param>
-        /// <returns> Ребро или null, если такого ребра нет на карте. </returns>
-        private static bool IsExistsEdge(HashSet<string> edgeHash, HexNode node, HexNode neighbor)
-        {
-            var hashKey1 = $"{node}-{neighbor}";
-            if (edgeHash.Contains(hashKey1))
-            {
-                return true;
-            }
-
-            var hashKey2 = $"{neighbor}-{node}";
-            return edgeHash.Contains(hashKey2);
-        }
-
-        private static HexNode CreateCorridorNode(IMap map, HexNode currentNode, int currentX, int currentY, HashSet<string> edgeHash)
-        {
-            var node = map.Nodes.OfType<HexNode>()
-                                .SingleOrDefault(x => x.OffsetX == currentX && x.OffsetY == currentY);
-
-            if (node == null)
-            {
-                node = new HexNode(currentX, currentY);
-                map.AddNode(node);
-            }
-
-            var isExists = IsExistsEdge(edgeHash, node, currentNode);
-
-            if (!isExists)
-            {
-                AddEdgeToMap(map, edgeHash, currentNode, node);
-            }
-
-            return node;
-        }
-
-        private void ConnectRoomsWithCorridor(IMap map, Room room, Room selectedRoom, HashSet<string> edgeHash)
-        {
-            var currentNode = room.Nodes.First();
-            var targetNode = selectedRoom.Nodes.First();
-
-            var points = CubeCoordsHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
-
-            foreach (var point in points)
-            {
-                var offsetCoords = HexHelper.ConvertToOffset(point);
-
-                // это происходит, потому что если при нулевом Х для обеих комнат
-                // попытаться отрисовать линию коридора, то она будет змейкой заходить за 0.
-                // Нужно искать решение получше.
-                offsetCoords = new OffsetCoords(offsetCoords.X < 0 ? 0 : offsetCoords.X,
-                    offsetCoords.Y < 0 ? 0 : offsetCoords.Y);
-
-                var node = CreateCorridorNode(map, currentNode, offsetCoords.X, offsetCoords.Y, edgeHash);
-                currentNode = node;
             }
         }
     }
