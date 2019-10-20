@@ -11,8 +11,16 @@ namespace Zilon.Core.CommonServices
     /// </summary>
     public sealed class GaussRandomNumberGenerator : IRandomNumberGenerator
     {
-        private readonly double _sigma = 0.5;
-        private readonly double _mu = 0.125;
+        /// <summary>
+        /// Погрешность.
+        /// </summary>
+        private const double SIGMA = 0.5;
+
+        /// <summary>
+        /// Математическое ожидание.
+        /// </summary>
+        private const double MV = 0.125;
+        
         private readonly IDice _dice;
 
         /// <summary>
@@ -39,14 +47,18 @@ namespace Zilon.Core.CommonServices
             var maxDiceVal = int.MaxValue - 1;
             for (int n = 0; n < count; n++)
             {
-                double dSumm = 0;
+                var dSumm = 0.0;
                 for (int i = 0; i <= 12; i++)
                 {
-                    double R = (float)_dice.Roll(maxDiceVal) / (maxDiceVal);
-                    dSumm += R;
+                    var r = (double)_dice.Roll(maxDiceVal) / maxDiceVal;
+                    dSumm += r;
                 }
-                double dRandValue = Math.Round((_mu + _sigma * (dSumm - 6)), 3);
-                sequence[n] = Math.Min(Math.Abs(dRandValue), 1);
+                var a = SIGMA * (dSumm - 6.0f);
+                var randomRaw = MV + a;
+                var randomAbs = Math.Abs(randomRaw);
+
+                // Нормализауем зерультат, чтобы он был в диапазоне [0..1]
+                sequence[n] = Math.Min(randomAbs, 1);
             }
 
             return sequence;
