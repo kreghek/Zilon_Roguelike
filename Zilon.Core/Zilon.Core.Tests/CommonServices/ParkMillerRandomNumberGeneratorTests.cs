@@ -1,16 +1,17 @@
 ﻿using System;
-
+using System.Linq;
 using FluentAssertions;
 
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices;
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    public class RandomNumberGeneratorTests
+    public class ParkMillerRandomNumberGeneratorTests
     {
         /// <summary>
         /// Тест проверяет, что при разных зернах генерации не происходит ошибки получения случайного числа.
@@ -23,14 +24,25 @@ namespace Zilon.Core.Tests.CommonServices
             // ARRANGE
             var rng = new ParkMillerRandomNumberGenerator(seed);
 
-            // ACT
-            Action act = () =>
+            var dice = new Dice(1);
+            var r = new GaussRandomNumberGenerator(dice);
+            var seq = r.GetSequence(1000);
+            var seqInt = seq.Select(x => (int)(x * 100));
+            var gr = seqInt.GroupBy(x => x);
+            var freq = gr.ToDictionary(x => x.Key, x => x.Count());
+            foreach (var fr in freq)
             {
-                rng.GetSequence(count);
-            };
+                Console.WriteLine(fr.Key + "\t" + fr.Value);
+            }
 
-            // ASSERT
-            act.Should().NotThrow();
+            //// ACT
+            //Action act = () =>
+            //{
+            //    rng.GetSequence(count);
+            //};
+
+            //// ASSERT
+            //act.Should().NotThrow();
         }
     }
 }

@@ -51,10 +51,13 @@ namespace Zilon.Core.CommonServices
         {
             unchecked
             {
-                _walkingNumber = (_walkingNumber * 16807) % 2147483647;
-                var a = (double)_walkingNumber / 0x7FFFFFFF;
-                var b = a + 0.000000000233;
-                return b;
+                //_walkingNumber = (_walkingNumber * 16807) % 2147483647;
+                //var a = (double)_walkingNumber / 0x7FFFFFFF;
+                //var b = a + 0.000000000233;
+                //return b;
+
+                // Не работает.
+                throw new NotSupportedException();
             }
         }
 

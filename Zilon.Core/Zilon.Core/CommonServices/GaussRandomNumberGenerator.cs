@@ -14,12 +14,12 @@ namespace Zilon.Core.CommonServices
         /// <summary>
         /// Погрешность.
         /// </summary>
-        private const double SIGMA = 0.5;
+        private const double SIGMA = 0.25;
 
         /// <summary>
         /// Математическое ожидание.
         /// </summary>
-        private const double MV = 0.125;
+        private const double MV = 0.5;
         
         private readonly IDice _dice;
 
@@ -48,7 +48,7 @@ namespace Zilon.Core.CommonServices
             for (int n = 0; n < count; n++)
             {
                 var dSumm = 0.0;
-                for (int i = 0; i <= 12; i++)
+                for (int i = 0; i < 12; i++)
                 {
                     var r = (double)_dice.Roll(maxDiceVal) / maxDiceVal;
                     dSumm += r;
@@ -58,7 +58,7 @@ namespace Zilon.Core.CommonServices
                 var randomAbs = Math.Abs(randomRaw);
 
                 // Нормализауем зерультат, чтобы он был в диапазоне [0..1]
-                sequence[n] = Math.Min(randomAbs, 1);
+                sequence[n] = randomRaw;
             }
 
             return sequence;
