@@ -13,7 +13,6 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
@@ -54,7 +53,6 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var roamingLogic = Factory.CreateLogic<RoamingLogicState>();

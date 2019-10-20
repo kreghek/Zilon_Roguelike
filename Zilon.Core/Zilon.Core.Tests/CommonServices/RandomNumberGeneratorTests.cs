@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.CommonServices
             // ACT
             Action act = () =>
             {
-                var randomValues = rng.GetSequence(count);
+                rng.GetSequence(count);
             };
 
             // ASSERT
