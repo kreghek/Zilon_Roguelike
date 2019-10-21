@@ -18,14 +18,14 @@ namespace Zilon.Core.Tests.CommonServices
         /// </summary>
         /// <param name="seed"></param>
         [Test]
-        public void NextTest([Values(uint.MinValue, (uint)100, (uint)300, uint.MaxValue)]uint seed,
+        public void NextTest([Values(uint.MinValue + 1, (uint)100, (uint)300, uint.MaxValue)]uint seed,
             [Values(1, 10, 100, 1000)] int count)
         {
             // ARRANGE
             var rng = new ParkMillerRandomNumberGenerator(seed);
 
             var dice = new Dice(1);
-            var r = new GaussRandomNumberGenerator(dice);
+            var r = new ParkMillerRandomNumberGenerator(dice);
             var seq = r.GetSequence(1000);
             var seqInt = seq.Select(x => (int)(x * 100));
             var gr = seqInt.GroupBy(x => x);

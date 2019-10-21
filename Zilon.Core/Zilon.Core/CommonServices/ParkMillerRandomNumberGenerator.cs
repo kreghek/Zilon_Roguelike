@@ -38,6 +38,11 @@ namespace Zilon.Core.CommonServices
         /// <param name="seed">Зерно генератора.</param>
         public ParkMillerRandomNumberGenerator(uint seed)
         {
+            if (seed == 0)
+            {
+                throw new ArgumentException("Значение не можут быть меньше или равно 0", nameof(seed));
+            }
+
             _seed = seed;
 
             Reset();
@@ -51,13 +56,10 @@ namespace Zilon.Core.CommonServices
         {
             unchecked
             {
-                //_walkingNumber = (_walkingNumber * 16807) % 2147483647;
-                //var a = (double)_walkingNumber / 0x7FFFFFFF;
-                //var b = a + 0.000000000233;
-                //return b;
-
-                // Не работает.
-                throw new NotSupportedException();
+                _walkingNumber = (_walkingNumber * 16807) % 2147483647;
+                var a = (double)_walkingNumber / 0x7FFFFFFF;
+                var b = a + 0.000000000233;
+                return b;
             }
         }
 
