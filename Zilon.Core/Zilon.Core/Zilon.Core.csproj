@@ -90,6 +90,7 @@
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="CommonServices\IRandomNumberGenerator.cs" />
     <Compile Include="CommonServices\GaussRandomNumberGenerator.cs" />
+    <Compile Include="CommonServices\ExpRandomNumberGenerator.cs" />
     <Compile Include="CommonServices\ParkMillerRandomNumberGenerator.cs" />
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
