@@ -14,12 +14,12 @@ namespace Zilon.Core.CommonServices
         /// <summary>
         /// Погрешность.
         /// </summary>
-        private const double SIGMA = 0.25;
+        private const double STDDEV = 0.25;
 
         /// <summary>
         /// Математическое ожидание.
         /// </summary>
-        private const double MV = 0.5;
+        private const double MEAN = 0.5;
         
         private readonly IDice _dice;
 
@@ -44,7 +44,7 @@ namespace Zilon.Core.CommonServices
 
             for (int n = 0; n < count; n++)
             {
-                var rand = GetNextDouble(_dice);
+                var rand = GetNext(_dice, 0.0, 1.0);
 
                 sequence[n] = rand;
             }
@@ -59,19 +59,25 @@ namespace Zilon.Core.CommonServices
             return next;
         }
 
-        private static double GetNext(IDice dice)
+        private static double GetNext(IDice dice, double min, double max)
         {
-            double v1, v2, s;
+            double x;
             do
             {
-                v1 = 2.0f * GetNextDouble(dice) - 1.0f;
-                v2 = 2.0f * GetNextDouble(dice) - 1.0f;
-                s = v1 * v1 + v2 * v2;
-            } while (s >= 1.0f || s == 0f);
+                x = NextGaussian(dice, MEAN, STDDEV);
+            } while (x < min || x > max);
+            return x;
+        }
 
-            s = Math.Sqrt((-2.0f * Math.Log(s)) / s);
+        private static double NextGaussian(IDice dice, double mean, double stdDev)
+        {
+            var u1 = GetNextDouble(dice); //these are uniform(0,1) random doubles
+            var u2 = GetNextDouble(dice);
+            var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                         Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+            var randNormal = mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
 
-            return v1 * s;
+            return randNormal;
         }
     }
 }
