@@ -1,4 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using BenchmarkDotNet.Attributes;
 
 using LightInject;
 
@@ -15,19 +18,26 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmark
 {
     public abstract class CreateSectorBenchBase
     {
-        private ServiceContainer _container;
+        protected ServiceContainer _container;
 
         [IterationSetup]
         public void IterationSetup()
         {
             _container = new ServiceContainer();
 
+            RegisterServices();
+        }
+
+        private void RegisterServices()
+        {
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
             _container.Register<IDice>(factory => new LinearDice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
@@ -40,7 +50,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
             _container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
             _container.Register<IChestGenerator, ChestGenerator>(new PerContainerLifetime());
-            _container.Register(factory => CreateFakeChestGeneratorRandomSource(), new PerContainerLifetime());
+            _container.Register(factory => CreateChestGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<IMonsterGenerator, MonsterGenerator>(new PerContainerLifetime());
             _container.Register(factory => CreateFakeMonsterGeneratorRandomSource(), new PerContainerLifetime());
             _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
@@ -65,6 +75,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
+            _container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
@@ -92,7 +103,71 @@ namespace Zilon.Core.Benchmark
             _container.Register<ICommand, PropTransferCommand>(serviceName: "show-container-modal-command");
         }
 
+        public async Task CreateInnerAsync()
+        {
+            var sectorManager = _container.GetInstance<ISectorManager>();
+            var playerState = _container.GetInstance<ISectorUiState>();
+            var schemeService = _container.GetInstance<ISchemeService>();
+            var humanPlayer = _container.GetInstance<HumanPlayer>();
+            var actorManager = _container.GetInstance<IActorManager>();
+            var humanActorTaskSource = _container.GetInstance<IHumanActorTaskSource>();
+
+            var locationScheme = new TestLocationScheme
+            {
+                SectorLevels = new ISectorSubScheme[]
+                {
+                    new TestSectorSubScheme
+                    {
+                        RegularMonsterSids = new[] { "rat" },
+                        RareMonsterSids = new[] { "rat" },
+                        ChampionMonsterSids = new[] { "rat" },
+
+                        RegionCount = 20,
+                        RegionSize = 20,
+
+                        IsStart = true,
+
+                        ChestDropTableSids = new[] {"survival", "default" },
+                        RegionChestCountRatio = 9,
+                        TotalChestCount = 20
+                    }
+                }
+            };
+
+            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            humanPlayer.GlobeNode = globeNode;
+
+            await sectorManager.CreateSectorAsync();
+
+            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
+
+            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+                .SingleOrDefault(x => x.IsStart).Nodes
+                .First();
+
+            var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
+
+            var playerActorVm = BenchHelper.CreateHumanActorVm(humanPlayer,
+                schemeService,
+                survivalRandomSource,
+                personScheme,
+                actorManager,
+                playerActorStartNode);
+
+            //Лучше централизовать переключение текущего актёра только в playerState
+            playerState.ActiveActor = playerActorVm;
+            humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
+
+
+            var gameLoop = _container.GetInstance<IGameLoop>();
+            var monsterTaskSource = _container.GetInstance<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] {
+                humanActorTaskSource,
+                monsterTaskSource
+            };
+        }
+
         protected abstract IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource();
-        protected abstract IChestGeneratorRandomSource CreateFakeChestGeneratorRandomSource();
+        protected abstract IChestGeneratorRandomSource CreateChestGeneratorRandomSource();
     }
 }
