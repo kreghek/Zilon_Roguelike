@@ -25,7 +25,6 @@ namespace Zilon.Core.Benchmark
             mock.Setup(x => x.RollMonsterScheme(It.IsAny<IEnumerable<IMonsterScheme>>()))
                 .Returns<IEnumerable<IMonsterScheme>>(sids => sids.First());
             mock.Setup(x => x.RollRarity()).Returns(2);
-            //mock.Setup(x => x.RollNodeIndex(It.IsAny<int>())).Returns(0);
             return mock.Object;
         }
 
