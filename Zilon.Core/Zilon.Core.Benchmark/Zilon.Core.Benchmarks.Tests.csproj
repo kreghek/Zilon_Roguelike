@@ -175,6 +175,7 @@
     <Compile Include="CreateProceduralSectorBench.cs" />
     <Compile Include="CreateProceduralSectorMaxBench.cs" />
     <Compile Include="CreateProceduralSectorMinBench.cs" />
+    <Compile Include="CreateSectorBenchBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MoveBench.cs" />
     <Compile Include="BenchTests.cs" />

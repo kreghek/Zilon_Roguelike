@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using BenchmarkDotNet.Attributes;
-
-using JetBrains.Annotations;
 
 using LightInject;
 
@@ -23,14 +20,12 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmark
 {
-    public class CreateProceduralSectorMaxBench
+    public sealed class CreateProceduralSectorMaxBench: CreateSectorBenchBase
     {
         private ServiceContainer _container;
 
@@ -151,7 +146,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
         }
 
-        private IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
+        protected override IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
             var mock = new Mock<IMonsterGeneratorRandomSource>();
             mock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(5);
@@ -162,7 +157,7 @@ namespace Zilon.Core.Benchmark
             return mock.Object;
         }
 
-        private IChestGeneratorRandomSource CreateFakeChestGeneratorRandomSource()
+        protected override IChestGeneratorRandomSource CreateFakeChestGeneratorRandomSource()
         {
             var mock = new Mock<IChestGeneratorRandomSource>();
             mock.Setup(x => x.RollChestCount(It.IsAny<int>())).Returns<int>(n => n);
