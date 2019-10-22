@@ -52,9 +52,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public void Create_RealRoomRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var dice = new Dice(diceSeed);
-            var randomGenerator = new GaussRandomNumberGenerator(dice);
-            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
+            var leanerDice = new LinearDice(diceSeed);
+            var gaussDice = new GaussDice(diceSeed);
+            var randomSource = new RoomGeneratorRandomSource(leanerDice, gaussDice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
@@ -77,9 +77,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public async Task Create_RealRoomRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
-            var dice = new Dice(3245);
-            var randomGenerator = new GaussRandomNumberGenerator(dice);
-            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
+            var linearDice = new LinearDice(3245);
+            var gaussDice = new GaussDice(3245);
+            var randomSource = new RoomGeneratorRandomSource(linearDice, gaussDice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();

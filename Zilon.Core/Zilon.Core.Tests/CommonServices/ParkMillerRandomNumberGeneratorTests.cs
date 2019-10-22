@@ -22,13 +22,16 @@ namespace Zilon.Core.Tests.CommonServices
             [Values(1, 10, 100, 1000)] int count)
         {
             // ARRANGE
-            var rng = new ParkMillerRandomNumberGenerator(seed);
+            //var rng = new ParkMillerRandomNumberGenerator(seed);
 
-            var dice = new Dice(3);
-            var r = new ExpRandomNumberGenerator(dice);
-            var seq = r.GetSequence(1000);
-            var seqInt = seq.Select(x => (int)(x * 100));
-            var gr = seqInt.GroupBy(x => x);
+            var dice = new LinearDice(3);
+            var r = new ExpDice(dice);
+            var seq = new int[1000];
+            for (var i = 0; i < seq.Length; i++)
+            {
+                seq[i] = r.Roll(100);
+            }
+            var gr = seq.GroupBy(x => x);
             var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
             foreach (var fr in freq)
             {

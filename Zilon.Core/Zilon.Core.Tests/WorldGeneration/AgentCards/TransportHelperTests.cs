@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.WorldGeneration.AgentCards
         {
             var realm = new Realm();
             var localities = new List<Locality>(Enumerable.Range(1, 10).Select(index => new Locality { Name = $"{index}", Owner = realm }));
-            var dice = new Dice(1);
+            var dice = new LinearDice(1);
 
             for (var i = 0; i < 100; i++)
             {

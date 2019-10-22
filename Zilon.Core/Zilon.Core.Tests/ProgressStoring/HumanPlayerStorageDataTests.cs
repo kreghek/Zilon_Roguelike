@@ -82,7 +82,7 @@ namespace Zilon.Core.ProgressStoring.Tests
 
             region.AddNode(regionNode);
 
-            var worldManager = new WorldManager(schemeService, new Dice(1));
+            var worldManager = new WorldManager(schemeService, new LinearDice(1));
             worldManager.Regions[globe.Localities.Last().Cell] = region;
 
             var humanPlayer = new HumanPlayer();

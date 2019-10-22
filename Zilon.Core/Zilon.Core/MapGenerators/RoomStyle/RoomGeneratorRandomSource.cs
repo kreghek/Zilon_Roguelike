@@ -16,12 +16,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
         private readonly IDice _dice;
-        private readonly IRandomNumberGenerator _randomNumberGenerator;
+        private readonly IDice _roomSizeDice;
 
-        public RoomGeneratorRandomSource(IDice dice, IRandomNumberGenerator randomNumberGenerator)
+        public RoomGeneratorRandomSource(IDice dice, IDice roomSizeDice)
         {
             _dice = dice;
-            _randomNumberGenerator = randomNumberGenerator;
+            _roomSizeDice = roomSizeDice;
         }
 
         /// <summary>
@@ -201,15 +201,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             var sizeList = new Size[count];
 
-            var sequenceWidth = _randomNumberGenerator.GetSequence(count);
-            var sequenceHeight = _randomNumberGenerator.GetSequence(count);
-
             for (var i = 0; i < count; i++)
             {
                 var diffSize = maxSize - minSize;
 
-                var rollDiffWidth = sequenceWidth[i] * diffSize;
-                var rollDiffHeight = sequenceHeight[i] * diffSize;
+                var rollDiffWidth = _roomSizeDice.Roll(diffSize);
+                var rollDiffHeight = _roomSizeDice.Roll(diffSize);
 
                 var rollWidth = (int)rollDiffWidth + minSize;
                 var rollHeight = (int)rollDiffHeight + minSize;

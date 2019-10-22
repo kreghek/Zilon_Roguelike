@@ -62,13 +62,12 @@ namespace Zilon.Core.Tests.MapGenerators
         public void Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var dice = new Dice(diceSeed);
-            var randomGenerator = new GaussRandomNumberGenerator(dice);
-            var randomSource = new RoomGeneratorRandomSource(dice, randomGenerator);
+            var linearDice = new LinearDice(diceSeed);
+            var gaussDice = new GaussDice(diceSeed);
+            var randomSource = new RoomGeneratorRandomSource(linearDice, gaussDice);
             var roomGenerator = new RoomGenerator(randomSource);
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var schemeService = CreateSchemeService();
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();

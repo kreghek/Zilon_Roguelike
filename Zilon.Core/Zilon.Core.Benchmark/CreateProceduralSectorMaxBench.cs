@@ -104,7 +104,7 @@ namespace Zilon.Core.Benchmark
             _container = new ServiceContainer();
 
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
-            _container.Register<IDice>(factory => new Dice(123), new PerContainerLifetime());
+            _container.Register<IDice>(factory => new LinearDice(123), new PerContainerLifetime());
             _container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, FixLargeRoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());

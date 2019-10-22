@@ -96,9 +96,11 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = CreateRandomSeedAndDice();
-            container.Register(factory => dice, new PerContainerLifetime());
-            container.Register<IRandomNumberGenerator, GaussRandomNumberGenerator>(new PerContainerLifetime());
+            var linearDice = CreateRandomSeedAndLinearDice();
+            var gaussDice = CreateRandomSeedAndGaussDice();
+            container.Register(factory => linearDice, "linear", new PerContainerLifetime());
+            container.Register(factory => gaussDice, "gauss", new PerContainerLifetime());
+            container.Register(factory=> factory.GetInstance<IDice>("linear"), new PerContainerLifetime());
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
             container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
@@ -113,7 +115,7 @@ namespace Zilon.Emulation.Common
             container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
             container.Register<IMapFactory, RoomMapFactory>("room", new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
-            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register(CreateRoomGeneratorRandomSource, new PerContainerLifetime());
             container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", new PerContainerLifetime());
             container.Register<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
@@ -121,23 +123,53 @@ namespace Zilon.Emulation.Common
             container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
         }
 
+        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceFactory factory)
+        {
+            var localLinearDice = factory.GetInstance<IDice>("linear");
+            var localGaussDice = factory.GetInstance<IDice>("gauss");
+            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localGaussDice);
+            return randomSource;
+        }
+
         /// <summary>
         /// Создаёт кость и фиксирует зерно рандома.
         /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private IDice CreateRandomSeedAndDice()
+        private IDice CreateRandomSeedAndLinearDice()
         {
             IDice dice;
             if (DiceSeed == null)
             {
                 var diceSeedFact = new Random().Next(int.MaxValue);
                 DiceSeed = diceSeedFact;
-                dice = new Dice(diceSeedFact);
+                dice = new LinearDice(diceSeedFact);
             }
             else
             {
-                dice = new Dice(DiceSeed.Value);
+                dice = new LinearDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndGaussDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new GaussDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new GaussDice(DiceSeed.Value);
             }
 
             return dice;

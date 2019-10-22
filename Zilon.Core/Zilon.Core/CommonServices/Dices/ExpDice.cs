@@ -2,14 +2,12 @@
 
 using JetBrains.Annotations;
 
-using Zilon.Core.CommonServices.Dices;
-
-namespace Zilon.Core.CommonServices
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    /// Генератор случайных числе Парка-Миллера.
+    /// Игральная кость, работающая по экпонециальному закону.
     /// </summary>
-    public sealed class ExpRandomNumberGenerator : IRandomNumberGenerator
+    public sealed class ExpDice : IDice
     {
         private const double LAMBDA = 0.5;
         private const double MAX = 7;
@@ -21,7 +19,7 @@ namespace Zilon.Core.CommonServices
         /// Конструктор генератора.
         /// </summary>
         /// <param name="dice"> Игральная кость для выбора случайного зерна генератора. </param>
-        public ExpRandomNumberGenerator([NotNull] IDice dice)
+        public ExpDice([NotNull] IDice dice)
         {
             if (dice is null)
             {
@@ -31,25 +29,20 @@ namespace Zilon.Core.CommonServices
             _dice = dice;
         }
 
-        public double[] GetSequence(int count)
+        public int Roll(int n)
         {
-            var sequence = new double[count];
+            var rollUnit = GetBounded(_dice, 0, 1);
 
-            for (int n = 0; n < count; n++)
-            {
-                var rand = GetBounded(_dice, 0, 1);
+            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
 
-                sequence[n] = rand;
-            }
-
-            return sequence;
+            return roll;
         }
 
         private static double GetNext(IDice dice)
         {
             var u = GetNextDouble(dice);
 
-            var x = Math.Log(1 - u) / (-LAMBDA);
+            var x = Math.Log(1 - u) / -LAMBDA;
 
             var mappedX = MapToInterval(
                 x,

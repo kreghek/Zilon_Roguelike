@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         [Category(TestCategories.LONG_RUN)]
         public async Task GenerateAsync_FixedDice_NoExceptions()
         {
-            var dice = new Dice(1);
+            var dice = new LinearDice(1);
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         [Test]
         public async Task GenerateAsync_ShowHistory()
         {
-            var dice = new Dice();
+            var dice = new LinearDice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -69,7 +69,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         [Test()]
         public async Task GenerateRegionAsyncTest()
         {
-            var dice = new Dice();
+            var dice = new LinearDice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -82,7 +82,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         public async Task GenerateRegionAsync_StartProvince_RegionHasStartNode()
         {
             // ARRANGE
-            var dice = new Dice(1);  // Для тестов указываем кость с фиксированным зурном рандома.
+            var dice = new LinearDice(1);  // Для тестов указываем кость с фиксированным зурном рандома.
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 

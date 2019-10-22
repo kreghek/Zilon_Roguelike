@@ -32,7 +32,7 @@ namespace Zilon.Core.Benchmark
             var container = new ServiceContainer();
 
             // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
-            container.Register<IDice>(factory => new Dice(1), new PerContainerLifetime());
+            container.Register<IDice>(factory => new LinearDice(1), new PerContainerLifetime());
             container.Register(factory => BenchHelper.CreateSchemeLocator(), new PerContainerLifetime());
             container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
             container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
