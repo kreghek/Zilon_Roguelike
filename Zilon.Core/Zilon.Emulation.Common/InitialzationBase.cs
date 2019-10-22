@@ -4,7 +4,6 @@ using LightInject;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
-using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;

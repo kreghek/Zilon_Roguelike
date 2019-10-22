@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 
 using NUnit.Framework;
-
-using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Schemes;

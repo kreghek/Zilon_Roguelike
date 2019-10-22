@@ -24,8 +24,7 @@ namespace Zilon.Core.Tests.CommonServices
             // ARRANGE
             //var rng = new ParkMillerRandomNumberGenerator(seed);
 
-            var dice = new LinearDice(3);
-            var r = new ExpDice(dice);
+            var r = new ExpDice(3);
             var seq = new int[1000];
             for (var i = 0; i < seq.Length; i++)
             {

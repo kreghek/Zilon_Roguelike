@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.CommonServices.Dices;
-
-namespace Zilon.Core.CommonServices
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
@@ -19,7 +17,7 @@ namespace Zilon.Core.CommonServices
         /// Математическое ожидание.
         /// </summary>
         private const double MEAN = 0.5;
-        
+
         private readonly Random _random;
 
         /// <summary>
