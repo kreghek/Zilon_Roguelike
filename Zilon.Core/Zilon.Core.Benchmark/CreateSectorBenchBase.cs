@@ -82,7 +82,6 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
             _container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
 
-
             // Специализированные сервисы для Ui.
             _container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
 
@@ -157,7 +156,6 @@ namespace Zilon.Core.Benchmark
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
-
 
             var gameLoop = _container.GetInstance<IGameLoop>();
             var monsterTaskSource = _container.GetInstance<MonsterBotActorTaskSource>();
