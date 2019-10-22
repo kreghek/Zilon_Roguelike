@@ -98,8 +98,10 @@ namespace Zilon.Emulation.Common
         {
             var linearDice = CreateRandomSeedAndLinearDice();
             var gaussDice = CreateRandomSeedAndGaussDice();
+            var expDice = CreateRandomSeedAndExpDice();
             container.Register(factory => linearDice, "linear", new PerContainerLifetime());
             container.Register(factory => gaussDice, "gauss", new PerContainerLifetime());
+            container.Register(factory => expDice, "exp", new PerContainerLifetime());
             container.Register(factory=> factory.GetInstance<IDice>("linear"), new PerContainerLifetime());
             container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
             container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
@@ -126,8 +128,8 @@ namespace Zilon.Emulation.Common
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceFactory factory)
         {
             var localLinearDice = factory.GetInstance<IDice>("linear");
-            var localGaussDice = factory.GetInstance<IDice>("gauss");
-            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localGaussDice);
+            var localRoomSizeDice = factory.GetInstance<IDice>("exp");
+            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
             return randomSource;
         }
 
@@ -170,6 +172,28 @@ namespace Zilon.Emulation.Common
             else
             {
                 dice = new GaussDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndExpDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new ExpDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new ExpDice(DiceSeed.Value);
             }
 
             return dice;

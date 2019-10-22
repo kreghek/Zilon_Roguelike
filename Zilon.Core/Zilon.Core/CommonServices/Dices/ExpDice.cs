@@ -1,6 +1,5 @@
 ﻿using System;
-
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -12,35 +11,43 @@ namespace Zilon.Core.CommonServices.Dices
         private const double LAMBDA = 0.5;
         private const double MAX = 7;
 
-        private readonly IDice _dice;
-
+        private readonly Random _random;
 
         /// <summary>
         /// Конструктор генератора.
         /// </summary>
-        /// <param name="dice"> Игральная кость для выбора случайного зерна генератора. </param>
-        public ExpDice([NotNull] IDice dice)
+        [ExcludeFromCodeCoverage]
+        public ExpDice()
         {
-            if (dice is null)
-            {
-                throw new ArgumentNullException(nameof(dice));
-            }
+            _random = new Random();
+        }
 
-            _dice = dice;
+        /// <summary>
+        /// Конструктор кости.
+        /// </summary>
+        /// <param name="seed"> Зерно рандомизации. </param>
+        /// <remarks>
+        /// При одном и том же зерне рандомизации будет генерироваться
+        /// одна и та же последовательность случайных чисел.
+        /// </remarks>
+        [ExcludeFromCodeCoverage]
+        public ExpDice(int seed)
+        {
+            _random = new Random(seed);
         }
 
         public int Roll(int n)
         {
-            var rollUnit = GetBounded(_dice, 0, 1);
+            var rollUnit = GetBounded(0, 1);
 
             var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
 
             return roll;
         }
 
-        private static double GetNext(IDice dice)
+        private double GetNext()
         {
-            var u = GetNextDouble(dice);
+            var u = GetNextDouble();
 
             var x = Math.Log(1 - u) / -LAMBDA;
 
@@ -54,20 +61,19 @@ namespace Zilon.Core.CommonServices.Dices
             return mappedX;
         }
 
-        private static double GetBounded(IDice dice, double min, double max)
+        private double GetBounded(double min, double max)
         {
             double x;
             do
             {
-                x = GetNext(dice);
+                x = GetNext();
             } while (x < min || x > max);
             return x;
         }
 
-        private static double GetNextDouble(IDice dice)
+        private double GetNextDouble()
         {
-            var maxDiceVal = 1000_000;
-            var next = (double)dice.Roll(maxDiceVal) / maxDiceVal;
+            var next = _random.NextDouble();
             return next;
         }
 

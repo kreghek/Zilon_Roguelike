@@ -25,6 +25,7 @@ namespace Zilon.Core.CommonServices
         /// <summary>
         /// Конструктор генератора.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public GaussDice()
         {
             _random = new Random();
