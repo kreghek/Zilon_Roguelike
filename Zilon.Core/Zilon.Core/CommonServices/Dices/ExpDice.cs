@@ -79,7 +79,13 @@ namespace Zilon.Core.CommonServices.Dices
 
         private static double MapToInterval(double x, double sourceMin, double sourceMax, double targetMin, double targetMax)
         {
-            return (targetMax - targetMin) * (x - sourceMin) / (sourceMax - sourceMin) + sourceMin;
+            var targetDiff = targetMax - targetMin;
+            var sourceDiff = sourceMax - sourceMin;
+            var shifftedX = x - sourceMin;
+            var sourceRatioX = shifftedX / sourceDiff;
+            var xNormalized = targetDiff * sourceRatioX;
+
+            return xNormalized + sourceMin;
         }
     }
 }

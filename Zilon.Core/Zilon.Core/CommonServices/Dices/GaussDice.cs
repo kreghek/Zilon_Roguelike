@@ -43,7 +43,6 @@ namespace Zilon.Core.CommonServices.Dices
             _random = new Random(seed);
         }
 
-
         public int Roll(int n)
         {
             var rand = GetNext(0.0, 1.0);
@@ -73,9 +72,11 @@ namespace Zilon.Core.CommonServices.Dices
             var u2 = GetNextDouble();
             var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
                          Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
-            var randNormal = mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
 
-            return randNormal;
+            var randNormal = stdDev * randStdNormal;
+            var randTotal = mean + randNormal; //random normal(mean,stdDev^2)
+
+            return randTotal;
         }
     }
 }
