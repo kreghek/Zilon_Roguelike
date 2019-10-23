@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Models.Modals;
 
-using JetBrains.Annotations;
-
-using UnityEngine;
 using UnityEngine.UI;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once CheckNamespace
 public class ContainerModalBody : ContainerModalBodyBase, IModalWindowHandler
 {
-    private List<PropItemVm> _containerViewModels;
-
     // ReSharper disable NotNullMemberIsNotInitialized
     // ReSharper disable UnassignedField.Global
     // ReSharper disable MemberCanBePrivate.Global
@@ -46,7 +40,7 @@ public class ContainerModalBody : ContainerModalBodyBase, IModalWindowHandler
         }
 
 
-        UpdatePropsInner(ContainerItemsParent, containerItems, ContainerPropItem_Click, _containerViewModels);
+        UpdatePropsInner(ContainerItemsParent, containerItems, ContainerPropItem_Click, ContainerViewModels);
     }
 
     private void PropItemViewModel_MouseExit(object sender, EventArgs e)

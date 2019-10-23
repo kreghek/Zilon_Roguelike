@@ -20,9 +20,9 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
     public override void InstallBindings()
     {
-        Container.Bind<IDice>().WithId("linear").FromInstance(new LinearDice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
-        Container.Bind<IDice>().WithId("exp").FromInstance(new ExpDice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
-        Container.Bind<IDice>().WithId("gauss").FromInstance(new GaussDice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
+        Container.Bind<IDice>().WithId("linear").To<LinearDice>().AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
+        Container.Bind<IDice>().WithId("exp").To<ExpDice>().AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
+        Container.Bind<IDice>().WithId("gauss").To<GaussDice>().AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
         Container.Bind<IDice>().FromMethod(context => context.Container.ResolveId<IDice>("linear"));
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
