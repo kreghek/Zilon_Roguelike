@@ -285,7 +285,6 @@ namespace Zilon.Core.WorldGeneration
                 IsBorder = true
             };
             region.AddNode(borderNode);
-            return;
         }
 
         private GlobeRegionPattern GetDefaultPattrn()
