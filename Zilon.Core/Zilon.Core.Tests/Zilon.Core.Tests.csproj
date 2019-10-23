@@ -115,7 +115,6 @@
     <Compile Include="CommonServices\Dices\IDiceExtensionsTests.cs" />
     <Compile Include="CommonServices\DropRollerTests.cs" />
     <Compile Include="CommonServices\Dices\DiceTestsBase.cs" />
-    <Compile Include="CommonServices\ParkMillerRandomNumberGeneratorTests.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Common\MatrixHelperTests.cs" />
