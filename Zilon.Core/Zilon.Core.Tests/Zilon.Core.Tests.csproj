@@ -109,8 +109,12 @@
     <Compile Include="Commands\PropTrasferCommandTests.cs" />
     <Compile Include="Commands\QueueCommandManagerTests.cs" />
     <Compile Include="Commands\UseSelfCommandTests.cs" />
+    <Compile Include="CommonServices\Dices\ExpDiceTests.cs" />
+    <Compile Include="CommonServices\Dices\GaussDiceTests.cs" />
+    <Compile Include="CommonServices\Dices\LinearDiceTests.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensionsTests.cs" />
     <Compile Include="CommonServices\DropRollerTests.cs" />
+    <Compile Include="CommonServices\Dices\DiceTestsBase.cs" />
     <Compile Include="Common\CubeCoordsHelperTests.cs" />
     <Compile Include="Common\HexHelperTests.cs" />
     <Compile Include="Common\MatrixHelperTests.cs" />

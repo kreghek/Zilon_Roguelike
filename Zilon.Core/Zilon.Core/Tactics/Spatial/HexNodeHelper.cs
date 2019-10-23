@@ -6,6 +6,9 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Spatial
 {
+    /// <summary>
+    /// Вспомогательный класс для работы с узлами в поле шестигранников.
+    /// </summary>
     public static class HexNodeHelper
     {
         /// <summary>
@@ -16,6 +19,16 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns></returns>
         public static HexNode[] GetSpatialNeighbors(HexNode currentNode, IEnumerable<HexNode> nodes)
         {
+            if (currentNode is null)
+            {
+                throw new ArgumentNullException(nameof(currentNode));
+            }
+
+            if (nodes is null)
+            {
+                throw new ArgumentNullException(nameof(nodes));
+            }
+
             var currentCubeCoords = currentNode.CubeCoords;
 
             var directions = HexHelper.GetOffsetClockwise();
@@ -25,9 +38,7 @@ namespace Zilon.Core.Tactics.Spatial
             for (var i = 0; i < 6; i++)
             {
                 var dir = directions[i];
-                var pos = new CubeCoords(dir.X + currentCubeCoords.X,
-                    dir.Y + currentCubeCoords.Y,
-                    dir.Z + currentCubeCoords.Z);
+                var pos = dir + currentCubeCoords;
 
                 neighborCoords.Add(pos);
             }
@@ -57,6 +68,11 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns> Возвращает ближайший узел карты. </returns>
         public static HexNode GetNearbyCoordinates(HexNode node, IEnumerable<HexNode> targets)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             var targetArray = targets.ToArray();
 
             if (!targetArray.Any())
@@ -87,12 +103,6 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return nearbyNode;
-        }
-
-        public static bool EqualCoordinates(HexNode hexNode1, HexNode hexNode2)
-        {
-            return hexNode1.OffsetX == hexNode2.OffsetX &&
-                hexNode1.OffsetY == hexNode2.OffsetY;
         }
     }
 }

@@ -88,6 +88,9 @@
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
+    <Compile Include="CommonServices\Dices\GaussDice.cs" />
+    <Compile Include="CommonServices\Dices\ExpDice.cs" />
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\Matrix.cs" />
@@ -121,6 +124,8 @@
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorBase.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomHelper.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
     <Compile Include="MapGenerators\SingleMapFactorySelector.cs" />
     <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />
@@ -262,7 +267,7 @@
     <Compile Include="Commands\Sector\ShowModalCommandBase.cs" />
     <Compile Include="Commands\Sector\TacticCommandBase.cs" />
     <Compile Include="Commands\UiCommandBase.cs" />
-    <Compile Include="CommonServices\Dices\Dice.cs" />
+    <Compile Include="CommonServices\Dices\LinearDice.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensions.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
     <Compile Include="Common\OrientedRange.cs" />

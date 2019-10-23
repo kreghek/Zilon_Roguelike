@@ -47,7 +47,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// </summary>
         [Test]
         [Category("integration")]
-        [Parallelizable]
         public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
         {
             // ARRANGE
@@ -84,6 +83,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 .Returns(new[] { new OffsetCoords(0, 0) });
             randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
                 .Returns(new[] { transition });
+            randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
+                .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });
             var random = randomMock.Object;
 
             var generator = new RoomGenerator(random);

@@ -46,7 +46,7 @@ namespace Zilon.Core.MassWorldGenerator
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = new Dice();
+            var dice = new LinearDice();
             container.Register<IDice>(factory => dice, new PerContainerLifetime());
             
         }

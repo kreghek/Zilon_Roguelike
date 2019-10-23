@@ -13,7 +13,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// <summary>
     /// Реализация фабрики карты, онованной на комнатах.
     /// </summary>
-    /// <seealso cref="Zilon.Core.MapGenerators.IMapFactory" />
+    /// <seealso cref="IMapFactory" />
     public class RoomMapFactory : IMapFactory
     {
         private const int RoomMinSize = 2;
@@ -22,7 +22,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         [ExcludeFromCodeCoverage]
         public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
-            _roomGenerator = roomGenerator;
+            _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
         }
 
         /// <summary>
@@ -33,6 +33,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </returns>
         public Task<ISectorMap> CreateAsync(object options)
         {
+            if (options is null)
+            {
+                throw new System.ArgumentNullException(nameof(options));
+            }
+
             var sectorScheme = (ISectorSubScheme)options;
 
             var map = CreateMapInstance();
