@@ -7,9 +7,9 @@ namespace Zilon.Emulation.Common
     /// <summary>
     /// Реализация селектора фабрик на основе переключения по типу фабрики.
     /// </summary>
-    public sealed class LightInjectSwitchMapfactorySelector : SwitchMapFactorySelectorBase
+    public sealed class LightInjectSwitchMapFactorySelector : SwitchMapFactorySelectorBase
     {
-        public LightInjectSwitchMapfactorySelector([Inject("room")] IMapFactory roomMapFactory,
+        public LightInjectSwitchMapFactorySelector([Inject("room")] IMapFactory roomMapFactory,
             [Inject("cellular-automaton")] IMapFactory cellularAutomatonMapFactory)
         {
             RoomMapFactory = roomMapFactory;
