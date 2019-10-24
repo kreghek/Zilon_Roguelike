@@ -14,8 +14,10 @@ namespace Zilon.Core.Benchmark
     {
         public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath, string artifactPath)
         {
-            Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
-            Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            // Отключены, потому что не работают на билд сервере.
+            // Из-за этого задача сборки заваливается.
+            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
+            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
 
             if (monoRuntimeName != null && monoRuntimePath != null)
             {
@@ -23,6 +25,7 @@ namespace Zilon.Core.Benchmark
             }
             else
             {
+                // Используется на билд-сервере, потому что там сразу запуск в окружении моно.
                 Add(Job.Default.With(new MonoRuntime()).WithIterationCount(iterationCount));
             }
 
