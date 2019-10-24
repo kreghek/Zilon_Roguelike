@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{91053C74-7FDF-4690-B20B-B63DB84606D8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Zilon.Core.Benchmarks</RootNamespace>
-    <AssemblyName>Zilon.Core.Benchmarks</AssemblyName>
+    <RootNamespace>Zilon.Core.Benchmarks.Move</RootNamespace>
+    <AssemblyName>Zilon.Core.Benchmarks.Move</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -155,13 +155,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BenchHelper.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="CreateGlobeBench.cs" />
-    <Compile Include="CreateProceduralSectorBench.cs" />
-    <Compile Include="CreateProceduralSectorMaxBench.cs" />
-    <Compile Include="CreateProceduralSectorMinBench.cs" />
-    <Compile Include="CreateSectorBenchBase.cs" />
     <Compile Include="MoveBench.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -182,6 +175,10 @@
     <ProjectReference Include="..\Zilon.CommonUtilities\Zilon.CommonUtilities.csproj">
       <Project>{B9367196-F13A-434E-9971-E823D2E2A7B3}</Project>
       <Name>Zilon.CommonUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj">
+      <Project>{4b14021b-1c05-47a2-89c6-aca7310bc999}</Project>
+      <Name>Zilon.Core.Benchmarks.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
       <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>

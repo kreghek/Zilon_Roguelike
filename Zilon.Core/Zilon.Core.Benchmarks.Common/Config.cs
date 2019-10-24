@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
 
 using BenchmarkDotNet.Analysers;
@@ -12,14 +11,10 @@ using BenchmarkDotNet.Loggers;
 
 namespace Zilon.Core.Benchmark
 {
-    internal class Config : ManualConfig
+    public class Config : ManualConfig
     {
-        public Config(string buildNumber)
+        public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath, string artifactPath)
         {
-            var iterationCount = int.Parse(ConfigurationManager.AppSettings["IterationCount"]);
-            var monoRuntimeName = ConfigurationManager.AppSettings["MonoRuntimeName"];
-            var monoRuntimePath = ConfigurationManager.AppSettings["MonoRuntimePath"];
-
             Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
             Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
             Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
@@ -40,7 +35,7 @@ namespace Zilon.Core.Benchmark
             Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
             Add(EnvironmentAnalyser.Default);
             UnionRule = ConfigUnionRule.AlwaysUseLocal;
-            ArtifactsPath = ConfigurationManager.AppSettings["BenchArtifactsPath"];
+            ArtifactsPath = artifactPath;
         }
     }
 }

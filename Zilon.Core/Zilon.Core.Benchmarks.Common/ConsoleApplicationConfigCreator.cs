@@ -1,32 +1,13 @@
 ﻿using System;
 
-using BenchmarkDotNet.Running;
-
 using Zilon.CommonUtilities;
 using Zilon.Core.Benchmark;
 
-namespace Zilon.Core.Benchmarks
+namespace Zilon.Core.Benchmarks.Common
 {
-    class Program
+    public static class ConsoleApplicationConfigCreator
     {
-        static void Main(string[] args)
-        {
-            var config = CreateBenchConfig(args);
-
-            var benchName = ArgumentHelper.GetProgramArgument(args, "BENCH");
-            var benchNameNormalized = benchName.Trim().ToUpperInvariant();
-
-            switch (benchNameNormalized)
-            {
-                case "MOVE":
-                    BenchmarkRunner.Run<MoveBench>(config);
-                    break;
-            }
-
-            Console.ReadLine();
-        }
-
-        private static Config CreateBenchConfig(string[] args)
+        public static Config CreateBenchConfig(string[] args)
         {
             var buildNumber = ArgumentHelper.GetProgramArgument(args, "BUILD_NUMBER");
             var iterationCount = 1;
