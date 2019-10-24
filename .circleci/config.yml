@@ -264,12 +264,40 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
       - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe iteration_Count=1 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
+  bench_create_sector:
+    working_directory: /bench_create_sector
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj /p:Configuration=Release
+      - run: mono --debug /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe iteration_Count=1 buildNumber=123 artifact_path="bench_create_sector/dotnetbenchmark-reports"
+  bench_create_globe:
+    working_directory: /bench_create_globe
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /p:Configuration=Release
+      - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
 workflows:
   version: 2
   commit:
     jobs:
       - build
       - bench_move
+      - bench_create_sector
+      - bench_create_globe
       - test_45:
           requires:
             - build
