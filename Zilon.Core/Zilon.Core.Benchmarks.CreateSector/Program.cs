@@ -5,7 +5,7 @@ using Zilon.Core.Benchmarks.Common;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
