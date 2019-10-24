@@ -196,8 +196,6 @@ namespace Zilon.Core.Benchmark
 
             sectorManager.CreateSectorAsync().Wait();
 
-
-
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
             var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
@@ -228,7 +226,6 @@ namespace Zilon.Core.Benchmark
         {
             var schemeService = _container.GetInstance<ISchemeService>();
             var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
-
 
             var inventory = new Inventory();
 
