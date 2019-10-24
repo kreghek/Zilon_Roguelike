@@ -10,7 +10,8 @@ namespace Zilon.Core.Benchmarks.Common
         public static Config CreateBenchConfig(string[] args)
         {
             var buildNumber = ArgumentHelper.GetProgramArgument(args, "BUILD_NUMBER");
-            var iterationCount = 1;
+            var iterationCountString = ArgumentHelper.GetProgramArgument(args, "ITERATION_COUNT");
+            var iterationCount = int.Parse(iterationCountString);
             var monoName = "mono";
             var monoPath = ArgumentHelper.GetProgramArgument(args, "MONO_PATH");
             var artifactPath = ArgumentHelper.GetProgramArgument(args, "ARTIFACT_PATH");
