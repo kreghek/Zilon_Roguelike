@@ -16,7 +16,15 @@ namespace Zilon.Core.Benchmark
         {
             Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
             Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
-            Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
+
+            if (monoRuntimeName != null && monoRuntimePath != null)
+            {
+                Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
+            }
+            else
+            {
+                Add(Job.Default.With(new MonoRuntime()).WithIterationCount(iterationCount));
+            }
 
             // В этих бенчах корку не удаётся запустить.
             // Предположительно, не получается найти инструмент для сборки бенча под корку.

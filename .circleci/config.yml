@@ -251,11 +251,25 @@ jobs:
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
       - store_artifacts:
           path: /test_mass_sector_generator/maps
+  bench_move:
+    working_directory: /bench_move
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
+      - run: --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Debug/Zilon.Core.Benchmarks.Move.exe iterationCount=1 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
 workflows:
   version: 2
   commit:
     jobs:
       - build
+      - bench_move
       - test_45:
           requires:
             - build
