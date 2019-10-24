@@ -264,7 +264,7 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
       - run: chmod u+x /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe
-      - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe iteration_Count=1 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
+      - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
   bench_create_sector:
     working_directory: /bench_create_sector
     docker:
@@ -278,7 +278,7 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj /p:Configuration=Release
       - run: chmod u+x /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe
-      - run: mono --debug /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe iteration_Count=1 buildNumber=123 artifact_path="bench_create_sector/dotnetbenchmark-reports"
+      - run: mono --debug /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_sector/dotnetbenchmark-reports"
   bench_create_globe:
     working_directory: /bench_create_globe
     docker:
@@ -292,7 +292,7 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
-      - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
+      - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
 workflows:
   version: 2
   commit:
