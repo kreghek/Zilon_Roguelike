@@ -298,9 +298,6 @@ workflows:
   commit:
     jobs:
       - build
-      - bench_move
-      - bench_create_sector
-      - bench_create_globe
       - test_45:
           requires:
             - build
@@ -374,3 +371,21 @@ workflows:
 #          requires:
 #            - build
 #            - test_45
+      - bench_move:
+          requires:
+            - build_Win_x64
+            - build_Win_x32
+            - build_Linux_x64
+            - build_MacOS_Universal
+      - bench_create_sector:
+          requires:
+            - build_Win_x64
+            - build_Win_x32
+            - build_Linux_x64
+            - build_MacOS_Universal
+      - bench_create_globe:
+          requires:
+            - build_Win_x64
+            - build_Win_x32
+            - build_Linux_x64
+            - build_MacOS_Universal
