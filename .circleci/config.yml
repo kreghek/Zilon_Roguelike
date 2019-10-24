@@ -263,7 +263,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
-      - run: --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Debug/Zilon.Core.Benchmarks.Move.exe iterationCount=1 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
+      - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Debug/Zilon.Core.Benchmarks.Move.exe iteration_Count=1 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
 workflows:
   version: 2
   commit:
