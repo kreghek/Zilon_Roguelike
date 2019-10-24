@@ -15,8 +15,6 @@ namespace Zilon.Core.Benchmarks.CreateSector
             BenchmarkRunner.Run<CreateProceduralSectorMinBench>(config);
             BenchmarkRunner.Run<CreateProceduralSectorBench>(config);
             BenchmarkRunner.Run<CreateProceduralSectorMaxBench>(config);
-
-            Console.ReadLine();
         }
     }
 }

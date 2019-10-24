@@ -13,8 +13,6 @@ namespace Zilon.Core.Benchmarks
         {
             var config = ConsoleApplicationConfigCreator.CreateBenchConfig(args);
             BenchmarkRunner.Run<MoveBench>(config);
-
-            Console.ReadLine();
         }
     }
 }
