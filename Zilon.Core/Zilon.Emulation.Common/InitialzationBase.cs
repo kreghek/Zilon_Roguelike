@@ -113,7 +113,7 @@ namespace Zilon.Emulation.Common
             container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
             container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(new PerContainerLifetime());
 
-            container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
+            container.Register<IMapFactorySelector, LightInjectSwitchMapFactorySelector>(new PerContainerLifetime());
             container.Register<IMapFactory, RoomMapFactory>("room", new PerContainerLifetime());
             container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             container.Register(CreateRoomGeneratorRandomSource, new PerContainerLifetime());

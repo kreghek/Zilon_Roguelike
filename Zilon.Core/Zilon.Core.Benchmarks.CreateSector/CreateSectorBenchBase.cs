@@ -75,7 +75,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorGenerator, SectorGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
-            _container.Register<IMapFactorySelector, LightInjectSwitchMapfactorySelector>(new PerContainerLifetime());
+            _container.Register<IMapFactorySelector, LightInjectSwitchMapFactorySelector>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 

@@ -24,6 +24,7 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmark
 {
@@ -149,6 +150,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
             _container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
             _container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
+            _container.Register<IMapFactorySelector, LightInjectSwitchMapFactorySelector>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
             _container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
 
@@ -194,8 +196,6 @@ namespace Zilon.Core.Benchmark
 
             sectorManager.CreateSectorAsync().Wait();
 
-
-
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
             var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
@@ -212,7 +212,7 @@ namespace Zilon.Core.Benchmark
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
         }
 
-        private FileSchemeLocator CreateSchemeLocator()
+        private static FileSchemeLocator CreateSchemeLocator()
         {
             var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
             var schemeLocator = new FileSchemeLocator(schemePath);
@@ -226,7 +226,6 @@ namespace Zilon.Core.Benchmark
         {
             var schemeService = _container.GetInstance<ISchemeService>();
             var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();
-
 
             var inventory = new Inventory();
 

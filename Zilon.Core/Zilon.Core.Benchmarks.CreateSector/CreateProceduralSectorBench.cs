@@ -3,7 +3,7 @@
 using BenchmarkDotNet.Attributes;
 
 using LightInject;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Benchmark
@@ -18,12 +18,14 @@ namespace Zilon.Core.Benchmark
 
         protected override IChestGeneratorRandomSource CreateChestGeneratorRandomSource()
         {
-            return _container.GetInstance<IChestGeneratorRandomSource>();
+            var linearDice = _container.GetInstance<IDice>();
+            return new ChestGeneratorRandomSource(linearDice);
         }
 
         protected override IMonsterGeneratorRandomSource CreateFakeMonsterGeneratorRandomSource()
         {
-            return _container.GetInstance<IMonsterGeneratorRandomSource>();
+            var linearDice = _container.GetInstance<IDice>();
+            return new MonsterGeneratorRandomSource(linearDice);
         }
     }
 }
