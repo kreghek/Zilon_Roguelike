@@ -212,7 +212,7 @@ namespace Zilon.Core.Benchmark
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
         }
 
-        private FileSchemeLocator CreateSchemeLocator()
+        private static FileSchemeLocator CreateSchemeLocator()
         {
             var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
             var schemeLocator = new FileSchemeLocator(schemePath);
