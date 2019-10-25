@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
-      - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
   test_players:
     working_directory: /test_players
     docker:
@@ -39,7 +39,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:Configuration=Release
-      - run: mono --debug /test_players/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.Tests/bin/Release/Zilon.Bot.Players.Tests.dll --encoding utf-8
+      - run: mono --debug /test_players/Zilon.Core/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.Tests/bin/Release/Zilon.Bot.Players.Tests.dll --encoding utf-8
   test_bots:
     working_directory: /test_bots
     docker:
@@ -52,7 +52,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:Configuration=Release
-      - run: mono --debug /test_bots/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Bot.Players.DevelopmentTests.dll --encoding utf-8
+      - run: mono --debug /test_bots/Zilon.Core/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Bot.Players.DevelopmentTests.dll --encoding utf-8
   test_specflow:
     working_directory: /test_specflow
     docker:
@@ -65,7 +65,7 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /p:Configuration=Release
-      - run: mono --debug /test_specflow/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
+      - run: mono --debug /test_specflow/Zilon.Core/packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
   build_Win_x64:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
