@@ -322,7 +322,7 @@ workflows:
       branches:
         only:
           - /release.*/
-          - release-556-pumpkins
+          - feature-556-pumpkins
     jobs:
       - build
       - test_45:
