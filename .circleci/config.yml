@@ -297,6 +297,7 @@ workflows:
   version: 2
   commit:
     jobs:
+      - bench_create_globe
       - build
       - test_45:
           requires:

@@ -51,40 +51,37 @@ namespace Zilon.Core.WorldGeneration
         /// </returns>
         public Task<GlobeGenerationResult> GenerateGlobeAsync()
         {
-            var globe = new Globe
+            return Task.Run(() =>
             {
-                Terrain = new TerrainCell[WORLD_SIZE][],
-                agentNameGenerator = new RandomName(_dice),
-                cityNameGenerator = new CityNameGenerator(_dice)
-            };
+                var globe = new Globe
+                {
+                    Terrain = new TerrainCell[WORLD_SIZE][],
+                    agentNameGenerator = new RandomName(_dice),
+                    cityNameGenerator = new CityNameGenerator(_dice)
+                };
 
-            var realmTask = CreateRealms(globe);
-            var terrainTask = CreateTerrain(globe);
+                var realmTask = CreateRealmsAsync(globe);
+                var terrainTask = CreateTerrainAsync(globe);
 
-            Task.WaitAll(realmTask, terrainTask);
+                Task.WaitAll(realmTask, terrainTask);
 
-            CreateStartLocalities(globe);
-            CreateStartAgents(globe);
+                CreateStartLocalities(globe);
+                CreateStartAgents(globe);
 
-            var agentsClock = new Stopwatch();
-            agentsClock.Start();
+                var cardQueue = CreateAgentCardQueue();
 
-            var cardQueue = CreateAgentCardQueue();
-
-            // обработка итераций
-            ProcessIterations(globe, cardQueue);
+                // обработка итераций
+                ProcessIterations(globe, cardQueue);
 
 
-            globe.StartProvince = GetStartProvinceCoords(globe);
-            globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
+                globe.StartProvince = GetStartProvinceCoords(globe);
+                globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
 
-            agentsClock.Stop();
-            Console.WriteLine(agentsClock.ElapsedMilliseconds / 1f + "ms");
-
-            // Сейчас история пустая. Пока не разработаны требования, как лучше сделать.
-            var globeHistory = new GlobeGenerationHistory();
-            var result = new GlobeGenerationResult(globe, globeHistory);
-            return Task.FromResult(result);
+                // Сейчас история пустая. Пока не разработаны требования, как лучше сделать.
+                var globeHistory = new GlobeGenerationHistory();
+                var result = new GlobeGenerationResult(globe, globeHistory);
+                return result;
+            });
         }
 
         private TerrainCell GetStartProvinceCoords(Globe globe)
@@ -495,7 +492,7 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private Task CreateTerrain(Globe globe)
+        private Task CreateTerrainAsync(Globe globe)
         {
             for (var i = 0; i < WORLD_SIZE; i++)
             {
@@ -515,7 +512,7 @@ namespace Zilon.Core.WorldGeneration
             return Task.CompletedTask;
         }
 
-        private Task CreateRealms(Globe globe)
+        private Task CreateRealmsAsync(Globe globe)
         {
             var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow,
             Color.Beige, Color.LightGray, Color.Magenta, Color.Cyan};
