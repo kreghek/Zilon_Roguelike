@@ -324,7 +324,6 @@ workflows:
             branches:
               only:
                 - /release.*/
-                - feature-556-pumpkins
       - build_Win_x64:
           requires:
             - build
@@ -332,7 +331,6 @@ workflows:
             branches:
               only:
                 - /release.*/
-                - feature-556-pumpkins
       - build_Win_x32:
           requires:
             - build
@@ -340,7 +338,6 @@ workflows:
             branches:
               only:
                 - /release.*/
-                - feature-556-pumpkins
       - build_Linux_x64:
           requires:
             - build
@@ -348,7 +345,6 @@ workflows:
             branches:
               only:
                 - /release.*/
-                - feature-556-pumpkins
       - build_MacOS_Universal:
           requires:
             - build
@@ -356,7 +352,6 @@ workflows:
             branches:
               only:
                 - /release.*/
-                - feature-556-pumpkins
 #      - build_Linux_x32:
 #          requires:
 #            - build
