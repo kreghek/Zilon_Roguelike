@@ -319,7 +319,7 @@ workflows:
             - test_specflow
   release:
     jobs:
-      - build
+      - build:
           filters:
             branches:
               only:
