@@ -511,7 +511,7 @@ namespace Zilon.Core.WorldGeneration
                         var terrain = globe.Terrain[i][j];
                         globe.ScanResult.Free.Add(terrain);
                     }
-                };
+                }
             });
         }
 
