@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace Zilon.Core.WorldGeneration
                     cityNameGenerator = new CityNameGenerator(_dice)
                 };
 
-                var realmTask = CreateRealmsAsync(globe);
+                var realmTask = CreateRealmsAsync(globe, _realmNames);
                 var terrainTask = CreateTerrainAsync(globe);
 
                 Task.WaitAll(realmTask, terrainTask);
@@ -247,7 +248,7 @@ namespace Zilon.Core.WorldGeneration
             }
             else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Dungeon))
             {
-                var locationSchemeSids = new[] 
+                var locationSchemeSids = new[]
                 {
                 "rat-hole",
                 "rat-kingdom",
@@ -492,42 +493,62 @@ namespace Zilon.Core.WorldGeneration
             }
         }
 
-        private Task CreateTerrainAsync(Globe globe)
+        private static Task CreateTerrainAsync(Globe globe)
         {
-            for (var i = 0; i < WORLD_SIZE; i++)
+            return Task.Run(() =>
             {
-                globe.Terrain[i] = new TerrainCell[WORLD_SIZE];
+                var concurentHashSet = new ConcurrentDictionary<TerrainCell, int>(Environment.ProcessorCount, WORLD_SIZE * WORLD_SIZE);
 
-                for (var j = 0; j < WORLD_SIZE; j++)
+                Parallel.For(0, WORLD_SIZE, (i) =>
                 {
-                    globe.Terrain[i][j] = new TerrainCell
+                    globe.Terrain[i] = new TerrainCell[WORLD_SIZE];
+
+                    for (var j = 0; j < WORLD_SIZE; j++)
                     {
-                        Coords = new OffsetCoords(i, j)
-                    };
+                        globe.Terrain[i][j] = new TerrainCell
+                        {
+                            Coords = new OffsetCoords(i, j)
+                        };
 
-                    globe.ScanResult.Free.Add(globe.Terrain[i][j]);
+                        var terrain = globe.Terrain[i][j];
+                        concurentHashSet.TryAdd(terrain, 0);
+                    }
+                });
+
+                foreach (var terrain in concurentHashSet.Keys)
+                {
+                    globe.ScanResult.Free.Add(terrain);
                 }
-            }
-
-            return Task.CompletedTask;
+            });
         }
 
-        private Task CreateRealmsAsync(Globe globe)
+        private static Task CreateRealmsAsync(Globe globe, string[] realmNames)
         {
-            var realmColors = new[] { Color.Red, Color.Green, Color.Blue, Color.Yellow,
-            Color.Beige, Color.LightGray, Color.Magenta, Color.Cyan};
-            for (var i = 0; i < START_ITERATION_REALMS; i++)
+            return Task.Run(() =>
             {
-                var realm = new Realm
+                var realmColors = new[]
                 {
-                    Name = _realmNames[i],
-                    Banner = new RealmBanner { MainColor = realmColors[i] }
+                    Color.Red,
+                    Color.Green,
+                    Color.Blue,
+                    Color.Yellow,
+                    Color.Beige,
+                    Color.LightGray,
+                    Color.Magenta,
+                    Color.Cyan
                 };
 
-                globe.Realms.Add(realm);
-            }
+                for (var i = 0; i < START_ITERATION_REALMS; i++)
+                {
+                    var realm = new Realm
+                    {
+                        Name = realmNames[i],
+                        Banner = new RealmBanner { MainColor = realmColors[i] }
+                    };
 
-            return Task.CompletedTask;
+                    globe.Realms.Add(realm);
+                }
+            });
         }
 
         private readonly string[] _realmNames = new[] {
