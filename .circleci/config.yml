@@ -301,22 +301,9 @@ workflows:
       - test_45:
           requires:
             - build
-      - test_players:
-          requires:
-            - build
-      - test_specflow:
-          requires:
-            - build
-      - test_bots:
-          requires:
-            - build
-            - test_45
-            - test_specflow
       - build_Win_x64:
           requires:
             - build
-            - test_45
-            - test_specflow
   release:
     jobs:
       - build:
