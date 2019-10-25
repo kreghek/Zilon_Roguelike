@@ -318,47 +318,87 @@ workflows:
             - test_45
             - test_specflow
   release:
-    filters:
-      branches:
-        only:
-          - /release.*/
-          - feature-556-pumpkins
     jobs:
       - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - test_45:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - test_players:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - test_specflow:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - test_bots:
           requires:
             - build
             - test_45
             - test_specflow
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - build_Win_x64:
           requires:
             - build
             - test_45
             - test_specflow
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - build_Win_x32:
           requires:
             - build
             - test_45
             - test_specflow
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - build_Linux_x64:
           requires:
             - build
             - test_45
             - test_specflow
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
       - build_MacOS_Universal:
           requires:
             - build
             - test_45
             - test_specflow
+          filters:
+            branches:
+              only:
+                - /release.*/
+                - feature-556-pumpkins
 #      - build_Linux_x32:
 #          requires:
 #            - build
