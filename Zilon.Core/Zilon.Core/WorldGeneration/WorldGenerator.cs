@@ -497,7 +497,7 @@ namespace Zilon.Core.WorldGeneration
         {
             return Task.Run(() =>
             {
-                var concurentHashSet = new ConcurrentDictionary<TerrainCell, int>(Environment.ProcessorCount, WORLD_SIZE * WORLD_SIZE);
+                var concurentHashSet = new ConcurrentDictionary<TerrainCell, int>(WORLD_SIZE, WORLD_SIZE * WORLD_SIZE);
 
                 Parallel.For(0, WORLD_SIZE, (i) =>
                 {
