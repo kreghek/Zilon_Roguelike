@@ -1,0 +1,15 @@
+{
+  "Rolls": 1,
+  "Records": [
+	{
+      "SchemeSid": "evil-pumpkin",
+
+      "Weight": 5
+    },
+
+    {
+      "SchemeSid": null,
+      "Weight": 95
+    }
+  ]
+}

@@ -21,7 +21,9 @@
     "Targets": "Enemy"
   },
   "DropTableSids": [
-    "survival"
+    "survival",
+	"default",
+	"default-evil-hour"
   ],
   "BaseScore": 25,
   "Tags": [
