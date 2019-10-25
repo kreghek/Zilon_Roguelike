@@ -497,9 +497,7 @@ namespace Zilon.Core.WorldGeneration
         {
             return Task.Run(() =>
             {
-                var concurentHashSet = new ConcurrentDictionary<TerrainCell, int>(WORLD_SIZE, WORLD_SIZE * WORLD_SIZE);
-
-                Parallel.For(0, WORLD_SIZE, (i) =>
+                for (var i = 0; i < WORLD_SIZE; i++)
                 {
                     globe.Terrain[i] = new TerrainCell[WORLD_SIZE];
 
@@ -511,14 +509,9 @@ namespace Zilon.Core.WorldGeneration
                         };
 
                         var terrain = globe.Terrain[i][j];
-                        concurentHashSet.TryAdd(terrain, 0);
+                        globe.ScanResult.Free.Add(terrain);
                     }
-                });
-
-                foreach (var terrain in concurentHashSet.Keys)
-                {
-                    globe.ScanResult.Free.Add(terrain);
-                }
+                };
             });
         }
 
