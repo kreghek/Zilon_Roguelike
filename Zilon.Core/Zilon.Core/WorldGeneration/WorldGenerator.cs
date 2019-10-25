@@ -73,7 +73,6 @@ namespace Zilon.Core.WorldGeneration
                 // обработка итераций
                 ProcessIterations(globe, cardQueue);
 
-
                 globe.StartProvince = GetStartProvinceCoords(globe);
                 globe.HomeProvince = GetHomeProvinceCoords(globe, globe.StartProvince);
 
