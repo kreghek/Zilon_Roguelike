@@ -23,7 +23,9 @@
   "DropTableSids": [
     "survival",
 	"champion-loot",
-	"demon"
+	"demon",
+	"default",
+	"default-evil-hour"
   ],
   "BaseScore": 200,
   "Tags": [

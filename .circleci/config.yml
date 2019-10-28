@@ -317,6 +317,45 @@ workflows:
             - build
             - test_45
             - test_specflow
+  release:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - /release.*/
+      - build_Win_x64:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+      - build_Win_x32:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+      - build_Linux_x64:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+      - build_MacOS_Universal:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /release.*/
+#      - build_Linux_x32:
+#          requires:
+#            - build
+#            - test_45
   nightly:
     triggers:
       - schedule:
