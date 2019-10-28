@@ -133,7 +133,7 @@ namespace Zilon.Core.Tactics
 
             }
 
-            if (useData.Consumable)
+            if (useData.Consumable && Person.Inventory != null)
             {
                 ConsumeResource(usedProp);
 
@@ -152,6 +152,10 @@ namespace Zilon.Core.Tactics
                 case Resource resource:
                     var removeResource = new Resource(resource.Scheme, 1);
                     Person.Inventory.Remove(removeResource);
+                    break;
+
+                case Equipment equipment:
+                    Person.Inventory.Remove(equipment);
                     break;
             }
         }
