@@ -31,7 +31,7 @@ namespace Zilon.Core.Tactics
 
         private IProp[] ResolveInner(IDropTableScheme[] dropTables)
         {
-            var modificators = new IDropTableModificatorScheme[0];
+            var modificators = GetModifiers();
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             var openDropTables = new List<IDropTableScheme>(dropTables);
@@ -69,6 +69,45 @@ namespace Zilon.Core.Tactics
             var props = rolledRecords.Select(GenerateProp).ToArray();
 
             return props;
+        }
+
+        private IDropTableModificatorScheme[] GetModifiers()
+        {
+            var totalModifierList = new List<IDropTableModificatorScheme>();
+
+            var currentDate = DateTime.Now;
+            // Основано на хелловине
+            var evilHour = new DateTime(currentDate.Year, 11, 2);
+            var evilHourStart = evilHour.AddDays(-5);
+            var evilHourEnd = evilHour.AddDays(2);
+            if (evilHourStart <= currentDate && currentDate <= evilHourEnd)
+            {
+                // Канун злого часа
+                if (currentDate <= evilHour)
+                {
+                    var t = 1 - (evilHour - currentDate).Days / 5.0f;
+                    var mod = new DropTableModificatorScheme
+                    {
+                        PropSids = new[] { "evil-pumpkin" },
+                        WeightBonus = 95 * t
+                    };
+
+                    totalModifierList.Add(mod);
+                }
+                else
+                {
+                    var t = (currentDate - evilHourEnd).Days / 2.0f;
+                    var mod = new DropTableModificatorScheme
+                    {
+                        PropSids = new[] { "evil-pumpkin" },
+                        WeightBonus = 95 * t
+                    };
+
+                    totalModifierList.Add(mod);
+                }
+            }
+
+            return totalModifierList.ToArray();
         }
 
         private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
