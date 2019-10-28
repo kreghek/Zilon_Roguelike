@@ -13,16 +13,16 @@
   "Use": {
     "Consumable": true,
     "CommonRules": [
-      {
-        "Type": "Satiety",
-        "Level": "Normal"
-      },
 	  {
-        "Type": "Health",
+        "Type": "Satiety",
+        "Level": "Lesser"
+      },
+      {
+        "Type": "Thirst",
         "Level": "Lesser"
       },
 	  {
-        "Type": "Thirst",
+        "Type": "Health",
         "Level": "Lesser",
 		"Direction": "Negative"
       }

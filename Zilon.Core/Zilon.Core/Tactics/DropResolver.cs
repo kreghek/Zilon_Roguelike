@@ -15,7 +15,10 @@ namespace Zilon.Core.Tactics
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
 
-        public DropResolver(IDropResolverRandomSource randomSource, ISchemeService schemeService, IPropFactory propFactory)
+        public DropResolver(
+            IDropResolverRandomSource randomSource,
+            ISchemeService schemeService,
+            IPropFactory propFactory)
         {
             _randomSource = randomSource;
             _schemeService = schemeService;
