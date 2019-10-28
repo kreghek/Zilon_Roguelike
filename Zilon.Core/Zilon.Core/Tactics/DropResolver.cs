@@ -88,22 +88,24 @@ namespace Zilon.Core.Tactics
                 // Канун злого часа
                 if (currentDate <= evilHour)
                 {
-                    var t = 1 - (evilHour - currentDate).Days / 5.0f;
+                    var days = (evilHour - currentDate).Days;
+                    var t = 1 - days / 5.0f;
                     var mod = new DropTableModificatorScheme
                     {
                         PropSids = new[] { "evil-pumpkin" },
-                        WeightBonus = 95 * t
+                        WeightBonus = 5 * t - 1
                     };
 
                     totalModifierList.Add(mod);
                 }
                 else
                 {
-                    var t = (currentDate - evilHourEnd).Days / 2.0f;
+                    var days = (currentDate - evilHourEnd).Days;
+                    var t = days / 2.0f;
                     var mod = new DropTableModificatorScheme
                     {
                         PropSids = new[] { "evil-pumpkin" },
-                        WeightBonus = 95 * t
+                        WeightBonus = 5 * t - 1
                     };
 
                     totalModifierList.Add(mod);
