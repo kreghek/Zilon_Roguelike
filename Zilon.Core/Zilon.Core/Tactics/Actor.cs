@@ -79,59 +79,25 @@ namespace Zilon.Core.Tactics
 
         public void UseProp(IProp usedProp)
         {
+            if (usedProp is null)
+            {
+                throw new ArgumentNullException(nameof(usedProp));
+            }
+
             var useData = usedProp.Scheme.Use;
 
             foreach (var rule in useData.CommonRules)
             {
                 switch (rule.Direction)
                 {
+                    // Если направление не указано, то будет считаться положительное значение
+                    //TODO При десериализации указывать значение Positive по умолчанию
+                    default:
                     case PersonRuleDirection.Positive:
-                        switch (rule.Type)
-                        {
-                            case ConsumeCommonRuleType.Satiety:
-                                RestoreStat(SurvivalStatType.Satiety, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Thirst:
-                                RestoreStat(SurvivalStatType.Hydration, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Health:
-                                RestoreStat(SurvivalStatType.Health, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Intoxication:
-                                RiseStat(SurvivalStatType.Intoxication, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Undefined:
-                            default:
-                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
-                        }
+                        ProcessPositiveRule(rule.Type, rule.Level);
                         break;
                     case PersonRuleDirection.Negative:
-                        switch (rule.Type)
-                        {
-                            case ConsumeCommonRuleType.Satiety:
-                                DecreaseStat(SurvivalStatType.Satiety, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Thirst:
-                                DecreaseStat(SurvivalStatType.Hydration, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Health:
-                                DecreaseStat(SurvivalStatType.Health, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Intoxication:
-                                DecreaseStat(SurvivalStatType.Intoxication, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Undefined:
-                            default:
-                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
-                        }
+                        ProcessNegativeRule(rule.Type, rule.Level);
                         break;
                 }
 
@@ -146,6 +112,58 @@ namespace Zilon.Core.Tactics
                     var consumeProgress = new ConsumeProviantJobProgress();
                     _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
                 }
+            }
+        }
+
+        private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    DecreaseStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    DecreaseStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    DecreaseStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    DecreaseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
+            }
+        }
+
+        private void ProcessPositiveRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    RestoreStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    RestoreStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    RestoreStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    RiseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
             }
         }
 
