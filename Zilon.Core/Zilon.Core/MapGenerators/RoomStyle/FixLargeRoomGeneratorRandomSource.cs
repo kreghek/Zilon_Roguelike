@@ -36,7 +36,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает массив координат из матрицы комнат.
         /// </returns>
-        public IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
+        public override IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
         {
             var result = new List<OffsetCoords>(20);
 

@@ -41,7 +41,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает массив координат из матрицы комнат.
         /// </returns>
-        public IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
+        public override IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount)
         {
             var result = new OffsetCoords[20];
 
@@ -50,38 +50,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 for (var x = 0; x < 5; x++)
                 {
                     result[x + y * 5] = new OffsetCoords(x, y);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Возвращает матрицу смежности между комнатами (сеть комнат).
-        /// </summary>
-        /// <param name="rooms">Всё комнаты, которые должны быть соединены в сеть.</param>
-        /// <param name="maxNeighbors">Максимальное количество соседей у комнаты.</param>
-        /// <returns>
-        /// Возвращает словарь, представляющий собой матрицу смежности комнат.
-        /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение.
-        /// </returns>
-        public IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors)
-        {
-            var result = new Dictionary<Room, Room[]>();
-
-            foreach (var currentRoom in rooms)
-            {
-                var currentConnection = Connections.Single(x =>
-                        x.Item1.X == currentRoom.PositionX &&
-                        x.Item1.Y == currentRoom.PositionY);
-
-                var connectedRoom = rooms.SingleOrDefault(x =>
-                    x.PositionX == currentConnection.Item2.X &&
-                    x.PositionY == currentConnection.Item2.Y);
-
-                if (connectedRoom != null)
-                {
-                    result.Add(currentRoom, new[] { connectedRoom });
                 }
             }
 

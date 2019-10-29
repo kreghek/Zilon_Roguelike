@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
-    public abstract class FixRoomGeneratorRandomSourceBase
+    public abstract class FixRoomGeneratorRandomSourceBase : IRoomGeneratorRandomSource
     {
         protected readonly List<Tuple<OffsetCoords, OffsetCoords>> Connections;
 
@@ -55,6 +55,16 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             return new RoomInteriorObjectMeta[0];
         }
+
+        /// <summary>
+        /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
+        /// </summary>
+        /// <param name="roomGridSize">Размер матрицы комнат.</param>
+        /// <param name="roomCount">Количество комнат в секторе.</param>
+        /// <returns>
+        /// Возвращает массив координат из матрицы комнат.
+        /// </returns>
+        public abstract IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount);
 
         /// <summary>
         /// Возвращает матрицу смежности между комнатами (сеть комнат).
