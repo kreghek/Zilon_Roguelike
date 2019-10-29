@@ -93,7 +93,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return result;
         }
 
-
         public Size[] RollRoomSize(int minSize, int maxSize, int count)
         {
             var sizeList = new Size[count];
@@ -109,7 +108,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             return openRoomNodes.First();
         }
-
 
         public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
         {

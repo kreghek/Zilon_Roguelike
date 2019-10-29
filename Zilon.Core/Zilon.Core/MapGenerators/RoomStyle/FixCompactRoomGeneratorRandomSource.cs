@@ -15,7 +15,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             {
                 for (var x = 0; x < 5; x++)
                 {
-
                     if (x == 0)
                     {
                         Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
