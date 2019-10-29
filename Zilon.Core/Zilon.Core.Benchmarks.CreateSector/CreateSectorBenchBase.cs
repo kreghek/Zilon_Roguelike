@@ -8,6 +8,7 @@ using LightInject;
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -70,6 +71,7 @@ namespace Zilon.Core.Benchmark
             _container.Register<ISectorFactory, SectorFactory>(LightInjectWrapper.CreateSingleton());
             _container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
             _container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
+            _container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
 
             _container.Register<HumanPlayer>(LightInjectWrapper.CreateSingleton());
             _container.Register<IBotPlayer, BotPlayer>(LightInjectWrapper.CreateSingleton());

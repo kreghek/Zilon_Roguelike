@@ -4,6 +4,7 @@ using LightInject;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
@@ -123,6 +124,8 @@ namespace Zilon.Emulation.Common
             container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
             container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
             container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+
+            container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceFactory factory)

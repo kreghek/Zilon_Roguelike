@@ -14,6 +14,7 @@ using Zilon.Bot.Players.LightInject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -324,6 +325,8 @@ namespace Zilon.Core.Spec.Contexts
 
             Container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
             Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
+
+            Container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
         }
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)

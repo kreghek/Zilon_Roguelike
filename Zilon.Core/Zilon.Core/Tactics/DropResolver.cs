@@ -14,15 +14,18 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolverRandomSource _randomSource;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
+        private readonly IUserTimeProvider _userTimeProvider;
 
         public DropResolver(
             IDropResolverRandomSource randomSource,
             ISchemeService schemeService,
-            IPropFactory propFactory)
+            IPropFactory propFactory,
+            IUserTimeProvider userTimeProvider)
         {
             _randomSource = randomSource;
             _schemeService = schemeService;
             _propFactory = propFactory;
+            _userTimeProvider = userTimeProvider;
         }
 
         public IProp[] Resolve(IEnumerable<IDropTableScheme> dropTables)
@@ -77,8 +80,14 @@ namespace Zilon.Core.Tactics
         private IDropTableModificatorScheme[] GetModifiers()
         {
             var totalModifierList = new List<IDropTableModificatorScheme>();
+            AddEvilHourModifiers(totalModifierList);
 
-            var currentDate = DateTime.Now;
+            return totalModifierList.ToArray();
+        }
+
+        private void AddEvilHourModifiers(IList<IDropTableModificatorScheme> totalModifierList)
+        {
+            var currentDate = _userTimeProvider.GetCurrentTime();
             // Основано на хелловине
             var evilHour = new DateTime(currentDate.Year, 11, 2);
             var evilHourStart = evilHour.AddDays(-5);
@@ -111,8 +120,6 @@ namespace Zilon.Core.Tactics
                     totalModifierList.Add(mod);
                 }
             }
-
-            return totalModifierList.ToArray();
         }
 
         private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
