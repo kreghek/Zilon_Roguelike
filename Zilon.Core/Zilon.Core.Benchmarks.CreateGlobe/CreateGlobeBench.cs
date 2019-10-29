@@ -7,6 +7,7 @@ using LightInject;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.WorldGeneration;
+using Zilon.IoC;
 
 namespace Zilon.Core.Benchmark
 {
@@ -22,25 +23,26 @@ namespace Zilon.Core.Benchmark
         {
             for (int i = 0; i < SequenceSize; i++)
             {
-                await _generator.GenerateGlobeAsync();
+                await _generator.GenerateGlobeAsync().ConfigureAwait(false);
             }
         }
 
         [IterationSetup]
         public void IterationSetup()
         {
-            var container = new ServiceContainer();
+            using (var container = new ServiceContainer())
+            {
+                // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
+                container.Register<IDice>(factory => new LinearDice(1), LightInjectWrapper.CreateSingleton());
+                container.Register(factory => BenchHelper.CreateSchemeLocator(), LightInjectWrapper.CreateSingleton());
+                container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
+                container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
 
-            // инстанцируем явно, чтобы обеспечить одинаковый рандом для всех запусков тестов.
-            container.Register<IDice>(factory => new LinearDice(1), new PerContainerLifetime());
-            container.Register(factory => BenchHelper.CreateSchemeLocator(), new PerContainerLifetime());
-            container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
-            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+                // Для мира
+                container.Register<IWorldGenerator, WorldGenerator>(LightInjectWrapper.CreateSingleton());
 
-            // Для мира
-            container.Register<IWorldGenerator, WorldGenerator>(new PerContainerLifetime());
-
-            _generator = container.GetInstance<IWorldGenerator>();
+                _generator = container.GetInstance<IWorldGenerator>();
+            }
         }
     }
 }

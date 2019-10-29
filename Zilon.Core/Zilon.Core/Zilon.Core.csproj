@@ -91,6 +91,7 @@
     <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
     <Compile Include="CommonServices\Dices\GaussDice.cs" />
     <Compile Include="CommonServices\Dices\ExpDice.cs" />
+    <Compile Include="CommonServices\IUserTimeProvider.cs" />
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
     <Compile Include="Common\Matrix.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\FixRoomGeneratorRandomSourceBase.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorBase.cs" />
     <Compile Include="MapGenerators\RoomStyle\RoomHelper.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
@@ -510,6 +512,7 @@
     <Compile Include="Tactics\TransitionDetection.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
+    <Compile Include="CommonServices\UserTimeProvider.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />

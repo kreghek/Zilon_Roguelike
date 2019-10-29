@@ -202,6 +202,10 @@
       <Project>{36013151-86c1-431e-abc6-aff816d4e015}</Project>
       <Name>Zilon.Emulation.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
+      <Project>{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}</Project>
+      <Name>Zilon.IoC</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

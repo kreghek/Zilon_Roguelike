@@ -14,11 +14,6 @@ namespace Zilon.Core.Benchmark
     {
         public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath, string artifactPath)
         {
-            // Отключены, потому что не работают на билд сервере.
-            // Из-за этого задача сборки заваливается.
-            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.LegacyJit).WithIterationCount(iterationCount));
-            //Add(Job.Default.With(Runtime.Clr).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
-
             if (monoRuntimeName != null && monoRuntimePath != null)
             {
                 Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
@@ -28,12 +23,6 @@ namespace Zilon.Core.Benchmark
                 // Используется на билд-сервере, потому что там сразу запуск в окружении моно.
                 Add(Job.Default.With(new MonoRuntime()).WithIterationCount(iterationCount));
             }
-
-            // В этих бенчах корку не удаётся запустить.
-            // Предположительно, не получается найти инструмент для сборки бенча под корку.
-            // Раскомментировать, когда будет ясно, как исправить.
-            //Add(Job.Default.With(Runtime.Core).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
-            //Add(Job.Default.With(Runtime.CoreRT).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
 
             Add(ConsoleLogger.Default);
             Add(TargetMethodColumn.Method,

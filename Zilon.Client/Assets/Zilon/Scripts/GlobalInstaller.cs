@@ -4,6 +4,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.Commands;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -34,6 +35,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
         Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
+        Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
 
         Container.Bind<HumanPlayer>().AsSingle();

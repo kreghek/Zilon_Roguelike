@@ -168,6 +168,10 @@
       <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
+      <Project>{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}</Project>
+      <Name>Zilon.IoC</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
