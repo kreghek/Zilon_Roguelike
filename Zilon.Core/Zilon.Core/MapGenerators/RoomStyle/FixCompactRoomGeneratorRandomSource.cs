@@ -7,14 +7,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
-    public class FixCompactRoomGeneratorRandomSource : IRoomGeneratorRandomSource
+    public class FixCompactRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {
-        private readonly List<Tuple<OffsetCoords, OffsetCoords>> _connections;
-
-        public FixCompactRoomGeneratorRandomSource()
+        public FixCompactRoomGeneratorRandomSource() : base()
         {
-            _connections = new List<Tuple<OffsetCoords, OffsetCoords>>(20);
-
             for (var y = 0; y < 4; y++)
             {
                 for (var x = 0; x < 5; x++)
@@ -22,53 +18,20 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                     if (x == 0)
                     {
-                        _connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
+                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
                             new OffsetCoords(x, y),
                             new OffsetCoords(x, y - 1))
                             );
                     }
                     else
                     {
-                        _connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
+                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
                             new OffsetCoords(x, y),
                             new OffsetCoords(x - 1, y))
                             );
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Выбирает комнаты, с которыми есть соединение.
-        /// </summary>
-        /// <param name="currentRoom">Текущая комната, для которой ищуются соединённые соседи.</param>
-        /// <param name="maxNeighbors">Максимальное количество соединённых соседей.</param>
-        /// <param name="availableRooms">Набор доступных для соединения соседенй.</param>
-        /// <returns>
-        /// Возвращает целевые комнаты для соединения.
-        /// </returns>
-        [NotNull, ItemNotNull]
-        public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
-        {
-            if (!availableRooms.Any())
-            {
-                return new Room[0];
-            }
-
-            var currentConnection = _connections.Single(x =>
-                        x.Item1.X == currentRoom.PositionX &&
-                        x.Item1.Y == currentRoom.PositionY);
-
-            var connectedRoom = availableRooms.Single(x =>
-                x.PositionX == currentConnection.Item2.X &&
-                x.PositionY == currentConnection.Item2.Y);
-
-            return new[] { connectedRoom };
-        }
-
-        public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
-        {
-            return new RoomInteriorObjectMeta[0];
         }
 
         /// <summary>
@@ -109,7 +72,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             foreach (var currentRoom in rooms)
             {
-                var currentConnection = _connections.Single(x =>
+                var currentConnection = Connections.Single(x =>
                         x.Item1.X == currentRoom.PositionX &&
                         x.Item1.Y == currentRoom.PositionY);
 
@@ -137,30 +100,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <remarks>
         /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
         /// </remarks>
-        private Size RollRoomSize(int minSize, int maxSize)
+        protected override Size RollRoomSize(int minSize, int maxSize)
         {
             return new Size(minSize, minSize);
-        }
-
-        public Size[] RollRoomSize(int minSize, int maxSize, int count)
-        {
-            var sizeList = new Size[count];
-            for (var i = 0; i < count; i++)
-            {
-                sizeList[i] = RollRoomSize(minSize, maxSize);
-            }
-
-            return sizeList;
-        }
-
-        public HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes)
-        {
-            return openRoomNodes.First();
-        }
-
-        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
-        {
-            return new[] { openTransitions.First() };
         }
     }
 }
