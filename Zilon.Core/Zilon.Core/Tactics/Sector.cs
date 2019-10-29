@@ -121,7 +121,13 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                foreach (var effect in effects.Items)
+                //TODO Выяснить, нужен ли ToArray() в effects.Items
+                // Было добавлено, потому что в результате запуска одного из тестов для ботов
+                // здесь выпало исключение, то коллекция изменилась.
+                // Но раньше никогда этой ошибки не было ни в тестах, ни на клиенте.
+                // Чтобы решить этот TODO, необходимо подобрать набор тестов, в результате которых
+                // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
+                foreach (var effect in effects.Items.ToArray())
                 {
                     if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
                     {

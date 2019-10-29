@@ -2,7 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -36,7 +36,7 @@ namespace Zilon.Core.Persons
         /// Событие, которое происходит, если значение характеристики
         /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        public event EventHandler<SurvivalStatChangedEventArgs> StatCrossKeyValue;
+        public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
 
         /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;

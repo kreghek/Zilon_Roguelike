@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
+  <Import Project="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7</LangVersion>
     <DocumentationFile>..\..\Zilon.Client\Assets\Plugins\Zilon.Core.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -39,6 +45,9 @@
     <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="JsonSubTypes, Version=1.6.0.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonSubTypes.1.6.0\lib\net46\JsonSubTypes.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -79,13 +88,27 @@
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
+    <Compile Include="CommonServices\Dices\GaussDice.cs" />
+    <Compile Include="CommonServices\Dices\ExpDice.cs" />
+    <Compile Include="CommonServices\IUserTimeProvider.cs" />
+    <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
+    <Compile Include="Common\Matrix.cs" />
+    <Compile Include="Common\MatrixExtensions.cs" />
     <Compile Include="Common\MatrixHelper.cs" />
     <Compile Include="Common\MatrixRotation.cs" />
     <Compile Include="Common\PropMetrics.cs" />
     <Compile Include="Common\Stat.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Components\TacticalActTargets.cs" />
+    <Compile Include="LogicCalculations\RuleCalculations.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonMapFactory.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\CellularAutomatonException.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\IInteriorObjectRandomSource.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectRandomSource.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\RegionDraft.cs" />
+    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectMeta.cs" />
     <Compile Include="MapGenerators\ChestGenerator.cs" />
     <Compile Include="MapGenerators\ChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\CitizenGenerator.cs" />
@@ -94,13 +117,20 @@
     <Compile Include="MapGenerators\IChestGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ICitizenGenerator.cs" />
     <Compile Include="MapGenerators\ICitizenGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\IMapFactorySelector.cs" />
     <Compile Include="MapGenerators\IMonsterGenerator.cs" />
     <Compile Include="MapGenerators\IMonsterGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\ISectorFactory.cs" />
+    <Compile Include="MapGenerators\MapFactoryHelper.cs" />
     <Compile Include="MapGenerators\MapRegionHelper.cs" />
     <Compile Include="MapGenerators\MonsterGenerator.cs" />
     <Compile Include="MapGenerators\MonsterGeneratorRandomSource.cs" />
+    <Compile Include="MapGenerators\RoomStyle\FixRoomGeneratorRandomSourceBase.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorBase.cs" />
+    <Compile Include="MapGenerators\RoomStyle\RoomHelper.cs" />
     <Compile Include="MapGenerators\RoomStyle\TownSectorScheme.cs" />
+    <Compile Include="MapGenerators\SingleMapFactorySelector.cs" />
+    <Compile Include="MapGenerators\SwitchMapFactorySelectorBase.cs" />
     <Compile Include="MapGenerators\WildStyle\WildMapFactory.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixLargeRoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\RoomStyle\FixCompactRoomGeneratorRandomSource.cs" />
@@ -130,15 +160,18 @@
     <Compile Include="Persons\IEvolutionDataExtensions.cs" />
     <Compile Include="Persons\IHumanPersonFactory.cs" />
     <Compile Include="Persons\IPersonExtensions.cs" />
-    <Compile Include="Persons\ISurvivalDataExtensions.cs" />
     <Compile Include="Persons\ISurvivalRandomSource.cs" />
     <Compile Include="Persons\CitizenPerson.cs" />
     <Compile Include="Persons\MonsterSurvivalData.cs" />
     <Compile Include="Persons\PersonEquipmentHelper.cs" />
     <Compile Include="Persons\ClassHumanPersonFactory.cs" />
     <Compile Include="Persons\RandomHumanPersonFactory.cs" />
-    <Compile Include="Persons\SurvivalRandomSource.cs" />
-    <Compile Include="Persons\SurvivalStatBonus.cs" />
+    <Compile Include="Common\SegmentHelper.cs" />
+    <Compile Include="Persons\Survival\SurvivalRandomSource.cs" />
+    <Compile Include="Persons\HpSurvivalStat.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatBonus.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatKeySegment.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatKeySegmentExtensions.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
@@ -163,22 +196,29 @@
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
     <Compile Include="Props\IEquipmentDurableService.cs" />
     <Compile Include="Props\IEquipmentDurableServiceRandomSource.cs" />
-    <Compile Include="Schemes\IPersonSurvivalStatKeyPointSubScheme.cs" />
+    <Compile Include="Schemes\IPersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\IPersonSurvivalStatSubScheme.cs" />
+    <Compile Include="Schemes\SectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
+    <Compile Include="Schemes\ISectorCellularAutomataMapFactoryOptionsSubScheme.cs" />
+    <Compile Include="Schemes\ISectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\PersonRule.cs" />
     <Compile Include="Schemes\EquipCommonRuleType.cs" />
     <Compile Include="Schemes\IPropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\IPropBulletSubScheme.cs" />
     <Compile Include="Schemes\ISectorSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatKeypointLevel.cs" />
-    <Compile Include="Schemes\PersonSurvivalStatKeyPointSubScheme.cs" />
+    <Compile Include="Schemes\PersonSurvivalStatKeySegmentSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatSubScheme.cs" />
     <Compile Include="Schemes\PersonSurvivalStatType.cs" />
     <Compile Include="Schemes\PropArmorItemSubScheme.cs" />
     <Compile Include="Schemes\PropBulletSubScheme.cs" />
     <Compile Include="Common\PropTags.cs" />
+    <Compile Include="Schemes\SchemeSectorMapGenerator.cs" />
+    <Compile Include="Schemes\SectorMapFactoryOptionsSubScheme.cs" />
     <Compile Include="Schemes\SectorSubScheme.cs" />
     <Compile Include="Schemes\SectorSubSchemeMapFactory.cs" />
+    <Compile Include="Scoring\DetailedLifetime.cs" />
+    <Compile Include="Scoring\ScoreCalculator.cs" />
     <Compile Include="Scoring\TextSummaryHelper.cs" />
     <Compile Include="Tactics\ActorInteractionBus.cs" />
     <Compile Include="Tactics\ActorInteractionEventBase.cs" />
@@ -233,7 +273,7 @@
     <Compile Include="Commands\Sector\ShowModalCommandBase.cs" />
     <Compile Include="Commands\Sector\TacticCommandBase.cs" />
     <Compile Include="Commands\UiCommandBase.cs" />
-    <Compile Include="CommonServices\Dices\Dice.cs" />
+    <Compile Include="CommonServices\Dices\LinearDice.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensions.cs" />
     <Compile Include="Common\CubeCoordsHelper.cs" />
     <Compile Include="Common\OrientedRange.cs" />
@@ -277,7 +317,7 @@
     <Compile Include="Persons\PersonArmorItem.cs" />
     <Compile Include="Persons\PersonDefenceItem.cs" />
     <Compile Include="Persons\PersonDefenceStats.cs" />
-    <Compile Include="Persons\SurvivalStatHazardEffect.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatHazardEffect.cs" />
     <Compile Include="Persons\ICombatStats.cs" />
     <Compile Include="Persons\IEvolutionData.cs" />
     <Compile Include="Persons\IJobExecutable.cs" />
@@ -292,11 +332,10 @@
     <Compile Include="Persons\PerkLevel.cs" />
     <Compile Include="Persons\PerkResolver.cs" />
     <Compile Include="Persons\HumanSurvivalData.cs" />
-    <Compile Include="Persons\SurvivalStatKeyPoint.cs" />
-    <Compile Include="Persons\SurvivalStatHazardLevel.cs" />
-    <Compile Include="Persons\SurvivalStat.cs" />
-    <Compile Include="Persons\SurvivalStatChangedEventArgs.cs" />
-    <Compile Include="Persons\SurvivalStatType.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatHazardLevel.cs" />
+    <Compile Include="Persons\Survival\SurvivalStat.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatChangedEventArgs.cs" />
+    <Compile Include="Persons\Survival\SurvivalStatType.cs" />
     <Compile Include="Components\OffenseType.cs" />
     <Compile Include="Players\IBotPlayer.cs" />
     <Compile Include="Schemes\IDropTableModificatorScheme.cs" />
@@ -394,7 +433,6 @@
     <Compile Include="Tactics\ActorManager.cs" />
     <Compile Include="Tactics\Behaviour\ActorTaskBase.cs" />
     <Compile Include="Tactics\Behaviour\Bots\DecisionSource.cs" />
-    <Compile Include="Tactics\Behaviour\Bots\IBotLogic.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IPatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\PatrolRoute.cs" />
     <Compile Include="Tactics\Behaviour\Bots\IDecisionSource.cs" />
@@ -478,6 +516,7 @@
     <Compile Include="Tactics\TransitionDetection.cs" />
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
+    <Compile Include="CommonServices\UserTimeProvider.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
@@ -534,7 +573,24 @@
     <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Persons\HumanPersonGeneration\" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Humanizer.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
+  </Target>
 </Project>

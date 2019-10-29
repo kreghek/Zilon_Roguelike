@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Client;
@@ -91,11 +92,21 @@ namespace Zilon.Core.Commands
             string usedPropResourceType,
             int usedPropResourceCount)
         {
-            var propResources = from prop in inventory.CalcActualItems()
-                                let propResource = prop as Resource
-                                where propResource != null
-                                where propResource.Scheme.Bullet?.Caliber == usedPropResourceType
-                                select propResource;
+            var props = inventory.CalcActualItems();
+            var propResources = new List<Resource>();
+            foreach (var prop in props)
+            {
+                var propResource = prop as Resource;
+                if (propResource == null)
+                {
+                    continue;
+                }
+
+                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
+                {
+                    propResources.Add(propResource);
+                }
+            }
 
             var preferredPropResource = propResources.FirstOrDefault();
 

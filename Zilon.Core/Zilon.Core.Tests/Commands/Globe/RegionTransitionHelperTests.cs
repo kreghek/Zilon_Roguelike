@@ -13,7 +13,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.Commands.Globe
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class RegionTransitionHelperTests
     {
         /// <summary>

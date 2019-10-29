@@ -36,14 +36,24 @@ namespace Zilon.Core.Components
         /// <param name="rarityBonus"> Бонус за редкость персонажа. </param>
         /// <param name="bonuses"> Прочие бонусы к текущей характеристике. </param>
         /// <returns> Возвращает актуальное значение характеритсики. </returns>
-        public float GetActualValue(int level, float rarityBonus, PersonStat[] bonuses = null)
+        public float GetActualValue(int level, float rarityBonus, PersonStat[] bonuses)
         {
             var bonusValue = CalcBonusValue(level, bonuses);
 
             return (Base + LevelInc * (level - 1)) * (1 + rarityBonus) + bonusValue;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /// <summary>
+        /// Расчёт текущего значения характеристики.
+        /// </summary>
+        /// <param name="level"> Актуальный уровень. </param>
+        /// <param name="rarityBonus"> Бонус за редкость персонажа. </param>
+        /// <returns> Возвращает актуальное значение характеритсики. </returns>
+        public float GetActualValue(int level, float rarityBonus)
+        {
+            return GetActualValue(level, rarityBonus, bonuses: null);
+        }
+
         private static float CalcBonusValue(int level, PersonStat[] bonuses)
         {
             if (bonuses == null)

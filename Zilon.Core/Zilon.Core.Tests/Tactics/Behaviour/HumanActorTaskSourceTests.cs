@@ -80,12 +80,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var moveIntention = new MoveIntention(startNode, map);
 
-
-
             // ACT
             var tasks = SetHumanIntention(actor, taskSource, moveIntention);
-
-
 
             // ASSERT
             tasks.Should().NotBeNullOrEmpty();
@@ -112,12 +108,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(actor);
 
-
-
             // ACT
             Action act = () => { taskSource.Intent(null); };
-
-
 
             // ASSERT
             act.Should().Throw<ArgumentException>();
@@ -146,10 +138,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var moveIntention = new MoveIntention(finishNode, map);
             var moveIntention2 = new MoveIntention(finishNode2, map);
 
-
-
             // ACT
-
 
             // 1. Ждём, пока задача на перемещение не отработает.
             // В конце текущая задача актёра будет IsComplete.
@@ -169,12 +158,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 task.IsComplete.Should().Be(true);
             }
 
-
             // 2. Указываем намерение на ещё одну задачу.
             var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
-
-
-
 
             // ASSERT
             factTasks.Should().NotBeNullOrEmpty();
@@ -202,8 +187,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var moveIntention = new MoveIntention(finishNode, map);
             var moveIntention2 = new MoveIntention(finishNode2, map);
 
-
-
             // ACT
 
             // 1. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
@@ -223,11 +206,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 task.IsComplete.Should().Be(false);
             }
 
-
             // 2. Указываем другое намерение до того, как текущая задача на перемещение выполнена до конца.
             var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
-
-
 
             // ASSERT
             factTasks.Should().NotBeNullOrEmpty();
@@ -257,7 +237,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
 
-
             var attackerActor = CreateActor(map, attackerStartNode);
             var targetActor = CreateActor(map, targetStartNode);
 
@@ -265,12 +244,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService));
 
-
-
             // ACT
             var tasks = SetHumanIntention(attackerActor, taskSource, attackIntention);
-
-
 
             // ASSERT
             tasks.Should().NotBeNullOrEmpty();
@@ -300,12 +275,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method, map));
 
-
-
             // ACT
             var tasks = SetHumanIntention(actor, taskSource, intention);
-
-
 
             // ASSERT
             tasks.Should().NotBeNullOrEmpty();

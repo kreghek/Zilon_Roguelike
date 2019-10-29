@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -58,12 +59,8 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = CreateActorMock();
             innerActorList.Add(actorMock.Object);
 
-
-
             // ACT
             sector.Update();
-
-
 
             // ASSERT
             _survivalDataMock.Verify(x => x.Update(), Times.Once);
@@ -107,14 +104,10 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Owner).Returns(new Mock<HumanPlayer>().Object);
             innerActorList.Add(actorMock.Object);
 
-
-
             // ACT
             using (var monitor = sector.Monitor())
             {
                 sector.Update();
-
-
 
                 // ASSERT
                 monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
@@ -133,8 +126,7 @@ namespace Zilon.Core.Tests.Tactics
             var survivalStats = new[] {
                 new SurvivalStat(0,-10,10){
                     Type = SurvivalStatType.Satiety,
-                    Rate = 1,
-                    KeyPoints = new SurvivalStatKeyPoint[0]
+                    Rate = 1
                 }
             };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
@@ -143,8 +135,6 @@ namespace Zilon.Core.Tests.Tactics
 
             var effectCollection = new EffectCollection();
             personMock.SetupGet(x => x.Effects).Returns(effectCollection);
-
-
 
             return actorMock;
         }

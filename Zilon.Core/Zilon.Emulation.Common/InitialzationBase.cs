@@ -1,11 +1,13 @@
-﻿using System.Configuration;
+﻿using System;
 
 using LightInject;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -14,12 +16,24 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.IoC;
 
 namespace Zilon.Emulation.Common
 {
     public abstract class InitialzationBase
     {
-        public void RegisterServices(IServiceRegistry serviceRegistry)
+        public int? DiceSeed { get; set; }
+
+        protected InitialzationBase()
+        { 
+        }
+
+        protected InitialzationBase(int diceSeed)
+        {
+            DiceSeed = diceSeed;
+        }
+
+        public virtual void RegisterServices(IServiceRegistry serviceRegistry)
         {
             RegisterSchemeService(serviceRegistry);
             RegisterAuxServices(serviceRegistry);
@@ -42,37 +56,40 @@ namespace Zilon.Emulation.Common
         {
             container.Register<ISchemeLocator>(factory =>
             {
-                var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+                //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
+                // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
+                // Следует их объединить в одном месте.
+                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
-            }, new PerContainerLifetime());
+            }, LightInjectWrapper.CreateSingleton());
 
-            container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+            container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
 
-            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
         }
 
         private void RegisterScopedSectorService(IServiceRegistry container)
         {
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
-            container.Register<ISectorGenerator, SectorGenerator>(new PerScopeLifetime());
-            container.Register<IMonsterGenerator, MonsterGenerator>(new PerScopeLifetime());
-            container.Register<IChestGenerator, ChestGenerator>(new PerScopeLifetime());
-            container.Register<ICitizenGenerator, CitizenGenerator>(new PerScopeLifetime());
-            container.Register<ISectorFactory, SectorFactory>(new PerScopeLifetime());
-            container.Register<ISectorManager, InfiniteSectorManager>(new PerScopeLifetime());
-            container.Register<IActorManager, ActorManager>(new PerScopeLifetime());
-            container.Register<IPropContainerManager, PropContainerManager>(new PerScopeLifetime());
-            container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerScopeLifetime());
-            container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", new PerScopeLifetime());
+            container.Register<ISectorGenerator, SectorGenerator>(LightInjectWrapper.CreateScoped());
+            container.Register<IMonsterGenerator, MonsterGenerator>(LightInjectWrapper.CreateScoped());
+            container.Register<IChestGenerator, ChestGenerator>(LightInjectWrapper.CreateScoped());
+            container.Register<ICitizenGenerator, CitizenGenerator>(LightInjectWrapper.CreateScoped());
+            container.Register<ISectorFactory, SectorFactory>(LightInjectWrapper.CreateScoped());
+            container.Register<ISectorManager, InfiniteSectorManager>(LightInjectWrapper.CreateScoped());
+            container.Register<IActorManager, ActorManager>(LightInjectWrapper.CreateScoped());
+            container.Register<IPropContainerManager, PropContainerManager>(LightInjectWrapper.CreateScoped());
+            container.Register<ITacticalActUsageService, TacticalActUsageService>(LightInjectWrapper.CreateScoped());
+            container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", LightInjectWrapper.CreateScoped());
         }
 
         private void RegisterGameLoop(IServiceRegistry container)
         {
-            container.Register<IGameLoop, GameLoop>(new PerScopeLifetime());
+            container.Register<IGameLoop, GameLoop>(LightInjectWrapper.CreateScoped());
         }
 
         /// <summary>
@@ -80,38 +97,122 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceRegistry container)
         {
-            var dice = new Dice();
-            container.Register<IDice>(factory => dice, new PerContainerLifetime());
-            container.Register<IDecisionSource, DecisionSource>(new PerContainerLifetime());
-            container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(new PerContainerLifetime());
-            container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
-            container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
-            container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
-            container.Register<ISurvivalRandomSource, SurvivalRandomSource>(new PerContainerLifetime());
-            container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
-            container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
-            container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(new PerContainerLifetime());
+            var linearDice = CreateRandomSeedAndLinearDice();
+            var gaussDice = CreateRandomSeedAndGaussDice();
+            var expDice = CreateRandomSeedAndExpDice();
+            container.Register(factory => linearDice, "linear", LightInjectWrapper.CreateSingleton());
+            container.Register(factory => gaussDice, "gauss", LightInjectWrapper.CreateSingleton());
+            container.Register(factory => expDice, "exp", LightInjectWrapper.CreateSingleton());
+            container.Register(factory=> factory.GetInstance<IDice>("linear"), LightInjectWrapper.CreateSingleton());
+            container.Register<IDecisionSource, DecisionSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<IPerkResolver, PerkResolver>(LightInjectWrapper.CreateSingleton());
+            container.Register<IPropFactory, PropFactory>(LightInjectWrapper.CreateSingleton());
+            container.Register<IDropResolver, DropResolver>(LightInjectWrapper.CreateSingleton());
+            container.Register<IDropResolverRandomSource, DropResolverRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<ISurvivalRandomSource, SurvivalRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
+            container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(LightInjectWrapper.CreateSingleton());
 
-            container.Register<IMapFactory, RoomMapFactory>(new PerContainerLifetime());
-            container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
-            container.Register<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(new PerContainerLifetime());
-            container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
+            container.Register<IMapFactorySelector, LightInjectSwitchMapFactorySelector>(LightInjectWrapper.CreateSingleton());
+            container.Register<IMapFactory, RoomMapFactory>("room", LightInjectWrapper.CreateSingleton());
+            container.Register<IRoomGenerator, RoomGenerator>(LightInjectWrapper.CreateSingleton());
+            container.Register(CreateRoomGeneratorRandomSource, LightInjectWrapper.CreateSingleton());
+            container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", LightInjectWrapper.CreateSingleton());
+            container.Register<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
+            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+
+            container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
+        }
+
+        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceFactory factory)
+        {
+            var localLinearDice = factory.GetInstance<IDice>("linear");
+            var localRoomSizeDice = factory.GetInstance<IDice>("exp");
+            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
+            return randomSource;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndLinearDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new LinearDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new LinearDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndGaussDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new GaussDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new GaussDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private IDice CreateRandomSeedAndExpDice()
+        {
+            IDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new ExpDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new ExpDice(DiceSeed.Value);
+            }
+
+            return dice;
         }
 
         private void RegisterClientServices(IServiceRegistry container)
         {
-            container.Register<ISectorUiState, SectorUiState>(new PerScopeLifetime());
-            container.Register<IInventoryState, InventoryState>(new PerScopeLifetime());
+            container.Register<ISectorUiState, SectorUiState>(LightInjectWrapper.CreateScoped());
+            container.Register<IInventoryState, InventoryState>(LightInjectWrapper.CreateScoped());
         }
 
         private void RegisterPlayerServices(IServiceRegistry container)
         {
-            container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
-            container.Register<HumanPlayer>(new PerContainerLifetime());
-            container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
+            container.Register<IScoreManager, ScoreManager>(LightInjectWrapper.CreateSingleton());
+            container.Register<HumanPlayer>(LightInjectWrapper.CreateSingleton());
+            container.Register<IBotPlayer, BotPlayer>(LightInjectWrapper.CreateSingleton());
         }
 
         protected abstract void RegisterBot(IServiceRegistry container);

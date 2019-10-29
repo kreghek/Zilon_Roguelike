@@ -9,7 +9,7 @@ using Zilon.Core.Commands;
 namespace Zilon.Core.Tests.Commands
 {
 
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class QueueCommandManagerTests
     {
         /// <summary>

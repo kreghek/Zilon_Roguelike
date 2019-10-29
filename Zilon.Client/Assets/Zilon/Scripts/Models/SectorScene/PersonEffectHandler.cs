@@ -26,7 +26,7 @@ public class PersonEffectHandler : MonoBehaviour
 // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
         if (person != null)
         {
-            person.Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+            person.Survival.StatChanged += Survival_StatChanged;
         }
     }
 
@@ -36,11 +36,11 @@ public class PersonEffectHandler : MonoBehaviour
 
         if (person != null)
         {
-            person.Survival.StatCrossKeyValue -= Survival_StatCrossKeyValue;
+            person.Survival.StatChanged -= Survival_StatChanged;
         }
     }
 
-    private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
+    private void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
     {
         UpdateEffects();
     }

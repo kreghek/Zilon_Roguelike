@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
+    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+    <ProjectReference Include="..\Zilon.CommonUtilities\Zilon.CommonUtilities.csproj" />
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj" />
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
   </ItemGroup>

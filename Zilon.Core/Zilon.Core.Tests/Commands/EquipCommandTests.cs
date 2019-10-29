@@ -32,12 +32,8 @@ namespace Zilon.Core.Tests.Commands
             var command = Container.GetInstance<EquipCommand>();
             command.SlotIndex = 0;
 
-
-
             // ACT
             var canExecute = command.CanExecute();
-
-
 
             // ASSERT
             canExecute.Should().BeTrue();
@@ -68,16 +64,11 @@ namespace Zilon.Core.Tests.Commands
 
             _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
 
-
             var command = Container.GetInstance<EquipCommand>();
             command.SlotIndex = 0;
 
-
-
             // ACT
             var canExecute = command.CanExecute();
-
-
 
             // ASSERT
             canExecute.Should().BeFalse();
@@ -95,12 +86,8 @@ namespace Zilon.Core.Tests.Commands
 
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
 
-
-
             // ACT
             command.Execute();
-
-
 
             // ASSERT
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);

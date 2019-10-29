@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using FluentAssertions;
 
 using Moq;
@@ -7,6 +8,7 @@ using Moq;
 using Newtonsoft.Json;
 
 using NUnit.Framework;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
@@ -16,7 +18,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.ProgressStoring
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HumanPersonStorageDataTests
     {
         [Test()]
@@ -110,7 +113,6 @@ namespace Zilon.Core.Tests.ProgressStoring
                                          inventory);
             person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
 
-
             // Назначаем экипировку
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);
             helm.Durable.Value = helm.Durable.Range.Max / 2;
@@ -129,7 +131,6 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             evolutionData.Perks.First().CurrentJobs.First().Progress = 13;
 
-
             var storageData = HumanPersonStorageData.Create(person);
 
             // Сериализуем
@@ -138,14 +139,10 @@ namespace Zilon.Core.Tests.ProgressStoring
             // Десериализуем
             var deserializedStorageData = JsonConvert.DeserializeObject<HumanPersonStorageData>(serialized);
 
-
-
             // ACT
 
             // Восстанавливаем
             var restoredPerson = deserializedStorageData.Restore(schemeService, survivalRandomSource, propFactory);
-
-
 
             // ASSERT
             restoredPerson.Should().BeEquivalentTo(person, options =>
