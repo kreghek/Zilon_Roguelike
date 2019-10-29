@@ -14,6 +14,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class RoomGeneratorTests
     {
         /// <summary>
@@ -28,7 +29,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var generator = new RoomGenerator(random);
             var graphMap = new SectorHexMap();
 
-
             // ACT
             Action act = () =>
             {
@@ -38,12 +38,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
 
-
-
             // ASSERT
             act.Should().NotThrow();
         }
-
 
         /// <summary>
         /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
@@ -57,7 +54,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var generator = new RoomGenerator(random);
             var graphMap = new SectorHexMap();
 
-
             // ACT
             Action act = () =>
             {
@@ -67,12 +63,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
 
-
-
             // ASSERT
             act.Should().NotThrow();
         }
-
 
         /// <summary>
         /// Тест проверяет, что если в схеме сектора обозначены переходы,
@@ -90,18 +83,16 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 .Returns(new[] { new OffsetCoords(0, 0) });
             randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
                 .Returns(new[] { transition });
+            randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
+                .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });
             var random = randomMock.Object;
 
             var generator = new RoomGenerator(random);
 
             var expectedTransitions = new[] { transition };
 
-
-
             // ACT
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
-
-
 
             // ASSERT
             factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(availableTransitions);

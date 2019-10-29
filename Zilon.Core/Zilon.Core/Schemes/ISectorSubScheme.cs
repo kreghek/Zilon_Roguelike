@@ -90,5 +90,10 @@
         /// Индикатор того, что сектор является стартовым при входе из локации.
         /// </summary>
         bool IsStart { get; }
+
+        /// <summary>
+        /// параметры генерации карты.
+        /// </summary>
+        ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
     }
 }

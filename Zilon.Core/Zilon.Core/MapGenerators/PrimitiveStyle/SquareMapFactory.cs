@@ -44,7 +44,14 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         public static async Task<ISectorMap> CreateAsync(int mapSize)
         {
             var factory = new SquareMapFactory();
-            return await factory.CreateAsync((object)mapSize);
+
+            //TODO Объяснить, почему тут нужно использовать ConfigureAwait(false)
+            // Это рекомендация Codacy.
+            // Но есть статья https://habr.com/ru/company/clrium/blog/463587/,
+            // в которой объясняется, что не всё так просто.
+            // Нужно чёткое понимание, зачем здесь ConfigureAwait(false) и
+            // к какому результату это приводит по сравнению с простым await.
+            return await factory.CreateAsync((object)mapSize).ConfigureAwait(false);
         }
     }
 }

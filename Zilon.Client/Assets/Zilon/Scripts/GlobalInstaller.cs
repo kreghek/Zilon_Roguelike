@@ -4,6 +4,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.Commands;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -20,7 +21,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
     public override void InstallBindings()
     {
-        Container.Bind<IDice>().FromInstance(new Dice()).AsSingle(); // инстанцируем явно из-за 2-х конструкторов.
+        RegisterDices();
+
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
@@ -33,6 +35,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
         Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
+        Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
 
         Container.Bind<HumanPlayer>().AsSingle();
@@ -47,5 +50,17 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
         Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
+    }
+
+    private void RegisterDices()
+    {
+        Container.Bind<IDice>().WithId("linear").To<LinearDice>().AsSingle();
+        Container.Bind<IDice>().WithId("exp").To<ExpDice>().AsSingle();
+        Container.Bind<IDice>().WithId("gauss").To<GaussDice>().AsSingle();
+
+        // Во всех случаях, когда не нужна кость с конкретным распределением,
+        // используем обычную кость с равномерным распределением.
+        Container.Bind<IDice>().FromMethod(context => context.Container.ResolveId<IDice>("linear"));
     }
 }

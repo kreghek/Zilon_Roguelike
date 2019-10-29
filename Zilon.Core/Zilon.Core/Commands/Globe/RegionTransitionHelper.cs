@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -14,6 +15,21 @@ namespace Zilon.Core.Commands.Globe
             IEnumerable<GlobeRegionNode> targetRegionBorderNodes,
             TerrainCell targetNeighborTerrainCell)
         {
+            if (targetRegionBorderNodes == null)
+            {
+                throw new ArgumentNullException(nameof(targetRegionBorderNodes));
+            }
+
+            if (currentTerrainCell == null)
+            {
+                throw new ArgumentNullException(nameof(currentTerrainCell));
+            }
+
+            if (targetNeighborTerrainCell == null)
+            {
+                throw new ArgumentNullException(nameof(targetNeighborTerrainCell));
+            }
+
             const int REGION_SIZE = 20;
 
             var regionNodeOffsetX = targetNeighborTerrainCell.Coords.X - currentTerrainCell.Coords.X;

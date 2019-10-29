@@ -6,7 +6,7 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class PersonStatTests
     {
         /// <summary>

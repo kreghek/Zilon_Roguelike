@@ -15,7 +15,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class HumanPersonTests
     {
         /// <summary>
@@ -622,8 +622,8 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorHeadProp = new Equipment(armorHeadPropScheme, new ITacticalActScheme[0]);
-            var armorBodyProp = new Equipment(armorBodyPropScheme, new ITacticalActScheme[0]);
+            var armorHeadProp = new Equipment(armorHeadPropScheme);
+            var armorBodyProp = new Equipment(armorBodyPropScheme);
 
 
 

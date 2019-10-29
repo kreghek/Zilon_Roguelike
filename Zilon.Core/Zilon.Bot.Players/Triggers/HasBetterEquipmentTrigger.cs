@@ -17,7 +17,6 @@ namespace Zilon.Bot.Players.Triggers
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
             var currentInventoryEquipments = actor.Person.Inventory.CalcActualItems().OfType<Equipment>();
-            var emptyEquipmentSlots = new List<PersonSlotSubScheme>();
 
             for (int i = 0; i < actor.Person.EquipmentCarrier.Slots.Length; i++)
             {

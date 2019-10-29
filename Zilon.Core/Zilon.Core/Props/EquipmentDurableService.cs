@@ -13,7 +13,6 @@ namespace Zilon.Core.Props
         private const int SUCCESS_TURN_RESIST = 2;
         private const int SUCCESS_USE_RESIST = 6;
         private const float FIELD_REDUCE_MAX = 0.1f;
-        private const float MASTER_REDUCE_MAX = 0.1f;
 
         private readonly IEquipmentDurableServiceRandomSource _randomSource;
 
@@ -49,7 +48,6 @@ namespace Zilon.Core.Props
 
             var maxDurable = equipment.Durable.Range.Max;
             var reduceValue = (int)Math.Round(maxDurable * FIELD_REDUCE_MAX) + 1;
-            var newMaxDurable = maxDurable - reduceValue;
 
             equipment.Durable.ChangeStatRange(0, maxDurable - reduceValue);
         }
