@@ -1,6 +1,7 @@
 ﻿using System;
 
 using BenchmarkDotNet.Running;
+using Zilon.CommonUtilities;
 
 namespace Zilon.Core.Benchmarks
 {
@@ -8,11 +9,11 @@ namespace Zilon.Core.Benchmarks
     {
         static void Main(string[] args)
         {
-            var schemePath = GetProgramArgument(args, "SchemeCatalog");
+            var schemePath = ArgumentHelper.GetProgramArgument(args, "SchemeCatalog");
 
-            var monoPath = GetProgramArgument(args, "MonoPath");
-            var artefactsPath = GetProgramArgument(args, "ArtefactsPath");
-            var iterationCount = int.Parse(GetProgramArgument(args, "IterationCount"));
+            var monoPath = ArgumentHelper.GetProgramArgument(args, "MonoPath");
+            var artefactsPath = ArgumentHelper.GetProgramArgument(args, "ArtefactsPath");
+            var iterationCount = int.Parse(ArgumentHelper.GetProgramArgument(args, "IterationCount"));
 
             var config = CreateBenchConfig(monoPath, artefactsPath, schemePath, iterationCount);
             BenchmarkRunner.Run<MoveBench>(config);
@@ -28,28 +29,6 @@ namespace Zilon.Core.Benchmarks
                 schemePath);
 
             return config;
-        }
-
-        private static string GetProgramArgument(string[] args, string testArg)
-        {
-            if (args == null)
-            {
-                return null;
-            }
-
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }

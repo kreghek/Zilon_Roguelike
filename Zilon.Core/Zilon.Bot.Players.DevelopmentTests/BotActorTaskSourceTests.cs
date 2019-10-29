@@ -32,7 +32,13 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [TestCase("monster")]
         public async Task GetActorTasksTestAsync(string mode)
         {
-            var humanActor = await CreateSectorAsync();
+            //TODO Объяснить, почему тут нужно использовать ConfigureAwait(false)
+            // Это рекомендация Codacy.
+            // Но есть статья https://habr.com/ru/company/clrium/blog/463587/,
+            // в которой объясняется, что не всё так просто.
+            // Нужно чёткое понимание, зачем здесь ConfigureAwait(false) и
+            // к какому результату это приводит по сравнению с простым await.
+            var humanActor = await CreateSectorAsync().ConfigureAwait(false);
 
             var gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
@@ -40,14 +46,14 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
             botActorTaskSource.Configure(new BotSettings { Mode = mode });
 
-
             while (!humanActor.Person.Survival.IsDead)
             {
                 gameLoop.Update();
 
                 if (_changeSector)
                 {
-                    humanActor = await CreateSectorAsync();
+                    //TODO Объяснить, почему тут нужно использовать ConfigureAwait(false)
+                    humanActor = await CreateSectorAsync().ConfigureAwait(false);
 
                     gameLoop = _sectorServiceContainer.GetInstance<IGameLoop>();
                     botActorTaskSource = _sectorServiceContainer.GetInstance<ISectorActorTaskSource>("bot");
@@ -65,6 +71,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
         {
             _globalServiceContainer = new ServiceContainer();
             _startUp = new Startup();
+            _globalServiceContainer.EnableAnnotatedConstructorInjection();
             _startUp.RegisterServices(_globalServiceContainer);
         }
 
@@ -145,7 +152,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
                 humanPlayer.MainPerson = person;
 
-
+                // TODO Использовать генератор персонажа, как в игре.
+                // Для этого нужно научить ботов корректно использовать оружие дальнего боя и посохи лечения.
                 var classRoll = new Random().Next(1, 3);
                 switch (classRoll)
                 {
@@ -187,6 +195,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
                         AddResourceToActor(inventory, "mana", 5, schemeService, propFactory);
                         AddResourceToActor(inventory, "arrow", 3, schemeService, propFactory);
                         break;
+
+                    default:
+                        throw new InvalidOperationException("Эта комбинация начальной экипировки не поддерживается.");
                 }
 
                 AddResourceToActor(inventory, "packed-food", 1, schemeService, propFactory);

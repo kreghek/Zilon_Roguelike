@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,11 +8,14 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
-    [TestFixture()]
+
+    [TestFixture][Parallelizable(ParallelScope.All)]
+    [Category(TestCategories.REAL_RESOURCE)]
     public class WorldGeneratorTests
     {
         /// <summary>
@@ -21,10 +23,10 @@ namespace Zilon.Core.Tests.WorldGeneration
         /// </summary>
         /// <returns></returns>
         [Test]
-        [Category("longtime")]
+        [Category(TestCategories.LONG_RUN)]
         public async Task GenerateAsync_FixedDice_NoExceptions()
         {
-            var dice = new Dice(1);
+            var dice = new LinearDice(1);
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -40,7 +42,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         [Test]
         public async Task GenerateAsync_ShowHistory()
         {
-            var dice = new Dice();
+            var dice = new LinearDice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -67,7 +69,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         [Test()]
         public async Task GenerateRegionAsyncTest()
         {
-            var dice = new Dice();
+            var dice = new LinearDice();
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -80,7 +82,7 @@ namespace Zilon.Core.Tests.WorldGeneration
         public async Task GenerateRegionAsync_StartProvince_RegionHasStartNode()
         {
             // ARRANGE
-            var dice = new Dice(1);  // Для тестов указываем кость с фиксированным зурном рандома.
+            var dice = new LinearDice(1);  // Для тестов указываем кость с фиксированным зурном рандома.
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
@@ -98,7 +100,7 @@ namespace Zilon.Core.Tests.WorldGeneration
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 

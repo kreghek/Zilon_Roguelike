@@ -13,9 +13,9 @@ namespace Zilon.Core.Tests.Props
     [TestFixture]
     public class PropStoreBaseTests
     {
-        private static TestPropScheme _resourceScheme;
-        private static TestPropScheme _equipmentScheme;
-        private static TestPropScheme _conceptScheme;
+        private TestPropScheme _resourceScheme;
+        private TestPropScheme _equipmentScheme;
+        private TestPropScheme _conceptScheme;
 
         /// <summary>
         /// Тест проверяет, что при добавлении экипировки она помещается в контейнер.
@@ -30,12 +30,8 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
             // ACT
             propStore.Add(equipment);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -57,12 +53,8 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
             // ACT
             propStore.Add(resource);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -88,13 +80,9 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
             // ACT
             propStore.Add(resource1);
             propStore.Add(resource2);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -117,12 +105,8 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
             // ACT
             propStore.Add(concent);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -143,12 +127,8 @@ namespace Zilon.Core.Tests.Props
             var propStore = CreatePropStore();
             propStore.Add(equipment);
 
-
-
             // ACT
             propStore.Remove(equipment);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -169,12 +149,8 @@ namespace Zilon.Core.Tests.Props
             var propStore = CreatePropStore();
             propStore.Add(resource);
 
-
-
             // ACT
             propStore.Remove(resource);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -201,12 +177,8 @@ namespace Zilon.Core.Tests.Props
 
             var resourceToRemove = CreateResource(resourceToRemoveCount);
 
-
-
             // ACT
             propStore.Remove(resourceToRemove);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -227,11 +199,8 @@ namespace Zilon.Core.Tests.Props
 
             propStore.Add(concent);
 
-
             // ACT
             propStore.Remove(concent);
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -250,15 +219,10 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Add(equipment);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
@@ -277,14 +241,10 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Add(concent);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
@@ -305,15 +265,10 @@ namespace Zilon.Core.Tests.Props
 
             var propStore = CreatePropStore();
 
-
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Add(resource);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
@@ -333,14 +288,10 @@ namespace Zilon.Core.Tests.Props
             var propStore = CreatePropStore();
             propStore.Add(equipment);
 
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Remove(equipment);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
@@ -361,14 +312,10 @@ namespace Zilon.Core.Tests.Props
             var propStore = CreatePropStore();
             propStore.Add(resource);
 
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Remove(resource);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
@@ -392,14 +339,10 @@ namespace Zilon.Core.Tests.Props
 
             var usedResource = CreateResource(resourceTakenCount);
 
-
-
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Remove(usedResource);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Changed));
@@ -420,21 +363,16 @@ namespace Zilon.Core.Tests.Props
 
             propStore.Add(concent);
 
-
             // ACT
             using (var monitor = propStore.Monitor())
             {
                 // ACT
                 propStore.Remove(concent);
 
-
-
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
 
             }
-
-
 
             // ASSERT
             var items = propStore.CalcActualItems();
@@ -484,19 +422,19 @@ namespace Zilon.Core.Tests.Props
             return propStore;
         }
 
-        private static Equipment CreateEquipment()
+        private Equipment CreateEquipment()
         {
             var equipment = new Equipment(_equipmentScheme, new ITacticalActScheme[0]);
             return equipment;
         }
 
-        private static Resource CreateResource(int resourceInitCount)
+        private Resource CreateResource(int resourceInitCount)
         {
             var resource = new Resource(_resourceScheme, resourceInitCount);
             return resource;
         }
 
-        private static Concept CreateConcept()
+        private Concept CreateConcept()
         {
             var concent = new Concept(_conceptScheme, _equipmentScheme);
 

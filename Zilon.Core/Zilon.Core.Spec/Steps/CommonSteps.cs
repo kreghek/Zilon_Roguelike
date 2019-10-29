@@ -266,7 +266,9 @@ namespace Zilon.Core.Spec.Steps
 
             var propsInInventory = actor.Person.Inventory.CalcActualItems();
             var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
-            var testedResouce = testedProp as Resource;
+
+            testedProp.Should().BeOfType<Resource>();
+            var testedResouce = (Resource)testedProp;
 
             testedResouce.Count.Should().Be(expectedCount);
         }

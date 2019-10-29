@@ -203,7 +203,7 @@ namespace Zilon.Core.Client
                     break;
 
                 default:
-                    throw new ArgumentException($"Предмет неизвестного типа {prop.GetType()}.");
+                    throw new ArgumentException($"Предмет неизвестного типа {prop?.GetType()}.");
             }
         }
 

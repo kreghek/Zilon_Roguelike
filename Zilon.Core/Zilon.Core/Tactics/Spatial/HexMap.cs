@@ -64,6 +64,17 @@ namespace Zilon.Core.Tactics.Spatial
             var offsetY = hexNode.OffsetY;
 
             var nodeMatrix = _segmentDict.First().Value;
+
+            if (nodeMatrix[offsetX, offsetY] != null)
+            {
+                // Эта проверка нужна, чтобы отлавливать дубликаты координат,
+                // которые могут быть созданы фабриками.
+                // Дубликаты так же попадают в регионы и могут быть сложными в отладке.
+                // Потому что искажают дальнейшую работу с картой.
+                //TODO Рассматреть вариант, когда проверка выполняется  стороне регионов.
+                throw new InvalidOperationException($"В координатах {offsetX},{offsetY} уже есть узел графа.");
+            }
+
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
@@ -252,22 +263,30 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                if (!(obj is SegmentKey))
-                {
-                    return false;
-                }
-
-                var key = (SegmentKey)obj;
-                return X == key.X &&
+                return obj is SegmentKey key &&
+                       X == key.X &&
                        Y == key.Y;
             }
 
             public override int GetHashCode()
             {
-                var hashCode = 1502939027;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                return hashCode;
+                unchecked
+                {
+                    var hashCode = 1861411795;
+                    hashCode = hashCode * -1521134295 + X.GetHashCode();
+                    hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            public static bool operator ==(SegmentKey left, SegmentKey right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(SegmentKey left, SegmentKey right)
+            {
+                return !(left == right);
             }
         }
     }

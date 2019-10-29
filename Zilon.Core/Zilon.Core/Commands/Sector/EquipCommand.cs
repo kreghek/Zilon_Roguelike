@@ -42,6 +42,8 @@ namespace Zilon.Core.Commands
             }
 
             // Сломанную экипировку нельзя надевать
+            //TODO Тут есть замечание, что equipment не проверяется.
+            // Реорганизовать этот код в более понятный.
             if (equipment.Durable.Value <= 0)
             {
                 return false;

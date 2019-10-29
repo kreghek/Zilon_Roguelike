@@ -124,6 +124,10 @@ namespace Zilon.Core.Tactics
                                 DecreaseStat(SurvivalStatType.Health, rule.Level);
                                 break;
 
+                            case ConsumeCommonRuleType.Intoxication:
+                                DecreaseStat(SurvivalStatType.Intoxication, rule.Level);
+                                break;
+
                             case ConsumeCommonRuleType.Undefined:
                             default:
                                 throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
@@ -133,7 +137,7 @@ namespace Zilon.Core.Tactics
 
             }
 
-            if (useData.Consumable)
+            if (useData.Consumable && Person.Inventory != null)
             {
                 ConsumeResource(usedProp);
 
@@ -152,6 +156,10 @@ namespace Zilon.Core.Tactics
                 case Resource resource:
                     var removeResource = new Resource(resource.Scheme, 1);
                     Person.Inventory.Remove(removeResource);
+                    break;
+
+                case Equipment equipment:
+                    Person.Inventory.Remove(equipment);
                     break;
             }
         }
@@ -216,11 +224,8 @@ namespace Zilon.Core.Tactics
             switch (statType)
             {
                 case SurvivalStatType.Satiety:
-                    RestoreSurvivalStatInner(SurvivalStatType.Satiety, level);
-                    break;
-
                 case SurvivalStatType.Hydration:
-                    RestoreSurvivalStatInner(SurvivalStatType.Hydration, level);
+                    RestoreSurvivalStatInner(statType, level);
                     break;
 
                 case SurvivalStatType.Intoxication:
@@ -316,11 +321,9 @@ namespace Zilon.Core.Tactics
             switch (statType)
             {
                 case SurvivalStatType.Satiety:
-                    DecreaseSurvivalStatInner(SurvivalStatType.Satiety, level);
-                    break;
-
                 case SurvivalStatType.Hydration:
-                    DecreaseSurvivalStatInner(SurvivalStatType.Hydration, level);
+                case SurvivalStatType.Intoxication:
+                    DecreaseSurvivalStatInner(statType, level);
                     break;
 
                 case SurvivalStatType.Health:
