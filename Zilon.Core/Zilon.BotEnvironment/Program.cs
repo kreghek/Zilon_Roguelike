@@ -20,6 +20,7 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.IoC;
 
 namespace Zilon.BotEnvironment
 {
@@ -223,9 +224,9 @@ namespace Zilon.BotEnvironment
 
             // Регистрируем сервис источника команд.
             var botActorTaskSource = GetBotActorTaskSource(registerManager);
-            serviceRegistry.Register(typeof(ISectorActorTaskSource), botActorTaskSource, "bot", new PerScopeLifetime());
+            serviceRegistry.Register(typeof(ISectorActorTaskSource), botActorTaskSource, "bot", LightInjectWrapper.CreateScoped());
             serviceRegistry.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot",
-                new PerScopeLifetime());
+                LightInjectWrapper.CreateScoped());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
             registerAuxMethod.Invoke(null, new object[] { serviceRegistry });

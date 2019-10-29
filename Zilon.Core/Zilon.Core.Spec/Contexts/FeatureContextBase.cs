@@ -14,6 +14,7 @@ using Zilon.Bot.Players.LightInject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -30,6 +31,7 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
+using Zilon.IoC;
 
 namespace Zilon.Core.Spec.Contexts
 {
@@ -272,30 +274,30 @@ namespace Zilon.Core.Spec.Contexts
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
-            }, new PerContainerLifetime());
+            }, LightInjectWrapper.CreateSingleton());
 
-            Container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+            Container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
 
-            Container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+            Container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
         }
 
         private void RegisterSectorService()
         {
-            Container.Register<IMapFactory, FuncMapFactory>(new PerContainerLifetime());
-            Container.Register<ISectorGenerator, TestEmptySectorGenerator>(new PerContainerLifetime());
-            Container.Register<ISectorManager, SectorManager>(new PerContainerLifetime());
-            Container.Register<IActorManager, ActorManager>(new PerContainerLifetime());
-            Container.Register<IPropContainerManager, PropContainerManager>(new PerContainerLifetime());
-            Container.Register<IRoomGenerator, RoomGenerator>(new PerContainerLifetime());
-            Container.Register<IScoreManager, ScoreManager>(new PerContainerLifetime());
-            Container.Register<ICitizenGenerator, CitizenGenerator>(new PerContainerLifetime());
-            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(new PerContainerLifetime());
-            Container.Register<IActorInteractionBus, ActorInteractionBus>(new PerContainerLifetime());
+            Container.Register<IMapFactory, FuncMapFactory>(LightInjectWrapper.CreateSingleton());
+            Container.Register<ISectorGenerator, TestEmptySectorGenerator>(LightInjectWrapper.CreateSingleton());
+            Container.Register<ISectorManager, SectorManager>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IActorManager, ActorManager>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IPropContainerManager, PropContainerManager>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IRoomGenerator, RoomGenerator>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IScoreManager, ScoreManager>(LightInjectWrapper.CreateSingleton());
+            Container.Register<ICitizenGenerator, CitizenGenerator>(LightInjectWrapper.CreateSingleton());
+            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IActorInteractionBus, ActorInteractionBus>(LightInjectWrapper.CreateSingleton());
         }
 
         private void RegisterGameLoop()
         {
-            Container.Register<IGameLoop, GameLoop>(new PerContainerLifetime());
+            Container.Register<IGameLoop, GameLoop>(LightInjectWrapper.CreateSingleton());
         }
 
         /// <summary>
@@ -304,25 +306,27 @@ namespace Zilon.Core.Spec.Contexts
         private void RegisterAuxServices()
         {
             var dice = new LinearDice(123);
-            Container.Register<IDice>(factory => dice, new PerContainerLifetime());
+            Container.Register<IDice>(factory => dice, LightInjectWrapper.CreateSingleton());
 
 
             var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
             decisionSourceMock.CallBase = true;
             var decisionSource = decisionSourceMock.Object;
 
-            Container.Register(factory => decisionSource, new PerContainerLifetime());
-            Container.Register(factory => CreateActUsageRandomSource(dice), new PerContainerLifetime());
+            Container.Register(factory => decisionSource, LightInjectWrapper.CreateSingleton());
+            Container.Register(factory => CreateActUsageRandomSource(dice), LightInjectWrapper.CreateSingleton());
 
-            Container.Register<IPerkResolver, PerkResolver>(new PerContainerLifetime());
-            Container.Register<ITacticalActUsageService, TacticalActUsageService>(new PerContainerLifetime());
-            Container.Register<IPropFactory, PropFactory>(new PerContainerLifetime());
-            Container.Register<IDropResolver, DropResolver>(new PerContainerLifetime());
-            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(new PerContainerLifetime());
-            Container.Register(factory => CreateSurvivalRandomSource(), new PerContainerLifetime());
+            Container.Register<IPerkResolver, PerkResolver>(LightInjectWrapper.CreateSingleton());
+            Container.Register<ITacticalActUsageService, TacticalActUsageService>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IPropFactory, PropFactory>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IDropResolver, DropResolver>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(LightInjectWrapper.CreateSingleton());
+            Container.Register(factory => CreateSurvivalRandomSource(), LightInjectWrapper.CreateSingleton());
 
-            Container.Register<IEquipmentDurableService, EquipmentDurableService>(new PerContainerLifetime());
-            Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(new PerContainerLifetime());
+            Container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
+
+            Container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
         }
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
@@ -357,15 +361,15 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterClientServices()
         {
-            Container.Register<ISectorUiState, SectorUiState>(new PerContainerLifetime());
-            Container.Register<IInventoryState, InventoryState>(new PerContainerLifetime());
+            Container.Register<ISectorUiState, SectorUiState>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IInventoryState, InventoryState>(LightInjectWrapper.CreateSingleton());
         }
 
         private void RegisterCommands()
         {
-            Container.Register<ICommand, MoveCommand>("move", new PerContainerLifetime());
-            Container.Register<ICommand, UseSelfCommand>("use-self", new PerContainerLifetime());
-            Container.Register<ICommand, AttackCommand>("attack", new PerContainerLifetime());
+            Container.Register<ICommand, MoveCommand>("move", LightInjectWrapper.CreateSingleton());
+            Container.Register<ICommand, UseSelfCommand>("use-self", LightInjectWrapper.CreateSingleton());
+            Container.Register<ICommand, AttackCommand>("attack", LightInjectWrapper.CreateSingleton());
 
             Container.Register<ICommand, PropTransferCommand>("prop-transfer");
             Container.Register<ICommand, EquipCommand>("equip");
@@ -373,17 +377,17 @@ namespace Zilon.Core.Spec.Contexts
 
         private void RegisterPlayerServices()
         {
-            Container.Register<HumanPlayer>(new PerContainerLifetime());
-            Container.Register<IBotPlayer, BotPlayer>(new PerContainerLifetime());
-            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-            Container.Register<MonsterBotActorTaskSource>(new PerContainerLifetime());
+            Container.Register<HumanPlayer>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IBotPlayer, BotPlayer>(LightInjectWrapper.CreateSingleton());
+            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(LightInjectWrapper.CreateSingleton());
+            Container.Register<MonsterBotActorTaskSource>(LightInjectWrapper.CreateSingleton());
             RegisterManager.RegisterBot(Container);
             RegisterManager.ConfigureAuxServices(Container);
         }
 
         private void RegisterWorldServices()
         {
-            Container.Register<IWorldManager, WorldManager>(new PerContainerLifetime());
+            Container.Register<IWorldManager, WorldManager>(LightInjectWrapper.CreateSingleton());
         }
 
         private void InitClientServices()

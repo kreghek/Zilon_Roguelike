@@ -3,6 +3,7 @@
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.WorldGeneration;
+using Zilon.IoC;
 
 namespace Zilon.Core.MassWorldGenerator
 {
@@ -34,11 +35,11 @@ namespace Zilon.Core.MassWorldGenerator
                 var schemeLocator = new FileSchemeLocator(_schemeCatalog);
 
                 return schemeLocator;
-            }, new PerContainerLifetime());
+            }, LightInjectWrapper.CreateSingleton());
 
-            container.Register<ISchemeService, SchemeService>(new PerContainerLifetime());
+            container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
 
-            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(new PerContainerLifetime());
+            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Zilon.Core.MassWorldGenerator
         private void RegisterAuxServices(IServiceRegistry container)
         {
             var dice = new LinearDice();
-            container.Register<IDice>(factory => dice, new PerContainerLifetime());
+            container.Register<IDice>(factory => dice, LightInjectWrapper.CreateSingleton());
             
         }
     }
