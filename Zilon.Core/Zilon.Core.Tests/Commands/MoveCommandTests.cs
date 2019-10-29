@@ -33,11 +33,8 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var command = Container.GetInstance<MoveCommand>();
 
-
-
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -54,11 +51,8 @@ namespace Zilon.Core.Tests.Commands
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
             var playerState = Container.GetInstance<ISectorUiState>();
 
-
-
             // ACT
             command.Execute();
-
 
             // ASSERT
             var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
@@ -74,11 +68,8 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var command = Container.GetInstance<MoveCommand>();
 
-
             // ACT
             var canRepeat = command.CanRepeat();
-
-
 
             // ASSERT
             canRepeat.Should().BeTrue();
@@ -95,7 +86,6 @@ namespace Zilon.Core.Tests.Commands
             var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
-
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
 
@@ -108,12 +98,8 @@ namespace Zilon.Core.Tests.Commands
             var monster = monsterMock.Object;
             _actorList.Add(monster);
 
-
-
             // ACT
             var canRepeat = command.CanRepeat();
-
-
 
             // ASSERT
             canRepeat.Should().BeFalse();
@@ -130,7 +116,6 @@ namespace Zilon.Core.Tests.Commands
             var playerState = Container.GetInstance<ISectorUiState>();
             var sectorManager = Container.GetInstance<ISectorManager>();
 
-
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
 
@@ -143,12 +128,8 @@ namespace Zilon.Core.Tests.Commands
             var monster = monsterMock.Object;
             _actorList.Add(monster);
 
-
-
             // ACT
             var canRepeat = command.CanRepeat();
-
-
 
             // ASSERT
             canRepeat.Should().BeTrue();

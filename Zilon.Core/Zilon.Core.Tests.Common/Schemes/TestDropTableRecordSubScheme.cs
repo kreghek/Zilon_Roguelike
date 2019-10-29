@@ -13,5 +13,14 @@ namespace Zilon.Core.Tests.Common.Schemes
         /// Дополнительный дроп.
         /// </summary>
         public IDropTableScheme[] Extra { get; set; }
+
+        public static TestDropTableRecordSubScheme CreateEmpty(int weight)
+        {
+            return new TestDropTableRecordSubScheme
+            {
+                SchemeSid = null,
+                Weight = weight
+            };
+        }
     }
 }

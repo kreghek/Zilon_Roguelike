@@ -9,7 +9,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Strategies.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class LogicTreeStrategyTests
     {
         /// <summary>

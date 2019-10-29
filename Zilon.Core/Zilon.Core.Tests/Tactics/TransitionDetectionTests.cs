@@ -11,7 +11,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class TransitionDetectionTests
     {
         /// <summary>

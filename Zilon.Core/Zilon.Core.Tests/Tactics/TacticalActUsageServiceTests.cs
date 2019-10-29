@@ -52,13 +52,9 @@ namespace Zilon.Core.Tests.Tactics
             var monsterMock = CreateOnHitMonsterMock();
             var monster = monsterMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { _act });
             actUsageService.UseOn(actor, monster, usedActs);
-
-
 
             // ASSERT
             _perkResolverMock.Verify(x => x.ApplyProgress(
@@ -110,13 +106,9 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { act });
             actUsageService.UseOn(actor, monster, usedActs);
-
-
 
             // ASSERT
             monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
@@ -165,13 +157,9 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { act });
             actUsageService.UseOn(actor, monster, usedActs);
-
-
 
             // ASSERT
             monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
@@ -225,13 +213,9 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { act });
             actUsageService.UseOn(actor, monster, usedActs);
-
-
 
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
@@ -261,16 +245,12 @@ namespace Zilon.Core.Tests.Tactics
             var monsterMock = CreateMonsterMock();
             var monster = monsterMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { _act });
 
             using (var monitor = actor.Monitor())
             {
                 actUsageService.UseOn(actor, monster, usedActs);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IActor.UsedAct));
@@ -322,12 +302,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var usedActs = new UsedTacticalActs(new[] { tacticalAct });
 
-
-
             // ACT
             actUsageService.UseOn(actor, actor, usedActs);
-
-
 
             // ASSERT
             survivalDataMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
@@ -358,8 +334,6 @@ namespace Zilon.Core.Tests.Tactics
             var monsterMock = CreateMonsterMock();
             var monster = monsterMock.Object;
 
-
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { _act });
 
@@ -367,8 +341,6 @@ namespace Zilon.Core.Tests.Tactics
             {
                 actUsageService.UseOn(actor, monster, usedActs);
             };
-
-
 
             // ASSERT
             act.Should().Throw<InvalidOperationException>();
@@ -426,18 +398,14 @@ namespace Zilon.Core.Tests.Tactics
             inventory.Add(new Resource(bulletScheme, 10));
             personMock.Setup(x => x.Inventory).Returns(inventory);
 
-
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(actStatsSubScheme);
             actMock.SetupGet(x => x.Constrains).Returns(actConstrainsSubScheme);
             var shootAct = actMock.Object;
 
-
             // ACT
             var usedActs = new UsedTacticalActs(new[] { shootAct });
             actUsageService.UseOn(actor, monster, usedActs);
-
-
 
             // ASSERT
             var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;

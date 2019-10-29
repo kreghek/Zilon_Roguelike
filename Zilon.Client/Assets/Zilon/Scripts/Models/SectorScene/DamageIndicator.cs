@@ -17,10 +17,26 @@ public class DamageIndicator : MonoBehaviour
         _diePosition = _objectPosition + Vector3.up * 0.5f;
         gameObject.transform.position = _objectPosition;
 
-        Text.text = damageValue.ToString();
+        Text.text = GetWoundString(damageValue);
         // Это нужно делать, потому что нет возможности указать слой в инспекторе.
         // https://answers.unity.com/questions/595634/3d-textmesh-not-being-drawn-properly-in-a-2d-game.html
         Text.GetComponent<MeshRenderer>().sortingLayerName = INDICATOR_SORTING_LAYER;
+    }
+
+    private static string GetWoundString(int damageValue)
+    {
+        if (1 <= damageValue && damageValue <= 2)
+        {
+            return "Low Wound";
+        }
+        else if (3 <= damageValue && damageValue <= 5)
+        {
+            return "Certain Wound";
+        }
+        else
+        {
+            return "Heavy Wound";
+        }
     }
 
     public void FixedUpdate()

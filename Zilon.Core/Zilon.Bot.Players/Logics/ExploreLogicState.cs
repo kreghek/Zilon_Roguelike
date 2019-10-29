@@ -10,6 +10,8 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
+    //TODO Перепроверить работу этого состояния.
+    // Есть подозрение, что оно не работает.
     public sealed class ExploreLogicState : LogicStateBase
     {
         private MoveTask _moveTask;
@@ -86,7 +88,8 @@ namespace Zilon.Bot.Players.Logics
                 strategyData.ObserverdNodes.Add(mapNode);
             }
 
-            var edgeNodes = new HashSet<IMapNode>();
+            // Собираем пограничные неисследованные узлы.
+            var frontNodes = new HashSet<IMapNode>();
             foreach (var observedNode in strategyData.ObserverdNodes)
             {
                 var nextNodes = _map.GetNext(observedNode);
@@ -95,7 +98,7 @@ namespace Zilon.Bot.Players.Logics
 
                 foreach (var edgeNode in notObservedNextNodes)
                 {
-                    edgeNodes.Add(edgeNode);
+                    frontNodes.Add(edgeNode);
                 }
 
                 // Примечаем выходы
@@ -105,26 +108,22 @@ namespace Zilon.Bot.Players.Logics
                 }
             }
 
-            var emptyEdgeNodes = !edgeNodes.Any();
+            var emptyFrontNodes = !frontNodes.Any();
             var allNodesObserved = _map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
 
-            if (!((emptyEdgeNodes && allNodesObserved) || !emptyEdgeNodes))
-            {
+            Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
+                "Это состояние выполняется, только если есть неисследованые узлы.");
 
-            }
-            Debug.Assert((emptyEdgeNodes && allNodesObserved) || !emptyEdgeNodes,
-                "Если нет крайних узлов карты, значит все узлы карты исследованы.");
-
-            return edgeNodes;
+            return frontNodes;
         }
 
         private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData)
         {
             IEnumerable<IMapNode> availableNodes;
-            var edgeNodes = WriteObservedNodes(actor, strategyData).ToArray();
-            if (edgeNodes.Any())
+            var frontNodes = WriteObservedNodes(actor, strategyData).ToArray();
+            if (frontNodes.Any())
             {
-                availableNodes = edgeNodes;
+                availableNodes = frontNodes;
             }
             else
             {

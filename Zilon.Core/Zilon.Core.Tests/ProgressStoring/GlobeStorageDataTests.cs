@@ -12,7 +12,8 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.ProgressStoring
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class GlobeStorageDataTests
     {
         /// <summary>
@@ -74,14 +75,10 @@ namespace Zilon.Core.Tests.ProgressStoring
             // Десериализуем
             var deserializedStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(serialized);
 
-
-
             // ACT
 
             // Восстанавливаем мир
             var restoredGlobe = deserializedStorageData.Restore();
-
-
 
             // ASSERT
             restoredGlobe.Should().BeEquivalentTo(globe, options =>

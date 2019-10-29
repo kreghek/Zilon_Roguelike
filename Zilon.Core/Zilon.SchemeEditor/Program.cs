@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 
 using Zilon.Core.Schemes;
 
@@ -36,11 +35,7 @@ namespace Zilon.SchemeEditor
         {
             Console.WriteLine($"Name Ru: {scheme.Name?.Ru}");
             var nameRu = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(nameRu))
-            {
-
-            }
-            else
+            if (string.IsNullOrWhiteSpace(nameRu))
             {
                 Console.Write("[Old value]");
                 Console.WriteLine();
@@ -64,7 +59,7 @@ namespace Zilon.SchemeEditor
 
         private static ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 

@@ -11,7 +11,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.World
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class GlobeHelperTests
     {
         /// <summary>

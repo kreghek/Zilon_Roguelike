@@ -13,7 +13,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// <summary>
     /// Реализация фабрики карты, онованной на комнатах.
     /// </summary>
-    /// <seealso cref="Zilon.Core.MapGenerators.IMapFactory" />
+    /// <seealso cref="IMapFactory" />
     public class RoomMapFactory : IMapFactory
     {
         private const int RoomMinSize = 2;
@@ -22,7 +22,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         [ExcludeFromCodeCoverage]
         public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
-            _roomGenerator = roomGenerator;
+            _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
         }
 
         /// <summary>
@@ -33,6 +33,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </returns>
         public Task<ISectorMap> CreateAsync(object options)
         {
+            if (options is null)
+            {
+                throw new System.ArgumentNullException(nameof(options));
+            }
+
             var sectorScheme = (ISectorSubScheme)options;
 
             var map = CreateMapInstance();
@@ -40,7 +45,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var transitions = CreateTransitions(sectorScheme);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
 
             var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
                 RoomMinSize,
@@ -79,16 +84,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             return Task.FromResult(map);
-        }
-
-        private static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
-        {
-            if (sectorScheme.TransSectorSids == null)
-            {
-                return new[] { RoomTransition.CreateGlobalExit() };
-            }
-
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
         }
 
         private static ISectorMap CreateMapInstance()

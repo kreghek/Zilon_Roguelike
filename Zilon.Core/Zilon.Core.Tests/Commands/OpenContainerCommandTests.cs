@@ -29,11 +29,8 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var command = Container.GetInstance<OpenContainerCommand>();
 
-
-
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -49,12 +46,8 @@ namespace Zilon.Core.Tests.Commands
             var command = Container.GetInstance<OpenContainerCommand>();
             var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
 
-
-
             // ACT
             command.Execute();
-
-
 
             // ASSERT
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));

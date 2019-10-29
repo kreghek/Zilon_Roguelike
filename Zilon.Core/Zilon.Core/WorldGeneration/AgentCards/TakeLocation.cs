@@ -35,29 +35,26 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            throw new NotImplementedException();
-            //var targetLocality = GetNeighborLocality(agent, globe, dice.Roll(0, 5));
+            var targetLocality = GetNeighborLocality(agent, globe, dice.Roll(0, 5));
 
-            //targetLocality.Population--;
+            targetLocality.Population--;
 
-            //targetLocality.Owner = agent.Realm;
+            targetLocality.Owner = agent.Realm;
 
-            //var otherAgentHistory = new List<string>();
-            //if (globe.AgentCells.TryGetValue(targetLocality.Cell, out var otherAgentsInLocality))
-            //{
-            //    foreach (var otherAgent in otherAgentsInLocality.ToArray())
-            //    {
-            //        if (otherAgent.Realm == agent.Realm)
-            //        {
-            //            continue;
-            //        }
+            if (globe.AgentCells.TryGetValue(targetLocality.Cell, out var otherAgentsInLocality))
+            {
+                foreach (var otherAgent in otherAgentsInLocality.ToArray())
+                {
+                    if (otherAgent.Realm == agent.Realm)
+                    {
+                        continue;
+                    }
 
-            //        TransferAgent(otherAgent, globe, agent.Realm, dice);
-            //        otherAgentHistory.Add($"{otherAgent} in {otherAgent.Location}.");
-            //    }
-            //}
+                    TransferAgent(otherAgent, globe, agent.Realm, dice);
+                }
+            }
 
-            //agent.Location = targetLocality.Cell;
+            agent.Location = targetLocality.Cell;
         }
 
         private static Locality GetNeighborLocality(Agent agent, Globe globe, int coordRollIndex)

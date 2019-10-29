@@ -28,7 +28,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <remarks>
         /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
         /// </remarks>
-        Size RollRoomSize(int minSize, int maxSize);
+        Size[] RollRoomSize(int minSize, int maxSize, int count);
 
         /// <summary>
         /// Выбирает комнаты, с которыми есть соединение.

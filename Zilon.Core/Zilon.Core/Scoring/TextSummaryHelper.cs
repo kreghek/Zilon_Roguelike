@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
@@ -13,24 +15,34 @@ namespace Zilon.Core.Scoring
         /// Создать текстовое описание итогов игры.
         /// </summary>
         /// <param name="scores"> Объект, содержащий очки игры. </param>
+        /// <param name="botName"> Имя бота, который играл. Не указывать, если выводятся очки игрока-человека. </param>
         /// <returns> Возвращает текстовое представление итогов игры в виде строки. </returns>
-        public static string CreateTextSummary(Scores scores)
+        //TODO Вместо botName передавать объект BotInfo. Так будет более очевидно.
+        public static string CreateTextSummary([NotNull] Scores scores, [CanBeNull] string botName)
         {
             var summaryStringBuilder = new StringBuilder();
 
-            summaryStringBuilder.AppendLine("YOU (BOT) DIED");
+            if (botName == null)
+            {
+                summaryStringBuilder.AppendLine("YOU DIED");
+            }
+            else
+            {
+                summaryStringBuilder.AppendLine($"YOU (BOT {botName}) DIED");
+            }
 
             summaryStringBuilder.AppendLine($"SCORES: {scores.BaseScores}");
 
             summaryStringBuilder.AppendLine("=== You survived ===");
-            var minutesTotal = scores.Turns * 2;
-            var hoursTotal = minutesTotal / 60f;
-            var daysTotal = hoursTotal / 24f;
-            var days = (int)daysTotal;
-            var hours = (int)(hoursTotal - days * 24);
 
-            summaryStringBuilder.AppendLine($"{days} days {hours} hours");
-            summaryStringBuilder.AppendLine($"Turns: {scores.Turns}");
+            var lifetime = ScoreCalculator.ConvertTurnsToDetailed(scores.Turns);
+
+            summaryStringBuilder.AppendLine($"{lifetime.Days} days {lifetime.Hours} hours");
+
+            if (botName != null)
+            {
+                summaryStringBuilder.AppendLine($"Turns: {scores.Turns}");
+            }
 
             summaryStringBuilder.AppendLine("=== You visited ===");
 
@@ -48,6 +60,17 @@ namespace Zilon.Core.Scoring
             }
 
             return summaryStringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Создать текстовое описание итогов игры.
+        /// </summary>
+        /// <param name="scores"> Объект, содержащий очки игры. </param>
+        /// <param name="botName"> Имя бота, который играл. Не указывать, если выводятся очки игрока-человека. </param>
+        /// <returns> Возвращает текстовое представление итогов игры в виде строки. </returns>
+        public static string CreateTextSummary([NotNull] Scores scores)
+        {
+            return CreateTextSummary(scores, botName: null);
         }
     }
 }

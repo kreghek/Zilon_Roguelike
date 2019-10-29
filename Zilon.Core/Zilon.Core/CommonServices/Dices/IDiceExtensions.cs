@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Zilon.Core.CommonServices.Dices
 {
+    /// <summary>
+    /// Вспомогательные расширения сервиса для работы с игральной костью.
+    /// </summary>
     public static class DiceExtensions
     {
         /// <summary>
@@ -19,6 +23,11 @@ namespace Zilon.Core.CommonServices.Dices
                 throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.", nameof(max));
             }
 
+            if (dice == null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             if (min == max)
             {
                 return min;
@@ -32,22 +41,56 @@ namespace Zilon.Core.CommonServices.Dices
 
         public static int RollD6(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6);
         }
 
         public static int Roll2D6(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6) + dice.Roll(6);
         }
 
         public static int RollD3(this IDice dice)
         {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
             return dice.Roll(6);
         }
 
-        public static int RollArrayIndex(this IDice dice, IList list)
+        /// <summary>
+        /// Выбирает случайное значение из списка.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <returns> Случайный элемент из списка. </returns>
+        public static T RollFromList<T>(this IDice dice, IList<T> list)
         {
-            return dice.Roll(0, list.Count - 1);
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var rollIndex = dice.Roll(0, list.Count - 1);
+            var item = list[rollIndex];
+            return item;
         }
     }
 }

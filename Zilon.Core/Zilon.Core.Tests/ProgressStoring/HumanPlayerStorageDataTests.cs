@@ -18,7 +18,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class HumanPlayerStorageDataTests
     {
         [Test]
@@ -82,7 +82,7 @@ namespace Zilon.Core.ProgressStoring.Tests
 
             region.AddNode(regionNode);
 
-            var worldManager = new WorldManager(schemeService, new Dice(1));
+            var worldManager = new WorldManager(schemeService, new LinearDice(1));
             worldManager.Regions[globe.Localities.Last().Cell] = region;
 
             var humanPlayer = new HumanPlayer();
