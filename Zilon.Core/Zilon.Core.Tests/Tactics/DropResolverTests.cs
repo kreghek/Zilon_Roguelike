@@ -1,13 +1,52 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
+
+namespace Zilon.Core.Tactics.Tests
+{
+    [TestFixture()]
+    public class DropResolverTests
+    {
+        [Test()]
+        public void ResolveTest()
+        {
+            var dice = new Dice(1);
+            var randomSource = new DropResolverRandomSource(dice);
+
+            var schemeFactory = new SchemeServiceHandlerFactory(CreateSchemeLocator());
+            var schemeService = new SchemeService(schemeFactory);
+            var propfactory = new PropFactory(schemeService);
+
+            var dropResolver = new DropResolver(randomSource, schemeService, propfactory);
+
+            var dropTable = new TestDropTableScheme(1, new[] { 
+                new TestDropTableRecordSubScheme{ 
+                    SchemeSid = "evil-pumpkin",
+                    Weight = 1
+                },
+                new TestDropTableRecordSubScheme{ 
+                    Weight = 95
+                }
+            });
+            var props = dropResolver.Resolve(new[] { dropTable });
+        }
+
+        private FileSchemeLocator CreateSchemeLocator()
+        {
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
+            var schemeLocator = new FileSchemeLocator(schemePath);
+            return schemeLocator;
+        }
+    }
+}
 
 namespace Zilon.Core.Tests.Tactics
 {
