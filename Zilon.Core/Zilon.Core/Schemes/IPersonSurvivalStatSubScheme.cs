@@ -18,7 +18,7 @@
         /// В результате прохождения ключевых точек обычно наступают или сбрасываются угрозы выживания.
         /// Например, добавляется эффект голода, снижающего характеристики.
         /// </summary>
-        IPersonSurvivalStatKeyPointSubScheme[] KeyPoints { get; }
+        IPersonSurvivalStatKeySegmentSubScheme[] KeyPoints { get; }
 
         /// <summary>
         /// Стартовое значение характеристики.

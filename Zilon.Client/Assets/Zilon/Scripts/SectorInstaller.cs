@@ -11,7 +11,9 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -56,8 +58,15 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // генерация сектора
         Container.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
-        Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().To<RoomGeneratorRandomSource>().AsSingle();
+        Container.Bind<IMapFactory>().WithId("room").To<RoomMapFactory>().AsSingle();
+        Container.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
+        Container.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
+        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context => {
+            var linearDice = context.Container.ResolveId<IDice>("linear");
+            var roomSizeDice = context.Container.ResolveId<IDice>("exp");
+            return new RoomGeneratorRandomSource(linearDice, roomSizeDice);
+        }).AsSingle();
+        Container.Bind<IInteriorObjectRandomSource>().To<InteriorObjectRandomSource>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
         Container.Bind<IChestGenerator>().To<ChestGenerator>().AsSingle();
         Container.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();

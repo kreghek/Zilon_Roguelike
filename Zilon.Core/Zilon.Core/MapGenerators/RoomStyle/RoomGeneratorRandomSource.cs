@@ -3,6 +3,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -15,10 +16,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public class RoomGeneratorRandomSource : IRoomGeneratorRandomSource
     {
         private readonly IDice _dice;
+        private readonly IDice _roomSizeDice;
 
-        public RoomGeneratorRandomSource(IDice dice)
+        public RoomGeneratorRandomSource(IDice dice, IDice roomSizeDice)
         {
             _dice = dice;
+            _roomSizeDice = roomSizeDice;
         }
 
         /// <summary>
@@ -194,12 +197,26 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <remarks>
         /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
         /// </remarks>
-        public Size RollRoomSize(int minSize, int maxSize)
+        public Size[] RollRoomSize(int minSize, int maxSize, int count)
         {
-            var rollWidth = _dice.Roll(2, maxSize);
-            var rollHeight = _dice.Roll(2, maxSize);
+            var sizeList = new Size[count];
 
-            return new Size(rollWidth, rollHeight);
+            for (var i = 0; i < count; i++)
+            {
+                var diffSize = maxSize - minSize;
+
+                var rollDiffWidth = _roomSizeDice.Roll(diffSize);
+                var rollDiffHeight = _roomSizeDice.Roll(diffSize);
+
+                var rollWidth = (int)rollDiffWidth + minSize;
+                var rollHeight = (int)rollDiffHeight + minSize;
+
+                var size = new Size(rollWidth, rollHeight);
+
+                sizeList[i] = size;
+            }
+
+            return sizeList;
         }
 
         public HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes)

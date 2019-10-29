@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.Persons.TestCases;
@@ -18,70 +19,6 @@ namespace Zilon.Core.Tests.Persons
     {
         private TestPersonScheme _personScheme;
         private ISurvivalRandomSource _survivalRandomSource;
-
-        /// <summary>
-        /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
-        /// </summary>
-        [Test]
-        public void Update_StatNearKeyPoint_RaiseEventWithCorrectValues()
-        {
-            // ARRANGE
-            const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
-
-            const int MIN_STAT_VALUE = 0;
-            const int MAX_STAT_VALUE = 1;
-            const int START_STAT_VALUE = MAX_STAT_VALUE;
-
-            const int LESSER_SURVIVAL_STAT_KEYPOINT = 0;
-            const SurvivalStatHazardLevel LESSER_SURVIVAL_STAT_KEYPOINT_TYPE = SurvivalStatHazardLevel.Lesser;
-
-            const int STAT_RATE = 1;
-
-            const int EXPECTED_SURVIVAL_STAT_KEYPOINT = LESSER_SURVIVAL_STAT_KEYPOINT;
-
-            // 1 при броске на снижение означает, что тест на снижение не пройден.
-            // Потому что нужно 4+ по умолчанию, чтобы пройти.
-            // Значит характеристика будет снижена.
-            const int FAKE_ROLL_SURVIVAL_RESULT = 1;
-
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
-                .Returns(FAKE_ROLL_SURVIVAL_RESULT);
-            var survivalRandomSource = survivalRandomSourceMock.Object;
-
-            var survivalStats = new SurvivalStat[] {
-                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
-                    Type = STAT_TYPE,
-                    Rate = STAT_RATE,
-                    KeyPoints = new[]{
-                        new SurvivalStatKeyPoint(
-                            LESSER_SURVIVAL_STAT_KEYPOINT_TYPE,
-                            LESSER_SURVIVAL_STAT_KEYPOINT)
-                    }
-                }
-            };
-
-            var survivalData = new HumanSurvivalData(_personScheme,
-                survivalStats,
-                survivalRandomSource);
-
-
-
-            // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.Update();
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
-                    .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.Stat.Type == STAT_TYPE &&
-                    args.KeyPoints.FirstOrDefault().Level == LESSER_SURVIVAL_STAT_KEYPOINT_TYPE &&
-                    args.KeyPoints.FirstOrDefault().Value == EXPECTED_SURVIVAL_STAT_KEYPOINT);
-            }
-        }
 
         /// <summary>
         /// Тест проверяет, что характеристика с изменённым DownPass корректно
@@ -116,73 +53,11 @@ namespace Zilon.Core.Tests.Persons
                 survivalStats,
                 survivalRandomSource);
 
-
-
             // ACT
             survivalData.Update();
 
-
-
             // ASSERT
             return survivalStats[0].Value;
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
-        /// </summary>
-        [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues()
-        {
-            // ARRANGE
-            var survivalData = CreateSurvivalData();
-
-            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = -1;
-
-
-
-            // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.RestoreStat(SurvivalStatType.Satiety, 1);
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
-                    .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Lesser &&
-                    args.KeyPoints.FirstOrDefault().Value == 0);
-            }
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при достижении ключевого показателя модуль выживания генерирует событие.
-        /// </summary>
-        [Test]
-        public void RestoreStat_StatNearKeyPoint_RaiseEventWithCorrectValues2()
-        {
-            // ARRANGE
-            var survivalData = CreateSurvivalData();
-
-            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Satiety);
-            stat.Value = stat.KeyPoints[1].Value;
-            var stat2 = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Hydration);
-            stat2.Value = stat2.KeyPoints[1].Value;
-
-            // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.RestoreStat(SurvivalStatType.Hydration, 3);
-
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISurvivalData.StatCrossKeyValue))
-                    .WithArgs<SurvivalStatChangedEventArgs>(args =>
-                    args.KeyPoints.FirstOrDefault().Level == SurvivalStatHazardLevel.Strong &&
-                    args.KeyPoints.FirstOrDefault().Value == stat2.KeyPoints[1].Value);
-            }
         }
 
         /// <summary>
@@ -204,12 +79,8 @@ namespace Zilon.Core.Tests.Persons
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
 
-
-
             // ACT
             survivalData.RestoreStat(SurvivalStatType.Health, restoreHpValue);
-
-
 
             // ASSERT
             var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
@@ -231,13 +102,10 @@ namespace Zilon.Core.Tests.Persons
 
             var survivalData = CreateSurvivalData();
 
-
             // ACT
             using (var monitor = survivalData.Monitor())
             {
                 survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
-
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(HumanSurvivalData.Dead));
@@ -247,7 +115,8 @@ namespace Zilon.Core.Tests.Persons
         [SetUp]
         public void SetUp()
         {
-            _personScheme = new TestPersonScheme {
+            _personScheme = new TestPersonScheme
+            {
                 SurvivalStats = new[] {
                     new TestPersonSurvivalStatSubScheme
                     {
@@ -256,20 +125,23 @@ namespace Zilon.Core.Tests.Persons
                         MaxValue = 100,
                         StartValue = 0,
                         KeyPoints = new []{
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Value = 0
+                                Start = 0.25f,
+                                End = 0.75f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Value = -25
+                                Start = 0.12f,
+                                End = 0.25f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Value = -75
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     },
@@ -281,20 +153,23 @@ namespace Zilon.Core.Tests.Persons
                         MaxValue = 100,
                         StartValue = 0,
                         KeyPoints = new []{
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Value = 0
+                                Start = 0.25f,
+                                End = 0.75f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Value = -25
+                                Start = 0.12f,
+                                End = 0.25f
                             },
-                            new TestPersonSurvivalStatKeyPointSubScheme
+                            new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Max,
-                                Value = -75
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     }
@@ -304,7 +179,6 @@ namespace Zilon.Core.Tests.Persons
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             _survivalRandomSource = survivalRandomSourceMock.Object;
         }
-
 
         private ISurvivalData CreateSurvivalData()
         {

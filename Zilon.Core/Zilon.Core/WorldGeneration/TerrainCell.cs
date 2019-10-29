@@ -11,19 +11,16 @@ namespace Zilon.Core.WorldGeneration
 
         public override bool Equals(object obj)
         {
-            var otherCell = obj as TerrainCell;
-
-            if (otherCell == null)
-            {
-                return false;
-            }
-
-            return Coords.X == otherCell.Coords.X && Coords.Y == otherCell.Coords.Y;
+            return obj is TerrainCell cell &&
+                   EqualityComparer<OffsetCoords>.Default.Equals(Coords, cell.Coords);
         }
 
         public override int GetHashCode()
         {
-            return -319820321 + EqualityComparer<OffsetCoords>.Default.GetHashCode(Coords);
+            unchecked
+            {
+                return -319820321 + EqualityComparer<OffsetCoords>.Default.GetHashCode(Coords);
+            }
         }
 
         public override string ToString()

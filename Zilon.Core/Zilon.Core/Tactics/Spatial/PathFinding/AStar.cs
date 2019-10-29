@@ -198,7 +198,6 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             {
                 if (_context.TargetNode == null)
                 {
-
                     if (!map.IsPositionAvailableFor(testedNeighbor, _context.Actor))
                     {
                         continue;

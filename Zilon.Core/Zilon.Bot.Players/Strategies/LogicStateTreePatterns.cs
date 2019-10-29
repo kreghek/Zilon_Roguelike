@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+
 using Zilon.Bot.Players.Logics;
 using Zilon.Bot.Players.Triggers;
 
 namespace Zilon.Bot.Players.Strategies
 {
-    public sealed class LogicStateTreePatterns
+    public static class LogicStateTreePatterns
     {
         public static ILogicStateFactory Factory;
 
@@ -13,14 +14,12 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
                 var roamingIdleLogic = Factory.CreateLogic<IdleLogicState>();
                 var fightLogic = Factory.CreateLogic<DefeatTargetLogicState>();
                 var fightIdleLogic = Factory.CreateLogic<IdleLogicState>();
-
 
                 tree.StartState = roamingLogic;
 
@@ -55,7 +54,6 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var roamingLogic = Factory.CreateLogic<RoamingLogicState>();
@@ -66,7 +64,6 @@ namespace Zilon.Bot.Players.Strategies
                 tree.Transitions.Add(roamingLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
                 });
-
 
                 tree.Transitions.Add(roamingIdleLogic, new LogicTransition[] {
                     new LogicTransition(Factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
@@ -82,7 +79,6 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var exploreLogic = Factory.CreateLogic<ExploreLogicState>();
@@ -93,7 +89,6 @@ namespace Zilon.Bot.Players.Strategies
                 var eatProviantLogic = Factory.CreateLogic<EatProviantLogicState>();
                 var lootLogic = Factory.CreateLogic<LootLogicState>();
                 var exitLogic = Factory.CreateLogic<ExitLogicState>();
-
 
                 tree.StartState = exploreLogic;
 
@@ -164,7 +159,6 @@ namespace Zilon.Bot.Players.Strategies
         {
             get
             {
-
                 var tree = new LogicStateTree();
 
                 var exploreLogic = Factory.CreateLogic<ExploreLogicState>();

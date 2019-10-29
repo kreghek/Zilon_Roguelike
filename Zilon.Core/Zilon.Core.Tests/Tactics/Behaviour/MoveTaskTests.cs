@@ -16,7 +16,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class MoveTaskTests
     {
         /// <summary>

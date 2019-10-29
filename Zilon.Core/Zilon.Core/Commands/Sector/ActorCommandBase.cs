@@ -12,8 +12,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class ActorCommandBase : TacticCommandBase
     {
-        protected readonly ISectorManager SectorManager;
-        protected readonly ISectorUiState PlayerState;
+        protected ISectorManager SectorManager { get; }
+        protected ISectorUiState PlayerState { get; }
 
         [ExcludeFromCodeCoverage]
         protected ActorCommandBase(IGameLoop gameLoop,

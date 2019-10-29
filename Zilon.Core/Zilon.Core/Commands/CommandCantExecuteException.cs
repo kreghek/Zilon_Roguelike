@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Zilon.Core.Commands
 {
     [Serializable]
-    internal class CommandCantExecuteException : Exception
+    public class CommandCantExecuteException : Exception
     {
         public CommandCantExecuteException()
         {

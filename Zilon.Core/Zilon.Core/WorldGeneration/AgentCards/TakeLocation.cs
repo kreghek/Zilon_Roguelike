@@ -41,7 +41,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
             targetLocality.Owner = agent.Realm;
 
-            var otherAgentHistory = new List<string>();
             if (globe.AgentCells.TryGetValue(targetLocality.Cell, out var otherAgentsInLocality))
             {
                 foreach (var otherAgent in otherAgentsInLocality.ToArray())
@@ -52,7 +51,6 @@ namespace Zilon.Core.WorldGeneration.AgentCards
                     }
 
                     TransferAgent(otherAgent, globe, agent.Realm, dice);
-                    otherAgentHistory.Add($"{otherAgent} in {otherAgent.Location}.");
                 }
             }
 

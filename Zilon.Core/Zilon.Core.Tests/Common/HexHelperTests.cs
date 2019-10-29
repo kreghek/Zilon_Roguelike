@@ -7,7 +7,7 @@ using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Common
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class HexHelperTests
     {
         /// <summary>

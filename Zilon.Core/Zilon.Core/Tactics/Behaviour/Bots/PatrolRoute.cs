@@ -8,6 +8,12 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
     /// </summary>
     public class PatrolRoute : IPatrolRoute
     {
+        /// <summary>
+        /// Контрольные узлы патруллирования.
+        /// </summary>
+        /// <remarks>
+        /// Если монстр находится на маршруте патруллирования, то он будет обходить эти узлы.
+        /// </remarks>
         public IMapNode[] Points { get; }
 
         public PatrolRoute(params IMapNode[] points)

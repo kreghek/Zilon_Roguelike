@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+
 using LightInject;
 
+using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -11,105 +17,200 @@ namespace Zilon.Core.MassSectorGenerator
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        private readonly static Random _random;
+
+        static Program()
         {
-            var startUp = new Startup();
+            _random = new Random();
+        }
+
+        static async Task Main(string[] args)
+        {
+            var diceSeed = GetDiceSeed(args);
+            var outputPath = GetOutputPath(args);
+
+            var startUp = new Startup(diceSeed);
             var serviceContainer = new ServiceContainer();
+            serviceContainer.EnableAnnotatedConstructorInjection();
             startUp.RegisterServices(serviceContainer);
 
-
             var schemeService = serviceContainer.GetInstance<ISchemeService>();
-            var allLocations = schemeService.GetSchemes<ILocationScheme>()
-                .Where(x => x.SectorLevels != null).ToArray();
 
-            var random = new Random();
-            var iteration = 0;
-            while (true)
+            var sectorSchemeResult = GetSectorScheme(args, schemeService);
+
+            using (var scopeContainer = serviceContainer.BeginScope())
             {
-                var schemeCount = allLocations.Length;
-                var randomSchemeIndex = random.Next(0, schemeCount);
-                var sectorScheme = allLocations[randomSchemeIndex];
-                var sectorLevelIndex = random.Next(0, sectorScheme.SectorLevels.Length);
-                var sectorLevel = sectorScheme.SectorLevels[sectorLevelIndex];
+                var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
+                var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
+                sector.Scheme = sectorSchemeResult.Location;
 
-                iteration++;
+                // Проверка
 
-                using (var scopeContainer = serviceContainer.BeginScope())
+                var sectorValidators = GetValidatorsInAssembly();
+                var checkTask = CheckSectorAsync(sectorValidators, scopeContainer, sector);
+
+                var saveTask = SaveMapAsImageAsync(outputPath, sector);
+
+                await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
+            }
+
+            serviceContainer.Dispose();
+        }
+
+        private static ISectorValidator[] GetValidatorsInAssembly()
+        {
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            var validatorTypes = thisAssembly.GetTypes()
+                .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
+                .Where(x => !x.IsInterface && !x.IsAbstract);
+
+            var validators = validatorTypes.Select(x => Activator.CreateInstance(x)).Cast<ISectorValidator>();
+
+            return validators.ToArray();
+        }
+
+        private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
+        {
+            if (outputPath != null)
+            {
+                SaveMapAsImage(sector.Map, outputPath);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static Task CheckSectorAsync(ISectorValidator[] validators, Scope scopeContainer, ISector sector)
+        {
+            return Task.Run(() =>
+            {
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+
+                var checkTasks = validators.Select(x => x.Validate(sector, scopeContainer));
+
+                var allTasks = Task.WhenAll(checkTasks);
+
+                try
                 {
-                    var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
-                    var sector = await sectorFactory.GenerateDungeonAsync(sectorLevel);
-                    sector.Scheme = sectorScheme;
+                    allTasks.Wait();
+                }
+                catch (AggregateException exception)
+                {
+                    Log.Error("Сектор содержит ошибки:");
 
-                    // Проверка
-
-                    // Проверка сундуков.
-                    // Сундуки не должны генерироваться на узлы, которые являются препятствием.
-                    // Сундуки не должны генерироваться на узлы с выходом.
-                    var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
-                    var allContainers = containerManager.Items;
-                    foreach (var container in allContainers)
+                    foreach (var inner in exception.InnerExceptions)
                     {
-                        // Проверяем, что сундук не стоит на препятствии.
-                        var hex = (HexNode)container.Node;
-                        if (hex.IsObstacle)
+                        if (inner is SectorValidationException)
                         {
-                            throw new Exception();
-                        }
-
-                        // Проверяем, что сундук не на клетке с выходом.
-                        var transitionNodes = sector.Map.Transitions.Keys;
-                        var chestOnTransitionNode = transitionNodes.Contains(container.Node);
-                        if (chestOnTransitionNode)
-                        {
-                            throw new Exception();
+                            Log.Error(inner);
                         }
                     }
 
-                    // Проверка монстров.
-                    // Монстры не должны генерироваться на узлах с препятствием.
-                    // Монстры не должны генерироваться на узлах с сундуками.
-                    var actorManager = scopeContainer.GetInstance<IActorManager>();
-                    var allMonsters = actorManager.Items;
-                    var containerNodes = allContainers.Select(x => x.Node);
-                    foreach (var actor in allMonsters)
-                    {
-                        var hex = (HexNode)actor.Node;
-                        if (hex.IsObstacle)
-                        {
-                            throw new Exception();
-                        }
-
-                        var monsterIsOnContainer = containerNodes.Contains(actor.Node);
-                        if (monsterIsOnContainer)
-                        {
-                            throw new Exception();
-                        }
-                    }
-
-                    // Проверка переходов.
-                    // Все переходы на уровне должны либо вести на глобальную карту,
-                    // либо на корректный уровень сектора.
-                    var transitions = sector.Map.Transitions.Values;
-                    foreach (var transition in transitions)
-                    {
-                        var targetSectorSid = transition.SectorSid;
-                        if (targetSectorSid == null)
-                        {
-                            // Это значит, что переход на глобальную карту.
-                            // Нормальная ситуация, проверяем следующий переход.
-                            continue;
-                        }
-
-                        var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
-                        if (sectorLevelBySid == null)
-                        {
-                            throw new Exception($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
-                        }
-                    }
+                    throw;
                 }
 
-                Console.WriteLine($"Iteration {iteration:D5} complete");
-                Console.WriteLine($"{sectorScheme.Name.En} Level {sectorLevelIndex}");
+                stopWatch.Stop();
+
+                Log.Info($"CHECK DURATION: {stopWatch.Elapsed.TotalSeconds} SEC");
+            });
+        }
+
+        private static string GetOutputPath(string[] args)
+        {
+            var outputPath = ArgumentHelper.GetProgramArgument(args, Args.OUT_PATH_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                return null;
+            }
+
+            try
+            {
+                Path.GetFullPath(outputPath);
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception);
+                return null;
+            }
+
+            return outputPath;
+        }
+
+        private static int GetDiceSeed(string[] args)
+        {
+            var diceSeedString = ArgumentHelper.GetProgramArgument(args, Args.DICE_SEED_ARG_NAME);
+
+            int diceSeed;
+            if (string.IsNullOrWhiteSpace(diceSeedString))
+            {
+                diceSeed = _random.Next(0, int.MaxValue);
+            }
+            else
+            {
+                if (!int.TryParse(diceSeedString, out diceSeed))
+                {
+                    throw new SectorGeneratorException($"Зерно рандома задано некорректно: {diceSeedString}.");
+                }
+            }
+
+            Log.Info($"DICE SEED: {diceSeed}");
+
+            return diceSeed;
+        }
+
+        private static SectorSchemeResult GetSectorScheme(string[] args, ISchemeService schemeService)
+        {
+            var locationSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.LOCATION_SCHEME_SID_ARG_NAME);
+            var sectorSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.SECTOR_SCHEME_SID_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(locationSchemeSid) && string.IsNullOrWhiteSpace(sectorSchemeSid))
+            {
+                // Если схемы не указаны, то берём случайную схему.
+                // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
+
+                var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
+                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
+                    .ToArray();
+                var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
+                var locationScheme = locationSchemes[locationSchemeIndex];
+
+                var sectorSchemes = locationScheme.SectorLevels;
+                var sectorSchemeIndex = _random.Next(0, sectorSchemes.Length);
+                var sectorScheme = sectorSchemes[sectorSchemeIndex];
+
+                Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
+
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
+            }
+            else
+            {
+                // Если схемы заданы, то строим карту на их основе.
+                // Это будет использовано для отладки.
+
+                var locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
+                if (locationScheme == null)
+                {
+                    throw new SectorGeneratorException($"Не найдена схема локации {locationSchemeSid}.");
+                }
+
+                var sectorScheme = locationScheme.SectorLevels.SingleOrDefault(x => x.Sid == sectorSchemeSid);
+                if (sectorScheme == null)
+                {
+                    throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
+                }
+
+                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+
+                return result;
+            }
+        }
+
+        private static void SaveMapAsImage(ISectorMap map, string outputPath)
+        {
+            using (var bmp = MapDrawer.DrawMap(map))
+            {
+                bmp.Save(outputPath);
             }
         }
     }

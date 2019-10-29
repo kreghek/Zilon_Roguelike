@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
@@ -96,11 +97,12 @@ public class PropInfoPopup : MonoBehaviour
                     {
                         var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
                         var actName = act.Name.En ?? act.Name.Ru;
-                        var efficient = $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
+                        var efficient = GetEfficientString(act);
                         if (act.Stats.Effect == TacticalActEffectType.Damage)
                         {
                             var actImpact = act.Stats.Offence.Impact;
-                            descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offence.ApRank} rank)");
+                            var rank = GetRankString(act.Stats.Offence.ApRank);
+                            descriptionLines.Add($"{actName}: {actImpact} {efficient} efficient ({rank} rank)");
                         }
                         else if (act.Stats.Effect == TacticalActEffectType.Heal)
                         {
@@ -113,7 +115,8 @@ public class PropInfoPopup : MonoBehaviour
                 {
                     foreach (var armor in propScheme.Equip.Armors)
                     {
-                        descriptionLines.Add($"Protects: {armor.Impact} ({armor.ArmorRank} rank): {armor.AbsorbtionLevel}");
+                        var rankString = GetRankString(armor.ArmorRank);
+                        descriptionLines.Add($"Protects: {armor.Impact} ({rankString} rank): {armor.AbsorbtionLevel}");
                     }
                 }
 
@@ -142,6 +145,54 @@ public class PropInfoPopup : MonoBehaviour
                 }
 
                 break;
+        }
+    }
+
+    private string GetRankString(int armorRank)
+    {
+        if (armorRank < 0)
+        {
+            throw new ArgumentException("Ранг защиты не можут быть меньше 0", nameof(armorRank));
+        }
+
+        if (armorRank == 0)
+        {
+            return "none";
+        }
+        else if (1 <= armorRank && armorRank <= 2)
+        {
+            return "minor";
+        }
+        else if (3 <= armorRank && armorRank <= 5)
+        {
+            return "normal";
+        }
+        else if (6 <= armorRank && armorRank <= 9)
+        {
+            return "good";
+        }
+        else
+        {
+            return "perfect";
+        }
+    }
+
+    private static string GetEfficientString(ITacticalActScheme act)
+    {
+        var efficient = act.Stats.Efficient;
+        var maxEfficientValue = efficient.Count * efficient.Dice;
+
+        if (maxEfficientValue <= 5)
+        {
+            return "low";
+        }
+        else if (6 <= maxEfficientValue && maxEfficientValue <= 8)
+        {
+            return "normal";
+        }
+        else
+        {
+            return "high";
         }
     }
 

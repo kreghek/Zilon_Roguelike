@@ -14,12 +14,18 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolverRandomSource _randomSource;
         private readonly ISchemeService _schemeService;
         private readonly IPropFactory _propFactory;
+        private readonly IUserTimeProvider _userTimeProvider;
 
-        public DropResolver(IDropResolverRandomSource randomSource, ISchemeService schemeService, IPropFactory propFactory)
+        public DropResolver(
+            IDropResolverRandomSource randomSource,
+            ISchemeService schemeService,
+            IPropFactory propFactory,
+            IUserTimeProvider userTimeProvider)
         {
             _randomSource = randomSource;
             _schemeService = schemeService;
             _propFactory = propFactory;
+            _userTimeProvider = userTimeProvider;
         }
 
         public IProp[] Resolve(IEnumerable<IDropTableScheme> dropTables)
@@ -31,7 +37,7 @@ namespace Zilon.Core.Tactics
 
         private IProp[] ResolveInner(IDropTableScheme[] dropTables)
         {
-            var modificators = new IDropTableModificatorScheme[0];
+            var modificators = GetModifiers();
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             var openDropTables = new List<IDropTableScheme>(dropTables);
@@ -69,6 +75,59 @@ namespace Zilon.Core.Tactics
             var props = rolledRecords.Select(GenerateProp).ToArray();
 
             return props;
+        }
+
+        private IDropTableModificatorScheme[] GetModifiers()
+        {
+            var totalModifierList = new List<IDropTableModificatorScheme>();
+            AddEvilHourModifiers(totalModifierList);
+
+            return totalModifierList.ToArray();
+        }
+
+        private void AddEvilHourModifiers(IList<IDropTableModificatorScheme> totalModifierList)
+        {
+            const float PRE_DAY_COUNT = 5.0f;
+            const float POST_DAY_COUNT = 2.0f;
+
+            var currentDate = _userTimeProvider.GetCurrentTime();
+            // Основано на хелловине
+            var evilHour = new DateTime(currentDate.Year, 11, 2);
+            var evilHourStart = evilHour.AddDays(-PRE_DAY_COUNT);
+            var evilHourEnd = evilHour.AddDays(POST_DAY_COUNT);
+            if (evilHourStart <= currentDate && currentDate <= evilHourEnd)
+            {
+                IDropTableModificatorScheme mod;
+                if (currentDate <= evilHour)
+                {
+                    // Канун злого часа
+                    mod = CreateEvilHourModifier(evilHour, PRE_DAY_COUNT, currentDate);
+                }
+                else
+                {
+                    // Хвост события
+                    mod = CreateEvilHourModifier(currentDate, POST_DAY_COUNT, evilHourEnd);
+                }
+
+                totalModifierList.Add(mod);
+            }
+        }
+
+        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration, DateTime currentDate)
+        {
+            var dateDiff = targetDate - currentDate;
+
+            var days = dateDiff.Days;
+            var ration = days / duration;
+            var inversedRation = 1 - ration;
+            var bonus = duration * inversedRation;
+            var mod = new DropTableModificatorScheme
+            {
+                PropSids = new[] { "evil-pumpkin" },
+                //TODO Зачем вообще здесь -1. Бонус - это число, на которое нужно умножить.
+                WeightBonus = bonus - 1
+            };
+            return mod;
         }
 
         private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,

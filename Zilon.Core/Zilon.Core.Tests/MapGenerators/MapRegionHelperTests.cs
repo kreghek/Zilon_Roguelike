@@ -12,7 +12,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class MapRegionHelperTests
     {
         /// <summary>

@@ -25,7 +25,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     public ActorGraphicBase GraphicRoot;
-    public ActorHpBar ActorHpBar;
 
     private readonly List<HitSfx> _effectList;
 
@@ -55,16 +54,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
 
         Actor.OpenedContainer += Actor_OpenedContainer;
-
-        if (ActorHpBar != null)
-        {
-            ActorHpBar.Actor = Actor;
-
-            if (PlayerState != null && ReferenceEquals(PlayerState.ActiveActor, this))
-            {
-                ActorHpBar.gameObject.SetActive(false);
-            }
-        }
     }
 
     [UsedImplicitly]

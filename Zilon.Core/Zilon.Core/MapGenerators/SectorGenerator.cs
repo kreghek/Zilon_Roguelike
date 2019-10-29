@@ -17,25 +17,24 @@ namespace Zilon.Core.MapGenerators
     /// <seealso cref="ISectorGenerator" />
     public class SectorGenerator : ISectorGenerator
     {
-
-        private readonly IMapFactory _mapFactory;
         private readonly IChestGenerator _chestGenerator;
         private readonly IBotPlayer _botPlayer;
         private readonly ICitizenGenerator _citizenGenerator;
+        private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="SectorGenerator"/>.
         /// </summary>
-        /// <param name="mapFactory"> Фабрика карты. Сейчас используется <see cref="RoomMapFactory"/>. </param>
+        /// <param name="mapFactorySelector"> Сервис для выбора фабрики для создания карты. </param>
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
         /// <param name="citizenGenerator"> Генератор жителей в городском квартале. </param>
         /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
-            IMapFactory mapFactory,
+            IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
@@ -43,7 +42,7 @@ namespace Zilon.Core.MapGenerators
 ,
             IBotPlayer botPlayer)
         {
-            _mapFactory = mapFactory;
+            _mapFactorySelector = mapFactorySelector;
             _sectorFactory = sectorFactory;
             _monsterGenerator = monsterGenerator;
             _chestGenerator = chestGenerator;
@@ -58,14 +57,18 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Возвращает экземпляр сектора. </returns>
         public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
         {
-            var map = await _mapFactory.CreateAsync(sectorScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(sectorScheme);
+
+            var map = await mapFactory.CreateAsync(sectorScheme);
 
             var sector = _sectorFactory.Create(map);
 
-            var monsterRegions = map.Regions.Where(x => !x.IsStart).ToArray();
+            var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
-            _chestGenerator.CreateChests(map, sectorScheme, monsterRegions);
+            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
+            _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
 
+            var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,
                 _botPlayer,
                 monsterRegions,
@@ -94,7 +97,9 @@ namespace Zilon.Core.MapGenerators
                 RegionSize = 10
             };
 
-            var map = await _mapFactory.CreateAsync(townScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(townScheme);
+
+            var map = await mapFactory.CreateAsync(townScheme);
 
             var sector = _sectorFactory.Create(map);
 
