@@ -120,11 +120,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
-
             // ACT
             var factProps = resolver.Resolve(new[] { testDropTable });
-
-
 
             // ASSERT
             factProps.Length.Should().Be(1);
@@ -190,7 +187,6 @@ namespace Zilon.Core.Tests.Tactics
                         MaxCount = 1
                     })
                 }
-
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
