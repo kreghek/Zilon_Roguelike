@@ -5,7 +5,7 @@ using Zilon.Core.Tests.Tactics.Base;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class PropContainerManagerTests : CommonManagerTestsBase<IPropContainer>
     {
         protected override ISectorEntityManager<IPropContainer> CreateManager()

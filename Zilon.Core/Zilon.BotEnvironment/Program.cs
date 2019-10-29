@@ -11,13 +11,16 @@ using LightInject;
 
 using Zilon.Bot;
 using Zilon.Bot.Sdk;
+using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.IoC;
 
 namespace Zilon.BotEnvironment
 {
@@ -38,7 +41,7 @@ namespace Zilon.BotEnvironment
 
         static async Task Main(string[] args)
         {
-            var scoreFilePreffix = GetProgramArgument(args, SCORE_PREFFIX_ARG);
+            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
             var schemeCatalogPath = GetProgramArgument(args, SCHEME_CATALOG_PATH_ARG);
 
@@ -71,8 +74,6 @@ namespace Zilon.BotEnvironment
                         .Stats
                         .Single(x => x.Type == SurvivalStatType.Health)
                         .Value;
-
-                    var hexNode = (HexNode)humanActor.Node;
 
                     Console.WriteLine($"Current HP: {humanPersonHp} Node {humanActor.Node}");
 
@@ -121,11 +122,11 @@ namespace Zilon.BotEnvironment
                 iterationCounter++;
             };
 
-            var mode = GetProgramArgument(args, BOT_MODE_ARG);
+            var mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG);
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             WriteScores(scorePath, _globalServiceContainer, scoreManager, mode, scoreFilePreffix);
 
-            if (!HasProgramArgument(args, SERVER_RUN_ARG))
+            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();
             }
@@ -135,7 +136,7 @@ namespace Zilon.BotEnvironment
         {
             var botSettings = new BotSettings
             {
-                Mode = GetProgramArgument(args, BOT_MODE_ARG)
+                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
             };
             actorTaskSource.Configure(botSettings);
         }
@@ -161,11 +162,8 @@ namespace Zilon.BotEnvironment
 
             _startUp.ConfigureAux(_sectorServiceContainer);
 
-            var schemeService = _globalServiceContainer.GetInstance<ISchemeService>();
             var humanPlayer = _globalServiceContainer.GetInstance<HumanPlayer>();
-            var survivalRandomSource = _globalServiceContainer.GetInstance<ISurvivalRandomSource>();
             var personFactory = _globalServiceContainer.GetInstance<IHumanPersonFactory>();
-            var propFactory = _globalServiceContainer.GetInstance<IPropFactory>();
             var scoreManager = _globalServiceContainer.GetInstance<IScoreManager>();
             var perkResolver = _globalServiceContainer.GetInstance<IPerkResolver>();
 
@@ -233,9 +231,9 @@ namespace Zilon.BotEnvironment
 
             // Регистрируем сервис источника команд.
             var botActorTaskSource = GetBotActorTaskSource(registerManager);
-            serviceRegistry.Register(typeof(ISectorActorTaskSource), botActorTaskSource, "bot", new PerScopeLifetime());
+            serviceRegistry.Register(typeof(ISectorActorTaskSource), botActorTaskSource, "bot", LightInjectWrapper.CreateScoped());
             serviceRegistry.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot",
-                new PerScopeLifetime());
+                LightInjectWrapper.CreateScoped());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
             registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
@@ -285,29 +283,6 @@ namespace Zilon.BotEnvironment
             return null;
         }
 
-
-        private static bool HasProgramArgument(string[] args, string testArg)
-        {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
-        }
-
-        private static string GetProgramArgument(string[] args, string testArg)
-        {
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private static void Survival_Dead(object sender, EventArgs e)
         {
             Console.WriteLine($"{sender} dead");
@@ -315,7 +290,7 @@ namespace Zilon.BotEnvironment
 
         private static void Actor_Moved(object sender, EventArgs e)
         {
-            var actor = sender as IActor;
+            var actor = (IActor)sender;
             Console.WriteLine($"{actor} moved {actor.Node}");
         }
 
@@ -326,40 +301,11 @@ namespace Zilon.BotEnvironment
             string mode,
             string scoreFilePreffix)
         {
-            var summaryStringBuilder = new StringBuilder(); 
-            
-            summaryStringBuilder.AppendLine("YOU (BOT) DIED");
+            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
 
-            summaryStringBuilder.AppendLine($"SCORES: {scoreManager.BaseScores}");
+            Console.WriteLine(summaryText);
 
-            summaryStringBuilder.AppendLine("=== You survived ===");
-            var minutesTotal = scoreManager.Turns * 2;
-            var hoursTotal = minutesTotal / 60f;
-            var daysTotal = hoursTotal / 24f;
-            var days = (int)daysTotal;
-            var hours = (int)(hoursTotal - days * 24);
-
-            summaryStringBuilder.AppendLine($"{days} days {hours} hours");
-            summaryStringBuilder.AppendLine($"Turns: {scoreManager.Turns}");
-
-            summaryStringBuilder.AppendLine("=== You visited ===");
-
-            summaryStringBuilder.AppendLine($"{scoreManager.Places.Count} places");
-
-            foreach (var placeType in scoreManager.PlaceTypes)
-            {
-                summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
-            }
-
-            summaryStringBuilder.AppendLine("=== You killed ===");
-            foreach (var frag in scoreManager.Frags)
-            {
-                summaryStringBuilder.AppendLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
-            }
-
-            Console.WriteLine(summaryStringBuilder.ToString());
-
-            AppendScores(scorePath, scoreManager, serviceFactory, scoreFilePreffix, mode, summaryStringBuilder.ToString());
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
         }
 
         private static void AppendScores(

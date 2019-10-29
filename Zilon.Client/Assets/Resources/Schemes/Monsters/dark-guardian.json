@@ -30,7 +30,9 @@
   },
   "DropTableSids": [
     "survival",
-	"dark-guardian-loot"
+	"dark-guardian-loot",
+	"default",
+	"default-evil-hour"
   ],
   "BaseScore": 75,
   "Tags": [

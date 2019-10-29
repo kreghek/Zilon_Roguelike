@@ -9,7 +9,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class HexNodeHelperTests
     {
         [Test]

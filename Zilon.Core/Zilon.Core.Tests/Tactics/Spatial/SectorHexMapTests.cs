@@ -7,7 +7,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Spatial.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class SectorHexMapTests
     {
         /// <summary>

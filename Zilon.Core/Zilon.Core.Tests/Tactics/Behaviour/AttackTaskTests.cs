@@ -18,7 +18,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class AttackTaskTests
     {
         private AttackTask _attackTask;

@@ -12,7 +12,7 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Менеджер модальных окон.
         /// </summary>
-        protected readonly ISectorModalManager ModalManager;
+        protected ISectorModalManager ModalManager { get; }
 
         /// <summary>
         /// Создаёт экземпляр <see cref="ShowModalCommandBase"/>.

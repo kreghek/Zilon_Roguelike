@@ -11,7 +11,7 @@ using FluentAssertions;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class MoveIntentionTests
     {
         /// <summary>

@@ -40,7 +40,9 @@
     "survival",
 	"champion-loot",
 	"hellrock-loot",
-	"demon"
+	"demon",
+	"default",
+	"default-evil-hour"
   ],
   "BaseScore": 100,
   "Tags": [

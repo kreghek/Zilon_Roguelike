@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </remarks>
         public RoomInteriorObjectMeta(OffsetCoords coords)
         {
-            Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+            Coords = coords;
         }
 
         /// <summary>

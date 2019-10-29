@@ -6,6 +6,7 @@ using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
+using Zilon.IoC;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -24,10 +25,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
         {
             container.RegisterLogicState();
             container.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
-                new PerScopeLifetime());
+                LightInjectWrapper.CreateScoped());
 
-            container.Register<ISectorActorTaskSource, HumanBotActorTaskSource>("bot", new PerScopeLifetime());
-            container.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot", new PerScopeLifetime());
+            container.Register<ISectorActorTaskSource, HumanBotActorTaskSource>("bot", LightInjectWrapper.CreateScoped());
+            container.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot", LightInjectWrapper.CreateScoped());
 
         }
     }

@@ -9,7 +9,7 @@ using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class ChestGeneratorRandomSourceTests
     {
         [Test]
