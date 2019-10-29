@@ -9,7 +9,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class FixCompactRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {
-        public FixCompactRoomGeneratorRandomSource() : base()
+        public FixCompactRoomGeneratorRandomSource()
         {
             for (var y = 0; y < 4; y++)
             {

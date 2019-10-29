@@ -5,10 +5,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
-
     public class FixLargeRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {
-        public FixLargeRoomGeneratorRandomSource() : base()
+        public FixLargeRoomGeneratorRandomSource()
         {
             // Все комнаты пересекаются через всё доступное пространство.
             // Каждая комната из ряда пересекается с зеркальной комнатой.

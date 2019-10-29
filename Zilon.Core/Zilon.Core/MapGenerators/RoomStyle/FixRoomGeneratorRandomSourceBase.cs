@@ -11,7 +11,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     {
         protected readonly List<Tuple<OffsetCoords, OffsetCoords>> Connections;
 
-        public FixRoomGeneratorRandomSourceBase()
+        protected FixRoomGeneratorRandomSourceBase()
         {
             // 20 комнат - это 6х6 матрица
             Connections = new List<Tuple<OffsetCoords, OffsetCoords>>(20);
