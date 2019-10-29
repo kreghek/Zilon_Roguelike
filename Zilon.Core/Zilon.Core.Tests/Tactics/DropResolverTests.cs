@@ -205,7 +205,7 @@ namespace Zilon.Core.Tests.Tactics
             ((Resource)factProps[1]).Count.Should().Be(1);
         }
 
-        private IUserTimeProvider CreateEmptyUserTimeProvider()
+        private static IUserTimeProvider CreateEmptyUserTimeProvider()
         {
             var userTimeProviderMock = new Mock<IUserTimeProvider>();
             return userTimeProviderMock.Object;
