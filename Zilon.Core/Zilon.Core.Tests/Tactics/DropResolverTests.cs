@@ -1,9 +1,11 @@
 ﻿using System;
+
 using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -18,7 +20,7 @@ namespace Zilon.Core.Tactics.Tests
         [Test()]
         public void ResolveTest()
         {
-            var dice = new Dice(1);
+            var dice = new LinearDice(1);
             var randomSource = new DropResolverRandomSource(dice);
 
             var schemeFactory = new SchemeServiceHandlerFactory(CreateSchemeLocator());

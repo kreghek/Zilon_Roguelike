@@ -103,6 +103,10 @@
       <Project>{36013151-86C1-431E-ABC6-AFF816D4E015}</Project>
       <Name>Zilon.Emulation.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
+      <Project>{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}</Project>
+      <Name>Zilon.IoC</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
