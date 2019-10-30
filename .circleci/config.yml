@@ -29,6 +29,19 @@ jobs:
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
       - store_test_results:
           path: TestResult.xml
+  test_45_coverage:
+    working_directory: /test_45_coverage
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
+      - run: mono --debug /test_45_coverage/Zilon.Core/packages/OpenCover.4.7.922/tools/OpenCover.Console.exe "-target:/test_45_coverage/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe" "-targetargs:Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll" "-register:user" "-output:opencover.xml"
   test_players:
     working_directory: /test_players
     docker:
