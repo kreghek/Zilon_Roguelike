@@ -312,6 +312,7 @@ workflows:
   version: 2
   commit:
     jobs:
+      - test_45_coverage
       - build
       - test_45:
           requires:
