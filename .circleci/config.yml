@@ -32,7 +32,7 @@ jobs:
   test_45_coverage:
     working_directory: /test_45_coverage
     docker:
-      - image: ubuntu:18.04
+      - image: amd64/mono:6.4.0.198
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
