@@ -148,6 +148,7 @@
     <Compile Include="PersonDialogs\DialogNode.cs" />
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
+    <Compile Include="Persons\SurvivalDataBase.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
     <Compile Include="Persons\CreatePersonException.cs" />
     <Compile Include="Persons\DamagePerkParams.cs" />
