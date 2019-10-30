@@ -8,7 +8,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовая реализация данных о выживании для монстров.
     /// </summary>
-    public sealed class MonsterSurvivalData : BaseSurvivalData, ISurvivalData
+    public sealed class MonsterSurvivalData : SurvivalDataBase, ISurvivalData
     {
         public MonsterSurvivalData([NotNull] IMonsterScheme monsterScheme) : base(GetStats(monsterScheme))
         {
@@ -16,7 +16,6 @@ namespace Zilon.Core.Persons
             {
                 throw new ArgumentNullException(nameof(monsterScheme));
             }
-
         }
 
         private static SurvivalStat[] GetStats([NotNull] IMonsterScheme monsterScheme)
@@ -27,8 +26,7 @@ namespace Zilon.Core.Persons
                 }
             };
         }
-
-
+        
         /// <summary>
         /// Обновление состояния данных о выживании.
         /// </summary>

@@ -12,7 +12,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Базовая реализация данных о выживании для человеческих персонажей.
     /// </summary>
-    public sealed class HumanSurvivalData : BaseSurvivalData, ISurvivalData
+    public sealed class HumanSurvivalData : SurvivalDataBase, ISurvivalData
     {
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
@@ -90,7 +90,6 @@ namespace Zilon.Core.Persons
         {
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-
         }
         
         /// <summary>Обновление состояния данных о выживании.</summary>

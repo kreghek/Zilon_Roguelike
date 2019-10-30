@@ -4,9 +4,9 @@ using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons
 {
-    public class BaseSurvivalData
+    public abstract class SurvivalDataBase
     {
-        public BaseSurvivalData(SurvivalStat[] stats)
+        public SurvivalDataBase(SurvivalStat[] stats)
         {
             Stats = stats;
         }
@@ -59,7 +59,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="caller">The object performing the call</param>
         /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
-        public void InvokeStatChangedEvent(BaseSurvivalData caller, SurvivalStatChangedEventArgs args)
+        public void InvokeStatChangedEvent(SurvivalDataBase caller, SurvivalStatChangedEventArgs args)
         {
             StatChanged?.Invoke(caller, args);
         }
