@@ -32,7 +32,7 @@ jobs:
   test_45_coverage:
     working_directory: /test_45_coverage
     docker:
-      - image: amd64/mono:6.4.0.198
+      - image: mono:6.0.0.313
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -44,7 +44,7 @@ jobs:
       - run: apt update && apt -y install wget && wget -O dotCover.tar.gz -P /test_45_coverage "https://download.jetbrains.com/resharper/ReSharperUltimate.2019.2.2/JetBrains.dotCover.CommandLineTools.Linux.2019.2.2.tar.gz?_ga=2.208181138.1839691299.1572416435-1767931937.1531365763&_gac=1.149803332.1572421002.Cj0KCQjw6eTtBRDdARIsANZWjYZezP-4m1JoGMBowUBUc5riQFUL86GCl6Wev_DWRz8FQSPXdpPfvDMaAlHIEALw_wcB"
       - run: mkdir -p /test_45_coverage/clt
       - run: apt update && apt -y install tar && tar -xvzf /test_45_coverage/dotCover.tar.gz -C /test_45_coverage/clt
-      - run: /test_45_coverage/clt/dotCover.sh cover --TargetExecutable="/test_45_coverage/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe" --TargetArguments="/test_45_coverage/Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll" --Output="Zilon.Core.Report.xml" --ReportType=XML
+      - run: /test_45_coverage/clt/dotCover.sh cover --TargetExecutable="/test_45_coverage/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe" --TargetArguments="/test_45_coverage/Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll -inpocess" --Output="Zilon.Core.Report.xml" --ReportType=XML
   test_players:
     working_directory: /test_players
     docker:
