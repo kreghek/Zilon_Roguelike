@@ -17,12 +17,6 @@ namespace Zilon.Core.Persons
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
-//        /// <summary>
-//        /// Событие, которое происходит, если значение характеристики
-//        /// пересекает ключевое значение (мин/макс/четверти/0).
-//        /// </summary>
-//        public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
-
         public HumanSurvivalData([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource) : base(GetStats(personScheme))
         {
