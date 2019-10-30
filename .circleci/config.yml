@@ -27,6 +27,8 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - store_test_results:
+          path: TestResult.xml
   test_players:
     working_directory: /test_players
     docker:
