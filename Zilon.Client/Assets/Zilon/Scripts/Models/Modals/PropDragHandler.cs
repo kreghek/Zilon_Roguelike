@@ -1,9 +1,8 @@
-﻿using JetBrains.Annotations;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Zenject;
+
 using Zilon.Core.Client;
 
 public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
@@ -45,7 +44,7 @@ public class PropDragHandler : UIBehaviour, IBeginDragHandler, IEndDragHandler, 
 
         _draggedPropItem = draggedPropItemObj.GetComponent<DraggedPropItem>();
         _draggedPropItem.Init(PropItemViewModel);
-        
+
         PropItemViewModel.SetDraggingState(true);
         _inventoryState.SelectedProp = PropItemViewModel;
     }

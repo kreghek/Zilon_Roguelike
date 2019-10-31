@@ -73,41 +73,51 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     private void UpdateSlotIcon()
     {
+        if (IconImage == null)
+        {
+            return;
+        }
+
         var currentEquipment = Actor.Person.EquipmentCarrier[SlotIndex];
         if (currentEquipment != null)
         {
-            if (IconImage != null)
-            {
-                IconImage.sprite = Resources.Load<Sprite>($"Icons/props/{currentEquipment.Scheme.Sid}");
-            }
+            SetEquipmentIcon(currentEquipment);
         }
         else
         {
-            if (IconImage != null)
-            {
-                switch (SlotTypes)
-                {
-                    case EquipmentSlotTypes.Head:
-                        IconImage.sprite = TypeBackgrounds[0];
-                        break;
-
-                    case EquipmentSlotTypes.Body:
-                        IconImage.sprite = TypeBackgrounds[1];
-                        break;
-
-                    case EquipmentSlotTypes.Hand:
-                        IconImage.sprite = TypeBackgrounds[2];
-                        break;
-
-                    case EquipmentSlotTypes.Aux:
-                        IconImage.sprite = TypeBackgrounds[3];
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"Неизвестный тип слота {SlotTypes}.");
-                }
-            }
+            SetEmptySlotIcon();
         }
+    }
+
+    private void SetEmptySlotIcon()
+    {
+        switch (SlotTypes)
+        {
+            case EquipmentSlotTypes.Head:
+                IconImage.sprite = TypeBackgrounds[0];
+                break;
+
+            case EquipmentSlotTypes.Body:
+                IconImage.sprite = TypeBackgrounds[1];
+                break;
+
+            case EquipmentSlotTypes.Hand:
+                IconImage.sprite = TypeBackgrounds[2];
+                break;
+
+            case EquipmentSlotTypes.Aux:
+                IconImage.sprite = TypeBackgrounds[3];
+                break;
+
+            default:
+                throw new InvalidOperationException($"Неизвестный тип слота {SlotTypes}.");
+        }
+    }
+
+    private void SetEquipmentIcon(Equipment currentEquipment)
+    {
+        var iconSprite = CalcIcon(currentEquipment);
+        IconImage.sprite = iconSprite;
     }
 
     public void FixedUpdate()
@@ -163,5 +173,17 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
         }
 
         DraggingStateChanged?.Invoke(this, new PropDraggingStateEventArgs(value));
+    }
+
+    private Sprite CalcIcon(IProp prop)
+    {
+        var schemeSid = prop.Scheme.Sid;
+        if (prop.Scheme.IsMimicFor != null)
+        {
+            schemeSid = prop.Scheme.IsMimicFor;
+        }
+
+        var iconSprite = Resources.Load<Sprite>($"Icons/props/{schemeSid}");
+        return iconSprite;
     }
 }

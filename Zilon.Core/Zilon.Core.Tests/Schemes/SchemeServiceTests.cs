@@ -141,7 +141,6 @@ namespace Zilon.Core.Tests.Schemes
 
 
             // ASSERT
-            var allTasks = new List<Task>();
             foreach (var dropTable in dropTables)
             {
                 CheckDropTableScheme(dropTable, schemeService);
