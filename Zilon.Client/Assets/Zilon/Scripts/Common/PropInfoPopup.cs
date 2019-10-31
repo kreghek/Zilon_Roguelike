@@ -21,7 +21,7 @@ using Zilon.Core.Schemes;
 /// </remarks>
 public class PropInfoPopup : MonoBehaviour
 {
-    [Inject] private ISchemeService _schemeService;
+    [Inject] private readonly ISchemeService _schemeService;
 
     public Text NameText;
     public Text TagsText;
@@ -55,11 +55,39 @@ public class PropInfoPopup : MonoBehaviour
         var prop = propViewModel.Prop;
         var propScheme = prop.Scheme;
 
+        // обрабатываем лже-предметы
+        propScheme = ProcessMimics(prop, propScheme);
+
         NameText.text = propScheme.Name?.En ?? propScheme.Name?.Ru ?? "[noname]";
         WritePropTags(prop);
         DescriptionText.text = propScheme.Description?.En ?? propScheme.Description?.Ru;
 
         WritePropStats(prop);
+    }
+
+    /// <summary>
+    /// Лже-предметы выдают себя на нормальный указанный предмет.
+    /// Но они не могут скрываться, когда их прочность падает ниже 50%.
+    /// В рамках этого метода мы возвращаем либо реальную схему предмета,
+    /// либо схему, под которую мимикрирует текущий предмет (потому что он мимик и его статы ниже).
+    /// </summary>
+    private IPropScheme ProcessMimics(IProp prop, IPropScheme propScheme)
+    {
+        if (propScheme.IsMimicFor != null)
+        {
+            if (prop is Equipment equipment)
+            {
+                if (equipment.Durable.ValueShare < 0.5f)
+                {
+                    var mimicScheme = _schemeService.GetScheme<IPropScheme>(propScheme.IsMimicFor);
+                    Debug.Assert(mimicScheme != null, "Все схемы должны быть согласованы");
+
+                    propScheme = mimicScheme;
+                }
+            }
+        }
+
+        return propScheme;
     }
 
     private void WritePropTags(IProp prop)

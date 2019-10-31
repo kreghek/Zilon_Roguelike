@@ -266,6 +266,11 @@
       "MaxCount": 10,
       "Weight": 2
     },
+	
+	{
+      "SchemeSid": "gold-armor-mimic",
+      "Weight": 300
+    },
 
     {
       "SchemeSid": null,
