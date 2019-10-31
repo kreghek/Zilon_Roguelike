@@ -124,6 +124,10 @@ namespace Zilon.Core.Tactics
                                 DecreaseStat(SurvivalStatType.Health, rule.Level);
                                 break;
 
+                            case ConsumeCommonRuleType.Intoxication:
+                                DecreaseStat(SurvivalStatType.Intoxication, rule.Level);
+                                break;
+
                             case ConsumeCommonRuleType.Undefined:
                             default:
                                 throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
