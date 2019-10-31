@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged", "pistol" ],
+  "Equip": {
+    "ActSids": [
+      "shot-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лже-Пистолет",
+	"En": "Pistol mimic"
+  }
+}

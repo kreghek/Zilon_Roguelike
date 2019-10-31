@@ -271,6 +271,16 @@
       "SchemeSid": "gold-armor-mimic",
       "Weight": 300
     },
+	
+	{
+      "SchemeSid": "gold-helmet-mimic",
+      "Weight": 300
+    },
+	
+	{
+      "SchemeSid": "pistol-mimic",
+      "Weight": 300
+    },
 
     {
       "SchemeSid": null,
