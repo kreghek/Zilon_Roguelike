@@ -9,5 +9,6 @@
   "Name": {
     "Ru": "Лже-Пистолет",
 	"En": "Pistol mimic"
-  }
+  },
+  "IsMimicFor": "pistol"
 }
