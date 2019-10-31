@@ -108,7 +108,13 @@ public sealed class PropItemVm : MonoBehaviour, IPropItemViewModel, IPropViewMod
 
     private Sprite CalcIcon(IProp prop)
     {
-        var iconSprite = Resources.Load<Sprite>($"Icons/props/{prop.Scheme.Sid}");
+        var schemeSid = prop.Scheme.Sid;
+        if (prop.Scheme.IsMimicFor != null)
+        {
+            schemeSid = prop.Scheme.IsMimicFor;
+        }
+
+        var iconSprite = Resources.Load<Sprite>($"Icons/props/{schemeSid}");
         return iconSprite;
     }
 }
