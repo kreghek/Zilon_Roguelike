@@ -10,7 +10,7 @@ namespace Zilon.WorldObserver
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var dice = new LinearDice();
             var worldGenerator = new GlobeInitiator(dice);

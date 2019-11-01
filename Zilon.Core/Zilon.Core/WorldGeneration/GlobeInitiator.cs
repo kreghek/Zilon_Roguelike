@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.NameGeneration;
