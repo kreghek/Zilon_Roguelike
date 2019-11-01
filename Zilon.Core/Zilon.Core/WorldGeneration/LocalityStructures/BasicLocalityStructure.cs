@@ -20,6 +20,8 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
             RequiredResources = requiredResources ?? throw new ArgumentNullException(nameof(requiredResources));
             ProductResources = productResources ?? throw new ArgumentNullException(nameof(productResources));
             Name = name ?? throw new ArgumentNullException(nameof(name));
+
+            AssignedPopulation = new List<PopulationUnit>();
         }
 
         /// <summary>
@@ -54,7 +56,19 @@ namespace Zilon.Core.WorldGeneration.LocalityStructures
         /// </summary>
         public int MaintenanceCost => 1;
 
+        /// <summary>
+        /// Информация о конструировании городской структуры.
+        /// </summary>
         public UnderConstructionData UnderConstructionData { get; }
+
+        /// <summary>
+        /// Назначенное население.
+        /// Одна единица населения может быть назначена на несколько структур
+        /// (если структура не имеет эксключизвого доступа к населению.
+        /// Одна единица населения может быть назначена не более, чем на 3 структуры
+        /// (если иное не указано для единицы населения).
+        /// </summary>
+        public List<PopulationUnit> AssignedPopulation { get; }
 
         public override string ToString()
         {

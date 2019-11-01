@@ -132,6 +132,11 @@ namespace Zilon.Core.WorldGeneration
         /// </remarks>
         public List<ILocalityStructure> Assigments { get; }
 
+        /// <summary>
+        /// Максимальное число назначений для населения.
+        /// </summary>
+        public int MaxAssignments => 3;
+
         private float Lerp(float firstFloat, float secondFloat, float by)
         {
             return firstFloat * (1 - by) + secondFloat * by;
