@@ -11,6 +11,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     public class InteriorObjectRandomSource : IInteriorObjectRandomSource
     {
+        private const int RETRY_COUNT = 3;
+
         private readonly IDice _dice;
 
         /// <summary>
@@ -34,8 +36,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new System.ArgumentNullException(nameof(regionDraftCoords));
             }
 
-           // var availableCoords = GetAvailableCoords(regionDraftCoords);
-            var openCoords = new List<OffsetCoords>(regionDraftCoords);
+            // Получаем все координаты, которые не прижаты к краю.
+            // Ставить препятсвия на краю нельзя,
+            // потому что коридор может начаться с препятсвия.
+            // Коридоры просто строятся от ближайшей точки региона.
+            var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
+
+            var openCoords = new List<OffsetCoords>(coordsInCenter);
             if (!openCoords.Any())
             {
                 return System.Array.Empty<InteriorObjectMeta>();
@@ -49,7 +56,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Выполняем 3 попытки на размещение элемента декора.
                 // 2 из них могут быть неудачными (например, элемент
                 // декора перекрывает проход к какой-либо доступной ячейке).
-                for (var tryIndex = 0; tryIndex < 3; tryIndex++)
+                for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
                     var isValid = TryRollInteriorCoord(openCoords, regionDraftCoords, out var rolledCoord);
 
@@ -102,6 +109,51 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return true;
         }
 
+        private static bool CheckMapPassable(IEnumerable<OffsetCoords> currentCoords, OffsetCoords targetCoords)
+        {
+            var matrix = new Matrix<bool>(1000, 1000);
+            foreach (var coords in currentCoords)
+            {
+                var x = coords.X;
+                var y = coords.Y;
+                matrix.Items[x, y] = true;
+            }
+
+            // Закрываем проверяемый узел
+            matrix.Items[targetCoords.X, targetCoords.Y] = false;
+
+            // Не выбираем првоеряемую координату, как стартовую, потому что
+            // она уже закрыта. Заливка от неё не пройдёт.
+            var availableStartPoints = currentCoords.Where(x => x != targetCoords).ToArray();
+            if (!availableStartPoints.Any())
+            {
+                // Если нет доступных координат для старта,
+                // значит стартовая координата была единственной.
+                // Её нельзя закрывать препятсвием.
+                return false;
+            }
+
+            var startPoint = availableStartPoints.First();
+            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
+
+            foreach (var point in floodPoints)
+            {
+                matrix.Items[point.X, point.Y] = false;
+            }
+
+            foreach (var node in currentCoords)
+            {
+                var x = node.X;
+                var y = node.Y;
+                if (matrix.Items[x, y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private static IEnumerable<OffsetCoords> GetAvailableCoords(OffsetCoords[] regionDraftCoords)
         {
             var coordHash = new HashSet<OffsetCoords>(regionDraftCoords);
@@ -130,40 +182,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var neighborCube = cube + neighborCubeOffset;
                 var neighborOffsetCoords = HexHelper.ConvertToOffset(neighborCube);
                 if (!coordHash.Contains(neighborOffsetCoords))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool CheckMapPassable(IEnumerable<OffsetCoords> currentCoords, OffsetCoords targetCoords)
-        {
-            var matrix = new Matrix<bool>(1000, 1000);
-            foreach (var coords in currentCoords)
-            {
-                var x = coords.X;
-                var y = coords.Y;
-                matrix.Items[x, y] = true;
-            }
-
-            // Закрываем проверяемый узел
-            matrix.Items[targetCoords.X, targetCoords.Y] = false;
-
-            var startPoint = currentCoords.First();
-            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
-
-            foreach (var point in floodPoints)
-            {
-                matrix.Items[point.X, point.Y] = false;
-            }
-
-            foreach (var node in currentCoords)
-            {
-                var x = node.X;
-                var y = node.Y;
-                if (matrix.Items[x, y])
                 {
                     return false;
                 }
