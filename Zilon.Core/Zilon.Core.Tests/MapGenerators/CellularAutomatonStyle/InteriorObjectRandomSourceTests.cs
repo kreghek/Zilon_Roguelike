@@ -35,7 +35,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
             {
                 for (var j = 0; j < SQARE_SIZE; j++)
                 {
-                    coords[i + j * SQARE_SIZE] = new OffsetCoords(i, j);
+                    coords[i + (j * SQARE_SIZE)] = new OffsetCoords(i, j);
                 }
             }
 
