@@ -1,0 +1,24 @@
+{
+  "Name": {
+    "Ru": "Ложный Рубящий удар",
+	"En": "Slash Mimic"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact":  "Kinetic",
+	  "ApRank": 1
+    }
+  }
+}
