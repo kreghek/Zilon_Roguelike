@@ -266,6 +266,71 @@
       "MaxCount": 10,
       "Weight": 2
     },
+	
+	{
+      "SchemeSid": "gold-armor-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "gold-helmet-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "pistol-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "anger-axe-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "battle-axe-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "bow-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "composite-bow-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "fireball-staff-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "flail-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "iron-ring-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "law-codex-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "mace-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "master-robe-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "short-sword-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "taurus-stim-mimic",
+      "Weight": 3
+    },
+	{
+      "SchemeSid": "wooden-shield-mimic",
+      "Weight": 3
+    },
 
     {
       "SchemeSid": null,

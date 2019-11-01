@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "mace" ],
+  "Equip": {
+    "ActSids": [
+      "blow"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лже-Цеп",
+	"En": "Flail"
+  },
+  "IsMimicFor": "flail"
+}

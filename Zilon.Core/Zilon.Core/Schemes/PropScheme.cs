@@ -44,5 +44,13 @@ namespace Zilon.Core.Schemes
         /// </remarks>
         [JsonProperty]
         public string[] Tags { get; private set; }
+
+        /// <summary>
+        /// Идентфиикаторы схем других предметов,
+        /// под которые будет мимикрировать данный предмет.
+        /// Используется лже-предметами.
+        /// </summary>
+        [JsonProperty]
+        public string IsMimicFor { get; private set; }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "ranged", "bow" ],
+  "Equip": {
+    "ActSids": [
+      "bow-shot-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лже-Лук",
+	"En": "Bow Mimic"
+  },
+  "IsMimicFor": "bow"
+}
