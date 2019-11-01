@@ -322,7 +322,6 @@ workflows:
   version: 2
   commit:
     jobs:
-      - test_45_coverage
       - build
       - test_45:
           requires:
@@ -396,6 +395,9 @@ workflows:
       - test_45:
           requires:
             - build
+      - test_45_coverage:
+          requires:
+            - test_45
       - test_players:
           requires:
             - build
