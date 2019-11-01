@@ -11,7 +11,7 @@ namespace Zilon.Core.WorldGeneration
     {
         public LocalityStats()
         {
-            ResourcesLastIteration = new Dictionary<LocalityResource, float>();
+            ResourcesPipeline = new Dictionary<LocalityResource, float>();
             ResourcesStorage = new Dictionary<LocalityResource, float>();
             FillResources();
         }
@@ -47,7 +47,7 @@ namespace Zilon.Core.WorldGeneration
         /// При дефиците население начинает мигрировать в другой город.
         /// В режиме приключений в городе не будут продавать определённые товары.
         /// </remarks>
-        public Dictionary<LocalityResource, float> ResourcesLastIteration { get; }
+        public Dictionary<LocalityResource, float> ResourcesPipeline { get; }
 
         /// <summary>
         /// Хранимые запасы ресурсов.
@@ -57,22 +57,22 @@ namespace Zilon.Core.WorldGeneration
 
         public void AddResource(LocalityResource resource, float count)
         {
-            ResourcesLastIteration[resource] += count;
+            ResourcesPipeline[resource] += count;
         }
 
         public float GetResource(LocalityResource resource)
         {
-            return ResourcesLastIteration[resource];
+            return ResourcesPipeline[resource];
         }
 
         public void RemoveResource(LocalityResource resource, float count)
         {
-            if (!ResourcesLastIteration.ContainsKey(resource))
+            if (!ResourcesPipeline.ContainsKey(resource))
             {
-                ResourcesLastIteration[resource] = 0;
+                ResourcesPipeline[resource] = 0;
             }
 
-            ResourcesLastIteration[resource] -= count;
+            ResourcesPipeline[resource] -= count;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Zilon.Core.WorldGeneration
                             .Where(x => x != LocalityResource.Undefined);
             foreach (var resource in allAvailableResources)
             {
-                ResourcesLastIteration[resource] = 0;
+                ResourcesPipeline[resource] = 0;
                 ResourcesStorage[resource] = 0;
             }
         }

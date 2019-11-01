@@ -26,7 +26,7 @@ namespace Zilon.Core.WorldGeneration.LocalityHazards
                 return false;
             }
 
-            var lastIterationFood = locality.Stats.ResourcesLastIteration[LocalityResource.Food];
+            var lastIterationFood = locality.Stats.ResourcesPipeline[LocalityResource.Food];
 
             locality.Stats.ResourcesStorage.TryGetValue(LocalityResource.Food, out var availableFoodFromStorage);
 

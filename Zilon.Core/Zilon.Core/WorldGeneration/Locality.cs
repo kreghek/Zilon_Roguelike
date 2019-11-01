@@ -158,7 +158,7 @@ namespace Zilon.Core.WorldGeneration
             // Доступные ресурсы - это ресурсы с прошлой итерации + (ресурсы со складов * К).
             // Где К - коэффициент, указывающий долю ресурсов от требуемого потребления, которая будет поставляться со складов.
             var availableResources = new Dictionary<LocalityResource, float>();
-            foreach (var lastIterationResource in Stats.ResourcesLastIteration)
+            foreach (var lastIterationResource in Stats.ResourcesPipeline)
             {
                 if (lastIterationResource.Key == LocalityResource.LivingPlaces)
                 {
@@ -272,7 +272,7 @@ namespace Zilon.Core.WorldGeneration
                     var totalStructureEfficient = regionMaintance * structureResourceAllocation * factPopulationPower;
 
                     // Заполняем ресурсы, добытые за эту итерацию.
-                    foreach (var resource in Stats.ResourcesLastIteration.Keys.ToArray())
+                    foreach (var resource in Stats.ResourcesPipeline.Keys.ToArray())
                     {
                         if (resource == LocalityResource.LivingPlaces)
                         {
@@ -280,19 +280,19 @@ namespace Zilon.Core.WorldGeneration
                             continue;
                         }
 
-                        Stats.ResourcesLastIteration[resource] = 0;
+                        Stats.ResourcesPipeline[resource] = 0;
                     }
 
                     foreach (var production in structure.ProductResources)
                     {
                         var factProduction = production.Value * totalStructureEfficient;
 
-                        if (!Stats.ResourcesLastIteration.ContainsKey(production.Key))
+                        if (!Stats.ResourcesPipeline.ContainsKey(production.Key))
                         {
-                            Stats.ResourcesLastIteration[production.Key] = 0;
+                            Stats.ResourcesPipeline[production.Key] = 0;
                         }
 
-                        Stats.ResourcesLastIteration[production.Key] += factProduction;
+                        Stats.ResourcesPipeline[production.Key] += factProduction;
                     }
 
                     // Извлекаем ресурсы на производство из доступных ресурсов.
