@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -91,6 +92,29 @@ namespace Zilon.Core.CommonServices.Dices
             var rollIndex = dice.Roll(0, list.Count - 1);
             var item = list[rollIndex];
             return item;
+        }
+
+        /// <summary>
+        /// Выбирает случайный индекс из набора.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <returns> Случайный элемент из списка. </returns>
+        public static int RollArrayIndex<T>(this IDice dice, IList<T> list)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var rollIndex = dice.Roll(0, list.Count());
+            return rollIndex;
         }
     }
 }

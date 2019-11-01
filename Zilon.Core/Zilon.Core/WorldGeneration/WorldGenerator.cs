@@ -476,7 +476,7 @@ namespace Zilon.Core.WorldGeneration
                     Name = localityName,
                     Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
-                    Population = 3
+                    //Population = 3
                 };
 
                 var rolledBranchIndex = _dice.Roll(0, 7);

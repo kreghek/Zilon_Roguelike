@@ -37,7 +37,7 @@ namespace Zilon.Core.WorldGeneration.AgentCards
         {
             var targetLocality = GetNeighborLocality(agent, globe, dice.Roll(0, 5));
 
-            targetLocality.Population--;
+            //targetLocality.Population--;
 
             targetLocality.Owner = agent.Realm;
 
