@@ -27,6 +27,31 @@ jobs:
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
       - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - store_test_results:
+          path: TestResult.xml
+  test_45_coverage:
+    working_directory: /test_45_coverage
+    docker:
+      - image: mono:6.0.0.313
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+      CODACY_COVERAGE_VERSION: 1.0.3
+      REPO_COMMIT_UUID: $CIRCLE_SHA1
+    steps:
+      - checkout
+      - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Debug
+      - run: apt update && apt -y install wget && wget -O dotCover.tar.gz -P /test_45_coverage "https://download.jetbrains.com/resharper/ReSharperUltimate.2019.2.2/JetBrains.dotCover.CommandLineTools.Linux.2019.2.2.tar.gz?_ga=2.208181138.1839691299.1572416435-1767931937.1531365763&_gac=1.149803332.1572421002.Cj0KCQjw6eTtBRDdARIsANZWjYZezP-4m1JoGMBowUBUc5riQFUL86GCl6Wev_DWRz8FQSPXdpPfvDMaAlHIEALw_wcB"
+      - run: mkdir -p /test_45_coverage/clt
+      - run: apt update && apt -y install tar && tar -xvzf /test_45_coverage/dotCover.tar.gz -C /test_45_coverage/clt
+      - run: /test_45_coverage/clt/dotCover.sh cover-mono --TargetArguments="/test_45_coverage/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe /test_45_coverage/Zilon.Core/Zilon.Core.Tests/bin/Debug/Zilon.Core.Tests.dll" --Output="/test_45_coverage/Zilon.Core.Report.xml" --ReportType=DetailedXML --Scope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --LogFile=/dev/stdout
+      - store_artifacts:
+          path: /test_45_coverage/Zilon.Core.Report.xml
+      - run: curl -Ls https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_linux-x64 --output Codacy.CSharpCoverage_linux-x64
+      - run: chmod +x ./Codacy.CSharpCoverage_linux-x64
+      - run: ./Codacy.CSharpCoverage_linux-x64 -c $REPO_COMMIT_UUID -t $CODACY_PROJECT_TOKEN -r /test_45_coverage/Zilon.Core.Report.xml -e dotcover
   test_players:
     working_directory: /test_players
     docker:
@@ -370,6 +395,9 @@ workflows:
       - test_45:
           requires:
             - build
+      - test_45_coverage:
+          requires:
+            - test_45
       - test_players:
           requires:
             - build
