@@ -1,0 +1,28 @@
+{
+  "Name": {
+    "Ru": "Ложный Огненный шар",
+    "En":  "Mimic Fireball"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 5
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Termal",
+	  "ApRank": 1
+    }
+  },
+  "Constrains": {
+    "PropResourceType": "mana",
+    "PropResourceCount": 1
+  }
+}
