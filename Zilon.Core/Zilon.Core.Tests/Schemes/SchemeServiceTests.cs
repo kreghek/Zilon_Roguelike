@@ -128,6 +128,30 @@ namespace Zilon.Core.Tests.Schemes
         }
 
         /// <summary>
+        /// Тест проверяет, что все схемы согласованы.
+        /// </summary>
+        //TODO Лучше сделать отдельное консольное приложение для валидации всех схем.
+        [Test]
+        [Category("validation")]
+        public void SchemeValidator() {
+            // ARRANGE
+            var schemeService = CreateSchemeService();
+
+            // ACT
+            var props = schemeService.GetSchemes<IPropScheme>();
+
+            // ASSERT
+            foreach (var prop in props)
+            {
+                if (prop.IsMimicFor != null)
+                {
+                    var realScheme = schemeService.GetScheme<IPropScheme>(prop.IsMimicFor);
+                    realScheme.Should().NotBeNull();
+                }
+            }
+        }
+
+        /// <summary>
         /// Тест проверяем схемы дропа.
         /// 1. Sid предметов должен быть корректным. Эти предметы должны существовать.
         /// </summary>
