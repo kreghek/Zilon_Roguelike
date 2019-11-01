@@ -12,9 +12,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
     [Parallelizable(ParallelScope.All)]
     public class InteriorObjectRandomSourceTests
     {
+        /// <summary>
+        /// Тест проверяет, что если есть возможность поставить объекты интерьера,
+        /// то они будут.
+        /// Размер квадрата 4х4, потому что генерится 1 объект интерьера на каждые 4 узла комнаты.
+        /// </summary>
         [Test]
         public void RollInteriorObjectsTest()
         {
+            const int SQARE_SIZE = 4;
+
             // ARRANGE
 
             var diceMock = new Mock<IDice>();
@@ -23,12 +30,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
 
             var interiorRandomSource = new InteriorObjectRandomSource(dice);
 
-            var coords = new OffsetCoords[9];
-            for (var i = 0; i < 3; i++)
+            var coords = new OffsetCoords[SQARE_SIZE * SQARE_SIZE];
+            for (var i = 0; i < SQARE_SIZE; i++)
             {
-                for (var j = 0; j < 3; j++)
+                for (var j = 0; j < SQARE_SIZE; j++)
                 {
-                    coords[i + j * 3] = new OffsetCoords(i, j);
+                    coords[i + j * SQARE_SIZE] = new OffsetCoords(i, j);
                 }
             }
 
