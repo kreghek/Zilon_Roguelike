@@ -14,20 +14,6 @@ jobs:
           root: bin
           paths:
             - ./*
-  build_netcore:
-    working_directory: /core-builds-netcore
-    docker:
-      - image: mcr.microsoft.com/dotnet/framework/sdk:4.8
-    steps:
-      - checkout
-      - run: nuget restore Zilon.Core/Zilon.Core/Zilon.Core.csproj -SolutionDirectory ./Zilon.Core
-      - run: nuget restore Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core/Zilon.Core.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
-      - run: msbuild Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
-      - persist_to_workspace:
-          root: bin
-          paths:
-            - ./*
   test_45:
     working_directory: /test45
     docker:
@@ -335,7 +321,6 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build_netcore
       - build
       - test_45:
           requires:
