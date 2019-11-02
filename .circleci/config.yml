@@ -14,6 +14,18 @@ jobs:
           root: bin
           paths:
             - ./*
+  build_netcore:
+    working_directory: /core-builds-netcore
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    steps:
+      - checkout
+      - run: dotnet build Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -o ../../bin
+      - run: dotnet build Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -o ../../bin
+      - persist_to_workspace:
+          root: bin
+          paths:
+            - ./*
   test_45:
     working_directory: /test45
     docker:
@@ -321,6 +333,7 @@ workflows:
   version: 2
   commit:
     jobs:
+      - build_netcore
       - build
       - test_45:
           requires:
