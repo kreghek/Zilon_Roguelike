@@ -322,10 +322,12 @@ workflows:
   commit:
     jobs:
       - build
-      - test_45_coverage
       - test_45:
           requires:
             - build
+      - test_45_coverage:
+          requires:
+            - test_45
       - test_players:
           requires:
             - build
