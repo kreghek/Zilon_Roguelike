@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.NetCore", "..\Zilon.Core.Benchmarks.NetCore\Zilon.Core.Benchmarks.NetCore.csproj", "{3D428E61-ABF2-4C8E-AB2F-F23C43B6B2CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.NetCore", "Zilon.Core.Benchmarks.NetCore\Zilon.Core.Benchmarks.NetCore.csproj", "{3D428E61-ABF2-4C8E-AB2F-F23C43B6B2CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.NetCore.Move", "Zilon.Core.Benchmarks.NetCore.Move\Zilon.Core.Benchmarks.NetCore.Move.csproj", "{4F37345B-1229-4AEE-8FA7-910FF3197CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{3D428E61-ABF2-4C8E-AB2F-F23C43B6B2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D428E61-ABF2-4C8E-AB2F-F23C43B6B2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D428E61-ABF2-4C8E-AB2F-F23C43B6B2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F37345B-1229-4AEE-8FA7-910FF3197CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F37345B-1229-4AEE-8FA7-910FF3197CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F37345B-1229-4AEE-8FA7-910FF3197CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F37345B-1229-4AEE-8FA7-910FF3197CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
