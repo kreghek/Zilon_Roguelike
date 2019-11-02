@@ -756,6 +756,12 @@ MonoBehaviour:
   WindowsParent: {fileID: 809724292}
   ModalPrefab: {fileID: 114999240963392250, guid: a9f7f5629d4bd3243a95fb1d88123a2b,
     type: 3}
+  QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
+    type: 3}
+  ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
+    type: 3}
+  HistoryModalPrefab: {fileID: 1119981412910000720, guid: 6fa0c247d7bb44b449bd6bae21992f19,
+    type: 3}
   ContainerModalPrefab: {fileID: 114800206159058986, guid: 5d51e8eeaf5d2f54c97ebc04b148b1ef,
     type: 3}
   InventoryModalPrefab: {fileID: 114694300186390620, guid: d62a684ca9caaae4599a0ef41dda1cc2,
@@ -767,12 +773,6 @@ MonoBehaviour:
   TraderModalPrefab: {fileID: 391459472281275467, guid: 925b2a6ed0fec2648844b346b66ee74b,
     type: 3}
   DialogModalPrefab: {fileID: 3308749736226327152, guid: 9c5432e265d0ecd4facb152e063f0aa0,
-    type: 3}
-  QuitModalPrefab: {fileID: 392829117503053823, guid: 65cb5e344d428524a8ffdf6ca96211bd,
-    type: 3}
-  ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
-    type: 3}
-  HistoryModalPrefab: {fileID: 1119981412910000720, guid: 6fa0c247d7bb44b449bd6bae21992f19,
     type: 3}
 --- !u!1 &269743640
 GameObject:
@@ -2124,7 +2124,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 227365886}
-        m_MethodName: ExitGame_Handler
+        m_MethodName: ExitTitle_Handler
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2456,7 +2456,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -59.399994, y: 22.799988}
+  m_AnchoredPosition: {x: -59.400024, y: 22.799988}
   m_SizeDelta: {x: 0, y: 21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &991466928
@@ -5616,7 +5616,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.6138
+  m_Size: 0.6137999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

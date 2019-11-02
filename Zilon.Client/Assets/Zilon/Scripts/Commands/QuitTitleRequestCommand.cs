@@ -16,7 +16,7 @@ namespace Assets.Zilon.Scripts.Commands
 
         public void Execute()
         {
-            _sectorModalManager.ShowQuitComfirmationModal();
+            _sectorModalManager.ShowQuitTitleComfirmationModal();
         }
     }
 }
