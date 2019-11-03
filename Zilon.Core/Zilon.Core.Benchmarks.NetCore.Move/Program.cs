@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BenchmarkDotNet.Running;
+
 using Zilon.Core.Benchmarks.Common;
 
 namespace Zilon.Core.Benchmarks.NetCore.Move
@@ -8,7 +9,7 @@ namespace Zilon.Core.Benchmarks.NetCore.Move
         static void Main(string[] args)
         {
             var config = ConsoleApplicationConfigCreator.CreateBenchConfig(args);
-            BenchmarkRunner.Run<CreateGlobeBench>(config);
+            BenchmarkRunner.Run<MoveBench>(config);
         }
     }
 }
