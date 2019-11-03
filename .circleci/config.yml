@@ -333,7 +333,6 @@ workflows:
   commit:
     jobs:
       - build
-      - bench_move_netcore
       - test_45:
           requires:
             - build
