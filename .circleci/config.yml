@@ -299,7 +299,7 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: dotnet run /bench_move_netcore/Zilon.Core/Zilon.Core.Benchmarks.NetCore.Move/Zilon.Core.Benchmarks.NetCore.Move.csproj -c Release -- --filter * --runtimes Core --allStats true
+      - run: dotnet run --project /bench_move_netcore/Zilon.Core/Zilon.Core.Benchmarks.NetCore.Move/Zilon.Core.Benchmarks.NetCore.Move.csproj -c Release -- --filter * --runtimes Core --allStats true
   bench_create_sector:
     working_directory: /bench_create_sector
     docker:
