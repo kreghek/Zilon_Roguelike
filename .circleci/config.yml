@@ -289,6 +289,17 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
       - run: chmod u+x /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe
       - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
+  bench_move_netcore:
+    working_directory: /bench_move_netcore
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: dotnet run Zilon.Core/Zilon.Core.Benchmarks.NetCore.Move/Zilon.Core.Benchmarks.NetCore.Move.csproj -c Release -- --filter * --runtimes Core --allStats true
   bench_create_sector:
     working_directory: /bench_create_sector
     docker:
@@ -322,6 +333,7 @@ workflows:
   commit:
     jobs:
       - build
+      - bench_move_netcore
       - test_45:
           requires:
             - build
