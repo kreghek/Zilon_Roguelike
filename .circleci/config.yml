@@ -87,9 +87,9 @@ jobs:
           command: chmod +x .circleci/buildWindows64.sh && .circleci/buildWindows64.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_Win64.zip ./Zilon.Client/Builds/*
+          command: apt update && apt -y install zip && cd /root/project/Zilon.Client/Builds/StandaloneWindows64 && zip -r /root/Last.Imperial.Vagabond.win.x64.v0.2.3-alpha.12.zip ./*
       - store_artifacts:
-          path: /root/LAST_Win64.zip
+          path: /root/Last.Imperial.Vagabond.win.x64.v0.2.3-alpha.12.zip
   build_Win_x32:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
@@ -111,9 +111,9 @@ jobs:
           command: chmod +x .circleci/buildWindows32.sh && .circleci/buildWindows32.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_Win32.zip ./Zilon.Client/Builds/*
+          command: apt update && apt -y install zip && cd /root/project/Zilon.Client/Builds/StandaloneWindows32 && zip -r /root/Last.Imperial.Vagabond.win.x32.v0.2.3-alpha.12.zip ./*
       - store_artifacts:
-          path: /root/LAST_Win32.zip
+          path: /root/Last.Imperial.Vagabond.win.x32.v0.2.3-alpha.12.zip
   build_Linux_x64:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
@@ -135,9 +135,9 @@ jobs:
           command: chmod +x .circleci/buildLinux64.sh && .circleci/buildLinux64.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_Linux64.zip ./Zilon.Client/Builds/*
+          command: apt update && apt -y install zip && cd /root/project/Zilon.Client/Builds/StandaloneLinux64 && zip -r /root/Last.Imperial.Vagabond.linux.x64.v0.2.3-alpha.12.zip ./*
       - store_artifacts:
-          path: /root/LAST_Linux64.zip
+          path: /root/Last.Imperial.Vagabond.linux.x64.v0.2.3-alpha.12.zip
   # Только для этого билда на выходе получается пустая папка.
   # Поэтому он временно отключен.
   build_Linux_x32:
@@ -233,9 +233,9 @@ jobs:
           command: chmod +x .circleci/buildMacOsxUniversal.sh && .circleci/buildMacOsxUniversal.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_MacOsxUniversal.zip ./Zilon.Client/Builds/*
+          command: apt update && apt -y install zip && cd /root/project/Zilon.Client/Builds/StandaloneMacOsxUniversal && zip -r /root/Last.Imperial.Vagabond.osx.universal.v0.2.3-alpha.12.zip ./*
       - store_artifacts:
-          path: /root/LAST_MacOsxUniversal.zip
+          path: /root/Last.Imperial.Vagabond.osx.universal.v0.2.3-alpha.12.zip
   test_mass_sector_generator:
     working_directory: /test_mass_sector_generator
     docker:
