@@ -87,7 +87,7 @@ jobs:
           command: chmod +x .circleci/buildWindows64.sh && .circleci/buildWindows64.sh
       - run:
           name: Zipping build
-          command: apt update && apt -y install zip && zip -r /root/LAST_Win64.zip /root/project/Zilon.Client/Builds/StandaloneWindows64/*
+          command: apt update && apt -y install zip && cd /root/project/Zilon.Client/Builds/StandaloneWindows64 && zip -r /root/LAST_Win64.zip ./*
       - store_artifacts:
           path: /root/LAST_Win64.zip
   build_Win_x32:
