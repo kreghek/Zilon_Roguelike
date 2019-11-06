@@ -91,6 +91,7 @@
     <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
     <Compile Include="CommonServices\Dices\GaussDice.cs" />
     <Compile Include="CommonServices\Dices\ExpDice.cs" />
+    <Compile Include="CommonServices\Dices\TwoStepMiddleDice.cs" />
     <Compile Include="CommonServices\IUserTimeProvider.cs" />
     <Compile Include="Common\HexBinaryFiller.cs" />
     <Compile Include="Common\ListHelper.cs" />
