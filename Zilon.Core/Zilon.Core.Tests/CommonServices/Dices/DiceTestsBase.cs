@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
         /// </summary>
         /// <param name="seed"> Зерно рандомизации для кости. </param>
         /// <param name="n"> Количество граней у кости. </param>
-        /// <param name="count"> Количество результатов, которое нужнополучить в течении теста. </param>
+        /// <param name="count"> Количество результатов, которое нужно получить в течении теста. </param>
         [Test]
         public void NextTest([Values(1, 100, 300, int.MaxValue)]int seed,
             [Values(1, 6, 100)] int n,
