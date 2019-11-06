@@ -111,6 +111,7 @@
     <Compile Include="Commands\UseSelfCommandTests.cs" />
     <Compile Include="CommonServices\Dices\ExpDiceTests.cs" />
     <Compile Include="CommonServices\Dices\GaussDiceTests.cs" />
+    <Compile Include="CommonServices\Dices\TwoStepMiddleDiceTests.cs" />
     <Compile Include="CommonServices\Dices\LinearDiceTests.cs" />
     <Compile Include="CommonServices\Dices\IDiceExtensionsTests.cs" />
     <Compile Include="CommonServices\DropRollerTests.cs" />
