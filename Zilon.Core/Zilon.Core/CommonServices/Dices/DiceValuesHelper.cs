@@ -11,7 +11,7 @@
         /// <returns> Возвращает выбрашенную грань. </returns>
         public static int MapDoubleToDiceEdge(double rawValue, int n)
         {
-            return (int)(n * rawValue);
+            return (int)(n * rawValue) + 1;
         }
     }
 }

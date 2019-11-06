@@ -89,6 +89,8 @@
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
     <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
+    <Compile Include="CommonServices\Dices\InversedExpDice.cs" />
+    <Compile Include="CommonServices\Dices\InversedGaussDice.cs" />
     <Compile Include="CommonServices\Dices\GaussDice.cs" />
     <Compile Include="CommonServices\Dices\ExpDice.cs" />
     <Compile Include="CommonServices\Dices\TwoStepMiddleDice.cs" />

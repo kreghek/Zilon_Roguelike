@@ -30,9 +30,9 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = CreateDice(seed);
 
             // ACT
+            var seq = new int[count];
             Action act = () =>
             {
-                var seq = new int[count];
                 for (var i = 0; i < seq.Length; i++)
                 {
                     seq[i] = dice.Roll(n);
@@ -47,6 +47,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
 
             // ASSERT
             act.Should().NotThrow();
+            seq.Min().Should().BeGreaterOrEqualTo(1);
+            seq.Max().Should().BeLessOrEqualTo(n);
         }
     }
 }
