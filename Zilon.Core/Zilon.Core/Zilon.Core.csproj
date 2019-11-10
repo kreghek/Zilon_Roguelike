@@ -88,7 +88,10 @@
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="CommonServices\Dices\DiceBase.cs" />
     <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
+    <Compile Include="CommonServices\Dices\ExponentialAlgorithms.cs" />
+    <Compile Include="CommonServices\Dices\GaussAlgorithms.cs" />
     <Compile Include="CommonServices\Dices\InversedExpDice.cs" />
     <Compile Include="CommonServices\Dices\InversedGaussDice.cs" />
     <Compile Include="CommonServices\Dices\GaussDice.cs" />

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     internal static class DiceValuesHelper
     {
@@ -12,6 +14,15 @@
         public static int MapDoubleToDiceEdge(double rawValue, int n)
         {
             return (int)(n * rawValue) + 1;
+        }
+
+        /// <summary>
+        /// Возвращает случайное число в диапазоне [0..1).
+        /// </summary>
+        public static double GetNextDouble(Random random)
+        {
+            var next = random.NextDouble();
+            return next;
         }
     }
 }

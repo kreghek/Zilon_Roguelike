@@ -49,7 +49,7 @@ namespace Zilon.Core.CommonServices.Dices
         {
             var u = GetNextDouble();
 
-            var x = Math.Log(1 - u) / -LAMBDA;
+            var x = ExponentialAlgorithms.MapToExpo(u, LAMBDA);
 
             var mappedX = MapToInterval(
                 x,
