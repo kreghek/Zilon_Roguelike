@@ -6,7 +6,7 @@ namespace Zilon.Core.CommonServices.Dices
     /// <summary>
     /// Игральная кость, работающая по экпонециальному закону.
     /// </summary>
-    public sealed class ExpDice : IDice
+    public class ExpDice : IDice
     {
         private const double LAMBDA = 0.5;
         private const double MAX = 7;
@@ -42,6 +42,13 @@ namespace Zilon.Core.CommonServices.Dices
 
             var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
 
+            var processedRoll = ProcessedRoll(roll, n);
+
+            return processedRoll;
+        }
+
+        protected virtual int ProcessedRoll(int roll, int n)
+        {
             return roll;
         }
 

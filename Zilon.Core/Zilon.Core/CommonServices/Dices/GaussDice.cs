@@ -3,7 +3,7 @@
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
     /// </summary>
-    public sealed class GaussDice : DiceBase, IDice
+    public class GaussDice : DiceBase, IDice
     {
         /// <summary>
         /// Погрешность.
@@ -39,9 +39,16 @@
             var randStdNormal = GaussAlgorithms.GetRandomStdNormal(u1, u2);
 
             var randNormal = stdDev * randStdNormal;
-            var randTotal = mean + randNormal;
+            var randNormalProcessed = ProcessRandStdNormal(randNormal, mean);
+            var randTotal = mean + randNormalProcessed;
 
             return randTotal;
+        }
+
+        protected virtual double ProcessRandStdNormal(double randStdNormal, double mean)
+        {
+            // В основной реализации ничего не делаем.
+            return randStdNormal;
         }
     }
 }
