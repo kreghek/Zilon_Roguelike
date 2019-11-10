@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
@@ -14,6 +16,16 @@
         /// Математическое ожидание.
         /// </summary>
         private const double MEAN = 0.5;
+
+        [ExcludeFromCodeCoverage]
+        public GaussDice()
+        {
+        }
+
+        [ExcludeFromCodeCoverage]
+        public GaussDice(int seed) : base(seed)
+        {
+        }
 
         public int Roll(int n)
         {
