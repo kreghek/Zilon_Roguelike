@@ -23,7 +23,7 @@ namespace Zilon.Core.CommonServices.Dices
         /// Конструктор генератора.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public DiceBase()
+        protected DiceBase()
         {
             _random = new Random();
         }
@@ -37,7 +37,7 @@ namespace Zilon.Core.CommonServices.Dices
         /// одна и та же последовательность случайных чисел.
         /// </remarks>
         [ExcludeFromCodeCoverage]
-        public DiceBase(int seed)
+        protected DiceBase(int seed)
         {
             _random = new Random(seed);
         }
