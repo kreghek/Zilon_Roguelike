@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -13,20 +13,6 @@ using Zilon.Core.Client;
 public class FollowingCamera : MonoBehaviour
 {
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
-
-    public void Start()
-    {
-        UnityEngine.Random.InitState(1);
-        var seq = new int[1000];
-        for (var i = 0; i < seq.Length; i++)
-        {
-            seq[i] = UnityEngine.Random.Range(1, 100 + 1);
-        }
-
-        var gr = seq.GroupBy(x => x);
-        var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
-        Debug.Log(string.Join("\n",freq.Select(fr => fr.Key + "\t" + fr.Value)));
-    }
 
     // ReSharper disable once UnusedMember.Local
     private void Update()

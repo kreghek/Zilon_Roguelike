@@ -34,7 +34,7 @@ namespace Zilon.Core.Benchmark
             Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
             Add(EnvironmentAnalyser.Default);
             UnionRule = ConfigUnionRule.AlwaysUseLocal;
-            //ArtifactsPath = artifactPath;
+            ArtifactsPath = artifactPath;
         }
     }
 }
