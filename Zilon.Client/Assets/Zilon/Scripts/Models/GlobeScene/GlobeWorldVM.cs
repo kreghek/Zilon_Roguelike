@@ -64,7 +64,7 @@ public class GlobeWorldVM : MonoBehaviour
 
         TryLoadPersonIfNull();
 
-        CreatePlayerPersonViewModel();
+        CreatePlayerPersonViewModelAndInitCameraAndBackground();
     }
 
     private void CreateRegionViewModels(GlobeRegion currentRegion)
@@ -90,25 +90,42 @@ public class GlobeWorldVM : MonoBehaviour
         return currentRegion;
     }
 
-    private void CreatePlayerPersonViewModel()
+    private void CreatePlayerPersonViewModelAndInitCameraAndBackground()
+    {
+        var groupObject = CreatePlayerPersonGroup();
+
+        FocusCameraToPersonGroup(groupObject, Camera);
+
+        MoveBackgroundToMapCenter(_locationNodeViewModels, MapBackground);
+
+        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
+        MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private GameObject CreatePlayerPersonGroup()
     {
         var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
         var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
         _groupViewModel = groupObject.GetComponent<GroupVM>();
         _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
         groupObject.transform.position = playerGroupNodeViewModel.transform.position;
-        Camera.Target = groupObject;
-        Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
+        return groupObject;
+    }
 
-        var nodes = _locationNodeViewModels.Select(x => x.Node);
+    private static void FocusCameraToPersonGroup(GameObject groupObject, GlobalFollowCamera camera)
+    {
+        camera.Target = groupObject;
+        camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
+    }
+
+    private static void MoveBackgroundToMapCenter(IEnumerable<MapLocation> locationNodeViewModels, GameObject mapBackground)
+    {
+        var nodes = locationNodeViewModels.Select(x => x.Node);
         var centerLocationNode = GlobeHelper.GetCenterLocationNode(nodes);
-        var centerLocationNodeViewModel = _locationNodeViewModels
+        var centerLocationNodeViewModel = locationNodeViewModels
             .Single(nodeViewModel => nodeViewModel.Node.OffsetX == centerLocationNode.OffsetX &&
             nodeViewModel.Node.OffsetY == centerLocationNode.OffsetY);
-        MapBackground.transform.position = centerLocationNodeViewModel.transform.position;
-
-        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
-        MoveGroupViewModel(_player.GlobeNode);
+        mapBackground.transform.position = centerLocationNodeViewModel.transform.position;
     }
 
     private void TryLoadPersonIfNull()
