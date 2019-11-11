@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -35,12 +36,12 @@ namespace Zilon.GlobeObserver
             var humanPersonFactor = serviceProvider.GetRequiredService<IHumanPersonFactory>();
 
             var actorList = await CreateGlobeAsync(mapFactory,
-                                                    actorManager,
-                                                    propContainerManager,
-                                                    dropResolver,
-                                                    schemeService,
-                                                    equipmentDurableService,
-                                                    humanPersonFactor);
+                                                   actorManager,
+                                                   propContainerManager,
+                                                   dropResolver,
+                                                   schemeService,
+                                                   equipmentDurableService,
+                                                   humanPersonFactor);
 
             var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
 
@@ -59,19 +60,35 @@ namespace Zilon.GlobeObserver
 
             serviceCollection.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             serviceCollection.AddSingleton<IPropFactory, PropFactory>();
-            serviceCollection.AddSingleton<IDropResolver, DropResolver>();
+            RegisterDropResolver(serviceCollection);
             serviceCollection.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
 
             //TODO При такой регистрации все актёры будут в одном менеджере, но в разных секторах. Это нужно перепроектировать.
             serviceCollection.AddSingleton<IActorManager, ActorManager>();
             serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
+            RegisterEquipmentDurableService(serviceCollection);
+            RegisterRoomMapFactory(serviceCollection);
 
-            serviceCollection.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
-            serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
+            serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
+        }
 
+        private static void RegisterRoomMapFactory(IServiceCollection serviceCollection)
+        {
             serviceCollection.AddSingleton<IMapFactory, RoomMapFactory>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>();
+        }
+
+        private static void RegisterEquipmentDurableService(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
+            serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
+        }
+
+        private static void RegisterDropResolver(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IDropResolver, DropResolver>();
+            serviceCollection.AddSingleton<IDropResolverRandomSource, DropResolverRandomSource>();
         }
 
         private static void RegisterSchemeService(IServiceCollection serviceCollection)
@@ -174,7 +191,13 @@ namespace Zilon.GlobeObserver
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            var sectorMap = await mapFactory.CreateAsync(null);
+            var townScheme = new TownSectorScheme
+            {
+                RegionCount = 10,
+                RegionSize = 10
+            };
+
+            var sectorMap = await mapFactory.CreateAsync(townScheme);
             var sector = new Sector(sectorMap,
                                     actorManager,
                                     propContainerManager,
