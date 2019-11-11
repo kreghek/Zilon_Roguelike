@@ -1,4 +1,5 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {
@@ -14,22 +15,24 @@ namespace Zilon.Core.WorldGeneration.AgentCards
 
         public bool CanUse(Agent agent, Globe globe)
         {
-            if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
-            {
-                return currentLocality.Population <= 5;
-            }
-            else
-            {
-                return false;
-            }
+            throw new NotImplementedException();
+            //if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
+            //{
+            //    return currentLocality.Population <= 5;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
         public void Use(Agent agent, Globe globe, IDice dice)
         {
-            if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
-            {
-                currentLocality.Population++;
-            }
+            throw new NotImplementedException();
+            //if (globe.LocalitiesCells.TryGetValue(agent.Location, out var currentLocality))
+            //{
+            //    currentLocality.Population++;
+            //}
         }
     }
 }

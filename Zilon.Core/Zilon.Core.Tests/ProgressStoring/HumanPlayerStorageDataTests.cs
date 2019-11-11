@@ -67,7 +67,7 @@ namespace Zilon.Core.ProgressStoring.Tests
                     Name = "capital",
                     Cell = flattenTerrain.Single(x => x.Coords.X == 0 && x.Coords.Y == 0),
                     Owner = globe.Realms.First(),
-                    Population = 1,
+                    //Population = 1,
                     Branches = new Dictionary<BranchType, int>{ { BranchType.Agricultural, 1 } }
                 }
             };

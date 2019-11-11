@@ -522,11 +522,15 @@
     <Compile Include="CommonServices\UserTimeProvider.cs" />
     <Compile Include="WorldGeneration\Agent.cs" />
     <Compile Include="WorldGeneration\AgentActionType.cs" />
+    <Compile Include="WorldGeneration\AgentCards\AgentLocalityHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
     <Compile Include="WorldGeneration\AgentCards\AgentOpposition.cs" />
     <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
+    <Compile Include="WorldGeneration\AgentCards\CreateLocalityStructure.cs" />
     <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
+    <Compile Include="WorldGeneration\AgentCards\FindResource.cs" />
     <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
+    <Compile Include="WorldGeneration\AgentCards\LocalityBalanceHelper.cs" />
     <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
     <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
     <Compile Include="WorldGeneration\Army.cs" />
@@ -536,17 +540,46 @@
     <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
     <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
     <Compile Include="WorldGeneration\GlobeGenerationResult.cs" />
+    <Compile Include="WorldGeneration\GlobeInitiator.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
     <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
+    <Compile Include="WorldGeneration\IGlobeEntity.cs" />
+    <Compile Include="WorldGeneration\ILocalityEventCard.cs" />
+    <Compile Include="WorldGeneration\ILocalityStructure.cs" />
     <Compile Include="WorldGeneration\IWorldGenerator.cs" />
+    <Compile Include="WorldGeneration\LocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityEventCards\NewActivistEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityEventCards\AccidentLocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityEventCards\PlagueLocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityEventCards\FamineLocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityEventCards\PopulationGrowthLocalityEvent.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\CrysisRandomSource.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerCrisis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\HungerMonitor.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisis.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisisMonitor.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\ICrisisRandomSource.cs" />
+    <Compile Include="WorldGeneration\LocalityHazards\PopulationGrowthMonitor.cs" />
     <Compile Include="WorldGeneration\LocalityHelper.cs" />
+    <Compile Include="WorldGeneration\LocalityRegion.cs" />
+    <Compile Include="WorldGeneration\LocalityResource.cs" />
+    <Compile Include="WorldGeneration\LocalityStats.cs" />
+    <Compile Include="WorldGeneration\LocalityStructureRepository.cs" />
+    <Compile Include="WorldGeneration\LocalityStructures\BasicLocalityStructure.cs" />
+    <Compile Include="WorldGeneration\LocalityStructures\LivingSector.cs" />
+    <Compile Include="WorldGeneration\LocalityStructures\SettlerCamp.cs" />
+    <Compile Include="WorldGeneration\MigrantGroup.cs" />
     <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
+    <Compile Include="WorldGeneration\PopulationRace.cs" />
+    <Compile Include="WorldGeneration\PopulationUnit.cs" />
+    <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
+    <Compile Include="WorldGeneration\UnderConstructionData.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />
     <Compile Include="WorldGeneration\Globe.cs" />
     <Compile Include="WorldGeneration\CacheHelper.cs" />
@@ -584,6 +617,9 @@
     <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="World\Observation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -44,6 +44,40 @@ namespace Zilon.Core.WorldGeneration
             _schemeService = schemeService;
         }
 
+        public Task<Globe> CreateStartGlobeAsync()
+        {
+            return Task.Run(() =>
+            {
+                var globe = new Globe
+                {
+                    Terrain = new TerrainCell[WORLD_SIZE][],
+                    agentNameGenerator = new RandomName(_dice),
+                    cityNameGenerator = new CityNameGenerator(_dice)
+                };
+
+                var realmTask = CreateRealmsAsync(globe, _realmNames);
+                var terrainTask = CreateTerrainAsync(globe);
+
+                Task.WaitAll(realmTask, terrainTask);
+
+                CreateStartLocalities(globe);
+                CreateStartAgents(globe);
+
+                return globe;
+            });
+        }
+
+        public Task NextIterationAsync(Globe globe)
+        {
+            return Task.Run(() =>
+            {
+                Parallel.ForEach(globe.Localities, (locality) =>
+                {
+                    locality.Update();
+                });
+            });
+        }
+
         /// <summary>
         /// Создание игрового мира с историей и граф провинций.
         /// </summary>
@@ -476,7 +510,7 @@ namespace Zilon.Core.WorldGeneration
                     Name = localityName,
                     Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
-                    Population = 3
+                    //Population = 3
                 };
 
                 var rolledBranchIndex = _dice.Roll(0, 7);

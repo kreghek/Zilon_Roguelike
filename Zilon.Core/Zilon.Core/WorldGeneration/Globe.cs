@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.WorldGeneration.NameGeneration;
 
@@ -78,6 +78,17 @@ namespace Zilon.Core.WorldGeneration
         public string GetLocalityName(IDice _dice)
         {
             return cityNameGenerator.Generate();
+        }
+
+        public Task NextIterationAsync()
+        {
+            return Task.Run(() =>
+            {
+                Parallel.ForEach(Localities, (locality) =>
+                {
+                    locality.Update();
+                });
+            });
         }
     }
 }
