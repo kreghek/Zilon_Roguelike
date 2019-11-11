@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,12 +13,9 @@ using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.IoC;
 
 namespace Zilon.BotEnvironment

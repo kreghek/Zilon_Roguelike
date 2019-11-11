@@ -1,71 +1,187 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
+using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.GlobeObserver
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var serviceCollection = new ServiceCollection();
             RegisterServices(serviceCollection);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var personList = CreateGlobe(serviceProvider);
+            var mapFactory = serviceProvider.GetRequiredService<IMapFactory>();
+            var actorManager = serviceProvider.GetRequiredService<IActorManager>();
+            var propContainerManager = serviceProvider.GetRequiredService<IPropContainerManager>();
+            var dropResolver = serviceProvider.GetRequiredService<IDropResolver>();
+            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
+            var equipmentDurableService = serviceProvider.GetRequiredService<IEquipmentDurableService>();
+            var humanPersonFactor = serviceProvider.GetRequiredService<IHumanPersonFactory>();
+
+            var actorList = await CreateGlobeAsync(mapFactory,
+                                                    actorManager,
+                                                    propContainerManager,
+                                                    dropResolver,
+                                                    schemeService,
+                                                    equipmentDurableService,
+                                                    humanPersonFactor);
+
+            var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
 
             while (true)
             {
-                NextTurn(personList, serviceProvider);
+                NextTurn(actorList, taskSource);
+                break;
             }
         }
 
         private static void RegisterServices(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<IDice, LinearDice>();
+
+            RegisterSchemeService(serviceCollection);
+
+            serviceCollection.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
+            serviceCollection.AddSingleton<IPropFactory, PropFactory>();
+            serviceCollection.AddSingleton<IDropResolver, DropResolver>();
             serviceCollection.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
+
+            //TODO При такой регистрации все актёры будут в одном менеджере, но в разных секторах. Это нужно перепроектировать.
+            serviceCollection.AddSingleton<IActorManager, ActorManager>();
+            serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
+
+            serviceCollection.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
+            serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
+
+            serviceCollection.AddSingleton<IMapFactory, RoomMapFactory>();
+            serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
+            serviceCollection.AddSingleton<IRoomGeneratorRandomSource, RoomGeneratorRandomSource>();
         }
 
-        private static void NextTurn(IList<IPerson> personList, IServiceProvider serviceProvider)
+        private static void RegisterSchemeService(IServiceCollection serviceCollection)
         {
-            foreach (var person in personList)
-            { 
-                person.
+            serviceCollection.AddSingleton<ISchemeLocator>(factory => FileSchemeLocator.CreateFromEnvVariable());
+            serviceCollection.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
+            serviceCollection.AddSingleton<ISchemeService, SchemeService>();
+        }
+
+        private static void NextTurn(IList<IActor> actorList, IActorTaskSource taskSource)
+        {
+            foreach (var actor in actorList)
+            {
+                if (actor.Person.CheckIsDead())
+                {
+                    continue;
+                }
+
+                ProcessActor(actor, taskSource);
             }
         }
 
-        private static IList<IPerson> CreateGlobe(IServiceProvider serviceProvider)
+        private static void ProcessActor(IActor actor, IActorTaskSource taskSource)
         {
-            var personList = new List<IPerson>();
+            var actorTasks = taskSource.GetActorTasks(actor);
+
+            foreach (var actorTask in actorTasks)
+            {
+                try
+                {
+                    actorTask.Execute();
+                }
+                catch (Exception exception)
+                {
+                    throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
+                        taskSource,
+                        exception);
+                }
+            }
+        }
+
+        private static async Task<IList<IActor>> CreateGlobeAsync(IMapFactory mapFactory,
+            IActorManager actorManager,
+            IPropContainerManager propContainerManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService,
+            IEquipmentDurableService equipmentDurableService,
+            IHumanPersonFactory humanPersonFactory)
+        {
+            var botPlayer = new BotPlayer();
+
+            var actorList = new List<IActor>();
 
             for (var localityIndex = 0; localityIndex < 300; localityIndex++)
             {
-                var localitySector = CreateLocalitySector();
+                var localitySector = await CreateLocalitySectorAsync(mapFactory,
+                                                                     actorManager,
+                                                                     propContainerManager,
+                                                                     dropResolver,
+                                                                     schemeService,
+                                                                     equipmentDurableService);
 
                 for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
                 {
                     for (var personIndex = 0; personIndex < 10; personIndex++)
                     {
-                        var person = CreatePerson(serviceProvider);
-                        personList.Add(person);
+                        var node = localitySector.Map.Nodes.ElementAt(personIndex);
+                        var person = CreatePerson(humanPersonFactory);
+                        var actor = CreateActor(botPlayer, person, node, actorManager);
+                        actorList.Add(actor);
                     }
                 }
             }
 
-            return personList;
+            return actorList;
         }
 
-        private static IPerson CreatePerson(IServiceProvider serviceProvider)
+        private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory)
         {
-            var personFactory = serviceProvider.GetService<IHumanPersonFactory>();
-            var person = personFactory.Create();
+            var person = humanPersonFactory.Create();
             return person;
         }
 
-        private static object CreateLocalitySector()
+        private static IActor CreateActor(IPlayer personPlayer,
+            IPerson person,
+            IMapNode node,
+            IActorManager actorManager)
         {
-            throw new NotImplementedException();
+            var actor = new Actor(person, personPlayer, node);
+
+            actorManager.Add(actor);
+
+            return actor;
+        }
+
+        private static async Task<ISector> CreateLocalitySectorAsync(IMapFactory mapFactory,
+            IActorManager actorManager,
+            IPropContainerManager propContainerManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService,
+            IEquipmentDurableService equipmentDurableService)
+        {
+            var sectorMap = await mapFactory.CreateAsync(null);
+            var sector = new Sector(sectorMap,
+                                    actorManager,
+                                    propContainerManager,
+                                    dropResolver,
+                                    schemeService,
+                                    equipmentDurableService);
+            return sector;
         }
     }
 }

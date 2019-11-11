@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
     <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Core.csproj" />
   </ItemGroup>
 
