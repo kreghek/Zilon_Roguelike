@@ -78,7 +78,7 @@ public class GlobeWorldVM : MonoBehaviour
     {
         if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
-            var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
+            var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator);
 
             _globeManager.Regions[_player.Terrain] = createdRegion;
         }
@@ -189,11 +189,11 @@ public class GlobeWorldVM : MonoBehaviour
 
                     foreach (var neighborBorderNode in neighborBorderNodes)
                     {
-
-                        var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(neighborBorderNode,
-                                                                                            terrainCell,
-                                                                                            currentRegionBorders,
-                                                                                            _player.Terrain);
+                        var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(
+                            neighborBorderNode,
+                            terrainCell,
+                            currentRegionBorders,
+                            _player.Terrain);
 
                         if (!transitionNodes.Any())
                         {
@@ -203,8 +203,10 @@ public class GlobeWorldVM : MonoBehaviour
                             continue;
                         }
 
-                        var worldCoords = HexHelper.ConvertToWorld(neighborBorderNode.OffsetX + terrainX * 20,
-                            neighborBorderNode.OffsetY + terrainY * 20);
+                        var relativeNodeX = terrainX * 20;
+                        var relativeNodeY = terrainY * 20;
+                        var worldCoords = HexHelper.ConvertToWorld(neighborBorderNode.OffsetX + relativeNodeX,
+                            neighborBorderNode.OffsetY + relativeNodeY);
 
                         var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
                         locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
@@ -235,8 +237,10 @@ public class GlobeWorldVM : MonoBehaviour
         _locationNodeViewModels = new List<MapLocation>(100);
         foreach (GlobeRegionNode globeRegionNode in currentRegion.Nodes)
         {
-            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + _player.Terrain.Coords.X * 20,
-                globeRegionNode.OffsetY + _player.Terrain.Coords.Y * 20);
+            var relativeNodeX = _player.Terrain.Coords.X * 20;
+            var relativeNodeY = _player.Terrain.Coords.Y * 20;
+            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + relativeNodeX,
+                globeRegionNode.OffsetY + relativeNodeY);
 
             var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
             locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
@@ -287,11 +291,10 @@ public class GlobeWorldVM : MonoBehaviour
 
         _player.Terrain = startCell;
 
-        var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator, _progressStorageService);
+        var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator);
         await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
         _globeManager.Regions[_player.Terrain] = createdRegion;
-
 
         var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
 
@@ -304,8 +307,7 @@ public class GlobeWorldVM : MonoBehaviour
 
     private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
         TerrainCell startCell,
-        IWorldGenerator globeGenerator,
-        ProgressStorageService progressStorageService)
+        IWorldGenerator globeGenerator)
     {
         return await globeGenerator.GenerateRegionAsync(globe, startCell);
     }
@@ -346,7 +348,7 @@ public class GlobeWorldVM : MonoBehaviour
                     var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
                     if (!worldManager.Regions.ContainsKey(terrainCell))
                     {
-                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, worldGenerator, progressStorageService);
+                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, worldGenerator);
 
                         worldManager.Regions[terrainCell] = createdNeiborRegion;
                     }
