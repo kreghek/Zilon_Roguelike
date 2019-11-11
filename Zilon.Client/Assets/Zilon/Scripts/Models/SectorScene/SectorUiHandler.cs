@@ -31,6 +31,8 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
 
+    [Inject(Id = "quit-request-title-command")] private readonly ICommand _quitRequestTitleCommand;
+
 
     [NotNull]
     [Inject(Id = "sector-transition-move-command")]
@@ -129,6 +131,11 @@ public class SectorUiHandler : MonoBehaviour
     public void ExitGame_Handler()
     {
         _clientCommandExecutor.Push(_quitRequestCommand);
+    }
+
+    public void ExitTitle_Handler()
+    {
+        _clientCommandExecutor.Push(_quitRequestTitleCommand);
     }
 
     public void SectorTransitionMoveButton_Handler()
