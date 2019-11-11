@@ -13,9 +13,9 @@ namespace Zilon.WorldObserver
         static async Task Main()
         {
             var dice = new LinearDice();
-            var worldGenerator = new GlobeInitiator(dice);
+            var globeInitiator = new GlobeInitiator(dice);
 
-            var globe = await worldGenerator.CreateStartGlobeAsync().ConfigureAwait(false);
+            var globe = await globeInitiator.CreateStartGlobeAsync().ConfigureAwait(false);
 
             var observedObject = new LocalityObserver(globe.Localities.First());
 
