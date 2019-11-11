@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
+using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -27,6 +29,8 @@ namespace Zilon.GlobeObserver
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
+            LogicStateTreePatterns.Factory = serviceProvider.GetRequiredService<ILogicStateFactory>();
+
             var mapFactory = serviceProvider.GetRequiredService<IMapFactory>();
             var actorManager = serviceProvider.GetRequiredService<IActorManager>();
             var propContainerManager = serviceProvider.GetRequiredService<IPropContainerManager>();
@@ -34,6 +38,7 @@ namespace Zilon.GlobeObserver
             var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
             var equipmentDurableService = serviceProvider.GetRequiredService<IEquipmentDurableService>();
             var humanPersonFactor = serviceProvider.GetRequiredService<IHumanPersonFactory>();
+            var botPlayer = serviceProvider.GetRequiredService<IBotPlayer>();
 
             var actorList = await CreateGlobeAsync(mapFactory,
                                                    actorManager,
@@ -41,7 +46,8 @@ namespace Zilon.GlobeObserver
                                                    dropResolver,
                                                    schemeService,
                                                    equipmentDurableService,
-                                                   humanPersonFactor);
+                                                   humanPersonFactor,
+                                                   botPlayer);
 
             var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
 
@@ -70,6 +76,35 @@ namespace Zilon.GlobeObserver
             RegisterRoomMapFactory(serviceCollection);
 
             serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
+
+            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
+            serviceCollection.AddSingleton<IActorTaskSource, MonsterBotActorTaskSource>();
+            serviceCollection.AddSingleton<ILogicStateFactory, ContainerLogicStateFactory>();
+
+            RegisterLogicState(serviceCollection);
+        }
+
+        public static void RegisterLogicState(IServiceCollection serviceRegistry)
+        {
+            var logicTypes = GetTypes<ILogicState>();
+            var triggerTypes = GetTypes<ILogicStateTrigger>()
+                .Where(x => !typeof(ICompositLogicStateTrigger).IsAssignableFrom(x));
+
+            var allTypes = logicTypes.Union(triggerTypes);
+            foreach (var logicType in allTypes)
+            {
+                // Регистрируем, как трансиентные. Потому что нам может потребовать несколько
+                // состояний и триггеров одного и того же типа.
+                // Например, для различной кастомизации.
+                serviceRegistry.AddTransient(logicType);
+            }
+        }
+
+        private static IEnumerable<Type> GetTypes<TInterface>()
+        {
+            var logicTypes = typeof(ILogicState).Assembly.GetTypes()
+                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(TInterface).IsAssignableFrom(x));
+            return logicTypes;
         }
 
         private static void RegisterRoomMapFactory(IServiceCollection serviceCollection)
@@ -136,10 +171,9 @@ namespace Zilon.GlobeObserver
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService,
-            IHumanPersonFactory humanPersonFactory)
+            IHumanPersonFactory humanPersonFactory,
+            IBotPlayer botPlayer)
         {
-            var botPlayer = new BotPlayer();
-
             var actorList = new List<IActor>();
 
             for (var localityIndex = 0; localityIndex < 300; localityIndex++)
