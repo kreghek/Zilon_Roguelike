@@ -48,52 +48,34 @@ public class GlobeWorldVM : MonoBehaviour
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members",
+        Justification = "Неявно используется платформой Unity")]
     private async void Start()
     {
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
 
-        if (_globeManager.Globe == null)
-        {
-            if (!_progressStorageService.LoadGlobe())
-            {
-
-                var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
-                _globeManager.Globe = globeGenerationResult.Globe;
-                _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
-
-                var startCell = _globeManager.Globe.StartProvince;
-
-                _player.Terrain = startCell;
-
-                var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator, _progressStorageService);
-                await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
-
-                _globeManager.Regions[_player.Terrain] = createdRegion;
-
-
-                var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
-
-                _player.GlobeNode = startNode;
-
-                startNode.ObservedState = GlobeNodeObservedState.Visited;
-
-                _globeModalManager.ShowHistoryBookModal();
-            }
-            else
-            {
-                _globeManager.GlobeGenerationHistory = new GlobeGenerationHistory();
-
-                if (!_progressStorageService.LoadPlayer())
-                {
-                    var startCell = _globeManager.Globe.StartProvince;
-
-                    _player.Terrain = startCell;
-                }
-            }
-        }
+        await EnsureGlobeInitialized();
 
         var currentGlobeCell = _player.Terrain;
+        var currentRegion = await GetOrCreateRegion(currentGlobeCell);
+
+        CreateRegionViewModels(currentRegion);
+
+        TryLoadPersonIfNull();
+
+        CreatePlayerPersonViewModel();
+    }
+
+    private void CreateRegionViewModels(GlobeRegion currentRegion)
+    {
+        // Создание визуализации узлов провинции.
+        CreateMapNodeViewModels(currentRegion);
+        CreateMapNodeConnectorViewModels(currentRegion);
+    }
+
+    private async System.Threading.Tasks.Task<GlobeRegion> GetOrCreateRegion(TerrainCell currentGlobeCell)
+    {
         if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
         {
             var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator, _progressStorageService);
@@ -104,29 +86,44 @@ public class GlobeWorldVM : MonoBehaviour
         // Создание соседних регионов
         await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
-        Debug.Log($"Current: {currentGlobeCell}");
-        Debug.Log($"Current: {_globeManager.Globe.HomeProvince}");
-
         _region = currentRegion;
+        return currentRegion;
+    }
 
-        // Создание визуализации узлов провинции.
-        _locationNodeViewModels = new List<MapLocation>(100);
-        foreach (GlobeRegionNode globeRegionNode in _region.Nodes)
+    private void CreatePlayerPersonViewModel()
+    {
+        var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
+        var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
+        _groupViewModel = groupObject.GetComponent<GroupVM>();
+        _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
+        groupObject.transform.position = playerGroupNodeViewModel.transform.position;
+        Camera.Target = groupObject;
+        Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
+
+        var nodes = _locationNodeViewModels.Select(x => x.Node);
+        var centerLocationNode = GlobeHelper.GetCenterLocationNode(nodes);
+        var centerLocationNodeViewModel = _locationNodeViewModels
+            .Single(nodeViewModel => nodeViewModel.Node.OffsetX == centerLocationNode.OffsetX &&
+            nodeViewModel.Node.OffsetY == centerLocationNode.OffsetY);
+        MapBackground.transform.position = centerLocationNodeViewModel.transform.position;
+
+        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
+        MoveGroupViewModel(_player.GlobeNode);
+    }
+
+    private void TryLoadPersonIfNull()
+    {
+        if (_player.MainPerson == null)
         {
-            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + _player.Terrain.Coords.X * 20, 
-                globeRegionNode.OffsetY + _player.Terrain.Coords.Y * 20);
-
-            var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
-            locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
-            var locationViewModel = locationObject.GetComponent<MapLocation>();
-            locationViewModel.Node = globeRegionNode;
-            locationViewModel.ParentRegion = _region;
-            _locationNodeViewModels.Add(locationViewModel);
-
-            locationViewModel.OnSelect += LocationViewModel_OnSelect;
-            locationViewModel.OnHover += LocationViewModel_OnHover;
+            if (!_progressStorageService.LoadPerson())
+            {
+                _player.MainPerson = _humanPersonFactory.Create();
+            }
         }
+    }
 
+    private void CreateMapNodeConnectorViewModels(GlobeRegion currentRegion)
+    {
         // Создание коннекторов между узлами провинции.
         var openNodeViewModels = new List<MapLocation>(_locationNodeViewModels);
         while (openNodeViewModels.Any())
@@ -214,32 +211,78 @@ public class GlobeWorldVM : MonoBehaviour
                 }
             }
         }
+    }
 
-        if (_player.MainPerson == null)
+    private void CreateMapNodeViewModels(GlobeRegion currentRegion)
+    {
+        _locationNodeViewModels = new List<MapLocation>(100);
+        foreach (GlobeRegionNode globeRegionNode in currentRegion.Nodes)
         {
-            if (!_progressStorageService.LoadPerson())
+            var worldCoords = HexHelper.ConvertToWorld(globeRegionNode.OffsetX + _player.Terrain.Coords.X * 20,
+                globeRegionNode.OffsetY + _player.Terrain.Coords.Y * 20);
+
+            var locationObject = _container.InstantiatePrefab(LocationPrefab, transform);
+            locationObject.transform.position = new Vector3(worldCoords[0], worldCoords[1], 0);
+            var locationViewModel = locationObject.GetComponent<MapLocation>();
+            locationViewModel.Node = globeRegionNode;
+            locationViewModel.ParentRegion = currentRegion;
+            _locationNodeViewModels.Add(locationViewModel);
+
+            locationViewModel.OnSelect += LocationViewModel_OnSelect;
+            locationViewModel.OnHover += LocationViewModel_OnHover;
+        }
+    }
+
+    private async System.Threading.Tasks.Task EnsureGlobeInitialized()
+    {
+        if (_globeManager.Globe == null)
+        {
+            if (!_progressStorageService.LoadGlobe())
             {
-                _player.MainPerson = _humanPersonFactory.Create();
+                await ProcessAfterGlobeLoad();
+            }
+            else
+            {
+                _globeManager.GlobeGenerationHistory = new GlobeGenerationHistory();
+
+                if (!_progressStorageService.LoadPlayer())
+                {
+                    ProcessAfterPlayerLoad();
+                }
             }
         }
+    }
 
-        var playerGroupNodeViewModel = _locationNodeViewModels.Single(x => x.Node == _player.GlobeNode);
-        var groupObject = _container.InstantiatePrefab(HumanGroupPrefab, transform);
-        _groupViewModel = groupObject.GetComponent<GroupVM>();
-        _groupViewModel.CurrentLocation = playerGroupNodeViewModel;
-        groupObject.transform.position = playerGroupNodeViewModel.transform.position;
-        Camera.Target = groupObject;
-        Camera.GetComponent<GlobalFollowCamera>().SetPosition(groupObject.transform);
+    private void ProcessAfterPlayerLoad()
+    {
+        var startCell = _globeManager.Globe.StartProvince;
 
-        var nodes = _locationNodeViewModels.Select(x=>x.Node);
-        var centerLocationNode = GlobeHelper.GetCenterLocationNode(nodes);
-        var centerLocationNodeViewModel = _locationNodeViewModels
-            .Single(nodeViewModel => nodeViewModel.Node.OffsetX == centerLocationNode.OffsetX &&
-            nodeViewModel.Node.OffsetY == centerLocationNode.OffsetY);
-        MapBackground.transform.position = centerLocationNodeViewModel.transform.position;
+        _player.Terrain = startCell;
+    }
 
-        _player.GlobeNodeChanged += HumanPlayer_GlobeNodeChanged;
-        MoveGroupViewModel(_player.GlobeNode);
+    private async System.Threading.Tasks.Task ProcessAfterGlobeLoad()
+    {
+        var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
+        _globeManager.Globe = globeGenerationResult.Globe;
+        _globeManager.GlobeGenerationHistory = globeGenerationResult.History;
+
+        var startCell = _globeManager.Globe.StartProvince;
+
+        _player.Terrain = startCell;
+
+        var createdRegion = await CreateRegionAsync(_globeManager.Globe, _player.Terrain, _globeGenerator, _progressStorageService);
+        await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
+
+        _globeManager.Regions[_player.Terrain] = createdRegion;
+
+
+        var startNode = createdRegion.RegionNodes.Single(x => x.IsStart);
+
+        _player.GlobeNode = startNode;
+
+        startNode.ObservedState = GlobeNodeObservedState.Visited;
+
+        _globeModalManager.ShowHistoryBookModal();
     }
 
     private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
