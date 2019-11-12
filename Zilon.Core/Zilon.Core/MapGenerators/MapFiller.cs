@@ -11,7 +11,11 @@ namespace Zilon.Core.MapGenerators
             OptionsDelegate optionsDelegate = null)
         {
             CreateNodes(map, 0, 0, mapSize, optionsDelegate);
-            CreateEdges(map);
+
+            if (!(map is HexMap))
+            {
+                CreateEdges(map);
+            }
         }
 
         public static void FillSquareMap(IMap map,
@@ -21,7 +25,11 @@ namespace Zilon.Core.MapGenerators
             OptionsDelegate optionsDelegate = null)
         {
             CreateNodes(map, startX, startY,  mapSize, optionsDelegate);
-            CreateEdges(map);
+            
+            if (!(map is HexMap))
+            {
+                CreateEdges(map);
+            }
         }
 
         private static void CreateEdges(IMap map)

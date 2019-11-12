@@ -96,6 +96,32 @@ namespace Zilon.GlobeObserver
 
             var scopesList = new ConcurrentBag<IServiceScope>();
 
+            Parallel.ForEach(provinces, async province =>
+            {
+                var scope = serviceProvider.CreateScope();
+
+                var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+                var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+                var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+                var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+                var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+                var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+                var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+
+                var wildSector = await CreateWildSectorAsync(mapFactory,
+                                                             actorManager,
+                                                             propContainerManager,
+                                                             dropResolver,
+                                                             schemeService,
+                                                             equipmentDurableService);
+
+                var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                (sectorManager as GenerationSectorManager).CurrentSector = wildSector;
+
+                scopesList.Add(scope);
+            });
+
             Parallel.For(0, 300, async localityIndex =>
             {
                 var scope = serviceProvider.CreateScope();
@@ -172,6 +198,23 @@ namespace Zilon.GlobeObserver
             };
 
             var sectorMap = await mapFactory.CreateAsync(townScheme);
+            var sector = new Sector(sectorMap,
+                                    actorManager,
+                                    propContainerManager,
+                                    dropResolver,
+                                    schemeService,
+                                    equipmentDurableService);
+            return sector;
+        }
+
+        private static async Task<ISector> CreateWildSectorAsync(IMapFactory mapFactory,
+            IActorManager actorManager,
+            IPropContainerManager propContainerManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService,
+            IEquipmentDurableService equipmentDurableService)
+        {
+            var sectorMap = await WildMapFactory.CreateAsync(100);
             var sector = new Sector(sectorMap,
                                     actorManager,
                                     propContainerManager,
