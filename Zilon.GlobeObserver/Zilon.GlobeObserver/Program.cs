@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.CommonServices;
@@ -16,6 +18,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.GlobeObserver
@@ -29,32 +32,20 @@ namespace Zilon.GlobeObserver
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            LogicStateTreePatterns.Factory = serviceProvider.GetRequiredService<ILogicStateFactory>();
+            var scopes = await CreateGlobeAsync(serviceProvider);
 
-            var mapFactory = serviceProvider.GetRequiredService<IMapFactory>();
-            var actorManager = serviceProvider.GetRequiredService<IActorManager>();
-            var propContainerManager = serviceProvider.GetRequiredService<IPropContainerManager>();
-            var dropResolver = serviceProvider.GetRequiredService<IDropResolver>();
-            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
-            var equipmentDurableService = serviceProvider.GetRequiredService<IEquipmentDurableService>();
-            var humanPersonFactor = serviceProvider.GetRequiredService<IHumanPersonFactory>();
-            var botPlayer = serviceProvider.GetRequiredService<IBotPlayer>();
+            var iteraion = 0;
 
-            var actorList = await CreateGlobeAsync(mapFactory,
-                                                   actorManager,
-                                                   propContainerManager,
-                                                   dropResolver,
-                                                   schemeService,
-                                                   equipmentDurableService,
-                                                   humanPersonFactor,
-                                                   botPlayer);
-
-            var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
-
-            while (true)
+            while (iteraion < 40000)
             {
-                NextTurn(actorList, taskSource);
-                break;
+                Parallel.ForEach(scopes, scope =>
+                {
+                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
+                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    NextTurn(actorManager, taskSource);
+                });
+
+                iteraion++;
             }
         }
 
@@ -70,18 +61,30 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
 
             //TODO При такой регистрации все актёры будут в одном менеджере, но в разных секторах. Это нужно перепроектировать.
-            serviceCollection.AddSingleton<IActorManager, ActorManager>();
-            serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
+            serviceCollection.AddScoped<IActorManager, ActorManager>();
+            serviceCollection.AddScoped<IPropContainerManager, PropContainerManager>();
             RegisterEquipmentDurableService(serviceCollection);
             RegisterRoomMapFactory(serviceCollection);
 
             serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
 
+            RegisterBotTaskSource(serviceCollection);
+
+            serviceCollection.AddScoped<ISectorManager, GenerationSectorManager>();
+        }
+
+        private static void RegisterBotTaskSource(IServiceCollection serviceCollection)
+        {
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
-            serviceCollection.AddSingleton<IActorTaskSource, MonsterBotActorTaskSource>();
-            serviceCollection.AddSingleton<ILogicStateFactory, ContainerLogicStateFactory>();
+
+            serviceCollection.AddSingleton<IDecisionSource, DecisionSource>();
+
+            serviceCollection.AddScoped<IActorTaskSource, MonsterBotActorTaskSource>();
+            serviceCollection.AddScoped<ILogicStateFactory, ContainerLogicStateFactory>();
 
             RegisterLogicState(serviceCollection);
+
+            serviceCollection.AddScoped<LogicStateTreePatterns>();
         }
 
         public static void RegisterLogicState(IServiceCollection serviceRegistry)
@@ -133,9 +136,9 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddSingleton<ISchemeService, SchemeService>();
         }
 
-        private static void NextTurn(IList<IActor> actorList, IActorTaskSource taskSource)
+        private static void NextTurn(IActorManager actors, IActorTaskSource taskSource)
         {
-            foreach (var actor in actorList)
+            foreach (var actor in actors.Items)
             {
                 if (actor.Person.CheckIsDead())
                 {
@@ -165,39 +168,51 @@ namespace Zilon.GlobeObserver
             }
         }
 
-        private static async Task<IList<IActor>> CreateGlobeAsync(IMapFactory mapFactory,
-            IActorManager actorManager,
-            IPropContainerManager propContainerManager,
-            IDropResolver dropResolver,
-            ISchemeService schemeService,
-            IEquipmentDurableService equipmentDurableService,
-            IHumanPersonFactory humanPersonFactory,
-            IBotPlayer botPlayer)
+        private static Task<IList<IServiceScope>> CreateGlobeAsync(IServiceProvider serviceProvider)
         {
-            var actorList = new List<IActor>();
-
-            for (var localityIndex = 0; localityIndex < 300; localityIndex++)
+            return Task.Run(() =>
             {
-                var localitySector = await CreateLocalitySectorAsync(mapFactory,
-                                                                     actorManager,
-                                                                     propContainerManager,
-                                                                     dropResolver,
-                                                                     schemeService,
-                                                                     equipmentDurableService);
+                var scopesList = new ConcurrentBag<IServiceScope>();
 
-                for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
+                Parallel.For(0, 300, async localityIndex =>
                 {
-                    for (var personIndex = 0; personIndex < 10; personIndex++)
-                    {
-                        var node = localitySector.Map.Nodes.ElementAt(personIndex);
-                        var person = CreatePerson(humanPersonFactory);
-                        var actor = CreateActor(botPlayer, person, node, actorManager);
-                        actorList.Add(actor);
-                    }
-                }
-            }
+                    var scope = serviceProvider.CreateScope();
 
-            return actorList;
+                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+
+                    var localitySector = await CreateLocalitySectorAsync(mapFactory,
+                                                                         actorManager,
+                                                                         propContainerManager,
+                                                                         dropResolver,
+                                                                         schemeService,
+                                                                         equipmentDurableService);
+
+                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
+
+                    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
+                    {
+                        for (var personIndex = 0; personIndex < 10; personIndex++)
+                        {
+                            var node = localitySector.Map.Nodes.ElementAt(personIndex);
+                            var person = CreatePerson(humanPersonFactory);
+                            var actor = CreateActor(botPlayer, person, node);
+                            actorManager.Add(actor);
+                        }
+                    }
+
+                    scopesList.Add(scope);
+                });
+
+                return scopesList.ToList() as IList<IServiceScope>;
+            });
         }
 
         private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory)
@@ -208,12 +223,9 @@ namespace Zilon.GlobeObserver
 
         private static IActor CreateActor(IPlayer personPlayer,
             IPerson person,
-            IMapNode node,
-            IActorManager actorManager)
+            IMapNode node)
         {
             var actor = new Actor(person, personPlayer, node);
-
-            actorManager.Add(actor);
 
             return actor;
         }
