@@ -38,8 +38,7 @@ namespace Zilon.Core.MapGenerators
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
-            ICitizenGenerator citizenGenerator
-,
+            ICitizenGenerator citizenGenerator,
             IBotPlayer botPlayer)
         {
             _mapFactorySelector = mapFactorySelector;

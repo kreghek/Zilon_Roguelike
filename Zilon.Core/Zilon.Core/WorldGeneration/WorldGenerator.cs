@@ -189,47 +189,49 @@ namespace Zilon.Core.WorldGeneration
         /// </returns>
         public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
         {
-            var region = new GlobeRegion(LocationBaseSize);
+            return Task.Run(() => {
+                var region = new GlobeRegion(LocationBaseSize);
 
-            // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
-            // Пока не вращаем и не искажаем.
-            // Там, где может быть объект, гарантированно создаём один город и два подземелья.
-            var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
-            var startPattern = GlobeRegionPatterns.Start;
-            var homePattern = GlobeRegionPatterns.Home;
-            // Расчитываем размер паттернов.
-            // Исходим из того, что пока все паттерны квадратные и одинаковые по размеру.
-            // Поэтому размер произвольного паттерна будет справедлив для всех остальных.
-            // Паттерн старта выбран произвольно.
-            var patternSize = startPattern.Values.GetUpperBound(0) - startPattern.Values.GetLowerBound(0) + 1;
+                // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
+                // Пока не вращаем и не искажаем.
+                // Там, где может быть объект, гарантированно создаём один город и два подземелья.
+                var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
+                var startPattern = GlobeRegionPatterns.Start;
+                var homePattern = GlobeRegionPatterns.Home;
+                // Расчитываем размер паттернов.
+                // Исходим из того, что пока все паттерны квадратные и одинаковые по размеру.
+                // Поэтому размер произвольного паттерна будет справедлив для всех остальных.
+                // Паттерн старта выбран произвольно.
+                var patternSize = startPattern.Values.GetUpperBound(0) - startPattern.Values.GetLowerBound(0) + 1;
 
-            // Вставляем паттерны в указанные области
-            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
-            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, 1);
-            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, LocationBaseSize - patternSize - 1);
-            ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
-            if (globe.StartProvince == cell)
-            {
-                ApplyRegionPattern(ref regionDraft, startPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-            }
-            else if (globe.HomeProvince == cell)
-            {
-                ApplyRegionPattern(ref regionDraft, homePattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-            }
-            else
-            {
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-            }
-
-            for (var x = regionDraft.GetLowerBound(0); x <= regionDraft.GetUpperBound(0); x++)
-            {
-                for (var y = regionDraft.GetLowerBound(1); y <= regionDraft.GetUpperBound(1); y++)
+                // Вставляем паттерны в указанные области
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, 1);
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, LocationBaseSize - patternSize - 1);
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
+                if (globe.StartProvince == cell)
                 {
-                    ValidateRegion(region, regionDraft, x, y);
+                    ApplyRegionPattern(ref regionDraft, startPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
                 }
-            }
+                else if (globe.HomeProvince == cell)
+                {
+                    ApplyRegionPattern(ref regionDraft, homePattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+                }
+                else
+                {
+                    ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+                }
 
-            return Task.FromResult(region);
+                for (var x = regionDraft.GetLowerBound(0); x <= regionDraft.GetUpperBound(0); x++)
+                {
+                    for (var y = regionDraft.GetLowerBound(1); y <= regionDraft.GetUpperBound(1); y++)
+                    {
+                        ValidateRegion(region, regionDraft, x, y);
+                    }
+                }
+
+                return region;
+            });
         }
 
         private void ValidateRegion(GlobeRegion region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
