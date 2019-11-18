@@ -1,24 +1,48 @@
-﻿using Zilon.Core.WorldGeneration;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring
 {
     public sealed class TerrainStorageData
     {
-        public TerrainCell[][] Terrain { get; private set; }
+        public TerrainCell[][] Cells { get; private set; }
 
-        public static TerrainStorageData Create(TerrainCell[][] terrain)
+        /// <summary>
+        /// Провинции мира.
+        /// </summary>
+        public GlobeRegionStorageData[] Regions { get; set; }
+
+        public static TerrainStorageData Create(Terrain terrain)
         {
+            if (terrain is null)
+            {
+                throw new System.ArgumentNullException(nameof(terrain));
+            }
+
+            var regionDict = terrain.Regions.ToDictionary(x => Guid.NewGuid(), x => x);
             var storageData = new TerrainStorageData
             {
-                Terrain = terrain
+                Cells = terrain.Cells,
+                Regions = terrain.Regions.Select(x =>
+                {
+                    return GlobeRegionStorageData.Create(x);
+                }).ToArray()
             };
 
             return storageData;
         }
 
-        public TerrainCell[][] Restore()
+        public Terrain Restore()
         {
-            return Terrain;
+            var terrain = new Terrain
+            {
+                Cells = Cells
+            };
+
+            return terrain;
         }
     }
 }

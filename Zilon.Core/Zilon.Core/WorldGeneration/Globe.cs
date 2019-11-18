@@ -4,7 +4,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.NameGeneration;
 
 namespace Zilon.Core.WorldGeneration
@@ -18,8 +20,9 @@ namespace Zilon.Core.WorldGeneration
 
         public CityNameGenerator cityNameGenerator;
 
-        public TerrainCell[][] Terrain { get; set; }
         public List<Realm> Realms = new List<Realm>();
+
+        public Terrain Terrain { get; set; }
 
         /// <summary>
         /// Список основных городов в мире.

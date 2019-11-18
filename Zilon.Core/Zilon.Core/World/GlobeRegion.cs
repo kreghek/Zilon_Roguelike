@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.World
 {
@@ -10,6 +11,7 @@ namespace Zilon.Core.World
     /// </summary>
     public class GlobeRegion : HexMap
     {
+        public TerrainCell TerrainCell { get; set; }
         /// <summary>
         /// Конструктор графа провинции.
         /// </summary>

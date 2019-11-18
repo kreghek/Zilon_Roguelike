@@ -15,21 +15,24 @@ namespace Zilon.Core.WorldGeneration
         public TerrainStorageData Terrain { get; set; }
 
         /// <summary>
-        /// Провинции мира.
+        /// Информация о текущих государствах мира.
         /// </summary>
-        public GlobeRegionNodeStorageData Regions { get; set; }
-
         public RealmStorageData[] Realms { get; set; }
 
+        /// <summary>
+        /// Информация о текущих населённых пунктах мира.
+        /// </summary>
         public LocalityStorageData[] Localities { get; set; }
 
         public static GlobeStorageData Create(Globe globe)
         {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
             var storageData = new GlobeStorageData();
-
-            var terrainStorageData = TerrainStorageData.Create(globe.Terrain);
-
-            storageData.Terrain = terrainStorageData;
+            FillTerrainStorageData(globe, storageData);
 
             var realmDict = globe.Realms.ToDictionary(realm => realm, realm => new RealmStorageData
             {
@@ -68,13 +71,18 @@ namespace Zilon.Core.WorldGeneration
             return storageData;
         }
 
+        private static void FillTerrainStorageData(Globe globe, GlobeStorageData storageData)
+        {
+            var terrainStorageData = TerrainStorageData.Create(globe.Terrain);
+
+            storageData.Terrain = terrainStorageData;
+        }
+
         public Globe Restore()
         {
             var globe = new Globe();
 
-            var terrain = Terrain.Restore();
-
-            globe.Terrain = terrain;
+            RestoreTerrain(globe);
 
             var realmDict = Realms.ToDictionary(storedRealm => storedRealm.Id, storedRealm => new Realm
             {
@@ -87,6 +95,12 @@ namespace Zilon.Core.WorldGeneration
             RestoreLocalities(out globe.Localities, out globe.LocalitiesCells, Localities, globe.Terrain, realmDict);
 
             return globe;
+        }
+
+        private void RestoreTerrain(Globe globe)
+        {
+            var terrain = Terrain.Restore();
+            globe.Terrain = terrain;
         }
 
         /// <summary>

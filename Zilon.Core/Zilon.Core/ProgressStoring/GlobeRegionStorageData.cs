@@ -2,7 +2,6 @@
 
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring
 {
@@ -11,11 +10,16 @@ namespace Zilon.Core.ProgressStoring
         public string Id { get; set; }
         public GlobeRegionNodeStorageData[] Nodes { get; set; }
 
-        public static GlobeRegionStorageData Create(GlobeRegion globeRegion, TerrainCell terrainCell)
+        public static GlobeRegionStorageData Create(GlobeRegion globeRegion)
         {
+            if (globeRegion is null)
+            {
+                throw new System.ArgumentNullException(nameof(globeRegion));
+            }
+
             var storageData = new GlobeRegionStorageData();
 
-            storageData.Id = terrainCell.Coords.ToString();
+            storageData.Id = globeRegion.TerrainCell.Coords.ToString();
             storageData.Nodes = globeRegion.RegionNodes.Select(x => GlobeRegionNodeStorageData.Create(x)).ToArray();
 
             return storageData;
