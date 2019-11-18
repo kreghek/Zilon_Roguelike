@@ -37,7 +37,10 @@ namespace Zilon.Core.WorldGeneration
             {
                 var globe = new Globe
                 {
-                    Terrain = new TerrainCell[WORLD_SIZE][],
+                    Terrain = new Terrain
+                    {
+                        Cells = new TerrainCell[WORLD_SIZE][]
+                    },
                     agentNameGenerator = new RandomName(_dice),
                     cityNameGenerator = new CityNameGenerator(_dice)
                 };
@@ -89,16 +92,16 @@ namespace Zilon.Core.WorldGeneration
             {
                 for (var i = 0; i < WORLD_SIZE; i++)
                 {
-                    globe.Terrain[i] = new TerrainCell[WORLD_SIZE];
+                    globe.Terrain.Cells[i] = new TerrainCell[WORLD_SIZE];
 
                     for (var j = 0; j < WORLD_SIZE; j++)
                     {
-                        globe.Terrain[i][j] = new TerrainCell
+                        globe.Terrain.Cells[i][j] = new TerrainCell
                         {
                             Coords = new OffsetCoords(i, j)
                         };
 
-                        var terrain = globe.Terrain[i][j];
+                        var terrain = globe.Terrain.Cells[i][j];
                         globe.ScanResult.Free.Add(terrain);
                     }
                 }
@@ -117,22 +120,11 @@ namespace Zilon.Core.WorldGeneration
                 var locality = new Locality()
                 {
                     Name = localityName,
-                    Cell = globe.Terrain[randomX][randomY],
                     Owner = globe.Realms[i],
                     //Population = 3
                 };
 
-                var rolledBranchIndex = _dice.Roll(0, 7);
-                locality.Branches = new Dictionary<BranchType, int>
-                        {
-                            { (BranchType)rolledBranchIndex, 1 }
-                        };
-
                 globe.Localities.Add(locality);
-
-                globe.LocalitiesCells[locality.Cell] = locality;
-
-                globe.ScanResult.Free.Remove(locality.Cell);
             }
         }
 
@@ -143,24 +135,7 @@ namespace Zilon.Core.WorldGeneration
                 var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
                 var locality = globe.Localities[rolledLocalityIndex];
 
-                var agentName = globe.agentNameGenerator.Generate(Sex.Male, 1);
-
-                var agent = new Agent
-                {
-                    Name = agentName,
-                    Location = locality.Cell,
-                    Realm = locality.Owner
-                };
-
-                globe.Agents.Add(agent);
-
-                CacheHelper.AddAgentToCell(globe.AgentCells, locality.Cell, agent);
-
-                var rolledBranchIndex = _dice.Roll(0, 7);
-                agent.Skills = new Dictionary<BranchType, int>
-                {
-                    { (BranchType)rolledBranchIndex, 1 }
-                };
+                
             }
         }
     }

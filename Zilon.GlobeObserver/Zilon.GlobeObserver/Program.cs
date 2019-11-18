@@ -82,8 +82,12 @@ namespace Zilon.GlobeObserver
 
         private static async Task<IList<IServiceScope>> CreateGlobeAsync(IServiceProvider serviceProvider)
         {
+            var globeState = new GlobeState();
+
             var terrainInitiator = serviceProvider.GetRequiredService<TerrainInitiator>();
             var terrain = await terrainInitiator.GenerateAsync();
+            globeState.Terrain = terrain;
+
             var provinces = new ConcurrentBag<GlobeRegion>();
             for (var terrainCellX = 0; terrainCellX < 40; terrainCellX++)
             {
@@ -98,28 +102,33 @@ namespace Zilon.GlobeObserver
 
             Parallel.ForEach(provinces, async province =>
             {
-                var scope = serviceProvider.CreateScope();
+                foreach (var provinceNode in province.RegionNodes)
+                {
+                    var scope = serviceProvider.CreateScope();
 
-                var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
-                var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
-                var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
-                var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
-                var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
-                var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
-                var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
-                var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
 
-                var wildSector = await CreateWildSectorAsync(mapFactory,
-                                                             actorManager,
-                                                             propContainerManager,
-                                                             dropResolver,
-                                                             schemeService,
-                                                             equipmentDurableService);
+                    var wildSector = await CreateWildSectorAsync(mapFactory,
+                                                                 actorManager,
+                                                                 propContainerManager,
+                                                                 dropResolver,
+                                                                 schemeService,
+                                                                 equipmentDurableService);
 
-                var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
-                (sectorManager as GenerationSectorManager).CurrentSector = wildSector;
+                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                    (sectorManager as GenerationSectorManager).CurrentSector = wildSector;
 
-                scopesList.Add(scope);
+                    provinceNode.Sector = wildSector;
+
+                    scopesList.Add(scope);
+                }
             });
 
             Parallel.For(0, 300, async localityIndex =>

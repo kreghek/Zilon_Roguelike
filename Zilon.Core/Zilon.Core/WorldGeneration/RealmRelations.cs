@@ -10,7 +10,5 @@ namespace Zilon.Core.WorldGeneration
         }
 
         public Dictionary<Realm, RealmRelationType> Relations { get; set; }
-
-        public Agent Leader { get; set; }
     }
 }

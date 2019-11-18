@@ -9,25 +9,30 @@ namespace Zilon.Core.WorldGeneration
 {
     public class GlobeStorageData
     {
-        public TerrainCell[][] Terrain { get; set; }
+        /// <summary>
+        /// Полная информация о ландшафте мира.
+        /// </summary>
+        public TerrainStorageData Terrain { get; set; }
 
+        /// <summary>
+        /// Информация о текущих государствах мира.
+        /// </summary>
         public RealmStorageData[] Realms { get; set; }
 
-        public AgentStorageData[] Agents { get; set; }
-
+        /// <summary>
+        /// Информация о текущих населённых пунктах мира.
+        /// </summary>
         public LocalityStorageData[] Localities { get; set; }
-
-        public int AgentCrisys { get; set; }
-
-        public TerrainCell StartProvince { get; set; }
-
-        public TerrainCell HomeProvince { get; set; }
-
 
         public static GlobeStorageData Create(Globe globe)
         {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
             var storageData = new GlobeStorageData();
-            storageData.Terrain = globe.Terrain;
+            FillTerrainStorageData(globe, storageData);
 
             var realmDict = globe.Realms.ToDictionary(realm => realm, realm => new RealmStorageData
             {
@@ -43,45 +48,26 @@ namespace Zilon.Core.WorldGeneration
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = locality.Name,
-                    Coords = locality.Cell.Coords,
                     RealmId = realmDict[locality.Owner].Id,
-                    //Population = locality.Population,
-                    Branches = locality.Branches.Select(x => new LocalityBranchStorageData { Type = x.Key, Value = x.Value }).ToArray()
                 });
 
             storageData.Localities = localityDict.Select(x => x.Value).ToArray();
 
-            var agentDict = globe.Agents.ToDictionary(agent => agent,
-                agent => new AgentStorageData
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = agent.Name,
-                    Hp = agent.Hp,
-                    RealmId = realmDict[agent.Realm].Id,
-                    Location = agent.Location.Coords,
-                    Skills = agent.Skills.Select(x => new AgentSkillStorageData
-                    {
-                        Type = x.Key,
-                        Value = x.Value
-                    }).ToArray()
-                });
-
-            storageData.Agents = agentDict.Select(x => x.Value).ToArray();
-
-            storageData.AgentCrisys = globe.AgentCrisys;
-
-            storageData.HomeProvince = globe.HomeProvince;
-
-            storageData.StartProvince = globe.StartProvince;
-
             return storageData;
+        }
+
+        private static void FillTerrainStorageData(Globe globe, GlobeStorageData storageData)
+        {
+            var terrainStorageData = TerrainStorageData.Create(globe.Terrain);
+
+            storageData.Terrain = terrainStorageData;
         }
 
         public Globe Restore()
         {
             var globe = new Globe();
 
-            globe.Terrain = Terrain;
+            RestoreTerrain(globe);
 
             var realmDict = Realms.ToDictionary(storedRealm => storedRealm.Id, storedRealm => new Realm
             {
@@ -93,35 +79,13 @@ namespace Zilon.Core.WorldGeneration
 
             RestoreLocalities(out globe.Localities, out globe.LocalitiesCells, Localities, globe.Terrain, realmDict);
 
-            RestoreAgents(out globe.Agents, Agents, globe.Terrain, realmDict);
-
-            globe.AgentCrisys = AgentCrisys;
-            globe.HomeProvince = globe.Terrain[HomeProvince.Coords.X][HomeProvince.Coords.Y];
-            globe.StartProvince = globe.Terrain[StartProvince.Coords.X][StartProvince.Coords.Y];
-
             return globe;
         }
 
-        private static void RestoreAgents(out List<Agent> agents, AgentStorageData[] storedAgents,
-            TerrainCell[][] terrain,
-            Dictionary<string, Realm> realmsDict)
+        private void RestoreTerrain(Globe globe)
         {
-            agents = new List<Agent>(storedAgents.Length);
-
-            foreach (var storedAgent in storedAgents)
-            {
-                var agentCell = terrain[storedAgent.Location.X][storedAgent.Location.Y];
-                var agent = new Agent
-                {
-                    Hp = storedAgent.Hp,
-                    Name = storedAgent.Name,
-                    Location = agentCell,
-                    Realm = realmsDict[storedAgent.RealmId],
-                    Skills = storedAgent.Skills.ToDictionary(x => x.Type, x => x.Value)
-                };
-
-                agents.Add(agent);
-            }
+            var terrain = Terrain.Restore();
+            globe.Terrain = terrain;
         }
 
         /// <summary>
@@ -135,7 +99,7 @@ namespace Zilon.Core.WorldGeneration
         private static void RestoreLocalities(out List<Locality> localities,
             out Dictionary<TerrainCell, Locality> localityCells,
             LocalityStorageData[] storedLocalities,
-            TerrainCell[][] terrain,
+            Terrain terrain,
             Dictionary<string, Realm> realmsDict)
         {
             localities = new List<Locality>(storedLocalities.Length);
@@ -143,14 +107,11 @@ namespace Zilon.Core.WorldGeneration
 
             foreach (var storedLocality in storedLocalities)
             {
-                var localityCell = terrain[storedLocality.Coords.X][storedLocality.Coords.Y];
+                var localityCell = terrain.Cells[storedLocality.Coords.X][storedLocality.Coords.Y];
                 var locality = new Locality()
                 {
                     Name = storedLocality.Name,
-                    Cell = localityCell,
                     Owner = realmsDict[storedLocality.RealmId],
-                    //Population = storedLocality.Population,
-                    Branches = storedLocality.Branches.ToDictionary(x => x.Type, x => x.Value)
                 };
 
                 localities.Add(locality);

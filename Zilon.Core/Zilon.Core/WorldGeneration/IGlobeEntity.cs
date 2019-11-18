@@ -16,10 +16,5 @@
         /// Текущее местоположение сущности.
         /// </summary>
         TerrainCell Location { get; set; }
-
-        /// <summary>
-        /// Лидер группы.
-        /// </summary>
-        Agent Leader { get; set; }
     }
 }
