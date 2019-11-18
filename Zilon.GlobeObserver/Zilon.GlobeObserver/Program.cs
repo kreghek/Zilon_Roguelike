@@ -82,8 +82,12 @@ namespace Zilon.GlobeObserver
 
         private static async Task<IList<IServiceScope>> CreateGlobeAsync(IServiceProvider serviceProvider)
         {
+            var globeState = new GlobeState();
+
             var terrainInitiator = serviceProvider.GetRequiredService<TerrainInitiator>();
             var terrain = await terrainInitiator.GenerateAsync();
+            globeState.Terrain = terrain;
+
             var provinces = new ConcurrentBag<GlobeRegion>();
             for (var terrainCellX = 0; terrainCellX < 40; terrainCellX++)
             {
