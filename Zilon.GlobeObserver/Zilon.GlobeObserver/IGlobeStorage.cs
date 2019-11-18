@@ -6,6 +6,6 @@ namespace Zilon.GlobeObserver
 {
     public interface IGlobeStorage
     {
-        void Save(GlobeState globeState);
+        void Save(GlobeState globeState, string name);
     }
 }

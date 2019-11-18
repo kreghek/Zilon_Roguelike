@@ -53,21 +53,6 @@ namespace Zilon.Core.WorldGeneration
 
             storageData.Localities = localityDict.Select(x => x.Value).ToArray();
 
-            var agentDict = globe.Agents.ToDictionary(agent => agent,
-                agent => new AgentStorageData
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = agent.Name,
-                    Hp = agent.Hp,
-                    RealmId = realmDict[agent.Realm].Id,
-                    Location = agent.Location.Coords,
-                    Skills = agent.Skills.Select(x => new AgentSkillStorageData
-                    {
-                        Type = x.Key,
-                        Value = x.Value
-                    }).ToArray()
-                });
-
             return storageData;
         }
 
@@ -114,7 +99,7 @@ namespace Zilon.Core.WorldGeneration
         private static void RestoreLocalities(out List<Locality> localities,
             out Dictionary<TerrainCell, Locality> localityCells,
             LocalityStorageData[] storedLocalities,
-            TerrainCell[][] terrain,
+            Terrain terrain,
             Dictionary<string, Realm> realmsDict)
         {
             localities = new List<Locality>(storedLocalities.Length);
@@ -122,7 +107,7 @@ namespace Zilon.Core.WorldGeneration
 
             foreach (var storedLocality in storedLocalities)
             {
-                var localityCell = terrain[storedLocality.Coords.X][storedLocality.Coords.Y];
+                var localityCell = terrain.Cells[storedLocality.Coords.X][storedLocality.Coords.Y];
                 var locality = new Locality()
                 {
                     Name = storedLocality.Name,

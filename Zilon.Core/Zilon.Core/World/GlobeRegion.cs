@@ -12,6 +12,7 @@ namespace Zilon.Core.World
     public class GlobeRegion : HexMap
     {
         public TerrainCell TerrainCell { get; set; }
+
         /// <summary>
         /// Конструктор графа провинции.
         /// </summary>
