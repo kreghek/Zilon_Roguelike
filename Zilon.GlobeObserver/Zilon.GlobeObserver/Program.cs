@@ -109,44 +109,43 @@ namespace Zilon.GlobeObserver
 
                 if (needToCreateSector)
                 {
-                    foreach (var provinceNode in province.RegionNodes)
+                    var provinceNode = province.RegionNodes.First();
+
+                    var scope = serviceProvider.CreateScope();
+
+                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+
+                    var localitySector = await CreateWildSectorAsync(mapFactory,
+                                                                 actorManager,
+                                                                 propContainerManager,
+                                                                 dropResolver,
+                                                                 schemeService,
+                                                                 equipmentDurableService);
+
+                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
+
+                    provinceNode.Sector = localitySector;
+
+                    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
                     {
-                        var scope = serviceProvider.CreateScope();
-
-                        var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
-                        var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
-                        var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
-                        var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
-                        var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
-                        var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
-                        var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
-                        var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
-
-                        var localitySector = await CreateWildSectorAsync(mapFactory,
-                                                                     actorManager,
-                                                                     propContainerManager,
-                                                                     dropResolver,
-                                                                     schemeService,
-                                                                     equipmentDurableService);
-
-                        var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
-                        (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
-
-                        provinceNode.Sector = localitySector;
-
-                        for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
+                        for (var personIndex = 0; personIndex < 10; personIndex++)
                         {
-                            for (var personIndex = 0; personIndex < 10; personIndex++)
-                            {
-                                var node = localitySector.Map.Nodes.ElementAt(personIndex);
-                                var person = CreatePerson(humanPersonFactory);
-                                var actor = CreateActor(botPlayer, person, node);
-                                actorManager.Add(actor);
-                            }
+                            var node = localitySector.Map.Nodes.ElementAt(personIndex);
+                            var person = CreatePerson(humanPersonFactory);
+                            var actor = CreateActor(botPlayer, person, node);
+                            actorManager.Add(actor);
                         }
-
-                        scopesList.Add(scope);
                     }
+
+                    scopesList.Add(scope);
                 }
             });
 
