@@ -177,6 +177,7 @@
     <Compile Include="Persons\Survival\SurvivalStatKeySegmentExtensions.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
+    <Compile Include="ProgressStoring\ActorStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />

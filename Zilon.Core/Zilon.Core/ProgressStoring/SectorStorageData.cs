@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -8,6 +9,7 @@ namespace Zilon.Core.ProgressStoring
 {
     public sealed class SectorStorageData
     {
+        public string SchemeSid { get; private set; }
         public OffsetCoords[] PassMap { get; private set; }
 
         public OffsetCoords[] Obstacles { get; private set; }
@@ -16,7 +18,8 @@ namespace Zilon.Core.ProgressStoring
 
         public TransitionStorageData[] Transitions { get; private set; }
 
-        public static SectorStorageData Create(ISector sector, IDictionary<HumanPersonStorageData, string> humanPersonStorageDataDict)
+
+        public static SectorStorageData Create(ISector sector, IDictionary<IPerson, string> humanPersonDict)
         {
             if (sector is null)
             {
@@ -25,8 +28,10 @@ namespace Zilon.Core.ProgressStoring
 
             var storageData = new SectorStorageData();
 
-            var passMapList = new List<OffsetCoords>(10000);
-            var obstacleList = new List<OffsetCoords>(10000);
+            storageData.SchemeSid = sector.Scheme?.Sid;
+
+            var passMapList = new List<OffsetCoords>();
+            var obstacleList = new List<OffsetCoords>();
             foreach (HexNode node in sector.Map.Nodes)
             {
                 var coords = new OffsetCoords(node.OffsetX, node.OffsetY);

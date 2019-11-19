@@ -60,15 +60,20 @@ namespace Zilon.Core.WorldGeneration
 
             var sectorStorageDataList = new List<SectorStorageData>();
             var personStorageDataList = new List<HumanPersonStorageData>();
+            var personDict = new Dictionary<IPerson, string>();
             foreach (var sectorInfo in globe.SectorInfos)
             {
                 foreach (var actor in sectorInfo.ActorManager.Items)
                 {
                     var personStorageData = HumanPersonStorageData.Create(actor.Person as HumanPerson);
                     personStorageDataList.Add(personStorageData);
+                    personDict.Add(actor.Person, personStorageData.Id);
                 }
+            }
 
-                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, null);
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, personDict);
                 sectorStorageDataList.Add(sectorStorageData);
             }
 
