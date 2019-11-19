@@ -32,17 +32,17 @@ namespace Zilon.GlobeObserver
 
             var result = await CreateGlobeAsync(serviceProvider);
 
-            var globeStorageData = GlobeStorageData.Create(result.Globe);
-            var globeStorageDataSerialized = JsonConvert.SerializeObject(globeStorageData);
+            var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
+            await globeStorage.SaveAsync(result.Globe, "globe");
 
             var iteraion = 0;
 
             while (iteraion < 40000)
             {
-                Parallel.ForEach(result.Scopes, scope =>
+                Parallel.ForEach(result.Globe.SectorInfos, sectorInfo =>
                 {
-                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
-                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    var taskSource = sectorInfo.ActorTaskSource;
+                    var actorManager = sectorInfo.ActorManager;
                     NextTurn(actorManager, taskSource);
                 });
 
@@ -92,7 +92,7 @@ namespace Zilon.GlobeObserver
             globe.Terrain = terrain;
 
             const int WORLD_SIZE = 40;
-            await GenerateAnsAssignRegionsAsync(serviceProvider, globe,  WORLD_SIZE);
+            await GenerateAnsAssignRegionsAsync(serviceProvider, globe, WORLD_SIZE);
 
             var scopesList = new ConcurrentBag<IServiceScope>();
 
@@ -108,7 +108,7 @@ namespace Zilon.GlobeObserver
 
                 if (needToCreateSector)
                 {
-                    var provinceNode = region.RegionNodes.First();
+                    var regionNode = region.RegionNodes.First();
 
                     var scope = serviceProvider.CreateScope();
 
@@ -131,7 +131,7 @@ namespace Zilon.GlobeObserver
                     var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
                     (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
 
-                    provinceNode.Sector = localitySector;
+                    regionNode.Sector = localitySector;
 
                     for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
                     {
@@ -145,10 +145,19 @@ namespace Zilon.GlobeObserver
                     }
 
                     scopesList.Add(scope);
+
+                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
+                    var sectorInfo = new SectorInfo(actorManager,
+                                                    propContainerManager,
+                                                    localitySector,
+                                                    region,
+                                                    regionNode,
+                                                    taskSource);
+                    globe.SectorInfos.Add(sectorInfo);
                 }
             });
 
-            var result = new GenerationResult(globe, scopesList.ToArray());
+            var result = new GenerationResult(globe);
 
             return result;
         }
@@ -189,29 +198,6 @@ namespace Zilon.GlobeObserver
             var actor = new Actor(person, personPlayer, node);
 
             return actor;
-        }
-
-        private static async Task<ISector> CreateLocalitySectorAsync(IMapFactory mapFactory,
-            IActorManager actorManager,
-            IPropContainerManager propContainerManager,
-            IDropResolver dropResolver,
-            ISchemeService schemeService,
-            IEquipmentDurableService equipmentDurableService)
-        {
-            var townScheme = new TownSectorScheme
-            {
-                RegionCount = 10,
-                RegionSize = 10
-            };
-
-            var sectorMap = await mapFactory.CreateAsync(townScheme);
-            var sector = new Sector(sectorMap,
-                                    actorManager,
-                                    propContainerManager,
-                                    dropResolver,
-                                    schemeService,
-                                    equipmentDurableService);
-            return sector;
         }
 
         private static async Task<ISector> CreateWildSectorAsync(IMapFactory mapFactory,

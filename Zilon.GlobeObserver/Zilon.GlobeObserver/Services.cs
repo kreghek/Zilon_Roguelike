@@ -34,7 +34,6 @@ namespace Zilon.GlobeObserver
             RegisterDropResolver(serviceCollection);
             serviceCollection.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
 
-            //TODO При такой регистрации все актёры будут в одном менеджере, но в разных секторах. Это нужно перепроектировать.
             serviceCollection.AddScoped<IActorManager, ActorManager>();
             serviceCollection.AddScoped<IPropContainerManager, PropContainerManager>();
             RegisterEquipmentDurableService(serviceCollection);
@@ -47,6 +46,13 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddScoped<ISectorManager, GenerationSectorManager>();
 
             RegisterGlobeServices(serviceCollection);
+
+            RegisterStorageService(serviceCollection);
+        }
+
+        private static void RegisterStorageService(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<GlobeStorage>();
         }
 
         private static void RegisterGlobeServices(IServiceCollection serviceCollection)

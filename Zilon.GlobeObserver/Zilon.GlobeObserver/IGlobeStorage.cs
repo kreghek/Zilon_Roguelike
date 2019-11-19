@@ -6,6 +6,6 @@ namespace Zilon.GlobeObserver
 {
     public interface IGlobeStorage
     {
-        Task Save(Globe globe, string name);
+        Task SaveAsync(Globe globe, string name);
     }
 }

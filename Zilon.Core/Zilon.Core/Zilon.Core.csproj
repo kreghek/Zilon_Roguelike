@@ -552,6 +552,7 @@
     <Compile Include="WorldGeneration\PopulationSpecializations.cs" />
     <Compile Include="WorldGeneration\ProvinceInitiator.cs" />
     <Compile Include="WorldGeneration\ScanResult.cs" />
+    <Compile Include="WorldGeneration\SectorInfo.cs" />
     <Compile Include="WorldGeneration\TerrainInitiator.cs" />
     <Compile Include="WorldGeneration\UnderConstructionData.cs" />
     <Compile Include="WorldGeneration\WorldGenerator.cs" />

@@ -25,6 +25,8 @@ namespace Zilon.Core.WorldGeneration
 
         public Terrain Terrain { get; set; }
 
+        public IList<SectorInfo> SectorInfos { get; }
+
         /// <summary>
         /// Список основных городов в мире.
         /// </summary>
@@ -36,6 +38,10 @@ namespace Zilon.Core.WorldGeneration
         public TerrainCell StartProvince { get; set; }
 
         public TerrainCell HomeProvince { get; set; }
+
+        public Globe() {
+            SectorInfos = new List<SectorInfo>();
+        }
 
         //public void Save(string path, string realmFileName = null, string branchFileName = null)
         //{
