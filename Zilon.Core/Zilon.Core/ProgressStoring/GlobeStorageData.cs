@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.World;
 
@@ -23,6 +24,10 @@ namespace Zilon.Core.WorldGeneration
         /// Информация о текущих населённых пунктах мира.
         /// </summary>
         public LocalityStorageData[] Localities { get; set; }
+
+        public SectorStorageData[] Sectors { get; set; }
+
+        public HumanPersonStorageData[] Persons { get; set; }
 
         public static GlobeStorageData Create(Globe globe)
         {
@@ -52,6 +57,23 @@ namespace Zilon.Core.WorldGeneration
                 });
 
             storageData.Localities = localityDict.Select(x => x.Value).ToArray();
+
+            var sectorStorageDataList = new List<SectorStorageData>();
+            var personStorageDataList = new List<HumanPersonStorageData>();
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                foreach (var actor in sectorInfo.ActorManager.Items)
+                {
+                    var personStorageData = HumanPersonStorageData.Create(actor.Person as HumanPerson);
+                    personStorageDataList.Add(personStorageData);
+                }
+
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, null);
+                sectorStorageDataList.Add(sectorStorageData);
+            }
+
+            storageData.Persons = personStorageDataList.ToArray();
+            storageData.Sectors = sectorStorageDataList.ToArray();
 
             return storageData;
         }

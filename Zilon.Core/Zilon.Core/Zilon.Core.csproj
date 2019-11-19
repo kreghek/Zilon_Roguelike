@@ -192,6 +192,7 @@
     <Compile Include="ProgressStoring\RealmStorageData.cs" />
     <Compile Include="ProgressStoring\ScoreSidCounterStorageData.cs" />
     <Compile Include="ProgressStoring\ScoresStorageData.cs" />
+    <Compile Include="ProgressStoring\SectorStorageData.cs" />
     <Compile Include="ProgressStoring\TerrainStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
