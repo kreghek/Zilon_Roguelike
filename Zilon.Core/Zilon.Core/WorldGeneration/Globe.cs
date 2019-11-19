@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Persons;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.NameGeneration;
 using Color = System.Drawing.Color;
@@ -26,6 +27,8 @@ namespace Zilon.Core.WorldGeneration
         public Terrain Terrain { get; set; }
 
         public IList<SectorInfo> SectorInfos { get; }
+
+        public IList<IPerson> Persons { get; }
 
         /// <summary>
         /// Список основных городов в мире.
