@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using Newtonsoft.Json;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.MapGenerators.WildStyle;
@@ -30,13 +30,16 @@ namespace Zilon.GlobeObserver
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var scopes = await CreateGlobeAsync(serviceProvider);
+            var result = await CreateGlobeAsync(serviceProvider);
+
+            var globeStorageData = GlobeStorageData.Create(result.Globe);
+            var globeStorageDataSerialized = JsonConvert.SerializeObject(globeStorageData);
 
             var iteraion = 0;
 
             while (iteraion < 40000)
             {
-                Parallel.ForEach(scopes, scope =>
+                Parallel.ForEach(result.Scopes, scope =>
                 {
                     var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
                     var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
@@ -80,36 +83,32 @@ namespace Zilon.GlobeObserver
             }
         }
 
-        private static async Task<IList<IServiceScope>> CreateGlobeAsync(IServiceProvider serviceProvider)
+        private static async Task<GenerationResult> CreateGlobeAsync(IServiceProvider serviceProvider)
         {
-            var globeState = new GlobeState();
+            var globe = new Globe();
 
             var terrainInitiator = serviceProvider.GetRequiredService<TerrainInitiator>();
             var terrain = await terrainInitiator.GenerateAsync();
-            globeState.Terrain = terrain;
+            globe.Terrain = terrain;
 
-            var localityCoords = Enumerable.Range(0, 1600).Take(16).OrderBy(x => Guid.NewGuid()).Select(x => new Core.OffsetCoords(x / 40, x % 40));
-
-            var provinces = new ConcurrentBag<GlobeRegion>();
-            for (var terrainCellX = 0; terrainCellX < 40; terrainCellX++)
-            {
-                for (var terrainCellY = 0; terrainCellY < 40; terrainCellY++)
-                {
-                    var province = await CreateProvinceAsync(serviceProvider);
-                    province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
-                    provinces.Add(province);
-                }
-            };
+            const int WORLD_SIZE = 40;
+            await GenerateAnsAssignRegionsAsync(serviceProvider, globe,  WORLD_SIZE);
 
             var scopesList = new ConcurrentBag<IServiceScope>();
 
-            Parallel.ForEach(provinces, async province =>
+            // Берём 8 случайных точек. Это стартовые города государсв.
+            var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
+                .Take(8)
+                .OrderBy(x => Guid.NewGuid())
+                .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
+
+            Parallel.ForEach(globe.Terrain.Regions, async region =>
             {
-                var needToCreateSector = localityCoords.Contains(province.TerrainCell.Coords);
+                var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
 
                 if (needToCreateSector)
                 {
-                    var provinceNode = province.RegionNodes.First();
+                    var provinceNode = region.RegionNodes.First();
 
                     var scope = serviceProvider.CreateScope();
 
@@ -149,44 +148,25 @@ namespace Zilon.GlobeObserver
                 }
             });
 
-            //Parallel.For(0, 300, async localityIndex =>
-            //{
-            //    var scope = serviceProvider.CreateScope();
+            var result = new GenerationResult(globe, scopesList.ToArray());
 
-            //    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
-            //    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
-            //    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
-            //    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
-            //    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
-            //    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
-            //    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
-            //    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+            return result;
+        }
 
-            //    var localitySector = await CreateLocalitySectorAsync(mapFactory,
-            //                                                         actorManager,
-            //                                                         propContainerManager,
-            //                                                         dropResolver,
-            //                                                         schemeService,
-            //                                                         equipmentDurableService);
+        private static async Task GenerateAnsAssignRegionsAsync(IServiceProvider serviceProvider, Globe globe, int WORLD_SIZE)
+        {
+            var provinces = new ConcurrentBag<GlobeRegion>();
+            for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)
+            {
+                for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
+                {
+                    var province = await CreateProvinceAsync(serviceProvider);
+                    province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
+                    provinces.Add(province);
+                }
+            };
 
-            //    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
-            //    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
-
-            //    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
-            //    {
-            //        for (var personIndex = 0; personIndex < 10; personIndex++)
-            //        {
-            //            var node = localitySector.Map.Nodes.ElementAt(personIndex);
-            //            var person = CreatePerson(humanPersonFactory);
-            //            var actor = CreateActor(botPlayer, person, node);
-            //            actorManager.Add(actor);
-            //        }
-            //    }
-
-            //    scopesList.Add(scope);
-            //});
-
-            return scopesList.ToList();
+            globe.Terrain.Regions = provinces.ToArray();
         }
 
         private static async Task<GlobeRegion> CreateProvinceAsync(IServiceProvider serviceProvider)

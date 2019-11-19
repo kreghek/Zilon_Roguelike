@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.GlobeObserver
 {
@@ -11,10 +10,9 @@ namespace Zilon.GlobeObserver
         /// </summary>
         /// <param name="globeState"></param>
         /// <param name="name"> Наименование мира. </param>
-        public void Save(GlobeState globeState, string name)
+        public Task Save(Globe globe, string name)
         {
-            var terrain = globeState.Terrain;
-
+            return Task.CompletedTask;
         }
     }
 }

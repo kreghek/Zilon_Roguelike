@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
+
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.GlobeObserver
 {
     public interface IGlobeStorage
     {
-        void Save(GlobeState globeState, string name);
+        Task Save(Globe globe, string name);
     }
 }
