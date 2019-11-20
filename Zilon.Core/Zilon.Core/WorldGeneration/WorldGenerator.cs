@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Zilon.Core.Common;
@@ -80,7 +77,8 @@ namespace Zilon.Core.WorldGeneration
             {
                 var globe = new Globe
                 {
-                    Terrain = new Terrain {
+                    Terrain = new Terrain
+                    {
                         Cells = new TerrainCell[WORLD_SIZE][]
                     },
                     agentNameGenerator = new RandomName(_dice),
@@ -181,7 +179,8 @@ namespace Zilon.Core.WorldGeneration
         /// </returns>
         public Task<GlobeRegion> GenerateRegionAsync(Globe globe, TerrainCell cell)
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 var region = new GlobeRegion(LocationBaseSize);
 
                 // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
@@ -201,18 +200,10 @@ namespace Zilon.Core.WorldGeneration
                 ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, 1);
                 ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, LocationBaseSize - patternSize - 1);
                 ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
-                if (globe.StartProvince == cell)
-                {
-                    ApplyRegionPattern(ref regionDraft, startPattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-                }
-                else if (globe.HomeProvince == cell)
-                {
-                    ApplyRegionPattern(ref regionDraft, homePattern, (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-                }
-                else
-                {
-                    ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
-                }
+
+
+                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+
 
                 for (var x = regionDraft.GetLowerBound(0); x <= regionDraft.GetUpperBound(0); x++)
                 {

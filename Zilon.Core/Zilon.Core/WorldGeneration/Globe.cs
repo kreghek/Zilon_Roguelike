@@ -1,15 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration.NameGeneration;
-using Color = System.Drawing.Color;
 
 namespace Zilon.Core.WorldGeneration
 {
@@ -34,15 +28,9 @@ namespace Zilon.Core.WorldGeneration
         /// Список основных городов в мире.
         /// </summary>
         public List<Locality> Localities = new List<Locality>();
-        public Dictionary<TerrainCell, Locality> LocalitiesCells = new Dictionary<TerrainCell, Locality>();
 
-        public ScanResult ScanResult = new ScanResult();
-
-        public TerrainCell StartProvince { get; set; }
-
-        public TerrainCell HomeProvince { get; set; }
-
-        public Globe() {
+        public Globe()
+        {
             SectorInfos = new List<SectorInfo>();
         }
 

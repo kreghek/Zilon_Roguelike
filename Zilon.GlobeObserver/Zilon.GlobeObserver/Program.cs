@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+
 using Zilon.Core.MapGenerators;
-using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;

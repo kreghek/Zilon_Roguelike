@@ -104,7 +104,7 @@ namespace Zilon.Core.WorldGeneration
 
             globe.Realms = realmDict.Select(x => x.Value).ToList();
 
-            RestoreLocalities(out globe.Localities, out globe.LocalitiesCells, Localities, globe.Terrain, realmDict);
+            RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
 
             return globe;
         }
@@ -124,17 +124,14 @@ namespace Zilon.Core.WorldGeneration
         /// <param name="terrain"> Территория мира. </param>
         /// <param name="realmsDict"> Словарь государств. Нужен, чтобы знать id государств, которые были в файле сохранения. </param>
         private static void RestoreLocalities(out List<Locality> localities,
-            out Dictionary<TerrainCell, Locality> localityCells,
             LocalityStorageData[] storedLocalities,
             Terrain terrain,
             Dictionary<string, Realm> realmsDict)
         {
             localities = new List<Locality>(storedLocalities.Length);
-            localityCells = new Dictionary<TerrainCell, Locality>(storedLocalities.Length);
 
             foreach (var storedLocality in storedLocalities)
             {
-                var localityCell = terrain.Cells[storedLocality.Coords.X][storedLocality.Coords.Y];
                 var locality = new Locality()
                 {
                     Name = storedLocality.Name,
@@ -142,7 +139,6 @@ namespace Zilon.Core.WorldGeneration
                 };
 
                 localities.Add(locality);
-                localityCells.Add(localityCell, locality);
             }
         }
     }

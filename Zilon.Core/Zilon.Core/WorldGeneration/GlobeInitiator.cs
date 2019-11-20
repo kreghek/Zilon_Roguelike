@@ -100,9 +100,6 @@ namespace Zilon.Core.WorldGeneration
                         {
                             Coords = new OffsetCoords(i, j)
                         };
-
-                        var terrain = globe.Terrain.Cells[i][j];
-                        globe.ScanResult.Free.Add(terrain);
                     }
                 }
             });
