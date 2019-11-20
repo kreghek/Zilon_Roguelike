@@ -19,6 +19,11 @@ namespace Zilon.Core.ProgressStoring
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
+            if (humanPerson is null)
+            {
+                throw new ArgumentNullException(nameof(humanPerson));
+            }
+
             var storageData = new HumanPersonStorageData();
 
             var id = Guid.NewGuid().ToString();
