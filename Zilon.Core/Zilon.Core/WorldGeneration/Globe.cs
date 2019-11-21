@@ -22,7 +22,7 @@ namespace Zilon.Core.WorldGeneration
 
         public IList<SectorInfo> SectorInfos { get; }
 
-        public IList<IPerson> Persons { get; }
+        public IList<IPerson> Persons { get; set; }
 
         /// <summary>
         /// Список основных городов в мире.

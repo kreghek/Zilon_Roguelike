@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
@@ -112,12 +113,23 @@ namespace Zilon.Core.WorldGeneration
             storageData.Terrain = terrainStorageData;
         }
 
-        public Globe Restore(ISchemeService schemeService)
+        public Globe Restore(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
         {
             var globe = new Globe();
 
             RestoreTerrain(globe, schemeService);
 
+            var realmDict = RestoreRealms(globe);
+
+            RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
+
+            RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
+
+            return globe;
+        }
+
+        private Dictionary<string, Realm> RestoreRealms(Globe globe)
+        {
             var realmDict = Realms.ToDictionary(storedRealm => storedRealm.Id, storedRealm => new Realm
             {
                 Name = storedRealm.Name,
@@ -125,10 +137,7 @@ namespace Zilon.Core.WorldGeneration
             });
 
             globe.Realms = realmDict.Select(x => x.Value).ToList();
-
-            RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
-
-            return globe;
+            return realmDict;
         }
 
         private void RestoreTerrain(Globe globe, ISchemeService schemeService)
@@ -162,6 +171,16 @@ namespace Zilon.Core.WorldGeneration
 
                 localities.Add(locality);
             }
+        }
+
+        private void RestorePersons(Globe globe, ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
+        {
+            globe.Persons = Persons.Select(x => (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory)).ToList();
+        }
+
+        private void RestoreSectors(Globe globe)
+        {
+            globe.SectorInfos = Sectors.Select(x => new SectorInfo(,,,x.)).ToList();
         }
     }
 }
