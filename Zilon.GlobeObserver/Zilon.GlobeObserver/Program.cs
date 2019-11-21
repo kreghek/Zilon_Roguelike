@@ -33,6 +33,8 @@ namespace Zilon.GlobeObserver
             var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
             await globeStorage.SaveAsync(result.Globe, "globe");
 
+            var restoredGlobe = await globeStorage.LoadAsync("globe");
+
             var iteraion = 0;
 
             while (iteraion < 40000)

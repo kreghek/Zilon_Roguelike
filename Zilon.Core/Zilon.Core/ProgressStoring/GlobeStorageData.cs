@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.WorldGeneration
@@ -90,11 +91,11 @@ namespace Zilon.Core.WorldGeneration
             storageData.Terrain = terrainStorageData;
         }
 
-        public Globe Restore()
+        public Globe Restore(ISchemeService schemeService)
         {
             var globe = new Globe();
 
-            RestoreTerrain(globe);
+            RestoreTerrain(globe, schemeService);
 
             var realmDict = Realms.ToDictionary(storedRealm => storedRealm.Id, storedRealm => new Realm
             {
@@ -109,9 +110,9 @@ namespace Zilon.Core.WorldGeneration
             return globe;
         }
 
-        private void RestoreTerrain(Globe globe)
+        private void RestoreTerrain(Globe globe, ISchemeService schemeService)
         {
-            var terrain = Terrain.Restore();
+            var terrain = Terrain.Restore(schemeService);
             globe.Terrain = terrain;
         }
 

@@ -1,13 +1,20 @@
 ﻿using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-
+using Zilon.Core.Schemes;
 using Zilon.Core.WorldGeneration;
 
 namespace Zilon.GlobeObserver
 {
     public class GlobeStorage : IGlobeStorage
     {
+        private readonly ISchemeService _schemeService;
+
+        public GlobeStorage(ISchemeService schemeService)
+        {
+            _schemeService = schemeService;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -21,6 +28,19 @@ namespace Zilon.GlobeObserver
                 var globeStorageDataSerialized = JsonConvert.SerializeObject(globeStorageData);
 
                 System.IO.File.WriteAllText($"{name}.json", globeStorageDataSerialized);
+            });
+        }
+
+        public Task<Globe> LoadAsync(string name)
+        {
+            return Task.Run(() =>
+            {
+                var globeStorageDataSerialized = System.IO.File.ReadAllText($"{name}.json");
+                var globeStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(globeStorageDataSerialized);
+
+                var globe = globeStorageData.Restore(_schemeService);
+
+                return globe;
             });
         }
     }
