@@ -19,7 +19,7 @@ namespace Zilon.Core.ProgressStoring
         {
             if (terrain is null)
             {
-                throw new System.ArgumentNullException(nameof(terrain));
+                throw new ArgumentNullException(nameof(terrain));
             }
 
             var regionDict = terrain.Regions.ToDictionary(x => Guid.NewGuid(), x => x);
