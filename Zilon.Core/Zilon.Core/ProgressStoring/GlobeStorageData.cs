@@ -40,26 +40,30 @@ namespace Zilon.Core.WorldGeneration
             var storageData = new GlobeStorageData();
             FillTerrainStorageData(globe, storageData);
 
-            var realmDict = globe.Realms.ToDictionary(realm => realm, realm => new RealmStorageData
-            {
-                Id = Guid.NewGuid().ToString(),
-                MainColor = realm.Banner.MainColor,
-                Name = realm.Name
-            });
+            var realmDict = FillRealmsStorageData(globe, storageData);
+            FillLocalities(globe, storageData, realmDict);
 
-            storageData.Realms = realmDict.Select(x => x.Value).ToArray();
+            var personDict = FillPersons(globe, storageData);
 
-            var localityDict = globe.Localities.ToDictionary(locality => locality,
-                locality => new LocalityStorageData
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = locality.Name,
-                    RealmId = realmDict[locality.Owner].Id,
-                });
+            FillSectors(globe, storageData, personDict);
 
-            storageData.Localities = localityDict.Select(x => x.Value).ToArray();
+            return storageData;
+        }
 
+        private static void FillSectors(Globe globe, GlobeStorageData storageData, Dictionary<IPerson, string> personDict)
+        {
             var sectorStorageDataList = new List<SectorStorageData>();
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, personDict);
+                sectorStorageDataList.Add(sectorStorageData);
+            }
+
+            storageData.Sectors = sectorStorageDataList.ToArray();
+        }
+
+        private static Dictionary<IPerson, string> FillPersons(Globe globe, GlobeStorageData storageData)
+        {
             var personStorageDataList = new List<HumanPersonStorageData>();
             var personDict = new Dictionary<IPerson, string>();
             foreach (var sectorInfo in globe.SectorInfos)
@@ -71,17 +75,34 @@ namespace Zilon.Core.WorldGeneration
                     personDict.Add(actor.Person, personStorageData.Id);
                 }
             }
-
-            foreach (var sectorInfo in globe.SectorInfos)
-            {
-                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, personDict);
-                sectorStorageDataList.Add(sectorStorageData);
-            }
-
             storageData.Persons = personStorageDataList.ToArray();
-            storageData.Sectors = sectorStorageDataList.ToArray();
+            return personDict;
+        }
 
-            return storageData;
+        private static void FillLocalities(Globe globe, GlobeStorageData storageData, Dictionary<Realm, RealmStorageData> realmDict)
+        {
+            var localityDict = globe.Localities.ToDictionary(locality => locality,
+                            locality => new LocalityStorageData
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Name = locality.Name,
+                                RealmId = realmDict[locality.Owner].Id,
+                            });
+
+            storageData.Localities = localityDict.Select(x => x.Value).ToArray();
+        }
+
+        private static Dictionary<Realm, RealmStorageData> FillRealmsStorageData(Globe globe, GlobeStorageData storageData)
+        {
+            var realmDict = globe.Realms.ToDictionary(realm => realm, realm => new RealmStorageData
+            {
+                Id = Guid.NewGuid().ToString(),
+                MainColor = realm.Banner.MainColor,
+                Name = realm.Name
+            });
+
+            storageData.Realms = realmDict.Select(x => x.Value).ToArray();
+            return realmDict;
         }
 
         private static void FillTerrainStorageData(Globe globe, GlobeStorageData storageData)

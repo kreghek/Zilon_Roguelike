@@ -27,6 +27,11 @@ namespace Zilon.Core.ProgressStoring
 
         public GlobeRegion Restore(ISchemeService schemeService)
         {
+            if (schemeService is null)
+            {
+                throw new System.ArgumentNullException(nameof(schemeService));
+            }
+
             var globeNode = new GlobeRegion(20);
 
             foreach (var storedNode in Nodes)
