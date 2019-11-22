@@ -17,6 +17,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
 namespace Zilon.GlobeObserver
@@ -53,6 +54,7 @@ namespace Zilon.GlobeObserver
         private static void RegisterStorageService(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<GlobeStorage>();
+            serviceCollection.AddScoped<ISectorInfoFactory, SectorInfoFactory>();
         }
 
         private static void RegisterGlobeServices(IServiceCollection serviceCollection)

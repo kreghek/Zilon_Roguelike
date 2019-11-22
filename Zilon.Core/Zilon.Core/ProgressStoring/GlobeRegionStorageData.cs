@@ -10,6 +10,8 @@ namespace Zilon.Core.ProgressStoring
         public string Id { get; set; }
         public GlobeRegionNodeStorageData[] Nodes { get; set; }
 
+        public OffsetCoords TerrainCoords { get; set; }
+
         public static GlobeRegionStorageData Create(GlobeRegion globeRegion)
         {
             if (globeRegion is null)
@@ -21,11 +23,12 @@ namespace Zilon.Core.ProgressStoring
 
             storageData.Id = globeRegion.TerrainCell.Coords.ToString();
             storageData.Nodes = globeRegion.RegionNodes.Select(x => GlobeRegionNodeStorageData.Create(x)).ToArray();
+            storageData.TerrainCoords = globeRegion.TerrainCell.Coords;
 
             return storageData;
         }
 
-        public GlobeRegion Restore(ISchemeService schemeService)
+        public GlobeRegion Restore(ISchemeService schemeService, WorldGeneration.TerrainCell[][] cells)
         {
             if (schemeService is null)
             {
@@ -33,6 +36,7 @@ namespace Zilon.Core.ProgressStoring
             }
 
             var globeNode = new GlobeRegion(20);
+            globeNode.TerrainCell = cells.SelectMany(x => x).Single(x => x.Coords == TerrainCoords);
 
             foreach (var storedNode in Nodes)
             {

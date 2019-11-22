@@ -552,6 +552,7 @@
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
+    <Compile Include="World\ISectorInfoFactory.cs" />
     <Compile Include="World\IWorldManager.cs" />
     <Compile Include="World\MonsterSet.cs" />
     <Compile Include="World\RealmBanner.cs" />

@@ -14,7 +14,7 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.GlobeObserver
 {
-    public class SectorInfoFactory
+    public class SectorInfoFactory : ISectorInfoFactory
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -65,7 +65,7 @@ namespace Zilon.GlobeObserver
                         .ToArray();
 
                     var region = new MapRegion(regionCounter, regionNodes);
-                        regionCounter++;
+                    regionCounter++;
 
                     sector.Map.Regions.Add(region);
                 }

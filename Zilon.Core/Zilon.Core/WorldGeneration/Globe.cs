@@ -20,7 +20,7 @@ namespace Zilon.Core.WorldGeneration
 
         public Terrain Terrain { get; set; }
 
-        public IList<SectorInfo> SectorInfos { get; }
+        public IList<SectorInfo> SectorInfos { get; set; }
 
         public IList<IPerson> Persons { get; set; }
 

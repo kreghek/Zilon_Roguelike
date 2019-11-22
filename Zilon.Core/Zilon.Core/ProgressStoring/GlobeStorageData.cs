@@ -56,7 +56,11 @@ namespace Zilon.Core.WorldGeneration
             var sectorStorageDataList = new List<SectorStorageData>();
             foreach (var sectorInfo in globe.SectorInfos)
             {
-                var sectorStorageData = SectorStorageData.Create(sectorInfo.Sector, personDict);
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Region,
+                    sectorInfo.RegionNode,
+                    sectorInfo.Sector,
+                    personDict);
+
                 sectorStorageDataList.Add(sectorStorageData);
             }
 
@@ -113,8 +117,16 @@ namespace Zilon.Core.WorldGeneration
             storageData.Terrain = terrainStorageData;
         }
 
-        public Globe Restore(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
+        public Globe Restore(ISchemeService schemeService,
+            ISurvivalRandomSource survivalRandomSource,
+            IPropFactory propFactory,
+            ISectorInfoFactory sectorInfoFactory)
         {
+            if (sectorInfoFactory is null)
+            {
+                throw new ArgumentNullException(nameof(sectorInfoFactory));
+            }
+
             var globe = new Globe();
 
             RestoreTerrain(globe, schemeService);
@@ -124,6 +136,8 @@ namespace Zilon.Core.WorldGeneration
             RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
 
             RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
+
+            RestoreSectors(globe, sectorInfoFactory);
 
             return globe;
         }
@@ -178,9 +192,23 @@ namespace Zilon.Core.WorldGeneration
             globe.Persons = Persons.Select(x => (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory)).ToList();
         }
 
-        private void RestoreSectors(Globe globe)
+        private void RestoreSectors(Globe globe, ISectorInfoFactory sectorInfoFactory)
         {
-            globe.SectorInfos = Sectors.Select(x => new SectorInfo(,,,x.)).ToList();
+            var infos = new List<SectorInfo>();
+            foreach (var sectorInfoStorageData in Sectors)
+            {
+                var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == sectorInfoStorageData.TerrainCoords);
+                var globeRegion = globe.Terrain.Regions.Single(x => x.TerrainCell == terrainCell);
+                var coordX = sectorInfoStorageData.GlobeRegionNodeCoords.X;
+                var coordY = sectorInfoStorageData.GlobeRegionNodeCoords.Y;
+                var globeRegionNode = globeRegion.RegionNodes.Single(x => x.OffsetX == coordX && x.OffsetY == coordY);
+
+                var info = sectorInfoFactory.Create(globeRegion, globeRegionNode, sectorInfoStorageData);
+
+                infos.Add(info);
+            }
+
+            globe.SectorInfos = infos;
         }
     }
 }

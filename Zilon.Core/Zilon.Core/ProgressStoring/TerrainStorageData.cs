@@ -37,19 +37,10 @@ namespace Zilon.Core.ProgressStoring
 
         public Terrain Restore(ISchemeService schemeService)
         {
-            //var cells = new TerrainCell[40][];
-            //for (var x = 0; x < 40; x++)
-            //{
-            //    for (var y = 0; y < 40; y++)
-            //    {
-            //        cells[x][y] = Cells[x * 40 + y];
-            //    }
-            //}
-
             var terrain = new Terrain
             {
                 Cells = Cells,
-                Regions = Regions.Select(x => x.Restore(schemeService)).ToArray()
+                Regions = Regions.Select(x => x.Restore(schemeService, Cells)).ToArray()
             };
 
             return terrain;

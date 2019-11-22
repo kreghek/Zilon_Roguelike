@@ -1,26 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.ProgressStoring
 {
     public sealed class SectorStorageData
     {
-        public string SchemeSid { get; private set; }
-        public OffsetCoords[] PassMap { get; private set; }
+        public string SchemeSid { get; set; }
+        public OffsetCoords[] PassMap { get; set; }
 
-        public OffsetCoords[] Obstacles { get; private set; }
+        public OffsetCoords[] Obstacles { get; set; }
 
-        public OffsetCoords[][] Regions { get; private set; }
+        public OffsetCoords[][] Regions { get; set; }
 
-        public TransitionStorageData[] Transitions { get; private set; }
+        public TransitionStorageData[] Transitions { get; set; }
+
+        public OffsetCoords TerrainCoords { get; set; }
+
+        public OffsetCoords GlobeRegionNodeCoords { get; set; }
 
 
-        public static SectorStorageData Create(ISector sector, IDictionary<IPerson, string> humanPersonDict)
+        public static SectorStorageData Create(GlobeRegion globeRegion,
+            GlobeRegionNode globeRegionNode,
+            ISector sector,
+            IDictionary<IPerson, string> humanPersonDict)
         {
+            if (globeRegion is null)
+            {
+                throw new ArgumentNullException(nameof(globeRegion));
+            }
+
+            if (globeRegionNode is null)
+            {
+                throw new ArgumentNullException(nameof(globeRegionNode));
+            }
+
             if (sector is null)
             {
                 throw new ArgumentNullException(nameof(sector));
@@ -59,6 +78,9 @@ namespace Zilon.Core.ProgressStoring
                 Coords = new OffsetCoords((x.Key as HexNode).OffsetX, (x.Key as HexNode).OffsetY),
                 Sid = x.Value.SectorSid
             }).ToArray();
+
+            storageData.TerrainCoords = globeRegion.TerrainCell.Coords;
+            storageData.GlobeRegionNodeCoords = new OffsetCoords(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
 
             return storageData;
         }
