@@ -535,6 +535,7 @@
     <Compile Include="World\IWorldGenerator.cs" />
     <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="World\NameGeneration\NameGen.cs" />
+    <Compile Include="World\NameGeneration\Sex.cs" />
     <Compile Include="World\ProvinceInitiator.cs" />
     <Compile Include="World\SectorInfo.cs" />
     <Compile Include="World\TerrainInitiator.cs" />

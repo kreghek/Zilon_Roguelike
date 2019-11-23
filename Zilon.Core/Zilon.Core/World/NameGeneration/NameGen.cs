@@ -16,21 +16,26 @@ namespace Zilon.Core.World.NameGeneration
         /// <summary>
         /// Class for holding the lists of names from names.json
         /// </summary>
-        class NameList
+        private class NameList
         {
-            public string[] boys { get; set; }
-            public string[] girls { get; set; }
-            public string[] last { get; set; }
+            [JsonProperty(PropertyName = "boys")]
+            public string[] Boys { get; set; }
+
+            [JsonProperty(PropertyName = "girls")]
+            public string[] Girls { get; set; }
+
+            [JsonProperty(PropertyName = "last")]
+            public string[] Last { get; set; }
 
             public NameList()
             {
-                boys = new string[] { };
-                girls = new string[] { };
-                last = new string[] { };
+                Boys = System.Array.Empty<string>();
+                Girls = System.Array.Empty<string>();
+                Last = System.Array.Empty<string>();
             }
         }
 
-        IDice _dice;
+        private readonly IDice _dice;
         private readonly List<string> _male;
         private readonly List<string> _female;
         private readonly List<string> _last;
@@ -54,9 +59,9 @@ namespace Zilon.Core.World.NameGeneration
             {
                 var nameList = serializer.Deserialize<NameList>(jreader);
 
-                _male = new List<string>(nameList.boys);
-                _female = new List<string>(nameList.girls);
-                _last = new List<string>(nameList.last);
+                _male = new List<string>(nameList.Boys);
+                _female = new List<string>(nameList.Girls);
+                _last = new List<string>(nameList.Last);
             }
         }
 
@@ -110,7 +115,7 @@ namespace Zilon.Core.World.NameGeneration
             {
                 if (isInital)
                 {
-                    middles.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[_dice.Roll(0, 25 - 1)].ToString() + "."); // randomly selects an uppercase letter to use as the inital and appends a dot
+                    middles.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[_dice.Roll(0, 25 - 1)].ToString(System.Globalization.CultureInfo.InvariantCulture) + "."); // randomly selects an uppercase letter to use as the inital and appends a dot
                 }
                 else
                 {
@@ -187,11 +192,5 @@ namespace Zilon.Core.World.NameGeneration
 
             return names;
         }
-    }
-
-    public enum Sex
-    {
-        Male,
-        Female
     }
 }
