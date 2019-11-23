@@ -8,7 +8,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public class GlobeStorageData
     {

@@ -2,7 +2,6 @@
 
 using Zilon.Core.Players;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring
 {

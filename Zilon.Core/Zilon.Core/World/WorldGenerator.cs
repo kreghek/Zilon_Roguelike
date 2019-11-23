@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
-using Zilon.Core.WorldGeneration.NameGeneration;
+using Zilon.Core.World.NameGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Экземпляр генератора мира с историей.

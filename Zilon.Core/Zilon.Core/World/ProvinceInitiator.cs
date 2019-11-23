@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public sealed class ProvinceInitiator
     {

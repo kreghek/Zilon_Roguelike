@@ -1,6 +1,4 @@
-﻿using Zilon.Core.WorldGeneration;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     /// <summary>
     /// Вся информация о территориях мира.

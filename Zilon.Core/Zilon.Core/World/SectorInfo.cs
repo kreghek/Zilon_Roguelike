@@ -2,9 +2,8 @@
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.World;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public class SectorInfo
     {

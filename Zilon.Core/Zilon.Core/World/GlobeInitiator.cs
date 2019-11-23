@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration.NameGeneration;
+using Zilon.Core.World.NameGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public sealed class GlobeInitiator
     {
@@ -132,7 +131,7 @@ namespace Zilon.Core.WorldGeneration
                 var rolledLocalityIndex = _dice.Roll(0, globe.Localities.Count - 1);
                 var locality = globe.Localities[rolledLocalityIndex];
 
-                
+
             }
         }
     }

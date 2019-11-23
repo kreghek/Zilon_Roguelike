@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-
-using Zilon.Core.WorldGeneration;
+using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {

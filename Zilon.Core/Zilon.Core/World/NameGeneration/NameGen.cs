@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 using Zilon.Core.CommonServices.Dices;
 
-namespace Zilon.Core.WorldGeneration.NameGeneration
+namespace Zilon.Core.World.NameGeneration
 {
     /// <summary>
     /// RandomName class, used to generate a random name.
@@ -45,7 +45,7 @@ namespace Zilon.Core.WorldGeneration.NameGeneration
             JsonSerializer serializer = new JsonSerializer();
 
             var assembly = this.GetType().Assembly;
-            var resourceName = "Zilon.Core.WorldGeneration.NameGeneration.names.json";
+            var resourceName = "Zilon.Core.World.NameGeneration.names.json";
 
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))

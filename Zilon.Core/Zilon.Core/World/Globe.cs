@@ -3,9 +3,9 @@
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration.NameGeneration;
+using Zilon.Core.World.NameGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Мир.

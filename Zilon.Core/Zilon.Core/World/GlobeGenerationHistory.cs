@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public class GlobeGenerationHistory
     {

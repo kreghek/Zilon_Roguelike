@@ -4,7 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Globe
 {

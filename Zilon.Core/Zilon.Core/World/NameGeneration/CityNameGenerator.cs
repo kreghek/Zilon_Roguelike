@@ -1,7 +1,7 @@
 ﻿using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
-namespace Zilon.Core.WorldGeneration.NameGeneration
+namespace Zilon.Core.World.NameGeneration
 {
     public sealed class CityNameGenerator
     {

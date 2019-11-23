@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.WorldGeneration
+﻿namespace Zilon.Core.World
 {
     /// <summary>
     /// Интерфейс сущности в мире.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public sealed class GlobeGenerationResult
     {

@@ -28,7 +28,7 @@ namespace Zilon.Core.ProgressStoring
             return storageData;
         }
 
-        public GlobeRegion Restore(ISchemeService schemeService, WorldGeneration.TerrainCell[][] cells)
+        public GlobeRegion Restore(ISchemeService schemeService, World.TerrainCell[][] cells)
         {
             if (schemeService is null)
             {

@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-using Zilon.Core.World;
-
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public sealed class TerrainInitiator
     {

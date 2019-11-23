@@ -520,32 +520,31 @@
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="CommonServices\UserTimeProvider.cs" />
-    <Compile Include="WorldGeneration\Army.cs" />
-    <Compile Include="WorldGeneration\DirectBitmap.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationResult.cs" />
-    <Compile Include="WorldGeneration\GlobeInitiator.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
+    <Compile Include="World\DirectBitmap.cs" />
+    <Compile Include="World\GlobeGenerationHistory.cs" />
+    <Compile Include="World\GlobeGenerationHistoryItem.cs" />
+    <Compile Include="World\GlobeGenerationResult.cs" />
+    <Compile Include="World\GlobeInitiator.cs" />
+    <Compile Include="World\GlobeRegionDraftValueType.cs" />
+    <Compile Include="World\GlobeRegionPatternValue.cs" />
+    <Compile Include="World\GlobeRegionDraftValue.cs" />
+    <Compile Include="World\GlobeRegionPattern.cs" />
+    <Compile Include="World\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
-    <Compile Include="WorldGeneration\IGlobeEntity.cs" />
-    <Compile Include="WorldGeneration\IWorldGenerator.cs" />
-    <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
-    <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
-    <Compile Include="WorldGeneration\ProvinceInitiator.cs" />
-    <Compile Include="WorldGeneration\SectorInfo.cs" />
-    <Compile Include="WorldGeneration\TerrainInitiator.cs" />
-    <Compile Include="WorldGeneration\WorldGenerator.cs" />
-    <Compile Include="WorldGeneration\Globe.cs" />
-    <Compile Include="WorldGeneration\Locality.cs" />
-    <Compile Include="WorldGeneration\Realm.cs" />
-    <Compile Include="WorldGeneration\RealmRelations.cs" />
-    <Compile Include="WorldGeneration\RealmRelationType.cs" />
-    <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\IGlobeEntity.cs" />
+    <Compile Include="World\IWorldGenerator.cs" />
+    <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
+    <Compile Include="World\NameGeneration\NameGen.cs" />
+    <Compile Include="World\ProvinceInitiator.cs" />
+    <Compile Include="World\SectorInfo.cs" />
+    <Compile Include="World\TerrainInitiator.cs" />
+    <Compile Include="World\WorldGenerator.cs" />
+    <Compile Include="World\Globe.cs" />
+    <Compile Include="World\Locality.cs" />
+    <Compile Include="World\Realm.cs" />
+    <Compile Include="World\RealmRelations.cs" />
+    <Compile Include="World\RealmRelationType.cs" />
+    <Compile Include="World\TerrainCell.cs" />
     <Compile Include="World\Color.cs" />
     <Compile Include="World\GlobeHelper.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
@@ -565,7 +564,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+    <EmbeddedResource Include="World\NameGeneration\names.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
