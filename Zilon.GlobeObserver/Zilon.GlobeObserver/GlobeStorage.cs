@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
@@ -44,14 +45,14 @@ namespace Zilon.GlobeObserver
             });
         }
 
-        public Task<Globe> LoadAsync(string name)
+        public Task<Globe> LoadAsync(string name, IPlayer player)
         {
             return Task.Run(() =>
             {
                 var globeStorageDataSerialized = System.IO.File.ReadAllText($"{name}.json");
                 var globeStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(globeStorageDataSerialized);
 
-                var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory);
+                var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory, player);
 
                 return globe;
             });

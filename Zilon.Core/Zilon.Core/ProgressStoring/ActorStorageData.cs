@@ -25,6 +25,11 @@ namespace Zilon.Core.ProgressStoring
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
+            if (sectorStorageDict is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorStorageDict));
+            }
+
             if (personDict is null)
             {
                 throw new System.ArgumentNullException(nameof(personDict));
@@ -40,11 +45,6 @@ namespace Zilon.Core.ProgressStoring
             storageData.SectorId = sectorStorageData.Id;
 
             return storageData;
-        }
-
-        public Actor Restore(Globe globe, IActorManager actorManager)
-        {
-            var person = globe.Persons.Single(x=>x.Id == PersonId);
         }
     }
 }

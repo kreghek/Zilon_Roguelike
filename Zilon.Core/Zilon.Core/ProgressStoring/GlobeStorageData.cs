@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
 namespace Zilon.Core.World
@@ -149,7 +151,8 @@ namespace Zilon.Core.World
         public Globe Restore(ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
-            ISectorInfoFactory sectorInfoFactory)
+            ISectorInfoFactory sectorInfoFactory,
+            IPlayer player)
         {
             if (sectorInfoFactory is null)
             {
@@ -164,20 +167,46 @@ namespace Zilon.Core.World
 
             RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
 
-            RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
+            var personDict = RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
 
-            RestoreSectors(globe, sectorInfoFactory);
+            var sectorDict = RestoreSectors(globe, sectorInfoFactory);
 
-            RestoreActors(globe);
+            RestoreActors(globe, personDict, sectorDict, player);
 
             return globe;
         }
 
-        private void RestoreActors(Globe globe)
+        private void RestoreActors(Globe globe,
+            IDictionary<string, IPerson> personDict,
+            IDictionary<string, ISector> sectorDict,
+            IPlayer player)
         {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (personDict is null)
+            {
+                throw new ArgumentNullException(nameof(personDict));
+            }
+
+            if (sectorDict is null)
+            {
+                throw new ArgumentNullException(nameof(sectorDict));
+            }
+
             foreach (var actorStorageData in Actors)
             {
-                var 
+                var person = personDict[actorStorageData.PersonId];
+                var sector = sectorDict[actorStorageData.SectorId];
+                var node = sector.Map.Nodes
+                    .Cast<HexNode>()
+                    .Single(n => n.OffsetX == actorStorageData.Coords.X && n.OffsetY == actorStorageData.Coords.Y);
+                var actor = new Actor(person, player, node);
+
+                var sectorInfo = globe.SectorInfos.Single(x=>x.Sector == sector);
+                sectorInfo.ActorManager.Add(actor);
             }
         }
 
@@ -226,14 +255,22 @@ namespace Zilon.Core.World
             }
         }
 
-        private void RestorePersons(Globe globe, ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
+        private Dictionary<string, IPerson> RestorePersons(Globe globe, ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
         {
-            globe.Persons = Persons.Select(x => (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory)).ToList();
+            var personsTemp = Persons.Select(x => new
+            {
+                Person = (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory),
+                Id = x.Id
+            });
+            globe.Persons = personsTemp.Select(x => x.Person).ToList();
+
+            return personsTemp.ToDictionary(x => x.Id, x => x.Person);
         }
 
-        private void RestoreSectors(Globe globe, ISectorInfoFactory sectorInfoFactory)
+        private Dictionary<string, ISector> RestoreSectors(Globe globe, ISectorInfoFactory sectorInfoFactory)
         {
             var infos = new List<SectorInfo>();
+            var sectorDict = new Dictionary<string, ISector>();
             foreach (var sectorInfoStorageData in Sectors)
             {
                 var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == sectorInfoStorageData.TerrainCoords);
@@ -245,9 +282,13 @@ namespace Zilon.Core.World
                 var info = sectorInfoFactory.Create(globeRegion, globeRegionNode, sectorInfoStorageData);
 
                 infos.Add(info);
+
+                sectorDict.Add(sectorInfoStorageData.Id, info.Sector);
             }
 
             globe.SectorInfos = infos;
+
+            return sectorDict;
         }
     }
 }
