@@ -6,6 +6,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.World
@@ -31,6 +32,8 @@ namespace Zilon.Core.World
 
         public HumanPersonStorageData[] Persons { get; set; }
 
+        public ActorStorageData[] Actors { get; set; }
+
         public static GlobeStorageData Create(Globe globe)
         {
             if (globe is null)
@@ -46,12 +49,36 @@ namespace Zilon.Core.World
 
             var personDict = FillPersons(globe, storageData);
 
-            FillSectors(globe, storageData, personDict);
+            var sectorStorageDict = new Dictionary<ISector, SectorStorageData>();
+            FillSectors(globe, storageData, personDict, sectorStorageDict);
+
+            FillActors(globe, storageData, personDict, sectorStorageDict);
 
             return storageData;
         }
 
-        private static void FillSectors(Globe globe, GlobeStorageData storageData, Dictionary<IPerson, string> personDict)
+        private static void FillActors(Globe globe,
+            GlobeStorageData storageData,
+            Dictionary<IPerson, string> personDict,
+            IDictionary<ISector, SectorStorageData> sectorStorageDict)
+        {
+            var actors = new List<ActorStorageData>();
+
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                foreach (var actor in sectorInfo.ActorManager.Items)
+                {
+                    var actorStorageData = ActorStorageData.Create(actor, sectorInfo.Sector, sectorStorageDict, personDict);
+                    actors.Add(actorStorageData);
+                }
+            }
+
+            storageData.Actors = actors.ToArray();
+        }
+
+        private static void FillSectors(Globe globe, GlobeStorageData storageData,
+            Dictionary<IPerson, string> personDict,
+            IDictionary<ISector, SectorStorageData> sectorStorageDict)
         {
             var sectorStorageDataList = new List<SectorStorageData>();
             foreach (var sectorInfo in globe.SectorInfos)
@@ -62,6 +89,8 @@ namespace Zilon.Core.World
                     personDict);
 
                 sectorStorageDataList.Add(sectorStorageData);
+
+                sectorStorageDict.Add(sectorInfo.Sector, sectorStorageData);
             }
 
             storageData.Sectors = sectorStorageDataList.ToArray();
@@ -139,7 +168,17 @@ namespace Zilon.Core.World
 
             RestoreSectors(globe, sectorInfoFactory);
 
+            RestoreActors(globe);
+
             return globe;
+        }
+
+        private void RestoreActors(Globe globe)
+        {
+            foreach (var actorStorageData in Actors)
+            {
+                var 
+            }
         }
 
         private Dictionary<string, Realm> RestoreRealms(Globe globe)

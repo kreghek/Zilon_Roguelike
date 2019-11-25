@@ -37,14 +37,23 @@ namespace Zilon.GlobeObserver
 
             var iteraion = 0;
 
+            var globe = restoredGlobe;// result.Globe;
+
             while (iteraion < 40000)
             {
-                Parallel.ForEach(result.Globe.SectorInfos, sectorInfo =>
+                foreach (var sectorInfo in globe.SectorInfos)
                 {
                     var taskSource = sectorInfo.ActorTaskSource;
                     var actorManager = sectorInfo.ActorManager;
                     NextTurn(actorManager, taskSource);
-                });
+                }
+
+                //Parallel.ForEach(globe.SectorInfos, sectorInfo =>
+                //{
+                //    var taskSource = sectorInfo.ActorTaskSource;
+                //    var actorManager = sectorInfo.ActorManager;
+                //    NextTurn(actorManager, taskSource);
+                //});
 
                 iteraion++;
             }

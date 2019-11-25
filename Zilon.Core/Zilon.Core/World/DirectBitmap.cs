@@ -24,7 +24,7 @@ namespace Zilon.Core.World
             Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
         }
 
-        public void SetPixel(int x, int y, Color colour)
+        public void SetPixel(int x, int y, System.Drawing.Color colour)
         {
             int index = x + y * Width;
             int col = colour.ToArgb();
@@ -32,11 +32,11 @@ namespace Zilon.Core.World
             Bits[index] = col;
         }
 
-        public Color GetPixel(int x, int y)
+        public System.Drawing.Color GetPixel(int x, int y)
         {
             int index = x + y * Width;
             int col = Bits[index];
-            Color result = Color.FromArgb(col);
+            var result = System.Drawing.Color.FromArgb(col);
 
             return result;
         }

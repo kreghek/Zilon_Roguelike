@@ -11,6 +11,8 @@ namespace Zilon.Core.ProgressStoring
 {
     public sealed class SectorStorageData
     {
+        public string Id { get; set; }
+
         public string SchemeSid { get; set; }
         public OffsetCoords[] PassMap { get; set; }
 
@@ -46,6 +48,8 @@ namespace Zilon.Core.ProgressStoring
             }
 
             var storageData = new SectorStorageData();
+
+            storageData.Id = Guid.NewGuid().ToString();
 
             storageData.SchemeSid = sector.Scheme?.Sid;
 

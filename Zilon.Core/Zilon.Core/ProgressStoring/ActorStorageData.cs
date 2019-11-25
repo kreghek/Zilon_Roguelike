@@ -1,18 +1,24 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.ProgressStoring
 {
     public sealed class ActorStorageData
     {
-        public string PersonId { get; private set; }
+        public string PersonId { get; set; }
 
-        public OffsetCoords Coords { get; private set; }
+        public string SectorId { get; set; }
 
-        public static ActorStorageData Create(IActor actor, IDictionary<IPerson, string> personDict)
+        public OffsetCoords Coords { get; set; }
+
+        public static ActorStorageData Create(IActor actor,
+            ISector sector,
+            IDictionary<ISector, SectorStorageData> sectorStorageDict,
+            IDictionary<IPerson, string> personDict)
         {
             if (actor is null)
             {
@@ -30,7 +36,15 @@ namespace Zilon.Core.ProgressStoring
             storageData.Coords = new OffsetCoords(hexNode.OffsetX, hexNode.OffsetY);
             storageData.PersonId = personDict[actor.Person];
 
+            var sectorStorageData = sectorStorageDict[sector];
+            storageData.SectorId = sectorStorageData.Id;
+
             return storageData;
+        }
+
+        public Actor Restore(Globe globe, IActorManager actorManager)
+        {
+            var person = globe.Persons.Single(x=>x.Id == PersonId);
         }
     }
 }
