@@ -57,5 +57,10 @@ namespace Zilon.GlobeObserver
                 return globe;
             });
         }
+
+        public bool HasFile(string name)
+        {
+            return System.IO.File.Exists($"{name}.json");
+        }
     }
 }

@@ -8,8 +8,6 @@ using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.World;
 
 namespace Zilon.Core.World
 {
@@ -36,6 +34,11 @@ namespace Zilon.Core.World
 
         public ActorStorageData[] Actors { get; set; }
 
+        /// <summary>
+        /// Текущая итерация генерация мира.
+        /// </summary>
+        public int Iteration { get; set; }
+
         public static GlobeStorageData Create(Globe globe)
         {
             if (globe is null)
@@ -44,6 +47,9 @@ namespace Zilon.Core.World
             }
 
             var storageData = new GlobeStorageData();
+
+            storageData.Iteration = globe.Iteration;
+
             FillTerrainStorageData(globe, storageData);
 
             var realmDict = FillRealmsStorageData(globe, storageData);
@@ -160,6 +166,7 @@ namespace Zilon.Core.World
             }
 
             var globe = new Globe();
+            globe.Iteration = Iteration;
 
             RestoreTerrain(globe, schemeService);
 
@@ -169,7 +176,7 @@ namespace Zilon.Core.World
 
             var personDict = RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
 
-            var sectorDict = RestoreSectors(globe, sectorInfoFactory, personDict);
+            RestoreSectors(globe, sectorInfoFactory, personDict);
 
             return globe;
         }

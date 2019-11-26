@@ -29,6 +29,12 @@ namespace Zilon.Core.World
         /// </summary>
         public List<Locality> Localities = new List<Locality>();
 
+        /// <summary>
+        /// Текущая итерация обработки мира.
+        /// Нужна для отслеживания времени существования мира.
+        /// </summary>
+        public int Iteration { get; set; }
+
         public Globe()
         {
             SectorInfos = new List<SectorInfo>();

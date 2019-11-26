@@ -27,43 +27,47 @@ namespace Zilon.GlobeObserver
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var result = await CreateGlobeAsync(serviceProvider);
-
             var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
-            await globeStorage.SaveAsync(result.Globe, "globe");
+            var globe = await LoadOrCreateGlobeAsync(serviceProvider, globeStorage);
 
-            var player = serviceProvider.GetRequiredService<IBotPlayer>();
-            var restoredGlobe = await globeStorage.LoadAsync("globe", player);
-
-            var iteraion = 0;
-
-            // Закоментировано использование результатов генерации
-            // для отладки результатов восстановления.
-            // После исправления восстановления вернуть закомментированный код.
-            var globe = restoredGlobe;// result.Globe;
-
-            while (iteraion < 40000)
+            Console.WriteLine("Press ESC to stop");
+            do
             {
-                foreach (var sectorInfo in globe.SectorInfos)
+                while (!Console.KeyAvailable)
                 {
-                    var taskSource = sectorInfo.ActorTaskSource;
-                    var actorManager = sectorInfo.ActorManager;
-                    NextTurn(actorManager, taskSource);
+                    globe.Iteration++;
+
+                    Parallel.ForEach(globe.SectorInfos, sectorInfo =>
+                    {
+                        var taskSource = sectorInfo.ActorTaskSource;
+                        var actorManager = sectorInfo.ActorManager;
+                        NextTurn(actorManager, taskSource);
+                    });
+
+                    Console.WriteLine($"[.] ITERATION {globe.Iteration} PROCESSED");
                 }
+            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 
-                // Закоментировано для упрощения отладки
-                // Вернуть этот код после исправления восстановления мира из файла
-                //Parallel.ForEach(globe.SectorInfos, sectorInfo =>
-                //{
-                //    var taskSource = sectorInfo.ActorTaskSource;
-                //    var actorManager = sectorInfo.ActorManager;
-                //    NextTurn(actorManager, taskSource);
-                //});
-
-                iteraion++;
-            }
+            await globeStorage.SaveAsync(globe, "globe");
         }
 
+        private static async Task<Globe> LoadOrCreateGlobeAsync(ServiceProvider serviceProvider, GlobeStorage globeStorage)
+        {
+            Globe globe;
+            if (!globeStorage.HasFile("globe"))
+            {
+                var result = await CreateGlobeAsync(serviceProvider);
+                globe = result.Globe;
+            }
+            else
+            {
+                var player = serviceProvider.GetRequiredService<IBotPlayer>();
+                var restoredGlobe = await globeStorage.LoadAsync("globe", player);
+                globe = restoredGlobe;
+            }
+
+            return globe;
+        }
 
         private static void NextTurn(IActorManager actors, IActorTaskSource taskSource)
         {
