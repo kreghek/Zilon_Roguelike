@@ -53,7 +53,7 @@ namespace Zilon.GlobeObserver
 
         private static void RegisterStorageService(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<GlobeStorage>();
+            serviceCollection.AddScoped<GlobeStorage>();
             serviceCollection.AddScoped<ISectorInfoFactory, SectorInfoFactory>();
         }
 

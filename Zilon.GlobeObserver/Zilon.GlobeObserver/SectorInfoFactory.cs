@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -22,9 +24,13 @@ namespace Zilon.GlobeObserver
             _serviceProvider = serviceProvider;
         }
 
-        public SectorInfo Create(GlobeRegion globeRegion, GlobeRegionNode globeRegionNode, SectorStorageData sectorStorageData)
+        public SectorInfo Create(GlobeRegion globeRegion,
+            GlobeRegionNode globeRegionNode,
+            SectorStorageData sectorStorageData,
+            IEnumerable<ActorStorageData> actors,
+            IDictionary<string, IPerson> personDict)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            var scope = _serviceProvider.CreateScope();
             {
                 var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
                 var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
@@ -48,6 +54,9 @@ namespace Zilon.GlobeObserver
                                         dropResolver,
                                         schemeService,
                                         equipmentDurableService);
+
+                var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                (sectorManager as GenerationSectorManager).CurrentSector = sector;
 
                 var sectorInfo = new SectorInfo(actorManager,
                                                 propContainerManager,
@@ -77,7 +86,39 @@ namespace Zilon.GlobeObserver
                     sector.Map.Transitions.Add(transitionNode, new Core.MapGenerators.RoomTransition(transition.Sid));
                 }
 
+
+                var player = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+                RestoreActors(sectorInfo, personDict, sector, player, actors);
+
                 return sectorInfo;
+            }
+        }
+
+        private void RestoreActors(SectorInfo sectorInfo,
+            IDictionary<string, IPerson> personDict,
+            ISector sector,
+            IPlayer player,
+            IEnumerable<ActorStorageData> actors)
+        {
+            if (sectorInfo is null)
+            {
+                throw new ArgumentNullException(nameof(sectorInfo));
+            }
+
+            if (personDict is null)
+            {
+                throw new ArgumentNullException(nameof(personDict));
+            }
+         
+            foreach (var actorStorageData in actors)
+            {
+                var person = personDict[actorStorageData.PersonId];
+                var node = sector.Map.Nodes
+                    .Cast<HexNode>()
+                    .Single(n => n.OffsetX == actorStorageData.Coords.X && n.OffsetY == actorStorageData.Coords.Y);
+                var actor = new Actor(person, player, node);
+
+                sectorInfo.ActorManager.Add(actor);
             }
         }
     }

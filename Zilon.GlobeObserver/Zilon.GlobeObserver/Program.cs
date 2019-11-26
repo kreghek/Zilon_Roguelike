@@ -15,7 +15,6 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
-using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {
@@ -38,6 +37,9 @@ namespace Zilon.GlobeObserver
 
             var iteraion = 0;
 
+            // Закоментировано использование результатов генерации
+            // для отладки результатов восстановления.
+            // После исправления восстановления вернуть закомментированный код.
             var globe = restoredGlobe;// result.Globe;
 
             while (iteraion < 40000)
@@ -49,6 +51,8 @@ namespace Zilon.GlobeObserver
                     NextTurn(actorManager, taskSource);
                 }
 
+                // Закоментировано для упрощения отладки
+                // Вернуть этот код после исправления восстановления мира из файла
                 //Parallel.ForEach(globe.SectorInfos, sectorInfo =>
                 //{
                 //    var taskSource = sectorInfo.ActorTaskSource;

@@ -11,7 +11,7 @@ namespace Zilon.Core.ProgressStoring
 {
     public class HumanPersonStorageData
     {
-        public string Id { get; private set; }
+        public string Id { get; set; }
         public HumanSurvivalStatStorageData[] Survival { get; set; }
         public PropStorageData[] Equipments { get; set; }
         public PropStorageData[] Inventory { get; set; }
