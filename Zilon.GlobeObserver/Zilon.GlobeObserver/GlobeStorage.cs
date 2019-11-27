@@ -39,22 +39,28 @@ namespace Zilon.GlobeObserver
             return Task.Run(() =>
             {
                 var globeStorageData = GlobeStorageData.Create(globe);
-                var globeStorageDataSerialized = JsonConvert.SerializeObject(globeStorageData);
 
-                System.IO.File.WriteAllText($"{name}.json", globeStorageDataSerialized);
+                using (var file = System.IO.File.CreateText($"{name}.json"))
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(file, globeStorageData);
+                }
             });
         }
 
-        public Task<Globe> LoadAsync(string name, IPlayer player)
+        public Task<Globe> LoadAsync(string name)
         {
             return Task.Run(() =>
             {
-                var globeStorageDataSerialized = System.IO.File.ReadAllText($"{name}.json");
-                var globeStorageData = JsonConvert.DeserializeObject<GlobeStorageData>(globeStorageDataSerialized);
+                using (var file = System.IO.File.OpenText($"{name}.json"))
+                {
+                    var serializer = new JsonSerializer();
+                    var globeStorageData = (GlobeStorageData)serializer.Deserialize(file, typeof(GlobeStorageData));
 
-                var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory, player);
+                    var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory);
 
-                return globe;
+                    return globe;
+                }
             });
         }
 

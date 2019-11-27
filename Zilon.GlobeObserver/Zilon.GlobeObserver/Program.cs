@@ -61,8 +61,7 @@ namespace Zilon.GlobeObserver
             }
             else
             {
-                var player = serviceProvider.GetRequiredService<IBotPlayer>();
-                var restoredGlobe = await globeStorage.LoadAsync("globe", player);
+                var restoredGlobe = await globeStorage.LoadAsync("globe");
                 globe = restoredGlobe;
             }
 
