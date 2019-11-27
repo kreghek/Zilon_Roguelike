@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
