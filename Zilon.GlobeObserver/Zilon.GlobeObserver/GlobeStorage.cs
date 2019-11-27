@@ -3,10 +3,8 @@
 using Newtonsoft.Json;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
 using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver

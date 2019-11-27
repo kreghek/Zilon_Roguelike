@@ -157,8 +157,7 @@ namespace Zilon.Core.World
         public Globe Restore(ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
-            ISectorInfoFactory sectorInfoFactory,
-            IPlayer player)
+            ISectorInfoFactory sectorInfoFactory)
         {
             if (sectorInfoFactory is null)
             {
@@ -231,7 +230,7 @@ namespace Zilon.Core.World
             var personsTemp = Persons.Select(x => new
             {
                 Person = (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory),
-                Id = x.Id
+                x.Id
             });
             globe.Persons = personsTemp.Select(x => x.Person).ToList();
 
