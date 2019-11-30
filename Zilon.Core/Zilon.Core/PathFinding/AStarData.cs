@@ -13,13 +13,19 @@ namespace Zilon.Core.PathFinding
         public IGraphNode Parent { get; set; }
 
         /// <summary>
-        /// Стоимость перемещение.
+        /// Стоимость перемещение от стартовой вершины к этой вершине.
+        /// Обычно обозначается, как g(x).
         /// </summary>
         public int MovementCost { get; set; }
 
         /// <summary>
+        /// Оценка расстояния от текущей вершины до цели.
+        /// </summary>
+        public int EstimateCost { get; set; }
+
+        /// <summary>
         /// Суммарная стоимость.
         /// </summary>
-        public int TotalCost => 0;
+        public int TotalCost => MovementCost + EstimateCost;
     }
 }

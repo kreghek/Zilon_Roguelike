@@ -196,6 +196,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
                 .Returns<IGraphNode>(node => graph.GetNext(node));
+            contextMock.Setup(x=>x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
+                .Returns<IGraphNode, IGraphNode>((current, target) => )
 
             return context;
         }
@@ -216,7 +218,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// <returns></returns>
         private static async Task<IMap> CreateGridOpenMapAsync()
         {
-            return await SquareMapFactory.CreateAsync(10);
+            return await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
         }
     }
 }

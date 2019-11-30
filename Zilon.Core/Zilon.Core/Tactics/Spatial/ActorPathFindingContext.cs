@@ -10,13 +10,13 @@ namespace Zilon.Core.Tactics.Spatial
     /// </summary>
     public class ActorPathFindingContext : IPathFindingContext
     {
-        private readonly IMap _map;
+        private readonly ISectorMap _map;
 
-        public ActorPathFindingContext(IActor actor, IMap map): this(actor, map, targetNode:null)
+        public ActorPathFindingContext(IActor actor, ISectorMap map): this(actor, map, targetNode:null)
         {
         }
 
-        public ActorPathFindingContext(IActor actor, IMap map, IGraphNode targetNode)
+        public ActorPathFindingContext(IActor actor, ISectorMap map, IGraphNode targetNode)
         {
             Actor = actor;
             _map = map;
@@ -26,6 +26,11 @@ namespace Zilon.Core.Tactics.Spatial
         public IActor Actor { get; }
 
         public IGraphNode TargetNode { get; }
+
+        public int GetDistanceBetween(IGraphNode current, IGraphNode target)
+        {
+            return _map.DistanceBetween(current, target);
+        }
 
         public IEnumerable<IGraphNode> GetNext(IGraphNode current)
         {

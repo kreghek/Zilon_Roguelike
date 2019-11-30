@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class MoveTask : ActorTaskBase
     {
-        private readonly IMap _map;
+        private readonly ISectorMap _map;
         private readonly List<IGraphNode> _path;
 
         public IGraphNode TargetNode { get; }
@@ -63,7 +63,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return _map.IsPositionAvailableFor(nextNode, Actor);
         }
 
-        public MoveTask(IActor actor, IGraphNode targetNode, IMap map) : base(actor)
+        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : base(actor)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             _map = map ?? throw new ArgumentNullException(nameof(map));

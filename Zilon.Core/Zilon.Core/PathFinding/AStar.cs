@@ -7,6 +7,13 @@ namespace Zilon.Core.PathFinding
     /// <summary>
     /// Interface to setup and run the AStar algorithm.
     /// </summary>
+    /// <remarks>
+    /// https://ru.wikipedia.org/wiki/A*
+    /// Общий алгоритм такой:
+    /// 1. В начале в список открытых узлов помещается стартовый узел.
+    /// 2. Из открытого списка выбирается первый узел, которого нет в списке закрытых.
+    /// Первый выбранный будет...
+    /// </remarks>
     public sealed class AStar
     {
         /// <summary>
@@ -87,10 +94,10 @@ namespace Zilon.Core.PathFinding
             // Continue searching until either failure or the goal node has been found.
             while (true)
             {
-                var s = Step();
-                if (s != State.Searching)
+                var state = Step();
+                if (state != State.Searching)
                 {
-                    return s;
+                    return state;
                 }
             }
         }
@@ -158,6 +165,7 @@ namespace Zilon.Core.PathFinding
 
                 childData.Parent = CurrentNode;
                 childData.MovementCost = currentData.MovementCost + 1;
+                childData.EstimateCost = _context.GetDistanceBetween(CurrentNode, _goal);
 
                 _openList.AddWithData(child, childData);
             }
