@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
@@ -225,7 +226,7 @@ namespace Zilon.Core.Benchmark
         private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
         [NotNull] IPersonScheme personScheme,
         [NotNull] IActorManager actorManager,
-        [NotNull] IMapNode startNode)
+        [NotNull] IGraphNode startNode)
         {
             var schemeService = _container.GetInstance<ISchemeService>();
             var survivalRandomSource = _container.GetInstance<ISurvivalRandomSource>();

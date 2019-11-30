@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
@@ -23,7 +24,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="sortedList">SortedList to add the node to.</param>
         /// <param name="node">Node to add to the sortedList.</param>
         /// <param name="data"> Данные узла для алгоритма. </param>
-        internal static void Add(this SortedList<int, IMapNode> sortedList, IMapNode node, AStarData data)
+        internal static void Add(this SortedList<int, IGraphNode> sortedList, IGraphNode node, AStarData data)
         {
             sortedList.Add(AStarData.TotalCost, node);
         }
@@ -33,7 +34,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         /// <param name="sortedList">SortedList to remove and return the smallest TotalCost node.</param>
         /// <returns>Node with the smallest TotalCost.</returns>
-        internal static IMapNode Pop(this SortedList<int, IMapNode> sortedList)
+        internal static IGraphNode Pop(this SortedList<int, IGraphNode> sortedList)
         {
             var top = sortedList.Values[0];
             sortedList.RemoveAt(0);

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 using LightInject;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -68,7 +68,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         private static void ValidatePassability(
             HexNode currentContainerHex,
             ISectorMap sectorMap,
-            IMapNode[] allContainerNodes)
+            IGraphNode[] allContainerNodes)
         {
             var neighborNodes = sectorMap.GetNext(currentContainerHex);
             var hasFreeNeighbor = false;

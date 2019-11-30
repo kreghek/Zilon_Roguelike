@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -13,7 +12,7 @@ namespace Zilon.Core.Tactics
         public override bool IsMapBlock => false;
 
         [ExcludeFromCodeCoverage]
-        public DropTableLoot(IMapNode node,
+        public DropTableLoot(IGraphNode node,
             IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(node, new DropTableChestStore(dropTables, dropResolver))
         {

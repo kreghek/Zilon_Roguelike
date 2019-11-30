@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -26,7 +27,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var sector = Context.GetSector();
 
-            var patrolPoints = new List<IMapNode>();
+            var patrolPoints = new List<IGraphNode>();
             foreach (var tableRow in table.Rows)
             {
                 tableRow.TryGetValue("x", out var routeX);

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -10,13 +11,13 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly IMap _map;
 
-        public MoveIntention(IMapNode targetNode, IMap map)
+        public MoveIntention(IGraphNode targetNode, IMap map)
         {
             TargetNode = targetNode;
             _map = map;
         }
 
-        public IMapNode TargetNode { get; }
+        public IGraphNode TargetNode { get; }
 
         public IActorTask CreateActorTask([CanBeNull] IActorTask currentTask, [NotNull] IActor actor)
         {

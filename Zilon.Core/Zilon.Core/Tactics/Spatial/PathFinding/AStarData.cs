@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Spatial.PathFinding
+﻿using Zilon.Core.Graphs;
+
+namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
     /// <summary>
     /// Внутреняя структура для алгоритма поиска пути A*.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Родительский узел.
         /// </summary>
-        public IMapNode Parent { get; set; }
+        public IGraphNode Parent { get; set; }
 
         /// <summary>
         /// Стоимость перемещение.

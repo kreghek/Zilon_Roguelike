@@ -16,6 +16,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Persons;
@@ -230,7 +231,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
-            [NotNull] IMapNode startNode,
+            [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
 
@@ -256,7 +257,7 @@ namespace Zilon.Core.Spec.Contexts
 
         private IActor CreateMonsterActor([NotNull] IBotPlayer player,
             [NotNull] IMonsterScheme monsterScheme,
-            [NotNull] IMapNode startNode)
+            [NotNull] IGraphNode startNode)
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 

@@ -4,24 +4,25 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     public class GraphMap : MapBase
     {
-        private readonly IList<IMapNode> _nodes;
-        private readonly IList<IEdge> _edges;
+        private readonly IList<IGraphNode> _nodes;
+        private readonly IList<IGraphEdge> _edges;
 
         [ExcludeFromCodeCoverage]
         public GraphMap()
         {
-            _edges = new List<IEdge>();
-            _nodes = new List<IMapNode>();
+            _edges = new List<IGraphEdge>();
+            _nodes = new List<IGraphNode>();
         }
 
-        public override IEnumerable<IMapNode> Nodes { get => _nodes; }
+        public override IEnumerable<IGraphNode> Nodes { get => _nodes; }
 
-        public override void AddEdge([NotNull] IMapNode node1, [NotNull]  IMapNode node2)
+        public override void AddEdge([NotNull] IGraphNode node1, [NotNull]  IGraphNode node2)
         {
             if (node1 == null)
             {
@@ -47,17 +48,17 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         [ExcludeFromCodeCoverage]
-        public override void AddNode(IMapNode node)
+        public override void AddNode(IGraphNode node)
         {
             _nodes.Add(node);
         }
 
-        public bool TargetIsOnLine(IMapNode currentNode, IMapNode targetNode)
+        public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
             return true;
         }
 
-        public override IEnumerable<IMapNode> GetNext(IMapNode node)
+        public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
         {
             var hexCurrent = (HexNode)node;
             var hexNodes = Nodes.Cast<HexNode>().ToArray();
@@ -80,7 +81,7 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
-        public override void RemoveEdge(IMapNode node1, IMapNode node2)
+        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
         {
             var currentEdge = (from edge in _edges
                                where edge.Nodes.Contains(node1)
@@ -90,12 +91,12 @@ namespace Zilon.Core.Tactics.Spatial
             _edges.Remove(currentEdge);
         }
 
-        private bool CheckNodeInMap(IMapNode node)
+        private bool CheckNodeInMap(IGraphNode node)
         {
             return Nodes.Contains(node);
         }
 
-        public override bool IsPositionAvailableForContainer(IMapNode targetNode)
+        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
         {
             throw new NotImplementedException();
         }

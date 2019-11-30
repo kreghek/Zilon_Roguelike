@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Graphs;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Persons
 {
@@ -29,8 +30,8 @@ namespace Zilon.Core.Persons
         /// <param name="targetNode"> Целевой узел. </param>
         /// <returns>Возвращает true, если дистанция допустима.</returns>
         public static bool CheckDistance(this ITacticalAct act,
-            IMapNode currentNode,
-            IMapNode targetNode,
+            IGraphNode currentNode,
+            IGraphNode targetNode,
             ISectorMap map)
         {
             var range = act.Stats.Range;

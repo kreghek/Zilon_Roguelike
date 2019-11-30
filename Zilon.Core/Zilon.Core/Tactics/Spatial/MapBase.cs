@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -11,7 +11,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// </summary>
     public abstract class MapBase : IMap
     {
-        private readonly IDictionary<IMapNode, IList<IPassMapBlocker>> _nodeBlockers;
+        private readonly IDictionary<IGraphNode, IList<IPassMapBlocker>> _nodeBlockers;
 
         /// <summary>
         /// Регионы карты.
@@ -21,13 +21,13 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Список узлов карты.
         /// </summary>
-        public abstract IEnumerable<IMapNode> Nodes { get; }
+        public abstract IEnumerable<IGraphNode> Nodes { get; }
 
         protected MapBase()
         {
             Regions = new List<MapRegion>();
 
-            _nodeBlockers = new Dictionary<IMapNode, IList<IPassMapBlocker>>();
+            _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// or
         /// actor
         /// </exception>
-        public virtual bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
+        public virtual bool IsPositionAvailableFor(IGraphNode targetNode, IActor actor)
         {
             if (targetNode == null)
             {
@@ -78,7 +78,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// or
         /// Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}
         /// </exception>
-        public void ReleaseNode(IMapNode node, IPassMapBlocker blocker)
+        public void ReleaseNode(IGraphNode node, IPassMapBlocker blocker)
         {
             if (!_nodeBlockers.TryGetValue(node, out IList<IPassMapBlocker> blockers))
             {
@@ -98,7 +98,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// </summary>
         /// <param name="node">Узел, который будет занят указанным блоком.</param>
         /// <param name="blocker">Блокер, который занимает узел.</param>
-        public void HoldNode(IMapNode node, IPassMapBlocker blocker)
+        public void HoldNode(IGraphNode node, IPassMapBlocker blocker)
         {
             if (!_nodeBlockers.TryGetValue(node, out IList<IPassMapBlocker> blockers))
             {
@@ -116,27 +116,27 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>
         /// Возвращает набор соседних узлов.
         /// </returns>
-        public abstract IEnumerable<IMapNode> GetNext(IMapNode node);
+        public abstract IEnumerable<IGraphNode> GetNext(IGraphNode node);
 
         /// <summary>
         /// Создаёт ребро между двумя узлами графа карты.
         /// </summary>
         /// <param name="node1">Узел графа карты.</param>
         /// <param name="node2">Узел графа карты.</param>
-        public abstract void AddEdge(IMapNode node1, IMapNode node2);
+        public abstract void AddEdge(IGraphNode node1, IGraphNode node2);
 
         /// <summary>
         /// Удаляет ребро между двумя узлами графа карты.
         /// </summary>
         /// <param name="node1">Узел графа карты.</param>
         /// <param name="node2">Узел графа карты.</param>
-        public abstract void RemoveEdge(IMapNode node1, IMapNode node2);
+        public abstract void RemoveEdge(IGraphNode node1, IGraphNode node2);
 
         /// <summary>
         /// Добавляет новый узел графа.
         /// </summary>
         /// <param name="node"></param>
-        public abstract void AddNode(IMapNode node);
+        public abstract void AddNode(IGraphNode node);
 
         /// <summary>
         /// Выполняет поиск пути к указанному узлу.
@@ -150,7 +150,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// Передача списка для результатов сделана для оптимизации - не нужно каждый раз создавать список
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
-        public void FindPath(IMapNode start, IMapNode end, PathFindingContext context, List<IMapNode> outputPath)
+        public void FindPath(IGraphNode start, IGraphNode end, PathFindingContext context, List<IGraphNode> outputPath)
         {
             var startNode = start;
             var finishNode = end;
@@ -167,6 +167,6 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
-        public abstract bool IsPositionAvailableForContainer(IMapNode targetNode);
+        public abstract bool IsPositionAvailableForContainer(IGraphNode targetNode);
     }
 }

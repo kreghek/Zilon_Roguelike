@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Moq;
 using Zilon.Core.Tactics.Spatial;
 using FluentAssertions;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
@@ -25,7 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var mapMock = new Mock<IMap>();
             var map = mapMock.Object;
 
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -60,7 +61,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var mapMock = new Mock<IMap>();
             var map = mapMock.Object;
 
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -100,7 +101,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var mapMock = new Mock<IMap>();
             var map = mapMock.Object;
 
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -133,10 +134,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var mapMock = new Mock<IMap>();
             var map = mapMock.Object;
 
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
-            var node2Mock = new Mock<IMapNode>();
+            var node2Mock = new Mock<IGraphNode>();
             var node2 = nodeMock.Object;
 
             var actorMock = new Mock<IActor>();

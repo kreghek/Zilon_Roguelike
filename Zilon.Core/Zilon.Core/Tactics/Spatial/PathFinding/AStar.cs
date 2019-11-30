@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
@@ -10,27 +11,27 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <summary>
         /// The open list.
         /// </summary>
-        private readonly SortedList<int, IMapNode> _openList;
+        private readonly SortedList<int, IGraphNode> _openList;
 
         /// <summary>
         /// The closed list.
         /// </summary>
-        private readonly SortedList<int, IMapNode> _closedList;
+        private readonly SortedList<int, IGraphNode> _closedList;
 
 
         private readonly IMap _map;
         private readonly IPathFindingContext _context;
-        private readonly Dictionary<IMapNode, AStarData> _dataDict;
+        private readonly Dictionary<IGraphNode, AStarData> _dataDict;
 
         /// <summary>
         /// The goal node.
         /// </summary>
-        private IMapNode _goal;
+        private IGraphNode _goal;
 
         /// <summary>
         /// Gets the current node that the AStar algorithm is at.
         /// </summary>
-        public IMapNode CurrentNode { get; private set; }
+        public IGraphNode CurrentNode { get; private set; }
 
         /// <summary>
         /// Creates a new AStar algorithm instance with the provided start and goal nodes.
@@ -39,7 +40,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        public AStar(IMap map, IPathFindingContext context, IMapNode start, IMapNode goal)
+        public AStar(IMap map, IPathFindingContext context, IGraphNode start, IGraphNode goal)
         {
             if (start == null)
             {
@@ -52,9 +53,9 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             }
 
             var duplicateComparer = new DuplicateComparer();
-            _openList = new SortedList<int, IMapNode>(duplicateComparer);
-            _closedList = new SortedList<int, IMapNode>(duplicateComparer);
-            _dataDict = new Dictionary<IMapNode, AStarData>();
+            _openList = new SortedList<int, IGraphNode>(duplicateComparer);
+            _closedList = new SortedList<int, IGraphNode>(duplicateComparer);
+            _dataDict = new Dictionary<IGraphNode, AStarData>();
 
             _map = map ?? throw new System.ArgumentNullException(nameof(map));
             _context = context ?? throw new System.ArgumentNullException(nameof(context));
@@ -67,7 +68,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// </summary>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        private void Reset(IMapNode start, IMapNode goal)
+        private void Reset(IGraphNode start, IGraphNode goal)
         {
             _openList.Clear();
             _closedList.Clear();
@@ -169,7 +170,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             return State.Searching;
         }
 
-        private AStarData GetData(IMapNode node)
+        private AStarData GetData(IGraphNode node)
         {
             if (_dataDict.TryGetValue(node, out var data))
             {
@@ -188,12 +189,12 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// <param name="current"> Текущий узел. </param>
         /// <param name="map"> Карта, на которой проводится проверка. </param>
         /// <returns> Возвращает список соседних узлов, соединённых ребрами с текущим. </returns>
-        private IMapNode[] GetAvailableNeighbors(IMapNode current, IMap map)
+        private IGraphNode[] GetAvailableNeighbors(IGraphNode current, IMap map)
         {
             var hexCurrent = (HexNode)current;
             var neighbors = map.GetNext(hexCurrent);
 
-            var actualNeighbors = new List<IMapNode>();
+            var actualNeighbors = new List<IGraphNode>();
             foreach (var testedNeighbor in neighbors)
             {
                 if (_context.TargetNode == null)
@@ -218,7 +219,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             return actualNeighbors.ToArray();
         }
 
-        private bool IsAvailable(IMap map, IMapNode testedNeighbor)
+        private bool IsAvailable(IMap map, IGraphNode testedNeighbor)
         {
             if (_context.TargetNode == testedNeighbor)
             {
@@ -238,15 +239,15 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         /// Will return a partial path if the algorithm has not finished yet.
         /// </summary>
         /// <returns>Returns empty if the algorithm has never been run.</returns>
-        public IMapNode[] GetPath()
+        public IGraphNode[] GetPath()
         {
             if (CurrentNode == null)
             {
-                return new IMapNode[0];
+                return new IGraphNode[0];
             }
 
             var next = CurrentNode;
-            var path = new List<IMapNode>();
+            var path = new List<IGraphNode>();
             while (next != null)
             {
                 if (_map.IsPositionAvailableFor(next, _context.Actor))

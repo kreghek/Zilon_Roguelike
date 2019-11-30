@@ -6,11 +6,11 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Client
@@ -35,7 +35,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 1)
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -79,7 +79,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Client
             {
                 resource
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -166,7 +166,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 1)
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -210,7 +210,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 2)
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -256,7 +256,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 
@@ -304,7 +304,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
-            var nodeMock = new Mock<IMapNode>();
+            var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
             var container = new FixedPropChest(node, containerProps);
 

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Client;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -21,7 +22,7 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
-        public IList<IMapNode> Path { get; }
+        public IList<IGraphNode> Path { get; }
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -44,7 +45,7 @@ namespace Zilon.Core.Commands
         {
             _actorManager = actorManager;
 
-            Path = new List<IMapNode>();
+            Path = new List<IGraphNode>();
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -25,7 +25,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public void Run_ShortGraph_PathFound()
         {
             // ARRAGE
-            var expectedPath = new List<IMapNode>();
+            var expectedPath = new List<IGraphNode>();
 
             var map = new GraphMap();
 
@@ -72,7 +72,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             // ARRAGE
             var map = await CreateGridOpenMapAsync();
 
-            var expectedPath = new IMapNode[] {
+            var expectedPath = new IGraphNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(1,1),
                 map.Nodes.Cast<HexNode>().SelectBy(2,2),
                 map.Nodes.Cast<HexNode>().SelectBy(2,3),
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             // ARRAGE
             var map = await CreateGridOpenMapAsync();
 
-            var expectedPath = new IMapNode[] {
+            var expectedPath = new IGraphNode[] {
                 map.Nodes.OfType<HexNode>().SelectBy(1, 1),
                 map.Nodes.OfType<HexNode>().SelectBy(2, 2),
                 map.Nodes.OfType<HexNode>().SelectBy(2, 3),

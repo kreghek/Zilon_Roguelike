@@ -5,7 +5,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -75,11 +75,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var personMock = new Mock<IPerson>();
             var person = personMock.Object;
 
-            IMapNode currentNode = startNode;
+            IGraphNode currentNode = startNode;
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(() => currentNode);
-            actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
-                .Callback<IMapNode>(node => currentNode = node);
+            actorMock.Setup(x => x.MoveToNode(It.IsAny<IGraphNode>()))
+                .Callback<IGraphNode>(node => currentNode = node);
             // ReSharper disable once UnusedVariable
             var actor = actorMock.Object;
 
@@ -103,7 +103,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 
-            var expectedPath = new IMapNode[] {
+            var expectedPath = new IGraphNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(4,4),
                 map.Nodes.Cast<HexNode>().SelectBy(3,4),
                 map.Nodes.Cast<HexNode>().SelectBy(2,4),
@@ -140,7 +140,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10);
 
-            var expectedPath = new IMapNode[] {
+            var expectedPath = new IGraphNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(4,4),
                 map.Nodes.Cast<HexNode>().SelectBy(3,4),
                 map.Nodes.Cast<HexNode>().SelectBy(2,4),

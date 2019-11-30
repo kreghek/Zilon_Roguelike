@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Spatial.PathFinding
+﻿using Zilon.Core.Graphs;
+
+namespace Zilon.Core.Tactics.Spatial.PathFinding
 {
     /// <summary>
     /// Базовая реализация контекста поиска пути.
@@ -13,6 +15,6 @@
 
         public IActor Actor { get; }
 
-        public IMapNode TargetNode { get; set; }
+        public IGraphNode TargetNode { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>
-        void MoveToNode(IMapNode targetNode);
+        void MoveToNode(IGraphNode targetNode);
 
         /// <summary>
         /// Открытие контейнера актёром.
