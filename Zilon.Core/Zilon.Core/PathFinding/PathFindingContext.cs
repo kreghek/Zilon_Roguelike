@@ -1,6 +1,7 @@
 ﻿using Zilon.Core.Graphs;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// Базовая реализация контекста поиска пути.

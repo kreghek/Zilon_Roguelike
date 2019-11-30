@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
-using Zilon.Core.Graphs;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+using Zilon.Core.Graphs;
+using Zilon.Core.Tactics.Spatial;
+
+namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// Interface to setup and run the AStar algorithm.
@@ -52,9 +54,8 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
                 throw new System.ArgumentNullException(nameof(goal));
             }
 
-            var duplicateComparer = new DuplicateComparer();
-            _openList = new SortedList<int, IGraphNode>(duplicateComparer);
-            _closedList = new SortedList<int, IGraphNode>(duplicateComparer);
+            _openList = new SortedList<int, IGraphNode>(DuplicateComparer.Instance);
+            _closedList = new SortedList<int, IGraphNode>(DuplicateComparer.Instance);
             _dataDict = new Dictionary<IGraphNode, AStarData>();
 
             _map = map ?? throw new System.ArgumentNullException(nameof(map));
@@ -176,7 +177,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
             {
                 return data;
             }
-            
+
             data = new AStarData();
             _dataDict.Add(node, data);
 
@@ -243,7 +244,7 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
         {
             if (CurrentNode == null)
             {
-                return new IGraphNode[0];
+                return System.Array.Empty<IGraphNode>();
             }
 
             var next = CurrentNode;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zilon.Core.Graphs;
+using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Behaviour
 {

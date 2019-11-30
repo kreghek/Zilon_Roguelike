@@ -8,9 +8,9 @@ using Moq;
 using NUnit.Framework;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tactics.Spatial.PathFinding;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding

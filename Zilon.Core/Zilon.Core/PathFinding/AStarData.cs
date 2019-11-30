@@ -1,6 +1,6 @@
 ﻿using Zilon.Core.Graphs;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// Внутреняя структура для алгоритма поиска пути A*.

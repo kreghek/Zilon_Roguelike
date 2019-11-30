@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Tactics.Spatial.PathFinding
+﻿namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// AStar algorithm states while searching for the goal.

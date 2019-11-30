@@ -477,11 +477,11 @@
     <Compile Include="Tactics\SectorEntityManager.cs" />
     <Compile Include="Tactics\Spatial\IPassMapBlocker.cs" />
     <Compile Include="Tactics\Spatial\MapBase.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\AStar.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\AStarData.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\DuplicateComparer.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\IPathFindingContext.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\PathFindingContext.cs" />
+    <Compile Include="PathFinding\AStar.cs" />
+    <Compile Include="PathFinding\AStarData.cs" />
+    <Compile Include="PathFinding\DuplicateComparer.cs" />
+    <Compile Include="PathFinding\IPathFindingContext.cs" />
+    <Compile Include="PathFinding\PathFindingContext.cs" />
     <Compile Include="Persons\IPerson.cs" />
     <Compile Include="Players\BotPlayer.cs" />
     <Compile Include="Players\HumanPlayer.cs" />
@@ -513,8 +513,8 @@
     <Compile Include="Tactics\Spatial\IMap.cs" />
     <Compile Include="Graphs\IGraphNode.cs" />
     <Compile Include="Tactics\Spatial\HexNodeHelper.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\SortedListExtensions.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\State.cs" />
+    <Compile Include="PathFinding\SortedListExtensions.cs" />
+    <Compile Include="PathFinding\State.cs" />
     <Compile Include="Tactics\SuccessOpenContainerResult.cs" />
     <Compile Include="Tactics\TacticalActUsageService.cs" />
     <Compile Include="Tactics\TransitionDetection.cs" />

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+
 using Zilon.Core.Graphs;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+namespace Zilon.Core.PathFinding
 {
     /// <summary>
 	/// Extension methods to make the System.Collections.Generic.SortedList easier to use.

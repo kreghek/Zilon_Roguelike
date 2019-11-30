@@ -1,6 +1,7 @@
 ﻿using Zilon.Core.Graphs;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+namespace Zilon.Core.PathFinding
 {
     public interface IPathFindingContext
     {
