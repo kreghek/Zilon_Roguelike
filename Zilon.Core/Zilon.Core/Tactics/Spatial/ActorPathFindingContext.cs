@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// <summary>
     /// Базовая реализация контекста поиска пути.
     /// </summary>
-    public struct ActorPathFindingContext : IPathFindingContext
+    public class ActorPathFindingContext : IPathFindingContext
     {
         private readonly IMap _map;
 

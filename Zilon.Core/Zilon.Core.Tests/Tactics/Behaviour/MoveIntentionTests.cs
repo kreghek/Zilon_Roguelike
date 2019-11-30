@@ -138,7 +138,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var node = nodeMock.Object;
 
             var node2Mock = new Mock<IGraphNode>();
-            var node2 = nodeMock.Object;
+            var node2 = node2Mock.Object;
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
