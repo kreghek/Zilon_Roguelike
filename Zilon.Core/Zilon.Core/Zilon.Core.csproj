@@ -481,7 +481,7 @@
     <Compile Include="PathFinding\AStarData.cs" />
     <Compile Include="PathFinding\DuplicateComparer.cs" />
     <Compile Include="PathFinding\IPathFindingContext.cs" />
-    <Compile Include="PathFinding\PathFindingContext.cs" />
+    <Compile Include="Tactics\Spatial\ActorPathFindingContext.cs" />
     <Compile Include="Persons\IPerson.cs" />
     <Compile Include="Players\BotPlayer.cs" />
     <Compile Include="Players\HumanPlayer.cs" />

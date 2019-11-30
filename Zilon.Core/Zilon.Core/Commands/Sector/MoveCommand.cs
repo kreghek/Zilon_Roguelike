@@ -130,9 +130,9 @@ namespace Zilon.Core.Commands
                 return;
             }
 
-            var context = new PathFindingContext(actor);
+            var context = new ActorPathFindingContext(actor, map);
 
-            var astar = new AStar(map, context, startNode, finishNode);
+            var astar = new AStar(context, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState != State.GoalFound)
             {

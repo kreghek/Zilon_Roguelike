@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Graphs;
-using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -91,10 +91,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private void CreatePath()
         {
-            var context = new PathFindingContext(Actor)
-            {
-                TargetNode = TargetNode
-            };
+            var context = new ActorPathFindingContext(Actor, _map, TargetNode);
 
             var startNode = Actor.Node;
             var finishNode = TargetNode;

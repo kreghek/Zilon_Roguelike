@@ -150,12 +150,12 @@ namespace Zilon.Core.Tactics.Spatial
         /// Передача списка для результатов сделана для оптимизации - не нужно каждый раз создавать список
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
-        public void FindPath(IGraphNode start, IGraphNode end, PathFindingContext context, List<IGraphNode> outputPath)
+        public void FindPath(IGraphNode start, IGraphNode end, ActorPathFindingContext context, List<IGraphNode> outputPath)
         {
             var startNode = start;
             var finishNode = end;
 
-            var astar = new AStar(this, context, startNode, finishNode);
+            var astar = new AStar(context, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {

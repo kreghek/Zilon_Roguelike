@@ -25,9 +25,9 @@ namespace Zilon.Core.PathFinding
         /// <param name="sortedList">SortedList to add the node to.</param>
         /// <param name="node">Node to add to the sortedList.</param>
         /// <param name="data"> Данные узла для алгоритма. </param>
-        internal static void Add(this SortedList<int, IGraphNode> sortedList, IGraphNode node, AStarData data)
+        internal static void AddWithData(this SortedList<int, IGraphNode> sortedList, IGraphNode node, AStarData data)
         {
-            sortedList.Add(AStarData.TotalCost, node);
+            sortedList.Add(data.TotalCost, node);
         }
 
         /// <summary>

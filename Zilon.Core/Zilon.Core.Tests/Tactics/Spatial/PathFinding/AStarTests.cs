@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PathFinding;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class AStarTests
     {
         /// <summary>
@@ -42,9 +44,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             expectedPath.Add(nodesArray[2]);
             expectedPath.Add(nodesArray[1]);
 
-            var context = CreatePathFindingContext();
+            var context = CreatePathFindingContext(map);
 
-            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
+            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -70,7 +72,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public async Task Run_GridGraphAndLinePath_PathFound()
         {
             // ARRAGE
-            var map = await CreateGridOpenMapAsync();
+            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
 
             var expectedPath = new IGraphNode[] {
                 map.Nodes.Cast<HexNode>().SelectBy(1,1),
@@ -82,9 +84,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             };
 
 
-            var context = CreatePathFindingContext();
+            var context = CreatePathFindingContext(map);
 
-            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
+            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -110,7 +112,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public async Task Run_CheckNeighborBypass_ExpectedPath()
         {
             // ARRAGE
-            var map = await CreateGridOpenMapAsync();
+            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
 
             var expectedPath = new IGraphNode[] {
                 map.Nodes.OfType<HexNode>().SelectBy(1, 1),
@@ -122,9 +124,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             };
 
 
-            var context = CreatePathFindingContext();
+            var context = CreatePathFindingContext(map);
 
-            var astar = new AStar(map, context, expectedPath.First(), expectedPath.Last());
+            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
 
 
@@ -159,7 +161,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             hexMap.AddNode(new HexNode(1, 1));
             hexMap.AddNode(new HexNode(2, 1));
 
-            var context = CreatePathFindingContext();
+            var context = CreatePathFindingContext(hexMap);
 
             var startNode = hexMap.Nodes.Cast<HexNode>().SelectBy(0, 0);
             var finishNode = hexMap.Nodes.Cast<HexNode>().SelectBy(2, 0);
@@ -172,7 +174,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             };
 
 
-            var astar = new AStar(hexMap, context, startNode, finishNode);
+            var astar = new AStar(context, startNode, finishNode);
 
 
 
@@ -188,14 +190,22 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factPath.Should().BeEquivalentTo(expectedPath);
         }
 
-        private static IPathFindingContext CreatePathFindingContext()
+        private static IPathFindingContext CreatePathFindingContext(IGraph graph)
         {
             var contextMock = new Mock<IPathFindingContext>();
             var context = contextMock.Object;
+            contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
+                .Returns<IGraphNode>(node => graph.GetNext(node));
 
-            var actorMock = new Mock<IActor>();
-            var actor = actorMock.Object;
-            contextMock.SetupGet(x => x.Actor).Returns(actor);
+            return context;
+        }
+
+        private static IPathFindingContext CreatePathFindingContext(HexMap hexMap)
+        {
+            var contextMock = new Mock<IPathFindingContext>();
+            var context = contextMock.Object;
+            contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
+                .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>().Where(x => !x.IsObstacle));
 
             return context;
         }

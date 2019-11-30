@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
-using Zilon.Core.PathFinding;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -56,6 +55,6 @@ namespace Zilon.Core.Tactics.Spatial
         /// Передача списка для результатов сделана для оптимизации - не нужно каждый раз создавать список
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
-        void FindPath(IGraphNode start, IGraphNode end, PathFindingContext context, List<IGraphNode> outputPath);
+        void FindPath(IGraphNode start, IGraphNode end, ActorPathFindingContext context, List<IGraphNode> outputPath);
     }
 }

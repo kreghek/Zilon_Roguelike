@@ -20,6 +20,6 @@ namespace Zilon.Core.PathFinding
         /// <summary>
         /// Суммарная стоимость.
         /// </summary>
-        public static int TotalCost => 0;
+        public int TotalCost => 0;
     }
 }

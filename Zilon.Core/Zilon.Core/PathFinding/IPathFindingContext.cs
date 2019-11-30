@@ -1,12 +1,11 @@
-﻿using Zilon.Core.Graphs;
-using Zilon.Core.Tactics;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
 {
     public interface IPathFindingContext
     {
-        IActor Actor { get; }
-
-        IGraphNode TargetNode { get; set; }
+        IEnumerable<IGraphNode> GetNext(IGraphNode current);
     }
 }
