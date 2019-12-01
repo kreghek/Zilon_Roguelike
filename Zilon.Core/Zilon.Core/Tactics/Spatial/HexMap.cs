@@ -248,9 +248,33 @@ namespace Zilon.Core.Tactics.Spatial
             return !isObstacle;
         }
 
+        /// <summary>
+        /// Distances the between.
+        /// </summary>
+        /// <param name="currentNode">The current node.</param>
+        /// <param name="targetNode">The target node.</param>
+        /// <returns></returns>
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
-            throw new NotImplementedException();
+            if (currentNode is null)
+            {
+                throw new ArgumentNullException(nameof(currentNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            var actorHexNode = (HexNode)currentNode;
+            var containerHexNode = (HexNode)targetNode;
+
+            var actorCoords = actorHexNode.CubeCoords;
+            var containerCoords = containerHexNode.CubeCoords;
+
+            var distance = actorCoords.DistanceTo(containerCoords);
+
+            return distance;
         }
 
         private struct SegmentKey

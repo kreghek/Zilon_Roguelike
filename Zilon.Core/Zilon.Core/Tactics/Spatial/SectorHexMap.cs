@@ -83,25 +83,5 @@ namespace Zilon.Core.Tactics.Spatial
 
             return true;
         }
-
-        /// <summary>
-        /// Distances the between.
-        /// </summary>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="targetNode">The target node.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
-        {
-            var actorHexNode = (HexNode)currentNode;
-            var containerHexNode = (HexNode)targetNode;
-
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
-
-            var distance = actorCoords.DistanceTo(containerCoords);
-
-            return distance;
-        }
     }
 }

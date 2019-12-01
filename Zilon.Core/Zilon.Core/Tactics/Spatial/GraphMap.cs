@@ -104,7 +104,35 @@ namespace Zilon.Core.Tactics.Spatial
 
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
-            throw new NotImplementedException();
+            if (currentNode is null)
+            {
+                throw new ArgumentNullException(nameof(currentNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            if (!(currentNode is HexNode))
+            {
+                throw new ArgumentException($"{nameof(currentNode)} должен быть типа {typeof(HexNode)}");
+            }
+
+            if (!(targetNode is HexNode))
+            {
+                throw new ArgumentException($"{nameof(targetNode)} должен быть типа {typeof(HexNode)}");
+            }
+
+            var actorHexNode = (HexNode)currentNode;
+            var containerHexNode = (HexNode)targetNode;
+
+            var actorCoords = actorHexNode.CubeCoords;
+            var containerCoords = containerHexNode.CubeCoords;
+
+            var distance = actorCoords.DistanceTo(containerCoords);
+
+            return distance;
         }
     }
 }
