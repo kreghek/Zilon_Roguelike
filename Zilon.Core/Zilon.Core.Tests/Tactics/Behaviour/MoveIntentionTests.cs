@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void CreateActorTask_FirstMoveTask_ReturnsMoveTask()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var nodeMock = new Mock<IGraphNode>();
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         public void CreateActorTask_CurrentIsNotMoveTask_ReturnsMoveTask()
         {
             // ARRANGE
-            var mapMock = new Mock<IMap>();
+            var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
             var nodeMock = new Mock<IGraphNode>();

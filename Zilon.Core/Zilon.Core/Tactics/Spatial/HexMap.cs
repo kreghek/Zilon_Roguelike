@@ -248,6 +248,11 @@ namespace Zilon.Core.Tactics.Spatial
             return !isObstacle;
         }
 
+        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
+        {
+            throw new NotImplementedException();
+        }
+
         private struct SegmentKey
         {
             // ReSharper disable once MemberCanBePrivate.Local

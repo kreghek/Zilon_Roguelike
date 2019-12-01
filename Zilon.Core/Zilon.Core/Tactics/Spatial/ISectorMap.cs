@@ -15,13 +15,5 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="targetNode">Целевой проверяемый узел.</param>
         /// <returns> Возвращает true, если узел доступен. Иначе, false.</returns>
         bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode);
-
-        /// <summary>
-        /// Рассчитывает рассточние между двумя узлами карты.
-        /// </summary>
-        /// <param name="currentNode">Стартовый узел.</param>
-        /// <param name="targetNode">Целевой узел.</param>
-        /// <returns> Целочисленное значение расстояния. </returns>
-        int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode);
     }
 }

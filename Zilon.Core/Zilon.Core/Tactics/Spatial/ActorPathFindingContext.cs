@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// <summary>
     /// Базовая реализация контекста поиска пути.
     /// </summary>
-    public class ActorPathFindingContext : IPathFindingContext
+    public class ActorPathFindingContext : IAstarContext
     {
         private readonly ISectorMap _map;
 

@@ -26,7 +26,7 @@ namespace Zilon.Core.PathFinding
         /// </summary>
         private readonly SortedList<int, IGraphNode> _closedList;
 
-        private readonly IPathFindingContext _context;
+        private readonly IAstarContext _context;
         private readonly Dictionary<IGraphNode, AStarData> _dataDict;
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Zilon.Core.PathFinding
         /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
-        public AStar(IPathFindingContext context, IGraphNode start, IGraphNode goal)
+        public AStar(IAstarContext context, IGraphNode start, IGraphNode goal)
         {
             if (start == null)
             {

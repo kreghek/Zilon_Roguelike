@@ -168,5 +168,7 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         public abstract bool IsPositionAvailableForContainer(IGraphNode targetNode);
+
+        public abstract int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode);
     }
 }

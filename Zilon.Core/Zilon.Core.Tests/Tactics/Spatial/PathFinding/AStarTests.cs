@@ -190,24 +190,26 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             factPath.Should().BeEquivalentTo(expectedPath);
         }
 
-        private static IPathFindingContext CreatePathFindingContext(IGraph graph)
+        private static IAstarContext CreatePathFindingContext(ISpatialGraph graph)
         {
-            var contextMock = new Mock<IPathFindingContext>();
+            var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
                 .Returns<IGraphNode>(node => graph.GetNext(node));
-            contextMock.Setup(x=>x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((current, target) => )
+            contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
+                .Returns<IGraphNode, IGraphNode>((current, target) => graph.DistanceBetween(current, target));
 
             return context;
         }
 
-        private static IPathFindingContext CreatePathFindingContext(HexMap hexMap)
+        private static IAstarContext CreatePathFindingContext(HexMap hexMap)
         {
-            var contextMock = new Mock<IPathFindingContext>();
+            var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
                 .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>().Where(x => !x.IsObstacle));
+            contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
+                .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
 
             return context;
         }

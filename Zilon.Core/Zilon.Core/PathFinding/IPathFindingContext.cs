@@ -7,7 +7,5 @@ namespace Zilon.Core.PathFinding
     public interface IPathFindingContext
     {
         IEnumerable<IGraphNode> GetNext(IGraphNode current);
-
-        int GetDistanceBetween(IGraphNode current, IGraphNode target);
     }
 }

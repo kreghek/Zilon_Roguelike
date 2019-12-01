@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -97,6 +98,11 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
             throw new NotImplementedException();
         }
