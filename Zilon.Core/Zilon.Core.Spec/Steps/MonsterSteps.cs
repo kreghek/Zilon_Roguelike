@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using FluentAssertions;
 
 using JetBrains.Annotations;
@@ -34,14 +35,13 @@ namespace Zilon.Core.Spec.Steps
                 tableRow.TryGetValue("y", out var routeY);
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
-                    .Single(node=>node.OffsetX == int.Parse(routeX) && node.OffsetY == int.Parse(routeY));
+                    .Single(node => node.OffsetX == int.Parse(routeX) && node.OffsetY == int.Parse(routeY));
 
                 patrolPoints.Add(routeNode);
             }
 
             var route = new PatrolRoute(patrolPoints.ToArray());
 
-            
             var monster = Context.GetMonsterById(monsterId);
             sector.PatrolRoutes[monster] = route;
         }

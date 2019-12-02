@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 
@@ -16,7 +17,6 @@ namespace Zilon.Core.Tactics
             IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(node, new DropTableChestStore(dropTables, dropResolver))
         {
-
         }
     }
 }

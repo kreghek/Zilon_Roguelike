@@ -234,7 +234,6 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
-
             var schemeService = Container.GetInstance<ISchemeService>();
             var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
 

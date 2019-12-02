@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 
@@ -14,9 +15,8 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public DropTablePropChest(IGraphNode node,
             IDropTableScheme[] dropTables,
-            IDropResolver dropResolver):base(node, new DropTableChestStore(dropTables, dropResolver))
+            IDropResolver dropResolver) : base(node, new DropTableChestStore(dropTables, dropResolver))
         {
-
         }
 
         [ExcludeFromCodeCoverage]
@@ -25,7 +25,6 @@ namespace Zilon.Core.Tactics
             IDropResolver dropResolver,
             int id) : base(node, new DropTableChestStore(dropTables, dropResolver), id)
         {
-
         }
     }
 }

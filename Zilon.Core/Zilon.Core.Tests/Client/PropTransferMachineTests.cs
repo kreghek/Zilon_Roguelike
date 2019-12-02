@@ -35,22 +35,17 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 1)
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStores.Container,
                 PropTransferMachineStores.Inventory);
-
-
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Resource>();
@@ -79,22 +74,17 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStores.Container,
                 PropTransferMachineStores.Inventory);
-
-
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Equipment>();
@@ -120,14 +110,11 @@ namespace Zilon.Core.Tests.Client
             {
                 resource
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             using (var monitorInventory = transferMachine.Inventory.Monitor())
@@ -166,14 +153,11 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 1)
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             using (var monitorInventory = transferMachine.Inventory.Monitor())
@@ -184,12 +168,17 @@ namespace Zilon.Core.Tests.Client
                     PropTransferMachineStores.Container,
                     PropTransferMachineStores.Inventory);
 
-
-
                 // ASSERT
                 monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
                 monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
             }
+        }
+
+        private static IGraphNode CreateNode()
+        {
+            var nodeMock = new Mock<IGraphNode>();
+            var node = nodeMock.Object;
+            return node;
         }
 
         /// <summary>
@@ -210,14 +199,11 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 2)
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             using (var monitorInventory = transferMachine.Inventory.Monitor())
@@ -227,8 +213,6 @@ namespace Zilon.Core.Tests.Client
                 transferMachine.TransferProp(transferResource,
                     PropTransferMachineStores.Container,
                     PropTransferMachineStores.Inventory);
-
-
 
                 // ASSERT
                 monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
@@ -256,14 +240,11 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             using (var monitorInventory = transferMachine.Inventory.Monitor())
@@ -298,20 +279,17 @@ namespace Zilon.Core.Tests.Client
 
             // Инвентарь
             var inventory = new Inventory();
-            inventory.Add(new Equipment(equipmentScheme, new ITacticalActScheme[0]));
+            inventory.Add(new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>()));
 
             // контейнер
             var containerProps = new IProp[] {
-                new Equipment(equipmentScheme, new ITacticalActScheme[0])
+                new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
             };
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
+            var node = CreateNode();
             var container = new FixedPropChest(node, containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
-
-
 
             // ACT
             using (var monitorInventory = transferMachine.Inventory.Monitor())
@@ -321,8 +299,6 @@ namespace Zilon.Core.Tests.Client
                 transferMachine.TransferProp(transferResource,
                     PropTransferMachineStores.Container,
                     PropTransferMachineStores.Inventory);
-
-
 
                 // ASSERT
                 monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
