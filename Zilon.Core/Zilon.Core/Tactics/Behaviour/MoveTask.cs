@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tactics.Spatial.PathFinding;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class MoveTask : ActorTaskBase
     {
-        private readonly IMap _map;
-        private readonly List<IMapNode> _path;
+        private readonly ISectorMap _map;
+        private readonly List<IGraphNode> _path;
 
-        public IMapNode TargetNode { get; }
+        public IGraphNode TargetNode { get; }
 
         public override void Execute()
         {
@@ -63,7 +63,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return _map.IsPositionAvailableFor(nextNode, Actor);
         }
 
-        public MoveTask(IActor actor, IMapNode targetNode, IMap map) : base(actor)
+        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : base(actor)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             _map = map ?? throw new ArgumentNullException(nameof(map));
@@ -74,11 +74,11 @@ namespace Zilon.Core.Tactics.Behaviour
                 // в результате рандома.
                 _isComplete = true;
 
-                _path = new List<IMapNode>(0);
+                _path = new List<IGraphNode>(0);
             }
             else
             {
-                _path = new List<IMapNode>();
+                _path = new List<IGraphNode>();
 
                 CreatePath();
 
@@ -91,10 +91,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private void CreatePath()
         {
-            var context = new PathFindingContext(Actor)
-            {
-                TargetNode = TargetNode
-            };
+            var context = new ActorPathFindingContext(Actor, _map, TargetNode);
 
             var startNode = Actor.Node;
             var finishNode = TargetNode;

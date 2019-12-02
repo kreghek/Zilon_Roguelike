@@ -7,7 +7,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -89,7 +89,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
         private static IMap CreateFakeMap()
         {
-            var nodes = new List<IMapNode>();
+            var nodes = new List<IGraphNode>();
 
             var mapMock = new Mock<IMap>();
             mapMock.SetupGet(x => x.Nodes).Returns(nodes);

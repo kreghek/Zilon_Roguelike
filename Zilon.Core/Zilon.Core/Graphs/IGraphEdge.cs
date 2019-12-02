@@ -1,14 +1,14 @@
-﻿namespace Zilon.Core.Tactics.Spatial
+﻿namespace Zilon.Core.Graphs
 {
     /// <summary>
     /// Интерфейс ребра графа карты.
     /// </summary>
-    public interface IEdge
+    public interface IGraphEdge
     {
         /// <summary>
         /// Соединённые узлы карты.
         /// </summary>
-        IMapNode[] Nodes { get; }
+        IGraphNode[] Nodes { get; }
 
         /// <summary>
         /// Стоимость ребра.

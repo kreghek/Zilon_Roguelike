@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -13,13 +13,11 @@ namespace Zilon.Core.Tactics
         public override bool IsMapBlock => true;
 
         [ExcludeFromCodeCoverage]
-        public FixedPropChest(IMapNode node, IProp[] props) : this(node, props, 0)
+        public FixedPropChest(IGraphNode node, IProp[] props) : this(node, props, 0)
         {
-
         }
 
-
-        public FixedPropChest(IMapNode node, IProp[] props, int id) : base(node, new ChestStore(), id)
+        public FixedPropChest(IGraphNode node, IProp[] props, int id) : base(node, new ChestStore(), id)
         {
             foreach (var prop in props)
             {

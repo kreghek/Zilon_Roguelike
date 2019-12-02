@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -13,6 +13,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// <remarks>
         /// Находятся в том порядке, в котором их нужно обходить.
         /// </remarks>
-        IMapNode[] Points { get; }
+        IGraphNode[] Points { get; }
     }
 }

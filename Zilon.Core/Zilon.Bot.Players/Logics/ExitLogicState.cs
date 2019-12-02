@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -58,7 +58,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private MoveTask CreateMoveTask(IActor actor, IMapNode targetExitNode)
+        private MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode)
         {
             Debug.Assert((targetExitNode as HexNode)?.IsObstacle != true,
                 "Узел с выходом не должен быть препятствием.");

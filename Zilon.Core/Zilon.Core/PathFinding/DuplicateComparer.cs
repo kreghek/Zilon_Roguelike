@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zilon.Core.Tactics.Spatial.PathFinding
+namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// System.Collections.Generic.SortedList by default does not allow duplicate items.
@@ -8,9 +8,20 @@ namespace Zilon.Core.Tactics.Spatial.PathFinding
     /// </summary>
     internal class DuplicateComparer : IComparer<int>
     {
+        static DuplicateComparer()
+        {
+            Instance = new DuplicateComparer();
+        }
+
+        private DuplicateComparer()
+        {
+        }
+
         public int Compare(int x, int y)
         {
-            return (x <= y) ? -1 : 1;
+            return x <= y ? -1 : 1;
         }
+
+        public static DuplicateComparer Instance { get; private set; }
     }
 }

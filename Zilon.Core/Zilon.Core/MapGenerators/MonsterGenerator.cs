@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -57,7 +57,7 @@ namespace Zilon.Core.MapGenerators
                 var containerNodes = _propContainerManager.Items.Select(x => x.Node);
                 var availableMonsterNodes = regionNodes.Except(containerNodes);
 
-                var freeNodes = new List<IMapNode>(availableMonsterNodes);
+                var freeNodes = new List<IGraphNode>(availableMonsterNodes);
 
                 var monsterCount = _generatorRandomSource.RollRegionCount(
                     sectorScheme.MinRegionMonsterCount,
@@ -181,14 +181,14 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private IActor CreateMonster(MonsterPerson person, IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var actor = new Actor(person, botPlayer, startNode);
             _actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IMonsterScheme monsterScheme, IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
@@ -218,7 +218,7 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(monsterPersons));
             }
 
-            var freeNodes = new List<IMapNode>(monsterRegions.SelectMany(x => x.Nodes));
+            var freeNodes = new List<IGraphNode>(monsterRegions.SelectMany(x => x.Nodes));
 
             foreach (var monsterPerson in monsterPersons)
             {

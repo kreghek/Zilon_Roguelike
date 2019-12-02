@@ -3,11 +3,11 @@
 using JetBrains.Annotations;
 
 using Zilon.Core.Client;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Benchmark
@@ -26,7 +26,7 @@ namespace Zilon.Core.Benchmark
             [NotNull] ISurvivalRandomSource survivalRandomSource,
             [NotNull] IPersonScheme personScheme,
             [NotNull] IActorManager actorManager,
-            [NotNull] IMapNode startNode)
+            [NotNull] IGraphNode startNode)
         {
             var inventory = new Inventory();
 
