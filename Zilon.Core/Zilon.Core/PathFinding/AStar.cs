@@ -12,7 +12,10 @@ namespace Zilon.Core.PathFinding
     /// Общий алгоритм такой:
     /// 1. В начале в список открытых узлов помещается стартовый узел.
     /// 2. Из открытого списка выбирается первый узел, которого нет в списке закрытых.
-    /// Первый выбранный будет...
+    /// Первый выбранный будет наиболее дешёвый, т.к. открытый список сортируется.
+    /// 3. Получаем всех соседей узла и размещаем из в открытый список. Соседи должны отсутствовать в закрытом списке.
+    /// 4. Для каждого соседа запоминаем, как мы к нему пришли.
+    /// 5. В конце по отметаким, как пришли восстанавливаем весь путь.
     /// </remarks>
     public sealed class AStar
     {
@@ -24,7 +27,7 @@ namespace Zilon.Core.PathFinding
         /// <summary>
         /// The closed list.
         /// </summary>
-        private readonly SortedList<int, IGraphNode> _closedList;
+        private readonly HashSet<IGraphNode> _closedList;
 
         private readonly IAstarContext _context;
         private readonly Dictionary<IGraphNode, AStarData> _dataDict;
@@ -58,7 +61,7 @@ namespace Zilon.Core.PathFinding
             }
 
             _openList = new SortedList<int, IGraphNode>(DuplicateComparer.Instance);
-            _closedList = new SortedList<int, IGraphNode>(DuplicateComparer.Instance);
+            _closedList = new HashSet<IGraphNode>();
             _dataDict = new Dictionary<IGraphNode, AStarData>();
 
             _context = context ?? throw new System.ArgumentNullException(nameof(context));
@@ -120,7 +123,7 @@ namespace Zilon.Core.PathFinding
                 CurrentNode = _openList.Pop();
 
                 // This node has already been searched, check the next one.
-                if (_closedList.ContainsValue(CurrentNode))
+                if (_closedList.Contains(CurrentNode))
                 {
                     continue;
                 }
@@ -136,7 +139,7 @@ namespace Zilon.Core.PathFinding
 
             _openList.Remove(currentData.TotalCost);
 
-            _closedList.AddWithData(CurrentNode, currentData);
+            _closedList.Add(CurrentNode);
 
             // Found the goal, stop searching.
             if (CurrentNode == _goal)
@@ -154,14 +157,13 @@ namespace Zilon.Core.PathFinding
                 // If the child has already been searched (closed list) or is on
                 // the open list to be searched then do not modify its movement cost
                 // or estimated cost since they have already been set previously.
-                if (_openList.ContainsValue(child) || _closedList.ContainsValue(child))
+                if (_openList.ContainsValue(child) || _closedList.Contains(child))
                 {
                     continue;
                 }
 
                 var childData = GetData(child);
                 currentData = GetData(CurrentNode);
-
 
                 childData.Parent = CurrentNode;
                 childData.MovementCost = currentData.MovementCost + 1;
