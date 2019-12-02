@@ -260,7 +260,7 @@ public class GlobeWorldVM : MonoBehaviour
         {
             if (!_progressStorageService.LoadGlobe())
             {
-                await ProcessAfterGlobeLoad();
+                await ProcessAfterGlobeLoadAync();
             }
             else
             {
@@ -281,7 +281,7 @@ public class GlobeWorldVM : MonoBehaviour
         _player.Terrain = startCell;
     }
 
-    private async System.Threading.Tasks.Task ProcessAfterGlobeLoad()
+    private async System.Threading.Tasks.Task ProcessAfterGlobeLoadAync()
     {
         var globeGenerationResult = await _globeGenerator.GenerateGlobeAsync();
         _globeManager.Globe = globeGenerationResult.Globe;

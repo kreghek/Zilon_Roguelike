@@ -14,6 +14,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -144,7 +145,7 @@ public class KeyboardMoveController : MonoBehaviour
         return KeyCode.None;
     }
 
-    private IMapNode GetTargetNode(HexNode actorHexNode, StepDirection direction)
+    private IGraphNode GetTargetNode(HexNode actorHexNode, StepDirection direction)
     {
         if (direction == StepDirection.Undefined)
         {
