@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
-using LightInject;
-
 using Moq;
 
 using NUnit.Framework;
@@ -15,7 +13,6 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -254,13 +251,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var taskSource = new HumanActorTaskSource();
             taskSource.SwitchActor(currentActor);
             return taskSource;
-        }
-
-        private static IDecisionSource CreateDecisionSource()
-        {
-            var decisionSourceMock = new Mock<IDecisionSource>();
-            var decisionSource = decisionSourceMock.Object;
-            return decisionSource;
         }
 
         private static IActor CreateActor(IMap map, HexNode startNode)
