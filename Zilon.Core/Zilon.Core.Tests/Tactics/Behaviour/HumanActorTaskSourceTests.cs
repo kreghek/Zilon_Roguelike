@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
-using LightInject;
-
 using Moq;
 
 using NUnit.Framework;
@@ -15,7 +13,6 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -28,49 +25,18 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     [TestFixture]
     public class HumanActorTaskSourceTests
     {
-        private ServiceContainer _container;
-
-        private IHumanActorTaskSource InitTaskSource(IActor currentActor)
-        {
-            var taskSource = _container.GetInstance<IHumanActorTaskSource>();
-            taskSource.SwitchActor(currentActor);
-            return taskSource;
-        }
-
-        private static IDecisionSource CreateDecisionSource()
-        {
-            var decisionSourceMock = new Mock<IDecisionSource>();
-            var decisionSource = decisionSourceMock.Object;
-            return decisionSource;
-        }
-
-        private static IActor CreateActor(IMap map, HexNode startNode)
-        {
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
-
-            var personMock = new Mock<IPerson>();
-            var person = personMock.Object;
-
-            var actor = new Actor(person, player, startNode);
-
-            map.HoldNode(startNode, actor);
-
-            return actor;
-        }
-
         /// <summary>
-        /// Данный метод проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
+        /// Тест проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
         /// </summary>
         /// <remarks>
         /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
         /// </remarks>
         [Test]
-        public async Task Intent_TargetToStartPoint_GenerateMoveCommandAsync()
+        public async Task Intent_TargetToStartPoint_GenerateMoveCommand()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -96,11 +62,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
         /// </remarks>
         [Test]
-        public async Task Intent_SetNullTarget_ThrownExceptionAsync()
+        public async Task Intent_SetNullTarget_ThrownException()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
 
@@ -118,14 +84,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// <summary>
         /// Тест проверяет, что после окончания задачи на перемещение
         /// и назначения новой задачи всё работает корректно.
-        /// То есть новая команда возвращается при запросе.
+        /// То есть новая команда и возвращается при запросе.
         /// </summary>
         [Test]
-        public async Task Intent_AssignAfterTaskComplete_NoNullCommandAsync()
+        public async Task Intent_AssignAfterTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -148,7 +114,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             {
                 foreach (var task in tasks)
                 {
-
                     task.Execute();
                 }
             }
@@ -167,14 +132,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         /// <summary>
         /// Тест проверяет, что если указать ещё одно намерение на перемещение, пока предыдущая задача не выполнилась,
-        /// то новое намерение отменяет текущее.
+        /// то новое намерение замещает текущее.
         /// </summary>
         [Test]
-        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommandAsync()
+        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -196,7 +161,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             {
                 foreach (var task in tasks)
                 {
-
                     task.Execute();
                 }
             }
@@ -213,26 +177,16 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             factTasks.Should().NotBeNullOrEmpty();
         }
 
-        private static IActorTask[] SetHumanIntention(IActor actor,
-            IHumanActorTaskSource taskSource,
-            IIntention intention)
-        {
-            taskSource.Intent(intention);
-
-            var tasks = taskSource.GetActorTasks(actor);
-            return tasks;
-        }
-
         /// <summary>
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test]
-        public async Task IntentAttack_SetTarget_ReturnsAttackTaskAsync()
+        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
-            var usageService = _container.GetInstance<ITacticalActUsageService>();
+            var usageService = CreateTacticalActUsageService();
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
@@ -256,10 +210,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
         /// </summary>
         [Test]
-        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTaskAsync()
+        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
         {
             //ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 
@@ -283,25 +237,43 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             tasks[0].Should().BeOfType<OpenContainerTask>();
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _container = new ServiceContainer();
-
-            var decisionSource = CreateDecisionSource();
-
-            var tacticalActUsageService = CreateTacticalActUsageService();
-
-            _container.Register(factory => tacticalActUsageService, new PerContainerLifetime());
-            _container.Register(factory => decisionSource, new PerContainerLifetime());
-            _container.Register<IHumanActorTaskSource, HumanActorTaskSource>(new PerContainerLifetime());
-        }
-
-        private ITacticalActUsageService CreateTacticalActUsageService()
+        private static ITacticalActUsageService CreateTacticalActUsageService()
         {
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
             var tacticalActUsageService = tacticalActUsageServiceMock.Object;
             return tacticalActUsageService;
+        }
+
+        private static IHumanActorTaskSource InitTaskSource(IActor currentActor)
+        {
+            var taskSource = new HumanActorTaskSource();
+            taskSource.SwitchActor(currentActor);
+            return taskSource;
+        }
+
+        private static IActor CreateActor(IMap map, HexNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+
+            var actor = new Actor(person, player, startNode);
+
+            map.HoldNode(startNode, actor);
+
+            return actor;
+        }
+
+        private static IActorTask[] SetHumanIntention(IActor actor,
+            IHumanActorTaskSource taskSource,
+            IIntention intention)
+        {
+            taskSource.Intent(intention);
+
+            var tasks = taskSource.GetActorTasks(actor);
+            return tasks;
         }
     }
 }
