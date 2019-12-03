@@ -114,7 +114,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             {
                 foreach (var task in tasks)
                 {
-
                     task.Execute();
                 }
             }
@@ -162,7 +161,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             {
                 foreach (var task in tasks)
                 {
-
                     task.Execute();
                 }
             }
@@ -183,7 +181,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
         /// </summary>
         [Test]
-        public async Task IntentAttack_SetTarget_ReturnsAttackTaskAsync()
+        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
         {
             //ARRANGE
             var usageService = CreateTacticalActUsageService();
@@ -212,7 +210,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
         /// </summary>
         [Test]
-        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTaskAsync()
+        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
         {
             //ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
@@ -239,14 +237,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             tasks[0].Should().BeOfType<OpenContainerTask>();
         }
 
-        private ITacticalActUsageService CreateTacticalActUsageService()
+        private static ITacticalActUsageService CreateTacticalActUsageService()
         {
             var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
             var tacticalActUsageService = tacticalActUsageServiceMock.Object;
             return tacticalActUsageService;
         }
 
-        private IHumanActorTaskSource InitTaskSource(IActor currentActor)
+        private static IHumanActorTaskSource InitTaskSource(IActor currentActor)
         {
             var taskSource = new HumanActorTaskSource();
             taskSource.SwitchActor(currentActor);
