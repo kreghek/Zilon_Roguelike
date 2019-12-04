@@ -1,7 +1,6 @@
 ﻿using System;
-using Zilon.Core.World;
 
-namespace Zilon.GlobeObserver
+namespace Zilon.Core.World
 {
     public class GenerationResult
     {

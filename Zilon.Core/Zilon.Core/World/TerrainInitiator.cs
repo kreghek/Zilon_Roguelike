@@ -4,7 +4,7 @@ namespace Zilon.Core.World
 {
     public sealed class TerrainInitiator
     {
-        private const int WORLD_SIZE = 40;
+        public int WorldSize { get; } = 40;
 
         public Task<Terrain> GenerateAsync()
         {
@@ -12,14 +12,14 @@ namespace Zilon.Core.World
             {
                 var terrain = new Terrain
                 {
-                    Cells = new TerrainCell[WORLD_SIZE][]
+                    Cells = new TerrainCell[WorldSize][]
                 };
 
-                for (var i = 0; i < WORLD_SIZE; i++)
+                for (var i = 0; i < WorldSize; i++)
                 {
-                    terrain.Cells[i] = new TerrainCell[WORLD_SIZE];
+                    terrain.Cells[i] = new TerrainCell[WorldSize];
 
-                    for (var j = 0; j < WORLD_SIZE; j++)
+                    for (var j = 0; j < WorldSize; j++)
                     {
                         terrain.Cells[i][j] = new TerrainCell
                         {

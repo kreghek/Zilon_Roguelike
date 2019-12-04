@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.Common;
@@ -24,6 +27,8 @@ namespace Zilon.Core.World
 
         private readonly IDice _dice;
         private readonly ISchemeService _schemeService;
+        private readonly TerrainInitiator _terrainInitiator;
+        private readonly ProvinceInitiator _provinceInitiator;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -32,37 +37,125 @@ namespace Zilon.Core.World
         /// В ближайшее время будет заменена специализированным источником рандома.
         /// </param>
         /// <param name="schemeService"> Сервис для доступа к схемам. Используется для генерации карты локации в провинции. </param>
-        public WorldGenerator(IDice dice, ISchemeService schemeService)
+        public WorldGenerator(
+            IDice dice,
+            ISchemeService schemeService,
+            TerrainInitiator terrainInitiator,
+            ProvinceInitiator provinceInitiator)
         {
             _dice = dice;
             _schemeService = schemeService;
+            _terrainInitiator = terrainInitiator;
+            _provinceInitiator = provinceInitiator;
         }
 
-        public Task<Globe> CreateStartGlobeAsync()
+        public async Task<GenerationResult> CreateGlobeAsync()
         {
-            return Task.Run(() =>
+            var globe = new Globe();
+
+            var terrain = await _terrainInitiator.GenerateAsync().ConfigureAwait(false);
+            globe.Terrain = terrain;
+
+            const int WORLD_SIZE = 40;
+            await GenerateAnsAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
+
+            // Берём 8 случайных точек. Это стартовые города государсв.
+            var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
+                .Take(8)
+                .OrderBy(x => Guid.NewGuid())
+                .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
+
+            Parallel.ForEach(globe.Terrain.Regions, async region =>
             {
-                var globe = new Globe
+                var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
+
+                if (needToCreateSector)
                 {
-                    Terrain = new Terrain
+                    var regionNode = region.RegionNodes.First();
+
+                    var scope = serviceProvider.CreateScope();
+
+                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+
+                    var localitySector = await CreateWildSectorAsync(mapFactory,
+                                                                 actorManager,
+                                                                 propContainerManager,
+                                                                 dropResolver,
+                                                                 schemeService,
+                                                                 equipmentDurableService);
+
+                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+                    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
+
+                    regionNode.Sector = localitySector;
+
+                    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
                     {
-                        Cells = new TerrainCell[WORLD_SIZE][]
-                    },
-                    agentNameGenerator = new RandomName(_dice),
-                    cityNameGenerator = new CityNameGenerator(_dice)
-                };
+                        for (var personIndex = 0; personIndex < 10; personIndex++)
+                        {
+                            var node = localitySector.Map.Nodes.ElementAt(personIndex);
+                            var person = CreatePerson(humanPersonFactory);
+                            var actor = CreateActor(botPlayer, person, node);
+                            actorManager.Add(actor);
+                        }
+                    }
 
-                var realmTask = CreateRealmsAsync(globe, _realmNames);
-                //var terrainTask = CreateTerrainAsync(globe);
+                    scopesList.Add(scope);
 
-                //Task.WaitAll(realmTask, terrainTask);
-
-                //CreateStartLocalities(globe);
-                //CreateStartAgents(globe);
-
-                return globe;
+                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
+                    var sectorInfo = new SectorInfo(actorManager,
+                                                    propContainerManager,
+                                                    localitySector,
+                                                    region,
+                                                    regionNode,
+                                                    taskSource);
+                    globe.SectorInfos.Add(sectorInfo);
+                }
             });
+
+            var result = new GenerationResult(globe);
+
+            return result;
         }
+
+        private async Task GenerateAnsAssignRegionsAsync(Globe globe, int WORLD_SIZE)
+        {
+            var provinces = new ConcurrentBag<GlobeRegion>();
+            for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)
+            {
+                for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
+                {
+                    var province = await CreateProvinceAsync().ConfigureAwait(false);
+                    province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
+                    provinces.Add(province);
+                }
+            };
+
+            globe.Terrain.Regions = provinces.ToArray();
+        }
+
+        private async Task<GlobeRegion> CreateProvinceAsync()
+        {
+            var region = await _provinceInitiator.GenerateRegionAsync().ConfigureAwait(false);
+            return region;
+        }
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// Создание игрового мира с историей и граф провинций.

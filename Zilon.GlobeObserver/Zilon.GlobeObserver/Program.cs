@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Persons;
@@ -210,7 +210,7 @@ namespace Zilon.GlobeObserver
 
         private static IActor CreateActor(IPlayer personPlayer,
             IPerson person,
-            IMapNode node)
+            IGraphNode node)
         {
             var actor = new Actor(person, personPlayer, node);
 
