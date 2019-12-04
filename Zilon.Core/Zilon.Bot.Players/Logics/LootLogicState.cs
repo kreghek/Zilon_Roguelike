@@ -34,7 +34,7 @@ namespace Zilon.Bot.Players.Logics
             return nearbyContainer;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
         {
             _propContainer = FindContainer(actor);
 

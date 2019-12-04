@@ -232,6 +232,7 @@
     <Compile Include="Tactics\ActorInteractionEvents\PureMissActorInteractionEvent.cs" />
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
+    <Compile Include="Tactics\Behaviour\SectorSnapshot.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\ActorInteractionEvents\DamageActorInteractionEvent.cs" />
     <Compile Include="Tactics\DamageEfficientCalc.cs" />

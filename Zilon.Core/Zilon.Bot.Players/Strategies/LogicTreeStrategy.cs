@@ -28,7 +28,7 @@ namespace Zilon.Bot.Players.Strategies
         public ILogicState CurrentState { get; private set; }
         public ILogicStrategyData StrategyData => _strategyData;
 
-        public IActorTask GetActorTask()
+        public IActorTask GetActorTask(SectorSnapshot sectorSnapshot)
         {
             // Для текущего состояния проверяем каждый из переходов.
             // Если переход выстреливает, то генерируем задачу актёру.
@@ -57,7 +57,7 @@ namespace Zilon.Bot.Players.Strategies
                 ResetLogicStates(_stateTree);
             }
 
-            var actorTask = CurrentState.GetTask(Actor, _strategyData);
+            var actorTask = CurrentState.GetTask(Actor, _strategyData, sectorSnapshot);
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 

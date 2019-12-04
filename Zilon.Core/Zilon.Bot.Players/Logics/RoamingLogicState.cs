@@ -48,7 +48,7 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
         {
             if (_moveTask == null)
             {
