@@ -39,7 +39,7 @@ namespace Zilon.GlobeObserver
 
                     Parallel.ForEach(globe.SectorInfos, sectorInfo =>
                     {
-                        var taskSource = sectorInfo.ActorTaskSource;
+                        var taskSource = sectorInfo.BotActorTaskSource;
                         var actorManager = sectorInfo.ActorManager;
                         NextTurn(actorManager, taskSource);
                     });

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Graphs;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.World.NameGeneration;
 
 namespace Zilon.Core.World
@@ -77,51 +81,28 @@ namespace Zilon.Core.World
                     var sector = await _sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
 
                     var regionNode = region.RegionNodes.First();
+                    regionNode.Sector = sector;
 
-                    var scope = serviceProvider.CreateScope();
+                    var sectorInfo = new SectorInfo(sector,
+                                                    region,
+                                                    regionNode,
+                                                    taskSource);
+                    globe.SectorInfos.Add(sectorInfo);
 
-                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
-                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
-                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
-                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
-                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
-                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
-                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
-                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
-
-                    var localitySector = await CreateWildSectorAsync(mapFactory,
-                                                                 actorManager,
-                                                                 propContainerManager,
-                                                                 dropResolver,
-                                                                 schemeService,
-                                                                 equipmentDurableService);
-
-                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
-                    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
-
-                    regionNode.Sector = localitySector;
 
                     for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
                     {
                         for (var personIndex = 0; personIndex < 10; personIndex++)
                         {
-                            var node = localitySector.Map.Nodes.ElementAt(personIndex);
+                            var node = sector.Map.Nodes.ElementAt(personIndex);
                             var person = CreatePerson(humanPersonFactory);
                             var actor = CreateActor(botPlayer, person, node);
                             actorManager.Add(actor);
                         }
                     }
 
-                    scopesList.Add(scope);
-
                     var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
-                    var sectorInfo = new SectorInfo(actorManager,
-                                                    propContainerManager,
-                                                    localitySector,
-                                                    region,
-                                                    regionNode,
-                                                    taskSource);
-                    globe.SectorInfos.Add(sectorInfo);
+                    
                 }
             });
 
@@ -150,6 +131,21 @@ namespace Zilon.Core.World
         {
             var region = await _provinceInitiator.GenerateRegionAsync().ConfigureAwait(false);
             return region;
+        }
+
+        private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory)
+        {
+            var person = humanPersonFactory.Create();
+            return person;
+        }
+
+        private static IActor CreateActor(IPlayer personPlayer,
+            IPerson person,
+            IGraphNode node)
+        {
+            var actor = new Actor(person, personPlayer, node);
+
+            return actor;
         }
 
 

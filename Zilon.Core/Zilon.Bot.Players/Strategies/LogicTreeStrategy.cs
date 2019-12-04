@@ -57,7 +57,7 @@ namespace Zilon.Bot.Players.Strategies
                 ResetLogicStates(_stateTree);
             }
 
-            var actorTask = CurrentState.GetTask(Actor, _strategyData, sectorSnapshot);
+            var actorTask = CurrentState.GetTask(Actor, sectorSnapshot, _strategyData);
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 
