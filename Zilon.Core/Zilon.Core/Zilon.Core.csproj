@@ -536,12 +536,15 @@
     <Compile Include="World\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="World\IGlobeEntity.cs" />
+    <Compile Include="World\ISectorBuilder.cs" />
     <Compile Include="World\IWorldGenerator.cs" />
     <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="World\NameGeneration\NameGen.cs" />
     <Compile Include="World\NameGeneration\Sex.cs" />
     <Compile Include="World\ProvinceInitiator.cs" />
+    <Compile Include="World\ISectorBuilderFactory.cs" />
     <Compile Include="World\SectorInfo.cs" />
+    <Compile Include="World\SectorBuilder.cs" />
     <Compile Include="World\TerrainInitiator.cs" />
     <Compile Include="World\WorldGenerator.cs" />
     <Compile Include="World\Globe.cs" />

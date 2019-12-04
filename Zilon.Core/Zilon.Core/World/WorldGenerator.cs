@@ -29,6 +29,7 @@ namespace Zilon.Core.World
         private readonly ISchemeService _schemeService;
         private readonly TerrainInitiator _terrainInitiator;
         private readonly ProvinceInitiator _provinceInitiator;
+        private readonly ISectorBuilder _sectorBuilder;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -41,12 +42,14 @@ namespace Zilon.Core.World
             IDice dice,
             ISchemeService schemeService,
             TerrainInitiator terrainInitiator,
-            ProvinceInitiator provinceInitiator)
+            ProvinceInitiator provinceInitiator,
+            ISectorBuilder sectorBuilder)
         {
             _dice = dice;
             _schemeService = schemeService;
             _terrainInitiator = terrainInitiator;
             _provinceInitiator = provinceInitiator;
+            _sectorBuilder = sectorBuilder;
         }
 
         public async Task<GenerationResult> CreateGlobeAsync()
@@ -71,6 +74,8 @@ namespace Zilon.Core.World
 
                 if (needToCreateSector)
                 {
+                    var sector = await _sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
+
                     var regionNode = region.RegionNodes.First();
 
                     var scope = serviceProvider.CreateScope();
