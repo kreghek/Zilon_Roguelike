@@ -1,11 +1,11 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tactics.Tests
@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             var person = new Mock<IPerson>().Object;
             var player = new Mock<IPlayer>().Object;
-            var node = new Mock<IMapNode>().Object;
+            var node = new Mock<IGraphNode>().Object;
 
             var actor = new Actor(person, player, node);
 
@@ -51,7 +51,7 @@ namespace Zilon.Core.Tactics.Tests
             var person = personMock.Object;
 
             var player = new Mock<IPlayer>().Object;
-            var node = new Mock<IMapNode>().Object;
+            var node = new Mock<IGraphNode>().Object;
 
             var actor = new Actor(person, player, node);
 

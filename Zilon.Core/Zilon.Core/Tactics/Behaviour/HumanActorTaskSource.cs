@@ -24,7 +24,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (actor != CurrentActor)
             {
-                return new IActorTask[0];
+                return Array.Empty<IActorTask>();
             }
 
             var currentTaskIsComplete = _currentTask?.IsComplete;
@@ -40,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_currentIntention == null)
             {
-                return new IActorTask[0];
+                return Array.Empty<IActorTask>();
             }
 
             _currentTask = _currentIntention.CreateActorTask(_currentTask, CurrentActor);
@@ -51,7 +51,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 return new[] { _currentTask };
             }
 
-            return new IActorTask[0];
+            return Array.Empty<IActorTask>();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tactics
         /// Набор узлов, где могут располагаться актёры игрока
         /// на начало прохождения сектора.
         /// </summary>
-        public IMapNode[] StartNodes { get; set; }
+        public IGraphNode[] StartNodes { get; set; }
 
         /// <summary>
         /// Менеджер работы с очками.

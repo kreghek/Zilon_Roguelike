@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Bot.Players.Strategies
 {
@@ -8,11 +7,11 @@ namespace Zilon.Bot.Players.Strategies
     {
         public LogicTreeStrategyData()
         {
-            ObserverdNodes = new HashSet<IMapNode>();
-            ExitNodes = new HashSet<IMapNode>();
+            ObserverdNodes = new HashSet<IGraphNode>();
+            ExitNodes = new HashSet<IGraphNode>();
         }
 
-        public HashSet<IMapNode> ObserverdNodes { get; }
-        public HashSet<IMapNode> ExitNodes { get; }
+        public HashSet<IGraphNode> ObserverdNodes { get; }
+        public HashSet<IGraphNode> ExitNodes { get; }
     }
 }

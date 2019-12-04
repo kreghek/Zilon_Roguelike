@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -16,10 +17,10 @@ namespace Zilon.Core.Tactics.Spatial
 
         public SectorHexMap(int segmentSize) : base(segmentSize)
         {
-            Transitions = new Dictionary<IMapNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
-        public Dictionary<IMapNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         /// <summary>
         /// Узлы карты, приведённые к <see cref="HexNode"/>.
@@ -40,7 +41,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>
         /// Возвращает true, если узел доступен. Иначе, false.
         /// </returns>
-        public bool TargetIsOnLine(IMapNode currentNode, IMapNode targetNode)
+        public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
             var targetHexNode = (HexNode)targetNode;
             var currentHexNode = (HexNode)currentNode;
@@ -81,26 +82,6 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Distances the between.
-        /// </summary>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="targetNode">The target node.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public int DistanceBetween(IMapNode currentNode, IMapNode targetNode)
-        {
-            var actorHexNode = (HexNode)currentNode;
-            var containerHexNode = (HexNode)targetNode;
-
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
-
-            var distance = actorCoords.DistanceTo(containerCoords);
-
-            return distance;
         }
     }
 }

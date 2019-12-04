@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -9,7 +9,7 @@ namespace Zilon.Bot.Players
     public static class LootHelper
     {
         public static IEnumerable<IPropContainer> FindAvailableContainers(IEnumerable<IPropContainer> containers,
-            IMapNode observeNode, ISectorMap map)
+            IGraphNode observeNode, ISectorMap map)
         {
             foreach (var container in containers)
             {

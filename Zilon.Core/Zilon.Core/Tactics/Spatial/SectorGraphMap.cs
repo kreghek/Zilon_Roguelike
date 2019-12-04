@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     public sealed class SectorGraphMap : GraphMap, ISectorMap
     {
-        public Dictionary<IMapNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         public SectorGraphMap()
         {
-            Transitions = new Dictionary<IMapNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
-        public int DistanceBetween(IMapNode currentNode, IMapNode targetNode)
+        public int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
             return 0;
         }

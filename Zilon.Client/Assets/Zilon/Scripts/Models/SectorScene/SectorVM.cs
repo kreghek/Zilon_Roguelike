@@ -17,6 +17,7 @@ using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -624,7 +625,7 @@ public class SectorVM : MonoBehaviour
     private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
         [NotNull] IActorManager actorManager,
         [NotNull] IPerkResolver perkResolver,
-        [NotNull] IMapNode startNode,
+        [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         if (_humanPlayer.MainPerson == null)

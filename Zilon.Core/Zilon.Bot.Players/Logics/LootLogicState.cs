@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -58,7 +58,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IMapNode containerMapNode, MoveTask storedMoveTask)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask)
         {
             var moveTask = storedMoveTask;
             if (storedMoveTask == null)

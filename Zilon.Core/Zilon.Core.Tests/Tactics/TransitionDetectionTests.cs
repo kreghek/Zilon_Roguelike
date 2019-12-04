@@ -5,9 +5,9 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Tactics
 {
@@ -23,12 +23,12 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actorNodeMock = new Mock<IMapNode>();
+            var actorNodeMock = new Mock<IGraphNode>();
             var actorNode = actorNodeMock.Object;
 
             var transition = new RoomTransition("test");
 
-            var testedTrasitions = new Dictionary<IMapNode, RoomTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
             {
                 { actorNode, transition }
             };
@@ -57,15 +57,15 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var actorNodeMock = new Mock<IMapNode>();
+            var actorNodeMock = new Mock<IGraphNode>();
             var actorNode = actorNodeMock.Object;
 
-            var transitionNodeMock = new Mock<IMapNode>();
+            var transitionNodeMock = new Mock<IGraphNode>();
             var transitionNode = transitionNodeMock.Object;
 
             var transition = new RoomTransition("test");
 
-            var testedTrasitions = new Dictionary<IMapNode, RoomTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
             {
                 { transitionNode, transition }
             };

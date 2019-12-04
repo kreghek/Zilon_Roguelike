@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -151,7 +152,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
             {
-                var regionNodeList = new List<IMapNode>();
+                var regionNodeList = new List<IGraphNode>();
 
                 foreach (var coord in draftRegion.Coords)
                 {

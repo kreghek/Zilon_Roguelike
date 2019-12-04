@@ -4,12 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -31,19 +31,19 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        public IMapNode Node { get; private set; }
+        public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node)
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node,
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
         {
             _perkResolver = perkResolver;
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tactics
             return !Person.Survival.IsDead;
         }
 
-        public void MoveToNode(IMapNode targetNode)
+        public void MoveToNode(IGraphNode targetNode)
         {
             Node = targetNode;
             Moved?.Invoke(this, new EventArgs());
