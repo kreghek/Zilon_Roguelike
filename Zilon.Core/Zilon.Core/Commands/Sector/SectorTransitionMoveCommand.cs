@@ -2,6 +2,7 @@
 
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {

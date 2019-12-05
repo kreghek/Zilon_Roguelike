@@ -249,6 +249,7 @@
     <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\ITaskSourceProvider.cs" />
     <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
     <Compile Include="Tactics\PropContainerPurpose.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
@@ -455,7 +456,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorGenerator.cs" />
     <Compile Include="Tactics\DropTablePropChest.cs" />
-    <Compile Include="Tactics\GameLoop.cs" />
+    <Compile Include="World\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\HitHelper.cs" />
@@ -465,7 +466,7 @@
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IDropResolverRandomSource.cs" />
-    <Compile Include="Tactics\IGameLoop.cs" />
+    <Compile Include="World\IGameLoop.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />

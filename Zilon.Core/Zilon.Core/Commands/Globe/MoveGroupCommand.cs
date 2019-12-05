@@ -58,7 +58,7 @@ namespace Zilon.Core.Commands.Globe
 
             var currentNode = _player.GlobeNode;
             var currentGlobeCell = _player.Terrain;
-            var region = _worldManager.Regions[currentGlobeCell];
+            var region = _worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == currentGlobeCell);
 
             if (region == selectedNodeViewModel.ParentRegion)
             {
@@ -91,8 +91,9 @@ namespace Zilon.Core.Commands.Globe
 
                 var currentTerrainNode = _player.GlobeNode;
                 var currentTerrainCell = _player.Terrain;
-                //TODO Выборку ячейки мира по узлу провиции нужно упростить.
-                var targetNeighborTerrainCell = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
+
+                var region1 = _worldManager.Globe.Terrain.Regions.Single(x => x == selectedNodeViewModel.ParentRegion);
+                var targetNeighborTerrainCell = region1.TerrainCell;
                 var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
                 var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
                                                                                     currentTerrainCell,

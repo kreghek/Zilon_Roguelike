@@ -28,7 +28,8 @@ namespace Zilon.GlobeObserver
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
-            var globe = await LoadOrCreateGlobeAsync(serviceProvider, globeStorage);
+            var globeGenerator = serviceProvider.GetRequiredService<IWorldGenerator>();
+            var globe = await LoadOrCreateGlobeAsync(globeStorage, globeGenerator);
 
             Console.WriteLine("Press ESC to stop");
             do
@@ -40,8 +41,11 @@ namespace Zilon.GlobeObserver
                     Parallel.ForEach(globe.SectorInfos, sectorInfo =>
                     {
                         var taskSource = sectorInfo.BotActorTaskSource;
-                        var actorManager = sectorInfo.ActorManager;
-                        NextTurn(actorManager, taskSource);
+                        var actorManager = sectorInfo.Sector.ActorManager;
+
+                        var snapshot = new SectorSnapshot(sectorInfo.Sector);
+
+                        NextTurn(actorManager, taskSource, snapshot);
                     });
 
                     Console.WriteLine($"[.] ITERATION {globe.Iteration} PROCESSED");
@@ -51,12 +55,12 @@ namespace Zilon.GlobeObserver
             await globeStorage.SaveAsync(globe, "globe");
         }
 
-        private static async Task<Globe> LoadOrCreateGlobeAsync(ServiceProvider serviceProvider, GlobeStorage globeStorage)
+        private static async Task<Globe> LoadOrCreateGlobeAsync(GlobeStorage globeStorage, IWorldGenerator globeGenerator)
         {
             Globe globe;
             if (!globeStorage.HasFile("globe"))
             {
-                var result = await CreateGlobeAsync(serviceProvider);
+                var result = await globeGenerator.CreateGlobeAsync().ConfigureAwait(false);
                 globe = result.Globe;
             }
             else
@@ -68,7 +72,7 @@ namespace Zilon.GlobeObserver
             return globe;
         }
 
-        private static void NextTurn(IActorManager actors, IActorTaskSource taskSource)
+        private static void NextTurn(IActorManager actors, IActorTaskSource taskSource, SectorSnapshot snapshot)
         {
             foreach (var actor in actors.Items)
             {
@@ -77,13 +81,13 @@ namespace Zilon.GlobeObserver
                     continue;
                 }
 
-                ProcessActor(actor, taskSource);
+                ProcessActor(actor, taskSource, snapshot);
             }
         }
 
-        private static void ProcessActor(IActor actor, IActorTaskSource taskSource)
+        private static void ProcessActor(IActor actor, IActorTaskSource taskSource, SectorSnapshot snapshot)
         {
-            var actorTasks = taskSource.GetActorTasks(actor);
+            var actorTasks = taskSource.GetActorTasks(actor, snapshot);
 
             foreach (var actorTask in actorTasks)
             {
@@ -100,100 +104,100 @@ namespace Zilon.GlobeObserver
             }
         }
 
-        private static async Task<GenerationResult> CreateGlobeAsync(IServiceProvider serviceProvider)
-        {
-            var globe = new Globe();
+        //private static async Task<GenerationResult> CreateGlobeAsync(IServiceProvider serviceProvider)
+        //{
+        //    var globe = new Globe();
 
-            var terrainInitiator = serviceProvider.GetRequiredService<TerrainInitiator>();
-            var terrain = await terrainInitiator.GenerateAsync();
-            globe.Terrain = terrain;
+        //    var terrainInitiator = serviceProvider.GetRequiredService<TerrainInitiator>();
+        //    var terrain = await terrainInitiator.GenerateAsync();
+        //    globe.Terrain = terrain;
 
-            const int WORLD_SIZE = 40;
-            await GenerateAnsAssignRegionsAsync(serviceProvider, globe, WORLD_SIZE);
+        //    const int WORLD_SIZE = 40;
+        //    await GenerateAnsAssignRegionsAsync(serviceProvider, globe, WORLD_SIZE);
 
-            var scopesList = new ConcurrentBag<IServiceScope>();
+        //    var scopesList = new ConcurrentBag<IServiceScope>();
 
-            // Берём 8 случайных точек. Это стартовые города государсв.
-            var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
-                .Take(8)
-                .OrderBy(x => Guid.NewGuid())
-                .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
+        //    // Берём 8 случайных точек. Это стартовые города государсв.
+        //    var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
+        //        .Take(8)
+        //        .OrderBy(x => Guid.NewGuid())
+        //        .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
-            Parallel.ForEach(globe.Terrain.Regions, async region =>
-            {
-                var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
+        //    Parallel.ForEach(globe.Terrain.Regions, async region =>
+        //    {
+        //        var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
 
-                if (needToCreateSector)
-                {
-                    var regionNode = region.RegionNodes.First();
+        //        if (needToCreateSector)
+        //        {
+        //            var regionNode = region.RegionNodes.First();
 
-                    var scope = serviceProvider.CreateScope();
+        //            var scope = serviceProvider.CreateScope();
 
-                    var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
-                    var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
-                    var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
-                    var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
-                    var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
-                    var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
-                    var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
-                    var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
+        //            var mapFactory = scope.ServiceProvider.GetRequiredService<IMapFactory>();
+        //            var actorManager = scope.ServiceProvider.GetRequiredService<IActorManager>();
+        //            var propContainerManager = scope.ServiceProvider.GetRequiredService<IPropContainerManager>();
+        //            var dropResolver = scope.ServiceProvider.GetRequiredService<IDropResolver>();
+        //            var schemeService = scope.ServiceProvider.GetRequiredService<ISchemeService>();
+        //            var equipmentDurableService = scope.ServiceProvider.GetRequiredService<IEquipmentDurableService>();
+        //            var humanPersonFactory = scope.ServiceProvider.GetRequiredService<IHumanPersonFactory>();
+        //            var botPlayer = scope.ServiceProvider.GetRequiredService<IBotPlayer>();
 
-                    var localitySector = await CreateWildSectorAsync(mapFactory,
-                                                                 actorManager,
-                                                                 propContainerManager,
-                                                                 dropResolver,
-                                                                 schemeService,
-                                                                 equipmentDurableService);
+        //            var localitySector = await CreateWildSectorAsync(mapFactory,
+        //                                                         actorManager,
+        //                                                         propContainerManager,
+        //                                                         dropResolver,
+        //                                                         schemeService,
+        //                                                         equipmentDurableService);
 
-                    var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
-                    (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
+        //            var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
+        //            (sectorManager as GenerationSectorManager).CurrentSector = localitySector;
 
-                    regionNode.Sector = localitySector;
+        //            regionNode.Sector = localitySector;
 
-                    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
-                    {
-                        for (var personIndex = 0; personIndex < 10; personIndex++)
-                        {
-                            var node = localitySector.Map.Nodes.ElementAt(personIndex);
-                            var person = CreatePerson(humanPersonFactory);
-                            var actor = CreateActor(botPlayer, person, node);
-                            actorManager.Add(actor);
-                        }
-                    }
+        //            for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
+        //            {
+        //                for (var personIndex = 0; personIndex < 10; personIndex++)
+        //                {
+        //                    var node = localitySector.Map.Nodes.ElementAt(personIndex);
+        //                    var person = CreatePerson(humanPersonFactory);
+        //                    var actor = CreateActor(botPlayer, person, node);
+        //                    actorManager.Add(actor);
+        //                }
+        //            }
 
-                    scopesList.Add(scope);
+        //            scopesList.Add(scope);
 
-                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
-                    var sectorInfo = new SectorInfo(actorManager,
-                                                    propContainerManager,
-                                                    localitySector,
-                                                    region,
-                                                    regionNode,
-                                                    taskSource);
-                    globe.SectorInfos.Add(sectorInfo);
-                }
-            });
+        //            var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
+        //            var sectorInfo = new SectorInfo(actorManager,
+        //                                            propContainerManager,
+        //                                            localitySector,
+        //                                            region,
+        //                                            regionNode,
+        //                                            taskSource);
+        //            globe.SectorInfos.Add(sectorInfo);
+        //        }
+        //    });
 
-            var result = new GenerationResult(globe);
+        //    var result = new GenerationResult(globe);
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static async Task GenerateAnsAssignRegionsAsync(IServiceProvider serviceProvider, Globe globe, int WORLD_SIZE)
-        {
-            var provinces = new ConcurrentBag<GlobeRegion>();
-            for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)
-            {
-                for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
-                {
-                    var province = await CreateProvinceAsync(serviceProvider);
-                    province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
-                    provinces.Add(province);
-                }
-            };
+        //private static async Task GenerateAnsAssignRegionsAsync(IServiceProvider serviceProvider, Globe globe, int WORLD_SIZE)
+        //{
+        //    var provinces = new ConcurrentBag<GlobeRegion>();
+        //    for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)
+        //    {
+        //        for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
+        //        {
+        //            var province = await CreateProvinceAsync(serviceProvider);
+        //            province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
+        //            provinces.Add(province);
+        //        }
+        //    };
 
-            globe.Terrain.Regions = provinces.ToArray();
-        }
+        //    globe.Terrain.Regions = provinces.ToArray();
+        //}
 
         private static async Task<GlobeRegion> CreateProvinceAsync(IServiceProvider serviceProvider)
         {

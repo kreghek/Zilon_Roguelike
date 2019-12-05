@@ -45,9 +45,10 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(globe));
             }
 
-            var storageData = new GlobeStorageData();
-
-            storageData.Iteration = globe.Iteration;
+            var storageData = new GlobeStorageData
+            {
+                Iteration = globe.Iteration
+            };
 
             FillTerrainStorageData(globe, storageData);
 
@@ -73,7 +74,7 @@ namespace Zilon.Core.World
 
             foreach (var sectorInfo in globe.SectorInfos)
             {
-                foreach (var actor in sectorInfo.ActorManager.Items)
+                foreach (var actor in sectorInfo.Sector.ActorManager.Items)
                 {
                     var actorStorageData = ActorStorageData.Create(actor, sectorInfo.Sector, sectorStorageDict, personDict);
                     actors.Add(actorStorageData);
@@ -109,7 +110,7 @@ namespace Zilon.Core.World
             var personDict = new Dictionary<IPerson, string>();
             foreach (var sectorInfo in globe.SectorInfos)
             {
-                foreach (var actor in sectorInfo.ActorManager.Items)
+                foreach (var actor in sectorInfo.Sector.ActorManager.Items)
                 {
                     var personStorageData = HumanPersonStorageData.Create(actor.Person as HumanPerson);
                     personStorageDataList.Add(personStorageData);
@@ -163,8 +164,10 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(sectorInfoFactory));
             }
 
-            var globe = new Globe();
-            globe.Iteration = Iteration;
+            var globe = new Globe
+            {
+                Iteration = Iteration
+            };
 
             RestoreTerrain(globe, schemeService);
 

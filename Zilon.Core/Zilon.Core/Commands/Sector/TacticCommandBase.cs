@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {
@@ -10,13 +10,15 @@ namespace Zilon.Core.Commands
     public abstract class TacticCommandBase : ICommand
     {
         private readonly IGameLoop _gameLoop;
+        private readonly IWorldManager _worldManager;
 
         protected virtual bool UpdateGameLoop => true;
 
         [ExcludeFromCodeCoverage]
-        protected TacticCommandBase(IGameLoop gameLoop)
+        protected TacticCommandBase(IGameLoop gameLoop, IWorldManager worldManager)
         {
             _gameLoop = gameLoop;
+            _worldManager = worldManager;
         }
 
         public abstract bool CanExecute();
@@ -31,9 +33,13 @@ namespace Zilon.Core.Commands
 
             ExecuteTacticCommand();
 
+            //TODO Убрать из команд обновление мира
+            // потому что эта операция длительная и должна вызываться явно.
+            // Так же это позволит избавиться от 2-х зависимостей в команде - от геймлупа и от менеджера мира.
             if (UpdateGameLoop)
             {
-                _gameLoop.Update();
+                var globe = _worldManager.Globe;
+                _gameLoop.UpdateAsync(globe).Wait();
             }
         }
 
