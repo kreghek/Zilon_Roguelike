@@ -321,7 +321,7 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - build:
           filters:
             branches:
               only:
