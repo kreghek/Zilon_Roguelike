@@ -322,6 +322,10 @@ workflows:
   commit:
     jobs:
       - build
+          filters:
+            branches:
+              only:
+                - master
       - test_45:
           requires:
             - build
