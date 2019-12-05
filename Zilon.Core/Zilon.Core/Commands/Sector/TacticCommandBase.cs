@@ -9,18 +9,6 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
-        private readonly IGameLoop _gameLoop;
-        private readonly IWorldManager _worldManager;
-
-        protected virtual bool UpdateGameLoop => true;
-
-        [ExcludeFromCodeCoverage]
-        protected TacticCommandBase(IGameLoop gameLoop, IWorldManager worldManager)
-        {
-            _gameLoop = gameLoop;
-            _worldManager = worldManager;
-        }
-
         public abstract bool CanExecute();
 
         public void Execute()
@@ -32,15 +20,6 @@ namespace Zilon.Core.Commands
             }
 
             ExecuteTacticCommand();
-
-            //TODO Убрать из команд обновление мира
-            // потому что эта операция длительная и должна вызываться явно.
-            // Так же это позволит избавиться от 2-х зависимостей в команде - от геймлупа и от менеджера мира.
-            if (UpdateGameLoop)
-            {
-                var globe = _worldManager.Globe;
-                _gameLoop.UpdateAsync(globe).Wait();
-            }
         }
 
         /// <summary>

@@ -29,6 +29,8 @@ namespace Zilon.GlobeObserver
 
             var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
             var globeGenerator = serviceProvider.GetRequiredService<IWorldGenerator>();
+            var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
+
             var globe = await LoadOrCreateGlobeAsync(globeStorage, globeGenerator);
 
             Console.WriteLine("Press ESC to stop");
@@ -40,7 +42,6 @@ namespace Zilon.GlobeObserver
 
                     Parallel.ForEach(globe.SectorInfos, sectorInfo =>
                     {
-                        var taskSource = sectorInfo.BotActorTaskSource;
                         var actorManager = sectorInfo.Sector.ActorManager;
 
                         var snapshot = new SectorSnapshot(sectorInfo.Sector);

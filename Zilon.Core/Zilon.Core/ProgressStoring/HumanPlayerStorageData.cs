@@ -28,12 +28,17 @@ namespace Zilon.Core.ProgressStoring
 
         public void Restore(HumanPlayer humanPlayer, Globe globe, IWorldManager worldManager)
         {
+            if (worldManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(worldManager));
+            }
+
             var terrainCoords = new OffsetCoords(TerrainX, TerrainY);
             var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
             humanPlayer.Terrain = terrainCell;
             humanPlayer.SectorSid = SectorSid;
 
-            var globeRegion = worldManager.Regions[terrainCell];
+            var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == terrainCell);
             humanPlayer.GlobeNode = globeRegion.RegionNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
         }
     }

@@ -59,12 +59,9 @@ namespace Zilon.GlobeObserver
                 var sectorManager = scope.ServiceProvider.GetRequiredService<ISectorManager>();
                 (sectorManager as GenerationSectorManager).CurrentSector = sector;
 
-                var sectorInfo = new SectorInfo(actorManager,
-                                                propContainerManager,
-                                                sector,
+                var sectorInfo = new SectorInfo(sector,
                                                 globeRegion,
-                                                globeRegionNode,
-                                                taskSource);
+                                                globeRegionNode);
 
                 var regionCounter = 1;
                 foreach (var regionCoords in sectorStorageData.Regions)
@@ -119,7 +116,7 @@ namespace Zilon.GlobeObserver
                     .Single(n => n.OffsetX == actorStorageData.Coords.X && n.OffsetY == actorStorageData.Coords.Y);
                 var actor = new Actor(person, player, node);
 
-                sectorInfo.ActorManager.Add(actor);
+                sectorInfo.Sector.ActorManager.Add(actor);
             }
         }
     }

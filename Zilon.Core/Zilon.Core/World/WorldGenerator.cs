@@ -34,6 +34,8 @@ namespace Zilon.Core.World
         private readonly TerrainInitiator _terrainInitiator;
         private readonly ProvinceInitiator _provinceInitiator;
         private readonly ISectorBuilder _sectorBuilder;
+        private readonly IHumanPersonFactory _humanPersonFactory;
+        private readonly BotPlayer _botPlayer;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -47,13 +49,17 @@ namespace Zilon.Core.World
             ISchemeService schemeService,
             TerrainInitiator terrainInitiator,
             ProvinceInitiator provinceInitiator,
-            ISectorBuilder sectorBuilder)
+            ISectorBuilder sectorBuilder,
+            IHumanPersonFactory humanPersonFactory,
+            BotPlayer botPlayer)
         {
             _dice = dice;
             _schemeService = schemeService;
             _terrainInitiator = terrainInitiator;
             _provinceInitiator = provinceInitiator;
             _sectorBuilder = sectorBuilder;
+            _humanPersonFactory = humanPersonFactory;
+            _botPlayer = botPlayer;
         }
 
         public async Task<GenerationResult> CreateGlobeAsync()
@@ -85,8 +91,7 @@ namespace Zilon.Core.World
 
                     var sectorInfo = new SectorInfo(sector,
                                                     region,
-                                                    regionNode,
-                                                    taskSource);
+                                                    regionNode);
                     globe.SectorInfos.Add(sectorInfo);
 
 
@@ -95,14 +100,11 @@ namespace Zilon.Core.World
                         for (var personIndex = 0; personIndex < 10; personIndex++)
                         {
                             var node = sector.Map.Nodes.ElementAt(personIndex);
-                            var person = CreatePerson(humanPersonFactory);
-                            var actor = CreateActor(botPlayer, person, node);
-                            actorManager.Add(actor);
+                            var person = CreatePerson(_humanPersonFactory);
+                            var actor = CreateActor(_botPlayer, person, node);
+                            sector.ActorManager.Add(actor);
                         }
                     }
-
-                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource>();
-                    
                 }
             });
 
