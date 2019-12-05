@@ -33,9 +33,9 @@ namespace Zilon.Core.World
         private readonly ISchemeService _schemeService;
         private readonly TerrainInitiator _terrainInitiator;
         private readonly ProvinceInitiator _provinceInitiator;
-        private readonly ISectorBuilder _sectorBuilder;
+        private readonly ISectorBuilderFactory _sectorBuilderFactory;
         private readonly IHumanPersonFactory _humanPersonFactory;
-        private readonly BotPlayer _botPlayer;
+        private readonly IBotPlayer _botPlayer;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="WorldGenerator"/>.
@@ -49,15 +49,15 @@ namespace Zilon.Core.World
             ISchemeService schemeService,
             TerrainInitiator terrainInitiator,
             ProvinceInitiator provinceInitiator,
-            ISectorBuilder sectorBuilder,
+            ISectorBuilderFactory sectorBuilderFactory,
             IHumanPersonFactory humanPersonFactory,
-            BotPlayer botPlayer)
+            IBotPlayer botPlayer)
         {
             _dice = dice;
             _schemeService = schemeService;
             _terrainInitiator = terrainInitiator;
             _provinceInitiator = provinceInitiator;
-            _sectorBuilder = sectorBuilder;
+            _sectorBuilderFactory = sectorBuilderFactory;
             _humanPersonFactory = humanPersonFactory;
             _botPlayer = botPlayer;
         }
@@ -78,13 +78,14 @@ namespace Zilon.Core.World
                 .OrderBy(x => Guid.NewGuid())
                 .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
-            Parallel.ForEach(globe.Terrain.Regions, async region =>
+            foreach(var region in globe.Terrain.Regions)
             {
                 var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
 
                 if (needToCreateSector)
                 {
-                    var sector = await _sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
+                    var sectorBuilder = _sectorBuilderFactory.GetBuilder();
+                    var sector = await sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
 
                     var regionNode = region.RegionNodes.First();
                     regionNode.Sector = sector;
@@ -106,7 +107,7 @@ namespace Zilon.Core.World
                         }
                     }
                 }
-            });
+            };
 
             var result = new GenerationResult(globe);
 

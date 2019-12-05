@@ -60,6 +60,8 @@ namespace Zilon.GlobeObserver
         {
             serviceCollection.AddSingleton<TerrainInitiator>();
             serviceCollection.AddSingleton<ProvinceInitiator>();
+            serviceCollection.AddSingleton<IWorldGenerator, WorldGenerator>();
+            serviceCollection.AddSingleton<ISectorBuilderFactory, ServiceProviderSectorBuilderFactory>();
         }
 
         private static void RegisterBotTaskSource(IServiceCollection serviceCollection)
@@ -68,12 +70,12 @@ namespace Zilon.GlobeObserver
 
             serviceCollection.AddSingleton<IDecisionSource, DecisionSource>();
 
-            serviceCollection.AddScoped<IActorTaskSource, MonsterBotActorTaskSource>();
-            serviceCollection.AddScoped<ILogicStateFactory, ContainerLogicStateFactory>();
+            serviceCollection.AddSingleton<IActorTaskSource, MonsterBotActorTaskSource>();
+            serviceCollection.AddSingleton<ILogicStateFactory, ContainerLogicStateFactory>();
 
             RegisterLogicState(serviceCollection);
 
-            serviceCollection.AddScoped<LogicStateTreePatterns>();
+            serviceCollection.AddSingleton<LogicStateTreePatterns>();
         }
 
         public static void RegisterLogicState(IServiceCollection serviceRegistry)
