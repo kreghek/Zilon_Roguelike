@@ -13,10 +13,10 @@ namespace Zilon.Core.Commands
     public class PropTransferCommand : SpecialActorCommandBase
     {
         [ExcludeFromCodeCoverage]
-        public PropTransferCommand(IGameLoop gameLoop,
+        public PropTransferCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
         }
 

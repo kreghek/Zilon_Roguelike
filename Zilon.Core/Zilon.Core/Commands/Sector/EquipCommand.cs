@@ -20,11 +20,11 @@ namespace Zilon.Core.Commands
         public int? SlotIndex { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public EquipCommand(IGameLoop gameLoop,
+        public EquipCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
             _inventoryState = inventoryState;
         }
