@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.Triggers

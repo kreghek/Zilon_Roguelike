@@ -2,7 +2,6 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.World
 {

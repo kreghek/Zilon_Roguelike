@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client

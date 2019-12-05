@@ -1,6 +1,4 @@
-﻿using Zilon.Core.World;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     /// <summary>
     /// Государство.

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.MapGenerators.RoomStyle
+﻿namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
     /// Метаданные элемета интерьера комнаты.

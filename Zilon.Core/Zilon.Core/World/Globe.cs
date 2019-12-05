@@ -2,7 +2,6 @@
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
-using Zilon.Core.World;
 using Zilon.Core.World.NameGeneration;
 
 namespace Zilon.Core.World

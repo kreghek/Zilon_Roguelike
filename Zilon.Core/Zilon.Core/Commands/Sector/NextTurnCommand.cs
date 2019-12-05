@@ -4,7 +4,6 @@ using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {

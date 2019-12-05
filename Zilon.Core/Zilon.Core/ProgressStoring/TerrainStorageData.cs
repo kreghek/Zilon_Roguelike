@@ -2,7 +2,6 @@
 using System.Linq;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
-using Zilon.Core.World;
 
 namespace Zilon.Core.ProgressStoring
 {

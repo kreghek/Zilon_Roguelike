@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.World;
 
 namespace Zilon.Core.World
 {

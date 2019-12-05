@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.World;
 using Zilon.Core.World.NameGeneration;
 
 namespace Zilon.Core.World
