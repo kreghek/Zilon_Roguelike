@@ -15,11 +15,11 @@ namespace Zilon.Core.Commands
         private readonly IInventoryState _inventoryState;
 
         [ExcludeFromCodeCoverage]
-        public UseSelfCommand(IGameLoop gameLoop,
+        public UseSelfCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
             _inventoryState = inventoryState;
         }

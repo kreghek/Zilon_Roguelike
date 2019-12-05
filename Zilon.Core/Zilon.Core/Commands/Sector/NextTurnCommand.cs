@@ -24,11 +24,11 @@ namespace Zilon.Core.Commands
         }
 
         [ExcludeFromCodeCoverage]
-        public NextTurnCommand(IGameLoop gameLoop,
+        public NextTurnCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState,
             IDecisionSource decisionSource) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
             _decisionSource = decisionSource;
         }

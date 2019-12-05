@@ -22,10 +22,10 @@ namespace Zilon.Core.Commands
         /// <param name="playerState"> Состояние игрока.
         /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
-        public SectorTransitionMoveCommand(IGameLoop gameLoop,
+        public SectorTransitionMoveCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
         }
 
