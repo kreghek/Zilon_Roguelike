@@ -548,7 +548,7 @@
     <Compile Include="World\SectorInfo.cs" />
     <Compile Include="World\SectorBuilder.cs" />
     <Compile Include="World\TerrainInitiator.cs" />
-    <Compile Include="World\WorldGenerator.cs" />
+    <Compile Include="World\GlobeGenerator.cs" />
     <Compile Include="World\Globe.cs" />
     <Compile Include="World\Locality.cs" />
     <Compile Include="World\Realm.cs" />

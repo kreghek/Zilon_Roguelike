@@ -44,6 +44,8 @@ namespace Zilon.GlobeObserver
                         var snapshot = new SectorSnapshot(sectorInfo.Sector);
 
                         NextTurn(actorManager, taskSource, snapshot);
+
+                        sectorInfo.Sector.Update();
                     };
 
                     Console.WriteLine($"[.] ITERATION {globe.Iteration} PROCESSED");

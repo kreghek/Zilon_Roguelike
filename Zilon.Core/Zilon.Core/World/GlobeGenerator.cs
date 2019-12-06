@@ -19,7 +19,7 @@ namespace Zilon.Core.World
     /// Экземпляр генератора мира с историей.
     /// </summary>
     /// <seealso cref="IWorldGenerator" />
-    public class WorldGenerator : IWorldGenerator
+    public class GlobeGenerator : IWorldGenerator
     {
         private const int WORLD_SIZE = 40;
         private const int START_ITERATION_REALMS = 8;
@@ -38,13 +38,13 @@ namespace Zilon.Core.World
         private readonly IBotPlayer _botPlayer;
 
         /// <summary>
-        /// Создаёт экземпляр <see cref="WorldGenerator"/>.
+        /// Создаёт экземпляр <see cref="GlobeGenerator"/>.
         /// </summary>
         /// <param name="dice"> Игровая кость, которая будет использована для рандомицзации событий мира.
         /// В ближайшее время будет заменена специализированным источником рандома.
         /// </param>
         /// <param name="schemeService"> Сервис для доступа к схемам. Используется для генерации карты локации в провинции. </param>
-        public WorldGenerator(
+        public GlobeGenerator(
             IDice dice,
             ISchemeService schemeService,
             TerrainInitiator terrainInitiator,
@@ -72,12 +72,17 @@ namespace Zilon.Core.World
             const int WORLD_SIZE = 40;
             await GenerateAnsAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
 
-            // Берём 8 случайных точек. Это стартовые города государсв.
+            const int START_LOCALITIES = 8;
+            const int POPULATION_UNIT_COUNT = 4;
+            const int PERSON_PER_POPULATION_UNIT = 10;
+
+            // Берём START_LOCALITIES случайных точек. Это стартовые города государсв.
             var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
-                .Take(8)
+                .Take(START_LOCALITIES)
                 .OrderBy(x => Guid.NewGuid())
                 .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
+            var personId = 1;
             foreach(var region in globe.Terrain.Regions)
             {
                 var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
@@ -96,12 +101,13 @@ namespace Zilon.Core.World
                     globe.SectorInfos.Add(sectorInfo);
 
 
-                    for (var populationUnitIndex = 0; populationUnitIndex < 4; populationUnitIndex++)
+                    for (var populationUnitIndex = 0; populationUnitIndex < POPULATION_UNIT_COUNT; populationUnitIndex++)
                     {
-                        for (var personIndex = 0; personIndex < 10; personIndex++)
+                        for (var personIndex = 0; personIndex < PERSON_PER_POPULATION_UNIT; personIndex++)
                         {
                             var node = sector.Map.Nodes.ElementAt(personIndex);
                             var person = CreatePerson(_humanPersonFactory);
+                            person.Id = personId++;
                             var actor = CreateActor(_botPlayer, person, node);
                             sector.ActorManager.Add(actor);
                         }

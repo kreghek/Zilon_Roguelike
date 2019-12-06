@@ -34,8 +34,8 @@ namespace Zilon.GlobeObserver
             RegisterDropResolver(serviceCollection);
             serviceCollection.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
 
-            serviceCollection.AddScoped<IActorManager, ActorManager>();
-            serviceCollection.AddScoped<IPropContainerManager, PropContainerManager>();
+            RegisterSectorSpecifics(serviceCollection);
+
             RegisterEquipmentDurableService(serviceCollection);
             RegisterRoomMapFactory(serviceCollection);
 
@@ -50,6 +50,14 @@ namespace Zilon.GlobeObserver
             RegisterStorageService(serviceCollection);
         }
 
+        private static void RegisterSectorSpecifics(IServiceCollection serviceCollection)
+        {
+            // В этом методе все сервисы должны быть трансиент.
+            // Потому что они уникальны для каждого сектора.
+            serviceCollection.AddTransient<IActorManager, ActorManager>();
+            serviceCollection.AddTransient<IPropContainerManager, PropContainerManager>();
+        }
+
         private static void RegisterStorageService(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<GlobeStorage>();
@@ -60,7 +68,7 @@ namespace Zilon.GlobeObserver
         {
             serviceCollection.AddSingleton<TerrainInitiator>();
             serviceCollection.AddSingleton<ProvinceInitiator>();
-            serviceCollection.AddSingleton<IWorldGenerator, WorldGenerator>();
+            serviceCollection.AddSingleton<IWorldGenerator, GlobeGenerator>();
             serviceCollection.AddSingleton<ISectorBuilderFactory, ServiceProviderSectorBuilderFactory>();
         }
 
