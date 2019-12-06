@@ -13,7 +13,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -42,7 +41,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
         Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
-        Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
+        Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
 
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();

@@ -1,6 +1,5 @@
 ﻿using Assets.Zilon.Scripts.Models.TitleScene;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 

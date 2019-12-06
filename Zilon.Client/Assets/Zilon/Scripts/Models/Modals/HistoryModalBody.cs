@@ -9,7 +9,6 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 /// <summary>
 /// Тело модала для работы с историей мира.

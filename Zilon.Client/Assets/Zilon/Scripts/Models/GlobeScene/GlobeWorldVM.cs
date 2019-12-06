@@ -17,7 +17,6 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobeWorldVM : MonoBehaviour
 {
@@ -36,7 +35,7 @@ public class GlobeWorldVM : MonoBehaviour
     private List<MapLocation> _locationNodeViewModels;
 
     [Inject] private readonly IWorldManager _globeManager;
-    [Inject] private readonly IWorldGenerator _globeGenerator;
+    [Inject] private readonly IGlobeGenerator _globeGenerator;
     [Inject] private readonly HumanPlayer _player;
     [Inject] private readonly DiContainer _container;
     [Inject] private readonly MoveGroupCommand _moveGroupCommand;
@@ -76,13 +75,6 @@ public class GlobeWorldVM : MonoBehaviour
 
     private async System.Threading.Tasks.Task<GlobeRegion> GetOrCreateRegion(TerrainCell currentGlobeCell)
     {
-        if (!_globeManager.Regions.TryGetValue(currentGlobeCell, out var currentRegion))
-        {
-            var createdRegion = await CreateRegionAsync(_globeManager.Globe, currentGlobeCell, _globeGenerator);
-
-            _globeManager.Regions[_player.Terrain] = createdRegion;
-        }
-
         // Создание соседних регионов
         await CreateNeighborRegionsAsync(_player.Terrain.Coords, _globeManager, _globeGenerator, _progressStorageService);
 
@@ -305,13 +297,6 @@ public class GlobeWorldVM : MonoBehaviour
         _globeModalManager.ShowHistoryBookModal();
     }
 
-    private static async System.Threading.Tasks.Task<GlobeRegion> CreateRegionAsync(Globe globe,
-        TerrainCell startCell,
-        IWorldGenerator globeGenerator)
-    {
-        return await globeGenerator.GenerateRegionAsync(globe, startCell);
-    }
-
     //TODO Попробовать сделать загрузку всех провинций параллельно.
     // Выглядит так, что каждый запуск метода не зависит от предыдущих запусков.
     /// <summary>
@@ -319,11 +304,11 @@ public class GlobeWorldVM : MonoBehaviour
     /// </summary>
     /// <param name="playerCoords"> Текущии координаты игрока. </param>
     /// <param name="worldManager"> Менеджер мира. </param>
-    /// <param name="worldGenerator"> Генератор мира, используемый для создания новых провинций. </param>
+    /// <param name="globeGenerator"> Генератор мира, используемый для создания новых провинций. </param>
     /// <returns> Возвращает объект Task. </returns>
     private static async System.Threading.Tasks.Task CreateNeighborRegionsAsync(OffsetCoords playerCoords,
         IWorldManager worldManager,
-        IWorldGenerator worldGenerator,
+        IGlobeGenerator globeGenerator,
         ProgressStorageService progressStorageService)
     {
         for (var offsetX = -1; offsetX <= 1; offsetX++)
@@ -348,7 +333,7 @@ public class GlobeWorldVM : MonoBehaviour
                     var terrainCell = worldManager.Globe.Terrain[terrainX][terrainY];
                     if (!worldManager.Regions.ContainsKey(terrainCell))
                     {
-                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, worldGenerator);
+                        var createdNeiborRegion = await CreateRegionAsync(worldManager.Globe, terrainCell, globeGenerator);
 
                         worldManager.Regions[terrainCell] = createdNeiborRegion;
                     }

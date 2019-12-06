@@ -526,9 +526,6 @@
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="CommonServices\UserTimeProvider.cs" />
     <Compile Include="World\DirectBitmap.cs" />
-    <Compile Include="World\GenerationResult.cs" />
-    <Compile Include="World\GlobeGenerationHistory.cs" />
-    <Compile Include="World\GlobeGenerationHistoryItem.cs" />
     <Compile Include="World\GlobeGenerationResult.cs" />
     <Compile Include="World\GlobeInitiator.cs" />
     <Compile Include="World\GlobeRegionDraftValueType.cs" />
@@ -539,7 +536,7 @@
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
     <Compile Include="World\IGlobeEntity.cs" />
     <Compile Include="World\ISectorBuilder.cs" />
-    <Compile Include="World\IWorldGenerator.cs" />
+    <Compile Include="World\IGlobeGenerator.cs" />
     <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
     <Compile Include="World\NameGeneration\NameGen.cs" />
     <Compile Include="World\NameGeneration\Sex.cs" />

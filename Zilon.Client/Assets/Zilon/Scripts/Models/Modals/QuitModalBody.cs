@@ -2,8 +2,6 @@
 
 using Assets.Zilon.Scripts;
 
-using JetBrains.Annotations;
-
 using UnityEngine;
 using UnityEngine.UI;
 

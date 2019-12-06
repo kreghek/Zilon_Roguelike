@@ -1,12 +1,10 @@
 ﻿using Assets.Zilon.Scripts.Services;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Props;
 
 public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 {

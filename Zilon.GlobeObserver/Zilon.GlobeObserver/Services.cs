@@ -68,7 +68,7 @@ namespace Zilon.GlobeObserver
         {
             serviceCollection.AddSingleton<TerrainInitiator>();
             serviceCollection.AddSingleton<ProvinceInitiator>();
-            serviceCollection.AddSingleton<IWorldGenerator, GlobeGenerator>();
+            serviceCollection.AddSingleton<IGlobeGenerator, GlobeGenerator>();
             serviceCollection.AddSingleton<ISectorBuilderFactory, ServiceProviderSectorBuilderFactory>();
         }
 

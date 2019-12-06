@@ -20,7 +20,7 @@ namespace Zilon.GlobeObserver
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var globeStorage = serviceProvider.GetRequiredService<GlobeStorage>();
-            var globeGenerator = serviceProvider.GetRequiredService<IWorldGenerator>();
+            var globeGenerator = serviceProvider.GetRequiredService<IGlobeGenerator>();
             var taskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
 
             var globe = await LoadOrCreateGlobeAsync(globeStorage, globeGenerator);
@@ -50,7 +50,7 @@ namespace Zilon.GlobeObserver
             await globeStorage.SaveAsync(globe, "globe");
         }
 
-        private static async Task<Globe> LoadOrCreateGlobeAsync(GlobeStorage globeStorage, IWorldGenerator globeGenerator)
+        private static async Task<Globe> LoadOrCreateGlobeAsync(GlobeStorage globeStorage, IGlobeGenerator globeGenerator)
         {
             Globe globe;
             if (!globeStorage.HasFile("globe"))
