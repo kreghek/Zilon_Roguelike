@@ -69,8 +69,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
-
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
