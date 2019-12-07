@@ -11,6 +11,8 @@ public class SectorViewModel : MonoBehaviour
 {
     [Inject] private readonly IGlobeGenerator _globeGenerator;
 
+    public SectorMapViewModel MapViewModel;
+
     private Globe _globe;
     private ISector _sector;
     private IActor _followedActor;
@@ -25,6 +27,7 @@ public class SectorViewModel : MonoBehaviour
 
         var sectorInfo = _globe.SectorInfos.First();
         _sector = sectorInfo.Sector;
+        MapViewModel.Init(_sector.Map);
 
         _followedActor = _sector.ActorManager.Items.First();
     }
