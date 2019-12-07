@@ -41,7 +41,7 @@ public class SectorViewModel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        const float TURN_DURATION = 2f;
+        const float TURN_DURATION = 1f;
 
         _counter += Time.deltaTime;
         if (_counter < TURN_DURATION)

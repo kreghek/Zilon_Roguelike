@@ -1,22 +1,20 @@
-﻿using System.Linq;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once UnusedMember.Global
 public class GenFollowingCamera : MonoBehaviour
 {
-    public ActorsViewModel ActorsViewModel;
+    public PersonFollower PersonFollower;
 
     // ReSharper disable once UnusedMember.Local
     private void Update()
     {
-        if (!ActorsViewModel.ActorViewModels.Any())
+        if (PersonFollower.FollowedPerson == null)
         {
             return;
         }
 
-        var actorViewModel = ActorsViewModel.ActorViewModels.First();
+        var actorViewModel = PersonFollower.FollowedPerson;
 
         var targetPosition = actorViewModel.transform.position;
         var cameraPlanePosition = new Vector3(targetPosition.x, targetPosition.y, -10);
