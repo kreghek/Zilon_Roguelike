@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 
 using UnityEngine;
@@ -22,17 +23,20 @@ public class PersonStatUiHandler : MonoBehaviour
         var sb = new StringBuilder();
 
         var person = PersonFollower.FollowedPerson.Actor.Person;
-        var survivalStatStrings = person.Survival.Stats.Select(x => $"{x.Type}: {x.Value}");
-        foreach (var survivalStatString in survivalStatStrings)
+        foreach (var survivalStat in person.Survival.Stats)
         {
-            sb.AppendLine(survivalStatString);
+            var statPercent = (int)Math.Round(survivalStat.ValueShare * 100);
+            sb.AppendLine($"{survivalStat.Type}: {statPercent}%");
         }
 
-        sb.AppendLine("=== Effects ===");
-
-        foreach (var effect in person.Effects.Items)
+        if (person.Effects.Items.Any())
         {
-            sb.AppendLine(effect.ToString());
+            sb.AppendLine("=== Effects ===");
+
+            foreach (var effect in person.Effects.Items)
+            {
+                sb.AppendLine(effect.ToString());
+            }
         }
 
         StatText.text = sb.ToString();
