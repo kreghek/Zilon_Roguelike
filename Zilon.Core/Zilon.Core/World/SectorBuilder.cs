@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -10,21 +9,19 @@ namespace Zilon.Core.World
 {
     public class SectorBuilder: ISectorBuilder
     {
-        private readonly IMapFactory _mapFactory;
         private readonly IActorManager _actorManager;
         private readonly IPropContainerManager _propContainerManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
 
-        public SectorBuilder(IMapFactory mapFactory,
+        public SectorBuilder(
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            _mapFactory = mapFactory;
             _actorManager = actorManager;
             _propContainerManager = propContainerManager;
             _dropResolver = dropResolver;
@@ -34,7 +31,6 @@ namespace Zilon.Core.World
 
         public Task<ISector> CreateSectorAsync() {
             return CreateWildSectorAsync(
-                _mapFactory,
                 _actorManager,
                 _propContainerManager,
                 _dropResolver,
@@ -42,7 +38,7 @@ namespace Zilon.Core.World
                 _equipmentDurableService);
         }
 
-        private static async Task<ISector> CreateWildSectorAsync(IMapFactory mapFactory,
+        private static async Task<ISector> CreateWildSectorAsync(
             IActorManager actorManager,
             IPropContainerManager propContainerManager,
             IDropResolver dropResolver,

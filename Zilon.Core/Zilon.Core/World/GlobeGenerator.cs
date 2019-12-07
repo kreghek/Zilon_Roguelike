@@ -52,7 +52,7 @@ namespace Zilon.Core.World
             globe.Terrain = terrain;
 
             const int WORLD_SIZE = 40;
-            await GenerateAnsAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
+            await GenerateAndAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
 
             const int START_LOCALITIES = 8;
             const int POPULATION_UNIT_COUNT = 4;
@@ -102,7 +102,7 @@ namespace Zilon.Core.World
             return result;
         }
 
-        private async Task GenerateAnsAssignRegionsAsync(Globe globe, int WORLD_SIZE)
+        private async Task GenerateAndAssignRegionsAsync(Globe globe, int WORLD_SIZE)
         {
             var provinces = new ConcurrentBag<GlobeRegion>();
             for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)

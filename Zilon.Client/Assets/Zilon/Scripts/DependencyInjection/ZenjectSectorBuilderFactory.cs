@@ -1,32 +1,26 @@
-﻿using System;
+﻿using Zenject;
 
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
-namespace Zilon.GlobeObserver
+namespace Assets.Zilon.Scripts.DependencyInjection
 {
-    internal sealed class ServiceProviderSectorBuilderFactory : ISectorBuilderFactory
+    class ZenjectSectorBuilderFactory : ISectorBuilderFactory
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IMapFactory _mapFactory;
+        private readonly DiContainer _diContainer;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
 
-        public ServiceProviderSectorBuilderFactory(
-            IServiceProvider serviceProvider,
-            IMapFactory mapFactory,
+        public ZenjectSectorBuilderFactory(
+            DiContainer diContainer,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            _serviceProvider = serviceProvider;
-            _mapFactory = mapFactory;
+            _diContainer = diContainer;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _equipmentDurableService = equipmentDurableService;
@@ -34,8 +28,8 @@ namespace Zilon.GlobeObserver
 
         public ISectorBuilder GetBuilder()
         {
-            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
-            var propContainerManager = _serviceProvider.GetRequiredService<IPropContainerManager>();
+            var actorManager = _diContainer.Resolve<IActorManager>();
+            var propContainerManager = _diContainer.Resolve<IPropContainerManager>();
 
             return new SectorBuilder(
                 actorManager,

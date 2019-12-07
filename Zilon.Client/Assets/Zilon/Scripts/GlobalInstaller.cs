@@ -1,4 +1,5 @@
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -36,6 +37,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
@@ -43,6 +46,11 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
         Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
 
+        Container.Bind<TerrainInitiator>().AsSingle();
+        Container.Bind<ProvinceInitiator>().AsSingle();
+        Container.Bind<IActorManager>().To<ActorManager>().AsTransient();
+        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsTransient();
+        Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
