@@ -13,20 +13,17 @@ namespace Zilon.GlobeObserver
     internal sealed class ServiceProviderSectorBuilderFactory : ISectorBuilderFactory
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IMapFactory _mapFactory;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
 
         public ServiceProviderSectorBuilderFactory(
             IServiceProvider serviceProvider,
-            IMapFactory mapFactory,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
             _serviceProvider = serviceProvider;
-            _mapFactory = mapFactory;
             _dropResolver = dropResolver;
             _schemeService = schemeService;
             _equipmentDurableService = equipmentDurableService;

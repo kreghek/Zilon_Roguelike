@@ -65,7 +65,7 @@ namespace Zilon.Core.World
                 .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
             var personId = 1;
-            foreach(var region in globe.Terrain.Regions)
+            foreach (var region in globe.Terrain.Regions)
             {
                 var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
 
@@ -87,7 +87,7 @@ namespace Zilon.Core.World
                     {
                         for (var personIndex = 0; personIndex < PERSON_PER_POPULATION_UNIT; personIndex++)
                         {
-                            var node = sector.Map.Nodes.ElementAt(personIndex);
+                            var node = sector.Map.Nodes.ElementAt(personIndex + (populationUnitIndex * PERSON_PER_POPULATION_UNIT));
                             var person = CreatePerson(_humanPersonFactory);
                             person.Id = personId++;
                             var actor = CreateActor(_botPlayer, person, node);

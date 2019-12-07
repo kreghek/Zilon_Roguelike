@@ -10,9 +10,12 @@ public class SectorMapViewModel : MonoBehaviour
 {
     public MapNodeVM MapNodePrefab;
 
+    public IEnumerable<MapNodeVM> NodeViewModels { get; private set; }
+
     public void Init(ISectorMap map)
     {
         var nodeViewModels = InitNodeViewModels(map);
+        NodeViewModels = nodeViewModels;
     }
 
     private List<MapNodeVM> InitNodeViewModels(ISectorMap map)
