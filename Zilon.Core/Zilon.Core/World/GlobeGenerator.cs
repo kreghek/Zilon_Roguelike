@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.Common;
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.World.NameGeneration;
 
 namespace Zilon.Core.World
 {
@@ -82,12 +77,11 @@ namespace Zilon.Core.World
                                                     regionNode);
                     globe.SectorInfos.Add(sectorInfo);
 
-
                     for (var populationUnitIndex = 0; populationUnitIndex < POPULATION_UNIT_COUNT; populationUnitIndex++)
                     {
                         for (var personIndex = 0; personIndex < PERSON_PER_POPULATION_UNIT; personIndex++)
                         {
-                            var node = sector.Map.Nodes.ElementAt(personIndex + (populationUnitIndex * PERSON_PER_POPULATION_UNIT));
+                            var node = sector.Map.Nodes.ElementAt(5_050 + personIndex + (populationUnitIndex * PERSON_PER_POPULATION_UNIT));
                             var person = CreatePerson(_humanPersonFactory);
                             person.Id = personId++;
                             var actor = CreateActor(_botPlayer, person, node);
