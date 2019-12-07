@@ -195,13 +195,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
-        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
-        //{
-        //    _sectorModalManager.ShowInstructionModal();
-        //}
-
-        _gameLoop.Updated += GameLoop_Updated;
+        //_gameLoop.Updated += GameLoop_Updated;
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
@@ -222,8 +216,6 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
-        LogicStateTreePatterns.Factory = _logicStateFactory;
-
         await _sectorManager.CreateSectorAsync();
 
         _sectorManager.CurrentSector.ScoreManager = _scoreManager;
@@ -232,11 +224,6 @@ public class SectorVM : MonoBehaviour
         _propContainerManager.Removed += PropContainerManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
-
-        _gameLoop.ActorTaskSources = new[] {
-            _humanActorTaskSource,
-            _monsterActorTaskSource
-        };
 
         _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
@@ -256,8 +243,6 @@ public class SectorVM : MonoBehaviour
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
-
-        _gameLoop.Updated -= GameLoop_Updated;
     }
 
     private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
