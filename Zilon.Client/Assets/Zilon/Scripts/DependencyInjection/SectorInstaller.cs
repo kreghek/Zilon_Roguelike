@@ -8,6 +8,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
@@ -26,8 +27,11 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-        Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
-        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
+
+        Container.Bind<IActorManager>().To<ActorManager>().AsTransient();
+        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsTransient();
+
+        Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
