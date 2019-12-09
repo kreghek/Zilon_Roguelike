@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -22,6 +22,8 @@ namespace Zilon.Core.World
         private readonly IHumanPersonFactory _humanPersonFactory;
         private readonly IBotPlayer _botPlayer;
 
+        private NameGeneration.RandomName _personNameGenerator;
+
         /// <summary>
         /// Создаёт экземпляр <see cref="GlobeGenerator"/>.
         /// </summary>
@@ -37,6 +39,10 @@ namespace Zilon.Core.World
             _sectorBuilderFactory = sectorBuilderFactory;
             _humanPersonFactory = humanPersonFactory;
             _botPlayer = botPlayer;
+
+            //TODO 
+            var dice = new LinearDice();
+            _personNameGenerator = new NameGeneration.RandomName(dice);
         }
 
         public async Task<GlobeGenerationResult> CreateGlobeAsync()
@@ -82,7 +88,7 @@ namespace Zilon.Core.World
                         for (var personIndex = 0; personIndex < PERSON_PER_POPULATION_UNIT; personIndex++)
                         {
                             var node = sector.Map.Nodes.ElementAt(5_050 + personIndex + (populationUnitIndex * PERSON_PER_POPULATION_UNIT));
-                            var person = CreatePerson(_humanPersonFactory);
+                            var person = CreatePerson(_humanPersonFactory, _personNameGenerator);
                             person.Id = personId++;
                             var actor = CreateActor(_botPlayer, person, node);
                             sector.ActorManager.Add(actor);
@@ -118,9 +124,10 @@ namespace Zilon.Core.World
             return region;
         }
 
-        private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory)
+        private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory, NameGeneration.RandomName randomName)
         {
             var person = humanPersonFactory.Create();
+            person.Name = randomName.Generate(NameGeneration.Sex.Male);
             return person;
         }
 

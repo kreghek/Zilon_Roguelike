@@ -4,6 +4,7 @@ using System.Text;
 
 using UnityEngine;
 using UnityEngine.UI;
+using Zilon.Core.Persons;
 
 public class PersonStatUiHandler : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class PersonStatUiHandler : MonoBehaviour
         }
 
         var sb = new StringBuilder();
+
+        //TODO
+        sb.AppendLine((PersonFollower.FollowedPerson.Actor.Person as HumanPerson).Name);
+        sb.AppendLine("=== Stats ===");
 
         var person = PersonFollower.FollowedPerson.Actor.Person;
         foreach (var survivalStat in person.Survival.Stats)
