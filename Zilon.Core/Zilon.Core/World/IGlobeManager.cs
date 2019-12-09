@@ -17,6 +17,6 @@ namespace Zilon.Core.World
         /// Обновление состояния мира на один шаг.
         /// </summary>
         /// <param name="botTaskSource">Источник команд для ботов.</param>
-        Task UpdateGlobeOneStep(IActorTaskSource botTaskSource);
+        Task UpdateGlobeOneStepAsync(IActorTaskSource botTaskSource);
     }
 }

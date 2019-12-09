@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -207,7 +208,7 @@ namespace Zilon.Core.World
             };
         }
 
-        public Task UpdateGlobeOneStep(IActorTaskSource botTaskSource)
+        public Task UpdateGlobeOneStepAsync(IActorTaskSource botTaskSource)
         {
             if (Globe == null)
             {
@@ -215,7 +216,8 @@ namespace Zilon.Core.World
             }
 
             var globe = Globe;
-            return Task.Run(()=> {
+            return Task.Run(() =>
+            {
                 globe.Iteration++;
 
                 foreach (var sectorInfo in globe.SectorInfos)
