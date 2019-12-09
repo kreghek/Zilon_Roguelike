@@ -10,7 +10,7 @@ public class PersonFollower : MonoBehaviour
     /// Время, в течении которого нужно следить за одним персонажем.
     /// В секундах.
     /// </summary>
-    private float FOLLOW_DURATION_SEC = 2 * 60;
+    private const float FOLLOW_DURATION_SEC = 2 * 60;
     private float _followCounter;
 
     public ActorsViewModel ActorsViewModel;
@@ -25,15 +25,20 @@ public class PersonFollower : MonoBehaviour
         {
             if (FollowedPerson.Actor.Person.CheckIsDead())
             {
+                // Наблюдаемый объект мертв.
                 TrySelectPersonInSector();
             }
             else
             {
+                // Наблюдение ведётся.
+                // Либо выжидаем лимит времени наблюдения.
+                // Либо меняем объект наблюдения.
                 UpdateFollowing();
             }
         }
         else
         {
+            // В данный момент никто не наблюдается.
             TrySelectPersonInSector();
         }
     }
