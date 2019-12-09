@@ -19,6 +19,7 @@ using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
@@ -85,7 +86,15 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ILogService>().To<LogService>().AsSingle();
 
         // Комманды актёра.
-        Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
+        Container.Bind<MoveCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("move-command").FromMethod((context) =>
+        {
+            var globeManager = context.Container.Resolve<IGlobeManager>();
+            var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
+            var underlyingCommand = context.Container.Resolve<MoveCommand>();
+            var commandWrapper = new UpdateGlobeCommand(globeManager, botTaskSource, underlyingCommand);
+            return commandWrapper;
+        }).AsSingle();
         Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();

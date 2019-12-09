@@ -20,7 +20,7 @@ namespace Assets.Zilon.Scripts.Services
     public sealed class ProgressStorageService
     {
         [Inject]
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
 
         [Inject]
         private readonly ISchemeService _schemeService;

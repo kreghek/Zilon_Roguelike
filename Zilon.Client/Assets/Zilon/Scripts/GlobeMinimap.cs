@@ -19,7 +19,7 @@ public class GlobeMinimap : MonoBehaviour
 
     public Image MinimapContent;
 
-    [Inject] private IWorldManager _worldManager;
+    [Inject] private IGlobeManager _worldManager;
     [Inject] private HumanPlayer _humanPlayer;
 
     private Texture2D _realmTexture;

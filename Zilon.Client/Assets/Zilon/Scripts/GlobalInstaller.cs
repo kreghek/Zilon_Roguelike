@@ -43,7 +43,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
-        Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
+        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
         Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
 
         Container.Bind<TerrainInitiator>().AsSingle();

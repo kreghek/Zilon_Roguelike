@@ -24,7 +24,7 @@ public class HistoryModalBody : MonoBehaviour, IModalWindowHandler
     public GlobeMinimap Minimap;
     public Text WorldDetailsText;
 
-    [Inject] readonly IWorldManager _worldManager;
+    [Inject] readonly IGlobeManager _worldManager;
 
     private MinimapState _minimapState;
 
