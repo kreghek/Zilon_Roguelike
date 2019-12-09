@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class MovePathVisualizer : MonoBehaviour
 
     public void FixedUpdate()
     {
-        var moveCommand = (MoveCommand)_moveCommand;
+        var moveCommand = GetMoveCommand();
         var path = moveCommand.Path;
 
         foreach (Transform visualizationItem in transform)
@@ -43,6 +44,26 @@ public class MovePathVisualizer : MonoBehaviour
                     item.transform.position = new Vector3(worldPosition[0], worldPosition[1] / 2);
                 }
             }
+        }
+    }
+
+    private MoveCommand GetMoveCommand()
+    {
+        return ScanCommand(_moveCommand);
+    }
+
+    private static MoveCommand ScanCommand(ICommand command)
+    {
+        switch (command)
+        {
+            case MoveCommand move:
+                return move;
+
+            case ICommandWrapper wrapper:
+                return ScanCommand(wrapper.UnderlyingCommand);
+
+            default:
+                throw new InvalidOperationException();
         }
     }
 }
