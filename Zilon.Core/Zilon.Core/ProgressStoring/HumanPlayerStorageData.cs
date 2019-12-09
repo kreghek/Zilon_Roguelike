@@ -26,7 +26,7 @@ namespace Zilon.Core.ProgressStoring
             return storageData;
         }
 
-        public void Restore(HumanPlayer humanPlayer, Globe globe, IWorldManager worldManager)
+        public void Restore(HumanPlayer humanPlayer, Globe globe, IGlobeManager worldManager)
         {
             if (worldManager is null)
             {

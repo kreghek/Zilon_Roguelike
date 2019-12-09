@@ -559,12 +559,12 @@
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
     <Compile Include="World\ISectorInfoFactory.cs" />
-    <Compile Include="World\IWorldManager.cs" />
+    <Compile Include="World\IGlobeManager.cs" />
     <Compile Include="World\MonsterSet.cs" />
     <Compile Include="World\RealmBanner.cs" />
     <Compile Include="World\Terrain.cs" />
     <Compile Include="World\WildMeetingEventArgs.cs" />
-    <Compile Include="World\WorldManager.cs" />
+    <Compile Include="World\GlobeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -13,7 +13,7 @@ namespace Zilon.Core.Commands.Globe
     {
         private const int TRAVEL_TURNS = 50;
         private readonly HumanPlayer _player;
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
         private readonly IGlobeUiState _globeUiState;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Zilon.Core.Commands.Globe
 
         public MoveGroupCommand(
             HumanPlayer player,
-            IWorldManager worldManager,
+            IGlobeManager worldManager,
             IGlobeUiState globeUiState)
         {
             _player = player;

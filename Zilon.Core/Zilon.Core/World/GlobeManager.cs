@@ -2,17 +2,19 @@
 
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.World
 {
     /// <summary>
     /// Базовая реализация сервиса для работы с глобальным миром.
     /// </summary>
-    public sealed class WorldManager : IWorldManager
+    public sealed class GlobeManager : IGlobeManager
     {
         private const int SPAWN_SUCCESS_ROLL = 5;
         private const int MONSTER_NODE_LIMIT = 100;
@@ -20,7 +22,7 @@ namespace Zilon.Core.World
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
 
-        public WorldManager(ISchemeService schemeService, IDice dice)
+        public GlobeManager(ISchemeService schemeService, IDice dice)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
@@ -203,6 +205,62 @@ namespace Zilon.Core.World
                     }
                 },
             };
+        }
+
+        public Task UpdateGlobeOneStep(IActorTaskSource botTaskSource)
+        {
+            if (Globe == null)
+            {
+                throw new InvalidOperationException($"Не инициализирован {nameof(Globe)}");
+            }
+
+            var globe = Globe;
+            return Task.Run(()=> {
+                globe.Iteration++;
+
+                foreach (var sectorInfo in globe.SectorInfos)
+                {
+                    var actorManager = sectorInfo.Sector.ActorManager;
+
+                    var snapshot = new SectorSnapshot(sectorInfo.Sector);
+
+                    NextTurn(actorManager, botTaskSource, snapshot);
+
+                    sectorInfo.Sector.Update();
+                };
+            });
+        }
+
+        private static void NextTurn(IActorManager actors, IActorTaskSource botTaskSource, SectorSnapshot snapshot)
+        {
+            foreach (var actor in actors.Items)
+            {
+                if (actor.Person.CheckIsDead())
+                {
+                    continue;
+                }
+
+                ProcessActor(actor, botTaskSource, snapshot);
+            }
+        }
+
+        private static void ProcessActor(IActor actor, IActorTaskSource botTaskSource, SectorSnapshot snapshot)
+        {
+            var actorTasks = botTaskSource.GetActorTasks(actor, snapshot);
+
+            foreach (var actorTask in actorTasks)
+            {
+                try
+                {
+                    actorTask.Execute();
+                }
+                catch (Exception exception)
+                {
+                    throw new ActorTaskExecutionException($"Ошибка при работе источника команд {botTaskSource.GetType().FullName}",
+                        botTaskSource,
+                        exception);
+                }
+            }
         }
     }
 }
