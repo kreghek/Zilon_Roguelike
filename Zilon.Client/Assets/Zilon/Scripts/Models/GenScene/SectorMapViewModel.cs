@@ -20,7 +20,7 @@ public class SectorMapViewModel : MonoBehaviour
 
     private List<MapNodeVM> InitNodeViewModels(ISectorMap map)
     {
-        var nodeVMs = new List<MapNodeVM>();
+        var nodeViewModels = new List<MapNodeVM>();
 
         foreach (var node in map.Nodes)
         {
@@ -38,10 +38,10 @@ public class SectorMapViewModel : MonoBehaviour
                 mapNodeVm.IsExit = true;
             }
 
-            nodeVMs.Add(mapNodeVm);
+            nodeViewModels.Add(mapNodeVm);
         }
 
-        return nodeVMs;
+        return nodeViewModels;
     }
 }
 
