@@ -21,17 +21,25 @@ public class PersonFollower : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (FollowedPerson != null)
+        if (IsFollowing)
         {
-            return;
+            if (FollowedPerson.Actor.Person.CheckIsDead())
+            {
+                TrySelectPersonInSector();
+            }
+            else
+            {
+                UpdateFollowing();
+            }
         }
-
-        if (FollowedPerson.Actor.Person.CheckIsDead())
+        else
         {
-            FollowedPerson = null;
-            return;
+            TrySelectPersonInSector();
         }
+    }
 
+    private void UpdateFollowing()
+    {
         _followCounter -= Time.deltaTime;
 
         if (_followCounter <= 0)
