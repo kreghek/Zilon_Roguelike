@@ -48,22 +48,22 @@ public class SectorUiHandler : MonoBehaviour
     {
         if (NextTurnButton != null)
         {
-            NextTurnButton.interactable = _nextTurnCommand.CanExecute();
+            NextTurnButton.interactable = GetEnableStateByCommand(_nextTurnCommand);
         }
 
         if (InventoryButton != null)
         {
-            InventoryButton.interactable = _showInventoryCommand.CanExecute();
+            InventoryButton.interactable = GetEnableStateByCommand(_showInventoryCommand);
         }
 
         if (PersonButton != null)
         {
-            PersonButton.interactable = _showPersonModalCommand.CanExecute();
+            PersonButton.interactable = GetEnableStateByCommand(_showPersonModalCommand);
         }
 
         if (SectorTransitionMoveButton != null)
         {
-            SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+            SectorTransitionMoveButton.interactable = GetEnableStateByCommand(_sectorTransitionMoveCommand);
         }
 
         if (CityQuickExitButton != null)
@@ -73,6 +73,11 @@ public class SectorUiHandler : MonoBehaviour
             var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
+    }
+
+    private bool GetEnableStateByCommand(ICommand command)
+    {
+        return (command?.CanExecute()).GetValueOrDefault();
     }
 
     public void Update()

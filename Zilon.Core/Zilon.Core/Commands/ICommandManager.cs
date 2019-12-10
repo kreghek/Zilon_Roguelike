@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+
+using JetBrains.Annotations;
 
 namespace Zilon.Core.Commands
 {
@@ -7,5 +9,7 @@ namespace Zilon.Core.Commands
     {
         void Push(ICommand command);
         ICommand Pop();
+
+        event EventHandler CommandPushed;
     }
 }

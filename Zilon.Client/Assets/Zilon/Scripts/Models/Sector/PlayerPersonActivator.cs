@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 
 using Zenject;
-
+using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -20,6 +20,7 @@ public class PlayerPersonActivator : MonoBehaviour
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
     [NotNull] [Inject] private readonly DiContainer _container;
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] public ActorViewModel ActorPrefab;
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
@@ -44,6 +45,8 @@ public class PlayerPersonActivator : MonoBehaviour
                 SectorMapViewModel.NodeViewModels);
 
             ActorsViewModel.ActorViewModels.Add(playerActorViewModel);
+
+            _playerState.ActiveActor = playerActorViewModel;
 
             Destroy(gameObject);
         }

@@ -10,6 +10,7 @@ public class SectorViewModel : MonoBehaviour
     public ActorsViewModel ActorsViewModel;
 
     public ISector Sector { get; private set; }
+
     public bool IsInitialized { get; private set; }
 
     public async Task Init(ISector sector)

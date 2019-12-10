@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
+using Assets.Zilon.Scripts.Models.Sector;
 
 using UnityEngine;
 
@@ -11,6 +14,10 @@ public class SectorMapViewModel : MonoBehaviour
     public MapNodeVM MapNodePrefab;
 
     public IEnumerable<MapNodeVM> NodeViewModels { get; private set; }
+
+    public event EventHandler<NodeInteractEventArgs> NodeSelected;
+
+    public event EventHandler<NodeInteractEventArgs> NodeEnter;
 
     public void Init(ISectorMap map)
     {
@@ -39,9 +46,27 @@ public class SectorMapViewModel : MonoBehaviour
             }
 
             nodeViewModels.Add(mapNodeVm);
+
+            mapNodeVm.OnSelect += MapNodeVm_Select;
+            mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
         }
 
         return nodeViewModels;
+    }
+
+    private void MapNodeVm_MouseEnter(object sender, EventArgs e)
+    {
+        var nodeViewModel = (MapNodeVM)sender;
+        var eventArgs = new NodeInteractEventArgs(nodeViewModel);
+        NodeEnter?.Invoke(this, eventArgs);
+
+    }
+
+    private void MapNodeVm_Select(object sender, EventArgs e)
+    {
+        var nodeViewModel = (MapNodeVM)sender;
+        var eventArgs = new NodeInteractEventArgs(nodeViewModel);
+        NodeSelected?.Invoke(this, eventArgs);
     }
 }
 
