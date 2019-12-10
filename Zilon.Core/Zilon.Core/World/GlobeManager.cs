@@ -22,11 +22,13 @@ namespace Zilon.Core.World
 
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
+        private readonly IGlobeGenerator _globeGenerator;
 
-        public GlobeManager(ISchemeService schemeService, IDice dice)
+        public GlobeManager(ISchemeService schemeService, IDice dice, IGlobeGenerator globeGenerator)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
+            _globeGenerator = globeGenerator ?? throw new ArgumentNullException(nameof(globeGenerator));
 
             Regions = new Dictionary<TerrainCell, GlobeRegion>();
         }
@@ -34,12 +36,13 @@ namespace Zilon.Core.World
         /// <summary>
         /// Глобальная карта.
         /// </summary>
-        public Globe Globe { get; set; }
+        public Globe Globe { get; private set; }
 
         /// <summary>
         /// Текущие сгенерированые провинции относительно ячеек глобальной карты.
         /// </summary>
         public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
+        public bool IsGlobeInitialized { get; private set; }
 
         /// <summary>
         /// Обновление состояния узлов провинции.
@@ -208,7 +211,7 @@ namespace Zilon.Core.World
             };
         }
 
-        public Task UpdateGlobeOneStepAsync(IActorTaskSource botTaskSource)
+        public Task UpdateGlobeOneStepAsync(GlobeIterationContext context)
         {
             if (Globe == null)
             {
@@ -226,6 +229,7 @@ namespace Zilon.Core.World
 
                     var snapshot = new SectorSnapshot(sectorInfo.Sector);
 
+                    var botTaskSource = context.BotTaskSource;
                     NextTurn(actorManager, botTaskSource, snapshot);
 
                     sectorInfo.Sector.Update();
@@ -263,6 +267,19 @@ namespace Zilon.Core.World
                         exception);
                 }
             }
+        }
+
+        public async Task InitializeGlobeAsync()
+        {
+            var generationResult = await _globeGenerator.CreateGlobeAsync().ConfigureAwait(false);
+            Globe = generationResult.Globe;
+            IsGlobeInitialized = true;
+        }
+
+        public void ResetGlobeState()
+        {
+            Globe = null;
+            IsGlobeInitialized = false;
         }
     }
 }

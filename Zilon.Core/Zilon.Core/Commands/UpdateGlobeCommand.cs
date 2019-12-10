@@ -28,7 +28,8 @@ namespace Zilon.Core.Commands
         {
             UnderlyingCommand.Execute();
 
-            _globeManager.UpdateGlobeOneStepAsync(_botTaskSource).Wait();
+            var context = new GlobeIterationContext(_botTaskSource);
+            _globeManager.UpdateGlobeOneStepAsync(context).Wait();
         }
     }
 }

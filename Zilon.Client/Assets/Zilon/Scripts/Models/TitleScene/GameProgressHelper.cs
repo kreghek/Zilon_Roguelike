@@ -11,7 +11,7 @@ namespace Assets.Zilon.Scripts.Models.TitleScene
             IScoreManager scoreManager,
             HumanPlayer humanPlayer)
         {
-            globeManager.Globe = null;
+            globeManager.ResetGlobeState();
             humanPlayer.GlobeNode = null;
             humanPlayer.MainPerson = null;
             humanPlayer.SectorSid = null;

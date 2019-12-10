@@ -120,18 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &26025506 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4161038480581927383, guid: c6c7910423c26d542b0db7d9165d1dca,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161038480557490165}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6be077972ea7bb74997ad152c15e93fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &50045952 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4384764743623187690, guid: aca9ff6695807544c97ad59c38666449,
@@ -424,7 +412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf336b740bb7e364482512c232767844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobeKeeper: {fileID: 26025506}
   SectorViewModel: {fileID: 160909245}
 --- !u!4 &331477203
 Transform:
@@ -1205,7 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b37feff3a7f9c804687fee8e1c487510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobeKeeper: {fileID: 26025506}
+  GlobeKeeper: {fileID: 0}
   Text: {fileID: 1786310340}
 --- !u!114 &2080010493
 MonoBehaviour:
@@ -1396,6 +1383,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sector
       objectReference: {fileID: 0}
+    - target: {fileID: 4766134963679475874, guid: 77e9255757871304e83ba0e39020523e,
+        type: 3}
+      propertyPath: GlobeKeeper
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4766134963679475878, guid: 77e9255757871304e83ba0e39020523e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1451,15 +1443,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4766134963679475874, guid: 77e9255757871304e83ba0e39020523e,
-        type: 3}
-      propertyPath: GlobeKeeper
-      value: 
-      objectReference: {fileID: 26025506}
     - target: {fileID: 4766134963679475877, guid: 77e9255757871304e83ba0e39020523e,
         type: 3}
       propertyPath: GlobeKeeper
       value: 
-      objectReference: {fileID: 26025506}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77e9255757871304e83ba0e39020523e, type: 3}

@@ -4,16 +4,22 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zenject;
+
+using Zilon.Core.World;
+
 public class GlobeGenShortState : MonoBehaviour
 {
+    [Inject]
+    private readonly IGlobeManager _globeManager;
+
     private DateTime? _globeCreatedTime;
 
-    public GlobeKeeper GlobeKeeper;
     public Text Text;
 
     private void Update()
     {
-        var globe = GlobeKeeper.Globe;
+        var globe = _globeManager.Globe;
         if (globe == null)
         {
             Text.text = string.Empty;

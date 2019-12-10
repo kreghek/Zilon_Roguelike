@@ -2,19 +2,25 @@
 
 using UnityEngine;
 
+using Zenject;
+
+using Zilon.Core.World;
+
 public class SectorViewModelActivator : MonoBehaviour
 {
-    public GlobeKeeper GlobeKeeper;
+    [Inject]
+    private readonly IGlobeManager _globeManager;
+
     public SectorViewModel TargetSectorViewModel;
 
     async void Update()
     {
-        if (!GlobeKeeper.HasGlobe)
+        if (!_globeManager.IsGlobeInitialized)
         {
             return;
         }
 
-        var globe = GlobeKeeper.Globe;
+        var globe = _globeManager.Globe;
 
         var sectorInfo = globe.SectorInfos.First();
         var sector = sectorInfo.Sector;

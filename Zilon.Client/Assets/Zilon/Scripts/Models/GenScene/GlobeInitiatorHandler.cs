@@ -8,11 +8,15 @@ using Zilon.Core.World;
 
 public class GlobeInitiatorHandler : MonoBehaviour
 {
-    [Inject] private readonly IGlobeGenerator _globeGenerator;
+    [Inject] private readonly IGlobeManager _globeManager;
 
-    public async Task<Globe> GenerateGlobeAsync()
+    private async void Start()
     {
-        var result = await _globeGenerator.CreateGlobeAsync();
-        return result.Globe;
+        await InitializeGlobeAsync();
+    }
+
+    private async Task InitializeGlobeAsync()
+    {
+        await _globeManager.InitializeGlobeAsync();
     }
 }

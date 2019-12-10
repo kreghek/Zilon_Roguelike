@@ -7,26 +7,31 @@ using Zenject;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 public class GlobeIterator : MonoBehaviour
 {
+    [Inject] private readonly IGlobeManager _globeManager;
+
     private float _counter;
 
-    public GlobeKeeper GlobeKeeper;
     public SectorViewModel SectorViewModel;
 
     [Inject(Id = "monster")] private readonly IActorTaskSource _actorTaskSource;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members",
+        Justification = "Неявно вызывается Unity.")]
     private void FixedUpdate()
     {
-        if (!GlobeKeeper.HasGlobe || !SectorViewModel.IsInitialized)
+        var canUpdateCurrentGlobe = _globeManager.IsGlobeInitialized && SectorViewModel.IsInitialized;
+        if (!canUpdateCurrentGlobe)
         {
             return;
         }
 
         const float TURN_DURATION = 1f;
 
-        _counter += Time.deltaTime;
+        _counter += Time.fixedDeltaTime;
         if (_counter < TURN_DURATION)
         {
             return;
@@ -34,7 +39,7 @@ public class GlobeIterator : MonoBehaviour
 
         _counter -= TURN_DURATION;
 
-        var globe = GlobeKeeper.Globe;
+        var globe = _globeManager.Globe;
         foreach (var sectorInfo in globe.SectorInfos)
         {
             var actorManager = sectorInfo.Sector.ActorManager;
