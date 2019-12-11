@@ -9,7 +9,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Globe
 {
-    public class MoveGroupCommand : ICommand
+    public class MoveGroupCommand : ICommand<GlobeCommandContext>
     {
         private const int TRAVEL_TURNS = 50;
         private readonly HumanPlayer _player;
@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands.Globe
         /// <returns>
         /// Возвращает true, если команду можно выполнить. Иначе возвращает false.
         /// </returns>
-        public bool CanExecute()
+        public bool CanExecute(GlobeCommandContext context)
         {
             if (_player.MainPerson == null)
             {
@@ -52,7 +52,7 @@ namespace Zilon.Core.Commands.Globe
         }
 
         /// <summary>Выполнение команды.</summary>
-        public void Execute()
+        public void Execute(GlobeCommandContext context)
         {
             var selectedNodeViewModel = (IGlobeNodeViewModel)_globeUiState.SelectedViewModel;
 

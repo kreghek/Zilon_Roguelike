@@ -21,7 +21,7 @@ namespace Zilon.Core.Commands
 
         }
 
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
             var map = SectorManager.CurrentSector.Map;
 

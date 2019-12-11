@@ -11,7 +11,7 @@ namespace Zilon.Core.Commands
     {
         private readonly IDecisionSource _decisionSource;
 
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
             return true;
         }

@@ -32,22 +32,21 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
-            return false;
-            //if (CurrentActor == null)
-            //{
-            //    return false;
-            //}
+            if (CurrentActor == null)
+            {
+                return false;
+            }
 
-            //var actorNode = CurrentActor.Node;
-            //var map = SectorManager.CurrentSector.Map;
+            var actorNode = CurrentActor.Node;
+            var map = SectorManager.CurrentSector.Map;
 
-            //var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
+            var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
-            //var actorOnTransition = detectedTransition != null;
+            var actorOnTransition = detectedTransition != null;
 
-            //return actorOnTransition;
+            return actorOnTransition;
         }
 
         /// <summary>

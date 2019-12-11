@@ -15,7 +15,7 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
-    public class MoveCommand : ActorCommandBase, IRepeatableCommand
+    public class MoveCommand : ActorCommandBase, IRepeatableCommand<SectorCommandContext>
     {
         private readonly IActorManager _actorManager;
 
@@ -37,13 +37,9 @@ namespace Zilon.Core.Commands
         /// <param name="actorManager"> Менеджер актёров.
         /// Нужен для отслеживания противников при автоперемещении. </param>
         [ExcludeFromCodeCoverage]
-        public MoveCommand(ISectorManager sectorManager,
-            ISectorUiState playerState,
-            IActorManager actorManager) :
-            base(sectorManager, playerState)
+        public MoveCommand() :
+            base()
         {
-            _actorManager = actorManager;
-
             Path = new List<IGraphNode>();
         }
 
@@ -51,15 +47,15 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
-            var nodeViewModel = GetHoverNodeViewModel();
+            var nodeViewModel = GetHoverNodeViewModel(context);
             if (nodeViewModel == null)
             {
                 return false;
             }
 
-            CreatePath(nodeViewModel);
+            CreatePath(context, nodeViewModel);
             return Path.Any();
         }
 
@@ -67,60 +63,65 @@ namespace Zilon.Core.Commands
         /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
         /// </summary>
         /// <returns> Возвращает true, если команду можно повторить. </returns>
-        public bool CanRepeat()
+        public bool CanRepeat(SectorCommandContext context)
         {
-            var canRepeat = CanExecuteForSelected() && CheckEnemies();
+            var canRepeat = CanExecuteForSelected(context) && CheckEnemies(context);
             return canRepeat;
         }
 
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
-        protected override void ExecuteTacticCommand()
+        protected override void ExecuteTacticCommand(SectorCommandContext context)
         {
-            var selectedNodeVm = GetSelectedNodeViewModel();
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var selectedNodeVm = GetSelectedNodeViewModel(context);
             if (selectedNodeVm == null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
-            CreatePath(selectedNodeVm);
+            CreatePath(context, selectedNodeVm);
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = SectorManager.CurrentSector.Map;
+            var targetMap = context.Sector.Map;
 
             var moveIntetion = new MoveIntention(targetNode, targetMap);
-            PlayerState.TaskSource.Intent(moveIntetion);
+            context.HumanActorTaskSource.Intent(moveIntetion);
         }
 
-        private IMapNodeViewModel GetHoverNodeViewModel()
+        private IMapNodeViewModel GetHoverNodeViewModel(SectorCommandContext context)
         {
-            return PlayerState.HoverViewModel as IMapNodeViewModel;
+            return context.HoverViewModel as IMapNodeViewModel;
         }
 
-        private IMapNodeViewModel GetSelectedNodeViewModel()
+        private IMapNodeViewModel GetSelectedNodeViewModel(SectorCommandContext context)
         {
-            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+            return context.SelectedViewModel as IMapNodeViewModel;
         }
 
-        private bool CanExecuteForSelected()
+        private bool CanExecuteForSelected(SectorCommandContext context)
         {
-            var nodeViewModel = GetSelectedNodeViewModel();
+            var nodeViewModel = GetSelectedNodeViewModel(context);
             if (nodeViewModel == null)
             {
                 return false;
             }
 
-            CreatePath(nodeViewModel);
+            CreatePath(context, nodeViewModel);
             return Path.Any();
         }
 
-        private void CreatePath(IMapNodeViewModel targetNode)
+        private void CreatePath(SectorCommandContext context, IMapNodeViewModel targetNode)
         {
-            var actor = PlayerState.ActiveActor.Actor;
+            var actor = context.ActiveActorViewModel.Actor;
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = SectorManager.CurrentSector.Map;
+            var map = context.Sector.Map;
 
             Path.Clear();
 
@@ -129,9 +130,9 @@ namespace Zilon.Core.Commands
                 return;
             }
 
-            var context = new ActorPathFindingContext(actor, map);
+            var pathFindingContext = new ActorPathFindingContext(actor, map);
 
-            var astar = new AStar(context, startNode, finishNode);
+            var astar = new AStar(pathFindingContext, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState != State.GoalFound)
             {
@@ -150,9 +151,9 @@ namespace Zilon.Core.Commands
             }
         }
 
-        private bool CheckEnemies()
+        private bool CheckEnemies(SectorCommandContext context)
         {
-            var actor = PlayerState.ActiveActor.Actor;
+            var actor = context.ActiveActorViewModel.Actor;
             var enemies = _actorManager.Items
                 .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
 
@@ -165,7 +166,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = SectorManager.CurrentSector.Map.TargetIsOnLine(
+                var isAvailable = context.Sector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 

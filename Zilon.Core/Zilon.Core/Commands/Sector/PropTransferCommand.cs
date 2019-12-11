@@ -21,7 +21,7 @@ namespace Zilon.Core.Commands
 
         public PropTransferMachine TransferMachine { get; set; }
 
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
             return true;
         }
