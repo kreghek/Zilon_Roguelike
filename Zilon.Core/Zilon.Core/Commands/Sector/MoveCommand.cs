@@ -88,10 +88,10 @@ namespace Zilon.Core.Commands
             CreatePath(context, selectedNodeVm);
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = context.Sector.Map;
+            var targetMap = context.CurrentSector.Map;
 
             var moveIntetion = new MoveIntention(targetNode, targetMap);
-            context.HumanActorTaskSource.Intent(moveIntetion);
+            context.TaskSource.Intent(moveIntetion);
         }
 
         private IMapNodeViewModel GetHoverNodeViewModel(SectorCommandContext context)
@@ -118,10 +118,10 @@ namespace Zilon.Core.Commands
 
         private void CreatePath(SectorCommandContext context, IMapNodeViewModel targetNode)
         {
-            var actor = context.ActiveActorViewModel.Actor;
+            var actor = context.ActiveActor.Actor;
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = context.Sector.Map;
+            var map = context.CurrentSector.Map;
 
             Path.Clear();
 
@@ -153,7 +153,7 @@ namespace Zilon.Core.Commands
 
         private bool CheckEnemies(SectorCommandContext context)
         {
-            var actor = context.ActiveActorViewModel.Actor;
+            var actor = context.ActiveActor.Actor;
             var enemies = _actorManager.Items
                 .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
 
@@ -166,7 +166,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = context.Sector.Map.TargetIsOnLine(
+                var isAvailable = context.CurrentSector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 

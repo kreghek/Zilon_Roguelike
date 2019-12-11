@@ -15,17 +15,18 @@ namespace Zilon.Core.Commands
             ISelectableViewModel hoverViewModel,
             ISelectableViewModel selectedViewModel)
         {
-            Sector = sector ?? throw new ArgumentNullException(nameof(sector));
-            ActiveActorViewModel = activeActorViewModel ?? throw new ArgumentNullException(nameof(activeActorViewModel));
-            HumanActorTaskSource = humanActorTaskSource;
+            CurrentSector = sector ?? throw new ArgumentNullException(nameof(sector));
+            ActiveActor = activeActorViewModel ?? throw new ArgumentNullException(nameof(activeActorViewModel));
+            TaskSource = humanActorTaskSource;
             HoverViewModel = hoverViewModel;
             SelectedViewModel = selectedViewModel;
         }
 
-        public ISector Sector { get; }
+        public ISector CurrentSector { get; }
 
-        public IActorViewModel ActiveActorViewModel { get; }
-        public IHumanActorTaskSource HumanActorTaskSource { get; }
+        public IActorViewModel ActiveActor { get; }
+
+        public IHumanActorTaskSource TaskSource { get; }
 
         /// <summary>
         /// Выбранный объект.

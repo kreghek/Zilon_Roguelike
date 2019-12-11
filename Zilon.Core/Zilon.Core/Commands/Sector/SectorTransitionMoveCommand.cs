@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -21,10 +20,8 @@ namespace Zilon.Core.Commands
         /// <param name="playerState"> Состояние игрока.
         /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
-        public SectorTransitionMoveCommand(
-            ISectorManager sectorManager,
-            ISectorUiState playerState) :
-            base(sectorManager, playerState)
+        public SectorTransitionMoveCommand() :
+            base()
         {
         }
 
@@ -34,13 +31,13 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute(SectorCommandContext context)
         {
-            if (CurrentActor == null)
+            if (context.ActiveActor == null)
             {
                 return false;
             }
 
-            var actorNode = CurrentActor.Node;
-            var map = SectorManager.CurrentSector.Map;
+            var actorNode = context.ActiveActor.Actor.Node;
+            var map = context.CurrentSector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
@@ -52,14 +49,14 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
-        protected override void ExecuteTacticCommand()
+        protected override void ExecuteTacticCommand(SectorCommandContext context)
         {
-            var actorNode = CurrentActor.Node;
-            var map = SectorManager.CurrentSector.Map;
+            var actorNode = context.ActiveActor.Actor.Node;
+            var map = context.CurrentSector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
-            SectorManager.CurrentSector.UseTransition(detectedTransition);
+            context.CurrentSector.UseTransition(detectedTransition);
         }
     }
 }
