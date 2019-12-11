@@ -14,8 +14,8 @@ public class SectorGameCursor : MonoBehaviour
     public SpriteRenderer SpriteRenderer;
 
     [Inject] private readonly ISectorUiState _playerState;
-    [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
-    [Inject(Id = "attack-command")] private readonly ICommand _attackCommand;
+    [Inject(Id = "move-command")] private readonly ICommand<SectorCommandContext> _moveCommand;
+    [Inject(Id = "attack-command")] private readonly ICommand<SectorCommandContext> _attackCommand;
 
     public void Start()
     {
@@ -33,6 +33,8 @@ public class SectorGameCursor : MonoBehaviour
         {
             return;
         }
+
+        var commandContext = new SectorCommandContext()
 
         if (_playerState.HoverViewModel is IContainerViewModel)
         {
