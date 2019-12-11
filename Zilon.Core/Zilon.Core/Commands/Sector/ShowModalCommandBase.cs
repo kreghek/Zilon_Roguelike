@@ -7,7 +7,7 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Базовая команда для всех команд, связанных с открытием модальных окон.
     /// </summary>
-    public abstract class ShowModalCommandBase : UiCommandBase
+    public abstract class ShowModalCommandBase : UiCommandBase<ActorModalCommandContext>
     {
         /// <summary>
         /// Менеджер модальных окон.
