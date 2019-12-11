@@ -3,33 +3,33 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {
-    public class UpdateGlobeCommand : ICommandWrapper
+    public class UpdateGlobeCommand<TContext> : ICommandWrapper<TContext>
     {
         private readonly IGlobeManager _globeManager;
         private readonly IActorTaskSource _botTaskSource;
 
         public UpdateGlobeCommand(IGlobeManager globeManager,
             IActorTaskSource botTaskSource,
-            ICommand underlyingCommand)
+            ICommand<TContext> underlyingCommand)
         {
             _globeManager = globeManager;
             _botTaskSource = botTaskSource;
             UnderlyingCommand = underlyingCommand;
         }
 
-        public ICommand UnderlyingCommand { get; }
+        public ICommand<TContext> UnderlyingCommand { get; }
 
-        public bool CanExecute()
+        public bool CanExecute(TContext context)
         {
-            return UnderlyingCommand.CanExecute();
+            return UnderlyingCommand.CanExecute(context);
         }
 
-        public void Execute()
+        public void Execute(TContext context)
         {
-            UnderlyingCommand.Execute();
+            UnderlyingCommand.Execute(context);
 
-            var context = new GlobeIterationContext(_botTaskSource);
-            _globeManager.UpdateGlobeOneStepAsync(context).Wait();
+            var globeIterationContext = new GlobeIterationContext(_botTaskSource);
+            _globeManager.UpdateGlobeOneStepAsync(globeIterationContext).Wait();
         }
     }
 }
