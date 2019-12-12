@@ -36,7 +36,7 @@ public class SectorGameCursor : MonoBehaviour
             return;
         }
 
-        var sectorCommandContext = SectorCommandContextFactory.Create();
+        var sectorCommandContext = SectorCommandContextFactory.CreateContext();
 
         if (_playerState.HoverViewModel is IContainerViewModel)
         {

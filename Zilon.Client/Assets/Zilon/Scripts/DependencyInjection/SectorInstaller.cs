@@ -115,8 +115,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
 
         // Специализированные команды для Ui.
-        Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
-        Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("equip-command").To<EquipCommand>().AsTransient();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
         Container.Bind<SpecialCommandManager>().AsSingle();
     }

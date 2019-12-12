@@ -9,7 +9,6 @@ using Zenject;
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
-using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -23,10 +22,6 @@ public class GenInstaller : MonoInstaller
     {
         RegisterRoomMapFactory();
 
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
-
-        Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-        
         Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();

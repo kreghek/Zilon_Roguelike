@@ -646,6 +646,7 @@ MonoBehaviour:
   PersonButton: {fileID: 1724347674}
   SectorTransitionMoveButton: {fileID: 299468032}
   CityQuickExitButton: {fileID: 185488352}
+  SectorCommandContextFactory: {fileID: 0}
 --- !u!114 &227365887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1639,6 +1640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7275fbc57f498f479548e99b5d46a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SectorCommandContextFactory: {fileID: 0}
 --- !u!114 &786481620 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4766134963144317226, guid: 77e9255757871304e83ba0e39020523e,
@@ -3580,6 +3582,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1696477761}
+  - component: {fileID: 1696477762}
   m_Layer: 0
   m_Name: SectorCommandContextFactory
   m_TagString: Untagged
@@ -3601,6 +3604,19 @@ Transform:
   m_Father: {fileID: 1387367823}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1696477762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696477760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0bfaf8f738edaf408d2ab9c39e5ab70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SectorViewModel: {fileID: 697327060}
 --- !u!1001 &1698614928
 PrefabInstance:
   m_ObjectHideFlags: 0

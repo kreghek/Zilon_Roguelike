@@ -25,7 +25,7 @@ namespace Assets.Zilon.Scripts.Services
                 return equipCommand;
             }
 
-            equipCommand = _diContainer.ResolveId<ICommand>("equip-command") as EquipCommand;
+            equipCommand = _diContainer.ResolveId<ICommand<SectorCommandContext>>("equip-command") as EquipCommand;
             _equipCommandDict[slotIndex] = equipCommand;
             equipCommand.SlotIndex = slotIndex;
 

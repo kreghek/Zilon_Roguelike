@@ -15,7 +15,7 @@ public class MovePathVisualizer : MonoBehaviour
 {
     public GameObject VisualizationItemPrefab;
 
-    [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
+    [Inject(Id = "move-command")] private readonly ICommand<SectorCommandContext> _moveCommand;
     [Inject] private readonly ISectorUiState _playerState;
     private IList<IGraphNode> _lastPath;
 
@@ -52,14 +52,14 @@ public class MovePathVisualizer : MonoBehaviour
         return ScanCommand(_moveCommand);
     }
 
-    private static MoveCommand ScanCommand(ICommand command)
+    private static MoveCommand ScanCommand(ICommand<SectorCommandContext> command)
     {
         switch (command)
         {
             case MoveCommand move:
                 return move;
 
-            case ICommandWrapper wrapper:
+            case ICommandWrapper<SectorCommandContext> wrapper:
                 return ScanCommand(wrapper.UnderlyingCommand);
 
             default:

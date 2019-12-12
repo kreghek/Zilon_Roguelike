@@ -20,11 +20,11 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly ICommandManager<SectorCommandContext> _comamndManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
-    [NotNull] private ICommand _equipCommand;
+    [NotNull] private ICommand<SectorCommandContext> _equipCommand;
 
     public IActor Actor { get; set; }
     public int SlotIndex;
@@ -33,6 +33,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     public Image IconImage;
     public EquipmentSlotTypes SlotTypes;
     public Sprite[] TypeBackgrounds;
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     public Vector3 Position => GetComponent<RectTransform>().position;
     public IProp Prop
@@ -122,7 +123,8 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void FixedUpdate()
     {
-        var canEquip = _equipCommand.CanExecute();
+        var commandContext = SectorCommandContextFactory.CreateContext();
+        var canEquip = _equipCommand.CanExecute(commandContext);
         var selectedProp = _inventoryState.SelectedProp;
         var denySlot = !canEquip && selectedProp != null;
         DenyBorder.SetActive(denySlot);

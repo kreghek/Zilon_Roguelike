@@ -35,9 +35,9 @@ public class InventoryHandler : MonoBehaviour
     [NotNull] [Inject] private readonly DiContainer _diContainer;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
-    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
+    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand<SectorCommandContext> _showHistoryCommand;
 
     public event EventHandler Closed;
 

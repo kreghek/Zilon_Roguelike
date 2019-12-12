@@ -13,7 +13,7 @@ public class GlobeInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
+        Container.Bind<ICommandManager<GlobeCommandContext>>().To<QueueCommandManager<GlobeCommandContext>>().AsSingle();
 
         Container.Bind<IGlobeUiState>().To<GlobeUiState>().AsSingle();
 
@@ -29,7 +29,7 @@ public class GlobeInstaller : MonoInstaller
             });
 
         Container.Bind<IGlobeModalManager>().FromInstance(GetGlobeModalManager()).AsSingle();
-        Container.Bind<ICommand>().WithId("show-history-command").To<GlobeShowHistoryCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-history-command").To<GlobeShowHistoryCommand>().AsSingle();
     }
 
     private GlobeModalManager GetGlobeModalManager()
