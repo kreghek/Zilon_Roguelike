@@ -26,6 +26,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     public override void InstallBindings()
     {
         Container.Bind<ICommandManager<SectorCommandContext>>().To<QueueCommandManager<SectorCommandContext>>().AsSingle();
+        Container.Bind<ICommandManager<ActorModalCommandContext>>().To<QueueCommandManager<ActorModalCommandContext>>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 

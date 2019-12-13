@@ -29,7 +29,7 @@ namespace Zilon.Core.Commands
             UnderlyingCommand.Execute(context);
 
             var globeIterationContext = new GlobeIterationContext(_botTaskSource);
-            _globeManager.UpdateGlobeOneStepAsync(globeIterationContext).Wait();
+            _globeManager.UpdateGlobeOneStepAsync(globeIterationContext).ConfigureAwait(true);
         }
     }
 }

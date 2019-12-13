@@ -89,7 +89,6 @@
     <Compile Include="Commands\ICommandWrapper.cs" />
     <Compile Include="Commands\SectorCommandContext.cs" />
     <Compile Include="Commands\ActorModalCommandContext.cs" />
-    <Compile Include="Commands\Sector\ICommandHandler.cs" />
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />

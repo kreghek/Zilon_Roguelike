@@ -22,16 +22,17 @@ public class SectorUiHandler : MonoBehaviour
     [Inject] private readonly ISectorManager _sectorManager;
 
     [Inject] private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
+    [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalClientCommandExecutor;
 
     [Inject(Id = "next-turn-command")] private readonly ICommand<SectorCommandContext> _nextTurnCommand;
 
-    [Inject(Id = "show-inventory-command")] private readonly ICommand<SectorCommandContext> _showInventoryCommand;
+    [Inject(Id = "show-inventory-command")] private readonly ICommand<ActorModalCommandContext> _showInventoryCommand;
 
-    [Inject(Id = "show-perks-command")] private readonly ICommand<SectorCommandContext> _showPersonModalCommand;
+    [Inject(Id = "show-perks-command")] private readonly ICommand<ActorModalCommandContext> _showPersonModalCommand;
 
-    [Inject(Id = "quit-request-command")] private readonly ICommand<SectorCommandContext> _quitRequestCommand;
+    [Inject(Id = "quit-request-command")] private readonly ICommand<ActorModalCommandContext> _quitRequestCommand;
 
-    [Inject(Id = "quit-request-title-command")] private readonly ICommand<SectorCommandContext> _quitRequestTitleCommand;
+    [Inject(Id = "quit-request-title-command")] private readonly ICommand<ActorModalCommandContext> _quitRequestTitleCommand;
 
 
     [NotNull]
@@ -45,6 +46,7 @@ public class SectorUiHandler : MonoBehaviour
     public Button CityQuickExitButton;
 
     public SectorCommandContextFactory SectorCommandContextFactory;
+    public ActorModalCommandContextFactory ActorModalCommandContextFactory;
 
     public void FixedUpdate()
     {
@@ -77,10 +79,26 @@ public class SectorUiHandler : MonoBehaviour
         }
     }
 
+    private bool GetEnableStateByCommand(ICommand<ActorModalCommandContext> command)
+    {
+        var context = ActorModalCommandContextFactory.CreateContext();
+        return CanExecuteCommand(command, context);
+    }
+
     private bool GetEnableStateByCommand(ICommand<SectorCommandContext> command)
     {
         var context = SectorCommandContextFactory.CreateContext();
-        return (command?.CanExecute(context)).GetValueOrDefault();
+        return CanExecuteCommand(command, context);
+    }
+
+    private static bool CanExecuteCommand<TContext>(ICommand<TContext> command, TContext context)
+    {
+        if (command == null)
+        {
+            return false;
+        }
+
+        return command.CanExecute(context);
     }
 
     public void Update()
@@ -123,7 +141,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showInventoryCommand);
+        _modalClientCommandExecutor.Push(_showInventoryCommand);
     }
 
     public void ShowPersonModalButton_Handler()
@@ -133,17 +151,17 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showPersonModalCommand);
+        _modalClientCommandExecutor.Push(_showPersonModalCommand);
     }
 
     public void ExitGame_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestCommand);
+        _modalClientCommandExecutor.Push(_quitRequestCommand);
     }
 
     public void ExitTitle_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestTitleCommand);
+        _modalClientCommandExecutor.Push(_quitRequestTitleCommand);
     }
 
     public void SectorTransitionMoveButton_Handler()
