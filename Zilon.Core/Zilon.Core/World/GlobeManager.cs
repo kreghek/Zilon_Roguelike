@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -23,13 +23,18 @@ namespace Zilon.Core.World
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
         private readonly IGlobeGenerator _globeGenerator;
+        private readonly IActorTaskSourceCollector _taskSourceCollector;
 
-        public GlobeManager(ISchemeService schemeService, IDice dice, IGlobeGenerator globeGenerator)
+        public GlobeManager(
+            ISchemeService schemeService,
+            IDice dice,
+            IGlobeGenerator globeGenerator,
+            IActorTaskSourceCollector taskSourceCollector)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
             _globeGenerator = globeGenerator ?? throw new ArgumentNullException(nameof(globeGenerator));
-
+            _taskSourceCollector = taskSourceCollector;
             Regions = new Dictionary<TerrainCell, GlobeRegion>();
         }
 
@@ -230,14 +235,14 @@ namespace Zilon.Core.World
                     var snapshot = new SectorSnapshot(sectorInfo.Sector);
 
                     var botTaskSource = context.BotTaskSource;
-                    NextTurn(actorManager, botTaskSource, snapshot);
+                    NextTurn(actorManager, _taskSourceCollector, snapshot);
 
                     sectorInfo.Sector.Update();
                 };
             });
         }
 
-        private static void NextTurn(IActorManager actors, IActorTaskSource botTaskSource, SectorSnapshot snapshot)
+        private static void NextTurn(IActorManager actors, IActorTaskSourceCollector taskSourceCollector, SectorSnapshot snapshot)
         {
             foreach (var actor in actors.Items)
             {
@@ -246,25 +251,30 @@ namespace Zilon.Core.World
                     continue;
                 }
 
-                ProcessActor(actor, botTaskSource, snapshot);
+                ProcessActor(actor, taskSourceCollector, snapshot);
             }
         }
 
-        private static void ProcessActor(IActor actor, IActorTaskSource botTaskSource, SectorSnapshot snapshot)
+        private static void ProcessActor(IActor actor, IActorTaskSourceCollector taskSourceCollector, SectorSnapshot snapshot)
         {
-            var actorTasks = botTaskSource.GetActorTasks(actor, snapshot);
+            var taskSources = taskSourceCollector.GetCurrentTaskSources();
 
-            foreach (var actorTask in actorTasks)
+            foreach (var taskSource in taskSources)
             {
-                try
+                var actorTasks = taskSource.GetActorTasks(actor, snapshot);
+
+                foreach (var actorTask in actorTasks)
                 {
-                    actorTask.Execute();
-                }
-                catch (Exception exception)
-                {
-                    throw new ActorTaskExecutionException($"Ошибка при работе источника команд {botTaskSource.GetType().FullName}",
-                        botTaskSource,
-                        exception);
+                    try
+                    {
+                        actorTask.Execute();
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
+                            taskSource,
+                            exception);
+                    }
                 }
             }
         }

@@ -85,6 +85,7 @@
     <Compile Include="Commands\GlobeCommandContext.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
+    <Compile Include="Commands\IActorTaskSourceCollector.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\ICommandWrapper.cs" />
     <Compile Include="Commands\SectorCommandContext.cs" />
