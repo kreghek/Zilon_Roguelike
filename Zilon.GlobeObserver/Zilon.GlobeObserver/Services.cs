@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -84,6 +85,8 @@ namespace Zilon.GlobeObserver
             RegisterLogicState(serviceCollection);
 
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
+
+            serviceCollection.AddSingleton<IActorTaskSourceCollector, TaskSourceCollector>();
         }
 
         public static void RegisterLogicState(IServiceCollection serviceRegistry)

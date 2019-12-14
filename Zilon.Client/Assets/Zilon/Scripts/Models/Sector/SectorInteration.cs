@@ -9,13 +9,13 @@ using Zilon.Core.Commands;
 
 public class SectorInteration : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerUiState;
 
     [NotNull]
     [Inject(Id = "move-command")]
-    private readonly ICommand _moveCommand;
+    private readonly ICommand<SectorCommandContext> _moveCommand;
 
     public SectorMapViewModel MapViewModel;
 

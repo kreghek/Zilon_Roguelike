@@ -69,7 +69,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
 
     [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
@@ -110,23 +110,23 @@ public class SectorVM : MonoBehaviour
 
     [NotNull]
     [Inject(Id = "move-command")]
-    private readonly ICommand _moveCommand;
+    private readonly ICommand<SectorCommandContext> _moveCommand;
 
     [NotNull]
     [Inject(Id = "attack-command")]
-    private readonly ICommand _attackCommand;
+    private readonly ICommand<SectorCommandContext> _attackCommand;
 
     [NotNull]
     [Inject(Id = "open-container-command")]
-    private readonly ICommand _openContainerCommand;
+    private readonly ICommand<SectorCommandContext> _openContainerCommand;
 
     [NotNull]
     [Inject(Id = "show-trader-modal-command")]
-    private readonly ICommand _showTraderModalCommand;
+    private readonly ICommand<SectorCommandContext> _showTraderModalCommand;
 
     [NotNull]
     [Inject(Id = "show-dialog-modal-command")]
-    private readonly ICommand _showDialogCommand;
+    private readonly ICommand<SectorCommandContext> _showDialogCommand;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -154,32 +154,32 @@ public class SectorVM : MonoBehaviour
 
     private void ExecuteCommands()
     {
-        var command = _clientCommandExecutor.Pop();
+        //var command = _clientCommandExecutor.Pop();
 
-        try
-        {
-            if (command != null)
-            {
-                command.Execute();
+        //try
+        //{
+        //    if (command != null)
+        //    {
+        //        command.Execute();
 
-                if (_interuptCommands)
-                {
-                    return;
-                }
+        //        if (_interuptCommands)
+        //        {
+        //            return;
+        //        }
 
-                if (command is IRepeatableCommand repeatableCommand)
-                {
-                    if (repeatableCommand.CanRepeat())
-                    {
-                        _clientCommandExecutor.Push(repeatableCommand);
-                    }
-                }
-            }
-        }
-        catch (Exception exception)
-        {
-            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-        }
+        //        if (command is IRepeatableCommand repeatableCommand)
+        //        {
+        //            if (repeatableCommand.CanRepeat())
+        //            {
+        //                _clientCommandExecutor.Push(repeatableCommand);
+        //            }
+        //        }
+        //    }
+        //}
+        //catch (Exception exception)
+        //{
+        //    throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+        //}
     }
 
     // ReSharper disable once UnusedMember.Local
@@ -406,19 +406,19 @@ public class SectorVM : MonoBehaviour
                     // Этот тип жителей не интерактивен.
                     break;
 
-                case CitizenType.Trader:
-                    if (_showTraderModalCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showTraderModalCommand);
-                    }
-                    break;
+                //case CitizenType.Trader:
+                //    if (_showTraderModalCommand.CanExecute())
+                //    {
+                //        _clientCommandExecutor.Push(_showTraderModalCommand);
+                //    }
+                //    break;
 
-                case CitizenType.QuestGiver:
-                    if (_showDialogCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showDialogCommand);
-                    }
-                    break;
+                //case CitizenType.QuestGiver:
+                //    if (_showDialogCommand.CanExecute())
+                //    {
+                //        _clientCommandExecutor.Push(_showDialogCommand);
+                //    }
+                //    break;
             }
 
             
@@ -585,19 +585,19 @@ public class SectorVM : MonoBehaviour
 
     private void EnemyActorVm_OnSelected(object sender, EventArgs e)
     {
-        if (_playerState.ActiveActor == null)
-        {
-            return;
-        }
+        //if (_playerState.ActiveActor == null)
+        //{
+        //    return;
+        //}
 
-        var actorViewModel = sender as ActorViewModel;
+        //var actorViewModel = sender as ActorViewModel;
 
-        _playerState.SelectedViewModel = actorViewModel;
+        //_playerState.SelectedViewModel = actorViewModel;
 
-        if (_attackCommand.CanExecute())
-        {
-            _clientCommandExecutor.Push(_attackCommand);
-        }
+        //if (_attackCommand.CanExecute())
+        //{
+        //    _clientCommandExecutor.Push(_attackCommand);
+        //}
     }
 
     private void EnemyViewModel_MouseEnter(object sender, EventArgs e)

@@ -32,9 +32,9 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private DiContainer _diContainer;
     [NotNull] [Inject] private ISectorUiState _playerState;
     [NotNull] [Inject] private IInventoryState _inventoryState;
-    [NotNull] [Inject] private ICommandManager _commandManager;
-    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [NotNull] [Inject] private ICommandManager<SectorCommandContext> _commandManager;
+    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand<SectorCommandContext> _showHistoryCommand;
 
     public event EventHandler Closed;
 

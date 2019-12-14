@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Assets.Zilon.Scripts.DependencyInjection;
+using Assets.Zilon.Scripts.Models.Globe;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -16,6 +17,7 @@ using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 public class GenInstaller : MonoInstaller
 {
@@ -23,12 +25,9 @@ public class GenInstaller : MonoInstaller
     {
         RegisterRoomMapFactory();
 
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
-
-        Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-        
         Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSourceCollector>().To<OnlyBotTaskSourceCollector>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
@@ -53,6 +52,17 @@ public class GenInstaller : MonoInstaller
         // Специализированные сервисы для Ui.
         Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
         Container.Bind<ILogService>().To<LogService>().AsSingle();
+
+
+        // Генерация мира. Потому что генерация может быть уникальной для разных сцен.
+        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
+        Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
+
+        Container.Bind<TerrainInitiator>().AsSingle();
+        Container.Bind<ProvinceInitiator>().AsSingle();
+        Container.Bind<IActorManager>().To<ActorManager>().AsTransient();
+        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsTransient();
+        Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
     }
 
     private void RegisterBotLogics(DiContainer container)
@@ -82,7 +92,8 @@ public class GenInstaller : MonoInstaller
     {
         Container.Bind<IMapFactory>().To<RoomMapFactory>().AsSingle();
         Container.Bind<IRoomGenerator>().To<RoomGenerator>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context => {
+        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context =>
+        {
             var linearDice = context.Container.ResolveId<IDice>("linear");
             var roomSizeDice = context.Container.ResolveId<IDice>("exp");
             return new RoomGeneratorRandomSource(linearDice, roomSizeDice);

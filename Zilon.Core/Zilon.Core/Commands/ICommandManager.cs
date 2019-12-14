@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 namespace Zilon.Core.Commands
 {
     [PublicAPI]
-    public interface ICommandManager
+    public interface ICommandManager<TContext>
     {
-        void Push(ICommand command);
-        ICommand Pop();
+        void Push(ICommand<TContext> command);
+        ICommand<TContext> Pop();
 
         event EventHandler CommandPushed;
     }

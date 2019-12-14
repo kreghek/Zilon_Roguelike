@@ -10,9 +10,11 @@ using Zilon.Core.Commands;
 
 public class CommandManagerHandler : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandManager;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _clientCommandManager;
 
     private bool _interuptCommands;
+
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     public void Start()
     {
@@ -28,20 +30,22 @@ public class CommandManagerHandler : MonoBehaviour
     {
         var command = _clientCommandManager.Pop();
 
+        var sectorCommandContext = SectorCommandContextFactory.CreateContext();
+
         try
         {
             if (command != null)
             {
-                command.Execute();
+                command.Execute(sectorCommandContext);
 
                 if (_interuptCommands)
                 {
                     return;
                 }
 
-                if (command is IRepeatableCommand repeatableCommand)
+                if (command is IRepeatableCommand<SectorCommandContext> repeatableCommand)
                 {
-                    if (repeatableCommand.CanRepeat())
+                    if (repeatableCommand.CanRepeat(sectorCommandContext))
                     {
                         _clientCommandManager.Push(repeatableCommand);
                     }

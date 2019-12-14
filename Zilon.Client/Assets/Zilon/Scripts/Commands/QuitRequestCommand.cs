@@ -5,16 +5,16 @@ using Zilon.Core.Commands;
 
 namespace Assets.Zilon.Scripts.Commands
 {
-    sealed class QuitRequestCommand : ICommand
+    sealed class QuitRequestCommand : ICommand<ActorModalCommandContext>
     {
         [Inject] ISectorModalManager _sectorModalManager;
 
-        public bool CanExecute()
+        public bool CanExecute(ActorModalCommandContext context)
         {
             return true;
         }
 
-        public void Execute()
+        public void Execute(ActorModalCommandContext context)
         {
             _sectorModalManager.ShowQuitComfirmationModal();
         }

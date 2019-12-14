@@ -82,10 +82,14 @@
     <Compile Include="Client\UiStateBase.cs" />
     <Compile Include="Client\Windows\IGlobeModalManager.cs" />
     <Compile Include="Commands\CommandCantExecuteException.cs" />
+    <Compile Include="Commands\GlobeCommandContext.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
+    <Compile Include="Commands\IActorTaskSourceCollector.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
     <Compile Include="Commands\ICommandWrapper.cs" />
+    <Compile Include="Commands\SectorCommandContext.cs" />
+    <Compile Include="Commands\ActorModalCommandContext.cs" />
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />

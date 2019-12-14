@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
+using Assets.Zilon.Scripts.Models.Globe;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -25,7 +27,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
+        Container.Bind<ICommandManager<SectorCommandContext>>().To<QueueCommandManager<SectorCommandContext>>().AsSingle();
+        Container.Bind<ICommandManager<ActorModalCommandContext>>().To<QueueCommandManager<ActorModalCommandContext>>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
@@ -35,6 +38,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSourceCollector>().FromMethod(context =>
+        {
+            var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
+            var humanTaskSource = context.Container.Resolve<IHumanActorTaskSource>();
+            return new TaskSourceCollector(botTaskSource, humanTaskSource);
+        }).AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
@@ -87,35 +96,45 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // Комманды актёра.
         Container.Bind<MoveCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("move-command").FromMethod((context) =>
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("move-command").FromMethod((context) =>
         {
             var globeManager = context.Container.Resolve<IGlobeManager>();
             var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
             var underlyingCommand = context.Container.Resolve<MoveCommand>();
-            var commandWrapper = new UpdateGlobeCommand(globeManager, botTaskSource, underlyingCommand);
+            var commandWrapper = new UpdateGlobeCommand<SectorCommandContext>(
+                globeManager,
+                botTaskSource,
+                underlyingCommand);
             return commandWrapper;
         }).AsSingle();
-        Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("use-self-command").To<UseSelfCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("sector-transition-move-command").To<SectorTransitionMoveCommand>().AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("attack-command").To<AttackCommand>().AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("use-self-command").To<UseSelfCommand>().AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("sector-transition-move-command").To<SectorTransitionMoveCommand>().AsSingle();
 
         // Комадны для UI.
-        Container.Bind<ICommand>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-dialog-modal-command").To<ShowDialogModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-history-command").To<SectorShowHistoryCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-dialog-modal-command").To<ShowDialogModalCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("show-history-command").To<SectorShowHistoryCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
 
         // Специализированные команды для Ui.
-        Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
-        Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("equip-command").To<EquipCommand>().AsTransient();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
         Container.Bind<SpecialCommandManager>().AsSingle();
+
+        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
+        Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
+
+        Container.Bind<TerrainInitiator>().AsSingle();
+        Container.Bind<ProvinceInitiator>().AsSingle();
+        Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
     }
 
     private void RegisterBotLogics(DiContainer container)

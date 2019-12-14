@@ -1192,7 +1192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b37feff3a7f9c804687fee8e1c487510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobeKeeper: {fileID: 0}
   Text: {fileID: 1786310340}
 --- !u!114 &2080010493
 MonoBehaviour:
@@ -1378,15 +1377,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4766134963679475879, guid: 77e9255757871304e83ba0e39020523e,
-        type: 3}
-      propertyPath: m_Name
-      value: Sector
-      objectReference: {fileID: 0}
     - target: {fileID: 4766134963679475874, guid: 77e9255757871304e83ba0e39020523e,
         type: 3}
       propertyPath: GlobeKeeper
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4766134963679475879, guid: 77e9255757871304e83ba0e39020523e,
+        type: 3}
+      propertyPath: m_Name
+      value: Sector
       objectReference: {fileID: 0}
     - target: {fileID: 4766134963679475878, guid: 77e9255757871304e83ba0e39020523e,
         type: 3}

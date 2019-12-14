@@ -43,21 +43,12 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
-        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
-        Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
-
-        Container.Bind<TerrainInitiator>().AsSingle();
-        Container.Bind<ProvinceInitiator>().AsSingle();
-        Container.Bind<IActorManager>().To<ActorManager>().AsTransient();
-        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsTransient();
-        Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
-
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
-        Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-command").To<QuitCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
     }
 
     private void RegisterDices()

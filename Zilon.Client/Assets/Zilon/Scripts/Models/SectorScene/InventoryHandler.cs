@@ -35,9 +35,10 @@ public class InventoryHandler : MonoBehaviour
     [NotNull] [Inject] private readonly DiContainer _diContainer;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
-    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
+    [NotNull] [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalCommandManager;
+    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand<ActorModalCommandContext> _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -48,18 +49,18 @@ public class InventoryHandler : MonoBehaviour
 
     public void Start()
     {
-        CreateSlots();
-        StartUpControls();
+        //CreateSlots();
+        //StartUpControls();
 
-        _actor = _playerState.ActiveActor.Actor;
-        var inventory = _actor.Person.Inventory;
-        UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+        //_actor = _playerState.ActiveActor.Actor;
+        //var inventory = _actor.Person.Inventory;
+        //UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
-        inventory.Added += Inventory_Added;
-        inventory.Removed += Inventory_Removed;
-        inventory.Changed += Inventory_Changed;
+        //inventory.Added += Inventory_Added;
+        //inventory.Removed += Inventory_Removed;
+        //inventory.Changed += Inventory_Changed;
 
-        _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+        //_inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
     }
 
     /// <summary>
@@ -332,7 +333,7 @@ public class InventoryHandler : MonoBehaviour
     {
         if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
         {
-            _commandManager.Push(_showHistoryCommand);
+            _modalCommandManager.Push(_showHistoryCommand);
         }
     }
 }

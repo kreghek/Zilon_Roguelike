@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -15,15 +14,13 @@ namespace Zilon.Core.Commands
 
         [ExcludeFromCodeCoverage]
         public UseSelfCommand(
-            ISectorManager sectorManager,
-            ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(sectorManager, playerState)
+            base()
         {
             _inventoryState = inventoryState;
         }
 
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
             var propVm = _inventoryState.SelectedProp;
             if (propVm == null)
@@ -45,13 +42,13 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        protected override void ExecuteTacticCommand()
+        protected override void ExecuteTacticCommand(SectorCommandContext context)
         {
             var propVm = _inventoryState.SelectedProp;
             var usableProp = propVm.Prop;
 
             var intention = new Intention<UsePropTask>(a => new UsePropTask(a, usableProp));
-            PlayerState.TaskSource.Intent(intention);
+            context.TaskSource.Intent(intention);
         }
     }
 }

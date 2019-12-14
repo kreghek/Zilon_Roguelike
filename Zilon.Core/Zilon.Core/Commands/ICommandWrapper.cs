@@ -1,7 +1,7 @@
 ﻿namespace Zilon.Core.Commands
 {
-    public interface ICommandWrapper: ICommand
+    public interface ICommandWrapper<TContext>: ICommand<TContext>
     {
-        ICommand UnderlyingCommand { get; }
+        ICommand<TContext> UnderlyingCommand { get; }
     }
 }
