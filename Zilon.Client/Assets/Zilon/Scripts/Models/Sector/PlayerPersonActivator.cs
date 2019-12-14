@@ -47,6 +47,7 @@ public class PlayerPersonActivator : MonoBehaviour
             ActorsViewModel.ActorViewModels.Add(playerActorViewModel);
 
             _playerState.ActiveActor = playerActorViewModel;
+            _humanActorTaskSource.SwitchActor(playerActorViewModel.Actor);
 
             Destroy(gameObject);
         }

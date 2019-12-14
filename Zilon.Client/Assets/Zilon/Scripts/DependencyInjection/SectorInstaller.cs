@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
+using Assets.Zilon.Scripts.Models.Globe;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -36,6 +38,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
+        Container.Bind<IActorTaskSourceCollector>().FromMethod(context =>
+        {
+            var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
+            var humanTaskSource = context.Container.Resolve<IHumanActorTaskSource>();
+            return new TaskSourceCollector(botTaskSource, humanTaskSource);
+        }).AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
@@ -120,6 +128,13 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand<SectorCommandContext>>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
         Container.Bind<SpecialCommandManager>().AsSingle();
+
+        Container.Bind<IGlobeManager>().To<GlobeManager>().AsSingle();
+        Container.Bind<IGlobeGenerator>().To<GlobeGenerator>().AsSingle();
+
+        Container.Bind<TerrainInitiator>().AsSingle();
+        Container.Bind<ProvinceInitiator>().AsSingle();
+        Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
     }
 
     private void RegisterBotLogics(DiContainer container)
