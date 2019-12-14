@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -50,6 +51,12 @@ public class SectorUiHandler : MonoBehaviour
 
     public void FixedUpdate()
     {
+        var canCreateCommandContext = CanCreateCommandContext();
+        if (!canCreateCommandContext)
+        {
+            return;
+        }
+
         if (NextTurnButton != null)
         {
             NextTurnButton.interactable = GetEnableStateByCommand(_nextTurnCommand);
@@ -77,6 +84,11 @@ public class SectorUiHandler : MonoBehaviour
             var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
+    }
+
+    private bool CanCreateCommandContext()
+    {
+        return SectorCommandContextFactory.SectorViewModel.IsInitialized && _playerState.ActiveActor != null;
     }
 
     private bool GetEnableStateByCommand(ICommand<ActorModalCommandContext> command)
