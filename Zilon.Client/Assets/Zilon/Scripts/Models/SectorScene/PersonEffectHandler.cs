@@ -17,7 +17,7 @@ public class PersonEffectHandler : MonoBehaviour
     [UsedImplicitly]
     [NotNull]
     [Inject]
-    private readonly ISectorUiState _sectorState;
+    private readonly ISectorUiState _sectorUiState;
 
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
@@ -28,19 +28,19 @@ public class PersonEffectHandler : MonoBehaviour
     {
         _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-        _sectorState.ActiveActorChanged += SectorState_ActiveActorChanged;
+        _sectorUiState.ActiveActorChanged += SectorState_ActiveActorChanged;
     }
 
     private void OnDestroy()
     {
-        _sectorState.ActiveActorChanged -= SectorState_ActiveActorChanged;
+        _sectorUiState.ActiveActorChanged -= SectorState_ActiveActorChanged;
 
         DropCurrentPersonSubscribtions();
     }
 
     private void SectorState_ActiveActorChanged(object sender, System.EventArgs e)
     {
-        var newPerson = _sectorState.ActiveActor.Actor.Person;
+        var newPerson = _sectorUiState.ActiveActor.Actor.Person;
         HandlePersonChanged(newPerson);
 
         UpdateEffects(_person);

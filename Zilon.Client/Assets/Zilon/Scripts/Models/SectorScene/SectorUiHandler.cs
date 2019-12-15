@@ -18,7 +18,7 @@ using Zilon.Core.Tactics;
 /// </summary>
 public class SectorUiHandler : MonoBehaviour
 {
-    [Inject] private readonly ISectorUiState _playerState;
+    [Inject] private readonly ISectorUiState _sectorUiState;
 
     [Inject] private readonly ISectorManager _sectorManager;
 
@@ -88,7 +88,7 @@ public class SectorUiHandler : MonoBehaviour
 
     private bool CanCreateCommandContext()
     {
-        return SectorCommandContextFactory.SectorViewModel.IsInitialized && _playerState.ActiveActor != null;
+        return SectorCommandContextFactory.SectorViewModel.IsInitialized && _sectorUiState.ActiveActor != null;
     }
 
     private bool GetEnableStateByCommand(ICommand<ActorModalCommandContext> command)
@@ -138,7 +138,7 @@ public class SectorUiHandler : MonoBehaviour
 
     public void NextTurn()
     {
-        if (_playerState.ActiveActor == null)
+        if (_sectorUiState.ActiveActor == null)
         {
             return;
         }
@@ -148,7 +148,7 @@ public class SectorUiHandler : MonoBehaviour
 
     public void ShowInventoryButton_Handler()
     {
-        if (_playerState.ActiveActor == null)
+        if (_sectorUiState.ActiveActor == null)
         {
             return;
         }
@@ -158,7 +158,7 @@ public class SectorUiHandler : MonoBehaviour
 
     public void ShowPersonModalButton_Handler()
     {
-        if (_playerState.ActiveActor == null)
+        if (_sectorUiState.ActiveActor == null)
         {
             return;
         }

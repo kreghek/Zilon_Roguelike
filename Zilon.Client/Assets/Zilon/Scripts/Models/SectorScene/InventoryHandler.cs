@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -21,6 +24,7 @@ public class InventoryHandler : MonoBehaviour
 
     private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
+    private TaskScheduler _taskScheduler;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
@@ -31,9 +35,10 @@ public class InventoryHandler : MonoBehaviour
     public GameObject ReadButton;
     public GameObject UsePropDropArea;
     public GameObject DeequipPropDropArea;
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     [NotNull] [Inject] private readonly DiContainer _diContainer;
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _sectorUiState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
     [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
     [NotNull] [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalCommandManager;
@@ -49,18 +54,53 @@ public class InventoryHandler : MonoBehaviour
 
     public void Start()
     {
-        //CreateSlots();
-        //StartUpControls();
+        if (SectorCommandContextFactory == null)
+        {
+            throw new InvalidOperationException($"Не задан {nameof(SectorCommandContextFactory)}");
+        }
 
-        //_actor = _playerState.ActiveActor.Actor;
-        //var inventory = _actor.Person.Inventory;
-        //UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-        //inventory.Added += Inventory_Added;
-        //inventory.Removed += Inventory_Removed;
-        //inventory.Changed += Inventory_Changed;
+        _sectorUiState.ActiveActorChanged += SectorUiState_ActiveActorChanged;
+    }
 
-        //_inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+    private void SectorUiState_ActiveActorChanged(object sender, EventArgs e)
+    {
+        var newPerson = _sectorUiState.ActiveActor.Actor;
+        HandlePersonChanged(newPerson);
+
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
+        {
+            CreateSlots();
+            StartUpControls();
+
+            var inventory = _actor.Person.Inventory;
+            UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+
+            inventory.Added += Inventory_Added;
+            inventory.Removed += Inventory_Removed;
+            inventory.Changed += Inventory_Changed;
+
+            _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+    }
+
+    private void HandlePersonChanged(IActor newPerson)
+    {
+        if (newPerson == _actor)
+        {
+            return;
+        }
+
+        DropCurrentPersonSubscribtions();
+        _actor = newPerson;
+    }
+
+    private void DropCurrentPersonSubscribtions()
+    {
+
     }
 
     /// <summary>
@@ -117,14 +157,14 @@ public class InventoryHandler : MonoBehaviour
 
     private void CreateSlots()
     {
-        var actorViewModel = _playerState.ActiveActor;
-        var slots = actorViewModel.Actor.Person.EquipmentCarrier.Slots;
+        var slots = _actor.Person.EquipmentCarrier.Slots;
 
         for (var i = 0; i < slots.Length; i++)
         {
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
-            slotViewModel.Actor = actorViewModel.Actor;
+            slotViewModel.SectorCommandContextFactory = SectorCommandContextFactory;
+            slotViewModel.Actor = _actor;
             slotViewModel.SlotIndex = i;
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += Slot_Click;
