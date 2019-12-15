@@ -4,55 +4,75 @@ using UnityEngine;
 
 using Zenject;
 
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 
 public class PersonEffectHandler : MonoBehaviour
 {
+    private IPerson _person;
+
     [UsedImplicitly]
-    [NotNull] [Inject] private readonly HumanPlayer _player;
+    [NotNull] [Inject] 
+    private readonly ISectorUiState _sectorState;
 
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
 
     [UsedImplicitly]
-    public void Start()
+    private void Start()
     {
-        UpdateEffects();
+        _sectorState.ActiveActorChanged += SectorState_ActiveActorChanged;
+    }
 
-        var person = _player.MainPerson;
+    private void OnDestroy()
+    {
+        _sectorState.ActiveActorChanged -= SectorState_ActiveActorChanged;
 
-//TODO Не очень надёжное решение.
-// Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
-        if (person != null)
+        DropCurrentPersonSubscribtions();
+    }
+
+    private void SectorState_ActiveActorChanged(object sender, System.EventArgs e)
+    {
+        var newPerson = _sectorState.ActiveActor.Actor.Person;
+        HandlePersonChanged(newPerson);
+
+        UpdateEffects(_person);
+
+        //TODO Не очень надёжное решение.
+        // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
+        if (_person != null)
         {
-            person.Survival.StatChanged += Survival_StatChanged;
+            _person.Survival.StatChanged += Survival_StatChanged;
         }
     }
 
-    public void OnDestroy()
+    private void HandlePersonChanged(IPerson newPerson)
     {
-        var person = _player.MainPerson;
-
-        if (person != null)
+        if (newPerson == _person)
         {
-            person.Survival.StatChanged -= Survival_StatChanged;
+            return;
+        }
+
+        DropCurrentPersonSubscribtions();
+        _person = newPerson;
+    }
+
+    private void DropCurrentPersonSubscribtions()
+    {
+        if (_person != null)
+        {
+            _person.Survival.StatChanged -= Survival_StatChanged;
         }
     }
 
     private void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
     {
-        UpdateEffects();
+        UpdateEffects(_person);
     }
 
-    private void UpdateEffects()
+    private void UpdateEffects(IPerson person)
     {
-        foreach (Transform childTrasform in EffectParent)
-        {
-            Destroy(childTrasform.gameObject);
-        }
-
-        var person = _player.MainPerson;
+        ClearCurrentEffectViewModels();
 
         if (person == null)
         {
@@ -60,7 +80,11 @@ public class PersonEffectHandler : MonoBehaviour
         }
 
         var effects = person.Effects;
+        CreateEffectViewModels(effects);
+    }
 
+    private void CreateEffectViewModels(EffectCollection effects)
+    {
         foreach (var effect in effects.Items)
         {
             if (effect is SurvivalStatHazardEffect survivalHazardEffect)
@@ -68,6 +92,14 @@ public class PersonEffectHandler : MonoBehaviour
                 var effectViewModel = Instantiate(EffectPrefab, EffectParent);
                 effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
             }
+        }
+    }
+
+    private void ClearCurrentEffectViewModels()
+    {
+        foreach (Transform childTrasform in EffectParent)
+        {
+            Destroy(childTrasform.gameObject);
         }
     }
 }

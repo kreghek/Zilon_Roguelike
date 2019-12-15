@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
@@ -29,20 +30,15 @@ public class PlayerPersonActivator : MonoBehaviour
     public SectorMapViewModel SectorMapViewModel;
     public Transform TargetObject;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", 
+        Justification = "Неявно вызывается Unity.")]
     private void FixedUpdate()
     {
         if (SectorViewModel.IsInitialized)
         {
-            var playerActorStartNode = SectorViewModel.Sector.Map.Regions
-            .Single(x => x.IsStart).Nodes
-            .First();
+            _humanPlayer.MainPerson = _humanPersonFactory.Create();
 
-            var playerActorViewModel = CreateHumanActorViewModel(
-                _humanPlayer,
-                SectorViewModel.Sector.ActorManager,
-                _perkResolver,
-                playerActorStartNode,
-                SectorMapViewModel.NodeViewModels);
+            var playerActorViewModel = SelectNodeAndCreateHumanPersonViewModelFromMainPerson();
 
             ActorsViewModel.ActorViewModels.Add(playerActorViewModel);
 
@@ -53,19 +49,33 @@ public class PlayerPersonActivator : MonoBehaviour
         }
     }
 
-    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
+    private ActorViewModel SelectNodeAndCreateHumanPersonViewModelFromMainPerson()
+    {
+        var playerActorStartNode = SectorViewModel.Sector.Map.Regions
+                    .Single(x => x.IsStart).Nodes
+                    .First();
+
+        var playerActorViewModel = CreateHumanActorViewModelFromMainPerson(
+            SectorViewModel.Sector.ActorManager,
+            _perkResolver,
+            playerActorStartNode,
+            SectorMapViewModel.NodeViewModels);
+        return playerActorViewModel;
+    }
+
+    private ActorViewModel CreateHumanActorViewModelFromMainPerson(
         [NotNull] IActorManager actorManager,
         [NotNull] IPerkResolver perkResolver,
         [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        _humanPlayer.MainPerson = _humanPersonFactory.Create();
-        
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
+        var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver);
 
         actorManager.Add(actor);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, TargetObject);
+        // Задаём имя объекта для отладки через редактор.
+        // Чтобы визуально можно было проще найти вью-модель персонажа игрока в секторе.
         actorViewModelObj.name = "PlayerActor";
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 

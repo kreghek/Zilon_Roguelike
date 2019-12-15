@@ -16,9 +16,14 @@ public class CommandManagerHandler : MonoBehaviour
 
     public SectorCommandContextFactory SectorCommandContextFactory;
 
-    public void Start()
+    private void Start()
     {
         _clientCommandManager.CommandPushed += CommandPushed;
+    }
+
+    private void OnDestroy()
+    {
+        _clientCommandManager.CommandPushed -= CommandPushed;
     }
 
     private void CommandPushed(object sender, EventArgs e)

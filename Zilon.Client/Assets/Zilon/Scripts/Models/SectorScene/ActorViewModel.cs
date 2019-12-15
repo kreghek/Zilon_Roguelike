@@ -140,7 +140,6 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void Actor_Moved(object sender, EventArgs e)
     {
-        Debug.Log("Обработка перемещения");
         // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
         // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
         Task.Factory.StartNew(() =>
