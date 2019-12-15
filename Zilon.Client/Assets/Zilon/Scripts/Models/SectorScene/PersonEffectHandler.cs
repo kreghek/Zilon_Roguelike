@@ -1,4 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 using UnityEngine;
 
@@ -12,15 +15,19 @@ public class PersonEffectHandler : MonoBehaviour
     private IPerson _person;
 
     [UsedImplicitly]
-    [NotNull] [Inject] 
+    [NotNull]
+    [Inject]
     private readonly ISectorUiState _sectorState;
 
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
+    private TaskScheduler _taskScheduler;
 
     [UsedImplicitly]
     private void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _sectorState.ActiveActorChanged += SectorState_ActiveActorChanged;
     }
 
@@ -67,13 +74,22 @@ public class PersonEffectHandler : MonoBehaviour
 
     private void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
     {
-        UpdateEffects(_person);
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
+        {
+            UpdateEffects(_person);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateEffects(IPerson person)
     {
         ClearCurrentEffectViewModels();
+        CreateEffectsOfCurrentPerson(person);
+    }
 
+    private void CreateEffectsOfCurrentPerson(IPerson person)
+    {
         if (person == null)
         {
             return;
