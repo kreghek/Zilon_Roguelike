@@ -96,17 +96,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // Комманды актёра.
         Container.Bind<MoveCommand>().AsSingle();
-        Container.Bind<ICommand<SectorCommandContext>>().WithId("move-command").FromMethod((context) =>
-        {
-            var globeManager = context.Container.Resolve<IGlobeManager>();
-            var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
-            var underlyingCommand = context.Container.Resolve<MoveCommand>();
-            var commandWrapper = new UpdateGlobeCommand<SectorCommandContext>(
-                globeManager,
-                botTaskSource,
-                underlyingCommand);
-            return commandWrapper;
-        }).AsSingle();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("move-command").FromMethod(RegisterWrapperCommand<MoveCommand>).AsSingle();
         Container.Bind<ICommand<SectorCommandContext>>().WithId("attack-command").To<AttackCommand>().AsSingle();
         Container.Bind<ICommand<SectorCommandContext>>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
         Container.Bind<ICommand<SectorCommandContext>>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
@@ -124,7 +114,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
 
         // Специализированные команды для Ui.
-        Container.Bind<ICommand<SectorCommandContext>>().WithId("equip-command").To<EquipCommand>().AsTransient();
+        Container.Bind<EquipCommand>().AsTransient();
+        Container.Bind<ICommand<SectorCommandContext>>().WithId("equip-command").FromMethod(RegisterWrapperCommand<EquipCommand>).AsTransient();
         Container.Bind<ICommand<SectorCommandContext>>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
         Container.Bind<SpecialCommandManager>().AsSingle();
@@ -135,6 +126,18 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<TerrainInitiator>().AsSingle();
         Container.Bind<ProvinceInitiator>().AsSingle();
         Container.Bind<ISectorBuilderFactory>().To<ZenjectSectorBuilderFactory>().AsSingle();
+    }
+
+    private static ICommand<SectorCommandContext> RegisterWrapperCommand<TCommand>(InjectContext context) where TCommand: ICommand<SectorCommandContext>
+    {
+        var globeManager = context.Container.Resolve<IGlobeManager>();
+        var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
+        var underlyingCommand = context.Container.Resolve<TCommand>();
+        var commandWrapper = new UpdateGlobeCommand<SectorCommandContext>(
+            globeManager,
+            botTaskSource,
+            underlyingCommand);
+        return commandWrapper;
     }
 
     private void RegisterBotLogics(DiContainer container)
