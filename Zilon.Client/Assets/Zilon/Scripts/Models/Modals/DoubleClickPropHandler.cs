@@ -17,11 +17,12 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
     [Inject] private readonly ISectorUiState _playerState;
     [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
+    [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalCommandManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
     [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
-    [Inject(Id = "show-history-command")] private readonly ICommand<SectorCommandContext> _showHistoryCommand;
+    [Inject(Id = "show-history-command")] private readonly ICommand<ActorModalCommandContext> _showHistoryCommand;
 
     public PropItemVm PropItemViewModel;
     public SectorCommandContextFactory SectorCommandContextFactory;
@@ -92,7 +93,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     {
         if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
         {
-            _commandManager.Push(_showHistoryCommand);
+            _modalCommandManager.Push(_showHistoryCommand);
         }
     }
 }

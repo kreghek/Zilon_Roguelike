@@ -61,17 +61,17 @@ public class InventoryHandler : MonoBehaviour
 
         _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-        _sectorUiState.ActiveActorChanged += SectorUiState_ActiveActorChanged;
+        _sectorUiState.ActiveActorChanged += SectorUiState_ActiveActorChangedAsync;
     }
 
-    private void SectorUiState_ActiveActorChanged(object sender, EventArgs e)
+    private async void SectorUiState_ActiveActorChangedAsync(object sender, EventArgs e)
     {
         var newPerson = _sectorUiState.ActiveActor.Actor;
         HandlePersonChanged(newPerson);
 
         // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
         // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             CreateSlots();
             StartUpControls();
@@ -201,11 +201,11 @@ public class InventoryHandler : MonoBehaviour
         slotVm.ApplyEquipment();
     }
 
-    private void Inventory_Removed(object sender, PropStoreEventArgs e)
+    private async void Inventory_Removed(object sender, PropStoreEventArgs e)
     {
         // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
         // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             foreach (var removedProp in e.Props)
             {
@@ -225,11 +225,11 @@ public class InventoryHandler : MonoBehaviour
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Inventory_Changed(object sender, PropStoreEventArgs e)
+    private async void Inventory_Changed(object sender, PropStoreEventArgs e)
     {
         // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
         // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             foreach (var changedProp in e.Props)
             {
@@ -239,11 +239,11 @@ public class InventoryHandler : MonoBehaviour
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Inventory_Added(object sender, PropStoreEventArgs e)
+    private async void Inventory_Added(object sender, PropStoreEventArgs e)
     {
         // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
         // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             foreach (var newProp in e.Props)
             {
