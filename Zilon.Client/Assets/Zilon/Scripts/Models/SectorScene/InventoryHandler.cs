@@ -203,40 +203,55 @@ public class InventoryHandler : MonoBehaviour
 
     private void Inventory_Removed(object sender, PropStoreEventArgs e)
     {
-        foreach (var removedProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
         {
-            var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
-            _propViewModels.Remove(propViewModel);
-            Destroy(propViewModel.gameObject);
-
-            var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
-            if (isRemovedPropWasSelected)
+            foreach (var removedProp in e.Props)
             {
-                _inventoryState.SelectedProp = null;
-                UseButton.SetActive(false);
-            }
-        }
+                var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
+                _propViewModels.Remove(propViewModel);
+                Destroy(propViewModel.gameObject);
 
-        UpdateItemsParentObject();
+                var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+                if (isRemovedPropWasSelected)
+                {
+                    _inventoryState.SelectedProp = null;
+                    UseButton.SetActive(false);
+                }
+            }
+
+            UpdateItemsParentObject();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void Inventory_Changed(object sender, PropStoreEventArgs e)
     {
-        foreach (var changedProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
         {
-            var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
-            propViewModel.UpdateProp();
-        }
+            foreach (var changedProp in e.Props)
+            {
+                var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
+                propViewModel.UpdateProp();
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void Inventory_Added(object sender, PropStoreEventArgs e)
     {
-        foreach (var newProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
         {
-            CreatePropObject(InventoryItemsParent, newProp);
-        }
+            foreach (var newProp in e.Props)
+            {
+                CreatePropObject(InventoryItemsParent, newProp);
+            }
 
-        UpdateItemsParentObject();
+            UpdateItemsParentObject();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateItemsParentObject()

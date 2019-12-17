@@ -7,7 +7,7 @@ using Zilon.Core.Props;
 
 namespace Assets.Zilon.Scripts.Models.Modals
 {
-    public class PropItemViewModelBase: MonoBehaviour
+    public class PropItemViewModelBase : MonoBehaviour
     {
         public Text CountText;
         public Text DurableStatusText;
@@ -40,30 +40,24 @@ namespace Assets.Zilon.Scripts.Models.Modals
 
         public void UpdateProp()
         {
-            if (Prop is Resource resource)
+            if (Prop == null)
             {
-                CountText.gameObject.SetActive(true);
-                CountText.text = $"x{resource.Count}";
-
-                DurableStatusText.gameObject.SetActive(false);
+                throw new InvalidOperationException("Предмет не задан");
             }
-            else if (Prop is Equipment equipment)
-            {
-                CountText.gameObject.SetActive(false);
 
-                if (equipment.Durable.Value <= 0)
-                {
-                    DurableStatusText.gameObject.SetActive(true);
-                    DurableStatusText.text = "B";
-                }
-                else
-                {
-                    DurableStatusText.gameObject.SetActive(false);
-                }
-            }
-            else
+            switch (Prop)
             {
-                throw new ArgumentException($"Тип предмета {Prop?.GetType()?.Name} не поддерживается", nameof(Prop));
+                case Resource resource:
+                    UpdateResource(resource);
+                    break;
+
+                case Equipment equipment:
+                    UpdateEquipment(equipment);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Тип предмета {Prop?.GetType()?.Name} не поддерживается");
+
             }
 
             Sid = Prop?.Scheme?.Sid;
@@ -71,6 +65,29 @@ namespace Assets.Zilon.Scripts.Models.Modals
             var iconSprite = CalcIcon(Prop);
 
             IconImage.sprite = iconSprite;
+        }
+
+        private void UpdateEquipment(Equipment equipment)
+        {
+            CountText.gameObject.SetActive(false);
+
+            if (equipment.Durable.Value <= 0)
+            {
+                DurableStatusText.gameObject.SetActive(true);
+                DurableStatusText.text = "B";
+            }
+            else
+            {
+                DurableStatusText.gameObject.SetActive(false);
+            }
+        }
+
+        private void UpdateResource(Resource resource)
+        {
+            CountText.gameObject.SetActive(true);
+            CountText.text = $"x{resource.Count}";
+
+            DurableStatusText.gameObject.SetActive(false);
         }
 
         private Sprite CalcIcon(IProp prop)
