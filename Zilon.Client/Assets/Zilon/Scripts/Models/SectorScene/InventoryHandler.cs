@@ -130,17 +130,22 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
-    private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
+    private async void InventoryState_SelectedPropChanged(object sender, EventArgs e)
     {
-        foreach (var propViewModel in _propViewModels)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
         {
-            var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
-            propViewModel.SetSelectedState(isSelected);
-        }
+            foreach (var propViewModel in _propViewModels)
+            {
+                var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+                propViewModel.SetSelectedState(isSelected);
+            }
 
-        PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
+            PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
 
-        UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+            UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     public void OnDestroy()

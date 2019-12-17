@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
@@ -23,7 +25,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     [Inject] private readonly ICommandManager<SectorCommandContext> _comamndManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
-
+    private TaskScheduler _taskScheduler;
     [NotNull] private ICommand<SectorCommandContext> _equipCommand;
 
     public IActor Actor { get; set; }
@@ -55,6 +57,8 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _equipCommand = _specialCommandManager.GetEquipCommand(SlotIndex);
 
         UpdateSlotIcon();
@@ -66,10 +70,15 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
         ClearEventHandlers();
     }
 
-    private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
+    private async void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
     {
-        UpdateSlotIcon();
-        _inventoryState.SelectedProp = null;
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
+        {
+            UpdateSlotIcon();
+            _inventoryState.SelectedProp = null;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateSlotIcon()

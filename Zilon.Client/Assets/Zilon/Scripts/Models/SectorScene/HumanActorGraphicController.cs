@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -13,9 +15,12 @@ public class HumanActorGraphicController : MonoBehaviour
 
     public IActor Actor { get; set; }
     public ActorGraphicBase Graphic;
+    private TaskScheduler _taskScheduler;
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _visualSlots = new Dictionary<int, VisualPropHolder>();
 
         ProjectSlotsToVisual();
@@ -49,9 +54,14 @@ public class HumanActorGraphicController : MonoBehaviour
         }
     }
 
-    private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
+    private async void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
     {
-        UpdateEquipment();
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
+        {
+            UpdateEquipment();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateEquipment()
