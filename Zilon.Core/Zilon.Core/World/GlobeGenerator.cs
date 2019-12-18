@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
@@ -14,7 +15,7 @@ namespace Zilon.Core.World
     /// Экземпляр генератора мира с историей.
     /// </summary>
     /// <seealso cref="IGlobeGenerator" />
-    public class GlobeGenerator : IGlobeGenerator
+    public sealed class GlobeGenerator : IGlobeGenerator
     {
         private readonly TerrainInitiator _terrainInitiator;
         private readonly ProvinceInitiator _provinceInitiator;
@@ -55,13 +56,13 @@ namespace Zilon.Core.World
             const int WORLD_SIZE = 40;
             await GenerateAndAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
 
-            const int START_LOCALITIES = 8;
+            const int START_TRIBES = 8;
             const int POPULATION_UNIT_COUNT = 4;
             const int PERSON_PER_POPULATION_UNIT = 10;
 
             // Берём START_LOCALITIES случайных точек. Это стартовые города государсв.
             var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
-                .Take(START_LOCALITIES)
+                .Take(START_TRIBES)
                 .OrderBy(x => Guid.NewGuid())
                 .Select(coordIndex => new OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
