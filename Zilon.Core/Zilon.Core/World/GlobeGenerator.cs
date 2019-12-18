@@ -22,7 +22,7 @@ namespace Zilon.Core.World
         private readonly IHumanPersonFactory _humanPersonFactory;
         private readonly IBotPlayer _botPlayer;
 
-        private NameGeneration.RandomName _personNameGenerator;
+        private readonly NameGeneration.RandomName _personNameGenerator;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="GlobeGenerator"/>.
@@ -63,7 +63,7 @@ namespace Zilon.Core.World
             var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
                 .Take(START_LOCALITIES)
                 .OrderBy(x => Guid.NewGuid())
-                .Select(coordIndex => new Core.OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
+                .Select(coordIndex => new OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
             var personId = 1;
             foreach (var region in globe.Terrain.Regions)
@@ -110,7 +110,7 @@ namespace Zilon.Core.World
                 for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
                 {
                     var province = await CreateProvinceAsync().ConfigureAwait(false);
-                    province.TerrainCell = new TerrainCell { Coords = new Core.OffsetCoords(terrainCellX, terrainCellY) };
+                    province.TerrainCell = new TerrainCell { Coords = new OffsetCoords(terrainCellX, terrainCellY) };
                     provinces.Add(province);
                 }
             };
