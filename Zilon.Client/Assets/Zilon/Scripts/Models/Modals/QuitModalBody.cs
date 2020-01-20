@@ -13,6 +13,8 @@ using Zilon.Core.Commands;
 
 public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 {
+    private ICommand _targetCommand;
+
     public Text Text;
 
     private string[] _texts = new[] {
@@ -24,23 +26,39 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
         "Just leave. When you come back, I'll be waiting with a bat."
     };
 
-    [Inject(Id = "quit-command")] private ICommand _command;
+    [Inject(Id = "quit-command")]
+    private readonly ICommand _quitCommand;
 
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [Inject(Id = "quit-title-command")]
+    private readonly ICommand _quitTitleCommand;
 
-    public string Caption => "Quit";
+    [Inject]
+    private readonly ICommandManager _clientCommandExecutor;
+
+    public string Caption { get; private set; }
 
     public event EventHandler Closed;
 
-    public void Init()
+    public void Init(string caption, bool closeGame)
     {
+        Caption = caption ?? throw new ArgumentNullException(nameof(caption));
+
+        if (closeGame)
+        {
+            _targetCommand = _quitCommand;
+        }
+        else
+        {
+            _targetCommand = _quitTitleCommand;
+        }
+
         var textIndex = UnityEngine.Random.Range(0, _texts.Length - 1);
         Text.text = _texts[textIndex];
     }
 
     public void ApplyChanges()
     {
-        _clientCommandExecutor.Push(_command);
+        _clientCommandExecutor.Push(_targetCommand);
     }
 
     public void CancelChanges()

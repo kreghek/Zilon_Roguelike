@@ -20,7 +20,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class MonsterGeneratorTests
     {
         /// <summary>
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 .Returns<string>(sid => schemeDict[sid]);
             var schemeService = schemeServiceMock.Object;
 
-            var dice = new Dice(3121);
+            var dice = new LinearDice(3121);
             var randomSourceMock = new Mock<MonsterGeneratorRandomSource>(dice).As<IMonsterGeneratorRandomSource>();
             randomSourceMock.CallBase = true;
             randomSourceMock.Setup(x => x.RollRarity()).Returns(2);

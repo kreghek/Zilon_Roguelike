@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Schemes;
@@ -14,7 +14,8 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
     [TestFixture]
-    public class DungeonMapFactoryTests
+    [Parallelizable(ParallelScope.All)]
+    public class RoomMapFactoryTests
     {
         /// <summary>
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
@@ -26,15 +27,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
-
-
             // ACT
             Func<Task> act = async () =>
             {
                 var map = await factory.CreateAsync(sectorScheme);
             };
-
-
 
             // ARRANGE
             act.Should().NotThrow();
@@ -49,24 +46,22 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         [TestCase(1)]
         [TestCase(8674)]
         [TestCase(1000)]
-        public void Create_RealRandom_NoExceptions(int diceSeed)
+        [Parallelizable]
+        public void Create_RealRoomRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var dice = new Dice(diceSeed);
-            var randomSource = new RoomGeneratorRandomSource(dice);
+            var leanerDice = new LinearDice(diceSeed);
+            var gaussDice = new GaussDice(diceSeed);
+            var randomSource = new RoomGeneratorRandomSource(leanerDice, gaussDice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
-
-
 
             // ACT
             Func<Task> act = async () =>
             {
                 var map = await factory.CreateAsync(sectorScheme);
             };
-
-
 
             // ARRANGE
             act.Should().NotThrow();
@@ -76,21 +71,19 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public async Task Create_RealRandom_NoOverlapNodesAsync()
+        [Parallelizable]
+        public async Task Create_RealRoomRandom_NoOverlapNodesAsync()
         {
             // ARRANGE
-            var dice = new Dice(3245);
-            var randomSource = new RoomGeneratorRandomSource(dice);
+            var linearDice = new LinearDice(3245);
+            var gaussDice = new GaussDice(3245);
+            var randomSource = new RoomGeneratorRandomSource(linearDice, gaussDice);
             var roomGenerator = new RoomGenerator(randomSource);
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
-
-
             // ACT
             var map = await factory.CreateAsync(sectorScheme);
-
-
 
             // ARRANGE
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();

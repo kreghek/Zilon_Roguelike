@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
-    public class HexNode: IMapNode
+    public class HexNode: IGraphNode
     {
         /// <summary>
         /// Уникальный идентификатор узла в рамках сектора.
@@ -21,13 +21,17 @@ namespace Zilon.Core.Tactics.Spatial
         public CubeCoords CubeCoords { get; }
         public bool IsObstacle { get; }
 
-        public HexNode(int x, int y, bool isObstacle = false)
+        public HexNode(int x, int y, bool isObstacle)
         {
             OffsetX = x;
             OffsetY = y;
             IsObstacle = isObstacle;
 
             CubeCoords = HexHelper.ConvertToCube(x, y);
+        }
+
+        public HexNode(int x, int y): this(x, y, false)
+        {
         }
 
         public override string ToString()

@@ -75,7 +75,6 @@ namespace Zilon.Core.Spec.Steps
             }
         }
 
-
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
         public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {

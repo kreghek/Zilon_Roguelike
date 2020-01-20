@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using Zilon.Core.Tactics.Spatial;
+
+using JetBrains.Annotations;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -16,6 +18,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// <returns> Количество ходов ожидания. </returns>
         int SelectIdleDuration(int min, int max);
 
-        IMapNode SelectTargetRoamingNode(IEnumerable<IMapNode> mapNodes);
+        /// <summary>
+        /// Выбор случайного узла для перемещения по карте сектора.
+        /// </summary>
+        /// <param name="mapNodes">Доступные для выбора узлы карты.</param>
+        /// <returns>Возвращает узле карты сектора. Или null, если такого узла нет.</returns>
+        [CanBeNull] IGraphNode SelectTargetRoamingNode([NotNull, ItemNotNull] IEnumerable<IGraphNode> mapNodes);
     }
 }

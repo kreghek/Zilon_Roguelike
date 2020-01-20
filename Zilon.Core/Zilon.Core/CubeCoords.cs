@@ -22,43 +22,6 @@ namespace Zilon.Core
             return $"(X: {X}, Y: {Y}, Z: {Z})";
         }
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is CubeCoords))
-            {
-                return false;
-            }
-
-            var vector = (CubeCoords)obj;
-            return X == vector.X &&
-                   Y == vector.Y &&
-                   Z == vector.Z;
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = -307843816;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            hashCode = hashCode * -1521134295 + Z.GetHashCode();
-            return hashCode;
-        }
-
-        public static bool operator ==(CubeCoords v, CubeCoords v2)
-        {
-            return v.X == v2.X && v.Y == v2.Y && v.Z == v2.Z;
-        }
-
-        public static bool operator !=(CubeCoords v, CubeCoords v2)
-        {
-            return !(v == v2);
-        }
-
-        public static CubeCoords operator +(CubeCoords v, CubeCoords v2)
-        {
-            return new CubeCoords(v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z);
-        }
-
         public static CubeCoords operator *(CubeCoords v, int q)
         {
             return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
@@ -69,6 +32,21 @@ namespace Zilon.Core
             return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
         }
 
+        public static bool operator ==(CubeCoords left, CubeCoords right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(CubeCoords left, CubeCoords right)
+        {
+            return !(left == right);
+        }
+
+        public static CubeCoords operator +(CubeCoords v, CubeCoords v2)
+        {
+            return new CubeCoords(v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z);
+        }
+
         public int DistanceTo(CubeCoords cubeCoords)
         {
             var a = this;
@@ -77,6 +55,26 @@ namespace Zilon.Core
             var distance = Math.Max(distance1, Math.Abs(a.Z - b.Z));
 
             return distance;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is CubeCoords coords &&
+                   X == coords.X &&
+                   Y == coords.Y &&
+                   Z == coords.Z;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = -307843816;
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                hashCode = hashCode * -1521134295 + Z.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     public class HexMap : MapBase
     {
-        private readonly IDictionary<SegmentKey, IMapNode[,]> _segmentDict;
+        private readonly IDictionary<SegmentKey, IGraphNode[,]> _segmentDict;
         private readonly int _segmentSize;
 
         public HexMap(int segmentSize)
@@ -20,13 +21,13 @@ namespace Zilon.Core.Tactics.Spatial
 
             _segmentSize = segmentSize;
 
-            _segmentDict = new Dictionary<SegmentKey, IMapNode[,]>();
+            _segmentDict = new Dictionary<SegmentKey, IGraphNode[,]>();
 
             CreateSegment(0, 0);
         }
 
         /// <summary>Список узлов карты.</summary>
-        public override IEnumerable<IMapNode> Nodes
+        public override IEnumerable<IGraphNode> Nodes
         {
             get
             {
@@ -49,7 +50,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>Создаёт ребро между двумя узлами графа карты.</summary>
         /// <param name="node1">Узел графа карты.</param>
         /// <param name="node2">Узел графа карты.</param>
-        public override void AddEdge(IMapNode node1, IMapNode node2)
+        public override void AddEdge(IGraphNode node1, IGraphNode node2)
         {
             // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
             // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
@@ -57,20 +58,31 @@ namespace Zilon.Core.Tactics.Spatial
 
         /// <summary>Добавляет новый узел графа.</summary>
         /// <param name="node"></param>
-        public override void AddNode(IMapNode node)
+        public override void AddNode(IGraphNode node)
         {
             var hexNode = (HexNode)node;
             var offsetX = hexNode.OffsetX;
             var offsetY = hexNode.OffsetY;
 
             var nodeMatrix = _segmentDict.First().Value;
+
+            if (nodeMatrix[offsetX, offsetY] != null)
+            {
+                // Эта проверка нужна, чтобы отлавливать дубликаты координат,
+                // которые могут быть созданы фабриками.
+                // Дубликаты так же попадают в регионы и могут быть сложными в отладке.
+                // Потому что искажают дальнейшую работу с картой.
+                //TODO Рассматреть вариант, когда проверка выполняется  стороне регионов.
+                throw new InvalidOperationException($"В координатах {offsetX},{offsetY} уже есть узел графа.");
+            }
+
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
         /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
         /// <param name="node">Опорный узел, относительно которого выбираются соседние узлы.</param>
         /// <returns>Возвращает набор соседних узлов.</returns>
-        public override IEnumerable<IMapNode> GetNext(IMapNode node)
+        public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
         {
             var hexCurrent = (HexNode)node;
             var offsetCoords = new OffsetCoords(hexCurrent.OffsetX, hexCurrent.OffsetY);
@@ -125,7 +137,7 @@ namespace Zilon.Core.Tactics.Spatial
                     neighborSegmentY++;
                 }
 
-                IMapNode currentNeibour;
+                IGraphNode currentNeibour;
                 if (neighborSegmentX == segmentX &&
                     neighborSegmentY == segmentY)
                 {
@@ -147,7 +159,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="targetNode">Целевая ячейка.</param>
         /// <param name="actor">Проверяемый актёр.</param>
         /// <returns>true, если указанный узел проходим для актёра. Иначе - false.</returns>
-        public override bool IsPositionAvailableFor(IMapNode targetNode, IActor actor)
+        public override bool IsPositionAvailableFor(IGraphNode targetNode, IActor actor)
         {
             if (!base.IsPositionAvailableFor(targetNode, actor))
             {
@@ -161,7 +173,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
         /// <param name="node1">Узел графа карты.</param>
         /// <param name="node2">Узел графа карты.</param>
-        public override void RemoveEdge(IMapNode node1, IMapNode node2)
+        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
         {
             // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
             // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
@@ -203,7 +215,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         private void CreateSegment(int segmentX, int segmentY)
         {
-            var matrix = new IMapNode[_segmentSize, _segmentSize];
+            var matrix = new IGraphNode[_segmentSize, _segmentSize];
 
             var key = new SegmentKey(segmentX, segmentY);
             _segmentDict[key] = matrix;
@@ -223,17 +235,46 @@ namespace Zilon.Core.Tactics.Spatial
             return neighborX;
         }
 
-        private static bool CheckNodeIsObstable(IMapNode targetNode)
+        private static bool CheckNodeIsObstable(IGraphNode targetNode)
         {
             var hex = (HexNode)targetNode;
             var hexIsObstacle = hex.IsObstacle;
             return hexIsObstacle;
         }
 
-        public override bool IsPositionAvailableForContainer(IMapNode targetNode)
+        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
         {
             var isObstacle = CheckNodeIsObstable(targetNode);
             return !isObstacle;
+        }
+
+        /// <summary>
+        /// Distances the between.
+        /// </summary>
+        /// <param name="currentNode">The current node.</param>
+        /// <param name="targetNode">The target node.</param>
+        /// <returns></returns>
+        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
+        {
+            if (currentNode is null)
+            {
+                throw new ArgumentNullException(nameof(currentNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            var actorHexNode = (HexNode)currentNode;
+            var containerHexNode = (HexNode)targetNode;
+
+            var actorCoords = actorHexNode.CubeCoords;
+            var containerCoords = containerHexNode.CubeCoords;
+
+            var distance = actorCoords.DistanceTo(containerCoords);
+
+            return distance;
         }
 
         private struct SegmentKey
@@ -252,22 +293,30 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                if (!(obj is SegmentKey))
-                {
-                    return false;
-                }
-
-                var key = (SegmentKey)obj;
-                return X == key.X &&
+                return obj is SegmentKey key &&
+                       X == key.X &&
                        Y == key.Y;
             }
 
             public override int GetHashCode()
             {
-                var hashCode = 1502939027;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                return hashCode;
+                unchecked
+                {
+                    var hashCode = 1861411795;
+                    hashCode = hashCode * -1521134295 + X.GetHashCode();
+                    hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            public static bool operator ==(SegmentKey left, SegmentKey right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(SegmentKey left, SegmentKey right)
+            {
+                return !(left == right);
             }
         }
     }

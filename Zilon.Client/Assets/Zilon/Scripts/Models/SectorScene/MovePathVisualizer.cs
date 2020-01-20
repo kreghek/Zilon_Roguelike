@@ -3,9 +3,11 @@
 using UnityEngine;
 
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 public class MovePathVisualizer : MonoBehaviour
@@ -14,7 +16,7 @@ public class MovePathVisualizer : MonoBehaviour
 
     [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
     [Inject] private readonly ISectorUiState _playerState;
-    private List<IMapNode> _lastPath;
+    private IList<IGraphNode> _lastPath;
 
     public void FixedUpdate()
     {

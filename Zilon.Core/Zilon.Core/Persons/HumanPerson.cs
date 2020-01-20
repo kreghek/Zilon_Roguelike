@@ -9,7 +9,9 @@ using Newtonsoft.Json;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.LogicCalculations;
 using Zilon.Core.Persons.Auxiliary;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -77,7 +79,7 @@ namespace Zilon.Core.Persons
             TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
-            Survival.StatCrossKeyValue += Survival_StatCrossKeyValue;
+            Survival.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
         }
 
@@ -493,8 +495,6 @@ namespace Zilon.Core.Persons
             PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            var stat = Survival.Stats.SingleOrDefault(x => x.Type == statType);
-
             var currentBonusValue = 0;
             var directionQuaff = direction == PersonRuleDirection.Negative ? -1 : 1;
 
@@ -593,7 +593,7 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.KeyPoints, _survivalRandomSource);
+            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.Stat.KeySegments, _survivalRandomSource);
         }
 
 
@@ -702,24 +702,7 @@ namespace Zilon.Core.Persons
         {
             if (string.IsNullOrWhiteSpace(rule.Params))
             {
-                switch (rule.Level)
-                {
-                    case PersonRuleLevel.Lesser:
-                        efficientModifierValue++;
-                        break;
-
-                    case PersonRuleLevel.Normal:
-                        efficientModifierValue += 3;
-                        break;
-
-                    case PersonRuleLevel.Grand:
-                        efficientModifierValue += 5;
-                        break;
-
-                    case PersonRuleLevel.Absolute:
-                        efficientModifierValue += 10;
-                        break;
-                }
+                efficientModifierValue = RuleCalculations.CalcEfficientByRuleLevel(efficientModifierValue, rule.Level);
             }
             else
             {
@@ -738,24 +721,7 @@ namespace Zilon.Core.Persons
 
                     if (hasAllTags)
                     {
-                        switch (rule.Level)
-                        {
-                            case PersonRuleLevel.Lesser:
-                                efficientModifierValue++;
-                                break;
-
-                            case PersonRuleLevel.Normal:
-                                efficientModifierValue += 3;
-                                break;
-
-                            case PersonRuleLevel.Grand:
-                                efficientModifierValue += 5;
-                                break;
-
-                            case PersonRuleLevel.Absolute:
-                                efficientModifierValue += 10;
-                                break;
-                        }
+                        efficientModifierValue = RuleCalculations.CalcEfficientByRuleLevel(efficientModifierValue, rule.Level);
                     }
                 }
             }

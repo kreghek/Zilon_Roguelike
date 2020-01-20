@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -14,7 +12,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
+    [Category(TestCategories.REAL_RESOURCE)]
     public class SchemeServiceTests
     {
         /// <summary>
@@ -173,7 +172,7 @@ namespace Zilon.Core.Tests.Schemes
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = ConfigurationManager.AppSettings["SchemeCatalog"];
+            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
             var schemeLocator = new FileSchemeLocator(schemePath);
 

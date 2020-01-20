@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonDialogs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -48,7 +48,7 @@ namespace Zilon.Core.MapGenerators
                                      where !map.Transitions.Keys.Contains(node)
                                      select node;
 
-                var openNodes = new List<IMapNode>(availableNodes);
+                var openNodes = new List<IGraphNode>(availableNodes);
                 for (var i = 0; i < citizenCount; i++)
                 {
                     //TODO Объединить этот блок с генератором сундуков, как дубликат
@@ -91,7 +91,7 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private IActor CreateCitizen(IDropTableScheme traderDropTable, IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateCitizen(IDropTableScheme traderDropTable, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson(traderDropTable, _dropResolver);
             var actor = new Actor(person, botPlayer, startNode);
@@ -99,7 +99,7 @@ namespace Zilon.Core.MapGenerators
             return actor;
         }
 
-        private IActor CreateCitizen(IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateCitizen(IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson();
             var actor = new Actor(person, botPlayer, startNode);
@@ -107,7 +107,7 @@ namespace Zilon.Core.MapGenerators
             return actor;
         }
 
-        private IActor CreateCitizen(Dialog dialog, IMapNode startNode, IBotPlayer botPlayer)
+        private IActor CreateCitizen(Dialog dialog, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson(dialog);
             var actor = new Actor(person, botPlayer, startNode);

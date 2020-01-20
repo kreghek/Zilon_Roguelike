@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -13,7 +13,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture]
+    [TestFixture][Parallelizable(ParallelScope.All)]
     public class OpenContainerTaskTests
     {
         /// <summary>
@@ -59,18 +59,18 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
             var mapMock = new Mock<ISectorMap>();
-            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IMapNode>(), It.IsAny<IMapNode>()))
+            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns(true);
             var map = mapMock.Object;
 
-            var actorNodeMock = new Mock<IMapNode>();
+            var actorNodeMock = new Mock<IGraphNode>();
             var actorNode = actorNodeMock.Object;
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             var actor = actorMock.Object;
 
-            var containerNodeMock = new Mock<IMapNode>();
+            var containerNodeMock = new Mock<IGraphNode>();
             var containerNode = containerNodeMock.Object;
 
             var container = CreateContainer(containerNode);
@@ -88,8 +88,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ASSERT
             mapMock.Verify(x => x.TargetIsOnLine(
-                It.Is<IMapNode>(n => n == actorNode),
-                It.Is<IMapNode>(n => n == containerNode))
+                It.Is<IGraphNode>(n => n == actorNode),
+                It.Is<IGraphNode>(n => n == containerNode))
                 );
         }
 
@@ -100,7 +100,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return method;
         }
 
-        private IPropContainer CreateContainer(IMapNode containerNode)
+        private IPropContainer CreateContainer(IGraphNode containerNode)
         {
             var containerMock = new Mock<IPropContainer>();
             containerMock.SetupGet(x => x.Node).Returns(containerNode);
