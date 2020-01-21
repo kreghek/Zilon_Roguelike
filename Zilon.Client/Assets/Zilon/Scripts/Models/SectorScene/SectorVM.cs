@@ -276,6 +276,9 @@ public class SectorVM : MonoBehaviour
             playerActorStartNode,
             nodeViewModels);
 
+        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
+        FowHelper.UpdateFowData(playerActorViewModel.Actor, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
+
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
@@ -636,7 +639,9 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
+        var fowData = new HumanSectorFowData();
+
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
 
         actorManager.Add(actor);
 

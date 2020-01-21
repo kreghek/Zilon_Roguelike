@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
@@ -34,6 +35,7 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
+        public ISectorFowData SectorFowData { get; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -41,12 +43,25 @@ namespace Zilon.Core.Tactics
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
+
+            if (SectorFowData == null)
+            {
+                SectorFowData = new MonsterSectorFowData();
+            }
         }
 
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
         {
             _perkResolver = perkResolver;
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
+
+            SectorFowData = sectorFowData;
         }
 
         public bool CanBeDamaged()
@@ -67,7 +82,7 @@ namespace Zilon.Core.Tactics
 
         public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
         {
-            var openResult = method.TryOpen(container);
+            var openResult = method?.TryOpen(container);
 
             DoOpenContainer(container, openResult);
         }

@@ -1,16 +1,18 @@
-﻿namespace Zilon.Core.Tactics
+﻿using Zilon.Core.Graphs;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Данные о тумане войны для одного узла карты сектора.
     /// </summary>
     public sealed class SectorMapFowNode
     {
-        public SectorMapFowNode(OffsetCoords nodeCoords)
+        public SectorMapFowNode(IGraphNode node)
         {
-            NodeCoords = nodeCoords;
+            Node = node;
         }
 
-        public OffsetCoords NodeCoords { get; }
+        public IGraphNode Node { get; }
 
         public SectorMapNodeFowState State { get; private set; }
 
