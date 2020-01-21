@@ -242,6 +242,7 @@
     <Compile Include="Tactics\ILootContainer.cs" />
     <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
+    <Compile Include="Tactics\ISectorFowData.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\Windows\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
@@ -254,6 +255,8 @@
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\SectorMapFowNode.cs" />
+    <Compile Include="Tactics\SectorMapNodeFowState.cs" />
     <Compile Include="Tactics\Spatial\HexMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\IMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
