@@ -1,5 +1,4 @@
-﻿using System;
-using Zilon.Core.Persons.Survival;
+﻿using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.Persons
 {
