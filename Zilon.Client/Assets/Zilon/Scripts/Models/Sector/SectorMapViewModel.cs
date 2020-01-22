@@ -6,11 +6,16 @@ using Assets.Zilon.Scripts.Models.Sector;
 
 using UnityEngine;
 
+using Zenject;
+
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 public class SectorMapViewModel : MonoBehaviour
 {
+    [Inject]
+    private readonly DiContainer _diContainer;
+
     public MapNodeVM MapNodePrefab;
 
     public IEnumerable<MapNodeVM> NodeViewModels { get; private set; }
@@ -31,7 +36,9 @@ public class SectorMapViewModel : MonoBehaviour
 
         foreach (var node in map.Nodes)
         {
-            var mapNodeVm = Instantiate(MapNodePrefab, transform);
+            var mapNodeObj = _diContainer.InstantiatePrefab(MapNodePrefab, transform);
+
+            var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
