@@ -9,11 +9,11 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Globe
 {
-    public class MoveGroupCommand : ICommand
+    public class MoveGroupCommand : ICommand<GlobeCommandContext>
     {
         private const int TRAVEL_TURNS = 50;
         private readonly HumanPlayer _player;
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
         private readonly IGlobeUiState _globeUiState;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Zilon.Core.Commands.Globe
 
         public MoveGroupCommand(
             HumanPlayer player,
-            IWorldManager worldManager,
+            IGlobeManager worldManager,
             IGlobeUiState globeUiState)
         {
             _player = player;
@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands.Globe
         /// <returns>
         /// Возвращает true, если команду можно выполнить. Иначе возвращает false.
         /// </returns>
-        public bool CanExecute()
+        public bool CanExecute(GlobeCommandContext context)
         {
             if (_player.MainPerson == null)
             {
@@ -52,13 +52,13 @@ namespace Zilon.Core.Commands.Globe
         }
 
         /// <summary>Выполнение команды.</summary>
-        public void Execute()
+        public void Execute(GlobeCommandContext context)
         {
             var selectedNodeViewModel = (IGlobeNodeViewModel)_globeUiState.SelectedViewModel;
 
             var currentNode = _player.GlobeNode;
             var currentGlobeCell = _player.Terrain;
-            var region = _worldManager.Regions[currentGlobeCell];
+            var region = _worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == currentGlobeCell);
 
             if (region == selectedNodeViewModel.ParentRegion)
             {
@@ -91,8 +91,9 @@ namespace Zilon.Core.Commands.Globe
 
                 var currentTerrainNode = _player.GlobeNode;
                 var currentTerrainCell = _player.Terrain;
-                //TODO Выборку ячейки мира по узлу провиции нужно упростить.
-                var targetNeighborTerrainCell = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
+
+                var region1 = _worldManager.Globe.Terrain.Regions.Single(x => x == selectedNodeViewModel.ParentRegion);
+                var targetNeighborTerrainCell = region1.TerrainCell;
                 var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
                 var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
                                                                                     currentTerrainCell,

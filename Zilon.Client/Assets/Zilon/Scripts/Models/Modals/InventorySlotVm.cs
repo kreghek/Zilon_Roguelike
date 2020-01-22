@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
@@ -20,11 +22,11 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly ICommandManager<SectorCommandContext> _comamndManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
-
-    [NotNull] private ICommand _equipCommand;
+    private TaskScheduler _taskScheduler;
+    [NotNull] private ICommand<SectorCommandContext> _equipCommand;
 
     public IActor Actor { get; set; }
     public int SlotIndex;
@@ -33,6 +35,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     public Image IconImage;
     public EquipmentSlotTypes SlotTypes;
     public Sprite[] TypeBackgrounds;
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     public Vector3 Position => GetComponent<RectTransform>().position;
     public IProp Prop
@@ -54,6 +57,8 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _equipCommand = _specialCommandManager.GetEquipCommand(SlotIndex);
 
         UpdateSlotIcon();
@@ -65,10 +70,15 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
         ClearEventHandlers();
     }
 
-    private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
+    private async void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
     {
-        UpdateSlotIcon();
-        _inventoryState.SelectedProp = null;
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
+        {
+            UpdateSlotIcon();
+            _inventoryState.SelectedProp = null;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateSlotIcon()
@@ -122,7 +132,8 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void FixedUpdate()
     {
-        var canEquip = _equipCommand.CanExecute();
+        var commandContext = SectorCommandContextFactory.CreateContext();
+        var canEquip = _equipCommand.CanExecute(commandContext);
         var selectedProp = _inventoryState.SelectedProp;
         var denySlot = !canEquip && selectedProp != null;
         DenyBorder.SetActive(denySlot);

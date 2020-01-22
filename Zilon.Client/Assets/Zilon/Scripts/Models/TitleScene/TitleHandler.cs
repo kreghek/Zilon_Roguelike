@@ -1,6 +1,5 @@
 ﻿using Assets.Zilon.Scripts.Models.TitleScene;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 
@@ -10,7 +9,7 @@ using Zilon.Core.World;
 
 public class TitleHandler : MonoBehaviour
 {
-    [Inject] private readonly IWorldManager _globeManager;
+    [Inject] private readonly IGlobeManager _globeManager;
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _humanPlayer;
 

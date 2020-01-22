@@ -30,6 +30,8 @@ namespace Zilon.Core.Tactics.Spatial
             CubeCoords = HexHelper.ConvertToCube(x, y);
         }
 
+        //TODO Добавить конструктор, принимающий OffsetCoords.
+        // На уровне объекта хранить OffsetCoords вместо разрозненных x и y.
         public HexNode(int x, int y): this(x, y, false)
         {
         }

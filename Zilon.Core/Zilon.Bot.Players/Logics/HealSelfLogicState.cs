@@ -11,7 +11,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public class HealSelfLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
         {
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)

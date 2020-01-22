@@ -1,4 +1,5 @@
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -13,7 +14,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -37,20 +37,18 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
-
-        Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
-        Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
-
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
-        Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-command").To<QuitCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
     }
 
     private void RegisterDices()

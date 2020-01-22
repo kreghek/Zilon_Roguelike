@@ -2,7 +2,6 @@
 
 using Zilon.Core.Players;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring
 {
@@ -27,14 +26,19 @@ namespace Zilon.Core.ProgressStoring
             return storageData;
         }
 
-        public void Restore(HumanPlayer humanPlayer, Globe globe, IWorldManager worldManager)
+        public void Restore(HumanPlayer humanPlayer, Globe globe, IGlobeManager worldManager)
         {
+            if (worldManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(worldManager));
+            }
+
             var terrainCoords = new OffsetCoords(TerrainX, TerrainY);
-            var terrainCell = globe.Terrain.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
+            var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
             humanPlayer.Terrain = terrainCell;
             humanPlayer.SectorSid = SectorSid;
 
-            var globeRegion = worldManager.Regions[terrainCell];
+            var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == terrainCell);
             humanPlayer.GlobeNode = globeRegion.RegionNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
         }
     }

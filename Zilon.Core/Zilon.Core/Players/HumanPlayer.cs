@@ -2,7 +2,6 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Players
 {

@@ -19,7 +19,7 @@ public class GlobeMinimap : MonoBehaviour
 
     public Image MinimapContent;
 
-    [Inject] private IWorldManager _worldManager;
+    [Inject] private IGlobeManager _worldManager;
     [Inject] private HumanPlayer _humanPlayer;
 
     private Texture2D _realmTexture;
@@ -46,8 +46,8 @@ public class GlobeMinimap : MonoBehaviour
         var globe = _worldManager.Globe;
         var terrain = globe.Terrain;
 
-        var globeWidth = terrain.Length;
-        var globeHeight = terrain[0].Length;
+        var globeWidth = terrain.Cells.Length;
+        var globeHeight = terrain.Cells[0].Length;
 
         var branchColors = new[] { Color.red, Color.blue, Color.green, Color.yellow,
                 Color.black, Color.magenta, Color.cyan, Color.gray };
@@ -59,25 +59,25 @@ public class GlobeMinimap : MonoBehaviour
         {
             for (int x = 0; x < globeWidth; x++)
             {
-                var cell = terrain[x][y];
-                if (globe.LocalitiesCells.TryGetValue(cell, out var locality))
-                {
-                    var branch = locality.Branches.Single(b => b.Value > 0);
-                    var owner = locality.Owner;
+                var cell = terrain.Cells[x][y];
+                //if (globe.LocalitiesCells.TryGetValue(cell, out var locality))
+                //{
+                //    var branch = locality.Branches.Single(b => b.Value > 0);
+                //    var owner = locality.Owner;
 
-                    var mainRealmColor = owner.Banner.MainColor;
-                    var realmColor = new Color(
-                        mainRealmColor.R / 255f,
-                        mainRealmColor.G / 255f,
-                        mainRealmColor.B / 255f);
+                //    var mainRealmColor = owner.Banner.MainColor;
+                //    var realmColor = new Color(
+                //        mainRealmColor.R / 255f,
+                //        mainRealmColor.G / 255f,
+                //        mainRealmColor.B / 255f);
 
-                    DrawBlock(_realmTexture, x, y, realmColor);
-                    DrawBlock(_branchesTexture, x, y, branchColors[(int)branch.Key]);
-                }
-                else
-                {
-                    ClearBlock(_realmTexture, x, y);
-                }
+                //    DrawBlock(_realmTexture, x, y, realmColor);
+                //    DrawBlock(_branchesTexture, x, y, branchColors[(int)branch.Key]);
+                //}
+                //else
+                //{
+                //    ClearBlock(_realmTexture, x, y);
+                //}
             }
         }
 

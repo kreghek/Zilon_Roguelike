@@ -5,7 +5,6 @@ using System.Linq;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
@@ -19,35 +18,34 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        private readonly ISectorMap _map;
         private readonly ITacticalActUsageService _actService;
-        private readonly IActorManager _actorManager;
 
-        public DefeatTargetLogicState(ISectorManager sectorManager,
-                                      ITacticalActUsageService actService,
-                                      IActorManager actorManager)
+        public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
-            _map = sectorManager.CurrentSector.Map;
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
-            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }
 
-        private IAttackTarget GetTarget(IActor actor)
+        private IAttackTarget GetTarget(IActor actor, SectorSnapshot sectorSnapshot)
         {
             //TODO Убрать дублирование кода с IntruderDetectedTrigger
             // Этот фрагмент уже однажды был использован неправильно,
             // что привело к трудноуловимой ошибке.
-            var intruders = CheckForIntruders(actor);
+            var intruders = CheckForIntruders(actor, sectorSnapshot);
 
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var map = sectorSnapshot.Sector.Map;
+
+            var orderedIntruders = intruders.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
             var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             return nearbyIntruder;
         }
 
-        private IEnumerable<IActor> CheckForIntruders(IActor actor)
+        private IEnumerable<IActor> CheckForIntruders(IActor actor, SectorSnapshot sectorSnapshot)
         {
-            foreach (var target in _actorManager.Items)
+            var actorManager = sectorSnapshot.Sector.ActorManager;
+            var map = sectorSnapshot.Sector.Map;
+
+            foreach (var target in actorManager.Items)
             {
                 if (target.Owner == actor.Owner)
                 {
@@ -59,7 +57,7 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -69,7 +67,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private bool CheckAttackAvailability(IActor actor, IAttackTarget target)
+        private bool CheckAttackAvailability(IActor actor, IAttackTarget target, SectorSnapshot sectorSnapshot)
         {
             if (actor.Person.TacticalActCarrier == null)
             {
@@ -79,17 +77,24 @@ namespace Zilon.Bot.Players.Logics
             var actCarrier = actor.Person.TacticalActCarrier;
             var act = actCarrier.Acts.First();
 
-            var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
-            var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
+            var map = sectorSnapshot.Sector.Map;
+
+            var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
             return isInDistance && targetIsOnLine;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (_target == null)
             {
-                _target = GetTarget(actor);
+                _target = GetTarget(actor, sectorSnapshot);
             }
 
             var targetCanBeDamaged = _target.CanBeDamaged();
@@ -99,7 +104,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var isAttackAllowed = CheckAttackAvailability(actor, _target);
+            var isAttackAllowed = CheckAttackAvailability(actor, _target, sectorSnapshot);
             if (isAttackAllowed)
             {
                 var attackTask = new AttackTask(actor, _target, _actService);
@@ -118,12 +123,14 @@ namespace Zilon.Bot.Players.Logics
                 }
                 else
                 {
+                    var map = sectorSnapshot.Sector.Map;
+
                     _refreshCounter = REFRESH_COUNTER_VALUE;
-                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, _target.Node);
+                    var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
 
                     if (targetIsOnLine)
                     {
-                        _moveTask = new MoveTask(actor, _target.Node, _map);
+                        _moveTask = new MoveTask(actor, _target.Node, map);
                         return _moveTask;
                     }
                     else

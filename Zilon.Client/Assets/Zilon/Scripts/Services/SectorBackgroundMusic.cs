@@ -1,19 +1,17 @@
 ﻿using System.Linq;
+
 using UnityEngine;
-
-using Zenject;
-
-using Zilon.Core.Tactics;
 
 public class SectorBackgroundMusic : MonoBehaviour
 {
+    public SectorViewModel SectorViewModel;
+
+    private bool _trackPlaying;
+
     private readonly string[] _pacificSectorSids = new[] {
         "city",
         "forest"
     };
-
-    [Inject]
-    private readonly ISectorManager _sectorManager;
 
     public AudioSource AudioSource;
 
@@ -21,18 +19,40 @@ public class SectorBackgroundMusic : MonoBehaviour
 
     public AudioClip DungeionMusic;
 
-    public void Awake()
+    public void Update()
     {
-        var currentSectorSid = _sectorManager.CurrentSector.Scheme.Sid;
+        if (!SectorViewModel.IsInitialized)
+        {
+            return;
+        }
+
+        if (_trackPlaying)
+        {
+            return;
+        }
+
+        SelectAndStartPlayingMusic();
+    }
+
+    public void SelectAndStartPlayingMusic()
+    {
+        var selectedClip = SelectMusicClipBySectorSid(SectorViewModel.Sector.Scheme?.Sid);
+        AudioSource.clip = selectedClip;
+
+        AudioSource.Play();
+
+        _trackPlaying = true;
+    }
+
+    private AudioClip SelectMusicClipBySectorSid(string currentSectorSid)
+    {
         if (_pacificSectorSids.Contains(currentSectorSid))
         {
-            AudioSource.clip = PacificMusic;
+            return PacificMusic;
         }
         else
         {
-            AudioSource.clip = DungeionMusic;
+            return DungeionMusic;
         }
-
-        AudioSource.Play();
     }
 }

@@ -21,22 +21,20 @@ namespace Zilon.Core.Commands
         private readonly ITacticalActUsageService _tacticalActUsageService;
 
         [ExcludeFromCodeCoverage]
-        public AttackCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
-            ISectorUiState playerState,
+        public AttackCommand(
             ITacticalActUsageService tacticalActUsageService) :
-            base(gameLoop, sectorManager, playerState)
+            base()
         {
             _tacticalActUsageService = tacticalActUsageService;
         }
 
-        public override bool CanExecute()
+        public override bool CanExecute(SectorCommandContext context)
         {
-            var map = SectorManager.CurrentSector.Map;
+            var map = context.CurrentSector.Map;
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var currentNode = context.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = GetCanExecuteActorViewModel();
+            var selectedActorViewModel = GetCanExecuteActorViewModel(context);
             if (selectedActorViewModel == null)
             {
                 return false;
@@ -44,9 +42,9 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedActorViewModel.Actor.Node;
 
-            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
+            var act = context.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
-                PlayerState.ActiveActor.Actor == selectedActorViewModel.Actor)
+                context.ActiveActor.Actor == selectedActorViewModel.Actor)
             {
                 return true;
             }
@@ -73,7 +71,7 @@ namespace Zilon.Core.Commands
 
                 if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
                 {
-                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
+                    var hasPropResource = CheckPropResource(context.ActiveActor.Actor.Person.Inventory,
                         act.Constrains.PropResourceType,
                         act.Constrains.PropResourceCount.Value);
 
@@ -113,20 +111,20 @@ namespace Zilon.Core.Commands
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
-        private IActorViewModel GetCanExecuteActorViewModel()
+        private IActorViewModel GetCanExecuteActorViewModel(SectorCommandContext context)
         {
-            var hover = PlayerState.HoverViewModel as IActorViewModel;
-            var selected = PlayerState.SelectedViewModel as IActorViewModel;
+            var hover = context.HoverViewModel as IActorViewModel;
+            var selected = context.SelectedViewModel as IActorViewModel;
             return hover ?? selected;
         }
 
-        protected override void ExecuteTacticCommand()
+        protected override void ExecuteTacticCommand(SectorCommandContext context)
         {
-            var targetActorViewModel = (IActorViewModel)PlayerState.SelectedViewModel;
+            var targetActorViewModel = (IActorViewModel)context.SelectedViewModel;
 
             var targetActor = targetActorViewModel.Actor;
             var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService));
-            PlayerState.TaskSource.Intent(intention);
+            context.TaskSource.Intent(intention);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace Assets.Zilon.Scripts.Models.TitleScene
     public static class GameProgressHelper
     {
         public static void ResetGameState(
-            IWorldManager globeManager,
+            IGlobeManager globeManager,
             IScoreManager scoreManager,
             HumanPlayer humanPlayer)
         {
-            globeManager.Globe = null;
+            globeManager.ResetGlobeState();
             humanPlayer.GlobeNode = null;
             humanPlayer.MainPerson = null;
             humanPlayer.SectorSid = null;

@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Zilon.Core.Commands
 {
-    public class QueueCommandManager : ICommandManager
+    public class QueueCommandManager<TContext> : ICommandManager<TContext>
     {
-        private readonly Queue<ICommand> _queue;
+        private readonly Queue<ICommand<TContext>> _queue;
 
         [ExcludeFromCodeCoverage]
         public QueueCommandManager()
         {
-            _queue = new Queue<ICommand>();
+            _queue = new Queue<ICommand<TContext>>();
         }
 
-        public ICommand Pop()
+        public event EventHandler CommandPushed;
+
+        public ICommand<TContext> Pop()
         {
             if (_queue.Any())
             {
@@ -24,9 +27,10 @@ namespace Zilon.Core.Commands
             return null;
         }
 
-        public void Push(ICommand command)
+        public void Push(ICommand<TContext> command)
         {
             _queue.Enqueue(command);
+            CommandPushed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

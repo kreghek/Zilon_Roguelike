@@ -9,27 +9,31 @@ namespace Assets.Zilon.Scripts.Services
     public class SpecialCommandManager
     {
         private readonly DiContainer _diContainer;
-        private readonly Dictionary<int, EquipCommand> _equipCommandDict;
+        private readonly Dictionary<int, ICommand<SectorCommandContext>> _equipCommandDict;
 
         public SpecialCommandManager(DiContainer diContainer)
         {
             _diContainer = diContainer;
 
-            _equipCommandDict = new Dictionary<int, EquipCommand>();
+            _equipCommandDict = new Dictionary<int, ICommand<SectorCommandContext>>();
         }
 
-        public EquipCommand GetEquipCommand(int slotIndex)
+        public ICommand<SectorCommandContext> GetEquipCommand(int slotIndex)
         {
-            if (_equipCommandDict.TryGetValue(slotIndex, out var equipCommand))
+            if (_equipCommandDict.TryGetValue(slotIndex, out var equipWrapperCommand))
             {
-                return equipCommand;
+                return equipWrapperCommand;
             }
 
-            equipCommand = _diContainer.ResolveId<ICommand>("equip-command") as EquipCommand;
-            _equipCommandDict[slotIndex] = equipCommand;
-            equipCommand.SlotIndex = slotIndex;
+            equipWrapperCommand = _diContainer.ResolveId<ICommand<SectorCommandContext>>("equip-command");
+            var castedWrapper = (UpdateGlobeCommand<SectorCommandContext>)equipWrapperCommand;
+            _equipCommandDict[slotIndex] = equipWrapperCommand;
 
-            return equipCommand;
+            var undelyingEquipCommand = castedWrapper.UnderlyingCommand as EquipCommand;
+
+            undelyingEquipCommand.SlotIndex = slotIndex;
+
+            return equipWrapperCommand;
         }
     }
 }

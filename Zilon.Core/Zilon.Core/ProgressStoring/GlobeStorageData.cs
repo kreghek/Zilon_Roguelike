@@ -2,33 +2,140 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
-using Zilon.Core.World;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     public class GlobeStorageData
     {
-        public TerrainCell[][] Terrain { get; set; }
+        /// <summary>
+        /// Полная информация о ландшафте мира.
+        /// </summary>
+        public TerrainStorageData Terrain { get; set; }
 
+        /// <summary>
+        /// Информация о текущих государствах мира.
+        /// </summary>
         public RealmStorageData[] Realms { get; set; }
 
-        public AgentStorageData[] Agents { get; set; }
-
+        /// <summary>
+        /// Информация о текущих населённых пунктах мира.
+        /// </summary>
         public LocalityStorageData[] Localities { get; set; }
 
-        public int AgentCrisys { get; set; }
+        public SectorStorageData[] Sectors { get; set; }
 
-        public TerrainCell StartProvince { get; set; }
+        public HumanPersonStorageData[] Persons { get; set; }
 
-        public TerrainCell HomeProvince { get; set; }
+        public ActorStorageData[] Actors { get; set; }
 
+        /// <summary>
+        /// Текущая итерация генерация мира.
+        /// </summary>
+        public int Iteration { get; set; }
 
         public static GlobeStorageData Create(Globe globe)
         {
-            var storageData = new GlobeStorageData();
-            storageData.Terrain = globe.Terrain;
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
 
+            var storageData = new GlobeStorageData
+            {
+                Iteration = globe.Iteration
+            };
+
+            FillTerrainStorageData(globe, storageData);
+
+            var realmDict = FillRealmsStorageData(globe, storageData);
+            FillLocalities(globe, storageData, realmDict);
+
+            var personDict = FillPersons(globe, storageData);
+
+            var sectorStorageDict = new Dictionary<ISector, SectorStorageData>();
+            FillSectors(globe, storageData, personDict, sectorStorageDict);
+
+            FillActors(globe, storageData, personDict, sectorStorageDict);
+
+            return storageData;
+        }
+
+        private static void FillActors(Globe globe,
+            GlobeStorageData storageData,
+            Dictionary<IPerson, string> personDict,
+            IDictionary<ISector, SectorStorageData> sectorStorageDict)
+        {
+            var actors = new List<ActorStorageData>();
+
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                foreach (var actor in sectorInfo.Sector.ActorManager.Items)
+                {
+                    var actorStorageData = ActorStorageData.Create(actor, sectorInfo.Sector, sectorStorageDict, personDict);
+                    actors.Add(actorStorageData);
+                }
+            }
+
+            storageData.Actors = actors.ToArray();
+        }
+
+        private static void FillSectors(Globe globe, GlobeStorageData storageData,
+            Dictionary<IPerson, string> personDict,
+            IDictionary<ISector, SectorStorageData> sectorStorageDict)
+        {
+            var sectorStorageDataList = new List<SectorStorageData>();
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Region,
+                    sectorInfo.RegionNode,
+                    sectorInfo.Sector,
+                    personDict);
+
+                sectorStorageDataList.Add(sectorStorageData);
+
+                sectorStorageDict.Add(sectorInfo.Sector, sectorStorageData);
+            }
+
+            storageData.Sectors = sectorStorageDataList.ToArray();
+        }
+
+        private static Dictionary<IPerson, string> FillPersons(Globe globe, GlobeStorageData storageData)
+        {
+            var personStorageDataList = new List<HumanPersonStorageData>();
+            var personDict = new Dictionary<IPerson, string>();
+            foreach (var sectorInfo in globe.SectorInfos)
+            {
+                foreach (var actor in sectorInfo.Sector.ActorManager.Items)
+                {
+                    var personStorageData = HumanPersonStorageData.Create(actor.Person as HumanPerson);
+                    personStorageDataList.Add(personStorageData);
+                    personDict.Add(actor.Person, personStorageData.Id);
+                }
+            }
+            storageData.Persons = personStorageDataList.ToArray();
+            return personDict;
+        }
+
+        private static void FillLocalities(Globe globe, GlobeStorageData storageData, Dictionary<Realm, RealmStorageData> realmDict)
+        {
+            var localityDict = globe.Localities.ToDictionary(locality => locality,
+                            locality => new LocalityStorageData
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Name = locality.Name,
+                                RealmId = realmDict[locality.Owner].Id,
+                            });
+
+            storageData.Localities = localityDict.Select(x => x.Value).ToArray();
+        }
+
+        private static Dictionary<Realm, RealmStorageData> FillRealmsStorageData(Globe globe, GlobeStorageData storageData)
+        {
             var realmDict = globe.Realms.ToDictionary(realm => realm, realm => new RealmStorageData
             {
                 Id = Guid.NewGuid().ToString(),
@@ -37,52 +144,46 @@ namespace Zilon.Core.WorldGeneration
             });
 
             storageData.Realms = realmDict.Select(x => x.Value).ToArray();
-
-            var localityDict = globe.Localities.ToDictionary(locality => locality,
-                locality => new LocalityStorageData
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = locality.Name,
-                    Coords = locality.Cell.Coords,
-                    RealmId = realmDict[locality.Owner].Id,
-                    Population = locality.Population,
-                    Branches = locality.Branches.Select(x => new LocalityBranchStorageData { Type = x.Key, Value = x.Value }).ToArray()
-                });
-
-            storageData.Localities = localityDict.Select(x => x.Value).ToArray();
-
-            var agentDict = globe.Agents.ToDictionary(agent => agent,
-                agent => new AgentStorageData
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = agent.Name,
-                    Hp = agent.Hp,
-                    RealmId = realmDict[agent.Realm].Id,
-                    Location = agent.Location.Coords,
-                    Skills = agent.Skills.Select(x => new AgentSkillStorageData
-                    {
-                        Type = x.Key,
-                        Value = x.Value
-                    }).ToArray()
-                });
-
-            storageData.Agents = agentDict.Select(x => x.Value).ToArray();
-
-            storageData.AgentCrisys = globe.AgentCrisys;
-
-            storageData.HomeProvince = globe.HomeProvince;
-
-            storageData.StartProvince = globe.StartProvince;
-
-            return storageData;
+            return realmDict;
         }
 
-        public Globe Restore()
+        private static void FillTerrainStorageData(Globe globe, GlobeStorageData storageData)
         {
-            var globe = new Globe();
+            var terrainStorageData = TerrainStorageData.Create(globe.Terrain);
 
-            globe.Terrain = Terrain;
+            storageData.Terrain = terrainStorageData;
+        }
 
+        public Globe Restore(ISchemeService schemeService,
+            ISurvivalRandomSource survivalRandomSource,
+            IPropFactory propFactory,
+            ISectorInfoFactory sectorInfoFactory)
+        {
+            if (sectorInfoFactory is null)
+            {
+                throw new ArgumentNullException(nameof(sectorInfoFactory));
+            }
+
+            var globe = new Globe
+            {
+                Iteration = Iteration
+            };
+
+            RestoreTerrain(globe, schemeService);
+
+            var realmDict = RestoreRealms(globe);
+
+            RestoreLocalities(out globe.Localities, Localities, globe.Terrain, realmDict);
+
+            var personDict = RestorePersons(globe, schemeService, survivalRandomSource, propFactory);
+
+            RestoreSectors(globe, sectorInfoFactory, personDict);
+
+            return globe;
+        }
+
+        private Dictionary<string, Realm> RestoreRealms(Globe globe)
+        {
             var realmDict = Realms.ToDictionary(storedRealm => storedRealm.Id, storedRealm => new Realm
             {
                 Name = storedRealm.Name,
@@ -90,38 +191,13 @@ namespace Zilon.Core.WorldGeneration
             });
 
             globe.Realms = realmDict.Select(x => x.Value).ToList();
-
-            RestoreLocalities(out globe.Localities, out globe.LocalitiesCells, Localities, globe.Terrain, realmDict);
-
-            RestoreAgents(out globe.Agents, Agents, globe.Terrain, realmDict);
-
-            globe.AgentCrisys = AgentCrisys;
-            globe.HomeProvince = globe.Terrain[HomeProvince.Coords.X][HomeProvince.Coords.Y];
-            globe.StartProvince = globe.Terrain[StartProvince.Coords.X][StartProvince.Coords.Y];
-
-            return globe;
+            return realmDict;
         }
 
-        private static void RestoreAgents(out List<Agent> agents, AgentStorageData[] storedAgents,
-            TerrainCell[][] terrain,
-            Dictionary<string, Realm> realmsDict)
+        private void RestoreTerrain(Globe globe, ISchemeService schemeService)
         {
-            agents = new List<Agent>(storedAgents.Length);
-
-            foreach (var storedAgent in storedAgents)
-            {
-                var agentCell = terrain[storedAgent.Location.X][storedAgent.Location.Y];
-                var agent = new Agent
-                {
-                    Hp = storedAgent.Hp,
-                    Name = storedAgent.Name,
-                    Location = agentCell,
-                    Realm = realmsDict[storedAgent.RealmId],
-                    Skills = storedAgent.Skills.ToDictionary(x => x.Type, x => x.Value)
-                };
-
-                agents.Add(agent);
-            }
+            var terrain = Terrain.Restore(schemeService);
+            globe.Terrain = terrain;
         }
 
         /// <summary>
@@ -133,29 +209,68 @@ namespace Zilon.Core.WorldGeneration
         /// <param name="terrain"> Территория мира. </param>
         /// <param name="realmsDict"> Словарь государств. Нужен, чтобы знать id государств, которые были в файле сохранения. </param>
         private static void RestoreLocalities(out List<Locality> localities,
-            out Dictionary<TerrainCell, Locality> localityCells,
             LocalityStorageData[] storedLocalities,
-            TerrainCell[][] terrain,
+            Terrain terrain,
             Dictionary<string, Realm> realmsDict)
         {
             localities = new List<Locality>(storedLocalities.Length);
-            localityCells = new Dictionary<TerrainCell, Locality>(storedLocalities.Length);
 
             foreach (var storedLocality in storedLocalities)
             {
-                var localityCell = terrain[storedLocality.Coords.X][storedLocality.Coords.Y];
                 var locality = new Locality()
                 {
                     Name = storedLocality.Name,
-                    Cell = localityCell,
                     Owner = realmsDict[storedLocality.RealmId],
-                    Population = storedLocality.Population,
-                    Branches = storedLocality.Branches.ToDictionary(x => x.Type, x => x.Value)
                 };
 
                 localities.Add(locality);
-                localityCells.Add(localityCell, locality);
             }
+        }
+
+        private Dictionary<string, IPerson> RestorePersons(Globe globe, ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, IPropFactory propFactory)
+        {
+            var personsTemp = Persons.Select(x => new
+            {
+                Person = (IPerson)x.Restore(schemeService, survivalRandomSource, propFactory),
+                x.Id
+            });
+            globe.Persons = personsTemp.Select(x => x.Person).ToList();
+
+            return personsTemp.ToDictionary(x => x.Id, x => x.Person);
+        }
+
+        private Dictionary<string, ISector> RestoreSectors(
+            Globe globe,
+            ISectorInfoFactory sectorInfoFactory,
+            Dictionary<string, IPerson> personDict)
+        {
+            var infos = new List<SectorInfo>();
+            var sectorDict = new Dictionary<string, ISector>();
+            foreach (var sectorInfoStorageData in Sectors)
+            {
+                var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == sectorInfoStorageData.TerrainCoords);
+                var globeRegion = globe.Terrain.Regions.Single(x => x.TerrainCell == terrainCell);
+                var coordX = sectorInfoStorageData.GlobeRegionNodeCoords.X;
+                var coordY = sectorInfoStorageData.GlobeRegionNodeCoords.Y;
+                var globeRegionNode = globeRegion.RegionNodes.Single(x => x.OffsetX == coordX && x.OffsetY == coordY);
+
+                var actorStorageDatas = Actors.Where(x => x.SectorId == sectorInfoStorageData.Id).ToArray();
+
+                var info = sectorInfoFactory.Create(globeRegion,
+                    globeRegionNode,
+                    sectorInfoStorageData,
+                    actorStorageDatas,
+                    personDict
+                    );
+
+                infos.Add(info);
+
+                sectorDict.Add(sectorInfoStorageData.Id, info.Sector);
+            }
+
+            globe.SectorInfos = infos;
+
+            return sectorDict;
         }
     }
 }

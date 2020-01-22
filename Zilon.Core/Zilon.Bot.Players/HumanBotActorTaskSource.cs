@@ -10,17 +10,18 @@ namespace Zilon.Bot.Players
     public sealed class HumanBotActorTaskSource : BotActorTaskSourceBase
     {
         private IBotSettings _botSettings;
+        private readonly LogicStateTreePatterns _logicStateTreePatterns;
 
-        public HumanBotActorTaskSource(HumanPlayer player) : base(player)
+        public HumanBotActorTaskSource(HumanPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
         {
-            
+            _logicStateTreePatterns = logicStateTreePatterns;
         }
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
             if (_botSettings == null)
             {
-                return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot)
+                return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
                 {
                     WriteStateChanges = true
                 };
@@ -31,25 +32,25 @@ namespace Zilon.Bot.Players
             {
                 case "":
                 case null:
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DefaultHumanBot)
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
                     {
                         WriteStateChanges = true
                     };
 
                 case "JOE":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.JoeHumanBot)
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.JoeHumanBot)
                     {
                         WriteStateChanges = true
                     };
 
                 case "DUNCAN":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.DuncanHumanBot)
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DuncanHumanBot)
                     {
                         WriteStateChanges = true
                     };
 
                 case "MONSTER":
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster)
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
                     {
                         WriteStateChanges = true
                     };

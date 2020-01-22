@@ -82,12 +82,18 @@
     <Compile Include="Client\UiStateBase.cs" />
     <Compile Include="Client\Windows\IGlobeModalManager.cs" />
     <Compile Include="Commands\CommandCantExecuteException.cs" />
+    <Compile Include="Commands\GlobeCommandContext.cs" />
     <Compile Include="Commands\Globe\MoveGroupCommand.cs" />
     <Compile Include="Commands\Globe\RegionTransitionHelper.cs" />
+    <Compile Include="Commands\IActorTaskSourceCollector.cs" />
     <Compile Include="Commands\IRepeatableCommand.cs" />
+    <Compile Include="Commands\ICommandWrapper.cs" />
+    <Compile Include="Commands\SectorCommandContext.cs" />
+    <Compile Include="Commands\ActorModalCommandContext.cs" />
     <Compile Include="Commands\Sector\SectorTransitionMoveCommand.cs" />
     <Compile Include="Commands\Sector\ShowDialogModalCommand.cs" />
     <Compile Include="Commands\Sector\ShowTraderModalCommand.cs" />
+    <Compile Include="Commands\UpdateGlobeCommand.cs" />
     <Compile Include="CommonServices\Dices\DiceBase.cs" />
     <Compile Include="CommonServices\Dices\DiceValuesHelper.cs" />
     <Compile Include="CommonServices\Dices\ExponentialAlgorithms.cs" />
@@ -182,15 +188,13 @@
     <Compile Include="Persons\Survival\SurvivalStatKeySegmentExtensions.cs" />
     <Compile Include="Persons\TakeHitJobProgress.cs" />
     <Compile Include="Persons\TakeDamageJobProgress.cs" />
+    <Compile Include="ProgressStoring\ActorStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeMonsterStateStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionNodeStorageData.cs" />
     <Compile Include="ProgressStoring\GlobeRegionStorageData.cs" />
     <Compile Include="ProgressStoring\HumanPersonStorageData.cs" />
     <Compile Include="ProgressStoring\HumanPlayerStorageData.cs" />
     <Compile Include="ProgressStoring\HumanSurvivalStatStorageData.cs" />
-    <Compile Include="ProgressStoring\LocalityBranchStorageData.cs" />
-    <Compile Include="ProgressStoring\AgentSkillStorageData.cs" />
-    <Compile Include="ProgressStoring\AgentStorageData.cs" />
     <Compile Include="ProgressStoring\LocalityStorageData.cs" />
     <Compile Include="ProgressStoring\PerkJobStorageData.cs" />
     <Compile Include="ProgressStoring\PerkStorageData.cs" />
@@ -199,6 +203,8 @@
     <Compile Include="ProgressStoring\RealmStorageData.cs" />
     <Compile Include="ProgressStoring\ScoreSidCounterStorageData.cs" />
     <Compile Include="ProgressStoring\ScoresStorageData.cs" />
+    <Compile Include="ProgressStoring\SectorStorageData.cs" />
+    <Compile Include="ProgressStoring\TerrainStorageData.cs" />
     <Compile Include="Props\ChestStore.cs" />
     <Compile Include="Props\EquipmentDurableService.cs" />
     <Compile Include="Props\EquipmentDurableServiceRandomSource.cs" />
@@ -234,6 +240,7 @@
     <Compile Include="Tactics\ActorInteractionEvents\PureMissActorInteractionEvent.cs" />
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
+    <Compile Include="Tactics\Behaviour\SectorSnapshot.cs" />
     <Compile Include="Tactics\Behaviour\FowHelper.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\ActorInteractionEvents\DamageActorInteractionEvent.cs" />
@@ -252,6 +259,7 @@
     <Compile Include="Client\Sector\SectorUiState.cs" />
     <Compile Include="Client\PropTransferMachine.cs" />
     <Compile Include="Client\PropTransferStore.cs" />
+    <Compile Include="Tactics\ITaskSourceProvider.cs" />
     <Compile Include="Tactics\NewActorInteractionEventArgs.cs" />
     <Compile Include="Tactics\PropContainerPurpose.cs" />
     <Compile Include="Tactics\ScoreAchievements.cs" />
@@ -460,7 +468,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomGeneratorRandomSource.cs" />
     <Compile Include="MapGenerators\SectorGenerator.cs" />
     <Compile Include="Tactics\DropTablePropChest.cs" />
-    <Compile Include="Tactics\GameLoop.cs" />
+    <Compile Include="World\GameLoop.cs" />
     <Compile Include="Tactics\IActorManager.cs" />
     <Compile Include="Tactics\ManagerItemsChangedEventArgs.cs" />
     <Compile Include="Tactics\HitHelper.cs" />
@@ -470,7 +478,8 @@
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IDropResolverRandomSource.cs" />
-    <Compile Include="Tactics\IGameLoop.cs" />
+    <Compile Include="World\GlobeIterationContext.cs" />
+    <Compile Include="World\IGameLoop.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
     <Compile Include="Tactics\IPropContainerManager.cs" />
     <Compile Include="Tactics\IPropContainer.cs" />
@@ -529,60 +538,53 @@
     <Compile Include="Tactics\UsedActEventArgs.cs" />
     <Compile Include="Tactics\UsedTacticalActs.cs" />
     <Compile Include="CommonServices\UserTimeProvider.cs" />
-    <Compile Include="WorldGeneration\Agent.cs" />
-    <Compile Include="WorldGeneration\AgentActionType.cs" />
-    <Compile Include="WorldGeneration\AgentCards\AgentSupport.cs" />
-    <Compile Include="WorldGeneration\AgentCards\AgentOpposition.cs" />
-    <Compile Include="WorldGeneration\AgentCards\CreateLocality.cs" />
-    <Compile Include="WorldGeneration\AgentCards\Disciple.cs" />
-    <Compile Include="WorldGeneration\AgentCards\IncreasePopulation.cs" />
-    <Compile Include="WorldGeneration\AgentCards\TakeLocation.cs" />
-    <Compile Include="WorldGeneration\AgentCards\TransportHelper.cs" />
-    <Compile Include="WorldGeneration\Army.cs" />
-    <Compile Include="WorldGeneration\BranchType.cs" />
-    <Compile Include="WorldGeneration\AgentCards\ChangeLocality.cs" />
-    <Compile Include="WorldGeneration\DirectBitmap.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationHistory.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationHistoryItem.cs" />
-    <Compile Include="WorldGeneration\GlobeGenerationResult.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionDraftValueType.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPatternValue.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionDraftValue.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPattern.cs" />
-    <Compile Include="WorldGeneration\GlobeRegionPatterns.cs" />
+    <Compile Include="World\DirectBitmap.cs" />
+    <Compile Include="World\GlobeGenerationResult.cs" />
+    <Compile Include="World\GlobeInitiator.cs" />
+    <Compile Include="World\GlobeRegionDraftValueType.cs" />
+    <Compile Include="World\GlobeRegionPatternValue.cs" />
+    <Compile Include="World\GlobeRegionDraftValue.cs" />
+    <Compile Include="World\GlobeRegionPattern.cs" />
+    <Compile Include="World\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
-    <Compile Include="WorldGeneration\IWorldGenerator.cs" />
-    <Compile Include="WorldGeneration\LocalityHelper.cs" />
-    <Compile Include="WorldGeneration\NameGeneration\CityNameGenerator.cs" />
-    <Compile Include="WorldGeneration\NameGeneration\NameGen.cs" />
-    <Compile Include="WorldGeneration\ScanResult.cs" />
-    <Compile Include="WorldGeneration\WorldGenerator.cs" />
-    <Compile Include="WorldGeneration\Globe.cs" />
-    <Compile Include="WorldGeneration\CacheHelper.cs" />
-    <Compile Include="WorldGeneration\IAgentCard.cs" />
-    <Compile Include="WorldGeneration\Locality.cs" />
-    <Compile Include="WorldGeneration\Realm.cs" />
-    <Compile Include="WorldGeneration\RealmRelations.cs" />
-    <Compile Include="WorldGeneration\RealmRelationType.cs" />
-    <Compile Include="WorldGeneration\TerrainCell.cs" />
+    <Compile Include="World\IGlobeEntity.cs" />
+    <Compile Include="World\ISectorBuilder.cs" />
+    <Compile Include="World\IGlobeGenerator.cs" />
+    <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
+    <Compile Include="World\NameGeneration\NameGen.cs" />
+    <Compile Include="World\NameGeneration\Sex.cs" />
+    <Compile Include="World\ProvinceInitiator.cs" />
+    <Compile Include="World\ISectorBuilderFactory.cs" />
+    <Compile Include="World\SectorInfo.cs" />
+    <Compile Include="World\SectorBuilder.cs" />
+    <Compile Include="World\TerrainInitiator.cs" />
+    <Compile Include="World\GlobeGenerator.cs" />
+    <Compile Include="World\Globe.cs" />
+    <Compile Include="World\Locality.cs" />
+    <Compile Include="World\Realm.cs" />
+    <Compile Include="World\RealmRelations.cs" />
+    <Compile Include="World\RealmRelationType.cs" />
+    <Compile Include="World\TerrainCell.cs" />
     <Compile Include="World\Color.cs" />
     <Compile Include="World\GlobeHelper.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
     <Compile Include="World\GlobeRegion.cs" />
     <Compile Include="World\GlobeRegionNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
-    <Compile Include="World\IWorldManager.cs" />
+    <Compile Include="World\ISectorInfoFactory.cs" />
+    <Compile Include="World\IGlobeManager.cs" />
     <Compile Include="World\MonsterSet.cs" />
     <Compile Include="World\RealmBanner.cs" />
+    <Compile Include="World\Terrain.cs" />
     <Compile Include="World\WildMeetingEventArgs.cs" />
-    <Compile Include="World\WorldManager.cs" />
+    <Compile Include="World\GlobeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+    <EmbeddedResource Include="World\NameGeneration\names.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
@@ -594,6 +596,7 @@
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -10,10 +11,24 @@ namespace Zilon.Core.Schemes
     {
         private readonly string _schemeCatalog;
 
+        private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
+
         [ExcludeFromCodeCoverage]
         public FileSchemeLocator([NotNull] string schemeCatalog)
         {
-            _schemeCatalog = schemeCatalog ?? throw new System.ArgumentNullException(nameof(schemeCatalog));
+            _schemeCatalog = schemeCatalog ?? throw new ArgumentNullException(nameof(schemeCatalog));
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static FileSchemeLocator CreateFromEnvVariable()
+        {
+            var schemeCatalogFromEnvVariable= Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
+            {
+                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+            }
+
+            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
         }
 
         public SchemeFile[] GetAll(string directory)

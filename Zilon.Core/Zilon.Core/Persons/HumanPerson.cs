@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons
 
         public int Id { get; set; }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public IEquipmentCarrier EquipmentCarrier { get; }
 

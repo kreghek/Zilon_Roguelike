@@ -16,12 +16,12 @@ namespace Zilon.Core.Tactics
     public class SectorManager : ISectorManager
     {
         private const string INTRO_LOCATION_SID = "intro";
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
         private readonly ISectorGenerator _generator;
         private readonly HumanPlayer _humanPlayer;
         private readonly ISchemeService _schemeService;
 
-        public SectorManager(IWorldManager worldManager,
+        public SectorManager(IGlobeManager worldManager,
             ISectorGenerator generator,
             HumanPlayer humanPlayer,
             ISchemeService schemeService)

@@ -16,14 +16,16 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     private const string HISTORY_BOOK_SID = "history-book";
 
     [Inject] private readonly ISectorUiState _playerState;
-    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
+    [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalCommandManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
-    [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
+    [Inject(Id = "show-history-command")] private readonly ICommand<ActorModalCommandContext> _showHistoryCommand;
 
     public PropItemVm PropItemViewModel;
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -68,10 +70,12 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
         var person = actor.Person;
         var personSlots = person.EquipmentCarrier.Slots;
 
+        var sectorCommandContext = SectorCommandContextFactory.CreateContext();
+
         for (var slotIndex = 0; slotIndex < personSlots.Length; slotIndex++)
         {
             var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
-            if (equipCommand.CanExecute())
+            if (equipCommand.CanExecute(sectorCommandContext))
             {
                 _commandManager.Push(equipCommand);
 
@@ -89,7 +93,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     {
         if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
         {
-            _commandManager.Push(_showHistoryCommand);
+            _modalCommandManager.Push(_showHistoryCommand);
         }
     }
 }
