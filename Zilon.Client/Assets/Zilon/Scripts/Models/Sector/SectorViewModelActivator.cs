@@ -13,7 +13,7 @@ public class SectorViewModelActivator : MonoBehaviour
 
     public SectorViewModel TargetSectorViewModel;
 
-    async void Update()
+    public void Update()
     {
         if (!_globeManager.IsGlobeInitialized)
         {
@@ -25,7 +25,7 @@ public class SectorViewModelActivator : MonoBehaviour
         var sectorInfo = globe.SectorInfos.First();
         var sector = sectorInfo.Sector;
 
-        await TargetSectorViewModel.Init(sector);
+        TargetSectorViewModel.Init(sector);
 
         Destroy(this);
     }

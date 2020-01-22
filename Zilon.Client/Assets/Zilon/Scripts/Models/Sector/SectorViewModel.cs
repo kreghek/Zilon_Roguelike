@@ -13,7 +13,7 @@ public class SectorViewModel : MonoBehaviour
 
     public bool IsInitialized { get; private set; }
 
-    public async Task Init(ISector sector)
+    public void Init(ISector sector)
     {
         Sector = sector;
 

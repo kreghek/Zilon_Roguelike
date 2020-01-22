@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 using Zenject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;

@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
