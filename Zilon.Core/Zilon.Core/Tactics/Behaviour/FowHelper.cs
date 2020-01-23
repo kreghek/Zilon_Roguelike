@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
@@ -61,8 +62,35 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static IGraphNode[] GetObservingNodes(ISectorMap map, IGraphNode baseNode, int radius)
         {
-            //TODO Оптимизировать
-            return map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
+            var border = new List<IGraphNode>() { baseNode };
+
+            var resultList = new List<IGraphNode>() { baseNode };
+
+            for (var i = 1; i <= radius; i++)
+            {
+                var newBorder = GetNextForBorder(border, resultList, map);
+
+                border.Clear();
+                border.AddRange(newBorder);
+                resultList.AddRange(newBorder);
+            }
+
+            return resultList.ToArray();// map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
+        }
+
+        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, ISectorMap map)
+        {
+            var borderTotal = new List<IGraphNode>();
+            foreach (var node in border)
+            {
+                var next = map.GetNext(node);
+
+                var newBorder = next.Except(border).Except(result);
+
+                borderTotal.AddRange(newBorder);
+            }
+
+            return borderTotal.ToArray();
         }
     }
 }
