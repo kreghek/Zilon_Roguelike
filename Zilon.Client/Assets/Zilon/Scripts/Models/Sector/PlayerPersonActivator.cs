@@ -70,9 +70,10 @@ public class PlayerPersonActivator : MonoBehaviour
         [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver);
+        var fowData = new HumanSectorFowData();
+        var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
 
-        FowHelper.UpdateFowData(actor, SectorViewModel.Sector.Map, startNode, 5);
+        FowHelper.UpdateFowData(actor.SectorFowData, SectorViewModel.Sector.Map, startNode, 5);
 
         actorManager.Add(actor);
 

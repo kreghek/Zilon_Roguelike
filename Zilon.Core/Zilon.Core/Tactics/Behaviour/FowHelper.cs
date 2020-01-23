@@ -10,15 +10,15 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Обновление состояния тумана войны для актёра с учётом карты и опорного узла карты.
         /// </summary>
-        /// <param name="actor">Актёр, состояние тумана войны которого обновляется.</param>
+        /// <param name="fowData">Состояние тумана войны которого обновляется.</param>
         /// <param name="map">Карта, на которой действует актёр.</param>
         /// <param name="baseNode">Опорный узел.</param>
         /// <param name="radius">Радиус обзора персонажа.</param>
-        public static void UpdateFowData(IActor actor, ISectorMap map, IGraphNode baseNode, int radius)
+        public static void UpdateFowData(ISectorFowData fowData, ISectorMap map, IGraphNode baseNode, int radius)
         {
-            if (actor is null)
+            if (fowData is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new System.ArgumentNullException(nameof(fowData));
             }
 
             if (map is null)
@@ -32,22 +32,37 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             // Все наблюдаемые из базового узла узлы карты.
-            var observingNodes = map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
+            var observingNodes = GetObservingNodes(map, baseNode, radius);
+            UpdateOrCreateFowNodes(fowData, observingNodes);
+        }
 
+        private static void UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
+        {
             foreach (var observingNode in observingNodes)
             {
                 // Если узла нет в данных о тумане войны, то добавляем его.
                 // Текущий узел в тумане войны переводим в состояние наблюдаемого.
-                var fowNode = actor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == observingNode);
+                var fowNode = GetFowNodeByMapNode(fowData, observingNode);
 
                 if (fowNode == null)
                 {
                     fowNode = new SectorMapFowNode(observingNode);
-                    actor.SectorFowData.AddNodes(new[] { fowNode });
+                    fowData.AddNodes(new[] { fowNode });
                 }
 
-                //fowNode.ChangeState(SectorMapNodeFowState.Observing);
+                fowNode.ChangeState(SectorMapNodeFowState.Observing);
             }
+        }
+
+        private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
+        {
+            return fowData.GetNode(observingNode);
+        }
+
+        private static IGraphNode[] GetObservingNodes(ISectorMap map, IGraphNode baseNode, int radius)
+        {
+            //TODO Оптимизировать
+            return map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
         }
     }
 }
