@@ -6,6 +6,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 [RequireComponent(typeof(MapNodeVM))]
 public class FowNodeController : MonoBehaviour
@@ -19,6 +20,9 @@ public class FowNodeController : MonoBehaviour
     public MapNodeVM NodeViewModel;
 
     public GameObject NodeGraphicObject;
+    private SectorMapFowNode _fowNode;
+
+    public ISectorMap SectorMap { get; set; }
 
     public void Start()
     {
@@ -39,8 +43,31 @@ public class FowNodeController : MonoBehaviour
             return;
         }
 
-        var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
-        var isObserving = fowNode?.State == SectorMapNodeFowState.Observing;
+        // Не обрабатываем узлы, которые далеко от активного актёра. Их всё равно не видно.
+        var distance = SectorMap.DistanceBetween(activeActor.Node, NodeViewModel.Node);
+        if (distance > 10)
+        {
+            return;
+        }
+
+        if (_fowNode == null)
+        {
+            var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
+
+            _fowNode = fowNode;
+        }
+
+        UpdateVisibilityUsingFowState();
+    }
+
+    private void UpdateVisibilityUsingFowState()
+    {
+        if (_fowNode == null)
+        {
+            return;
+        }
+
+        var isObserving = _fowNode.State == SectorMapNodeFowState.Observing;
 
         NodeGraphicObject.SetActive(isObserving);
     }
