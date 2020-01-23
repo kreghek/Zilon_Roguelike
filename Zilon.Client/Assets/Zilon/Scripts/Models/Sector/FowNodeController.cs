@@ -19,7 +19,7 @@ public class FowNodeController : MonoBehaviour
 
     public MapNodeVM NodeViewModel;
 
-    public GameObject NodeGraphicObject;
+    public GameObject FowObject;
     private SectorMapFowNode _fowNode;
 
     public ISectorMap SectorMap { get; set; }
@@ -27,7 +27,7 @@ public class FowNodeController : MonoBehaviour
     public void Start()
     {
         PrepareSlowUpdate();
-        NodeGraphicObject.SetActive(false);
+        FowObject.SetActive(true);
     }
 
     private void PrepareSlowUpdate()
@@ -50,14 +50,21 @@ public class FowNodeController : MonoBehaviour
             return;
         }
 
-        if (_fowNode == null)
-        {
-            var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
+        ///
+        var fowNode = activeActor.SectorFowData.GetNode(NodeViewModel.Node);
+        var isObserving = fowNode?.State == SectorMapNodeFowState.Observing;
 
-            _fowNode = fowNode;
-        }
+        FowObject.SetActive(!isObserving);
 
-        UpdateVisibilityUsingFowState();
+        //
+        //if (_fowNode == null)
+        //{
+        //    var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
+
+        //    _fowNode = fowNode;
+        //}
+
+        //UpdateVisibilityUsingFowState();
     }
 
     private void UpdateVisibilityUsingFowState()
@@ -69,7 +76,7 @@ public class FowNodeController : MonoBehaviour
 
         var isObserving = _fowNode.State == SectorMapNodeFowState.Observing;
 
-        NodeGraphicObject.SetActive(isObserving);
+        FowObject.SetActive(!isObserving);
     }
 
     void FixedUpdate()
