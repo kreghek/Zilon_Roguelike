@@ -34,11 +34,23 @@ namespace Zilon.Core.Tactics.Behaviour
 
             // Все наблюдаемые из базового узла узлы карты.
             var observingNodes = GetObservingNodes(map, baseNode, radius);
-            UpdateOrCreateFowNodes(fowData, observingNodes);
+
+            var currentObservedFowNodes = fowData.Nodes.Where(x=>x.State == SectorMapNodeFowState.Observing);
+
+            var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
+
+            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes);
+
+            foreach (var fowNode in notObservingFowNodes)
+            {
+                fowNode.ChangeState(SectorMapNodeFowState.Explored);
+            }
         }
 
-        private static void UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
+        private static SectorMapFowNode[] UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
         {
+            var observedFowNodes = new List<SectorMapFowNode>();
+
             foreach (var observingNode in observingNodes)
             {
                 // Если узла нет в данных о тумане войны, то добавляем его.
@@ -52,7 +64,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
 
                 fowNode.ChangeState(SectorMapNodeFowState.Observing);
+                observedFowNodes.Add(fowNode);
             }
+
+            return observedFowNodes.ToArray();
         }
 
         private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)

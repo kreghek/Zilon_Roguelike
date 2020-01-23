@@ -10,6 +10,9 @@ using Zilon.Core.Tactics;
 [RequireComponent(typeof(MapNodeVM))]
 public class FowNodeController : MonoBehaviour
 {
+    private const float UPDATE_FOW_DELAY = 0.3f;
+    private float _fowUpdateCounter;
+
     [Inject]
     private readonly ISectorUiState _sectorUiState;
 
@@ -19,10 +22,16 @@ public class FowNodeController : MonoBehaviour
 
     public void Start()
     {
+        PrepareSlowUpdate();
         NodeGraphicObject.SetActive(false);
     }
 
-    public void Update()
+    private void PrepareSlowUpdate()
+    {
+        _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
+    }
+
+    private void UpdateFowState()
     {
         var activeActor = _sectorUiState?.ActiveActor?.Actor;
         if (activeActor == null)
@@ -34,5 +43,15 @@ public class FowNodeController : MonoBehaviour
         var isObserving = fowNode?.State == SectorMapNodeFowState.Observing;
 
         NodeGraphicObject.SetActive(isObserving);
+    }
+
+    void FixedUpdate()
+    {
+        if (Time.fixedTime >= _fowUpdateCounter)
+        {
+            UpdateFowState();
+
+            _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
+        }
     }
 }
