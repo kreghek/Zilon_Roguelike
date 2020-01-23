@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             // Все наблюдаемые из базового узла узлы карты.
-            var observingNodes = map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
+            var observingNodes = map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
 
             foreach (var observingNode in observingNodes)
             {
