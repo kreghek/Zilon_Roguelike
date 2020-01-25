@@ -100,7 +100,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var next = map.GetNext(node);
 
-                var newBorder = next.Except(border).Except(result);
+                var newBorder = next.Except(border).Except(result).Except(borderTotal);
 
                 borderTotal.AddRange(newBorder);
             }

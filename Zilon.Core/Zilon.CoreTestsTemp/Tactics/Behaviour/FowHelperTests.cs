@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new SectorHexMap();
+            var map = new SectorHexMap(1000);
             for (var i = 0; i < mapSize; i++)
             {
                 for (var j = 0; j < mapSize; j++)
@@ -43,12 +43,15 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var baseNode = map.HexNodes.Single(x => x.OffsetX == baseX && x.OffsetY == baseY);
 
+            var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
+
             // ACT
 
             FowHelper.UpdateFowData(fowData, map, baseNode, radius);
 
             // ARRANGE
-            nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Should().NotBeEmpty();
+            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Select(x => x.Node).ToArray();
+            factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
         }
     }
 }
