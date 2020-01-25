@@ -45,26 +45,19 @@ public class FowNodeController : MonoBehaviour
 
         // Не обрабатываем узлы, которые далеко от активного актёра. Их всё равно не видно.
         var distance = SectorMap.DistanceBetween(activeActor.Node, NodeViewModel.Node);
-        if (distance > 6)
+        if (distance > 10)
         {
             return;
         }
 
-        ///
-        var fowNode = activeActor.SectorFowData.GetNode(NodeViewModel.Node);
-        var isObserving = fowNode?.State == SectorMapNodeFowState.Observing;
+        if (_fowNode == null)
+        {
+            var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
 
-        FowObject.SetActive(!isObserving);
+            _fowNode = fowNode;
+        }
 
-        //
-        //if (_fowNode == null)
-        //{
-        //    var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == NodeViewModel.Node);
-
-        //    _fowNode = fowNode;
-        //}
-
-        //UpdateVisibilityUsingFowState();
+        UpdateVisibilityUsingFowState();
     }
 
     private void UpdateVisibilityUsingFowState()
