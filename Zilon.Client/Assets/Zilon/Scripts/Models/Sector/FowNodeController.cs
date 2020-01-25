@@ -45,7 +45,7 @@ public class FowNodeController : MonoBehaviour
 
         // Не обрабатываем узлы, которые далеко от активного актёра. Их всё равно не видно.
         var distance = SectorMap.DistanceBetween(activeActor.Node, NodeViewModel.Node);
-        if (distance > 10)
+        if (distance > 6)
         {
             return;
         }
