@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 using Zenject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -258,6 +257,9 @@ public class SectorVM : MonoBehaviour
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);
+
+        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
+        FowHelper.UpdateFowData(playerActorViewModel.Actor.SectorFowData, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
@@ -619,7 +621,9 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
+        var fowData = new HumanSectorFowData();
+
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
 
         actorManager.Add(actor);
 

@@ -56,8 +56,8 @@ namespace Zilon.Core.World
             const int WORLD_SIZE = 40;
             await GenerateAndAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
 
-            const int START_TRIBES = 8;
-            const int POPULATION_UNIT_COUNT = 4;
+            const int START_TRIBES = 1;  //TODO Должно быть пару десятков
+            const int POPULATION_UNIT_COUNT = 4; // TODO Было 4
             const int PERSON_PER_POPULATION_UNIT = 10;
 
             // Берём START_LOCALITIES случайных точек. Это стартовые города государсв.

@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.IoC", "Zilon.IoC\Zilo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.WorldObserver", "Zilon.WorldObserver\Zilon.WorldObserver.csproj", "{FFD12106-72D7-45AE-8FEE-3D5583D1D9AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.CoreTestsTemp", "Zilon.CoreTestsTemp\Zilon.CoreTestsTemp.csproj", "{193F60BB-6504-42CA-97C6-27BCEC980FD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{FFD12106-72D7-45AE-8FEE-3D5583D1D9AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD12106-72D7-45AE-8FEE-3D5583D1D9AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD12106-72D7-45AE-8FEE-3D5583D1D9AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193F60BB-6504-42CA-97C6-27BCEC980FD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193F60BB-6504-42CA-97C6-27BCEC980FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193F60BB-6504-42CA-97C6-27BCEC980FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193F60BB-6504-42CA-97C6-27BCEC980FD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,7 +16,7 @@ public class ActorsViewModel : MonoBehaviour
     [NotNull] public ActorViewModel ActorPrefab;
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
 
-    [Inject] DiContainer _container;
+    [Inject] private readonly DiContainer _container;
 
     public ActorsViewModel()
     {

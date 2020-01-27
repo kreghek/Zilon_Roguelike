@@ -163,6 +163,8 @@
     <Compile Include="PersonDialogs\DialogNode.cs" />
     <Compile Include="Persons\AttackActorJobData.cs" />
     <Compile Include="Persons\AttackActorJobProgress.cs" />
+    <Compile Include="Tactics\MonsterSectorFowData.cs" />
+    <Compile Include="Tactics\HumanSectorFowData.cs" />
     <Compile Include="Persons\SurvivalDataBase.cs" />
     <Compile Include="Persons\ConsumeProviantJobProgress.cs" />
     <Compile Include="Persons\CreatePersonException.cs" />
@@ -239,6 +241,7 @@
     <Compile Include="Tactics\ActorTaskExecutionException.cs" />
     <Compile Include="Tactics\ArmorEventArgs.cs" />
     <Compile Include="Tactics\Behaviour\SectorSnapshot.cs" />
+    <Compile Include="Tactics\Behaviour\FowHelper.cs" />
     <Compile Include="Tactics\Behaviour\TaskException.cs" />
     <Compile Include="Tactics\ActorInteractionEvents\DamageActorInteractionEvent.cs" />
     <Compile Include="Tactics\DamageEfficientCalc.cs" />
@@ -249,6 +252,7 @@
     <Compile Include="Tactics\ILootContainer.cs" />
     <Compile Include="Tactics\InfiniteSectorManager.cs" />
     <Compile Include="Tactics\IScoreManager.cs" />
+    <Compile Include="Tactics\ISectorFowData.cs" />
     <Compile Include="Tactics\ISectorManager.cs" />
     <Compile Include="Client\Windows\ISectorModalManager.cs" />
     <Compile Include="Client\ISelectableViewModel.cs" />
@@ -262,6 +266,8 @@
     <Compile Include="Tactics\ScoreManager.cs" />
     <Compile Include="Tactics\Scores.cs" />
     <Compile Include="Tactics\SectorExitEventArgs.cs" />
+    <Compile Include="Tactics\SectorMapFowNode.cs" />
+    <Compile Include="Tactics\SectorMapNodeFowState.cs" />
     <Compile Include="Tactics\Spatial\HexMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\IMapNodeDistanceCalculator.cs" />
     <Compile Include="Tactics\Spatial\ISectorMap.cs" />
