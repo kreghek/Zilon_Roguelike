@@ -25,9 +25,6 @@ namespace Zilon.Core.World
         /// <summary>
         /// Создание
         /// </summary>
-        /// <param name="globe">Объект игрового мира, для которого создаётся локация.</param>
-        /// <param name="cell">Провинция игрового мира из указанного выше <see cref="Globe" />,
-        /// для которого создаётся локация.</param>
         /// <returns>
         /// Возвращает граф локация для провинции.
         /// </returns>
@@ -41,26 +38,29 @@ namespace Zilon.Core.World
                 // Пока не вращаем и не искажаем.
                 // Там, где может быть объект, гарантированно создаём один город и два подземелья.
                 var regionDraft = new GlobeRegionDraftValue[ProvinceBaseSize, ProvinceBaseSize];
-                var startPattern = GlobeRegionPatterns.Start;
-                var homePattern = GlobeRegionPatterns.Home;
-                // Расчитываем размер паттернов.
-                // Исходим из того, что пока все паттерны квадратные и одинаковые по размеру.
-                // Поэтому размер произвольного паттерна будет справедлив для всех остальных.
-                // Паттерн старта выбран произвольно.
-                var patternSize = startPattern.Values.GetUpperBound(0) - startPattern.Values.GetLowerBound(0) + 1;
+
+                // Для дальнейших вычислений выборан произвольный паттерн,
+                // т.к. размеры паттернов одинаковые.
+                var anyPattern = GlobeRegionPatterns.Angle;
+                var patternSize = GetPatternSize(anyPattern);
 
                 // Вставляем паттерны в указанные области
-                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
-                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, 1);
-                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, ProvinceBaseSize - patternSize - 1);
-                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, ProvinceBaseSize - patternSize - 1);
-                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (ProvinceBaseSize - patternSize) / 2, (ProvinceBaseSize - patternSize) / 2);
+                var center = (ProvinceBaseSize - patternSize) / 2;
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), center, center);
 
-                // На основе черновика генерируем злы провинции
+                // На основе черновика генерируем узлы провинции
                 AddProvinceNodesFromDraft(province, regionDraft);
 
                 return province;
             });
+        }
+
+        private static int GetPatternSize(GlobeRegionPattern anyPattern)
+        {
+            // Расчитываем размер паттернов.
+            // Исходим из того, что пока все паттерны квадратные и одинаковые по размеру.
+            // Поэтому размер произвольного паттерна будет справедлив для всех остальных.
+            return anyPattern.Values.GetUpperBound(0) - anyPattern.Values.GetLowerBound(0) + 1;
         }
 
         private void AddProvinceNodesFromDraft(Province province, GlobeRegionDraftValue[,] regionDraft)

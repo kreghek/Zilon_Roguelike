@@ -8,6 +8,7 @@ using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.World.GlobeDrafting;
 
 namespace Zilon.Core.World
 {
@@ -17,6 +18,7 @@ namespace Zilon.Core.World
     /// <seealso cref="IGlobeGenerator" />
     public sealed class GlobeGenerator : IGlobeGenerator
     {
+        private readonly GlobeDraftGenerator _globeDraftGenerator;
         private readonly TerrainInitiator _terrainInitiator;
         private readonly ISectorBuilderFactory _sectorBuilderFactory;
         private readonly IHumanPersonFactory _humanPersonFactory;
@@ -28,12 +30,13 @@ namespace Zilon.Core.World
         /// Создаёт экземпляр <see cref="GlobeGenerator"/>.
         /// </summary>
         public GlobeGenerator(
+            GlobeDraftGenerator globeDraftGenerator,
             TerrainInitiator terrainInitiator,
-            ProvinceInitiator provinceInitiator,
             ISectorBuilderFactory sectorBuilderFactory,
             IHumanPersonFactory humanPersonFactory,
             IBotPlayer botPlayer)
         {
+            _globeDraftGenerator = globeDraftGenerator;
             _terrainInitiator = terrainInitiator;
             _sectorBuilderFactory = sectorBuilderFactory;
             _humanPersonFactory = humanPersonFactory;
@@ -46,20 +49,12 @@ namespace Zilon.Core.World
 
         public async Task<GlobeGenerationResult> CreateGlobeAsync()
         {
+            var globeDraft = _globeDraftGenerator.Generate();
+
             var globe = new Globe();
 
-            var terrain = await _terrainInitiator.GenerateAsync().ConfigureAwait(false);
+            var terrain = await _terrainInitiator.GenerateAsync(globeDraft).ConfigureAwait(false);
             globe.Terrain = terrain;
-
-            const int START_TRIBES = 1;  //TODO Должно быть пару десятков
-            const int POPULATION_UNIT_COUNT = 4; // TODO Было 4
-            const int PERSON_PER_POPULATION_UNIT = 10;
-
-            // Берём START_LOCALITIES случайных точек. Это стартовые города государсв.
-            var localityCoords = Enumerable.Range(0, WORLD_SIZE * WORLD_SIZE)
-                .Take(START_TRIBES)
-                .OrderBy(x => Guid.NewGuid())
-                .Select(coordIndex => new OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
             var personId = 1;
             foreach (var terrainNode in globe.Terrain.TerrainNodes)
@@ -88,15 +83,20 @@ namespace Zilon.Core.World
 
                     globe.SectorInfos.Add(sectorInfo);
 
-                    for (var populationUnitIndex = 0; populationUnitIndex < POPULATION_UNIT_COUNT; populationUnitIndex++)
+                    var terrainNodeCoords = new OffsetCoords(terrainNode.OffsetX, terrainNode.OffsetY);
+                    var startLocalityDraft = globeDraft.StartLocalities.SingleOrDefault(x=>x.StartTerrainCoords == terrainNodeCoords);
+
+                    if (startLocalityDraft != null)
                     {
-                        for (var personIndex = 0; personIndex < PERSON_PER_POPULATION_UNIT; personIndex++)
+                        for (var populationUnitIndex = 0; populationUnitIndex < startLocalityDraft.Population; populationUnitIndex++)
                         {
-                            var node = sector.Map.Nodes.ElementAt(5_050 + personIndex + (populationUnitIndex * PERSON_PER_POPULATION_UNIT));
+                            var node = sector.Map.Nodes.ElementAt(5_050 + populationUnitIndex);
                             var person = CreatePerson(_humanPersonFactory, _personNameGenerator);
-                            person.Id = personId++;
+                            person.Id = personId;
                             var actor = CreateActor(_botPlayer, person, node);
                             sector.ActorManager.Add(actor);
+
+                            personId++;
                         }
                     }
                 }

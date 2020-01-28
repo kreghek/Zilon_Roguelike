@@ -478,6 +478,9 @@
     <Compile Include="Tactics\ITacticalActUsageRandomSource.cs" />
     <Compile Include="Tactics\IDropResolver.cs" />
     <Compile Include="Tactics\IDropResolverRandomSource.cs" />
+    <Compile Include="World\GlobeDrafting\GlobeDraftGenerator.cs" />
+    <Compile Include="World\GlobeDrafting\GlobeDraft.cs" />
+    <Compile Include="World\GlobeDrafting\RealmLocalityDraft.cs" />
     <Compile Include="World\GlobeIterationContext.cs" />
     <Compile Include="World\IGameLoop.cs" />
     <Compile Include="Tactics\IOpenContainerResult.cs" />
