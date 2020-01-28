@@ -17,11 +17,11 @@ namespace Zilon.Core.World
         /// <summary>
         /// Вспомогательное свойство региона для того, чтобы каждый раз не приводить узлы к ожидаемому типу.
         /// </summary>
-        public IEnumerable<TerrainCell> TerrainNodes
+        public IEnumerable<TerrainNode> TerrainNodes
         {
             get
             {
-                return Nodes.OfType<TerrainCell>();
+                return Nodes.OfType<TerrainNode>();
             }
         }
     }

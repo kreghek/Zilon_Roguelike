@@ -7,16 +7,16 @@ namespace Zilon.Core.World
     public class SectorInfo
     {
         public SectorInfo(ISector sector,
-                          Province region,
-                          ProvinceNode regionNode)
+                          Province province,
+                          ProvinceNode provinceNode)
         {
             Sector = sector ?? throw new ArgumentNullException(nameof(sector));
-            Region = region ?? throw new ArgumentNullException(nameof(region));
-            RegionNode = regionNode ?? throw new ArgumentNullException(nameof(regionNode));
+            Province = province ?? throw new ArgumentNullException(nameof(province));
+            ProvinceNode = provinceNode ?? throw new ArgumentNullException(nameof(provinceNode));
         }
 
         public ISector Sector { get; }
-        public Province Region { get; }
-        public ProvinceNode RegionNode { get; }
+        public Province Province { get; }
+        public ProvinceNode ProvinceNode { get; }
     }
 }

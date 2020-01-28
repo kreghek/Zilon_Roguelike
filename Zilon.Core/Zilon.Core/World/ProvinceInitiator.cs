@@ -54,19 +54,38 @@ namespace Zilon.Core.World
                 RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, 1);
                 RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, ProvinceBaseSize - patternSize - 1);
                 RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, ProvinceBaseSize - patternSize - 1);
-
                 RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (ProvinceBaseSize - patternSize) / 2, (ProvinceBaseSize - patternSize) / 2);
 
-                for (var x = 0; x <= ProvinceBaseSize; x++)
-                {
-                    for (var y = 0; y <= ProvinceBaseSize; y++)
-                    {
-                        AddNode(province, regionDraft, x, y);
-                    }
-                }
+                // На основе черновика генерируем злы провинции
+                AddProvinceNodesFromDraft(province, regionDraft);
 
                 return province;
             });
+        }
+
+        private void AddProvinceNodesFromDraft(Province province, GlobeRegionDraftValue[,] regionDraft)
+        {
+            for (var x = 0; x <= ProvinceBaseSize; x++)
+            {
+                for (var y = 0; y <= ProvinceBaseSize; y++)
+                {
+                    // Определяем, является ли узел граничным. На граничных узлах ничего не создаём.
+                    // Потому что это может вызвать трудности при переходах между провинциями.
+                    // Например, игрок при переходе сразу может попасть в данж или город.
+                    // Не отлажен механиз перехода, если часть узлов соседней провинции отсутствует.
+                    var isBorder = GetIsBorder(x, y);
+                    if (isBorder)
+                    {
+                        AddBorderNode(province, x, y);
+                    }
+                    else
+                    {
+                        var currentPatternValue = regionDraft[x, y];
+
+                        AddNode(province, currentPatternValue, x, y);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -187,20 +206,8 @@ namespace Zilon.Core.World
             return defaultPattern;
         }
 
-        private void AddNode(Province region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
+        private void AddNode(Province region, GlobeRegionDraftValue currentPatternValue, int x, int y)
         {
-            // Определяем, является ли узел граничным. На граничных узлах ничего не создаём.
-            // Потому что это может вызвать трудности при переходах между провинциями.
-            // Например, игрок при переходе сразу может попасть в данж или город.
-            // Не отлажен механиз перехода, если часть узлов соседней провинции отсутствует.
-            var isBorder = GetIsBorder(x, y);
-            if (isBorder)
-            {
-                AddBorderNode(region, x, y);
-                return;
-            }
-
-            var currentPatternValue = regionDraft[x, y];
             var node = CreateProvinceNodeByDraftValue(x, y, currentPatternValue);
 
             if (node != null)

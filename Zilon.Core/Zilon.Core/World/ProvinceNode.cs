@@ -86,7 +86,16 @@ namespace Zilon.Core.World
         /// <summary>
         /// Сгенерированный сектор для этого узла провинции.
         /// </summary>
-        public ISector Sector { get; set; }
+        public ISector Sector { get; private set; }
+
+        /// <summary>
+        /// Связывает узлен провинции с сектором, который нужно прогружать для этого узла.
+        /// </summary>
+        /// <param name="sector"></param>
+        public void BindSector(ISector sector)
+        {
+            Sector = sector;
+        }
 
         private void DoObservedStateChanged()
         {

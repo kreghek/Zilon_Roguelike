@@ -2,6 +2,6 @@
 {
     public interface ISectorBuilderFactory
     {
-        ISectorBuilder GetBuilder();
+        ISectorBuilder GetBuilder(ProvinceNode provinceNode);
     }
 }

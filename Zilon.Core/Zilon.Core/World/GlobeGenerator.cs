@@ -62,21 +62,30 @@ namespace Zilon.Core.World
                 .Select(coordIndex => new OffsetCoords(coordIndex / WORLD_SIZE, coordIndex % WORLD_SIZE));
 
             var personId = 1;
-            foreach (var region in globe.Terrain.Regions)
+            foreach (var terrainNode in globe.Terrain.TerrainNodes)
             {
-                var needToCreateSector = localityCoords.Contains(region.GlobeCoords.Coords);
-
-                if (needToCreateSector)
+                var province = terrainNode.Province;
+                foreach (var provinceNode in province.ProvinceNodes)
                 {
-                    var sectorBuilder = _sectorBuilderFactory.GetBuilder();
+                    //TODO Нужно разделить генерацию узлов провинций и генерацию стартовой доп информации.
+                    // Под стартовой инфой подразумевается:
+                    // - Есть ли на старте мира в узле город? И какой фракции, численности.
+                    // - Есть ли на старте мира в узле данж. Если есть, то его схема.
+                    // Сейчас эта хранится прямо в узлах провинции. И остаётся там даже после стартовой генерации мира.
+
+                    var sectorBuilder = _sectorBuilderFactory.GetBuilder(provinceNode);
                     var sector = await sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
 
-                    var regionNode = region.ProvinceNodes.First();
-                    regionNode.Sector = sector;
+                    provinceNode.BindSector(sector);
 
+                    //TODO От SectorInfo можно отказаться. Вместо этого достаточно проходится по всем узлам всех провинций.
+                    // Если для узла провинции привязан сектор (не null), тогда обрабатывать этот сектор.
+                    // Для оптимизации можно хранить отдельный список узлов, к которым привязан сектор. Чтобы
+                    // не выполнять обход абсолютчно всех узлов.
                     var sectorInfo = new SectorInfo(sector,
-                                                    region,
-                                                    regionNode);
+                                                    province,
+                                                    provinceNode);
+
                     globe.SectorInfos.Add(sectorInfo);
 
                     for (var populationUnitIndex = 0; populationUnitIndex < POPULATION_UNIT_COUNT; populationUnitIndex++)

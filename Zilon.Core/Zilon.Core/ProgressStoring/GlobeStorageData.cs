@@ -91,8 +91,8 @@ namespace Zilon.Core.World
             var sectorStorageDataList = new List<SectorStorageData>();
             foreach (var sectorInfo in globe.SectorInfos)
             {
-                var sectorStorageData = SectorStorageData.Create(sectorInfo.Region,
-                    sectorInfo.RegionNode,
+                var sectorStorageData = SectorStorageData.Create(sectorInfo.Province,
+                    sectorInfo.ProvinceNode,
                     sectorInfo.Sector,
                     personDict);
 
