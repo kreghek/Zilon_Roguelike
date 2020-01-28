@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Zilon.Core.World
 {
     public sealed class TerrainInitiator
     {
-        const int PROVINCE_SIZE = 40;
-
         private readonly ProvinceInitiator _provinceInitiator;
 
         public TerrainInitiator(ProvinceInitiator provinceInitiator)

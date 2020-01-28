@@ -9,7 +9,7 @@ namespace Zilon.Core.World
 {
     public sealed class ProvinceInitiator
     {
-        private const int LocationBaseSize = 20;
+        private const int ProvinceBaseSize = 20;
         private const string CITY_SCHEME_SID = "city";
         private const string WILD_SCHEME_SID = "forest";
 
@@ -35,12 +35,12 @@ namespace Zilon.Core.World
         {
             return Task.Run(() =>
             {
-                var region = new Province(LocationBaseSize);
+                var province = new Province(ProvinceBaseSize);
 
                 // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
                 // Пока не вращаем и не искажаем.
                 // Там, где может быть объект, гарантированно создаём один город и два подземелья.
-                var regionDraft = new GlobeRegionDraftValue[LocationBaseSize, LocationBaseSize];
+                var regionDraft = new GlobeRegionDraftValue[ProvinceBaseSize, ProvinceBaseSize];
                 var startPattern = GlobeRegionPatterns.Start;
                 var homePattern = GlobeRegionPatterns.Home;
                 // Расчитываем размер паттернов.
@@ -50,22 +50,22 @@ namespace Zilon.Core.World
                 var patternSize = startPattern.Values.GetUpperBound(0) - startPattern.Values.GetLowerBound(0) + 1;
 
                 // Вставляем паттерны в указанные области
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, 1);
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, LocationBaseSize - patternSize - 1);
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), LocationBaseSize - patternSize - 1, LocationBaseSize - patternSize - 1);
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, 1);
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, 1);
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), 1, ProvinceBaseSize - patternSize - 1);
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), ProvinceBaseSize - patternSize - 1, ProvinceBaseSize - patternSize - 1);
 
-                ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
+                RotateAndApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (ProvinceBaseSize - patternSize) / 2, (ProvinceBaseSize - patternSize) / 2);
 
-                for (var x = 0; x <= LocationBaseSize; x++)
+                for (var x = 0; x <= ProvinceBaseSize; x++)
                 {
-                    for (var y = 0; y <= LocationBaseSize; y++)
+                    for (var y = 0; y <= ProvinceBaseSize; y++)
                     {
-                        ValidateRegion(region, regionDraft, x, y);
+                        AddNode(province, regionDraft, x, y);
                     }
                 }
 
-                return region;
+                return province;
             });
         }
 
@@ -77,7 +77,7 @@ namespace Zilon.Core.World
         /// <param name="pattern"> Шаблон, применяемый на черновик. </param>
         /// <param name="insertX"> Х-координата применения шаблона. </param>
         /// <param name="insertY"> Y-координата применения шаблона. </param>
-        private void ApplyRegionPattern(ref GlobeRegionDraftValue[,] regionDraft,
+        private void RotateAndApplyRegionPattern(ref GlobeRegionDraftValue[,] regionDraft,
                                          GlobeRegionPattern pattern,
                                          int insertX,
                                          int insertY)
@@ -87,10 +87,14 @@ namespace Zilon.Core.World
             var townIndex = _dice.Roll(0, townCount - 1);
 
             var rotateValueIndex = _dice.Roll(0, (int)MatrixRotation.ConterClockwise90);
-            var rotatedPatternValues = MatrixHelper.Rotate(pattern.Values, (MatrixRotation)rotateValueIndex);
-            ApplyRegionPatternInner(regionDraft, rotatedPatternValues, insertX, insertY, townIndex);
+            GlobeRegionPatternValue[,] rotatedPatternValues = RotatePattern(pattern, rotateValueIndex);
+            ApplyRegionPattern(regionDraft, rotatedPatternValues, insertX, insertY, townIndex);
         }
 
+        private static GlobeRegionPatternValue[,] RotatePattern(GlobeRegionPattern pattern, int rotateValueIndex)
+        {
+            return MatrixHelper.Rotate(pattern.Values, (MatrixRotation)rotateValueIndex);
+        }
 
         private static int CountTownPlaces(GlobeRegionPatternValue[,] patternValues)
         {
@@ -111,7 +115,7 @@ namespace Zilon.Core.World
             return counter;
         }
 
-        private static void ApplyRegionPatternInner(GlobeRegionDraftValue[,] regionDraft,
+        private static void ApplyRegionPattern(GlobeRegionDraftValue[,] regionDraft,
                                                     GlobeRegionPatternValue[,] patternValues,
                                                     int insertX,
                                                     int insertY,
@@ -183,20 +187,30 @@ namespace Zilon.Core.World
             return defaultPattern;
         }
 
-        private void ValidateRegion(Province region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
+        private void AddNode(Province region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
         {
             // Определяем, является ли узел граничным. На граничных узлах ничего не создаём.
             // Потому что это может вызвать трудности при переходах между провинциями.
             // Например, игрок при переходе сразу может попасть в данж или город.
             // Не отлажен механиз перехода, если часть узлов соседней провинции отсутствует.
-            var isBorder = x == 0 || x == LocationBaseSize - 1 || y == 0 || y == LocationBaseSize - 1;
+            var isBorder = GetIsBorder(x, y);
             if (isBorder)
             {
-                AddNodeIfBorder(region, x, y);
+                AddBorderNode(region, x, y);
                 return;
             }
 
             var currentPatternValue = regionDraft[x, y];
+            var node = CreateProvinceNodeByDraftValue(x, y, currentPatternValue);
+
+            if (node != null)
+            {
+                region.AddNode(node);
+            }
+        }
+
+        private ProvinceNode CreateProvinceNodeByDraftValue(int x, int y, GlobeRegionDraftValue currentPatternValue)
+        {
             ProvinceNode node = null;
             if (currentPatternValue == null || currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Wild))
             {
@@ -253,19 +267,23 @@ namespace Zilon.Core.World
                 Debug.Assert(true, "При генерации провинции должны все исходы быть предусмотрены.");
             }
 
-            if (node != null)
-            {
-                region.AddNode(node);
-            }
+            return node;
         }
 
-        private void AddNodeIfBorder(Province region, int x, int y)
+        private static bool GetIsBorder(int x, int y)
+        {
+            return x == 0 || x == ProvinceBaseSize - 1 || y == 0 || y == ProvinceBaseSize - 1;
+        }
+
+        private void AddBorderNode(Province region, int x, int y)
         {
             var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
+            
             var borderNode = new ProvinceNode(x, y, locationScheme)
             {
                 IsBorder = true
             };
+
             region.AddNode(borderNode);
         }
     }
