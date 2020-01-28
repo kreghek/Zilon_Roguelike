@@ -27,8 +27,8 @@ namespace Zilon.Core.ProgressStoring
         public OffsetCoords GlobeRegionNodeCoords { get; set; }
 
 
-        public static SectorStorageData Create(GlobeRegion globeRegion,
-            GlobeRegionNode globeRegionNode,
+        public static SectorStorageData Create(Province globeRegion,
+            ProvinceNode globeRegionNode,
             ISector sector,
             IDictionary<IPerson, string> humanPersonDict)
         {
@@ -83,7 +83,7 @@ namespace Zilon.Core.ProgressStoring
                 Sid = x.Value.SectorSid
             }).ToArray();
 
-            storageData.TerrainCoords = globeRegion.TerrainCell.Coords;
+            storageData.TerrainCoords = globeRegion.GlobeCoords.Coords;
             storageData.GlobeRegionNodeCoords = new OffsetCoords(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
 
             return storageData;

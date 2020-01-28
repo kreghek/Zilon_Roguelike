@@ -58,7 +58,7 @@ namespace Zilon.Core.Commands.Globe
 
             var currentNode = _player.GlobeNode;
             var currentGlobeCell = _player.Terrain;
-            var region = _worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == currentGlobeCell);
+            var region = _worldManager.Globe.Terrain.Regions.Single(x=>x.GlobeCoords == currentGlobeCell);
 
             if (region == selectedNodeViewModel.ParentRegion)
             {
@@ -93,8 +93,8 @@ namespace Zilon.Core.Commands.Globe
                 var currentTerrainCell = _player.Terrain;
 
                 var region1 = _worldManager.Globe.Terrain.Regions.Single(x => x == selectedNodeViewModel.ParentRegion);
-                var targetNeighborTerrainCell = region1.TerrainCell;
-                var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
+                var targetNeighborTerrainCell = region1.GlobeCoords;
+                var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
                 var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
                                                                                     currentTerrainCell,
                                                                                     targetNeighborBorders,

@@ -35,7 +35,7 @@ namespace Zilon.Core.World
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
             _globeGenerator = globeGenerator ?? throw new ArgumentNullException(nameof(globeGenerator));
             _taskSourceCollector = taskSourceCollector;
-            Regions = new Dictionary<TerrainCell, GlobeRegion>();
+            Regions = new Dictionary<TerrainCell, Province>();
         }
 
         /// <summary>
@@ -46,26 +46,26 @@ namespace Zilon.Core.World
         /// <summary>
         /// Текущие сгенерированые провинции относительно ячеек глобальной карты.
         /// </summary>
-        public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
+        public Dictionary<TerrainCell, Province> Regions { get; }
         public bool IsGlobeInitialized { get; private set; }
 
         /// <summary>
         /// Обновление состояния узлов провинции.
         /// </summary>
         /// <param name="region">Провинция, которая обновляется.</param>
-        public void UpdateRegionNodes(GlobeRegion region)
+        public void UpdateRegionNodes(Province region)
         {
             // Подсчитываем узлы, занятые монстрами.
             // Это делаем для того, чтобы следить за плотностью моснтров в секторе.
 
-            var nodeWithMonsters = region.RegionNodes.Where(x => x.MonsterState != null);
+            var nodeWithMonsters = region.ProvinceNodes.Where(x => x.MonsterState != null);
 
             var monsterLimitIsReached = nodeWithMonsters.Count() >= MONSTER_NODE_LIMIT;
 
             // Наборы монстров для генерации в узлах.
             var monsterSets = CreateMonsterSets();
 
-            foreach (var node in region.RegionNodes)
+            foreach (var node in region.ProvinceNodes)
             {
                 if (node.MonsterState == null)
                 {
@@ -112,7 +112,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private void CreateNodeMonsterState(MonsterSet[] monsterSets, GlobeRegionNode node)
+        private void CreateNodeMonsterState(MonsterSet[] monsterSets, ProvinceNode node)
         {
             var monsterSetRoll = _dice.Roll(0, monsterSets.Count() - 1);
             var rolledMonsterSet = monsterSets[monsterSetRoll];

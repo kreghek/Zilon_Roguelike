@@ -38,8 +38,8 @@ namespace Zilon.Core.ProgressStoring
             humanPlayer.Terrain = terrainCell;
             humanPlayer.SectorSid = SectorSid;
 
-            var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.TerrainCell == terrainCell);
-            humanPlayer.GlobeNode = globeRegion.RegionNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
+            var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.GlobeCoords == terrainCell);
+            humanPlayer.GlobeNode = globeRegion.ProvinceNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
         }
     }
 }

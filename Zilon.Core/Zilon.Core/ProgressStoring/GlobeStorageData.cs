@@ -249,10 +249,10 @@ namespace Zilon.Core.World
             foreach (var sectorInfoStorageData in Sectors)
             {
                 var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == sectorInfoStorageData.TerrainCoords);
-                var globeRegion = globe.Terrain.Regions.Single(x => x.TerrainCell == terrainCell);
+                var globeRegion = globe.Terrain.Regions.Single(x => x.GlobeCoords == terrainCell);
                 var coordX = sectorInfoStorageData.GlobeRegionNodeCoords.X;
                 var coordY = sectorInfoStorageData.GlobeRegionNodeCoords.Y;
-                var globeRegionNode = globeRegion.RegionNodes.Single(x => x.OffsetX == coordX && x.OffsetY == coordY);
+                var globeRegionNode = globeRegion.ProvinceNodes.Single(x => x.OffsetX == coordX && x.OffsetY == coordY);
 
                 var actorStorageDatas = Actors.Where(x => x.SectorId == sectorInfoStorageData.Id).ToArray();
 

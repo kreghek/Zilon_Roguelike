@@ -31,11 +31,11 @@ namespace Zilon.Core.World
         /// <returns>
         /// Возвращает граф локация для провинции.
         /// </returns>
-        public Task<GlobeRegion> GenerateRegionAsync()
+        public Task<Province> GenerateProvinceAsync()
         {
             return Task.Run(() =>
             {
-                var region = new GlobeRegion(LocationBaseSize);
+                var region = new Province(LocationBaseSize);
 
                 // Сейчас допускаем, что паттерны квадратные, меньше размера провинции.
                 // Пока не вращаем и не искажаем.
@@ -57,9 +57,9 @@ namespace Zilon.Core.World
 
                 ApplyRegionPattern(ref regionDraft, GetDefaultPattrn(), (LocationBaseSize - patternSize) / 2, (LocationBaseSize - patternSize) / 2);
 
-                for (var x = regionDraft.GetLowerBound(0); x <= regionDraft.GetUpperBound(0); x++)
+                for (var x = 0; x <= LocationBaseSize; x++)
                 {
-                    for (var y = regionDraft.GetLowerBound(1); y <= regionDraft.GetUpperBound(1); y++)
+                    for (var y = 0; y <= LocationBaseSize; y++)
                     {
                         ValidateRegion(region, regionDraft, x, y);
                     }
@@ -183,7 +183,7 @@ namespace Zilon.Core.World
             return defaultPattern;
         }
 
-        private void ValidateRegion(GlobeRegion region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
+        private void ValidateRegion(Province region, GlobeRegionDraftValue[,] regionDraft, int x, int y)
         {
             // Определяем, является ли узел граничным. На граничных узлах ничего не создаём.
             // Потому что это может вызвать трудности при переходах между провинциями.
@@ -197,19 +197,19 @@ namespace Zilon.Core.World
             }
 
             var currentPatternValue = regionDraft[x, y];
-            GlobeRegionNode node = null;
+            ProvinceNode node = null;
             if (currentPatternValue == null || currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Wild))
             {
                 // Это означает, что сюда не был применен ни один шаблон или
                 // Дикий сектор был указан явно одним из шаблонов.
                 // Значит генерируем просто дикий сектор.
                 var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                node = new GlobeRegionNode(x, y, locationScheme);
+                node = new ProvinceNode(x, y, locationScheme);
             }
             else if (currentPatternValue.IsStart)
             {
                 var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-                node = new GlobeRegionNode(x, y, locationScheme)
+                node = new ProvinceNode(x, y, locationScheme)
                 {
                     IsStart = true
                 };
@@ -217,7 +217,7 @@ namespace Zilon.Core.World
             else if (currentPatternValue.IsHome)
             {
                 var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                node = new GlobeRegionNode(x, y, locationScheme)
+                node = new ProvinceNode(x, y, locationScheme)
                 {
                     IsTown = true,
                     IsHome = true
@@ -226,7 +226,7 @@ namespace Zilon.Core.World
             else if (currentPatternValue.Value.HasFlag(GlobeRegionDraftValueType.Town))
             {
                 var locationScheme = _schemeService.GetScheme<ILocationScheme>(CITY_SCHEME_SID);
-                node = new GlobeRegionNode(x, y, locationScheme)
+                node = new ProvinceNode(x, y, locationScheme)
                 {
                     IsTown = true
                 };
@@ -246,7 +246,7 @@ namespace Zilon.Core.World
                 var locationSidIndex = _dice.Roll(0, locationSchemeSids.Length - 1);
                 var locationSid = locationSchemeSids[locationSidIndex];
                 var locationScheme = _schemeService.GetScheme<ILocationScheme>(locationSid);
-                node = new GlobeRegionNode(x, y, locationScheme);
+                node = new ProvinceNode(x, y, locationScheme);
             }
             else
             {
@@ -259,10 +259,10 @@ namespace Zilon.Core.World
             }
         }
 
-        private void AddNodeIfBorder(GlobeRegion region, int x, int y)
+        private void AddNodeIfBorder(Province region, int x, int y)
         {
             var locationScheme = _schemeService.GetScheme<ILocationScheme>(WILD_SCHEME_SID);
-            var borderNode = new GlobeRegionNode(x, y, locationScheme)
+            var borderNode = new ProvinceNode(x, y, locationScheme)
             {
                 IsBorder = true
             };

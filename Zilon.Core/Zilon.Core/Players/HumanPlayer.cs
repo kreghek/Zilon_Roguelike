@@ -11,7 +11,7 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : PlayerBase
     {
-        private GlobeRegionNode _globeNode;
+        private ProvinceNode _globeNode;
 
         /// <summary>
         /// Текущая провинция группы игрока.
@@ -21,7 +21,7 @@ namespace Zilon.Core.Players
         /// <summary>
         /// Текущая локация группы игрока. Узел провинции.
         /// </summary>
-        public GlobeRegionNode GlobeNode
+        public ProvinceNode GlobeNode
         {
             get => _globeNode;
             set

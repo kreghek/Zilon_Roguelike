@@ -564,12 +564,12 @@
     <Compile Include="World\Realm.cs" />
     <Compile Include="World\RealmRelations.cs" />
     <Compile Include="World\RealmRelationType.cs" />
-    <Compile Include="World\TerrainCell.cs" />
+    <Compile Include="World\TerrainNode.cs" />
     <Compile Include="World\Color.cs" />
     <Compile Include="World\GlobeHelper.cs" />
     <Compile Include="World\GlobeNodeObservedState.cs" />
-    <Compile Include="World\GlobeRegion.cs" />
-    <Compile Include="World\GlobeRegionNode.cs" />
+    <Compile Include="World\Province.cs" />
+    <Compile Include="World\ProvinceNode.cs" />
     <Compile Include="World\GlobeRegionNodeMonsterState.cs" />
     <Compile Include="World\ISectorInfoFactory.cs" />
     <Compile Include="World\IGlobeManager.cs" />

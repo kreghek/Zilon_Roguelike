@@ -1,18 +1,28 @@
-﻿namespace Zilon.Core.World
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Tactics.Spatial;
+
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Вся информация о территориях мира.
     /// </summary>
-    public sealed class Terrain
+    public sealed class Terrain: HexMap
     {
-        /// <summary>
-        /// Сетка всех узлов уровня провинций.
-        /// </summary>
-        public TerrainCell[][] Cells { get; set; }
+        public Terrain(int segmentSize) : base(segmentSize)
+        {
+        }
 
         /// <summary>
-        /// Провинции с уих узлами.
+        /// Вспомогательное свойство региона для того, чтобы каждый раз не приводить узлы к ожидаемому типу.
         /// </summary>
-        public GlobeRegion[] Regions { get; set; }
+        public IEnumerable<TerrainCell> TerrainNodes
+        {
+            get
+            {
+                return Nodes.OfType<TerrainCell>();
+            }
+        }
     }
 }

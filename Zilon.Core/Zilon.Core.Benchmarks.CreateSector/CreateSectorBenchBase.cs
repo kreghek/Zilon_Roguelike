@@ -146,7 +146,7 @@ namespace Zilon.Core.Benchmark
                 }
             };
 
-            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
+            var globeNode = new ProvinceNode(0, 0, locationScheme);
             humanPlayer.GlobeNode = globeNode;
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);

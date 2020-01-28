@@ -9,7 +9,7 @@ namespace Zilon.Core.World
     /// <summary>
     /// Узел локации провинции в графе провинции.
     /// </summary>
-    public sealed class GlobeRegionNode : HexNode
+    public sealed class ProvinceNode : HexNode
     {
         private GlobeNodeObservedState _observedState;
 
@@ -19,7 +19,7 @@ namespace Zilon.Core.World
         /// <param name="x"> Координата X в сетке гексов. </param>
         /// <param name="y"> Координата Y в сетке гексов. </param>
         /// <param name="scheme"> Схема провинции. </param>
-        public GlobeRegionNode(int x, int y, ILocationScheme scheme) : base(x, y)
+        public ProvinceNode(int x, int y, ILocationScheme scheme) : base(x, y)
         {
             Scheme = scheme;
         }

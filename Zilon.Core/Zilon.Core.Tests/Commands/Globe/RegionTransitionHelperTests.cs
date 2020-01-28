@@ -30,24 +30,24 @@ namespace Zilon.Core.Tests.Commands.Globe
             var regionSchemeMock = new Mock<ILocationScheme>();
             var regionScheme = regionSchemeMock.Object;
 
-            var currentRegion = new GlobeRegion(REGION_SIZE);
+            var currentRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, currentRegion);
 
             // Берём правую верхнюю точку для перехода.
-            var currentNode = currentRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 0);
+            var currentNode = currentRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 0);
 
             var currentTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 0)
             };
 
-            var targetRegion = new GlobeRegion(REGION_SIZE);
+            var targetRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, targetRegion);
             var expectedTransitionNodes = new[] {
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0)
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0)
             };
 
-            var targetRegionBorders = targetRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
+            var targetRegionBorders = targetRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
             var targetTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(1, 0)
@@ -81,25 +81,25 @@ namespace Zilon.Core.Tests.Commands.Globe
             var regionSchemeMock = new Mock<ILocationScheme>();
             var regionScheme = regionSchemeMock.Object;
 
-            var currentRegion = new GlobeRegion(REGION_SIZE);
+            var currentRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, currentRegion);
 
             // Берём правую верхнюю точку для перехода.
-            var currentNode = currentRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0);
+            var currentNode = currentRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0);
 
             var currentTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(1, 0)
             };
 
-            var targetRegion = new GlobeRegion(REGION_SIZE);
+            var targetRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, targetRegion);
             var expectedTransitionNodes = new[] {
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 0),
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 1)
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 0),
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == REGION_SIZE - 1 && node.OffsetY == 1)
             };
 
-            var targetRegionBorders = targetRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
+            var targetRegionBorders = targetRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
             var targetTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 0)
@@ -133,24 +133,24 @@ namespace Zilon.Core.Tests.Commands.Globe
             var regionSchemeMock = new Mock<ILocationScheme>();
             var regionScheme = regionSchemeMock.Object;
 
-            var currentRegion = new GlobeRegion(REGION_SIZE);
+            var currentRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, currentRegion);
 
             // Берём правую верхнюю точку для перехода.
-            var currentNode = currentRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0);
+            var currentNode = currentRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0);
 
             var currentTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 1)
             };
 
-            var targetRegion = new GlobeRegion(REGION_SIZE);
+            var targetRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, targetRegion);
             var expectedTransitionNodes = new[] {
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == REGION_SIZE - 1),
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == REGION_SIZE - 1),
             };
 
-            var targetRegionBorders = targetRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
+            var targetRegionBorders = targetRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
             var targetTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 0)
@@ -184,25 +184,25 @@ namespace Zilon.Core.Tests.Commands.Globe
             var regionSchemeMock = new Mock<ILocationScheme>();
             var regionScheme = regionSchemeMock.Object;
 
-            var currentRegion = new GlobeRegion(REGION_SIZE);
+            var currentRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, currentRegion);
 
             // Берём правую верхнюю точку для перехода.
-            var currentNode = currentRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == REGION_SIZE - 1);
+            var currentNode = currentRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == REGION_SIZE - 1);
 
             var currentTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 0)
             };
 
-            var targetRegion = new GlobeRegion(REGION_SIZE);
+            var targetRegion = new Province(REGION_SIZE);
             FillRegion(REGION_SIZE, regionScheme, targetRegion);
             var expectedTransitionNodes = new[] {
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0),
-                targetRegion.Nodes.OfType<GlobeRegionNode>().Single(node => node.OffsetX == 1 && node.OffsetY == 0)
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 0 && node.OffsetY == 0),
+                targetRegion.Nodes.OfType<ProvinceNode>().Single(node => node.OffsetX == 1 && node.OffsetY == 0)
             };
 
-            var targetRegionBorders = targetRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
+            var targetRegionBorders = targetRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
             var targetTerrainCell = new TerrainCell()
             {
                 Coords = new OffsetCoords(0, 1)
@@ -222,13 +222,13 @@ namespace Zilon.Core.Tests.Commands.Globe
             factTransitionNodes.Should().BeEquivalentTo(expectedTransitionNodes);
         }
 
-        private static void FillRegion(int regionSize, ILocationScheme regionScheme, GlobeRegion currentRegion)
+        private static void FillRegion(int regionSize, ILocationScheme regionScheme, Province currentRegion)
         {
             for (var x = 0; x < regionSize; x++)
             {
                 for (var y = 0; y < regionSize; y++)
                 {
-                    currentRegion.AddNode(new GlobeRegionNode(x, y, regionScheme)
+                    currentRegion.AddNode(new ProvinceNode(x, y, regionScheme)
                     {
                         IsBorder = x == 0 || x == regionSize - 1 || y == 0 || y == regionSize - 1
                     });

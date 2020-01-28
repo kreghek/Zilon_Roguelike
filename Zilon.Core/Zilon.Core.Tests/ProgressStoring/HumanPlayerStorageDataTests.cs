@@ -76,9 +76,9 @@ namespace Zilon.Core.ProgressStoring.Tests
             globe.HomeProvince = globe.Localities.First().Cell;
             globe.StartProvince = globe.Localities.Last().Cell;
 
-            var region = new GlobeRegion(20);
+            var region = new Province(20);
 
-            var regionNode = new GlobeRegionNode(0, 1, locationSchemes["forest"]);
+            var regionNode = new ProvinceNode(0, 1, locationSchemes["forest"]);
 
             region.AddNode(regionNode);
 

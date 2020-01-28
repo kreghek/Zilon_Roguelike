@@ -6,7 +6,7 @@
     /// <remarks>
     /// Этот граф учитывает, что узлы могут иметь координаты, а рёбра - проходимость.
     /// </remarks>
-    public interface ISpatialGraph: IGraph
+    public interface ISpatialGraph
     {
         /// <summary>
         /// Рассчитывает рассточние между двумя узлами графа.

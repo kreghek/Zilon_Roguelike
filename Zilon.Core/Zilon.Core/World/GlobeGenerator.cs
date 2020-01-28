@@ -18,7 +18,6 @@ namespace Zilon.Core.World
     public sealed class GlobeGenerator : IGlobeGenerator
     {
         private readonly TerrainInitiator _terrainInitiator;
-        private readonly ProvinceInitiator _provinceInitiator;
         private readonly ISectorBuilderFactory _sectorBuilderFactory;
         private readonly IHumanPersonFactory _humanPersonFactory;
         private readonly IBotPlayer _botPlayer;
@@ -36,7 +35,6 @@ namespace Zilon.Core.World
             IBotPlayer botPlayer)
         {
             _terrainInitiator = terrainInitiator;
-            _provinceInitiator = provinceInitiator;
             _sectorBuilderFactory = sectorBuilderFactory;
             _humanPersonFactory = humanPersonFactory;
             _botPlayer = botPlayer;
@@ -53,9 +51,6 @@ namespace Zilon.Core.World
             var terrain = await _terrainInitiator.GenerateAsync().ConfigureAwait(false);
             globe.Terrain = terrain;
 
-            const int WORLD_SIZE = 40;
-            await GenerateAndAssignRegionsAsync(globe, WORLD_SIZE).ConfigureAwait(false);
-
             const int START_TRIBES = 1;  //TODO Должно быть пару десятков
             const int POPULATION_UNIT_COUNT = 4; // TODO Было 4
             const int PERSON_PER_POPULATION_UNIT = 10;
@@ -69,14 +64,14 @@ namespace Zilon.Core.World
             var personId = 1;
             foreach (var region in globe.Terrain.Regions)
             {
-                var needToCreateSector = localityCoords.Contains(region.TerrainCell.Coords);
+                var needToCreateSector = localityCoords.Contains(region.GlobeCoords.Coords);
 
                 if (needToCreateSector)
                 {
                     var sectorBuilder = _sectorBuilderFactory.GetBuilder();
                     var sector = await sectorBuilder.CreateSectorAsync().ConfigureAwait(false);
 
-                    var regionNode = region.RegionNodes.First();
+                    var regionNode = region.ProvinceNodes.First();
                     regionNode.Sector = sector;
 
                     var sectorInfo = new SectorInfo(sector,
@@ -101,28 +96,6 @@ namespace Zilon.Core.World
             var result = new GlobeGenerationResult(globe);
 
             return result;
-        }
-
-        private async Task GenerateAndAssignRegionsAsync(Globe globe, int WORLD_SIZE)
-        {
-            var provinces = new ConcurrentBag<GlobeRegion>();
-            for (var terrainCellX = 0; terrainCellX < WORLD_SIZE; terrainCellX++)
-            {
-                for (var terrainCellY = 0; terrainCellY < WORLD_SIZE; terrainCellY++)
-                {
-                    var province = await CreateProvinceAsync().ConfigureAwait(false);
-                    province.TerrainCell = new TerrainCell { Coords = new OffsetCoords(terrainCellX, terrainCellY) };
-                    provinces.Add(province);
-                }
-            };
-
-            globe.Terrain.Regions = provinces.ToArray();
-        }
-
-        private async Task<GlobeRegion> CreateProvinceAsync()
-        {
-            var region = await _provinceInitiator.GenerateRegionAsync().ConfigureAwait(false);
-            return region;
         }
 
         private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory, NameGeneration.RandomName randomName)

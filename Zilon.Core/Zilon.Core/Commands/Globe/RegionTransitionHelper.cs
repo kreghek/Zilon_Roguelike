@@ -9,9 +9,9 @@ namespace Zilon.Core.Commands.Globe
 {
     public static class RegionTransitionHelper
     {
-        public static IEnumerable<GlobeRegionNode> GetNeighborBorderNodes(GlobeRegionNode currentTerrainNode,
+        public static IEnumerable<ProvinceNode> GetNeighborBorderNodes(ProvinceNode currentTerrainNode,
             TerrainCell currentTerrainCell,
-            IEnumerable<GlobeRegionNode> targetRegionBorderNodes,
+            IEnumerable<ProvinceNode> targetRegionBorderNodes,
             TerrainCell targetNeighborTerrainCell)
         {
             if (targetRegionBorderNodes == null)

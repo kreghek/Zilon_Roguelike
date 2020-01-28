@@ -13,7 +13,7 @@ namespace Zilon.Core.Tactics
 
             PlaceTypes = new Dictionary<ILocationScheme, int>();
 
-            Places = new HashSet<GlobeRegionNode>();
+            Places = new HashSet<ProvinceNode>();
         }
 
         public float TurnCounter { get; set; }
@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics
         public int Turns { get; set; }
 
         /// <summary>Посещённые места.</summary>
-        public ISet<GlobeRegionNode> Places { get; set; }
+        public ISet<ProvinceNode> Places { get; set; }
         public ScoreAchievements Achievements { get; set; }
     }
 }
