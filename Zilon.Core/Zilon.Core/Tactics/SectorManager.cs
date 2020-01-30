@@ -42,42 +42,43 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public async Task CreateSectorAsync()
         {
-            var regionNode = _humanPlayer.GlobeNode;
+            throw new NotImplementedException("Работа с миром изменилась. Нужно адаптировать.");
+            //var regionNode = _humanPlayer.GlobeNode;
 
-            ILocationScheme scheme = null;
-            if (_humanPlayer.GlobeNode == null)
-            {
-                scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
-            }
-            else
-            {
-                scheme = _humanPlayer.GlobeNode.Scheme;
-            }
+            //ILocationScheme scheme = null;
+            //if (_humanPlayer.GlobeNode == null)
+            //{
+            //    scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
+            //}
+            //else
+            //{
+            //    scheme = _humanPlayer.GlobeNode.Scheme;
+            //}
 
-            if (scheme.SectorLevels != null)
-            {
-                ISectorSubScheme sectorLevelScheme;
-                if (_humanPlayer.SectorSid == null)
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
-                }
-                else
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
-                }
+            //if (scheme.SectorLevels != null)
+            //{
+            //    ISectorSubScheme sectorLevelScheme;
+            //    if (_humanPlayer.SectorSid == null)
+            //    {
+            //        sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
+            //    }
+            //    else
+            //    {
+            //        sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+            //    }
                 
-                CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
-            }
-            else if (regionNode.IsTown)
-            {
-                CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode);
-            }
-            else
-            {
-                CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode);
-            }
+            //    CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
+            //}
+            //else if (regionNode.IsTown)
+            //{
+            //    CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode);
+            //}
+            //else
+            //{
+            //    CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode);
+            //}
 
-            CurrentSector.Scheme = scheme;
+            //CurrentSector.Scheme = scheme;
         }
     }
 }

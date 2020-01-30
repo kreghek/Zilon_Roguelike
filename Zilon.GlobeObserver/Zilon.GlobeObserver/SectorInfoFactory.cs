@@ -25,8 +25,8 @@ namespace Zilon.GlobeObserver
             _serviceProvider = serviceProvider;
         }
 
-        public SectorInfo Create(GlobeRegion globeRegion,
-            GlobeRegionNode globeRegionNode,
+        public SectorInfo Create(Province globeRegion,
+            ProvinceNode globeRegionNode,
             SectorStorageData sectorStorageData,
             IEnumerable<ActorStorageData> actors,
             IDictionary<string, IPerson> personDict)

@@ -29,7 +29,7 @@ namespace Zilon.GlobeObserver
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public ISectorBuilder GetBuilder()
+        public ISectorBuilder GetBuilder(ProvinceNode provinceNode)
         {
             var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var propContainerManager = _serviceProvider.GetRequiredService<IPropContainerManager>();

@@ -39,13 +39,13 @@ namespace Zilon.Core.Graphs
         /// </summary>
         /// <param name="node1"> Узел графа карты. </param>
         /// <param name="node2"> Узел графа карты. </param>
-        void AddEdge(IGraphEdge node1, IGraphEdge node2);
+        void AddEdge(IGraphNode node1, IGraphNode node2);
 
         /// <summary>
         /// Удаляет ребро между двумя узлами графа карты.
         /// </summary>
         /// <param name="node1"> Узел графа карты. </param>
         /// <param name="node2"> Узел графа карты. </param>
-        void RemoveEdge(IGraphEdge node1, IGraphEdge node2);
+        void RemoveEdge(IGraphNode node1, IGraphNode node2);
     }
 }

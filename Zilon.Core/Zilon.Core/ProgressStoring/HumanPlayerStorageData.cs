@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Players;
+﻿using Zilon.Core.Players;
 using Zilon.Core.World;
 
 namespace Zilon.Core.ProgressStoring
@@ -18,11 +16,11 @@ namespace Zilon.Core.ProgressStoring
         public static HumanPlayerStorageData Create(HumanPlayer humanPlayer)
         {
             var storageData = new HumanPlayerStorageData();
-            storageData.CurrentGlobeNodeX = humanPlayer.GlobeNode.OffsetX;
-            storageData.CurrentGlobeNodeY = humanPlayer.GlobeNode.OffsetY;
+            //storageData.CurrentGlobeNodeX = humanPlayer.GlobeNode.OffsetX;
+            //storageData.CurrentGlobeNodeY = humanPlayer.GlobeNode.OffsetY;
             storageData.SectorSid = humanPlayer.SectorSid;
-            storageData.TerrainX = humanPlayer.Terrain.Coords.X;
-            storageData.TerrainY = humanPlayer.Terrain.Coords.Y;
+            //storageData.TerrainX = humanPlayer.Terrain.Coords.X;
+            //storageData.TerrainY = humanPlayer.Terrain.Coords.Y;
             return storageData;
         }
 
@@ -34,12 +32,12 @@ namespace Zilon.Core.ProgressStoring
             }
 
             var terrainCoords = new OffsetCoords(TerrainX, TerrainY);
-            var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
-            humanPlayer.Terrain = terrainCell;
+            //var terrainCell = globe.Terrain.Cells.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
+            //humanPlayer.Terrain = terrainCell;
             humanPlayer.SectorSid = SectorSid;
 
-            var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.GlobeCoords == terrainCell);
-            humanPlayer.GlobeNode = globeRegion.ProvinceNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
+            //var globeRegion = worldManager.Globe.Terrain.Regions.Single(x=>x.GlobeCoords == terrainCell);
+            //humanPlayer.GlobeNode = globeRegion.ProvinceNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
         }
     }
 }

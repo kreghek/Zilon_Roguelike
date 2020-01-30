@@ -7,8 +7,8 @@ namespace Zilon.Core.World
 {
     public interface ISectorInfoFactory
     {
-        SectorInfo Create(Province globeRegion,
-            ProvinceNode globeRegionNode,
+        SectorInfo Create(Province province,
+            ProvinceNode provinceNode,
             SectorStorageData sectorStorageData,
             IEnumerable<ActorStorageData> actors,
             IDictionary<string, IPerson> personDict);

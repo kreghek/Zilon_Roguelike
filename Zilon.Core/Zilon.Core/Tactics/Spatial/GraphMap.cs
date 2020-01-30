@@ -134,5 +134,20 @@ namespace Zilon.Core.Tactics.Spatial
 
             return distance;
         }
+
+        /// <inheritdoc/>
+        public override void RemoveNode(IGraphNode node)
+        {
+            _nodes.Remove(node);
+
+            var edgesCopy = _edges.ToArray();
+            foreach (var edge in edgesCopy)
+            {
+                if (edge.Nodes.Contains(node))
+                {
+                    _edges.Remove(edge);
+                }
+            }
+        }
     }
 }

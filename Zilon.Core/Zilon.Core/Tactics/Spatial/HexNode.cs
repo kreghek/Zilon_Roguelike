@@ -19,6 +19,9 @@ namespace Zilon.Core.Tactics.Spatial
         public int OffsetX { get; }
         public int OffsetY { get; }
         public CubeCoords CubeCoords { get; }
+
+        public OffsetCoords Coords { get; }
+
         public bool IsObstacle { get; }
 
         public HexNode(int x, int y, bool isObstacle)
@@ -28,6 +31,8 @@ namespace Zilon.Core.Tactics.Spatial
             IsObstacle = isObstacle;
 
             CubeCoords = HexHelper.ConvertToCube(x, y);
+
+            Coords = new OffsetCoords(x, y);
         }
 
         //TODO Добавить конструктор, принимающий OffsetCoords.

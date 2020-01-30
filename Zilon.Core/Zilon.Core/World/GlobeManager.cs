@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
@@ -35,7 +36,6 @@ namespace Zilon.Core.World
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
             _globeGenerator = globeGenerator ?? throw new ArgumentNullException(nameof(globeGenerator));
             _taskSourceCollector = taskSourceCollector;
-            Regions = new Dictionary<TerrainCell, Province>();
         }
 
         /// <summary>
@@ -43,10 +43,7 @@ namespace Zilon.Core.World
         /// </summary>
         public Globe Globe { get; private set; }
 
-        /// <summary>
-        /// Текущие сгенерированые провинции относительно ячеек глобальной карты.
-        /// </summary>
-        public Dictionary<TerrainCell, Province> Regions { get; }
+        /// <inheritdoc/>
         public bool IsGlobeInitialized { get; private set; }
 
         /// <summary>

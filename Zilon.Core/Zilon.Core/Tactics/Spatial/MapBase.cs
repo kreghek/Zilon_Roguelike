@@ -132,11 +132,11 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="node2">Узел графа карты.</param>
         public abstract void RemoveEdge(IGraphNode node1, IGraphNode node2);
 
-        /// <summary>
-        /// Добавляет новый узел графа.
-        /// </summary>
-        /// <param name="node"></param>
+        /// <inheritdoc/>
         public abstract void AddNode(IGraphNode node);
+
+        /// <inheritdoc/>
+        public abstract void RemoveNode(IGraphNode node);
 
         /// <summary>
         /// Выполняет поиск пути к указанному узлу.
@@ -152,6 +152,26 @@ namespace Zilon.Core.Tactics.Spatial
         /// </remarks>
         public void FindPath(IGraphNode start, IGraphNode end, ActorPathFindingContext context, List<IGraphNode> outputPath)
         {
+            if (start is null)
+            {
+                throw new ArgumentNullException(nameof(start));
+            }
+
+            if (end is null)
+            {
+                throw new ArgumentNullException(nameof(end));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (outputPath is null)
+            {
+                throw new ArgumentNullException(nameof(outputPath));
+            }
+
             var startNode = start;
             var finishNode = end;
 
@@ -167,8 +187,10 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
+        /// <inheritdoc/>
         public abstract bool IsPositionAvailableForContainer(IGraphNode targetNode);
 
+        /// <inheritdoc/>
         public abstract int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode);
     }
 }

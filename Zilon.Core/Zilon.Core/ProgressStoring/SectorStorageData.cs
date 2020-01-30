@@ -32,6 +32,8 @@ namespace Zilon.Core.ProgressStoring
             ISector sector,
             IDictionary<IPerson, string> humanPersonDict)
         {
+            throw new NotImplementedException("Работа с миром изменилась. Нужно адаптировать.");
+
             if (globeRegion is null)
             {
                 throw new ArgumentNullException(nameof(globeRegion));
@@ -83,7 +85,7 @@ namespace Zilon.Core.ProgressStoring
                 Sid = x.Value.SectorSid
             }).ToArray();
 
-            storageData.TerrainCoords = globeRegion.GlobeCoords.Coords;
+            //storageData.TerrainCoords = globeRegion.GlobeCoords.Coords;
             storageData.GlobeRegionNodeCoords = new OffsetCoords(globeRegionNode.OffsetX, globeRegionNode.OffsetY);
 
             return storageData;

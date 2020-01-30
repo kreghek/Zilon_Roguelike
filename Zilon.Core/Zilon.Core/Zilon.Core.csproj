@@ -550,7 +550,6 @@
     <Compile Include="World\GlobeRegionPattern.cs" />
     <Compile Include="World\GlobeRegionPatterns.cs" />
     <Compile Include="ProgressStoring\GlobeStorageData.cs" />
-    <Compile Include="World\IGlobeEntity.cs" />
     <Compile Include="World\ISectorBuilder.cs" />
     <Compile Include="World\IGlobeGenerator.cs" />
     <Compile Include="World\NameGeneration\CityNameGenerator.cs" />
