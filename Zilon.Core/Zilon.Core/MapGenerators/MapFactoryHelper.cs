@@ -22,7 +22,17 @@ namespace Zilon.Core.MapGenerators
                 return new[] { RoomTransition.CreateGlobalExit() };
             }
 
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+            return sectorScheme.TransSectorSids.Select(CreateTransitionFromScheme);
+        }
+
+        private static RoomTransition CreateTransitionFromScheme(ISectorTransitionSubScheme trans)
+        {
+            if (trans.SectorSid == null)
+            {
+                return RoomTransition.CreateGlobalExit();
+            }
+
+            return new RoomTransition(trans.SectorSid, trans.SectorLevelSid);
         }
     }
 }

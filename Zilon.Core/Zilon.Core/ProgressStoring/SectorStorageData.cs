@@ -82,7 +82,7 @@ namespace Zilon.Core.ProgressStoring
             storageData.Transitions = sector.Map.Transitions.Select(x => new TransitionStorageData
             {
                 Coords = new OffsetCoords((x.Key as HexNode).OffsetX, (x.Key as HexNode).OffsetY),
-                Sid = x.Value.SectorSid
+                Sid = x.Value.SectorLevelSid
             }).ToArray();
 
             //storageData.TerrainCoords = globeRegion.GlobeCoords.Coords;

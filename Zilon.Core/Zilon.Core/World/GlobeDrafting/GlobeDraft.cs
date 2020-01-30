@@ -17,5 +17,10 @@
         /// Рядом с поселениями обязательно будет несколько начальных данжей.
         /// </summary>
         public RealmLocalityDraft[] StartLocalities { get; set; }
+
+        /// <summary>
+        /// Начальные подземелья.
+        /// </summary>
+        public DungeonDraft[] StartDungeons { get; set; }
     }
 }

@@ -17,7 +17,20 @@
             return new GlobeDraft
             {
                 Size = WorldSize,
-                StartLocalities = new[] {
+                StartLocalities = GenerateStartRealmLocalities(),
+                StartDungeons = new[] {
+                    new DungeonDraft{
+                        SchemeSid = "intro",
+                        SchemeLevelSid = "intro",
+                        StartTerrainCoords = new OffsetCoords(7, 5)
+                    }
+                }
+            };
+        }
+
+        private static RealmLocalityDraft[] GenerateStartRealmLocalities()
+        {
+            return new[] {
                     new RealmLocalityDraft{
                         StartTerrainCoords = new OffsetCoords(5, 5),
                         Population = 40
@@ -32,8 +45,7 @@
                         StartTerrainCoords = new OffsetCoords(15, 15),
                         Population = 40
                     },
-                }
-            };
+                };
         }
     }
 }

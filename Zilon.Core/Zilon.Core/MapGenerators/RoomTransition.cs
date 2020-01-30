@@ -18,25 +18,47 @@ namespace Zilon.Core.MapGenerators
         /// Идентификатор сектора в рамках указанной локации.
         /// Если указано null, означает, что будет переход "на поверхность".
         /// </param>
-        /// <seealso cref="SectorSid"/>
-        public RoomTransition([CanBeNull] string sectorSid)
+        /// <seealso cref="SectorLevelSid"/>
+        public RoomTransition([NotNull] string sectorSid, [NotNull] string sectorLevelSid)
         {
+            if (string.IsNullOrEmpty(sectorSid))
+            {
+                throw new System.ArgumentException("message", nameof(sectorSid));
+            }
+
+            if (string.IsNullOrEmpty(sectorLevelSid))
+            {
+                throw new System.ArgumentException("message", nameof(sectorLevelSid));
+            }
+
             SectorSid = sectorSid;
+            SectorLevelSid = sectorLevelSid;
+        }
+
+        private RoomTransition()
+        { 
+            // Пустой конструктор для генерации выгода наружу.
+            // Идентификаторы будут равны null.
         }
 
         /// <summary>
-        /// Идентификатор сектора для перехода.
+        /// Идентификатор схемы уровня сектора для перехода.
         /// </summary>
         /// <remarks>
         /// Если равно null, то означает, что переход выводит из подземелья (на глобалную карту).
         /// </remarks>
+        public string SectorLevelSid { get; }
+
+        /// <summary>
+        /// Идентификатор схемы сектора для перехода.
+        /// </summary>
         public string SectorSid { get; }
 
         /// <summary> Создаёт переход на поверхность. </summary>
         /// <returns> Возвращает экземпляр перехода, настроенного для перехода на поверхность. </returns>
         public static RoomTransition CreateGlobalExit()
         {
-            return new RoomTransition(null);
+            return new RoomTransition();
         }
 
         /// <summary>
@@ -47,12 +69,12 @@ namespace Zilon.Core.MapGenerators
         /// </returns>
         public override string ToString()
         {
-            if (SectorSid == null)
+            if (SectorLevelSid == null)
             {
                 return "[Global]";
             }
 
-            return SectorSid;
+            return SectorLevelSid;
         }
     }
 }

@@ -204,7 +204,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     map.Transitions.Add(transitionNode, transition);
 
-                    if (transition.SectorSid == null)
+                    if (transition.SectorLevelSid == null)
                     {
                         transitionRegion.IsOut = true;
                     }

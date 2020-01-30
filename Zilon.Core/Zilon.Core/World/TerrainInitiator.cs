@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Zilon.Core.World.GlobeDrafting;
@@ -20,28 +21,61 @@ namespace Zilon.Core.World
             {
                 var terrain = new Terrain(globeDraft.Size);
 
-                //TODO Можно генерировать параллельно. Не забыть делать через промежуточный ConcurrencyBag
-                // Удалить этот TODO, если окажется, что параллельная генерация неэффективна.
-                // Указать здесь, что попытка была сделана и она оказалась не эффетивной,
-                // чтобы не появлялось таких же todo с предложением сделать параллельно.
+                //TODO Можно запустить параллельно.
+                // Но это возможно, если предварительно сделать одно из следующих действий:
+                // 1. Ввесли допущение и проверку, что стартовые подземелья не появляются в узлах провинции,
+                // где уже предполагаются стартовые города.
+                // 2. Блокировать операцию на добавление узла. Иначе будет сгенерирован один узел дважды.
+                // 3. Переписать алгоритм так, чтобы города и подземелья группировались по координатам узла.
+                // Тогда можно будет последовательно создать узел и добавить в него всё, что нужно. Будет актуально,
+                // когда будет снято допущение, что в одном узле может быть только один стартовый город.
 
-                // Сейчас исходим из того, что в каждой провинции может быть не более одного стартового города.
-                foreach (var startProvinceDraft in globeDraft.StartLocalities)
-                {
-                    var province = await CreateProvinceAsync().ConfigureAwait(false);
-                    var terrainNode = CreateTerrainNode(startProvinceDraft, province);
+                await GenerateStartLocalityProvinceNodes(globeDraft.StartLocalities, terrain).ConfigureAwait(false);
 
-                    terrain.AddNode(terrainNode);
-                }
+                await GenerateStartDungeonProvinceNodes(globeDraft.StartDungeons, terrain).ConfigureAwait(false);
 
                 return terrain;
             });
         }
 
-        private static TerrainNode CreateTerrainNode(RealmLocalityDraft startProvinceDraft, Province province)
+        private async Task GenerateStartLocalityProvinceNodes(IEnumerable<RealmLocalityDraft> startLocalities, Terrain terrain)
         {
-            var x = startProvinceDraft.StartTerrainCoords.X;
-            var y = startProvinceDraft.StartTerrainCoords.Y;
+            //TODO Можно генерировать параллельно. Не забыть делать через промежуточный ConcurrencyBag
+            // Удалить этот TODO, если окажется, что параллельная генерация неэффективна.
+            // Указать здесь, что попытка была сделана и она оказалась не эффетивной,
+            // чтобы не появлялось таких же todo с предложением сделать параллельно.
+
+            // Сейчас исходим из того, что в каждой провинции может быть не более одного стартового города.
+            foreach (var localityDraft in startLocalities)
+            {
+                var province = await CreateProvinceAsync().ConfigureAwait(false);
+                var terrainNode = CreateTerrainNode(localityDraft.StartTerrainCoords, province);
+
+                terrain.AddNode(terrainNode);
+            }
+        }
+
+        private async Task GenerateStartDungeonProvinceNodes(IEnumerable<DungeonDraft> startDungeons, Terrain terrain)
+        {
+            //TODO Можно генерировать параллельно. Не забыть делать через промежуточный ConcurrencyBag
+            // Удалить этот TODO, если окажется, что параллельная генерация неэффективна.
+            // Указать здесь, что попытка была сделана и она оказалась не эффетивной,
+            // чтобы не появлялось таких же todo с предложением сделать параллельно.
+
+            // Сейчас исходим из того, что в каждой провинции может быть не более одного стартового города.
+            foreach (var dungeonDraft in startDungeons)
+            {
+                var province = await CreateProvinceAsync().ConfigureAwait(false);
+                var terrainNode = CreateTerrainNode(dungeonDraft.StartTerrainCoords, province);
+
+                terrain.AddNode(terrainNode);
+            }
+        }
+
+        private static TerrainNode CreateTerrainNode(OffsetCoords coords, Province province)
+        {
+            var x = coords.X;
+            var y = coords.Y;
 
             var terrainNode = new TerrainNode(x, y, province)
             {

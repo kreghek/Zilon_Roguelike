@@ -83,28 +83,56 @@ namespace Zilon.Core.World
 
                     globe.SectorInfos.Add(sectorInfo);
 
-                    var terrainNodeCoords = new OffsetCoords(terrainNode.OffsetX, terrainNode.OffsetY);
-                    var startLocalityDraft = globeDraft.StartLocalities.SingleOrDefault(x=>x.StartTerrainCoords == terrainNodeCoords);
+                    // Если созданный сектор в черновике отмечен, как стартовое поселение, то
+                    // в нём генерируются объекты поселения по данным черновика.
+                    personId = GenerateLocalityObjectsIfIsStartLocality(globeDraft, personId, terrainNode, sector);
 
-                    if (startLocalityDraft != null)
-                    {
-                        for (var populationUnitIndex = 0; populationUnitIndex < startLocalityDraft.Population; populationUnitIndex++)
-                        {
-                            var node = sector.Map.Nodes.ElementAt(5_050 + populationUnitIndex);
-                            var person = CreatePerson(_humanPersonFactory, _personNameGenerator);
-                            person.Id = personId;
-                            var actor = CreateActor(_botPlayer, person, node);
-                            sector.ActorManager.Add(actor);
-
-                            personId++;
-                        }
-                    }
+                    // Если генерируемый сектор размечен в черновике, как подземелье,
+                    // то генерируем в секторе списк в подземелье.
+                    GenerateDungeonTransitionIfIsStartDungeonDraft(globeDraft, terrainNode, sector);
                 }
             };
 
             var result = new GlobeGenerationResult(globe);
 
             return result;
+        }
+
+        private void GenerateDungeonTransitionIfIsStartDungeonDraft(GlobeDraft globeDraft, TerrainNode terrainNode, ISector sector)
+        {
+            var terrainNodeCoords = terrainNode.Coords;
+            // Предполагается, что в сероновике есть только одно подземелье в кадождом узле провинции.
+            var startDungeonDraft = globeDraft.StartDungeons.SingleOrDefault(x => x.StartTerrainCoords == terrainNodeCoords);
+
+            if (startDungeonDraft != null)
+            {
+                var transitionNode = sector.Map.Nodes.First();
+                var trasition = new MapGenerators.RoomTransition(startDungeonDraft.SchemeSid, startDungeonDraft.SchemeLevelSid);
+                sector.Map.Transitions.Add(transitionNode, trasition);
+            }
+        }
+
+        private int GenerateLocalityObjectsIfIsStartLocality(GlobeDraft globeDraft, int personId, TerrainNode terrainNode, ISector sector)
+        {
+            var terrainNodeCoords = terrainNode.Coords;
+            // Предполагается, что в сероновике есть только одно поселение в кадождом узле провинции.
+            var startLocalityDraft = globeDraft.StartLocalities.SingleOrDefault(x => x.StartTerrainCoords == terrainNodeCoords);
+
+            if (startLocalityDraft != null)
+            {
+                for (var populationUnitIndex = 0; populationUnitIndex < startLocalityDraft.Population; populationUnitIndex++)
+                {
+                    var node = sector.Map.Nodes.ElementAt(5_050 + populationUnitIndex);
+                    var person = CreatePerson(_humanPersonFactory, _personNameGenerator);
+                    person.Id = personId;
+                    var actor = CreateActor(_botPlayer, person, node);
+                    sector.ActorManager.Add(actor);
+
+                    personId++;
+                }
+            }
+
+            return personId;
         }
 
         private static IPerson CreatePerson(IHumanPersonFactory humanPersonFactory, NameGeneration.RandomName randomName)
