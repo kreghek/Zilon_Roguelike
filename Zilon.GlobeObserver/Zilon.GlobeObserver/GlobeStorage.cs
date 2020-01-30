@@ -34,32 +34,35 @@ namespace Zilon.GlobeObserver
         /// <param name="name"> Наименование мира. </param>
         public Task SaveAsync(Globe globe, string name)
         {
+            throw new System.NotImplementedException("Работа с миром изменилась.");
+
             return Task.Run(() =>
             {
-                var globeStorageData = GlobeStorageData.Create(globe);
+                //var globeStorageData = GlobeStorageData.Create(globe);
 
-                using (var file = System.IO.File.CreateText($"{name}.json"))
-                {
-                    var serializer = new JsonSerializer();
-                    serializer.Serialize(file, globeStorageData);
-                }
+                //using (var file = System.IO.File.CreateText($"{name}.json"))
+                //{
+                //    var serializer = new JsonSerializer();
+                //    serializer.Serialize(file, globeStorageData);
+                //}
             });
         }
 
         public Task<Globe> LoadAsync(string name)
         {
-            return Task.Run(() =>
-            {
-                using (var file = System.IO.File.OpenText($"{name}.json"))
-                {
-                    var serializer = new JsonSerializer();
-                    var globeStorageData = (GlobeStorageData)serializer.Deserialize(file, typeof(GlobeStorageData));
+            throw new System.NotImplementedException();
+            //return Task.Run<Globe>(() =>
+            //{
+            //    using (var file = System.IO.File.OpenText($"{name}.json"))
+            //    {
+            //        var serializer = new JsonSerializer();
+            //        var globeStorageData = (GlobeStorageData)serializer.Deserialize(file, typeof(GlobeStorageData));
 
-                    var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory);
+            //        var globe = globeStorageData.Restore(_schemeService, _survivalRandomSource, _propFactory, _sectorInfoFactory);
 
-                    return globe;
-                }
-            });
+            //        return globe;
+            //    }
+            //});
         }
 
         public bool HasFile(string name)
