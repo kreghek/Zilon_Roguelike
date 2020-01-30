@@ -17,6 +17,11 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Набор объектов переходов. </returns>
         public static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
         {
+            if (sectorScheme is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorScheme));
+            }
+
             if (sectorScheme.TransSectorSids == null)
             {
                 return new[] { RoomTransition.CreateGlobalExit() };
