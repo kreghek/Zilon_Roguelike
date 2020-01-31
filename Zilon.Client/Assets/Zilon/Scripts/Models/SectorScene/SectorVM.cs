@@ -507,7 +507,6 @@ public class SectorVM : MonoBehaviour
 
             if (e.Transition.SectorSid == null)
             {
-                AddResourceToCurrentPerson("history-book");
                 _humanPlayer.SectorSid = null;
                 SceneManager.LoadScene("globe");
                 SaveGameProgress();

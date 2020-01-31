@@ -26,7 +26,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public ISectorBuilder GetBuilder()
+        public ISectorBuilder GetBuilder(ProvinceNode provinceNode)
         {
             var actorManager = _diContainer.Resolve<IActorManager>();
             var propContainerManager = _diContainer.Resolve<IPropContainerManager>();

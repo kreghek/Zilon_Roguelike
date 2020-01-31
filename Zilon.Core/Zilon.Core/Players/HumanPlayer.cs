@@ -16,9 +16,14 @@ namespace Zilon.Core.Players
         public HumanPerson MainPerson { get; set; }
 
         /// <summary> 
-        /// Текущий идентфиикатор сектора внутри локации, где сейчас находится группа игрока.
+        /// Текущий идентфиикатор сектора, где сейчас находится группа игрока.
         /// </summary>
         public string SectorSid { get; set; }
+
+        /// <summary>
+        /// Текущий идентфиикатор уровня сектора, где сейчас находится группа игрока.
+        /// </summary>
+        public string SectorLevelSid { get; set; }
 
         /// <summary>
         /// Событие выстреливает, если зменяется узел группы игрока на глобальной карте.
