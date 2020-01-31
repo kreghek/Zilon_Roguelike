@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -37,7 +38,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize, IEnumerable<RoomTransition> availableTransitions);
+        public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize, IEnumerable<SectorTransition> availableTransitions);
 
         /// <summary>
         /// Соединяет две комнаты коридором.

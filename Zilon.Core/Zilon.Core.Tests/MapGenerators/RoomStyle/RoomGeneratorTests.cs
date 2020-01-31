@@ -7,8 +7,8 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
@@ -32,7 +32,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { SectorTransition.CreateGlobalExit() });
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
@@ -57,7 +57,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { SectorTransition.CreateGlobalExit() });
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
@@ -75,13 +75,13 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public void GenerateRoomsInGrid_Transitions()
         {
             // ARRANGE
-            var transition = RoomTransition.CreateGlobalExit();
+            var transition = SectorTransition.CreateGlobalExit();
             var availableTransitions = new[] { transition };
 
             var randomMock = new Mock<IRoomGeneratorRandomSource>();
             randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(new[] { new OffsetCoords(0, 0) });
-            randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
+            randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<SectorTransition>>()))
                 .Returns(new[] { transition });
             randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
                 .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });

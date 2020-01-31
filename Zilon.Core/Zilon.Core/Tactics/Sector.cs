@@ -5,7 +5,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 using Zilon.Core.Graphs;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -300,13 +299,13 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit([NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] SectorTransition roomTransition)
         {
             var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
 
-        public void UseTransition(RoomTransition transition)
+        public void UseTransition(SectorTransition transition)
         {
             DoActorExit(transition);
         }

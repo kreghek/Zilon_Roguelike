@@ -3,7 +3,6 @@ using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
-using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -17,10 +16,10 @@ namespace Zilon.Core.Tactics.Spatial
 
         public SectorHexMap(int segmentSize) : base(segmentSize)
         {
-            Transitions = new Dictionary<IGraphNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, SectorTransition>();
         }
 
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Узлы карты, приведённые к <see cref="HexNode"/>.

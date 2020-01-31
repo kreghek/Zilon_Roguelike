@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -119,7 +120,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return openRoomNodes.First();
         }
 
-        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        public IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions)
         {
             return new[] { openTransitions.First() };
         }

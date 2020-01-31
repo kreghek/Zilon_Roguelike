@@ -104,7 +104,7 @@ namespace Zilon.Core.MapGenerators
             _citizenGenerator.CreateCitizens(sector, _botPlayer, sector.Map.Regions);
 
             //TODO Выходы нужно генерировать в карте, аналогично подземельям.
-            map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
+            map.Transitions.Add(map.Nodes.Last(), SectorTransition.CreateGlobalExit());
 
             return sector;
         }

@@ -151,7 +151,7 @@
     <Compile Include="MapGenerators\RoomStyle\RoomInteriorObjectMeta.cs" />
     <Compile Include="MapGenerators\RoomStyle\IRoomGenerator.cs" />
     <Compile Include="MapGenerators\MapFiller.cs" />
-    <Compile Include="MapGenerators\RoomTransition.cs" />
+    <Compile Include="Tactics\SectorTransition.cs" />
     <Compile Include="MapGenerators\SectorFactory.cs" />
     <Compile Include="MapGenerators\PrimitiveStyle\SquareMapFactory.cs" />
     <Compile Include="OffsetCoordsExtensions.cs" />

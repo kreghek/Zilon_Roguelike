@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -61,7 +59,7 @@ namespace Zilon.Core.Tactics
         /// Использование перехода в секторе.
         /// </summary>
         /// <param name="transition"> Переход, который следует использовать. </param>
-        void UseTransition(RoomTransition transition);
+        void UseTransition(ISectorTransition transition);
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.

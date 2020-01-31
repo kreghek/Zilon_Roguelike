@@ -107,7 +107,7 @@ namespace Zilon.Core.World
             if (startDungeonDraft != null)
             {
                 var transitionNode = sector.Map.Nodes.First();
-                var trasition = new MapGenerators.RoomTransition(startDungeonDraft.SchemeSid, startDungeonDraft.SchemeLevelSid);
+                var trasition = new SectorTransition(startDungeonDraft.SchemeSid, startDungeonDraft.SchemeLevelSid);
                 sector.Map.Transitions.Add(transitionNode, trasition);
             }
         }

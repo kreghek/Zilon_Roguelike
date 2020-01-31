@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.WildStyle
@@ -51,7 +51,7 @@ namespace Zilon.Core.MapGenerators.WildStyle
             map.Regions.Add(startRegion);
             map.Regions.Add(outerRegion);
 
-            map.Transitions.Add(outerNodes.Last(), RoomTransition.CreateGlobalExit());
+            map.Transitions.Add(outerNodes.Last(), SectorTransition.CreateGlobalExit());
 
             return Task.FromResult(map);
         }
