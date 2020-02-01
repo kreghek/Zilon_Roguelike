@@ -52,6 +52,11 @@ namespace Zilon.Core.Persons
                     SurvivalStatType.Intoxication,
                     PersonSurvivalStatType.Intoxication,
                     statList);
+
+                CreateStatFromScheme(personScheme.SurvivalStats,
+                    SurvivalStatType.Wound,
+                    PersonSurvivalStatType.Wound,
+                    statList);
             }
 
             return statList.ToArray();
