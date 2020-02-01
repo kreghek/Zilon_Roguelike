@@ -96,6 +96,12 @@
 		  "End": 1
         }
       ]
+    },
+	{
+      "Type": "Wound",
+      "MinValue": 0,
+      "MaxValue": 30,
+      "StartValue": 0
     }
   ]
 }
