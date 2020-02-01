@@ -91,7 +91,7 @@ namespace Zilon.Core.Persons
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
-        
+
         /// <summary>Обновление состояния данных о выживании.</summary>
         public void Update()
         {
@@ -112,7 +112,10 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static SurvivalStat CreateStat(SurvivalStatType type, PersonSurvivalStatType schemeStatType, IPersonSurvivalStatSubScheme[] survivalStats)
+        private static SurvivalStat CreateStat(
+            SurvivalStatType type,
+            PersonSurvivalStatType schemeStatType,
+            IPersonSurvivalStatSubScheme[] survivalStats)
         {
             var statScheme = survivalStats.SingleOrDefault(x => x.Type == schemeStatType);
             if (statScheme == null)

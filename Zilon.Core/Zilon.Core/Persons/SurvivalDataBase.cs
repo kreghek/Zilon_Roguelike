@@ -36,7 +36,10 @@ namespace Zilon.Core.Persons
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
-                ChangeStatInner(stat, value);
+                if (stat.Value < stat.Range.Max)
+                {
+                    ChangeStatInner(stat, value);
+                }
             }
         }
 
@@ -50,7 +53,10 @@ namespace Zilon.Core.Persons
             var stat = Stats.SingleOrDefault(x => x.Type == type);
             if (stat != null)
             {
-                ChangeStatInner(stat, -value);
+                if (stat.Value > stat.Range.Min)
+                {
+                    ChangeStatInner(stat, -value);
+                }
             }
         }
 
@@ -93,14 +99,15 @@ namespace Zilon.Core.Persons
         {
             stat.Value += value;
 
-            ProcessIfHealth(stat);
+            ProcessIfHealth(stat, value);
+            ProcessIfWound(stat);
         }
 
         /// <summary>
         /// Индивидуально обрабатывает характеристику, если это здоровье.
         /// </summary>
         /// <param name="stat"> Обрабатываемая характеристика. </param>
-        private void ProcessIfHealth(SurvivalStat stat)
+        private void ProcessIfHealth(SurvivalStat stat, int value)
         {
             if (stat.Type != SurvivalStatType.Health)
             {
@@ -112,6 +119,43 @@ namespace Zilon.Core.Persons
             {
                 IsDead = true;
                 DoDead();
+            }
+            else
+            {
+                if (value < 0)
+                {
+                    SetWoundCounter();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Если персонаж получает урон, то выставляетс счётчик раны.
+        /// Когда счтётчик раны снижается до 0, восстанавливается 1 здоровья.
+        /// </summary>
+        private void SetWoundCounter()
+        {
+            var woundStat = Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Wound);
+            if (woundStat != null)
+            {
+                SetStatForce(SurvivalStatType.Wound, woundStat.Range.Max);
+            }
+        }
+
+        private void ProcessIfWound(SurvivalStat stat)
+        {
+            if (stat.Type != SurvivalStatType.Wound)
+            {
+                return;
+            }
+
+            var woundCounter = stat.Value;
+            if (woundCounter <= 0)
+            {
+                // Если счётчик раны дошёл до 0,
+                // то восстанавливаем единицу здоровья.
+
+                RestoreStat(SurvivalStatType.Health, 1);
             }
         }
 
