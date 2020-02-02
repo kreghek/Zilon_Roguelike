@@ -18,6 +18,7 @@ public class FowManager : MonoBehaviour
 
     private MapNodeVM[] _nodeViewModels;
     private IList<ActorViewModel> _actorViewModels;
+    private IList<ContainerVm> _containerViewModels;
 
     public void Start()
     {
@@ -34,7 +35,7 @@ public class FowManager : MonoBehaviour
         }
     }
 
-    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels)
+    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels, IList<ContainerVm> containerViewModels)
     {
         if (nodeViewModels is null)
         {
@@ -46,9 +47,16 @@ public class FowManager : MonoBehaviour
             throw new System.ArgumentNullException(nameof(actorViewModels));
         }
 
+        if (containerViewModels is null)
+        {
+            throw new System.ArgumentNullException(nameof(containerViewModels));
+        }
+
         _nodeViewModels = nodeViewModels.ToArray();
 
         _actorViewModels = actorViewModels;
+
+        _containerViewModels = containerViewModels;
     }
 
     private void PrepareSlowUpdate()
@@ -66,6 +74,7 @@ public class FowManager : MonoBehaviour
 
         ProcessNodeFow(activeActor.SectorFowData);
         ProcessActorFow(activeActor.SectorFowData);
+        ProcessContainerFow(activeActor.SectorFowData);
     }
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
@@ -104,6 +113,28 @@ public class FowManager : MonoBehaviour
             var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
             var fowController = actorViewModel.GetComponent<FowActorController>();
+
+            if (fowController != null)
+            {
+                fowController.ChangeState(fowState);
+            }
+        }
+    }
+
+    private void ProcessContainerFow(ISectorFowData sectorFowData)
+    {
+        if (_containerViewModels == null)
+        {
+            return;
+        }
+
+        foreach (var containerViewModel in _containerViewModels.ToArray())
+        {
+            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
+
+            var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
+
+            var fowController = containerViewModel.GetComponent<FowContainerController>();
 
             if (fowController != null)
             {

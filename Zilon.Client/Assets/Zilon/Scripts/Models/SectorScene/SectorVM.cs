@@ -199,7 +199,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        FowManager.InitViewModels(nodeViewModels, ActorViewModels);
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _containerViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
