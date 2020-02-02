@@ -45,10 +45,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftTopWall: {fileID: 21300000, guid: 1221094616408c94da8fbd2f43d7c50c, type: 3}
   LeftWall: {fileID: 21300000, guid: c945559d68c8d5f45bf79394c14bc42b, type: 3}
-  LeftBottomWall: {fileID: 21300000, guid: cbb10de3812aad14294a70dc287e1480, type: 3}
+  LeftBottomWall: {fileID: 21300000, guid: 800358afc333b174c8d4c8dbfcb08bbe, type: 3}
   RightTopWall: {fileID: 21300000, guid: 7dc08516b93fea649a8a643def47a086, type: 3}
   RightWall: {fileID: 21300000, guid: a52eb8ab4394dc14a863a81c8eaa80f0, type: 3}
-  RightBottomWall: {fileID: 21300000, guid: 4b4eef2cb4f2cc240911c253c733bd08, type: 3}
+  RightBottomWall: {fileID: 21300000, guid: 88874f68a89081c47bd827f28f687b8c, type: 3}
   Floor: {fileID: 21300000, guid: a18cfc181f02d274894748e7dc8aa87c, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}

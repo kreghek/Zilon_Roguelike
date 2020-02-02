@@ -60,9 +60,14 @@ public class FowManager : MonoBehaviour
         {
             var fowNode = activeActor.SectorFowData.Nodes.SingleOrDefault(x => x.Node == nodeViewModel.Node);
 
-            var isObserving = fowNode?.State == SectorMapNodeFowState.Observing;
+            var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
-            nodeViewModel.gameObject.SetActive(isObserving);
+            var fowController = nodeViewModel.GetComponent<FowNodeController>();
+
+            if (fowController != null)
+            {
+                fowController.ChangeState(fowState);
+            }
         }
     }
 }
