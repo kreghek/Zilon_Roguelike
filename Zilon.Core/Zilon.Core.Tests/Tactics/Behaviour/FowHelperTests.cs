@@ -12,13 +12,13 @@ using Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases;
 
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class FowHelperTests
     {
         /// <summary>
         /// Тест проверяет, что на пустой карте данные тумана войны не пустые.
         /// </summary>
-        [Test()]
+        [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
         public void UpdateFowData_SquareMap_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY, int radius)
         {

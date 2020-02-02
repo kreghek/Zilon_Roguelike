@@ -192,7 +192,6 @@ public class SectorVM : MonoBehaviour
         await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
-        FowManager.InitNodes(nodeViewModels);
         _nodeViewModels.AddRange(nodeViewModels);
 
         InitPlayerActor(nodeViewModels);
@@ -200,11 +199,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
-        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
-        //{
-        //    _sectorModalManager.ShowInstructionModal();
-        //}
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
@@ -358,8 +353,31 @@ public class SectorVM : MonoBehaviour
             actorViewModel.Selected += EnemyActorVm_OnSelected;
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead += Monster_Dead;
+
+            var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
+            // Контроллеру тумана войны скармливаем только графику.
+            // Потому что на основтой объект акёра завязаны блокировки (на перемещение, например).
+            // Если основной объект создаст блокировку и будет отключен,
+            // то он не сможет её снять в результате своих Update.
+            // Это создаст всеобщую неснимаемую блокировку.
+            fowController.Graphic = actorGraphic.gameObject;
+            // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
+            fowController.Collider = actorViewModel.GetComponent<Collider2D>();
 
             ActorViewModels.Add(actorViewModel);
+        }
+    }
+
+    private void Monster_Dead(object sender, EventArgs e)
+    {
+        // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
+        // Это делаем, чтобы избежать приведения sender к ISurvivalData.
+        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.Survival, sender));
+
+        if (viewModel != null)
+        {
+            ActorViewModels.Remove(viewModel);
         }
     }
 
