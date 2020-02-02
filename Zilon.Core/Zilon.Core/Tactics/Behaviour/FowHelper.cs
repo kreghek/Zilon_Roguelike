@@ -6,6 +6,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
+    /// <summary>
+    /// Вспомогательный класс для рассчёта тумана войны.
+    /// </summary>
     public static class FowHelper
     {
         /// <summary>
