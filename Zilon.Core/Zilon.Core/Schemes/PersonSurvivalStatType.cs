@@ -28,6 +28,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Интоксикация персонажа.
         /// </summary>
-        Intoxication
+        Intoxication,
+
+        /// <summary>
+        /// Способность восстанвливать раны.
+        /// </summary>
+        Wound
     }
 }
