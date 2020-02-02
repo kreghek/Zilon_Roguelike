@@ -44,7 +44,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _map.HoldNode(nextNode, Actor);
 
             const int DISTANCE_OF_SIGN = 5;
-            FowHelper.UpdateFowData(Actor, _map, nextNode, DISTANCE_OF_SIGN);
+            FowHelper.UpdateFowData(Actor.SectorFowData, _map, nextNode, DISTANCE_OF_SIGN);
 
             _path.RemoveAt(0);
 
