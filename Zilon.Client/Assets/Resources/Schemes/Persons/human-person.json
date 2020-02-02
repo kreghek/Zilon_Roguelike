@@ -100,7 +100,7 @@
 	{
       "Type": "Wound",
       "MinValue": 0,
-      "MaxValue": 10,
+      "MaxValue": 50,
       "StartValue": 0
     }
   ]
