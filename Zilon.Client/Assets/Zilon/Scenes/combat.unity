@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 160909242}
   - component: {fileID: 160909243}
   - component: {fileID: 160909244}
+  - component: {fileID: 160909245}
   m_Layer: 0
   m_Name: Sector
   m_TagString: Untagged
@@ -339,6 +340,7 @@ MonoBehaviour:
   WindowCanvas: {fileID: 227365884}
   FoundNothingIndicatorPrefab: {fileID: 7517115147975470495, guid: 3118e367336d83b4082d94d0a4d3dbf6,
     type: 3}
+  FowManager: {fileID: 160909245}
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,6 +379,18 @@ MonoBehaviour:
     type: 3}
   BlockSparksPrefab: {fileID: 5693981553541839669, guid: 8499d56e88c77d548b5fc26f815893c0,
     type: 3}
+--- !u!114 &160909245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160909240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e73087b5890f04a89e6a521d075177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &185488349
 GameObject:
   m_ObjectHideFlags: 0
@@ -5616,7 +5630,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.6137999
+  m_Size: 0.6138
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

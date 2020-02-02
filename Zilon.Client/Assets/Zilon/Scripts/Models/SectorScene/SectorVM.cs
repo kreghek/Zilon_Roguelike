@@ -67,6 +67,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
 
+    [NotNull] public FowManager FowManager;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -190,6 +192,7 @@ public class SectorVM : MonoBehaviour
         await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
+        FowManager.InitNodes(nodeViewModels);
         _nodeViewModels.AddRange(nodeViewModels);
 
         InitPlayerActor(nodeViewModels);
@@ -313,8 +316,8 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
 
-            var fowController = mapNodeObj.GetComponent<FowNodeController>();
-            fowController.SectorMap = map;
+            //var fowController = mapNodeObj.GetComponent<FowNodeController>();
+            //fowController.SectorMap = map;
 
             nodeVMs.Add(mapNodeVm);
         }
