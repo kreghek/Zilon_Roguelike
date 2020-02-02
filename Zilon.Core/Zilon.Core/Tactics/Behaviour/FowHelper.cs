@@ -84,16 +84,19 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var resultList = new List<IGraphNode>() { baseNode };
 
+            // Шаги заливки
             for (var i = 1; i <= radius; i++)
             {
                 var newBorder = GetNextForBorder(border, resultList, map);
 
+                var visibleBorder = newBorder.Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
+
                 border.Clear();
-                border.AddRange(newBorder);
-                resultList.AddRange(newBorder);
+                border.AddRange(visibleBorder);
+                resultList.AddRange(visibleBorder);
             }
 
-            return resultList.ToArray();// map.Nodes.Where(x => map.DistanceBetween(x, baseNode) <= radius && map.TargetIsOnLine(x, baseNode)).ToArray();
+            return resultList.ToArray();
         }
 
         private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, ISectorMap map)
