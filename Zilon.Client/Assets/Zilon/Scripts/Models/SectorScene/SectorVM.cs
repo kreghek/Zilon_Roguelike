@@ -277,7 +277,7 @@ public class SectorVM : MonoBehaviour
             nodeViewModels);
 
         //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(playerActorViewModel.Actor, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
+        FowHelper.UpdateFowData(playerActorViewModel.Actor.SectorFowData, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
@@ -293,7 +293,9 @@ public class SectorVM : MonoBehaviour
 
         foreach (var node in map.Nodes)
         {
-            var mapNodeVm = Instantiate(MapNodePrefab, transform);
+            var mapNodeObj = _container.InstantiatePrefab(MapNodePrefab, transform);
+
+            var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
@@ -310,6 +312,9 @@ public class SectorVM : MonoBehaviour
 
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
+
+            var fowController = mapNodeObj.GetComponent<FowNodeController>();
+            fowController.SectorMap = map;
 
             nodeVMs.Add(mapNodeVm);
         }
