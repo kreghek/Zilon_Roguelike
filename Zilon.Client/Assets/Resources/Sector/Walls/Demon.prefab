@@ -43,12 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6653e41f8a26f44ea5959296a28651a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftTopWall: {fileID: 21300000, guid: ae539e3324376eb459a84b9382c2d737, type: 3}
-  LeftWall: {fileID: 21300000, guid: 9d7c23d9b549d70478422314dff3f380, type: 3}
-  LeftBottomWall: {fileID: 21300000, guid: 6e525c757ceacf546904a1cc6bb43fe0, type: 3}
-  RightTopWall: {fileID: 21300000, guid: 5ed0981b60750734e8e2e0b0f10a7009, type: 3}
-  RightWall: {fileID: 21300000, guid: 6e502895eb2f3474d97cb39a6ac1bf3a, type: 3}
-  RightBottomWall: {fileID: 21300000, guid: 9fa2ff8ab0d4424449f388748fd3bba8, type: 3}
+  LeftTopWall: {fileID: 21300000, guid: 4ed0ba62b2dd4d642931e73f9e591830, type: 3}
+  LeftWall: {fileID: 21300000, guid: 4f3185c8341a4ac43802d0c1b639783b, type: 3}
+  LeftBottomWall: {fileID: 21300000, guid: db607e4b6e205254896b155df80fdde9, type: 3}
+  RightTopWall: {fileID: 21300000, guid: af8ddcd644a85fd4588260ef0bbcf45b, type: 3}
+  RightWall: {fileID: 21300000, guid: 9e891f4ac75920c4bbcb9be310dace04, type: 3}
+  RightBottomWall: {fileID: 21300000, guid: c2276e80038142f4188bf4501bbe0f86, type: 3}
   Floor: {fileID: 21300000, guid: 7017c2e471201914a9b9acb2b93a3743, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
