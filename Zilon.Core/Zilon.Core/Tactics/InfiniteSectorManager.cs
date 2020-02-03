@@ -27,7 +27,7 @@ namespace Zilon.Core.Tactics
 
             var sectorLevelScheme = scheme.SectorLevels[0];
 
-            CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
+            CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme).ConfigureAwait(false);
             CurrentSector.Scheme = scheme;
         }
     }

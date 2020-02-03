@@ -443,8 +443,7 @@ public class SectorVM : MonoBehaviour
 
         _playerState.SelectedViewModel = traderViewModel;
 
-        var citizen = traderViewModel.Actor.Person as CitizenPerson;
-        if (citizen != null)
+        if (traderViewModel.Actor.Person is CitizenPerson citizen)
         {
             switch (citizen.CitizenType)
             {
@@ -467,7 +466,7 @@ public class SectorVM : MonoBehaviour
                     break;
             }
 
-            
+
         }
     }
 
@@ -545,46 +544,53 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
-        if (_humanPlayer.GlobeNode == null)
-        {
-            // intro
-
-            if (e.Transition.SectorSid == null)
-            {
-                AddResourceToCurrentPerson("history-book");
-                _humanPlayer.SectorSid = null;
-                SceneManager.LoadScene("globe");
-                SaveGameProgress();
-                return;
-            }
-            else
-            {
-                _humanPlayer.SectorSid = e.Transition.SectorSid;
-                StartLoadScene();
-                return;
-            }
-        }
-
-        var currentLocation = _humanPlayer.GlobeNode.Scheme;
-        if (currentLocation?.SectorLevels == null)
-        {
-            _humanPlayer.SectorSid = null;
-            SceneManager.LoadScene("globe");
-            SaveGameProgress();
-            return;
-        }
-
         if (e.Transition.SectorSid == null)
         {
-            _humanPlayer.SectorSid = null;
-            SceneManager.LoadScene("globe");
-            SaveGameProgress();
+            _humanPlayer.SectorSid = "globe";
+            _humanPlayer.SectorLevelSid = null;
+
+            // Текущий набор секторов пройден.
+            // Из доступных выбираем случайную схему нового сектора.
+            // И запоминаем её в объекте игрока.
+
+            StartLoadScene();
+
+            return;
         }
         else
         {
-            _humanPlayer.SectorSid = e.Transition.SectorSid;
+            _humanPlayer.SectorLevelSid = e.Transition.SectorSid;
+
             StartLoadScene();
+
+            return;
         }
+
+        //if (_humanPlayer.GlobeNode == null)
+        //{
+
+        //}
+
+        //var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        //if (currentLocation?.SectorLevels == null)
+        //{
+        //    _humanPlayer.SectorSid = null;
+        //    SceneManager.LoadScene("globe");
+        //    SaveGameProgress();
+        //    return;
+        //}
+
+        //if (e.Transition.SectorSid == null)
+        //{
+        //    _humanPlayer.SectorSid = null;
+        //    SceneManager.LoadScene("globe");
+        //    SaveGameProgress();
+        //}
+        //else
+        //{
+        //    _humanPlayer.SectorSid = e.Transition.SectorSid;
+        //    StartLoadScene();
+        //}
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
