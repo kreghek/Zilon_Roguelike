@@ -1,0 +1,8 @@
+version: 1
+update_configs:
+  - package_manager: "dotnet:nuget"
+    directory: "/Zilon.Core/Zilon.Core"
+    update_schedule: "weekly"
+  - package_manager: "dotnet:nuget"
+    directory: "/Zilon.Core/Zilon.Bot.Players"
+    update_schedule: "weekly"
