@@ -43,6 +43,12 @@ namespace Zilon.Core.Tactics.Behaviour
             Actor.MoveToNode(nextNode);
             _map.HoldNode(nextNode, Actor);
 
+            if (Actor.SectorFowData is HumanSectorFowData)
+            {
+                const int DISTANCE_OF_SIGN = 5;
+                FowHelper.UpdateFowData(Actor.SectorFowData, _map, nextNode, DISTANCE_OF_SIGN);
+            }
+
             _path.RemoveAt(0);
 
             if (!_path.Any())

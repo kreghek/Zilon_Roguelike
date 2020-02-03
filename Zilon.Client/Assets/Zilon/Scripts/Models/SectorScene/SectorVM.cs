@@ -67,6 +67,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
 
+    [NotNull] public FowManager FowManager;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -197,11 +199,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
-        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
-        //{
-        //    _sectorModalManager.ShowInstructionModal();
-        //}
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _containerViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
@@ -276,6 +274,9 @@ public class SectorVM : MonoBehaviour
             playerActorStartNode,
             nodeViewModels);
 
+        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
+        FowHelper.UpdateFowData(playerActorViewModel.Actor.SectorFowData, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
+
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
@@ -290,7 +291,9 @@ public class SectorVM : MonoBehaviour
 
         foreach (var node in map.Nodes)
         {
-            var mapNodeVm = Instantiate(MapNodePrefab, transform);
+            var mapNodeObj = _container.InstantiatePrefab(MapNodePrefab, transform);
+
+            var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
@@ -307,6 +310,9 @@ public class SectorVM : MonoBehaviour
 
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
+
+            //var fowController = mapNodeObj.GetComponent<FowNodeController>();
+            //fowController.SectorMap = map;
 
             nodeVMs.Add(mapNodeVm);
         }
@@ -347,8 +353,31 @@ public class SectorVM : MonoBehaviour
             actorViewModel.Selected += EnemyActorVm_OnSelected;
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead += Monster_Dead;
+
+            var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
+            // Контроллеру тумана войны скармливаем только графику.
+            // Потому что на основтой объект акёра завязаны блокировки (на перемещение, например).
+            // Если основной объект создаст блокировку и будет отключен,
+            // то он не сможет её снять в результате своих Update.
+            // Это создаст всеобщую неснимаемую блокировку.
+            fowController.Graphic = actorGraphic.gameObject;
+            // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
+            fowController.Collider = actorViewModel.GetComponent<Collider2D>();
 
             ActorViewModels.Add(actorViewModel);
+        }
+    }
+
+    private void Monster_Dead(object sender, EventArgs e)
+    {
+        // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
+        // Это делаем, чтобы избежать приведения sender к ISurvivalData.
+        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.Survival, sender));
+
+        if (viewModel != null)
+        {
+            ActorViewModels.Remove(viewModel);
         }
     }
 
@@ -636,7 +665,9 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
+        var fowData = new HumanSectorFowData();
+
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
 
         actorManager.Add(actor);
 

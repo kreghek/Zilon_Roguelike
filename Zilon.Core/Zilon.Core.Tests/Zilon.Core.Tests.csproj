@@ -162,7 +162,9 @@
     <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
     <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
     <Compile Include="Tactics\Behaviour\EquipTaskTests.cs" />
+    <Compile Include="Tactics\Behaviour\FowHelperTests.cs" />
     <Compile Include="Tactics\Behaviour\MoveIntentionTests.cs" />
+    <Compile Include="Tactics\Behaviour\TestCases\FowHelperTestCaseDataSource.cs" />
     <Compile Include="Tactics\PropContainerManagerTests.cs" />
     <Compile Include="Tactics\ActorManagerTests.cs" />
     <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />

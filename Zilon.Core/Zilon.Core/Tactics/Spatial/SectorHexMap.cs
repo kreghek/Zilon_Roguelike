@@ -20,6 +20,7 @@ namespace Zilon.Core.Tactics.Spatial
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
+        /// <inheritdoc/>
         public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         /// <summary>
@@ -43,6 +44,16 @@ namespace Zilon.Core.Tactics.Spatial
         /// </returns>
         public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
+            if (currentNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(targetNode));
+            }
+
             var targetHexNode = (HexNode)targetNode;
             var currentHexNode = (HexNode)currentNode;
 
