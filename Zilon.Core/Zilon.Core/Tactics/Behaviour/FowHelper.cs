@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics.Behaviour
             // Все наблюдаемые из базового узла узлы карты.
             var observingNodes = GetObservingNodes(map, baseNode, radius);
 
-            var currentObservedFowNodes = fowData.Nodes.Where(x=>x.State == SectorMapNodeFowState.Observing);
+            var currentObservedFowNodes = fowData.Nodes.Where(x => x.State == SectorMapNodeFowState.Observing);
 
             var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
 
@@ -80,9 +80,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static IGraphNode[] GetObservingNodes(ISectorMap map, IGraphNode baseNode, int radius)
         {
-            var border = new List<IGraphNode>() { baseNode };
+            var border = new List<IGraphNode> { baseNode };
 
-            var resultList = new List<IGraphNode>() { baseNode };
+            var resultList = new List<IGraphNode> { baseNode };
 
             // Шаги заливки
             for (var i = 1; i <= radius; i++)
@@ -102,6 +102,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, ISectorMap map)
         {
             var borderTotal = new List<IGraphNode>();
+
             foreach (var node in border)
             {
                 var next = map.GetNext(node);
