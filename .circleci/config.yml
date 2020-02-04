@@ -8,7 +8,9 @@ jobs:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core/Zilon.Core.csproj -SolutionDirectory ./Zilon.Core
       - run: nuget restore Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -SolutionDirectory ./Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core/Zilon.Core.csproj /t:Restore /p:Configuration=Release /p:OutputPath=../../bin
       - run: msbuild Zilon.Core/Zilon.Core/Zilon.Core.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
+      - run: msbuild Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj /t:Restore /p:Configuration=Release /p:OutputPath=../../bin
       - run: msbuild Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
       - persist_to_workspace:
           root: bin
