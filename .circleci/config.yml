@@ -28,7 +28,9 @@ jobs:
       # Этот шаг обязательно нужно вызывать, чтобы восстановить PackageReference в Zilon.Core
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Restore /p:Configuration=Release
       - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Build /p:Configuration=Release
-      - run: mono --debug .nuget/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - run: ls -l
+      - run: mono --debug /.nuget/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      - run: mono --debug /.Config/Nuget/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
       - store_test_results:
           path: TestResult.xml
   test_45_coverage:
