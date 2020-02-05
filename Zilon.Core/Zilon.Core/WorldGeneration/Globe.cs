@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -67,11 +66,11 @@ namespace Zilon.Core.WorldGeneration
                     }
                 }
 
-                realmFileName = realmFileName ?? "realms.bmp";
-                realmBmp.Bitmap.Save(Path.Combine(path, realmFileName), ImageFormat.Bmp);
+                //realmFileName = realmFileName ?? "realms.bmp";
+                //realmBmp.Bitmap.Save(Path.Combine(path, realmFileName), ImageFormat.Bmp);
 
-                branchFileName = branchFileName ?? "branches.bmp";
-                branchmBmp.Bitmap.Save(Path.Combine(path, branchFileName), ImageFormat.Bmp);
+                //branchFileName = branchFileName ?? "branches.bmp";
+                //branchmBmp.Bitmap.Save(Path.Combine(path, branchFileName), ImageFormat.Bmp);
             }
         }
 

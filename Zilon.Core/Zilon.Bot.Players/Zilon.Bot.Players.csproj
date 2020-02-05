@@ -1,102 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{218B22DD-5BF3-4A86-B979-7E6F534F3F52}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Bot.Players</RootNamespace>
-    <AssemblyName>Zilon.Bot.Players</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Zilon.Client\Assets\Plugins\Zilon.Bot.Players.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Linq.Expressions" />
-    <Reference Include="System.Runtime" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BotActorTaskSourceBase.cs" />
-    <Compile Include="ILogicStrategyData.cs" />
-    <Compile Include="Logics\EquipBetterPropLogicState.cs" />
-    <Compile Include="Logics\ExitLogicState.cs" />
-    <Compile Include="Logics\LogicStateBase.cs" />
-    <Compile Include="Logics\ExploreLogicState.cs" />
-    <Compile Include="Strategies\LogicTreeStrategyData.cs" />
-    <Compile Include="MonsterBotActorTaskSource.cs" />
-    <Compile Include="HumanBotActorTaskSource.cs" />
-    <Compile Include="ILogicState.cs" />
-    <Compile Include="ILogicStateFactory.cs" />
-    <Compile Include="ILogicStateTrigger.cs" />
-    <Compile Include="ILogicStrategy.cs" />
-    <Compile Include="LogicHelper.cs" />
-    <Compile Include="Logics\EatProviantLogicState.cs" />
-    <Compile Include="Logics\HealSelfLogicState.cs" />
-    <Compile Include="Logics\LootLogicState.cs" />
-    <Compile Include="LootHelper.cs" />
-    <Compile Include="Strategies\BotStrategyException.cs" />
-    <Compile Include="Strategies\LogicStateTrack.cs" />
-    <Compile Include="Strategies\LogicStateTree.cs" />
-    <Compile Include="Strategies\LogicStateTreePatterns.cs" />
-    <Compile Include="Triggers\AndTrigger.cs" />
-    <Compile Include="Triggers\CounterOverTrigger.cs" />
-    <Compile Include="ICompositLogicStateTrigger.cs" />
-    <Compile Include="Triggers\ExploredTrigger.cs" />
-    <Compile Include="Triggers\HasBetterEquipmentTrigger.cs" />
-    <Compile Include="Triggers\LootDetectedTrigger.cs" />
-    <Compile Include="Triggers\ResourceFinder.cs" />
-    <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
-    <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
-    <Compile Include="Triggers\LogicOverTrigger.cs" />
-    <Compile Include="Triggers\HungryAndHasResourceTrigger.cs" />
-    <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
-    <Compile Include="Logics\IdleLogicState.cs" />
-    <Compile Include="Logics\DefeatTargetLogicState.cs" />
-    <Compile Include="Logics\RoamingLogicState.cs" />
-    <Compile Include="LogicTransition.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\LogicTreeStrategy.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
-      <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
-      <Name>Zilon.Bot.Sdk</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
-      <Name>Zilon.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
+    </PropertyGroup>
+	<ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
       <Version>2.9.3</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<ItemGroup>
+	  <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	</ItemGroup>
 </Project>

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
 namespace Zilon.Core.WorldGeneration
 {
     public class DirectBitmap : IDisposable
     {
-        public Bitmap Bitmap { get; private set; }
+        //public Bitmap Bitmap { get; private set; }
         public int[] Bits { get; private set; }
         public bool Disposed { get; private set; }
         public int Height { get; private set; }
@@ -21,7 +20,7 @@ namespace Zilon.Core.WorldGeneration
             Height = height;
             Bits = new int[width * height];
             BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-            Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
+            //Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
         }
 
         public void SetPixel(int x, int y, Color colour)
@@ -49,7 +48,7 @@ namespace Zilon.Core.WorldGeneration
             }
 
             Disposed = true;
-            Bitmap.Dispose();
+            //Bitmap.Dispose();
             BitsHandle.Free();
         }
     }
