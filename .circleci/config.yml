@@ -6,8 +6,6 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
     steps:
       - checkout
-      - run: nuget restore Zilon.Core/Zilon.Core/Zilon.Core.csproj -SolutionDirectory ./Zilon.Core
-      - run: nuget restore Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -SolutionDirectory ./Zilon.Core
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -o ../../bin
       - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -o ../../bin
       - persist_to_workspace:
