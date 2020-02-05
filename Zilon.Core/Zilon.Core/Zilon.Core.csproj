@@ -14,6 +14,7 @@
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations">
 		  <Version>2019.1.3</Version>
+		  <ExcludeAssets>runtime; build</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="JsonSubTypes">
 		  <Version>1.6.0</Version>
