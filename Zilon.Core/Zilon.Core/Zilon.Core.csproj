@@ -5,6 +5,12 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
       <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
     </PropertyGroup>
+    <ItemGroup>
+      <None Remove="WorldGeneration\NameGeneration\names.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+    </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations">
 		  <Version>2019.1.3</Version>
