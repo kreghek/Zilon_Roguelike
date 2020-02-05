@@ -19,7 +19,7 @@ namespace Zilon.Core.Tactics.Spatial
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
-        public int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
+        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
             var distance = _nodeDistanceCalculator.GetDistance((TNode)currentNode, (TNode)targetNode);
             return distance;

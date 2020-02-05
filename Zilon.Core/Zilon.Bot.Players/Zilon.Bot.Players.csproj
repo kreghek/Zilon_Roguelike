@@ -1,125 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
-  <Import Project="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props')" />
-  <Import Project="..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props')" />
-  <Import Project="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props')" />
-  <Import Project="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{218B22DD-5BF3-4A86-B979-7E6F534F3F52}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Bot.Players</RootNamespace>
-    <AssemblyName>Zilon.Bot.Players</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Zilon.Client\Assets\Plugins\Zilon.Bot.Players.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Zilon.Client\Assets\Plugins\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Linq.Expressions" />
-    <Reference Include="System.Runtime" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BotActorTaskSourceBase.cs" />
-    <Compile Include="ILogicStrategyData.cs" />
-    <Compile Include="Logics\EquipBetterPropLogicState.cs" />
-    <Compile Include="Logics\ExitLogicState.cs" />
-    <Compile Include="Logics\LogicStateBase.cs" />
-    <Compile Include="Logics\ExploreLogicState.cs" />
-    <Compile Include="Strategies\LogicTreeStrategyData.cs" />
-    <Compile Include="MonsterBotActorTaskSource.cs" />
-    <Compile Include="HumanBotActorTaskSource.cs" />
-    <Compile Include="ILogicState.cs" />
-    <Compile Include="ILogicStateFactory.cs" />
-    <Compile Include="ILogicStateTrigger.cs" />
-    <Compile Include="ILogicStrategy.cs" />
-    <Compile Include="LogicHelper.cs" />
-    <Compile Include="Logics\EatProviantLogicState.cs" />
-    <Compile Include="Logics\HealSelfLogicState.cs" />
-    <Compile Include="Logics\LootLogicState.cs" />
-    <Compile Include="LootHelper.cs" />
-    <Compile Include="Strategies\BotStrategyException.cs" />
-    <Compile Include="Strategies\LogicStateTrack.cs" />
-    <Compile Include="Strategies\LogicStateTree.cs" />
-    <Compile Include="Strategies\LogicStateTreePatterns.cs" />
-    <Compile Include="Triggers\AndTrigger.cs" />
-    <Compile Include="Triggers\CounterOverTrigger.cs" />
-    <Compile Include="ICompositLogicStateTrigger.cs" />
-    <Compile Include="Triggers\ExploredTrigger.cs" />
-    <Compile Include="Triggers\HasBetterEquipmentTrigger.cs" />
-    <Compile Include="Triggers\LootDetectedTrigger.cs" />
-    <Compile Include="Triggers\ResourceFinder.cs" />
-    <Compile Include="Triggers\ThirstAndHasResourceTrigger.cs" />
-    <Compile Include="Triggers\IntruderDetectedTrigger.cs" />
-    <Compile Include="Triggers\LogicOverTrigger.cs" />
-    <Compile Include="Triggers\HungryAndHasResourceTrigger.cs" />
-    <Compile Include="Triggers\LowHpAndHasResourceTrigger.cs" />
-    <Compile Include="Logics\IdleLogicState.cs" />
-    <Compile Include="Logics\DefeatTargetLogicState.cs" />
-    <Compile Include="Logics\RoamingLogicState.cs" />
-    <Compile Include="LogicTransition.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\LogicTreeStrategy.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
-      <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
-      <Name>Zilon.Bot.Sdk</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
-      <Name>Zilon.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Humanizer.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.3\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeQuality.Analyzers.2.9.3\build\Microsoft.CodeQuality.Analyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetCore.Analyzers.2.9.3\build\Microsoft.NetCore.Analyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetFramework.Analyzers.2.9.3\build\Microsoft.NetFramework.Analyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.3\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
-  </Target>
+		<TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+	</PropertyGroup>
+	<ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
+      <Version>2.9.3</Version>
+    </PackageReference>
+  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	</ItemGroup>
 </Project>

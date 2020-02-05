@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core", "Zilon.Core\Zilon.Core.csproj", "{93E96628-DE50-42AE-A2F5-4B4B042D66E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core", "Zilon.Core\Zilon.Core.csproj", "{93E96628-DE50-42AE-A2F5-4B4B042D66E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
