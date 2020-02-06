@@ -3,13 +3,11 @@ jobs:
   build:
     working_directory: /core-builds
     docker:
-      - image: mono:6.0.0.313
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
     steps:
       - checkout
-      - run: nuget restore Zilon.Core/Zilon.Core/Zilon.Core.csproj -SolutionDirectory ./Zilon.Core
-      - run: nuget restore Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core/Zilon.Core.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
-      - run: msbuild Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj /t:Build /p:Configuration=Release /p:OutputPath=../../bin
+      - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       - persist_to_workspace:
           root: bin
           paths:
@@ -25,8 +23,13 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Release
-      - run: mono --debug /test45/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
+      # Этот шаг обязательно нужно вызывать, чтобы восстановить PackageReference в Zilon.Core
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Build /p:Configuration=Release
+      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
+      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
+      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
+      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe /test45/Zilon.Core/Zilon.Core.Tests/bin/Release/Zilon.Core.Tests.dll --encoding utf-8
       - store_test_results:
           path: TestResult.xml
   test_45_coverage:
@@ -41,11 +44,15 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:Configuration=Debug
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Restore /p:Configuration=Debug
+      - run: msbuild Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /t:Build /p:Configuration=Debug
       - run: apt update && apt -y install wget && wget -O dotCover.tar.gz -P /test_45_coverage "https://download.jetbrains.com/resharper/ReSharperUltimate.2019.2.2/JetBrains.dotCover.CommandLineTools.Linux.2019.2.2.tar.gz?_ga=2.208181138.1839691299.1572416435-1767931937.1531365763&_gac=1.149803332.1572421002.Cj0KCQjw6eTtBRDdARIsANZWjYZezP-4m1JoGMBowUBUc5riQFUL86GCl6Wev_DWRz8FQSPXdpPfvDMaAlHIEALw_wcB"
       - run: mkdir -p /test_45_coverage/clt
       - run: apt update && apt -y install tar && tar -xvzf /test_45_coverage/dotCover.tar.gz -C /test_45_coverage/clt
-      - run: /test_45_coverage/clt/dotCover.sh cover-mono --TargetArguments="/test_45_coverage/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe /test_45_coverage/Zilon.Core/Zilon.Core.Tests/bin/Debug/Zilon.Core.Tests.dll" --Output="/test_45_coverage/Zilon.Core.Report.xml" --ReportType=DetailedXML --Scope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --LogFile=/dev/stdout
+      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
+      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
+      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
+      - run: /test_45_coverage/clt/dotCover.sh cover-mono --TargetArguments="./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe /test_45_coverage/Zilon.Core/Zilon.Core.Tests/bin/Debug/Zilon.Core.Tests.dll" --Output="/test_45_coverage/Zilon.Core.Report.xml" --ReportType=DetailedXML --Scope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --LogFile=/dev/stdout
       - store_artifacts:
           path: /test_45_coverage/Zilon.Core.Report.xml
       - run: curl -Ls https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_linux-x64 --output Codacy.CSharpCoverage_linux-x64
@@ -62,8 +69,12 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:Configuration=Release
-      - run: mono --debug /test_players/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.Tests/bin/Release/Zilon.Bot.Players.Tests.dll --encoding utf-8
+      - run: msbuild Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /t:Build /p:Configuration=Release
+      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
+      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
+      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
+      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.Tests/bin/Release/Zilon.Bot.Players.Tests.dll --encoding utf-8
   test_bots:
     working_directory: /test_bots
     docker:
@@ -75,8 +86,12 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:Configuration=Release
-      - run: mono --debug /test_bots/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Bot.Players.DevelopmentTests.dll --encoding utf-8
+      - run: msbuild Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /t:Build /p:Configuration=Release
+      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
+      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
+      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
+      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Bot.Players.DevelopmentTests/bin/Release/Zilon.Bot.Players.DevelopmentTests.dll --encoding utf-8
   test_specflow:
     working_directory: /test_specflow
     docker:
@@ -88,8 +103,12 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /p:Configuration=Release
-      - run: mono --debug /test_specflow/Zilon.Core/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
+      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /t:Build /p:Configuration=Release
+      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
+      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
+      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
+      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
   build_Win_x64:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
@@ -269,7 +288,8 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /p:Configuration=Debug
+      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /t:Restore /p:Configuration=Debug
+      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /t:Build /p:Configuration=Debug
       - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
@@ -286,7 +306,8 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.Move/Zilon.Core.Benchmarks.Move.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe
       - run: mono --debug /bench_move/Zilon.Core/Zilon.Core.Benchmarks.Move/bin/Release/Zilon.Core.Benchmarks.Move.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_move/dotnetbenchmark-reports"
   bench_create_sector:
@@ -300,7 +321,8 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateSector/Zilon.Core.Benchmarks.CreateSector.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe
       - run: mono --debug /bench_create_sector/Zilon.Core/Zilon.Core.Benchmarks.CreateSector/bin/Release/Zilon.Core.Benchmarks.CreateSector.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_sector/dotnetbenchmark-reports"
   bench_create_globe:
@@ -314,7 +336,8 @@ jobs:
     steps:
       - checkout
       - run: nuget restore Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Restore /p:Configuration=Release
+      - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
 workflows:
