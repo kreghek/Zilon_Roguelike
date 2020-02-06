@@ -161,7 +161,7 @@
       <Name>Zilon.Core.Tests.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93E96628-DE50-42AE-A2F5-4B4B042D66E6}</Project>
+      <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
       <Name>Zilon.Core</Name>
     </ProjectReference>
   </ItemGroup>
