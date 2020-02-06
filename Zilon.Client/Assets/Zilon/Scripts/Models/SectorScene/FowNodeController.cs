@@ -6,9 +6,20 @@ using Zilon.Core.Tactics;
 
 public class FowNodeController : MonoBehaviour, IFowObjectController
 {
+    private Color[] _baseSpriteColors;
+
     public MapNodeVM NodeViewModel;
 
     public SpriteRenderer[] NodeSprites;
+
+    private void Start()
+    {
+        _baseSpriteColors = new Color[NodeSprites.Length];
+        for (var i = 0; i < NodeSprites.Length; i++)
+        {
+            _baseSpriteColors[i] = NodeSprites[i].color;
+        }
+    }
 
     public void ChangeState(SectorMapNodeFowState state)
     {
@@ -19,18 +30,23 @@ public class FowNodeController : MonoBehaviour, IFowObjectController
                 break;
 
             case SectorMapNodeFowState.Observing:
-                foreach (var nodeSprite in NodeSprites)
+
+                for (var i = 0; i < NodeSprites.Length; i++)
                 {
-                    nodeSprite.color = Color.white;
+                    var nodeSprite = NodeSprites[i];
+                    nodeSprite.color = _baseSpriteColors[i];
                 }
 
                 NodeViewModel.gameObject.SetActive(true);
+
                 break;
 
             case SectorMapNodeFowState.Explored:
-                foreach (var nodeSprite in NodeSprites)
+                for (var i = 0; i < NodeSprites.Length; i++)
                 {
-                    nodeSprite.color = Color.gray;
+                    var nodeSprite = NodeSprites[i];
+                    var memoryColor = Color.Lerp(_baseSpriteColors[i], new Color(1, 1, 1, 0), 0.5f);
+                    nodeSprite.color = memoryColor;
                 }
 
                 NodeViewModel.gameObject.SetActive(true);

@@ -45,10 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftTopWall: {fileID: 21300000, guid: 82c3549f67445ab41bbf01a4e391eb0b, type: 3}
   LeftWall: {fileID: 21300000, guid: 06fe241718c24624f981f354be0f2864, type: 3}
-  LeftBottomWall: {fileID: 21300000, guid: 800358afc333b174c8d4c8dbfcb08bbe, type: 3}
+  LeftBottomWall: {fileID: 21300000, guid: bd98993ca27cc9e43bc34e40ae449c90, type: 3}
   RightTopWall: {fileID: 21300000, guid: e8d0a635b80cb814f9906f206791066e, type: 3}
   RightWall: {fileID: 21300000, guid: e5243e41a21cfc74aa5c522538134d42, type: 3}
-  RightBottomWall: {fileID: 21300000, guid: 88874f68a89081c47bd827f28f687b8c, type: 3}
+  RightBottomWall: {fileID: 21300000, guid: 02c7883879ecf4b439981bd3bc8acaa6, type: 3}
+  LeftBottomColor: {r: 0.4716981, g: 0.41163743, b: 0.3537736, a: 0.49803922}
+  RightBottomColor: {r: 0.4745098, g: 0.4117647, b: 0.35686275, a: 0.49803922}
   Floor: {fileID: 21300000, guid: a18cfc181f02d274894748e7dc8aa87c, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}
