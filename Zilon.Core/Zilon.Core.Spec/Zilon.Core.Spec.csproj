@@ -84,16 +84,8 @@
     <PackageReference Include="FluentAssertions">
       <Version>5.4.1</Version>
     </PackageReference>
-    <PackageReference Include="JetBrains.Annotations">
-      <Version>2019.1.3</Version>
-    </PackageReference>
     <PackageReference Include="LightInject">
       <Version>5.1.8</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.8</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.13.1</Version>
@@ -119,10 +111,6 @@
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
       <Project>{218b22dd-5bf3-4a86-b979-7e6f534f3f52}</Project>
       <Name>Zilon.Bot.Players</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj">
-      <Project>{c043bda8-78ea-4b90-a35e-14282665f0d1}</Project>
-      <Name>Zilon.Bot.Sdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
       <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>

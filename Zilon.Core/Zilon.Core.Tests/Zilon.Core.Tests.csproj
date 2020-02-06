@@ -184,9 +184,7 @@
       <Version>5.1.8</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.8</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
+      <Version>2.9.3</Version>
     </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.13.1</Version>
