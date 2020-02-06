@@ -81,28 +81,6 @@
     <None Include="TestCases\Survival.feature" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj">
-      <Project>{1325f406-e074-438f-9a8f-28b9f411cadf}</Project>
-      <Name>Zilon.Bot.Players.LightInject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
-      <Project>{218b22dd-5bf3-4a86-b979-7e6f534f3f52}</Project>
-      <Name>Zilon.Bot.Players</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
-      <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>
-      <Name>Zilon.Core.Tests.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
-      <Name>Zilon.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
-      <Project>{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}</Project>
-      <Name>Zilon.IoC</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="FluentAssertions">
       <Version>5.4.1</Version>
     </PackageReference>
@@ -124,6 +102,28 @@
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation">
       <Version>3.1.82</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj">
+      <Project>{1325f406-e074-438f-9a8f-28b9f411cadf}</Project>
+      <Name>Zilon.Bot.Players.LightInject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
+      <Project>{218b22dd-5bf3-4a86-b979-7e6f534f3f52}</Project>
+      <Name>Zilon.Bot.Players</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
+      <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>
+      <Name>Zilon.Core.Tests.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
+      <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
+      <Name>Zilon.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
+      <Project>{f3616226-6a1a-4d56-9e53-ce8daa1c7a06}</Project>
+      <Name>Zilon.IoC</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
