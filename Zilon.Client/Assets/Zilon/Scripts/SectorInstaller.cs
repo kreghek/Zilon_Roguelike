@@ -52,7 +52,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
-        Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
+        Container.Bind<ISectorManager>().To<InfSectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
