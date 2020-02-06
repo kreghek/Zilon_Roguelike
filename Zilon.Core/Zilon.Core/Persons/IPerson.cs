@@ -12,6 +12,8 @@ namespace Zilon.Core.Persons
     {
         int Id { get; set; }
 
+        PhysicalSize PhysicalSize { get; }
+
         /// <summary>
         /// Носитель экипировки.
         /// </summary>
@@ -46,5 +48,20 @@ namespace Zilon.Core.Persons
         ISurvivalData Survival { get; }
 
         EffectCollection Effects { get; }
+    }
+
+    public enum PhysicalSize
+    { 
+        Undefined = 0,
+
+        /// <summary>
+        /// Объект размеров в 1 ячейку.
+        /// </summary>
+        Size1,
+
+        /// <summary>
+        /// Объект размером в ячейку и её окружность.
+        /// </summary>
+        Size7
     }
 }

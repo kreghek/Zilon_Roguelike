@@ -55,6 +55,8 @@ namespace Zilon.Core.Persons
         /// <inheritdoc/>
         public EffectCollection Effects { get; }
 
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
             [NotNull] IEvolutionData evolutionData,
