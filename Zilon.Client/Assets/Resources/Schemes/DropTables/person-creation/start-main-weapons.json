@@ -31,6 +31,23 @@
 				  "Weight": 5
 				}
 			]
+		},
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "battle-axe",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "short-sword",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mace",
+				  "Weight": 5
+				},
+			]
 		}
 	  ]
     },
@@ -48,6 +65,23 @@
 				  "Weight": 5
 				}
 			]
+		},
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "battle-axe",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "short-sword",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mace",
+				  "Weight": 5
+				},
+			]
 		}
 	  ]
     },
@@ -64,6 +98,23 @@
 				  "MaxCount": 15,
 				  "Weight": 5
 				}
+			]
+		},
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "battle-axe",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "short-sword",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mace",
+				  "Weight": 5
+				},
 			]
 		}
 	  ]
@@ -85,6 +136,23 @@
 				  "MaxCount": 15,
 				  "Weight": 5
 				}
+			]
+		},
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "battle-axe",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "short-sword",
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "mace",
+				  "Weight": 5
+				},
 			]
 		}
 	  ]
