@@ -118,7 +118,9 @@ public class PropInfoPopup : MonoBehaviour
         }
 
         var filteredTags = prop.Scheme.Tags.Where(x => !string.IsNullOrWhiteSpace(x));
-        var tagsText = string.Join(" ", filteredTags);
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+        var tagDisplayNames = filteredTags.Select(x => StaticPhrases.GetValue($"prop-tag-{x}", currentLanguage));
+        var tagsText = string.Join(" ", tagDisplayNames);
 
         TagsText.text = tagsText;
     }
