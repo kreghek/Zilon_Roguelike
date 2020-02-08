@@ -96,6 +96,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "indicator-critical-wound", new MultilangPhrase{ En = "Critical wound", Ru = "Критическая рана" } },
                 { "indicator-block", new MultilangPhrase{ En = "Block!", Ru = "Блок!" } },
                 { "indicator-miss", new MultilangPhrase{ En = "Miss!", Ru = "Промах!" } },
+                { "indicator-found-nothing", new MultilangPhrase{ En = "Found\nNoting!", Ru = "Ничего\nне найдено!" } },
             };
         }
 
