@@ -90,6 +90,12 @@ namespace Assets.Zilon.Scripts.Services
 
                 { "log-player-damage-template", new MultilangPhrase{ En = "Player damaged {0} on {1}", Ru = "Игрок ранил {0} на {1} ед. урона" } },
                 { "log-monster-damage-template", new MultilangPhrase{ En = "{0} damaged plyer on {1}", Ru = "{0} ранил игрока на {1} ед. урона" } },
+
+                { "indicator-lesser-wound", new MultilangPhrase{ En = "Lesser wound", Ru = "Легкая рана" } },
+                { "indicator-serious-wound", new MultilangPhrase{ En = "Serious wound", Ru = "Серьезная рана" } },
+                { "indicator-critical-wound", new MultilangPhrase{ En = "Critical wound", Ru = "Критическая рана" } },
+                { "indicator-block", new MultilangPhrase{ En = "Block!", Ru = "Блок!" } },
+                { "indicator-miss", new MultilangPhrase{ En = "Miss!", Ru = "Промах!" } },
             };
         }
 

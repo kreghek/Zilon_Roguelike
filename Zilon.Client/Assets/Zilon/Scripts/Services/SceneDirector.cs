@@ -169,6 +169,7 @@ public sealed class SceneDirector : MonoBehaviour
     private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
     {
         var damageIndicator = Instantiate(DamageIndicatorPrefab);
+        damageIndicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
         damageIndicator.transform.SetParent(SectorViewModel.transform);
         damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
@@ -176,6 +177,7 @@ public sealed class SceneDirector : MonoBehaviour
     private void CreateNoDamageIndicator(ActorViewModel actorViewModel, NoDamageIndicatorBase missIndicatorPrefab)
     {
         var indicator = Instantiate(missIndicatorPrefab);
+        indicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
         indicator.transform.SetParent(SectorViewModel.transform);
         indicator.Init(actorViewModel);
     }
