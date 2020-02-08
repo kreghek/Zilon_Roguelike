@@ -155,6 +155,7 @@ public class PropInfoPopup : MonoBehaviour
 
     private void WriteEquipmentStats(IPropScheme propScheme, Equipment equipment)
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
         var descriptionLines = new List<string>();
 
         if (propScheme.Equip.ActSids != null)
@@ -162,16 +163,22 @@ public class PropInfoPopup : MonoBehaviour
             foreach (var sid in propScheme.Equip.ActSids)
             {
                 var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
-                var actName = act.Name.En ?? act.Name.Ru;
-                var efficient = $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
+                var actName = LocalizationHelper.GetValue(currentLanguage, act.Name);
+                var efficient = GetEfficientString(act);
                 if (act.Stats.Effect == TacticalActEffectType.Damage)
                 {
                     var actImpact = act.Stats.Offence.Impact;
-                    descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offence.ApRank} rank)");
+                    var actImpactLangKey = actImpact.ToString().ToLowerInvariant();
+                    var impactDisplayName = StaticPhrases.GetValue($"impact-{actImpactLangKey}", currentLanguage);
+
+                    var apRankDisplayName = StaticPhrases.GetValue($"ap-rank", currentLanguage);
+
+                    descriptionLines.Add($"{actName}: {impactDisplayName} {efficient} ({act.Stats.Offence.ApRank} {apRankDisplayName})");
                 }
                 else if (act.Stats.Effect == TacticalActEffectType.Heal)
                 {
-                    descriptionLines.Add($"{actName}: heal {efficient}");
+                    var healDisplayName = StaticPhrases.GetValue($"efficient-heal", currentLanguage);
+                    descriptionLines.Add($"{actName}: {healDisplayName} {efficient}");
                 }
             }
         }
@@ -197,6 +204,11 @@ public class PropInfoPopup : MonoBehaviour
         descriptionLines.Add($"Durable: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
 
         StatText.text = string.Join("\n", descriptionLines);
+    }
+
+    private static string GetEfficientString(ITacticalActScheme act)
+    {
+        return $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
     }
 
     public void FixedUpdate()

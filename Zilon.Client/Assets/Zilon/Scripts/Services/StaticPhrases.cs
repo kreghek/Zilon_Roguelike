@@ -40,6 +40,16 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-sword", new MultilangPhrase{ En = "sword", Ru = "меч" } },
                 { "prop-tag-axe", new MultilangPhrase{ En = "axe", Ru = "топор" } },
                 { "prop-tag-mace", new MultilangPhrase{ En = "mace", Ru = "булава" } },
+
+                { "impact-kinetic", new MultilangPhrase{ En = "kinetic", Ru = "кинетический" } },
+                { "impact-psy", new MultilangPhrase{ En = "psy", Ru = "пси" } },
+                { "impact-termal", new MultilangPhrase{ En = "termal", Ru = "термальный" } },
+                { "impact-explosion", new MultilangPhrase{ En = "explosion", Ru = "взрывной" } },
+                { "impact-acid", new MultilangPhrase{ En = "acid", Ru = "кислотный" } },
+
+                { "ap-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
+                { "armor-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
+                { "efficient-heal", new MultilangPhrase{ En = "heal", Ru = "лечение" } },
             };
         }
 
