@@ -20,6 +20,11 @@
       "Weight": 10
     },
 	
+	{
+      "SchemeSid": "gaint-artist-brush",
+      "Weight": 1
+    },
+	
     {
       "SchemeSid": "pistol",
       "Weight": 5,
