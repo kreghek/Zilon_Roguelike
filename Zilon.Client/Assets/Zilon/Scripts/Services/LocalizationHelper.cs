@@ -10,6 +10,19 @@ namespace Assets.Zilon.Scripts.Services
             {
                 case Language.English:
                 default:
+                    return localizedString?.En;
+
+                case Language.Russian:
+                    return localizedString?.Ru;
+            }
+        }
+
+        public static string GetValueOrDefaultNoname(Language currentLanguage, LocalizedStringSubScheme localizedString)
+        {
+            switch (currentLanguage)
+            {
+                case Language.English:
+                default:
                     return localizedString?.En ?? "[noname]";
 
                 case Language.Russian:

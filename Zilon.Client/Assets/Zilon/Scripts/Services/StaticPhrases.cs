@@ -47,9 +47,16 @@ namespace Assets.Zilon.Scripts.Services
                 { "impact-explosion", new MultilangPhrase{ En = "explosion", Ru = "взрывной" } },
                 { "impact-acid", new MultilangPhrase{ En = "acid", Ru = "кислотный" } },
 
+                { "armor-absorbtion-lesser", new MultilangPhrase{ En = "lesser", Ru = "слабый" } },
+                { "armor-absorbtion-normal", new MultilangPhrase{ En = "normal", Ru = "нормальный" } },
+                { "armor-absorbtion-grand", new MultilangPhrase{ En = "grand", Ru = "сильный" } },
+                { "armor-absorbtion-absolute", new MultilangPhrase{ En = "absolute", Ru = "абсолютный" } },
+
                 { "ap-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
                 { "armor-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
                 { "efficient-heal", new MultilangPhrase{ En = "heal", Ru = "лечение" } },
+                { "armor-protects", new MultilangPhrase{ En = "Protects", Ru = "Защита" } },
+                { "prop-durable", new MultilangPhrase{ En = "Durable", Ru = "Прочность" } },
             };
         }
 

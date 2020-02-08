@@ -80,7 +80,7 @@ public class PropInfoPopup : MonoBehaviour
         var lang = _uiSettingService.CurrentLanguage;
         var name = propScheme.Name;
 
-        return LocalizationHelper.GetValue(lang, name);
+        return LocalizationHelper.GetValueOrDefaultNoname(lang, name);
     }
 
     /// <summary>
@@ -171,13 +171,13 @@ public class PropInfoPopup : MonoBehaviour
                     var actImpactLangKey = actImpact.ToString().ToLowerInvariant();
                     var impactDisplayName = StaticPhrases.GetValue($"impact-{actImpactLangKey}", currentLanguage);
 
-                    var apRankDisplayName = StaticPhrases.GetValue($"ap-rank", currentLanguage);
+                    var apRankDisplayName = StaticPhrases.GetValue("ap-rank", currentLanguage);
 
                     descriptionLines.Add($"{actName}: {impactDisplayName} {efficient} ({act.Stats.Offence.ApRank} {apRankDisplayName})");
                 }
                 else if (act.Stats.Effect == TacticalActEffectType.Heal)
                 {
-                    var healDisplayName = StaticPhrases.GetValue($"efficient-heal", currentLanguage);
+                    var healDisplayName = StaticPhrases.GetValue("efficient-heal", currentLanguage);
                     descriptionLines.Add($"{actName}: {healDisplayName} {efficient}");
                 }
             }
@@ -185,9 +185,19 @@ public class PropInfoPopup : MonoBehaviour
 
         if (propScheme.Equip.Armors != null)
         {
+            var protectsDisplayName = StaticPhrases.GetValue("armor-protects", currentLanguage);
+            var armorRankDisplayName = StaticPhrases.GetValue("armor-rank", currentLanguage);
             foreach (var armor in propScheme.Equip.Armors)
             {
-                descriptionLines.Add($"Protects: {armor.Impact} ({armor.ArmorRank} rank): {armor.AbsorbtionLevel}");
+                var armorImpact = armor.Impact;
+                var armorImpactLangKey = armorImpact.ToString().ToLowerInvariant();
+                var impactDisplayName = StaticPhrases.GetValue($"impact-{armorImpactLangKey}", currentLanguage);
+
+                var armorAbsorbtionLevel = armor.AbsorbtionLevel;
+                var armorAbsorbtionLevelKey = armorAbsorbtionLevel.ToString().ToLowerInvariant();
+                var armorAbsDisplayName = StaticPhrases.GetValue($"armor-absorbtion-{armorAbsorbtionLevelKey}", currentLanguage);
+
+                descriptionLines.Add($"{protectsDisplayName}: {impactDisplayName} ({armor.ArmorRank} {armorRankDisplayName}): {armorAbsDisplayName}");
             }
         }
 
@@ -201,7 +211,8 @@ public class PropInfoPopup : MonoBehaviour
             }
         }
 
-        descriptionLines.Add($"Durable: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
+        var durableDisplayName = StaticPhrases.GetValue($"prop-durable", currentLanguage);
+        descriptionLines.Add($"{durableDisplayName}: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
 
         StatText.text = string.Join("\n", descriptionLines);
     }
