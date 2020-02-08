@@ -9,6 +9,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 
@@ -70,24 +71,25 @@ public sealed class SceneDirector : MonoBehaviour
 
     private string GetDamageLog(Language currentLanguage, DamageActorInteractionEvent interactionEvent)
     {
+        string damageTemplate;
+        MonsterPerson logPerson;
         if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
         {
-            var damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
-            var damageLog = string.Format(
-                damageTemplate,
-                interactionEvent.TargetActor,
-                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
-            return damageLog;
+            damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
+            logPerson = interactionEvent.TargetActor.Person as MonsterPerson;
         }
         else
         {
-            var damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
-            var damageLog = string.Format(
-                damageTemplate,
-                interactionEvent.Actor,
-                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
-            return damageLog;
+            damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
+            logPerson = interactionEvent.Actor.Person as MonsterPerson;
         }
+
+        var logActorDisplayName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, logPerson.Scheme.Name);
+        var damageLog = string.Format(
+                damageTemplate,
+                logActorDisplayName,
+                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+        return damageLog;
     }
 
     private void CreateDamageIndication(DamageActorInteractionEvent interactionEvent)
