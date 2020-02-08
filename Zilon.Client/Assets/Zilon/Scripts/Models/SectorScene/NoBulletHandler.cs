@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 
+using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -13,11 +15,16 @@ using Zilon.Core.Props;
 public class NoBulletHandler : MonoBehaviour
 {
     public GameObject Content;
+    public Text MessageText;
 
-    [Inject] [NotNull] private ISectorUiState _playerState;
+    [Inject] [NotNull] private readonly ISectorUiState _playerState;
+    [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 
     private void Start()
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+        var noBulletsDisplayText = StaticPhrases.GetValue("no-bullets", currentLanguage);
+        MessageText.text = noBulletsDisplayText;
         InvokeRepeating(nameof(UpdateSprite), 0, 1);
     }
 
@@ -28,8 +35,6 @@ public class NoBulletHandler : MonoBehaviour
         {
             return;
         }
-
-
 
         var activeAct = person.TacticalActCarrier.Acts.First();
         if (activeAct.Constrains != null)

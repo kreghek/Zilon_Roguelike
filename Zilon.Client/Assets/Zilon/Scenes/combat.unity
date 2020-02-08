@@ -559,6 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: Exit from city
+  TextIsKey: 0
 --- !u!1 &187834198
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,6 +612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Content: {fileID: 935642531}
+  MessageText: {fileID: 324249977}
 --- !u!114 &187834201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: No bullets for current weapon
+  TextIsKey: 1
 --- !u!222 &187834202
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -997,7 +1000,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Go to next level
+  text: tooltip-transition
+  TextIsKey: 1
 --- !u!1 &324249975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,7 +1867,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Quit game
+  text: tooltip-exit
+  TextIsKey: 1
 --- !u!114 &810694221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2220,7 +2225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Quit game and go to Main menu
+  text: tooltip-exit-title
+  TextIsKey: 1
 --- !u!1 &860833367
 GameObject:
   m_ObjectHideFlags: 0
@@ -2388,7 +2394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Wait
+  text: tooltip-wait
+  TextIsKey: 1
 --- !u!224 &910512450 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224013231738973734, guid: cc306c34acabd0c4baf8c060e9487004,
@@ -3845,7 +3852,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Person
+  text: tooltip-person
+  TextIsKey: 1
 --- !u!1 &1793996587
 GameObject:
   m_ObjectHideFlags: 0
@@ -5644,6 +5652,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 415948494916139211}
     m_Modifications:
+    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
+        type: 3}
+      propertyPath: m_Name
+      value: PropInfoPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6680245457075671535, guid: 0a72ea45d960d454894b35f094304f5f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5748,16 +5766,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
-        type: 3}
-      propertyPath: m_Name
-      value: PropInfoPopup
-      objectReference: {fileID: 0}
-    - target: {fileID: 5219618356452094335, guid: 0a72ea45d960d454894b35f094304f5f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7142680303188802009, guid: 0a72ea45d960d454894b35f094304f5f,
         type: 3}
