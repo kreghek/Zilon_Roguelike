@@ -612,6 +612,22 @@ public class SectorVM : MonoBehaviour
         AddResource(inventory, resourceSid, count);
     }
 
+    //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
+    /// <summary>
+    /// Добавляет ресурс созданному персонажу игрока.
+    /// </summary>
+    /// <param name="resourceSid"> Идентификатор предмета. </param>
+    /// <param name="count"> Количество ресурсво. </param>
+    /// <remarks>
+    /// Используется, чтобы добавить персонажу игрока книгу истории, когда он
+    /// выходит из стартовой локации, и начинается создание мира.
+    /// </remarks>
+    public void AddEquipmentToCurrentPerson(string equipmentSid)
+    {
+        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        AddEquipment(inventory, equipmentSid);
+    }
+
     private void AddResource(Inventory inventory, string resourceSid, int count)
     {
         try
@@ -623,6 +639,20 @@ public class SectorVM : MonoBehaviour
         catch (KeyNotFoundException)
         {
             Debug.LogError($"Не найден объект {resourceSid}");
+        }
+    }
+
+    private void AddEquipment(Inventory inventory, string equipmentSid)
+    {
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var resource = _propFactory.CreateEquipment(equipmentScheme);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
         }
     }
 
@@ -700,6 +730,8 @@ public class SectorVM : MonoBehaviour
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+
+        AddEquipmentToCurrentPerson("gas-mask");
 
         return actorViewModel;
     }
