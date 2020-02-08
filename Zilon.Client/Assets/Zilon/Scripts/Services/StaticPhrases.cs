@@ -66,6 +66,12 @@ namespace Assets.Zilon.Scripts.Services
                 { "rule-hungerresistance", new MultilangPhrase{ En = "Hunger resistance", Ru = "Сопротивление голоду" } },
                 { "rule-thristresistance", new MultilangPhrase{ En = "Thrist resistance", Ru = "Сопротивление жажде" } },
 
+                { "state-hp-healthy", new MultilangPhrase{ En = "Healthy", Ru = "Здоров" } },
+                { "state-hp-slightly-injured", new MultilangPhrase{ En = "Slightly injured", Ru = "Слабо ранен" } },
+                { "state-hp-wounded", new MultilangPhrase{ En = "Wounded", Ru = "Ранен" } },
+                { "state-hp-badly-wounded", new MultilangPhrase{ En = "Badly wounded", Ru = "Серьезно ранен" } },
+                { "state-hp-at-death", new MultilangPhrase{ En = "At Death", Ru = "Присмерти" } },
+
                 { "ap-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
                 { "armor-rank", new MultilangPhrase{ En = "rank", Ru = "ранг" } },
                 { "efficient-heal", new MultilangPhrase{ En = "heal", Ru = "лечение" } },
