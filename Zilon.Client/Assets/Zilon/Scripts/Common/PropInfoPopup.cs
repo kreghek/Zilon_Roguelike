@@ -195,7 +195,7 @@ public class PropInfoPopup : MonoBehaviour
 
                 var armorAbsorbtionLevel = armor.AbsorbtionLevel;
                 var armorAbsorbtionLevelKey = armorAbsorbtionLevel.ToString().ToLowerInvariant();
-                var armorAbsDisplayName = StaticPhrases.GetValue($"armor-absorbtion-{armorAbsorbtionLevelKey}", currentLanguage);
+                var armorAbsDisplayName = StaticPhrases.GetValue($"rule-{armorAbsorbtionLevelKey}", currentLanguage);
 
                 descriptionLines.Add($"{protectsDisplayName}: {impactDisplayName} ({armor.ArmorRank} {armorRankDisplayName}): {armorAbsDisplayName}");
             }
@@ -232,10 +232,20 @@ public class PropInfoPopup : MonoBehaviour
         }
     }
 
-    private static string GetUseRuleDescription(ConsumeCommonRule rule)
+    private string GetUseRuleDescription(ConsumeCommonRule rule)
     {
-        string signString = GetDirectionString(rule.Direction);
-        return $"{rule.Type}:{signString}{rule.Level}";
+        var signString = GetDirectionString(rule.Direction);
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var ruleType = rule.Type;
+        var ruleKey = ruleType.ToString().ToLowerInvariant();
+        var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
+
+        var ruleLevel = rule.Level;
+        var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
+        var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
+
+        return $"{ruleDisplayName}: {signString}{ruleLevelDisplayName}";
     }
 
     private static string GetDirectionString(PersonRuleDirection direction)
@@ -248,13 +258,16 @@ public class PropInfoPopup : MonoBehaviour
         return string.Empty;
     }
 
-    private static string GetBonusString(PersonRuleDirection direction)
+    private string GetBonusString(PersonRuleDirection direction)
     {
+        var currentLang = _uiSettingService.CurrentLanguage;
+        var bonusDisplayName = StaticPhrases.GetValue("prop-bonus", currentLang);
+        var penaltyDisplayName = StaticPhrases.GetValue("prop-penalty", currentLang);
         if (direction == PersonRuleDirection.Negative)
         {
-            return "Penalty";
+            return penaltyDisplayName;
         }
 
-        return "Bonus";
+        return bonusDisplayName;
     }
 }
