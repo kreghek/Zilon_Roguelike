@@ -31,7 +31,7 @@ namespace Assets.Zilon.Scripts.Services
 
         private static Dictionary<string, MultilangPhrase> InitPhrases()
         {
-            return new Dictionary<string, MultilangPhrase> 
+            return new Dictionary<string, MultilangPhrase>
             {
                 { "prop-tag-weapon", new MultilangPhrase{ En = "weapon", Ru = "оружие" } },
                 { "prop-tag-armor", new MultilangPhrase{ En = "armor", Ru = "броня" } },
@@ -87,6 +87,9 @@ namespace Assets.Zilon.Scripts.Services
                 { "tooltip-transition", new MultilangPhrase{ En = "Go to the next level", Ru = "Перейти на следующий уровень" } },
                 { "tooltip-exit-title", new MultilangPhrase{ En = "Quit game and go to Main menu", Ru = "Покинуть игру и перейти в главное меню" } },
                 { "tooltip-exit", new MultilangPhrase{ En = "Quit game", Ru = "Покинуть игру" } },
+
+                { "log-player-damage-template", new MultilangPhrase{ En = "Player damaged {0} on {1}", Ru = "Игрок ранил {0} на {1} ед. урона" } },
+                { "log-monster-damage-template", new MultilangPhrase{ En = "{0} damaged plyer on {1}", Ru = "{0} ранил игрока на {1} ед. урона" } },
             };
         }
 

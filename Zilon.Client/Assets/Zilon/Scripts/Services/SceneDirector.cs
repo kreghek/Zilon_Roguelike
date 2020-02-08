@@ -8,15 +8,19 @@ using UnityEngine;
 
 using Zenject;
 
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 
-
 public sealed class SceneDirector : MonoBehaviour
 {
+    [NotNull] [Inject] private readonly ISectorUiState _sectorUiState;
+
     [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
 
     [NotNull] [Inject] private readonly ILogService _logService;
+
+    [NotNull] [Inject] private readonly UiSettingService _uiSettingService;
 
     public SectorVM SectorViewModel;
     public DamageIndicator DamageIndicatorPrefab;
@@ -33,14 +37,18 @@ public sealed class SceneDirector : MonoBehaviour
 
     private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
         switch (e.ActorInteractionEvent)
         {
             case DamageActorInteractionEvent interactionEvent:
-                _logService.Log($"{interactionEvent.Actor} damage {interactionEvent.TargetActor} on {interactionEvent.DamageEfficientCalcResult.ResultEfficient}");
+                var damageLog = GetDamageLog(currentLanguage, interactionEvent);
+
+                _logService.Log(damageLog);
 
                 if (interactionEvent.DamageEfficientCalcResult.TargetSuccessfullUsedArmor)
                 {
-                    _logService.Log($"{interactionEvent.TargetActor} successfully used armor rank: {interactionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {interactionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {interactionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.");
+                    var usedArmorLog = $"{interactionEvent.TargetActor} successfully used armor rank: {interactionEvent.DamageEfficientCalcResult.ArmorRank}, roll: {interactionEvent.DamageEfficientCalcResult.FactArmorSaveRoll}, success: {interactionEvent.DamageEfficientCalcResult.SuccessArmorSaveRoll}.";
+                    _logService.Log(usedArmorLog);
                 }
 
                 CreateDamageIndication(interactionEvent);
@@ -57,6 +65,28 @@ public sealed class SceneDirector : MonoBehaviour
 
                 CreateMissIndication(interactionEvent);
                 break;
+        }
+    }
+
+    private string GetDamageLog(Language currentLanguage, DamageActorInteractionEvent interactionEvent)
+    {
+        if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
+        {
+            var damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
+            var damageLog = string.Format(
+                damageTemplate,
+                interactionEvent.TargetActor,
+                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+            return damageLog;
+        }
+        else
+        {
+            var damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
+            var damageLog = string.Format(
+                damageTemplate,
+                interactionEvent.Actor,
+                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+            return damageLog;
         }
     }
 
