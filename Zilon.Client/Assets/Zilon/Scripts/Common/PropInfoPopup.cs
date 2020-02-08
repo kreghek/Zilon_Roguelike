@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
-
+using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +23,7 @@ using Zilon.Core.Schemes;
 public class PropInfoPopup : MonoBehaviour
 {
     [Inject] private readonly ISchemeService _schemeService;
+    [Inject] private readonly UiSettingService _uiSettingService;
 
     public Text NameText;
     public Text TagsText;
@@ -59,11 +60,27 @@ public class PropInfoPopup : MonoBehaviour
         // обрабатываем лже-предметы
         propScheme = ProcessMimics(prop, propScheme);
 
-        NameText.text = propScheme.Name?.En ?? propScheme.Name?.Ru ?? "[noname]";
+        NameText.text = GetPropDisplayName(propScheme);
         WritePropTags(prop);
-        DescriptionText.text = propScheme.Description?.En ?? propScheme.Description?.Ru;
+        DescriptionText.text = GetPropDescription(propScheme);
 
         WritePropStats(prop);
+    }
+
+    private string GetPropDescription(IPropScheme propScheme)
+    {
+        var lang = _uiSettingService.CurrentLanguage;
+        var description = propScheme.Description;
+
+        return LocalizationHelper.GetValue(lang, description);
+    }
+
+    private string GetPropDisplayName(IPropScheme propScheme)
+    {
+        var lang = _uiSettingService.CurrentLanguage;
+        var name = propScheme.Name;
+
+        return LocalizationHelper.GetValue(lang, name);
     }
 
     /// <summary>
@@ -178,54 +195,6 @@ public class PropInfoPopup : MonoBehaviour
         descriptionLines.Add($"Durable: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
 
         StatText.text = string.Join("\n", descriptionLines);
-    }
-
-    private string GetRankString(int armorRank)
-    {
-        if (armorRank < 0)
-        {
-            throw new ArgumentException("Ранг защиты не можут быть меньше 0", nameof(armorRank));
-        }
-
-        if (armorRank == 0)
-        {
-            return "none";
-        }
-        else if (1 <= armorRank && armorRank <= 2)
-        {
-            return "minor";
-        }
-        else if (3 <= armorRank && armorRank <= 5)
-        {
-            return "normal";
-        }
-        else if (6 <= armorRank && armorRank <= 9)
-        {
-            return "good";
-        }
-        else
-        {
-            return "perfect";
-        }
-    }
-
-    private static string GetEfficientString(ITacticalActScheme act)
-    {
-        var efficient = act.Stats.Efficient;
-        var maxEfficientValue = efficient.Count * efficient.Dice;
-
-        if (maxEfficientValue <= 5)
-        {
-            return "low";
-        }
-        else if (6 <= maxEfficientValue && maxEfficientValue <= 8)
-        {
-            return "normal";
-        }
-        else
-        {
-            return "high";
-        }
     }
 
     public void FixedUpdate()
