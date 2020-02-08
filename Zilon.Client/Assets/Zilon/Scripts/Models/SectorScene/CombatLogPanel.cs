@@ -28,7 +28,7 @@ public class CombatLogPanel : MonoBehaviour
         _logService.LogChanged -= LogService_LogChanged;
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         if (_counter <= SHOW_DURATION)
         {

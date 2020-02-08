@@ -21,6 +21,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
     public override void InstallBindings()
     {
+        Container.Bind<UiSettingService>().AsSingle();
+
         RegisterDices();
 
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();

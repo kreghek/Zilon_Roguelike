@@ -112,6 +112,8 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly ScoreStorage _scoreStorage;
 
+    [Inject] private readonly UiSettingService _uiSettingService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -526,7 +528,8 @@ public class SectorVM : MonoBehaviour
         }
         else
         {
-            var indicator = Instantiate<FoundNothingIndicator>(FoundNothingIndicatorPrefab, transform);
+            var indicator = Instantiate(FoundNothingIndicatorPrefab, transform);
+            indicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
 
             var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
 
