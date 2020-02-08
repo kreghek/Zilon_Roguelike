@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using Assets.Zilon.Scripts.Services;
+
+using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,14 +16,17 @@ public class SectorNameHandler : MonoBehaviour
 
     [Inject] [NotNull] private readonly HumanPlayer _humanPlayer;
     [Inject] [NotNull] private readonly ISchemeService _schemeService;
+    [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 
     public void FixedUpdate()
     {
         var currentSchemeSid = _humanPlayer.SectorSid;
 
         var scheme = _schemeService.GetScheme<ILocationScheme>(currentSchemeSid);
-        
-        SectorNameText.text = scheme.Name.En;
+
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        SectorNameText.text = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, scheme.Name);
 
         Destroy(this);
     }
