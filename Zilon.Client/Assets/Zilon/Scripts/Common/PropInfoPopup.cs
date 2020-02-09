@@ -207,7 +207,16 @@ public class PropInfoPopup : MonoBehaviour
             {
                 var sign = GetDirectionString(rule.Direction);
                 var bonusString = GetBonusString(rule.Direction);
-                descriptionLines.Add($"{bonusString}: {rule.Type}: {sign}{rule.Level}");
+
+                var ruleType = rule.Type;
+                var ruleKey = ruleType.ToString().ToLowerInvariant();
+                var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
+
+                var ruleLevel = rule.Level;
+                var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
+                var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
+
+                descriptionLines.Add($"{bonusString}: {ruleDisplayName}: {sign}{ruleLevelDisplayName}");
             }
         }
 

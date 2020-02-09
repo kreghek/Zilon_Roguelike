@@ -14,6 +14,17 @@
       "SchemeSid": "gold-helmet",
       "Weight": 10
     },
+	
+	{
+      "SchemeSid": "gas-mask",
+      "Weight": 10
+    },
+	
+	{
+      "SchemeSid": "gaint-artist-brush",
+      "Weight": 1
+    },
+	
     {
       "SchemeSid": "pistol",
       "Weight": 5,
