@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour {
 
-	[Inject] private ISectorUiState _playerState;
+	[Inject] private readonly ISectorUiState _playerState;
 
 	public ActItemVm ActVmPrefab;
 	public Transform ActItemParent;
@@ -57,7 +60,7 @@ public class ActPanelHandler : MonoBehaviour {
             throw new InvalidOperationException("Не указано действие (ViewModel).");
         }
 
-        TacticalAct act = GetAct(actItemVm);
+        var act = GetAct(actItemVm);
     }
 
     private static TacticalAct GetAct(ActItemVm actItemVm)
