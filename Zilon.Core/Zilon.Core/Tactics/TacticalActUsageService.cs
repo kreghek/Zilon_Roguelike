@@ -227,13 +227,13 @@ namespace Zilon.Core.Tactics
                     break;
 
                 case TacticalActEffectType.Heal:
-                    HealActor(actor, targetActor, tacticalActRoll);
+                    HealActor(targetActor, tacticalActRoll);
                     break;
 
                 default:
-                    throw new ArgumentException(string.Format("Не определённый эффект {0} действия {1}.",
-                        tacticalActRoll.TacticalAct.Stats.Effect,
-                        tacticalActRoll.TacticalAct));
+                    var effect = tacticalActRoll.TacticalAct.Stats.Effect;
+                    var tacticalAct = tacticalActRoll.TacticalAct;
+                    throw new ArgumentException($"Не определённый эффект {effect} действия {tacticalAct}.");
             }
         }
 
@@ -429,10 +429,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Лечит актёра.
         /// </summary>
-        /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
             targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
@@ -642,7 +641,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="tacticalAct"></param>
         /// <returns></returns>
-        private int GetActApRank(ITacticalAct tacticalAct)
+        private static int GetActApRank(ITacticalAct tacticalAct)
         {
             return tacticalAct.Stats.Offence.ApRank;
         }
