@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Базовая реализация сервиса для работы с действиями персонажа.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Tactics.ITacticalActUsageService" />
+    /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
@@ -53,6 +53,21 @@ namespace Zilon.Core.Tactics
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            if (usedActs is null)
+            {
+                throw new ArgumentNullException(nameof(usedActs));
+            }
+
             foreach (var act in usedActs.Primary)
             {
                 if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
