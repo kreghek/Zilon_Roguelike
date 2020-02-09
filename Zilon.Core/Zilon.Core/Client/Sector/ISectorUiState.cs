@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
 {
@@ -14,6 +15,8 @@ namespace Zilon.Core.Client
         /// Активный актёр.
         /// </summary>
         IActorViewModel ActiveActor { get; set; }
+
+        ITacticalAct TacticalAct { get; set; }
 
         /// <summary>
         /// Пользовательский источник задач для актёров.

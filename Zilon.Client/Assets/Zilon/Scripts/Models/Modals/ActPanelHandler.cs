@@ -61,7 +61,11 @@ public class ActPanelHandler : MonoBehaviour {
         }
 
         var act = GetAct(actItemVm);
-    }
+
+		_playerState.TacticalAct = act;
+
+		Debug.Log(act);
+	}
 
     private static TacticalAct GetAct(ActItemVm actItemVm)
     {
