@@ -9,50 +9,70 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
-public class ActPanelHandler : MonoBehaviour {
+public class ActPanelHandler : MonoBehaviour
+{
 
-	[Inject] private readonly ISectorUiState _playerState;
+    [Inject] private readonly ISectorUiState _playerState;
 
-	public ActItemVm ActVmPrefab;
-	public Transform ActItemParent;
+    public ActItemVm ActVmPrefab;
+    public Transform ActItemParent;
 
-	public void Start()
-	{
-		var actorVm = _playerState.ActiveActor;
-		var actor = actorVm.Actor;
-		
-		//actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
-		
-		var acts = actor.Person.TacticalActCarrier.Acts;
-		UpdateActs(acts);
-	}
+    public void Start()
+    {
+        var actorVm = _playerState.ActiveActor;
+        var actor = actorVm.Actor;
 
-	private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
-	{
-		var actorVm = _playerState.ActiveActor;
-		var actor = actorVm.Actor;
-		
-		var acts = actor.Person.TacticalActCarrier.Acts;
-		UpdateActs(acts);
-	}
+        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
 
-	private void UpdateActs(IEnumerable<ITacticalAct> acts)
-	{
-		foreach (Transform item in ActItemParent)
-		{
-			Destroy(item.gameObject);
-		}
+        var acts = actor.Person.TacticalActCarrier.Acts;
 
-		var actArray = acts.ToArray();
-		foreach (var act in actArray)
-		{
-			var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
-			actItemVm.Init(act);
-			actItemVm.Click += ActClick_Handler;
-		}
-	}
+        UpdateSelectedAct(currentAct: null, acts);
 
-	private void ActClick_Handler(object sender, EventArgs e)
+        UpdateActs(acts);
+    }
+
+    private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
+    {
+        var currentAct = _playerState.TacticalAct;
+        _playerState.TacticalAct = null;
+
+        var actorVm = _playerState.ActiveActor;
+        var actor = actorVm.Actor;
+
+        var acts = actor.Person.TacticalActCarrier.Acts;
+        UpdateActs(acts);
+        UpdateSelectedAct(currentAct, acts);
+    }
+
+    private void UpdateSelectedAct(ITacticalAct currentAct, ITacticalAct[] acts)
+    {
+        if (acts.Contains(currentAct))
+        {
+            _playerState.TacticalAct = currentAct;
+        }
+        else
+        {
+            _playerState.TacticalAct = acts.First();
+        }
+    }
+
+    private void UpdateActs(IEnumerable<ITacticalAct> acts)
+    {
+        foreach (Transform item in ActItemParent)
+        {
+            Destroy(item.gameObject);
+        }
+
+        var actArray = acts.ToArray();
+        foreach (var act in actArray)
+        {
+            var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
+            actItemVm.Init(act);
+            actItemVm.Click += ActClick_Handler;
+        }
+    }
+
+    private void ActClick_Handler(object sender, EventArgs e)
     {
         var actItemVm = sender as ActItemVm;
         if (actItemVm == null)
@@ -62,10 +82,10 @@ public class ActPanelHandler : MonoBehaviour {
 
         var act = GetAct(actItemVm);
 
-		_playerState.TacticalAct = act;
+        _playerState.TacticalAct = act;
 
-		Debug.Log(act);
-	}
+        Debug.Log(act);
+    }
 
     private static TacticalAct GetAct(ActItemVm actItemVm)
     {
