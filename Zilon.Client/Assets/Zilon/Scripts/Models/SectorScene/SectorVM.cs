@@ -732,6 +732,7 @@ public class SectorVM : MonoBehaviour
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
 
         AddEquipmentToCurrentPerson("chainsaw");
+        AddEquipmentToCurrentPerson("aketon");
 
         return actorViewModel;
     }
