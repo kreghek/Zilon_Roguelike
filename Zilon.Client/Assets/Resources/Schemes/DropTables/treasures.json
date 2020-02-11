@@ -25,6 +25,11 @@
       "Weight": 1
     },
 	
+	{
+      "SchemeSid": "chainsaw",
+      "Weight": 1
+    },
+	
     {
       "SchemeSid": "pistol",
       "Weight": 5,
