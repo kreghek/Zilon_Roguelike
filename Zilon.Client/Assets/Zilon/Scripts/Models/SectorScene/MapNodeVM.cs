@@ -96,7 +96,6 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             case "rat-hole":
             case "rat-kingdom":
             case "genomass-cave":
-            case "intro":
             default:
                 wallsSid = "Cave";
                 break;
@@ -110,6 +109,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
                 break;
 
             case "crypt":
+            case "intro":
                 wallsSid = "Crypt";
                 break;
 
