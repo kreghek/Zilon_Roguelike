@@ -25,6 +25,40 @@
       "Weight": 1
     },
 	
+	{
+      "SchemeSid": "chainsaw",
+      "Weight": 1
+    },
+	
+	{
+      "SchemeSid": "aketon",
+      "Weight": 1
+    },
+	
+	{
+      "SchemeSid": "shotgun",
+      "Weight": 1,
+	  "Extra":[
+		{
+			"Rolls": 1,
+			"Records":[
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 3,
+				  "MaxCount": 5,
+				  "Weight": 5
+				},
+				{
+				  "SchemeSid": "bullet-45",
+				  "MinCount": 6,
+				  "MaxCount": 10,
+				  "Weight": 2
+				}
+			]
+		}
+	  ]
+    },
+	
     {
       "SchemeSid": "pistol",
       "Weight": 5,
