@@ -16,7 +16,10 @@ public class ActPanelHandler : MonoBehaviour
     [Inject] private readonly ISectorUiState _playerState;
 
     public ActItemVm ActVmPrefab;
+
     public Transform ActItemParent;
+
+    public ActInfoPopup ActInfoPopup;
 
     public ActPanelHandler()
     {

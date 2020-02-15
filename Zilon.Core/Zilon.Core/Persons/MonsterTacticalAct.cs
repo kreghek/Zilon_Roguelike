@@ -15,6 +15,8 @@ namespace Zilon.Core.Persons
         public Equipment Equipment => null;
         public ITacticalActConstrainsSubScheme Constrains => null;
 
+        public ITacticalActScheme Scheme { get; }
+
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
             Stats = stats;

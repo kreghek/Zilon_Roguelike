@@ -1,15 +1,13 @@
 ﻿using System;
 
-using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
 
 using UnityEngine;
 using UnityEngine.UI;
 
-using Zilon.Core.Client;
 using Zilon.Core.Props;
 
-public sealed class PropItemVm : PropItemViewModelBase, IPropItemViewModel, IPropViewModelDescription
+public sealed class PropItemVm : PropItemViewModelBase
 {
     public Image SelectedBorder;
 

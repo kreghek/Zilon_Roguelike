@@ -174,12 +174,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6680245457075671535}
   - component: {fileID: 4560371640224566215}
+  - component: {fileID: 3157010251597803129}
   - component: {fileID: 3961275265972362294}
   - component: {fileID: 3524277000582440537}
   - component: {fileID: 1745900329359035655}
   - component: {fileID: 2180654298705199231}
   m_Layer: 5
-  m_Name: PropInfoPopup
+  m_Name: ActInfoPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,6 +217,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5219618356452094335}
   m_CullTransparentMesh: 0
+--- !u!114 &3157010251597803129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219618356452094335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd913bd105ba18409c06a740be158bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameText: {fileID: 2869020652250851212}
+  TagsText: {fileID: 1528404186639120716}
+  DescriptionText: {fileID: 6856529413248271302}
+  StatText: {fileID: 3814022316327841292}
 --- !u!114 &3961275265972362294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,4 +475,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PropName
+  m_Text: Action name

@@ -11,6 +11,11 @@ namespace Zilon.Core.Persons
     public interface ITacticalAct
     {
         /// <summary>
+        /// Схема действия.
+        /// </summary>
+        ITacticalActScheme Scheme { get; }
+
+        /// <summary>
         /// Схема основных характеристик тактического действия.
         /// </summary>
         ITacticalActStatsSubScheme Stats { get; }
