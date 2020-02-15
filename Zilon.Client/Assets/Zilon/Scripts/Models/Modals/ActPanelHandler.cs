@@ -11,11 +11,17 @@ using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour
 {
+    private readonly List<ActItemVm> _actViewModels;
 
     [Inject] private readonly ISectorUiState _playerState;
 
     public ActItemVm ActVmPrefab;
     public Transform ActItemParent;
+
+    public ActPanelHandler()
+    {
+        _actViewModels = new List<ActItemVm>();
+    }
 
     public void Start()
     {
@@ -63,12 +69,14 @@ public class ActPanelHandler : MonoBehaviour
             Destroy(item.gameObject);
         }
 
+        _actViewModels.Clear();
         var actArray = acts.ToArray();
         foreach (var act in actArray)
         {
             var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
             actItemVm.Init(act);
             actItemVm.Click += ActClick_Handler;
+            _actViewModels.Add(actItemVm);
         }
     }
 
@@ -80,11 +88,17 @@ public class ActPanelHandler : MonoBehaviour
             throw new InvalidOperationException("Не указано действие (ViewModel).");
         }
 
-        var act = GetAct(actItemVm);
+        var selectedAct = GetAct(actItemVm);
 
-        _playerState.TacticalAct = act;
+        _playerState.TacticalAct = selectedAct;
 
-        Debug.Log(act);
+        foreach (var actVm in _actViewModels)
+        {
+            var isSelected = actVm.Act == selectedAct;
+            actVm.SetSelectedState(isSelected);
+        }
+
+        Debug.Log(selectedAct);
     }
 
     private static TacticalAct GetAct(ActItemVm actItemVm)
