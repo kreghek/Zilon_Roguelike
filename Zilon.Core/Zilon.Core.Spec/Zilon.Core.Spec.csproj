@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions">
-      <Version>5.4.1</Version>
+      <Version>5.10.2</Version>
     </PackageReference>
     <PackageReference Include="LightInject">
       <Version>5.1.8</Version>
