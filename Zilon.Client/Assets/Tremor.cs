@@ -10,7 +10,6 @@ public class Tremor : MonoBehaviour
 
     public Transform Target;
 
-
     public void Start()
     {
         _initPosition = Target.localPosition;
@@ -20,6 +19,9 @@ public class Tremor : MonoBehaviour
     {
         _counter += Time.deltaTime;
 
-        Target.transform.localPosition = _initPosition + Vector3.up * Mathf.Sin(_counter * SPEED_COEF) * AMPLITUDE;
+        var f = _counter * SPEED_COEF;
+        var diff = Mathf.Sin(f) * AMPLITUDE;
+        var tremorPosition = Vector3.up * diff;
+        Target.transform.localPosition = _initPosition + tremorPosition;
     }
 }
