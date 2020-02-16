@@ -23,5 +23,9 @@
     <None Include="README.md" />
     <EmbeddedResource Include="Schemes\human-person.json" />
   </ItemGroup>
+    
+  <ItemGroup>
+    <DotNetCliToolReference Include="JetBrains.dotCover.DotNetCliTool" Version="2019.2.0.1" />
+  </ItemGroup>
 
 </Project>
