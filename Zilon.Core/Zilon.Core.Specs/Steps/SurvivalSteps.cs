@@ -94,12 +94,22 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
             var survival = actor.Person.Survival;
-            var statType = statName switch
+
+            SurvivalStatType statType;
+            switch (statName)
             {
-                "сытость" => SurvivalStatType.Satiety,
-                "вода" => SurvivalStatType.Hydration,
-                _ => throw new NotSupportedException("Передан неподдерживаемый тип характеристики."),
-            };
+                case "сытость":
+                    statType = SurvivalStatType.Satiety;
+                    break;
+
+                case "вода":
+                    statType = SurvivalStatType.Hydration;
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+
             survival.SetStatForce(statType, statValue);
         }
 
@@ -184,12 +194,22 @@ namespace Zilon.Core.Specs.Steps
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
             var actor = Context.GetActiveActor();
-            var survivalStatValue = stat switch
+
+            int? survivalStatValue;
+            switch (stat)
             {
-                "сытость" => GetSurvivalValue(actor, SurvivalStatType.Satiety),
-                "вода" => GetSurvivalValue(actor, SurvivalStatType.Hydration),
-                _ => throw new NotSupportedException("Передан неподдерживаемый тип характеристики."),
-            };
+                case "сытость":
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Satiety);
+                    break;
+
+                case "вода":
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Hydration);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+
             survivalStatValue.Should().Be(expectedValue);
         }
 

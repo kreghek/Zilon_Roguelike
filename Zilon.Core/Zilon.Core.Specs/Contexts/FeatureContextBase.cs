@@ -258,7 +258,6 @@ namespace Zilon.Core.Specs.Contexts
             _specificActUsageRandomSource = actUsageRandomSource;
         }
 
-
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
             [NotNull] IGraphNode startNode,
@@ -337,7 +336,6 @@ namespace Zilon.Core.Specs.Contexts
         {
             var dice = new LinearDice(123);
             serviceCollection.AddSingleton<IDice>(factory => dice);
-
 
             var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
             decisionSourceMock.CallBase = true;

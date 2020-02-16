@@ -12,9 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{F057B4
 		CreateAppSettings.ps1 = CreateAppSettings.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Spec", "Zilon.Core.Spec\Zilon.Core.Spec.csproj", "{31887843-0523-4FFA-8B03-A7D041B95FA3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests.Common", "Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{53AF1D62-18D8-4252-B09A-1CC50724BE92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests.Common", "Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{53AF1D62-18D8-4252-B09A-1CC50724BE92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3B88E0E-94FE-44BE-B147-3A31C9A6F034}"
 EndProject
@@ -69,9 +67,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D62245
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.IoC", "Zilon.IoC\Zilon.IoC.csproj", "{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Specs", "Zilon.Core.Specs\Zilon.Core.Specs.csproj", "{E9CE6565-6024-41E5-8552-B7021234708C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Specs", "Zilon.Core.Specs\Zilon.Core.Specs.csproj", "{E9CE6565-6024-41E5-8552-B7021234708C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.NetCore", "Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore", "Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +85,6 @@ Global
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0192DB6B-EAE2-430A-BC52-148EEC878151}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31887843-0523-4FFA-8B03-A7D041B95FA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31887843-0523-4FFA-8B03-A7D041B95FA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31887843-0523-4FFA-8B03-A7D041B95FA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31887843-0523-4FFA-8B03-A7D041B95FA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -173,7 +167,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0192DB6B-EAE2-430A-BC52-148EEC878151} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
-		{31887843-0523-4FFA-8B03-A7D041B95FA3} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{B7EFEC00-E068-4510-B18D-3BF8A2E8245B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}

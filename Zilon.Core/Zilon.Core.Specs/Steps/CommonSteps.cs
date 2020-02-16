@@ -214,14 +214,12 @@ namespace Zilon.Core.Specs.Steps
                 takenResource = resource;
             }
 
-
             transferMachine.TransferProp(takenResource,
                 PropTransferMachineStores.Container,
                 PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
         }
-
 
         [UsedImplicitly]
         [Then(@"У актёра в инвентаре есть (.*)")]
@@ -272,7 +270,6 @@ namespace Zilon.Core.Specs.Steps
 
             testedResouce.Count.Should().Be(expectedCount);
         }
-
 
         [UsedImplicitly]
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
