@@ -35,7 +35,7 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: /test_di/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.DiTests.csproj -c Release -r ./Results
+      - run: dotnet test Zilon.Core/Zilon.Core.DiTests/Zilon.Core.DiTests.csproj -c Release -r ./Results
       - store_test_results:
           path: ./TestResult.xml
   test_45_coverage:

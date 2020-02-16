@@ -46,11 +46,8 @@ namespace Zilon.Core.Tests.Commands
             var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
-
-
             // ACT
             command.Execute();
-
 
             // ASSERT
             var target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
