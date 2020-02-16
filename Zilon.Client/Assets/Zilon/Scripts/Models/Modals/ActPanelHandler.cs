@@ -78,9 +78,14 @@ public class ActPanelHandler : MonoBehaviour
         {
             var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
             actItemVm.Init(act);
+
+            var isSelected = actItemVm.Act == _playerState.TacticalAct;
+            actItemVm.SetSelectedState(isSelected);
+
             actItemVm.Click += ActClick_Handler;
             actItemVm.MouseEnter += ActViewModel_MouseEnter;
             actItemVm.MouseExit += ActViewModel_MouseExit;
+
             _actViewModels.Add(actItemVm);
         }
     }
