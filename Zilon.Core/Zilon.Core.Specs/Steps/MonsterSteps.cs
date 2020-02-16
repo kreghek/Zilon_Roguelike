@@ -9,11 +9,11 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [UsedImplicitly]
     [Binding]

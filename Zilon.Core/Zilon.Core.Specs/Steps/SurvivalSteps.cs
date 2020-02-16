@@ -10,11 +10,11 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class SurvivalSteps : GenericStepsBase<CommonGameActionsContext>

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Spec.Mocks
+namespace Zilon.Core.Specs.Mocks
 {
     public class FuncMapFactory : IMapFactory
     {

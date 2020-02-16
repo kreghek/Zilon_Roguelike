@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Commands;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public class MoveSteps : GenericStepsBase<CommonGameActionsContext>

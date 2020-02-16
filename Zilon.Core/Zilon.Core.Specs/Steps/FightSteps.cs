@@ -15,12 +15,12 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class FightSteps : GenericStepsBase<CommonGameActionsContext>

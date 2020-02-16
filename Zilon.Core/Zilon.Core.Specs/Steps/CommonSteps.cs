@@ -13,11 +13,11 @@ using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [UsedImplicitly]
     [Binding]
@@ -175,7 +175,7 @@ namespace Zilon.Core.Spec.Steps
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
-            ((PropTransferCommand)propTransferCommand).TransferMachine = transferMachine;
+            propTransferCommand.TransferMachine = transferMachine;
 
             var equipment = container.Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
@@ -198,7 +198,7 @@ namespace Zilon.Core.Spec.Steps
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
-            ((PropTransferCommand)propTransferCommand).TransferMachine = transferMachine;
+            propTransferCommand.TransferMachine = transferMachine;
 
             var resource = container.Content.CalcActualItems()
                 .OfType<Resource>()

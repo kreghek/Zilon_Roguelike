@@ -24,7 +24,7 @@ using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Mocks;
+using Zilon.Core.Specs.Mocks;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -33,7 +33,7 @@ using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
 
-namespace Zilon.Core.Spec.Contexts
+namespace Zilon.Core.Specs.Contexts
 {
     public abstract class FeatureContextBase
     {
@@ -50,6 +50,7 @@ namespace Zilon.Core.Spec.Contexts
             var serviceCollection = RegisterServices();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceProvider;
 
             ConfigureServices(serviceProvider);
         }
@@ -60,6 +61,11 @@ namespace Zilon.Core.Spec.Contexts
 
             var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+
+            var gameLoop = serviceProvider.GetRequiredService<IGameLoop>();
+            var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] { humanTaskSource, monsterTaskSource };
 
             RegisterManager.ConfigureAuxServices(serviceProvider);
         }

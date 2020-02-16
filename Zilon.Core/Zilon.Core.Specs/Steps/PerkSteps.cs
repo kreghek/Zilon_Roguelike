@@ -3,10 +3,9 @@
 using FluentAssertions;
 
 using TechTalk.SpecFlow;
+using Zilon.Core.Specs.Contexts;
 
-using Zilon.Core.Spec.Contexts;
-
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class PerkSteps : GenericStepsBase<CommonGameActionsContext>
@@ -31,7 +30,7 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var perk = actor.Person.EvolutionData.Perks.Single(x=>x.Scheme.Sid == perkSid);
+            var perk = actor.Person.EvolutionData.Perks.Single(x => x.Scheme.Sid == perkSid);
 
             perk.CurrentLevel.Should().NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
             perk.CurrentLevel.Primary.Should().Be(0);

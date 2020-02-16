@@ -12,12 +12,12 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class ChestSteps : GenericStepsBase<CommonGameActionsContext>

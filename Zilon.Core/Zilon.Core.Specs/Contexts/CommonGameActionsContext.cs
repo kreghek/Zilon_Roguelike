@@ -10,7 +10,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Contexts
+namespace Zilon.Core.Specs.Contexts
 {
     public class CommonGameActionsContext : FeatureContextBase
     {

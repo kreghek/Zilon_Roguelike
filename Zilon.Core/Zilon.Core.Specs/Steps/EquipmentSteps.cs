@@ -11,10 +11,10 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [UsedImplicitly]
     [Binding]
@@ -58,7 +58,7 @@ namespace Zilon.Core.Spec.Steps
             var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
             var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             var actor = Context.GetActiveActor();
 
@@ -80,7 +80,7 @@ namespace Zilon.Core.Spec.Steps
             var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
             var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             inventoryState.SelectedProp = null;
 
@@ -110,7 +110,7 @@ namespace Zilon.Core.Spec.Steps
             var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
             var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             var actor = Context.GetActiveActor();
 
