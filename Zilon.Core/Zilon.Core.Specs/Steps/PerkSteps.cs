@@ -12,7 +12,6 @@ namespace Zilon.Core.Specs.Steps
     {
         public PerkSteps(CommonGameActionsContext context) : base(context)
         {
-
         }
 
         [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]

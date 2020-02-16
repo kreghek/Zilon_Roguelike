@@ -15,15 +15,19 @@ namespace Zilon.Core.Schemes
         {
             _schemeCatalog = schemeCatalog ?? throw new System.ArgumentNullException(nameof(schemeCatalog));
 
-            if (!Directory.Exists(_schemeCatalog))
+            var schemeLocatorFullPath = Path.GetFullPath(_schemeCatalog);
+
+            if (!Directory.Exists(schemeLocatorFullPath))
             {
-                throw new System.ArgumentException($"Директория каталога {_schemeCatalog} не найдена.");
+                throw new System.ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
             }
         }
 
         public SchemeFile[] GetAll(string directory)
         {
-            var path = Path.Combine(_schemeCatalog, directory);
+            var schemeLocatorFullPath = Path.GetFullPath(_schemeCatalog);
+
+            var path = Path.Combine(schemeLocatorFullPath, directory);
             if (!Directory.Exists(path))
             {
                 return System.Array.Empty<SchemeFile>();

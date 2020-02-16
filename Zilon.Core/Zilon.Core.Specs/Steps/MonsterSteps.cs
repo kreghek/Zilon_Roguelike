@@ -46,7 +46,6 @@ namespace Zilon.Core.Specs.Steps
             sector.PatrolRoutes[monster] = route;
         }
 
-
         [Then(@"Монстр Id:(\d+) стоит в узле \((\d+), (\d+)\)")]
         [Then(@"Монстр Id:(\d+)\s(не)\sстоит в узле \((\d+), (\d+)\)")]
         public void ThenМонстрIdСтоитВУзле(int monsterId, string isNot, int offsetX, int offsetY)

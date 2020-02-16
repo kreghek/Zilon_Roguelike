@@ -310,7 +310,7 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private void RegisterSectorService(ServiceCollection serviceCollection)
+        private static void RegisterSectorService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IMapFactory, FuncMapFactory>();
             serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();

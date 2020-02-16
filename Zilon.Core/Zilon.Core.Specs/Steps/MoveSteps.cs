@@ -27,7 +27,6 @@ namespace Zilon.Core.Specs.Steps
             moveCommand.CanExecute().Should().BeTrue();
         }
 
-
         [Then(@"Команда на перемещение не может выполняться")]
         public void ThenКомандаНаПеремещениеНеМожетВыполняться()
         {

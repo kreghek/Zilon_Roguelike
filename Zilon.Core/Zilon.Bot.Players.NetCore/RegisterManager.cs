@@ -6,7 +6,6 @@ using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 
-
 namespace Zilon.Bot.Players.NetCore
 {
     [BotRegistration]
