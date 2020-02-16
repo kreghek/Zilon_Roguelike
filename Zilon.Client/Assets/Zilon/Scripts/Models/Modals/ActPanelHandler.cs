@@ -131,5 +131,4 @@ public class ActPanelHandler : MonoBehaviour
         var currentItemVm = (IActViewModelDescription)sender;
         ActInfoPopup.SetPropViewModel(currentItemVm);
     }
-
 }
