@@ -83,7 +83,6 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<MoveCommand>();
-            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var playerMock = new Mock<IPlayer>();

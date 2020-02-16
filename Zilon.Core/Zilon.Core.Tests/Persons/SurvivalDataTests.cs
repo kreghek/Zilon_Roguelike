@@ -118,7 +118,7 @@ namespace Zilon.Core.Tests.Persons
             }
         }
 
-        public IPersonScheme CreatePersonScheme()
+        public static IPersonScheme CreatePersonScheme()
         {
             var personScheme = new TestPersonScheme
             {
@@ -190,7 +190,7 @@ namespace Zilon.Core.Tests.Persons
             return survivalRandomSourceMock.Object;
         }
 
-        private ISurvivalData CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
+        private static ISurvivalData CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
         {
             var survivalData = new HumanSurvivalData(personScheme, survivalRandomSource);
             return survivalData;

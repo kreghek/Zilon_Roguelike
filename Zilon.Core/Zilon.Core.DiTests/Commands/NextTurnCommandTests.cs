@@ -44,10 +44,8 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
             var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
 
-
             // ACT
             command.Execute();
-
 
             // ASSERT
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);
