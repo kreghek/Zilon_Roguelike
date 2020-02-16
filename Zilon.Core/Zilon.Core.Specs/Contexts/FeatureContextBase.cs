@@ -389,13 +389,13 @@ namespace Zilon.Core.Specs.Contexts
             return survivalRandomSource;
         }
 
-        private void RegisterClientServices(ServiceCollection serviceCollection)
+        private static void RegisterClientServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
             serviceCollection.AddSingleton<IInventoryState, InventoryState>();
         }
 
-        private void RegisterCommands(ServiceCollection serviceCollection)
+        private static void RegisterCommands(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<MoveCommand>();
             serviceCollection.AddSingleton<UseSelfCommand>();

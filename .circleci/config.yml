@@ -95,7 +95,7 @@ jobs:
   test_specflow:
     working_directory: /test_specflow
     docker:
-      - image: mono:6.0.0.313
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
