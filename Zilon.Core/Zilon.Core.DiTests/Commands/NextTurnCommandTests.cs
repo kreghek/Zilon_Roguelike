@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -15,7 +15,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture()]
-    public class NextTurnCommandTests: CommandTestBase
+    public class NextTurnCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно выполнить выполнить следующий ход.
@@ -25,13 +25,10 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<NextTurnCommand>();
-
-
+            var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -44,8 +41,8 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<NextTurnCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
 
 
             // ACT
@@ -62,8 +59,8 @@ namespace Zilon.Core.Tests.Commands
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
             var decisionSource = decisionSourceMock.Object;
 
-            Container.Register(factory => decisionSource, new PerContainerLifetime());
-            Container.Register<NextTurnCommand>(new PerContainerLifetime());
+            Container.AddSingleton(factory => decisionSource);
+            Container.AddSingleton<NextTurnCommand>();
         }
     }
 }

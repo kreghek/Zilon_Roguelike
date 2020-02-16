@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -17,7 +16,7 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture()]
-    public class UseSelfCommandTests: CommandTestBase
+    public class UseSelfCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно использовать предмет, если есть информация об использовании.
@@ -26,13 +25,10 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<UseSelfCommand>();
-
-
+            var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -45,16 +41,13 @@ namespace Zilon.Core.Tests.Commands
         public void Execute_CanUse_UsageIntended()
         {
             // ARRANGE
-            var command = Container.GetInstance<UseSelfCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var inventoryState = Container.GetInstance<IInventoryState>();
-            var playerState = Container.GetInstance<ISectorUiState>();
-
-
+            var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
             command.Execute();
-
 
             // ASSERT
             var selectedProp = inventoryState.SelectedProp.Prop;
@@ -87,9 +80,9 @@ namespace Zilon.Core.Tests.Commands
             inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
             var inventoryState = inventoryStateMock.Object;
 
-            Container.Register(factory => inventoryState, new PerContainerLifetime());
+            Container.AddSingleton(factory => inventoryState);
 
-            Container.Register<UseSelfCommand>(new PerContainerLifetime());
+            Container.AddSingleton<UseSelfCommand>();
         }
     }
 }

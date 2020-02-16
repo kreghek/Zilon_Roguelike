@@ -2,7 +2,7 @@
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -18,7 +18,7 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture]
-    public class OpenContainerCommandTests: CommandTestBase
+    public class OpenContainerCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно атаковать, если не мешают стены.
@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<OpenContainerCommand>();
+            var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
@@ -43,8 +43,8 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<OpenContainerCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
 
             // ACT
             command.Execute();
@@ -66,7 +66,7 @@ namespace Zilon.Core.Tests.Commands
 
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
 
-            Container.Register<OpenContainerCommand>(new PerContainerLifetime());
+            Container.AddSingleton<OpenContainerCommand>();
         }
     }
 }
