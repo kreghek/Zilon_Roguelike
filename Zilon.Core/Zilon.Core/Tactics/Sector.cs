@@ -94,12 +94,30 @@ namespace Zilon.Core.Tactics
 
             UpdateSurvivals();
 
+            UpdateActAvailability();
+
             UpdateActorEffects();
 
             UpdateEquipments();
 
             // Определяем, не покинули ли актёры игрока сектор.
             //DetectSectorExit();
+        }
+
+        private void UpdateActAvailability()
+        {
+            foreach (var actor in _actorManager.Items.ToArray())
+            {
+                if (actor.Person.TacticalActCarrier == null)
+                {
+                    continue;
+                }
+
+                foreach (var act in actor.Person.TacticalActCarrier.Acts)
+                { 
+                    act.IsAvailable = 
+                }
+            }
         }
 
         private void UpdateScores()
