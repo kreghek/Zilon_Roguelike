@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 using Microsoft.Extensions.DependencyInjection;
+
 using Moq;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.LightInject;
+using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -38,9 +39,9 @@ namespace Zilon.Core.Spec.Contexts
     {
         private ITacticalActUsageRandomSource _specificActUsageRandomSource;
 
-        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
+        private readonly IServiceProvider _serviceProvider;
 
-        private IServiceProvider _serviceProvider;
+        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
 
         protected FeatureContextBase()
         {
@@ -59,6 +60,8 @@ namespace Zilon.Core.Spec.Contexts
 
             var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+
+            RegisterManager.ConfigureAuxServices(serviceProvider);
         }
 
         private ServiceCollection RegisterServices()
@@ -392,8 +395,7 @@ namespace Zilon.Core.Spec.Contexts
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
-            RegisterManager.RegisterBot(Container);
-            RegisterManager.ConfigureAuxServices(Container);
+            RegisterManager.RegisterBot(serviceCollection);
         }
 
         private void RegisterWorldServices(ServiceCollection serviceCollection)

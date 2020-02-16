@@ -1,8 +1,8 @@
 ﻿using System;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Bot.Players.LightInject.DependencyInjection;
+using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 
@@ -16,17 +16,16 @@ namespace Zilon.Bot.Players.NetCore
         public static Type ActorTaskSourceType => typeof(HumanBotActorTaskSource);
 
         [RegisterAuxServices]
-        public static void RegisterBot(IServiceRegistry serviceRegistry)
+        public static void RegisterBot(IServiceCollection serviceRegistry)
         {
             serviceRegistry.RegisterLogicState();
-            serviceRegistry.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
-                new PerContainerLifetime());
+            serviceRegistry.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
         }
 
         [ConfigureAuxServices]
-        public static void ConfigureAuxServices(IServiceFactory serviceFactory)
+        public static void ConfigureAuxServices(IServiceProvider serviceFactory)
         {
-            LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();
+            LogicStateTreePatterns.Factory = serviceFactory.GetRequiredService<ILogicStateFactory>();
         }
     }
 }
