@@ -109,12 +109,12 @@ namespace Zilon.Core.Spec.Contexts
             var locationScheme = new TestLocationScheme
             {
                 SectorLevels = new ISectorSubScheme[]
-               {
+                {
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
                     }
-               }
+                }
             };
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);
             humanPlayer.GlobeNode = globeNode;
@@ -124,13 +124,13 @@ namespace Zilon.Core.Spec.Contexts
 
         public ISector GetSector()
         {
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
             return sectorManager.CurrentSector;
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
         {
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;
 
@@ -139,15 +139,15 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetActiveActor()
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
 
         public Equipment CreateEquipment(string propSid)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var propFactory = Container.GetInstance<IPropFactory>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var propFactory = _serviceProvider.GetRequiredService<IPropFactory>();
 
             var propScheme = schemeService.GetScheme<IPropScheme>(propSid);
 
@@ -157,13 +157,13 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var actorManager = Container.GetInstance<IActorManager>();
-            var humanPlayer = Container.GetInstance<HumanPlayer>();
-            var perkResolver = Container.GetInstance<IPerkResolver>();
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
+            var humanTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
+            var humanPlayer = _serviceProvider.GetRequiredService<HumanPlayer>();
+            var perkResolver = _serviceProvider.GetRequiredService<IPerkResolver>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
@@ -183,10 +183,10 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
-            var actorManager = Container.GetInstance<IActorManager>();
-            var botPlayer = Container.GetInstance<IBotPlayer>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
+            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
+            var botPlayer = _serviceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
@@ -199,8 +199,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var containerManager = Container.GetInstance<IPropContainerManager>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var containerManager = _serviceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
@@ -212,7 +212,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
 
             var resourceScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
 
@@ -228,7 +228,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetMonsterById(int id)
         {
-            var actorManager = Container.GetInstance<IActorManager>();
+            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
 
             var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
@@ -247,8 +247,8 @@ namespace Zilon.Core.Spec.Contexts
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
 
             var evolutionData = new EvolutionData(schemeService);
 
@@ -405,8 +405,8 @@ namespace Zilon.Core.Spec.Contexts
 
         private void InitClientServices()
         {
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var playerState = Container.GetInstance<ISectorUiState>();
+            var humanTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
 
             playerState.TaskSource = humanTaskSource;
         }
