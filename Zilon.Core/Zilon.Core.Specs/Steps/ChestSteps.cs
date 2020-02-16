@@ -1,21 +1,21 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using FluentAssertions;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
 using TechTalk.SpecFlow;
 
+using Zilon.Core.Client;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
-
-using LightInject;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.Tests.Common.Schemes;
-using Zilon.Core.Schemes;
-using System.Collections.Generic;
-using Moq;
-using Zilon.Core.Props;
-using Zilon.Core.Client;
 
 namespace Zilon.Core.Spec.Steps
 {
@@ -30,9 +30,9 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\) со случайным лутом")]
         public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
         {
-            var schemeService = Context.Container.GetInstance<ISchemeService>();
-            var containerManager = Context.Container.GetInstance<IPropContainerManager>();
-            var sectorManager = Context.Container.GetInstance<ISectorManager>();
+            var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
+            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
 
             var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
@@ -62,7 +62,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"В выбранном сундуке лут")]
         public void ThenВВыбранномСундукеЛут(Table table)
         {
-            var playerState = Context.Container.GetInstance<ISectorUiState>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var selectedChest = (playerState.HoverViewModel as IContainerViewModel).Container;
 
             // lootProps будет изменяться

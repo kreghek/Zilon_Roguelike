@@ -1,7 +1,8 @@
 ﻿using System;
+
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
@@ -12,7 +13,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Spec.Steps
 {
     [Binding]
-    public class MoveSteps: GenericStepsBase<CommonGameActionsContext>
+    public class MoveSteps : GenericStepsBase<CommonGameActionsContext>
     {
         protected MoveSteps(CommonGameActionsContext context) : base(context)
         {
@@ -21,7 +22,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Команда на перемещение может выполняться")]
         public void ThenКомандаНаПеремещениеМожетВыполняться()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
             moveCommand.CanExecute().Should().BeTrue();
         }
@@ -30,7 +31,7 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Команда на перемещение не может выполняться")]
         public void ThenКомандаНаПеремещениеНеМожетВыполняться()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
             moveCommand.CanExecute().Should().BeFalse();
         }
@@ -38,7 +39,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Выполняется команда на перемещение")]
         public void WhenВыполняетсяКомандаНаПеремещение()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
             moveCommand.Execute();
         }
 
@@ -47,7 +48,7 @@ namespace Zilon.Core.Spec.Steps
         {
             try
             {
-                var moveCommand = Context.Container.GetInstance<ICommand>("move");
+                var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
                 moveCommand.Execute();
             }
             catch (InvalidOperationException exception)

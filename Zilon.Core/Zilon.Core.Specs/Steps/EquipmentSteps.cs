@@ -4,7 +4,7 @@ using FluentAssertions;
 
 using JetBrains.Annotations;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
@@ -22,7 +22,6 @@ namespace Zilon.Core.Spec.Steps
     {
         public EquipmentSteps(CommonGameActionsContext context) : base(context)
         {
-
         }
 
         [UsedImplicitly]
@@ -56,14 +55,14 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
             ((EquipCommand)equipCommand).SlotIndex = slotIndex;
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x=>x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {
@@ -78,8 +77,8 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Снимаю экипировку из слота (\d+)")]
         public void WhenСнимаюЭкипировкуИзСлота(int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
             ((EquipCommand)equipCommand).SlotIndex = slotIndex;
 
@@ -108,8 +107,8 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
         public void ThenНевозможнаЭкипировкаПредметаPistolВСлотIndex(string propSid, int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
             ((EquipCommand)equipCommand).SlotIndex = slotIndex;
 

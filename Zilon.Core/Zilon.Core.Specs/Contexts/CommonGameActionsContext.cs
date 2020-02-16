@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -16,9 +16,9 @@ namespace Zilon.Core.Spec.Contexts
     {
         public void MoveOnceActiveActor(OffsetCoords targetCoords)
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var moveCommand = Container.GetInstance<ICommand>("move");
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+            var moveCommand = ServiceProvider.GetRequiredService<MoveCommand>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var targetNode = sectorManager
                 .CurrentSector
@@ -40,8 +40,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public void UsePropByActiveActor(string propSid)
         {
-            var useSelfCommand = Container.GetInstance<ICommand>("use-self");
-            var inventoryState = Container.GetInstance<IInventoryState>();
+            var useSelfCommand = ServiceProvider.GetRequiredService<UseSelfCommand>();
+            var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var actor = GetActiveActor();
 
             var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
@@ -57,8 +57,8 @@ namespace Zilon.Core.Spec.Contexts
 
         internal void ClickOnNode(int x, int y)
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;
             var selectedNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == x && n.OffsetY == y);

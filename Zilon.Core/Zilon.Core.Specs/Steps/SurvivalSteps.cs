@@ -3,13 +3,12 @@ using System.Linq;
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Spec.Contexts;
 using Zilon.Core.Tactics;
@@ -33,7 +32,7 @@ namespace Zilon.Core.Spec.Steps
 
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
-        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
+        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid,
             string provisionStat)
         {
             var actor = Context.GetActiveActor();
@@ -74,7 +73,8 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            var propScheme = new TestPropScheme {
+            var propScheme = new TestPropScheme
+            {
                 Sid = propSid,
                 Use = new TestPropUseSubScheme
                 {
@@ -94,29 +94,19 @@ namespace Zilon.Core.Spec.Steps
         {
             var actor = Context.GetActiveActor();
             var survival = actor.Person.Survival;
-
-            SurvivalStatType statType;
-            switch (statName)
+            var statType = statName switch
             {
-                case "сытость":
-                    statType = SurvivalStatType.Satiety;
-                    break;
-
-                case "вода":
-                    statType = SurvivalStatType.Hydration;
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
-            }
-
+                "сытость" => SurvivalStatType.Satiety,
+                "вода" => SurvivalStatType.Hydration,
+                _ => throw new NotSupportedException("Передан неподдерживаемый тип характеристики."),
+            };
             survival.SetStatForce(statType, statValue);
         }
 
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
-            var survivalRandomSource = Context.Container.GetInstance<ISurvivalRandomSource>();
+            var survivalRandomSource = Context.ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
             var actor = Context.GetActiveActor();
 
@@ -194,21 +184,12 @@ namespace Zilon.Core.Spec.Steps
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
             var actor = Context.GetActiveActor();
-            int? survivalStatValue;
-            switch (stat)
+            var survivalStatValue = stat switch
             {
-                case "сытость":
-                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Satiety);
-                    break;
-
-                case "вода":
-                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Hydration);
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
-            }
-
+                "сытость" => GetSurvivalValue(actor, SurvivalStatType.Satiety),
+                "вода" => GetSurvivalValue(actor, SurvivalStatType.Hydration),
+                _ => throw new NotSupportedException("Передан неподдерживаемый тип характеристики."),
+            };
             survivalStatValue.Should().Be(expectedValue);
         }
 
