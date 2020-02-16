@@ -102,13 +102,7 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: nuget restore Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /t:Restore /p:Configuration=Release
-      - run: msbuild Zilon.Core/Zilon.Core.Spec/Zilon.Core.Spec.csproj /t:Build /p:Configuration=Release
-      # Этот шаг нужен для того, чтобы в ./packages явно был установлен NUnit.ConsoleRunner, через который выполняется запуск тестов.
-      # Если его не сделать, то NUnit.ConsoleRunner не будет найден. Даже если он установлен, как nuget-ссылка в csproj.
-      - run: nuget install NUnit.ConsoleRunner -Version 3.10.0 -OutputDirectory ./packages
-      - run: mono --debug ./packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe Zilon.Core/Zilon.Core.Spec/bin/Release/Zilon.Core.Spec.dll --encoding utf-8
+      - run: dotnet test Zilon.Core/Zilon.Core.Specs/Zilon.Core.Specs.csproj -c Release
   build_Win_x64:
     docker:
       - image: gableroux/unity3d:2019.2.5f1-windows
