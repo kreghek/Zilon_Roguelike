@@ -91,7 +91,7 @@ namespace Zilon.Core.Specs.Steps
             };
 
             playerState.SelectedViewModel = monsterViewModel;
-            playerState.TacticalAct = GetUsedActs(monster).First();
+            playerState.TacticalAct = GetUsedActs(playerState.ActiveActor.Actor).First();
 
             attackCommand.Execute();
         }
