@@ -3,19 +3,18 @@ using System.Linq;
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class SurvivalSteps : GenericStepsBase<CommonGameActionsContext>
@@ -33,7 +32,7 @@ namespace Zilon.Core.Spec.Steps
 
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
-        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid, 
+        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid,
             string provisionStat)
         {
             var actor = Context.GetActiveActor();
@@ -74,7 +73,8 @@ namespace Zilon.Core.Spec.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            var propScheme = new TestPropScheme {
+            var propScheme = new TestPropScheme
+            {
                 Sid = propSid,
                 Use = new TestPropUseSubScheme
                 {
@@ -87,7 +87,6 @@ namespace Zilon.Core.Spec.Steps
 
             Context.AddResourceToActor(propScheme, 1, actor);
         }
-
 
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
@@ -116,7 +115,7 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
-            var survivalRandomSource = Context.Container.GetInstance<ISurvivalRandomSource>();
+            var survivalRandomSource = Context.ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
             var actor = Context.GetActiveActor();
 
@@ -128,7 +127,6 @@ namespace Zilon.Core.Spec.Steps
 
             actor.Person.Effects.Add(effect);
         }
-
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
@@ -194,6 +192,7 @@ namespace Zilon.Core.Spec.Steps
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
             var actor = Context.GetActiveActor();
+
             int? survivalStatValue;
             switch (stat)
             {

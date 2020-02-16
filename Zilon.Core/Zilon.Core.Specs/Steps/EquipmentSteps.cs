@@ -4,17 +4,17 @@ using FluentAssertions;
 
 using JetBrains.Annotations;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [UsedImplicitly]
     [Binding]
@@ -22,7 +22,6 @@ namespace Zilon.Core.Spec.Steps
     {
         public EquipmentSteps(CommonGameActionsContext context) : base(context)
         {
-
         }
 
         [UsedImplicitly]
@@ -51,19 +50,18 @@ namespace Zilon.Core.Spec.Steps
             actor.Person.EquipmentCarrier[slotIndex] = equipment;
         }
 
-
         [UsedImplicitly]
         [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x=>x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {
@@ -78,16 +76,15 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Снимаю экипировку из слота (\d+)")]
         public void WhenСнимаюЭкипировкуИзСлота(int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             inventoryState.SelectedProp = null;
 
             equipCommand.Execute();
         }
-
 
         [Then(@"В слоте Index: (\d+) актёра игрока есть (.+)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)
@@ -108,10 +105,10 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
         public void ThenНевозможнаЭкипировкаПредметаPistolВСлотIndex(string propSid, int slotIndex)
         {
-            var equipCommand = Context.Container.GetInstance<ICommand>("equip");
-            var inventoryState = Context.Container.GetInstance<IInventoryState>();
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            ((EquipCommand)equipCommand).SlotIndex = slotIndex;
+            equipCommand.SlotIndex = slotIndex;
 
             var actor = Context.GetActiveActor();
 

@@ -1,18 +1,19 @@
 ﻿using System;
+
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Commands;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
-    public class MoveSteps: GenericStepsBase<CommonGameActionsContext>
+    public class MoveSteps : GenericStepsBase<CommonGameActionsContext>
     {
         protected MoveSteps(CommonGameActionsContext context) : base(context)
         {
@@ -21,16 +22,15 @@ namespace Zilon.Core.Spec.Steps
         [Then(@"Команда на перемещение может выполняться")]
         public void ThenКомандаНаПеремещениеМожетВыполняться()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
             moveCommand.CanExecute().Should().BeTrue();
         }
 
-
         [Then(@"Команда на перемещение не может выполняться")]
         public void ThenКомандаНаПеремещениеНеМожетВыполняться()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
             moveCommand.CanExecute().Should().BeFalse();
         }
@@ -38,7 +38,7 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Выполняется команда на перемещение")]
         public void WhenВыполняетсяКомандаНаПеремещение()
         {
-            var moveCommand = Context.Container.GetInstance<ICommand>("move");
+            var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
             moveCommand.Execute();
         }
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.Spec.Steps
         {
             try
             {
-                var moveCommand = Context.Container.GetInstance<ICommand>("move");
+                var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
                 moveCommand.Execute();
             }
             catch (InvalidOperationException exception)
@@ -55,7 +55,6 @@ namespace Zilon.Core.Spec.Steps
                 Console.WriteLine(exception.ToString());
             }
         }
-
 
         [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
         public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
@@ -70,6 +69,5 @@ namespace Zilon.Core.Spec.Steps
             var factOffsetCoords = new OffsetCoords(hexNode.OffsetX, hexNode.OffsetY);
             factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
-
     }
 }

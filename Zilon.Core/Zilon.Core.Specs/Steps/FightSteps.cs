@@ -4,7 +4,7 @@ using System.Linq;
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -15,12 +15,12 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
-using Zilon.Core.Spec.Contexts;
+using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tests.Common;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
     [Binding]
     public sealed class FightSteps : GenericStepsBase<CommonGameActionsContext>
@@ -36,7 +36,7 @@ namespace Zilon.Core.Spec.Steps
             {
                 case "Успешный удар двумя оружиями.":
                     {
-                        var dice = Context.Container.GetInstance<IDice>();
+                        var dice = Context.ServiceProvider.GetRequiredService<IDice>();
 
                         var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
                         actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
@@ -55,7 +55,7 @@ namespace Zilon.Core.Spec.Steps
 
                 case "Провальный удар двумя оружиями.":
                     {
-                        var dice = Context.Container.GetInstance<IDice>();
+                        var dice = Context.ServiceProvider.GetRequiredService<IDice>();
 
                         var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
                         actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
@@ -80,8 +80,8 @@ namespace Zilon.Core.Spec.Steps
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
         public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
-            var attackCommand = Context.Container.GetInstance<ICommand>("attack");
-            var playerState = Context.Container.GetInstance<ISectorUiState>();
+            var attackCommand = Context.ServiceProvider.GetRequiredService<AttackCommand>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var monster = Context.GetMonsterById(monsterId);
 
@@ -91,7 +91,7 @@ namespace Zilon.Core.Spec.Steps
             };
 
             playerState.SelectedViewModel = monsterViewModel;
-            playerState.TacticalAct = GetUsedActs(monster).First();
+            playerState.TacticalAct = GetUsedActs(playerState.ActiveActor.Actor).First();
 
             attackCommand.Execute();
         }
@@ -171,6 +171,5 @@ namespace Zilon.Core.Spec.Steps
 
             act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
         }
-
     }
 }

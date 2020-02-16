@@ -1,8 +1,8 @@
-﻿using Zilon.Core.Spec.Contexts;
+﻿using Zilon.Core.Specs.Contexts;
 
-namespace Zilon.Core.Spec.Steps
+namespace Zilon.Core.Specs.Steps
 {
-    public abstract class GenericStepsBase<TContext> where TContext: FeatureContextBase, new()
+    public abstract class GenericStepsBase<TContext> where TContext : FeatureContextBase, new()
     {
         protected readonly TContext Context;
 

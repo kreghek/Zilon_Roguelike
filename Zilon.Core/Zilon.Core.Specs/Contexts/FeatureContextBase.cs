@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.LightInject;
+using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -24,7 +24,7 @@ using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Spec.Mocks;
+using Zilon.Core.Specs.Mocks;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -32,36 +32,66 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
-using Zilon.IoC;
 
-namespace Zilon.Core.Spec.Contexts
+namespace Zilon.Core.Specs.Contexts
 {
     public abstract class FeatureContextBase
     {
         private ITacticalActUsageRandomSource _specificActUsageRandomSource;
 
-        public ServiceContainer Container { get; }
+        public IServiceProvider ServiceProvider { get; }
 
         public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
 
         protected FeatureContextBase()
         {
-            Container = new ServiceContainer();
             RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
 
-            RegisterSchemeService();
-            RegisterSectorService();
-            RegisterGameLoop();
-            RegisterAuxServices();
-            RegisterPlayerServices();
-            RegisterClientServices();
-            RegisterCommands();
-            RegisterWorldServices();
+            var serviceCollection = RegisterServices();
 
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceProvider;
+
+            ConfigureServices(serviceProvider);
+        }
+
+        private void ConfigureServices(ServiceProvider serviceProvider)
+        {
             InitClientServices();
 
-            var eventMessageBus = Container.GetInstance<IActorInteractionBus>();
+            ConfigureEventBus(serviceProvider);
+
+            ConfigureGameLoop(serviceProvider);
+
+            RegisterManager.ConfigureAuxServices(serviceProvider);
+        }
+
+        private void ConfigureEventBus(ServiceProvider serviceProvider)
+        {
+            var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+        }
+
+        private static void ConfigureGameLoop(ServiceProvider serviceProvider)
+        {
+            var gameLoop = serviceProvider.GetRequiredService<IGameLoop>();
+            var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+            gameLoop.ActorTaskSources = new IActorTaskSource[] { humanTaskSource, monsterTaskSource };
+        }
+
+        private ServiceCollection RegisterServices()
+        {
+            var serviceCollection = new ServiceCollection();
+            RegisterSchemeService(serviceCollection);
+            RegisterSectorService(serviceCollection);
+            RegisterGameLoop(serviceCollection);
+            RegisterAuxServices(serviceCollection);
+            RegisterPlayerServices(serviceCollection);
+            RegisterClientServices(serviceCollection);
+            RegisterCommands(serviceCollection);
+            RegisterWorldServices(serviceCollection);
+            return serviceCollection;
         }
 
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
@@ -71,7 +101,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public async Task CreateSectorAsync(int mapSize)
         {
-            var mapFactory = (FuncMapFactory)Container.GetInstance<IMapFactory>();
+            var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
             mapFactory.SetFunc(() =>
             {
                 ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
@@ -90,18 +120,18 @@ namespace Zilon.Core.Spec.Contexts
                 return Task.FromResult(map);
             });
 
-            var sectorManager = Container.GetInstance<ISectorManager>();
-            var humanPlayer = Container.GetInstance<HumanPlayer>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
 
             var locationScheme = new TestLocationScheme
             {
                 SectorLevels = new ISectorSubScheme[]
-               {
+                {
                     new TestSectorSubScheme
                     {
                         RegularMonsterSids = new[] { "rat" },
                     }
-               }
+                }
             };
             var globeNode = new GlobeRegionNode(0, 0, locationScheme);
             humanPlayer.GlobeNode = globeNode;
@@ -111,13 +141,13 @@ namespace Zilon.Core.Spec.Contexts
 
         public ISector GetSector()
         {
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             return sectorManager.CurrentSector;
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
         {
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;
 
@@ -126,15 +156,15 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetActiveActor()
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var actor = playerState.ActiveActor.Actor;
             return actor;
         }
 
         public Equipment CreateEquipment(string propSid)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var propFactory = Container.GetInstance<IPropFactory>();
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
+            var propFactory = ServiceProvider.GetRequiredService<IPropFactory>();
 
             var propScheme = schemeService.GetScheme<IPropScheme>(propSid);
 
@@ -144,13 +174,13 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var actorManager = Container.GetInstance<IActorManager>();
-            var humanPlayer = Container.GetInstance<HumanPlayer>();
-            var perkResolver = Container.GetInstance<IPerkResolver>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
+            var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
@@ -170,10 +200,10 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
-            var actorManager = Container.GetInstance<IActorManager>();
-            var botPlayer = Container.GetInstance<IBotPlayer>();
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var botPlayer = ServiceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
@@ -186,8 +216,8 @@ namespace Zilon.Core.Spec.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var containerManager = Container.GetInstance<IPropContainerManager>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var containerManager = ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
@@ -199,7 +229,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
 
             var resourceScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
 
@@ -215,7 +245,7 @@ namespace Zilon.Core.Spec.Contexts
 
         public IActor GetMonsterById(int id)
         {
-            var actorManager = Container.GetInstance<IActorManager>();
+            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
 
             var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
@@ -228,14 +258,13 @@ namespace Zilon.Core.Spec.Contexts
             _specificActUsageRandomSource = actUsageRandomSource;
         }
 
-
         private IActor CreateHumanActor([NotNull] IPlayer player,
             [NotNull] IPersonScheme personScheme,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
-            var schemeService = Container.GetInstance<ISchemeService>();
-            var survivalRandomSource = Container.GetInstance<ISurvivalRandomSource>();
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
+            var survivalRandomSource = ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
             var evolutionData = new EvolutionData(schemeService);
 
@@ -265,68 +294,67 @@ namespace Zilon.Core.Spec.Contexts
             return actor;
         }
 
-        private void RegisterSchemeService()
+        private static void RegisterSchemeService(ServiceCollection serviceCollection)
         {
-            Container.Register<ISchemeLocator>(factory =>
+            serviceCollection.AddSingleton<ISchemeLocator>(factory =>
             {
                 var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
-            }, LightInjectWrapper.CreateSingleton());
+            });
 
-            Container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<ISchemeService, SchemeService>();
 
-            Container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private void RegisterSectorService()
+        private static void RegisterSectorService(ServiceCollection serviceCollection)
         {
-            Container.Register<IMapFactory, FuncMapFactory>(LightInjectWrapper.CreateSingleton());
-            Container.Register<ISectorGenerator, TestEmptySectorGenerator>(LightInjectWrapper.CreateSingleton());
-            Container.Register<ISectorManager, SectorManager>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IActorManager, ActorManager>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IPropContainerManager, PropContainerManager>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IRoomGenerator, RoomGenerator>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IScoreManager, ScoreManager>(LightInjectWrapper.CreateSingleton());
-            Container.Register<ICitizenGenerator, CitizenGenerator>(LightInjectWrapper.CreateSingleton());
-            Container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IActorInteractionBus, ActorInteractionBus>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IMapFactory, FuncMapFactory>();
+            serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();
+            serviceCollection.AddSingleton<ISectorManager, SectorManager>();
+            serviceCollection.AddSingleton<IActorManager, ActorManager>();
+            serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
+            serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
+            serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
+            serviceCollection.AddSingleton<ICitizenGenerator, CitizenGenerator>();
+            serviceCollection.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
+            serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
         }
 
-        private void RegisterGameLoop()
+        private static void RegisterGameLoop(ServiceCollection serviceCollection)
         {
-            Container.Register<IGameLoop, GameLoop>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IGameLoop, GameLoop>();
         }
 
         /// <summary>
         /// Подготовка дополнительных сервисов
         /// </summary>
-        private void RegisterAuxServices()
+        private void RegisterAuxServices(ServiceCollection serviceCollection)
         {
             var dice = new LinearDice(123);
-            Container.Register<IDice>(factory => dice, LightInjectWrapper.CreateSingleton());
-
+            serviceCollection.AddSingleton<IDice>(factory => dice);
 
             var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
             decisionSourceMock.CallBase = true;
             var decisionSource = decisionSourceMock.Object;
 
-            Container.Register(factory => decisionSource, LightInjectWrapper.CreateSingleton());
-            Container.Register(factory => CreateActUsageRandomSource(dice), LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton(factory => decisionSource);
+            serviceCollection.AddSingleton(factory => CreateActUsageRandomSource(dice));
 
-            Container.Register<IPerkResolver, PerkResolver>(LightInjectWrapper.CreateSingleton());
-            Container.Register<ITacticalActUsageService, TacticalActUsageService>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IPropFactory, PropFactory>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IDropResolver, DropResolver>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IDropResolverRandomSource, DropResolverRandomSource>(LightInjectWrapper.CreateSingleton());
-            Container.Register(factory => CreateSurvivalRandomSource(), LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IPerkResolver, PerkResolver>();
+            serviceCollection.AddSingleton<ITacticalActUsageService, TacticalActUsageService>();
+            serviceCollection.AddSingleton<IPropFactory, PropFactory>();
+            serviceCollection.AddSingleton<IDropResolver, DropResolver>();
+            serviceCollection.AddSingleton<IDropResolverRandomSource, DropResolverRandomSource>();
+            serviceCollection.AddSingleton(factory => CreateSurvivalRandomSource());
 
-            Container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
+            serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
 
-            Container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
         }
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
@@ -359,41 +387,40 @@ namespace Zilon.Core.Spec.Contexts
             return survivalRandomSource;
         }
 
-        private void RegisterClientServices()
+        private static void RegisterClientServices(ServiceCollection serviceCollection)
         {
-            Container.Register<ISectorUiState, SectorUiState>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IInventoryState, InventoryState>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
+            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
         }
 
-        private void RegisterCommands()
+        private static void RegisterCommands(ServiceCollection serviceCollection)
         {
-            Container.Register<ICommand, MoveCommand>("move", LightInjectWrapper.CreateSingleton());
-            Container.Register<ICommand, UseSelfCommand>("use-self", LightInjectWrapper.CreateSingleton());
-            Container.Register<ICommand, AttackCommand>("attack", LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<MoveCommand>();
+            serviceCollection.AddSingleton<UseSelfCommand>();
+            serviceCollection.AddSingleton<AttackCommand>();
 
-            Container.Register<ICommand, PropTransferCommand>("prop-transfer");
-            Container.Register<ICommand, EquipCommand>("equip");
+            serviceCollection.AddTransient<PropTransferCommand>();
+            serviceCollection.AddTransient<EquipCommand>();
         }
 
-        private void RegisterPlayerServices()
+        private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
-            Container.Register<HumanPlayer>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IBotPlayer, BotPlayer>(LightInjectWrapper.CreateSingleton());
-            Container.Register<IHumanActorTaskSource, HumanActorTaskSource>(LightInjectWrapper.CreateSingleton());
-            Container.Register<MonsterBotActorTaskSource>(LightInjectWrapper.CreateSingleton());
-            RegisterManager.RegisterBot(Container);
-            RegisterManager.ConfigureAuxServices(Container);
+            serviceCollection.AddSingleton<HumanPlayer>();
+            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
+            serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
+            serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
+            RegisterManager.RegisterBot(serviceCollection);
         }
 
-        private void RegisterWorldServices()
+        private static void RegisterWorldServices(ServiceCollection serviceCollection)
         {
-            Container.Register<IWorldManager, WorldManager>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IWorldManager, WorldManager>();
         }
 
         private void InitClientServices()
         {
-            var humanTaskSource = Container.GetInstance<IHumanActorTaskSource>();
-            var playerState = Container.GetInstance<ISectorUiState>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             playerState.TaskSource = humanTaskSource;
         }

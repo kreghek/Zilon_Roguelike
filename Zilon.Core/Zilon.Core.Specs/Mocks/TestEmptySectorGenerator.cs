@@ -7,7 +7,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
-namespace Zilon.Core.Spec.Mocks
+namespace Zilon.Core.Specs.Mocks
 {
     public class TestEmptySectorGenerator : ISectorGenerator
     {
