@@ -14,6 +14,11 @@ namespace Zilon.Core.Schemes
         public FileSchemeLocator([NotNull] string schemeCatalog)
         {
             _schemeCatalog = schemeCatalog ?? throw new System.ArgumentNullException(nameof(schemeCatalog));
+
+            if (!Directory.Exists(_schemeCatalog))
+            {
+                throw new System.ArgumentException($"Директория каталога {_schemeCatalog} не найдена.");
+            }
         }
 
         public SchemeFile[] GetAll(string directory)
@@ -21,7 +26,7 @@ namespace Zilon.Core.Schemes
             var path = Path.Combine(_schemeCatalog, directory);
             if (!Directory.Exists(path))
             {
-                return new SchemeFile[0];
+                return System.Array.Empty<SchemeFile>();
             }
 
             var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);

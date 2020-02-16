@@ -88,7 +88,6 @@ namespace Zilon.Core.Specs.Steps
             Context.AddResourceToActor(propScheme, 1, actor);
         }
 
-
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
@@ -128,7 +127,6 @@ namespace Zilon.Core.Specs.Steps
 
             actor.Person.Effects.Add(effect);
         }
-
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)

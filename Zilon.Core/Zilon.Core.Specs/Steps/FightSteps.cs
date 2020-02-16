@@ -171,6 +171,5 @@ namespace Zilon.Core.Specs.Steps
 
             act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
         }
-
     }
 }

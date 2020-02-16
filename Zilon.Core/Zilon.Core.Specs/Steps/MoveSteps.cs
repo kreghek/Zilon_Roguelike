@@ -57,7 +57,6 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-
         [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
         public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
         {
@@ -71,6 +70,5 @@ namespace Zilon.Core.Specs.Steps
             var factOffsetCoords = new OffsetCoords(hexNode.OffsetX, hexNode.OffsetY);
             factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
-
     }
 }

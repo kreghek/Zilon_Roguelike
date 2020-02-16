@@ -50,7 +50,6 @@ namespace Zilon.Core.Specs.Steps
             actor.Person.EquipmentCarrier[slotIndex] = equipment;
         }
 
-
         [UsedImplicitly]
         [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
         public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
@@ -86,7 +85,6 @@ namespace Zilon.Core.Specs.Steps
 
             equipCommand.Execute();
         }
-
 
         [Then(@"В слоте Index: (\d+) актёра игрока есть (.+)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)

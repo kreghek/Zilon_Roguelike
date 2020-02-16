@@ -294,7 +294,7 @@ namespace Zilon.Core.Specs.Contexts
             return actor;
         }
 
-        private void RegisterSchemeService(ServiceCollection serviceCollection)
+        private static void RegisterSchemeService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ISchemeLocator>(factory =>
             {
@@ -324,7 +324,7 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
         }
 
-        private void RegisterGameLoop(ServiceCollection serviceCollection)
+        private static void RegisterGameLoop(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IGameLoop, GameLoop>();
         }
@@ -403,7 +403,7 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddTransient<EquipCommand>();
         }
 
-        private void RegisterPlayerServices(ServiceCollection serviceCollection)
+        private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<HumanPlayer>();
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
@@ -412,7 +412,7 @@ namespace Zilon.Core.Specs.Contexts
             RegisterManager.RegisterBot(serviceCollection);
         }
 
-        private void RegisterWorldServices(ServiceCollection serviceCollection)
+        private static void RegisterWorldServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IWorldManager, WorldManager>();
         }

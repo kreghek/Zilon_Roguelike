@@ -24,7 +24,6 @@ namespace Zilon.Core.Specs.Steps
     {
         public ChestSteps(CommonGameActionsContext context) : base(context)
         {
-
         }
 
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\) со случайным лутом")]
@@ -58,7 +57,6 @@ namespace Zilon.Core.Specs.Steps
             containerManager.Add(chest);
         }
 
-
         [Then(@"В выбранном сундуке лут")]
         public void ThenВВыбранномСундукеЛут(Table table)
         {
@@ -83,6 +81,5 @@ namespace Zilon.Core.Specs.Steps
                 lootProps.Remove(factLootResource);
             }
         }
-
     }
 }
