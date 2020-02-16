@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
@@ -31,7 +32,8 @@ namespace Zilon.Core.Spec.Steps
         [Given(@"Задаём броски для использования действий")]
         public void GivenЗадаёмБроскиДляИспользованияДействий()
         {
-            switch (ScenarioContext.Current.ScenarioInfo.Title) {
+            switch (ScenarioContext.Current.ScenarioInfo.Title)
+            {
                 case "Успешный удар двумя оружиями.":
                     {
                         var dice = Context.Container.GetInstance<IDice>();
@@ -89,8 +91,53 @@ namespace Zilon.Core.Spec.Steps
             };
 
             playerState.SelectedViewModel = monsterViewModel;
+            playerState.TacticalAct = GetUsedActs(monster).First();
 
             attackCommand.Execute();
+        }
+
+        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
+        {
+            if (actor.Person.EquipmentCarrier == null)
+            {
+                yield return actor.Person.TacticalActCarrier.Acts.First();
+            }
+            else
+            {
+                var usedEquipmentActs = false;
+                var slots = actor.Person.EquipmentCarrier.Slots;
+                for (var i = 0; i < slots.Length; i++)
+                {
+                    var slotEquipment = actor.Person.EquipmentCarrier[i];
+                    if (slotEquipment == null)
+                    {
+                        continue;
+                    }
+
+                    if ((slots[i].Types & Components.EquipmentSlotTypes.Hand) == 0)
+                    {
+                        continue;
+                    }
+
+                    var equipmentActs = from act in actor.Person.TacticalActCarrier.Acts
+                                        where act.Equipment == slotEquipment
+                                        select act;
+
+                    var usedAct = equipmentActs.FirstOrDefault();
+
+                    if (usedAct != null)
+                    {
+                        usedEquipmentActs = true;
+
+                        yield return usedAct;
+                    }
+                }
+
+                if (!usedEquipmentActs)
+                {
+                    yield return actor.Person.TacticalActCarrier.Acts.First();
+                }
+            }
         }
 
         [Then(@"Актёр игрока мертв")]
@@ -109,7 +156,7 @@ namespace Zilon.Core.Spec.Steps
             // Проверяем наличие события успешной обороны.
             var monsterDodgeEvent = Context.RaisedActorInteractionEvents
                 .OfType<DodgeActorInteractionEvent>()
-                .SingleOrDefault(x=>x.TargetActor == monster);
+                .SingleOrDefault(x => x.TargetActor == monster);
 
             monsterDodgeEvent.Should().NotBeNull();
         }

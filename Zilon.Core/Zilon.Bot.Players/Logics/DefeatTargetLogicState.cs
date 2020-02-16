@@ -142,7 +142,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
+        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
         {
             if (actor.Person.EquipmentCarrier == null)
             {
