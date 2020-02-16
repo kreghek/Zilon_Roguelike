@@ -15,11 +15,9 @@ using Zilon.Core.Tests.Persons.TestCases;
 namespace Zilon.Core.Tests.Persons
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class SurvivalDataTests
     {
-        private TestPersonScheme _personScheme;
-        private ISurvivalRandomSource _survivalRandomSource;
-
         /// <summary>
         /// Тест проверяет, что характеристика с изменённым DownPass корректно
         /// изменяется при указанных результатах броска кости.
@@ -29,6 +27,8 @@ namespace Zilon.Core.Tests.Persons
         public int Update_ModifiedDownPass_StatDownCorrectly(int statDownPass, int downPassRoll)
         {
             // ARRANGE
+
+            var personScheme = CreatePersonScheme();
 
             const int STAT_RATE = 1;
             const int MIN_STAT_VALUE = 0;
@@ -49,7 +49,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var survivalData = new HumanSurvivalData(_personScheme,
+            var survivalData = new HumanSurvivalData(personScheme,
                 survivalStats,
                 survivalRandomSource);
 
@@ -72,9 +72,12 @@ namespace Zilon.Core.Tests.Persons
             const int restoreHpValue = 2;
             const int expectedHp = personHp;
 
-            _personScheme.Hp = personHp;
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
-            var survivalData = CreateSurvivalData();
+            personScheme.Hp = personHp;
+
+            var survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
 
             var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
@@ -95,12 +98,15 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
 
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
+
             const int personHp = 1;
             const int damageValue = 2;
 
-            _personScheme.Hp = personHp;
+            personScheme.Hp = personHp;
 
-            var survivalData = CreateSurvivalData();
+            var survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
 
             // ACT
             using (var monitor = survivalData.Monitor())
@@ -112,10 +118,9 @@ namespace Zilon.Core.Tests.Persons
             }
         }
 
-        [SetUp]
-        public void SetUp()
+        public IPersonScheme CreatePersonScheme()
         {
-            _personScheme = new TestPersonScheme
+            var personScheme = new TestPersonScheme
             {
                 SurvivalStats = new[] {
                     new TestPersonSurvivalStatSubScheme
@@ -176,13 +181,18 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            _survivalRandomSource = survivalRandomSourceMock.Object;
+            return personScheme;
         }
 
-        private ISurvivalData CreateSurvivalData()
+        private static ISurvivalRandomSource CreateSurvivalRandomSource()
         {
-            var survivalData = new HumanSurvivalData(_personScheme, _survivalRandomSource);
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            return survivalRandomSourceMock.Object;
+        }
+
+        private ISurvivalData CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
+        {
+            var survivalData = new HumanSurvivalData(personScheme, survivalRandomSource);
             return survivalData;
         }
     }
