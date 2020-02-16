@@ -49,8 +49,9 @@ jobs:
       CODACY_COVERAGE_VERSION: 1.0.3
     steps:
       - checkout
-      - run: dotnet restore Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj
-      - run: dotnet dotcover test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -c Release -r /test_45_coverage/Zilon.Core.Report.xml --dcReportType=DetailedXML --dcScope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --dcLogFile=/dev/stdout
+      - run: cd Zilon.Core/Zilon.Core.Tests
+      - run: dotnet restore
+      - run: dotnet dotcover test -c Release -r /test_45_coverage/Zilon.Core.Report.xml --dcReportType=DetailedXML --dcScope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --dcLogFile=/dev/stdout
       - store_artifacts:
           path: /test_45_coverage/Zilon.Core.Report.xml
       - run: curl -Ls https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_linux-x64 --output Codacy.CSharpCoverage_linux-x64
