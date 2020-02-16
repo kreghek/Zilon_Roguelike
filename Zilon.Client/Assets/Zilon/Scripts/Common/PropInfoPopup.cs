@@ -235,7 +235,6 @@ public class PropInfoPopup : MonoBehaviour
     {
         if (PropViewModel != null)
         {
-
             GetComponent<RectTransform>().position = PropViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }
