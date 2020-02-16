@@ -42,13 +42,25 @@ namespace Zilon.Core.Tactics
         /// or
         /// sectorManager
         /// </exception>
-        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
+        public TacticalActUsageService(
+            ITacticalActUsageRandomSource actUsageRandomSource,
             IPerkResolver perkResolver,
             ISectorManager sectorManager)
         {
             _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
             _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
             _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
+        }
+
+        public TacticalActUsageService(
+            ITacticalActUsageRandomSource actUsageRandomSource,
+            IPerkResolver perkResolver,
+            ISectorManager sectorManager,
+            IEquipmentDurableService equipmentDurableService,
+            IActorInteractionBus actorInteractionBus) : this(actUsageRandomSource, perkResolver, sectorManager)
+        {
+            EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
+            ActorInteractionBus = actorInteractionBus ?? throw new ArgumentNullException(nameof(actorInteractionBus));
         }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
@@ -124,7 +136,6 @@ namespace Zilon.Core.Tactics
             {
                 throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
             }
-
 
             actor.UseAct(target, act);
 

@@ -59,15 +59,25 @@ namespace Zilon.Core.Specs.Contexts
         {
             InitClientServices();
 
+            ConfigureEventBus(serviceProvider);
+
+            ConfigureGameLoop(serviceProvider);
+
+            RegisterManager.ConfigureAuxServices(serviceProvider);
+        }
+
+        private void ConfigureEventBus(ServiceProvider serviceProvider)
+        {
             var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
+        }
 
+        private static void ConfigureGameLoop(ServiceProvider serviceProvider)
+        {
             var gameLoop = serviceProvider.GetRequiredService<IGameLoop>();
             var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
             var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             gameLoop.ActorTaskSources = new IActorTaskSource[] { humanTaskSource, monsterTaskSource };
-
-            RegisterManager.ConfigureAuxServices(serviceProvider);
         }
 
         private ServiceCollection RegisterServices()
