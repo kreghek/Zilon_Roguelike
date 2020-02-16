@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Assets.Zilon.Scripts.Models;
 using UnityEngine;
 
 using Zenject;
@@ -79,6 +79,8 @@ public class ActPanelHandler : MonoBehaviour
             var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
             actItemVm.Init(act);
             actItemVm.Click += ActClick_Handler;
+            actItemVm.MouseEnter += ActViewModel_MouseEnter;
+            actItemVm.MouseExit += ActViewModel_MouseExit;
             _actViewModels.Add(actItemVm);
         }
     }
@@ -113,4 +115,16 @@ public class ActPanelHandler : MonoBehaviour
 
         throw new InvalidOperationException("Не указано действие (Domain).");
     }
+
+    private void ActViewModel_MouseExit(object sender, EventArgs e)
+    {
+        ActInfoPopup.SetPropViewModel(null);
+    }
+
+    private void ActViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var currentItemVm = (IActViewModelDescription)sender;
+        ActInfoPopup.SetPropViewModel(currentItemVm);
+    }
+
 }
