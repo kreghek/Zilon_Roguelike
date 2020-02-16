@@ -24,7 +24,7 @@ jobs:
       - checkout
       - run: dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -c Release -r ./Results
       - store_test_results:
-          path: ./TestResult.xml
+          path: ./Results/Zilon.Core.Tests.xml
   test_di:
     working_directory: /test_di
     docker:
@@ -37,7 +37,7 @@ jobs:
       - checkout
       - run: dotnet test Zilon.Core/Zilon.Core.DiTests/Zilon.Core.DiTests.csproj -c Release -r ./Results
       - store_test_results:
-          path: ./TestResult.xml
+          path: ./Results/Zilon.Core.DiTests.xml
   test_45_coverage:
     working_directory: /test_45_coverage
     docker:
@@ -49,7 +49,7 @@ jobs:
       CODACY_COVERAGE_VERSION: 1.0.3
     steps:
       - checkout
-      - run: cd Zilon.Core/Zilon.Core.Tests
+      - run: cd /test_45_coverage/Zilon.Core/Zilon.Core.Tests
       - run: dotnet restore
       - run: dotnet dotcover test -c Release -r /test_45_coverage/Zilon.Core.Report.xml --dcReportType=DetailedXML --dcScope="/test_45_coverage/Zilon.Core/Zilon.Core/bin/Debug/Zilon.Core.dll" --dcLogFile=/dev/stdout
       - store_artifacts:
