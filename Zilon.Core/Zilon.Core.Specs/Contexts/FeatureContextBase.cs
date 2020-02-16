@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using LightInject;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
@@ -32,7 +31,6 @@ using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
-using Zilon.IoC;
 
 namespace Zilon.Core.Spec.Contexts
 {

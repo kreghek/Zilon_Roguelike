@@ -16,4 +16,7 @@
           <Version>11.0.2</Version>
         </PackageReference>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	</ItemGroup>
 </Project>
