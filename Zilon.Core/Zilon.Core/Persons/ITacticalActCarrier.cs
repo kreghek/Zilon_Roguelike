@@ -9,7 +9,5 @@
         /// Набор всех действий.
         /// </summary>
         ITacticalAct[] Acts { get; set; }
-
-        void UpdateActs();
     }
 }

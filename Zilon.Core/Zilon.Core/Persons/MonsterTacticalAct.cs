@@ -16,7 +16,6 @@ namespace Zilon.Core.Persons
         public ITacticalActConstrainsSubScheme Constrains => null;
 
         public ITacticalActScheme Scheme { get; }
-        public bool IsAvailable { get; set; }
 
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
