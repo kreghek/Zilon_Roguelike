@@ -3,11 +3,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zilon.Core.Client;
 using Zilon.Core.Props;
 
 namespace Assets.Zilon.Scripts.Models.Modals
 {
-    public class PropItemViewModelBase: MonoBehaviour
+    public class PropItemViewModelBase: MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
     {
         public Text CountText;
         public Text DurableStatusText;

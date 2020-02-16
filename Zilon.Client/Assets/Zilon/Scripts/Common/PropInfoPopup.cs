@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -231,11 +231,10 @@ public class PropInfoPopup : MonoBehaviour
         return $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         if (PropViewModel != null)
         {
-
             GetComponent<RectTransform>().position = PropViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }

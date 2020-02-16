@@ -123,9 +123,11 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var targetActorViewModel = (IActorViewModel)PlayerState.SelectedViewModel;
-
             var targetActor = targetActorViewModel.Actor;
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, _tacticalActUsageService));
+
+            var tacticalAct = PlayerState.TacticalAct;
+
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention);
         }
     }

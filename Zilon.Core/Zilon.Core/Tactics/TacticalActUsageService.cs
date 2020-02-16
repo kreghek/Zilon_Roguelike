@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Базовая реализация сервиса для работы с действиями персонажа.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Tactics.ITacticalActUsageService" />
+    /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
@@ -53,6 +53,21 @@ namespace Zilon.Core.Tactics
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            if (usedActs is null)
+            {
+                throw new ArgumentNullException(nameof(usedActs));
+            }
+
             foreach (var act in usedActs.Primary)
             {
                 if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
@@ -212,13 +227,13 @@ namespace Zilon.Core.Tactics
                     break;
 
                 case TacticalActEffectType.Heal:
-                    HealActor(actor, targetActor, tacticalActRoll);
+                    HealActor(targetActor, tacticalActRoll);
                     break;
 
                 default:
-                    throw new ArgumentException(string.Format("Не определённый эффект {0} действия {1}.",
-                        tacticalActRoll.TacticalAct.Stats.Effect,
-                        tacticalActRoll.TacticalAct));
+                    var effect = tacticalActRoll.TacticalAct.Stats.Effect;
+                    var tacticalAct = tacticalActRoll.TacticalAct;
+                    throw new ArgumentException($"Не определённый эффект {effect} действия {tacticalAct}.");
             }
         }
 
@@ -414,10 +429,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Лечит актёра.
         /// </summary>
-        /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
             targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
@@ -627,7 +641,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="tacticalAct"></param>
         /// <returns></returns>
-        private int GetActApRank(ITacticalAct tacticalAct)
+        private static int GetActApRank(ITacticalAct tacticalAct)
         {
             return tacticalAct.Stats.Offence.ApRank;
         }
