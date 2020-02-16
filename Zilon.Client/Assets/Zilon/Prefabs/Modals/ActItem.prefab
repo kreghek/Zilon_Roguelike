@@ -206,6 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectedBorder: {fileID: 1799648150879948074}
+  IconImage: {fileID: 114078281140737776}
 --- !u!61 &7996703044130205258
 BoxCollider2D:
   m_ObjectHideFlags: 0
