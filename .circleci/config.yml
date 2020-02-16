@@ -99,7 +99,7 @@ jobs:
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
-      ZILON_LIV_SCHEME_CATALOG: ./Zilon.Client/Assets/Resources/Schemes
+      ZILON_LIV_SCHEME_CATALOG: /test_specflow/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
       - run: dotnet test Zilon.Core/Zilon.Core.Specs/Zilon.Core.Specs.csproj -c Release
