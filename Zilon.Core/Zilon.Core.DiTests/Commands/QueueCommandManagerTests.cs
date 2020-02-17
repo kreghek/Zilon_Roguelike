@@ -8,8 +8,8 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Tests.Commands
 {
-
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class QueueCommandManagerTests
     {
         /// <summary>
@@ -28,7 +28,6 @@ namespace Zilon.Core.Tests.Commands
             {
                 commandManager.Push(command);
             }
-
 
             // ACT
             AssertPopCommands(commands, commandManager);
@@ -51,7 +50,6 @@ namespace Zilon.Core.Tests.Commands
                 commandManager.Push(command);
             }
 
-
             // ACT
             AssertPopCommands(commands, commandManager);
         }
@@ -61,7 +59,6 @@ namespace Zilon.Core.Tests.Commands
             foreach (var expectedCommand in commands)
             {
                 var factCommand = commandManager.Pop();
-
 
                 // ASSERT
                 factCommand.Should().Be(expectedCommand);
@@ -83,23 +80,17 @@ namespace Zilon.Core.Tests.Commands
 
             var commandManager = new QueueCommandManager();
 
-
-
             // ACT
 
             commandManager.Push(command1);
             var factCommand1 = commandManager.Pop();
-            
 
             // Холостой Update.
             var idleCommand = commandManager.Pop();
-            
 
             // Вторая команда должна быть извлечена.
             commandManager.Push(command2);
             var factCommand2 = commandManager.Pop();
-            
-
 
             // ASSERT
             factCommand1.Should().Be(command1);

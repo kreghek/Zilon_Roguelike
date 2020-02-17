@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -23,12 +24,14 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public abstract class CommandTestBase
     {
-        protected ServiceContainer Container;
+        protected IServiceCollection Container;
+
+        protected IServiceProvider ServiceProvider;
 
         [SetUp]
         public async System.Threading.Tasks.Task SetUpAsync()
         {
-            Container = new ServiceContainer();
+            Container = new ServiceCollection();
 
             var testMap = await SquareMapFactory.CreateAsync(10);
 
@@ -88,13 +91,15 @@ namespace Zilon.Core.Tests.Commands
             var usageServiceMock = new Mock<ITacticalActUsageService>();
             var usageService = usageServiceMock.Object;
 
-            Container.Register(factory => sectorManager, new PerContainerLifetime());
-            Container.Register(factory => humanTaskSourceMock, new PerContainerLifetime());
-            Container.Register(factory => playerState, new PerContainerLifetime());
-            Container.Register(factory => gameLoop, new PerContainerLifetime());
-            Container.Register(factory => usageService, new PerContainerLifetime());
+            Container.AddSingleton(factory => sectorManager);
+            Container.AddSingleton(factory => humanTaskSourceMock);
+            Container.AddSingleton(factory => playerState);
+            Container.AddSingleton(factory => gameLoop);
+            Container.AddSingleton(factory => usageService);
 
             RegisterSpecificServices(testMap, playerStateMock);
+
+            ServiceProvider = Container.BuildServiceProvider();
         }
 
         protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);

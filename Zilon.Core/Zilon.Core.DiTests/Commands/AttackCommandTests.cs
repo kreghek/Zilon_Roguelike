@@ -2,7 +2,7 @@
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -26,13 +26,10 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<AttackCommand>();
-
-
+            var command = ServiceProvider.GetRequiredService<AttackCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -45,15 +42,12 @@ namespace Zilon.Core.Tests.Commands
         public void Execute_CanAttack_AttackIntended()
         {
             // ARRANGE
-            var command = Container.GetInstance<AttackCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = Container.GetInstance<ISectorUiState>();
-
-
+            var command = ServiceProvider.GetRequiredService<AttackCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
             command.Execute();
-
 
             // ASSERT
             var target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
@@ -82,7 +76,7 @@ namespace Zilon.Core.Tests.Commands
             var targetVm = targetVmMock.Object;
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
-            Container.Register<AttackCommand>(new PerContainerLifetime());
+            Container.AddSingleton<AttackCommand>();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Linq;
 
 using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -20,7 +20,7 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture()]
-    public class MoveCommandTests: CommandTestBase
+    public class MoveCommandTests : CommandTestBase
     {
         private List<IActor> _actorList;
 
@@ -31,7 +31,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<MoveCommand>();
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
@@ -47,9 +47,9 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<MoveCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
-            var playerState = Container.GetInstance<ISectorUiState>();
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
             command.Execute();
@@ -66,7 +66,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanRepeate_NoMonsters_ReturnsTrue()
         {
             // ARRANGE
-            var command = Container.GetInstance<MoveCommand>();
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
 
             // ACT
             var canRepeat = command.CanRepeat();
@@ -82,9 +82,8 @@ namespace Zilon.Core.Tests.Commands
         public void CanRepeate_MonsterInSign_ReturnsFalse()
         {
             // ARRANGE
-            var command = Container.GetInstance<MoveCommand>();
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
@@ -112,9 +111,8 @@ namespace Zilon.Core.Tests.Commands
         public void CanRepeate_MonsterNotInSign_ReturnsTrue()
         {
             // ARRANGE
-            var command = Container.GetInstance<MoveCommand>();
-            var playerState = Container.GetInstance<ISectorUiState>();
-            var sectorManager = Container.GetInstance<ISectorManager>();
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
@@ -145,14 +143,14 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
-            Container.Register<MoveCommand>(new PerContainerLifetime());
+            Container.AddSingleton<MoveCommand>();
 
             _actorList = new List<IActor> { playerStateMock.Object.ActiveActor.Actor };
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Items).Returns(_actorList);
             var actorManager = actorManagerMock.Object;
 
-            Container.Register(factory => actorManager, new PerContainerLifetime());
+            Container.AddSingleton(factory => actorManager);
         }
     }
 }

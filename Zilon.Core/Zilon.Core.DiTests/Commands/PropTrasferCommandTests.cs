@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -14,8 +14,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Commands
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
-    public class PropTrasferCommandTests: CommandTestBase
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
+    public class PropTrasferCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно использовать экипировку.
@@ -24,13 +25,10 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = Container.GetInstance<PropTransferCommand>();
-
-
+            var command = ServiceProvider.GetRequiredService<PropTransferCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
-
 
             // ASSERT
             canExecute.Should().Be(true);
@@ -42,15 +40,14 @@ namespace Zilon.Core.Tests.Commands
         [Test]
         public void ExecuteTest()
         {
-            var command = Container.GetInstance<PropTransferCommand>();
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var command = ServiceProvider.GetRequiredService<PropTransferCommand>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
 
-
+            var transferMachine = ServiceProvider.GetRequiredService<PropTransferMachine>();
+            command.TransferMachine = transferMachine;
 
             // ACT
             command.Execute();
-
-
 
             // ASSERT
             humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
@@ -62,8 +59,8 @@ namespace Zilon.Core.Tests.Commands
             var container = CreateStore();
             var transferMachine = new PropTransferMachine(inventory, container);
 
-            Container.Register(factory => transferMachine, new PerContainerLifetime());
-            Container.Register<PropTransferCommand>(new PerContainerLifetime());
+            Container.AddSingleton(factory => transferMachine);
+            Container.AddSingleton<PropTransferCommand>();
         }
 
         private IPropStore CreateStore()

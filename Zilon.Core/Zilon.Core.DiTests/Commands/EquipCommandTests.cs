@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -29,7 +29,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecute_SelectEquipment_ReturnsTrue()
         {
             // ARRANGE
-            var command = Container.GetInstance<EquipCommand>();
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
             // ACT
@@ -64,7 +64,7 @@ namespace Zilon.Core.Tests.Commands
 
             _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
 
-            var command = Container.GetInstance<EquipCommand>();
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
             // ACT
@@ -81,10 +81,10 @@ namespace Zilon.Core.Tests.Commands
         public void Execute_Intention()
         {
             // ARRANGE
-            var command = Container.GetInstance<EquipCommand>();
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = Container.GetInstance<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
 
             // ACT
             command.Execute();
@@ -114,8 +114,8 @@ namespace Zilon.Core.Tests.Commands
             _inventoryStateMock.SetupProperty(x => x.SelectedProp, equipmentViewModel);
             var inventoryState = _inventoryStateMock.Object;
 
-            Container.Register(factory => inventoryState, new PerContainerLifetime());
-            Container.Register<EquipCommand>(new PerContainerLifetime());
+            Container.AddSingleton(factory => inventoryState);
+            Container.AddSingleton<EquipCommand>();
         }
     }
 }

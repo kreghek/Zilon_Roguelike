@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Specs", "Zilon.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore", "Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.DiTests", "Zilon.Core.DiTests\Zilon.Core.DiTests.csproj", "{9D36570D-7A47-4814-8986-A9E9374FB3F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +191,7 @@ Global
 		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06} = {0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}
 		{E9CE6565-6024-41E5-8552-B7021234708C} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
+		{9D36570D-7A47-4814-8986-A9E9374FB3F6} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}

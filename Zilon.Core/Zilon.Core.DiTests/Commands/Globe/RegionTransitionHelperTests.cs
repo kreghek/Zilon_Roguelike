@@ -13,7 +13,8 @@ using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.Commands.Globe
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class RegionTransitionHelperTests
     {
         /// <summary>
@@ -53,15 +54,11 @@ namespace Zilon.Core.Tests.Commands.Globe
                 Coords = new OffsetCoords(1, 0)
             };
 
-
-
             // ACT
             var factTransitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentNode,
                 currentTerrainCell,
                 targetRegionBorders,
                 targetTerrainCell);
-
-
 
             // ASSERT
             factTransitionNodes.Should().BeEquivalentTo(expectedTransitionNodes);
@@ -105,15 +102,11 @@ namespace Zilon.Core.Tests.Commands.Globe
                 Coords = new OffsetCoords(0, 0)
             };
 
-
-
             // ACT
             var factTransitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentNode,
                 currentTerrainCell,
                 targetRegionBorders,
                 targetTerrainCell);
-
-
 
             // ASSERT
             factTransitionNodes.Should().BeEquivalentTo(expectedTransitionNodes);
@@ -156,15 +149,11 @@ namespace Zilon.Core.Tests.Commands.Globe
                 Coords = new OffsetCoords(0, 0)
             };
 
-
-
             // ACT
             var factTransitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentNode,
                 currentTerrainCell,
                 targetRegionBorders,
                 targetTerrainCell);
-
-
 
             // ASSERT
             factTransitionNodes.Should().BeEquivalentTo(expectedTransitionNodes);
@@ -208,15 +197,11 @@ namespace Zilon.Core.Tests.Commands.Globe
                 Coords = new OffsetCoords(0, 1)
             };
 
-
-
             // ACT
             var factTransitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentNode,
                 currentTerrainCell,
                 targetRegionBorders,
                 targetTerrainCell);
-
-
 
             // ASSERT
             factTransitionNodes.Should().BeEquivalentTo(expectedTransitionNodes);
