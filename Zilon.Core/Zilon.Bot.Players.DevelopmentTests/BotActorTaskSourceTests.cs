@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using LightInject;
-
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
@@ -20,7 +20,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
     [TestFixture]
     public class BotActorTaskSourceTests
     {
-        private ServiceContainer _globalServiceContainer;
         private Startup _startUp;
         private Scope _sectorServiceContainer;
         private bool _changeSector;
@@ -32,6 +31,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [TestCase("monster")]
         public async Task GetActorTasksTestAsync(string mode)
         {
+            var _globalServiceContainer = new ServiceCollection();
+            var startUp = new Startup();
+            var startUp.RegisterServices(_globalServiceContainer);
+
             //TODO Объяснить, почему тут нужно использовать ConfigureAwait(false)
             // Это рекомендация Codacy.
             // Но есть статья https://habr.com/ru/company/clrium/blog/463587/,
@@ -64,15 +67,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             };
 
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
-        }
-
-        [SetUp]
-        public void StartUp()
-        {
-            _globalServiceContainer = new ServiceContainer();
-            _startUp = new Startup();
-            _globalServiceContainer.EnableAnnotatedConstructorInjection();
-            _startUp.RegisterServices(_globalServiceContainer);
         }
 
         private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
