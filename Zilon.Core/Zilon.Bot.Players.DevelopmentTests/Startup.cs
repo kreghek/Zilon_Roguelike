@@ -1,4 +1,5 @@
-﻿using LightInject;
+﻿using System;
+using LightInject;
 
 using Zilon.Bot.Players.LightInject;
 using Zilon.Bot.Players.LightInject.DependencyInjection;
@@ -12,7 +13,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 {
     class Startup: InitialzationBase
     {
-        public override void ConfigureAux(IServiceFactory serviceFactory)
+        public override void ConfigureAux(IServiceProvider serviceFactory)
         {
             LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();
         }
