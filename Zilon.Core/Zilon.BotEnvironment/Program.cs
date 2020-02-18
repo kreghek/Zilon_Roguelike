@@ -40,7 +40,9 @@ namespace Zilon.BotEnvironment
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            LoadBotAssembly("cdt", "Zilon.Bot.Players.LightInject.dll", serviceCollection, serviceProvider);
+            LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
+
+            serviceProvider = serviceCollection.BuildServiceProvider();
 
             await autoPlayEngine.StartAsync(serviceProvider);
 
@@ -62,8 +64,8 @@ namespace Zilon.BotEnvironment
             var registerManager = registerManagers.SingleOrDefault();
 
             // Регистрируем сервис источника команд.
-            var botActorTaskSource = GetBotActorTaskSource(registerManager);
-            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource), botActorTaskSource);
+            var botActorTaskSourceType = GetBotActorTaskSource(registerManager);
+            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource), botActorTaskSourceType);
             serviceRegistry.AddScoped<IActorTaskSource>(factory => factory.GetRequiredService<IPluggableActorTaskSource>());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);

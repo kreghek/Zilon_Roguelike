@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
-using Zilon.CommonUtilities;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
