@@ -7,7 +7,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class HumanBotActorTaskSource : BotActorTaskSourceBase
+    public sealed class HumanBotActorTaskSource : BotActorTaskSourceBase, IPluggableActorTaskSource
     {
         private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
@@ -19,6 +19,11 @@ namespace Zilon.Bot.Players
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (_botSettings == null)
             {
                 return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)

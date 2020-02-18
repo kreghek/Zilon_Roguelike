@@ -28,7 +28,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var botSettings = new BotSettings { Mode = mode };
 
-            var autoPlayEngine = new AutoplayEngine(startUp, botSettings);
+            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
             await autoPlayEngine.StartAsync(_globalServiceProvider).ConfigureAwait(false);
 
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();

@@ -24,6 +24,11 @@ namespace Zilon.Bot.Players
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             switch (actor.Person)
             {
                 case MonsterPerson _:
