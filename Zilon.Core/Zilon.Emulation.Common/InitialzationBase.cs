@@ -1,7 +1,7 @@
 ﻿using System;
 
-using LightInject;
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices;
@@ -14,9 +14,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.IoC;
 
 namespace Zilon.Emulation.Common
 {
@@ -25,7 +23,7 @@ namespace Zilon.Emulation.Common
         public int? DiceSeed { get; set; }
 
         protected InitialzationBase()
-        { 
+        {
         }
 
         protected InitialzationBase(int diceSeed)
@@ -42,7 +40,7 @@ namespace Zilon.Emulation.Common
             RegisterSectorServices(serviceCollection);
         }
 
-        public abstract void ConfigureAux(IServiceCollection serviceFactory);
+        public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
         private void RegisterSectorServices(IServiceCollection serviceRegistry)
         {
@@ -54,7 +52,7 @@ namespace Zilon.Emulation.Common
 
         private void RegisterSchemeService(IServiceCollection container)
         {
-            container.Register<ISchemeLocator>(factory =>
+            container.AddSingleton<ISchemeLocator>(factory =>
             {
                 //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
                 // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
@@ -64,14 +62,14 @@ namespace Zilon.Emulation.Common
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
-            }, LightInjectWrapper.CreateSingleton());
+            });
 
-            container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<ISchemeService, SchemeService>();
 
-            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private void RegisterScopedSectorService(IServiceCollection container)
+        private static void RegisterScopedSectorService(IServiceCollection container)
         {
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
@@ -87,9 +85,9 @@ namespace Zilon.Emulation.Common
             container.AddScoped<MonsterBotActorTaskSource>();
         }
 
-        private void RegisterGameLoop(IServiceCollection serviceRegistry)
+        private static void RegisterGameLoop(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddSingleton<IGameLoop, GameLoop>();
+            serviceRegistry.AddScoped<IGameLoop, GameLoop>();
         }
 
         /// <summary>
@@ -203,7 +201,7 @@ namespace Zilon.Emulation.Common
             return dice;
         }
 
-        private void RegisterClientServices(IServiceCollection serviceCollection)
+        private static void RegisterClientServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
             serviceCollection.AddSingleton<IInventoryState, InventoryState>();

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+		<TargetFramework>netstandard2.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations">
@@ -18,7 +18,7 @@
 	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection">
 	    <Version>3.1.1</Version>
 	  </PackageReference>
 	</ItemGroup>
