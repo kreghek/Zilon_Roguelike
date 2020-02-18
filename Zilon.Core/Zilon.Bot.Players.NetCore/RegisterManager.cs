@@ -19,12 +19,12 @@ namespace Zilon.Bot.Players.NetCore
         {
             serviceRegistry.RegisterLogicState();
             serviceRegistry.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
+            serviceRegistry.AddScoped<LogicStateTreePatterns>();
         }
 
         [ConfigureAuxServices]
         public static void ConfigureAuxServices(IServiceProvider serviceFactory)
         {
-            LogicStateTreePatterns.Factory = serviceFactory.GetRequiredService<ILogicStateFactory>();
         }
     }
 }
