@@ -18,7 +18,6 @@ namespace Zilon.BotEnvironment
         {
             var fragSum = scoreManager.Frags.Sum(x => x.Value);
 
-
             var baseName = "BotScores.db3";
             if (!File.Exists(baseName))
             {

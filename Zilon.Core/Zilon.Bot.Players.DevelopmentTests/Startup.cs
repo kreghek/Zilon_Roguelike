@@ -9,7 +9,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class Startup: InitialzationBase
+    class Startup : InitialzationBase
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {
@@ -22,7 +22,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             container.AddScoped<LogicStateTreePatterns>();
 
             container.AddScoped<HumanBotActorTaskSource>();
-
         }
     }
 }

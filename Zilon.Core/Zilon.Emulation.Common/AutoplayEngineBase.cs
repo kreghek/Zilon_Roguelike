@@ -70,7 +70,7 @@ namespace Zilon.Emulation.Common
                 {
                     CatchException(exception);
                 }
-            };
+            }
 
             ProcessEnd();
         }
@@ -211,7 +211,6 @@ namespace Zilon.Emulation.Common
                 Debug.WriteLine($"Не найден объект {resourceSid}");
             }
         }
-
 
         private async Task<IActor> CreateSectorAsync(IServiceProvider _globalServiceProvider)
         {
