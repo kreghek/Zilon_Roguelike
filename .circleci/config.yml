@@ -275,9 +275,6 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: /test_mass_sector_generator/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: nuget restore Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -SolutionDirectory ./Zilon.Core
-      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /t:Restore /p:Configuration=Debug
-      - run: msbuild Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj /t:Build /p:Configuration=Debug
       - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
@@ -333,6 +330,7 @@ workflows:
   commit:
     jobs:
       - build
+      - test_mass_sector_generator
       - test_45:
           requires:
             - build
