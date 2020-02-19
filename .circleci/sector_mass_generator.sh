@@ -4,8 +4,8 @@ set -e
 
 mkdir -p /test_mass_sector_generator/maps
 
-sudo apt install libc6-dev 
-sudo apt install libgdiplus
+apt install libc6-dev 
+apt install libgdiplus
 
 TOTAL_EXIT_CODE=0
 for i in $(seq 1 100); do
