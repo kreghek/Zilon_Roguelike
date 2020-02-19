@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core", "Zilon.Core\Zilon.Core.csproj", "{93E96628-DE50-42AE-A2F5-4B4B042D66E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{F057B496-9EBB-49B9-8B3F-ECBF7B08CA18}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,25 +31,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Emulation", "Emulation", "{ED8E92CD-C200-4104-9FBF-50CDE07CB98C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotEnvironment", "Zilon.BotEnvironment\Zilon.BotEnvironment.csproj", "{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.BotEnvironment", "Zilon.BotEnvironment\Zilon.BotEnvironment.csproj", "{B7EFEC00-E068-4510-B18D-3BF8A2E8245B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Sdk", "Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj", "{C043BDA8-78EA-4B90-A35E-14282665F0D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players", "Zilon.Bot.Players\Zilon.Bot.Players.csproj", "{218B22DD-5BF3-4A86-B979-7E6F534F3F52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.Tests", "Zilon.Bot.Players.Tests\Zilon.Bot.Players.Tests.csproj", "{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.LightInject", "Zilon.Bot.Players.LightInject\Zilon.Bot.Players.LightInject.csproj", "{1325F406-E074-438F-9A8F-28B9F411CADF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.Tests", "Zilon.Bot.Players.Tests\Zilon.Bot.Players.Tests.csproj", "{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotMassLauncher", "Zilon.BotMassLauncher\Zilon.BotMassLauncher.csproj", "{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Bot.Players.DevelopmentTests", "Zilon.Bot.Players.DevelopmentTests\Zilon.Bot.Players.DevelopmentTests.csproj", "{B0CDC661-4458-4E1E-9375-F949F3EFB567}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.DevelopmentTests", "Zilon.Bot.Players.DevelopmentTests\Zilon.Bot.Players.DevelopmentTests.csproj", "{B0CDC661-4458-4E1E-9375-F949F3EFB567}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Emulation.Common", "Zilon.Emulation.Common\Zilon.Emulation.Common.csproj", "{36013151-86C1-431E-ABC6-AFF816D4E015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Emulation.Common", "Zilon.Emulation.Common\Zilon.Emulation.Common.csproj", "{36013151-86C1-431E-ABC6-AFF816D4E015}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.MassWorldGenerator", "Zilon.Core.MassWorldGenerator\Zilon.Core.MassWorldGenerator.csproj", "{FE267C20-E743-4E58-9A74-49FE482FF058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.MassSectorGenerator", "Zilon.Core.MassSectorGenerator\Zilon.Core.MassSectorGenerator.csproj", "{9045F970-688B-4BC0-AD3C-247CEABE94B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.MassSectorGenerator", "Zilon.Core.MassSectorGenerator\Zilon.Core.MassSectorGenerator.csproj", "{9045F970-688B-4BC0-AD3C-247CEABE94B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}"
 EndProject
@@ -65,13 +63,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.Creat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D62245E2-9CDA-444F-93C1-0FDC28EF2D0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.IoC", "Zilon.IoC\Zilon.IoC.csproj", "{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Specs", "Zilon.Core.Specs\Zilon.Core.Specs.csproj", "{E9CE6565-6024-41E5-8552-B7021234708C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore", "Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.DiTests", "Zilon.Core.DiTests\Zilon.Core.DiTests.csproj", "{9D36570D-7A47-4814-8986-A9E9374FB3F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.DiTests", "Zilon.Core.DiTests\Zilon.Core.DiTests.csproj", "{9D36570D-7A47-4814-8986-A9E9374FB3F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,10 +103,6 @@ Global
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1325F406-E074-438F-9A8F-28B9F411CADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1325F406-E074-438F-9A8F-28B9F411CADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1325F406-E074-438F-9A8F-28B9F411CADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1325F406-E074-438F-9A8F-28B9F411CADF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -151,10 +143,6 @@ Global
 		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E9CE6565-6024-41E5-8552-B7021234708C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E9CE6565-6024-41E5-8552-B7021234708C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9CE6565-6024-41E5-8552-B7021234708C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -176,7 +164,6 @@ Global
 		{53AF1D62-18D8-4252-B09A-1CC50724BE92} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{B7EFEC00-E068-4510-B18D-3BF8A2E8245B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{BC06E840-A29B-4610-A535-3F2DCD3D2F2F} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
-		{1325F406-E074-438F-9A8F-28B9F411CADF} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{B0CDC661-4458-4E1E-9375-F949F3EFB567} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{36013151-86C1-431E-ABC6-AFF816D4E015} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
@@ -188,7 +175,6 @@ Global
 		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 		{F2F66142-B4BA-48FE-A60B-61A9D75F775A} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
 		{D62245E2-9CDA-444F-93C1-0FDC28EF2D0A} = {67CFF0E1-4DD5-4EFF-991D-3B745796992A}
-		{F3616226-6A1A-4D56-9E53-CE8DAA1C7A06} = {0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}
 		{E9CE6565-6024-41E5-8552-B7021234708C} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}

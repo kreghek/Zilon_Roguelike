@@ -67,10 +67,6 @@
       <Project>{36013151-86c1-431e-abc6-aff816d4e015}</Project>
       <Name>Zilon.Emulation.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj">
-      <Project>{f3616226-6a1a-4d56-9e53-ce8daa1c7a06}</Project>
-      <Name>Zilon.IoC</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
