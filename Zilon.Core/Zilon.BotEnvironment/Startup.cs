@@ -10,10 +10,12 @@ namespace Zilon.BotEnvironment
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {
+            // Сейчас конфигурирование доп.сервисов для базового бота не требуется.
         }
 
         protected override void RegisterBot(IServiceCollection serviceCollection)
         {
+            // Регистрация в Program.
         }
     }
 }

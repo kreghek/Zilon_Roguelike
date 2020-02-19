@@ -46,6 +46,8 @@ namespace Zilon.BotEnvironment
 
             await autoPlayEngine.StartAsync(serviceProvider);
 
+            Console.WriteLine(autoPlayEngine.LogOutput);
+
             if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
             {
                 Console.ReadLine();

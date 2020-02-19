@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,10 +20,14 @@ namespace Zilon.BotEnvironment
         private const int ENVIRONMENT_EXCEPTION_LIMIT = 3;
 
         private readonly Startup _startup;
-        private readonly string scoreFilePreffix;
+        private readonly string _scoreFilePreffix;
 
-        int botExceptionCount = 0;
-        int envExceptionCount = 0;
+        private int _botExceptionCount;
+        private int _envExceptionCount;
+
+        private readonly StringBuilder _logStringBuilder;
+
+        public string LogOutput => _logStringBuilder.ToString();
 
         public AutoplayEngine(Startup startup,
             BotSettings botSettings,
@@ -30,39 +35,40 @@ namespace Zilon.BotEnvironment
             ) : base(botSettings)
         {
             _startup = startup;
-            this.scoreFilePreffix = scoreFilePreffix;
+            _scoreFilePreffix = scoreFilePreffix;
+            _logStringBuilder = new StringBuilder();
         }
 
         protected override void CatchActorTaskExecutionException(ActorTaskExecutionException exception)
         {
-            AppendException(exception, scoreFilePreffix);
+            AppendException(exception, _scoreFilePreffix);
 
             var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             if (exception.ActorTaskSource != monsterActorTaskSource)
             {
-                botExceptionCount++;
+                _botExceptionCount++;
 
-                if (botExceptionCount >= BOT_EXCEPTION_LIMIT)
+                if (_botExceptionCount >= BOT_EXCEPTION_LIMIT)
                 {
-                    AppendFail(ServiceScope.ServiceProvider, scoreFilePreffix);
+                    AppendFail(ServiceScope.ServiceProvider, _scoreFilePreffix);
                     throw exception;
                 }
             }
             else
             {
-                envExceptionCount++;
-                CheckEnvExceptions(envExceptionCount, exception);
-                Console.WriteLine($"[.] {exception.Message}");
+                _envExceptionCount++;
+                CheckEnvExceptions(_envExceptionCount, exception);
+                Log($"[.] {exception.Message}");
             }
         }
 
         protected override void CatchException(Exception exception)
         {
-            AppendException(exception, scoreFilePreffix);
+            AppendException(exception, _scoreFilePreffix);
 
-            envExceptionCount++;
-            CheckEnvExceptions(envExceptionCount, exception);
-            Console.WriteLine($"[.] {exception.Message}");
+            _envExceptionCount++;
+            CheckEnvExceptions(_envExceptionCount, exception);
+            Log($"[.] {exception.Message}");
         }
 
         protected override void ConfigBotAux()
@@ -74,14 +80,14 @@ namespace Zilon.BotEnvironment
         {
             var mode = _botSettings.Mode;
             var scoreManager = ServiceScope.ServiceProvider.GetRequiredService<IScoreManager>();
-            WriteScores(ServiceScope.ServiceProvider, scoreManager, mode, scoreFilePreffix);
+            WriteScores(ServiceScope.ServiceProvider, scoreManager, mode, _scoreFilePreffix);
         }
 
-        private static void WriteScores(IServiceProvider serviceFactory, IScoreManager scoreManager, string mode, string scoreFilePreffix)
+        private void WriteScores(IServiceProvider serviceFactory, IScoreManager scoreManager, string mode, string scoreFilePreffix)
         {
             var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
 
-            Console.WriteLine(summaryText);
+            Log(summaryText);
 
             AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
         }
@@ -136,9 +142,9 @@ namespace Zilon.BotEnvironment
             return scoreFilePreffixFileName;
         }
 
-        private static void AppendFail(IServiceProvider serviceFactory, string scoreFilePreffix)
+        private void AppendFail(IServiceProvider serviceFactory, string scoreFilePreffix)
         {
-            Console.WriteLine("[x] Bot task source error limit reached");
+            Log("[x] Bot task source error limit reached");
 
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))
@@ -161,6 +167,11 @@ namespace Zilon.BotEnvironment
             {
                 throw exception;
             }
+        }
+
+        private void Log(string message)
+        {
+            _logStringBuilder.AppendLine(message);
         }
     }
 }
