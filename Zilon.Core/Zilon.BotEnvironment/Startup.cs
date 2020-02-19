@@ -6,7 +6,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    class Startup : InitialzationBase
+    class Startup : InitializationBase
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {

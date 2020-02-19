@@ -9,7 +9,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class Startup : InitialzationBase
+    class Startup : InitializationBase
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {
