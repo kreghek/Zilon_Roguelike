@@ -95,12 +95,6 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceCollection container)
         {
-            // В комментариях - подавление ошибки от сервиса lgtm.com
-            // Это ложное срабатывание, потому что эти переменные используются в замыкании.
-            var linearDice = CreateRandomSeedAndLinearDice(); //lgtm [cs/useless-assignment-to-local]
-            var gaussDice = CreateRandomSeedAndGaussDice(); //lgtm [cs/useless-assignment-to-local]
-            var expDice = CreateRandomSeedAndExpDice(); //lgtm [cs/useless-assignment-to-local]
-
             container.AddSingleton(factory => CreateRandomSeedAndLinearDice());
             container.AddSingleton(factory => CreateRandomSeedAndGaussDice());
             container.AddSingleton(factory => CreateRandomSeedAndExpDice());
