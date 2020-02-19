@@ -1,6 +1,6 @@
 ﻿using System;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
@@ -14,9 +14,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.IoC;
 
 namespace Zilon.Emulation.Common
 {
@@ -25,7 +23,7 @@ namespace Zilon.Emulation.Common
         public int? DiceSeed { get; set; }
 
         protected InitialzationBase()
-        { 
+        {
         }
 
         protected InitialzationBase(int diceSeed)
@@ -33,18 +31,18 @@ namespace Zilon.Emulation.Common
             DiceSeed = diceSeed;
         }
 
-        public virtual void RegisterServices(IServiceRegistry serviceRegistry)
+        public virtual void RegisterServices(IServiceCollection serviceCollection)
         {
-            RegisterSchemeService(serviceRegistry);
-            RegisterAuxServices(serviceRegistry);
-            RegisterPlayerServices(serviceRegistry);
+            RegisterSchemeService(serviceCollection);
+            RegisterAuxServices(serviceCollection);
+            RegisterPlayerServices(serviceCollection);
 
-            RegisterSectorServices(serviceRegistry);
+            RegisterSectorServices(serviceCollection);
         }
 
-        public abstract void ConfigureAux(IServiceFactory serviceFactory);
+        public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
-        private void RegisterSectorServices(IServiceRegistry serviceRegistry)
+        private void RegisterSectorServices(IServiceCollection serviceRegistry)
         {
             RegisterClientServices(serviceRegistry);
             RegisterGameLoop(serviceRegistry);
@@ -52,9 +50,9 @@ namespace Zilon.Emulation.Common
             RegisterBot(serviceRegistry);
         }
 
-        private void RegisterSchemeService(IServiceRegistry container)
+        private static void RegisterSchemeService(IServiceCollection container)
         {
-            container.Register<ISchemeLocator>(factory =>
+            container.AddSingleton<ISchemeLocator>(factory =>
             {
                 //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
                 // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
@@ -64,74 +62,75 @@ namespace Zilon.Emulation.Common
                 var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
-            }, LightInjectWrapper.CreateSingleton());
+            });
 
-            container.Register<ISchemeService, SchemeService>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<ISchemeService, SchemeService>();
 
-            container.Register<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private void RegisterScopedSectorService(IServiceRegistry container)
+        private static void RegisterScopedSectorService(IServiceCollection container)
         {
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
-            container.Register<ISectorGenerator, SectorGenerator>(LightInjectWrapper.CreateScoped());
-            container.Register<IMonsterGenerator, MonsterGenerator>(LightInjectWrapper.CreateScoped());
-            container.Register<IChestGenerator, ChestGenerator>(LightInjectWrapper.CreateScoped());
-            container.Register<ICitizenGenerator, CitizenGenerator>(LightInjectWrapper.CreateScoped());
-            container.Register<ISectorFactory, SectorFactory>(LightInjectWrapper.CreateScoped());
-            container.Register<ISectorManager, InfiniteSectorManager>(LightInjectWrapper.CreateScoped());
-            container.Register<IActorManager, ActorManager>(LightInjectWrapper.CreateScoped());
-            container.Register<IPropContainerManager, PropContainerManager>(LightInjectWrapper.CreateScoped());
-            container.Register<ITacticalActUsageService, TacticalActUsageService>(LightInjectWrapper.CreateScoped());
-            container.Register<IActorTaskSource, MonsterBotActorTaskSource>("monster", LightInjectWrapper.CreateScoped());
+            container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddScoped<IMonsterGenerator, MonsterGenerator>();
+            container.AddScoped<IChestGenerator, ChestGenerator>();
+            container.AddScoped<ICitizenGenerator, CitizenGenerator>();
+            container.AddScoped<ISectorFactory, SectorFactory>();
+            container.AddScoped<ISectorManager, InfiniteSectorManager>();
+            container.AddScoped<IActorManager, ActorManager>();
+            container.AddScoped<IPropContainerManager, PropContainerManager>();
+            container.AddScoped<ITacticalActUsageService, TacticalActUsageService>();
+            container.AddScoped<MonsterBotActorTaskSource>();
         }
 
-        private void RegisterGameLoop(IServiceRegistry container)
+        private static void RegisterGameLoop(IServiceCollection serviceRegistry)
         {
-            container.Register<IGameLoop, GameLoop>(LightInjectWrapper.CreateScoped());
+            serviceRegistry.AddScoped<IGameLoop, GameLoop>();
         }
 
         /// <summary>
         /// Подготовка дополнительных сервисов
         /// </summary>
-        private void RegisterAuxServices(IServiceRegistry container)
+        private void RegisterAuxServices(IServiceCollection container)
         {
             var linearDice = CreateRandomSeedAndLinearDice();
             var gaussDice = CreateRandomSeedAndGaussDice();
             var expDice = CreateRandomSeedAndExpDice();
-            container.Register(factory => linearDice, "linear", LightInjectWrapper.CreateSingleton());
-            container.Register(factory => gaussDice, "gauss", LightInjectWrapper.CreateSingleton());
-            container.Register(factory => expDice, "exp", LightInjectWrapper.CreateSingleton());
-            container.Register(factory=> factory.GetInstance<IDice>("linear"), LightInjectWrapper.CreateSingleton());
-            container.Register<IDecisionSource, DecisionSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<IPerkResolver, PerkResolver>(LightInjectWrapper.CreateSingleton());
-            container.Register<IPropFactory, PropFactory>(LightInjectWrapper.CreateSingleton());
-            container.Register<IDropResolver, DropResolver>(LightInjectWrapper.CreateSingleton());
-            container.Register<IDropResolverRandomSource, DropResolverRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<ISurvivalRandomSource, SurvivalRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<IEquipmentDurableService, EquipmentDurableService>(LightInjectWrapper.CreateSingleton());
-            container.Register<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<IHumanPersonFactory, RandomHumanPersonFactory>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton(factory => CreateRandomSeedAndLinearDice());
+            container.AddSingleton(factory => CreateRandomSeedAndGaussDice());
+            container.AddSingleton(factory => CreateRandomSeedAndExpDice());
+            container.AddSingleton<IDice>(factory => factory.GetRequiredService<LinearDice>());
 
-            container.Register<IMapFactorySelector, LightInjectSwitchMapFactorySelector>(LightInjectWrapper.CreateSingleton());
-            container.Register<IMapFactory, RoomMapFactory>("room", LightInjectWrapper.CreateSingleton());
-            container.Register<IRoomGenerator, RoomGenerator>(LightInjectWrapper.CreateSingleton());
-            container.Register(CreateRoomGeneratorRandomSource, LightInjectWrapper.CreateSingleton());
-            container.Register<IMapFactory, CellularAutomatonMapFactory>("cellular-automaton", LightInjectWrapper.CreateSingleton());
-            container.Register<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
-            container.Register<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<IChestGeneratorRandomSource, ChestGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
-            container.Register<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<IDecisionSource, DecisionSource>();
+            container.AddSingleton<ITacticalActUsageRandomSource, TacticalActUsageRandomSource>();
+            container.AddSingleton<IPerkResolver, PerkResolver>();
+            container.AddSingleton<IPropFactory, PropFactory>();
+            container.AddSingleton<IDropResolver, DropResolver>();
+            container.AddSingleton<IDropResolverRandomSource, DropResolverRandomSource>();
+            container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
+            container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
+            container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
+            container.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
 
-            container.Register<IUserTimeProvider, UserTimeProvider>(LightInjectWrapper.CreateSingleton());
+            container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
+            container.AddSingleton<RoomMapFactory>();
+            container.AddSingleton<IRoomGenerator, RoomGenerator>();
+            container.AddSingleton(CreateRoomGeneratorRandomSource);
+            container.AddSingleton<CellularAutomatonMapFactory>();
+            container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
+            container.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
+            container.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
+            container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
+
+            container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
         }
 
-        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceFactory factory)
+        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)
         {
-            var localLinearDice = factory.GetInstance<IDice>("linear");
-            var localRoomSizeDice = factory.GetInstance<IDice>("exp");
+            var localLinearDice = factory.GetRequiredService<LinearDice>();
+            var localRoomSizeDice = factory.GetRequiredService<ExpDice>();
             var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
             return randomSource;
         }
@@ -141,9 +140,9 @@ namespace Zilon.Emulation.Common
         /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private IDice CreateRandomSeedAndLinearDice()
+        private LinearDice CreateRandomSeedAndLinearDice()
         {
-            IDice dice;
+            LinearDice dice;
             if (DiceSeed == null)
             {
                 var diceSeedFact = new Random().Next(int.MaxValue);
@@ -163,9 +162,9 @@ namespace Zilon.Emulation.Common
         /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private IDice CreateRandomSeedAndGaussDice()
+        private GaussDice CreateRandomSeedAndGaussDice()
         {
-            IDice dice;
+            GaussDice dice;
             if (DiceSeed == null)
             {
                 var diceSeedFact = new Random().Next(int.MaxValue);
@@ -185,9 +184,9 @@ namespace Zilon.Emulation.Common
         /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private IDice CreateRandomSeedAndExpDice()
+        private ExpDice CreateRandomSeedAndExpDice()
         {
-            IDice dice;
+            ExpDice dice;
             if (DiceSeed == null)
             {
                 var diceSeedFact = new Random().Next(int.MaxValue);
@@ -202,19 +201,19 @@ namespace Zilon.Emulation.Common
             return dice;
         }
 
-        private void RegisterClientServices(IServiceRegistry container)
+        private static void RegisterClientServices(IServiceCollection serviceCollection)
         {
-            container.Register<ISectorUiState, SectorUiState>(LightInjectWrapper.CreateScoped());
-            container.Register<IInventoryState, InventoryState>(LightInjectWrapper.CreateScoped());
+            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
+            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
         }
 
-        private void RegisterPlayerServices(IServiceRegistry container)
+        private static void RegisterPlayerServices(IServiceCollection serviceCollection)
         {
-            container.Register<IScoreManager, ScoreManager>(LightInjectWrapper.CreateSingleton());
-            container.Register<HumanPlayer>(LightInjectWrapper.CreateSingleton());
-            container.Register<IBotPlayer, BotPlayer>(LightInjectWrapper.CreateSingleton());
+            serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
+            serviceCollection.AddSingleton<HumanPlayer>();
+            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
         }
 
-        protected abstract void RegisterBot(IServiceRegistry container);
+        protected abstract void RegisterBot(IServiceCollection serviceCollection);
     }
 }
