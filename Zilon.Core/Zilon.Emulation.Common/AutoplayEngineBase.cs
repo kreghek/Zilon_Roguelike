@@ -21,26 +21,27 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000;
 
         private bool _changeSector;
-        protected readonly BotSettings _botSettings;
 
         protected IServiceScope ServiceScope { get; set; }
 
-        public AutoplayEngineBase(BotSettings botSettings)
+        protected BotSettings BotSettings { get; }
+
+        protected AutoplayEngineBase(BotSettings botSettings)
         {
-            _botSettings = botSettings;
+            BotSettings = botSettings;
         }
 
-        public async Task StartAsync(IServiceProvider _globalServiceProvider)
+        public async Task StartAsync(IServiceProvider serviceProvider)
         {
-            if (_globalServiceProvider is null)
+            if (serviceProvider is null)
             {
-                throw new ArgumentNullException(nameof(_globalServiceProvider));
+                throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var humanActor = await CreateSectorAsync(_globalServiceProvider).ConfigureAwait(false);
+            var humanActor = await CreateSectorAsync(serviceProvider).ConfigureAwait(false);
             var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
-            var botActorTaskSource = _globalServiceProvider.GetRequiredService<T>();
-            botActorTaskSource.Configure(_botSettings);
+            var botActorTaskSource = serviceProvider.GetRequiredService<T>();
+            botActorTaskSource.Configure(BotSettings);
 
             var iterationCounter = 1;
             while (!humanActor.Person.Survival.IsDead && iterationCounter <= ITERATION_LIMIT)
@@ -51,11 +52,11 @@ namespace Zilon.Emulation.Common
 
                     if (_changeSector)
                     {
-                        humanActor = await CreateSectorAsync(_globalServiceProvider).ConfigureAwait(false);
+                        humanActor = await CreateSectorAsync(serviceProvider).ConfigureAwait(false);
 
                         gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
                         botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-                        botActorTaskSource.Configure(_botSettings);
+                        botActorTaskSource.Configure(BotSettings);
 
                         _changeSector = false;
                     }
@@ -260,11 +261,13 @@ namespace Zilon.Emulation.Common
 
         private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
         {
-            Console.WriteLine("Exit");
+            ProcessSectorExit();
             _changeSector = true;
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
         }
+
+        protected abstract void ProcessSectorExit();
     }
 }

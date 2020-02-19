@@ -35,5 +35,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
             // В тестх не требуется пост-обратоки результатов.
             // Здесь должна быть фиксация итогов - очки, причина смерти, состояние персонажа на момент смерти.
         }
+
+        protected override void ProcessSectorExit()
+        {
+            Console.WriteLine("Exit");
+        }
     }
 }

@@ -78,7 +78,7 @@ namespace Zilon.BotEnvironment
 
         protected override void ProcessEnd()
         {
-            var mode = _botSettings.Mode;
+            var mode = BotSettings.Mode;
             var scoreManager = ServiceScope.ServiceProvider.GetRequiredService<IScoreManager>();
             WriteScores(ServiceScope.ServiceProvider, scoreManager, mode, _scoreFilePreffix);
         }
@@ -172,6 +172,11 @@ namespace Zilon.BotEnvironment
         private void Log(string message)
         {
             _logStringBuilder.AppendLine(message);
+        }
+
+        protected override void ProcessSectorExit()
+        {
+            Log("Exit");
         }
     }
 }
