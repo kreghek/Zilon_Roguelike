@@ -276,6 +276,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install GDI Packages
+          command: apt update && apt -y install libc6-dev && apt -y install libgdiplus
+      - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
       - store_artifacts:
