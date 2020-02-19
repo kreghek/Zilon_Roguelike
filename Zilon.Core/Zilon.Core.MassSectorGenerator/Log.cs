@@ -11,6 +11,11 @@ namespace Zilon.Core.MassSectorGenerator
 
         public static void Error(Exception exception)
         {
+            if (exception is null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
+
             Console.WriteLine(exception.ToString());
         }
 
