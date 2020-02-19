@@ -50,7 +50,7 @@ namespace Zilon.Emulation.Common
             RegisterBot(serviceRegistry);
         }
 
-        private void RegisterSchemeService(IServiceCollection container)
+        private static void RegisterSchemeService(IServiceCollection container)
         {
             container.AddSingleton<ISchemeLocator>(factory =>
             {
