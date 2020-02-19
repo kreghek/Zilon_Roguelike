@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
@@ -30,31 +30,28 @@ namespace Zilon.Core.MassSectorGenerator
             var outputPath = GetOutputPath(args);
 
             var startUp = new Startup(diceSeed);
-            var serviceContainer = new ServiceContainer();
-            serviceContainer.EnableAnnotatedConstructorInjection();
+            var serviceContainer = new ServiceCollection();
+
             startUp.RegisterServices(serviceContainer);
 
-            var schemeService = serviceContainer.GetInstance<ISchemeService>();
+            var serviceProvider = serviceContainer.BuildServiceProvider();
+
+            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
 
             var sectorSchemeResult = GetSectorScheme(args, schemeService);
 
-            using (var scopeContainer = serviceContainer.BeginScope())
-            {
-                var sectorFactory = scopeContainer.GetInstance<ISectorGenerator>();
-                var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
-                sector.Scheme = sectorSchemeResult.Location;
+            var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
+            var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
+            sector.Scheme = sectorSchemeResult.Location;
 
-                // Проверка
+            // Проверка
 
-                var sectorValidators = GetValidatorsInAssembly();
-                var checkTask = CheckSectorAsync(sectorValidators, scopeContainer, sector);
+            var sectorValidators = GetValidatorsInAssembly();
+            var checkTask = CheckSectorAsync(sectorValidators, serviceProvider, sector);
 
-                var saveTask = SaveMapAsImageAsync(outputPath, sector);
+            var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
-                await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
-            }
-
-            serviceContainer.Dispose();
+            await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
         }
 
         private static ISectorValidator[] GetValidatorsInAssembly()
@@ -79,7 +76,7 @@ namespace Zilon.Core.MassSectorGenerator
             return Task.CompletedTask;
         }
 
-        private static Task CheckSectorAsync(ISectorValidator[] validators, Scope scopeContainer, ISector sector)
+        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer, ISector sector)
         {
             return Task.Run(() =>
             {

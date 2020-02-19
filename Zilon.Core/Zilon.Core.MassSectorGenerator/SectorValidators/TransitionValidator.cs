@@ -1,7 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-
-using LightInject;
 
 using Zilon.Core.Tactics;
 
@@ -15,7 +14,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     class TransitionValidator : ISectorValidator
     {
-        public Task Validate(ISector sector, Scope scopeContainer)
+        public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
             return Task.Run(() =>
             {

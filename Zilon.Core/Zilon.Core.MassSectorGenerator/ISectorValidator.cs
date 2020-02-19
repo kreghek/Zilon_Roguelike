@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-
-using LightInject;
+﻿using System;
+using System.Threading.Tasks;
 
 using Zilon.Core.Tactics;
 
@@ -16,6 +15,6 @@ namespace Zilon.Core.MassSectorGenerator
         /// </summary>
         /// <param name="sector"> Проверяемый сектор. </param>
         /// <param name="scopeContainer"> Контейнер с зависимостями. </param>
-        Task Validate(ISector sector, Scope scopeContainer);
+        Task Validate(ISector sector, IServiceProvider scopeContainer);
     }
 }
