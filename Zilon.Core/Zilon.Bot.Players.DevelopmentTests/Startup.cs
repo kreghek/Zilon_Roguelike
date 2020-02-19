@@ -13,6 +13,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {
+            // Понфигурация дополнительных сервисов для коробочного источника команд не требуется.
         }
 
         protected override void RegisterBot(IServiceCollection container)

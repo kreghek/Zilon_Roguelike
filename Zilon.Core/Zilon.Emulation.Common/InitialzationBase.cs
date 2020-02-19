@@ -207,7 +207,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IInventoryState, InventoryState>();
         }
 
-        private void RegisterPlayerServices(IServiceCollection serviceCollection)
+        private static void RegisterPlayerServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<HumanPlayer>();
