@@ -224,8 +224,6 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
-        LogicStateTreePatterns.Factory = _logicStateFactory;
-
         await _sectorManager.CreateSectorAsync();
 
         _sectorManager.CurrentSector.ScoreManager = _scoreManager;

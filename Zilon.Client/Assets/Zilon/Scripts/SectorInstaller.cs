@@ -8,6 +8,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
@@ -31,6 +32,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
+        Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
@@ -61,7 +63,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMapFactory>().WithId("room").To<RoomMapFactory>().AsSingle();
         Container.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
         Container.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context => {
+        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context =>
+        {
             var linearDice = context.Container.ResolveId<IDice>("linear");
             var roomSizeDice = context.Container.ResolveId<IDice>("exp");
             return new RoomGeneratorRandomSource(linearDice, roomSizeDice);

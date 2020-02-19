@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zilon.CommonUtilities\Zilon.CommonUtilities.csproj" />
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
   </ItemGroup>
 
