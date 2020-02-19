@@ -8,7 +8,7 @@ TOTAL_EXIT_CODE=0
 for i in $(seq 1 100); do
   echo "======= $i ========="
   
-  dotnet run -p Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -f netstandard2.0 -c Release -r linux-x64 \
+  dotnet run -p Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj -f netcoreapp2.0 -c Release -r linux-x64 \
     -- out="/test_mass_sector_generator/maps/map-$i.bmp"
 	
   EXIT_CODE=$?
