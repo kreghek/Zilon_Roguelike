@@ -277,7 +277,12 @@ jobs:
       - checkout
       - run:
           name: Install GDI Packages
-          command: apt update && apt -y install libc6-dev && apt -y install libgdiplus
+          command: apt-get update \
+    && apt-get install -y --allow-unauthenticated \
+        libc6-dev \
+        libgdiplus \
+        libx11-dev \
+     && rm -rf /var/lib/apt/lists/*
       - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
