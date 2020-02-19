@@ -20,7 +20,7 @@ public class GameOverEffect : MonoBehaviour
     private float _counter;
     private const float _delayDuration = 3;
 
-    void FixedUpdate()
+    void Update()
     {
         _counter += Time.deltaTime;
         if (_counter >= _delayDuration)

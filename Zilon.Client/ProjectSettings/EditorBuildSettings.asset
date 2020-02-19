@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Zilon/Scenes/globe.unity
     guid: 380d1fcc57970684ba510afd99f0ecdd
   - enabled: 1
+    path: Assets/Zilon/Scenes/save-last-scores.unity
+    guid: 5b282fb13839a834ba99c4383c92b0d5
+  - enabled: 1
     path: Assets/Zilon/Scenes/scores.unity
     guid: 721f50cc8827c684bac660610525f7a9
   m_configObjects: {}
