@@ -270,7 +270,7 @@ jobs:
   test_mass_sector_generator:
     working_directory: /test_mass_sector_generator
     docker:
-      - image: mono:6.0.0.313
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
     environment:
       ZILON_LIV_SCHEME_CATALOG: /test_mass_sector_generator/Zilon.Client/Assets/Resources/Schemes
     steps:
