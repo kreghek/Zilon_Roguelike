@@ -92,6 +92,7 @@ public class SectorUiHandler : MonoBehaviour
             SectorTransitionMoveButton_Handler();
         }
 
+        // Отключено, потому что сейчас нет выхода на глобальную карту.
         if (Input.GetKeyDown(KeyCode.G))
         {
             CityQuickExit_Handler();
@@ -140,11 +141,27 @@ public class SectorUiHandler : MonoBehaviour
 
     public void SectorTransitionMoveButton_Handler()
     {
+        // Защита от бага.
+        // Пользователь может нажать T и выполнить переход.
+        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
+        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        {
+            return;
+        }
+
         _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
     }
 
     public void CityQuickExit_Handler()
     {
+        // Защита от бага.
+        // Пользователь может нажать Q и выйти из сектора на глобальную карту.
+        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
+        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        {
+            return;
+        }
+
         // Это быстрое решение.
         // Тупо загружаем глобальную карту.
         SceneManager.LoadScene("globe");

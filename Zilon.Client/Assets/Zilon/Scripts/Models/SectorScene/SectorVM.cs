@@ -264,14 +264,19 @@ public class SectorVM : MonoBehaviour
             .Single(x => x.IsStart).Nodes
             .First();
 
-        var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorViewModel(
+            _humanPlayer,
             _actorManager,
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);
 
         //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(playerActorViewModel.Actor.SectorFowData, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
+        FowHelper.UpdateFowData(
+            playerActorViewModel.Actor.SectorFowData,
+            _sectorManager.CurrentSector.Map,
+            playerActorStartNode,
+            radius: 5);
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
