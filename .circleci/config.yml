@@ -276,14 +276,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install GDI Packages
-          command: apt-get update \
-    && apt-get install -y --allow-unauthenticated \
-        libc6-dev \
-        libgdiplus \
-        libx11-dev \
-     && rm -rf /var/lib/apt/lists/*
-      - run:
           name: Mass Launcher
           command: chmod +x .circleci/sector_mass_generator.sh && .circleci/sector_mass_generator.sh
       - store_artifacts:
@@ -338,7 +330,6 @@ workflows:
   commit:
     jobs:
       - build
-      - test_mass_sector_generator
       - test_45:
           requires:
             - build
