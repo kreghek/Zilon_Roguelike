@@ -92,7 +92,12 @@ namespace Zilon.BotEnvironment
             AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
         }
 
-        private static void AppendScores(IScoreManager scoreManager, IServiceProvider serviceFactory, string scoreFilePreffix, string mode, string summary)
+        private static void AppendScores(
+            IScoreManager scoreManager,
+            IServiceProvider serviceFactory,
+            string scoreFilePreffix,
+            string mode,
+            string summary)
         {
             var path = SCORE_FILE_PATH;
             if (!Directory.Exists(path))

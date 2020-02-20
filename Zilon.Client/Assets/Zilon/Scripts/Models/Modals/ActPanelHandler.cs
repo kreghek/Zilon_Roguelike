@@ -11,6 +11,8 @@ using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour
 {
+    private IEquipmentCarrier _equipmentCarrier;
+
     private readonly List<ActItemVm> _actViewModels;
 
     [Inject] private readonly ISectorUiState _playerState;
@@ -31,13 +33,22 @@ public class ActPanelHandler : MonoBehaviour
         var actorVm = _playerState.ActiveActor;
         var actor = actorVm.Actor;
 
-        actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        // Запоминаем объект equipmentCarrier, чтобы затем корректно отписаться от события,
+        // которое навешиваем ниже. Даже если активный персонаж изменится.
+        _equipmentCarrier = actor.Person.EquipmentCarrier;
+
+        _equipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
 
         var acts = actor.Person.TacticalActCarrier.Acts;
 
         UpdateSelectedAct(currentAct: null, acts);
 
         UpdateActs(acts);
+    }
+
+    public void OnDestroy()
+    {
+        _equipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 
     private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)

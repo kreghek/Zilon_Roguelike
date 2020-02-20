@@ -17,6 +17,11 @@ public class ScoresHandler : MonoBehaviour
 
     public void Awake()
     {
+        UpdateScoreTable();
+    }
+
+    public void UpdateScoreTable()
+    {
         ScoresRecord[] scoreRecords;
 
         try
@@ -29,6 +34,20 @@ public class ScoresHandler : MonoBehaviour
             Debug.LogError("Не удалось выполнить чтение результатов из БД\n" + exception.ToString());
         }
 
+        ClearScoreTable();
+        FillScoreTable(scoreRecords);
+    }
+
+    private void ClearScoreTable()
+    {
+        foreach (Transform scoreRow in ScoreRecordParent)
+        {
+            Destroy(scoreRow.gameObject);
+        }
+    }
+
+    private void FillScoreTable(ScoresRecord[] scoreRecords)
+    {
         var parentRect = ScoreRecordParent.GetComponent<RectTransform>();
         var rowCount = scoreRecords.Length;
         parentRect.sizeDelta = new Vector2(parentRect.sizeDelta.x, (60 + 5) * rowCount);

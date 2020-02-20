@@ -18,15 +18,15 @@ using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Emulation.Common
 {
-    public abstract class InitialzationBase
+    public abstract class InitializationBase
     {
         public int? DiceSeed { get; set; }
 
-        protected InitialzationBase()
+        protected InitializationBase()
         {
         }
 
-        protected InitialzationBase(int diceSeed)
+        protected InitializationBase(int diceSeed)
         {
             DiceSeed = diceSeed;
         }
@@ -95,9 +95,6 @@ namespace Zilon.Emulation.Common
         /// </summary>
         private void RegisterAuxServices(IServiceCollection container)
         {
-            var linearDice = CreateRandomSeedAndLinearDice();
-            var gaussDice = CreateRandomSeedAndGaussDice();
-            var expDice = CreateRandomSeedAndExpDice();
             container.AddSingleton(factory => CreateRandomSeedAndLinearDice());
             container.AddSingleton(factory => CreateRandomSeedAndGaussDice());
             container.AddSingleton(factory => CreateRandomSeedAndExpDice());

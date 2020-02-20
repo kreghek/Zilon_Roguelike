@@ -6,7 +6,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    public class Startup : InitialzationBase
+    public class Startup : InitializationBase
     {
         public Startup(int diceSeed): base(diceSeed)
         { 

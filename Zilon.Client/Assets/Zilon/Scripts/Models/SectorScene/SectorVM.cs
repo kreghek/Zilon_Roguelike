@@ -8,12 +8,10 @@ using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -109,8 +107,6 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
-
-    [Inject] private readonly ScoreStorage _scoreStorage;
 
     [Inject] private readonly UiSettingService _uiSettingService;
 
@@ -268,14 +264,19 @@ public class SectorVM : MonoBehaviour
             .Single(x => x.IsStart).Nodes
             .First();
 
-        var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorViewModel(
+            _humanPlayer,
             _actorManager,
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);
 
         //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(playerActorViewModel.Actor.SectorFowData, _sectorManager.CurrentSector.Map, playerActorStartNode, 5);
+        FowHelper.UpdateFowData(
+            playerActorViewModel.Actor.SectorFowData,
+            _sectorManager.CurrentSector.Map,
+            playerActorStartNode,
+            radius: 5);
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
@@ -734,17 +735,6 @@ public class SectorVM : MonoBehaviour
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
-        var scores = _scoreManager.Scores;
-
-        try
-        {
-            _scoreStorage.AppendScores("test", scores);
-        }
-        catch (Exception exception)
-        {
-            Debug.LogError("Не удалось выполнить запись результатов в БД\n" + exception.ToString());
-        }
-
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
 
