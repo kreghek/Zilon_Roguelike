@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
-
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -26,6 +26,12 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
     [Inject]
     private readonly ScoreStorage _scoreStorage;
 
+    [Inject]
+    private readonly DeathReasonService _deathReasonService;
+
+    [Inject]
+    private readonly IPlayerEventLogService _playerEventLogService;
+
     public string Caption => "Scores";
 
     public event EventHandler Closed;
@@ -37,7 +43,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
 
-        DetailsText.text = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
+        var lastPlayerEvent = _playerEventLogService.GetPlayerEvent();
+        var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
+
+        DetailsText.text = deathReason + "\n" + TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
     }
 
     public void ApplyChanges()
