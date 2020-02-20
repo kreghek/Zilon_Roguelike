@@ -82,8 +82,26 @@ namespace Zilon.Emulation.Common
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
             container.AddScoped<IActorManager, ActorManager>();
             container.AddScoped<IPropContainerManager, PropContainerManager>();
-            container.AddScoped<ITacticalActUsageService, TacticalActUsageService>();
+            container.AddScoped<ITacticalActUsageService>(serviceProvider =>
+            {
+                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
+                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
+
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, perkResolver, sectorManager);
+
+                ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
+
+                return tacticalActUsageService;
+            });
             container.AddScoped<MonsterBotActorTaskSource>();
+        }
+
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
+        {
+            // Указание необязательных зависимостей
+            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+            tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)
@@ -208,6 +226,7 @@ namespace Zilon.Emulation.Common
         private static void RegisterPlayerServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
+            serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<HumanPlayer>();
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
         }
