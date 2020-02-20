@@ -37,6 +37,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
+        Container.Bind<IPlayerEventLogService>().To<PlayerEventLogService>().AsSingle();
         Container.Bind<DeathReasonService>().AsSingle();
         Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
