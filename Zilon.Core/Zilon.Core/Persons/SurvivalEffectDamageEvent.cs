@@ -12,5 +12,7 @@ namespace Zilon.Core.Persons
         }
 
         public SurvivalStatHazardEffect Effect { get; }
+        public string Key => $"{Effect.Type}";
+        public int Weight => (int)Effect.Level;
     }
 }

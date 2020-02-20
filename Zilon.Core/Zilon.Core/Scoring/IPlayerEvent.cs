@@ -2,6 +2,8 @@
 {
     public interface IPlayerEvent
     {
+        string Key { get; }
 
+        int Weight { get; }
     }
 }

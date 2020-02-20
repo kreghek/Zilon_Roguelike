@@ -1,9 +1,9 @@
 ﻿using System;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 
-namespace Zilon.Core.Scoring
+namespace Zilon.Core.Tactics
 {
     public sealed class PlayerDamagedEvent : IPlayerEvent
     {
@@ -16,5 +16,9 @@ namespace Zilon.Core.Scoring
         public ITacticalAct TacticalAct { get; }
 
         public IActor Damager { get; }
+
+        public string Key => $"{Damager.Person}-{TacticalAct}";
+
+        public int Weight => TacticalAct.Efficient.Dice * TacticalAct.Efficient.Count;
     }
 }

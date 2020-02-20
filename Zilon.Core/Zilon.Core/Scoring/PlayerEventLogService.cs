@@ -10,7 +10,7 @@ namespace Zilon.Core.Scoring
 
         public PlayerEventLogService()
         {
-            _playerEvents = new List<IPlayerEvent>();
+            _playerEvents = new List<IPlayerEvent>(10);
         }
 
         public IActor Actor { get; set; }
@@ -22,7 +22,21 @@ namespace Zilon.Core.Scoring
 
         public void Log(IPlayerEvent playerEvent)
         {
+            KeepStoredEventListCount();
+
             _playerEvents.Add(playerEvent);
+        }
+
+        private void KeepStoredEventListCount()
+        {
+            if (_playerEvents.Count >= 10)
+            {
+                var lengthDiff = _playerEvents.Count - 10 + 1;
+                for (var i = 0; i < lengthDiff; i++)
+                {
+                    _playerEvents.RemoveAt(0);
+                }
+            }
         }
     }
 }

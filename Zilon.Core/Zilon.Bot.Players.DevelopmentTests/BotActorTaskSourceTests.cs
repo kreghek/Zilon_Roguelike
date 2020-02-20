@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -41,26 +42,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             string deathReason = GetDeathReasonString(lastEvent);
 
             Console.WriteLine($"Death Reason: {deathReason}");
-        }
-
-        private static string GetDeathReasonString(IPlayerEvent lastEvent)
-        {
-            if (lastEvent is null)
-            {
-                return null;
-            }
-
-            switch (lastEvent)
-            {
-                case PlayerDamagedEvent playerDamagedEvent:
-                    return $"{playerDamagedEvent.Damager}";
-
-                case SurvivalEffectDamageEvent survivalEffectDamageEvent:
-                    return $"{survivalEffectDamageEvent.Effect.Type}";
-
-                default:
-                    throw new InvalidOperationException();
-            }
         }
     }
 }
