@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
+
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
-using Zilon.Core.Tactics;
 
 public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 {
@@ -56,7 +56,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         var scores = _scoreManager.Scores;
         try
         {
-            _scoreStorage.AppendScores(name, scores);
+            var lastPlayerEvent = _playerEventLogService.GetPlayerEvent();
+            var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
+
+            _scoreStorage.AppendScores(name, scores, deathReason);
         }
         catch (Exception exception)
         {

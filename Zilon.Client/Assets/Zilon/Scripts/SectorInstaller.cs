@@ -17,6 +17,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -36,18 +37,24 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
-            .OnInstantiated<TacticalActUsageService>((c, i) =>
+            .OnInstantiated<TacticalActUsageService>((c, service) =>
              {
                  var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
                  if (equipmentDurableService != null)
                  {
-                     i.EquipmentDurableService = equipmentDurableService;
+                     service.EquipmentDurableService = equipmentDurableService;
                  }
 
                  var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
                  if (actorInteractionBus != null)
                  {
-                     i.ActorInteractionBus = actorInteractionBus;
+                     service.ActorInteractionBus = actorInteractionBus;
+                 }
+
+                 var playerEventLogService = Container.Resolve<IPlayerEventLogService>();
+                 if (playerEventLogService != null)
+                 {
+                     service.PlayerEventLogService = playerEventLogService;
                  }
              });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
