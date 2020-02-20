@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
@@ -8,14 +8,14 @@ namespace Zilon.Core.ScoreResultGenerating
 {
     public class DeathReasonService
     {
-        public string GetDeathReasonSummary(IEnumerable<IPlayerEvent> playerEvents)
+        public string GetDeathReasonSummary(IPlayerEvent playerEvent)
         {
-            if (playerEvents is null)
+            if (playerEvent is null)
             {
-                throw new ArgumentNullException(nameof(playerEvents));
+                throw new ArgumentNullException(nameof(playerEvent));
             }
 
-
+            return GetDeathReasonString(playerEvent);
         }
 
         private static string GetDeathReasonString(IPlayerEvent dominateEvent)

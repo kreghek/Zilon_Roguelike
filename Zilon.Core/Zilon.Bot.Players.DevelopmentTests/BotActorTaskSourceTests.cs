@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -38,8 +39,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
 
             var playerEventLogService = _globalServiceProvider.GetRequiredService<IPlayerEventLogService>();
-            var lastEvent = playerEventLogService.GetPlayerEvents().LastOrDefault();
-            string deathReason = GetDeathReasonString(lastEvent);
+            var deathReasonService = _globalServiceProvider.GetRequiredService<DeathReasonService>();
+            var lastEvent = playerEventLogService.GetPlayerEvent();
+            string deathReason = deathReasonService.GetDeathReasonSummary(lastEvent);
 
             Console.WriteLine($"Death Reason: {deathReason}");
         }

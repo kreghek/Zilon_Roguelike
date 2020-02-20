@@ -13,6 +13,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -227,6 +228,7 @@ namespace Zilon.Emulation.Common
         {
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
+            serviceCollection.AddSingleton<DeathReasonService>();
             serviceCollection.AddSingleton<HumanPlayer>();
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
         }

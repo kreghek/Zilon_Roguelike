@@ -8,6 +8,6 @@ namespace Zilon.Core.Scoring
 
         IActor Actor { get; set; }
 
-        IPlayerEvent[] GetPlayerEvents();
+        IPlayerEvent GetPlayerEvent();
     }
 }
