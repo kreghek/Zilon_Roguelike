@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using Zenject;
 
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
 
 public class NewGameButtonHandler : MonoBehaviour

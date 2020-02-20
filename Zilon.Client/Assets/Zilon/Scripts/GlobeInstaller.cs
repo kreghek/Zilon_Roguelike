@@ -7,7 +7,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Globe;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 
 public class GlobeInstaller : MonoInstaller
 {
@@ -20,6 +20,7 @@ public class GlobeInstaller : MonoInstaller
         Container.Bind<MoveGroupCommand>().AsSingle()
             .OnInstantiated<MoveGroupCommand>((c, i) =>
             {
+                //TODO Возможно, лучше будет извлекать значение из параметра "c".
                 var scoreManager = Container.Resolve<IScoreManager>();
                 if (scoreManager != null)
                 {
