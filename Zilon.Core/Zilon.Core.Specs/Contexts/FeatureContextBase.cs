@@ -24,6 +24,7 @@ using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Specs.Mocks;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;

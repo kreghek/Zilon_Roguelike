@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {

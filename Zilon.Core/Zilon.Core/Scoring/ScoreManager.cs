@@ -2,14 +2,15 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.Scoring
 {
     /// <summary>
     /// Реализация менеджера подсчёта очков.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Tactics.IScoreManager" />
+    /// <seealso cref="IScoreManager" />
     public class ScoreManager : IScoreManager
     {
         private const float TURN_INC = 0.1f;
@@ -35,7 +36,7 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Посещённые места.</summary>
         public ISet<GlobeRegionNode> Places { get => Scores.Places; }
-        public ScoreAchievements Achievements { get => Scores.Achievements; private set=> Scores.Achievements = value; }
+        public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
 
         public void CountHome()
         {

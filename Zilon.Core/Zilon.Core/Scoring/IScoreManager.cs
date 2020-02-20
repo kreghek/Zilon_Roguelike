@@ -2,9 +2,10 @@
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.Scoring
 {
     /// <summary>
     /// Менеджер подсчёта очков.
