@@ -22,20 +22,22 @@ namespace Zilon.Core.Scoring
             Scores = new Scores();
         }
 
-        /// <summary>Базовые очки, набранные игроком.</summary>
+        /// <inheritdoc/>
         public int BaseScores { get => Scores.BaseScores; private set => Scores.BaseScores = value; }
 
-        /// <summary>Фраги по схемам монстров, добытые игроком.</summary>
+        /// <inheritdoc/>
         public IDictionary<IMonsterScheme, int> Frags { get => Scores.Frags; }
 
-        /// <summary>Счётчик ходов по типам секторов.</summary>
+        /// <inheritdoc/>
         public IDictionary<ILocationScheme, int> PlaceTypes { get => Scores.PlaceTypes; }
 
-        /// <summary>Шаги, прожитые персонажем.</summary>
+        /// <inheritdoc/>
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
-        /// <summary>Посещённые места.</summary>
+        /// <inheritdoc/>
         public ISet<GlobeRegionNode> Places { get => Scores.Places; }
+
+        /// <inheritdoc/>
         public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
 
         public void CountHome()
@@ -48,6 +50,11 @@ namespace Zilon.Core.Scoring
         /// <param name="monster">Монстр, убитый игроком.</param>
         public void CountMonsterDefeat(MonsterPerson monster)
         {
+            if (monster is null)
+            {
+                throw new System.ArgumentNullException(nameof(monster));
+            }
+
             var monsterScheme = monster.Scheme;
 
             var score = monsterScheme.BaseScore;
