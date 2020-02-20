@@ -14,6 +14,7 @@ using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
@@ -54,6 +55,8 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public EffectCollection Effects { get; }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
@@ -603,7 +606,11 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.Stat.KeySegments, _survivalRandomSource);
+            PersonEffectHelper.UpdateSurvivalEffect(
+                Effects,
+                e.Stat,
+                e.Stat.KeySegments,
+                _survivalRandomSource);
         }
 
 

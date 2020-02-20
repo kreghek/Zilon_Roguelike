@@ -289,7 +289,7 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
-                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct.Scheme);
+                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
 
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
@@ -329,7 +329,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalActScheme tacticalActScheme)
+        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
         {
             // Сервис логирование - необязательная зависимость.
             // Если он не задан, то не выполняем логирование.
@@ -344,7 +344,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damageEvent = new PlayerDamagedEvent(tacticalActScheme, actor);
+            var damageEvent = new PlayerDamagedEvent(tacticalAct, actor);
             PlayerEventLogService.Log(damageEvent);
         }
 

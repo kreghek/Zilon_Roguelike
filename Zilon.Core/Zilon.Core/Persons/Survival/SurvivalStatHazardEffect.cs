@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using Zilon.Core.Components;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
@@ -11,6 +12,8 @@ namespace Zilon.Core.Persons
     {
         private SurvivalStatHazardLevel _level;
         private readonly ISurvivalRandomSource _survivalRandomSource;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
@@ -45,6 +48,11 @@ namespace Zilon.Core.Persons
 
         public void Apply(ISurvivalData survivalData)
         {
+            if (survivalData is null)
+            {
+                throw new ArgumentNullException(nameof(survivalData));
+            }
+
             if (Level == SurvivalStatHazardLevel.Max)
             {
                 var roll = _survivalRandomSource.RollMaxHazardDamage();
@@ -52,8 +60,20 @@ namespace Zilon.Core.Persons
                 if (roll >= successRoll)
                 {
                     survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                    LogPlayerEvent();
                 }
             }
+        }
+
+        private void LogPlayerEvent()
+        {
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            var playerEvent = new SurvivalEffectDamageEvent(this);
+            PlayerEventLogService.Log(playerEvent);
         }
 
         private int GetSuccessHazardDamageRoll()

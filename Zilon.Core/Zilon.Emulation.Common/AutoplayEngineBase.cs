@@ -88,7 +88,8 @@ namespace Zilon.Emulation.Common
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
             ISectorManager sectorManager,
-            IActorManager actorManager)
+            IActorManager actorManager,
+            IPlayerEventLogService playerEventLogService)
         {
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
@@ -105,7 +106,10 @@ namespace Zilon.Emulation.Common
 
                 var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
-                var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory);
+                var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory)
+                {
+                    PlayerEventLogService = playerEventLogService
+                };
 
                 humanPlayer.MainPerson = person;
 
@@ -163,6 +167,8 @@ namespace Zilon.Emulation.Common
             }
 
             var actor = new Actor(humanPlayer.MainPerson, humanPlayer, playerActorStartNode);
+
+            playerEventLogService.Actor = actor;
 
             actorManager.Add(actor);
 
@@ -237,6 +243,7 @@ namespace Zilon.Emulation.Common
             var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
             var actorManager = ServiceScope.ServiceProvider.GetRequiredService<IActorManager>();
             var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+            var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 
@@ -253,7 +260,8 @@ namespace Zilon.Emulation.Common
                 survivalRandomSource,
                 propFactory,
                 sectorManager,
-                actorManager);
+                actorManager,
+                playerEventLogService);
 
             return humanActor;
         }

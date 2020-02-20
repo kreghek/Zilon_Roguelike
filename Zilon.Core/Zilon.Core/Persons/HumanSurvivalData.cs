@@ -31,6 +31,10 @@ namespace Zilon.Core.Persons
 
         private static SurvivalStat[] GetStats([NotNull] IPersonScheme personScheme)
         {
+            if (personScheme is null)
+            {
+                throw new ArgumentNullException(nameof(personScheme));
+            }
             // Устанавливаем характеристики выживания персонажа
             var statList = new List<SurvivalStat>();
             SetHitPointsStat(personScheme, statList);

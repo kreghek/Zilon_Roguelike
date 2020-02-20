@@ -1,19 +1,19 @@
 ﻿using System;
 
-using Zilon.Core.Schemes;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
 {
     public sealed class PlayerDamagedEvent : IPlayerEvent
     {
-        public PlayerDamagedEvent(ITacticalActScheme tacticalActScheme, IActor damager)
+        public PlayerDamagedEvent(ITacticalAct tacticalAct, IActor damager)
         {
-            TacticalActScheme = tacticalActScheme ?? throw new ArgumentNullException(nameof(tacticalActScheme));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
             Damager = damager ?? throw new ArgumentNullException(nameof(damager));
         }
 
-        public ITacticalActScheme TacticalActScheme { get; }
+        public ITacticalAct TacticalAct { get; }
 
         public IActor Damager { get; }
     }
