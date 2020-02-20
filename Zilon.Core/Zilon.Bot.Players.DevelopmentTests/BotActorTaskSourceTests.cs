@@ -41,7 +41,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var playerEventLogService = _globalServiceProvider.GetRequiredService<IPlayerEventLogService>();
             var deathReasonService = _globalServiceProvider.GetRequiredService<DeathReasonService>();
             var lastEvent = playerEventLogService.GetPlayerEvent();
-            string deathReason = deathReasonService.GetDeathReasonSummary(lastEvent);
+            string deathReason = deathReasonService.GetDeathReasonSummary(lastEvent, Core.Localization.Language.Ru);
 
             Console.WriteLine($"Death Reason: {deathReason}");
         }
