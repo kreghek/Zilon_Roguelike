@@ -38,25 +38,25 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
             .OnInstantiated<TacticalActUsageService>((c, service) =>
-             {
-                 var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
-                 if (equipmentDurableService != null)
-                 {
-                     service.EquipmentDurableService = equipmentDurableService;
-                 }
+            {
+                var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
+                if (equipmentDurableService != null)
+                {
+                    service.EquipmentDurableService = equipmentDurableService;
+                }
 
-                 var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
-                 if (actorInteractionBus != null)
-                 {
-                     service.ActorInteractionBus = actorInteractionBus;
-                 }
+                var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
+                if (actorInteractionBus != null)
+                {
+                    service.ActorInteractionBus = actorInteractionBus;
+                }
 
-                 var playerEventLogService = Container.Resolve<IPlayerEventLogService>();
-                 if (playerEventLogService != null)
-                 {
-                     service.PlayerEventLogService = playerEventLogService;
-                 }
-             });
+                var playerEventLogService = Container.Resolve<IPlayerEventLogService>();
+                if (playerEventLogService != null)
+                {
+                    service.PlayerEventLogService = playerEventLogService;
+                }
+            });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();

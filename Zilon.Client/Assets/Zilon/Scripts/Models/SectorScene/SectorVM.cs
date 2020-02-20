@@ -111,6 +111,9 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly UiSettingService _uiSettingService;
 
+    [Inject]
+    private readonly IPlayerEventLogService _playerEventLogService;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -707,6 +710,8 @@ public class SectorVM : MonoBehaviour
         var fowData = new HumanSectorFowData();
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
+        _playerEventLogService.Actor = actor;
+        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
 
         actorManager.Add(actor);
 
