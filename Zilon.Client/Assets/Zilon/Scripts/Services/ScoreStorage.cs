@@ -57,7 +57,7 @@ namespace Assets.Zilon.Scripts.Services
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT Name, Scores, TextSummary FROM [Scores] ORDER BY Scores DESC";
+                    command.CommandText = "SELECT Name, Scores, DeathReason, TextSummary FROM [Scores] ORDER BY Scores DESC";
                     command.CommandType = CommandType.Text;
                     using (var reader = command.ExecuteReader())
                     {
@@ -69,7 +69,8 @@ namespace Assets.Zilon.Scripts.Services
                             {
                                 Number = number,
                                 Name = reader.GetString(0),
-                                Scores = reader.GetInt32(1)
+                                DeathReason = reader.GetString(1),
+                                Scores = reader.GetInt32(2)
                             };
 
                             recordList.Add(record);

@@ -55,7 +55,7 @@ public class ScoresHandler : MonoBehaviour
         foreach (var record in scoreRecords)
         {
             var row = Instantiate(ScoresTableRowPrefab, ScoreRecordParent);
-            row.Init(record.Number, record.Name, record.Scores, "[not impl]", "[not impl]");
+            row.Init(record.Number, record.Name, record.Scores, record.DeathReason, string.Empty);
         }
     }
 
