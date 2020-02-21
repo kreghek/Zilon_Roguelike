@@ -46,7 +46,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         var lastPlayerEvent = _playerEventLogService.GetPlayerEvent();
         var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
 
-        DetailsText.text = deathReason + "\n" + TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
+        DetailsText.text = "Причина смерти:" + deathReason + "\n" + TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
     }
 
     public void ApplyChanges()
