@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Localization;
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
@@ -6,7 +7,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.ScoreResultGenerating
 {
-    public class DeathReasonService
+    public class DeathReasonService : IDeathReasonService
     {
         public string GetDeathReasonSummary(IPlayerEvent playerEvent, Language language)
         {
