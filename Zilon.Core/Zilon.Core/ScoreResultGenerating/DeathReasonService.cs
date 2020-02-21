@@ -83,7 +83,12 @@ namespace Zilon.Core.ScoreResultGenerating
 
         private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
         {
-            var monsterPerson = playerDamagedEvent.Damager.Person as MonsterPerson;
+            var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
+
+            if (monsterPerson == null)
+            {
+                throw new InvalidOperationException();
+            }
 
             switch (language)
             {
