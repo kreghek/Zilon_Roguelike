@@ -118,10 +118,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-                var targetCubePos = ((HexNode)target.Node).CubeCoords;
-
-                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                isInDistance = act.CheckDistance(actor.Node, target.Node, _sectorManager.CurrentSector.Map);
             }
 
             if (!isInDistance)

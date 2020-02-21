@@ -57,9 +57,7 @@ namespace Zilon.Core.Commands
                     return false;
                 }
 
-                var currentCoords = ((HexNode)currentNode).CubeCoords;
-                var targetCoords = ((HexNode)targetNode).CubeCoords;
-                var isInDistance = act.CheckDistance(currentCoords, targetCoords);
+                var isInDistance = act.CheckDistance(currentNode, targetNode, SectorManager.CurrentSector.Map);
                 if (!isInDistance)
                 {
                     return false;
