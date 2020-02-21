@@ -17,6 +17,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -36,20 +37,26 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
-            .OnInstantiated<TacticalActUsageService>((c, i) =>
-             {
-                 var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
-                 if (equipmentDurableService != null)
-                 {
-                     i.EquipmentDurableService = equipmentDurableService;
-                 }
+            .OnInstantiated<TacticalActUsageService>((c, service) =>
+            {
+                var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
+                if (equipmentDurableService != null)
+                {
+                    service.EquipmentDurableService = equipmentDurableService;
+                }
 
-                 var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
-                 if (actorInteractionBus != null)
-                 {
-                     i.ActorInteractionBus = actorInteractionBus;
-                 }
-             });
+                var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
+                if (actorInteractionBus != null)
+                {
+                    service.ActorInteractionBus = actorInteractionBus;
+                }
+
+                var playerEventLogService = Container.Resolve<IPlayerEventLogService>();
+                if (playerEventLogService != null)
+                {
+                    service.PlayerEventLogService = playerEventLogService;
+                }
+            });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();

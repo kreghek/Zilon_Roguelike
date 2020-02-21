@@ -6,6 +6,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
@@ -28,6 +29,8 @@ namespace Zilon.Core.Tactics
         /// Шина событий возаимодействия актёров.
         /// </summary>
         public IActorInteractionBus ActorInteractionBus { get; set; }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
@@ -286,6 +289,8 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
+                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
+
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
                     var damagedEquipment = GetDamagedEquipment(targetActor);
@@ -322,6 +327,25 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        {
+            // Сервис логирование - необязательная зависимость.
+            // Если он не задан, то не выполняем логирование.
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            // Логируем только урон по персонажу игрока.
+            if (targetActor != PlayerEventLogService.Actor)
+            {
+                return;
+            }
+
+            var damageEvent = new PlayerDamagedEvent(tacticalAct, actor);
+            PlayerEventLogService.Log(damageEvent);
         }
 
         private void ProcessSuccessfulAttackEvent(

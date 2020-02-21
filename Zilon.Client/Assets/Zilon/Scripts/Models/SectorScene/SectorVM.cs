@@ -21,6 +21,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -109,6 +110,9 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
     [Inject] private readonly UiSettingService _uiSettingService;
+
+    [Inject]
+    private readonly IPlayerEventLogService _playerEventLogService;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -706,6 +710,8 @@ public class SectorVM : MonoBehaviour
         var fowData = new HumanSectorFowData();
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
+        _playerEventLogService.Actor = actor;
+        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
 
         actorManager.Add(actor);
 

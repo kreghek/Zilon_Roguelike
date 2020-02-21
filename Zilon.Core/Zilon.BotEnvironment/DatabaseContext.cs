@@ -3,8 +3,7 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 
 namespace Zilon.BotEnvironment
 {

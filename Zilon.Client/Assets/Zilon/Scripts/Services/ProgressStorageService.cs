@@ -12,7 +12,7 @@ using Zilon.Core.Players;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 
@@ -30,13 +30,13 @@ namespace Assets.Zilon.Scripts.Services
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
         [Inject]
-        private IPropFactory _propFactory;
+        private readonly IPropFactory _propFactory;
 
         [Inject]
-        private HumanPlayer _humanPlayer;
+        private readonly HumanPlayer _humanPlayer;
 
         [Inject]
-        private IScoreManager _scoreManager;
+        private readonly IScoreManager _scoreManager;
 
         public bool HasSaves()
         {
@@ -91,7 +91,7 @@ namespace Assets.Zilon.Scripts.Services
 
             foreach (var cell in terrainCells)
             {
-                var region =  LoadRegion(cell);
+                var region = LoadRegion(cell);
                 if (region != null)
                 {
                     _worldManager.Regions[cell] = region;

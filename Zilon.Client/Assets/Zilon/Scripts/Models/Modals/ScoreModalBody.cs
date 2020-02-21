@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 using Zenject;
 
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
-using Zilon.Core.Tactics;
 
 public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 {
@@ -26,6 +26,12 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
     [Inject]
     private readonly ScoreStorage _scoreStorage;
 
+    [Inject]
+    private readonly DeathReasonService _deathReasonService;
+
+    [Inject]
+    private readonly IPlayerEventLogService _playerEventLogService;
+
     public string Caption => "Scores";
 
     public event EventHandler Closed;
@@ -37,7 +43,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         // TODO Сделать анимацию - плавное накручивание очков через Lerp от инта
         TotalScoreText.text = _scoreManager.BaseScores.ToString();
 
-        DetailsText.text = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
+        var lastPlayerEvent = _playerEventLogService.GetPlayerEvent();
+        var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
+
+        DetailsText.text = "Причина смерти:" + deathReason + "\n" + TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
     }
 
     public void ApplyChanges()
@@ -47,7 +56,10 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
         var scores = _scoreManager.Scores;
         try
         {
-            _scoreStorage.AppendScores(name, scores);
+            var lastPlayerEvent = _playerEventLogService.GetPlayerEvent();
+            var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
+
+            _scoreStorage.AppendScores(name, scores, deathReason);
         }
         catch (Exception exception)
         {

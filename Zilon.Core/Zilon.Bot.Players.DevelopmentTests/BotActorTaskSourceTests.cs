@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.Persons;
+using Zilon.Core.ScoreResultGenerating;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.DevelopmentTests
@@ -33,6 +37,13 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
+
+            var playerEventLogService = _globalServiceProvider.GetRequiredService<IPlayerEventLogService>();
+            var deathReasonService = _globalServiceProvider.GetRequiredService<DeathReasonService>();
+            var lastEvent = playerEventLogService.GetPlayerEvent();
+            string deathReason = deathReasonService.GetDeathReasonSummary(lastEvent, Core.Localization.Language.Ru);
+
+            Console.WriteLine($"Death Reason: {deathReason}");
         }
     }
 }

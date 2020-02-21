@@ -10,6 +10,8 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.ScoreResultGenerating;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
@@ -35,17 +37,17 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
         Container.Bind<IPerkResolver>().To<PerkResolver>().AsSingle();
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
+        Container.Bind<IPlayerEventLogService>().To<PlayerEventLogService>().AsSingle();
+        Container.Bind<DeathReasonService>().AsSingle();
         Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
-
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
         Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
         Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
-
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
