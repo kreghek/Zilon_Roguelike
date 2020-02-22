@@ -23,6 +23,6 @@
   },
   "Constrains":
   {
-    "Cooldown": 3
+    "Cooldown": 30
   }
 }
