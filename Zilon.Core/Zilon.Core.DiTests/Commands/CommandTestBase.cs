@@ -24,16 +24,15 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public abstract class CommandTestBase
     {
-        protected IServiceCollection Container;
-
-        protected IServiceProvider ServiceProvider;
+        protected IServiceCollection Container { get; set; }
+        protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
         public async System.Threading.Tasks.Task SetUpAsync()
         {
             Container = new ServiceCollection();
 
-            var testMap = await SquareMapFactory.CreateAsync(10);
+            var testMap = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
@@ -42,18 +41,13 @@ namespace Zilon.Core.Tests.Commands
             var sectorManagerMock = new Mock<ISectorManager>();
             sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
             var sectorManager = sectorManagerMock.Object;
-
-            var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            var act = actMock.Object;
+            var simpleAct = CreateSimpleAct();
+            var cooldownAct = CreateActWithCooldown();
+            var cooldownResolvedAct = CreateActWithResolvedCooldown();
 
             var actCarrierMock = new Mock<ITacticalActCarrier>();
             actCarrierMock.SetupGet(x => x.Acts)
-                .Returns(new[] { act });
+                .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
             var actCarrier = actCarrierMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
@@ -100,6 +94,44 @@ namespace Zilon.Core.Tests.Commands
             RegisterSpecificServices(testMap, playerStateMock);
 
             ServiceProvider = Container.BuildServiceProvider();
+        }
+
+        private static ITacticalAct CreateSimpleAct()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            var act = actMock.Object;
+            return act;
+        }
+
+        private static ITacticalAct CreateActWithCooldown()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            actMock.SetupGet(x => x.CurrentCooldown).Returns(1);
+            var act = actMock.Object;
+            return act;
+        }
+
+        private static ITacticalAct CreateActWithResolvedCooldown()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            actMock.SetupGet(x => x.CurrentCooldown).Returns(0);
+            var act = actMock.Object;
+            return act;
         }
 
         protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
