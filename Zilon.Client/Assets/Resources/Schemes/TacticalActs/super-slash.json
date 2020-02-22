@@ -19,10 +19,10 @@
       "Type": "Tactical",
       "Impact":  "Kinetic",
 	  "ApRank": 2
-    },
-	"Constrains":
-	{
-	    "Cooldown": 3
-	}
+    }
+  },
+  "Constrains":
+  {
+    "Cooldown": 3
   }
 }
