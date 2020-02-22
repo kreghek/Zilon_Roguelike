@@ -39,5 +39,11 @@ namespace Zilon.Core.Persons
         /// Актуальные данные о применении действия.
         /// </summary>
         Roll ToHit { get; }
+
+        /// <summary>
+        /// Текущее состояние КД на использование.
+        /// Используется, если в схеме <see cref="ITacticalActConstrainsSubScheme.Cooldown"/> не null.
+        /// </summary>
+        int? Cooldown { get; }
     }
 }

@@ -32,17 +32,28 @@ namespace Zilon.Core.Persons
             Constrains = scheme.Constrains;
         }
 
+        /// <inheritdoc/>
         public ITacticalActStatsSubScheme Stats { get; }
 
+        /// <inheritdoc/>
         public ITacticalActScheme Scheme { get; }
 
+        /// <inheritdoc/>
         public Roll Efficient { get; }
 
+        /// <inheritdoc/>
         public Roll ToHit { get; }
 
+        /// <inheritdoc/>
         public Equipment Equipment { get; }
+
+        /// <inheritdoc/>
         public ITacticalActConstrainsSubScheme Constrains { get; }
 
+        /// <inheritdoc/>
+        public int? Cooldown { get; }
+
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Scheme} [{Equipment}]";

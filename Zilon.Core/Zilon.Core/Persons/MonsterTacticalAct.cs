@@ -16,6 +16,7 @@ namespace Zilon.Core.Persons
         public ITacticalActConstrainsSubScheme Constrains => null;
 
         public ITacticalActScheme Scheme { get; }
+        public int? Cooldown { get; }
 
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {

@@ -44,7 +44,7 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedActorViewModel.Actor.Node;
 
-            var act = PlayerState.ActiveActor.Actor.Person.TacticalActCarrier.Acts.First();
+            var act = PlayerState.TacticalAct;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
                 PlayerState.ActiveActor.Actor == selectedActorViewModel.Actor)
             {
@@ -52,6 +52,7 @@ namespace Zilon.Core.Commands
             }
             else
             {
+                // Проверка, что цель достаточно близка по дистации и видна.
                 if (act.Stats.Range == null)
                 {
                     return false;
@@ -69,6 +70,8 @@ namespace Zilon.Core.Commands
                     return false;
                 }
 
+                // Проверка наличия ресурсов для выполнения действия
+
                 if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
                 {
                     var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
@@ -79,6 +82,13 @@ namespace Zilon.Core.Commands
                     {
                         return false;
                     }
+                }
+
+                // Проверка КД
+
+                if (act.Cooldown > 0)
+                {
+                    return false;
                 }
             }
 
