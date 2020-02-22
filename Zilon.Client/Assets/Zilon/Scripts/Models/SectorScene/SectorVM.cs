@@ -438,7 +438,7 @@ public class SectorVM : MonoBehaviour
         actorViewModel.Actor = actor;
 
         actorViewModel.Selected += TraderViewModel_Selected;
-        
+
         ActorViewModels.Add(actorViewModel);
     }
 
@@ -534,7 +534,7 @@ public class SectorVM : MonoBehaviour
             var indicator = Instantiate(FoundNothingIndicatorPrefab, transform);
             indicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
 
-            var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
+            var actorViewModel = ActorViewModels.SingleOrDefault(x => x.Actor == actor);
 
             indicator.Init(actorViewModel);
         }
@@ -735,6 +735,8 @@ public class SectorVM : MonoBehaviour
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+
+        AddEquipmentToCurrentPerson("rush-sword");
 
         return actorViewModel;
     }

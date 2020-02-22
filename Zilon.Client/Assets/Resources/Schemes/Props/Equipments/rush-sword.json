@@ -2,7 +2,8 @@
   "Tags": [ "weapon", "sword" ],
   "Equip": {
     "ActSids": [
-      "slash"
+      "slash",
+	  "super-slash"
     ],
     "SlotTypes": [ "Hand" ]
   },
