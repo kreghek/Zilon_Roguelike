@@ -15,6 +15,12 @@ namespace Zilon.Core.Tactics.Spatial
 
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
+            //TODO Жуткий костыль. Перепиать код, чтобы его не было. Тесты должны проходить.
+            if (currentNode is HexNode hexCurrentNode && targetNode is HexNode hexTargetNode)
+            {
+                return hexCurrentNode.CubeCoords.DistanceTo(hexTargetNode.CubeCoords);
+            }
+
             return 0;
         }
     }

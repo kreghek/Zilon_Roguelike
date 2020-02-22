@@ -118,10 +118,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-                var targetCubePos = ((HexNode)target.Node).CubeCoords;
-
-                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                isInDistance = act.CheckDistance(actor.Node, target.Node, _sectorManager.CurrentSector.Map);
             }
 
             if (!isInDistance)
@@ -163,6 +160,9 @@ namespace Zilon.Core.Tactics
             {
                 EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
             }
+
+            // Сброс КД, если он есть.
+            act.StartCooldownIfItIs();
         }
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)

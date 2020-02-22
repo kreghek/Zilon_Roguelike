@@ -66,6 +66,16 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
+            if (testMap is null)
+            {
+                throw new System.ArgumentNullException(nameof(testMap));
+            }
+
+            if (playerStateMock is null)
+            {
+                throw new System.ArgumentNullException(nameof(playerStateMock));
+            }
+
             var targetMock = new Mock<IActor>();
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
