@@ -160,6 +160,9 @@ namespace Zilon.Core.Tactics
             {
                 EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
             }
+
+            // Сброс КД, если он есть.
+            act.StartCooldownIfItIs();
         }
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)

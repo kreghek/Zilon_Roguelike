@@ -86,7 +86,7 @@ namespace Zilon.Core.Commands
 
                 // Проверка КД
 
-                if (act.Cooldown > 0)
+                if (act.CurrentCooldown > 0)
                 {
                     return false;
                 }

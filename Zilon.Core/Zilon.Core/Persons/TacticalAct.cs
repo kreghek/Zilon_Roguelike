@@ -30,6 +30,8 @@ namespace Zilon.Core.Persons
             Equipment = equipment;
 
             Constrains = scheme.Constrains;
+
+            CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
         }
 
         /// <inheritdoc/>
@@ -51,12 +53,33 @@ namespace Zilon.Core.Persons
         public ITacticalActConstrainsSubScheme Constrains { get; }
 
         /// <inheritdoc/>
-        public int? Cooldown { get; }
+        public int? CurrentCooldown { get; private set; }
+
+        /// <inheritdoc/>
+        public void StartCooldownIfItIs()
+        {
+            CurrentCooldown = Constrains?.Cooldown;
+        }
 
         /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Scheme} [{Equipment}]";
+        }
+
+        /// <inheritdoc/>
+        public void UpdateCooldown()
+        {
+            if (CurrentCooldown is null)
+            {
+                // Если КД нет, то ничего не делаем.
+                return;
+            }
+
+            if (CurrentCooldown > 0)
+            {
+                CurrentCooldown--;
+            }
         }
     }
 }

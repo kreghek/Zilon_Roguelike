@@ -44,6 +44,18 @@ namespace Zilon.Core.Persons
         /// Текущее состояние КД на использование.
         /// Используется, если в схеме <see cref="ITacticalActConstrainsSubScheme.Cooldown"/> не null.
         /// </summary>
-        int? Cooldown { get; }
+        int? CurrentCooldown { get; }
+
+        /// <summary>
+        /// Сброс счётчика КД.
+        /// Применяется, когда действие выполнено. Начинает новый отсчёт.
+        /// </summary>
+        void StartCooldownIfItIs();
+
+        /// <summary>
+        /// Обновление состояния КД.
+        /// Уменьшает отсчёт, чтобы, со временем, действие снова стало доступным.
+        /// </summary>
+        void UpdateCooldown();
     }
 }
