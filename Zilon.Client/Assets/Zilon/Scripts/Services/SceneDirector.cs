@@ -106,7 +106,10 @@ public sealed class SceneDirector : MonoBehaviour
         // В ином случае считаем, что цель заблокировала урон.
         if (interactionEvent.DamageEfficientCalcResult.ResultEfficient > 0)
         {
-            CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
+            // Пока индикаторы уроне не выводим. См #678.
+            // Сейчас индикаторы вносят больше путаницы.
+            //CreateNumericDamageIndicator(interactionEvent, damagedActorViewModel);
+
             CreateBloodTracker(damagedActorViewModel);
         }
         else
