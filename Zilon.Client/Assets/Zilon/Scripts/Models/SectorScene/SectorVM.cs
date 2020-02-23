@@ -736,8 +736,6 @@ public class SectorVM : MonoBehaviour
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
 
-        AddEquipmentToCurrentPerson("rush-sword");
-
         return actorViewModel;
     }
 
