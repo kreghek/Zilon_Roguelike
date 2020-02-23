@@ -97,7 +97,12 @@ public class SectorUiHandler : MonoBehaviour
 
     private bool GetCanOpenLoot()
     {
-        var personNode = _playerState.ActiveActor.Actor.Node;
+        var personNode = _playerState.ActiveActor?.Actor?.Node;
+        if (personNode is null)
+        {
+            return false;
+        }
+
         var lootInNode = GetContainerInNode(personNode);
         if (lootInNode is null)
         {
