@@ -34,7 +34,7 @@ namespace Assets.Zilon.Scripts.Services
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, DeathReason, Turns, Frags, Summary, TextSummary)
-                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, {deathReason}, {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
+                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, '{deathReason}', {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }
@@ -69,8 +69,8 @@ namespace Assets.Zilon.Scripts.Services
                             {
                                 Number = number,
                                 Name = reader.GetString(0),
-                                DeathReason = reader.GetString(1),
-                                Scores = reader.GetInt32(2)
+                                Scores = reader.GetInt32(1),
+                                DeathReason = reader.GetString(2)
                             };
 
                             recordList.Add(record);
