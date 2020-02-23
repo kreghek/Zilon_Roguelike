@@ -33,7 +33,7 @@ namespace Zilon.Core.Commands
             }
 
             var container = targetContainerViewModel.Container;
-            var requiredDistance = container.Purpose == PropContainerPurpose.Loot ? 0 : 1;
+            var requiredDistance = 1;
 
             var targetNode = container.Node;
 

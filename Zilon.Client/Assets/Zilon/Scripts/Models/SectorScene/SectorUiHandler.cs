@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -38,7 +38,7 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject(Id = "quit-request-title-command")] private readonly ICommand _quitRequestTitleCommand;
 
-    [Inject(Id = "open-container")] private readonly ICommand _openContainerCommand;
+    [Inject(Id = "open-container-command")] private readonly ICommand _openContainerCommand;
 
 
     [NotNull]
@@ -52,7 +52,13 @@ public class SectorUiHandler : MonoBehaviour
     public Button CityQuickExitButton;
     public Button OpenLootButton;
 
-    public void FixedUpdate()
+    public void Update()
+    {
+        HandleHotKeys();
+        UpdateButtonStates();
+    }
+
+    private void UpdateButtonStates()
     {
         if (NextTurnButton != null)
         {
@@ -85,7 +91,7 @@ public class SectorUiHandler : MonoBehaviour
         if (OpenLootButton != null)
         {
             var canOpen = GetCanOpenLoot();
-            OpenLootButton.interactable = canOpen;
+            OpenLootButton.gameObject.SetActive(canOpen);
         }
     }
 
@@ -107,7 +113,7 @@ public class SectorUiHandler : MonoBehaviour
         return containerInNode;
     }
 
-    public void Update()
+    private void HandleHotKeys()
     {
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Keypad5))
         {
