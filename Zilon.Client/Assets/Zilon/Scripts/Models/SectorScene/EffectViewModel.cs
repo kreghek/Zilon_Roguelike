@@ -16,6 +16,8 @@ public class EffectViewModel : MonoBehaviour
     public Sprite IntoxicationSprite;
     public Sprite InjureSprite;
 
+    public UiElementTooltip UiElementTooltip;
+
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
 
@@ -26,9 +28,22 @@ public class EffectViewModel : MonoBehaviour
         SelectIcon(type);
         HighlightLevel(level);
         ShowText();
+
+        if (UiElementTooltip != null)
+        {
+            string effectText = GetEffectText();
+            UiElementTooltip.text = effectText;
+        }
     }
 
     private void ShowText()
+    {
+        string effectText = GetEffectText();
+
+        NameText.text = effectText;
+    }
+
+    private string GetEffectText()
     {
         var effectText = string.Empty;
         switch (Level)
@@ -43,7 +58,7 @@ public class EffectViewModel : MonoBehaviour
 
                     case SurvivalStatType.Satiety:
                         effectText += " Hunger";
-                            break;
+                        break;
 
                     case SurvivalStatType.Hydration:
                         effectText += " Thrist";
@@ -103,7 +118,7 @@ public class EffectViewModel : MonoBehaviour
                 break;
         }
 
-        NameText.text = effectText;
+        return effectText;
     }
 
     private void HighlightLevel(SurvivalStatHazardLevel level)
