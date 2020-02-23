@@ -49,72 +49,93 @@ public class EffectViewModel : MonoBehaviour
         switch (Level)
         {
             case SurvivalStatHazardLevel.Lesser:
-                effectText = "Weak";
-                switch (Type)
-                {
-                    case SurvivalStatType.Health:
-                        effectText += " Injury";
-                        break;
-
-                    case SurvivalStatType.Satiety:
-                        effectText += " Hunger";
-                        break;
-
-                    case SurvivalStatType.Hydration:
-                        effectText += " Thrist";
-                        break;
-
-                    case SurvivalStatType.Intoxication:
-                        effectText += " Intoxication";
-                        break;
-                }
+                effectText = GetLesserEffect();
 
                 NameText.color = Color.gray;
                 break;
 
             case SurvivalStatHazardLevel.Strong:
-                switch (Type)
-                {
-                    case SurvivalStatType.Health:
-                        effectText += "Strong Injury";
-                        break;
-
-                    case SurvivalStatType.Satiety:
-                        effectText = "Hunger";
-                        break;
-
-                    case SurvivalStatType.Hydration:
-                        effectText = "Thrist";
-                        break;
-
-                    case SurvivalStatType.Intoxication:
-                        effectText += "Intoxication";
-                        break;
-                }
+                effectText = GetStrongEffect(effectText);
 
                 NameText.color = Color.red;
                 break;
 
             case SurvivalStatHazardLevel.Max:
-                switch (Type)
-                {
-                    case SurvivalStatType.Health:
-                        effectText = "Vital Wound!";
-                        break;
-
-                    case SurvivalStatType.Satiety:
-                        effectText = "Starvation!";
-                        break;
-
-                    case SurvivalStatType.Hydration:
-                        effectText = "Dehydration!";
-                        break;
-
-                    case SurvivalStatType.Intoxication:
-                        effectText += "Strong Intoxication!";
-                        break;
-                }
+                effectText = GetMaxEffect(effectText);
                 NameText.color = Color.red;
+                break;
+        }
+
+        return effectText;
+    }
+
+    private string GetMaxEffect(string effectText)
+    {
+        switch (Type)
+        {
+            case SurvivalStatType.Health:
+                effectText = "Vital Wound!";
+                break;
+
+            case SurvivalStatType.Satiety:
+                effectText = "Starvation!";
+                break;
+
+            case SurvivalStatType.Hydration:
+                effectText = "Dehydration!";
+                break;
+
+            case SurvivalStatType.Intoxication:
+                effectText += "Strong Intoxication!";
+                break;
+        }
+
+        return effectText;
+    }
+
+    private string GetStrongEffect(string effectText)
+    {
+        switch (Type)
+        {
+            case SurvivalStatType.Health:
+                effectText += "Strong Injury";
+                break;
+
+            case SurvivalStatType.Satiety:
+                effectText = "Hunger";
+                break;
+
+            case SurvivalStatType.Hydration:
+                effectText = "Thrist";
+                break;
+
+            case SurvivalStatType.Intoxication:
+                effectText += "Intoxication";
+                break;
+        }
+
+        return effectText;
+    }
+
+    private string GetLesserEffect()
+    {
+        string effectText = "Weak";
+        switch (Type)
+        {
+            case SurvivalStatType.Health:
+                effectText += " Injury";
+                break;
+
+            case SurvivalStatType.Satiety:
+                effectText += " Hunger";
+                break;
+
+            case SurvivalStatType.Hydration:
+                effectText += " Thrist";
+                break;
+
+            case SurvivalStatType.Intoxication:
+                effectText += " Intoxication";
                 break;
         }
 
