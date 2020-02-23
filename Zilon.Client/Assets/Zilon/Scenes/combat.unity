@@ -1990,7 +1990,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 227365886}
-        m_MethodName: SectorTransitionMoveButton_Handler
+        m_MethodName: OpenLoot_Handler
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
