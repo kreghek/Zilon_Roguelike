@@ -109,7 +109,7 @@ public class SectorUiHandler : MonoBehaviour
 
     private IPropContainer GetContainerInNode(IGraphNode targetnNode)
     {
-        var containerInNode = _propContainerManager.Items.SingleOrDefault(x => x.Node == targetnNode);
+        var containerInNode = _propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
         return containerInNode;
     }
 
