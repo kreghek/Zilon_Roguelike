@@ -82,9 +82,10 @@ namespace Assets.Zilon.Scripts.Services
                 { "no-bullets", new MultilangPhrase{ En = "NO BULLETS", Ru = "НЕТ СНАРЯДОВ" } },
 
                 { "tooltip-no-bullets", new MultilangPhrase{ En = "No bullets for current weapon", Ru = "В инвентаре нет подходящих снарядов для текущего оружия" } },
-                { "tooltip-wait", new MultilangPhrase{ En = "Wait one turn", Ru = "Подождать один ход" } },
-                { "tooltip-person", new MultilangPhrase{ En = "Person window", Ru = "Окно персонажа" } },
-                { "tooltip-transition", new MultilangPhrase{ En = "Go to the next level", Ru = "Перейти на следующий уровень" } },
+                { "tooltip-wait", new MultilangPhrase{ En = "Wait one turn [E]", Ru = "Подождать один ход [E]" } },
+                { "tooltip-person", new MultilangPhrase{ En = "Person window [P]", Ru = "Окно персонажа [P]" } },
+                { "tooltip-transition", new MultilangPhrase{ En = "Go to the next level [T]", Ru = "Перейти на следующий уровень [T]" } },
+                { "tooltip-open-loot", new MultilangPhrase{ En = "Open loot [O]", Ru = "Открыть лут [O]" } },
                 { "tooltip-exit-title", new MultilangPhrase{ En = "Quit game and go to Main menu", Ru = "Покинуть игру и перейти в главное меню" } },
                 { "tooltip-exit", new MultilangPhrase{ En = "Quit game", Ru = "Покинуть игру" } },
 
@@ -97,6 +98,21 @@ namespace Assets.Zilon.Scripts.Services
                 { "indicator-block", new MultilangPhrase{ En = "Block!", Ru = "Блок!" } },
                 { "indicator-miss", new MultilangPhrase{ En = "Miss!", Ru = "Промах!" } },
                 { "indicator-found-nothing", new MultilangPhrase{ En = "Found\nNoting!", Ru = "Ничего\nне найдено!" } },
+
+                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкая рана" } },
+                { "weak-hunger", new MultilangPhrase{ En = "Weak hunger", Ru = "Слабый голод" } },
+                { "weak-thirst", new MultilangPhrase{ En = "Weak thirst", Ru = "Слабая жажда" } },
+                { "weak-intoxication", new MultilangPhrase{ En = "Weak intoxication", Ru = "Слабая токсикация" } },
+
+                { "strong-injury", new MultilangPhrase{ En = "Strong injury", Ru = "Серьзная рана" } },
+                { "strong-hunger", new MultilangPhrase{ En = "Hunger", Ru = "Голод" } },
+                { "strong-thirst", new MultilangPhrase{ En = "Thirst", Ru = "Жажда" } },
+                { "strong-intoxication", new MultilangPhrase{ En = "Intoxication", Ru = "Токсакация" } },
+
+                { "max-injury", new MultilangPhrase{ En = "Vital wound!", Ru = "Смертельная рана!" } },
+                { "max-hunger", new MultilangPhrase{ En = "Starvation!", Ru = "Голодание!" } },
+                { "max-thirst", new MultilangPhrase{ En = "Dehydration!", Ru = "Обезвоживание!" } },
+                { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } }
             };
         }
 

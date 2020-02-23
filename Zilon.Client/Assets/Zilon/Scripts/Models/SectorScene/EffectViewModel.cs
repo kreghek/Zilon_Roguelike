@@ -1,7 +1,11 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
 using UnityEngine.UI;
+
+using Zenject;
 
 using Zilon.Core.Persons;
 
@@ -18,50 +22,55 @@ public class EffectViewModel : MonoBehaviour
 
     public UiElementTooltip UiElementTooltip;
 
+    [Inject]
+    UiSettingService _uiSettingService;
+
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
 
     public void Init(SurvivalStatType type, SurvivalStatHazardLevel level)
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
         Type = type;
         Level = level;
         SelectIcon(type);
         HighlightLevel(level);
-        ShowText();
+        ShowText(currentLanguage);
 
         if (UiElementTooltip != null)
         {
-            string effectText = GetEffectText();
+            var effectText = GetEffectText(currentLanguage);
             UiElementTooltip.text = effectText;
         }
     }
 
-    private void ShowText()
+    private void ShowText(Language currentLanguage)
     {
-        string effectText = GetEffectText();
+        var effectText = GetEffectText(currentLanguage);
 
         NameText.text = effectText;
     }
 
-    private string GetEffectText()
+    private string GetEffectText(Language currentLanguage)
     {
         var effectText = string.Empty;
         switch (Level)
         {
             case SurvivalStatHazardLevel.Lesser:
-                effectText = GetLesserEffect();
+                effectText = GetLesserEffect(currentLanguage);
 
                 NameText.color = Color.gray;
                 break;
 
             case SurvivalStatHazardLevel.Strong:
-                effectText = GetStrongEffect(effectText);
+                effectText = GetStrongEffect(currentLanguage);
 
                 NameText.color = Color.red;
                 break;
 
             case SurvivalStatHazardLevel.Max:
-                effectText = GetMaxEffect(effectText);
+                effectText = GetMaxEffect(currentLanguage);
                 NameText.color = Color.red;
                 break;
         }
@@ -69,77 +78,67 @@ public class EffectViewModel : MonoBehaviour
         return effectText;
     }
 
-    private string GetMaxEffect(string effectText)
+    private string GetMaxEffect(Language currentLanguage)
     {
         switch (Type)
         {
             case SurvivalStatType.Health:
-                effectText = "Vital Wound!";
-                break;
+                return StaticPhrases.GetValue("max-injury", currentLanguage);
 
             case SurvivalStatType.Satiety:
-                effectText = "Starvation!";
-                break;
+                return StaticPhrases.GetValue("max-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                effectText = "Dehydration!";
-                break;
+                return StaticPhrases.GetValue("max-thrist", currentLanguage);
 
             case SurvivalStatType.Intoxication:
-                effectText += "Strong Intoxication!";
-                break;
-        }
+                return StaticPhrases.GetValue("max-intoxication", currentLanguage);
 
-        return effectText;
+            default:
+                throw new InvalidOperationException();
+        }
     }
 
-    private string GetStrongEffect(string effectText)
+    private string GetStrongEffect(Language currentLanguage)
     {
         switch (Type)
         {
             case SurvivalStatType.Health:
-                effectText += "Strong Injury";
-                break;
+                return StaticPhrases.GetValue("strong-injury", currentLanguage);
 
             case SurvivalStatType.Satiety:
-                effectText = "Hunger";
-                break;
+                return StaticPhrases.GetValue("strong-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                effectText = "Thrist";
-                break;
+                return StaticPhrases.GetValue("strong-thrist", currentLanguage);
 
             case SurvivalStatType.Intoxication:
-                effectText += "Intoxication";
-                break;
-        }
+                return StaticPhrases.GetValue("strong-intoxication", currentLanguage);
 
-        return effectText;
+            default:
+                throw new InvalidOperationException();
+        }
     }
 
-    private string GetLesserEffect()
+    private string GetLesserEffect(Language currentLanguage)
     {
-        string effectText = "Weak";
         switch (Type)
         {
             case SurvivalStatType.Health:
-                effectText += " Injury";
-                break;
+                return StaticPhrases.GetValue("weak-injury", currentLanguage);
 
             case SurvivalStatType.Satiety:
-                effectText += " Hunger";
-                break;
+                return StaticPhrases.GetValue("weak-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                effectText += " Thrist";
-                break;
+                return StaticPhrases.GetValue("weak-thrist", currentLanguage);
 
             case SurvivalStatType.Intoxication:
-                effectText += " Intoxication";
-                break;
-        }
+                return StaticPhrases.GetValue("weak-intoxication", currentLanguage);
 
-        return effectText;
+            default:
+                throw new InvalidOperationException();
+        }
     }
 
     private void HighlightLevel(SurvivalStatHazardLevel level)
@@ -147,15 +146,15 @@ public class EffectViewModel : MonoBehaviour
         switch (level)
         {
             case SurvivalStatHazardLevel.Lesser:
-                Background.color = Color.white;
+                Background.color = new Color32(0xff, 0xcc, 0x5e, 255);
                 break;
 
             case SurvivalStatHazardLevel.Strong:
-                Background.color = new Color(0.3f, 0,0, 1);
+                Background.color = new Color32(0xff, 0x7c, 0x24, 255);
                 break;
 
             case SurvivalStatHazardLevel.Max:
-                Background.color = new Color(1f, 0, 0, 1);
+                Background.color = new Color32(0xc3, 0x28, 0x13, 255);
                 break;
 
             default:

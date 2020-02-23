@@ -10,9 +10,9 @@ namespace Zilon.Core.Persons
         public HpSurvivalStat(int startValue, int min, int max) : base(startValue, min, max)
         {
             KeySegments = new[] {
-                new SurvivalStatKeySegment(0, 0.25f, SurvivalStatHazardLevel.Max),
-                new SurvivalStatKeySegment(0.25f, 0.5f, SurvivalStatHazardLevel.Strong),
-                new SurvivalStatKeySegment(0.5f, 0.75f, SurvivalStatHazardLevel.Lesser)
+                new SurvivalStatKeySegment(0, 0.3f, SurvivalStatHazardLevel.Max),
+                new SurvivalStatKeySegment(0.3f, 0.6f, SurvivalStatHazardLevel.Strong),
+                new SurvivalStatKeySegment(0.6f, 0.75f, SurvivalStatHazardLevel.Lesser)
             };
         }
     }
