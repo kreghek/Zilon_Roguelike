@@ -12,6 +12,9 @@ public class PersonEffectHandler : MonoBehaviour
     [UsedImplicitly]
     [NotNull] [Inject] private readonly HumanPlayer _player;
 
+    [Inject]
+    private DiContainer _diContainer;
+
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
 
@@ -65,7 +68,8 @@ public class PersonEffectHandler : MonoBehaviour
         {
             if (effect is SurvivalStatHazardEffect survivalHazardEffect)
             {
-                var effectViewModel = Instantiate(EffectPrefab, EffectParent);
+                var effectViewModelObj = _diContainer.InstantiatePrefab(EffectPrefab, EffectParent);
+                var effectViewModel = effectViewModelObj.GetComponent<EffectViewModel>();
                 effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
             }
         }

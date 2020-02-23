@@ -97,6 +97,21 @@ namespace Assets.Zilon.Scripts.Services
                 { "indicator-block", new MultilangPhrase{ En = "Block!", Ru = "Блок!" } },
                 { "indicator-miss", new MultilangPhrase{ En = "Miss!", Ru = "Промах!" } },
                 { "indicator-found-nothing", new MultilangPhrase{ En = "Found\nNoting!", Ru = "Ничего\nне найдено!" } },
+
+                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкая рана" } },
+                { "weak-hunger", new MultilangPhrase{ En = "Weak hunger", Ru = "Слабый голод" } },
+                { "weak-thirst", new MultilangPhrase{ En = "Weak thirst", Ru = "Слабая жажда" } },
+                { "weak-intoxication", new MultilangPhrase{ En = "Weak intoxication", Ru = "Слабая токсикация" } },
+
+                { "strong-injury", new MultilangPhrase{ En = "Strong injury", Ru = "Серьзная рана" } },
+                { "strong-hunger", new MultilangPhrase{ En = "Hunger", Ru = "Голод" } },
+                { "strong-thirst", new MultilangPhrase{ En = "Thirst", Ru = "Жажда" } },
+                { "strong-intoxication", new MultilangPhrase{ En = "Intoxication", Ru = "Токсакация" } },
+
+                { "max-injury", new MultilangPhrase{ En = "Vital wound!", Ru = "Смертельная рана!" } },
+                { "max-hunger", new MultilangPhrase{ En = "Starvation!", Ru = "Голодание!" } },
+                { "max-thirst", new MultilangPhrase{ En = "Dehydration!", Ru = "Обезвоживание!" } },
+                { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } }
             };
         }
 
