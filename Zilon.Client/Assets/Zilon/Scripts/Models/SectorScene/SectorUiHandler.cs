@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Linq;
+using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +10,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
@@ -23,6 +26,8 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
+    [Inject] private readonly IPropContainerManager _propContainerManager;
+
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -32,6 +37,8 @@ public class SectorUiHandler : MonoBehaviour
     [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
 
     [Inject(Id = "quit-request-title-command")] private readonly ICommand _quitRequestTitleCommand;
+
+    [Inject(Id = "open-container")] private readonly ICommand _openContainerCommand;
 
 
     [NotNull]
@@ -43,6 +50,7 @@ public class SectorUiHandler : MonoBehaviour
     public Button PersonButton;
     public Button SectorTransitionMoveButton;
     public Button CityQuickExitButton;
+    public Button OpenLootButton;
 
     public void FixedUpdate()
     {
@@ -73,6 +81,30 @@ public class SectorUiHandler : MonoBehaviour
             var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
+
+        if (OpenLootButton != null)
+        {
+            var canOpen = GetCanOpenLoot();
+            OpenLootButton.interactable = canOpen;
+        }
+    }
+
+    private bool GetCanOpenLoot()
+    {
+        var personNode = _playerState.ActiveActor.Actor.Node;
+        var lootInNode = GetContainerInNode(personNode);
+        if (lootInNode is null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private IPropContainer GetContainerInNode(IGraphNode targetnNode)
+    {
+        var containerInNode = _propContainerManager.Items.SingleOrDefault(x => x.Node == targetnNode);
+        return containerInNode;
     }
 
     public void Update()
@@ -165,5 +197,32 @@ public class SectorUiHandler : MonoBehaviour
         // Это быстрое решение.
         // Тупо загружаем глобальную карту.
         SceneManager.LoadScene("globe");
+    }
+
+    public void OpenLoot_Handler()
+    {
+        var personNode = _playerState.ActiveActor.Actor.Node;
+        var lootInNode = GetContainerInNode(personNode);
+
+        if (lootInNode != null)
+        {
+            var viewModel = GetLootViewModel(lootInNode);
+            _playerState.SelectedViewModel = viewModel;
+            _clientCommandExecutor.Push(_openContainerCommand);
+        }
+    }
+
+    private static ContainerVm GetLootViewModel(IPropContainer lootInNode)
+    {
+        var viewModels = FindObjectsOfType<ContainerVm>();
+        foreach (var viewModel in viewModels)
+        {
+            if (viewModel.Container == lootInNode)
+            {
+                return viewModel;
+            }
+        }
+
+        return null;
     }
 }
