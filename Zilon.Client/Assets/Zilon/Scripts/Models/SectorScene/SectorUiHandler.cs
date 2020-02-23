@@ -130,6 +130,11 @@ public class SectorUiHandler : MonoBehaviour
             SectorTransitionMoveButton_Handler();
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            OpenLoot_Handler();
+        }
+
         // Отключено, потому что сейчас нет выхода на глобальную карту.
         if (Input.GetKeyDown(KeyCode.G))
         {
