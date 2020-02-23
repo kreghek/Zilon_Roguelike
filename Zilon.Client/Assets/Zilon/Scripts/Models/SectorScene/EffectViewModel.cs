@@ -147,15 +147,15 @@ public class EffectViewModel : MonoBehaviour
         switch (level)
         {
             case SurvivalStatHazardLevel.Lesser:
-                Background.color = Color.white;
+                Background.color = new Color32(0xff, 0xcc, 0x5e, 255);
                 break;
 
             case SurvivalStatHazardLevel.Strong:
-                Background.color = new Color(0.3f, 0,0, 1);
+                Background.color = new Color32(0xff, 0x7c, 0x24, 255);
                 break;
 
             case SurvivalStatHazardLevel.Max:
-                Background.color = new Color(1f, 0, 0, 1);
+                Background.color = new Color32(0xc3, 0x28, 0x13, 255);
                 break;
 
             default:
