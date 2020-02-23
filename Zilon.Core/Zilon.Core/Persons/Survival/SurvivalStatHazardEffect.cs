@@ -53,7 +53,7 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(survivalData));
             }
 
-            if (Level == SurvivalStatHazardLevel.Max)
+            if (Level == SurvivalStatHazardLevel.Max && Type != SurvivalStatType.Health)
             {
                 var roll = _survivalRandomSource.RollMaxHazardDamage();
                 var successRoll = GetSuccessHazardDamageRoll();
