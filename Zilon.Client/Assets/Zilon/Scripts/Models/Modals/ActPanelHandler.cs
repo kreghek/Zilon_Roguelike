@@ -60,8 +60,10 @@ public class ActPanelHandler : MonoBehaviour
         var actor = actorVm.Actor;
 
         var acts = actor.Person.TacticalActCarrier.Acts;
-        UpdateActs(acts);
+
         UpdateSelectedAct(currentAct, acts);
+
+        UpdateActs(acts);
     }
 
     private void UpdateSelectedAct(ITacticalAct currentAct, ITacticalAct[] acts)
@@ -72,7 +74,13 @@ public class ActPanelHandler : MonoBehaviour
         }
         else
         {
-            _playerState.TacticalAct = acts.First();
+            // Действие по умолчанию:
+            // должно быть без ограничений.
+            // желательно, чтобы это было действие от оружия,
+            // потому что оно обычно эффективнее кулака.
+            _playerState.TacticalAct = acts
+                .OrderBy(x => x.Equipment is null)
+                .First(x => x.Constrains is null);
         }
     }
 

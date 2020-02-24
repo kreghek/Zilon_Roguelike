@@ -63,7 +63,7 @@ public class ActInfoPopup : MonoBehaviour
         if (ActViewModel != null)
         {
             GetComponent<RectTransform>().position = ActViewModel.Position
-                + new Vector3(0.4f, 1.4f);
+                + new Vector3(0.4f, 0.6f);
         }
     }
 }
