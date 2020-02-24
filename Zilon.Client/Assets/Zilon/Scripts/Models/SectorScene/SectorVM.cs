@@ -715,6 +715,8 @@ public class SectorVM : MonoBehaviour
 
         actorManager.Add(actor);
 
+        AddEquipmentToCurrentPerson("rush-sword");
+
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
         actorViewModel.PlayerState = _playerState;

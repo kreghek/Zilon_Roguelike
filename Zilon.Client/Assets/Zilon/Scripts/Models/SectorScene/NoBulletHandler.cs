@@ -36,8 +36,13 @@ public class NoBulletHandler : MonoBehaviour
             return;
         }
 
-        var activeAct = person.TacticalActCarrier.Acts.First();
-        if (activeAct.Constrains != null)
+        var activeAct = _playerState.TacticalAct;
+        if (activeAct is null)
+        {
+            return;
+        }
+
+        if (activeAct.Constrains?.PropResourceType != null)
         {
             var bulletInInventory = from resource in person.Inventory.CalcActualItems().OfType<Resource>()
                                     where resource.Scheme.Bullet?.Caliber == activeAct.Constrains.PropResourceType
