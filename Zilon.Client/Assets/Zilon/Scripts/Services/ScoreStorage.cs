@@ -112,7 +112,7 @@ namespace Assets.Zilon.Scripts.Services
                             ,ROUND(AVG([Frags]), 1) AS AvgFrags
                             ,MAX([Frags]) AS MaxFrags
                         FROM [Scores]
-                        GROUP BY [Name] ,[Preffix] ,[Mode]";
+                        GROUP BY [Preffix] ,[Mode]";
                     command.CommandType = CommandType.Text;
                     using (var reader = command.ExecuteReader())
                     {
