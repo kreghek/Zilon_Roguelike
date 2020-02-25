@@ -1,5 +1,5 @@
 {
-  "Rolls": 2,
+  "Rolls": 1,
   "Records": [
     {
       "SchemeSid": "battle-axe",
@@ -144,6 +144,49 @@
 	{
 	  "SchemeSid": "law-codex",
       "Weight": 1
-	}
+	},
+	
+	{
+      "SchemeSid": "med-kit",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 50
+    },
+	
+	{
+      "SchemeSid": "kalin-cheese",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 50
+    },
+    {
+      "SchemeSid": "tomaton",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 40
+    },
+    {
+      "SchemeSid": "packed-food",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 20
+    },
+    {
+      "SchemeSid": "water-bottle",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 30
+    },
+	{
+      "SchemeSid": "northerner-ale",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 30
+    },
+	
+	{
+      "SchemeSid": null,
+      "Weight": 800
+    },
   ]
 }
