@@ -24,7 +24,7 @@ namespace Zilon.Core.Tests.Commands
     [TestFixture]
     public abstract class CommandTestBase
     {
-        protected IServiceCollection Container { get; set; }
+        protected IServiceCollection Container { get; private set; }
         protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]

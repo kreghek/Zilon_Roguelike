@@ -14,7 +14,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.Commands
 {
-    [TestFixture()]
+    [TestFixture]
     public class NextTurnCommandTests : CommandTestBase
     {
         /// <summary>
