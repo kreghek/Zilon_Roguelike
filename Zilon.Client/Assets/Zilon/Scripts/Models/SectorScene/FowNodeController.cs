@@ -12,7 +12,7 @@ public class FowNodeController : MonoBehaviour, IFowObjectController
 
     public SpriteRenderer[] NodeSprites;
 
-    private void Start()
+    public void Start()
     {
         _baseSpriteColors = new Color[NodeSprites.Length];
         for (var i = 0; i < NodeSprites.Length; i++)

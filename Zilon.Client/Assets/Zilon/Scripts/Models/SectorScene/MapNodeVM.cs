@@ -15,6 +15,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     public SpriteRenderer FloorDecorRenderer;
     public SpriteRenderer InteriorObjectSpriteRenderer;
     public GameObject[] Walls;
+    public GameObject[] NextNodeMarkers;
     public SpriteRenderer LeftBottomRenderer;
     public SpriteRenderer RightBottomRenderer;
     public bool IsExit;
@@ -58,6 +59,10 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             {
                 Destroy(wallObj.GetComponent<SpriteRenderer>());
             }
+
+            // Скрываем маркеры неоткрытого следующего узла,
+            // если есть стена.
+            NextNodeMarkers[i].SetActive(!hasWall);
         }
 
         LeftBottomRenderer.color = walls.LeftBottomColor;

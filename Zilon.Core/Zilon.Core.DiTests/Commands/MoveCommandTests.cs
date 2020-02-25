@@ -19,7 +19,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
-    [TestFixture()]
+    [TestFixture]
     public class MoveCommandTests : CommandTestBase
     {
         private List<IActor> _actorList;

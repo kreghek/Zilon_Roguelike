@@ -15,7 +15,6 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture]
-    [Parallelizable(ParallelScope.All)]
     public class PropTrasferCommandTests : CommandTestBase
     {
         /// <summary>
