@@ -17,6 +17,7 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
+    [TestFixture]
     public class AttackCommandTests : CommandTestBase
     {
         /// <summary>

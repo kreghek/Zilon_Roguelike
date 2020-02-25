@@ -758,10 +758,10 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var effecientDebuffRule = greaterSurvivalEffect.Rules
+            var effecientDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
 
-            var toHitDebuffRule = greaterSurvivalEffect.Rules
+            var toHitDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
 
             if (effecientDebuffRule != null)
