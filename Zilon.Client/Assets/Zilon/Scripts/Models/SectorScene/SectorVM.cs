@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -735,8 +735,25 @@ public class SectorVM : MonoBehaviour
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+        actor.UsedProp += Actor_UsedProp;
 
         return actorViewModel;
+    }
+
+    public SleepShadow SleepShadow;
+
+    private void Actor_UsedProp(object sender, UsedPropEventArgs e)
+    {
+        if (e.UsedProp.Scheme.Sid != "camp")
+        {
+            return;
+        }
+
+        var sleepBlocker = new SleepBlocker();
+        _commandBlockerService.AddBlocker(sleepBlocker);
+
+        var sleepShadow = Instantiate(SleepShadow);
+        sleepShadow.Init(sleepBlocker);
     }
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)

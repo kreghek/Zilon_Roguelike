@@ -18,10 +18,20 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
+        /// <inheritdoc/>
         public event EventHandler Moved;
+
+        /// <inheritdoc/>
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
         public event EventHandler<UsedActEventArgs> UsedAct;
+
+        /// <inheritdoc/>
         public event EventHandler<DamageTakenEventArgs> DamageTaken;
+
+        /// <inheritdoc/>
+        public event EventHandler<UsedPropEventArgs> UsedProp;
 
         /// <inheritdoc />
         /// <summary>
@@ -128,6 +138,8 @@ namespace Zilon.Core.Tactics
                     _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
                 }
             }
+
+            UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
         }
 
         private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
