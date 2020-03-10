@@ -52,6 +52,8 @@ public class SectorUiHandler : MonoBehaviour
     public Button CityQuickExitButton;
     public Button OpenLootButton;
 
+    public GameObject SleepShadow;
+
     public void Update()
     {
         HandleHotKeys();
@@ -155,6 +157,19 @@ public class SectorUiHandler : MonoBehaviour
         }
 
         _clientCommandExecutor.Push(_nextTurnCommand);
+    }
+
+    public void Sleep_Handler()
+    {
+        if (_playerState.ActiveActor == null)
+        {
+            return;
+        }
+
+        for (var i = 0; i < 30; i++)
+        {
+            NextTurn();
+        }
     }
 
     public void ShowInventoryButton_Handler()
