@@ -739,7 +739,10 @@ public class SectorVM : MonoBehaviour
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
 
-        AddResourceToCurrentPerson("camp-tools");
+        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        {
+            AddResourceToCurrentPerson("camp-tools");
+        }
 
         return actorViewModel;
     }
