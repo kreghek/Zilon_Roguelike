@@ -341,8 +341,7 @@ MonoBehaviour:
   FoundNothingIndicatorPrefab: {fileID: 7517115147975470495, guid: 3118e367336d83b4082d94d0a4d3dbf6,
     type: 3}
   FowManager: {fileID: 160909245}
-  SleepShadow: {fileID: 532727881402498302, guid: b4eb0821e0b13ac4db6ab7a4b6f48e9c,
-    type: 3}
+  SleepShadowManager: {fileID: 261788445}
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -810,6 +809,7 @@ RectTransform:
   - {fileID: 809724293}
   - {fileID: 1698614929}
   - {fileID: 991466927}
+  - {fileID: 261788444}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -869,6 +869,56 @@ MonoBehaviour:
   TraderModalPrefab: {fileID: 391459472281275467, guid: 925b2a6ed0fec2648844b346b66ee74b,
     type: 3}
   DialogModalPrefab: {fileID: 3308749736226327152, guid: 9c5432e265d0ecd4facb152e063f0aa0,
+    type: 3}
+--- !u!1 &261788443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 261788444}
+  - component: {fileID: 261788445}
+  m_Layer: 5
+  m_Name: SleepShadowManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &261788444
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261788443}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 227365885}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &261788445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261788443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d847cddaddf930240a7da2c2588d2b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SleepShadow: {fileID: 532727881402498302, guid: b4eb0821e0b13ac4db6ab7a4b6f48e9c,
     type: 3}
 --- !u!1 &269743640
 GameObject:

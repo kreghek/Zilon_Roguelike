@@ -68,6 +68,8 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public FowManager FowManager;
 
+    [NotNull] public SleepShadowManager SleepShadowManager;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -742,8 +744,6 @@ public class SectorVM : MonoBehaviour
         return actorViewModel;
     }
 
-    public SleepShadow SleepShadow;
-
     private void Actor_UsedProp(object sender, UsedPropEventArgs e)
     {
         if (e.UsedProp.Scheme.Sid != "camp-tools")
@@ -751,11 +751,7 @@ public class SectorVM : MonoBehaviour
             return;
         }
 
-        var sleepBlocker = new SleepBlocker();
-        _commandBlockerService.AddBlocker(sleepBlocker);
-
-        var sleepShadow = Instantiate(SleepShadow);
-        sleepShadow.Init(sleepBlocker);
+        SleepShadowManager.StartShadowAnimation();
     }
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)

@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Zilon.Scripts.Models.SectorScene;
+﻿using Assets.Zilon.Scripts.Models.SectorScene;
+
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SleepShadow : MonoBehaviour
 {
-    private const float SLEEP_DURATION_SECONDS = 2f;
+    private const float SLEEP_DURATION_SECONDS = 4f;
 
     private float _counter;
 
