@@ -302,7 +302,9 @@ public class InventoryHandler : MonoBehaviour
             return;
         }
 
-        if (currentItemViewModel.SelectAsDrag && currentItemViewModel.Prop.Scheme.Use != null)
+        if (currentItemViewModel.SelectAsDrag
+            && currentItemViewModel.Prop.Scheme.Use != null
+            && _useSelfCommand.CanExecute())
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
@@ -315,10 +317,10 @@ public class InventoryHandler : MonoBehaviour
 
             var currentItem = currentItemViewModel.Prop;
 
-            var canUseProp = currentItem.Scheme.Use != null;
+            var canUseProp = currentItem.Scheme.Use != null && _useSelfCommand.CanExecute();
             UseButton.SetActive(canUseProp);
 
-            var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID;
+            var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID && _useSelfCommand.CanExecute();
             ReadButton.SetActive(canRead);
         }
     }

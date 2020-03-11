@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ using NUnit.Framework;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -83,6 +85,11 @@ namespace Zilon.Core.Tests.Commands
             Container.AddSingleton(factory => inventoryState);
 
             Container.AddSingleton<UseSelfCommand>();
+
+            var actorManagerMock = new Mock<IActorManager>();
+            actorManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IActor>());
+            var actorManager = actorManagerMock.Object;
+            Container.AddSingleton(actorManager);
         }
     }
 }
