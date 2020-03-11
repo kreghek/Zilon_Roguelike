@@ -159,19 +159,6 @@ public class SectorUiHandler : MonoBehaviour
         _clientCommandExecutor.Push(_nextTurnCommand);
     }
 
-    public void Sleep_Handler()
-    {
-        if (_playerState.ActiveActor == null)
-        {
-            return;
-        }
-
-        for (var i = 0; i < 30; i++)
-        {
-            NextTurn();
-        }
-    }
-
     public void ShowInventoryButton_Handler()
     {
         if (_playerState.ActiveActor == null)
