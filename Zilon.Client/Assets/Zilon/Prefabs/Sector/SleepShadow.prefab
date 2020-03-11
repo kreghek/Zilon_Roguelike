@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6390767549716747361}
   - component: {fileID: 2934765623732977388}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: SleepShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0960b6e060742c34e96eea5689506c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpriteRenderer: {fileID: 0}
+  ShadowImage: {fileID: 2934765623732977388}
 --- !u!222 &6390767549716747361
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

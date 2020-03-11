@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SleepShadow : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class SleepShadow : MonoBehaviour
 
     public SleepBlocker SleepBlocker { get; private set; }
 
-    public SpriteRenderer SpriteRenderer;
+    public Image ShadowImage;
 
     public void Init(SleepBlocker sleepBlocker)
     {
@@ -28,7 +29,7 @@ public class SleepShadow : MonoBehaviour
     {
         _counter += Time.deltaTime;
 
-        SpriteRenderer.color = new Color(0, 0, 0, Mathf.Sin(_counter / SLEEP_DURATION_SECONDS * 2 * Mathf.PI));
+        ShadowImage.color = new Color(0, 0, 0, Mathf.Sin(_counter / SLEEP_DURATION_SECONDS * 2 * Mathf.PI));
 
         if (_counter >= SLEEP_DURATION_SECONDS)
         {

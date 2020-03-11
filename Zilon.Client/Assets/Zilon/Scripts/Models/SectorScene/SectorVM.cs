@@ -737,6 +737,8 @@ public class SectorVM : MonoBehaviour
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
 
+        AddResourceToCurrentPerson("camp-tools");
+
         return actorViewModel;
     }
 
@@ -744,7 +746,7 @@ public class SectorVM : MonoBehaviour
 
     private void Actor_UsedProp(object sender, UsedPropEventArgs e)
     {
-        if (e.UsedProp.Scheme.Sid != "camp")
+        if (e.UsedProp.Scheme.Sid != "camp-tools")
         {
             return;
         }

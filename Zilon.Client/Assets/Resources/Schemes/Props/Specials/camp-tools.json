@@ -1,0 +1,29 @@
+{
+  "Name": {
+    "En": "Camp tools",
+	"Ru": "Принадлежности для лагеря"
+  },
+  "Use": {
+    "CommonRules": [
+      {
+        "Type": "Health",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Intoxication",
+        "Level": "Lesser",
+		"Direction": "Negative"
+      },
+	  {
+        "Type": "Satiety",
+        "Level": "Grand",
+		"Direction": "Negative"
+      },
+	  {
+        "Type": "Thirst",
+        "Level": "Grand",
+		"Direction": "Negative"
+      }
+    ]
+  }
+}
