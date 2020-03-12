@@ -744,6 +744,8 @@ public class SectorVM : MonoBehaviour
             AddResourceToCurrentPerson("camp-tools");
         }
 
+        //AddEquipmentToCurrentPerson("short-sword-mimic");
+
         return actorViewModel;
     }
 

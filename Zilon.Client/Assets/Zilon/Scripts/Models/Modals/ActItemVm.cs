@@ -36,6 +36,11 @@ public class ActItemVm : MonoBehaviour, IActViewModelDescription
     private Sprite CalcIcon(ITacticalActScheme scheme, Equipment equipment)
     {
         var schemeSid = scheme.Sid;
+        if (scheme.IsMimicFor != null)
+        {
+            schemeSid = scheme.IsMimicFor;
+        }
+
         var iconFromActs = Resources.Load<Sprite>($"Icons/acts/{schemeSid}");
         if (iconFromActs == null)
         {
