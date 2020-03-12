@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 
 //TODO Попробовать объедининть с PerkInfoPopup
 /// <summary>
@@ -18,6 +19,7 @@ using Zilon.Core.Persons;
 public class ActInfoPopup : MonoBehaviour
 {
     [Inject] private readonly UiSettingService _uiSettingService;
+    [Inject] private readonly ISchemeService _schemeService;
 
     public Text NameText;
 
@@ -50,10 +52,16 @@ public class ActInfoPopup : MonoBehaviour
         NameText.text = GetPropDisplayName(act);
     }
 
-    private string GetPropDisplayName(ITacticalAct propScheme)
+    private string GetPropDisplayName(ITacticalAct act)
     {
         var lang = _uiSettingService.CurrentLanguage;
-        var name = propScheme.Scheme.Name;
+        var scheme = act.Scheme;
+        if (scheme.IsMimicFor != null)
+        {
+            scheme = _schemeService.GetScheme<ITacticalActScheme>(scheme.IsMimicFor);
+        }
+
+        var name = scheme.Name;
 
         return LocalizationHelper.GetValueOrDefaultNoname(lang, name);
     }
