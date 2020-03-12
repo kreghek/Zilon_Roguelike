@@ -11,11 +11,13 @@ namespace Zilon.Core.Schemes
     {
         /// <inheritdoc/>
         [JsonProperty]
-        public ITacticalActStatsSubScheme Stats { get; }
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
+        public ITacticalActStatsSubScheme Stats { get; private set; }
 
         /// <inheritdoc/>
         [JsonProperty]
-        public ITacticalActConstrainsSubScheme Constrains { get; }
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActConstrainsSubScheme>))]
+        public ITacticalActConstrainsSubScheme Constrains { get; private set; }
 
         /// <inheritdoc/>
         [JsonProperty]

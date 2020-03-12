@@ -46,7 +46,14 @@ public class ActItemVm : MonoBehaviour, IActViewModelDescription
         {
             if (equipment != null)
             {
-                var iconFromProps = Resources.Load<Sprite>($"Icons/props/{equipment.Scheme.Sid}");
+                var equipmentScheme = equipment.Scheme;
+                var equipmentSchemeSid = equipmentScheme.Sid;
+                if (equipmentScheme.IsMimicFor != null)
+                {
+                    equipmentSchemeSid = equipmentScheme.IsMimicFor;
+                }
+
+                var iconFromProps = Resources.Load<Sprite>($"Icons/props/{equipmentSchemeSid}");
                 if (iconFromProps == null)
                 {
                     var defaultIcon = Resources.Load<Sprite>($"Icons/acts/default");
