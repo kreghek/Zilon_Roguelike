@@ -15,6 +15,11 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Возвращает фабрику карт для сектора. </returns>
         public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
         {
+            if (sectorScheme is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorScheme));
+            }
+
             if (sectorScheme.MapGeneratorOptions == null)
             {
                 //TODO Прописать для всех схем конкретный генератор.

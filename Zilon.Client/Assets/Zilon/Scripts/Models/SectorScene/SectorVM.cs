@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 
 using Zilon.Bot.Players;
-using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -23,6 +21,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -67,6 +66,10 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
 
+    [NotNull] public FowManager FowManager;
+
+    [NotNull] public SleepShadowManager SleepShadowManager;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -108,7 +111,10 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
-    [Inject] private readonly ScoreStorage _scoreStorage;
+    [Inject] private readonly UiSettingService _uiSettingService;
+
+    [Inject]
+    private readonly IPlayerEventLogService _playerEventLogService;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -197,11 +203,7 @@ public class SectorVM : MonoBehaviour
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        //TODO Вернуть, когда будет доделано (придумано) окно с туториалом.
-        //if (_humanPlayer.SectorSid == "intro" || _humanPlayer.SectorSid == null)
-        //{
-        //    _sectorModalManager.ShowInstructionModal();
-        //}
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _containerViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
@@ -224,8 +226,6 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
-        LogicStateTreePatterns.Factory = _logicStateFactory;
-
         await _sectorManager.CreateSectorAsync();
 
         _sectorManager.CurrentSector.ScoreManager = _scoreManager;
@@ -270,11 +270,19 @@ public class SectorVM : MonoBehaviour
             .Single(x => x.IsStart).Nodes
             .First();
 
-        var playerActorViewModel = CreateHumanActorViewModel(_humanPlayer,
+        var playerActorViewModel = CreateHumanActorViewModel(
+            _humanPlayer,
             _actorManager,
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);
+
+        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
+        FowHelper.UpdateFowData(
+            playerActorViewModel.Actor.SectorFowData,
+            _sectorManager.CurrentSector.Map,
+            playerActorStartNode,
+            radius: 5);
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
@@ -290,7 +298,9 @@ public class SectorVM : MonoBehaviour
 
         foreach (var node in map.Nodes)
         {
-            var mapNodeVm = Instantiate(MapNodePrefab, transform);
+            var mapNodeObj = _container.InstantiatePrefab(MapNodePrefab, transform);
+
+            var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
             var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
@@ -307,6 +317,9 @@ public class SectorVM : MonoBehaviour
 
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
+
+            //var fowController = mapNodeObj.GetComponent<FowNodeController>();
+            //fowController.SectorMap = map;
 
             nodeVMs.Add(mapNodeVm);
         }
@@ -347,8 +360,31 @@ public class SectorVM : MonoBehaviour
             actorViewModel.Selected += EnemyActorVm_OnSelected;
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead += Monster_Dead;
+
+            var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
+            // Контроллеру тумана войны скармливаем только графику.
+            // Потому что на основтой объект акёра завязаны блокировки (на перемещение, например).
+            // Если основной объект создаст блокировку и будет отключен,
+            // то он не сможет её снять в результате своих Update.
+            // Это создаст всеобщую неснимаемую блокировку.
+            fowController.Graphic = actorGraphic.gameObject;
+            // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
+            fowController.Collider = actorViewModel.GetComponent<Collider2D>();
 
             ActorViewModels.Add(actorViewModel);
+        }
+    }
+
+    private void Monster_Dead(object sender, EventArgs e)
+    {
+        // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
+        // Это делаем, чтобы избежать приведения sender к ISurvivalData.
+        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.Survival, sender));
+
+        if (viewModel != null)
+        {
+            ActorViewModels.Remove(viewModel);
         }
     }
 
@@ -404,7 +440,7 @@ public class SectorVM : MonoBehaviour
         actorViewModel.Actor = actor;
 
         actorViewModel.Selected += TraderViewModel_Selected;
-        
+
         ActorViewModels.Add(actorViewModel);
     }
 
@@ -414,8 +450,7 @@ public class SectorVM : MonoBehaviour
 
         _playerState.SelectedViewModel = traderViewModel;
 
-        var citizen = traderViewModel.Actor.Person as CitizenPerson;
-        if (citizen != null)
+        if (traderViewModel.Actor.Person is CitizenPerson citizen)
         {
             switch (citizen.CitizenType)
             {
@@ -438,7 +473,7 @@ public class SectorVM : MonoBehaviour
                     break;
             }
 
-            
+
         }
     }
 
@@ -498,9 +533,10 @@ public class SectorVM : MonoBehaviour
         }
         else
         {
-            var indicator = Instantiate<FoundNothingIndicator>(FoundNothingIndicatorPrefab, transform);
+            var indicator = Instantiate(FoundNothingIndicatorPrefab, transform);
+            indicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
 
-            var actorViewModel = ActorViewModels.SingleOrDefault(x=>x.Actor == actor);
+            var actorViewModel = ActorViewModels.SingleOrDefault(x => x.Actor == actor);
 
             indicator.Init(actorViewModel);
         }
@@ -516,46 +552,53 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
-        if (_humanPlayer.GlobeNode == null)
-        {
-            // intro
-
-            if (e.Transition.SectorSid == null)
-            {
-                AddResourceToCurrentPerson("history-book");
-                _humanPlayer.SectorSid = null;
-                SceneManager.LoadScene("globe");
-                SaveGameProgress();
-                return;
-            }
-            else
-            {
-                _humanPlayer.SectorSid = e.Transition.SectorSid;
-                StartLoadScene();
-                return;
-            }
-        }
-
-        var currentLocation = _humanPlayer.GlobeNode.Scheme;
-        if (currentLocation?.SectorLevels == null)
-        {
-            _humanPlayer.SectorSid = null;
-            SceneManager.LoadScene("globe");
-            SaveGameProgress();
-            return;
-        }
-
         if (e.Transition.SectorSid == null)
         {
-            _humanPlayer.SectorSid = null;
-            SceneManager.LoadScene("globe");
-            SaveGameProgress();
+            _humanPlayer.SectorSid = "globe";
+            _humanPlayer.SectorLevelSid = null;
+
+            // Текущий набор секторов пройден.
+            // Из доступных выбираем случайную схему нового сектора.
+            // И запоминаем её в объекте игрока.
+
+            StartLoadScene();
+
+            return;
         }
         else
         {
-            _humanPlayer.SectorSid = e.Transition.SectorSid;
+            _humanPlayer.SectorLevelSid = e.Transition.SectorSid;
+
             StartLoadScene();
+
+            return;
         }
+
+        //if (_humanPlayer.GlobeNode == null)
+        //{
+
+        //}
+
+        //var currentLocation = _humanPlayer.GlobeNode.Scheme;
+        //if (currentLocation?.SectorLevels == null)
+        //{
+        //    _humanPlayer.SectorSid = null;
+        //    SceneManager.LoadScene("globe");
+        //    SaveGameProgress();
+        //    return;
+        //}
+
+        //if (e.Transition.SectorSid == null)
+        //{
+        //    _humanPlayer.SectorSid = null;
+        //    SceneManager.LoadScene("globe");
+        //    SaveGameProgress();
+        //}
+        //else
+        //{
+        //    _humanPlayer.SectorSid = e.Transition.SectorSid;
+        //    StartLoadScene();
+        //}
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
@@ -574,6 +617,22 @@ public class SectorVM : MonoBehaviour
         AddResource(inventory, resourceSid, count);
     }
 
+    //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
+    /// <summary>
+    /// Добавляет ресурс созданному персонажу игрока.
+    /// </summary>
+    /// <param name="resourceSid"> Идентификатор предмета. </param>
+    /// <param name="count"> Количество ресурсво. </param>
+    /// <remarks>
+    /// Используется, чтобы добавить персонажу игрока книгу истории, когда он
+    /// выходит из стартовой локации, и начинается создание мира.
+    /// </remarks>
+    public void AddEquipmentToCurrentPerson(string equipmentSid)
+    {
+        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        AddEquipment(inventory, equipmentSid);
+    }
+
     private void AddResource(Inventory inventory, string resourceSid, int count)
     {
         try
@@ -585,6 +644,20 @@ public class SectorVM : MonoBehaviour
         catch (KeyNotFoundException)
         {
             Debug.LogError($"Не найден объект {resourceSid}");
+        }
+    }
+
+    private void AddEquipment(Inventory inventory, string equipmentSid)
+    {
+        try
+        {
+            var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
+            var resource = _propFactory.CreateEquipment(equipmentScheme);
+            inventory.Add(resource);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogError($"Не найден объект {equipmentSid}");
         }
     }
 
@@ -636,7 +709,11 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver);
+        var fowData = new HumanSectorFowData();
+
+        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
+        _playerEventLogService.Actor = actor;
+        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
 
         actorManager.Add(actor);
 
@@ -660,23 +737,28 @@ public class SectorVM : MonoBehaviour
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+        actor.UsedProp += Actor_UsedProp;
+
+        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        {
+            AddResourceToCurrentPerson("camp-tools");
+        }
 
         return actorViewModel;
     }
 
+    private void Actor_UsedProp(object sender, UsedPropEventArgs e)
+    {
+        if (e.UsedProp.Scheme.Sid != "camp-tools")
+        {
+            return;
+        }
+
+        SleepShadowManager.StartShadowAnimation();
+    }
+
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
-        var scores = _scoreManager.Scores;
-
-        try
-        {
-            _scoreStorage.AppendScores("test", scores);
-        }
-        catch (Exception exception)
-        {
-            Debug.LogError("Не удалось выполнить запись результатов в БД\n" + exception.ToString());
-        }
-
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
 

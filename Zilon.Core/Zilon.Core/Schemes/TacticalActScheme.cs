@@ -9,21 +9,18 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class TacticalActScheme : SchemeBase, ITacticalActScheme
     {
-        [JsonConstructor]
-        public TacticalActScheme(TacticalActStatsSubScheme stats, TacticalActConstrainsSubScheme constrains)
-        {
-            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
-            Constrains = constrains;
-        }
+        /// <inheritdoc/>
+        [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
+        public ITacticalActStatsSubScheme Stats { get; private set; }
 
-        /// <summary>
-        /// Основные характеристики действия.
-        /// </summary>
-        public ITacticalActStatsSubScheme Stats { get; }
+        /// <inheritdoc/>
+        [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActConstrainsSubScheme>))]
+        public ITacticalActConstrainsSubScheme Constrains { get; private set; }
 
-        /// <summary>
-        /// Ограничения на использование действия.
-        /// </summary>
-        public ITacticalActConstrainsSubScheme Constrains { get; }
+        /// <inheritdoc/>
+        [JsonProperty]
+        public string IsMimicFor { get; private set; }
     }
 }

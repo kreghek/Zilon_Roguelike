@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -27,6 +28,11 @@ namespace Zilon.Bot.Players.Logics
                                       ITacticalActUsageService actService,
                                       IActorManager actorManager)
         {
+            if (sectorManager is null)
+            {
+                throw new ArgumentNullException(nameof(sectorManager));
+            }
+
             _map = sectorManager.CurrentSector.Map;
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
             _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
@@ -102,7 +108,8 @@ namespace Zilon.Bot.Players.Logics
             var isAttackAllowed = CheckAttackAvailability(actor, _target);
             if (isAttackAllowed)
             {
-                var attackTask = new AttackTask(actor, _target, _actService);
+                var act = GetUsedActs(actor).First();
+                var attackTask = new AttackTask(actor, _target, act, _actService);
                 return attackTask;
             }
             else
@@ -131,6 +138,50 @@ namespace Zilon.Bot.Players.Logics
                         // Цел за пределами видимости. Считается потерянной.
                         return null;
                     }
+                }
+            }
+        }
+
+        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
+        {
+            if (actor.Person.EquipmentCarrier == null)
+            {
+                yield return actor.Person.TacticalActCarrier.Acts.First();
+            }
+            else
+            {
+                var usedEquipmentActs = false;
+                var slots = actor.Person.EquipmentCarrier.Slots;
+                for (var i = 0; i < slots.Length; i++)
+                {
+                    var slotEquipment = actor.Person.EquipmentCarrier[i];
+                    if (slotEquipment == null)
+                    {
+                        continue;
+                    }
+
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
+                    {
+                        continue;
+                    }
+
+                    var equipmentActs = from act in actor.Person.TacticalActCarrier.Acts
+                                        where act.Equipment == slotEquipment
+                                        select act;
+
+                    var usedAct = equipmentActs.FirstOrDefault();
+
+                    if (usedAct != null)
+                    {
+                        usedEquipmentActs = true;
+
+                        yield return usedAct;
+                    }
+                }
+
+                if (!usedEquipmentActs)
+                {
+                    yield return actor.Person.TacticalActCarrier.Acts.First();
                 }
             }
         }

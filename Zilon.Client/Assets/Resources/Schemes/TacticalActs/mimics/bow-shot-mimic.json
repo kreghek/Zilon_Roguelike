@@ -24,5 +24,6 @@
   "Constrains": {
     "PropResourceType": "arrow",
     "PropResourceCount": 1
-  }
+  },
+  "IsMimicFor": "bow-shot"
 }

@@ -10,6 +10,9 @@ public class SectorWalls : MonoBehaviour
     public Sprite RightWall;
     public Sprite RightBottomWall;
 
+    public Color LeftBottomColor;
+    public Color RightBottomColor;
+
     public Sprite Floor;
 
     public Sprite[] InteriorObjectSprites;

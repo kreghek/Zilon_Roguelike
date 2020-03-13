@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
@@ -10,14 +9,16 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class ConsumeProviantJobProgress : IJobProgress
     {
-        public ConsumeProviantJobProgress()
-        {
-            
-        }
-
+        /// <inheritdoc/>
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
+            if (currentJobs is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentJobs));
+            }
+
             var modifiedJobs = new List<IJob>();
+
             foreach (var job in currentJobs)
             {
                 if (job.Scheme.Type != JobType.ConsumeProviant)

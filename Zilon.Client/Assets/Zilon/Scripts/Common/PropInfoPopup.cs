@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +23,7 @@ using Zilon.Core.Schemes;
 public class PropInfoPopup : MonoBehaviour
 {
     [Inject] private readonly ISchemeService _schemeService;
+    [Inject] private readonly UiSettingService _uiSettingService;
 
     public Text NameText;
     public Text TagsText;
@@ -59,11 +60,27 @@ public class PropInfoPopup : MonoBehaviour
         // обрабатываем лже-предметы
         propScheme = ProcessMimics(prop, propScheme);
 
-        NameText.text = propScheme.Name?.En ?? propScheme.Name?.Ru ?? "[noname]";
+        NameText.text = GetPropDisplayName(propScheme);
         WritePropTags(prop);
-        DescriptionText.text = propScheme.Description?.En ?? propScheme.Description?.Ru;
+        DescriptionText.text = GetPropDescription(propScheme);
 
         WritePropStats(prop);
+    }
+
+    private string GetPropDescription(IPropScheme propScheme)
+    {
+        var lang = _uiSettingService.CurrentLanguage;
+        var description = propScheme.Description;
+
+        return LocalizationHelper.GetValue(lang, description);
+    }
+
+    private string GetPropDisplayName(IPropScheme propScheme)
+    {
+        var lang = _uiSettingService.CurrentLanguage;
+        var name = propScheme.Name;
+
+        return LocalizationHelper.GetValueOrDefaultNoname(lang, name);
     }
 
     /// <summary>
@@ -101,7 +118,9 @@ public class PropInfoPopup : MonoBehaviour
         }
 
         var filteredTags = prop.Scheme.Tags.Where(x => !string.IsNullOrWhiteSpace(x));
-        var tagsText = string.Join(" ", filteredTags);
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+        var tagDisplayNames = filteredTags.Select(x => StaticPhrases.GetValue($"prop-tag-{x}", currentLanguage));
+        var tagsText = string.Join(" ", tagDisplayNames);
 
         TagsText.text = tagsText;
     }
@@ -136,6 +155,7 @@ public class PropInfoPopup : MonoBehaviour
 
     private void WriteEquipmentStats(IPropScheme propScheme, Equipment equipment)
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
         var descriptionLines = new List<string>();
 
         if (propScheme.Equip.ActSids != null)
@@ -143,25 +163,41 @@ public class PropInfoPopup : MonoBehaviour
             foreach (var sid in propScheme.Equip.ActSids)
             {
                 var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
-                var actName = act.Name.En ?? act.Name.Ru;
-                var efficient = $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
+                var actName = LocalizationHelper.GetValue(currentLanguage, act.Name);
+                var efficient = GetEfficientString(act);
                 if (act.Stats.Effect == TacticalActEffectType.Damage)
                 {
                     var actImpact = act.Stats.Offence.Impact;
-                    descriptionLines.Add($"{actName}: {actImpact} {efficient} ({act.Stats.Offence.ApRank} rank)");
+                    var actImpactLangKey = actImpact.ToString().ToLowerInvariant();
+                    var impactDisplayName = StaticPhrases.GetValue($"impact-{actImpactLangKey}", currentLanguage);
+
+                    var apRankDisplayName = StaticPhrases.GetValue("ap-rank", currentLanguage);
+
+                    descriptionLines.Add($"{actName}: {impactDisplayName} {efficient} ({act.Stats.Offence.ApRank} {apRankDisplayName})");
                 }
                 else if (act.Stats.Effect == TacticalActEffectType.Heal)
                 {
-                    descriptionLines.Add($"{actName}: heal {efficient}");
+                    var healDisplayName = StaticPhrases.GetValue("efficient-heal", currentLanguage);
+                    descriptionLines.Add($"{actName}: {healDisplayName} {efficient}");
                 }
             }
         }
 
         if (propScheme.Equip.Armors != null)
         {
+            var protectsDisplayName = StaticPhrases.GetValue("armor-protects", currentLanguage);
+            var armorRankDisplayName = StaticPhrases.GetValue("armor-rank", currentLanguage);
             foreach (var armor in propScheme.Equip.Armors)
             {
-                descriptionLines.Add($"Protects: {armor.Impact} ({armor.ArmorRank} rank): {armor.AbsorbtionLevel}");
+                var armorImpact = armor.Impact;
+                var armorImpactLangKey = armorImpact.ToString().ToLowerInvariant();
+                var impactDisplayName = StaticPhrases.GetValue($"impact-{armorImpactLangKey}", currentLanguage);
+
+                var armorAbsorbtionLevel = armor.AbsorbtionLevel;
+                var armorAbsorbtionLevelKey = armorAbsorbtionLevel.ToString().ToLowerInvariant();
+                var armorAbsDisplayName = StaticPhrases.GetValue($"rule-{armorAbsorbtionLevelKey}", currentLanguage);
+
+                descriptionLines.Add($"{protectsDisplayName}: {impactDisplayName} ({armor.ArmorRank} {armorRankDisplayName}): {armorAbsDisplayName}");
             }
         }
 
@@ -171,77 +207,53 @@ public class PropInfoPopup : MonoBehaviour
             {
                 var sign = GetDirectionString(rule.Direction);
                 var bonusString = GetBonusString(rule.Direction);
-                descriptionLines.Add($"{bonusString}: {rule.Type}: {sign}{rule.Level}");
+
+                var ruleType = rule.Type;
+                var ruleKey = ruleType.ToString().ToLowerInvariant();
+                var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
+
+                var ruleLevel = rule.Level;
+                var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
+                var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
+
+                descriptionLines.Add($"{bonusString}: {ruleDisplayName}: {sign}{ruleLevelDisplayName}");
             }
         }
 
-        descriptionLines.Add($"Durable: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
+        var durableDisplayName = StaticPhrases.GetValue($"prop-durable", currentLanguage);
+        descriptionLines.Add($"{durableDisplayName}: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
 
         StatText.text = string.Join("\n", descriptionLines);
     }
 
-    private string GetRankString(int armorRank)
-    {
-        if (armorRank < 0)
-        {
-            throw new ArgumentException("Ранг защиты не можут быть меньше 0", nameof(armorRank));
-        }
-
-        if (armorRank == 0)
-        {
-            return "none";
-        }
-        else if (1 <= armorRank && armorRank <= 2)
-        {
-            return "minor";
-        }
-        else if (3 <= armorRank && armorRank <= 5)
-        {
-            return "normal";
-        }
-        else if (6 <= armorRank && armorRank <= 9)
-        {
-            return "good";
-        }
-        else
-        {
-            return "perfect";
-        }
-    }
-
     private static string GetEfficientString(ITacticalActScheme act)
     {
-        var efficient = act.Stats.Efficient;
-        var maxEfficientValue = efficient.Count * efficient.Dice;
-
-        if (maxEfficientValue <= 5)
-        {
-            return "low";
-        }
-        else if (6 <= maxEfficientValue && maxEfficientValue <= 8)
-        {
-            return "normal";
-        }
-        else
-        {
-            return "high";
-        }
+        return $"{act.Stats.Efficient.Count}D{act.Stats.Efficient.Dice}";
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         if (PropViewModel != null)
         {
-
             GetComponent<RectTransform>().position = PropViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }
     }
 
-    private static string GetUseRuleDescription(ConsumeCommonRule rule)
+    private string GetUseRuleDescription(ConsumeCommonRule rule)
     {
-        string signString = GetDirectionString(rule.Direction);
-        return $"{rule.Type}:{signString}{rule.Level}";
+        var signString = GetDirectionString(rule.Direction);
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var ruleType = rule.Type;
+        var ruleKey = ruleType.ToString().ToLowerInvariant();
+        var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
+
+        var ruleLevel = rule.Level;
+        var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
+        var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
+
+        return $"{ruleDisplayName}: {signString}{ruleLevelDisplayName}";
     }
 
     private static string GetDirectionString(PersonRuleDirection direction)
@@ -254,13 +266,16 @@ public class PropInfoPopup : MonoBehaviour
         return string.Empty;
     }
 
-    private static string GetBonusString(PersonRuleDirection direction)
+    private string GetBonusString(PersonRuleDirection direction)
     {
+        var currentLang = _uiSettingService.CurrentLanguage;
+        var bonusDisplayName = StaticPhrases.GetValue("prop-bonus", currentLang);
+        var penaltyDisplayName = StaticPhrases.GetValue("prop-penalty", currentLang);
         if (direction == PersonRuleDirection.Negative)
         {
-            return "Penalty";
+            return penaltyDisplayName;
         }
 
-        return "Bonus";
+        return bonusDisplayName;
     }
 }

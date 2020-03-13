@@ -7,6 +7,7 @@ using Assets.Zilon.Scripts.Services;
 using UnityEngine;
 
 using Zenject;
+
 using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
@@ -15,7 +16,7 @@ using Zilon.Core.Commands.Globe;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
 using Zilon.Core.WorldGeneration;
 

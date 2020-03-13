@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
@@ -17,10 +18,20 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
+        /// <inheritdoc/>
         public event EventHandler Moved;
+
+        /// <inheritdoc/>
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
         public event EventHandler<UsedActEventArgs> UsedAct;
+
+        /// <inheritdoc/>
         public event EventHandler<DamageTakenEventArgs> DamageTaken;
+
+        /// <inheritdoc/>
+        public event EventHandler<UsedPropEventArgs> UsedProp;
 
         /// <inheritdoc />
         /// <summary>
@@ -34,6 +45,7 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
+        public ISectorFowData SectorFowData { get; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -41,12 +53,25 @@ namespace Zilon.Core.Tactics
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
+
+            if (SectorFowData == null)
+            {
+                SectorFowData = new MonsterSectorFowData();
+            }
         }
 
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
         {
             _perkResolver = perkResolver;
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
+
+            SectorFowData = sectorFowData;
         }
 
         public bool CanBeDamaged()
@@ -67,7 +92,7 @@ namespace Zilon.Core.Tactics
 
         public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
         {
-            var openResult = method.TryOpen(container);
+            var openResult = method?.TryOpen(container);
 
             DoOpenContainer(container, openResult);
         }
@@ -113,6 +138,8 @@ namespace Zilon.Core.Tactics
                     _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
                 }
             }
+
+            UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
         }
 
         private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)

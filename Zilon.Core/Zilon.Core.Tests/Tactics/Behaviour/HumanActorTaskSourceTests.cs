@@ -196,7 +196,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(attackerActor);
 
-            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, usageService));
+            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct: null, actService: usageService));
 
             // ACT
             var tasks = SetHumanIntention(attackerActor, taskSource, attackIntention);
