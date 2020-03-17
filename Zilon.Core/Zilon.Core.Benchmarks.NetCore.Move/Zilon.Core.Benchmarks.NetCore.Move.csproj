@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
+    <PackageReference Include="LightInject" Version="6.2.0" />
+    <PackageReference Include="LightInject.Annotation" Version="1.1.0" />
+    <PackageReference Include="System.Security.Permissions" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
+    <ProjectReference Include="..\Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj" />
+    <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj" />
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+    <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
+    <ProjectReference Include="..\Zilon.IoC\Zilon.IoC.csproj" />
+  </ItemGroup>
+
+</Project>
