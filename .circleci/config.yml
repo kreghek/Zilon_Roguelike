@@ -28,7 +28,7 @@ jobs:
   test_di:
     working_directory: /test_di
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -41,7 +41,7 @@ jobs:
   test_45_coverage:
     working_directory: /test_45_coverage
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -65,7 +65,7 @@ jobs:
   test_players:
     working_directory: /test_players
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -76,7 +76,7 @@ jobs:
   test_bots:
     working_directory: /test_bots
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -87,7 +87,7 @@ jobs:
   test_specflow:
     working_directory: /test_specflow
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
