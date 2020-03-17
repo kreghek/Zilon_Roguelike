@@ -6,6 +6,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -28,7 +29,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async System.Threading.Tasks.Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
         {
             // ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
             var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
@@ -43,13 +44,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new MoveTask(actor, finishNode, map);
 
-
             // ACT
             for (var step = 1; step <= expectedPath.Length; step++)
             {
                 task.Execute();
-
-
 
                 // ASSERT
                 var expectedIsComplete = step >= 3;
@@ -58,8 +56,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
                 actor.Node.Should().Be(expectedPath[step - 1]);
             }
-
-
 
             // ASSERT
 
@@ -75,11 +71,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var personMock = new Mock<IPerson>();
             var person = personMock.Object;
 
-            IMapNode currentNode = startNode;
+            IGraphNode currentNode = startNode;
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(() => currentNode);
-            actorMock.Setup(x => x.MoveToNode(It.IsAny<IMapNode>()))
-                .Callback<IMapNode>(node => currentNode = node);
+            actorMock.Setup(x => x.MoveToNode(It.IsAny<IGraphNode>()))
+                .Callback<IGraphNode>(node => currentNode = node);
             // ReSharper disable once UnusedVariable
             var actor = actorMock.Object;
 
@@ -99,16 +95,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 
-            var expectedPath = new IMapNode[] {
-                map.Nodes.Cast<HexNode>().SelectBy(4,4),
-                map.Nodes.Cast<HexNode>().SelectBy(3,4),
-                map.Nodes.Cast<HexNode>().SelectBy(2,4),
-                map.Nodes.Cast<HexNode>().SelectBy(1,5),
-            };
+            var expectedPath = CreateExpectedPath(map);
 
             var startNode = expectedPath.First();
             var finishNode = expectedPath.Last();
@@ -118,12 +109,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new MoveTask(actor, finishNode, map);
 
-
             // ACT
             for (var step = 1; step < expectedPath.Length; step++)
             {
                 task.Execute();
-
 
                 // ASSERT
                 actor.Node.Should().Be(expectedPath[step]);
@@ -138,14 +127,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var expectedPath = new IMapNode[] {
-                map.Nodes.Cast<HexNode>().SelectBy(4,4),
-                map.Nodes.Cast<HexNode>().SelectBy(3,4),
-                map.Nodes.Cast<HexNode>().SelectBy(2,4),
-                map.Nodes.Cast<HexNode>().SelectBy(1,5),
-            };
+            var expectedPath = CreateExpectedPath(map);
 
             var startNode = expectedPath.First();
             var finishNode = expectedPath.Last();
@@ -155,18 +139,24 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new MoveTask(actor, finishNode, map);
 
-
-
             // ACT
             for (var step = 1; step < expectedPath.Length; step++)
             {
                 task.Execute();
             }
 
-
-
             // ASSERT
             task.IsComplete.Should().BeTrue();
+        }
+
+        private static IGraphNode[] CreateExpectedPath(ISectorMap map)
+        {
+            return new IGraphNode[] {
+                map.Nodes.Cast<HexNode>().SelectBy(4,4),
+                map.Nodes.Cast<HexNode>().SelectBy(3,4),
+                map.Nodes.Cast<HexNode>().SelectBy(2,4),
+                map.Nodes.Cast<HexNode>().SelectBy(1,5),
+            };
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public IPropUseSubScheme Use { get; set; }
         public string[] Tags { get; set; }
         public IPropBulletSubScheme Bullet { get; set; }
+        public string IsMimicFor { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -528,7 +529,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = await SquareMapFactory.CreateAsync(3);
+            var map = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;
@@ -543,7 +544,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManager = sectorManagerMock.Object;
 
             var mapMock = new Mock<ISectorMap>();
-            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IMapNode>(), It.IsAny<IMapNode>()))
+            mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns(false);
             var map = mapMock.Object;
            

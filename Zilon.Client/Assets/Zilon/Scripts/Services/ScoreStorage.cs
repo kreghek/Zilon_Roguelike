@@ -17,7 +17,7 @@ namespace Assets.Zilon.Scripts.Services
 {
     public sealed class ScoreStorage
     {
-        public void AppendScores(string personName, Scores scores)
+        public void AppendScores(string personName, Scores scores, string deathReason)
         {
             var pathToDb = Path.Combine(Application.persistentDataPath, "data.bytes");
             var connectionString = $"URI=file:{pathToDb}";
@@ -33,8 +33,8 @@ namespace Assets.Zilon.Scripts.Services
                 var textSummary = TextSummaryHelper.CreateTextSummary(scores);
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, Summary, TextSummary)
-                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
+                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, DeathReason, Turns, Frags, Summary, TextSummary)
+                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, '{deathReason}', {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }
@@ -57,7 +57,7 @@ namespace Assets.Zilon.Scripts.Services
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT Name, Scores, TextSummary FROM [Scores] ORDER BY Scores DESC";
+                    command.CommandText = "SELECT Name, Scores, DeathReason, TextSummary FROM [Scores] ORDER BY Scores DESC";
                     command.CommandType = CommandType.Text;
                     using (var reader = command.ExecuteReader())
                     {
@@ -69,7 +69,8 @@ namespace Assets.Zilon.Scripts.Services
                             {
                                 Number = number,
                                 Name = reader.GetString(0),
-                                Scores = reader.GetInt32(1)
+                                Scores = reader.GetInt32(1),
+                                DeathReason = reader.GetString(2)
                             };
 
                             recordList.Add(record);
@@ -111,7 +112,7 @@ namespace Assets.Zilon.Scripts.Services
                             ,ROUND(AVG([Frags]), 1) AS AvgFrags
                             ,MAX([Frags]) AS MaxFrags
                         FROM [Scores]
-                        GROUP BY [Name] ,[Preffix] ,[Mode]";
+                        GROUP BY [Preffix] ,[Mode]";
                     command.CommandType = CommandType.Text;
                     using (var reader = command.ExecuteReader())
                     {
@@ -146,6 +147,7 @@ namespace Assets.Zilon.Scripts.Services
                         Mode TEXT NULL,
                         TimeStamp TEXT NOT NULL DEFAULT (datetime(current_timestamp)),
                         Scores INTEGER NULL,
+                        DeathReason TEXT NOT NULL,
                         Turns INTEGER NULL,
                         Frags INTEGER NULL,
                         Summary TEXT NULL,

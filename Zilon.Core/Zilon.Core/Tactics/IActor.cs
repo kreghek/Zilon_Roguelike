@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>
-        void MoveToNode(IMapNode targetNode);
+        void MoveToNode(IGraphNode targetNode);
 
         /// <summary>
         /// Открытие контейнера актёром.
@@ -68,6 +68,11 @@ namespace Zilon.Core.Tactics
         event EventHandler<DamageTakenEventArgs> DamageTaken;
 
         /// <summary>
+        /// Выстреливает, когда актёр использует предмет.
+        /// </summary>
+        event EventHandler<UsedPropEventArgs> UsedProp;
+
+        /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
         /// <param name="target"> Цель действия. </param>
@@ -75,5 +80,16 @@ namespace Zilon.Core.Tactics
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
+
+        /// <summary>
+        /// Данные о тумане войны актёра.
+        /// </summary>
+        /// <remarks>
+        /// Актёр живёт только в рамках сектора. Если сектор уничтожается,
+        /// будет потеряна ссылка на актёра, а следовательно и на информацию о тумане войны.
+        /// Таким образом ненужные данные о тумане войны не будут оставать в памяти при смене секторов.
+        /// Но будут специфичны для каждого актёра. Например, для ботов.
+        /// </remarks>
+        ISectorFowData SectorFowData { get; }
     }
 }

@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "mace" ],
+  "Equip": {
+    "ActSids": [
+      "blow"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Гигантская кисть художника",
+	"En": "Gaint artist brush"
+  }
+}

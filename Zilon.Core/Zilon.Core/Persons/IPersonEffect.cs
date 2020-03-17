@@ -2,12 +2,20 @@
 
 namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Эффект персонажа.
+    /// </summary>
     public interface IPersonEffect
     {
-        EffectRule[] Rules { get; }
+        /// <summary>
+        /// Получить правила эффекта.
+        /// </summary>
+        /// <returns> Возвращает текущие правила эффекта. </returns>
+        EffectRule[] GetRules();
 
-        void Update();
-
+        /// <summary>
+        /// Выстреливает, когда внешние характеристики эффекта изменились.
+        /// </summary>
         event EventHandler Changed;
     }
 }

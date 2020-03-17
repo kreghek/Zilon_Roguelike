@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using FluentAssertions;
 
@@ -7,6 +6,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics.Spatial;
 
@@ -43,7 +43,7 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(node11, node10);
             map.AddEdge(node11, node01);
 
-            var regionNodes = new IMapNode[] { node00, node01, node10, node11 };
+            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
 
             // генерируем выход
             var corridorNode = new HexNode(2, 0);
@@ -92,15 +92,15 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(node11, node10);
             map.AddEdge(node11, node01);
 
-            var regionNodes = new IMapNode[] { node00, node01, node10, node11 };
+            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
 
             // генерируем выход
             var corridorNode = new HexNode(2, 0);
             map.AddNode(corridorNode);
             map.AddEdge(corridorNode, node10);
 
-            mapMock.Setup(x => x.GetNext(It.Is<IMapNode>(n => n == node10)))
-                .Returns(new IMapNode[] { corridorNode, node00, node11 });
+            mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
+                .Returns(new IGraphNode[] { corridorNode, node00, node11 });
 
 
 
@@ -123,7 +123,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ARRANGE
             var hexMap = new HexMap(200);
 
-            var region = new List<IMapNode>();
+            var region = new List<IGraphNode>();
             for (var x = 80; x <= 93; x++)
             {
                 for (var y = 40; y <= 54; y++)
@@ -153,7 +153,7 @@ namespace Zilon.Core.Tests.MapGenerators
             hexMap.AddNode(new HexNode(95, 50));
 
             // эмулируем выборку сундуков в предыдущих итерациях
-            var availableNodes = new List<IMapNode>(region);
+            var availableNodes = new List<IGraphNode>(region);
             var rolled = new[] { 114, 136, 0, 123, 179, 0, 111, 3 };
             foreach (int rolledIndex in rolled)
             {

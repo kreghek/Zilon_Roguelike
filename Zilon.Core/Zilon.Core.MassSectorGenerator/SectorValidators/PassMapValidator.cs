@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
@@ -17,7 +18,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     class PassMapValidator : ISectorValidator
     {
-        public Task Validate(ISector sector, Scope scopeContainer)
+        public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
             // Проверяем проходимость карты.
             // Для этого убеждаемся, что из любого узла есть путь до любого другого.
@@ -27,7 +28,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
             return Task.Run(() =>
             {
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
+                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
                 var containerNodes = containerManager.Items.Select(x => x.Node);
 
                 var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();

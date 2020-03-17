@@ -1,0 +1,16 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "Health",
+		"Level": "Normal"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Taurus stim mimic",
+    "Ru": "Ложно-Бычий стимулятор"
+  },
+  "IsMimicFor": "taurus-stim"
+}

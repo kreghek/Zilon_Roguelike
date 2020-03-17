@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
     public abstract class ChestBase : IPropContainer
     {
         [ExcludeFromCodeCoverage]
-        protected ChestBase(IMapNode node, IPropStore content) : this(node, content, default(int))
+        protected ChestBase(IGraphNode node, IPropStore content) : this(node, content, default(int))
         {
         }
 
         [ExcludeFromCodeCoverage]
-        protected ChestBase(IMapNode node, IPropStore content, int id)
+        protected ChestBase(IGraphNode node, IPropStore content, int id)
         {
             Id = id;
             Node = node ?? throw new ArgumentNullException(nameof(node));
@@ -35,7 +34,7 @@ namespace Zilon.Core.Tactics
         }
 
         public int Id { get; }
-        public IMapNode Node { get; }
+        public IGraphNode Node { get; }
         public IPropStore Content { get; }
         public bool IsOpened { get; private set; }
         public abstract bool IsMapBlock { get; }

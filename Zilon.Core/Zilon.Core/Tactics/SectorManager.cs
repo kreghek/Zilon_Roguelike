@@ -66,15 +66,15 @@ namespace Zilon.Core.Tactics
                     sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
                 }
                 
-                CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme);
+                CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme).ConfigureAwait(false);
             }
             else if (regionNode.IsTown)
             {
-                CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode);
+                CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode).ConfigureAwait(false);
             }
             else
             {
-                CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode);
+                CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode).ConfigureAwait(false);
             }
 
             CurrentSector.Scheme = scheme;

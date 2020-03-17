@@ -1,10 +1,33 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    public interface IPropScheme: IScheme
+    /// <summary>
+    /// Схема предмета.
+    /// </summary>
+    public interface IPropScheme: IScheme, IMimicScheme
     {
+        /// <summary>
+        /// Теги предмета. Используются для описания и для некоторых правил.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Performance",
+            "CA1819:Properties should not return arrays",
+            Justification = "Свойство нужно для десериализации")]
         string[] Tags { get; }
+
+        /// <summary>
+        /// Информация о крафте данного прдмета.
+        /// </summary>
         CraftSubScheme Craft { get; }
+
+        /// <summary>
+        /// Информация о том, как предмет можно экипировать.
+        /// </summary>
         IPropEquipSubScheme Equip { get; }
+
+        /// <summary>
+        /// Информация о том, что будет, если предмет употребить
+        /// (сьесть, выпить, использовать).
+        /// </summary>
         IPropUseSubScheme Use { get; }
         
         /// <summary>

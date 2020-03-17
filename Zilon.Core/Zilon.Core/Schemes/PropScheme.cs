@@ -43,6 +43,16 @@ namespace Zilon.Core.Schemes
         /// возможность парного оружия.
         /// </remarks>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется массив в свойстве для десериализации.")]
         public string[] Tags { get; private set; }
+
+        /// <summary>
+        /// Идентфиикаторы схем других предметов,
+        /// под которые будет мимикрировать данный предмет.
+        /// Используется лже-предметами.
+        /// </summary>
+        [JsonProperty]
+        public string IsMimicFor { get; private set; }
     }
 }

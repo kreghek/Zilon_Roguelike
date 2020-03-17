@@ -1,6 +1,10 @@
 {
+  "Tags": [ "weapon", "ranged", "shotgun" ],
   "Equip": {
-
+    "ActSids": [
+      "shot"
+    ],
+    "SlotTypes": [ "Hand" ]
   },
   "Craft": {
     "PrototypeSources": [
@@ -56,6 +60,7 @@
     "ProductOutput": 1
   },
   "Name": {
-    "En": "Shotgun"
+    "En": "Shotgun",
+	"Ru": "Дробовик"
   }
 }

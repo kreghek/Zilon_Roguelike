@@ -1,10 +1,11 @@
 ﻿using JetBrains.Annotations;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
-    public class HexNode: IMapNode
+    public class HexNode: IGraphNode
     {
         /// <summary>
         /// Уникальный идентификатор узла в рамках сектора.

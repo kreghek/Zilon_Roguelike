@@ -6,5 +6,6 @@ namespace Zilon.Core.Tests.Common.Schemes
     {
         public string PropResourceType { get; set; }
         public int? PropResourceCount { get; set; }
+        public int? Cooldown { get; }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "sword" ],
+  "Equip": {
+    "ActSids": [
+      "slash-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Ложный Короткий меч",
+	"En": "Short sword mimic"
+  },
+  "IsMimicFor": "short-sword"
+}

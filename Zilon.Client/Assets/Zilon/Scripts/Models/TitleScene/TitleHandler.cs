@@ -1,11 +1,11 @@
 ﻿using Assets.Zilon.Scripts.Models.TitleScene;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Zenject;
 
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
 
 public class TitleHandler : MonoBehaviour

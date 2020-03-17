@@ -14,6 +14,7 @@ using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
@@ -25,25 +26,37 @@ namespace Zilon.Core.Persons
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
+        /// <inheritdoc/>
         public int Id { get; set; }
 
+        /// <inheritdoc/>
         public string Name { get; }
 
+        /// <inheritdoc/>
         public IEquipmentCarrier EquipmentCarrier { get; }
 
+        /// <inheritdoc/>
         public ITacticalActCarrier TacticalActCarrier { get; }
 
+        /// <inheritdoc/>
         public IEvolutionData EvolutionData { get; }
 
+        /// <inheritdoc/>
         public IPersonScheme Scheme { get; }
 
+        /// <inheritdoc/>
         public ICombatStats CombatStats { get; }
 
+        /// <inheritdoc/>
         public IPropStore Inventory { get; }
 
+        /// <inheritdoc/>
         public ISurvivalData Survival { get; }
 
+        /// <inheritdoc/>
         public EffectCollection Effects { get; }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
@@ -226,7 +239,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
+        private static IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
         {
             var armorGroups = equipmentArmors.GroupBy(x => x.Impact).OrderBy(x => x.Key);
 
@@ -370,7 +383,7 @@ namespace Zilon.Core.Persons
             var perks = EvolutionData?.GetArchievedPerks();
             if (perks == null)
             {
-                perks = new IPerk[0];
+                perks = Array.Empty<IPerk>();
             }
 
             return perks;
@@ -489,7 +502,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void BonusToDownPass(
+        private static void BonusToDownPass(
             SurvivalStatType statType,
             PersonRuleLevel level,
             PersonRuleDirection direction,
@@ -593,7 +606,11 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.Stat.KeySegments, _survivalRandomSource);
+            PersonEffectHelper.UpdateSurvivalEffect(
+                Effects,
+                e.Stat,
+                e.Stat.KeySegments,
+                _survivalRandomSource);
         }
 
 
@@ -741,10 +758,10 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var effecientDebuffRule = greaterSurvivalEffect.Rules
+            var effecientDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
 
-            var toHitDebuffRule = greaterSurvivalEffect.Rules
+            var toHitDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
 
             if (effecientDebuffRule != null)
@@ -779,6 +796,7 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Name}";

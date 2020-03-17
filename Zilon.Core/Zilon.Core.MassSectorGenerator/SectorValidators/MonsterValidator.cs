@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -16,16 +17,16 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     class MonsterValidator : ISectorValidator
     {
-        public Task Validate(ISector sector, Scope scopeContainer)
+        public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
             return Task.Run(() =>
             {
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
+                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
                 var allContainers = containerManager.Items;
 
                 // Монстры не должны генерироваться на узлах с препятствием.
                 // Монстры не должны генерироваться на узлах с сундуками.
-                var actorManager = scopeContainer.GetInstance<IActorManager>();
+                var actorManager = scopeContainer.GetRequiredService<IActorManager>();
                 var allMonsters = actorManager.Items;
                 var containerNodes = allContainers.Select(x => x.Node);
                 foreach (var actor in allMonsters)
