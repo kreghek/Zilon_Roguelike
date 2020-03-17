@@ -3,13 +3,16 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+
 using Zilon.Core.Scoring;
 
 namespace Zilon.BotEnvironment
 {
     public static class DatabaseContext
     {
-        public static void AppendScores(IScoreManager scoreManager,
+        public static void AppendScores(
+            string scorePath,
+            IScoreManager scoreManager,
             string botName,
             string scoreFilePreffix,
             string mode,
@@ -18,15 +21,16 @@ namespace Zilon.BotEnvironment
             var fragSum = scoreManager.Frags.Sum(x => x.Value);
 
             var baseName = "BotScores.db3";
-            if (!File.Exists(baseName))
+            var dbPath = Path.Combine(scorePath, baseName);
+            if (!File.Exists(dbPath))
             {
-                SQLiteConnection.CreateFile(baseName);
+                SQLiteConnection.CreateFile(dbPath);
             }
 
             var factory = SQLiteFactory.Instance;
             using (var connection = factory.CreateConnection())
             {
-                connection.ConnectionString = "Data Source = " + baseName;
+                connection.ConnectionString = "Data Source = " + dbPath;
                 connection.Open();
 
                 CreateScoresTableIfNotExists(connection);
