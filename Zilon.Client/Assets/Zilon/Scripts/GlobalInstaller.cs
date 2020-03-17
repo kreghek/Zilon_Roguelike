@@ -1,4 +1,5 @@
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -31,7 +32,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
-        Container.Bind<IHumanPersonFactory>().To<RandomHumanPersonFactory>().AsSingle();
+        Container.RegisterHumanPersonFactory();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
