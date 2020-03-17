@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -67,6 +67,8 @@ public class SectorVM : MonoBehaviour
     [NotNull] public FoundNothingIndicator FoundNothingIndicatorPrefab;
 
     [NotNull] public FowManager FowManager;
+
+    [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
@@ -735,8 +737,24 @@ public class SectorVM : MonoBehaviour
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+        actor.UsedProp += Actor_UsedProp;
+
+        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        {
+            AddResourceToCurrentPerson("camp-tools");
+        }
 
         return actorViewModel;
+    }
+
+    private void Actor_UsedProp(object sender, UsedPropEventArgs e)
+    {
+        if (e.UsedProp.Scheme.Sid != "camp-tools")
+        {
+            return;
+        }
+
+        SleepShadowManager.StartShadowAnimation();
     }
 
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)

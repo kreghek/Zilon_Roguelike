@@ -19,7 +19,6 @@ namespace Zilon.BotEnvironment
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string BOT_MODE_ARG = "Mode";
-
         private static Startup _startUp;
 
         static async Task Main(string[] args)
@@ -28,7 +27,7 @@ namespace Zilon.BotEnvironment
 
             var serviceCollection = new ServiceCollection();
 
-            _startUp = new Startup();
+            _startUp = new Startup(schemeCatalogPath);
             _startUp.RegisterServices(serviceCollection);
 
             var botSettings = new BotSettings

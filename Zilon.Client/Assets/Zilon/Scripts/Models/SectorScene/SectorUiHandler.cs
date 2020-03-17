@@ -52,6 +52,8 @@ public class SectorUiHandler : MonoBehaviour
     public Button CityQuickExitButton;
     public Button OpenLootButton;
 
+    public GameObject SleepShadow;
+
     public void Update()
     {
         HandleHotKeys();

@@ -89,7 +89,7 @@ public class EffectViewModel : MonoBehaviour
                 return StaticPhrases.GetValue("max-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                return StaticPhrases.GetValue("max-thrist", currentLanguage);
+                return StaticPhrases.GetValue("max-thirst", currentLanguage);
 
             case SurvivalStatType.Intoxication:
                 return StaticPhrases.GetValue("max-intoxication", currentLanguage);
@@ -110,7 +110,7 @@ public class EffectViewModel : MonoBehaviour
                 return StaticPhrases.GetValue("strong-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                return StaticPhrases.GetValue("strong-thrist", currentLanguage);
+                return StaticPhrases.GetValue("strong-thirst", currentLanguage);
 
             case SurvivalStatType.Intoxication:
                 return StaticPhrases.GetValue("strong-intoxication", currentLanguage);
@@ -131,7 +131,7 @@ public class EffectViewModel : MonoBehaviour
                 return StaticPhrases.GetValue("weak-hunger", currentLanguage);
 
             case SurvivalStatType.Hydration:
-                return StaticPhrases.GetValue("weak-thrist", currentLanguage);
+                return StaticPhrases.GetValue("weak-thirst", currentLanguage);
 
             case SurvivalStatType.Intoxication:
                 return StaticPhrases.GetValue("weak-intoxication", currentLanguage);
@@ -154,7 +154,7 @@ public class EffectViewModel : MonoBehaviour
                 break;
 
             case SurvivalStatHazardLevel.Max:
-                Background.color = new Color32(0xc3, 0x28, 0x13, 255);
+                Background.color = new Color32(0xf3, 0x28, 0x13, 255);
                 break;
 
             default:

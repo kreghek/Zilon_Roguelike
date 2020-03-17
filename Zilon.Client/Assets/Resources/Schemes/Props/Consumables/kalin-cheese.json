@@ -15,5 +15,19 @@
         "Level": "Lesser"
       }
     ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "acid",
+        "Count": 1
+      },
+      {
+        "PropSid": "vege-milk",
+        "Count": 1
+      },
+    ],
+    "ProductOutput": 1
   }
 }

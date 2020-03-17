@@ -43,6 +43,8 @@ namespace Zilon.Core.Schemes
         /// возможность парного оружия.
         /// </remarks>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется массив в свойстве для десериализации.")]
         public string[] Tags { get; private set; }
 
         /// <summary>
