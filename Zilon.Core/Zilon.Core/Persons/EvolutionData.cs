@@ -88,7 +88,12 @@ namespace Zilon.Core.Persons
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
                 // Для развития годятся только те перки, которые не врождённые.
                 // Врождённые перки даются только при генерации персонажа.
-                .Where(x => !x.IsBuildIn);
+                .Where(x => !x.IsBuildIn)
+                // Защиита от схем, в которых забыли прописать работы и уровни.
+                // По идее, такие перки либо должны быть врождёнными.
+                // Следовательно, если они не отсеяны выше, то это ошибка.
+                // Такие схемы лучше проверять в тестах на валидацию схем.
+                .Where(x=>x.Jobs != null && x.Levels != null);
 
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)
