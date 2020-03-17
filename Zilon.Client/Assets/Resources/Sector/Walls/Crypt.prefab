@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2077895187870998827}
   - component: {fileID: 2851506336247315825}
   m_Layer: 0
-  m_Name: Cript
+  m_Name: Crypt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,12 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6653e41f8a26f44ea5959296a28651a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftTopWall: {fileID: 21300000, guid: 0e6590838f530fc479bd78cff0638b4e, type: 3}
-  LeftWall: {fileID: 21300000, guid: 7363c92543165f74dae69ae002f7a622, type: 3}
-  LeftBottomWall: {fileID: 21300000, guid: b9f1d65d7bf1a5e4199f5fa878aff7c6, type: 3}
-  RightTopWall: {fileID: 21300000, guid: 8581356977d4bed40a9dbe5e73b10a54, type: 3}
-  RightWall: {fileID: 21300000, guid: 6d2b966496121bc4086ae38db98eaafc, type: 3}
-  RightBottomWall: {fileID: 21300000, guid: afbe13d29032ca64683867806dfb8246, type: 3}
+  LeftTopWall: {fileID: 21300000, guid: 266ff5c9cf17ece4ca95ef7297e0e8bf, type: 3}
+  LeftWall: {fileID: 21300000, guid: 57f6e7cb1a324444eadaec2ebb663e27, type: 3}
+  LeftBottomWall: {fileID: 21300000, guid: 3e97d1b357e59464c97e070206c00fcc, type: 3}
+  RightTopWall: {fileID: 21300000, guid: 97fece8dfec971246bfbbd2d50dde385, type: 3}
+  RightWall: {fileID: 21300000, guid: 37223fa06f73b7842ab1e6d6c9331107, type: 3}
+  RightBottomWall: {fileID: 21300000, guid: 15985bb9d6c1da646865335155274a8f, type: 3}
+  LeftBottomColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0.49803922}
+  RightBottomColor: {r: 0.5372549, g: 0.5372549, b: 0.5372549, a: 0.49803922}
   Floor: {fileID: 21300000, guid: e777644fdc923a846b82ca22b6906aaa, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}

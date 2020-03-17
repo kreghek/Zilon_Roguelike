@@ -1,0 +1,32 @@
+{
+  "Name": {
+    "En": "Camp tools",
+	"Ru": "Принадлежности для лагеря"
+  },
+  "Description":{
+    "Ru": "Позволяет разбить лагерь, чтобы немного отдохнуть и восстановить силы. Отдыхать можно только в локациях, очищенных от ВСЕХ монстров."
+  },
+  "Use": {
+    "CommonRules": [
+      {
+        "Type": "Health",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Intoxication",
+        "Level": "Lesser",
+		"Direction": "Negative"
+      },
+	  {
+        "Type": "Satiety",
+        "Level": "Grand",
+		"Direction": "Negative"
+      },
+	  {
+        "Type": "Thirst",
+        "Level": "Grand",
+		"Direction": "Negative"
+      }
+    ]
+  }
+}

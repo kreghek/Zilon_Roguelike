@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Graphs;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players
 {
@@ -9,7 +10,7 @@ namespace Zilon.Bot.Players
         /// </summary>
         private const int SIGN_RANGE = 5;
 
-        public static bool CheckTargetVisible(ISectorMap map, IMapNode node, IMapNode target)
+        public static bool CheckTargetVisible(ISectorMap map, IGraphNode node, IGraphNode target)
         {
             var distance = map.DistanceBetween(node, target);
             var isInSignRange = distance <= SIGN_RANGE;

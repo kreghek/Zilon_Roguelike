@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
+    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+    <ProjectReference Include="..\Zilon.BotEnvironment\Zilon.BotEnvironment.csproj" />
+    <ProjectReference Include="..\Zilon.BotMassLauncher\Zilon.BotMassLauncher.csproj" />
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+  </ItemGroup>
+
+</Project>

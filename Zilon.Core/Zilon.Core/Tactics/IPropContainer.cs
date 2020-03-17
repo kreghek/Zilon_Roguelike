@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
 
@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Узер карты сектора, в котором находится контейнер.
         /// </summary>
-        IMapNode Node { get; }
+        IGraphNode Node { get; }
 
         /// <summary>
         /// Содержимое контейнера.

@@ -70,7 +70,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, actService);
+            _attackTask = new AttackTask(_actor, target, tacticalAct, actService);
 
             Action act = () =>
             {

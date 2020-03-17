@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -21,16 +21,16 @@ namespace Zilon.Core.MapGenerators
         /// <param name="availableNodes"> Доступные узлы. Использовать узлы региона.
         /// Возможно, отфильтрованные от уже занятых узлов. </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
-        public static IMapNode FindNonBlockedNode(
-            [NotNull] IMapNode node,
+        public static IGraphNode FindNonBlockedNode(
+            [NotNull] IGraphNode node,
             [NotNull] IMap map,
-            [NotNull] [ItemNotNull] IEnumerable<IMapNode> availableNodes)
+            [NotNull] [ItemNotNull] IEnumerable<IGraphNode> availableNodes)
         {
-            var availableNodesArray = availableNodes as IMapNode[] ?? availableNodes.ToArray();
+            var availableNodesArray = availableNodes as IGraphNode[] ?? availableNodes.ToArray();
             CheckArguments(node, map, availableNodesArray);
 
-            var openList = new List<IMapNode>(6 + 1) { node };
-            var closedNodes = new List<IMapNode>();
+            var openList = new List<IGraphNode>(6 + 1) { node };
+            var closedNodes = new List<IGraphNode>();
             while (openList.Any())
             {
                 node = openList[0];
@@ -39,7 +39,7 @@ namespace Zilon.Core.MapGenerators
 
                 var neighbors = map.GetNext(node);
 
-                var neighborsArray = neighbors as IMapNode[] ?? neighbors.ToArray();
+                var neighborsArray = neighbors as IGraphNode[] ?? neighbors.ToArray();
                 var corridorNodes = from neighbor in neighborsArray
                                     where !availableNodesArray.Contains(neighbor)
                                     select neighbor;
@@ -59,9 +59,9 @@ namespace Zilon.Core.MapGenerators
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void CheckArguments(IMapNode node,
+        private static void CheckArguments(IGraphNode node,
             IMap map,
-            IEnumerable<IMapNode> availableNodes)
+            IEnumerable<IGraphNode> availableNodes)
         {
             if (map == null)
             {

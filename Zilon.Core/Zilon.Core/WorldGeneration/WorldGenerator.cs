@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -471,7 +470,7 @@ namespace Zilon.Core.WorldGeneration
 
                 var localityName = globe.GetLocalityName(_dice);
 
-                var locality = new Locality()
+                var locality = new Locality
                 {
                     Name = localityName,
                     Cell = globe.Terrain[randomX][randomY],

@@ -10,8 +10,11 @@ namespace Zilon.Bot.Players
 {
     public sealed class MonsterBotActorTaskSource : BotActorTaskSourceBase
     {
-        public MonsterBotActorTaskSource(IBotPlayer player) : base(player)
+        private readonly LogicStateTreePatterns _logicStateTreePatterns;
+
+        public MonsterBotActorTaskSource(IBotPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
         {
+            _logicStateTreePatterns = logicStateTreePatterns;
         }
 
         public override void Configure(IBotSettings botSettings)
@@ -21,18 +24,24 @@ namespace Zilon.Bot.Players
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             switch (actor.Person)
             {
                 case MonsterPerson _:
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Monster);
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster);
 
+                case HumanPerson _:
                 case CitizenPerson _:
-                    return new LogicTreeStrategy(actor, LogicStateTreePatterns.Citizen);
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Citizen);
 
                 default:
                     throw new NotSupportedException($"{actor.Person.GetType()} не поддерживается.");
             }
-            
+
         }
     }
 }

@@ -4,55 +4,52 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 
-using LightInject;
-
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Scoring;
 
 namespace Zilon.BotEnvironment
 {
     public static class DatabaseContext
     {
-        public static void AppendScores(IScoreManager scoreManager,
-            IServiceFactory serviceFactory,
+        public static void AppendScores(
+            string scorePath,
+            IScoreManager scoreManager,
+            string botName,
             string scoreFilePreffix,
             string mode,
             string textSummary)
         {
-            var botTaskSource = serviceFactory.GetInstance<IActorTaskSource>("bot");
             var fragSum = scoreManager.Frags.Sum(x => x.Value);
 
-
             var baseName = "BotScores.db3";
-            if (!File.Exists(baseName))
+            var dbPath = Path.Combine(scorePath, baseName);
+            if (!File.Exists(dbPath))
             {
-                SQLiteConnection.CreateFile(baseName);
+                SQLiteConnection.CreateFile(dbPath);
             }
 
-
-            var factory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
-            using (var connection = (SQLiteConnection)factory.CreateConnection())
+            var factory = SQLiteFactory.Instance;
+            using (var connection = factory.CreateConnection())
             {
-                connection.ConnectionString = "Data Source = " + baseName;
+                connection.ConnectionString = "Data Source = " + dbPath;
                 connection.Open();
 
                 CreateScoresTableIfNotExists(connection);
 
                 CreatMeasuresViewIfNotExists(connection);
 
-                using (var command = new SQLiteCommand(connection))
+                using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
-                    VALUES ('{botTaskSource.GetType().FullName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
+                    VALUES ('{botName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }
             }
         }
 
-        private static void CreateScoresTableIfNotExists(SQLiteConnection connection)
+        private static void CreateScoresTableIfNotExists(DbConnection connection)
         {
-            using (var command = new SQLiteCommand(connection))
+            using (var command = connection.CreateCommand())
             {
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS [Scores](
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,9 +67,9 @@ namespace Zilon.BotEnvironment
             }
         }
 
-        private static void CreatMeasuresViewIfNotExists(SQLiteConnection connection)
+        private static void CreatMeasuresViewIfNotExists(DbConnection connection)
         {
-            using (var command = new SQLiteCommand(connection))
+            using (var command = connection.CreateCommand())
             {
                 command.CommandText = @"CREATE VIEW IF NOT EXISTS [v_Measures] ([Name]
                             ,[Preffix]

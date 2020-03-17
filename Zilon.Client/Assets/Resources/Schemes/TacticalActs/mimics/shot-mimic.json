@@ -24,5 +24,6 @@
   "Constrains": {
     "PropResourceType": "bullet-45",
     "PropResourceCount": 1
-  }
+  },
+  "IsMimicFor": "shot"
 }

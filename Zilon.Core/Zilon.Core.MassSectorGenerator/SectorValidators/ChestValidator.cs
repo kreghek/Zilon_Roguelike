@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
-using LightInject;
+using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -16,13 +18,13 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     class ChestValidator : ISectorValidator
     {
-        public Task Validate(ISector sector, Scope scopeContainer)
+        public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
             return Task.Run(() =>
             {
                 // Сундуки не должны генерироваться на узлы, которые являются препятствием.
                 // Сундуки не должны генерироваться на узлы с выходом.
-                var containerManager = scopeContainer.GetInstance<IPropContainerManager>();
+                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
                 var allContainers = containerManager.Items;
                 var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
                 foreach (var container in allContainers)
@@ -68,7 +70,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         private static void ValidatePassability(
             HexNode currentContainerHex,
             ISectorMap sectorMap,
-            IMapNode[] allContainerNodes)
+            IGraphNode[] allContainerNodes)
         {
             var neighborNodes = sectorMap.GetNext(currentContainerHex);
             var hasFreeNeighbor = false;

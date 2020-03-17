@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class UiElementTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler, ISelectHandler
 {
     public string text;
+    public bool TextIsKey;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -22,12 +23,24 @@ public class UiElementTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExi
         StopHover();
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects",
+        Justification = "TooltipManager может вернуть null, если на сцену не разместили нужный компонент")]
     void StartHover(Vector3 position)
     {
-        TooltipManager.Instance.ShowTooltip(text, position);
+        if (!TextIsKey)
+        {
+            TooltipManager.Instance?.ShowTooltip(text, position);
+        }
+        else
+        {
+            TooltipManager.Instance?.ShowLocalizedTooltip(text, position);
+        }
     }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects",
+        Justification = "TooltipManager может вернуть null, если на сцену не разместили нужный компонент")]
     void StopHover()
     {
-        TooltipManager.Instance.HideTooltip();
+        TooltipManager.Instance?.HideTooltip();
     }
 }

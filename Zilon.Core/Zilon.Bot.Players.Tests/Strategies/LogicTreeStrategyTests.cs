@@ -9,7 +9,8 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Strategies.Tests
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class LogicTreeStrategyTests
     {
         /// <summary>
@@ -23,7 +24,7 @@ namespace Zilon.Bot.Players.Strategies.Tests
 
             CreateLogicState(out var logicState, out var actorTask);
 
-            logicTree.Transitions.Add(logicState, new LogicTransition[0]);
+            logicTree.Transitions.Add(logicState, System.Array.Empty<LogicTransition>());
             logicTree.StartState = logicState;
 
             var actorMock = new Mock<IActor>();
@@ -31,12 +32,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
 
             var strategy = new LogicTreeStrategy(actor, logicTree);
 
-
-
             // ACT
             var factTask = strategy.GetActorTask();
-
-
 
             // ASSERT
             factTask.Should().Be(actorTask);
@@ -79,12 +76,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
 
             var strategy = new LogicTreeStrategy(actor, logicTree);
 
-
-
             // ACT
             var factTask = strategy.GetActorTask();
-
-
 
             // ASSERT
             factTask.Should().Be(secondActorTask);

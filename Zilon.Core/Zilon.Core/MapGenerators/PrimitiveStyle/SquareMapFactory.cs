@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.PrimitiveStyle
@@ -7,7 +8,7 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
     /// <summary>
     /// Реализация фабрики для построения квадратной карты указанного размера.
     /// </summary>
-    /// <seealso cref="Zilon.Core.MapGenerators.IMapFactory" />
+    /// <seealso cref="IMapFactory" />
     public class SquareMapFactory : IMapFactory
     {
         /// <summary>
@@ -45,13 +46,7 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            //TODO Объяснить, почему тут нужно использовать ConfigureAwait(false)
-            // Это рекомендация Codacy.
-            // Но есть статья https://habr.com/ru/company/clrium/blog/463587/,
-            // в которой объясняется, что не всё так просто.
-            // Нужно чёткое понимание, зачем здесь ConfigureAwait(false) и
-            // к какому результату это приводит по сравнению с простым await.
-            return await factory.CreateAsync((object)mapSize).ConfigureAwait(false);
+            return await factory.CreateAsync(mapSize).ConfigureAwait(false);
         }
     }
 }

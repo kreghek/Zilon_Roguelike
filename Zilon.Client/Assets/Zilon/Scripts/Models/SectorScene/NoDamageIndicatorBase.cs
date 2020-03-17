@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Zilon.Scripts.Services;
+
+using UnityEngine;
 
 public class NoDamageIndicatorBase : MonoBehaviour
 {
@@ -10,6 +12,14 @@ public class NoDamageIndicatorBase : MonoBehaviour
     private Vector3 _diePosition;
 
     public TextMesh Text;
+    public string TextKey;
+
+    internal Language CurrentLanguage { get; set; }
+
+    public void Start()
+    {
+        Text.text = StaticPhrases.GetValue(TextKey, CurrentLanguage);
+    }
 
     public void Init(ActorViewModel actorViewModel)
     {
@@ -22,7 +32,7 @@ public class NoDamageIndicatorBase : MonoBehaviour
         Text.GetComponent<MeshRenderer>().sortingLayerName = INDICATOR_SORTING_LAYER;
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         _lifetmeCounter += Time.deltaTime;
         if (_lifetmeCounter < LIFETIME)

@@ -3,11 +3,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zilon.Core.Client;
 using Zilon.Core.Props;
 
 namespace Assets.Zilon.Scripts.Models.Modals
 {
-    public class PropItemViewModelBase: MonoBehaviour
+    public class PropItemViewModelBase: MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
     {
         public Text CountText;
         public Text DurableStatusText;
@@ -42,8 +43,17 @@ namespace Assets.Zilon.Scripts.Models.Modals
         {
             if (Prop is Resource resource)
             {
-                CountText.gameObject.SetActive(true);
-                CountText.text = $"x{resource.Count}";
+                // Для принадлежностей для отдыха не показываем количество.
+                // Этот предмет всегда единичный.
+                if (Prop.Scheme.Sid != "camp-tools")
+                {
+                    CountText.gameObject.SetActive(true);
+                    CountText.text = $"x{resource.Count}";
+                }
+                else
+                {
+                    CountText.gameObject.SetActive(false);
+                }
 
                 DurableStatusText.gameObject.SetActive(false);
             }

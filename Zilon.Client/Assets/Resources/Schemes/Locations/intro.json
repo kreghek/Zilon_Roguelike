@@ -43,10 +43,10 @@
 			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
 			"RegionCount": 2,
 			"RegionSize": 30,
-			"MinRegionMonsterCount": 20,
+			"MinRegionMonsterCount": 5,
 			"RegionMonsterCount": 20,
 			
-			"TotalChestCount": 1,
+			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
 			"ChestDropTableSids": ["survival", "default"],
 			

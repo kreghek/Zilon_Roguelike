@@ -24,5 +24,6 @@
   "Constrains": {
     "PropResourceType": "mana",
     "PropResourceCount": 1
-  }
+  },
+  "IsMimicFor": "fireball"
 }

@@ -1,55 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Zilon.Scripts.Models;
 using UnityEngine;
+
 using Zenject;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 
-public class ActPanelHandler : MonoBehaviour {
+public class ActPanelHandler : MonoBehaviour
+{
+    private IEquipmentCarrier _equipmentCarrier;
 
-	[Inject] private ISectorUiState _playerState;
+    private readonly List<ActItemVm> _actViewModels;
 
-	public ActItemVm ActVmPrefab;
-	public Transform ActItemParent;
+    [Inject] private readonly ISectorUiState _playerState;
 
-	public void Start()
-	{
-		var actorVm = _playerState.ActiveActor;
-		var actor = actorVm.Actor;
-		
-		//actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
-		
-		var acts = actor.Person.TacticalActCarrier.Acts;
-		UpdateActs(acts);
-	}
+    public ActItemVm ActVmPrefab;
 
-	private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
-	{
-		var actorVm = _playerState.ActiveActor;
-		var actor = actorVm.Actor;
-		
-		var acts = actor.Person.TacticalActCarrier.Acts;
-		UpdateActs(acts);
-	}
+    public Transform ActItemParent;
 
-	private void UpdateActs(IEnumerable<ITacticalAct> acts)
-	{
-		foreach (Transform item in ActItemParent)
-		{
-			Destroy(item.gameObject);
-		}
+    public ActInfoPopup ActInfoPopup;
 
-		var actArray = acts.ToArray();
-		foreach (var act in actArray)
-		{
-			var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
-			actItemVm.Init(act);
-			actItemVm.Click += ActClick_Handler;
-		}
-	}
+    public ActPanelHandler()
+    {
+        _actViewModels = new List<ActItemVm>();
+    }
 
-	private void ActClick_Handler(object sender, EventArgs e)
+    public void Start()
+    {
+        var actorVm = _playerState.ActiveActor;
+        var actor = actorVm.Actor;
+
+        // Запоминаем объект equipmentCarrier, чтобы затем корректно отписаться от события,
+        // которое навешиваем ниже. Даже если активный персонаж изменится.
+        _equipmentCarrier = actor.Person.EquipmentCarrier;
+
+        _equipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+
+        var acts = actor.Person.TacticalActCarrier.Acts;
+
+        UpdateSelectedAct(currentAct: null, acts);
+
+        UpdateActs(acts);
+    }
+
+    public void OnDestroy()
+    {
+        _equipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+    }
+
+    private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
+    {
+        var currentAct = _playerState.TacticalAct;
+        _playerState.TacticalAct = null;
+
+        var actorVm = _playerState.ActiveActor;
+        var actor = actorVm.Actor;
+
+        var acts = actor.Person.TacticalActCarrier.Acts;
+
+        UpdateSelectedAct(currentAct, acts);
+
+        UpdateActs(acts);
+    }
+
+    private void UpdateSelectedAct(ITacticalAct currentAct, ITacticalAct[] acts)
+    {
+        if (acts.Contains(currentAct))
+        {
+            _playerState.TacticalAct = currentAct;
+        }
+        else
+        {
+            // Действие по умолчанию:
+            // должно быть без ограничений.
+            // желательно, чтобы это было действие от оружия,
+            // потому что оно обычно эффективнее кулака.
+            _playerState.TacticalAct = acts
+                .OrderBy(x => x.Equipment is null)
+                .First(x => x.Constrains is null);
+        }
+    }
+
+    private void UpdateActs(IEnumerable<ITacticalAct> acts)
+    {
+        foreach (Transform item in ActItemParent)
+        {
+            Destroy(item.gameObject);
+        }
+
+        _actViewModels.Clear();
+        var actArray = acts.ToArray();
+        foreach (var act in actArray)
+        {
+            var actItemVm = Instantiate(ActVmPrefab, ActItemParent);
+            actItemVm.Init(act);
+
+            var isSelected = actItemVm.Act == _playerState.TacticalAct;
+            actItemVm.SetSelectedState(isSelected);
+
+            actItemVm.Click += ActClick_Handler;
+            actItemVm.MouseEnter += ActViewModel_MouseEnter;
+            actItemVm.MouseExit += ActViewModel_MouseExit;
+
+            _actViewModels.Add(actItemVm);
+        }
+    }
+
+    private void ActClick_Handler(object sender, EventArgs e)
     {
         var actItemVm = sender as ActItemVm;
         if (actItemVm == null)
@@ -57,7 +117,17 @@ public class ActPanelHandler : MonoBehaviour {
             throw new InvalidOperationException("Не указано действие (ViewModel).");
         }
 
-        TacticalAct act = GetAct(actItemVm);
+        var selectedAct = GetAct(actItemVm);
+
+        _playerState.TacticalAct = selectedAct;
+
+        foreach (var actVm in _actViewModels)
+        {
+            var isSelected = actVm.Act == selectedAct;
+            actVm.SetSelectedState(isSelected);
+        }
+
+        Debug.Log(selectedAct);
     }
 
     private static TacticalAct GetAct(ActItemVm actItemVm)
@@ -68,5 +138,16 @@ public class ActPanelHandler : MonoBehaviour {
         }
 
         throw new InvalidOperationException("Не указано действие (Domain).");
+    }
+
+    private void ActViewModel_MouseExit(object sender, EventArgs e)
+    {
+        ActInfoPopup.SetPropViewModel(null);
+    }
+
+    private void ActViewModel_MouseEnter(object sender, EventArgs e)
+    {
+        var currentItemVm = (IActViewModelDescription)sender;
+        ActInfoPopup.SetPropViewModel(currentItemVm);
     }
 }

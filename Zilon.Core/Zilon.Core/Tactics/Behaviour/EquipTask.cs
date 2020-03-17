@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 

@@ -25,5 +25,23 @@
 		"Direction": "Negative"
       }
     ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "ethanol",
+        "Count": 1
+      },
+      {
+        "PropSid": "water-bottle",
+        "Count": 1
+      },
+	  {
+        "PropSid": "strong-fuel",
+        "Count": 1
+      },
+    ],
+    "ProductOutput": 2
   }
 }

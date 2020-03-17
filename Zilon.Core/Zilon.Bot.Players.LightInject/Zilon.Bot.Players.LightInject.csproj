@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LightInject, Version=5.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LightInject.5.1.8\lib\net46\LightInject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj">
@@ -56,6 +56,11 @@
       <Project>{C043BDA8-78EA-4B90-A35E-14282665F0D1}</Project>
       <Name>Zilon.Bot.Sdk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LightInject">
+      <Version>5.1.8</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
