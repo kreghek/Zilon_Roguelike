@@ -15,7 +15,7 @@ jobs:
   test_45:
     working_directory: /test45
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
