@@ -18,7 +18,6 @@ namespace Zilon.Core.Commands
             ISectorUiState playerState) :
             base(gameLoop, sectorManager, playerState)
         {
-
         }
 
         public override bool CanExecute()
@@ -33,11 +32,24 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var targetNode = targetContainerViewModel.Container.Node;
+            var container = targetContainerViewModel.Container;
+            var requiredDistance = 1;
 
-            var canExecute = map.TargetIsOnLine(currentNode, targetNode);
+            var targetNode = container.Node;
 
-            return canExecute;
+            var distance = map.DistanceBetween(currentNode, targetNode);
+            if (distance > requiredDistance)
+            {
+                return false;
+            }
+
+            var containerIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
+            if (!containerIsOnLine)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected override void ExecuteTacticCommand()

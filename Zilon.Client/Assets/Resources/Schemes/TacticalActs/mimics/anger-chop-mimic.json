@@ -1,0 +1,25 @@
+{
+  "Name": {
+    "Ru": "Ложный Яростный рубящий удар",
+	"En": "Mimic Anger Chop"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Fury",
+      "Impact":  "Kinetic",
+	  "ApRank": 1
+    }
+  },
+  "IsMimicFor": "anger-chop"
+}

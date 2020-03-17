@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -63,7 +63,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             foreach (var room in rooms)
             {
                 var passableRoomNodes = room.Nodes.Where(x => !x.IsObstacle);
-                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IMapNode>().ToArray());
+                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>().ToArray());
                 regionIdCounter++;
                 map.Regions.Add(region);
 

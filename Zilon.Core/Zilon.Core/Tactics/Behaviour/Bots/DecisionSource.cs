@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -25,11 +25,11 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         }
 
         [ExcludeFromCodeCoverage]
-        public IMapNode SelectTargetRoamingNode(IEnumerable<IMapNode> mapNodes)
+        public IGraphNode SelectTargetRoamingNode(IEnumerable<IGraphNode> mapNodes)
         {
             // Небольшая оптимизация для коллекций, которые поддерживают доступ по индексу,
             // чтобы не обходить всю коллекцию до указанного элемента.
-            if (mapNodes is IList<IMapNode> mapNodesList)
+            if (mapNodes is IList<IGraphNode> mapNodesList)
             {
                 return SelectRandomListImpl(mapNodesList);
             }
@@ -38,13 +38,13 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             return SelectRandomEnumerableImpl(mapNodes);
         }
 
-        private IMapNode SelectRandomEnumerableImpl(IEnumerable<IMapNode> mapNodes)
+        private IGraphNode SelectRandomEnumerableImpl(IEnumerable<IGraphNode> mapNodes)
         {
             var roll = _dice.Roll(mapNodes.Count());
             return mapNodes.ElementAt(RollToIndex(roll));
         }
 
-        private IMapNode SelectRandomListImpl(IList<IMapNode> mapNodesList)
+        private IGraphNode SelectRandomListImpl(IList<IGraphNode> mapNodesList)
         {
             var roll = _dice.Roll(mapNodesList.Count);
             return mapNodesList[RollToIndex(roll)];

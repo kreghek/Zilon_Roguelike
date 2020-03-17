@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Zilon.Scripts.Services;
+
+using UnityEngine;
 
 public class DamageIndicator : MonoBehaviour
 {
@@ -11,35 +13,39 @@ public class DamageIndicator : MonoBehaviour
 
     public TextMesh Text;
 
+    internal Language CurrentLanguage { get; set; }
+
     public void Init(ActorViewModel actorViewModel, int damageValue)
     {
         _objectPosition = actorViewModel.gameObject.transform.position + Vector3.left * Random.Range(-0.3f, 0.3f);
         _diePosition = _objectPosition + Vector3.up * 0.5f;
         gameObject.transform.position = _objectPosition;
 
-        Text.text = GetWoundString(damageValue);
+        var woundKey = GetWoundKey(damageValue);
+        var woundString = StaticPhrases.GetValue(woundKey, CurrentLanguage);
+        Text.text = woundString;
         // Это нужно делать, потому что нет возможности указать слой в инспекторе.
         // https://answers.unity.com/questions/595634/3d-textmesh-not-being-drawn-properly-in-a-2d-game.html
         Text.GetComponent<MeshRenderer>().sortingLayerName = INDICATOR_SORTING_LAYER;
     }
 
-    private static string GetWoundString(int damageValue)
+    private static string GetWoundKey(int damageValue)
     {
         if (1 <= damageValue && damageValue <= 2)
         {
-            return "Low Wound";
+            return "indicator-lesser-wound";
         }
         else if (3 <= damageValue && damageValue <= 5)
         {
-            return "Certain Wound";
+            return "indicator-serious-wound";
         }
         else
         {
-            return "Heavy Wound";
+            return "indicator-critical-wound";
         }
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         _lifetmeCounter += Time.deltaTime;
         if (_lifetmeCounter < LIFETIME)

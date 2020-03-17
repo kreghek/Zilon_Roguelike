@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -79,7 +79,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private IEnumerable<IMapNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData)
+        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData)
         {
             var observeNodes = _map.Nodes.Where(x => _map.DistanceBetween(x, actor.Node) < 5);
 
@@ -89,7 +89,7 @@ namespace Zilon.Bot.Players.Logics
             }
 
             // Собираем пограничные неисследованные узлы.
-            var frontNodes = new HashSet<IMapNode>();
+            var frontNodes = new HashSet<IGraphNode>();
             foreach (var observedNode in strategyData.ObserverdNodes)
             {
                 var nextNodes = _map.GetNext(observedNode);
@@ -119,7 +119,7 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData)
         {
-            IEnumerable<IMapNode> availableNodes;
+            IEnumerable<IGraphNode> availableNodes;
             var frontNodes = WriteObservedNodes(actor, strategyData).ToArray();
             if (frontNodes.Any())
             {

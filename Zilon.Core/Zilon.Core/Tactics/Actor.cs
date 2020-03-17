@@ -2,14 +2,15 @@
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -17,10 +18,20 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
+        /// <inheritdoc/>
         public event EventHandler Moved;
+
+        /// <inheritdoc/>
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
         public event EventHandler<UsedActEventArgs> UsedAct;
+
+        /// <inheritdoc/>
         public event EventHandler<DamageTakenEventArgs> DamageTaken;
+
+        /// <inheritdoc/>
+        public event EventHandler<UsedPropEventArgs> UsedProp;
 
         /// <inheritdoc />
         /// <summary>
@@ -31,22 +42,36 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится актёр.
         /// </summary>
-        public IMapNode Node { get; private set; }
+        public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
+        public ISectorFowData SectorFowData { get; }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node)
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             Node = node ?? throw new ArgumentNullException(nameof(node));
+
+            if (SectorFowData == null)
+            {
+                SectorFowData = new MonsterSectorFowData();
+            }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IMapNode node,
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
         {
             _perkResolver = perkResolver;
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
+        {
+            _perkResolver = perkResolver;
+
+            SectorFowData = sectorFowData;
         }
 
         public bool CanBeDamaged()
@@ -59,7 +84,7 @@ namespace Zilon.Core.Tactics
             return !Person.Survival.IsDead;
         }
 
-        public void MoveToNode(IMapNode targetNode)
+        public void MoveToNode(IGraphNode targetNode)
         {
             Node = targetNode;
             Moved?.Invoke(this, new EventArgs());
@@ -67,7 +92,7 @@ namespace Zilon.Core.Tactics
 
         public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
         {
-            var openResult = method.TryOpen(container);
+            var openResult = method?.TryOpen(container);
 
             DoOpenContainer(container, openResult);
         }
@@ -79,59 +104,25 @@ namespace Zilon.Core.Tactics
 
         public void UseProp(IProp usedProp)
         {
+            if (usedProp is null)
+            {
+                throw new ArgumentNullException(nameof(usedProp));
+            }
+
             var useData = usedProp.Scheme.Use;
 
             foreach (var rule in useData.CommonRules)
             {
                 switch (rule.Direction)
                 {
+                    // Если направление не указано, то будет считаться положительное значение
+                    //TODO При десериализации указывать значение Positive по умолчанию
+                    default:
                     case PersonRuleDirection.Positive:
-                        switch (rule.Type)
-                        {
-                            case ConsumeCommonRuleType.Satiety:
-                                RestoreStat(SurvivalStatType.Satiety, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Thirst:
-                                RestoreStat(SurvivalStatType.Hydration, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Health:
-                                RestoreStat(SurvivalStatType.Health, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Intoxication:
-                                RiseStat(SurvivalStatType.Intoxication, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Undefined:
-                            default:
-                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
-                        }
+                        ProcessPositiveRule(rule.Type, rule.Level);
                         break;
                     case PersonRuleDirection.Negative:
-                        switch (rule.Type)
-                        {
-                            case ConsumeCommonRuleType.Satiety:
-                                DecreaseStat(SurvivalStatType.Satiety, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Thirst:
-                                DecreaseStat(SurvivalStatType.Hydration, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Health:
-                                DecreaseStat(SurvivalStatType.Health, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Intoxication:
-                                DecreaseStat(SurvivalStatType.Intoxication, rule.Level);
-                                break;
-
-                            case ConsumeCommonRuleType.Undefined:
-                            default:
-                                throw new ArgumentOutOfRangeException($"Правило поглощения {rule.Type} не поддерживается.");
-                        }
+                        ProcessNegativeRule(rule.Type, rule.Level);
                         break;
                 }
 
@@ -146,6 +137,60 @@ namespace Zilon.Core.Tactics
                     var consumeProgress = new ConsumeProviantJobProgress();
                     _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
                 }
+            }
+
+            UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
+        }
+
+        private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    DecreaseStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    DecreaseStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    DecreaseStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    DecreaseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
+            }
+        }
+
+        private void ProcessPositiveRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    RestoreStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    RestoreStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    RestoreStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    RiseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
             }
         }
 

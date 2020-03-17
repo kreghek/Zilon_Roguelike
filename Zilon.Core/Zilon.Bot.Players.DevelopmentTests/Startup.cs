@@ -1,35 +1,28 @@
-﻿using LightInject;
+﻿using System;
 
-using Zilon.Bot.Players.LightInject;
-using Zilon.Bot.Players.LightInject.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Players.NetCore;
+using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
-using Zilon.Bot.Sdk;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
-using Zilon.IoC;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class Startup: InitialzationBase
+    class Startup : InitializationBase
     {
-        public Startup(string catalogPath) : base(catalogPath)
+        public override void ConfigureAux(IServiceProvider serviceFactory)
         {
+            // Понфигурация дополнительных сервисов для коробочного источника команд не требуется.
         }
 
-        public override void ConfigureAux(IServiceFactory serviceFactory)
-        {
-            LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();
-        }
-
-        protected override void RegisterBot(IServiceRegistry container)
+        protected override void RegisterBot(IServiceCollection container)
         {
             container.RegisterLogicState();
-            container.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
-                LightInjectWrapper.CreateScoped());
+            container.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
+            container.AddScoped<LogicStateTreePatterns>();
 
-            container.Register<ISectorActorTaskSource, HumanBotActorTaskSource>("bot", LightInjectWrapper.CreateScoped());
-            container.Register<IActorTaskSource>(factory => factory.GetInstance<ISectorActorTaskSource>(), "bot", LightInjectWrapper.CreateScoped());
-
+            container.AddScoped<HumanBotActorTaskSource>();
         }
     }
 }

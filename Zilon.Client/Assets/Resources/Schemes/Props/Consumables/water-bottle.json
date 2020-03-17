@@ -15,5 +15,19 @@
         "Level": "Lesser"
       }
     ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "dirty-water",
+        "Count": 1
+      },
+      {
+        "PropSid": "coil",
+        "Count": 1
+      }
+    ],
+    "ProductOutput": 1
   }
 }

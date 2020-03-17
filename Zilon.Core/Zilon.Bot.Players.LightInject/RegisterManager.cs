@@ -21,12 +21,12 @@ namespace Zilon.Bot.Players.LightInject
             serviceRegistry.RegisterLogicState();
             serviceRegistry.Register<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory),
                 new PerContainerLifetime());
+            serviceRegistry.Register<LogicStateTreePatterns>(new PerContainerLifetime());
         }
 
         [ConfigureAuxServices]
         public static void ConfigureAuxServices(IServiceFactory serviceFactory)
         {
-            LogicStateTreePatterns.Factory = serviceFactory.GetInstance<ILogicStateFactory>();
         }
     }
 }

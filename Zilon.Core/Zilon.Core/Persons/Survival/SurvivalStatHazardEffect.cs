@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using Zilon.Core.Components;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
     public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
         private SurvivalStatHazardLevel _level;
+        private EffectRule[] _rules;
         private readonly ISurvivalRandomSource _survivalRandomSource;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
@@ -21,7 +25,7 @@ namespace Zilon.Core.Persons
 
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
-            Rules = CalcRules();
+            _rules = CalcRules();
         }
 
         public SurvivalStatType Type { get; }
@@ -33,38 +37,52 @@ namespace Zilon.Core.Persons
             {
                 _level = value;
 
-                Rules = CalcRules();
+                _rules = CalcRules();
 
                 Changed?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        public EffectRule[] Rules { get; private set; }
+        public EffectRule[] GetRules() {
+            return _rules;
+        }
 
         public event EventHandler Changed;
 
         public void Apply(ISurvivalData survivalData)
         {
-            if (Level == SurvivalStatHazardLevel.Max)
+            if (survivalData is null)
+            {
+                throw new ArgumentNullException(nameof(survivalData));
+            }
+
+            if (Level == SurvivalStatHazardLevel.Max && Type != SurvivalStatType.Health)
             {
                 var roll = _survivalRandomSource.RollMaxHazardDamage();
                 var successRoll = GetSuccessHazardDamageRoll();
                 if (roll >= successRoll)
                 {
                     survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                    LogPlayerEvent();
                 }
             }
         }
 
-        private int GetSuccessHazardDamageRoll()
+        private void LogPlayerEvent()
+        {
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            var playerEvent = new SurvivalEffectDamageEvent(this);
+            PlayerEventLogService.Log(playerEvent);
+        }
+
+        private static int GetSuccessHazardDamageRoll()
         {
             // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
             return 4;
-        }
-
-        public void Update()
-        {
-            // На персонажа нет влияния
         }
 
         private EffectRule[] CalcRules()
@@ -85,7 +103,7 @@ namespace Zilon.Core.Persons
 
                 case SurvivalStatHazardLevel.Undefined:
                     throw new NotSupportedException();
-                
+
                 default:
                     throw new NotSupportedException("Неизветный уровень угрозы выживания.");
             }

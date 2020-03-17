@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
@@ -14,9 +14,9 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// <remarks>
         /// Если монстр находится на маршруте патруллирования, то он будет обходить эти узлы.
         /// </remarks>
-        public IMapNode[] Points { get; }
+        public IGraphNode[] Points { get; }
 
-        public PatrolRoute(params IMapNode[] points)
+        public PatrolRoute(params IGraphNode[] points)
         {
             Points = points;
         }

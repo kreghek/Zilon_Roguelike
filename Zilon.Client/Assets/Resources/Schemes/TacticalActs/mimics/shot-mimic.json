@@ -1,0 +1,29 @@
+{
+  "Name": {
+    "Ru": "Липовый Выстрел",
+    "En":  "Shot mimic"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 1,
+      "Count": 3
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 5
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Kinetic",
+	  "ApRank": 1
+    }
+  },
+  "Constrains": {
+    "PropResourceType": "bullet-45",
+    "PropResourceCount": 1
+  },
+  "IsMimicFor": "shot"
+}

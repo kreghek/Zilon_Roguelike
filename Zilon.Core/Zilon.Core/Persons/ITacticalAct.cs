@@ -11,6 +11,11 @@ namespace Zilon.Core.Persons
     public interface ITacticalAct
     {
         /// <summary>
+        /// Схема действия.
+        /// </summary>
+        ITacticalActScheme Scheme { get; }
+
+        /// <summary>
         /// Схема основных характеристик тактического действия.
         /// </summary>
         ITacticalActStatsSubScheme Stats { get; }
@@ -34,5 +39,23 @@ namespace Zilon.Core.Persons
         /// Актуальные данные о применении действия.
         /// </summary>
         Roll ToHit { get; }
+
+        /// <summary>
+        /// Текущее состояние КД на использование.
+        /// Используется, если в схеме <see cref="ITacticalActConstrainsSubScheme.Cooldown"/> не null.
+        /// </summary>
+        int? CurrentCooldown { get; }
+
+        /// <summary>
+        /// Сброс счётчика КД.
+        /// Применяется, когда действие выполнено. Начинает новый отсчёт.
+        /// </summary>
+        void StartCooldownIfItIs();
+
+        /// <summary>
+        /// Обновление состояния КД.
+        /// Уменьшает отсчёт, чтобы, со временем, действие снова стало доступным.
+        /// </summary>
+        void UpdateCooldown();
     }
 }

@@ -6,6 +6,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
@@ -14,7 +15,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Базовая реализация сервиса для работы с действиями персонажа.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Tactics.ITacticalActUsageService" />
+    /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
@@ -29,6 +30,8 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public IActorInteractionBus ActorInteractionBus { get; set; }
 
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
         /// </summary>
@@ -42,7 +45,8 @@ namespace Zilon.Core.Tactics
         /// or
         /// sectorManager
         /// </exception>
-        public TacticalActUsageService(ITacticalActUsageRandomSource actUsageRandomSource,
+        public TacticalActUsageService(
+            ITacticalActUsageRandomSource actUsageRandomSource,
             IPerkResolver perkResolver,
             ISectorManager sectorManager)
         {
@@ -51,8 +55,34 @@ namespace Zilon.Core.Tactics
             _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
         }
 
+        public TacticalActUsageService(
+            ITacticalActUsageRandomSource actUsageRandomSource,
+            IPerkResolver perkResolver,
+            ISectorManager sectorManager,
+            IEquipmentDurableService equipmentDurableService,
+            IActorInteractionBus actorInteractionBus) : this(actUsageRandomSource, perkResolver, sectorManager)
+        {
+            EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
+            ActorInteractionBus = actorInteractionBus ?? throw new ArgumentNullException(nameof(actorInteractionBus));
+        }
+
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            if (usedActs is null)
+            {
+                throw new ArgumentNullException(nameof(usedActs));
+            }
+
             foreach (var act in usedActs.Primary)
             {
                 if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
@@ -88,10 +118,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                var currentCubePos = ((HexNode)actor.Node).CubeCoords;
-                var targetCubePos = ((HexNode)target.Node).CubeCoords;
-
-                isInDistance = act.CheckDistance(currentCubePos, targetCubePos);
+                isInDistance = act.CheckDistance(actor.Node, target.Node, _sectorManager.CurrentSector.Map);
             }
 
             if (!isInDistance)
@@ -109,7 +136,6 @@ namespace Zilon.Core.Tactics
             {
                 throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
             }
-
 
             actor.UseAct(target, act);
 
@@ -134,6 +160,9 @@ namespace Zilon.Core.Tactics
             {
                 EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
             }
+
+            // Сброс КД, если он есть.
+            act.StartCooldownIfItIs();
         }
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)
@@ -212,13 +241,13 @@ namespace Zilon.Core.Tactics
                     break;
 
                 case TacticalActEffectType.Heal:
-                    HealActor(actor, targetActor, tacticalActRoll);
+                    HealActor(targetActor, tacticalActRoll);
                     break;
 
                 default:
-                    throw new ArgumentException(string.Format("Не определённый эффект {0} действия {1}.",
-                        tacticalActRoll.TacticalAct.Stats.Effect,
-                        tacticalActRoll.TacticalAct));
+                    var effect = tacticalActRoll.TacticalAct.Stats.Effect;
+                    var tacticalAct = tacticalActRoll.TacticalAct;
+                    throw new ArgumentException($"Не определённый эффект {effect} действия {tacticalAct}.");
             }
         }
 
@@ -260,6 +289,8 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
+                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
+
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
                     var damagedEquipment = GetDamagedEquipment(targetActor);
@@ -296,6 +327,25 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        {
+            // Сервис логирование - необязательная зависимость.
+            // Если он не задан, то не выполняем логирование.
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            // Логируем только урон по персонажу игрока.
+            if (targetActor != PlayerEventLogService.Actor)
+            {
+                return;
+            }
+
+            var damageEvent = new PlayerDamagedEvent(tacticalAct, actor);
+            PlayerEventLogService.Log(damageEvent);
         }
 
         private void ProcessSuccessfulAttackEvent(
@@ -414,10 +464,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Лечит актёра.
         /// </summary>
-        /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void HealActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
             targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
@@ -627,7 +676,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="tacticalAct"></param>
         /// <returns></returns>
-        private int GetActApRank(ITacticalAct tacticalAct)
+        private static int GetActApRank(ITacticalAct tacticalAct)
         {
             return tacticalAct.Stats.Offence.ApRank;
         }

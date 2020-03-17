@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
+using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -12,15 +12,18 @@ namespace Zilon.Core.Commands
     public class UseSelfCommand : ActorCommandBase
     {
         private readonly IInventoryState _inventoryState;
+        private readonly IActorManager _actorManager;
 
         [ExcludeFromCodeCoverage]
         public UseSelfCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
             ISectorUiState playerState,
-            IInventoryState inventoryState) :
+            IInventoryState inventoryState,
+            IActorManager actorManager) :
             base(gameLoop, sectorManager, playerState)
         {
             _inventoryState = inventoryState;
+            _actorManager = actorManager;
         }
 
         public override bool CanExecute()
@@ -40,6 +43,17 @@ namespace Zilon.Core.Commands
             if (prop.Scheme.Use == null)
             {
                 throw new AppException("Попытка использовать предмет, для которого нет информации об использовании.");
+            }
+
+            // На использование лагеря отдельная логика.
+            // Отдыхать можно только есть в секторе не осталось монстров.
+            if (prop.Scheme.Sid == "camp-tools")
+            {
+                var enemiesInSector = _actorManager.Items.Where(x => x != CurrentActor);
+                if (enemiesInSector.Any())
+                {
+                    return false;
+                }
             }
 
             return true;

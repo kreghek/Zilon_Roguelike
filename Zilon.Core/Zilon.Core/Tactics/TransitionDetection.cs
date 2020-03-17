@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -13,7 +13,7 @@ namespace Zilon.Core.Tactics
         /// <param name="transitions"> Доступные переходы. </param>
         /// <param name="actorNodes"> Набор проверяемых узлов. Сюда передаются узлы актеров, которые пренадлежат игроку. </param>
         /// <returns> Возвращает отработавший переход. Иначе возаращает null. </returns>
-        public static RoomTransition Detect(IDictionary<IMapNode, RoomTransition> transitions, IEnumerable<IMapNode> actorNodes)
+        public static RoomTransition Detect(IDictionary<IGraphNode, RoomTransition> transitions, IEnumerable<IGraphNode> actorNodes)
         {
             // Из сектора нет прямого выхода.
             // Нужно для упрощения тестов сектора или карты.

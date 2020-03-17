@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -70,7 +71,7 @@ namespace Zilon.Core.MapGenerators
                                      where map.IsPositionAvailableForContainer(node)
                                      select node;
 
-                var openNodes = new List<IMapNode>(availableNodes);
+                var openNodes = new List<IGraphNode>(availableNodes);
                 for (var i = 0; i < rolledCount; i++)
                 {
                     var containerPurpose = _chestGeneratorRandomSource.RollPurpose();

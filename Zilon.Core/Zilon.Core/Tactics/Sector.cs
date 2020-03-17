@@ -5,10 +5,12 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -46,7 +48,7 @@ namespace Zilon.Core.Tactics
         /// Набор узлов, где могут располагаться актёры игрока
         /// на начало прохождения сектора.
         /// </summary>
-        public IMapNode[] StartNodes { get; set; }
+        public IGraphNode[] StartNodes { get; set; }
 
         /// <summary>
         /// Менеджер работы с очками.
@@ -65,11 +67,11 @@ namespace Zilon.Core.Tactics
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            _actorManager = actorManager;
-            _propContainerManager = propContainerManager;
-            _dropResolver = dropResolver;
-            _schemeService = schemeService;
-            _equipmentDurableService = equipmentDurableService;
+            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
+            _propContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
 
             _actorManager.Added += ActorManager_Added;
             _propContainerManager.Added += PropContainerManager_Added;
@@ -98,8 +100,26 @@ namespace Zilon.Core.Tactics
 
             UpdateEquipments();
 
+            UpdateActoActs();
+
             // Определяем, не покинули ли актёры игрока сектор.
             //DetectSectorExit();
+        }
+
+        private void UpdateActoActs()
+        {
+            foreach (var actor in _actorManager.Items.ToArray())
+            {
+                if (actor.Person?.TacticalActCarrier?.Acts is null)
+                {
+                    continue;
+                }
+
+                foreach (var act in actor.Person.TacticalActCarrier.Acts)
+                {
+                    act.UpdateCooldown();
+                }
+            }
         }
 
         private void UpdateScores()
@@ -287,7 +307,7 @@ namespace Zilon.Core.Tactics
         {
             if (monsterScheme.DropTableSids == null)
             {
-                return new IDropTableScheme[0];
+                return Array.Empty<IDropTableScheme>();
             }
 
             var dropTableCount = monsterScheme.DropTableSids.Length;

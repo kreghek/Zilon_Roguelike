@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics
 {
@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Текущий узел карты, в котором находится цель.
         /// </summary>
-        IMapNode Node { get; }
+        IGraphNode Node { get; }
 
         /// <summary>
         /// Принятие урона.

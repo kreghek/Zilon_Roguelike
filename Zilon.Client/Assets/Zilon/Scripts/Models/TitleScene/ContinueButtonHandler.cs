@@ -8,8 +8,9 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
+
 using Color = UnityEngine.Color;
 
 public class ContinueButtonHandler : MonoBehaviour

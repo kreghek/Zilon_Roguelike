@@ -1,0 +1,29 @@
+{
+  "Name": {
+    "Ru": "Ложный Выстрел",
+	"En": "Mimic Shot"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 2,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 5
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact":  "Kinetic",
+	  "ApRank": 1
+    }
+  },
+  "Constrains": {
+    "PropResourceType": "arrow",
+    "PropResourceCount": 1
+  },
+  "IsMimicFor": "bow-shot"
+}

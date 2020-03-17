@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -146,19 +147,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
-
-            var allCoords = draftRegions.SelectMany(x => x.Coords).ToArray();
-            var interiorCoords = _interiorObjectRandomSource.RollInteriorObjects(allCoords);
-            var interiorCoordHashset = interiorCoords.ToDictionary(x => x.Coords, x => x);
+            var interiorHashset = GenerateInteriorObjects(draftRegions);
 
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
             {
-                var regionNodeList = new List<IMapNode>();
+                var regionNodeList = new List<IGraphNode>();
 
                 foreach (var coord in draftRegion.Coords)
                 {
-                    var isObstacle = interiorCoordHashset.ContainsKey(coord);
+                    var isObstacle = interiorHashset.ContainsKey(coord);
 
                     var node = new HexNode(coord.X, coord.Y, isObstacle);
                     map.AddNode(node);
@@ -218,6 +216,23 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return map;
+        }
+
+        private Dictionary<OffsetCoords, InteriorObjectMeta> GenerateInteriorObjects(RegionDraft[] draftRegions)
+        {
+            var interiorHashset = new Dictionary<OffsetCoords, InteriorObjectMeta>();
+            foreach (var draftRegion in draftRegions)
+            {
+                var allCoords = draftRegion.Coords;
+                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(allCoords);
+
+                foreach (var meta in interiorMetas)
+                {
+                    interiorHashset.Add(meta.Coords, meta);
+                }
+            }
+
+            return interiorHashset;
         }
 
         private void InitStartAliveMatrix(Matrix<bool> matrix, int _chanceToStartAlive)
@@ -527,12 +542,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static IEnumerable<OffsetCoords> FloodFillRegions(Matrix<bool> matrix, OffsetCoords point)
         {
-            var snapshotCellmap = (bool[,])matrix.Items.Clone();
-
-            var newMatrix = new Matrix<bool>(snapshotCellmap, matrix.Width, matrix.Height);
-
             var regionPoints = HexBinaryFiller.FloodFill(
-                newMatrix,
+                matrix,
                 point);
 
             // В регионе должна быть хоть одна точка - стартовая.

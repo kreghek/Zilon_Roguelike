@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
 {
@@ -9,5 +10,8 @@ namespace Zilon.Core.Client
 
         /// <summary>Пользовательский источник задач для актёров.</summary>
         public IHumanActorTaskSource TaskSource { get; set; }
+
+        /// <inheritdoc/>
+        public ITacticalAct TacticalAct { get; set; }
     }
 }

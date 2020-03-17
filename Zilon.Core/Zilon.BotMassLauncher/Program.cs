@@ -29,9 +29,11 @@ namespace Zilon.BotMassLauncher
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            _pathToEnv = GetProgramArgument(args, "env");
-            _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
-            _scorePreffix = GenerateUniquePreffix();
+            //TODO Восстановить работу с конфигами или переделать на чтение аргументов.
+            // Стало нерабочим после портирования на netcore.
+            //_pathToEnv = ConfigurationManager.AppSettings["env"];
+            //_launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");

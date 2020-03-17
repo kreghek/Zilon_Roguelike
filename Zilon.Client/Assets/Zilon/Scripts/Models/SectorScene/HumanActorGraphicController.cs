@@ -70,7 +70,13 @@ public class HumanActorGraphicController : MonoBehaviour
                 var equipment = equipmentCarrier[slotIndex];
                 if (equipment != null)
                 {
-                    visualPropResource = Resources.Load<VisualProp>($"VisualProps/{equipment.Scheme.Sid}");
+                    var schemeSid = equipment.Scheme.Sid;
+                    if (equipment.Scheme.IsMimicFor != null)
+                    {
+                        schemeSid = equipment.Scheme.IsMimicFor;
+                    }
+
+                    visualPropResource = Resources.Load<VisualProp>($"VisualProps/{schemeSid}");
                 }
 
                 if (visualPropResource != null)

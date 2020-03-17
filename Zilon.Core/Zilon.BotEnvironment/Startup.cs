@@ -1,23 +1,21 @@
-﻿using LightInject;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Emulation.Common;
 
-namespace Zilon.Bot
+namespace Zilon.BotEnvironment
 {
-    class Startup: InitialzationBase
+    class Startup : InitializationBase
     {
-        public Startup(string catalogPath) : base(catalogPath)
+        public override void ConfigureAux(IServiceProvider serviceFactory)
         {
+            // Сейчас конфигурирование доп.сервисов для базового бота не требуется.
         }
 
-        public override void ConfigureAux(IServiceFactory serviceFactory)
+        protected override void RegisterBot(IServiceCollection serviceCollection)
         {
-            
-        }
-
-        protected override void RegisterBot(IServiceRegistry container)
-        {
-            
+            // Регистрация в Program.
         }
     }
 }
