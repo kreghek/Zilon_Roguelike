@@ -1,14 +1,12 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
-
-using Zilon.Core.Components;
-using Zilon.Core.Schemes;
 
 /// <summary>
 /// Всплывающее окно с краткой информацией о перке.
@@ -18,7 +16,7 @@ using Zilon.Core.Schemes;
 /// </remarks>
 public class PerkInfoPopup : MonoBehaviour
 {
-    [Inject] private ISchemeService _schemeService;
+    [Inject] private readonly UiSettingService _uiSettingService;
 
     public Text NameText;
     public Text DescriptionText;
@@ -48,10 +46,12 @@ public class PerkInfoPopup : MonoBehaviour
 
     private void ShowPerkInfo(IPerkViewModelDescription perkViewModel)
     {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
         var perkScheme = perkViewModel.Perk.Scheme;
 
-        NameText.text = perkScheme.Name?.En ?? perkScheme.Name?.Ru ?? "[No Name]";
-        DescriptionText.text = perkScheme.Description?.En ?? perkScheme.Description?.Ru;
+        NameText.text = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, perkScheme.Name);
+        DescriptionText.text = LocalizationHelper.GetValue(currentLanguage, perkScheme.Description);
 
         JobsText.text = null;
 
@@ -71,24 +71,12 @@ public class PerkInfoPopup : MonoBehaviour
         }
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         if (PerkViewModel != null)
         {
-
             GetComponent<RectTransform>().position = PerkViewModel.Position
                 + new Vector3(0.4f, -0.4f);
         }
-    }
-
-    private static string GetUseRuleDescription(ConsumeCommonRule rule)
-    {
-        string signString = GetDirectionString(rule.Direction);
-        return $"{rule.Type}:{signString}{rule.Level}";
-    }
-
-    private static string GetDirectionString(PersonRuleDirection direction)
-    {
-        return direction == PersonRuleDirection.Positive ? string.Empty : "-";
     }
 }

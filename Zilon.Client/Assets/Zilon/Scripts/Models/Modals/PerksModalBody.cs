@@ -20,8 +20,6 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler
     public PerkItemViewModel PerkItemPrefab;
     public PerkInfoPopup PerkInfoPopup;
 
-    [NotNull] [Inject] private DiContainer _diContainer;
-
     public event EventHandler Closed;
 
     public string Caption => "Character";
@@ -44,10 +42,10 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler
 
         foreach (var perk in perks)
         {
-            var propItemVm = Instantiate(PerkItemPrefab, itemsParent);
-            propItemVm.Init(perk);
-            propItemVm.MouseEnter += PerkItemVm_MouseEnter;
-            propItemVm.MouseExit += PerkItemVm_MouseExit;
+            var perkItemVm = Instantiate(PerkItemPrefab, itemsParent);
+            perkItemVm.Init(perk);
+            perkItemVm.MouseEnter += PerkItemVm_MouseEnter;
+            perkItemVm.MouseExit += PerkItemVm_MouseExit;
         }
     }
 
