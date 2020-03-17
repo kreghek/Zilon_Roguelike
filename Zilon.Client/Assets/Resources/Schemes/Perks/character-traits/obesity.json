@@ -2,5 +2,6 @@
   "Name": {
     "Ru": "Тучность",
 	"En": "Obesity"
-  }
+  },
+  "IsBuildIn": true
 }

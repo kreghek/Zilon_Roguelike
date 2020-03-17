@@ -2,5 +2,6 @@
   "Name": {
     "Ru": "Тяжелая рука",
 	"En": "Heavy handed"
-  }
+  },
+  "IsBuildIn": true
 }
