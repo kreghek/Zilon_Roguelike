@@ -15,5 +15,23 @@
         "Level": "Normal"
       }
     ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "acid",
+        "Count": 2
+      },
+      {
+        "PropSid": "vege-milk",
+        "Count": 3
+      },
+	  {
+        "PropSid": "fabric",
+        "Count": 12
+      },
+    ],
+    "ProductOutput": 1
   }
 }
