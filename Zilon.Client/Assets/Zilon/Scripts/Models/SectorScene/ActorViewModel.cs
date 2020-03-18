@@ -79,7 +79,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         }
 
         transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveCounter.Value);
-        _moveCounter += Time.deltaTime * MOVE_SPEED_Q;
+        _moveCounter += Time.fixedDeltaTime * MOVE_SPEED_Q;
 
         if (_moveCounter >= END_MOVE_COUNTER)
         {

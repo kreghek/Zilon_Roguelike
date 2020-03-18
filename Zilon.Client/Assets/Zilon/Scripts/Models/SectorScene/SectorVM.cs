@@ -200,7 +200,8 @@ public class SectorVM : MonoBehaviour
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
 
-        PlayerPersonInitiator.InitPlayerActor(nodeViewModels, ActorViewModels);
+        var playerActorViewModel = PlayerPersonInitiator.InitPlayerActor(nodeViewModels, ActorViewModels);
+        AddPlayerActorEventHandlers(playerActorViewModel);
 
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
@@ -212,6 +213,17 @@ public class SectorVM : MonoBehaviour
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
+    }
+
+    private void AddPlayerActorEventHandlers(ActorViewModel actorViewModel)
+    {
+        actorViewModel.Selected += HumanActorViewModel_Selected;
+
+        var actor = actorViewModel.Actor;
+        actor.OpenedContainer += PlayerActorOnOpenedContainer;
+        actor.UsedAct += ActorOnUsedAct;
+        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+        actor.UsedProp += Actor_UsedProp;
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
