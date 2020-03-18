@@ -147,16 +147,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix)
         {
-            var scaledMatrix = new Matrix<bool>(matrix.Width * 3, matrix.Height * 3);
+            const int V = 4;
+            var scaledMatrix = new Matrix<bool>(matrix.Width * V, matrix.Height * V);
             for (var i = 0; i < matrix.Width; i++)
             {
                 for (var j = 0; j < matrix.Height; j++)
                 {
-                    for (var k1 = 0; k1 < 3; k1++)
+                    for (var k1 = 0; k1 < V; k1++)
                     {
-                        for (var k2 = 0; k2 < 3; k2++)
+                        for (var k2 = 0; k2 < V; k2++)
                         {
-                            scaledMatrix.Items[i * 3 + k1, j * 3 + k2] = matrix.Items[i, j];
+                            scaledMatrix.Items[i * V + k1, j * V + k2] = matrix.Items[i, j];
                         }
                     }
                 }
