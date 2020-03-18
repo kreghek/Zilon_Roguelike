@@ -14,6 +14,7 @@ using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
@@ -54,6 +55,8 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public EffectCollection Effects { get; }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
 
@@ -605,7 +608,11 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
-            PersonEffectHelper.UpdateSurvivalEffect(Effects, e.Stat, e.Stat.KeySegments, _survivalRandomSource);
+            PersonEffectHelper.UpdateSurvivalEffect(
+                Effects,
+                e.Stat,
+                e.Stat.KeySegments,
+                _survivalRandomSource);
         }
 
 
@@ -753,10 +760,10 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var effecientDebuffRule = greaterSurvivalEffect.Rules
+            var effecientDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
 
-            var toHitDebuffRule = greaterSurvivalEffect.Rules
+            var toHitDebuffRule = greaterSurvivalEffect.GetRules()
                 .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
 
             if (effecientDebuffRule != null)

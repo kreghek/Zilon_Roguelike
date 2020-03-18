@@ -1,226 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0192DB6B-EAE2-430A-BC52-148EEC878151}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zilon.Core.Tests</RootNamespace>
-    <AssemblyName>Zilon.Core.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <LangVersion>6</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="FluentAssertions" Version="5.10.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise />
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="Client\PropTransferMachineTests.cs" />
-    <Compile Include="Client\PropTransferStoreTests.cs" />
-    <Compile Include="Commands\CommandTestBase.cs" />
-    <Compile Include="Commands\EquipCommandTests.cs" />
-    <Compile Include="Commands\AttackCommandTests.cs" />
-    <Compile Include="Commands\Globe\RegionTransitionHelperTests.cs" />
-    <Compile Include="Commands\MoveCommandTests.cs" />
-    <Compile Include="Commands\NextTurnCommandTests.cs" />
-    <Compile Include="Commands\OpenContainerCommandTests.cs" />
-    <Compile Include="Commands\PropTrasferCommandTests.cs" />
-    <Compile Include="Commands\QueueCommandManagerTests.cs" />
-    <Compile Include="Commands\UseSelfCommandTests.cs" />
-    <Compile Include="CommonServices\Dices\ExpDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\GaussDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\InversedExpDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\InversedGaussDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\TwoStepMiddleDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\LinearDiceTests.cs" />
-    <Compile Include="CommonServices\Dices\IDiceExtensionsTests.cs" />
-    <Compile Include="CommonServices\DropRollerTests.cs" />
-    <Compile Include="CommonServices\Dices\DiceTestsBase.cs" />
-    <Compile Include="Common\CubeCoordsHelperTests.cs" />
-    <Compile Include="Common\HexHelperTests.cs" />
-    <Compile Include="Common\MatrixHelperTests.cs" />
-    <Compile Include="Common\RangeExtensionsTests.cs" />
-    <Compile Include="Common\TestCases\CubeCoordsHelperTestCases.cs" />
-    <Compile Include="Components\PersonStatTests.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MapGenerators\CellularAutomatonStyle\InteriorObjectRandomSourceTests.cs" />
-    <Compile Include="MapGenerators\ChestGeneratorRandomSourceTests.cs" />
-    <Compile Include="MapGenerators\MonsterGeneratorTests.cs" />
-    <Compile Include="MapGenerators\RoomStyle\RoomGeneratorTests.cs" />
-    <Compile Include="MapGenerators\RoomStyle\RoomMapFactoryTests.cs" />
-    <Compile Include="MapGenerators\MapRegionHelperTests.cs" />
-    <Compile Include="MapGenerators\RoomStyle\TestSnakeRoomGenerator.cs" />
-    <Compile Include="MapGenerators\WildStyle\WildMapFactoryTests.cs" />
-    <Compile Include="PerkHelperTests.cs" />
-    <Compile Include="Persons\Auxiliary\PersonEffectHelperTests.cs" />
-    <Compile Include="Persons\DefeatActorJobProgressTests.cs" />
-    <Compile Include="Persons\EquipmentCarrierTests.cs" />
-    <Compile Include="Persons\EquipmentTests.cs" />
-    <Compile Include="Persons\EvolutionDataTests.cs" />
-    <Compile Include="Persons\HumanPersonTests.cs" />
-    <Compile Include="Persons\MonsterPersonTests.cs" />
-    <Compile Include="Persons\PerkResolverTests.cs" />
-    <Compile Include="Persons\SurvivalStatTests.cs" />
-    <Compile Include="Persons\SurvivalDataTests.cs" />
-    <Compile Include="Persons\TestCases\EquipmentCarrierTestsCaseSource.cs" />
-    <Compile Include="Persons\TestCases\SurvivalDataTestCasesSource.cs" />
-    <Compile Include="Persons\TestCases\SurvivalStatTestCasesSource.cs" />
-    <Compile Include="ProgressStoring\GlobeStorageDataTests.cs" />
-    <Compile Include="ProgressStoring\HumanPersonStorageDataTests.cs" />
-    <Compile Include="ProgressStoring\HumanPlayerStorageDataTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Props\PropStoreBaseTests.cs" />
-    <Compile Include="Schemes\MonsterSchemeTests.cs" />
-    <Compile Include="Schemes\PersonSchemeTests.cs" />
-    <Compile Include="Schemes\PropSchemeTests.cs" />
-    <Compile Include="Schemes\PerkSchemeTests.cs" />
-    <Compile Include="Schemes\SchemeServiceTests.cs" />
-    <Compile Include="Services\MapGenerators\SquareMapFactoryTests.cs" />
-    <Compile Include="Tactics\ActorTests.cs" />
-    <Compile Include="Tactics\ActUsageRandomSourceTests.cs" />
-    <Compile Include="Tactics\Base\CommonManagerTestsBase.cs" />
-    <Compile Include="Tactics\Behaviour\EquipTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\FowHelperTests.cs" />
-    <Compile Include="Tactics\Behaviour\MoveIntentionTests.cs" />
-    <Compile Include="Tactics\Behaviour\TestCases\FowHelperTestCaseDataSource.cs" />
-    <Compile Include="Tactics\PropContainerManagerTests.cs" />
-    <Compile Include="Tactics\ActorManagerTests.cs" />
-    <Compile Include="Tactics\Behaviour\AttackTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\HumanActorTaskSourceTests.cs" />
-    <Compile Include="Tactics\Behaviour\IdleTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\MoveTaskTests.cs" />
-    <Compile Include="Tactics\Behaviour\OpenContainerTaskTests.cs" />
-    <Compile Include="Tactics\DropResolverTests.cs" />
-    <Compile Include="Tactics\DropTableChestStoreTests.cs" />
-    <Compile Include="Tactics\DropTablePropChestTests.cs" />
-    <Compile Include="Tactics\GameLoopTests.cs" />
-    <Compile Include="MapGenerators\SectorProceduralGeneratorTests.cs" />
-    <Compile Include="Tactics\SectorTests.cs" />
-    <Compile Include="Tactics\Spatial\HexNodeHelperTests.cs" />
-    <Compile Include="Tactics\Spatial\PathFinding\AStarTests.cs" />
-    <Compile Include="Tactics\Spatial\SectorHexMapTests.cs" />
-    <Compile Include="Tactics\Spatial\TestCases\ConvertOffsetToCubeTestCaseSource.cs" />
-    <Compile Include="Tactics\Spatial\TestCases\HexWorldPositionTestCaseSource.cs" />
-    <Compile Include="Tactics\TacticalActUsageServiceTests.cs" />
-    <Compile Include="Tactics\TransitionDetectionTests.cs" />
-    <Compile Include="WorldGeneration\AgentCards\TransportHelperTests.cs" />
-    <Compile Include="WorldGeneration\WorldGeneratorTests.cs" />
-    <Compile Include="World\GlobeHelperTestCaseSource.cs" />
-    <Compile Include="World\GlobeHelperTests.cs" />
+    <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj" />
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="README.md" />
     <EmbeddedResource Include="Schemes\human-person.json" />
   </ItemGroup>
+    
   <ItemGroup>
-    <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj">
-      <Project>{53af1d62-18d8-4252-b09a-1cc50724be92}</Project>
-      <Name>Zilon.Core.Tests.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj">
-      <Project>{93e96628-de50-42ae-a2f5-4b4b042d66e6}</Project>
-      <Name>Zilon.Core</Name>
-    </ProjectReference>
+    <DotNetCliToolReference Include="JetBrains.dotCover.DotNetCliTool" Version="2019.2.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FluentAssertions">
-      <Version>5.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="JetBrains.Annotations">
-      <Version>2019.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="JetBrains.dotCover.CommandLineTools">
-      <Version>2019.2.3</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="JsonSubTypes">
-      <Version>1.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="LightInject">
-      <Version>5.1.8</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.3</Version>
-    </PackageReference>
-    <PackageReference Include="Moq">
-      <Version>4.13.1</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>11.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>3.12.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

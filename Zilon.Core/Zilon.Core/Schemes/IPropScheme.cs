@@ -3,11 +3,15 @@
     /// <summary>
     /// Схема предмета.
     /// </summary>
-    public interface IPropScheme: IScheme
+    public interface IPropScheme: IScheme, IMimicScheme
     {
         /// <summary>
         /// Теги предмета. Используются для описания и для некоторых правил.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Performance",
+            "CA1819:Properties should not return arrays",
+            Justification = "Свойство нужно для десериализации")]
         string[] Tags { get; }
 
         /// <summary>
@@ -30,12 +34,5 @@
         /// Информация о предмете, как он используется для выполнения действий.
         /// </summary>
         IPropBulletSubScheme Bullet { get; }
-
-        /// <summary>
-        /// Идентфиикатор схемы другого предмета,
-        /// под который будет мимикрировать данный предмет.
-        /// Используется лже-предметами.
-        /// </summary>
-        string IsMimicFor { get; }
     }
 }

@@ -8,6 +8,7 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Bot.Players;
+using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
@@ -16,6 +17,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Props;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -31,28 +33,35 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
+        Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
-            .OnInstantiated<TacticalActUsageService>((c, i) =>
-             {
-                 var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
-                 if (equipmentDurableService != null)
-                 {
-                     i.EquipmentDurableService = equipmentDurableService;
-                 }
+            .OnInstantiated<TacticalActUsageService>((c, service) =>
+            {
+                var equipmentDurableService = Container.Resolve<IEquipmentDurableService>();
+                if (equipmentDurableService != null)
+                {
+                    service.EquipmentDurableService = equipmentDurableService;
+                }
 
-                 var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
-                 if (actorInteractionBus != null)
-                 {
-                     i.ActorInteractionBus = actorInteractionBus;
-                 }
-             });
+                var actorInteractionBus = Container.Resolve<IActorInteractionBus>();
+                if (actorInteractionBus != null)
+                {
+                    service.ActorInteractionBus = actorInteractionBus;
+                }
+
+                var playerEventLogService = Container.Resolve<IPlayerEventLogService>();
+                if (playerEventLogService != null)
+                {
+                    service.PlayerEventLogService = playerEventLogService;
+                }
+            });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
-        Container.Bind<ISectorManager>().To<SectorManager>().AsSingle();
+        Container.Bind<ISectorManager>().To<InfSectorManager>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
@@ -61,7 +70,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IMapFactory>().WithId("room").To<RoomMapFactory>().AsSingle();
         Container.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
         Container.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
-        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context => {
+        Container.Bind<IRoomGeneratorRandomSource>().FromMethod(context =>
+        {
             var linearDice = context.Container.ResolveId<IDice>("linear");
             var roomSizeDice = context.Container.ResolveId<IDice>("exp");
             return new RoomGeneratorRandomSource(linearDice, roomSizeDice);

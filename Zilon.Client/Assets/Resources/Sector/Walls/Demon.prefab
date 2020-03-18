@@ -49,6 +49,8 @@ MonoBehaviour:
   RightTopWall: {fileID: 21300000, guid: af8ddcd644a85fd4588260ef0bbcf45b, type: 3}
   RightWall: {fileID: 21300000, guid: 9e891f4ac75920c4bbcb9be310dace04, type: 3}
   RightBottomWall: {fileID: 21300000, guid: c2276e80038142f4188bf4501bbe0f86, type: 3}
+  LeftBottomColor: {r: 0.6698113, g: 0.3733166, b: 0.17377181, a: 0.49803922}
+  RightBottomColor: {r: 0.67058825, g: 0.3764706, b: 0.1764706, a: 0.49803922}
   Floor: {fileID: 21300000, guid: 7017c2e471201914a9b9acb2b93a3743, type: 3}
   InteriorObjectSprites:
   - {fileID: 21300000, guid: 335e996710d032d479f5541ce3150ee4, type: 3}

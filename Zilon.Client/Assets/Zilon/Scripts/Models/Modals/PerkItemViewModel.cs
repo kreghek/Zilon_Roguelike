@@ -1,9 +1,12 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
+
+using Zenject;
 
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Persons;
@@ -16,7 +19,6 @@ using Zilon.Core.Persons;
 /// </remarks>
 public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkViewModelDescription
 {
-
     public Text LevelText;
     public Image IconImage;
     public Image SelectedBorder;
@@ -65,6 +67,11 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
     private Sprite CalcIcon(IPerk perk)
     {
         var iconSprite = Resources.Load<Sprite>($"Icons/perks/{perk.Scheme.Sid}");
+        if (iconSprite is null)
+        {
+            iconSprite = Resources.Load<Sprite>($"Icons/perks/default");
+        }
+
         return iconSprite;
     }
 }

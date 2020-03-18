@@ -1,23 +1,25 @@
-﻿using LightInject;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Emulation.Common;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    public class Startup : InitialzationBase
+    public class Startup : InitializationBase
     {
         public Startup(int diceSeed): base(diceSeed)
         { 
         }
 
-        public override void ConfigureAux(IServiceFactory serviceFactory)
+        public override void ConfigureAux(IServiceProvider serviceFactory)
         {
-            
+            // Для этой утилиты бота не настраиваем. Нам нужны только сектора.
         }
 
-        protected override void RegisterBot(IServiceRegistry container)
+        protected override void RegisterBot(IServiceCollection serviceCollection)
         {
-            
+            // Для этой утилиты бота не настраиваем. Нам нужны только сектора.
         }
     }
 }

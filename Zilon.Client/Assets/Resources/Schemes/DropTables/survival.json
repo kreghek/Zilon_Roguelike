@@ -37,9 +37,60 @@
       "MaxCount": 1,
       "Weight": 6
     },
+	
+	// Ресурсы для крафта
+	{
+      "SchemeSid": "acid",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "dirty-water",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "ethanol",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "potatus",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "raw-meat",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "vege-milk",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "roast",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },
+	{
+      "SchemeSid": "stew",
+      "MinCount": 1,
+      "MaxCount": 1,
+      "Weight": 1
+    },	
+	
     {
       "SchemeSid": null,
-      "Weight": 600
+      "Weight": 800
     }
   ]
 }

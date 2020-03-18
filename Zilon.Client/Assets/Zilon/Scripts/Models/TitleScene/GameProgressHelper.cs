@@ -1,5 +1,5 @@
 ﻿using Zilon.Core.Players;
-using Zilon.Core.Tactics;
+using Zilon.Core.Scoring;
 using Zilon.Core.World;
 
 namespace Assets.Zilon.Scripts.Models.TitleScene

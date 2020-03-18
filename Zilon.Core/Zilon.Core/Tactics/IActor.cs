@@ -68,6 +68,11 @@ namespace Zilon.Core.Tactics
         event EventHandler<DamageTakenEventArgs> DamageTaken;
 
         /// <summary>
+        /// Выстреливает, когда актёр использует предмет.
+        /// </summary>
+        event EventHandler<UsedPropEventArgs> UsedProp;
+
+        /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
         /// <param name="target"> Цель действия. </param>

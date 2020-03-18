@@ -20,5 +20,6 @@
       "Impact":  "Kinetic",
 	  "ApRank": 1
     }
-  }
+  },
+  "IsMimicFor": "chop"
 }

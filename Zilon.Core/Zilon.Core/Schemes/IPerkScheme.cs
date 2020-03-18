@@ -6,7 +6,7 @@ namespace Zilon.Core.Schemes
     {
         PerkConditionSubScheme[] BaseConditions { get; set; }
         string IconSid { get; set; }
-        bool IsBuildIn { get; set; }
+        bool IsBuildIn { get; }
         JobSubScheme[] Jobs { get; set; }
         PerkLevelSubScheme[] Levels { get; set; }
         int Order { get; set; }

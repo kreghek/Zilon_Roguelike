@@ -529,7 +529,7 @@ namespace Zilon.Core.Tests.Tactics
             var sectorManagerMock = new Mock<ISectorManager>();
             var sectorManager = sectorManagerMock.Object;
 
-            var map = await SquareMapFactory.CreateAsync(3);
+            var map = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;

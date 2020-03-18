@@ -21,6 +21,16 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (decisionSource is null)
+            {
+                throw new System.ArgumentNullException(nameof(decisionSource));
+            }
+
             _counter = decisionSource.SelectIdleDuration(IdleMin, IdleMax);
         }
 

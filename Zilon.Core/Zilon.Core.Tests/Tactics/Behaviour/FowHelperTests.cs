@@ -13,6 +13,7 @@ using Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases;
 namespace Zilon.Core.Tactics.Behaviour.Tests
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class FowHelperTests
     {
         /// <summary>

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -18,21 +19,25 @@ namespace Zilon.Core.Persons
         private const string BODY_DROP_SID = "start-armors";
         private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
         private const string START_PROP_DROP_SID = "start-props";
+        
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
+        private readonly IPersonPerkInitializator _personPerkInitializator;
 
         public RandomHumanPersonFactory(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
-            IDropResolver dropResolver)
+            IDropResolver dropResolver,
+            IPersonPerkInitializator personPerkInitializator)
         {
             _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
             _survivalRandomSource = survivalRandomSource ?? throw new System.ArgumentNullException(nameof(survivalRandomSource));
             _propFactory = propFactory ?? throw new System.ArgumentNullException(nameof(propFactory));
             _dropResolver = dropResolver ?? throw new System.ArgumentNullException(nameof(dropResolver));
+            _personPerkInitializator = personPerkInitializator;
         }
 
         public HumanPerson Create()
@@ -47,6 +52,26 @@ namespace Zilon.Core.Persons
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
 
+            RollStartEquipment(inventory, person);
+
+            RollTraitPerks(evolutionData);
+
+            return person;
+        }
+
+        private void RollTraitPerks(IEvolutionData evolutionData)
+        {
+            if (evolutionData is null)
+            {
+                throw new ArgumentNullException(nameof(evolutionData));
+            }
+
+            var rolledTraits = _personPerkInitializator.Get();
+            evolutionData.AddBuildInPerks(rolledTraits);
+        }
+
+        private void RollStartEquipment(Inventory inventory, HumanPerson person)
+        {
             var headDropScheme = GetHeads();
             FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
 
@@ -69,9 +94,6 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
-
-
-            return person;
         }
 
         private void AddEquipment(Inventory inventory, string sid)

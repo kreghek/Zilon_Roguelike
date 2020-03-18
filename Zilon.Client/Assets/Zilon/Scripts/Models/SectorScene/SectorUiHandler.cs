@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+
+using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +10,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
@@ -23,6 +26,8 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
+    [Inject] private readonly IPropContainerManager _propContainerManager;
+
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -32,6 +37,8 @@ public class SectorUiHandler : MonoBehaviour
     [Inject(Id = "quit-request-command")] private readonly ICommand _quitRequestCommand;
 
     [Inject(Id = "quit-request-title-command")] private readonly ICommand _quitRequestTitleCommand;
+
+    [Inject(Id = "open-container-command")] private readonly ICommand _openContainerCommand;
 
 
     [NotNull]
@@ -43,8 +50,15 @@ public class SectorUiHandler : MonoBehaviour
     public Button PersonButton;
     public Button SectorTransitionMoveButton;
     public Button CityQuickExitButton;
+    public Button OpenLootButton;
 
-    public void FixedUpdate()
+    public void Update()
+    {
+        HandleHotKeys();
+        UpdateButtonStates();
+    }
+
+    private void UpdateButtonStates()
     {
         if (NextTurnButton != null)
         {
@@ -73,9 +87,38 @@ public class SectorUiHandler : MonoBehaviour
             var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
+
+        if (OpenLootButton != null)
+        {
+            var canOpen = GetCanOpenLoot();
+            OpenLootButton.gameObject.SetActive(canOpen);
+        }
     }
 
-    public void Update()
+    private bool GetCanOpenLoot()
+    {
+        var personNode = _playerState.ActiveActor?.Actor?.Node;
+        if (personNode is null)
+        {
+            return false;
+        }
+
+        var lootInNode = GetContainerInNode(personNode);
+        if (lootInNode is null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private IPropContainer GetContainerInNode(IGraphNode targetnNode)
+    {
+        var containerInNode = _propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
+        return containerInNode;
+    }
+
+    private void HandleHotKeys()
     {
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Keypad5))
         {
@@ -92,6 +135,12 @@ public class SectorUiHandler : MonoBehaviour
             SectorTransitionMoveButton_Handler();
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            OpenLoot_Handler();
+        }
+
+        // Отключено, потому что сейчас нет выхода на глобальную карту.
         if (Input.GetKeyDown(KeyCode.G))
         {
             CityQuickExit_Handler();
@@ -140,13 +189,56 @@ public class SectorUiHandler : MonoBehaviour
 
     public void SectorTransitionMoveButton_Handler()
     {
+        // Защита от бага.
+        // Пользователь может нажать T и выполнить переход.
+        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
+        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        {
+            return;
+        }
+
         _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
     }
 
     public void CityQuickExit_Handler()
     {
+        // Защита от бага.
+        // Пользователь может нажать Q и выйти из сектора на глобальную карту.
+        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
+        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        {
+            return;
+        }
+
         // Это быстрое решение.
         // Тупо загружаем глобальную карту.
         SceneManager.LoadScene("globe");
+    }
+
+    public void OpenLoot_Handler()
+    {
+        var personNode = _playerState.ActiveActor.Actor.Node;
+        var lootInNode = GetContainerInNode(personNode);
+
+        if (lootInNode != null)
+        {
+            var viewModel = GetLootViewModel(lootInNode);
+            _playerState.SelectedViewModel = viewModel;
+            _clientCommandExecutor.Push(_openContainerCommand);
+        }
+    }
+
+    private static ContainerVm GetLootViewModel(IPropContainer lootInNode)
+    {
+        var viewModels = FindObjectsOfType<ContainerVm>();
+        foreach (var viewModel in viewModels)
+        {
+            if (viewModel.Container == lootInNode)
+            {
+                return viewModel;
+            }
+        }
+
+        return null;
     }
 }

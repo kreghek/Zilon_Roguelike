@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Client.Windows;
+using Zilon.Core.Persons;
 
 namespace Assets.Zilon.Scripts.Services
 {
@@ -9,6 +10,8 @@ namespace Assets.Zilon.Scripts.Services
         public ScoreModalBody ScoreModalPrefab;
 
         public HistoryModalBody HistoryModalPrefab;
+
+        public PersonCreateModalBody PersonCreateModalPrefab;
 
         public void ShowQuitComfirmationModal()
         {
@@ -30,6 +33,12 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<HistoryModalBody>(HistoryModalPrefab.gameObject);
             modalBody.Init();
+        }
+
+        public void ShowCreatePersonModal(HumanPerson playerPerson)
+        {
+            var modalBody = CreateWindowHandler<PersonCreateModalBody>(PersonCreateModalPrefab.gameObject);
+            modalBody.Init(playerPerson);
         }
 
         private void ShowQuitComfirmationModalInner(string caption, bool closeGame)
