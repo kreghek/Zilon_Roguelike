@@ -27,7 +27,7 @@ namespace Zilon.BotEnvironment
 
             var serviceCollection = new ServiceCollection();
 
-            _startUp = new Startup(schemeCatalogPath);
+            _startUp = new Startup();
             _startUp.RegisterServices(serviceCollection);
 
             var botSettings = new BotSettings

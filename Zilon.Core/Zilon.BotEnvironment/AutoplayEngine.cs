@@ -114,7 +114,7 @@ namespace Zilon.BotEnvironment
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
 
-            DatabaseContext.AppendScores(scoreManager, botTaskSource.GetType().FullName, scoreFilePreffix, mode, summary);
+            DatabaseContext.AppendScores(path, scoreManager, botTaskSource.GetType().FullName, scoreFilePreffix, mode, summary);
         }
 
         private void AppendException(Exception exception, string scoreFilePreffix)
