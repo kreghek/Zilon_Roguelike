@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players", "Zilon.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.Tests", "Zilon.Bot.Players.Tests\Zilon.Bot.Players.Tests.csproj", "{BC06E840-A29B-4610-A535-3F2DCD3D2F2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.BotMassLauncher", "Zilon.BotMassLauncher\Zilon.BotMassLauncher.csproj", "{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.BotMassLauncher", "Zilon.BotMassLauncher\Zilon.BotMassLauncher.csproj", "{01FE47A4-1DA0-476C-AE2D-8CBC5E2CED97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.DevelopmentTests", "Zilon.Bot.Players.DevelopmentTests\Zilon.Bot.Players.DevelopmentTests.csproj", "{B0CDC661-4458-4E1E-9375-F949F3EFB567}"
 EndProject
@@ -47,17 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.MassSectorGenera
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{0EC4CA2B-F1EE-47F9-968C-1EFC1EF5D2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.CommonUtilities", "Zilon.CommonUtilities\Zilon.CommonUtilities.csproj", "{B9367196-F13A-434E-9971-E823D2E2A7B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.CommonUtilities", "Zilon.CommonUtilities\Zilon.CommonUtilities.csproj", "{B9367196-F13A-434E-9971-E823D2E2A7B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Specs", "Zilon.Core.Specs\Zilon.Core.Specs.csproj", "{E9CE6565-6024-41E5-8552-B7021234708C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore", "Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{1F6F4A58-B945-4E1F-9860-ADDB296EA57B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.DiTests", "Zilon.Core.DiTests\Zilon.Core.DiTests.csproj", "{9D36570D-7A47-4814-8986-A9E9374FB3F6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tournament", "Tournament", "{70708604-D448-4720-8719-4FFECDAD73ED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Tournament.ApiGate", "Zilon.Tournament.ApiGate\Zilon.Tournament.ApiGate.csproj", "{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,10 +121,6 @@ Global
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,7 +138,6 @@ Global
 		{E9CE6565-6024-41E5-8552-B7021234708C} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
-		{DE0F841C-1B0A-4B61-AF94-D67A5CA3DCAE} = {70708604-D448-4720-8719-4FFECDAD73ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
