@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+
 using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
+
 using Zenject;
+
 using Zilon.Core.Persons;
 
 public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
@@ -38,17 +41,15 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
         foreach (var startTrait in buildInTraits)
         {
             var traitName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, startTrait.Scheme.Name);
-            DescriptionText.text += traitName + "\n";
+            DescriptionText.text += traitName + Environment.NewLine;
         }
     }
 
     public void ApplyChanges()
     {
-
     }
 
     public void CancelChanges()
     {
-        throw new NotImplementedException();
     }
 }
