@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Assets.Zilon.Scripts.Models.SectorScene;
+
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -69,6 +69,8 @@ public class SectorVM : MonoBehaviour
     [NotNull] public FowManager FowManager;
 
     [NotNull] public SleepShadowManager SleepShadowManager;
+
+    [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
@@ -152,7 +154,7 @@ public class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    private void FixedUpdate()
+    public void Update()
     {
         if (!_commandBlockerService.HasBlockers)
         {
@@ -198,7 +200,8 @@ public class SectorVM : MonoBehaviour
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
 
-        InitPlayerActor(nodeViewModels);
+        PlayerPersonInitiator.InitPlayerActor(nodeViewModels, ActorViewModels);
+
         CreateMonsterViewModels(nodeViewModels);
         CreateContainerViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
@@ -260,35 +263,6 @@ public class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
 
         _gameLoop.Updated -= GameLoop_Updated;
-    }
-
-    private void InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels)
-    {
-        var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
-
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
-            .Single(x => x.IsStart).Nodes
-            .First();
-
-        var playerActorViewModel = CreateHumanActorViewModel(
-            _humanPlayer,
-            _actorManager,
-            _perkResolver,
-            playerActorStartNode,
-            nodeViewModels);
-
-        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(
-            playerActorViewModel.Actor.SectorFowData,
-            _sectorManager.CurrentSector.Map,
-            playerActorStartNode,
-            radius: 5);
-
-        //Лучше централизовать переключение текущего актёра только в playerState
-        _playerState.ActiveActor = playerActorViewModel;
-        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
-
-        ActorViewModels.Add(playerActorViewModel);
     }
 
     private List<MapNodeVM> InitNodeViewModels()
