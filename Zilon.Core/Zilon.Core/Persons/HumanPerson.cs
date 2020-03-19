@@ -612,7 +612,8 @@ namespace Zilon.Core.Persons
                 Effects,
                 e.Stat,
                 e.Stat.KeySegments,
-                _survivalRandomSource);
+                _survivalRandomSource,
+                PlayerEventLogService);
         }
 
 

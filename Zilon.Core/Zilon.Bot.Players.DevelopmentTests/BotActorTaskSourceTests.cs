@@ -44,7 +44,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             if (lastEvent != null)
             {
-                var deathReason = deathReasonService.GetDeathReasonSummary(lastEvent, Core.Localization.Language.Ru);
+                var deathReason = deathReasonService.GetDeathReasonSummary(
+                    lastEvent,
+                    Core.Localization.Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");
             }
@@ -52,8 +54,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
             {
                 // Это может быть в следующих случаях:
                 // 1. Ошибка в регистрации или инициализации сервисов, в результате которой система не регистрирует события персонажа.
-                // 2. Игра была завершена до наступления любого зарегистрированного события. Это поведение потенциально возможно,
-                // но сейчас не предполагается при штатной работе.
+                // 2. Игра была завершена до наступления любого зарегистрированного события.
+                // Эта ситуация может быть, если персонаж умер в результате события, которое не регистрируется.
+                // Это считается ошибкой.
 
                 throw new InvalidOperationException("Не удалось вычислить причину смерти персонажа.");
             }

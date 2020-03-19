@@ -11,9 +11,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
 {
     class Startup : InitializationBase
     {
-        public override void ConfigureAux(IServiceProvider serviceFactory)
+        public override void ConfigureAux(IServiceProvider serviceProvider)
         {
-            // Понфигурация дополнительных сервисов для коробочного источника команд не требуется.
+            // Конфигурация дополнительных сервисов для коробочного источника команд не требуется.
         }
 
         protected override void RegisterBot(IServiceCollection container)
