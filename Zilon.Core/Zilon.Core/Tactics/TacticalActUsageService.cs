@@ -481,7 +481,7 @@ namespace Zilon.Core.Tactics
         {
             var damageEfficientCalcResult = new DamageEfficientCalc();
 
-            var actApRank = GetActApRank(tacticalActRoll.TacticalAct); ;
+            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
             damageEfficientCalcResult.ActApRank = actApRank;
             var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
             damageEfficientCalcResult.ArmorRank = armorRank;

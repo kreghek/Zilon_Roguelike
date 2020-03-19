@@ -14,8 +14,8 @@ namespace Zilon.Core.Benchmark
     {
         public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath, string artifactPath)
         {
-            Add(Job.Default.With(Runtime.Core).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
-            Add(Job.Default.With(Runtime.CoreRT).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            Add(Job.Default.With(CoreRuntime.Core20).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            Add(Job.Default.With(CoreRtRuntime.CoreRt20).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
 
 
             Add(ConsoleLogger.Default);

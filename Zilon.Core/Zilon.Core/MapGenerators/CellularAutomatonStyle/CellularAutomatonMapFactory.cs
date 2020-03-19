@@ -19,7 +19,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
-        private readonly int SIMULATION_COUNT = 2;
+        private const int SIMULATION_COUNT = 2;
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;
         private const int RETRY_LIMIT = 3;
@@ -97,7 +97,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
+                var maxtrixScales = CreateScaledMatrix(matrix);
+
+                var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
                 try
@@ -114,7 +116,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
                 // На карте должно быть минимум столько регионов, сколько переходов.
                 // +1 - это регион старта.
-                if (draftRegions.Count() < targetRegionDraftCount)
+                if (draftRegions.Length < targetRegionDraftCount)
                 {
                     try
                     {
@@ -141,6 +143,27 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Если цикл закончился, значит вышел лимит попыток.
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
+        }
+
+        private static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix)
+        {
+            const int V = 4;
+            var scaledMatrix = new Matrix<bool>(matrix.Width * V, matrix.Height * V);
+            for (var i = 0; i < matrix.Width; i++)
+            {
+                for (var j = 0; j < matrix.Height; j++)
+                {
+                    for (var k1 = 0; k1 < V; k1++)
+                    {
+                        for (var k2 = 0; k2 < V; k2++)
+                        {
+                            scaledMatrix.Items[i * V + k1, j * V + k2] = matrix.Items[i, j];
+                        }
+                    }
+                }
+            }
+
+            return scaledMatrix;
         }
 
         private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
@@ -191,7 +214,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Пропускаем 1, потому что 1 занять стартом.
                 var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
 
-                Debug.Assert(trasitionRegionDrafts.Count() >= transitionArray.Count(),
+                Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
                     "Должно быть достаточно регионов для размещения всех переходов.");
 
                 for (var i = 0; i < transitionArray.Length; i++)
@@ -273,13 +296,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
             }
 
-            var regionCountDiff = targetRegionCount - draftRegions.Count();
+            var regionCountDiff = targetRegionCount - draftRegions.Length;
             if (regionCountDiff <= 0)
             {
                 return (RegionDraft[])draftRegions.Clone();
             }
 
-            var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
+            var availableSplitRegions = draftRegions.Where(x => x.Coords.Length > 1);
             var availableCoords = from region in availableSplitRegions
                                   from coord in region.Coords.Skip(1)
                                   select new RegionCoords(coord, region);

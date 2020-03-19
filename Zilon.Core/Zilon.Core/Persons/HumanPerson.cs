@@ -58,6 +58,8 @@ namespace Zilon.Core.Persons
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
             [NotNull] IEvolutionData evolutionData,
@@ -610,7 +612,8 @@ namespace Zilon.Core.Persons
                 Effects,
                 e.Stat,
                 e.Stat.KeySegments,
-                _survivalRandomSource);
+                _survivalRandomSource,
+                PlayerEventLogService);
         }
 
 

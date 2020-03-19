@@ -6,6 +6,7 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using Zilon.Core.Persons.Survival;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons.Auxiliary
 {
@@ -25,7 +26,8 @@ namespace Zilon.Core.Persons.Auxiliary
             [NotNull] EffectCollection currentEffects,
             [NotNull] SurvivalStat stat,
             [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments,
-            [NotNull] ISurvivalRandomSource survivalRandomSource)
+            [NotNull] ISurvivalRandomSource survivalRandomSource,
+            [NotNull] IPlayerEventLogService playerEventLogService)
         {
             ThrowExceptionIfArgumentsInvalid(currentEffects, stat, keySegments, survivalRandomSource);
 
@@ -63,6 +65,8 @@ namespace Zilon.Core.Persons.Auxiliary
                     statType,
                     currentSegment.Level,
                     survivalRandomSource);
+
+                    newEffect.PlayerEventLogService = playerEventLogService;
 
                     currentEffects.Add(newEffect);
                 }

@@ -37,6 +37,8 @@ namespace Zilon.Core.Persons
 
         public CitizenType CitizenType { get; }
 
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+
         public CitizenPerson()
         {
             CitizenType = CitizenType.Unintresting;

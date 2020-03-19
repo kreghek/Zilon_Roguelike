@@ -31,6 +31,8 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+
         public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
             
