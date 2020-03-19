@@ -4,11 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.NetCore.Move
+namespace Zilon.Core.Benchmarks.CreateSector
 {
     class Startup : InitializationBase
     {
-        public Startup(): base(123)
+        public Startup() : base(123)
         {
         }
 
