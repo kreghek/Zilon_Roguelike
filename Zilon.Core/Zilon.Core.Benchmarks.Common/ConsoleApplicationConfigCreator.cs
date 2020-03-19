@@ -17,7 +17,7 @@ namespace Zilon.Core.Benchmarks.Common
         {
             var buildNumber = ArgumentHelper.GetProgramArgument(args, "BUILD_NUMBER");
             var iterationCountString = ArgumentHelper.GetProgramArgument(args, "ITERATION_COUNT");
-            var iterationCount = int.Parse(iterationCountString);
+            var iterationCount = int.Parse(iterationCountString, System.Globalization.CultureInfo.InvariantCulture);
             var monoName = "mono";
             var monoPath = ArgumentHelper.GetProgramArgument(args, "MONO_PATH");
             var artifactPath = ArgumentHelper.GetProgramArgument(args, "ARTIFACT_PATH");

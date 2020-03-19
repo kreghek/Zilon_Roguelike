@@ -55,6 +55,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.DiTests", "Zilon.Core.DiTests\Zilon.Core.DiTests.csproj", "{9D36570D-7A47-4814-8986-A9E9374FB3F6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Tournament.ApiGate", "Zilon.Tournament.ApiGate\Zilon.Tournament.ApiGate.csproj", "{1213C747-6969-471F-A71E-F359BD0189A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchs", "Benchs", "{F8EA35C7-A141-4A26-BD17-1656979D9635}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.NetCore.Move", "Zilon.Core.Benchmarks.NetCore.Move\Zilon.Core.Benchmarks.NetCore.Move.csproj", "{41B3941F-50F7-4CF3-A6E4-50A731A8031A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.Common", "Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj", "{4B14021B-1C05-47A2-89C6-ACA7310BC999}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +129,18 @@ Global
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1213C747-6969-471F-A71E-F359BD0189A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1213C747-6969-471F-A71E-F359BD0189A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1213C747-6969-471F-A71E-F359BD0189A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1213C747-6969-471F-A71E-F359BD0189A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B3941F-50F7-4CF3-A6E4-50A731A8031A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B3941F-50F7-4CF3-A6E4-50A731A8031A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B3941F-50F7-4CF3-A6E4-50A731A8031A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B3941F-50F7-4CF3-A6E4-50A731A8031A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +158,9 @@ Global
 		{E9CE6565-6024-41E5-8552-B7021234708C} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
+		{1213C747-6969-471F-A71E-F359BD0189A9} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
+		{41B3941F-50F7-4CF3-A6E4-50A731A8031A} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
+		{4B14021B-1C05-47A2-89C6-ACA7310BC999} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
