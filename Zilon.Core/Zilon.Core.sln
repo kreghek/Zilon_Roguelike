@@ -61,7 +61,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchs", "Benchs", "{F8EA35
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.NetCore.Move", "Zilon.Core.Benchmarks.NetCore.Move\Zilon.Core.Benchmarks.NetCore.Move.csproj", "{41B3941F-50F7-4CF3-A6E4-50A731A8031A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.Common", "Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj", "{4B14021B-1C05-47A2-89C6-ACA7310BC999}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Common", "Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj", "{4B14021B-1C05-47A2-89C6-ACA7310BC999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.Move", "Zilon.Core.Benchmarks.Move\Zilon.Core.Benchmarks.Move.csproj", "{91053C74-7FDF-4690-B20B-B63DB84606D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.CreateSector", "Zilon.Core.Benchmarks.CreateSector\Zilon.Core.Benchmarks.CreateSector.csproj", "{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.Core.Benchmarks.CreateGlobe", "Zilon.Core.Benchmarks.CreateGlobe\Zilon.Core.Benchmarks.CreateGlobe.csproj", "{F2F66142-B4BA-48FE-A60B-61A9D75F775A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +147,18 @@ Global
 		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91053C74-7FDF-4690-B20B-B63DB84606D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91053C74-7FDF-4690-B20B-B63DB84606D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91053C74-7FDF-4690-B20B-B63DB84606D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91053C74-7FDF-4690-B20B-B63DB84606D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F66142-B4BA-48FE-A60B-61A9D75F775A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +179,9 @@ Global
 		{1213C747-6969-471F-A71E-F359BD0189A9} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{41B3941F-50F7-4CF3-A6E4-50A731A8031A} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 		{4B14021B-1C05-47A2-89C6-ACA7310BC999} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
+		{91053C74-7FDF-4690-B20B-B63DB84606D8} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
+		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
+		{F2F66142-B4BA-48FE-A60B-61A9D75F775A} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
