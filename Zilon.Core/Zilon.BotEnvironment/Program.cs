@@ -43,7 +43,9 @@ namespace Zilon.BotEnvironment
 
             serviceProvider = serviceCollection.BuildServiceProvider();
 
-            await autoPlayEngine.StartAsync(serviceProvider);
+            var startPerson = autoPlayEngine.CreateStartPerson(serviceProvider);
+
+            await autoPlayEngine.StartAsync(startPerson, serviceProvider);
 
             Console.WriteLine(autoPlayEngine.LogOutput);
 

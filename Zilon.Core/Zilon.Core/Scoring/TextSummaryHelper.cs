@@ -20,6 +20,11 @@ namespace Zilon.Core.Scoring
         //TODO Вместо botName передавать объект BotInfo. Так будет более очевидно.
         public static string CreateTextSummary([NotNull] Scores scores, [CanBeNull] string botName)
         {
+            if (scores is null)
+            {
+                throw new System.ArgumentNullException(nameof(scores));
+            }
+
             var summaryStringBuilder = new StringBuilder();
 
             if (botName == null)

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
@@ -25,21 +26,64 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [Parallelizable(ParallelScope.All)]
         public async Task GetActorTasksTestAsync(string mode)
         {
-            var _globalServiceContainer = new ServiceCollection();
+            var serviceContainer = new ServiceCollection();
             var startUp = new Startup();
-            startUp.RegisterServices(_globalServiceContainer);
-            var _globalServiceProvider = _globalServiceContainer.BuildServiceProvider();
+            startUp.RegisterServices(serviceContainer);
+            var serviceProvider = serviceContainer.BuildServiceProvider();
 
             var botSettings = new BotSettings { Mode = mode };
 
             var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
-            await autoPlayEngine.StartAsync(_globalServiceProvider).ConfigureAwait(false);
 
-            var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
+            var startPerson = autoPlayEngine.CreateStartPerson(serviceProvider);
+
+            PrintPersonBacklog(startPerson);
+
+            await autoPlayEngine.StartAsync(startPerson, serviceProvider).ConfigureAwait(false);
+
+            PrintResult(serviceProvider);
+        }
+
+        private void PrintPersonBacklog(HumanPerson humanPerson)
+        {
+            Console.WriteLine("Build In Traits:");
+            var buildinTraits = humanPerson.EvolutionData.Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+            foreach (var buildInTrait in buildinTraits)
+            {
+                Console.WriteLine(buildInTrait.Scheme.Name.En);
+            }
+
+            Console.WriteLine("Start Equipments:");
+            var equipments = humanPerson.EquipmentCarrier.ToArray();
+            foreach (var equipment in equipments)
+            {
+                if (equipment is null)
+                {
+                    continue;
+                }
+
+                Console.WriteLine(equipment.Scheme.Name.En);
+            }
+
+            Console.WriteLine("Start Inventory:");
+            var inventoryProps = humanPerson.Inventory.CalcActualItems().ToArray();
+            foreach (var prop in inventoryProps)
+            {
+                Console.WriteLine(prop.Scheme.Name.En);
+            }
+        }
+
+        private static void PrintResult(ServiceProvider serviceProvider)
+        {
+            var scoreManager = serviceProvider.GetRequiredService<IScoreManager>();
+
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
 
-            var playerEventLogService = _globalServiceProvider.GetRequiredService<IPlayerEventLogService>();
-            var deathReasonService = _globalServiceProvider.GetRequiredService<DeathReasonService>();
+            var scoreDetails = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            Console.WriteLine($"Details:  {scoreDetails}");
+
+            var playerEventLogService = serviceProvider.GetRequiredService<IPlayerEventLogService>();
+            var deathReasonService = serviceProvider.GetRequiredService<DeathReasonService>();
             var lastEvent = playerEventLogService.GetPlayerEvent();
 
             if (lastEvent != null)
