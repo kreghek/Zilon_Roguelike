@@ -41,9 +41,22 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var playerEventLogService = _globalServiceProvider.GetRequiredService<IPlayerEventLogService>();
             var deathReasonService = _globalServiceProvider.GetRequiredService<DeathReasonService>();
             var lastEvent = playerEventLogService.GetPlayerEvent();
-            string deathReason = deathReasonService.GetDeathReasonSummary(lastEvent, Core.Localization.Language.Ru);
 
-            Console.WriteLine($"Death Reason: {deathReason}");
+            if (lastEvent != null)
+            {
+                var deathReason = deathReasonService.GetDeathReasonSummary(lastEvent, Core.Localization.Language.Ru);
+
+                Console.WriteLine($"Death Reason: {deathReason}");
+            }
+            else
+            {
+                // Это может быть в следующих случаях:
+                // 1. Ошибка в регистрации или инициализации сервисов, в результате которой система не регистрирует события персонажа.
+                // 2. Игра была завершена до наступления любого зарегистрированного события. Это поведение потенциально возможно,
+                // но сейчас не предполагается при штатной работе.
+
+                throw new InvalidOperationException("Не удалось вычислить причину смерти персонажа.");
+            }
         }
     }
 }
