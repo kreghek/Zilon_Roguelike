@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
@@ -69,7 +70,21 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var inventoryProps = humanPerson.Inventory.CalcActualItems().ToArray();
             foreach (var prop in inventoryProps)
             {
-                Console.WriteLine(prop.Scheme.Name.En);
+                switch (prop)
+                {
+                    case Equipment equipment:
+                        Console.WriteLine(equipment.Scheme.Name.En);
+                        break;
+
+                    case Resource resource:
+                        Console.WriteLine($"{resource.Scheme.Name.En} x {resource.Count}");
+                        break;
+
+                    default:
+                        Console.WriteLine(prop.Scheme.Name.En);
+                        break;
+                }
+                
             }
         }
 
