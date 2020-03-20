@@ -22,10 +22,10 @@ public class SectorViewModelActivator : MonoBehaviour
 
         var globe = _globeManager.Globe;
 
-        var sectorInfo = globe.SectorInfos.First();
-        var sector = sectorInfo.Sector;
+        //var sectorInfo = globe.SectorInfos.First();
+        //var sector = sectorInfo.Sector;
 
-        TargetSectorViewModel.Init(sector);
+        //TargetSectorViewModel.Init(sector);
 
         Destroy(this);
     }

@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-using Zilon.Core.Tactics.Behaviour;
-
 namespace Zilon.Core.World
 {
     /// <summary>

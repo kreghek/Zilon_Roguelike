@@ -122,8 +122,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void FixedUpdate()
     {
-        var commandContext = SectorCommandContextFactory.CreateContext();
-        var canEquip = _equipCommand.CanExecute(commandContext);
+        var canEquip = _equipCommand.CanExecute();
         var selectedProp = _inventoryState.SelectedProp;
         var denySlot = !canEquip && selectedProp != null;
         DenyBorder.SetActive(denySlot);

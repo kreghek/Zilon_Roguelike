@@ -56,9 +56,6 @@ public class SectorMapViewModel : MonoBehaviour
 
             mapNodeVm.OnSelect += MapNodeVm_Select;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
-
-            var fowController = mapNodeObj.GetComponent<FowNodeController>();
-            fowController.SectorMap = map;
         }
 
         return nodeViewModels;

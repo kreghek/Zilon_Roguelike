@@ -1278,6 +1278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc40be9e8a5271443887c9a18b5b57af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SectorViewModel: {fileID: 0}
   AudioSource: {fileID: 418371950}
   PacificMusic: {fileID: 8300000, guid: 0d73f3bab30296e45a8d3dcdd3a3e2c4, type: 3}
   DungeionMusic: {fileID: 8300000, guid: 4b0de299cb087714fbcabc0f76f37c0d, type: 3}
@@ -4774,7 +4775,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1808564497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb9eeb8f4d205344fb3509cd874780ba, type: 3}
+  m_Script: {fileID: 11500000, guid: c1949a8c6fb4d2c46aa6a589b3b32a20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1809942182

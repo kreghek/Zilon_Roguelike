@@ -100,7 +100,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ILogService>().To<LogService>().AsSingle();
 
         // Комманды актёра.
-        Container.Bind<MoveCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("move-command").To<MoveCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
