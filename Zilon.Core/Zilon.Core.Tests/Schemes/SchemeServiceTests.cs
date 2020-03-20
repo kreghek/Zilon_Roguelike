@@ -172,9 +172,7 @@ namespace Zilon.Core.Tests.Schemes
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-            var schemeLocator = new FileSchemeLocator(schemePath);
+            var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
             var schemeHandlerFactory = new StrictSchemeServiceHandlerFactory(schemeLocator);
 

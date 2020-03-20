@@ -16,7 +16,6 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -44,6 +43,9 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
+
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
@@ -54,8 +56,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
-        Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-command").To<QuitCommand>().AsSingle();
+        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
     }
 
     private void RegisterDices()

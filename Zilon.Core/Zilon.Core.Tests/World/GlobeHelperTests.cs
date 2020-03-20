@@ -26,13 +26,13 @@ namespace Zilon.Core.Tests.World
             var locationSchemeMock = new Mock<ILocationScheme>();
             var locationScheme = locationSchemeMock.Object;
 
-            var nodes = new GlobeRegionNode[gridSize * gridSize];
+            var nodes = new ProvinceNode[gridSize * gridSize];
 
             for (var i = 0; i < gridSize; i++)
             {
                 for (var j = 0; j < gridSize; j++)
                 {
-                    nodes[i * gridSize + j] = new GlobeRegionNode(i, j, locationScheme);
+                    nodes[i * gridSize + j] = new ProvinceNode(i, j, locationScheme);
                 }
             }
 

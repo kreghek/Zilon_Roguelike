@@ -20,7 +20,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
         }
 
-        public IActorTask[] GetActorTasks(IActor actor)
+        public IActorTask[] GetActorTasks(IActor actor, SectorSnapshot sectorSnapshot)
         {
             if (actor != CurrentActor)
             {

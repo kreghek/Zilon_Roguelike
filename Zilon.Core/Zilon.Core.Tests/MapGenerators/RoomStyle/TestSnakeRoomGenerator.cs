@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
-using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
@@ -23,7 +22,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
             int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions)
+            IEnumerable<SectorTransition> availableTransitions)
         {
             var rooms = new List<Room>();
 

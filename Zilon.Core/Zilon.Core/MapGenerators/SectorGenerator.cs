@@ -7,7 +7,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -38,8 +37,7 @@ namespace Zilon.Core.MapGenerators
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
-            ICitizenGenerator citizenGenerator
-,
+            ICitizenGenerator citizenGenerator,
             IBotPlayer botPlayer)
         {
             _mapFactorySelector = mapFactorySelector;
@@ -89,7 +87,7 @@ namespace Zilon.Core.MapGenerators
         /// Нужно будет передавать параметры зданий, наличие персонажей и станков для крафта.
         /// Вместо общей информации об узле.
         /// </remarks>
-        public async Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
+        public async Task<ISector> GenerateTownQuarterAsync(Globe globe, ProvinceNode globeNode)
         {
             var townScheme = new TownSectorScheme
             {
@@ -106,7 +104,7 @@ namespace Zilon.Core.MapGenerators
             _citizenGenerator.CreateCitizens(sector, _botPlayer, sector.Map.Regions);
 
             //TODO Выходы нужно генерировать в карте, аналогично подземельям.
-            map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
+            map.Transitions.Add(map.Nodes.Last(), SectorTransition.CreateGlobalExit());
 
             return sector;
         }
@@ -123,7 +121,7 @@ namespace Zilon.Core.MapGenerators
         /// Нужно будет передавать параметры окружения и количество
         /// и характеристики монстров.
         /// </remarks>
-        public async Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
+        public async Task<ISector> GenerateWildAsync(Globe globe, ProvinceNode globeNode)
         {
             var map = await WildMapFactory.CreateAsync(30);
             var sector = _sectorFactory.Create(map);

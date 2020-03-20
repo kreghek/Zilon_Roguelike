@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -42,7 +42,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Этот набор является подмножеством идентфикаторов секторов
         /// из схемы строящегося сектора
         /// </remarks>
-        public List<RoomTransition> Transitions { get; }
+        public List<SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Признак того, что комната является стартовой в секторе.
@@ -52,7 +52,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public Room()
         {
             Nodes = new List<HexNode>();
-            Transitions = new List<RoomTransition>();
+            Transitions = new List<SectorTransition>();
         }
 
         public override string ToString()

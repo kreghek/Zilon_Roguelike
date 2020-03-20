@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -47,7 +48,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns> Возвращает словарь, представляющий собой матрицу смежности комнат.
         /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение. </returns>
         IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
-        IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
+        IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions);
         HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
 
         /// <summary>

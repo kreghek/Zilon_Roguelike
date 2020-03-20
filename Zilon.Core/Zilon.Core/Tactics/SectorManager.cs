@@ -16,12 +16,12 @@ namespace Zilon.Core.Tactics
     public class SectorManager : ISectorManager
     {
         private const string INTRO_LOCATION_SID = "intro";
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
         private readonly ISectorGenerator _generator;
         private readonly HumanPlayer _humanPlayer;
         private readonly ISchemeService _schemeService;
 
-        public SectorManager(IWorldManager worldManager,
+        public SectorManager(IGlobeManager worldManager,
             ISectorGenerator generator,
             HumanPlayer humanPlayer,
             ISchemeService schemeService)
@@ -42,29 +42,30 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public async Task CreateSectorAsync()
         {
-            var regionNode = _humanPlayer.GlobeNode;
+            throw new NotImplementedException("Работа с миром изменилась. Нужно адаптировать.");
+            //var regionNode = _humanPlayer.GlobeNode;
 
-            ILocationScheme scheme = null;
-            if (_humanPlayer.GlobeNode == null)
-            {
-                scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
-            }
-            else
-            {
-                scheme = _humanPlayer.GlobeNode.Scheme;
-            }
+            //ILocationScheme scheme = null;
+            //if (_humanPlayer.GlobeNode == null)
+            //{
+            //    scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
+            //}
+            //else
+            //{
+            //    scheme = _humanPlayer.GlobeNode.Scheme;
+            //}
 
-            if (scheme.SectorLevels != null)
-            {
-                ISectorSubScheme sectorLevelScheme;
-                if (_humanPlayer.SectorSid == null)
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
-                }
-                else
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
-                }
+            //if (scheme.SectorLevels != null)
+            //{
+            //    ISectorSubScheme sectorLevelScheme;
+            //    if (_humanPlayer.SectorSid == null)
+            //    {
+            //        sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
+            //    }
+            //    else
+            //    {
+            //        sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
+            //    }
                 
                 CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme).ConfigureAwait(false);
             }
@@ -77,7 +78,7 @@ namespace Zilon.Core.Tactics
                 CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode).ConfigureAwait(false);
             }
 
-            CurrentSector.Scheme = scheme;
+            //CurrentSector.Scheme = scheme;
         }
     }
 }

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Zilon/Scenes/gen.unity
+    guid: dac8ada9829f11e41998e0f3c12c1c7b
+  - enabled: 1
     path: Assets/Zilon/Scenes/title.unity
     guid: 62aae4473bd667a4ba7eacd419ce1e42
   - enabled: 1

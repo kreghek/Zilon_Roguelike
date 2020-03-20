@@ -79,8 +79,7 @@ namespace Zilon.Core.Tactics.Tests
 
         private FileSchemeLocator CreateSchemeLocator()
         {
-            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-            var schemeLocator = new FileSchemeLocator(schemePath);
+            var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
             return schemeLocator;
         }
     }

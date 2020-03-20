@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
@@ -100,9 +99,7 @@ namespace Zilon.Core.Tests.WorldGeneration
 
         private ISchemeService CreateSchemeService()
         {
-            var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-            var schemeLocator = new FileSchemeLocator(schemePath);
+            var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
             var schemeHandlerFactory = new SchemeServiceHandlerFactory(schemeLocator);
 

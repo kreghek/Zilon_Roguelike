@@ -4,8 +4,8 @@ namespace Zilon.Core.Client
 {
     public interface IGlobeNodeViewModel: ISelectableViewModel
     {
-        GlobeRegionNode Node { get; }
+        ProvinceNode Node { get; }
 
-        GlobeRegion ParentRegion { get; }
+        Province ParentRegion { get; }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -21,6 +24,7 @@ public class InventoryHandler : MonoBehaviour
 
     private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
+    private TaskScheduler _taskScheduler;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
@@ -31,13 +35,15 @@ public class InventoryHandler : MonoBehaviour
     public GameObject ReadButton;
     public GameObject UsePropDropArea;
     public GameObject DeequipPropDropArea;
+    public SectorCommandContextFactory SectorCommandContextFactory;
 
     [NotNull] [Inject] private readonly DiContainer _diContainer;
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly ISectorUiState _sectorUiState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
-    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
+    [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
+    [NotNull] [Inject] private readonly ICommandManager<ActorModalCommandContext> _modalCommandManager;
+    [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand<SectorCommandContext> _useSelfCommand;
+    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand<ActorModalCommandContext> _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -48,18 +54,53 @@ public class InventoryHandler : MonoBehaviour
 
     public void Start()
     {
-        CreateSlots();
-        StartUpControls();
+        if (SectorCommandContextFactory == null)
+        {
+            throw new InvalidOperationException($"Не задан {nameof(SectorCommandContextFactory)}");
+        }
 
-        _actor = _playerState.ActiveActor.Actor;
-        var inventory = _actor.Person.Inventory;
-        UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-        inventory.Added += Inventory_Added;
-        inventory.Removed += Inventory_Removed;
-        inventory.Changed += Inventory_Changed;
+        _sectorUiState.ActiveActorChanged += SectorUiState_ActiveActorChangedAsync;
+    }
 
-        _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+    private async void SectorUiState_ActiveActorChangedAsync(object sender, EventArgs e)
+    {
+        var newPerson = _sectorUiState.ActiveActor.Actor;
+        HandlePersonChanged(newPerson);
+
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
+        {
+            CreateSlots();
+            StartUpControls();
+
+            var inventory = _actor.Person.Inventory;
+            UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
+
+            inventory.Added += Inventory_Added;
+            inventory.Removed += Inventory_Removed;
+            inventory.Changed += Inventory_Changed;
+
+            _inventoryState.SelectedPropChanged += InventoryState_SelectedPropChanged;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+    }
+
+    private void HandlePersonChanged(IActor newPerson)
+    {
+        if (newPerson == _actor)
+        {
+            return;
+        }
+
+        DropCurrentPersonSubscribtions();
+        _actor = newPerson;
+    }
+
+    private void DropCurrentPersonSubscribtions()
+    {
+
     }
 
     /// <summary>
@@ -89,17 +130,22 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
-    private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
+    private async void InventoryState_SelectedPropChanged(object sender, EventArgs e)
     {
-        foreach (var propViewModel in _propViewModels)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
         {
-            var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
-            propViewModel.SetSelectedState(isSelected);
-        }
+            foreach (var propViewModel in _propViewModels)
+            {
+                var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+                propViewModel.SetSelectedState(isSelected);
+            }
 
-        PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
+            PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
 
-        UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+            UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     public void OnDestroy()
@@ -116,14 +162,14 @@ public class InventoryHandler : MonoBehaviour
 
     private void CreateSlots()
     {
-        var actorViewModel = _playerState.ActiveActor;
-        var slots = actorViewModel.Actor.Person.EquipmentCarrier.Slots;
+        var slots = _actor.Person.EquipmentCarrier.Slots;
 
         for (var i = 0; i < slots.Length; i++)
         {
             var slotObject = _diContainer.InstantiatePrefab(EquipmentSlotPrefab, EquipmentSlotsParent);
             var slotViewModel = slotObject.GetComponent<InventorySlotVm>();
-            slotViewModel.Actor = actorViewModel.Actor;
+            slotViewModel.SectorCommandContextFactory = SectorCommandContextFactory;
+            slotViewModel.Actor = _actor;
             slotViewModel.SlotIndex = i;
             slotViewModel.SlotTypes = slots[i].Types;
             slotViewModel.Click += Slot_Click;
@@ -160,42 +206,57 @@ public class InventoryHandler : MonoBehaviour
         slotVm.ApplyEquipment();
     }
 
-    private void Inventory_Removed(object sender, PropStoreEventArgs e)
+    private async void Inventory_Removed(object sender, PropStoreEventArgs e)
     {
-        foreach (var removedProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
         {
-            var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
-            _propViewModels.Remove(propViewModel);
-            Destroy(propViewModel.gameObject);
-
-            var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
-            if (isRemovedPropWasSelected)
+            foreach (var removedProp in e.Props)
             {
-                _inventoryState.SelectedProp = null;
-                UseButton.SetActive(false);
+                var propViewModel = _propViewModels.Single(x => x.Prop == removedProp);
+                _propViewModels.Remove(propViewModel);
+                Destroy(propViewModel.gameObject);
+
+                var isRemovedPropWasSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+                if (isRemovedPropWasSelected)
+                {
+                    _inventoryState.SelectedProp = null;
+                    UseButton.SetActive(false);
+                }
             }
-        }
 
-        UpdateItemsParentObject();
+            UpdateItemsParentObject();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Inventory_Changed(object sender, PropStoreEventArgs e)
+    private async void Inventory_Changed(object sender, PropStoreEventArgs e)
     {
-        foreach (var changedProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
         {
-            var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
-            propViewModel.UpdateProp();
-        }
+            foreach (var changedProp in e.Props)
+            {
+                var propViewModel = _propViewModels.Single(x => x.Prop == changedProp);
+                propViewModel.UpdateProp();
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Inventory_Added(object sender, PropStoreEventArgs e)
+    private async void Inventory_Added(object sender, PropStoreEventArgs e)
     {
-        foreach (var newProp in e.Props)
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        await Task.Factory.StartNew(() =>
         {
-            CreatePropObject(InventoryItemsParent, newProp);
-        }
+            foreach (var newProp in e.Props)
+            {
+                CreatePropObject(InventoryItemsParent, newProp);
+            }
 
-        UpdateItemsParentObject();
+            UpdateItemsParentObject();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateItemsParentObject()
@@ -334,7 +395,7 @@ public class InventoryHandler : MonoBehaviour
     {
         if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
         {
-            _commandManager.Push(_showHistoryCommand);
+            _modalCommandManager.Push(_showHistoryCommand);
         }
     }
 }

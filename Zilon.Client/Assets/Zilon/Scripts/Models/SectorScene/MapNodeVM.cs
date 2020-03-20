@@ -34,7 +34,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     {
         var neighborCubePositions = HexHelper.GetOffsetClockwise();
 
-        var walls = GetWalls(LocaltionScheme.Sid);
+        var walls = GetWalls(LocaltionScheme?.Sid);
 
         for (var i = 0; i < 6; i++)
         {
@@ -95,6 +95,11 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     {
         var wallsPath = "Sector/Walls";
         string wallsSid;
+
+        if (locationSid == null)
+        {
+            return Resources.Load<SectorWalls>($"{wallsPath}/City");
+        }
 
         switch (locationSid)
         {

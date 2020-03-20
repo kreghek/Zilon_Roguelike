@@ -22,12 +22,12 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
         
-        public override void Execute()
+        public override void Execute(ActorModalCommandContext context)
         {
             ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
         }
 
-        public override bool CanExecute()
+        public override bool CanExecute(ActorModalCommandContext context)
         {
             return true;
         }

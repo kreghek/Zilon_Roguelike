@@ -66,11 +66,11 @@ public class KeyboardMoveController : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly ICommandManager _clientCommandExecutor;
+    private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
 
     [NotNull]
     [Inject(Id = "move-command")]
-    private readonly ICommand _moveCommand;
+    private readonly ICommand<SectorCommandContext> _moveCommand;
 
     // Update is called once per frame
     void Update()

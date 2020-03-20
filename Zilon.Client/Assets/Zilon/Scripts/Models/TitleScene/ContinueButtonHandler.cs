@@ -21,7 +21,7 @@ public class ContinueButtonHandler : MonoBehaviour
 
     public Text ContinueText;
 
-    [Inject] private readonly IWorldManager _globeManager;
+    [Inject] private readonly IGlobeManager _globeManager;
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _humanPlayer;
 

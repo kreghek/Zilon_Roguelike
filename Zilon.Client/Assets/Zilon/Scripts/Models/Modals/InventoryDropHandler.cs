@@ -14,7 +14,7 @@ public class InventoryDropHandler : UIBehaviour, IDropHandler
 {
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
     [Inject] private readonly IInventoryState _inventoryState;
-    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly ICommandManager<SectorCommandContext> _commandManager;
 
     public void OnDrop(PointerEventData eventData)
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading;
+using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -31,6 +32,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private Vector3 _targetPosition;
     private float? _moveCounter;
     private MoveCommandBlocker _moveCommandBlocker;
+    private TaskScheduler _taskScheduler;
 
     public ActorViewModel()
     {
@@ -47,6 +49,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     [UsedImplicitly]
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         Actor.Moved += Actor_Moved;
         if (Actor.Person.Survival != null)
         {
@@ -136,13 +140,18 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void Actor_Moved(object sender, EventArgs e)
     {
-        _moveCounter = 0;
-        var actorHexNode = (HexNode)Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetX, actorHexNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetY - 0.26f);
-        _moveCommandBlocker = new MoveCommandBlocker();
-        _commandBlockerService.AddBlocker(_moveCommandBlocker);
-        GraphicRoot.ProcessMove(_targetPosition);
+        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
+        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
+        Task.Factory.StartNew(() =>
+        {
+            _moveCounter = 0;
+            var actorHexNode = (HexNode)Actor.Node;
+            var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetX, actorHexNode.OffsetY);
+            _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetY - 0.26f);
+            _moveCommandBlocker = new MoveCommandBlocker();
+            _commandBlockerService.AddBlocker(_moveCommandBlocker);
+            GraphicRoot.ProcessMove(_targetPosition);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)

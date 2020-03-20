@@ -33,7 +33,7 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Выполнение команды.
         /// </summary>
-        public override void Execute()
+        public override void Execute(ActorModalCommandContext context)
         {
             var targetTraderViewModel = (IActorViewModel)_playerState.HoverViewModel;
             var trader = targetTraderViewModel.Actor.Person as CitizenPerson;
@@ -47,7 +47,7 @@ namespace Zilon.Core.Commands
         /// <returns>
         /// Возвращает true, если команду можно выполнить. Иначе возвращает false.
         /// </returns>
-        public override bool CanExecute()
+        public override bool CanExecute(ActorModalCommandContext context)
         {
             var targetTraderViewModel = _playerState.HoverViewModel as IActorViewModel;
             var trader = targetTraderViewModel?.Actor.Person as CitizenPerson;

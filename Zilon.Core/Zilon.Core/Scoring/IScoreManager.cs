@@ -29,7 +29,7 @@ namespace Zilon.Core.Scoring
         /// <summary>
         /// Посещённые места.
         /// </summary>
-        ISet<GlobeRegionNode> Places { get; }
+        ISet<ProvinceNode> Places { get; }
 
         /// <summary>Засчитать убийство монстра.</summary>
         /// <param name="monster"> Монстр, убитый игроком. </param>
@@ -42,7 +42,7 @@ namespace Zilon.Core.Scoring
         /// Засчитывает посещение места на глобальной карте.
         /// </summary>
         /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
-        void CountPlace(GlobeRegionNode regionNode);
+        void CountPlace(ProvinceNode regionNode);
 
         /// <summary>
         /// Засчитывает посещение победного узла.

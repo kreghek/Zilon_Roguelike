@@ -45,12 +45,12 @@ namespace Zilon.Core.Specs.Mocks
             return sector;
         }
 
-        public Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
+        public Task<ISector> GenerateTownQuarterAsync(Globe globe, ProvinceNode globeNode)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
+        public Task<ISector> GenerateWildAsync(Globe globe, ProvinceNode globeNode)
         {
             throw new System.NotImplementedException();
         }

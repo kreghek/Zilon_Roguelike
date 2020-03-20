@@ -9,7 +9,6 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 /// <summary>
 /// Тело модала для работы с историей мира.
@@ -25,7 +24,7 @@ public class HistoryModalBody : MonoBehaviour, IModalWindowHandler
     public GlobeMinimap Minimap;
     public Text WorldDetailsText;
 
-    [Inject] readonly IWorldManager _worldManager;
+    [Inject] readonly IGlobeManager _worldManager;
 
     private MinimapState _minimapState;
 
@@ -60,29 +59,29 @@ public class HistoryModalBody : MonoBehaviour, IModalWindowHandler
         // Потенциально это будут столицы.
 
 
-        var mostPowerfullAgents = globe.Agents.OrderBy(x => x.Skills.Sum(s => s.Value)).ToArray();
-        var localities = globe.Localities.OrderBy(x => x.Population).ToArray();
-        foreach (var realm in globe.Realms)
-        {
-            // Наименование.
-            detailsText += $"=== {realm.Name} ===" + Environment.NewLine;
+        //var mostPowerfullAgents = globe.Agents.OrderBy(x => x.Skills.Sum(s => s.Value)).ToArray();
+        //var localities = globe.Localities.OrderBy(x => x.Population).ToArray();
+        //foreach (var realm in globe.Realms)
+        //{
+        //    // Наименование.
+        //    detailsText += $"=== {realm.Name} ===" + Environment.NewLine;
 
-            // Агент-представитель.
-            var mostPowerfullAgent = mostPowerfullAgents.FirstOrDefault(x=>x.Realm == realm);
-            if (mostPowerfullAgent != null)
-            {
-                detailsText += $"The most influential citizen: {mostPowerfullAgent.Name}" + Environment.NewLine;
-            }
+        //    // Агент-представитель.
+        //    var mostPowerfullAgent = mostPowerfullAgents.FirstOrDefault(x=>x.Realm == realm);
+        //    if (mostPowerfullAgent != null)
+        //    {
+        //        detailsText += $"The most influential citizen: {mostPowerfullAgent.Name}" + Environment.NewLine;
+        //    }
 
-            // Столица.
-            var biggestCity = localities.FirstOrDefault(x => x.Owner == realm);
-            if (biggestCity != null)
-            {
-                detailsText += $"The capital: {biggestCity.Name}" + Environment.NewLine;
-            }
+        //    // Столица.
+        //    var biggestCity = localities.FirstOrDefault(x => x.Owner == realm);
+        //    if (biggestCity != null)
+        //    {
+        //        detailsText += $"The capital: {biggestCity.Name}" + Environment.NewLine;
+        //    }
 
-            detailsText += Environment.NewLine;
-        }
+        //    detailsText += Environment.NewLine;
+        //}
 
         return detailsText;
     }

@@ -340,7 +340,11 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only:
+                - master
       - test_45:
           requires:
             - build

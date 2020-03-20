@@ -9,11 +9,11 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Commands.Globe
 {
-    public class MoveGroupCommand : ICommand
+    public class MoveGroupCommand : ICommand<GlobeCommandContext>
     {
         private const int TRAVEL_TURNS = 50;
         private readonly HumanPlayer _player;
-        private readonly IWorldManager _worldManager;
+        private readonly IGlobeManager _worldManager;
         private readonly IGlobeUiState _globeUiState;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Zilon.Core.Commands.Globe
 
         public MoveGroupCommand(
             HumanPlayer player,
-            IWorldManager worldManager,
+            IGlobeManager worldManager,
             IGlobeUiState globeUiState)
         {
             _player = player;
@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands.Globe
         /// <returns>
         /// Возвращает true, если команду можно выполнить. Иначе возвращает false.
         /// </returns>
-        public bool CanExecute()
+        public bool CanExecute(GlobeCommandContext context)
         {
             if (_player.MainPerson == null)
             {
@@ -52,63 +52,66 @@ namespace Zilon.Core.Commands.Globe
         }
 
         /// <summary>Выполнение команды.</summary>
-        public void Execute()
+        public void Execute(GlobeCommandContext context)
         {
-            var selectedNodeViewModel = (IGlobeNodeViewModel)_globeUiState.SelectedViewModel;
+            //var selectedNodeViewModel = (IGlobeNodeViewModel)_globeUiState.SelectedViewModel;
 
-            var currentNode = _player.GlobeNode;
-            var currentGlobeCell = _player.Terrain;
-            var region = _worldManager.Regions[currentGlobeCell];
+            //var currentNode = _player.GlobeNode;
+            //var currentGlobeCell = _player.Terrain;
+            //var region = _worldManager.Globe.Terrain.Regions.Single(x=>x.GlobeCoords == currentGlobeCell);
 
-            if (region == selectedNodeViewModel.ParentRegion)
-            {
-                // Значит путешествие внутри одной провинции.
+            //if (region == selectedNodeViewModel.ParentRegion)
+            //{
+            //    // Значит путешествие внутри одной провинции.
 
-                var neighborNodes = region.GetNext(currentNode);
-                var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
+            //    var neighborNodes = region.GetNext(currentNode);
+            //    var selectedIsNeighbor = neighborNodes.Contains(selectedNodeViewModel.Node);
 
-                if (selectedIsNeighbor)
-                {
-                    var globeNode = selectedNodeViewModel.Node;
+            //    if (selectedIsNeighbor)
+            //    {
+            //        var globeNode = selectedNodeViewModel.Node;
 
 
-                    if (globeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
-                    {
-                        ScoreManager?.CountPlace(globeNode);
-                    }
+            //        if (globeNode.Scheme.SectorLevels != null || _player.GlobeNode.IsTown)
+            //        {
+            //            ScoreManager?.CountPlace(globeNode);
+            //        }
 
-                    _player.GlobeNode = globeNode;
+            //        _player.GlobeNode = globeNode;
 
-                    // Обновление состояния разведки узлов провинции
-                    globeNode.ObservedState = GlobeNodeObservedState.Visited;
+            //        // Обновление состояния разведки узлов провинции
+            //        globeNode.ObservedState = GlobeNodeObservedState.Visited;
 
-                    UpdateSurvivals();
-                }
-            }
-            else
-            {
-                Debug.Assert(selectedNodeViewModel.ParentRegion == null, "Для узла должна быть задана провинция.");
+            //        UpdateSurvivals();
+            //    }
+            //}
+            //else
+            //{
+            //    Debug.Assert(selectedNodeViewModel.ParentRegion == null, "Для узла должна быть задана провинция.");
 
-                var currentTerrainNode = _player.GlobeNode;
-                var currentTerrainCell = _player.Terrain;
-                //TODO Выборку ячейки мира по узлу провиции нужно упростить.
-                var targetNeighborTerrainCell = _worldManager.Regions.Single(x => x.Value == selectedNodeViewModel.ParentRegion).Key;
-                var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<GlobeRegionNode>().Where(node => node.IsBorder);
-                var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
-                                                                                    currentTerrainCell,
-                                                                                    targetNeighborBorders,
-                                                                                    targetNeighborTerrainCell);
-                if (transitionNodes.Contains(selectedNodeViewModel.Node))
-                {
-                    _player.GlobeNode = selectedNodeViewModel.Node;
-                    _player.Terrain = targetNeighborTerrainCell;
+            //    var currentTerrainNode = _player.GlobeNode;
+            //    var currentTerrainCell = _player.Terrain;
 
-                    // Обновление состояния разведки узлов провинции
-                    selectedNodeViewModel.Node.ObservedState = GlobeNodeObservedState.Visited;
+            //    var region1 = _worldManager.Globe.Terrain.Regions.Single(x => x == selectedNodeViewModel.ParentRegion);
+            //    var targetNeighborTerrainCell = region1.GlobeCoords;
+            //    var targetNeighborBorders = selectedNodeViewModel.ParentRegion.Nodes.OfType<ProvinceNode>().Where(node => node.IsBorder);
+            //    var transitionNodes = RegionTransitionHelper.GetNeighborBorderNodes(currentTerrainNode,
+            //                                                                        currentTerrainCell,
+            //                                                                        targetNeighborBorders,
+            //                                                                        targetNeighborTerrainCell);
+            //    if (transitionNodes.Contains(selectedNodeViewModel.Node))
+            //    {
+            //        _player.GlobeNode = selectedNodeViewModel.Node;
+            //        _player.Terrain = targetNeighborTerrainCell;
 
-                    UpdateSurvivals();
-                }
-            }
+            //        // Обновление состояния разведки узлов провинции
+            //        selectedNodeViewModel.Node.ObservedState = GlobeNodeObservedState.Visited;
+
+            //        UpdateSurvivals();
+            //    }
+            //}
+
+            throw new System.NotImplementedException();
         }
 
         private void UpdateSurvivals()

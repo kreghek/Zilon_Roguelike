@@ -20,7 +20,7 @@ namespace Zilon.Core.ProgressStoring
 
         public GlobeNodeObservedState Observed { get; set; }
 
-        public static GlobeRegionNodeStorageData Create(GlobeRegionNode globeRegionNode)
+        public static GlobeRegionNodeStorageData Create(ProvinceNode globeRegionNode)
         {
             var storageData = new GlobeRegionNodeStorageData();
 

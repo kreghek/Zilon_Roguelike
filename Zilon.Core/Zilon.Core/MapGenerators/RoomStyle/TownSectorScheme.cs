@@ -13,9 +13,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public int TotalChestCount { get; }
         public int RegionChestCountRatio { get; }
         public string[] ChestDropTableSids { get; }
-        public string[] TransSectorSids { get; }
         public bool IsStart { get; }
         public int MinRegionMonsterCount { get; }
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+        public ISectorTransitionSubScheme[] TransSectorSids { get; }
     }
 }

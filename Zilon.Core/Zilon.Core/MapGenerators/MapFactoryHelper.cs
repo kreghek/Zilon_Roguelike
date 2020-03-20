@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -15,14 +16,19 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="sectorScheme"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
-        public static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
+        public static IEnumerable<ISectorTransition> CreateTransitions(ISectorSubScheme sectorScheme)
         {
-            if (sectorScheme.TransSectorSids == null)
+            if (sectorScheme is null)
             {
-                return new[] { RoomTransition.CreateGlobalExit() };
+                throw new System.ArgumentNullException(nameof(sectorScheme));
             }
 
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+            return sectorScheme.TransSectorSids.Select(CreateTransitionFromScheme);
+        }
+
+        private static ISectorTransition CreateTransitionFromScheme(ISectorTransitionSubScheme trans)
+        {
+            return new DeferredSectorTransition(trans.SectorSid, trans.SectorLevelSid);
         }
     }
 }
