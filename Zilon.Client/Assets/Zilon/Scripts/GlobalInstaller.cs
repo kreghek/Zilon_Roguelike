@@ -56,8 +56,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
 
-        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-command").To<QuitCommand>().AsSingle();
-        Container.Bind<ICommand<ActorModalCommandContext>>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
+        Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();
     }
 
     private void RegisterDices()

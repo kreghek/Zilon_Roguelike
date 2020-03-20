@@ -14,13 +14,14 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Assets.Zilon.Scripts.Services
 {
     public sealed class ProgressStorageService
     {
         [Inject]
-        private readonly IGlobeManager _worldManager;
+        private readonly IWorldManager _worldManager;
 
         [Inject]
         private readonly ISchemeService _schemeService;
@@ -45,26 +46,26 @@ namespace Assets.Zilon.Scripts.Services
 
         public void Save()
         {
-            //if (_worldManager.Globe != null)
-            //{
-            //    SaveGlobe();
+            if (_worldManager.Globe != null)
+            {
+                SaveGlobe();
 
-            //    SavePlayer();
-            //    SaveScores();
+                SavePlayer();
+                SaveScores();
 
-            //    if (_worldManager.Regions != null)
-            //    {
-            //        foreach (var region in _worldManager.Regions)
-            //        {
-            //            SaveGlobeRegion(region.Value, region.Key);
-            //        }
-            //    }
+                if (_worldManager.Regions != null)
+                {
+                    foreach (var region in _worldManager.Regions)
+                    {
+                        SaveGlobeRegion(region.Value, region.Key);
+                    }
+                }
 
-            //    if (_humanPlayer.MainPerson != null)
-            //    {
-            //        SavePerson();
-            //    }
-            //}
+                if (_humanPlayer.MainPerson != null)
+                {
+                    SavePerson();
+                }
+            }
         }
 
         public void SaveGlobe()
@@ -76,17 +77,17 @@ namespace Assets.Zilon.Scripts.Services
 
         public bool LoadGlobe()
         {
-            //var storageDataObject = LoadInner<GlobeStorageData>("Globe.txt");
-            //if (storageDataObject == null)
-            //{
-            //    return false;
-            //}
+            var storageDataObject = LoadInner<GlobeStorageData>("Globe.txt");
+            if (storageDataObject == null)
+            {
+                return false;
+            }
 
-            //var globe = storageDataObject.Restore();
+            var globe = storageDataObject.Restore();
 
-            //_worldManager.Globe = globe;
+            _worldManager.Globe = globe;
 
-            //var terrainCells = globe.Terrain.SelectMany(x => x).ToArray();
+            var terrainCells = globe.Terrain.SelectMany(x => x).ToArray();
 
             foreach (var cell in terrainCells)
             {
@@ -122,24 +123,24 @@ namespace Assets.Zilon.Scripts.Services
             return true;
         }
 
-        //public void SaveGlobeRegion(GlobeRegion globeRegion, TerrainCell terrainCell)
-        //{
-        //    var strageDataObject = GlobeRegionStorageData.Create(globeRegion, terrainCell);
-        //    SaveInner(strageDataObject, $"Region{terrainCell}.txt");
-        //}
+        public void SaveGlobeRegion(GlobeRegion globeRegion, TerrainCell terrainCell)
+        {
+            var strageDataObject = GlobeRegionStorageData.Create(globeRegion, terrainCell);
+            SaveInner(strageDataObject, $"Region{terrainCell}.txt");
+        }
 
-        //public GlobeRegion LoadRegion(TerrainCell terrainCell)
-        //{
-        //    var storageDataObject = LoadInner<GlobeRegionStorageData>($"Region{terrainCell}.txt");
-        //    if (storageDataObject == null)
-        //    {
-        //        return null;
-        //    }
+        public GlobeRegion LoadRegion(TerrainCell terrainCell)
+        {
+            var storageDataObject = LoadInner<GlobeRegionStorageData>($"Region{terrainCell}.txt");
+            if (storageDataObject == null)
+            {
+                return null;
+            }
 
-        //    var region = storageDataObject.Restore(_schemeService);
+            var region = storageDataObject.Restore(_schemeService);
 
-        //    return region;
-        //}
+            return region;
+        }
 
         public void SavePlayer()
         {

@@ -11,7 +11,7 @@ using Zilon.Core.Commands;
 
 public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 {
-    private ICommand<SectorCommandContext> _targetCommand;
+    private ICommand _targetCommand;
 
     public Text Text;
 
@@ -25,13 +25,13 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     };
 
     [Inject(Id = "quit-command")]
-    private readonly ICommand<SectorCommandContext> _quitCommand;
+    private readonly ICommand _quitCommand;
 
     [Inject(Id = "quit-title-command")]
-    private readonly ICommand<SectorCommandContext> _quitTitleCommand;
+    private readonly ICommand _quitTitleCommand;
 
     [Inject]
-    private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
+    private readonly ICommandManager _clientCommandExecutor;
 
     public string Caption { get; private set; }
 

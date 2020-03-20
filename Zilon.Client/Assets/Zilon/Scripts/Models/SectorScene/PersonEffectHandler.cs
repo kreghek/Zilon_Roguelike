@@ -1,109 +1,69 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 
 public class PersonEffectHandler : MonoBehaviour
 {
-    private IPerson _person;
-
     [UsedImplicitly]
-    [NotNull]
-    [Inject]
-    private readonly ISectorUiState _sectorUiState;
+    [NotNull] [Inject] private readonly HumanPlayer _player;
 
     [Inject]
     private DiContainer _diContainer;
 
     public Transform EffectParent;
     public EffectViewModel EffectPrefab;
-    private TaskScheduler _taskScheduler;
 
     [UsedImplicitly]
-    private void Start()
+    public void Start()
     {
-        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+        UpdateEffects();
 
-        _sectorUiState.ActiveActorChanged += SectorState_ActiveActorChanged;
-    }
+        var person = _player.MainPerson;
 
-    private void OnDestroy()
-    {
-        _sectorUiState.ActiveActorChanged -= SectorState_ActiveActorChanged;
-
-        DropCurrentPersonSubscribtions();
-    }
-
-    private void SectorState_ActiveActorChanged(object sender, System.EventArgs e)
-    {
-        var newPerson = _sectorUiState.ActiveActor.Actor.Person;
-        HandlePersonChanged(newPerson);
-
-        UpdateEffects(_person);
-
-        //TODO Не очень надёжное решение.
-        // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
-        if (_person != null)
+//TODO Не очень надёжное решение.
+// Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
+        if (person != null)
         {
-            _person.Survival.StatChanged += Survival_StatChanged;
+            person.Survival.StatChanged += Survival_StatChanged;
         }
     }
 
-    private void HandlePersonChanged(IPerson newPerson)
+    public void OnDestroy()
     {
-        if (newPerson == _person)
-        {
-            return;
-        }
+        var person = _player.MainPerson;
 
-        DropCurrentPersonSubscribtions();
-        _person = newPerson;
-    }
-
-    private void DropCurrentPersonSubscribtions()
-    {
-        if (_person != null)
+        if (person != null)
         {
-            _person.Survival.StatChanged -= Survival_StatChanged;
+            person.Survival.StatChanged -= Survival_StatChanged;
         }
     }
 
     private void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
     {
-        // Этот код обработчика должен выполниться в потоке Unity и не важно в каком потоке было выстелено событие.
-        // https://stackoverflow.com/questions/40733647/how-to-call-event-handler-through-ui-thread-when-the-operation-is-executing-into
-        Task.Factory.StartNew(() =>
+        UpdateEffects();
+    }
+
+    private void UpdateEffects()
+    {
+        foreach (Transform childTrasform in EffectParent)
         {
-            UpdateEffects(_person);
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
-    }
+            Destroy(childTrasform.gameObject);
+        }
 
-    private void UpdateEffects(IPerson person)
-    {
-        ClearCurrentEffectViewModels();
-        CreateEffectsOfCurrentPerson(person);
-    }
+        var person = _player.MainPerson;
 
-    private void CreateEffectsOfCurrentPerson(IPerson person)
-    {
         if (person == null)
         {
             return;
         }
 
         var effects = person.Effects;
-        CreateEffectViewModels(effects);
-    }
 
-    private void CreateEffectViewModels(EffectCollection effects)
-    {
         foreach (var effect in effects.Items)
         {
             if (effect is SurvivalStatHazardEffect survivalHazardEffect)
@@ -112,14 +72,6 @@ public class PersonEffectHandler : MonoBehaviour
                 var effectViewModel = effectViewModelObj.GetComponent<EffectViewModel>();
                 effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
             }
-        }
-    }
-
-    private void ClearCurrentEffectViewModels()
-    {
-        foreach (Transform childTrasform in EffectParent)
-        {
-            Destroy(childTrasform.gameObject);
         }
     }
 }

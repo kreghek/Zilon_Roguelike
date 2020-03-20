@@ -16,8 +16,10 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
     public event EventHandler OnSelect;
     public event EventHandler OnHover;
     public SpriteRenderer Icon;
-    public ProvinceNode Node { get; set; }
-    public Province ParentRegion { get; set; }
+
+    public GlobeRegionNode Node { get; set; }
+
+    public GlobeRegion ParentRegion { get; set; }
 
     public bool OtherRegion { get; set; }
 

@@ -14,10 +14,12 @@ namespace Zilon.Bot.Players.Logics
         private IdleTask _idleTask;
 
         private readonly IDecisionSource _decisionSource;
+        private readonly ISectorMap _map;
 
-        public RoamingLogicState(IDecisionSource decisionSource)
+        public RoamingLogicState(IDecisionSource decisionSource, ISectorManager sectorManager)
         {
             _decisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
+            _map = sectorManager.CurrentSector.Map;
         }
 
         protected override void ResetData()
@@ -26,19 +28,18 @@ namespace Zilon.Bot.Players.Logics
             _idleTask = null;
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, SectorSnapshot sectorSnapshot)
+        private MoveTask CreateBypassMoveTask(IActor actor)
         {
-            var map = sectorSnapshot.Sector.Map;
-            var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+            var availableNodes = _map.Nodes.Where(x => _map.DistanceBetween(x, actor.Node) < 5);
 
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
             for (var i = 0; i < 3; i++)
             {
                 var targetNode = _decisionSource.SelectTargetRoamingNode(availableNodesArray);
 
-                if (map.IsPositionAvailableFor(targetNode, actor))
+                if (_map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var moveTask = new MoveTask(actor, targetNode, map);
+                    var moveTask = new MoveTask(actor, targetNode, _map);
 
                     return moveTask;
                 }
@@ -47,11 +48,11 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             if (_moveTask == null)
             {
-                _moveTask = CreateBypassMoveTask(actor, sectorSnapshot);
+                _moveTask = CreateBypassMoveTask(actor);
 
                 if (_moveTask != null)
                 {
@@ -75,7 +76,7 @@ namespace Zilon.Bot.Players.Logics
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
                     if (!_moveTask.CanExecute())
                     {
-                        _moveTask = CreateBypassMoveTask(actor, sectorSnapshot);
+                        _moveTask = CreateBypassMoveTask(actor);
                     }
 
                     if (_moveTask != null)

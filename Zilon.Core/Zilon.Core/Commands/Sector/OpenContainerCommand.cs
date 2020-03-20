@@ -13,18 +13,20 @@ namespace Zilon.Core.Commands
     public class OpenContainerCommand : ActorCommandBase
     {
         [ExcludeFromCodeCoverage]
-        public OpenContainerCommand() :
-            base()
+        public OpenContainerCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            ISectorUiState playerState) :
+            base(gameLoop, sectorManager, playerState)
         {
         }
 
-        public override bool CanExecute(SectorCommandContext context)
+        public override bool CanExecute()
         {
-            var map = context.CurrentSector.Map;
+            var map = SectorManager.CurrentSector.Map;
 
-            var currentNode = context.ActiveActor.Actor.Node;
+            var currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var targetContainerViewModel = GetSelectedNodeViewModel(context);
+            var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
                 return false;
@@ -50,9 +52,9 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        protected override void ExecuteTacticCommand(SectorCommandContext context)
+        protected override void ExecuteTacticCommand()
         {
-            var targetContainerViewModel = GetSelectedNodeViewModel(context);
+            var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
@@ -64,19 +66,19 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container, context));
-            context.TaskSource.Intent(intetion);
+            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container));
+            PlayerState.TaskSource.Intent(intetion);
         }
 
-        private OpenContainerTask CreateTask(IActor actor, IPropContainer container, SectorCommandContext context)
+        private OpenContainerTask CreateTask(IActor actor, IPropContainer container)
         {
             var openMethod = new HandOpenContainerMethod();
-            return new OpenContainerTask(actor, container, openMethod, context.CurrentSector.Map);
+            return new OpenContainerTask(actor, container, openMethod, SectorManager.CurrentSector.Map);
         }
 
-        private IContainerViewModel GetSelectedNodeViewModel(SectorCommandContext context)
+        private IContainerViewModel GetSelectedNodeViewModel()
         {
-            return context.HoverViewModel as IContainerViewModel;
+            return PlayerState.HoverViewModel as IContainerViewModel;
         }
     }
 }

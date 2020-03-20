@@ -16,17 +16,17 @@ namespace Assets.Zilon.Scripts.Commands
     /// Потенциально, будет использоваться отдельным контроллом (но для этого в CanExecute
     /// нужно добавить проверку наличия книги истории в инвентаре).
     /// </remarks>
-    internal sealed class GlobeShowHistoryCommand : ICommand<ActorModalCommandContext>
+    internal sealed class GlobeShowHistoryCommand : ICommand
     {
         [Inject]
         private IGlobeModalManager _globeModalManager;
 
-        public bool CanExecute(ActorModalCommandContext context)
+        public bool CanExecute()
         {
             return true;
         }
 
-        public void Execute(ActorModalCommandContext context)
+        public void Execute()
         {
             _globeModalManager.ShowHistoryBookModal();
         }

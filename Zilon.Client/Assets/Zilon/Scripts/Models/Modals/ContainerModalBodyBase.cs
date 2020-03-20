@@ -22,9 +22,9 @@ namespace Assets.Zilon.Scripts.Models.Modals
 
         [NotNull] public Transform ContainerItemsParent;
 
-        [NotNull] [Inject] private readonly ICommandManager<SectorCommandContext> _clientCommandExecutor;
+        [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-        [NotNull] [Inject(Id = "prop-transfer-command")] private readonly ICommand<SectorCommandContext> _propTransferCommand;
+        [NotNull] [Inject(Id = "prop-transfer-command")] private readonly ICommand _propTransferCommand;
 
         [NotNull] protected List<PropItemVm> ContainerViewModels { get; private set; }
 

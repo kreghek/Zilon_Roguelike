@@ -35,7 +35,7 @@ namespace Zilon.Core.Scoring
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
         /// <inheritdoc/>
-        public ISet<ProvinceNode> Places { get => Scores.Places; }
+        public ISet<GlobeRegionNode> Places { get => Scores.Places; }
 
         /// <inheritdoc/>
         public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
@@ -75,7 +75,7 @@ namespace Zilon.Core.Scoring
 
         /// <summary>Засчитывает посещение места на глобальной карте.</summary>
         /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
-        public void CountPlace(ProvinceNode regionNode)
+        public void CountPlace(GlobeRegionNode regionNode)
         {
             if (!Places.Contains(regionNode))
             {

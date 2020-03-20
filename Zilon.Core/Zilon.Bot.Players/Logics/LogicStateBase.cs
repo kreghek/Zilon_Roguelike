@@ -7,7 +7,7 @@ namespace Zilon.Bot.Players.Logics
     {
         public bool Complete { get; protected set; }
 
-        public abstract IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData);
+        public abstract IActorTask GetTask(IActor actor, ILogicStrategyData strategyData);
 
         public void Reset()
         {

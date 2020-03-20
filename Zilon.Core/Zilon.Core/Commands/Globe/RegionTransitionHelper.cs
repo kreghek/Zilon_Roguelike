@@ -4,15 +4,16 @@ using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Commands.Globe
 {
     public static class RegionTransitionHelper
     {
-        public static IEnumerable<ProvinceNode> GetNeighborBorderNodes(ProvinceNode currentTerrainNode,
-            TerrainNode currentTerrainCell,
-            IEnumerable<ProvinceNode> targetRegionBorderNodes,
-            TerrainNode targetNeighborTerrainCell)
+        public static IEnumerable<GlobeRegionNode> GetNeighborBorderNodes(GlobeRegionNode currentTerrainNode,
+            TerrainCell currentTerrainCell,
+            IEnumerable<GlobeRegionNode> targetRegionBorderNodes,
+            TerrainCell targetNeighborTerrainCell)
         {
             if (targetRegionBorderNodes == null)
             {

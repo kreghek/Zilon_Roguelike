@@ -6,17 +6,17 @@
     /// <remarks>
     /// Изменение состояния модели возможно только через команды.
     /// </remarks>
-    public interface ICommand<TContext>
+    public interface ICommand
     {
         /// <summary>
         /// Выполнение команды.
         /// </summary>
-        void Execute(TContext context);
+        void Execute();
 
         /// <summary>
         /// Проверяет, возможно ли выполнение команды.
         /// </summary>
         /// <returns> Возвращает true, если команду можно выполнить. Иначе возвращает false. </returns>
-        bool CanExecute(TContext context);
+        bool CanExecute();
     }
 }

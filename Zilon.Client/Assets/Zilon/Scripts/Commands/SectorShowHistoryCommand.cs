@@ -14,17 +14,17 @@ namespace Assets.Zilon.Scripts.Commands
     /// 
     /// Эта команда используется, когда читаем книгу истории из инвернтаря.
     /// </remarks>
-    internal sealed class SectorShowHistoryCommand : ICommand<ActorModalCommandContext>
+    internal sealed class SectorShowHistoryCommand : ICommand
     {
         [Inject]
         private ISectorModalManager _sectorModalManager;
 
-        public bool CanExecute(ActorModalCommandContext context)
+        public bool CanExecute()
         {
             return true;
         }
 
-        public void Execute(ActorModalCommandContext context)
+        public void Execute()
         {
             _sectorModalManager.ShowHistoryBookModal();
         }

@@ -14,6 +14,7 @@ public class SectorNameHandler : MonoBehaviour
 {
     public Text SectorNameText;
 
+    [Inject] [NotNull] private readonly HumanPlayer _humanPlayer;
     [Inject] [NotNull] private readonly ISchemeService _schemeService;
     [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Zilon.Core.Client;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
@@ -9,21 +11,23 @@ namespace Zilon.Core.Commands
     {
         private readonly IDecisionSource _decisionSource;
 
-        public override bool CanExecute(SectorCommandContext context)
+        public override bool CanExecute()
         {
             return true;
         }
 
-        protected override void ExecuteTacticCommand(SectorCommandContext context)
+        protected override void ExecuteTacticCommand()
         {
             var intention = new Intention<IdleTask>(actor => new IdleTask(actor, _decisionSource));
-            context.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention);
         }
 
         [ExcludeFromCodeCoverage]
-        public NextTurnCommand(
+        public NextTurnCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            ISectorUiState playerState,
             IDecisionSource decisionSource) :
-            base()
+            base(gameLoop, sectorManager, playerState)
         {
             _decisionSource = decisionSource;
         }

@@ -67,7 +67,7 @@ namespace Zilon.Core.ProgressStoring.Tests
                     Name = "capital",
                     Cell = flattenTerrain.Single(x => x.Coords.X == 0 && x.Coords.Y == 0),
                     Owner = globe.Realms.First(),
-                    //Population = 1,
+                    Population = 1,
                     Branches = new Dictionary<BranchType, int>{ { BranchType.Agricultural, 1 } }
                 }
             };
@@ -76,9 +76,9 @@ namespace Zilon.Core.ProgressStoring.Tests
             globe.HomeProvince = globe.Localities.First().Cell;
             globe.StartProvince = globe.Localities.Last().Cell;
 
-            var region = new Province(20);
+            var region = new GlobeRegion(20);
 
-            var regionNode = new ProvinceNode(0, 1, locationSchemes["forest"]);
+            var regionNode = new GlobeRegionNode(0, 1, locationSchemes["forest"]);
 
             region.AddNode(regionNode);
 

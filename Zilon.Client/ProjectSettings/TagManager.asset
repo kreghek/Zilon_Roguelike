@@ -44,9 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Fow
-    uniqueID: 2671312673
-    locked: 0
   - name: SceneIndication
     uniqueID: 631733791
     locked: 0

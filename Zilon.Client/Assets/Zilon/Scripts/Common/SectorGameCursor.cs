@@ -13,11 +13,10 @@ public class SectorGameCursor : MonoBehaviour
     public Sprite InteractiveCursorSprite;
     public Sprite CantMoveCursorSprite;
     public SpriteRenderer SpriteRenderer;
-    public SectorCommandContextFactory SectorCommandContextFactory;
 
     [Inject] private readonly ISectorUiState _playerState;
-    [Inject(Id = "move-command")] private readonly ICommand<SectorCommandContext> _moveCommand;
-    [Inject(Id = "attack-command")] private readonly ICommand<SectorCommandContext> _attackCommand;
+    [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
+    [Inject(Id = "attack-command")] private readonly ICommand _attackCommand;
 
     public void Start()
     {
@@ -36,22 +35,20 @@ public class SectorGameCursor : MonoBehaviour
             return;
         }
 
-        var sectorCommandContext = SectorCommandContextFactory.CreateContext();
-
         if (_playerState.HoverViewModel is IContainerViewModel)
         {
             SpriteRenderer.sprite = InteractiveCursorSprite;
         }
         else if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
-            if (!_moveCommand.CanExecute(sectorCommandContext))
+            if (!_moveCommand.CanExecute())
             {
                 SpriteRenderer.sprite = CantMoveCursorSprite;
             }
         }
         else if (_playerState.HoverViewModel is IActorViewModel)
         {
-            if (_attackCommand.CanExecute(sectorCommandContext))
+            if (_attackCommand.CanExecute())
             {
                 SpriteRenderer.sprite = AttackCursorSprite;
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -15,13 +14,13 @@ public class MovePathVisualizer : MonoBehaviour
 {
     public GameObject VisualizationItemPrefab;
 
-    [Inject(Id = "move-command")] private readonly ICommand<SectorCommandContext> _moveCommand;
+    [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
     [Inject] private readonly ISectorUiState _playerState;
     private IList<IGraphNode> _lastPath;
 
     public void FixedUpdate()
     {
-        var moveCommand = GetMoveCommand();
+        var moveCommand = (MoveCommand)_moveCommand;
         var path = moveCommand.Path;
 
         foreach (Transform visualizationItem in transform)
@@ -44,26 +43,6 @@ public class MovePathVisualizer : MonoBehaviour
                     item.transform.position = new Vector3(worldPosition[0], worldPosition[1] / 2);
                 }
             }
-        }
-    }
-
-    private MoveCommand GetMoveCommand()
-    {
-        return ScanCommand(_moveCommand);
-    }
-
-    private static MoveCommand ScanCommand(ICommand<SectorCommandContext> command)
-    {
-        switch (command)
-        {
-            case MoveCommand move:
-                return move;
-
-            case ICommandWrapper<SectorCommandContext> wrapper:
-                return ScanCommand(wrapper.UnderlyingCommand);
-
-            default:
-                throw new InvalidOperationException();
         }
     }
 }

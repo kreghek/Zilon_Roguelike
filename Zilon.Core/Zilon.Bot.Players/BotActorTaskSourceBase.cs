@@ -23,16 +23,12 @@ namespace Zilon.Bot.Players
 
         public abstract void Configure(IBotSettings botSettings);
 
-        public IActorTask[] GetActorTasks(IActor actor, SectorSnapshot sectorSnapshot)
+        public IActorTask[] GetActorTasks(IActor actor)
         {
-            if (actor is null)
-            {
-                throw new System.ArgumentNullException(nameof(actor));
-            }
             // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
             if (actor.Owner != _player)
             {
-                return System.Array.Empty<IActorTask>();
+                return new IActorTask[0];
             }
 
             // Основные компоненты:
@@ -69,11 +65,11 @@ namespace Zilon.Bot.Players
                     _actorStrategies[actor] = logicStrategy;
                 }
 
-                var actorTask = logicStrategy.GetActorTask(sectorSnapshot);
+                var actorTask = logicStrategy.GetActorTask();
 
                 if (actorTask == null)
                 {
-                    return System.Array.Empty<IActorTask>();
+                    return new IActorTask[0];
                 }
 
                 return new[] { actorTask };
@@ -83,7 +79,7 @@ namespace Zilon.Bot.Players
                 _actorStrategies.Remove(actor);
             }
 
-            return System.Array.Empty<IActorTask>();
+            return new IActorTask[0];
         }
 
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);

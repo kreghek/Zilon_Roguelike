@@ -66,8 +66,8 @@ namespace Zilon.Core.Tactics
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            _propContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
+            PropContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
@@ -318,13 +318,13 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit([NotNull] SectorTransition roomTransition)
+        private void DoActorExit([NotNull] RoomTransition roomTransition)
         {
             var e = new SectorExitEventArgs(roomTransition);
             HumanGroupExit?.Invoke(this, e);
         }
 
-        public void UseTransition(SectorTransition transition)
+        public void UseTransition(RoomTransition transition)
         {
             DoActorExit(transition);
         }

@@ -11,7 +11,6 @@ namespace Zilon.Core.ProgressStoring
 {
     public class HumanPersonStorageData
     {
-        public string Id { get; set; }
         public HumanSurvivalStatStorageData[] Survival { get; set; }
         public PropStorageData[] Equipments { get; set; }
         public PropStorageData[] Inventory { get; set; }
@@ -19,15 +18,7 @@ namespace Zilon.Core.ProgressStoring
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
-            if (humanPerson is null)
-            {
-                throw new ArgumentNullException(nameof(humanPerson));
-            }
-
             var storageData = new HumanPersonStorageData();
-
-            var id = Guid.NewGuid().ToString();
-            storageData.Id = id;
 
             storageData.Survival = humanPerson.Survival.Stats.Select(x => new HumanSurvivalStatStorageData
             {

@@ -2,67 +2,65 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-using Zilon.Core.Commands;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.World
 {
     /// <summary>
     /// Базовая реализация сервиса для работы с глобальным миром.
     /// </summary>
-    public sealed class GlobeManager : IGlobeManager
+    public sealed class WorldManager : IWorldManager
     {
         private const int SPAWN_SUCCESS_ROLL = 5;
         private const int MONSTER_NODE_LIMIT = 100;
 
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
-        private readonly IGlobeGenerator _globeGenerator;
-        private readonly IActorTaskSourceCollector _taskSourceCollector;
 
-        public GlobeManager(
-            ISchemeService schemeService,
-            IDice dice,
-            IGlobeGenerator globeGenerator,
-            IActorTaskSourceCollector taskSourceCollector)
+        public WorldManager(ISchemeService schemeService, IDice dice)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
-            _globeGenerator = globeGenerator ?? throw new ArgumentNullException(nameof(globeGenerator));
-            _taskSourceCollector = taskSourceCollector;
+
+            Regions = new Dictionary<TerrainCell, GlobeRegion>();
         }
 
         /// <summary>
         /// Глобальная карта.
         /// </summary>
-        public Globe Globe { get; private set; }
+        public Globe Globe { get; set; }
 
-        /// <inheritdoc/>
-        public bool IsGlobeInitialized { get; private set; }
+        /// <summary>
+        /// Текущие сгенерированые провинции относительно ячеек глобальной карты.
+        /// </summary>
+        public Dictionary<TerrainCell, GlobeRegion> Regions { get; }
+
+        /// <summary>
+        /// История генерации мира.
+        /// </summary>
+        public GlobeGenerationHistory GlobeGenerationHistory { get; set; }
 
         /// <summary>
         /// Обновление состояния узлов провинции.
         /// </summary>
         /// <param name="region">Провинция, которая обновляется.</param>
-        public void UpdateRegionNodes(Province region)
+        public void UpdateRegionNodes(GlobeRegion region)
         {
             // Подсчитываем узлы, занятые монстрами.
             // Это делаем для того, чтобы следить за плотностью моснтров в секторе.
 
-            var nodeWithMonsters = region.ProvinceNodes.Where(x => x.MonsterState != null);
+            var nodeWithMonsters = region.RegionNodes.Where(x => x.MonsterState != null);
 
             var monsterLimitIsReached = nodeWithMonsters.Count() >= MONSTER_NODE_LIMIT;
 
             // Наборы монстров для генерации в узлах.
             var monsterSets = CreateMonsterSets();
 
-            foreach (var node in region.ProvinceNodes)
+            foreach (var node in region.RegionNodes)
             {
                 if (node.MonsterState == null)
                 {
@@ -109,7 +107,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private void CreateNodeMonsterState(MonsterSet[] monsterSets, ProvinceNode node)
+        private void CreateNodeMonsterState(MonsterSet[] monsterSets, GlobeRegionNode node)
         {
             var monsterSetRoll = _dice.Roll(0, monsterSets.Count() - 1);
             var rolledMonsterSet = monsterSets[monsterSetRoll];
@@ -211,82 +209,6 @@ namespace Zilon.Core.World
                     }
                 },
             };
-        }
-
-        public Task UpdateGlobeOneStepAsync(GlobeIterationContext context)
-        {
-            if (Globe == null)
-            {
-                throw new InvalidOperationException($"Не инициализирован {nameof(Globe)}");
-            }
-
-            var globe = Globe;
-            return Task.Run(() =>
-            {
-                globe.Iteration++;
-
-                foreach (var sectorInfo in globe.SectorInfos)
-                {
-                    var actorManager = sectorInfo.Sector.ActorManager;
-
-                    var snapshot = new SectorSnapshot(sectorInfo.Sector);
-
-                    var botTaskSource = context.BotTaskSource;
-                    NextTurn(actorManager, _taskSourceCollector, snapshot);
-
-                    sectorInfo.Sector.Update();
-                };
-            });
-        }
-
-        private static void NextTurn(IActorManager actors, IActorTaskSourceCollector taskSourceCollector, SectorSnapshot snapshot)
-        {
-            foreach (var actor in actors.Items)
-            {
-                if (actor.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                ProcessActor(actor, taskSourceCollector, snapshot);
-            }
-        }
-
-        private static void ProcessActor(IActor actor, IActorTaskSourceCollector taskSourceCollector, SectorSnapshot snapshot)
-        {
-            var taskSources = taskSourceCollector.GetCurrentTaskSources();
-
-            foreach (var taskSource in taskSources)
-            {
-                var actorTasks = taskSource.GetActorTasks(actor, snapshot);
-
-                foreach (var actorTask in actorTasks)
-                {
-                    try
-                    {
-                        actorTask.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
-                            taskSource,
-                            exception);
-                    }
-                }
-            }
-        }
-
-        public async Task InitializeGlobeAsync()
-        {
-            var generationResult = await _globeGenerator.CreateGlobeAsync().ConfigureAwait(false);
-            Globe = generationResult.Globe;
-            IsGlobeInitialized = true;
-        }
-
-        public void ResetGlobeState()
-        {
-            Globe = null;
-            IsGlobeInitialized = false;
         }
     }
 }

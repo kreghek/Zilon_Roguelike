@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics
 {
@@ -12,7 +13,7 @@ namespace Zilon.Core.Tactics
         /// <param name="transitions"> Доступные переходы. </param>
         /// <param name="actorNodes"> Набор проверяемых узлов. Сюда передаются узлы актеров, которые пренадлежат игроку. </param>
         /// <returns> Возвращает отработавший переход. Иначе возаращает null. </returns>
-        public static SectorTransition Detect(IDictionary<IGraphNode, SectorTransition> transitions, IEnumerable<IGraphNode> actorNodes)
+        public static RoomTransition Detect(IDictionary<IGraphNode, RoomTransition> transitions, IEnumerable<IGraphNode> actorNodes)
         {
             // Из сектора нет прямого выхода.
             // Нужно для упрощения тестов сектора или карты.
@@ -29,7 +30,7 @@ namespace Zilon.Core.Tactics
             // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
             var atLeastOneHuman = false;
 
-            SectorTransition expectedTransition = null;
+            RoomTransition expectedTransition = null;
             foreach (var actorNode in actorNodes)
             {
                 atLeastOneHuman = true;

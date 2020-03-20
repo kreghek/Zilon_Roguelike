@@ -25,7 +25,7 @@ namespace Zilon.Core.MapGenerators
         /// Нужно будет передавать параметры зданий, наличие персонажей и станков для крафта.
         /// Вместо общей информации об узле.
         /// </remarks>
-        Task<ISector> GenerateTownQuarterAsync(Globe globe, ProvinceNode globeNode);
+        Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode);
 
         /// <summary>
         /// Создаёт сектор фрагмента дикого окружения.
@@ -37,6 +37,6 @@ namespace Zilon.Core.MapGenerators
         /// Нужно будет передавать параметры окружения и количество
         /// и характеристики монстров.
         /// </remarks>
-        Task<ISector> GenerateWildAsync(Globe globe, ProvinceNode globeNode);
+        Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode);
     }
 }

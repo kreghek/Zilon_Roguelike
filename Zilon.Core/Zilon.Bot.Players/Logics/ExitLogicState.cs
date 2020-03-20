@@ -20,7 +20,7 @@ namespace Zilon.Bot.Players.Logics
             _map = sectorManager.CurrentSector.Map;
         }
 
-        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             if (!strategyData.ExitNodes.Any())
             {

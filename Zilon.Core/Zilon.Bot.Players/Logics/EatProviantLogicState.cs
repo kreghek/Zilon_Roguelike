@@ -11,7 +11,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             var eatFoodTask = CheckHazard(actor, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
             if (eatFoodTask != null)

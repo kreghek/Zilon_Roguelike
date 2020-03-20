@@ -9,7 +9,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class EquipBetterPropLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, SectorSnapshot sectorSnapshot, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
             var inventory = actor.Person.Inventory;
             var currentInventoryProps = inventory.CalcActualItems();

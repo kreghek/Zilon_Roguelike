@@ -4,14 +4,14 @@ using Zilon.Core.Commands;
 
 namespace Assets.Zilon.Scripts.Commands
 {
-    sealed class QuitCommand : ICommand<ActorModalCommandContext>
+    sealed class QuitCommand : ICommand
     {
-        public bool CanExecute(ActorModalCommandContext context)
+        public bool CanExecute()
         {
             return true;
         }
 
-        public void Execute(ActorModalCommandContext context)
+        public void Execute()
         {
             Application.Quit();
         }

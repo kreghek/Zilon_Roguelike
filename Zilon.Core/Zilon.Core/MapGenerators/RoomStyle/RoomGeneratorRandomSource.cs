@@ -3,7 +3,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -224,7 +223,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return openRoomNodes.ElementAt(index);
         }
 
-        public IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions)
+        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
         {
             var index = _dice.Roll(0, openTransitions.Count() - 1);
             return new[] { openTransitions.ElementAt(index) };

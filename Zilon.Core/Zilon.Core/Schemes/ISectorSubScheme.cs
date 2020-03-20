@@ -82,9 +82,9 @@
         string[] ChestDropTableSids { get; }
 
         /// <summary>
-        /// Идентфикаторы связанных секторов.
+        /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        ISectorTransitionSubScheme[] TransSectorSids { get; }
+        string[] TransSectorSids { get; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.
@@ -95,11 +95,5 @@
         /// параметры генерации карты.
         /// </summary>
         ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
-    }
-
-    public interface ISectorTransitionSubScheme: ISubScheme
-    { 
-        string SectorSid { get; }
-        string SectorLevelSid { get; }
     }
 }

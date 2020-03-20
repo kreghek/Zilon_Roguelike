@@ -6,6 +6,7 @@ using Moq;
 
 using NUnit.Framework;
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics
@@ -25,9 +26,9 @@ namespace Zilon.Core.Tests.Tactics
             var actorNodeMock = new Mock<IGraphNode>();
             var actorNode = actorNodeMock.Object;
 
-            var transition = new SectorTransition("test");
+            var transition = new RoomTransition("test");
 
-            var testedTrasitions = new Dictionary<IGraphNode, SectorTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
             {
                 { actorNode, transition }
             };
@@ -62,16 +63,16 @@ namespace Zilon.Core.Tests.Tactics
             var transitionNodeMock = new Mock<IGraphNode>();
             var transitionNode = transitionNodeMock.Object;
 
-            var transition = new SectorTransition("test");
+            var transition = new RoomTransition("test");
 
-            var testedTrasitions = new Dictionary<IGraphNode, SectorTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
             {
                 { transitionNode, transition }
             };
 
             var testedNodes = new[] { actorNode };
 
-            SectorTransition expectedTransition = null;
+            RoomTransition expectedTransition = null;
 
 
 

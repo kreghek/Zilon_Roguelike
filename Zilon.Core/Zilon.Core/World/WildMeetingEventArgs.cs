@@ -10,6 +10,6 @@ namespace Zilon.Core.World
         /// <summary>
         /// Узел глобальной карты, где произошло событие.
         /// </summary>
-        public ProvinceNode MettingNode { get; }
+        public GlobeRegionNode MettingNode { get; }
     }
 }

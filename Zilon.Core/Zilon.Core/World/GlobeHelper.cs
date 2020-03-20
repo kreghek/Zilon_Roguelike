@@ -5,7 +5,7 @@ namespace Zilon.Core.World
 {
     public static class GlobeHelper
     {
-        public static ProvinceNode GetCenterLocationNode(IEnumerable<ProvinceNode> locationNodeViewModels)
+        public static GlobeRegionNode GetCenterLocationNode(IEnumerable<GlobeRegionNode> locationNodeViewModels)
         {
             var xGroupedNodes = locationNodeViewModels
                 .GroupBy(node => node.OffsetX)

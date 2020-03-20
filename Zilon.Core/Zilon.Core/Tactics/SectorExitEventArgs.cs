@@ -1,14 +1,15 @@
 ﻿using System;
+using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics
 {
     public sealed class SectorExitEventArgs: EventArgs
     {
-        public SectorExitEventArgs(SectorTransition transition)
+        public SectorExitEventArgs(RoomTransition transition)
         {
             Transition = transition ?? throw new ArgumentNullException(nameof(transition));
         }
 
-        public SectorTransition Transition { get; }
+        public RoomTransition Transition { get; }
     }
 }

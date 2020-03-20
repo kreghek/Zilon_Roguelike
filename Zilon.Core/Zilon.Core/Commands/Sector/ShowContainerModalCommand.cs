@@ -23,7 +23,7 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
         
-        public override void Execute(ActorModalCommandContext context)
+        public override void Execute()
         {
             var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
             var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
@@ -34,7 +34,7 @@ namespace Zilon.Core.Commands
             ModalManager.ShowContainerModal(transferMachine);
         }
 
-        public override bool CanExecute(ActorModalCommandContext context)
+        public override bool CanExecute()
         {
             var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
 

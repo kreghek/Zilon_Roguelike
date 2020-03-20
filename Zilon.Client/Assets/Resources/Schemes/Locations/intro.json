@@ -18,7 +18,7 @@
 			"RegionSize": 5,
 			"RegionMonsterCount": 2,
 			
-			"TransSectorSids": [{"SectorSid": "intro", "SectorLevelSid": "boss-sector"}],
+			"TransSectorSids": ["boss-sector"],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,

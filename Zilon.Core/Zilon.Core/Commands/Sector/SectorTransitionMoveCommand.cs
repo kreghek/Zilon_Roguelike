@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -20,8 +21,10 @@ namespace Zilon.Core.Commands
         /// <param name="playerState"> Состояние игрока.
         /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
-        public SectorTransitionMoveCommand() :
-            base()
+        public SectorTransitionMoveCommand(IGameLoop gameLoop,
+            ISectorManager sectorManager,
+            ISectorUiState playerState) :
+            base(gameLoop, sectorManager, playerState)
         {
         }
 
@@ -29,15 +32,15 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute(SectorCommandContext context)
+        public override bool CanExecute()
         {
-            if (context.ActiveActor == null)
+            if (CurrentActor == null)
             {
                 return false;
             }
 
-            var actorNode = context.ActiveActor.Actor.Node;
-            var map = context.CurrentSector.Map;
+            var actorNode = CurrentActor.Node;
+            var map = SectorManager.CurrentSector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
@@ -49,14 +52,14 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
-        protected override void ExecuteTacticCommand(SectorCommandContext context)
+        protected override void ExecuteTacticCommand()
         {
-            var actorNode = context.ActiveActor.Actor.Node;
-            var map = context.CurrentSector.Map;
+            var actorNode = CurrentActor.Node;
+            var map = SectorManager.CurrentSector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
-            context.CurrentSector.UseTransition(detectedTransition);
+            SectorManager.CurrentSector.UseTransition(detectedTransition);
         }
     }
 }

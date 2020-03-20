@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
-using Zilon.Core.Tactics;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -39,7 +39,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
             int roomMaxSize,
-            IEnumerable<SectorTransition> availableTransitions)
+            IEnumerable<RoomTransition> availableTransitions)
         {
             // На 20 комнат будет матрица 6х6.
             var roomGridSize = (int)Math.Ceiling(Math.Log(roomCount, 2)) + 1;
@@ -51,7 +51,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             // Это гарантирует IroomGeneratorRandomSource
             var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount).ToArray();
 
-            var openTransitions = new List<SectorTransition>(availableTransitions);
+            var openTransitions = new List<RoomTransition>(availableTransitions);
 
             var startAssigned = false;
 

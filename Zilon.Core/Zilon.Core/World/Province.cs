@@ -8,25 +8,23 @@ namespace Zilon.Core.World
     /// <summary>
     /// Граф провинции на глобальной карте.
     /// </summary>
-    public class Province : HexMap
+    public class GlobeRegion : HexMap
     {
-        public OffsetCoords GlobeCoords { get; set; }
-
         /// <summary>
         /// Конструктор графа провинции.
         /// </summary>
-        public Province(int segmentSize) : base(segmentSize)
+        public GlobeRegion(int segmentSize) : base(segmentSize)
         {
         }
 
         /// <summary>
         /// Вспомогательное свойство региона для того, чтобы каждый раз не приводить узлы к ожидаемому типу.
         /// </summary>
-        public IEnumerable<ProvinceNode> ProvinceNodes
+        public IEnumerable<GlobeRegionNode> RegionNodes
         {
             get
             {
-                return Nodes.OfType<ProvinceNode>();
+                return Nodes.OfType<GlobeRegionNode>();
             }
         }
     }

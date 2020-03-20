@@ -4,14 +4,14 @@ using Zilon.Core.Commands;
 
 namespace Assets.Zilon.Scripts.Commands
 {
-    sealed class QuitTitleCommand : ICommand<ActorModalCommandContext>
+    sealed class QuitTitleCommand : ICommand
     {
-        public bool CanExecute(ActorModalCommandContext context)
+        public bool CanExecute()
         {
             return true;
         }
 
-        public void Execute(ActorModalCommandContext context)
+        public void Execute()
         {
             SceneManager.LoadScene("title");
         }
