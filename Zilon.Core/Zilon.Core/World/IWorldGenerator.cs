@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-using Zilon.Core.WorldGeneration;
-
 namespace Zilon.Core.World
 {
     /// <summary>

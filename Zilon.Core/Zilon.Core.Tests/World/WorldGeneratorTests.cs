@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
@@ -45,7 +46,7 @@ namespace Zilon.Core.Tests.WorldGeneration
             var schemeService = CreateSchemeService();
             var generator = new WorldGenerator(dice, schemeService);
 
-            var result = await generator.GenerateGlobeAsync();
+            var result = await generator.GenerateGlobeAsync().ConfigureAwait(false);
 
             var historyText = string.Empty;
 

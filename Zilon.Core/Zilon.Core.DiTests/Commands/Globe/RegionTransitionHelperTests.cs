@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Zilon.Core.Commands.Globe;
 using Zilon.Core.Schemes;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.Tests.Commands.Globe
 {

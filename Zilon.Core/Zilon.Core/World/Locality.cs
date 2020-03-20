@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.World
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Город.
@@ -31,5 +33,15 @@
         /// Текущее население населенного пункта.
         /// </summary>
         public int Population { get; set; }
+
+        /// <summary>
+        /// Узел провинции, в котором находится населенный пункт.
+        /// </summary>
+        public TerrainCell Cell { get; set; }
+
+        /// <summary>
+        /// Специализация населенного пункта.
+        /// </summary>
+        public Dictionary<BranchType, int> Branches { get; set; }
     }
 }

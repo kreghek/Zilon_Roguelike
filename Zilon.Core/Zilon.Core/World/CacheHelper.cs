@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.World;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Вспомогательный класс для работы с кешем агентов.

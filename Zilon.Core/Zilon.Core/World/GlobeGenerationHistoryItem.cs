@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     //TODO Переработать историю.
     // Сейчас вообще нерабочий вариант.

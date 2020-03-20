@@ -3,11 +3,6 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-      <Compile Remove="WorldGeneration\NameGeneration\**" />
-      <EmbeddedResource Remove="WorldGeneration\NameGeneration\**" />
-      <None Remove="WorldGeneration\NameGeneration\**" />
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="JetBrains.Annotations">
             <Version>2019.1.3</Version>
             <ExcludeAssets>runtime; build</ExcludeAssets>

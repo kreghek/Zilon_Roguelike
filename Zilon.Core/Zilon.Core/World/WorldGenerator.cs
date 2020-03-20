@@ -8,6 +8,7 @@ using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.World.AgentCards;
+using Zilon.Core.World.NameGeneration;
 using Zilon.Core.WorldGeneration;
 using Zilon.Core.WorldGeneration.AgentCards;
 
