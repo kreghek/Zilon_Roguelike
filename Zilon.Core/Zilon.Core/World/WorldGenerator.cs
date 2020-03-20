@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
+using Zilon.Core.World.AgentCards;
+using Zilon.Core.WorldGeneration;
 using Zilon.Core.WorldGeneration.AgentCards;
-using Zilon.Core.WorldGeneration.NameGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Экземпляр генератора мира с историей.
@@ -520,14 +520,14 @@ namespace Zilon.Core.WorldGeneration
             {
                 var realmColors = new[]
                 {
-                    Color.Red,
-                    Color.Green,
-                    Color.Blue,
-                    Color.Yellow,
-                    Color.Beige,
-                    Color.LightGray,
-                    Color.Magenta,
-                    Color.Cyan
+                    BannerColor.Red,
+                    BannerColor.Green,
+                    BannerColor.Blue,
+                    BannerColor.Yellow,
+                    BannerColor.Beige,
+                    BannerColor.LightGray,
+                    BannerColor.Magenta,
+                    BannerColor.Cyan
                 };
 
                 for (var i = 0; i < START_ITERATION_REALMS; i++)

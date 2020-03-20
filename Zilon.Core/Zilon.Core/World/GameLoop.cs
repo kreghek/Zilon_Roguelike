@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.World
 {
@@ -47,8 +46,7 @@ namespace Zilon.Core.World
                             continue;
                         }
 
-                        var sectorSnapshot = new SectorSnapshot(sectorInfo.Sector);
-                        ProcessActor(actor, sectorSnapshot);
+                        ProcessActor(actor);
                     }
 
                     sectorInfo.Sector.Update();
@@ -58,12 +56,12 @@ namespace Zilon.Core.World
             });
         }
 
-        private void ProcessActor(IActor actor, SectorSnapshot sectorSnapshot)
+        private void ProcessActor(IActor actor)
         {
             var ActorTaskSources = _taskSourceProvider.GetTaskSources();
             foreach (var taskSource in ActorTaskSources)
             {
-                var actorTasks = taskSource.GetActorTasks(actor, sectorSnapshot);
+                var actorTasks = taskSource.GetActorTasks(actor);
 
                 foreach (var actorTask in actorTasks)
                 {

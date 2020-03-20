@@ -15,6 +15,8 @@ namespace Zilon.Core.Commands
             _queue = new Queue<ICommand>();
         }
 
+        public event EventHandler CommandPushed;
+
         public ICommand Pop()
         {
             if (_queue.Any())

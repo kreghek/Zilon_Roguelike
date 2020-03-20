@@ -54,7 +54,7 @@ namespace Zilon.Core.ProgressStoring.Tests
             {
                 new Realm{
                     Name = "realm-name",
-                    Banner = new RealmBanner{ MainColor = new Color(0, 0, 0) }
+                    Banner = new RealmBanner{ MainColor = new BannerColor(0, 0, 0) }
                 }
             };
 

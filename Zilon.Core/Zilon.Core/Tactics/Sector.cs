@@ -6,6 +6,7 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -105,7 +106,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateActoActs()
         {
-            foreach (var actor in _actorManager.Items.ToArray())
+            foreach (var actor in ActorManager.Items.ToArray())
             {
                 if (actor.Person?.TacticalActCarrier?.Acts is null)
                 {

@@ -2,6 +2,7 @@
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.World;
 
 namespace Zilon.Core.WorldGeneration.AgentCards
 {

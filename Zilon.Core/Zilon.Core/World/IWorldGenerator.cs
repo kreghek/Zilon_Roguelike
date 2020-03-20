@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-using Zilon.Core.World;
+using Zilon.Core.WorldGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Интерфейс генератора игрового мира.

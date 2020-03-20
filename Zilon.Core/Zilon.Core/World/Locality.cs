@@ -26,5 +26,10 @@
         {
             return $"{Name} [{Owner}]";
         }
+
+        /// <summary>
+        /// Текущее население населенного пункта.
+        /// </summary>
+        public int Population { get; set; }
     }
 }

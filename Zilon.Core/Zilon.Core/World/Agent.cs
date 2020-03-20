@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Zilon.Core.WorldGeneration;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Деятель.

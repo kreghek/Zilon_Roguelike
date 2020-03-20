@@ -3,10 +3,9 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove="WorldGeneration\NameGeneration\names.json" />
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="WorldGeneration\NameGeneration\names.json" />
+      <Compile Remove="WorldGeneration\NameGeneration\**" />
+      <EmbeddedResource Remove="WorldGeneration\NameGeneration\**" />
+      <None Remove="WorldGeneration\NameGeneration\**" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations">

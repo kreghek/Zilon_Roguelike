@@ -3,8 +3,10 @@ using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.WorldGeneration;
+using Zilon.Core.WorldGeneration.AgentCards;
 
-namespace Zilon.Core.WorldGeneration.AgentCards
+namespace Zilon.Core.World.AgentCards
 {
     /// <summary>
     /// Создание населённого пункта агентом.

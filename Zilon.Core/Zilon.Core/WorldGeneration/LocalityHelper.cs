@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Zilon.Core.World;
 
 namespace Zilon.Core.WorldGeneration
 {
