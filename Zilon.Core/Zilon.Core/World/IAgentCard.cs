@@ -1,7 +1,6 @@
 ﻿using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.World;
 
-namespace Zilon.Core.WorldGeneration
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Карта действия деятеля.
