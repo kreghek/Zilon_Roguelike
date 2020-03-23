@@ -55,7 +55,6 @@ namespace Zilon.Core.World.AgentCards
 
             var firstBranch = highestBranchs.First();
 
-
             // Обнаружение свободных узлов для размещения населённого пункта.
             // Свободные узлы ишутся от текущей локации агента.
 

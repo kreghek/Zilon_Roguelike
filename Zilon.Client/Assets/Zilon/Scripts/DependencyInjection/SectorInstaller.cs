@@ -93,7 +93,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICitizenGenerator>().To<CitizenGenerator>().AsSingle();
         Container.Bind<ICitizenGeneratorRandomSource>().To<CitizenGeneratorRandomSource>().AsSingle();
 
-
         // Специализированные сервисы для Ui.
         Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
         Container.Bind<ILogService>().To<LogService>().AsSingle();

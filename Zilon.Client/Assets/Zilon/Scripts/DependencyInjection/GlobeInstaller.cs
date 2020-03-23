@@ -24,7 +24,6 @@ public class GlobeInstaller : MonoInstaller
                 {
                     i.ScoreManager = scoreManager;
                 }
-
             });
 
         Container.Bind<IGlobeModalManager>().FromInstance(GetGlobeModalManager()).AsSingle();

@@ -66,7 +66,6 @@ public class SectorMapViewModel : MonoBehaviour
         var nodeViewModel = (MapNodeVM)sender;
         var eventArgs = new NodeInteractEventArgs(nodeViewModel);
         NodeEnter?.Invoke(this, eventArgs);
-
     }
 
     private void MapNodeVm_Select(object sender, EventArgs e)
@@ -76,4 +75,3 @@ public class SectorMapViewModel : MonoBehaviour
         NodeSelected?.Invoke(this, eventArgs);
     }
 }
-

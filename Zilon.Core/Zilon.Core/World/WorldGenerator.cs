@@ -399,7 +399,6 @@ namespace Zilon.Core.World
         {
             for (var iteration = 0; iteration < HISTORY_ITERATION_COUNT; iteration++)
             {
-
                 foreach (var agent in globe.Agents.ToArray())
                 {
                     var useCardRoll = _dice.Roll2D6();

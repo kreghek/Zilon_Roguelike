@@ -14,7 +14,8 @@ using Zilon.Core.World;
 namespace Zilon.Core.Tests.WorldGeneration
 {
 
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
     public class WorldGeneratorTests
     {
@@ -88,11 +89,8 @@ namespace Zilon.Core.Tests.WorldGeneration
 
             var result = await generator.GenerateGlobeAsync();
 
-
             // ACT
             var region = await generator.GenerateRegionAsync(result.Globe, result.Globe.StartProvince);
-
-
 
             // ASSERT
             region.RegionNodes.Should().ContainSingle(x => x.IsStart, "В стартовой провинции должен быть один стартовый узел.");
