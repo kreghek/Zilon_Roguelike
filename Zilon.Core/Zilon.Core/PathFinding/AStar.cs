@@ -85,7 +85,6 @@ namespace Zilon.Core.PathFinding
 
             var currentData = GetData(CurrentNode);
             _openList.AddWithData(CurrentNode, currentData);
-
         }
 
         /// <summary>
