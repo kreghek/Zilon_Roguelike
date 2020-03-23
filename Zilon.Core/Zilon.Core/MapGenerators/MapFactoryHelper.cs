@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -21,6 +21,11 @@ namespace Zilon.Core.MapGenerators
             if (sectorScheme is null)
             {
                 throw new System.ArgumentNullException(nameof(sectorScheme));
+            }
+
+            if (sectorScheme.TransSectorSids is null)
+            {
+                return Array.Empty<RoomTransition>();
             }
 
             return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));

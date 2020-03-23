@@ -38,6 +38,7 @@ namespace Zilon.Core.Persons
         public CitizenType CitizenType { get; }
 
         public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public bool HasInventory { get => false; }
 
         public CitizenPerson()
         {

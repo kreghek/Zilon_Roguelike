@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -82,13 +83,80 @@ namespace Zilon.Bot.Players.Logics
                 throw new NotSupportedException();
             }
 
-            var actCarrier = actor.Person.TacticalActCarrier;
-            var act = actCarrier.Acts.First();
+            var act = SelectBestAct(actor);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
             var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
 
             return isInDistance && targetIsOnLine;
+        }
+
+        private ITacticalAct SelectBestAct(IActor actor)
+        {
+            var availableActs = actor.Person.TacticalActCarrier.Acts
+                .Where(x => x.CurrentCooldown == null || x.CurrentCooldown == 0)
+                .Where(x => TacticalActIsAvailableByConstrains(x, actor.Person));
+
+            return availableActs.FirstOrDefault();
+        }
+
+        private bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, IPerson person)
+        {
+            if (tacticalAct.Constrains is null)
+            {
+                // Если нет никаких ограничений, то действие доступно в любом случае.
+                return true;
+            }
+
+            if (tacticalAct.Constrains.PropResourceType is null)
+            {
+                // Если нет ограничений по ресурсам, то действие доступно.
+                return true;
+            }
+
+            // Проверяем наличие ресурсов в нужном количестве.
+            // Проверка осуществляется в хранилище, указанном параметром.
+
+            if (!person.HasInventory)
+            {
+                // Персонажи бе инвентаря не могут применять действия,
+                // для которых нужны ресурсы.
+                return false;
+            }
+
+            var propResourceType = tacticalAct.Constrains.PropResourceType;
+            var propResourceCount = tacticalAct.Constrains.PropResourceCount.Value;
+            if (CheckPropResource(person.Inventory, propResourceType, propResourceCount))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckPropResource(IPropStore inventory,
+            string usedPropResourceType,
+            int usedPropResourceCount)
+        {
+            var props = inventory.CalcActualItems();
+            var propResources = new List<Resource>();
+            foreach (var prop in props)
+            {
+                var propResource = prop as Resource;
+                if (propResource == null)
+                {
+                    continue;
+                }
+
+                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
+                {
+                    propResources.Add(propResource);
+                }
+            }
+
+            var preferredPropResource = propResources.FirstOrDefault();
+
+            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
