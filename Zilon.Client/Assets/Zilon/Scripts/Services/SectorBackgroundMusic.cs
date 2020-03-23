@@ -2,16 +2,21 @@
 
 using UnityEngine;
 
+using Zenject;
+
+using Zilon.Core.Tactics;
+
 public class SectorBackgroundMusic : MonoBehaviour
 {
-    public SectorViewModel SectorViewModel;
-
     private bool _trackPlaying;
 
     private readonly string[] _pacificSectorSids = new[] {
         "city",
         "forest"
     };
+
+    [Inject]
+    private readonly ISectorManager _sectorManager;
 
     public AudioSource AudioSource;
 
@@ -21,11 +26,6 @@ public class SectorBackgroundMusic : MonoBehaviour
 
     public void Update()
     {
-        if (!SectorViewModel.IsInitialized)
-        {
-            return;
-        }
-
         if (_trackPlaying)
         {
             return;
@@ -36,7 +36,9 @@ public class SectorBackgroundMusic : MonoBehaviour
 
     public void SelectAndStartPlayingMusic()
     {
-        var selectedClip = SelectMusicClipBySectorSid(SectorViewModel.Sector.Scheme?.Sid);
+        var currentSectorSid = _sectorManager.CurrentSector.Scheme?.Sid;
+
+        var selectedClip = SelectMusicClipBySectorSid(currentSectorSid);
         AudioSource.clip = selectedClip;
 
         AudioSource.Play();
