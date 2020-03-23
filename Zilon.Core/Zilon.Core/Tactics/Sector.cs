@@ -77,6 +77,8 @@ namespace Zilon.Core.Tactics
             PropContainerManager.Added += PropContainerManager_Added;
             PropContainerManager.Removed += PropContainerManager_Remove;
 
+            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
+
             PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
         }
 
