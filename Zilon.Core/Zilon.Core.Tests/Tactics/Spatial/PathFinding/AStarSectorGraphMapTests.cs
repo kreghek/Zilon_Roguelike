@@ -10,12 +10,10 @@ using NUnit.Framework;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PathFinding;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
-
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 {
@@ -24,7 +22,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     public class AStarSectorGraphMapTests
     {
         /// <summary>
-        /// Тест из спек.
+        /// Тест из спеки:
+        /// Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
+        /// Даёт уверенность, что в изоляции поиск пути выполняется. Была ошибка, что не находил путь.
         /// </summary>
         [Test]
         public async Task Run_FromSpec()
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var contextMock = new Mock<IAstarContext>();
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(x=>map.GetNext(x));
+                .Returns<IGraphNode>(x => map.GetNext(x));
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns<IGraphNode, IGraphNode>((a, b) => map.DistanceBetween(a, b));
             var context = contextMock.Object;
