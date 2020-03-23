@@ -3,13 +3,14 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public abstract class LogicStateBase: ILogicState
+    public abstract class LogicStateBase : ILogicState
     {
         public bool Complete { get; protected set; }
 
         public abstract IActorTask GetTask(IActor actor, ILogicStrategyData strategyData);
 
-        public void Reset() {
+        public void Reset()
+        {
             Complete = false;
             ResetData();
         }

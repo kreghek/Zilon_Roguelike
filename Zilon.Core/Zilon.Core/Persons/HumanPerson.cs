@@ -58,7 +58,8 @@ namespace Zilon.Core.Persons
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public bool HasInventory { get => true; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,

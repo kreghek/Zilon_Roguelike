@@ -5,6 +5,6 @@
     /// </summary>
     public sealed class RealmBanner
     {
-        public Color MainColor { get; set; }
+        public BannerColor MainColor { get; set; }
     }
 }

@@ -106,42 +106,10 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
 
             foreach (var nextNode in NextNodes)
             {
-                if (nextNode.Node.ObservedState == GlobeNodeObservedState.Hidden)
-                {
-                    nextNode.gameObject.SetActive(true);
-                    if (!nextNode.OtherRegion)
-                    {
-                        nextNode.Icon.color = Color.grey;
-                    }
-                    else
-                    {
-                        nextNode.Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
-                    }
-                }
-                else
-                {
-                    nextNode.gameObject.SetActive(true);
-
-                    if (!nextNode.OtherRegion)
-                    {
-                        nextNode.Icon.color = Color.white;
-                    }
-                    else
-                    {
-                        nextNode.Icon.color = Color.cyan;
-                    }
-                }
+                SetVisitedObjectStateByObservingState(nextNode);
 
                 // Визуализируем коннекторы
-                foreach (var connector in Connectors)
-                {
-                    connector.gameObject.SetActive(false);
-
-                    if (connector.gameObject1 == gameObject || connector.gameObject2 == gameObject)
-                    {
-                        connector.gameObject.SetActive(true);
-                    }
-                }
+                ShowConnectors();
             }
         }
         else
@@ -151,28 +119,67 @@ public class MapLocation : MonoBehaviour, IGlobeNodeViewModel
             {
                 if (nextNode.Node.ObservedState == GlobeNodeObservedState.Visited)
                 {
-                    gameObject.SetActive(true);
-
-                    if (!OtherRegion)
-                    {
-                        Icon.color = Color.grey;
-                    }
-                    else
-                    {
-                        Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
-                    }
+                    SetNextObjectStateByObservingState();
 
                     // Визуализируем коннекторы
-                    foreach (var connector in Connectors)
-                    {
-                        connector.gameObject.SetActive(false);
-
-                        if (connector.gameObject1 == gameObject || connector.gameObject2 == gameObject)
-                        {
-                            connector.gameObject.SetActive(true);
-                        }
-                    }
+                    ShowConnectors();
                 }
+            }
+        }
+    }
+
+    private void SetNextObjectStateByObservingState()
+    {
+        gameObject.SetActive(true);
+
+        if (!OtherRegion)
+        {
+            Icon.color = Color.grey;
+        }
+        else
+        {
+            Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
+        }
+    }
+
+    private static void SetVisitedObjectStateByObservingState(MapLocation nextNode)
+    {
+        if (nextNode.Node.ObservedState == GlobeNodeObservedState.Hidden)
+        {
+            nextNode.gameObject.SetActive(true);
+            if (!nextNode.OtherRegion)
+            {
+                nextNode.Icon.color = Color.grey;
+            }
+            else
+            {
+                nextNode.Icon.color = Color.Lerp(Color.cyan, Color.gray, 0.5f);
+            }
+        }
+        else
+        {
+            nextNode.gameObject.SetActive(true);
+
+            if (!nextNode.OtherRegion)
+            {
+                nextNode.Icon.color = Color.white;
+            }
+            else
+            {
+                nextNode.Icon.color = Color.cyan;
+            }
+        }
+    }
+
+    private void ShowConnectors()
+    {
+        foreach (var connector in Connectors)
+        {
+            connector.gameObject.SetActive(false);
+
+            if (connector.gameObject1 == gameObject || connector.gameObject2 == gameObject)
+            {
+                connector.gameObject.SetActive(true);
             }
         }
     }

@@ -7,7 +7,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -38,8 +37,7 @@ namespace Zilon.Core.MapGenerators
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
-            ICitizenGenerator citizenGenerator
-,
+            ICitizenGenerator citizenGenerator,
             IBotPlayer botPlayer)
         {
             _mapFactorySelector = mapFactorySelector;

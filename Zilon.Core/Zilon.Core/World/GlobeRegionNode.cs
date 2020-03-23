@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.World
@@ -81,6 +82,20 @@ namespace Zilon.Core.World
         /// Выстреливает, когда изменяется состояние исследования узла.
         /// </summary>
         public event EventHandler ObservedStateChanged;
+
+        /// <summary>
+        /// Сгенерированный сектор для этого узла провинции.
+        /// </summary>
+        public ISector Sector { get; private set; }
+
+        /// <summary>
+        /// Связывает узлен провинции с сектором, который нужно прогружать для этого узла.
+        /// </summary>
+        /// <param name="sector"></param>
+        public void BindSector(ISector sector)
+        {
+            Sector = sector;
+        }
 
         private void DoObservedStateChanged()
         {

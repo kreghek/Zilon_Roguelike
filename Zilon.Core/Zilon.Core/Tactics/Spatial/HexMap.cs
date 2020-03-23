@@ -277,6 +277,11 @@ namespace Zilon.Core.Tactics.Spatial
             return distance;
         }
 
+        public override void RemoveNode(IGraphNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         private struct SegmentKey
         {
             // ReSharper disable once MemberCanBePrivate.Local

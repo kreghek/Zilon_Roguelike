@@ -13,8 +13,10 @@ namespace Zilon.Core.Persons
 
             foreach (var perk in evolutionData.Perks)
             {
-                if (perk.CurrentLevel is null)
+                if (perk.CurrentJobs is null)
                 {
+                    // Перки у которых нет работ, не могут развиваться.
+
                     // Некоторые перки (например врождённые таланты), не прокачиваются.
                     // Сразу игнорируем их.
                     continue;

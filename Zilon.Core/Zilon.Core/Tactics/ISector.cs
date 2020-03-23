@@ -44,5 +44,9 @@ namespace Zilon.Core.Tactics
         ILocationScheme Scheme { get; set; }
 
         void UseTransition(RoomTransition transition);
+
+        IActorManager ActorManager { get; }
+
+        IPropContainerManager PropContainerManager { get; }
     }
 }

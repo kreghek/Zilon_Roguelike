@@ -6,6 +6,6 @@ namespace Zilon.Core.ProgressStoring
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public Color MainColor { get; set; }
+        public BannerColor MainColor { get; set; }
     }
 }

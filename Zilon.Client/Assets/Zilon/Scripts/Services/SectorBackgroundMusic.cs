@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using UnityEngine;
 
 using Zenject;
@@ -7,6 +8,8 @@ using Zilon.Core.Tactics;
 
 public class SectorBackgroundMusic : MonoBehaviour
 {
+    private bool _trackPlaying;
+
     private readonly string[] _pacificSectorSids = new[] {
         "city",
         "forest"
@@ -21,18 +24,37 @@ public class SectorBackgroundMusic : MonoBehaviour
 
     public AudioClip DungeionMusic;
 
-    public void Awake()
+    public void Update()
     {
-        var currentSectorSid = _sectorManager.CurrentSector.Scheme.Sid;
+        if (_trackPlaying)
+        {
+            return;
+        }
+
+        SelectAndStartPlayingMusic();
+    }
+
+    public void SelectAndStartPlayingMusic()
+    {
+        var currentSectorSid = _sectorManager.CurrentSector.Scheme?.Sid;
+
+        var selectedClip = SelectMusicClipBySectorSid(currentSectorSid);
+        AudioSource.clip = selectedClip;
+
+        AudioSource.Play();
+
+        _trackPlaying = true;
+    }
+
+    private AudioClip SelectMusicClipBySectorSid(string currentSectorSid)
+    {
         if (_pacificSectorSids.Contains(currentSectorSid))
         {
-            AudioSource.clip = PacificMusic;
+            return PacificMusic;
         }
         else
         {
-            AudioSource.clip = DungeionMusic;
+            return DungeionMusic;
         }
-
-        AudioSource.Play();
     }
 }

@@ -22,8 +22,6 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISector" />
     public class Sector : ISector
     {
-        private readonly IActorManager _actorManager;
-        private readonly IPropContainerManager _propContainerManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
@@ -58,6 +56,8 @@ namespace Zilon.Core.Tactics
         public string Sid { get; set; }
 
         public ILocationScheme Scheme { get; set; }
+        public IActorManager ActorManager { get; }
+        public IPropContainerManager PropContainerManager { get; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
@@ -67,15 +67,15 @@ namespace Zilon.Core.Tactics
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
-            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            _propContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
+            PropContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
 
-            _actorManager.Added += ActorManager_Added;
-            _propContainerManager.Added += PropContainerManager_Added;
-            _propContainerManager.Removed += PropContainerManager_Remove;
+            ActorManager.Added += ActorManager_Added;
+            PropContainerManager.Added += PropContainerManager_Added;
+            PropContainerManager.Removed += PropContainerManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
@@ -108,7 +108,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateActoActs()
         {
-            foreach (var actor in _actorManager.Items.ToArray())
+            foreach (var actor in ActorManager.Items.ToArray())
             {
                 if (actor.Person?.TacticalActCarrier?.Acts is null)
                 {
@@ -132,7 +132,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateActorEffects()
         {
-            foreach (var actor in _actorManager.Items.ToArray())
+            foreach (var actor in ActorManager.Items.ToArray())
             {
                 var effects = actor.Person.Effects;
 
@@ -159,7 +159,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateSurvivals()
         {
-            var actors = _actorManager.Items.ToArray();
+            var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
                 var survival = actor.Person.Survival;
@@ -174,7 +174,7 @@ namespace Zilon.Core.Tactics
 
         private void UpdateEquipments()
         {
-            var actors = _actorManager.Items.ToArray();
+            var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
                 var equipmentCarrier = actor.Person.EquipmentCarrier;
@@ -232,7 +232,7 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                _propContainerManager.Remove(container);
+                PropContainerManager.Remove(container);
             }
         }
 
@@ -267,9 +267,9 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = _actorManager.Items.Single(x => x.Person.Survival == sender);
+            var actor = ActorManager.Items.Single(x => x.Person.Survival == sender);
             Map.ReleaseNode(actor.Node, actor);
-            _actorManager.Remove(actor);
+            ActorManager.Remove(actor);
 
             if (actor.Person.Survival != null)
             {
@@ -294,7 +294,7 @@ namespace Zilon.Core.Tactics
 
             if (loot.Content.CalcActualItems().Any())
             {
-                _propContainerManager.Add(loot);
+                PropContainerManager.Add(loot);
             }
 
             if (ScoreManager != null)

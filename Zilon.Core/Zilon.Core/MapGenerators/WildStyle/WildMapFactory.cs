@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.WildStyle
@@ -64,7 +64,7 @@ namespace Zilon.Core.MapGenerators.WildStyle
         public static async Task<ISectorMap> CreateAsync(int mapSize)
         {
             var factory = new WildMapFactory();
-            return await factory.CreateAsync((object)mapSize);
+            return await factory.CreateAsync((object)mapSize).ConfigureAwait(false);
         }
     }
 }

@@ -21,6 +21,8 @@ public class SectorGameCursor : MonoBehaviour
     public void Start()
     {
         Cursor.visible = false;
+        SpriteRenderer.sprite = DefaultCursorSprite;
+
         _playerState.HoverChanged += PlayerState_HoverChanged;
     }
 
@@ -62,6 +64,7 @@ public class SectorGameCursor : MonoBehaviour
 
     public void OnDestroy()
     {
+        Cursor.visible = true;
         _playerState.HoverChanged -= PlayerState_HoverChanged;
     }
 

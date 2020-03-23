@@ -16,7 +16,6 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -43,6 +42,9 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
+
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();

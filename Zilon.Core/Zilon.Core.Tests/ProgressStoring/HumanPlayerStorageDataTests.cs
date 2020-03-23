@@ -14,7 +14,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Zilon.Core.ProgressStoring.Tests
 {
@@ -54,7 +53,7 @@ namespace Zilon.Core.ProgressStoring.Tests
             {
                 new Realm{
                     Name = "realm-name",
-                    Banner = new RealmBanner{ MainColor = new Color(0, 0, 0) }
+                    Banner = new RealmBanner{ MainColor = new BannerColor(0, 0, 0) }
                 }
             };
 

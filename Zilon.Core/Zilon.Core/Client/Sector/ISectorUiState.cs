@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
@@ -22,5 +24,12 @@ namespace Zilon.Core.Client
         /// Пользовательский источник задач для актёров.
         /// </summary>
         IHumanActorTaskSource TaskSource { get; set; }
+
+        /// <summary>
+        /// Выстреливает, когда изменяется активный персонаж игрока.
+        /// В первую очередь введено для того, чтобы инициировать визуализацию
+        /// UI-элементов, отображающих статус персонажа игрока.
+        /// </summary>
+        event EventHandler ActiveActorChanged;
     }
 }

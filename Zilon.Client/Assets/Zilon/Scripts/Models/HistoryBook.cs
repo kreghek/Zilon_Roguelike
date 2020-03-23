@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-using Zilon.Core.WorldGeneration;
+using Zilon.Core.World;
 
 /// <summary>
 /// Скрипт для вывода истории создания мира.

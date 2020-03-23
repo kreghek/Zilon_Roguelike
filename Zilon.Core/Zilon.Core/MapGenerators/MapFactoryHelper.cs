@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Schemes;
@@ -17,9 +18,14 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Набор объектов переходов. </returns>
         public static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
         {
-            if (sectorScheme.TransSectorSids == null)
+            if (sectorScheme is null)
             {
-                return new[] { RoomTransition.CreateGlobalExit() };
+                throw new System.ArgumentNullException(nameof(sectorScheme));
+            }
+
+            if (sectorScheme.TransSectorSids is null)
+            {
+                return Array.Empty<RoomTransition>();
             }
 
             return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));

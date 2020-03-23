@@ -31,11 +31,12 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size7; }
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public bool HasInventory { get => false; }
 
         public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
-            
+
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
