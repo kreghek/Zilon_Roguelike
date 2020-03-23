@@ -76,19 +76,27 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private bool CheckAttackAvailability(IActor actor, IAttackTarget target)
+        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target)
         {
             if (actor.Person.TacticalActCarrier == null)
             {
                 throw new NotSupportedException();
             }
 
-            var act = SelectActHelper.SelectBestAct(actor.Person);
+            var inventory = actor.Person.HasInventory ? actor.Person.Inventory : null;
+
+            var act = SelectActHelper.SelectBestAct(actor.Person.TacticalActCarrier.Acts, inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
             var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
 
-            return isInDistance && targetIsOnLine;
+            var attackParams = new AttackParams
+            {
+                IsAvailable = isInDistance && targetIsOnLine,
+                TacticalAct = act
+            };
+
+            return attackParams;
         }
 
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
@@ -105,10 +113,10 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var isAttackAllowed = CheckAttackAvailability(actor, _target);
-            if (isAttackAllowed)
+            var attackParams = CheckAttackAvailability(actor, _target);
+            if (attackParams.IsAvailable)
             {
-                var act = GetUsedActs(actor).First();
+                var act = attackParams.TacticalAct;
                 var attackTask = new AttackTask(actor, _target, act, _actService);
                 return attackTask;
             }
@@ -142,55 +150,17 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
-        {
-            if (actor.Person.EquipmentCarrier == null)
-            {
-                yield return actor.Person.TacticalActCarrier.Acts.First();
-            }
-            else
-            {
-                var usedEquipmentActs = false;
-                var slots = actor.Person.EquipmentCarrier.Slots;
-                for (var i = 0; i < slots.Length; i++)
-                {
-                    var slotEquipment = actor.Person.EquipmentCarrier[i];
-                    if (slotEquipment == null)
-                    {
-                        continue;
-                    }
-
-                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
-                    {
-                        continue;
-                    }
-
-                    var equipmentActs = from act in actor.Person.TacticalActCarrier.Acts
-                                        where act.Equipment == slotEquipment
-                                        select act;
-
-                    var usedAct = equipmentActs.FirstOrDefault();
-
-                    if (usedAct != null)
-                    {
-                        usedEquipmentActs = true;
-
-                        yield return usedAct;
-                    }
-                }
-
-                if (!usedEquipmentActs)
-                {
-                    yield return actor.Person.TacticalActCarrier.Acts.First();
-                }
-            }
-        }
-
         protected override void ResetData()
         {
             _refreshCounter = 0;
             _target = null;
             _moveTask = null;
+        }
+
+        private class AttackParams
+        {
+            public bool IsAvailable { get; set; }
+            public ITacticalAct TacticalAct { get; set; }
         }
     }
 }

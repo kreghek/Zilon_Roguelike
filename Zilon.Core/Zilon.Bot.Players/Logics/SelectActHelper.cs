@@ -13,25 +13,26 @@ namespace Zilon.Bot.Players.Logics
         /// <summary>
         /// Выбирает лучшее действие из указанных.
         /// </summary>
-        /// <param name="person"> Персонаж, для которого выбирается действие. </param>
+        /// <param name="acts"> Все возможные действия. </param>
+        /// <param name="propStore"> Хранилище, в котором искать ресурсы. </param>
         /// <returns> Лучшее дейсвие среди указанных. </returns>
         [NotNull]
-        public static ITacticalAct SelectBestAct(IPerson person)
+        public static ITacticalAct SelectBestAct(IEnumerable<ITacticalAct> acts, [CanBeNull] IPropStore propStore)
         {
-            if (person is null)
+            if (acts is null)
             {
-                throw new System.ArgumentNullException(nameof(person));
+                throw new System.ArgumentNullException(nameof(acts));
             }
 
-            var availableActs = person.TacticalActCarrier.Acts
+            var availableActs = acts
                 .Where(x => x.CurrentCooldown == null || x.CurrentCooldown == 0)
-                .Where(x => TacticalActIsAvailableByConstrains(x, person))
-                .OrderBy(x => x.Efficient.Dice * x.Efficient.Count);
+                .Where(x => TacticalActIsAvailableByConstrains(x, propStore))
+                .OrderByDescending(x => x.Efficient.Dice * x.Efficient.Count);
 
             return availableActs.First();
         }
 
-        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, IPerson person)
+        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, [CanBeNull] IPropStore propStore)
         {
             if (tacticalAct.Constrains is null)
             {
@@ -48,7 +49,7 @@ namespace Zilon.Bot.Players.Logics
             // Проверяем наличие ресурсов в нужном количестве.
             // Проверка осуществляется в хранилище, указанном параметром.
 
-            if (!person.HasInventory)
+            if (propStore is null)
             {
                 // Персонажи бе инвентаря не могут применять действия,
                 // для которых нужны ресурсы.
@@ -57,7 +58,7 @@ namespace Zilon.Bot.Players.Logics
 
             var propResourceType = tacticalAct.Constrains.PropResourceType;
             var propResourceCount = tacticalAct.Constrains.PropResourceCount.Value;
-            if (CheckPropResource(person.Inventory, propResourceType, propResourceCount))
+            if (CheckPropResource(propStore, propResourceType, propResourceCount))
             {
                 return true;
             }
