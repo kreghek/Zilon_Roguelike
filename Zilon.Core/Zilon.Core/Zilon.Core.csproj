@@ -3,6 +3,12 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="World\NameGeneration\names.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="World\NameGeneration\names.json" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="JetBrains.Annotations">
             <Version>2019.1.3</Version>
             <ExcludeAssets>runtime; build</ExcludeAssets>
