@@ -26,16 +26,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
-
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 
+        Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-
-        Container.Bind<IActorManager>().To<ActorManager>().AsTransient();
-        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsTransient();
-
-        Container.Bind<LogicStateTreePatterns>().AsSingle();
+        Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
+        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSourceCollector>().FromMethod(context =>
@@ -44,6 +40,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
             var humanTaskSource = context.Container.Resolve<IHumanActorTaskSource>();
             return new TaskSourceCollector(botTaskSource, humanTaskSource);
         }).AsSingle();
+        Container.Bind<LogicStateTreePatterns>().AsSingle();
         Container.Bind<ILogicStateFactory>().To<ZenjectLogicStateFactory>().AsSingle();
         RegisterBotLogics(Container);
         Container.Bind<ITacticalActUsageService>().To<TacticalActUsageService>().AsSingle()
@@ -120,7 +117,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
 
         // Специализированные команды для Ui.
-        Container.Bind<EquipCommand>().AsTransient();
         Container.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
         Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
