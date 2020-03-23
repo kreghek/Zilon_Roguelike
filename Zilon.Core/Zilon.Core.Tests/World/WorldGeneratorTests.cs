@@ -13,7 +13,6 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.WorldGeneration
 {
-
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
@@ -63,7 +62,6 @@ namespace Zilon.Core.Tests.WorldGeneration
             }
 
             Console.WriteLine(historyText);
-
         }
 
         [Ignore("Эти тесты для ручной проверки. Нужно их привести к нормальным модульным тестам.")]
