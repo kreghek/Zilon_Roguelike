@@ -38,25 +38,27 @@ namespace Zilon.Tournament.ApiGate.Launcher
                     {
                         try
                         {
-                            using var process = new Process();
-
-                            process.StartInfo = new ProcessStartInfo
+                            using (var process = new Process())
                             {
-                                FileName = $"{appPath}Zilon.BotMassLauncher.exe",
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                                Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true
-                            };
 
-                            process.Start();
+                                process.StartInfo = new ProcessStartInfo
+                                {
+                                    FileName = $"{appPath}Zilon.BotMassLauncher.exe",
+                                    UseShellExecute = false,
+                                    CreateNoWindow = true,
+                                    Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true
+                                };
 
-                            var output = process.StandardOutput.ReadToEnd();
-                            var error = process.StandardError.ReadToEnd();
+                                process.Start();
 
-                            // Один бот в массланчере в одном режиме может работать 1 час максимум
-                            process.WaitForExit((int)(3.6 * 1000_000));
+                                var output = process.StandardOutput.ReadToEnd();
+                                var error = process.StandardError.ReadToEnd();
+
+                                // Один бот в массланчере в одном режиме может работать 1 час максимум
+                                process.WaitForExit((int)(3.6 * 1000_000));
+                            }
                         }
                         catch (Exception e)
                         {
