@@ -5,14 +5,13 @@ namespace Zilon.Core.World
     /// <summary>
     /// Ячейка глобального мира.
     /// </summary>
-    public class TerrainCell
+    public struct TerrainCell : System.IEquatable<TerrainCell>
     {
-        public OffsetCoords Coords;
+        public OffsetCoords Coords { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is TerrainCell cell &&
-                   EqualityComparer<OffsetCoords>.Default.Equals(Coords, cell.Coords);
+            return obj is TerrainCell cell && Equals(cell);
         }
 
         public override int GetHashCode()
@@ -36,6 +35,11 @@ namespace Zilon.Core.World
         public static bool operator !=(TerrainCell left, TerrainCell right)
         {
             return !(left == right);
+        }
+
+        public bool Equals(TerrainCell other)
+        {
+            return EqualityComparer<OffsetCoords>.Default.Equals(Coords, other.Coords);
         }
     }
 }
