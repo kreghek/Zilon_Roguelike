@@ -82,7 +82,21 @@ namespace Zilon.Core.World
 
         private async Task CreateNextSectorNodesAsync(SectorNode sectorNode, Biome biom)
         {
-            if (sectorNode.SectorScheme.TransSectorSids is null)
+            var nextSectorLevels = biom.LocationScheme.SectorLevels
+                    .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));
+
+            foreach (var nextSectorLevelScheme in nextSectorLevels)
+            {
+                var nextSectorNode = new SectorNode(biom, nextSectorLevelScheme);
+
+                biom.AddNode(nextSectorNode);
+
+                biom.AddEdge(sectorNode, nextSectorNode);
+            }
+
+            // Если в секторе есть переход в другой биом, то
+            // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
+            if (sectorNode.SectorScheme.TransSectorSids.Any(x=>x.SectorLevelSid is null))
             {
                 var nextSectorNode = await RollAndBindBiomeAsync().ConfigureAwait(false);
 
@@ -93,19 +107,6 @@ namespace Zilon.Core.World
                 var nextBiom = nextSectorNode.Biome;
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
-            }
-            else
-            {
-                var nextSectorLevels = biom.LocationScheme.SectorLevels.Where(x => sectorNode.SectorScheme.TransSectorSids.Contains(x.Sid));
-
-                foreach (var nextSectorLevelScheme in nextSectorLevels)
-                {
-                    var nextSectorNode = new SectorNode(biom, nextSectorLevelScheme);
-
-                    biom.AddNode(nextSectorNode);
-
-                    biom.AddEdge(sectorNode, nextSectorNode);
-                }
             }
         }
     }

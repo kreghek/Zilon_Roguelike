@@ -84,7 +84,7 @@
         /// <summary>
         /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        string[] TransSectorSids { get; }
+        ISectorTransitionSubScheme[] TransSectorSids { get; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.
@@ -95,5 +95,10 @@
         /// параметры генерации карты.
         /// </summary>
         ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+    }
+
+    public interface ISectorTransitionSubScheme : ISubScheme
+    {
+        string SectorLevelSid { get; }
     }
 }

@@ -11,18 +11,24 @@ namespace Zilon.Core.Schemes
         /// Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] RegularMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы редких монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] RareMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы боссов, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] ChampionMonsterSids { get; private set; }
 
 
@@ -69,6 +75,8 @@ namespace Zilon.Core.Schemes
         /// Таблицы дропа для сундуков.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] ChestDropTableSids { get; private set; }
 
 
@@ -98,7 +106,10 @@ namespace Zilon.Core.Schemes
         /// </summary>
         /// <seealso cref="Sid"/>
         [JsonProperty]
-        public string[] TransSectorSids { get; private set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme>))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
+        public ISectorTransitionSubScheme[] TransSectorSids { get; private set; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.
@@ -116,5 +127,11 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<SectorMapFactoryOptionsSubSchemeBase>))]
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; private set; }
+    }
+
+    public sealed class SectorTransitionSubScheme : ISectorTransitionSubScheme
+    {
+        [JsonProperty]
+        public string SectorLevelSid { get; private set; }
     }
 }

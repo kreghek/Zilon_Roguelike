@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (sectorScheme is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorScheme));
+                throw new ArgumentNullException(nameof(sectorScheme));
             }
 
             if (sectorScheme.TransSectorSids is null)
@@ -28,7 +28,7 @@ namespace Zilon.Core.MapGenerators
                 return Array.Empty<RoomTransition>();
             }
 
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+            return sectorScheme.TransSectorSids.Select(trans => new RoomTransition(trans.SectorLevelSid));
         }
     }
 }

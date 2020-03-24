@@ -41,7 +41,8 @@ namespace Zilon.Core.World.Tests
 
             var schemeRoundCounter = 0;
             var rollerMock = new Mock<IBiomeSchemeRoller>();
-            rollerMock.Setup(x => x.Roll()).Returns(() => {
+            rollerMock.Setup(x => x.Roll()).Returns(() =>
+            {
                 schemeRoundCounter++;
                 if (schemeRoundCounter >= locationSchemes.Length)
                 {
@@ -68,14 +69,16 @@ namespace Zilon.Core.World.Tests
             // ACT
 
             var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
-            var introNode = biom.Sectors.Single(x=>x.State == SectorNodeState.SectorMaterialized);
+            var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
             var currentNode = introNode;
 
             var iteration = 0;
             const int ITERATION_MAX = 100;
             while (iteration < ITERATION_MAX)
             {
-                var nextNode = currentNode.Biome.GetNext(currentNode).OfType<SectorNode>().First(x=>x.State != SectorNodeState.SectorMaterialized);
+                var nextNode = currentNode.Biome.GetNext(currentNode)
+                    .OfType<SectorNode>()
+                    .First(x => x.State != SectorNodeState.SectorMaterialized);
 
                 await biomService.MaterializeLevel(nextNode).ConfigureAwait(false);
 
@@ -91,7 +94,7 @@ namespace Zilon.Core.World.Tests
             while (true)
             {
                 var nextNodes = scanNode.Biome.GetNext(scanNode).OfType<SectorNode>();
-                scanNode = nextNodes.SingleOrDefault(x=>x.State == SectorNodeState.SectorMaterialized 
+                scanNode = nextNodes.SingleOrDefault(x => x.State == SectorNodeState.SectorMaterialized
                 && !materializedSectorNodes.Contains(x));
 
                 if (scanNode is null)
@@ -115,10 +118,11 @@ namespace Zilon.Core.World.Tests
                         new TestSectorSubScheme{
                             Sid = "intro-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ "intro-2" }
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" } }
                         },
                         new TestSectorSubScheme{
-                            Sid = "intro-2"
+                            Sid = "intro-2",
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -129,10 +133,11 @@ namespace Zilon.Core.World.Tests
                         new TestSectorSubScheme{
                             Sid = "d1-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ "d1-2" }
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" } }
                         },
                         new TestSectorSubScheme{
-                            Sid = "d1-2"
+                            Sid = "d1-2",
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -142,7 +147,8 @@ namespace Zilon.Core.World.Tests
                     SectorLevels = new []{
                         new TestSectorSubScheme{
                             Sid = "d2-1",
-                            IsStart = true
+                            IsStart = true,
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -153,21 +159,23 @@ namespace Zilon.Core.World.Tests
                         new TestSectorSubScheme{
                             Sid = "d3-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ "d3-3", "d3-4" }
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
+                                new TestSectorTransitionSubScheme { SectorLevelSid ="d3-4" } }
                         },
 
                         new TestSectorSubScheme{
                             Sid = "d3-3",
-                            TransSectorSids = new[]{ "d3-2" }
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" } }
                         },
 
                         new TestSectorSubScheme{
                             Sid = "d3-4",
-                            TransSectorSids = new[]{ "d3-3" }
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" } }
                         },
 
                         new TestSectorSubScheme{
-                            Sid = "d3-2"
+                            Sid = "d3-2",
+                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
                         }
                     }
                 }

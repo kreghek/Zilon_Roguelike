@@ -21,7 +21,7 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int RegionMonsterCount { get; set; }
         public int TotalChestCount { get; set; }
         public string[] ChestDropTableSids { get; set; }
-        public string[] TransSectorSids { get; set; }
+        public ISectorTransitionSubScheme[] TransSectorSids { get; set; }
         public bool IsStart { get; set; }
         public int RegionChestCountRatio { get; set; }
         public int MinRegionMonsterCount { get; }
@@ -32,5 +32,10 @@ namespace Zilon.Core.Tests.Common.Schemes
         {
             return Sid;
         }
+    }
+
+    public class TestSectorTransitionSubScheme : ISectorTransitionSubScheme
+    {
+        public string SectorLevelSid { get; set; }
     }
 }
