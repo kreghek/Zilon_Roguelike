@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.World
@@ -15,8 +16,12 @@ namespace Zilon.Core.World
         private readonly IList<SectorNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
 
-        public Biom()
+        public ILocationScheme LocationScheme { get; }
+
+        public Biom(ILocationScheme locationScheme)
         {
+            LocationScheme = locationScheme ?? throw new ArgumentNullException(nameof(locationScheme));
+
             _nodes = new List<SectorNode>();
             _edges = new List<IGraphEdge>();
         }
@@ -79,7 +84,7 @@ namespace Zilon.Core.World
 
         public void RemoveNode(IGraphNode node)
         {
-            _nodes.Remove(node);
+            _nodes.Remove(node as SectorNode);
         }
     }
 }
