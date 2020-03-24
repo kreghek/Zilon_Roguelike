@@ -61,8 +61,6 @@ namespace Zilon.Core.World.Tests
                 .Returns<string>(sid => locationSchemes.Single(scheme => scheme.Sid == sid));
             var schemeService = schemeServiceMock.Object;
 
-
-
             var introScheme = locationSchemes.Single(x => x.Sid == "intro");
 
             var biomService = new BiomeInitializer(sectorGenerator, roller);

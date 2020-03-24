@@ -39,29 +39,13 @@ namespace Zilon.Core.World
                 throw new InvalidOperationException();
             }
 
-            switch (sectorNode.State)
-            {
-                //case SectorNodeState.SchemeUnknown:
+            var biom = sectorNode.Biome;
 
-                //    var newBiomSector = await RollAndBindBiomeAsync(sectorNode).ConfigureAwait(false);
-                //    newBiomSector.Biome.AddNode(newBiomSector);
+            var sector = await _sectorGenerator.GenerateDungeonAsync(sectorNode.SectorScheme).ConfigureAwait(false);
 
-                //    await CreateNextSectorNodesAsync(newBiomSector, newBiomSector.Biome).ConfigureAwait(false);
+            sectorNode.MaterializeSector(sector);
 
-                //    break;
-
-                case SectorNodeState.SchemeKnown:
-
-                    var biom = sectorNode.Biome;
-
-                    var sector = await _sectorGenerator.GenerateDungeonAsync(sectorNode.SectorScheme).ConfigureAwait(false);
-
-                    sectorNode.MaterializeSector(sector);
-
-                    await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
-
-                    break;
-            }
+            await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
         }
 
         private async Task<SectorNode> RollAndBindBiomeAsync()
