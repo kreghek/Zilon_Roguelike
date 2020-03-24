@@ -40,7 +40,6 @@ namespace Zilon.Tournament.ApiGate.Launcher
                         {
                             using (var process = new Process())
                             {
-
                                 process.StartInfo = new ProcessStartInfo
                                 {
                                     FileName = $"{appPath}Zilon.BotMassLauncher.exe",
@@ -60,12 +59,14 @@ namespace Zilon.Tournament.ApiGate.Launcher
                                 process.WaitForExit((int)(3.6 * 1000_000));
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception exception)
                         {
+                            Console.WriteLine($"[X] {exception}");
                         }
                     }
                 }
             }
+
             _logger.LogDebug("Launcher service is stopping");
 
             return Task.CompletedTask;
@@ -73,7 +74,6 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
         private BotInfo[] GetAllBots(string appPath)
         {
-
             var botList = new List<BotInfo>();
 
             var botRootCatalog = Path.Combine(appPath, "bots");
@@ -99,18 +99,5 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
             return botList.ToArray();
         }
-    }
-
-    public sealed class BotInfo
-    {
-        public string Catalog { get; set; }
-        public string Assembly { get; set; }
-        public string[] Modes { get; set; }
-    }
-
-    public sealed class BotSettings
-    {
-        public string AssemblyName { get; set; }
-        public string[] Modes { get; set; }
     }
 }
