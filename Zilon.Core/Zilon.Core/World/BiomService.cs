@@ -24,7 +24,7 @@ namespace Zilon.Core.World
             var startSectorScheme = biom.LocationScheme.SectorLevels.Single(x => x.IsStart);
             var sector = await _sectorGenerator.GenerateDungeonAsync(startSectorScheme).ConfigureAwait(false);
 
-            var sectorNode = new SectorNode(startSectorScheme);
+            var sectorNode = new SectorNode(biom, startSectorScheme);
             sectorNode.MaterializeSector(sector);
             biom.AddNode(sectorNode);
 
@@ -37,7 +37,7 @@ namespace Zilon.Core.World
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
-                var nextSectorNode = new SectorNode(nextSectorLevelScheme);
+                var nextSectorNode = new SectorNode(biom, nextSectorLevelScheme);
                 
                 biom.AddNode(sectorNode);
 
