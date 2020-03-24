@@ -61,6 +61,9 @@ namespace Zilon.Tournament.ApiGate.Launcher
                         }
                         catch (Exception exception)
                         {
+                            // Просто логируем это исключение.
+                            //TODO Нужно детально посмотреть, что можно делать с исключением.
+                            // Возможно есть более надёжный и точный способ обработки.
                             Console.WriteLine($"[X] {exception}");
                         }
                     }
