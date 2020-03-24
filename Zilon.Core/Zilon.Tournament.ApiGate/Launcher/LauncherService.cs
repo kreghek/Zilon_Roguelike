@@ -2,29 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
-using Zilon.Bot.Sdk;
 
 namespace Zilon.Tournament.ApiGate.Launcher
 {
     public class LauncherService : BackgroundService
     {
         private readonly ILogger<LauncherService> _logger;
-        private readonly IHostingEnvironment _env;
-        private readonly IConfiguration _configuration;
 
-        public LauncherService(ILogger<LauncherService> logger, IHostingEnvironment env, IConfiguration configuration)
+        public LauncherService(ILogger<LauncherService> logger)
         {
             _logger = logger;
-            _env = env;
-            _configuration = configuration;
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -44,26 +38,25 @@ namespace Zilon.Tournament.ApiGate.Launcher
                     {
                         try
                         {
-                            using (var process = new Process())
+                            using var process = new Process();
+
+                            process.StartInfo = new ProcessStartInfo
                             {
-                                process.StartInfo = new ProcessStartInfo
-                                {
-                                    FileName = $"{appPath}Zilon.BotMassLauncher.exe",
-                                    UseShellExecute = false,
-                                    CreateNoWindow = true,
-                                    Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
-                                    RedirectStandardOutput = true,
-                                    RedirectStandardError = true
-                                };
+                                FileName = $"{appPath}Zilon.BotMassLauncher.exe",
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                                Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true
+                            };
 
-                                process.Start();
+                            process.Start();
 
-                                var output = process.StandardOutput.ReadToEnd();
-                                var error = process.StandardError.ReadToEnd();
+                            var output = process.StandardOutput.ReadToEnd();
+                            var error = process.StandardError.ReadToEnd();
 
-                                // Один бот в массланчере в одном режиме может работать 1 час максимум
-                                process.WaitForExit((int)(3.6*1000_000));
-                            }
+                            // Один бот в массланчере в одном режиме может работать 1 час максимум
+                            process.WaitForExit((int)(3.6 * 1000_000));
                         }
                         catch (Exception e)
                         {
