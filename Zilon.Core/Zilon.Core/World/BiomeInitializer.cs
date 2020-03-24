@@ -10,9 +10,9 @@ namespace Zilon.Core.World
     public class BiomeInitializer : IBiomeInitializer
     {
         private readonly ISectorGenerator _sectorGenerator;
-        private readonly IBiomSchemeRoller _biomeSchemeRoller;
+        private readonly IBiomeSchemeRoller _biomeSchemeRoller;
 
-        public BiomeInitializer(ISectorGenerator sectorGenerator, IBiomSchemeRoller biomeSchemeRoller)
+        public BiomeInitializer(ISectorGenerator sectorGenerator, IBiomeSchemeRoller biomeSchemeRoller)
         {
             _sectorGenerator = sectorGenerator ?? throw new ArgumentNullException(nameof(sectorGenerator));
             _biomeSchemeRoller = biomeSchemeRoller ?? throw new ArgumentNullException(nameof(biomeSchemeRoller));
