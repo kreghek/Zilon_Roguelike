@@ -27,5 +27,10 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int MinRegionMonsterCount { get; }
         public SchemeSectorMapGenerator MapGenerator { get; }
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+
+        public override string ToString()
+        {
+            return Sid;
+        }
     }
 }

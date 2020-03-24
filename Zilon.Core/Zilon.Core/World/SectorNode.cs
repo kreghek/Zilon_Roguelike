@@ -8,9 +8,9 @@ namespace Zilon.Core.World
 {
     public sealed class SectorNode : IGraphNode
     {
-        public SectorNode(Biom biom, ISectorSubScheme sectorScheme)
+        public SectorNode(Biome biom, ISectorSubScheme sectorScheme)
         {
-            Biom = biom ?? throw new ArgumentNullException(nameof(biom));
+            Biome = biom ?? throw new ArgumentNullException(nameof(biom));
             SectorScheme = sectorScheme ?? throw new ArgumentNullException(nameof(sectorScheme));
             State = SectorNodeState.SchemeKnown;
         }
@@ -21,30 +21,38 @@ namespace Zilon.Core.World
 
         public ISector Sector { get; private set; }
 
-        public Biom Biom { get; private set; }
+        public Biome Biome { get; private set; }
 
         public ISectorSubScheme SectorScheme { get; set; }
 
         public void MaterializeSector(ISector sector)
         {
+            if (State != SectorNodeState.SchemeKnown)
+            {
+                throw new InvalidOperationException("Неверное состояние узла.");
+            }
+
             Sector = sector ?? throw new ArgumentNullException(nameof(sector));
             State = SectorNodeState.SectorMaterialized;
         }
 
-        public void BindSchemeInfo(Biom biom, ISectorSubScheme sectorScheme)
+        public void BindSchemeInfo(Biome biom, ISectorSubScheme sectorScheme)
         {
-            Biom = biom ?? throw new ArgumentNullException(nameof(biom));
+            if (State != SectorNodeState.SchemeUnknown)
+            {
+                throw new InvalidOperationException("Неверное состояние узла.");
+            }
+
+            Biome = biom ?? throw new ArgumentNullException(nameof(biom));
             SectorScheme = sectorScheme ?? throw new ArgumentNullException(nameof(sectorScheme));
             State = SectorNodeState.SchemeKnown;
         }
 
-        public SectorNodeState State { get; private set; }
-    }
+        public override string ToString()
+        {
+            return $"[{Biome.LocationScheme}] {SectorScheme}";
+        }
 
-    public enum SectorNodeState
-    {
-        SchemeUnknown,
-        SchemeKnown,
-        SectorMaterialized
+        public SectorNodeState State { get; private set; }
     }
 }

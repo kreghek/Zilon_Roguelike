@@ -64,11 +64,11 @@ namespace Zilon.Core.World.Tests
 
             var introScheme = locationSchemes.Single(x => x.Sid == "intro");
 
-            var biomService = new BiomInitializer(sectorGenerator, roller);
+            var biomService = new BiomeInitializer(sectorGenerator, roller);
 
             // ACT
 
-            var biom = await biomService.InitBiomAsync(introScheme).ConfigureAwait(false);
+            var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x=>x.State == SectorNodeState.SectorMaterialized);
             var currentNode = introNode;
 
@@ -76,7 +76,7 @@ namespace Zilon.Core.World.Tests
             const int ITERATION_MAX = 100;
             while (iteration < ITERATION_MAX)
             {
-                var nextNode = currentNode.Biom.GetNext(currentNode).First() as SectorNode;
+                var nextNode = currentNode.Biome.GetNext(currentNode).OfType<SectorNode>().First(x=>x.State != SectorNodeState.SectorMaterialized);
 
                 await biomService.MaterializeLevel(nextNode).ConfigureAwait(false);
 
@@ -91,8 +91,9 @@ namespace Zilon.Core.World.Tests
             materializedSectorNodes.Add(scanNode);
             while (true)
             {
-                var nextNodes = scanNode.Biom.GetNext(scanNode).OfType<SectorNode>();
-                scanNode = nextNodes.SingleOrDefault(x=>x.State == SectorNodeState.SectorMaterialized);
+                var nextNodes = scanNode.Biome.GetNext(scanNode).OfType<SectorNode>();
+                scanNode = nextNodes.SingleOrDefault(x=>x.State == SectorNodeState.SectorMaterialized 
+                && !materializedSectorNodes.Contains(x));
 
                 if (scanNode is null)
                 {

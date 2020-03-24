@@ -5,12 +5,12 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.World
 {
-    public class BiomSchemeRoller : IBiomSchemeRoller
+    public class BiomeSchemeRoller : IBiomeSchemeRoller
     {
         private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
 
-        public BiomSchemeRoller(ISchemeService schemeService, IDice dice)
+        public BiomeSchemeRoller(ISchemeService schemeService, IDice dice)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));

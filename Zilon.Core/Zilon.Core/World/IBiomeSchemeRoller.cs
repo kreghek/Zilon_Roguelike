@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.World
 {
-    public interface IBiomSchemeRoller
+    public interface IBiomeSchemeRoller
     {
         ILocationScheme Roll();
     }

@@ -11,14 +11,14 @@ namespace Zilon.Core.World
     /// <summary>
     /// Биом, как совокупность нескольких секторов.
     /// </summary>
-    public sealed class Biom : IGraph
+    public sealed class Biome : IGraph
     {
         private readonly IList<SectorNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
 
         public ILocationScheme LocationScheme { get; }
 
-        public Biom(ILocationScheme locationScheme)
+        public Biome(ILocationScheme locationScheme)
         {
             LocationScheme = locationScheme ?? throw new ArgumentNullException(nameof(locationScheme));
 

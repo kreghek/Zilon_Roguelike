@@ -3,9 +3,9 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.World
 {
-    public interface IBiomInitializer
+    public interface IBiomeInitializer
     {
-        Task<Biom> InitBiomAsync(ILocationScheme locationScheme);
+        Task<Biome> InitBiomeAsync(ILocationScheme locationScheme);
         Task MaterializeLevel(SectorNode sectorNode);
     }
 }
