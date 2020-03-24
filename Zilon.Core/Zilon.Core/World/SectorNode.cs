@@ -28,7 +28,7 @@ namespace Zilon.Core.World
         public void MaterializeSector(ISector sector)
         {
             Sector = sector ?? throw new ArgumentNullException(nameof(sector));
-            State = SectorNodeState.SectormMaterialized;
+            State = SectorNodeState.SectorMaterialized;
         }
 
         public void BindSchemeInfo(Biom biom, ISectorSubScheme sectorScheme)
@@ -45,6 +45,6 @@ namespace Zilon.Core.World
     {
         SchemeUnknown,
         SchemeKnown,
-        SectormMaterialized
+        SectorMaterialized
     }
 }

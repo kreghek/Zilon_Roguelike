@@ -26,7 +26,7 @@ namespace Zilon.Core.World
             _edges = new List<IGraphEdge>();
         }
 
-        public IEnumerable<SectorNode> Sectors { get; }
+        public IEnumerable<SectorNode> Sectors { get => _nodes.OfType<SectorNode>(); }
 
         public IEnumerable<IGraphNode> Nodes { get => _nodes; }
 
