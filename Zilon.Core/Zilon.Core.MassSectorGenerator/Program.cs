@@ -41,7 +41,7 @@ namespace Zilon.Core.MassSectorGenerator
             var sectorSchemeResult = GetSectorScheme(args, schemeService);
 
             var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
-            var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
+            var sector = await sectorFactory.GenerateAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
             sector.Scheme = sectorSchemeResult.Location;
 
             // Проверка

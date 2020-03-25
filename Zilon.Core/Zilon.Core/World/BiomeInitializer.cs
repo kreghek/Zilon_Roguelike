@@ -18,7 +18,7 @@ namespace Zilon.Core.World
             _biomeSchemeRoller = biomeSchemeRoller ?? throw new ArgumentNullException(nameof(biomeSchemeRoller));
         }
 
-        public async Task<Biome> InitBiomeAsync(ILocationScheme locationScheme)
+        public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
         {
             var biom = new Biome(locationScheme);
 
@@ -27,7 +27,7 @@ namespace Zilon.Core.World
             return biom;
         }
 
-        public async Task MaterializeLevel(SectorNode sectorNode)
+        public async Task MaterializeLevel(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
@@ -41,7 +41,7 @@ namespace Zilon.Core.World
 
             var biom = sectorNode.Biome;
 
-            var sector = await _sectorGenerator.GenerateDungeonAsync(sectorNode.SectorScheme).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode.SectorScheme).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
 
@@ -58,7 +58,7 @@ namespace Zilon.Core.World
 
             var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
-            var sector = await _sectorGenerator.GenerateDungeonAsync(startSectorScheme).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(startSectorScheme).ConfigureAwait(false);
 
             return newBiomeSector;
         }
@@ -71,7 +71,7 @@ namespace Zilon.Core.World
 
         private async Task CreateAndAddSectorByScheme(Biome biom, ISectorSubScheme startSectorScheme)
         {
-            var sector = await _sectorGenerator.GenerateDungeonAsync(startSectorScheme).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(startSectorScheme).ConfigureAwait(false);
 
             var sectorNode = new SectorNode(biom, startSectorScheme);
             sectorNode.MaterializeSector(sector);
@@ -80,7 +80,7 @@ namespace Zilon.Core.World
             await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
         }
 
-        private async Task CreateNextSectorNodesAsync(SectorNode sectorNode, Biome biom)
+        private async Task CreateNextSectorNodesAsync(ISectorNode sectorNode, Biome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
                     .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));

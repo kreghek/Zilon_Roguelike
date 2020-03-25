@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
@@ -38,14 +39,15 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new System.ArgumentNullException(nameof(options));
             }
 
-            var sectorScheme = (ISectorSubScheme)options;
+            var sectorNode = (ISectorNode)options;
+            var sectorScheme = sectorNode.SectorScheme;
 
             var map = CreateMapInstance();
 
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
             var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
                 RoomMinSize,

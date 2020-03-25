@@ -11,6 +11,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -52,10 +53,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var sectorScheme = (ISectorSubScheme)options;
-            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
+            var sectorNode = (ISectorNode)options;
+            var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorNode.SectorScheme.MapGeneratorOptions;
             if (cellularAutomatonOptions == null)
             {
                 throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
@@ -209,7 +210,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     map.Transitions.Add(transitionNode, transition);
 
-                    if (transition.SectorSid == null)
+                    if (transition.SectorNode == null)
                     {
                         transitionRegion.IsOut = true;
                     }

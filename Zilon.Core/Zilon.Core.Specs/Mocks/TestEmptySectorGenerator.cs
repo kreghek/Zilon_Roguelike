@@ -32,7 +32,7 @@ namespace Zilon.Core.Specs.Mocks
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
+        public async Task<ISector> GenerateAsync(ISectorSubScheme sectorScheme)
         {
             var map = await _mapFactory.CreateAsync(sectorScheme);
             var sector = new Sector(map,

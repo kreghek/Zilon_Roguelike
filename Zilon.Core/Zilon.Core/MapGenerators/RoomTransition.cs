@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -14,30 +14,15 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создаение экземпляра перехода.
         /// </summary>
-        /// <param name="sectorSid">
-        /// Идентификатор сектора в рамках указанной локации.
-        /// Если указано null, означает, что будет переход "на поверхность".
-        /// </param>
-        /// <seealso cref="SectorSid"/>
-        public RoomTransition([CanBeNull] string sectorSid)
+        public RoomTransition(ISectorNode sectorNode)
         {
-            SectorSid = sectorSid;
+            SectorNode = sectorNode;
         }
 
         /// <summary>
-        /// Идентификатор сектора для перехода.
+        /// Узел сектора в графе биома.
         /// </summary>
-        /// <remarks>
-        /// Если равно null, то означает, что переход выводит из подземелья (на глобалную карту).
-        /// </remarks>
-        public string SectorSid { get; }
-
-        /// <summary> Создаёт переход на поверхность. </summary>
-        /// <returns> Возвращает экземпляр перехода, настроенного для перехода на поверхность. </returns>
-        public static RoomTransition CreateGlobalExit()
-        {
-            return new RoomTransition(null);
-        }
+        public ISectorNode SectorNode { get; }
 
         /// <summary>
         /// Вывод строкого представления перехода.
@@ -47,12 +32,7 @@ namespace Zilon.Core.MapGenerators
         /// </returns>
         public override string ToString()
         {
-            if (SectorSid == null)
-            {
-                return "[Global]";
-            }
-
-            return SectorSid;
+            return SectorNode.ToString();
         }
     }
 }

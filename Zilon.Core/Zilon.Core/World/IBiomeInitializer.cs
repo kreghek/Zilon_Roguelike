@@ -5,7 +5,7 @@ namespace Zilon.Core.World
 {
     public interface IBiomeInitializer
     {
-        Task<Biome> InitBiomeAsync(ILocationScheme locationScheme);
-        Task MaterializeLevel(SectorNode sectorNode);
+        Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme);
+        Task MaterializeLevel(ISectorNode sectorNode);
     }
 }

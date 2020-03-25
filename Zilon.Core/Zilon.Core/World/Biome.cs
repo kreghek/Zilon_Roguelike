@@ -11,7 +11,7 @@ namespace Zilon.Core.World
     /// <summary>
     /// Биом, как совокупность нескольких секторов.
     /// </summary>
-    public sealed class Biome : IGraph
+    public sealed class Biome : IBiome, IGraph
     {
         private readonly IList<SectorNode> _nodes;
         private readonly IList<IGraphEdge> _edges;

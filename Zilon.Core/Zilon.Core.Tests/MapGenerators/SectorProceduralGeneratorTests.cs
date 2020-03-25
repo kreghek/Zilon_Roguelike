@@ -37,7 +37,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Func<Task> act = async () =>
             {
-                var sector = await generator.GenerateDungeonAsync(sectorScheme).ConfigureAwait(false);
+                var sector = await generator.GenerateAsync(sectorScheme).ConfigureAwait(false);
             };
 
             // ASSERT
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorScheme = CreateSectorScheme();
 
             // ACT
-            await generator.GenerateDungeonAsync(sectorScheme).ConfigureAwait(false);
+            await generator.GenerateAsync(sectorScheme).ConfigureAwait(false);
         }
 
         private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
