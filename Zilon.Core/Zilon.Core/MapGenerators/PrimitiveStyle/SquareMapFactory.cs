@@ -53,10 +53,8 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            var generationOptions = new SectorMapFactoryOptions
-            {
-                OptionsSubScheme = new SquaregenerationOptionsSubScheme { Size = mapSize }
-            };
+            var squaregenerationOptionsSubScheme = new SquaregenerationOptionsSubScheme { Size = mapSize };
+            var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
 
             return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
         }

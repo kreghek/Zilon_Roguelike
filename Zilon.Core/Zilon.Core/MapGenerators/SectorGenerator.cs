@@ -61,10 +61,7 @@ namespace Zilon.Core.MapGenerators
 
             var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
-            var sectorFactoryOptions = new SectorMapFactoryOptions { 
-                OptionsSubScheme = sectorNode.SectorScheme.MapGeneratorOptions,
-                Transitions = transitions
-            };
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
 
             var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
