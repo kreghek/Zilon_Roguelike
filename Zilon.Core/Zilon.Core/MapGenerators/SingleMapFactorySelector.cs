@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -18,12 +19,8 @@ namespace Zilon.Core.MapGenerators
             _mapFactory = mapFactory ?? throw new System.ArgumentNullException(nameof(mapFactory));
         }
 
-        /// <summary>
-        /// Вернуть фабрику карт.
-        /// </summary>
-        /// <param name="sectorScheme">Схема сектора. не используется в данном селекторе.</param>
-        /// <returns> Возаращает экземпляр фабрики карт. </returns>
-        public IMapFactory GetMapFactory(ISectorSubScheme sectorScheme)
+        /// <inheritdoc/>
+        public IMapFactory GetMapFactory(ISectorNode sectorNode)
         {
             return _mapFactory;
         }

@@ -25,8 +25,8 @@ namespace Zilon.Core.World.Tests
             // ARRANGE
 
             var sectorGeneratorMock = new Mock<ISectorGenerator>();
-            sectorGeneratorMock.Setup(x => x.GenerateAsync(It.IsAny<ISectorSubScheme>()))
-                .Returns<ISectorSubScheme>(scheme =>
+            sectorGeneratorMock.Setup(x => x.GenerateAsync(It.IsAny<ISectorNode>()))
+                .Returns<ISectorNode>(scheme =>
                 {
                     return Task.Run(() =>
                     {

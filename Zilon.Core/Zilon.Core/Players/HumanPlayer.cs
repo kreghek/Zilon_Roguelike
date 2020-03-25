@@ -31,6 +31,8 @@ namespace Zilon.Core.Players
             }
         }
 
+        public ISectorNode SectorNode { get; }
+
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>

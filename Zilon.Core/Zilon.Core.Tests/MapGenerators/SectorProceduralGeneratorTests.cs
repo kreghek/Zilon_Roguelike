@@ -72,8 +72,12 @@ namespace Zilon.Core.Tests.MapGenerators
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x=>x.SectorScheme).Returns(sectorScheme);
+            var sectorNode = sectorNodeMock.Object;
+
             // ACT
-            await generator.GenerateAsync(sectorScheme).ConfigureAwait(false);
+            await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
         private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
@@ -92,7 +96,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var citizenGenerator = citizenGeneratorMock.Object;
 
             var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
-            mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorSubScheme>()))
+            mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorNode>()))
                 .Returns(mapFactory);
             var mapFactorySelector = mapFactorySelectorMock.Object;
 

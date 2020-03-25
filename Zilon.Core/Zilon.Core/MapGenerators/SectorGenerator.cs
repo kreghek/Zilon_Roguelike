@@ -51,17 +51,19 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создаёт экземпляр сектора подземелий с указанными параметрами.
         /// </summary>
-        /// <param name="sectorScheme"> Схема генерации сектора. </param>
+        /// <param name="sectorNode"> Схема генерации сектора. </param>
         /// <returns> Возвращает экземпляр сектора. </returns>
-        public async Task<ISector> GenerateAsync(ISectorSubScheme sectorScheme)
+        public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
-            var mapFactory = _mapFactorySelector.GetMapFactory(sectorScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(sectorNode);
 
-            var map = await mapFactory.CreateAsync(sectorScheme).ConfigureAwait(false);
+            var map = await mapFactory.CreateAsync(sectorNode).ConfigureAwait(false);
 
             var sector = _sectorFactory.Create(map);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
+
+            var sectorScheme = sectorNode.SectorScheme;
 
             var chestRegions = gameObjectRegions.Where(x => x.Nodes.Length > 4);
             _chestGenerator.CreateChests(map, sectorScheme, chestRegions);

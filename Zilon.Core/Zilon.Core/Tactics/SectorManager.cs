@@ -42,34 +42,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public async Task CreateSectorAsync()
         {
-            var regionNode = _humanPlayer.GlobeNode;
-
-            ILocationScheme scheme = null;
-            if (_humanPlayer.GlobeNode == null)
-            {
-                scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
-            }
-            else
-            {
-                scheme = _humanPlayer.GlobeNode.Scheme;
-            }
-
-            if (scheme.SectorLevels != null)
-            {
-                ISectorSubScheme sectorLevelScheme;
-                if (_humanPlayer.SectorSid == null)
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
-                }
-                else
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
-                }
-                
-                CurrentSector = await _generator.GenerateAsync(sectorLevelScheme).ConfigureAwait(false);
-            }
-
-            CurrentSector.Scheme = scheme;
+            CurrentSector = await _generator.GenerateAsync(_humanPlayer.SectorNode).ConfigureAwait(false);
         }
     }
 }

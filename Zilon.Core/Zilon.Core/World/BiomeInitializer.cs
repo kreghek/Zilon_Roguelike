@@ -41,7 +41,7 @@ namespace Zilon.Core.World
 
             var biom = sectorNode.Biome;
 
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode.SectorScheme).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
 
@@ -58,7 +58,7 @@ namespace Zilon.Core.World
 
             var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
-            var sector = await _sectorGenerator.GenerateAsync(startSectorScheme).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(newBiomeSector).ConfigureAwait(false);
 
             return newBiomeSector;
         }
@@ -71,9 +71,10 @@ namespace Zilon.Core.World
 
         private async Task CreateAndAddSectorByScheme(Biome biom, ISectorSubScheme startSectorScheme)
         {
-            var sector = await _sectorGenerator.GenerateAsync(startSectorScheme).ConfigureAwait(false);
-
             var sectorNode = new SectorNode(biom, startSectorScheme);
+
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+
             sectorNode.MaterializeSector(sector);
             biom.AddNode(sectorNode);
 

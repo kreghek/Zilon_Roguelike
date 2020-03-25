@@ -2,6 +2,7 @@
 
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -11,8 +12,8 @@ namespace Zilon.Core.MapGenerators
     public interface ISectorGenerator
     {
         /// <summary> Создаёт сектор подземелья с учётом указанных настроек. </summary>
-        /// <param name="sectorScheme"> Схема создания сектора. </param>
+        /// <param name="sectorNode"> Схема создания сектора. </param>
         /// <returns> Возвращает созданный сектор. </returns>
-        Task<ISector> GenerateAsync(ISectorSubScheme sectorScheme);
+        Task<ISector> GenerateAsync(ISectorNode sectorNode);
     }
 }
