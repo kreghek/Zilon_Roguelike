@@ -17,8 +17,13 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
-			"RegionCount": 30,
-			"RegionSize": 5,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 30,
+				"RegionSize": 5,
+			},
+			
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,

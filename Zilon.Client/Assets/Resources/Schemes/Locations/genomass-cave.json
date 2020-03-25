@@ -14,11 +14,9 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 20,
-			"RegionSize": 20,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl2"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -41,11 +39,9 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3", "lvl4", "lvl5", "lvl6"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl3"}, { "SectorLevelSid": "lvl4"}, { "SectorLevelSid": "lvl5"}, { "SectorLevelSid": "lvl6"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -68,8 +64,6 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["infernal-genomass"],
-			"RegionCount": 20,
-			"RegionSize": 5,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -93,8 +87,6 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -118,8 +110,6 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -143,8 +133,6 @@
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,

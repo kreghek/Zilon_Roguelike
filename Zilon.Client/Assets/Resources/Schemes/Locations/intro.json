@@ -14,11 +14,9 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 5,
 			"RegionMonsterCount": 2,
 			
-			"TransSectorSids": ["boss-sector"],
+			"TransSectorSids": [{ "SectorLevelSid": "boss-sector"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -41,8 +39,6 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
-			"RegionCount": 2,
-			"RegionSize": 30,
 			"MinRegionMonsterCount": 5,
 			"RegionMonsterCount": 20,
 			

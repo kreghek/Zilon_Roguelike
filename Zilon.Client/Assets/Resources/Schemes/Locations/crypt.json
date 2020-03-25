@@ -14,8 +14,13 @@
 			"RegularMonsterSids": ["skeleton-grunt", "skeleton-warrior", "zombie", "grave-worm", "ghoul"],
 			"RareMonsterSids": ["skeleton-champion", "vampire"],
 			"ChampionMonsterSids": ["necromancer", "dervish"],
-			"RegionCount": 20,
-			"RegionSize": 20,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 20,
+				"RegionSize": 20,
+			},
+			
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,

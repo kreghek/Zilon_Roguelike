@@ -31,31 +31,6 @@ namespace Zilon.Core.Schemes
             Justification = "Используется для десериализации")]
         public string[] ChampionMonsterSids { get; private set; }
 
-
-        /// <summary>
-        /// Тип фабрики для карты.
-        /// </summary>
-        [JsonProperty]
-        public SectorSubSchemeMapFactory MapFactory { get; private set; }
-
-        /// <summary>
-        /// Количество регионов в карте.
-        /// </summary>
-        /// <remarks>
-        /// Для подземелий это количество комнат.
-        /// </remarks>
-        [JsonProperty]
-        public int RegionCount { get; private set; }
-
-        /// <summary>
-        /// Максимальный размер комнат.
-        /// </summary>
-        /// <remarks>
-        /// Минимальный размер всегда 2х2.
-        /// </remarks>
-        [JsonProperty]
-        public int RegionSize { get; private set; }
-
         /// <summary>
         /// Количество монстров в секторе.
         /// </summary>
@@ -106,7 +81,7 @@ namespace Zilon.Core.Schemes
         /// </summary>
         /// <seealso cref="Sid"/>
         [JsonProperty]
-        [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme>))]
+        [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public ISectorTransitionSubScheme[] TransSectorSids { get; private set; }

@@ -14,11 +14,16 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
-			"RegionCount": 30,
-			"RegionSize": 5,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 30,
+				"RegionSize": 5,
+			},
+			
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl2"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -33,11 +38,16 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
 			"ChampionMonsterSids": ["rat-human-slayer", "night-stalker"],
-			"RegionCount": 10,
-			"RegionSize": 5,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 10,
+				"RegionSize": 5,
+			},
+			
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl-throne", "lvl-barracks"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl-throne"},{ "SectorLevelSid": "lvl-barracks"} ],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -52,8 +62,13 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
 			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"],
-			"RegionCount": 3,
-			"RegionSize": 30,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 3,
+				"RegionSize": 30,
+			},
+			
 			"RegionMonsterCount": 20,
 			
 			"TotalChestCount": 20,
@@ -69,15 +84,20 @@
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": ["rat-mutant", "moon-rat"],
 			"ChampionMonsterSids": ["rat-king", "rat-human-slayer", "night-stalker"],
-			"RegionCount": 3,
-			"RegionSize": 30,
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 3,
+				"RegionSize": 30,
+			},
+			
 			"RegionMonsterCount": 20,
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
 			"ChestDropTableSids": ["survival", "default"],
 			
-			"TransSectorSids": ["lvl-throne", "lvl-barracks"]
+			"TransSectorSids": [{ "SectorLevelSid": "lvl-throne"}]
 		}
 	]
 }
