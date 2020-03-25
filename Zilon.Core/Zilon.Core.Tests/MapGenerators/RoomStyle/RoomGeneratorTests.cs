@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
@@ -75,7 +76,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public void GenerateRoomsInGrid_Transitions()
         {
             // ARRANGE
-            var transition = RoomTransition.CreateGlobalExit();
+            var sectorNodeMock = new Mock<ISectorNode>();
+            var sectorNode = sectorNodeMock.Object;
+            var transition = new RoomTransition(sectorNode);
             var availableTransitions = new[] { transition };
 
             var randomMock = new Mock<IRoomGeneratorRandomSource>();

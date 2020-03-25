@@ -14,6 +14,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.MapGenerators.RoomStyle;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -34,10 +35,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
+            var sectorNode = sectorNodeMock.Object;
+
             // ACT
             Func<Task> act = async () =>
             {
-                var sector = await generator.GenerateAsync(sectorScheme).ConfigureAwait(false);
+                var sector = await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
             };
 
             // ASSERT
