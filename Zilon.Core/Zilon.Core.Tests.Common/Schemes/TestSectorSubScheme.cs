@@ -15,7 +15,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] RegularMonsterSids { get; set; }
         public string[] RareMonsterSids { get; set; }
         public string[] ChampionMonsterSids { get; set; }
-        public SectorSubSchemeMapFactory MapFactory { get; set; }
         public int RegionMonsterCount { get; set; }
         public int TotalChestCount { get; set; }
         public string[] ChestDropTableSids { get; set; }

@@ -53,13 +53,13 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            var squaregenerationOptionsSubScheme = new SquaregenerationOptionsSubScheme { Size = mapSize };
+            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme { Size = mapSize };
             var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
 
             return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
         }
 
-        private class SquaregenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
+        private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
         {
             public SchemeSectorMapGenerator MapGenerator { get; }
             public int Size { get; set; }

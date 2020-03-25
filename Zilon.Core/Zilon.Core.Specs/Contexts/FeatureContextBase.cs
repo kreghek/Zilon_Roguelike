@@ -127,6 +127,10 @@ namespace Zilon.Core.Specs.Contexts
             var sectorSubScheme = new TestSectorSubScheme
             {
                 RegularMonsterSids = new[] { "rat" },
+                MapGeneratorOptions = new SquareGenerationOptionsSubScheme
+                { 
+                    Size = mapSize
+                }
             };
 
             var sectorNodeMock = new Mock<ISectorNode>();
@@ -137,6 +141,12 @@ namespace Zilon.Core.Specs.Contexts
             humanPlayer.BindSectorNode(sectorNode);
 
             await sectorManager.CreateSectorAsync();
+        }
+
+        private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
+        {
+            public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.SquarePlane; }
+            public int Size { get; set; }
         }
 
         public ISector GetSector()
