@@ -84,7 +84,7 @@ public class SectorUiHandler : MonoBehaviour
         {
             // Это быстрое решение.
             // Проверяем, если это город, то делаем кнопку выхода видимой.
-            var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
+            var isInCity = GetIsInCity();
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
 
@@ -93,6 +93,11 @@ public class SectorUiHandler : MonoBehaviour
             var canOpen = GetCanOpenLoot();
             OpenLootButton.gameObject.SetActive(canOpen);
         }
+    }
+
+    private bool GetIsInCity()
+    {
+        return _sectorManager.CurrentSector?.Scheme.Sid == "city";
     }
 
     private bool GetCanOpenLoot()

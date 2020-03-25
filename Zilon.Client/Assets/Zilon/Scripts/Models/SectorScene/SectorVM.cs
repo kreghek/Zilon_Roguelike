@@ -250,6 +250,7 @@ public class SectorVM : MonoBehaviour
         {
             var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
             var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
+            sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
         }
         else if (sectorNode.State == SectorNodeState.SchemeKnown)
         {

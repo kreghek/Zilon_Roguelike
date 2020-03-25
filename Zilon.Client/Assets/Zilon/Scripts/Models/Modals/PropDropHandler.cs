@@ -7,47 +7,50 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Props;
 
 public class PropDropHandler : MonoBehaviour, IDropHandler
 {
-    private const string HISTORY_BOOK_SID = "history-book";
-
     [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public void OnDrop(PointerEventData eventData)
     {
-        var droppedPropItem = eventData.pointerDrag?.GetComponent<PropItemVm>();
+        var droppedPropItem = GetPropItemViewModel(eventData);
         _inventoryState.SelectedProp = droppedPropItem;
 
-        var prop = droppedPropItem?.Prop;
+        var prop = GetPropFromViewModelSafe(droppedPropItem);
 
-        if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))
+        var canUseProp = prop.Scheme.Use != null;
+        if (canUseProp)
         {
-            var canUseProp = prop.Scheme.Use != null;
-            if (canUseProp)
-            {
-                UseProp();
-            }
+            UseProp();
         }
-        else
+    }
+
+    private static IProp GetPropFromViewModelSafe(PropItemVm droppedPropItem)
+    {
+        if (droppedPropItem is null)
         {
-            ReadProp();
+            return null;
         }
+
+        return droppedPropItem.Prop;
+    }
+
+    private static PropItemVm GetPropItemViewModel(PointerEventData eventData)
+    {
+        if (eventData.pointerDrag is null)
+        {
+            return null;
+        }
+
+        return eventData.pointerDrag.GetComponent<PropItemVm>();
     }
 
     private void UseProp()
     {
         _commandManager.Push(_useSelfCommand);
-    }
-
-    private void ReadProp()
-    {
-        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
-        {
-            _commandManager.Push(_showHistoryCommand);
-        }
     }
 }

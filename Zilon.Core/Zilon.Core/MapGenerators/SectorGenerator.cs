@@ -80,6 +80,8 @@ namespace Zilon.Core.MapGenerators
                 monsterRegions,
                 sectorScheme);
 
+            sector.Scheme = sectorNode.Biome.LocationScheme;
+
             return sector;
         }
     }
