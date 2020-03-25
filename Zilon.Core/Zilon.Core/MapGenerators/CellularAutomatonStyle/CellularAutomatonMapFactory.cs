@@ -39,27 +39,20 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _interiorObjectRandomSource = interiorObjectRandomSource;
         }
 
-        /// <summary>
-        /// Создаёт карту сектора.
-        /// </summary>
-        /// <param name="options">Настройки генерации.
-        /// Должны быть типа ISectorSubScheme с заданным значением MapGeneratorOptions.
-        /// Значение MapGeneratorOptions должно быть типа ISectorCellularAutomataMapFactoryOptionsSubScheme.</param>
-        /// <returns></returns>
-        public Task<ISectorMap> CreateAsync(object options)
+        /// <inheritdoc/>
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
-            if (options is null)
+            if (generationOptions is null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
-            var sectorNode = (ISectorNode)options;
-            var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
+            var transitions = generationOptions.Transitions;
 
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorNode.SectorScheme.MapGeneratorOptions;
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
             if (cellularAutomatonOptions == null)
             {
-                throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
             var matrixWidth = cellularAutomatonOptions.MapWidth;

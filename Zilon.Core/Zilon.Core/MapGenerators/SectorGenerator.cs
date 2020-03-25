@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -55,9 +52,16 @@ namespace Zilon.Core.MapGenerators
         /// <returns> Возвращает экземпляр сектора. </returns>
         public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
+            if (sectorNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorNode));
+            }
+
             var mapFactory = _mapFactorySelector.GetMapFactory(sectorNode);
 
-            var map = await mapFactory.CreateAsync(sectorNode).ConfigureAwait(false);
+            var sectorFactoryOptions = new SectorMapFactoryOptions { OptionsSubScheme = sectorNode.SectorScheme.MapGeneratorOptions };
+
+            var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
             var sector = _sectorFactory.Create(map);
 

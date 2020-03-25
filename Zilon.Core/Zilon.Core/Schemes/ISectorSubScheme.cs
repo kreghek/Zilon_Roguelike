@@ -39,22 +39,6 @@
         string[] ChampionMonsterSids { get; }
 
         /// <summary>
-        /// Количество регионов в карте.
-        /// </summary>
-        /// <remarks>
-        /// Для подземелий это количество комнат.
-        /// </remarks>
-        int RegionCount { get; }
-
-        /// <summary>
-        /// Максимальный размер комнат.
-        /// </summary>
-        /// <remarks>
-        /// Минимальный размер всегда 2х2.
-        /// </remarks>
-        int RegionSize { get; }
-
-        /// <summary>
         /// Минимальное количество монстров в регионе сектора.
         /// </summary>
         int MinRegionMonsterCount { get; }
@@ -95,10 +79,5 @@
         /// параметры генерации карты.
         /// </summary>
         ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
-    }
-
-    public interface ISectorTransitionSubScheme : ISubScheme
-    {
-        string SectorLevelSid { get; }
     }
 }

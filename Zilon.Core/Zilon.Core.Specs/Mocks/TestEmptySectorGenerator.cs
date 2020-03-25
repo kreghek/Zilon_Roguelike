@@ -34,7 +34,9 @@ namespace Zilon.Core.Specs.Mocks
 
         public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
-            var map = await _mapFactory.CreateAsync(sectorNode);
+            var sectorFactoryOptions = new SectorMapFactoryOptions { OptionsSubScheme = sectorNode.SectorScheme.MapGeneratorOptions };
+
+            var map = await _mapFactory.CreateAsync(sectorFactoryOptions);
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.PrimitiveStyle
@@ -11,16 +13,21 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
     /// <seealso cref="IMapFactory" />
     public class SquareMapFactory : IMapFactory
     {
-        /// <summary>
-        /// Создание карты.
-        /// </summary>
-        /// <param name="options">Параметры создания карты.</param>
-        /// <returns>
-        /// Возвращает экземпляр карты.
-        /// </returns>
-        public Task<ISectorMap> CreateAsync(object options)
+        /// <inheritdoc/>
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
-            var mapSize = (int)options;
+            if (generationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(generationOptions));
+            }
+
+            var factoryOptions = (ISectorSquareMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
+            if (factoryOptions == null)
+            {
+                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+            }
+
+            var mapSize = factoryOptions.Size;
 
             ISectorMap map = new SectorGraphMap();
             MapFiller.FillSquareMap(map, mapSize);
@@ -46,7 +53,18 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            return await factory.CreateAsync(mapSize).ConfigureAwait(false);
+            var generationOptions = new SectorMapFactoryOptions
+            {
+                OptionsSubScheme = new SquaregenerationOptionsSubScheme { Size = mapSize }
+            };
+
+            return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
+        }
+
+        private class SquaregenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
+        {
+            public SchemeSectorMapGenerator MapGenerator { get; }
+            public int Size { get; set; }
         }
     }
 }
