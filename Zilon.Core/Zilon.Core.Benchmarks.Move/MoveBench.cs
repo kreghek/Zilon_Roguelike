@@ -127,8 +127,11 @@ namespace Zilon.Core.Benchmarks.Move
                         RegularMonsterSids = new[] { "rat" },
                         RegionMonsterCount = 0,
 
-                        RegionCount = 20,
-                        RegionSize = 20,
+                        MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                        {
+                            RegionCount = 20,
+                            RegionSize = 20,
+                        },
 
                         IsStart = true,
 

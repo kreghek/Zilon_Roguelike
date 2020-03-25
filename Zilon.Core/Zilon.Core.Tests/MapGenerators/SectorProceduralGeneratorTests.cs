@@ -115,8 +115,11 @@ namespace Zilon.Core.Tests.MapGenerators
             return new TestSectorSubScheme
             {
                 RegularMonsterSids = new[] { "rat" },
-                RegionCount = 20,
-                RegionSize = 20
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20,
+                }
             };
         }
 

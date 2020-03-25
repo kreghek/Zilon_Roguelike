@@ -105,8 +105,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             return new TestSectorSubScheme
             {
-                RegionSize = 20,
-                RegionCount = 20
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20,
+                }
             };
         }
     }
