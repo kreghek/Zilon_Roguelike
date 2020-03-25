@@ -76,7 +76,9 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl4",
@@ -99,7 +101,9 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl5",
@@ -122,7 +126,9 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl6",
@@ -145,7 +151,9 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		}
 	]
 }

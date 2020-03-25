@@ -52,7 +52,9 @@
 				"MapWidth": 45,
 				"MapHeight": 60,
 				"ChanceToStartAlive": 30,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 	]
 }

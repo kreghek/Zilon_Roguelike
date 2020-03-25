@@ -73,7 +73,9 @@
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"]
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl-barracks",

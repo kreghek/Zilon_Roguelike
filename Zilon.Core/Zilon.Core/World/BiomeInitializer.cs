@@ -41,11 +41,14 @@ namespace Zilon.Core.World
 
             var biom = sectorNode.Biome;
 
+            // Важно генерировать соседние узлы до начала генерации сектора,
+            // чтобы знать переходы из сектора.
+
+            await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
+
             var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
-
-            await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
         }
 
         private async Task<SectorNode> RollAndBindBiomeAsync()
@@ -73,12 +76,16 @@ namespace Zilon.Core.World
         {
             var sectorNode = new SectorNode(biom, startSectorScheme);
 
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+            // Важно генерировать соседние узлы до начала генерации сектора,
+            // чтобы знать переходы из сектора.
 
-            sectorNode.MaterializeSector(sector);
             biom.AddNode(sectorNode);
 
             await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
+
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+
+            sectorNode.MaterializeSector(sector);
         }
 
         private async Task CreateNextSectorNodesAsync(ISectorNode sectorNode, IBiome biom)

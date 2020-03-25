@@ -557,6 +557,8 @@ public class SectorVM : MonoBehaviour
 
         var nextSectorNode = e.Transition.SectorNode;
         _humanPlayer.BindSectorNode(nextSectorNode);
+
+        StartLoadScene();
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
