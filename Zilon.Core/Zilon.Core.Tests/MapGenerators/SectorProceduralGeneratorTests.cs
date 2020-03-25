@@ -34,10 +34,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
-
-            var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
-            var sectorNode = sectorNodeMock.Object;
+            var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
             Func<Task> act = async () =>
@@ -72,9 +69,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
-            var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x=>x.SectorScheme).Returns(sectorScheme);
-            var sectorNode = sectorNodeMock.Object;
+            var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
@@ -123,6 +118,20 @@ namespace Zilon.Core.Tests.MapGenerators
                 RegionCount = 20,
                 RegionSize = 20
             };
+        }
+
+        private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
+        {
+            var biomeMock = new Mock<IBiome>();
+            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>())).Returns(Array.Empty<ISectorNode>());
+            var biome = biomeMock.Object;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
+            sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
+            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SectorMaterialized);
+            var sectorNode = sectorNodeMock.Object;
+            return sectorNode;
         }
     }
 }

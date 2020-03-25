@@ -81,7 +81,7 @@ namespace Zilon.Core.World
             await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
         }
 
-        private async Task CreateNextSectorNodesAsync(ISectorNode sectorNode, Biome biom)
+        private async Task CreateNextSectorNodesAsync(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
                     .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));

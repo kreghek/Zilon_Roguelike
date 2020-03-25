@@ -6,12 +6,16 @@ namespace Zilon.Core.World
 {
     public interface ISectorNode: IGraphNode
     {
-        Biome Biome { get; }
+        IBiome Biome { get; }
+        
         ISector Sector { get; }
+        
         ISectorSubScheme SectorScheme { get; set; }
+        
         SectorNodeState State { get; }
 
-        void BindSchemeInfo(Biome biom, ISectorSubScheme sectorScheme);
+        void BindSchemeInfo(IBiome biom, ISectorSubScheme sectorScheme);
+
         void MaterializeSector(ISector sector);
     }
 }

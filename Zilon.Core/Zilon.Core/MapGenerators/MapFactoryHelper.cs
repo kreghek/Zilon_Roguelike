@@ -24,6 +24,11 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(sectorNode));
             }
 
+            if (sectorNode.State != SectorNodeState.SectorMaterialized)
+            {
+                throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
+            }
+
             var next = sectorNode.Biome.GetNext(sectorNode);
 
             return next.Select(node => new RoomTransition(node as ISectorNode));

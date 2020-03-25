@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -8,7 +7,7 @@ namespace Zilon.Core.World
 {
     public sealed class SectorNode : ISectorNode
     {
-        public SectorNode(Biome biom, ISectorSubScheme sectorScheme)
+        public SectorNode(IBiome biom, ISectorSubScheme sectorScheme)
         {
             Biome = biom ?? throw new ArgumentNullException(nameof(biom));
             SectorScheme = sectorScheme ?? throw new ArgumentNullException(nameof(sectorScheme));
@@ -21,7 +20,7 @@ namespace Zilon.Core.World
 
         public ISector Sector { get; private set; }
 
-        public Biome Biome { get; private set; }
+        public IBiome Biome { get; private set; }
 
         public ISectorSubScheme SectorScheme { get; set; }
 
@@ -36,7 +35,7 @@ namespace Zilon.Core.World
             State = SectorNodeState.SectorMaterialized;
         }
 
-        public void BindSchemeInfo(Biome biom, ISectorSubScheme sectorScheme)
+        public void BindSchemeInfo(IBiome biom, ISectorSubScheme sectorScheme)
         {
             if (State != SectorNodeState.SchemeUnknown)
             {
