@@ -124,18 +124,17 @@ namespace Zilon.Core.Specs.Contexts
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
 
-            var locationScheme = new TestLocationScheme
+            var sectorSubScheme = new TestSectorSubScheme
             {
-                SectorLevels = new ISectorSubScheme[]
-                {
-                    new TestSectorSubScheme
-                    {
-                        RegularMonsterSids = new[] { "rat" },
-                    }
-                }
+                RegularMonsterSids = new[] { "rat" },
             };
-            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
-            humanPlayer.GlobeNode = globeNode;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x=>x.State).Returns(SectorNodeState.SectorMaterialized);
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorSubScheme);
+            var sectorNode = sectorNodeMock.Object;
+
+            humanPlayer.BindSectorNode(sectorNode);
 
             await sectorManager.CreateSectorAsync();
         }

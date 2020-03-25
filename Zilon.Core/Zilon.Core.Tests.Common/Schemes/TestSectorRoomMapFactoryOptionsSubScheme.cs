@@ -6,6 +6,6 @@ namespace Zilon.Core.Tests.Common.Schemes
     {
         public int RegionCount { get; set; }
         public int RegionSize { get; set; }
-        public SchemeSectorMapGenerator MapGenerator { get; }
+        public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.Room; }
     }
 }

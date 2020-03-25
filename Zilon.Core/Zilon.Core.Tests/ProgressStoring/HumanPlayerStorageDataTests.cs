@@ -86,7 +86,7 @@ namespace Zilon.Core.ProgressStoring.Tests
 
             var humanPlayer = new HumanPlayer();
             humanPlayer.Terrain = globe.Localities.Last().Cell;
-            humanPlayer.GlobeNode = regionNode;
+            //humanPlayer.GlobeNode = regionNode;
 
             // Создание модели хранения
             var storageData = HumanPlayerStorageData.Create(humanPlayer);

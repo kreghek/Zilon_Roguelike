@@ -18,9 +18,9 @@ namespace Zilon.Core.ProgressStoring
         public static HumanPlayerStorageData Create(HumanPlayer humanPlayer)
         {
             var storageData = new HumanPlayerStorageData();
-            storageData.CurrentGlobeNodeX = humanPlayer.GlobeNode.OffsetX;
-            storageData.CurrentGlobeNodeY = humanPlayer.GlobeNode.OffsetY;
-            storageData.SectorSid = humanPlayer.SectorSid;
+            //storageData.CurrentGlobeNodeX = humanPlayer.GlobeNode.OffsetX;
+            //storageData.CurrentGlobeNodeY = humanPlayer.GlobeNode.OffsetY;
+            //storageData.SectorSid = humanPlayer.SectorSid;
             storageData.TerrainX = humanPlayer.Terrain.Coords.X;
             storageData.TerrainY = humanPlayer.Terrain.Coords.Y;
             return storageData;
@@ -28,13 +28,13 @@ namespace Zilon.Core.ProgressStoring
 
         public void Restore(HumanPlayer humanPlayer, Globe globe, IWorldManager worldManager)
         {
-            var terrainCoords = new OffsetCoords(TerrainX, TerrainY);
-            var terrainCell = globe.Terrain.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
-            humanPlayer.Terrain = terrainCell;
-            humanPlayer.SectorSid = SectorSid;
+            //var terrainCoords = new OffsetCoords(TerrainX, TerrainY);
+            //var terrainCell = globe.Terrain.SelectMany(x => x).Single(x => x.Coords == terrainCoords);
+            //humanPlayer.Terrain = terrainCell;
+            //humanPlayer.SectorSid = SectorSid;
 
-            var globeRegion = worldManager.Regions[terrainCell];
-            humanPlayer.GlobeNode = globeRegion.RegionNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
+            //var globeRegion = worldManager.Regions[terrainCell];
+            //humanPlayer.GlobeNode = globeRegion.RegionNodes.Single(x => x.OffsetX == CurrentGlobeNodeX && x.OffsetY == CurrentGlobeNodeY);
         }
     }
 }

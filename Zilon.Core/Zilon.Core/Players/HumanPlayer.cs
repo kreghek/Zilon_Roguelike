@@ -11,46 +11,21 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : PlayerBase
     {
-        private GlobeRegionNode _globeNode;
-
         /// <summary>
         /// Текущая провинция группы игрока.
         /// </summary>
         public TerrainCell Terrain { get; set; }
 
-        /// <summary>
-        /// Текущая локация группы игрока. Узел провинции.
-        /// </summary>
-        public GlobeRegionNode GlobeNode
-        {
-            get => _globeNode;
-            set
-            {
-                _globeNode = value;
-                GlobeNodeChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-        public ISectorNode SectorNode { get; }
+        public ISectorNode SectorNode { get; private set; }
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
         public HumanPerson MainPerson { get; set; }
 
-        /// <summary> 
-        /// Текущий идентфиикатор сектора.
-        /// </summary>
-        public string SectorSid { get; set; }
-
-        /// <summary> 
-        /// Текущий идентфиикатор уровня сектора внутри локации.
-        /// </summary>
-        public string SectorLevelSid { get; set; }
-
-        /// <summary>
-        /// Событие выстреливает, если зменяется узел группы игрока на глобальной карте.
-        /// </summary>
-        public event EventHandler GlobeNodeChanged;
+        public void BindSectorNode(ISectorNode sectorNode)
+        {
+            SectorNode = sectorNode;
+        }
     }
 }

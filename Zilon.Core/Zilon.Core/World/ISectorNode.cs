@@ -10,7 +10,7 @@ namespace Zilon.Core.World
         
         ISector Sector { get; }
         
-        ISectorSubScheme SectorScheme { get; set; }
+        ISectorSubScheme SectorScheme { get; }
         
         SectorNodeState State { get; }
 
