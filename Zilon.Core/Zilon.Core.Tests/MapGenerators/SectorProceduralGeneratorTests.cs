@@ -132,7 +132,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorNodeMock = new Mock<ISectorNode>();
             sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
             sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
-            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SectorMaterialized);
+            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
             var sectorNode = sectorNodeMock.Object;
             return sectorNode;
         }

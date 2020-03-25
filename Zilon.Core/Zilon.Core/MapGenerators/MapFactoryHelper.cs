@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(sectorNode));
             }
 
-            if (sectorNode.State != SectorNodeState.SectorMaterialized)
+            if (sectorNode.State != SectorNodeState.SchemeKnown)
             {
                 throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
             }
