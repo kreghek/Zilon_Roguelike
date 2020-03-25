@@ -51,11 +51,25 @@
             return resultMatrix;
         }
 
+        /// <summary>
+        /// Растягивает матрицу.
+        /// </summary>
+        /// <param name="matrix"> Исходная матрица. </param>
+        /// <param name="factor"> Фактор растягивания. Указывает, сколько ячеек будет создано в замен исходного значения. </param>
+        /// <returns> Возвращает новую растянутую матрицу. </returns>
+        /// <remarks>
+        /// <see cref="factor"/> должен быть больше или равен 1. Уменьшение матрица не реализовано.
+        /// </remarks>
         public static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix, int factor)
         {
             if (matrix is null)
             {
                 throw new System.ArgumentNullException(nameof(matrix));
+            }
+
+            if (factor < 1)
+            {
+                throw new System.ArgumentException("Значение должно быть 1 или больше.", nameof(factor));
             }
 
             var scaledMatrix = new Matrix<bool>(matrix.Width * factor, matrix.Height * factor);
