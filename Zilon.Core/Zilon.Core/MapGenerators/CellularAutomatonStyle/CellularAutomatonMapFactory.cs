@@ -97,7 +97,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                var maxtrixScales = CreateScaledMatrix(matrix);
+                // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
+                // мог помещаться персонаж размером в 7 узлов.
+                const int SCALE_FACTOR = 4;
+                var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
 
                 var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
 
@@ -143,27 +146,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Если цикл закончился, значит вышел лимит попыток.
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
-        }
-
-        private static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix)
-        {
-            const int V = 4;
-            var scaledMatrix = new Matrix<bool>(matrix.Width * V, matrix.Height * V);
-            for (var i = 0; i < matrix.Width; i++)
-            {
-                for (var j = 0; j < matrix.Height; j++)
-                {
-                    for (var k1 = 0; k1 < V; k1++)
-                    {
-                        for (var k2 = 0; k2 < V; k2++)
-                        {
-                            scaledMatrix.Items[i * V + k1, j * V + k2] = matrix.Items[i, j];
-                        }
-                    }
-                }
-            }
-
-            return scaledMatrix;
         }
 
         private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)

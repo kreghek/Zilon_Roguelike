@@ -50,5 +50,31 @@
 
             return resultMatrix;
         }
+
+        public static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix, int factor)
+        {
+            if (matrix is null)
+            {
+                throw new System.ArgumentNullException(nameof(matrix));
+            }
+
+            var scaledMatrix = new Matrix<bool>(matrix.Width * factor, matrix.Height * factor);
+
+            for (var i = 0; i < matrix.Width; i++)
+            {
+                for (var j = 0; j < matrix.Height; j++)
+                {
+                    for (var k1 = 0; k1 < factor; k1++)
+                    {
+                        for (var k2 = 0; k2 < factor; k2++)
+                        {
+                            scaledMatrix.Items[i * factor + k1, j * factor + k2] = matrix.Items[i, j];
+                        }
+                    }
+                }
+            }
+
+            return scaledMatrix;
+        }
     }
 }
