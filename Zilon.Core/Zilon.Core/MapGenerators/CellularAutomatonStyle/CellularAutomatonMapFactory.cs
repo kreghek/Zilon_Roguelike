@@ -93,10 +93,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
                 // мог помещаться персонаж размером в 7 узлов.
-                const int SCALE_FACTOR = 4;
-                var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
+                // Отключено, потому что сейчас слишком долгая генерация + туман войны на больших плошадях тормозит
+                //const int SCALE_FACTOR = 4;
+                //var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
 
-                var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
+                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
                 try
