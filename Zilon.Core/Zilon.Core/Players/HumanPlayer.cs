@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Players
@@ -11,11 +9,6 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : PlayerBase
     {
-        /// <summary>
-        /// Текущая провинция группы игрока.
-        /// </summary>
-        public TerrainCell Terrain { get; set; }
-
         public ISectorNode SectorNode { get; private set; }
 
         /// <summary>
@@ -26,6 +19,12 @@ namespace Zilon.Core.Players
         public void BindSectorNode(ISectorNode sectorNode)
         {
             SectorNode = sectorNode;
+        }
+
+        public void Reset()
+        {
+            SectorNode = null;
+            MainPerson = null;
         }
     }
 }

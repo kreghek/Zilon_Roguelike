@@ -6,17 +6,15 @@ using Zenject;
 
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
-using Zilon.Core.World;
 
 public class TitleHandler : MonoBehaviour
 {
-    [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _humanPlayer;
 
     public void Start()
     {
-        GameProgressHelper.ResetGameState(_globeManager, _scoreManager, _humanPlayer);
+        GameProgressHelper.ResetGameState(_scoreManager, _humanPlayer);
     }
 
     public void CloseButtonHandler()

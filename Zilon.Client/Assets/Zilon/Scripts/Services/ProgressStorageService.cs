@@ -156,7 +156,7 @@ namespace Assets.Zilon.Scripts.Services
                 return false;
             }
 
-            storageDataObject.Restore(_humanPlayer, _worldManager.Globe, _worldManager);
+            storageDataObject.Restore(_humanPlayer);
 
             LoadScores();
 

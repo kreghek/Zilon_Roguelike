@@ -2,7 +2,6 @@
 using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
@@ -42,7 +41,6 @@ public class ContinueButtonHandler : MonoBehaviour
 
     public void ContinueHandler()
     {
-        GameProgressHelper.ResetGameState(_globeManager, _scoreManager, _humanPlayer);
-        SceneManager.LoadScene("globe");
+        GameProgressHelper.ResetGameState(_scoreManager, _humanPlayer);
     }
 }

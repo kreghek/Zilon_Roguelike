@@ -15,14 +15,11 @@ public class SectorNameHandler : MonoBehaviour
     public Text SectorNameText;
 
     [Inject] [NotNull] private readonly HumanPlayer _humanPlayer;
-    [Inject] [NotNull] private readonly ISchemeService _schemeService;
     [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 
     public void FixedUpdate()
     {
-        var currentSchemeSid = _humanPlayer.SectorSid;
-
-        var scheme = _schemeService.GetScheme<ILocationScheme>(currentSchemeSid);
+        var scheme = _humanPlayer.SectorNode.SectorScheme;
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 

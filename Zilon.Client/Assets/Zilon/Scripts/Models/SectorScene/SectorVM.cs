@@ -25,6 +25,7 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once ArrangeTypeModifiers
@@ -114,6 +115,8 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
     [Inject] private readonly UiSettingService _uiSettingService;
+
+    [Inject] private readonly IBiomeInitializer _biomeInitializer;
 
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
@@ -241,9 +244,22 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
+        var sectorNode = _humanPlayer.SectorNode;
+
+        if (sectorNode == null)
+        {
+            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
+            var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
+        }
+        else if (sectorNode.State == SectorNodeState.SchemeKnown)
+        {
+            await _biomeInitializer.MaterializeLevel(sectorNode);
+        }
+
+        _humanPlayer.BindSectorNode(sectorNode);
         await _sectorManager.CreateSectorAsync();
 
-        _sectorManager.CurrentSector.ScoreManager = _scoreManager;
+        var sector = sectorNode.Sector.ScoreManager = _scoreManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -538,53 +554,8 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
-        if (e.Transition.SectorSid == null)
-        {
-            _humanPlayer.SectorSid = "globe";
-            _humanPlayer.SectorLevelSid = null;
-
-            // Текущий набор секторов пройден.
-            // Из доступных выбираем случайную схему нового сектора.
-            // И запоминаем её в объекте игрока.
-
-            StartLoadScene();
-
-            return;
-        }
-        else
-        {
-            _humanPlayer.SectorLevelSid = e.Transition.SectorSid;
-
-            StartLoadScene();
-
-            return;
-        }
-
-        //if (_humanPlayer.GlobeNode == null)
-        //{
-
-        //}
-
-        //var currentLocation = _humanPlayer.GlobeNode.Scheme;
-        //if (currentLocation?.SectorLevels == null)
-        //{
-        //    _humanPlayer.SectorSid = null;
-        //    SceneManager.LoadScene("globe");
-        //    SaveGameProgress();
-        //    return;
-        //}
-
-        //if (e.Transition.SectorSid == null)
-        //{
-        //    _humanPlayer.SectorSid = null;
-        //    SceneManager.LoadScene("globe");
-        //    SaveGameProgress();
-        //}
-        //else
-        //{
-        //    _humanPlayer.SectorSid = e.Transition.SectorSid;
-        //    StartLoadScene();
-        //}
+        var nextSectorNode = e.Transition.SectorNode;
+        _humanPlayer.BindSectorNode(nextSectorNode);
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

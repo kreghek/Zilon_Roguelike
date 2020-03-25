@@ -52,6 +52,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
         Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
 
+        Container.Bind<IBiomeSchemeRoller>().To<BiomeSchemeRoller>().AsSingle();
+
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
         Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();

@@ -1,21 +1,17 @@
 ﻿using Zilon.Core.Players;
 using Zilon.Core.Scoring;
-using Zilon.Core.World;
 
 namespace Assets.Zilon.Scripts.Models.TitleScene
 {
+    //TODO Статический класс лучше заменить на отдельную службу со своими зависимостями.
+    [System.Obsolete("Требуется заменить отдельной службой")]
     public static class GameProgressHelper
     {
         public static void ResetGameState(
-            IWorldManager globeManager,
             IScoreManager scoreManager,
             HumanPlayer humanPlayer)
         {
-            globeManager.Globe = null;
-            humanPlayer.GlobeNode = null;
-            humanPlayer.MainPerson = null;
-            humanPlayer.SectorSid = null;
-            humanPlayer.Terrain = null;
+            humanPlayer.Reset();
             scoreManager.ResetScores();
         }
     }

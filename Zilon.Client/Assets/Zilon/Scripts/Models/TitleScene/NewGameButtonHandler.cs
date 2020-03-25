@@ -8,12 +8,9 @@ using Zenject;
 
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
-using Zilon.Core.World;
 
 public class NewGameButtonHandler : MonoBehaviour
 {
-
-    [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _humanPlayer;
 
@@ -23,7 +20,7 @@ public class NewGameButtonHandler : MonoBehaviour
     // Start is called before the first frame update
     public void PlayHandler()
     {
-        GameProgressHelper.ResetGameState(_globeManager, _scoreManager, _humanPlayer);
+        GameProgressHelper.ResetGameState(_scoreManager, _humanPlayer);
         _progressStorageService.Destroy();
         SceneManager.LoadScene("combat");
     }
