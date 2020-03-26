@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 
 public class SectorNameHandler : MonoBehaviour
 {
@@ -19,11 +18,15 @@ public class SectorNameHandler : MonoBehaviour
 
     public void FixedUpdate()
     {
+        var locationScheme = _humanPlayer.SectorNode.Biome.LocationScheme;
         var scheme = _humanPlayer.SectorNode.SectorScheme;
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
-        SectorNameText.text = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, scheme.Name);
+        var locationName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, locationScheme.Name);
+        var sectorLevelName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, scheme.Name);
+
+        SectorNameText.text = $"{locationName} {sectorLevelName}";
 
         Destroy(this);
     }
