@@ -543,7 +543,9 @@ public class SectorVM : MonoBehaviour
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
         // Персонаж игрока выходит из сектора.
-        _humanPlayer.SectorNode.Sector.ActorManager.Remove(_playerState.ActiveActor.Actor);
+        var actor = _playerState.ActiveActor.Actor;
+        _humanPlayer.SectorNode.Sector.ActorManager.Remove(actor);
+        _humanPlayer.SectorNode.Sector.Map.ReleaseNode(actor.Node, actor);
 
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();

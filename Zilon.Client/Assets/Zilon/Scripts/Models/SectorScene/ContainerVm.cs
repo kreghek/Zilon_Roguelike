@@ -33,6 +33,11 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
         transform.position = new Vector3(transform.position.x, transform.position.y, hexNode.OffsetY - 0.26f);
     }
 
+    private void OnDestroy()
+    {
+        Container.Opened -= Container_Opened;
+    }
+
     public void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject())
