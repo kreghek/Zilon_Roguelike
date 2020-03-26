@@ -287,6 +287,14 @@ public class SectorVM : MonoBehaviour
     {
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
+
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        foreach (var monsterActor in monsters)
+        {
+            monsterActor.UsedAct -= ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead -= Monster_Dead;
+        }    
+
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
 
         _gameLoop.Updated -= GameLoop_Updated;
