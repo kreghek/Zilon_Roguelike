@@ -91,8 +91,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
 
-    [NotNull] [Inject] private readonly IActorManager _actorManager;
-
     [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
     //TODO Вернуть, когда будет придуман туториал
@@ -260,7 +258,7 @@ public class SectorVM : MonoBehaviour
         _humanPlayer.BindSectorNode(sectorNode);
         await _sectorManager.CreateSectorAsync();
 
-        var sector = sectorNode.Sector.ScoreManager = _scoreManager;
+        sectorNode.Sector.ScoreManager = _scoreManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -296,7 +294,7 @@ public class SectorVM : MonoBehaviour
 
     private List<MapNodeVM> InitNodeViewModels()
     {
-        var map = _sectorManager.CurrentSector.Map;
+        var map = _humanPlayer.SectorNode.Sector.Map;
         var nodeVMs = new List<MapNodeVM>();
 
         foreach (var node in map.Nodes)
@@ -321,9 +319,6 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
 
-            //var fowController = mapNodeObj.GetComponent<FowNodeController>();
-            //fowController.SectorMap = map;
-
             nodeVMs.Add(mapNodeVm);
         }
 
@@ -341,7 +336,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var monsters = _actorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -355,7 +350,7 @@ public class SectorVM : MonoBehaviour
             graphicController.Actor = monsterActor;
             graphicController.Graphic = actorGraphic;
 
-            var actorNodeVm = nodeViewModels.Single(x => x.Node == monsterActor.Node);
+            var actorNodeVm = nodeViewModels.Single(x => ReferenceEquals(x.Node, monsterActor.Node));
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
             actorViewModel.transform.position = actorPosition;
             actorViewModel.Actor = monsterActor;
@@ -401,7 +396,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var citizens = _actorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
+        var citizens = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
         foreach (var trader in citizens)
         {
             CreateTraderViewModel(nodeViewModels, trader);
@@ -547,6 +542,9 @@ public class SectorVM : MonoBehaviour
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
+        // Персонаж игрока выходит из сектора.
+        _humanPlayer.SectorNode.Sector.ActorManager.Remove(_playerState.ActiveActor.Actor);
+
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
