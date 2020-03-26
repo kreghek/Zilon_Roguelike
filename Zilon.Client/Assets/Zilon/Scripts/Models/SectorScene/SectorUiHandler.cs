@@ -26,8 +26,6 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-    [Inject] private readonly IPropContainerManager _propContainerManager;
-
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -119,7 +117,8 @@ public class SectorUiHandler : MonoBehaviour
 
     private IPropContainer GetContainerInNode(IGraphNode targetnNode)
     {
-        var containerInNode = _propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
+        var propContainerManager = _sectorManager.CurrentSector.PropContainerManager;
+        var containerInNode = propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
         return containerInNode;
     }
 

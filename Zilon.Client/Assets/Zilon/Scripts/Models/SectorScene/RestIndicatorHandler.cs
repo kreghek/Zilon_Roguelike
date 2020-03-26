@@ -5,6 +5,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 public class RestIndicatorHandler : MonoBehaviour
@@ -12,7 +13,7 @@ public class RestIndicatorHandler : MonoBehaviour
     public GameObject Icon;
 
     [Inject]
-    private readonly IActorManager _actorManager;
+    private readonly HumanPlayer _humanPlayer;
 
     [Inject]
     private readonly ISectorUiState _playerState;
@@ -24,7 +25,8 @@ public class RestIndicatorHandler : MonoBehaviour
 
     public void Update()
     {
-        if (_actorManager.Items.Any(x => x != _playerState.ActiveActor?.Actor))
+        var actorManager = _humanPlayer.SectorNode.Sector.ActorManager;
+        if (actorManager.Items.Any(x => x != _playerState.ActiveActor?.Actor))
         {
             Icon.SetActive(false);
         }
