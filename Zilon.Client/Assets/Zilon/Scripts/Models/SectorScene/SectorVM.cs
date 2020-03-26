@@ -72,7 +72,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-
+    private IPropContainerManager _propContainerManager;
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -90,8 +90,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
     [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
-
-    [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
@@ -259,6 +257,8 @@ public class SectorVM : MonoBehaviour
         await _sectorManager.CreateSectorAsync();
 
         sectorNode.Sector.ScoreManager = _scoreManager;
+
+        _propContainerManager = sectorNode.Sector.PropContainerManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -651,58 +651,6 @@ public class SectorVM : MonoBehaviour
     private void EnemyViewModel_MouseEnter(object sender, EventArgs e)
     {
         _playerState.HoverViewModel = (IActorViewModel)sender;
-    }
-
-    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
-        [NotNull] IActorManager actorManager,
-        [NotNull] IPerkResolver perkResolver,
-        [NotNull] IGraphNode startNode,
-        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
-    {
-        if (_humanPlayer.MainPerson == null)
-        {
-            if (!_progressStorageService.LoadPerson())
-            {
-                _humanPlayer.MainPerson = _humanPersonFactory.Create();
-            }
-        }
-
-        var fowData = new HumanSectorFowData();
-
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
-        _playerEventLogService.Actor = actor;
-        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
-
-        actorManager.Add(actor);
-
-        var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
-        var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
-        actorViewModel.PlayerState = _playerState;
-        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-        actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
-        actorViewModel.GraphicRoot = actorGraphic;
-
-        var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
-        graphicController.Actor = actor;
-        graphicController.Graphic = actorGraphic;
-
-        var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
-        var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-        actorViewModel.transform.position = actorPosition;
-        actorViewModel.Actor = actor;
-        actorViewModel.Selected += HumanActorViewModel_Selected;
-
-        actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actor.UsedAct += ActorOnUsedAct;
-        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
-        actor.UsedProp += Actor_UsedProp;
-
-        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
-        {
-            AddResourceToCurrentPerson("camp-tools");
-        }
-
-        return actorViewModel;
     }
 
     private void Actor_UsedProp(object sender, UsedPropEventArgs e)
