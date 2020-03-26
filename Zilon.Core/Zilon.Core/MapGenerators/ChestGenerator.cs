@@ -17,18 +17,15 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
-        private readonly IPropContainerManager _propContainerManager;
         private readonly IChestGeneratorRandomSource _chestGeneratorRandomSource;
 
         public ChestGenerator(ISchemeService schemeService,
             IDropResolver dropResolver,
-            IPropContainerManager propContainerManager,
             IChestGeneratorRandomSource chestGeneratorRandomSource)
         {
-            _schemeService = schemeService;
-            _dropResolver = dropResolver;
-            _propContainerManager = propContainerManager;
-            _chestGeneratorRandomSource = chestGeneratorRandomSource;
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _chestGeneratorRandomSource = chestGeneratorRandomSource ?? throw new ArgumentNullException(nameof(chestGeneratorRandomSource));
         }
 
         /// <inheritdoc/>
@@ -104,7 +101,7 @@ namespace Zilon.Core.MapGenerators
                     }
 
                     // Проверка, что сундук не перегораживает проход.
-                    var isValid = CheckMap(map, (HexNode)containerNode);
+                    var isValid = CheckMap(sector, (HexNode)containerNode);
                     if (!isValid)
                     {
                         // в этом случае будет сгенерировано на один сундук меньше.
@@ -136,7 +133,7 @@ namespace Zilon.Core.MapGenerators
                         default:
                             throw new InvalidOperationException($"Не корректное назначение {containerPurpose}.");
                     }
-                    _propContainerManager.Add(container);
+                    sector.PropContainerManager.Add(container);
 
                     chestCounter--;
 
@@ -149,9 +146,10 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private bool CheckMap(ISectorMap map, HexNode containerNode)
+        private bool CheckMap(ISector sector, HexNode containerNode)
         {
-            var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+            var map = sector.Map;
+            var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);
 
             var allNonObstacleNodes = map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
             var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
