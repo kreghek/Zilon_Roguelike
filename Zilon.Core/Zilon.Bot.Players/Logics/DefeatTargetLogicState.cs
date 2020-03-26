@@ -22,12 +22,11 @@ namespace Zilon.Bot.Players.Logics
         private MoveTask _moveTask;
 
         private readonly ISectorMap _map;
+        private readonly ISectorManager _sectorManager;
         private readonly ITacticalActUsageService _actService;
-        private readonly IActorManager _actorManager;
 
         public DefeatTargetLogicState(ISectorManager sectorManager,
-                                      ITacticalActUsageService actService,
-                                      IActorManager actorManager)
+                                      ITacticalActUsageService actService)
         {
             if (sectorManager is null)
             {
@@ -35,8 +34,8 @@ namespace Zilon.Bot.Players.Logics
             }
 
             _map = sectorManager.CurrentSector.Map;
+            _sectorManager = sectorManager;
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
-            _actorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
         }
 
         private IAttackTarget GetTarget(IActor actor)
@@ -54,7 +53,7 @@ namespace Zilon.Bot.Players.Logics
 
         private IEnumerable<IActor> CheckForIntruders(IActor actor)
         {
-            foreach (var target in _actorManager.Items)
+            foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
             {
                 if (target.Owner == actor.Owner)
                 {

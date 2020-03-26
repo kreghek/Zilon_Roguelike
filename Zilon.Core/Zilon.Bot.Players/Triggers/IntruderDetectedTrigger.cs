@@ -8,19 +8,19 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger: ILogicStateTrigger
     {
-        private readonly IActorManager _actorManager;
+        private readonly ISectorManager _sectorManager;
         private readonly ISectorMap _map;
 
-        public IntruderDetectedTrigger(IActorManager actorManager, ISectorManager sectorManager)
+        public IntruderDetectedTrigger(ISectorManager sectorManager)
         {
-            _actorManager = actorManager;
+            _sectorManager = sectorManager ?? throw new System.ArgumentNullException(nameof(sectorManager));
             _map = sectorManager.CurrentSector.Map;
         }
 
         private IActor[] CheckForIntruders(IActor actor)
         {
             var foundIntruders = new List<IActor>();
-            foreach (var target in _actorManager.Items)
+            foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
             {
                 if (target.Owner == actor.Owner)
                 {

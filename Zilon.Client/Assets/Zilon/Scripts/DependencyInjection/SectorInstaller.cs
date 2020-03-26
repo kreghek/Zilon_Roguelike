@@ -31,8 +31,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-        Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
-        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSourceCollector>().FromMethod(context =>
