@@ -31,14 +31,27 @@ namespace Zilon.Core.MapGenerators
             _chestGeneratorRandomSource = chestGeneratorRandomSource;
         }
 
+        /// <inheritdoc/>
         /// <summary>
         /// Создать сундуки в секторе.
         /// </summary>
-        /// <param name="map">Карта сектора. Нужна для определения доступного места для сундука.</param>
-        /// <param name="sectorSubScheme">Схема сектора. По сути - настройки для размещения сундуков.</param>
-        /// <param name="regions">Регионы, в которых возможно размещение сундуков.</param>
-        public void CreateChests(ISectorMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
+        public void CreateChests(ISector sector, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
         {
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (sectorSubScheme is null)
+            {
+                throw new ArgumentNullException(nameof(sectorSubScheme));
+            }
+
+            if (regions is null)
+            {
+                throw new ArgumentNullException(nameof(regions));
+            }
+
             var trashDropTables = GetTrashDropTables(sectorSubScheme);
             var treasuresDropTable = GetTreasuresDropTable();
             var chestCounter = sectorSubScheme.TotalChestCount;
@@ -47,10 +60,10 @@ namespace Zilon.Core.MapGenerators
             var countChestRatioNormal = 1f / sectorSubScheme.RegionChestCountRatio;
             foreach (var region in regions)
             {
-                var maxChestCountRaw = region.Nodes.Count() * countChestRatioNormal;
+                var maxChestCountRaw = region.Nodes.Length * countChestRatioNormal;
                 var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
 
-                if (region.Nodes.Count() <= 1)
+                if (region.Nodes.Length <= 1)
                 {
                     // Для регионов, где только один узел,
                     // не создаём сундуки, иначе проход может быть загорожен.
@@ -65,6 +78,8 @@ namespace Zilon.Core.MapGenerators
                 }
 
                 var rolledCount = _chestGeneratorRandomSource.RollChestCount(maxChestCount);
+
+                var map = sector.Map;
 
                 var availableNodes = from node in region.Nodes
                                      where !map.Transitions.Keys.Contains(node)

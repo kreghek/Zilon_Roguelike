@@ -19,14 +19,12 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly ISchemeService _schemeService;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
-        private readonly IPropContainerManager _propContainerManager;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
         /// </summary>
         /// <param name="schemeService"> Сервис схем. </param>
         /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
-        /// <param name="actorManager"> Менеджер актёров, в который размещаются монстры. </param>
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterGeneratorRandomSource generatorRandomSource)
         {
@@ -70,7 +68,7 @@ namespace Zilon.Core.MapGenerators
             foreach (var region in monsterRegions)
             {
                 var regionNodes = region.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle);
-                var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+                var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);
                 var availableMonsterNodes = regionNodes.Except(containerNodes);
 
                 var freeNodes = new List<IGraphNode>(availableMonsterNodes);
