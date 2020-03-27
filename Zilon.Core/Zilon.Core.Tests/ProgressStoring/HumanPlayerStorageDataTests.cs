@@ -33,10 +33,7 @@ namespace Zilon.Core.ProgressStoring.Tests
                     Sid = SCHEME_SID,
                     SectorLevels = new ISectorSubScheme[]
                     {
-                        new TestSectorSubScheme
-                        {
-
-                        }
+                        new TestSectorSubScheme()
                     }
                 } }
             };
