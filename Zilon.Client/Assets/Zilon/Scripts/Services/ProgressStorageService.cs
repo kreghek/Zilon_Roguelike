@@ -13,16 +13,11 @@ using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
-using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 namespace Assets.Zilon.Scripts.Services
 {
     public sealed class ProgressStorageService
     {
-        [Inject]
-        private readonly IWorldManager _worldManager;
-
         [Inject]
         private readonly ISchemeService _schemeService;
 
@@ -46,59 +41,14 @@ namespace Assets.Zilon.Scripts.Services
 
         public void Save()
         {
-            if (_worldManager.Globe != null)
+            SavePlayer();
+            SaveScores();
+
+
+            if (_humanPlayer.MainPerson != null)
             {
-                SaveGlobe();
-
-                SavePlayer();
-                SaveScores();
-
-                if (_worldManager.Regions != null)
-                {
-                    foreach (var region in _worldManager.Regions)
-                    {
-                        SaveGlobeRegion(region.Value, region.Key);
-                    }
-                }
-
-                if (_humanPlayer.MainPerson != null)
-                {
-                    SavePerson();
-                }
+                SavePerson();
             }
-        }
-
-        public void SaveGlobe()
-        {
-            var storageDataObject = GlobeStorageData.Create(_worldManager.Globe);
-
-            SaveInner(storageDataObject, "Globe.txt");
-        }
-
-        public bool LoadGlobe()
-        {
-            var storageDataObject = LoadInner<GlobeStorageData>("Globe.txt");
-            if (storageDataObject == null)
-            {
-                return false;
-            }
-
-            var globe = storageDataObject.Restore();
-
-            _worldManager.Globe = globe;
-
-            var terrainCells = globe.Terrain.SelectMany(x => x).ToArray();
-
-            foreach (var cell in terrainCells)
-            {
-                var region = LoadRegion(cell);
-                if (region != null)
-                {
-                    _worldManager.Regions[cell] = region;
-                }
-            }
-
-            return true;
         }
 
         public void SavePerson()
@@ -121,25 +71,6 @@ namespace Assets.Zilon.Scripts.Services
             _humanPlayer.MainPerson = person;
 
             return true;
-        }
-
-        public void SaveGlobeRegion(GlobeRegion globeRegion, TerrainCell terrainCell)
-        {
-            var strageDataObject = GlobeRegionStorageData.Create(globeRegion, terrainCell);
-            SaveInner(strageDataObject, $"Region{terrainCell}.txt");
-        }
-
-        public GlobeRegion LoadRegion(TerrainCell terrainCell)
-        {
-            var storageDataObject = LoadInner<GlobeRegionStorageData>($"Region{terrainCell}.txt");
-            if (storageDataObject == null)
-            {
-                return null;
-            }
-
-            var region = storageDataObject.Restore(_schemeService);
-
-            return region;
         }
 
         public void SavePlayer()

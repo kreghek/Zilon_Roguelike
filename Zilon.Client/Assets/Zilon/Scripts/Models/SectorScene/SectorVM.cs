@@ -250,7 +250,7 @@ public class SectorVM : MonoBehaviour
         }
         else if (sectorNode.State == SectorNodeState.SchemeKnown)
         {
-            await _biomeInitializer.MaterializeLevel(sectorNode);
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode);
         }
 
         _humanPlayer.BindSectorNode(sectorNode);

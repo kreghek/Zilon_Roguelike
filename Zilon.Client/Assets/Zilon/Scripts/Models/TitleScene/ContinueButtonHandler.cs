@@ -8,7 +8,6 @@ using Zenject;
 
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
-using Zilon.Core.World;
 
 using Color = UnityEngine.Color;
 
@@ -20,12 +19,9 @@ public class ContinueButtonHandler : MonoBehaviour
 
     public Text ContinueText;
 
-    [Inject] private readonly IWorldManager _globeManager;
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly HumanPlayer _humanPlayer;
-
-    [Inject]
-    ProgressStorageService _progressStorageService;
+    [Inject] private readonly ProgressStorageService _progressStorageService;
 
     // Start is called before the first frame update
     void Start()
