@@ -288,15 +288,6 @@ public class SectorVM : MonoBehaviour
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
 
-        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
-        foreach (var monsterActor in monsters)
-        {
-            monsterActor.UsedAct -= ActorOnUsedAct;
-            monsterActor.Person.Survival.Dead -= Monster_Dead;
-        }    
-
-        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
-
         _gameLoop.Updated -= GameLoop_Updated;
     }
 
@@ -553,7 +544,9 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
         _humanPlayer.SectorNode.Sector.ActorManager.Remove(actor);
-        _humanPlayer.SectorNode.Sector.Map.ReleaseNode(actor.Node, actor);
+
+        // Отписываемся от событий в этом секторе
+        UnscribeSectorDependentEvents();
 
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
@@ -567,6 +560,18 @@ public class SectorVM : MonoBehaviour
         _humanPlayer.BindSectorNode(nextSectorNode);
 
         StartLoadScene();
+    }
+
+    private void UnscribeSectorDependentEvents()
+    {
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        foreach (var monsterActor in monsters)
+        {
+            monsterActor.UsedAct -= ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead -= Monster_Dead;
+        }
+
+        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
