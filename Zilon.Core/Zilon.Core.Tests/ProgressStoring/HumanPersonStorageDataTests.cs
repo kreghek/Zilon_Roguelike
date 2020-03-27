@@ -74,7 +74,7 @@ namespace Zilon.Core.Tests.ProgressStoring
             {
                 { "perk1", new TestPerkScheme{
                     Sid = "perk1",
-                    Levels = new PerkLevelSubScheme[]{
+                    Levels = new []{
                         new PerkLevelSubScheme{
                             Jobs = new[]{
                                 new TestJobSubScheme{Type = JobType.Defeats, Value = 100 }

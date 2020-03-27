@@ -27,7 +27,7 @@ namespace Zilon.Core.World
             return biom;
         }
 
-        public async Task MaterializeLevel(ISectorNode sectorNode)
+        public async Task MaterializeLevelAsync(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
@@ -61,27 +61,25 @@ namespace Zilon.Core.World
 
             var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
-            var sector = await _sectorGenerator.GenerateAsync(newBiomeSector).ConfigureAwait(false);
-
             return newBiomeSector;
         }
 
-        private async Task CreateStartSectorAsync(Biome biom)
+        private async Task CreateStartSectorAsync(IBiome biome)
         {
-            var startSectorScheme = biom.LocationScheme.SectorLevels.Single(x => x.IsStart);
-            await CreateAndAddSectorByScheme(biom, startSectorScheme).ConfigureAwait(false);
+            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
+            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
         }
 
-        private async Task CreateAndAddSectorByScheme(Biome biom, ISectorSubScheme startSectorScheme)
+        private async Task CreateAndAddSectorByScheme(IBiome biome, ISectorSubScheme startSectorScheme)
         {
-            var sectorNode = new SectorNode(biom, startSectorScheme);
+            var sectorNode = new SectorNode(biome, startSectorScheme);
 
             // Важно генерировать соседние узлы до начала генерации сектора,
             // чтобы знать переходы из сектора.
 
-            biom.AddNode(sectorNode);
+            biome.AddNode(sectorNode);
 
-            await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
+            await CreateNextSectorNodesAsync(sectorNode, biome).ConfigureAwait(false);
 
             var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
@@ -104,7 +102,7 @@ namespace Zilon.Core.World
 
             // Если в секторе есть переход в другой биом, то
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
-            if (sectorNode.SectorScheme.TransSectorSids.Any(x=>x.SectorLevelSid is null))
+            if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
             {
                 var nextSectorNode = await RollAndBindBiomeAsync().ConfigureAwait(false);
 

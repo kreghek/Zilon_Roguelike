@@ -17,7 +17,8 @@ namespace Zilon.Core.ProgressStoring
 
         public void Restore(HumanPlayer humanPlayer)
         {
-            
+            // Здесь нужно восстанавливать позиуию игрока в графе узлов биома.
+            // Еще не успел это сделать. Вернуться, когда будет готово сохранение биомов.
         }
     }
 }

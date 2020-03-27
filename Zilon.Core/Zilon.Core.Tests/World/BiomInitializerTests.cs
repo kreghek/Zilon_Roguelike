@@ -78,7 +78,7 @@ namespace Zilon.Core.World.Tests
                     .OfType<SectorNode>()
                     .First(x => x.State != SectorNodeState.SectorMaterialized);
 
-                await biomService.MaterializeLevel(nextNode).ConfigureAwait(false);
+                await biomService.MaterializeLevelAsync(nextNode).ConfigureAwait(false);
 
                 currentNode = nextNode;
 

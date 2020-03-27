@@ -146,7 +146,7 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private bool CheckMap(ISector sector, HexNode containerNode)
+        private static bool CheckMap(ISector sector, HexNode containerNode)
         {
             var map = sector.Map;
             var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);

@@ -27,7 +27,6 @@ namespace Zilon.Core.ProgressStoring.Tests
 
             const string SCHEME_SID = "rat-hole";
 
-            var schemeServiceMock = new Mock<ISchemeService>();
             var locationSchemes = new Dictionary<string, ILocationScheme>
             {
                 { SCHEME_SID, new TestLocationScheme{
@@ -39,10 +38,6 @@ namespace Zilon.Core.ProgressStoring.Tests
                     }
                 } }
             };
-            schemeServiceMock.Setup(x => x.GetScheme<ILocationScheme>(It.IsAny<string>()))
-                .Returns<string>(sid => locationSchemes[sid]);
-            var schemeService = schemeServiceMock.Object;
-
 
             var locationScheme = locationSchemes[SCHEME_SID];
             var biome = new Biome(locationScheme);

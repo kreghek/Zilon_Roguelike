@@ -98,7 +98,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
 
             // ASSERT
-            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(availableTransitions);
+            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(expectedTransitions);
         }
     }
 }
