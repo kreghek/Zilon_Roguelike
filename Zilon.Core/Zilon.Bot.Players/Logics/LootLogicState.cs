@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -13,18 +14,23 @@ namespace Zilon.Bot.Players.Logics
 
         public MoveTask _moveTask;
 
-        private readonly IPropContainerManager _propContainerManager;
         private readonly ISectorMap _map;
+        private readonly ISectorManager _sectorManager;
 
-        public LootLogicState(IPropContainerManager propContainerManager, ISectorManager sectorManager)
+        public LootLogicState(ISectorManager sectorManager)
         {
-            _propContainerManager = propContainerManager;
+            if (sectorManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorManager));
+            }
+
             _map = sectorManager.CurrentSector.Map;
+            _sectorManager = sectorManager;
         }
 
         public IPropContainer FindContainer(IActor actor)
         {
-            var foundContainers = LootHelper.FindAvailableContainers(_propContainerManager.Items,
+            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
                 actor.Node,
                 _map);
 

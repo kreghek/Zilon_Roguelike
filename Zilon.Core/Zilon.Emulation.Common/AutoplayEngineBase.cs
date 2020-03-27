@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +8,6 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -93,7 +89,6 @@ namespace Zilon.Emulation.Common
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
             HumanPerson humanPerson,
             ISectorManager sectorManager,
-            IActorManager actorManager,
             IPlayerEventLogService playerEventLogService)
         {
             var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
@@ -108,7 +103,7 @@ namespace Zilon.Emulation.Common
 
             playerEventLogService.Actor = actor;
 
-            actorManager.Add(actor);
+            sectorManager.CurrentSector.ActorManager.Add(actor);
 
             return actor;
         }
@@ -131,7 +126,6 @@ namespace Zilon.Emulation.Common
             var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-            var actorManager = ServiceScope.ServiceProvider.GetRequiredService<IActorManager>();
             var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
 
@@ -148,7 +142,6 @@ namespace Zilon.Emulation.Common
             var humanActor = CreateHumanActor(humanPlayer,
                 startPerson,
                 sectorManager,
-                actorManager,
                 playerEventLogService);
 
             return humanActor;

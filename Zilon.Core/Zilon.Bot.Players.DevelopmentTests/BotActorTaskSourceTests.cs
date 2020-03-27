@@ -7,12 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
