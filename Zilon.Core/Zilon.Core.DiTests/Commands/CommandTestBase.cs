@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -79,6 +80,9 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
             playerStateMock.SetupProperty(x => x.TacticalAct, simpleAct);
             var playerState = playerStateMock.Object;
+
+            sectorMock.SetupGet(x => x.ActorManager)
+                .Returns(() => ServiceProvider.GetRequiredService<IActorManager>());
 
             var gameLoopMock = new Mock<IGameLoop>();
             var gameLoop = gameLoopMock.Object;
