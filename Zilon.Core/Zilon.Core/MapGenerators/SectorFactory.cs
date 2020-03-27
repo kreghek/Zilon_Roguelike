@@ -22,7 +22,7 @@ namespace Zilon.Core.MapGenerators
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public ISector Create(ISectorMap map)
+        public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
             var actorManager = new ActorManager();
             var propContainerManager = new PropContainerManager();
@@ -32,7 +32,11 @@ namespace Zilon.Core.MapGenerators
                 propContainerManager,
                 _dropResolver,
                 _schemeService,
-                _equipmentDurableService);
+                _equipmentDurableService)
+            {
+                Scheme = locationScheme
+            };
+
             return sector;
         }
     }

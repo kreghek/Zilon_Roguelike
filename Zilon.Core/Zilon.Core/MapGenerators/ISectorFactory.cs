@@ -5,6 +5,6 @@ namespace Zilon.Core.MapGenerators
 {
     public interface ISectorFactory
     {
-        ISector Create(ISectorMap map);
+        ISector Create(ISectorMap map, Schemes.ILocationScheme locationScheme);
     }
 }

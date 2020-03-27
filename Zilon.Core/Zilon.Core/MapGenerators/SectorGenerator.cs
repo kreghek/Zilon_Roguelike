@@ -65,7 +65,9 @@ namespace Zilon.Core.MapGenerators
 
             var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
-            var sector = _sectorFactory.Create(map);
+            var locationScheme = sectorNode.Biome.LocationScheme;
+
+            var sector = _sectorFactory.Create(map, locationScheme);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
@@ -79,8 +81,6 @@ namespace Zilon.Core.MapGenerators
                 _botPlayer,
                 monsterRegions,
                 sectorScheme);
-
-            sector.Scheme = sectorNode.Biome.LocationScheme;
 
             return sector;
         }
