@@ -103,10 +103,4 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<SectorMapFactoryOptionsSubSchemeBase>))]
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; private set; }
     }
-
-    public sealed class SectorTransitionSubScheme : ISectorTransitionSubScheme
-    {
-        [JsonProperty]
-        public string SectorLevelSid { get; private set; }
-    }
 }

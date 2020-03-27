@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 
 using Newtonsoft.Json;
 
@@ -43,7 +42,6 @@ namespace Assets.Zilon.Scripts.Services
         {
             SavePlayer();
             SaveScores();
-
 
             if (_humanPlayer.MainPerson != null)
             {
@@ -96,7 +94,6 @@ namespace Assets.Zilon.Scripts.Services
 
         public void Destroy()
         {
-            DeleteFile("Globe.txt");
             DeleteFile("Person.txt");
             DeleteFile("Player.txt");
             DeleteFile("Scores.txt");

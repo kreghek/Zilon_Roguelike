@@ -30,9 +30,4 @@ namespace Zilon.Core.Tests.Common.Schemes
             return Sid;
         }
     }
-
-    public class TestSectorTransitionSubScheme : ISectorTransitionSubScheme
-    {
-        public string SectorLevelSid { get; set; }
-    }
 }

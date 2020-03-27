@@ -2,8 +2,6 @@
 
 using FluentAssertions;
 
-using Moq;
-
 using Newtonsoft.Json;
 
 using NUnit.Framework;
@@ -15,7 +13,8 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.ProgressStoring.Tests
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HumanPlayerStorageDataTests
     {
         [Test]
@@ -29,10 +28,13 @@ namespace Zilon.Core.ProgressStoring.Tests
 
             var locationSchemes = new Dictionary<string, ILocationScheme>
             {
-                { SCHEME_SID, new TestLocationScheme{
+                { SCHEME_SID, new TestLocationScheme
+                {
                     Sid = SCHEME_SID,
-                    SectorLevels = new ISectorSubScheme[]{
-                        new TestSectorSubScheme{
+                    SectorLevels = new ISectorSubScheme[]
+                    {
+                        new TestSectorSubScheme
+                        {
 
                         }
                     }

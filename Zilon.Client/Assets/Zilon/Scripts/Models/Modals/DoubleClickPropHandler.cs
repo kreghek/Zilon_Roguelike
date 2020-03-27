@@ -30,7 +30,6 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
             var prop = PropItemViewModel.Prop;
 
-
             var canUseProp = prop.Scheme.Use != null;
             if (canUseProp)
             {

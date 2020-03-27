@@ -217,6 +217,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ReadButton_Handler()
     {
-        
+        // Пок нет чтения, этот метод ничего не делает.
     }
 }

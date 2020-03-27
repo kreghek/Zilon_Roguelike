@@ -20,7 +20,11 @@
 
             var n = sourceMatrix.GetUpperBound(0) - sourceMatrix.GetLowerBound(0) + 1;
             var m = sourceMatrix.GetUpperBound(1) - sourceMatrix.GetLowerBound(1) + 1;
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+            // Отключаем это предупреждение, потому что на выходе нужен такой массив.
+            // Кроме того, матрица не может быть jagged.
             T[,] ret = new T[m, n];
+#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
 
             for (int i = 0; i < m; i++)
             {
@@ -82,7 +86,9 @@
                     {
                         for (var k2 = 0; k2 < factor; k2++)
                         {
-                            scaledMatrix.Items[i * factor + k1, j * factor + k2] = matrix.Items[i, j];
+                            var iFactor = i * factor;
+                            var jFactor = j * factor;
+                            scaledMatrix.Items[iFactor + k1, jFactor + k2] = matrix.Items[i, j];
                         }
                     }
                 }
