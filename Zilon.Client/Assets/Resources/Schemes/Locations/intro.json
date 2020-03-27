@@ -7,7 +7,8 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "Intro"
+				"En": "Trial",
+				"Ru": "Испытательный"
 			},
 			"IsStart": true,
 			
@@ -33,14 +34,15 @@
 		{
 			"Sid": "boss-sector",
 			"Name":{
-				"En": "End of the Beginning"
+				"En": "End of the Beginning",
+				"Ru": "Конец Испытательного"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
 			"MinRegionMonsterCount": 5,
-			"RegionMonsterCount": 20,
+			"RegionMonsterCount": 10,
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -49,9 +51,9 @@
 			"MapGeneratorOptions":
 			{
 				"MapGenerator": "CellularAutomaton",
-				"MapWidth": 45,
-				"MapHeight": 60,
-				"ChanceToStartAlive": 30,
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
 			},
 			
 			"TransSectorSids": [{ "SectorLevelSid": null}]
