@@ -10,13 +10,13 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Persons.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class PersonPerkInitializatorTests
     {
         /// <summary>
         /// Проверяет, что при наличии одной схемы начального перка создаётся объект перка с этой схемой.
         /// </summary>
-        [Test()]
+        [Test]
         public void GetTest_OneBuildInPerk_ReturnsThisBuildInPerk()
         {
             var diceMock = new Mock<IDice>();

@@ -11,7 +11,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tactics.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class ActorTests
     {
         /// <summary>

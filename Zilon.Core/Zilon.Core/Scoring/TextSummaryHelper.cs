@@ -51,8 +51,6 @@ namespace Zilon.Core.Scoring
 
             summaryStringBuilder.AppendLine("=== You visited ===");
 
-            summaryStringBuilder.AppendLine($"{scores.Places.Count} places");
-
             foreach (var placeType in scores.PlaceTypes)
             {
                 summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");

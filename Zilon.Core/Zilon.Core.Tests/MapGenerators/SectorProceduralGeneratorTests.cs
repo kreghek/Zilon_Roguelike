@@ -18,7 +18,8 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
@@ -39,7 +40,7 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Func<Task> act = async () =>
             {
-                var sector = await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
+                await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
             };
 
             // ASSERT

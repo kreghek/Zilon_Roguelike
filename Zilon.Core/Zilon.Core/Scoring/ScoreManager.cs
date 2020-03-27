@@ -3,7 +3,6 @@
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Scoring
 {
@@ -14,7 +13,6 @@ namespace Zilon.Core.Scoring
     public class ScoreManager : IScoreManager
     {
         private const float TURN_INC = 0.1f;
-        private const int PLACE_SCORES = 100;
         private const int MONSTER_DEFAULT_BASE_SCORE = 25;
 
         public ScoreManager()
@@ -33,9 +31,6 @@ namespace Zilon.Core.Scoring
 
         /// <inheritdoc/>
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
-
-        /// <inheritdoc/>
-        public ISet<GlobeRegionNode> Places { get => Scores.Places; }
 
         /// <inheritdoc/>
         public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
@@ -73,17 +68,6 @@ namespace Zilon.Core.Scoring
             Frags[monsterScheme]++;
         }
 
-        /// <summary>Засчитывает посещение места на глобальной карте.</summary>
-        /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
-        public void CountPlace(GlobeRegionNode regionNode)
-        {
-            if (!Places.Contains(regionNode))
-            {
-                Places.Add(regionNode);
-                BaseScores += PLACE_SCORES;
-            }
-        }
-
         /// <summary>Засчитать один прожитый шаг.</summary>
         public void CountTurn(ILocationScheme sectorScheme)
         {
@@ -111,7 +95,6 @@ namespace Zilon.Core.Scoring
             Frags.Clear();
             PlaceTypes.Clear();
             Turns = 0;
-            Places.Clear();
         }
 
         public Scores Scores { get; set; }

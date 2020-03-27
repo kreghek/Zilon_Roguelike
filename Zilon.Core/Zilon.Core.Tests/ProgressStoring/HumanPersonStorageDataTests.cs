@@ -22,7 +22,7 @@ namespace Zilon.Core.Tests.ProgressStoring
     [Parallelizable(ParallelScope.All)]
     public class HumanPersonStorageDataTests
     {
-        [Test()]
+        [Test]
         public void Restore_MinimunPersonAfterSave_RestoredPersonEqualsOriginal()
         {
             // ARRANGE

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -12,8 +11,6 @@ namespace Zilon.Core.Tactics
             Frags = new Dictionary<IMonsterScheme, int>();
 
             PlaceTypes = new Dictionary<ILocationScheme, int>();
-
-            Places = new HashSet<GlobeRegionNode>();
         }
 
         public float TurnCounter { get; set; }
@@ -29,8 +26,9 @@ namespace Zilon.Core.Tactics
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
 
-        /// <summary>Посещённые места.</summary>
-        public ISet<GlobeRegionNode> Places { get; set; }
+        /// <summary>
+        /// Различные достижения, полученные заигровую сессию.
+        /// </summary>
         public ScoreAchievements Achievements { get; set; }
     }
 }

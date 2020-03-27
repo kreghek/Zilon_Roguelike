@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -14,21 +12,15 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISectorManager" />
     public class SectorManager : ISectorManager
     {
-        private const string INTRO_LOCATION_SID = "intro";
-        private readonly IWorldManager _worldManager;
         private readonly ISectorGenerator _generator;
         private readonly HumanPlayer _humanPlayer;
-        private readonly ISchemeService _schemeService;
 
-        public SectorManager(IWorldManager worldManager,
+        public SectorManager(
             ISectorGenerator generator,
-            HumanPlayer humanPlayer,
-            ISchemeService schemeService)
+            HumanPlayer humanPlayer)
         {
-            _worldManager = worldManager ?? throw new ArgumentNullException(nameof(worldManager));
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
             _humanPlayer = humanPlayer ?? throw new ArgumentNullException(nameof(humanPlayer));
-            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
         }
 
         /// <summary>

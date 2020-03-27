@@ -15,11 +15,16 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.World.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     [Category("integration")]
     public class BiomInitializerTests
     {
-        [Test()]
+        /// <summary>
+        /// Вспомогательный тест, больший нужный для ручной проверки.
+        /// Проверяет, что успешно создаётся цепочка узлов биома.
+        /// </summary>
+        /// <returns></returns>
+        [Test]
         public async Task BuildLinearBiomGraph()
         {
             // ARRANGE
@@ -54,13 +59,6 @@ namespace Zilon.Core.World.Tests
                 return scheme;
             });
             var roller = rollerMock.Object;
-
-            var schemeServiceMock = new Mock<ISchemeService>();
-            schemeServiceMock.Setup(x => x.GetSchemes<ILocationScheme>())
-                .Returns(locationSchemes);
-            schemeServiceMock.Setup(x => x.GetScheme<ILocationScheme>(It.IsAny<string>()))
-                .Returns<string>(sid => locationSchemes.Single(scheme => scheme.Sid == sid));
-            var schemeService = schemeServiceMock.Object;
 
             var introScheme = locationSchemes.Single(x => x.Sid == "intro");
 

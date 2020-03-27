@@ -91,7 +91,6 @@ namespace Zilon.Core.Specs.Contexts
             RegisterPlayerServices(serviceCollection);
             RegisterClientServices(serviceCollection);
             RegisterCommands(serviceCollection);
-            RegisterWorldServices(serviceCollection);
             return serviceCollection;
         }
 
@@ -418,11 +417,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
             RegisterManager.RegisterBot(serviceCollection);
-        }
-
-        private static void RegisterWorldServices(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IWorldManager, WorldManager>();
         }
 
         private void InitClientServices()
