@@ -41,6 +41,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var roomFactoryOptions = generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
 
+            if (roomFactoryOptions is null)
+            {
+                throw new System.ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
+            }
+
             var map = CreateMapInstance();
 
             var edgeHash = new HashSet<string>();
