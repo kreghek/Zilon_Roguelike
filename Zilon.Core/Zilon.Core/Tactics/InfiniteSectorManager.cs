@@ -2,6 +2,7 @@
 
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -25,9 +26,11 @@ namespace Zilon.Core.Tactics
         {
             var scheme = _schemeService.GetScheme<ILocationScheme>(LOCATION_SID);
 
-            var sectorLevelScheme = scheme.SectorLevels[0];
+            var biome = new Biome(scheme);
 
-            CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme).ConfigureAwait(false);
+            var sectorNode = new SectorNode(biome, scheme.SectorLevels[0]);
+
+            CurrentSector = await _generator.GenerateAsync(sectorNode).ConfigureAwait(false);
             CurrentSector.Scheme = scheme;
         }
     }

@@ -14,10 +14,12 @@ using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.MapGenerators.RoomStyle;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
@@ -33,11 +35,12 @@ namespace Zilon.Core.Tests.MapGenerators
             var botPlayer = CreateBotPlayer();
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
+            var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
             Func<Task> act = async () =>
             {
-                var sector = await generator.GenerateDungeonAsync(sectorScheme).ConfigureAwait(false);
+                await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
             };
 
             // ASSERT
@@ -67,8 +70,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var generator = CreateGenerator(botPlayer, mapFactory);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorNode = CreateSectorNode(sectorScheme);
+
             // ACT
-            await generator.GenerateDungeonAsync(sectorScheme).ConfigureAwait(false);
+            await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
         private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
@@ -87,7 +92,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var citizenGenerator = citizenGeneratorMock.Object;
 
             var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
-            mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorSubScheme>()))
+            mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorNode>()))
                 .Returns(mapFactory);
             var mapFactorySelector = mapFactorySelectorMock.Object;
 
@@ -111,9 +116,26 @@ namespace Zilon.Core.Tests.MapGenerators
             return new TestSectorSubScheme
             {
                 RegularMonsterSids = new[] { "rat" },
-                RegionCount = 20,
-                RegionSize = 20
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20,
+                }
             };
+        }
+
+        private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
+        {
+            var biomeMock = new Mock<IBiome>();
+            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>())).Returns(Array.Empty<ISectorNode>());
+            var biome = biomeMock.Object;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
+            sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
+            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
+            var sectorNode = sectorNodeMock.Object;
+            return sectorNode;
         }
     }
 }

@@ -1,26 +1,12 @@
-﻿using System.Linq;
-
-using UnityEngine;
-
-using Zenject;
-
-using Zilon.Core.World;
+﻿using UnityEngine;
 
 public class SectorViewModelActivator : MonoBehaviour
 {
-    [Inject]
-    private readonly IGlobeManager _globeManager;
-
     public SectorViewModel TargetSectorViewModel;
 
     public void Update()
     {
-        if (!_globeManager.IsGlobeInitialized)
-        {
-            return;
-        }
-
-        var globe = _globeManager.Globe;
+        // Вместо этих строк нужно брать доменную модель сектора из HumanPlayer/SectorManager
 
         //var sectorInfo = globe.SectorInfos.First();
         //var sector = sectorInfo.Sector;

@@ -20,7 +20,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class MonsterGeneratorTests
     {
         /// <summary>
@@ -55,19 +56,20 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
-            var propContainerMock = new Mock<IPropContainerManager>();
-            var propContainer = propContainerMock.Object;
-            propContainerMock.SetupGet(x => x.Items).Returns(new IPropContainer[0]);
+            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManager = propContainerManagerMock.Object;
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IPropContainer>());
+
             var monsterGenerator = new MonsterGenerator(schemeService,
-                randomSource,
-                actorManager,
-                propContainer);
+                randomSource);
 
+            var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
-            var map = await SquareMapFactory.CreateAsync(20);
             var sectorMock = new Mock<ISector>();
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
+            sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
+            sectorMock.SetupGet(x => x.PropContainerManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
             var monsterRegions = new List<MapRegion> {
@@ -86,8 +88,6 @@ namespace Zilon.Core.Tests.MapGenerators
                 new Mock<IBotPlayer>().Object,
                 monsterRegions,
                 sectorScheme);
-
-
 
             // ASSERT
             var championCount = actorManager.Items.Count(x => ((MonsterPerson)x.Person).Scheme.Sid == "champion");

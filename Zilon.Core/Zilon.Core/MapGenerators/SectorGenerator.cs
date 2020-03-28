@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.MapGenerators.WildStyle;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -51,88 +48,39 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создаёт экземпляр сектора подземелий с указанными параметрами.
         /// </summary>
-        /// <param name="sectorScheme"> Схема генерации сектора. </param>
+        /// <param name="sectorNode"> Схема генерации сектора. </param>
         /// <returns> Возвращает экземпляр сектора. </returns>
-        public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
+        public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
-            var mapFactory = _mapFactorySelector.GetMapFactory(sectorScheme);
+            if (sectorNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorNode));
+            }
 
-            var map = await mapFactory.CreateAsync(sectorScheme);
+            var mapFactory = _mapFactorySelector.GetMapFactory(sectorNode);
 
-            var sector = _sectorFactory.Create(map);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
+
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
+
+            var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+
+            var locationScheme = sectorNode.Biome.LocationScheme;
+
+            var sector = _sectorFactory.Create(map, locationScheme);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
-            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Count() > 4);
-            _chestGenerator.CreateChests(map, sectorScheme, chestRegions);
+            var sectorScheme = sectorNode.SectorScheme;
+
+            var chestRegions = gameObjectRegions.Where(x => x.Nodes.Length > 4);
+            _chestGenerator.CreateChests(sector, sectorScheme, chestRegions);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,
                 _botPlayer,
                 monsterRegions,
                 sectorScheme);
-
-            return sector;
-        }
-
-        /// <summary>
-        /// Создаёт сектор квартала города.
-        /// </summary>
-        /// <param name="globe">Объект мира.</param>
-        /// <param name="globeNode">Узел провинции, на основе которого генерируется сектор.</param>
-        /// <returns>
-        /// Возвращает созданный сектор.
-        /// </returns>
-        /// <remarks>
-        /// Нужно будет передавать параметры зданий, наличие персонажей и станков для крафта.
-        /// Вместо общей информации об узле.
-        /// </remarks>
-        public async Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
-        {
-            var townScheme = new TownSectorScheme
-            {
-                RegionCount = 10,
-                RegionSize = 10
-            };
-
-            var mapFactory = _mapFactorySelector.GetMapFactory(townScheme);
-
-            var map = await mapFactory.CreateAsync(townScheme);
-
-            var sector = _sectorFactory.Create(map);
-
-            _citizenGenerator.CreateCitizens(sector, _botPlayer, sector.Map.Regions);
-
-            //TODO Выходы нужно генерировать в карте, аналогично подземельям.
-            map.Transitions.Add(map.Nodes.Last(), RoomTransition.CreateGlobalExit());
-
-            return sector;
-        }
-
-        /// <summary>
-        /// Создаёт сектор фрагмента дикого окружения.
-        /// </summary>
-        /// <param name="globe">Объект мира.</param>
-        /// <param name="globeNode">Узел провинции, на основе которого генерируется сектор.</param>
-        /// <returns>
-        /// Возвращает созданный сектор.
-        /// </returns>
-        /// <remarks>
-        /// Нужно будет передавать параметры окружения и количество
-        /// и характеристики монстров.
-        /// </remarks>
-        public async Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
-        {
-            var map = await WildMapFactory.CreateAsync(30);
-            var sector = _sectorFactory.Create(map);
-
-            if (globeNode.MonsterState != null)
-            {
-                _monsterGenerator.CreateMonsters(sector,
-                    _botPlayer,
-                    new[] { map.Regions[1] },
-                    globeNode.MonsterState.MonsterPersons);
-            }
 
             return sector;
         }

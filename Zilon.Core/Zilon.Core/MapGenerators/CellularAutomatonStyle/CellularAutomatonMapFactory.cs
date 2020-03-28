@@ -11,6 +11,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -38,27 +39,20 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _interiorObjectRandomSource = interiorObjectRandomSource;
         }
 
-        /// <summary>
-        /// Создаёт карту сектора.
-        /// </summary>
-        /// <param name="options">Настройки генерации.
-        /// Должны быть типа ISectorSubScheme с заданным значением MapGeneratorOptions.
-        /// Значение MapGeneratorOptions должно быть типа ISectorCellularAutomataMapFactoryOptionsSubScheme.</param>
-        /// <returns></returns>
-        public Task<ISectorMap> CreateAsync(object options)
+        /// <inheritdoc/>
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
-            if (options is null)
+            if (generationOptions is null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
-            var sectorScheme = (ISectorSubScheme)options;
-            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
+            var transitions = generationOptions.Transitions;
 
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
             if (cellularAutomatonOptions == null)
             {
-                throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
             var matrixWidth = cellularAutomatonOptions.MapWidth;
@@ -97,9 +91,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                var maxtrixScales = CreateScaledMatrix(matrix);
+                // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
+                // мог помещаться персонаж размером в 7 узлов.
+                // Отключено, потому что сейчас слишком долгая генерация + туман войны на больших плошадях тормозит
+                //const int SCALE_FACTOR = 4;
+                //var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
 
-                var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
+                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
                 try
@@ -143,27 +141,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Если цикл закончился, значит вышел лимит попыток.
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
-        }
-
-        private static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix)
-        {
-            const int V = 4;
-            var scaledMatrix = new Matrix<bool>(matrix.Width * V, matrix.Height * V);
-            for (var i = 0; i < matrix.Width; i++)
-            {
-                for (var j = 0; j < matrix.Height; j++)
-                {
-                    for (var k1 = 0; k1 < V; k1++)
-                    {
-                        for (var k2 = 0; k2 < V; k2++)
-                        {
-                            scaledMatrix.Items[i * V + k1, j * V + k2] = matrix.Items[i, j];
-                        }
-                    }
-                }
-            }
-
-            return scaledMatrix;
         }
 
         private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
@@ -227,7 +204,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     map.Transitions.Add(transitionNode, transition);
 
-                    if (transition.SectorSid == null)
+                    if (transition.SectorNode == null)
                     {
                         transitionRegion.IsOut = true;
                     }

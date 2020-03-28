@@ -11,44 +11,25 @@ namespace Zilon.Core.Schemes
         /// Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] RegularMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы редких монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] RareMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы боссов, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] ChampionMonsterSids { get; private set; }
-
-
-        /// <summary>
-        /// Тип фабрики для карты.
-        /// </summary>
-        [JsonProperty]
-        public SectorSubSchemeMapFactory MapFactory { get; private set; }
-
-        /// <summary>
-        /// Количество регионов в карте.
-        /// </summary>
-        /// <remarks>
-        /// Для подземелий это количество комнат.
-        /// </remarks>
-        [JsonProperty]
-        public int RegionCount { get; private set; }
-
-        /// <summary>
-        /// Максимальный размер комнат.
-        /// </summary>
-        /// <remarks>
-        /// Минимальный размер всегда 2х2.
-        /// </remarks>
-        [JsonProperty]
-        public int RegionSize { get; private set; }
 
         /// <summary>
         /// Количество монстров в секторе.
@@ -69,6 +50,8 @@ namespace Zilon.Core.Schemes
         /// Таблицы дропа для сундуков.
         /// </summary>
         [JsonProperty]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
         public string[] ChestDropTableSids { get; private set; }
 
 
@@ -98,7 +81,10 @@ namespace Zilon.Core.Schemes
         /// </summary>
         /// <seealso cref="Sid"/>
         [JsonProperty]
-        public string[] TransSectorSids { get; private set; }
+        [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Используется для десериализации")]
+        public ISectorTransitionSubScheme[] TransSectorSids { get; private set; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.

@@ -118,29 +118,27 @@ namespace Zilon.Core.Benchmarks.Move
             var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource>();
 
-            var locationScheme = new TestLocationScheme
+            TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
             {
-                SectorLevels = new ISectorSubScheme[]
-               {
-                    new TestSectorSubScheme
-                    {
-                        RegularMonsterSids = new[] { "rat" },
-                        RegionMonsterCount = 0,
+                RegularMonsterSids = new[] { "rat" },
+                RegionMonsterCount = 0,
 
-                        RegionCount = 20,
-                        RegionSize = 20,
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20,
+                },
 
-                        IsStart = true,
+                IsStart = true,
 
-                        ChestDropTableSids = new[] {"survival", "default" },
-                        RegionChestCountRatio = 9,
-                        TotalChestCount = 0
-                    }
-               }
+                ChestDropTableSids = new[] { "survival", "default" },
+                RegionChestCountRatio = 9,
+                TotalChestCount = 0
             };
 
-            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
-            humanPlayer.GlobeNode = globeNode;
+            var sectorNode = new TestMaterializedSectorNode(testSectorSubScheme);
+
+            humanPlayer.BindSectorNode(sectorNode);
 
             sectorManager.CreateSectorAsync().Wait();
 

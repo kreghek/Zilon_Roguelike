@@ -91,7 +91,6 @@ namespace Zilon.Core.Specs.Contexts
             RegisterPlayerServices(serviceCollection);
             RegisterClientServices(serviceCollection);
             RegisterCommands(serviceCollection);
-            RegisterWorldServices(serviceCollection);
             return serviceCollection;
         }
 
@@ -124,20 +123,29 @@ namespace Zilon.Core.Specs.Contexts
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
 
-            var locationScheme = new TestLocationScheme
+            var sectorSubScheme = new TestSectorSubScheme
             {
-                SectorLevels = new ISectorSubScheme[]
-                {
-                    new TestSectorSubScheme
-                    {
-                        RegularMonsterSids = new[] { "rat" },
-                    }
+                RegularMonsterSids = new[] { "rat" },
+                MapGeneratorOptions = new SquareGenerationOptionsSubScheme
+                { 
+                    Size = mapSize
                 }
             };
-            var globeNode = new GlobeRegionNode(0, 0, locationScheme);
-            humanPlayer.GlobeNode = globeNode;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x=>x.State).Returns(SectorNodeState.SectorMaterialized);
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorSubScheme);
+            var sectorNode = sectorNodeMock.Object;
+
+            humanPlayer.BindSectorNode(sectorNode);
 
             await sectorManager.CreateSectorAsync();
+        }
+
+        private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
+        {
+            public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.SquarePlane; }
+            public int Size { get; set; }
         }
 
         public ISector GetSector()
@@ -409,11 +417,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
             RegisterManager.RegisterBot(serviceCollection);
-        }
-
-        private static void RegisterWorldServices(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IWorldManager, WorldManager>();
         }
 
         private void InitClientServices()

@@ -93,8 +93,6 @@ namespace Zilon.Emulation.Common
             container.AddScoped<ICitizenGenerator, CitizenGenerator>();
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
-            container.AddScoped<IActorManager, ActorManager>();
-            container.AddScoped<IPropContainerManager, PropContainerManager>();
             container.AddScoped<ITacticalActUsageService>(serviceProvider =>
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();

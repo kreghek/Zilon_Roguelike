@@ -17,8 +17,6 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
-        private readonly IActorManager _actorManager;
-
         /// <summary>
         /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
@@ -39,12 +37,9 @@ namespace Zilon.Core.Commands
         [ExcludeFromCodeCoverage]
         public MoveCommand(IGameLoop gameLoop,
             ISectorManager sectorManager,
-            ISectorUiState playerState,
-            IActorManager actorManager) :
+            ISectorUiState playerState) :
             base(gameLoop, sectorManager, playerState)
         {
-            _actorManager = actorManager;
-
             Path = new List<IGraphNode>();
         }
 
@@ -154,7 +149,7 @@ namespace Zilon.Core.Commands
         private bool CheckEnemies()
         {
             var actor = PlayerState.ActiveActor.Actor;
-            var enemies = _actorManager.Items
+            var enemies = SectorManager.CurrentSector.ActorManager.Items
                 .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
 
             foreach (var enemyActor in enemies)

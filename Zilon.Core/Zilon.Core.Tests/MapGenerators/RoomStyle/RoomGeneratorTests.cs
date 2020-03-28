@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 {
@@ -32,7 +33,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
@@ -57,7 +58,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Action act = () =>
             {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, new[] { RoomTransition.CreateGlobalExit() });
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
                 var edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
@@ -75,7 +76,9 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public void GenerateRoomsInGrid_Transitions()
         {
             // ARRANGE
-            var transition = RoomTransition.CreateGlobalExit();
+            var sectorNodeMock = new Mock<ISectorNode>();
+            var sectorNode = sectorNodeMock.Object;
+            var transition = new RoomTransition(sectorNode);
             var availableTransitions = new[] { transition };
 
             var randomMock = new Mock<IRoomGeneratorRandomSource>();
@@ -95,7 +98,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
 
             // ASSERT
-            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(availableTransitions);
+            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(expectedTransitions);
         }
     }
 }

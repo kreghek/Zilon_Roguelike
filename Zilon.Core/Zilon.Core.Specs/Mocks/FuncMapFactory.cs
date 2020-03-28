@@ -10,7 +10,7 @@ namespace Zilon.Core.Specs.Mocks
     {
         private Func<Task<ISectorMap>> _factoryFuncAsync;
 
-        public async Task<ISectorMap> CreateAsync(object options)
+        public async Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
             if (_factoryFuncAsync == null)
             {

@@ -7,12 +7,13 @@ namespace Zilon.Bot.Players.Triggers
 {
     public sealed class LootDetectedTrigger : ILogicStateTrigger
     {
-        private readonly IPropContainerManager _propContainerManager;
         private readonly ISectorMap _map;
+        private readonly ISectorManager _sectorManager;
 
-        public LootDetectedTrigger(IPropContainerManager propContainerManager, ISectorManager sectorManager)
+        public LootDetectedTrigger(ISectorManager sectorManager)
         {
-            _propContainerManager = propContainerManager;
+            _sectorManager = sectorManager ?? throw new System.ArgumentNullException(nameof(sectorManager));
+
             _map = sectorManager.CurrentSector.Map;
         }
 
@@ -23,7 +24,7 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
-            var foundContainers = LootHelper.FindAvailableContainers(_propContainerManager.Items,
+            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
                 actor.Node,
                 _map);
 

@@ -17,7 +17,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Commands
 {
-    [TestFixture()]
+    [TestFixture]
     public class UseSelfCommandTests : CommandTestBase
     {
         /// <summary>

@@ -9,11 +9,11 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Bot.Players.Logics.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class SelectActHelperTests
     {
-        [Test()]
+        [Test]
         public void SelectBestAct_HasResourceRequireActAndHasNoResource_SelectsDefault()
         {
             // ARRANGE
@@ -71,7 +71,7 @@ namespace Zilon.Bot.Players.Logics.Tests
             factAct.Scheme.Sid.Should().Be("default");
         }
 
-        [Test()]
+        [Test]
         public void SelectBestAct_HasResourceRequireActAndHasNoInventory_SelectsDefault()
         {
             // ARRANGE

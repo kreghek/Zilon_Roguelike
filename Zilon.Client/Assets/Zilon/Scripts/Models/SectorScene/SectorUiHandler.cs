@@ -26,8 +26,6 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
-    [Inject] private readonly IPropContainerManager _propContainerManager;
-
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -84,7 +82,7 @@ public class SectorUiHandler : MonoBehaviour
         {
             // Это быстрое решение.
             // Проверяем, если это город, то делаем кнопку выхода видимой.
-            var isInCity = _sectorManager.CurrentSector?.Scheme.Sid == "city";
+            var isInCity = GetIsInCity();
             CityQuickExitButton.gameObject.SetActive(isInCity);
         }
 
@@ -93,6 +91,11 @@ public class SectorUiHandler : MonoBehaviour
             var canOpen = GetCanOpenLoot();
             OpenLootButton.gameObject.SetActive(canOpen);
         }
+    }
+
+    private bool GetIsInCity()
+    {
+        return _sectorManager.CurrentSector?.Scheme.Sid == "city";
     }
 
     private bool GetCanOpenLoot()
@@ -114,7 +117,8 @@ public class SectorUiHandler : MonoBehaviour
 
     private IPropContainer GetContainerInNode(IGraphNode targetnNode)
     {
-        var containerInNode = _propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
+        var propContainerManager = _sectorManager.CurrentSector.PropContainerManager;
+        var containerInNode = propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
         return containerInNode;
     }
 
@@ -192,7 +196,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать T и выполнить переход.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
         {
             return;
         }
@@ -205,7 +209,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать Q и выйти из сектора на глобальную карту.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
         {
             return;
         }

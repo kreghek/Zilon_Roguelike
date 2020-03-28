@@ -74,6 +74,7 @@ namespace Zilon.Core.Tactics
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
 
             ActorManager.Added += ActorManager_Added;
+            ActorManager.Removed += ActorManager_Remove;
             PropContainerManager.Added += PropContainerManager_Added;
             PropContainerManager.Removed += PropContainerManager_Remove;
 
@@ -265,10 +266,23 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        private void ActorManager_Remove(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        {
+            // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
+            foreach (var actor in e.Items)
+            {
+                Map.ReleaseNode(actor.Node, actor);
+
+                if (actor.Person.Survival != null)
+                {
+                    actor.Person.Survival.Dead -= ActorState_Dead;
+                }
+            }
+        }
+
         private void ActorState_Dead(object sender, EventArgs e)
         {
             var actor = ActorManager.Items.Single(x => x.Person.Survival == sender);
-            Map.ReleaseNode(actor.Node, actor);
             ActorManager.Remove(actor);
 
             if (actor.Person.Survival != null)

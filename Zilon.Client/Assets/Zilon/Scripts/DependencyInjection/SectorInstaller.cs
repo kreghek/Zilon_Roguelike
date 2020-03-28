@@ -21,6 +21,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
@@ -30,8 +31,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
-        Container.Bind<IActorManager>().To<ActorManager>().AsSingle();
-        Container.Bind<IPropContainerManager>().To<PropContainerManager>().AsSingle();
         Container.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
         Container.Bind<IActorTaskSourceCollector>().FromMethod(context =>
@@ -69,6 +68,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<ISectorManager>().To<InfSectorManager>().AsSingle();
+        Container.Bind<IBiomeInitializer>().To<BiomeInitializer>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
@@ -111,7 +111,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("show-dialog-modal-command").To<ShowDialogModalCommand>().AsSingle();
-        Container.Bind<ICommand>().WithId("show-history-command").To<SectorShowHistoryCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
 

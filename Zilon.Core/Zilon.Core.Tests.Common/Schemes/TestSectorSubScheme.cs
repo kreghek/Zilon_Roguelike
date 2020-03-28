@@ -15,17 +15,19 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] RegularMonsterSids { get; set; }
         public string[] RareMonsterSids { get; set; }
         public string[] ChampionMonsterSids { get; set; }
-        public SectorSubSchemeMapFactory MapFactory { get; set; }
-        public int RegionCount { get; set; }
-        public int RegionSize { get; set; }
         public int RegionMonsterCount { get; set; }
         public int TotalChestCount { get; set; }
         public string[] ChestDropTableSids { get; set; }
-        public string[] TransSectorSids { get; set; }
+        public ISectorTransitionSubScheme[] TransSectorSids { get; set; }
         public bool IsStart { get; set; }
         public int RegionChestCountRatio { get; set; }
         public int MinRegionMonsterCount { get; }
         public SchemeSectorMapGenerator MapGenerator { get; }
-        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; set; }
+
+        public override string ToString()
+        {
+            return Sid;
+        }
     }
 }

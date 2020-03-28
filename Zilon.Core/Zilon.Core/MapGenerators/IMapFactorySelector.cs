@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Schemes;
+﻿using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -13,6 +13,6 @@ namespace Zilon.Core.MapGenerators
         /// <param name="sectorScheme">Схема сектора, на основе которой будет принято решение,
         /// какой генератор карты использовать.</param>
         /// <returns> Возвращает фабрику карт для сектора. </returns>
-        IMapFactory GetMapFactory(ISectorSubScheme sectorScheme);        
+        IMapFactory GetMapFactory(ISectorNode sectorNode);        
     }
 }

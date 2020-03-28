@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -14,21 +15,23 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создание переходов на основе схемы.
         /// </summary>
-        /// <param name="sectorScheme"> Схема сектора. </param>
+        /// <param name="sectorNode"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
-        public static IEnumerable<RoomTransition> CreateTransitions(ISectorSubScheme sectorScheme)
+        public static IEnumerable<RoomTransition> CreateTransitions(ISectorNode sectorNode)
         {
-            if (sectorScheme is null)
+            if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorScheme));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
-            if (sectorScheme.TransSectorSids is null)
+            if (sectorNode.State != SectorNodeState.SchemeKnown)
             {
-                return Array.Empty<RoomTransition>();
+                throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
             }
 
-            return sectorScheme.TransSectorSids.Select(sid => new RoomTransition(sid));
+            var next = sectorNode.Biome.GetNext(sectorNode);
+
+            return next.Select(node => new RoomTransition(node as ISectorNode));
         }
     }
 }

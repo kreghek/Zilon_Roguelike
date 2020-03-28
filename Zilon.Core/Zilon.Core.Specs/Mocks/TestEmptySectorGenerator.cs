@@ -32,9 +32,11 @@ namespace Zilon.Core.Specs.Mocks
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public async Task<ISector> GenerateDungeonAsync(ISectorSubScheme sectorScheme)
+        public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
-            var map = await _mapFactory.CreateAsync(sectorScheme);
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions);
+
+            var map = await _mapFactory.CreateAsync(sectorFactoryOptions);
             var sector = new Sector(map,
                 _actorManager,
                 _propContainerManager,
@@ -42,16 +44,6 @@ namespace Zilon.Core.Specs.Mocks
                 _schemeService,
                 _equipmentDurableService);
             return sector;
-        }
-
-        public Task<ISector> GenerateTownQuarterAsync(Globe globe, GlobeRegionNode globeNode)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<ISector> GenerateWildAsync(Globe globe, GlobeRegionNode globeNode)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

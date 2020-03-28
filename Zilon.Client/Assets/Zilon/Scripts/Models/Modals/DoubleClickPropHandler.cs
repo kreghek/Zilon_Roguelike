@@ -10,10 +10,8 @@ using Zilon.Core.Commands;
 
 public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 {
-    float lastClick = 0f;
-    float interval = 0.4f;
-
-    private const string HISTORY_BOOK_SID = "history-book";
+    private float _lastClick = 0f;
+    private const float INTERVAL = 0.4f;
 
     [Inject] private readonly ISectorUiState _playerState;
     [Inject] private readonly ICommandManager _commandManager;
@@ -21,37 +19,29 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
     [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public PropItemVm PropItemViewModel;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if ((lastClick + interval) > Time.time)
+        if ((_lastClick + INTERVAL) > Time.time)
         {
             _inventoryState.SelectedProp = PropItemViewModel;
 
             var prop = PropItemViewModel.Prop;
 
-            if (!(prop.Scheme.Sid == HISTORY_BOOK_SID))
+            var canUseProp = prop.Scheme.Use != null;
+            if (canUseProp)
             {
-                var canUseProp = prop.Scheme.Use != null;
-                if (canUseProp)
-                {
-                    UseProp();
-                }
-                else if (prop.Scheme.Equip != null)
-                {
-                    EquipProp(PropItemViewModel);
-                }
+                UseProp();
             }
-            else
+            else if (prop.Scheme.Equip != null)
             {
-                ReadProp();
+                EquipProp(PropItemViewModel);
             }
         }
 
-        lastClick = Time.time;
+        _lastClick = Time.time;
     }
 
     /// <summary>
@@ -83,13 +73,5 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     private void UseProp()
     {
         _commandManager.Push(_useSelfCommand);
-    }
-
-    private void ReadProp()
-    {
-        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
-        {
-            _commandManager.Push(_showHistoryCommand);
-        }
     }
 }

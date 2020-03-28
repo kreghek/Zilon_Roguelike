@@ -12,6 +12,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MassSectorGenerator
 {
@@ -40,8 +41,11 @@ namespace Zilon.Core.MassSectorGenerator
 
             var sectorSchemeResult = GetSectorScheme(args, schemeService);
 
+            var biome = new Biome(sectorSchemeResult.Location);
+            var sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
+
             var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
-            var sector = await sectorFactory.GenerateDungeonAsync(sectorSchemeResult.Sector).ConfigureAwait(false);
+            var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
             sector.Scheme = sectorSchemeResult.Location;
 
             // Проверка

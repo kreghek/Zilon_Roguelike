@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Services;
@@ -40,10 +39,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly HumanPlayer _humanPlayer;
-
-    [NotNull]
-    [Inject]
-    private readonly IActorManager _actorManager;
 
     [NotNull]
     [Inject]
@@ -90,7 +85,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         var playerActorViewModel = CreateHumanActorViewModel(
             _humanPlayer,
-            _actorManager,
+            _humanPlayer.SectorNode.Sector.ActorManager,
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);

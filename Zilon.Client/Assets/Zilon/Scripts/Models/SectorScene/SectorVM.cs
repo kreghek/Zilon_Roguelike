@@ -25,6 +25,7 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable once ArrangeTypeModifiers
@@ -71,7 +72,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-
+    private IPropContainerManager _propContainerManager;
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -89,10 +90,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
     [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
-
-    [NotNull] [Inject] private readonly IActorManager _actorManager;
-
-    [NotNull] [Inject] private readonly IPropContainerManager _propContainerManager;
 
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
@@ -114,6 +111,8 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
 
     [Inject] private readonly UiSettingService _uiSettingService;
+
+    [Inject] private readonly IBiomeInitializer _biomeInitializer;
 
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
@@ -241,9 +240,25 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
+        var sectorNode = _humanPlayer.SectorNode;
+
+        if (sectorNode == null)
+        {
+            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
+            var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
+            sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
+        }
+        else if (sectorNode.State == SectorNodeState.SchemeKnown)
+        {
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode);
+        }
+
+        _humanPlayer.BindSectorNode(sectorNode);
         await _sectorManager.CreateSectorAsync();
 
-        _sectorManager.CurrentSector.ScoreManager = _scoreManager;
+        sectorNode.Sector.ScoreManager = _scoreManager;
+
+        _propContainerManager = sectorNode.Sector.PropContainerManager;
 
         _propContainerManager.Added += PropContainerManager_Added;
         _propContainerManager.Removed += PropContainerManager_Removed;
@@ -272,14 +287,13 @@ public class SectorVM : MonoBehaviour
     {
         _propContainerManager.Added -= PropContainerManager_Added;
         _propContainerManager.Removed -= PropContainerManager_Removed;
-        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
 
         _gameLoop.Updated -= GameLoop_Updated;
     }
 
     private List<MapNodeVM> InitNodeViewModels()
     {
-        var map = _sectorManager.CurrentSector.Map;
+        var map = _humanPlayer.SectorNode.Sector.Map;
         var nodeVMs = new List<MapNodeVM>();
 
         foreach (var node in map.Nodes)
@@ -304,9 +318,6 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.OnSelect += MapNodeVm_OnSelect;
             mapNodeVm.MouseEnter += MapNodeVm_MouseEnter;
 
-            //var fowController = mapNodeObj.GetComponent<FowNodeController>();
-            //fowController.SectorMap = map;
-
             nodeVMs.Add(mapNodeVm);
         }
 
@@ -324,7 +335,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var monsters = _actorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -338,7 +349,7 @@ public class SectorVM : MonoBehaviour
             graphicController.Actor = monsterActor;
             graphicController.Graphic = actorGraphic;
 
-            var actorNodeVm = nodeViewModels.Single(x => x.Node == monsterActor.Node);
+            var actorNodeVm = nodeViewModels.Single(x => ReferenceEquals(x.Node, monsterActor.Node));
             var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
             actorViewModel.transform.position = actorPosition;
             actorViewModel.Actor = monsterActor;
@@ -384,7 +395,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var citizens = _actorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
+        var citizens = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
         foreach (var trader in citizens)
         {
             CreateTraderViewModel(nodeViewModels, trader);
@@ -530,6 +541,13 @@ public class SectorVM : MonoBehaviour
 
     private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
     {
+        // Персонаж игрока выходит из сектора.
+        var actor = _playerState.ActiveActor.Actor;
+        _humanPlayer.SectorNode.Sector.ActorManager.Remove(actor);
+
+        // Отписываемся от событий в этом секторе
+        UnscribeSectorDependentEvents();
+
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
         _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
@@ -538,53 +556,22 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActor(null);
 
-        if (e.Transition.SectorSid == null)
+        var nextSectorNode = e.Transition.SectorNode;
+        _humanPlayer.BindSectorNode(nextSectorNode);
+
+        StartLoadScene();
+    }
+
+    private void UnscribeSectorDependentEvents()
+    {
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        foreach (var monsterActor in monsters)
         {
-            _humanPlayer.SectorSid = "globe";
-            _humanPlayer.SectorLevelSid = null;
-
-            // Текущий набор секторов пройден.
-            // Из доступных выбираем случайную схему нового сектора.
-            // И запоминаем её в объекте игрока.
-
-            StartLoadScene();
-
-            return;
-        }
-        else
-        {
-            _humanPlayer.SectorLevelSid = e.Transition.SectorSid;
-
-            StartLoadScene();
-
-            return;
+            monsterActor.UsedAct -= ActorOnUsedAct;
+            monsterActor.Person.Survival.Dead -= Monster_Dead;
         }
 
-        //if (_humanPlayer.GlobeNode == null)
-        //{
-
-        //}
-
-        //var currentLocation = _humanPlayer.GlobeNode.Scheme;
-        //if (currentLocation?.SectorLevels == null)
-        //{
-        //    _humanPlayer.SectorSid = null;
-        //    SceneManager.LoadScene("globe");
-        //    SaveGameProgress();
-        //    return;
-        //}
-
-        //if (e.Transition.SectorSid == null)
-        //{
-        //    _humanPlayer.SectorSid = null;
-        //    SceneManager.LoadScene("globe");
-        //    SaveGameProgress();
-        //}
-        //else
-        //{
-        //    _humanPlayer.SectorSid = e.Transition.SectorSid;
-        //    StartLoadScene();
-        //}
+        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
@@ -679,58 +666,6 @@ public class SectorVM : MonoBehaviour
     private void EnemyViewModel_MouseEnter(object sender, EventArgs e)
     {
         _playerState.HoverViewModel = (IActorViewModel)sender;
-    }
-
-    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
-        [NotNull] IActorManager actorManager,
-        [NotNull] IPerkResolver perkResolver,
-        [NotNull] IGraphNode startNode,
-        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
-    {
-        if (_humanPlayer.MainPerson == null)
-        {
-            if (!_progressStorageService.LoadPerson())
-            {
-                _humanPlayer.MainPerson = _humanPersonFactory.Create();
-            }
-        }
-
-        var fowData = new HumanSectorFowData();
-
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
-        _playerEventLogService.Actor = actor;
-        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
-
-        actorManager.Add(actor);
-
-        var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
-        var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
-        actorViewModel.PlayerState = _playerState;
-        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-        actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
-        actorViewModel.GraphicRoot = actorGraphic;
-
-        var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
-        graphicController.Actor = actor;
-        graphicController.Graphic = actorGraphic;
-
-        var actorNodeVm = nodeVMs.Single(x => x.Node == actor.Node);
-        var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-        actorViewModel.transform.position = actorPosition;
-        actorViewModel.Actor = actor;
-        actorViewModel.Selected += HumanActorViewModel_Selected;
-
-        actor.OpenedContainer += PlayerActorOnOpenedContainer;
-        actor.UsedAct += ActorOnUsedAct;
-        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
-        actor.UsedProp += Actor_UsedProp;
-
-        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
-        {
-            AddResourceToCurrentPerson("camp-tools");
-        }
-
-        return actorViewModel;
     }
 
     private void Actor_UsedProp(object sender, UsedPropEventArgs e)

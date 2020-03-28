@@ -17,8 +17,6 @@ using Zilon.Core.Tactics;
 
 public class InventoryHandler : MonoBehaviour
 {
-    private const string HISTORY_BOOK_SID = "history-book";
-
     private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
 
@@ -37,7 +35,6 @@ public class InventoryHandler : MonoBehaviour
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
     [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -320,9 +317,16 @@ public class InventoryHandler : MonoBehaviour
             var canUseProp = currentItem.Scheme.Use != null && _useSelfCommand.CanExecute();
             UseButton.SetActive(canUseProp);
 
-            var canRead = currentItem.Scheme.Sid == HISTORY_BOOK_SID && _useSelfCommand.CanExecute();
+            var canRead = CanRead() && _useSelfCommand.CanExecute();
             ReadButton.SetActive(canRead);
         }
+    }
+
+    private static bool CanRead()
+    {
+        // Сейчас ни один предмет нельзя прочесть.
+        // Далее будут введены книги и свитки.
+        return false;
     }
 
     public void UseButton_Handler()
@@ -332,9 +336,6 @@ public class InventoryHandler : MonoBehaviour
 
     public void ReadButton_Handler()
     {
-        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
-        {
-            _commandManager.Push(_showHistoryCommand);
-        }
+       // Эта кнопка не делает ничего, пока не будут введены свитки и книги
     }
 }
