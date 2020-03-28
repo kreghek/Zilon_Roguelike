@@ -58,7 +58,7 @@ namespace Zilon.Core.World.AgentCards
             // Обнаружение свободных узлов для размещения населённого пункта.
             // Свободные узлы ишутся от текущей локации агента.
 
-            TerrainCell? freeLocaltion = null;
+            TerrainCell freeLocaltion = null;
 
             var nextCoords = HexHelper.GetOffsetClockwise();
             var agentCubeCoords = HexHelper.ConvertToCube(agent.Location.Coords.X, agent.Location.Coords.Y);
@@ -100,7 +100,7 @@ namespace Zilon.Core.World.AgentCards
                 {
                     Name = localityName,
                     Branches = new Dictionary<BranchType, int> { { firstBranch.Key, 1 } },
-                    Cell = freeLocaltion.Value,
+                    Cell = freeLocaltion,
 
                     Population = 1,
                     Owner = currentLocality.Owner
@@ -109,8 +109,8 @@ namespace Zilon.Core.World.AgentCards
                 currentLocality.Population--;
 
                 globe.Localities.Add(createdLocality);
-                globe.LocalitiesCells[freeLocaltion.Value] = createdLocality;
-                globe.ScanResult.Free.Remove(freeLocaltion.Value);
+                globe.LocalitiesCells[freeLocaltion] = createdLocality;
+                globe.ScanResult.Free.Remove(freeLocaltion);
             }
             else
             {
