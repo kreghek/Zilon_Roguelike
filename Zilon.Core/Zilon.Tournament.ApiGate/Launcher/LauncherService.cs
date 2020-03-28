@@ -38,32 +38,38 @@ namespace Zilon.Tournament.ApiGate.Launcher
                     {
                         try
                         {
-                            using var process = new Process();
-
-                            process.StartInfo = new ProcessStartInfo
+                            using (var process = new Process())
                             {
-                                FileName = $"{appPath}Zilon.BotMassLauncher.exe",
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                                Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true
-                            };
+                                process.StartInfo = new ProcessStartInfo
+                                {
+                                    FileName = $"{appPath}Zilon.BotMassLauncher.exe",
+                                    UseShellExecute = false,
+                                    CreateNoWindow = true,
+                                    Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true
+                                };
 
-                            process.Start();
+                                process.Start();
 
-                            var output = process.StandardOutput.ReadToEnd();
-                            var error = process.StandardError.ReadToEnd();
+                                var output = process.StandardOutput.ReadToEnd();
+                                var error = process.StandardError.ReadToEnd();
 
-                            // Один бот в массланчере в одном режиме может работать 1 час максимум
-                            process.WaitForExit((int)(3.6 * 1000_000));
+                                // Один бот в массланчере в одном режиме может работать 1 час максимум
+                                process.WaitForExit((int)(3.6 * 1000_000));
+                            }
                         }
-                        catch (Exception e)
+                        catch (Exception exception)
                         {
+                            // Просто логируем это исключение.
+                            //TODO Нужно детально посмотреть, что можно делать с исключением.
+                            // Возможно есть более надёжный и точный способ обработки.
+                            Console.WriteLine($"[X] {exception}");
                         }
                     }
                 }
             }
+
             _logger.LogDebug("Launcher service is stopping");
 
             return Task.CompletedTask;
@@ -71,7 +77,6 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
         private BotInfo[] GetAllBots(string appPath)
         {
-
             var botList = new List<BotInfo>();
 
             var botRootCatalog = Path.Combine(appPath, "bots");
@@ -97,18 +102,5 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
             return botList.ToArray();
         }
-    }
-
-    public sealed class BotInfo
-    {
-        public string Catalog { get; set; }
-        public string Assembly { get; set; }
-        public string[] Modes { get; set; }
-    }
-
-    public sealed class BotSettings
-    {
-        public string AssemblyName { get; set; }
-        public string[] Modes { get; set; }
     }
 }
