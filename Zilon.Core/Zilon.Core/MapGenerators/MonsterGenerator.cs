@@ -77,7 +77,7 @@ namespace Zilon.Core.MapGenerators
                     sectorScheme.MinRegionMonsterCount,
                     sectorScheme.RegionMonsterCount);
 
-                for (int i = 0; i < monsterCount; i++)
+                for (var i = 0; i < monsterCount; i++)
                 {
                     // если в комнате все места заняты
                     if (!freeNodes.Any())
@@ -116,7 +116,17 @@ namespace Zilon.Core.MapGenerators
 
                     freeNodes.Remove(monster.Node);
                     //}
+
+                    SetMonsterInfection(monster, sector);
                 }
+            }
+        }
+
+        private void SetMonsterInfection(IActor monster, ISector sector)
+        {
+            foreach (var disease in sector.Diseases)
+            {
+                monster.Person.DiseaseData.Infect(disease);
             }
         }
 

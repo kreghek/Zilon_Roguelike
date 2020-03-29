@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -69,6 +70,8 @@ namespace Zilon.Core.MapGenerators
 
             var sector = _sectorFactory.Create(map, locationScheme);
 
+            SetDiseases();
+
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
             var sectorScheme = sectorNode.SectorScheme;
@@ -83,6 +86,12 @@ namespace Zilon.Core.MapGenerators
                 sectorScheme);
 
             return sector;
+        }
+
+        private void SetDiseases(Sector sector)
+        {
+            var disease = new Disease("test");
+            sector.AddDisease(disease);
         }
     }
 }

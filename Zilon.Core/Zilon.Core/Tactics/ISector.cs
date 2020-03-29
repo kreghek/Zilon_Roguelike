@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Zilon.Core.MapGenerators;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -49,5 +50,13 @@ namespace Zilon.Core.Tactics
         IActorManager ActorManager { get; }
 
         IPropContainerManager PropContainerManager { get; }
+
+        /// <summary>
+        /// Текущие болезни в секторе.
+        /// </summary>
+        /// <remarks>
+        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
+        /// </remarks>
+        IEnumerable<IDisease> Diseases { get; }
     }
 }

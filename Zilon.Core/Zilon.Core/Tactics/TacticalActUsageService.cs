@@ -336,8 +336,18 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="sourceActor"> Актёр-источник заражения. </param>
         /// <param name="targetActor"> Актёр-цель заражения. </param>
-        private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
+        private static void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
         {
+            if (sourceActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
+            if (targetActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
             var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
 
             foreach (var disease in currentDiseases)

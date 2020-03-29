@@ -26,6 +26,8 @@ namespace Zilon.Core.Tactics
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
 
+        private readonly List<IDisease> _diseases;
+
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
@@ -58,6 +60,7 @@ namespace Zilon.Core.Tactics
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
         public IPropContainerManager PropContainerManager { get; }
+        public IEnumerable<IDisease> Diseases { get => _diseases; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
@@ -73,6 +76,8 @@ namespace Zilon.Core.Tactics
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
 
+            _diseases = new List<IDisease>();
+
             ActorManager.Added += ActorManager_Added;
             ActorManager.Removed += ActorManager_Remove;
             PropContainerManager.Added += PropContainerManager_Added;
@@ -81,6 +86,11 @@ namespace Zilon.Core.Tactics
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
             PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
+        }
+
+        public void AddDisease(IDisease disease)
+        {
+            _diseases.Add(disease);
         }
 
         /// <summary>
