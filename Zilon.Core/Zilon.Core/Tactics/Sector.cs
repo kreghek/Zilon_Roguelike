@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -109,12 +110,37 @@ namespace Zilon.Core.Tactics
 
             UpdateActorEffects();
 
+            UpdateDiseases();
+
             UpdateEquipments();
 
             UpdateActoActs();
 
             // Определяем, не покинули ли актёры игрока сектор.
             //DetectSectorExit();
+        }
+
+        private void UpdateDiseases()
+        {
+            foreach (var actor in ActorManager.Items.ToArray())
+            {
+                if (actor.Person.DiseaseData is null)
+                {
+                    continue;
+                }
+
+                foreach (var disease in actor.Person.DiseaseData.Diseases)
+                {
+                    // Если есть болезнь, то назначаем эффект.
+
+                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == disease);
+                    if (diseaseEffect is null)
+                    {
+                        diseaseEffect = new DiseaseEffect(disease);
+                        actor.Person.Effects.Add(diseaseEffect);
+                    }
+                }
+            }
         }
 
         private void UpdateActoActs()

@@ -4,14 +4,14 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons.Survival
 {
-    public class VirusHazardEffect : IPersonEffect
+    public class DiseaseEffect : IPersonEffect
     {
-        public VirusHazardEffect(string name)
+        public DiseaseEffect(IDisease disease)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Disease = disease;
         }
 
-        public string Name { get; }
+        public IDisease Disease { get; }
 
         public event EventHandler Changed;
 
