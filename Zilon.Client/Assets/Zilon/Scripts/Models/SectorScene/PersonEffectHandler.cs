@@ -1,10 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 using UnityEngine;
 
 using Zenject;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 
 public class PersonEffectHandler : MonoBehaviour
@@ -16,7 +18,10 @@ public class PersonEffectHandler : MonoBehaviour
     private DiContainer _diContainer;
 
     public Transform EffectParent;
-    public EffectViewModel EffectPrefab;
+
+    public SurvivalHazardEffectViewModel SurvivalHazardEffectPrefab;
+
+    public DiseaseEffectViewModel DiseaseEffectPrefab;
 
     [UsedImplicitly]
     public void Start()
@@ -66,12 +71,30 @@ public class PersonEffectHandler : MonoBehaviour
 
         foreach (var effect in effects.Items)
         {
-            if (effect is SurvivalStatHazardEffect survivalHazardEffect)
+            switch(effect)
             {
-                var effectViewModelObj = _diContainer.InstantiatePrefab(EffectPrefab, EffectParent);
-                var effectViewModel = effectViewModelObj.GetComponent<EffectViewModel>();
-                effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
+                case SurvivalStatHazardEffect survivalHazardEffect:
+                    CreateSurvivalHazardEffect(survivalHazardEffect);
+                    break;
+
+                case DiseaseEffect diseaseEffect:
+                    CreateDiseaseEffect(diseaseEffect);
+                    break;
             }
         }
+    }
+
+    private void CreateDiseaseEffect(DiseaseEffect diseaseEffect)
+    {
+        var effectViewModelObj = _diContainer.InstantiatePrefab(SurvivalHazardEffectPrefab, EffectParent);
+        var effectViewModel = effectViewModelObj.GetComponent<SurvivalHazardEffectViewModel>();
+        effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
+    }
+
+    private void CreateSurvivalHazardEffect(SurvivalStatHazardEffect survivalHazardEffect)
+    {
+        var effectViewModelObj = _diContainer.InstantiatePrefab(SurvivalHazardEffectPrefab, EffectParent);
+        var effectViewModel = effectViewModelObj.GetComponent<SurvivalHazardEffectViewModel>();
+        effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
     }
 }

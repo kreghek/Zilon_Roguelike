@@ -55,7 +55,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             var mapFactory = _mapFactorySelector.GetMapFactory(sectorNode);
@@ -70,7 +70,7 @@ namespace Zilon.Core.MapGenerators
 
             var sector = _sectorFactory.Create(map, locationScheme);
 
-            SetDiseases();
+            SetDiseases(sector);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
@@ -88,7 +88,7 @@ namespace Zilon.Core.MapGenerators
             return sector;
         }
 
-        private void SetDiseases(Sector sector)
+        private void SetDiseases(ISector sector)
         {
             var disease = new Disease("test");
             sector.AddDisease(disease);

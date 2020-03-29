@@ -9,7 +9,7 @@ using Zenject;
 
 using Zilon.Core.Persons;
 
-public class EffectViewModel : MonoBehaviour
+public class SurvivalHazardEffectViewModel : MonoBehaviour
 {
     public Image EffectIcon;
     public Image Background;

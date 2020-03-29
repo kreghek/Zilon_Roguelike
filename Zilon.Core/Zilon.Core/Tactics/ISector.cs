@@ -58,5 +58,7 @@ namespace Zilon.Core.Tactics
         /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
         /// </remarks>
         IEnumerable<IDisease> Diseases { get; }
+
+        void AddDisease(IDisease disease);
     }
 }
