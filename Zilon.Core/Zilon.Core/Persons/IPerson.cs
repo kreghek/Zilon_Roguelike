@@ -54,20 +54,10 @@ namespace Zilon.Core.Persons
         ISurvivalData Survival { get; }
 
         EffectCollection Effects { get; }
-    }
-
-    public enum PhysicalSize
-    { 
-        Undefined = 0,
 
         /// <summary>
-        /// Объект размеров в 1 ячейку.
+        /// Модуль заболеваний персонажа.
         /// </summary>
-        Size1,
-
-        /// <summary>
-        /// Объект размером в ячейку и её окружность.
-        /// </summary>
-        Size7
+        IDiseaseData DiseaseData { get; }
     }
 }

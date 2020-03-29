@@ -60,6 +60,7 @@ namespace Zilon.Core.Persons
 
         public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
         public bool HasInventory { get => true; }
+        public IDiseaseData DiseaseData { get; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
@@ -97,6 +98,8 @@ namespace Zilon.Core.Persons
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
             Survival.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
+
+            DiseaseData = new DiseaseData();
         }
 
         public HumanPerson(IPersonScheme scheme,

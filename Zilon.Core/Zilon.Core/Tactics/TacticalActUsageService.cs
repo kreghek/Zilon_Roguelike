@@ -289,6 +289,8 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
+                ProcessDiseaseInfection(actor, targetActor);
+
                 LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
 
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
@@ -326,6 +328,21 @@ namespace Zilon.Core.Tactics
                         successToHitRoll,
                         factToHitRoll);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Обработать инфицирование болезью.
+        /// </summary>
+        /// <param name="sourceActor"> Актёр-источник заражения. </param>
+        /// <param name="targetActor"> Актёр-цель заражения. </param>
+        private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
+        {
+            var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
+
+            foreach (var disease in currentDiseases)
+            {
+                targetActor.Person.DiseaseData.Infect(disease);
             }
         }
 
