@@ -152,6 +152,8 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
+
+            container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)

@@ -16,6 +16,7 @@ namespace Zilon.Core.MapGenerators
     public class SectorGenerator : ISectorGenerator
     {
         private readonly IChestGenerator _chestGenerator;
+        private readonly IDiseaseGenerator _diseaseGenerator;
         private readonly IBotPlayer _botPlayer;
         private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
@@ -34,13 +35,15 @@ namespace Zilon.Core.MapGenerators
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
+            IDiseaseGenerator diseaseGenerator,
             IBotPlayer botPlayer)
         {
-            _mapFactorySelector = mapFactorySelector;
-            _sectorFactory = sectorFactory;
-            _monsterGenerator = monsterGenerator;
-            _chestGenerator = chestGenerator;
-            _botPlayer = botPlayer;
+            _mapFactorySelector = mapFactorySelector ?? throw new ArgumentNullException(nameof(mapFactorySelector));
+            _sectorFactory = sectorFactory ?? throw new ArgumentNullException(nameof(sectorFactory));
+            _monsterGenerator = monsterGenerator ?? throw new ArgumentNullException(nameof(monsterGenerator));
+            _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
+            _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
+            _botPlayer = botPlayer ?? throw new ArgumentNullException(nameof(botPlayer));
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace Zilon.Core.MapGenerators
 
             var sector = _sectorFactory.Create(map, locationScheme);
 
-            SetDiseases(sector);
+            DefineDiseases(sector);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
@@ -85,9 +88,15 @@ namespace Zilon.Core.MapGenerators
             return sector;
         }
 
-        private void SetDiseases(ISector sector)
+        private void DefineDiseases(ISector sector)
         {
-            var disease = new Disease("test");
+            var disease = _diseaseGenerator.Create();
+
+            if (disease is null)
+            {
+                return;
+            }
+
             sector.AddDisease(disease);
         }
     }
