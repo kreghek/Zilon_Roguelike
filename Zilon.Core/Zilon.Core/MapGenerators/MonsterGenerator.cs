@@ -114,7 +114,7 @@ namespace Zilon.Core.MapGenerators
             {
                 foreach (var disease in sector.Diseases)
                 {
-                    var rollInfectedMonsters = _generatorRandomSource.RollInfectedMonsters(diseaseMonsters, 0.1f);
+                    var rollInfectedMonsters = _generatorRandomSource.RollInfectedMonsters(diseaseMonsters, 1f);
                     foreach (var monster in rollInfectedMonsters)
                     {
                         SetMonsterInfection(monster, disease);

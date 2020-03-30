@@ -11,9 +11,11 @@ using Zilon.Core.Persons;
 
 public class SurvivalHazardEffectViewModel : MonoBehaviour
 {
+    [Inject]
+    private readonly UiSettingService _uiSettingService;
+
     public Image EffectIcon;
     public Image Background;
-    public Text NameText;
 
     public Sprite HungerSprite;
     public Sprite ThristSprite;
@@ -21,9 +23,6 @@ public class SurvivalHazardEffectViewModel : MonoBehaviour
     public Sprite InjureSprite;
 
     public UiElementTooltip UiElementTooltip;
-
-    [Inject]
-    UiSettingService _uiSettingService;
 
     public SurvivalStatType Type { get; private set; }
     public SurvivalStatHazardLevel Level { get; private set; }
@@ -36,20 +35,12 @@ public class SurvivalHazardEffectViewModel : MonoBehaviour
         Level = level;
         SelectIcon(type);
         HighlightLevel(level);
-        ShowText(currentLanguage);
 
         if (UiElementTooltip != null)
         {
             var effectText = GetEffectText(currentLanguage);
             UiElementTooltip.text = effectText;
         }
-    }
-
-    private void ShowText(Language currentLanguage)
-    {
-        var effectText = GetEffectText(currentLanguage);
-
-        NameText.text = effectText;
     }
 
     private string GetEffectText(Language currentLanguage)
@@ -59,19 +50,14 @@ public class SurvivalHazardEffectViewModel : MonoBehaviour
         {
             case SurvivalStatHazardLevel.Lesser:
                 effectText = GetLesserEffect(currentLanguage);
-
-                NameText.color = Color.gray;
                 break;
 
             case SurvivalStatHazardLevel.Strong:
                 effectText = GetStrongEffect(currentLanguage);
-
-                NameText.color = Color.red;
                 break;
 
             case SurvivalStatHazardLevel.Max:
                 effectText = GetMaxEffect(currentLanguage);
-                NameText.color = Color.red;
                 break;
         }
 
