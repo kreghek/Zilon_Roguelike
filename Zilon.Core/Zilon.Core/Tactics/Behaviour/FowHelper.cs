@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -89,7 +89,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var newBorder = GetNextForBorder(border, resultList, map);
 
-                var visibleBorder = newBorder.Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
+                var visibleBorder = newBorder.AsParallel().Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);
