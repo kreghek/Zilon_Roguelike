@@ -1,14 +1,17 @@
 ﻿using System;
+using Zilon.Core.Localization;
 
 namespace Zilon.Core.Persons
 {
     public class Disease : IDisease
     {
-        public Disease(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+        public ILocalizedString Primary { get; }
+        public ILocalizedString PrimaryPrefix { get; }
 
-        public string Name { get; }
+        public Disease(ILocalizedString primary, ILocalizedString primaryPrefix)
+        {
+            Primary = primary ?? throw new ArgumentNullException(nameof(primary));
+            PrimaryPrefix = primaryPrefix;
+        }
     }
 }

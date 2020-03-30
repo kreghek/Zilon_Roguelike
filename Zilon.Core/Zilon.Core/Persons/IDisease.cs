@@ -1,10 +1,13 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Localization;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Интерфейс болезни, поразившей персонажа.
     /// </summary>
     public interface IDisease
     {
-        string Name { get; }
+        ILocalizedString Primary { get; }
+        ILocalizedString PrimaryPrefix { get; }
     }
 }
