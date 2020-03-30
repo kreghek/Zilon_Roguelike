@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -16,7 +17,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IChestGenerator _chestGenerator;
         private readonly IBotPlayer _botPlayer;
-        private readonly ICitizenGenerator _citizenGenerator;
         private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
@@ -28,14 +28,12 @@ namespace Zilon.Core.MapGenerators
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
-        /// <param name="citizenGenerator"> Генератор жителей в городском квартале. </param>
         /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
             IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
-            ICitizenGenerator citizenGenerator,
             IBotPlayer botPlayer)
         {
             _mapFactorySelector = mapFactorySelector;
@@ -43,7 +41,6 @@ namespace Zilon.Core.MapGenerators
             _monsterGenerator = monsterGenerator;
             _chestGenerator = chestGenerator;
             _botPlayer = botPlayer;
-            _citizenGenerator = citizenGenerator;
         }
 
         /// <summary>
