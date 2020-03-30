@@ -65,6 +65,8 @@ namespace Zilon.Core.MapGenerators
             var rarityCounter = new int[3];
             var rarityMaxCounter = new[] { -1, 10, 1 };
 
+            var resultMonsterActors = new List<IActor>();
+
             foreach (var region in monsterRegions)
             {
                 var regionNodes = region.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle);
@@ -91,43 +93,39 @@ namespace Zilon.Core.MapGenerators
                     var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
-
-                    //TODO Восстановить патруллирование марштуров позже
-                    // первый монстр ходит по маршруту
-                    // остальные бродят произвольно
-                    //if (i == 0)
-                    //{
-                    //    // генерируем маршрут обхода
-                    //    var startPatrolNode = region.Nodes.First();
-                    //    var endPatrolNode = region.Nodes.Last();
-
-                    //    // генерируем моснтра
-                    //    var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
-                    //    var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
-                    //    sector.PatrolRoutes[monster] = patrolRoute;
-
-                    //    freeNodes.Remove(monster.Node);
-                    //}
-                    //else
-                    //{
                     var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                     var monsterNode = freeNodes[rollIndex];
                     var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
 
                     freeNodes.Remove(monster.Node);
-                    //}
 
-                    SetMonsterInfection(monster, sector);
+                    resultMonsterActors.Add(monster);
+                }
+            }
+
+            // Инфицируем монстров, если в секторе есть болезни.
+            RollInfections(sector, resultMonsterActors);
+        }
+
+        private void RollInfections(ISector sector, List<IActor> resultMonsterActors)
+        {
+            var diseaseMonsters = resultMonsterActors.Select(x => x.Person).ToArray();
+            if (sector.Diseases?.Any() == true)
+            {
+                foreach (var disease in sector.Diseases)
+                {
+                    var rollInfectedMonsters = _generatorRandomSource.RollInfectedMonsters(diseaseMonsters, 0.1f);
+                    foreach (var monster in rollInfectedMonsters)
+                    {
+                        SetMonsterInfection(monster, disease);
+                    }
                 }
             }
         }
 
-        private void SetMonsterInfection(IActor monster, ISector sector)
+        private static void SetMonsterInfection(IPerson monster, IDisease disease)
         {
-            foreach (var disease in sector.Diseases)
-            {
-                monster.Person.DiseaseData.Infect(disease);
-            }
+            monster.DiseaseData.Infect(disease);
         }
 
         /// <summary>

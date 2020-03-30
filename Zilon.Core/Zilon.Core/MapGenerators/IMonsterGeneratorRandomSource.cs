@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators
@@ -29,5 +30,11 @@ namespace Zilon.Core.MapGenerators
         /// <param name="count"> Количество узлов в коллекции доступных узлов. </param>
         /// <returns> Индекс узла карты. </returns>
         int RollNodeIndex(int count);
+
+        /// <summary>
+        /// Выбирает количество монстров, инфицированных в этом секторе.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IPerson> RollInfectedMonsters(IEnumerable<IPerson> monsters, float diseasePower);
     }
 }
