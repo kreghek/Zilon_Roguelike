@@ -98,16 +98,19 @@ namespace Zilon.Core.Tests.MapGenerators
                 .Returns(mapFactory);
             var mapFactorySelector = mapFactorySelectorMock.Object;
 
+            var diseaseGeneratorMock = new Mock<IDiseaseGenerator>();
+            var diseaseGenerator = diseaseGeneratorMock.Object;
+
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
             sectorFactoryMock.Setup(x => x.Create(It.IsAny<ISectorMap>(), It.IsAny<ILocationScheme>()))
-                .Returns(sector);            
+                .Returns(sector);
 
             return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,
-                citizenGenerator,
+                diseaseGenerator,
                 botPlayer);
         }
 

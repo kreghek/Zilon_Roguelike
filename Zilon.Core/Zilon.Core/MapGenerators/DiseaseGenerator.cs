@@ -18,7 +18,6 @@ namespace Zilon.Core.MapGenerators
             var roll = _dice.RollD6();
             if (roll == 1)
             {
-
                 _counter++;
                 var disease = new Disease($"disease {_counter}");
                 return disease;
