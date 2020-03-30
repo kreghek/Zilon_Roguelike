@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 224683823224836880}
   - component: {fileID: 222901990384436090}
   - component: {fileID: 114199583137715534}
-  - component: {fileID: 114683913208299558}
   - component: {fileID: 2311512904827396139}
+  - component: {fileID: -8183160514315430309}
   m_Layer: 5
-  m_Name: SurvivalHazardEffectViewModel
+  m_Name: DiseaseHazardEffectViewModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,25 +69,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &114683913208299558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860903143570492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eee7989d6d07d447a04145c7cdfae48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectIcon: {fileID: 1645137972383179856}
-  Background: {fileID: 4544340499035745814}
-  HungerSprite: {fileID: 21300000, guid: 69b5169aed016d84a92c951bfa1e974f, type: 3}
-  ThristSprite: {fileID: 21300000, guid: dd18b85fa6f2c4546a07ce7d47fde67a, type: 3}
-  IntoxicationSprite: {fileID: 21300000, guid: 7435ccb2a8741f248bd74b9b00629f32, type: 3}
-  InjureSprite: {fileID: 21300000, guid: 766c714b3c3b6934a8e90df05aef8111, type: 3}
-  UiElementTooltip: {fileID: 2311512904827396139}
 --- !u!114 &2311512904827396139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,6 +83,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: 
   TextIsKey: 0
+--- !u!114 &-8183160514315430309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860903143570492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb37e29cadea9be40b3b8521644570d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UiElementTooltip: {fileID: 2311512904827396139}
 --- !u!1 &1578793237884679211
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +161,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 3e39a4a16b5008142919e246d2fbf16a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

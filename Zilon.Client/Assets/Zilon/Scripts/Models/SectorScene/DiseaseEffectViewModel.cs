@@ -22,6 +22,8 @@ public class DiseaseEffectViewModel : MonoBehaviour
             throw new System.ArgumentNullException(nameof(disease));
         }
 
+        _disease = disease;
+
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
         if (UiElementTooltip != null)

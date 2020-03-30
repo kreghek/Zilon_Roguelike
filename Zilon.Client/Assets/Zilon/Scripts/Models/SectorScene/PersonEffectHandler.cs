@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 using UnityEngine;
 
@@ -12,10 +11,12 @@ using Zilon.Core.Players;
 public class PersonEffectHandler : MonoBehaviour
 {
     [UsedImplicitly]
-    [NotNull] [Inject] private readonly HumanPlayer _player;
+    [NotNull]
+    [Inject]
+    private readonly HumanPlayer _player;
 
     [Inject]
-    private DiContainer _diContainer;
+    private readonly DiContainer _diContainer;
 
     public Transform EffectParent;
 
@@ -30,8 +31,8 @@ public class PersonEffectHandler : MonoBehaviour
 
         var person = _player.MainPerson;
 
-//TODO Не очень надёжное решение.
-// Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
+        //TODO Не очень надёжное решение.
+        // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
         if (person != null)
         {
             person.Survival.StatChanged += Survival_StatChanged;
@@ -71,7 +72,7 @@ public class PersonEffectHandler : MonoBehaviour
 
         foreach (var effect in effects.Items)
         {
-            switch(effect)
+            switch (effect)
             {
                 case SurvivalStatHazardEffect survivalHazardEffect:
                     CreateSurvivalHazardEffect(survivalHazardEffect);
@@ -86,9 +87,9 @@ public class PersonEffectHandler : MonoBehaviour
 
     private void CreateDiseaseEffect(DiseaseEffect diseaseEffect)
     {
-        var effectViewModelObj = _diContainer.InstantiatePrefab(SurvivalHazardEffectPrefab, EffectParent);
-        var effectViewModel = effectViewModelObj.GetComponent<SurvivalHazardEffectViewModel>();
-        effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
+        var effectViewModelObj = _diContainer.InstantiatePrefab(DiseaseEffectPrefab, EffectParent);
+        var effectViewModel = effectViewModelObj.GetComponent<DiseaseEffectViewModel>();
+        effectViewModel.Init(diseaseEffect.Disease);
     }
 
     private void CreateSurvivalHazardEffect(SurvivalStatHazardEffect survivalHazardEffect)
