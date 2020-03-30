@@ -113,6 +113,7 @@ namespace Zilon.Emulation.Common
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
             tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+            tacticalActUsageService.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
@@ -11,6 +12,8 @@ namespace Zilon.Core.Tactics
             Frags = new Dictionary<IMonsterScheme, int>();
 
             PlaceTypes = new Dictionary<ILocationScheme, int>();
+
+            Diseases = new List<IDisease>();
         }
 
         public float TurnCounter { get; set; }
@@ -30,5 +33,10 @@ namespace Zilon.Core.Tactics
         /// Различные достижения, полученные заигровую сессию.
         /// </summary>
         public ScoreAchievements Achievements { get; set; }
+
+        /// <summary>
+        /// Болезни, которыми был инфицирован персонаж.
+        /// </summary>
+        public IList<IDisease> Diseases { get; }
     }
 }
