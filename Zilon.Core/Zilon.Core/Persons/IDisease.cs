@@ -7,7 +7,6 @@ namespace Zilon.Core.Persons
     /// </summary>
     public interface IDisease
     {
-        ILocalizedString Primary { get; }
-        ILocalizedString PrimaryPrefix { get; }
+        DiseaseName Name { get; }
     }
 }

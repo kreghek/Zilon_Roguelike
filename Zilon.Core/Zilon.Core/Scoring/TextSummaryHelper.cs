@@ -63,7 +63,7 @@ namespace Zilon.Core.Scoring
 
                 foreach (var disease in scores.Diseases)
                 {
-                    summaryStringBuilder.AppendLine($"{disease.PrimaryPrefix}{disease.Primary}");
+                    summaryStringBuilder.AppendLine($"{disease.Name.PrimaryPrefix}{disease.Name.Primary}");
                 }
             }
 

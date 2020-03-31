@@ -38,14 +38,14 @@ namespace Zilon.Core.MapGenerators.Tests
                 if (disease != null)
                 {
                     resultDiseases.Add(disease);
-                    Console.WriteLine($"{disease.PrimaryPrefix?.Ru}{disease.Primary?.Ru}");
+                    Console.WriteLine($"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru}");
                 }
             }
 
             // ASSERT
             foreach (var disease in resultDiseases)
             {
-                resultDiseases.Should().NotContain(x => x != disease && x.Primary == disease.Primary && x.PrimaryPrefix == disease.PrimaryPrefix);
+                resultDiseases.Should().NotContain(x => x != disease && x.Name == disease.Name);
             }
         }
     }

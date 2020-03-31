@@ -10,13 +10,14 @@ namespace Zilon.Core.MapGenerators
     public class DiseaseGenerator : IDiseaseGenerator
     {
         private readonly IDice _dice;
-        private List<UsedDisease> _usedDiseases;
+
+        private readonly List<DiseaseName> _usedDiseases;
 
         public DiseaseGenerator(IDice dice)
         {
             _dice = dice;
 
-            _usedDiseases = new List<UsedDisease>();
+            _usedDiseases = new List<DiseaseName>();
         }
 
         public IDisease Create()
@@ -27,31 +28,37 @@ namespace Zilon.Core.MapGenerators
                 var nameGenerationAttempt = 0;
                 do
                 {
-
                     var primaryName = _dice.RollFromList(DiseaseNames.Primary);
 
-                    ILocalizedString preffix = null;
+                    ILocalizedString prefix = null;
 
-                    var rollPreffix = _dice.RollD6();
-                    if (rollPreffix <= 4)
+                    var rollPrefix = _dice.RollD6();
+                    if (rollPrefix <= 4)
                     {
-                        preffix = _dice.RollFromList(DiseaseNames.PrimaryPreffix);
+                        prefix = _dice.RollFromList(DiseaseNames.PrimaryPreffix);
                     }
 
-                    var usedDisease = new UsedDisease() { Primary = primaryName, PrimaryPreffix = preffix };
+                    ILocalizedString secondary = null;
+                    var rollSecondary = _dice.RollD6();
+                    if (rollSecondary <= 4)
+                    {
+                        secondary = _dice.RollFromList(DiseaseNames.Secondary);
+                    }
+
+                    var diseaseName = new DiseaseName(primaryName, prefix, secondary);
 
                     // Проверяем, была ли уже такая болезнь.
 
-                    var isDuplicate = CheckDublicate(usedDisease);
+                    var isDuplicate = CheckDublicate(diseaseName);
                     if (isDuplicate)
                     {
                         nameGenerationAttempt++;
                         continue;
                     }
 
-                    var disease = new Disease(primaryName, preffix);
+                    var disease = new Disease(diseaseName);
 
-                    _usedDiseases.Add(usedDisease);
+                    _usedDiseases.Add(diseaseName);
 
                     return disease;
                 } while (nameGenerationAttempt < 10);
@@ -65,18 +72,11 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private bool CheckDublicate(UsedDisease checkingDisease)
+        private bool CheckDublicate(DiseaseName checkingDisease)
         {
-            var foundName = _usedDiseases
-                .SingleOrDefault(x => x.Primary == checkingDisease.Primary && x.PrimaryPreffix == checkingDisease.PrimaryPreffix);
+            var nameFound = _usedDiseases.Any(x => x == checkingDisease);
 
-            return foundName != null;
-        }
-
-        private class UsedDisease
-        {
-            public ILocalizedString Primary { get; set; }
-            public ILocalizedString PrimaryPreffix { get; set; }
+            return nameFound;
         }
     }
 
@@ -153,6 +153,29 @@ namespace Zilon.Core.MapGenerators
                         Ru = "Сверх"
                     }
                 };
+        }
+
+        public static ILocalizedString[] Secondary { 
+            get =>new[] { 
+                new LocalizedString{ 
+                    Ru = "Атипичный"
+                },
+                new LocalizedString{
+                    Ru = "Черный"
+                },
+                new LocalizedString{
+                    Ru = "Красный"
+                },
+                new LocalizedString{
+                    Ru = "Белый"
+                },
+                new LocalizedString{
+                    Ru = "Желчный"
+                },
+                new LocalizedString{
+                    Ru = "Бубонный"
+                }
+            };
         }
     }
 
