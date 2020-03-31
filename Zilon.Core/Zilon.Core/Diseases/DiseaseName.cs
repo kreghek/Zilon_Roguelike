@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Zilon.Core.Localization;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Структура для хранения имёни болезни.
@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons
         /// Основное наименование. Обяхательно есть, не null.
         /// </summary>
         public ILocalizedString Primary { get; }
-        
+
         /// <summary>
         /// Префикс основного наименования. Необязательный. Слитно ставится перед основным наименованием.
         /// </summary>

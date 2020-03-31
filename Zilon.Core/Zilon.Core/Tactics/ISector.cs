@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Zilon.Core.Diseases;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour.Bots;

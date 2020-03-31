@@ -2,8 +2,8 @@
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Diseases;
 using Zilon.Core.Localization;
-using Zilon.Core.Persons;
 
 namespace Zilon.Core.MapGenerators
 {

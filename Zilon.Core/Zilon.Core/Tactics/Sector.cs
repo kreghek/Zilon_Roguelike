@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
@@ -114,7 +114,7 @@ namespace Zilon.Core.Tactics
 
             UpdateEquipments();
 
-            UpdateActoActs();
+            UpdateActorActs();
 
             // Определяем, не покинули ли актёры игрока сектор.
             //DetectSectorExit();
@@ -129,21 +129,32 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                foreach (var disease in actor.Person.DiseaseData.Diseases)
+                foreach (var diseaseProcess in actor.Person.DiseaseData.Diseases.ToArray())
                 {
                     // Если есть болезнь, то назначаем эффект.
 
-                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == disease);
+                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == diseaseProcess);
                     if (diseaseEffect is null)
                     {
-                        diseaseEffect = new DiseaseEffect(disease);
+                        diseaseEffect = new DiseaseEffect(diseaseProcess.Disease);
                         actor.Person.Effects.Add(diseaseEffect);
+                    }
+
+                    diseaseProcess.Update();
+
+                    if (diseaseProcess.Value >= 1)
+                    {
+                        actor.Person.DiseaseData.RemoveDisease(diseaseProcess.Disease);
+                        if (diseaseEffect != null)
+                        {
+                            actor.Person.Effects.Remove(diseaseEffect);
+                        }
                     }
                 }
             }
         }
 
-        private void UpdateActoActs()
+        private void UpdateActorActs()
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {

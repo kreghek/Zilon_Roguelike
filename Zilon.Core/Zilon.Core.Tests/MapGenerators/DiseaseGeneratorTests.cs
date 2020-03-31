@@ -6,7 +6,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.Persons;
+using Zilon.Core.Diseases;
 
 namespace Zilon.Core.MapGenerators.Tests
 {
