@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons
@@ -19,7 +20,10 @@ namespace Zilon.Core.Persons
         /// <param name="disease"> Болезнь, которой будет инфицирован персонаж. </param>
         void Infect(IDisease disease);
 
-        void Update();
+        /// <summary>
+        /// Процесс, обратный инфецированию. Удаляет болезнь из персонажа.
+        /// </summary>
+        /// <param name="disease"> Целевая болезнь. </param>
         void RemoveDisease(IDisease disease);
     }
 }

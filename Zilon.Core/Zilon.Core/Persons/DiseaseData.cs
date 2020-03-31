@@ -5,6 +5,9 @@ using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Базовая реализация моделя болезней персонажа.
+    /// </summary>
     public class DiseaseData : IDiseaseData
     {
         private readonly List<IDiseaseProcess> _diseases;
@@ -14,8 +17,10 @@ namespace Zilon.Core.Persons
             _diseases = new List<IDiseaseProcess>();
         }
 
+        /// <inheritdoc/>
         public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
 
+        /// <inheritdoc/>
         public void Infect(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
@@ -27,15 +32,11 @@ namespace Zilon.Core.Persons
             }
         }
 
+        /// <inheritdoc/>
         public void RemoveDisease(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
             _diseases.Remove(currentProcess);
-        }
-
-        public void Update()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
