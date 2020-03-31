@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -355,14 +356,14 @@ namespace Zilon.Core.Tactics
 
             var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
 
-            foreach (var disease in currentDiseases)
+            foreach (var diseaseProcess in currentDiseases)
             {
-                targetActor.Person.DiseaseData.Infect(disease);
-                CountInfectionInScope(targetActor, disease);
+                targetActor.Person.DiseaseData.Infect(diseaseProcess.Disease);
+                CountInfectionInScore(targetActor, diseaseProcess.Disease);
             }
         }
 
-        private void CountInfectionInScope(IActor targetActor, IDisease disease)
+        private void CountInfectionInScore(IActor targetActor, IDisease disease)
         {
             if (targetActor is MonsterPerson)
             {

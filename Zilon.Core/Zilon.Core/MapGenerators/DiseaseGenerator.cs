@@ -2,8 +2,8 @@
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Diseases;
 using Zilon.Core.Localization;
-using Zilon.Core.Persons;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -23,7 +23,7 @@ namespace Zilon.Core.MapGenerators
         public IDisease Create()
         {
             var roll = _dice.RollD6();
-            if (roll == 1)
+            if (roll <= 6)
             {
                 var nameGenerationAttempt = 0;
                 do

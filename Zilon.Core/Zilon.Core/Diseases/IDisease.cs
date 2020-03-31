@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Localization;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Интерфейс болезни, поразившей персонажа.

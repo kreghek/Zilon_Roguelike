@@ -73,6 +73,12 @@ namespace Zilon.Core.MapGenerators
                     },
                     new LocalizedString{
                         Ru = "Сверх"
+                    },
+                    new LocalizedString{ 
+                        Ru = "Квази"
+                    },
+                    new LocalizedString{ 
+                        Ru = "Псевдо"
                     }
                 };
         }

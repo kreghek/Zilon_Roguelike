@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Persons;
+﻿using Zilon.Core.Diseases;
 
 namespace Assets.Zilon.Scripts.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Объект, представляющий болезнь в игре.

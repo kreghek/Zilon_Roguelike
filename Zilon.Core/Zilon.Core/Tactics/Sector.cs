@@ -5,6 +5,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
@@ -114,10 +115,7 @@ namespace Zilon.Core.Tactics
 
             UpdateEquipments();
 
-            UpdateActoActs();
-
-            // Определяем, не покинули ли актёры игрока сектор.
-            //DetectSectorExit();
+            UpdateActorActs();
         }
 
         private void UpdateDiseases()
@@ -129,21 +127,34 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                foreach (var disease in actor.Person.DiseaseData.Diseases)
+                foreach (var diseaseProcess in actor.Person.DiseaseData.Diseases.ToArray())
                 {
                     // Если есть болезнь, то назначаем эффект.
 
-                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == disease);
-                    if (diseaseEffect is null)
+                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>()
+                        .SingleOrDefault(x => x.Disease == diseaseProcess.Disease);
+
+                    if (diseaseEffect is null && diseaseProcess.CurrentPower >= 0.25)
                     {
-                        diseaseEffect = new DiseaseEffect(disease);
+                        diseaseEffect = new DiseaseEffect(diseaseProcess.Disease);
                         actor.Person.Effects.Add(diseaseEffect);
+                    }
+
+                    diseaseProcess.Update();
+
+                    if (diseaseProcess.Value >= 1)
+                    {
+                        actor.Person.DiseaseData.RemoveDisease(diseaseProcess.Disease);
+                        if (diseaseEffect != null)
+                        {
+                            actor.Person.Effects.Remove(diseaseEffect);
+                        }
                     }
                 }
             }
         }
 
-        private void UpdateActoActs()
+        private void UpdateActorActs()
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
@@ -232,21 +243,6 @@ namespace Zilon.Core.Tactics
                 }
             }
         }
-
-        /// <summary>
-        /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
-        /// </summary>
-        //private void DetectSectorExit()
-        //{
-        //    var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
-        //    var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
-
-        //    if (detectedTransition != null)
-        //    {
-        //        DoActorExit(detectedTransition);
-        //    }
-        //}
-
 
         private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
         {

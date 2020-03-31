@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Components;
+using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons.Survival
 {
