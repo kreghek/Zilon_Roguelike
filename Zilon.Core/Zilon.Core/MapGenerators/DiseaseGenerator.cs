@@ -33,19 +33,26 @@ namespace Zilon.Core.MapGenerators
                     ILocalizedString prefix = null;
 
                     var rollPrefix = _dice.RollD6();
-                    if (rollPrefix <= 4)
+                    if (rollPrefix >= 4)
                     {
                         prefix = _dice.RollFromList(DiseaseNames.PrimaryPreffix);
                     }
 
                     ILocalizedString secondary = null;
                     var rollSecondary = _dice.RollD6();
-                    if (rollSecondary <= 4)
+                    if (rollSecondary >= 4)
                     {
                         secondary = _dice.RollFromList(DiseaseNames.Secondary);
                     }
 
-                    var diseaseName = new DiseaseName(primaryName, prefix, secondary);
+                    ILocalizedString subject = null;
+                    var rollSubject = _dice.RollD6();
+                    if (rollSubject >= 6)
+                    {
+                        subject = _dice.RollFromList(DiseaseNames.Subject);
+                    }
+
+                    var diseaseName = new DiseaseName(primaryName, prefix, secondary, subject);
 
                     // Проверяем, была ли уже такая болезнь.
 
@@ -174,6 +181,26 @@ namespace Zilon.Core.MapGenerators
                 },
                 new LocalizedString{
                     Ru = "Бубонный"
+                },
+                new LocalizedString{ 
+                    Ru = "Общий"
+                },
+                new LocalizedString{ 
+                    Ru = "Кишечный"
+                }
+            };
+        }
+
+        public static ILocalizedString[] Subject {
+            get => new[] {
+                new LocalizedString{
+                    Ru = "Смерти"
+                },
+                new LocalizedString{
+                    Ru = "Крови"
+                },
+                new LocalizedString{
+                    Ru = "Печени"
                 }
             };
         }

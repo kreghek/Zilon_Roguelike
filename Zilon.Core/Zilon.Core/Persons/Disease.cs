@@ -17,11 +17,12 @@ namespace Zilon.Core.Persons
 
     public struct DiseaseName : IEquatable<DiseaseName>
     {
-        public DiseaseName(ILocalizedString primary, ILocalizedString primaryPrefix, ILocalizedString secondary)
+        public DiseaseName(ILocalizedString primary, ILocalizedString primaryPrefix, ILocalizedString secondary, ILocalizedString subject)
         {
             Primary = primary ?? throw new ArgumentNullException(nameof(primary));
             PrimaryPrefix = primaryPrefix;
             Secondary = secondary;
+            Subject = subject;
         }
 
         public ILocalizedString Primary { get; }
@@ -29,6 +30,8 @@ namespace Zilon.Core.Persons
         public ILocalizedString PrimaryPrefix { get; set; }
 
         public ILocalizedString Secondary { get; set; }
+
+        public ILocalizedString Subject { get; }
 
         public override bool Equals(object obj)
         {
