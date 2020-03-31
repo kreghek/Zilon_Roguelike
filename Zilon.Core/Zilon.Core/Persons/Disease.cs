@@ -1,14 +1,18 @@
-﻿using System;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
+    /// <summary>
+    /// Объект, представляющий болезнь в игре.
+    /// </summary>
     public class Disease : IDisease
     {
-        public Disease(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+        /// <summary>
+        /// Наименование болезни.
+        /// </summary>
+        public DiseaseName Name { get; }
 
-        public string Name { get; }
+        public Disease(DiseaseName name)
+        {
+            Name = name;
+        }
     }
 }
