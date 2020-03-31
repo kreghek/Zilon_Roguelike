@@ -782,8 +782,6 @@ MonoBehaviour:
     type: 3}
   ScoreModalPrefab: {fileID: 5334718383566932956, guid: 9460d7c5ebe741844808be2be6715742,
     type: 3}
-  HistoryModalPrefab: {fileID: 1119981412910000720, guid: 6fa0c247d7bb44b449bd6bae21992f19,
-    type: 3}
   PersonCreateModalPrefab: {fileID: 1506063898886576590, guid: 8b220a215c9fe264682ab3d298e764f3,
     type: 3}
   ContainerModalPrefab: {fileID: 114800206159058986, guid: 5d51e8eeaf5d2f54c97ebc04b148b1ef,
@@ -1278,7 +1276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc40be9e8a5271443887c9a18b5b57af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SectorViewModel: {fileID: 0}
   AudioSource: {fileID: 418371950}
   PacificMusic: {fileID: 8300000, guid: 0d73f3bab30296e45a8d3dcdd3a3e2c4, type: 3}
   DungeionMusic: {fileID: 8300000, guid: 4b0de299cb087714fbcabc0f76f37c0d, type: 3}
@@ -6219,7 +6216,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.61380005
+  m_Size: 0.6138
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

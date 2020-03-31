@@ -113,6 +113,7 @@ namespace Zilon.Emulation.Common
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
             tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+            tacticalActUsageService.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)
@@ -151,6 +152,8 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
+
+            container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 using JetBrains.Annotations;
 
@@ -54,6 +55,16 @@ namespace Zilon.Core.Scoring
             foreach (var placeType in scores.PlaceTypes)
             {
                 summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
+            }
+
+            if (scores.Diseases.Any())
+            {
+                summaryStringBuilder.AppendLine("=== Infections ===");
+
+                foreach (var disease in scores.Diseases)
+                {
+                    summaryStringBuilder.AppendLine(disease.Name);
+                }
             }
 
             summaryStringBuilder.AppendLine("=== You killed ===");

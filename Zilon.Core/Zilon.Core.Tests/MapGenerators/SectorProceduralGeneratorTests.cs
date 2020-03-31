@@ -12,6 +12,8 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.MapGenerators.RoomStyle;
 using Zilon.Core.World;
@@ -96,11 +98,19 @@ namespace Zilon.Core.Tests.MapGenerators
                 .Returns(mapFactory);
             var mapFactorySelector = mapFactorySelectorMock.Object;
 
+            var diseaseGeneratorMock = new Mock<IDiseaseGenerator>();
+            var diseaseGenerator = diseaseGeneratorMock.Object;
+
+            var sectorMock = new Mock<ISector>();
+            var sector = sectorMock.Object;
+            sectorFactoryMock.Setup(x => x.Create(It.IsAny<ISectorMap>(), It.IsAny<ILocationScheme>()))
+                .Returns(sector);
+
             return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
                 chestGenerator,
-                citizenGenerator,
+                diseaseGenerator,
                 botPlayer);
         }
 

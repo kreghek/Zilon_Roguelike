@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -25,6 +26,8 @@ namespace Zilon.Core.Tactics
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
+
+        private readonly List<IDisease> _diseases;
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
@@ -58,6 +61,7 @@ namespace Zilon.Core.Tactics
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
         public IPropContainerManager PropContainerManager { get; }
+        public IEnumerable<IDisease> Diseases { get => _diseases; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
@@ -73,6 +77,8 @@ namespace Zilon.Core.Tactics
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
 
+            _diseases = new List<IDisease>();
+
             ActorManager.Added += ActorManager_Added;
             ActorManager.Removed += ActorManager_Remove;
             PropContainerManager.Added += PropContainerManager_Added;
@@ -81,6 +87,11 @@ namespace Zilon.Core.Tactics
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
             PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
+        }
+
+        public void AddDisease(IDisease disease)
+        {
+            _diseases.Add(disease);
         }
 
         /// <summary>
@@ -99,12 +110,37 @@ namespace Zilon.Core.Tactics
 
             UpdateActorEffects();
 
+            UpdateDiseases();
+
             UpdateEquipments();
 
             UpdateActoActs();
 
             // Определяем, не покинули ли актёры игрока сектор.
             //DetectSectorExit();
+        }
+
+        private void UpdateDiseases()
+        {
+            foreach (var actor in ActorManager.Items.ToArray())
+            {
+                if (actor.Person.DiseaseData is null)
+                {
+                    continue;
+                }
+
+                foreach (var disease in actor.Person.DiseaseData.Diseases)
+                {
+                    // Если есть болезнь, то назначаем эффект.
+
+                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == disease);
+                    if (diseaseEffect is null)
+                    {
+                        diseaseEffect = new DiseaseEffect(disease);
+                        actor.Person.Effects.Add(diseaseEffect);
+                    }
+                }
+            }
         }
 
         private void UpdateActoActs()

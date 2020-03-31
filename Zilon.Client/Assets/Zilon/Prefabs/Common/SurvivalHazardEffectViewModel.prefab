@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114683913208299558}
   - component: {fileID: 2311512904827396139}
   m_Layer: 5
-  m_Name: EffectViewModel
+  m_Name: SurvivalHazardEffectViewModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +83,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectIcon: {fileID: 1645137972383179856}
   Background: {fileID: 4544340499035745814}
-  NameText: {fileID: 3810033343488556025}
   HungerSprite: {fileID: 21300000, guid: 69b5169aed016d84a92c951bfa1e974f, type: 3}
   ThristSprite: {fileID: 21300000, guid: dd18b85fa6f2c4546a07ce7d47fde67a, type: 3}
   IntoxicationSprite: {fileID: 21300000, guid: 7435ccb2a8741f248bd74b9b00629f32, type: 3}

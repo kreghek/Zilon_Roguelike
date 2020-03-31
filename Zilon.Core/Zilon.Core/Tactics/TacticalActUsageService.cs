@@ -33,6 +33,11 @@ namespace Zilon.Core.Tactics
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         /// <summary>
+        /// Сервис для работы с достижениями персонажа.
+        /// </summary>
+        public IScoreManager ScoreManager { get; set; }
+
+        /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
         /// </summary>
         /// <param name="actUsageRandomSource">Источник рандома для выполнения действий.</param>
@@ -289,7 +294,9 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
-                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
+                ProcessDiseaseInfection(actor, targetActor);
+
+                LogDamagePlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
 
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
@@ -329,7 +336,54 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        /// <summary>
+        /// Обработать инфицирование болезью.
+        /// </summary>
+        /// <param name="sourceActor"> Актёр-источник заражения. </param>
+        /// <param name="targetActor"> Актёр-цель заражения. </param>
+        private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
+        {
+            if (sourceActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
+            if (targetActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
+            var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
+
+            foreach (var disease in currentDiseases)
+            {
+                targetActor.Person.DiseaseData.Infect(disease);
+                CountInfectionInScope(targetActor, disease);
+            }
+        }
+
+        private void CountInfectionInScope(IActor targetActor, IDisease disease)
+        {
+            if (targetActor is MonsterPerson)
+            {
+                // Для монстров не считаем достижения.
+                return;
+            }
+
+            // Сервис подсчёта очков - необязательная зависимость.
+            if (ScoreManager is null)
+            {
+                return;
+            }
+
+            // Каждую болезнь фиксируем только один раз
+            if (!ScoreManager.Scores.Diseases.Any(x => x == disease))
+            {
+                ScoreManager.Scores.Diseases.Add(disease);
+            }
+        }
+
+        private void LogDamagePlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
         {
             // Сервис логирование - необязательная зависимость.
             // Если он не задан, то не выполняем логирование.

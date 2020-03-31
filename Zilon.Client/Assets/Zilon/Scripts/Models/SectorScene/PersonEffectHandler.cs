@@ -5,18 +5,24 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 
 public class PersonEffectHandler : MonoBehaviour
 {
     [UsedImplicitly]
-    [NotNull] [Inject] private readonly HumanPlayer _player;
+    [NotNull]
+    [Inject]
+    private readonly HumanPlayer _player;
 
     [Inject]
-    private DiContainer _diContainer;
+    private readonly DiContainer _diContainer;
 
     public Transform EffectParent;
-    public EffectViewModel EffectPrefab;
+
+    public SurvivalHazardEffectViewModel SurvivalHazardEffectPrefab;
+
+    public DiseaseEffectViewModel DiseaseEffectPrefab;
 
     [UsedImplicitly]
     public void Start()
@@ -25,8 +31,8 @@ public class PersonEffectHandler : MonoBehaviour
 
         var person = _player.MainPerson;
 
-//TODO Не очень надёжное решение.
-// Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
+        //TODO Не очень надёжное решение.
+        // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
         if (person != null)
         {
             person.Survival.StatChanged += Survival_StatChanged;
@@ -66,12 +72,30 @@ public class PersonEffectHandler : MonoBehaviour
 
         foreach (var effect in effects.Items)
         {
-            if (effect is SurvivalStatHazardEffect survivalHazardEffect)
+            switch (effect)
             {
-                var effectViewModelObj = _diContainer.InstantiatePrefab(EffectPrefab, EffectParent);
-                var effectViewModel = effectViewModelObj.GetComponent<EffectViewModel>();
-                effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
+                case SurvivalStatHazardEffect survivalHazardEffect:
+                    CreateSurvivalHazardEffect(survivalHazardEffect);
+                    break;
+
+                case DiseaseEffect diseaseEffect:
+                    CreateDiseaseEffect(diseaseEffect);
+                    break;
             }
         }
+    }
+
+    private void CreateDiseaseEffect(DiseaseEffect diseaseEffect)
+    {
+        var effectViewModelObj = _diContainer.InstantiatePrefab(DiseaseEffectPrefab, EffectParent);
+        var effectViewModel = effectViewModelObj.GetComponent<DiseaseEffectViewModel>();
+        effectViewModel.Init(diseaseEffect.Disease);
+    }
+
+    private void CreateSurvivalHazardEffect(SurvivalStatHazardEffect survivalHazardEffect)
+    {
+        var effectViewModelObj = _diContainer.InstantiatePrefab(SurvivalHazardEffectPrefab, EffectParent);
+        var effectViewModel = effectViewModelObj.GetComponent<SurvivalHazardEffectViewModel>();
+        effectViewModel.Init(survivalHazardEffect.Type, survivalHazardEffect.Level);
     }
 }

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -14,8 +16,8 @@ namespace Zilon.Core.MapGenerators
     public class SectorGenerator : ISectorGenerator
     {
         private readonly IChestGenerator _chestGenerator;
+        private readonly IDiseaseGenerator _diseaseGenerator;
         private readonly IBotPlayer _botPlayer;
-        private readonly ICitizenGenerator _citizenGenerator;
         private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
@@ -27,22 +29,21 @@ namespace Zilon.Core.MapGenerators
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
         /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
-        /// <param name="citizenGenerator"> Генератор жителей в городском квартале. </param>
         /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
             IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IChestGenerator chestGenerator,
-            ICitizenGenerator citizenGenerator,
+            IDiseaseGenerator diseaseGenerator,
             IBotPlayer botPlayer)
         {
-            _mapFactorySelector = mapFactorySelector;
-            _sectorFactory = sectorFactory;
-            _monsterGenerator = monsterGenerator;
-            _chestGenerator = chestGenerator;
-            _botPlayer = botPlayer;
-            _citizenGenerator = citizenGenerator;
+            _mapFactorySelector = mapFactorySelector ?? throw new ArgumentNullException(nameof(mapFactorySelector));
+            _sectorFactory = sectorFactory ?? throw new ArgumentNullException(nameof(sectorFactory));
+            _monsterGenerator = monsterGenerator ?? throw new ArgumentNullException(nameof(monsterGenerator));
+            _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
+            _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
+            _botPlayer = botPlayer ?? throw new ArgumentNullException(nameof(botPlayer));
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             var mapFactory = _mapFactorySelector.GetMapFactory(sectorNode);
@@ -68,6 +69,8 @@ namespace Zilon.Core.MapGenerators
             var locationScheme = sectorNode.Biome.LocationScheme;
 
             var sector = _sectorFactory.Create(map, locationScheme);
+
+            DefineDiseases(sector);
 
             var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
 
@@ -83,6 +86,18 @@ namespace Zilon.Core.MapGenerators
                 sectorScheme);
 
             return sector;
+        }
+
+        private void DefineDiseases(ISector sector)
+        {
+            var disease = _diseaseGenerator.Create();
+
+            if (disease is null)
+            {
+                return;
+            }
+
+            sector.AddDisease(disease);
         }
     }
 }

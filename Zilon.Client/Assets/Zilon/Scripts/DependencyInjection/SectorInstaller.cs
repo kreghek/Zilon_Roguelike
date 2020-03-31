@@ -62,6 +62,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
                 {
                     service.PlayerEventLogService = playerEventLogService;
                 }
+
+                var scoreManager = Container.Resolve<IScoreManager>();
+                if (scoreManager != null)
+                {
+                    service.ScoreManager = scoreManager;
+                }
             });
         Container.Bind<ITacticalActUsageRandomSource>().To<TacticalActUsageRandomSource>().AsSingle();
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();

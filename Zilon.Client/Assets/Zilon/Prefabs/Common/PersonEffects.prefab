@@ -50,7 +50,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EffectParent: {fileID: 224013231738973734}
-  EffectPrefab: {fileID: 114683913208299558, guid: e83cb3bd4a921c541818039d153512d7,
+  SurvivalHazardEffectPrefab: {fileID: 114683913208299558, guid: e83cb3bd4a921c541818039d153512d7,
+    type: 3}
+  DiseaseEffectPrefab: {fileID: -8183160514315430309, guid: 3435354a97848d2419c3cf39e0f03e7b,
     type: 3}
 --- !u!114 &6930959546940836115
 MonoBehaviour:
