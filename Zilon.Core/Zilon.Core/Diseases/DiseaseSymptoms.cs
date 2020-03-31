@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Zilon.Core.Localization;
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Localization;
 
-namespace Zilon.Core.MapGenerators
+namespace Zilon.Core.Diseases
 {
     public static class DiseaseSymptoms
     {
-        public static DiseaseSymptom[] Symptoms { 
-            get => new[] { 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+            Justification = "Справочные данные.")]
+        public static DiseaseSymptom[] Symptoms
+        {
+            get => new[] {
                 new DiseaseSymptom
                 {
                     Name = new LocalizedString{ En = "Sore Throat", Ru = "Воспаление горла" },

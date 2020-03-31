@@ -1,18 +1,22 @@
-﻿namespace Zilon.Core.Diseases
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Объект, представляющий болезнь в игре.
     /// </summary>
     public class Disease : IDisease
     {
-        /// <summary>
-        /// Наименование болезни.
-        /// </summary>
+        /// <inheritdoc/>
         public DiseaseName Name { get; }
 
-        public Disease(DiseaseName name)
+        /// <inheritdoc/>
+        public IEnumerable<DiseaseSymptom> Symptoms { get; }
+
+        public Disease(DiseaseName name, IEnumerable<DiseaseSymptom> symptoms)
         {
             Name = name;
+            Symptoms = symptoms ?? throw new System.ArgumentNullException(nameof(symptoms));
         }
     }
 }

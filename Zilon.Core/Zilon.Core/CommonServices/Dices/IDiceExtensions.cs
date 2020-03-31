@@ -94,6 +94,43 @@ namespace Zilon.Core.CommonServices.Dices
         }
 
         /// <summary>
+        /// Выбирает случайное значение из списка.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <param name="count">Количество выбранных значений. </param>
+        /// <returns> Случайный элемент из списка. </returns>
+        public static IEnumerable<T> RollFromList<T>(this IDice dice, IList<T> list, int count)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (list.Count < count)
+            {
+                throw new ArgumentException("Требуемое количество должно быть не меньше размера списка.", nameof(count));
+            }
+
+            var openList = new List<T>(list);
+
+            for (var i = 0; i < count; i++)
+            {
+                var rolledItem = dice.RollFromList(openList);
+
+                yield return rolledItem;
+
+                openList.Remove(rolledItem);
+            }
+        }
+
+        /// <summary>
         /// Выбирает случайный индекс из набора.
         /// </summary>
         /// <typeparam name="T"> Тип элементов списка. </typeparam>

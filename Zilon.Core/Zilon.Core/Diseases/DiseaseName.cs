@@ -10,7 +10,11 @@ namespace Zilon.Core.Diseases
     /// </summary>
     public struct DiseaseName : IEquatable<DiseaseName>
     {
-        public DiseaseName(ILocalizedString primary, ILocalizedString primaryPrefix, ILocalizedString secondary, ILocalizedString subject)
+        public DiseaseName(
+            ILocalizedString primary,
+            ILocalizedString primaryPrefix,
+            ILocalizedString secondary,
+            ILocalizedString subject)
         {
             Primary = primary ?? throw new ArgumentNullException(nameof(primary));
             PrimaryPrefix = primaryPrefix;

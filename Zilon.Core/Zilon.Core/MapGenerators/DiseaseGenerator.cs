@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
@@ -63,7 +64,9 @@ namespace Zilon.Core.MapGenerators
                         continue;
                     }
 
-                    var disease = new Disease(diseaseName);
+                    var rolledSymptoms = RolledSymptoms();
+
+                    var disease = new Disease(diseaseName, rolledSymptoms);
 
                     _usedDiseases.Add(diseaseName);
 
@@ -77,6 +80,15 @@ namespace Zilon.Core.MapGenerators
             {
                 return null;
             }
+        }
+
+        private IEnumerable<DiseaseSymptom> RolledSymptoms()
+        {
+            var symptomCount = _dice.Roll(3, 5);
+
+            var rolledSymptoms = _dice.RollFromList(DiseaseSymptoms.Symptoms, symptomCount);
+
+            return rolledSymptoms;
         }
 
         private bool CheckDublicate(DiseaseName checkingDisease)
