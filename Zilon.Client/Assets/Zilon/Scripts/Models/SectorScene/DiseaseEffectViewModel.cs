@@ -35,6 +35,6 @@ public class DiseaseEffectViewModel : MonoBehaviour
 
     private static string GetEffectText(Language currentLanguage, IDisease disease)
     {
-        return disease.Name;
+        return LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, disease.Name;
     }
 }

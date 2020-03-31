@@ -1,10 +1,10 @@
-﻿using Zilon.Core.Schemes;
+﻿using Zilon.Core.Localization;
 
 namespace Assets.Zilon.Scripts.Services
 {
     static class LocalizationHelper
     {
-        public static string GetValue(Language currentLanguage, LocalizedStringSubScheme localizedString)
+        public static string GetValue(Language currentLanguage, ILocalizedString localizedString)
         {
             switch (currentLanguage)
             {
@@ -17,7 +17,7 @@ namespace Assets.Zilon.Scripts.Services
             }
         }
 
-        public static string GetValueOrDefaultNoname(Language currentLanguage, LocalizedStringSubScheme localizedString)
+        public static string GetValueOrDefaultNoname(Language currentLanguage, ILocalizedString localizedString)
         {
             switch (currentLanguage)
             {
