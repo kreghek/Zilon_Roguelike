@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Persons;
+using Zilon.Core.Diseases;
 
 public class DiseaseEffectViewModel : MonoBehaviour
 {

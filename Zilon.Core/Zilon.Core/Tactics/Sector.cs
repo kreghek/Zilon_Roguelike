@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
@@ -115,9 +116,6 @@ namespace Zilon.Core.Tactics
             UpdateEquipments();
 
             UpdateActorActs();
-
-            // Определяем, не покинули ли актёры игрока сектор.
-            //DetectSectorExit();
         }
 
         private void UpdateDiseases()
@@ -133,8 +131,10 @@ namespace Zilon.Core.Tactics
                 {
                     // Если есть болезнь, то назначаем эффект.
 
-                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>().SingleOrDefault(x => x.Disease == diseaseProcess);
-                    if (diseaseEffect is null)
+                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>()
+                        .SingleOrDefault(x => x.Disease == diseaseProcess.Disease);
+
+                    if (diseaseEffect is null && diseaseProcess.CurrentPower >= 0.25)
                     {
                         diseaseEffect = new DiseaseEffect(diseaseProcess.Disease);
                         actor.Person.Effects.Add(diseaseEffect);
@@ -243,21 +243,6 @@ namespace Zilon.Core.Tactics
                 }
             }
         }
-
-        /// <summary>
-        /// Определяет, находятся ли актёры игрока в точках выхода их сектора.
-        /// </summary>
-        //private void DetectSectorExit()
-        //{
-        //    var humanActorNodes = _actorManager.Items.Where(x => x.Owner is HumanPlayer).Select(x => x.Node);
-        //    var detectedTransition = TransitionDetection.Detect(Map.Transitions, humanActorNodes);
-
-        //    if (detectedTransition != null)
-        //    {
-        //        DoActorExit(detectedTransition);
-        //    }
-        //}
-
 
         private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
         {

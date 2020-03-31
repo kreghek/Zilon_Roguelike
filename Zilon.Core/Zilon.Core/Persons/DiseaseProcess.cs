@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class DiseaseProcess : IDiseaseProcess
     {
-        private const float DISEASE_SPEED = 0.01f;
+        private const float DISEASE_SPEED = 0.005f;
 
         public DiseaseProcess(IDisease disease)
         {
