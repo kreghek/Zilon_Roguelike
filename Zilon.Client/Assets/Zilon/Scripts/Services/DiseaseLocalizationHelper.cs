@@ -1,5 +1,4 @@
 ﻿using Zilon.Core.Persons;
-using Zilon.Core.Schemes;
 
 namespace Assets.Zilon.Scripts.Services
 {
@@ -10,17 +9,9 @@ namespace Assets.Zilon.Scripts.Services
             var primaryName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, diseaseName.Primary);
             var prefix = LocalizationHelper.GetValue(currentLanguage, diseaseName.PrimaryPrefix);
             var secondaryName = LocalizationHelper.GetValue(currentLanguage, diseaseName.Secondary);
-            var subject = LocalizationHelper.GetValue(currentLanguage, );
+            var subject = LocalizationHelper.GetValue(currentLanguage, diseaseName.Subject);
 
-            switch (currentLanguage)
-            {
-                case Language.English:
-                default:
-                    return localizedString?.En ?? "[noname]";
-
-                case Language.Russian:
-                    return localizedString?.Ru ?? "[не задано]";
-            }
+            return $"{secondaryName} {prefix}{primaryName} {subject}".Trim();
         }
     }
 }
