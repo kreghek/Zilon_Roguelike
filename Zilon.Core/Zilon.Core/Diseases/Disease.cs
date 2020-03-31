@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.Diseases
 {
@@ -7,16 +8,23 @@ namespace Zilon.Core.Diseases
     /// </summary>
     public class Disease : IDisease
     {
+        private readonly DiseaseSymptom[] _symptoms;
+
         /// <inheritdoc/>
         public DiseaseName Name { get; }
 
         /// <inheritdoc/>
-        public IEnumerable<DiseaseSymptom> Symptoms { get; }
+        public DiseaseSymptom[] GetSymptoms() { return _symptoms; }
 
         public Disease(DiseaseName name, IEnumerable<DiseaseSymptom> symptoms)
         {
+            if (symptoms is null)
+            {
+                throw new System.ArgumentNullException(nameof(symptoms));
+            }
+
             Name = name;
-            Symptoms = symptoms ?? throw new System.ArgumentNullException(nameof(symptoms));
+            _symptoms = symptoms.ToArray();
         }
     }
 }

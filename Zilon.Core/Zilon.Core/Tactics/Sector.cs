@@ -129,25 +129,80 @@ namespace Zilon.Core.Tactics
 
                 foreach (var diseaseProcess in actor.Person.DiseaseData.Diseases.ToArray())
                 {
-                    // Если есть болезнь, то назначаем эффект.
+                    // Если есть болезнь, то назначаем эффекты на симпомы этой болезни.
 
-                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>()
-                        .SingleOrDefault(x => x.Disease == diseaseProcess.Disease);
+                    // Первые 25% силы болезнь себя не проявляет.
+                    // Оставшиеся 75% делим на равные отрезки между всеми симптомами.
+                    // По мере увеличения силы болезни добавляем по эффекту на каждый симптом за каждый пройденный
+                    // рассчитанный отрезок на симптом.
+                    // Если эффект на такой симптом уже есть, то добавляем к этому симптому новую болезнь.
+                    // После 50% прогресса болезни (то есть когда прошёл пик силы) начинаем обратный процесс - убираем эффекты
+                    // за каждый симптом.
+                    // Если для эффекта симптома указано несколько болезней, то эффект уходит только после удаления последней болезни.
 
-                    if (diseaseEffect is null && diseaseProcess.CurrentPower >= 0.25)
+                    var disease = diseaseProcess.Disease;
+                    var symptoms = disease.GetSymptoms();
+
+                    var currentPower = diseaseProcess.CurrentPower;
+
+                    // Рассчитываем отрезок силы на один симптом.
+                    var symptomPowerSegment = 0.75f / symptoms.Length;
+
+                    if (diseaseProcess.Value < 0.5f)
                     {
-                        diseaseEffect = new DiseaseEffect(diseaseProcess.Disease);
-                        actor.Person.Effects.Add(diseaseEffect);
-                    }
+                        // Обрабатываем нарастание силы болезни.
 
-                    diseaseProcess.Update();
-
-                    if (diseaseProcess.Value >= 1)
-                    {
-                        actor.Person.DiseaseData.RemoveDisease(diseaseProcess.Disease);
-                        if (diseaseEffect != null)
+                        if (currentPower > 0.25f)
                         {
-                            actor.Person.Effects.Remove(diseaseEffect);
+                            // Симптомы начинаю проявляться после 25% силы болезни.
+
+                            // Рассчитываем количество симптомов, которые должны быть при текущей силе болезни.
+
+                            var activeSymptomCount = (int)Math.Ceiling((currentPower - 0.25f) / symptomPowerSegment);
+
+                            // Начинаем проверять, есть ли эффекты на все эти симптомы
+                            // или добавлены ли болезни симптомов в список болезней эффектов.
+
+                            for (var i = 0; i < activeSymptomCount; i++)
+                            {
+                                var currentSymptom = symptoms[i];
+
+                                var currentSymptomEffect = actor.Person.Effects.Items.OfType<DiseaseSymptomEffect>()
+                                    .SingleOrDefault(x => x.Symptom == currentSymptom);
+
+                                if (currentSymptomEffect is null)
+                                {
+                                    currentSymptomEffect = new DiseaseSymptomEffect(disease, currentSymptom);
+                                    actor.Person.Effects.Add(currentSymptomEffect);
+                                }
+                                else
+                                {
+                                    currentSymptomEffect.AddDisease(disease);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var activeSymptomCount = (int)Math.Ceiling(currentPower / symptomPowerSegment);
+
+                        // Начинаем снимать все эффекты, которые за пределами количества.
+
+                        var symptomLowerIndex = activeSymptomCount - 1;
+
+                        for (var i = symptomLowerIndex; i < symptoms.Length; i++)
+                        {
+                            var currentSymptom = symptoms[i];
+
+                            var currentSymptomEffect = actor.Person.Effects.Items.OfType<DiseaseSymptomEffect>()
+                                .Single(x => x.Symptom == currentSymptom);
+
+                            currentSymptomEffect.RemoveDisease(disease);
+
+                            if (!currentSymptomEffect.Diseases.Any())
+                            {
+                                actor.Person.Effects.Remove(currentSymptomEffect);
+                            }                                
                         }
                     }
                 }

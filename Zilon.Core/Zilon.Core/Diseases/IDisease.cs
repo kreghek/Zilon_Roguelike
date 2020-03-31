@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Zilon.Core.Diseases
+﻿namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Интерфейс болезни, поразившей персонажа.
@@ -15,6 +13,6 @@ namespace Zilon.Core.Diseases
         /// <summary>
         /// Симптомы болезни.
         /// </summary>
-        IEnumerable<DiseaseSymptom> Symptoms { get; }
+        DiseaseSymptom[] GetSymptoms();
     }
 }
