@@ -1,5 +1,8 @@
 ﻿namespace Zilon.Core.Localization
 {
+    /// <summary>
+    /// Локализованная строка на разных языках.
+    /// </summary>
     public interface ILocalizedString
     {
         /// <summary>
