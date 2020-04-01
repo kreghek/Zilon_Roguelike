@@ -35,7 +35,24 @@ namespace Zilon.Core.Persons
         /// влияние болезни,
         /// эффекты болезни (симптомы).
         /// </summary>
-        public float CurrentPower { get => (float)Math.Sin(Value * Math.PI); }
+        public float CurrentPower { get => CalcPowerByProgress(Value); }
+
+        private static float CalcPowerByProgress(float progress)
+        {
+            var power = Math.Sin(progress * Math.PI);
+
+            if (power < 0)
+            {
+                return 0;
+            }
+
+            if (power > 1)
+            {
+                return 1;
+            }
+
+            return (float)power;
+        }
 
         public void Update()
         {
