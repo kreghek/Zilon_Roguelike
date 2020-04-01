@@ -403,7 +403,49 @@ namespace Zilon.Core.Persons
             var bonusList = new List<SurvivalStatBonus>();
             FillSurvivalBonusesFromEquipments(ref bonusList);
             FillSurvivalBonusesFromPerks(ref bonusList);
+            FillSurvivalBonusesFromEffects(ref bonusList);
             ApplySurvivalBonuses(bonusList);
+        }
+
+        private void FillSurvivalBonusesFromEffects([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        {
+            if (Effects is null)
+            {
+                return;
+            }
+
+            foreach (var effect in Effects.Items)
+            {
+                switch (effect)
+                {
+                    case DiseaseSymptomEffect diseaseSymptomEffect:
+
+                        switch (diseaseSymptomEffect.Symptom.Rule)
+                        {
+                            case Diseases.DiseaseSymptomType.HealthLimit:
+                                BonusToHealth(PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
+                                break;
+
+                            case Diseases.DiseaseSymptomType.HungerSpeed:
+                                BonusToDownPass(SurvivalStatType.Satiety, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
+                                break;
+
+                            case Diseases.DiseaseSymptomType.ThirstSpeed:
+                                BonusToDownPass(SurvivalStatType.Hydration, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
+                                break;
+
+                            case Diseases.DiseaseSymptomType.BreathDownSpeed:
+                                BonusToDownPass(SurvivalStatType.Breath, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
+                                break;
+
+                            case Diseases.DiseaseSymptomType.EnegryDownSpeed:
+                                BonusToDownPass(SurvivalStatType.Energy, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
+                                break;
+                        }
+
+                        break;
+                }
+            }
         }
 
         private void FillSurvivalBonusesFromPerks([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
@@ -502,6 +544,10 @@ namespace Zilon.Core.Persons
 
                         case EquipCommonRuleType.HungerResistance:
                             BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                            break;
+
+                        case EquipCommonRuleType.ThristResistance:
+                            BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
                             break;
                     }
                 }

@@ -63,7 +63,22 @@ namespace Zilon.Core.Persons
                     statList);
             }
 
+            CreateUselessStat(SurvivalStatType.Breath, statList);
+            CreateUselessStat(SurvivalStatType.Energy, statList);
+
             return statList.ToArray();
+        }
+
+        private static void CreateUselessStat(SurvivalStatType statType, List<SurvivalStat> statList)
+        {
+            var stat = new SurvivalStat(100, 0, 100)
+            {
+                Type = statType,
+                Rate = 1,
+                DownPassRoll = 0
+            };
+
+            statList.Add(stat);
         }
 
         private void Stat_Changed(object sender, EventArgs e)
@@ -127,7 +142,7 @@ namespace Zilon.Core.Persons
             IPersonSurvivalStatSubScheme[] survivalStats)
         {
             var statScheme = survivalStats.SingleOrDefault(x => x.Type == schemeStatType);
-            if (statScheme == null)
+            if (statScheme is null)
             {
                 return null;
             }
@@ -138,20 +153,14 @@ namespace Zilon.Core.Persons
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keySegmentList);
-
-                //Ниже пока не актуально. Алгоритм работает так, что ему не важен порядок ключевых точек.
-                //// По условиям работы с о схемами, в схемах ключевые значения
-                //// могут быть в любом порядке.
-                //// При создании ключевых точек их нужно сортировать по возрастанию, чтобы корректно
-                //// обрабатываться пересечение ключевых точек.
-                //keyPointList.Sort((a, b) => a.Value.CompareTo(b.Value));
             }
 
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
             {
                 Type = type,
                 Rate = 1,
-                KeySegments = keySegmentList.ToArray()
+                KeySegments = keySegmentList.ToArray(),
+                DownPassRoll = statScheme.DownPassRoll.GetValueOrDefault(SurvivalStat.DEFAULT_DOWN_PASS_VALUE)
             };
 
             return stat;
