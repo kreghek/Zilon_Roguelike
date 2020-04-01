@@ -43,7 +43,6 @@ namespace Zilon.Core.Persons.Survival
         /// </summary>
         public int DownPassRoll { get; set; }
 
-
         /// <summary>
         /// Ключевые сегменты характеристики.
         /// </summary>

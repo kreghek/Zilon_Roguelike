@@ -2,6 +2,9 @@
 
 namespace Zilon.Core.Diseases
 {
+    /// <summary>
+    /// Каталог симптомов.
+    /// </summary>
     public static class DiseaseSymptoms
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -21,6 +24,11 @@ namespace Zilon.Core.Diseases
                 },
                 new DiseaseSymptom
                 {
+                    Name = new LocalizedString{ En = "Dyspnea", Ru = "Одышка" },
+                    Rule = DiseaseSymptomType.BreathDownSpeed
+                },
+                new DiseaseSymptom
+                {
                     Name = new LocalizedString{ En = "Body aches", Ru = "Ломота в теле" },
                     Rule = DiseaseSymptomType.HealthLimit
                 },
@@ -36,27 +44,5 @@ namespace Zilon.Core.Diseases
                 },
             };
         }
-    }
-
-    public class DiseaseSymptom
-    {
-        public ILocalizedString Name { get; set; }
-
-        public DiseaseSymptomType Rule { get; set; }
-    }
-
-    public enum DiseaseSymptomType
-    {
-        Undefined,
-
-        BreathDownSpeed,
-
-        EnegryDownSpeed,
-
-        HungerSpeed,
-
-        ThirstSpeed,
-
-        HealthLimit
     }
 }
