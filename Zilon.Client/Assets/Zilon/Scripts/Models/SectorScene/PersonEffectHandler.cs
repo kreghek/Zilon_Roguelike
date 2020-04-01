@@ -78,18 +78,18 @@ public class PersonEffectHandler : MonoBehaviour
                     CreateSurvivalHazardEffect(survivalHazardEffect);
                     break;
 
-                case DiseaseEffect diseaseEffect:
+                case DiseaseSymptomEffect diseaseEffect:
                     CreateDiseaseEffect(diseaseEffect);
                     break;
             }
         }
     }
 
-    private void CreateDiseaseEffect(DiseaseEffect diseaseEffect)
+    private void CreateDiseaseEffect(DiseaseSymptomEffect diseaseEffect)
     {
         var effectViewModelObj = _diContainer.InstantiatePrefab(DiseaseEffectPrefab, EffectParent);
         var effectViewModel = effectViewModelObj.GetComponent<DiseaseEffectViewModel>();
-        effectViewModel.Init(diseaseEffect.Disease);
+        effectViewModel.Init(diseaseEffect);
     }
 
     private void CreateSurvivalHazardEffect(SurvivalStatHazardEffect survivalHazardEffect)
