@@ -1,19 +1,22 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Persons;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+
 using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.Persons.Survival;
+using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Persons.Tests
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class DiseaseDataTests
     {
-        [Test()]
-        public void Update_AllProcess_EffectAddedAndRemoved()
+        [Test]
+        [TestCaseSource(typeof(DiseaseDataTestCaseSource), nameof(DiseaseDataTestCaseSource.TestCases))]
+        public void Update_AllProcess_EffectAddedAndRemoved(DiseaseSymptom[] symptoms)
         {
             // ARRANGE
             var effectList = new List<IPersonEffect>();
@@ -23,10 +26,6 @@ namespace Zilon.Core.Persons.Tests
             effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Remove(x));
             effectCollectionMock.SetupGet(x => x.Items).Returns(effectList);
             var effectCollection = effectCollectionMock.Object;
-
-            var symptoms = new[] {
-                new DiseaseSymptom{ Rule = DiseaseSymptomType.BreathDownSpeed }
-            };
 
             var diseaseMock = new Mock<IDisease>();
             diseaseMock.Setup(x => x.GetSymptoms())
@@ -45,13 +44,14 @@ namespace Zilon.Core.Persons.Tests
             }
 
             // ARRANGE
-            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(x => DeaseSymptomHasRule(x))), Times.Once);
-            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(x => DeaseSymptomHasRule(x))), Times.Once);
+            var exceptedTimes = symptoms.Length;
+            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
         }
 
-        private static bool DeaseSymptomHasRule(IPersonEffect x)
+        private static bool IsDeaseSymptom(IPersonEffect x)
         {
-            return x is DiseaseSymptomEffect diseaseSymptomEffect && diseaseSymptomEffect.Symptom.Rule == DiseaseSymptomType.BreathDownSpeed;
+            return x is DiseaseSymptomEffect;
         }
     }
 }
