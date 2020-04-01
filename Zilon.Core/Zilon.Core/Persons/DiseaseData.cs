@@ -41,10 +41,12 @@ namespace Zilon.Core.Persons
             _diseases.Remove(currentProcess);
         }
 
-        public void Update(EffectCollection personEffects)
+        public void Update(IEffectCollection personEffects)
         {
             foreach (var diseaseProcess in Diseases.ToArray())
             {
+                diseaseProcess.Update();
+
                 // Если есть болезнь, то назначаем эффекты на симпомы этой болезни.
 
                 // Первые 25% силы болезнь себя не проявляет.
@@ -93,33 +95,43 @@ namespace Zilon.Core.Persons
                             }
                             else
                             {
-                                currentSymptomEffect.AddDisease(disease);
+                                currentSymptomEffect.HoldDisease(disease);
                             }
                         }
                     }
                 }
                 else
                 {
-                    var activeSymptomCount = (int)Math.Ceiling(currentPower / symptomPowerSegment);
+                    var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
 
                     // Начинаем снимать все эффекты, которые за пределами количества.
 
-                    var symptomLowerIndex = activeSymptomCount - 1;
+                    var symptomLowerIndex = activeSymptomCount;
 
                     for (var i = symptomLowerIndex; i < symptoms.Length; i++)
                     {
                         var currentSymptom = symptoms[i];
 
                         var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                            .Single(x => x.Symptom == currentSymptom);
+                            .SingleOrDefault(x => x.Symptom == currentSymptom);
 
-                        currentSymptomEffect.RemoveDisease(disease);
-
-                        if (!currentSymptomEffect.Diseases.Any())
+                        if (currentSymptomEffect != null)
                         {
-                            personEffects.Remove(currentSymptomEffect);
+                            currentSymptomEffect.ReleaseDisease(disease);
+
+                            if (!currentSymptomEffect.Diseases.Any())
+                            {
+                                personEffects.Remove(currentSymptomEffect);
+                            }
                         }
                     }
+                }
+
+                // Если процесс болезни прошёл, то удаляем болезнь из модуля персонажа.
+                // Счтаетс, что он её перетерпел.
+                if (diseaseProcess.Value >= 1)
+                {
+                    RemoveDisease(diseaseProcess.Disease);
                 }
             }
         }

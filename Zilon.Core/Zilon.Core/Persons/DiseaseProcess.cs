@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class DiseaseProcess : IDiseaseProcess
     {
-        private const float DISEASE_SPEED = 0.0005f;
+        private const float DISEASE_SPEED = 0.005f;
 
         public DiseaseProcess(IDisease disease)
         {
@@ -35,7 +35,7 @@ namespace Zilon.Core.Persons
         /// влияние болезни,
         /// эффекты болезни (симптомы).
         /// </summary>
-        public float CurrentPower { get => (float)Math.Sin(Value * 2 * Math.PI); }
+        public float CurrentPower { get => (float)Math.Sin(Value * Math.PI); }
 
         public void Update()
         {

@@ -24,21 +24,24 @@ namespace Zilon.Core.Persons.Survival
 
             _diseases = new List<IDisease>();
 
-            AddDisease(disease);
+            HoldDisease(disease);
         }
 
         public IList<IDisease> Diseases { get => _diseases; }
 
         public DiseaseSymptom Symptom { get; }
 
-        public void AddDisease(IDisease disease)
+        public void HoldDisease(IDisease disease)
         {
-            _diseases.Add(disease);
+            if (!_diseases.Contains(disease))
+            {
+                _diseases.Add(disease);
+            }
 
             Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        public void RemoveDisease(IDisease disease)
+        public void ReleaseDisease(IDisease disease)
         {
             _diseases.Remove(disease);
 

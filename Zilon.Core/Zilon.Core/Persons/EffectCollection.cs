@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Zilon.Core.Persons
 {
-    public class EffectCollection
+    public class EffectCollection : IEffectCollection
     {
         private readonly List<IPersonEffect> _items;
 
@@ -16,6 +16,11 @@ namespace Zilon.Core.Persons
 
         public void Add(IPersonEffect effect)
         {
+            if (effect is null)
+            {
+                throw new ArgumentNullException(nameof(effect));
+            }
+
             _items.Add(effect);
 
             effect.Changed += Effect_Changed;
@@ -24,6 +29,11 @@ namespace Zilon.Core.Persons
 
         public void Remove(IPersonEffect effect)
         {
+            if (effect is null)
+            {
+                throw new ArgumentNullException(nameof(effect));
+            }
+
             _items.Remove(effect);
             effect.Changed -= Effect_Changed;
             DoRemoved(effect);

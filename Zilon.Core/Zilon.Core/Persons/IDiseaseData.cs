@@ -30,6 +30,6 @@ namespace Zilon.Core.Persons
         /// Обновление состояния модуля болезней.
         /// </summary>
         /// <param name="personEffects"> Ссылка на модуль эффектов персонажа. Болезни навешивают эффекты. </param>
-        void Update(EffectCollection personEffects);
+        void Update(IEffectCollection personEffects);
     }
 }
