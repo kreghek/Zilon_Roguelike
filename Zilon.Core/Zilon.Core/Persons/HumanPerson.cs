@@ -658,6 +658,11 @@ namespace Zilon.Core.Persons
 
         private void Survival_StatCrossKeyValue(object sender, SurvivalStatChangedEventArgs e)
         {
+            if (e.Stat.KeySegments is null)
+            {
+                return;
+            }
+
             PersonEffectHelper.UpdateSurvivalEffect(
                 Effects,
                 e.Stat,
