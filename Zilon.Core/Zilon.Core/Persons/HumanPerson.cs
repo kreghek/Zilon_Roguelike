@@ -441,9 +441,15 @@ namespace Zilon.Core.Persons
                             case Diseases.DiseaseSymptomType.EnegryDownSpeed:
                                 BonusToDownPass(SurvivalStatType.Energy, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
+
+                            case Diseases.DiseaseSymptomType.Undefined:
+                            default:
+                                throw new InvalidOperationException($"Неизвестное правило эффекта {diseaseSymptomEffect.Symptom.Rule}");
                         }
 
                         break;
+                    default:
+                        throw new InvalidOperationException($"Неизвестный тип эффекта {effect.GetType()}");
                 }
             }
         }
