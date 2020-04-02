@@ -696,28 +696,48 @@ public class SectorVM : MonoBehaviour
         // Визуализируем удар.
         var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
 
-        if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Damage)
+        var actEffect = e.TacticalAct.Stats.Effect;
+        switch (actEffect)
         {
-            var targetViewModel = ActorViewModels.Single(x => x.Actor == e.Target);
+            case TacticalActEffectType.Damage:
+                ProcessDamage(e.Target, e.TacticalAct, actor, actorViewModel);
+                break;
 
-            actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
+            case TacticalActEffectType.Heal:
+                ProcessHeal(actorViewModel);
+                break;
 
-            var sfx = Instantiate(HitSfx, transform);
-            targetViewModel.AddHitEffect(sfx);
-
-            // Проверяем, стрелковое оружие или удар ближнего боя
-            if (e.TacticalAct.Stats.Range?.Max > 1)
-            {
-                sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
-
-                // Создаём снараяд
-                CreateBullet(actor, e.Target);
-            }
+            case TacticalActEffectType.Undefined:
+            default:
+                throw new InvalidOperationException($"Неизвестный тип воздействия {actEffect}.");
         }
-        else if (e.TacticalAct.Stats.Effect == TacticalActEffectType.Heal)
+    }
+
+    private static void ProcessHeal(ActorViewModel actorViewModel)
+    {
+        actorViewModel.GraphicRoot.ProcessHit(actorViewModel.transform.position);
+    }
+
+    private void ProcessDamage(IAttackTarget target, ITacticalAct tacticalAct, IActor actor, ActorViewModel actorViewModel)
+    {
+        var targetViewModel = ActorViewModels.SingleOrDefault(x => x.Actor == target);
+        if (targetViewModel is null)
         {
-            actorViewModel.GraphicRoot.ProcessHit(actorViewModel.transform.position);
-            Debug.Log($"{actor} healed youself");
+            return;
+        }
+
+        actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
+
+        var sfx = Instantiate(HitSfx, transform);
+        targetViewModel.AddHitEffect(sfx);
+
+        // Проверяем, стрелковое оружие или удар ближнего боя
+        if (tacticalAct.Stats.Range?.Max > 1)
+        {
+            sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
+
+            // Создаём снараяд
+            CreateBullet(actor, target);
         }
     }
 

@@ -18,6 +18,11 @@ namespace Zilon.Core.Persons.Tests
         [TestCaseSource(typeof(DiseaseDataTestCaseSource), nameof(DiseaseDataTestCaseSource.TestCases))]
         public void Update_AllProcess_EffectAddedAndRemoved(DiseaseSymptom[] symptoms)
         {
+            if (symptoms is null)
+            {
+                throw new System.ArgumentNullException(nameof(symptoms));
+            }
+
             // ARRANGE
             var effectList = new List<IPersonEffect>();
 
@@ -30,6 +35,8 @@ namespace Zilon.Core.Persons.Tests
             var diseaseMock = new Mock<IDisease>();
             diseaseMock.Setup(x => x.GetSymptoms())
                 .Returns(symptoms);
+            diseaseMock.SetupGet(x => x.ProgressSpeed)
+                .Returns(0.001f);
             var disease = diseaseMock.Object;
 
             var diseaseData = new DiseaseData();
@@ -38,15 +45,15 @@ namespace Zilon.Core.Persons.Tests
 
             // ACT
 
-            for (var i = 0; i < 200; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 diseaseData.Update(effectCollection);
             }
 
             // ARRANGE
             var exceptedTimes = symptoms.Length;
-            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
-            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
         }
 
         private static bool IsDeaseSymptom(IPersonEffect x)

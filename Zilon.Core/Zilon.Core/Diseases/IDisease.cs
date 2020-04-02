@@ -14,5 +14,10 @@
         /// Симптомы болезни.
         /// </summary>
         DiseaseSymptom[] GetSymptoms();
+
+        /// <summary>
+        /// Скорость протекания болезни.
+        /// </summary>
+        float ProgressSpeed { get; }
     }
 }
