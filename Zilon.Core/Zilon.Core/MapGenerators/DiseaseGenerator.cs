@@ -95,12 +95,12 @@ namespace Zilon.Core.MapGenerators
 
         private float RollDiseaseProgressSpeed()
         {
-            const int BASE_DURABLE = 2000;
+            const int BASE_DURABLE = 20_000;
             const float DIFF_DURABLE_PERCENTAGE = 0.1f;
             const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
 
             var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
-            var factDurable = BASE_DURABLE + DIFF_DURABLE;
+            var factDurable = BASE_DURABLE + rolledDiff;
 
             return 1f / factDurable;
         }
