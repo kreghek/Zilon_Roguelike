@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators
         public IDisease Create()
         {
             var roll = _dice.RollD6();
-            if (roll <= 6)
+            if (roll <= 1)
             {
                 var nameGenerationAttempt = 0;
                 do
