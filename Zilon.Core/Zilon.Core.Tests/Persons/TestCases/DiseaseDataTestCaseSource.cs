@@ -12,8 +12,8 @@ namespace Zilon.Core.Tests.Persons.TestCases
         {
             get
             {
-                yield return new TestCaseData((object)Single);
-                yield return new TestCaseData((object)Multiple);
+                yield return new TestCaseData(arg: Single);
+                yield return new TestCaseData(arg: Multiple);
             }
         }
 
