@@ -9,8 +9,6 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class DiseaseProcess : IDiseaseProcess
     {
-        private const float DISEASE_SPEED = 0.005f;
-
         public DiseaseProcess(IDisease disease)
         {
             Disease = disease ?? throw new ArgumentNullException(nameof(disease));
@@ -56,7 +54,7 @@ namespace Zilon.Core.Persons
 
         public void Update()
         {
-            Value += DISEASE_SPEED;
+            Value += Disease.ProgressSpeed;
         }
     }
 }

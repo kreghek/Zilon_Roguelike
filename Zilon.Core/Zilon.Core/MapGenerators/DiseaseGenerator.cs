@@ -57,7 +57,7 @@ namespace Zilon.Core.MapGenerators
 
                     // Проверяем, была ли уже такая болезнь.
 
-                    var isDuplicate = CheckDublicate(diseaseName);
+                    var isDuplicate = CheckDuplicates(diseaseName);
                     if (isDuplicate)
                     {
                         nameGenerationAttempt++;
@@ -66,7 +66,9 @@ namespace Zilon.Core.MapGenerators
 
                     var rolledSymptoms = RolledSymptoms();
 
-                    var disease = new Disease(diseaseName, rolledSymptoms);
+                    var progressSpeed = RollDiseaseProgressSpeed();
+
+                    var disease = new Disease(diseaseName, rolledSymptoms, progressSpeed);
 
                     _usedDiseases.Add(diseaseName);
 
@@ -91,7 +93,19 @@ namespace Zilon.Core.MapGenerators
             return rolledSymptoms;
         }
 
-        private bool CheckDublicate(DiseaseName checkingDisease)
+        private float RollDiseaseProgressSpeed()
+        {
+            const int BASE_DURABLE = 2000;
+            const float DIFF_DURABLE_PERCENTAGE = 0.1f;
+            const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
+
+            var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
+            var factDurable = BASE_DURABLE + DIFF_DURABLE;
+
+            return 1f / factDurable;
+        }
+
+        private bool CheckDuplicates(DiseaseName checkingDisease)
         {
             var nameFound = _usedDiseases.Any(x => x == checkingDisease);
 
