@@ -448,6 +448,12 @@ namespace Zilon.Core.Persons
                         }
 
                         break;
+
+                    case SurvivalStatHazardEffect _:
+                        // Эти эффекты пока не влияют на статы выживания.
+                        // Но case- блок должен быть, иначе будет ошибка.
+                        break;
+
                     default:
                         throw new InvalidOperationException($"Неизвестный тип эффекта {effect.GetType()}");
                 }
