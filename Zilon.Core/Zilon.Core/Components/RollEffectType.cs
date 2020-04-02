@@ -11,6 +11,16 @@ namespace Zilon.Core.Components
 
         Efficient,
 
-        ArmorSave
+        ArmorSave,
+
+        BreathDownSpeed,
+
+        EnegryDownSpeed,
+
+        HungerSpeed,
+
+        ThirstSpeed,
+
+        HealthLimit
     }
 }

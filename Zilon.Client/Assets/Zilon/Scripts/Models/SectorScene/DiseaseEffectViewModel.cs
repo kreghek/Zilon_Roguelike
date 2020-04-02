@@ -1,10 +1,12 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using System.Collections.Generic;
+
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Diseases;
+using Zilon.Core.Persons.Survival;
 
 public class DiseaseEffectViewModel : MonoBehaviour
 {
@@ -13,28 +15,39 @@ public class DiseaseEffectViewModel : MonoBehaviour
 
     public UiElementTooltip UiElementTooltip;
 
-    private IDisease _disease;
+    private DiseaseSymptomEffect _diseaseSymptomEffect;
 
-    public void Init(IDisease disease)
+    public void Init(DiseaseSymptomEffect diseaseSymptomEffect)
     {
-        if (disease is null)
+        if (diseaseSymptomEffect is null)
         {
-            throw new System.ArgumentNullException(nameof(disease));
+            throw new System.ArgumentNullException(nameof(diseaseSymptomEffect));
         }
 
-        _disease = disease;
+        _diseaseSymptomEffect = diseaseSymptomEffect;
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
         if (UiElementTooltip != null)
         {
-            var effectText = GetEffectText(currentLanguage, _disease);
+            var effectText = GetEffectText(currentLanguage, _diseaseSymptomEffect);
             UiElementTooltip.text = effectText;
         }
     }
 
-    private static string GetEffectText(Language currentLanguage, IDisease disease)
+    private static string GetEffectText(Language currentLanguage, DiseaseSymptomEffect diseaseSymptomEffect)
     {
-        return DiseaseLocalizationHelper.GetValueOrDefaultNoname(currentLanguage, disease.Name);
+        var symptomName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, diseaseSymptomEffect.Symptom.Name);
+
+        var diseaseNames = new List<string>();
+
+        foreach (var disease in diseaseSymptomEffect.Diseases)
+        {
+            var diseaseName = DiseaseLocalizationHelper.GetValueOrDefaultNoname(currentLanguage, disease.Name);
+
+            diseaseNames.Add(diseaseName);
+        }
+
+        return $"{symptomName}\n{string.Join("\n", diseaseNames)}";
     }
 }

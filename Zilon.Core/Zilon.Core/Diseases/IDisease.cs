@@ -5,6 +5,14 @@
     /// </summary>
     public interface IDisease
     {
+        /// <summary>
+        /// Наименование болезни.
+        /// </summary>
         DiseaseName Name { get; }
+
+        /// <summary>
+        /// Симптомы болезни.
+        /// </summary>
+        DiseaseSymptom[] GetSymptoms();
     }
 }

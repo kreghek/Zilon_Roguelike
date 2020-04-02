@@ -127,30 +127,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                foreach (var diseaseProcess in actor.Person.DiseaseData.Diseases.ToArray())
-                {
-                    // Если есть болезнь, то назначаем эффект.
-
-                    var diseaseEffect = actor.Person.Effects.Items.OfType<DiseaseEffect>()
-                        .SingleOrDefault(x => x.Disease == diseaseProcess.Disease);
-
-                    if (diseaseEffect is null && diseaseProcess.CurrentPower >= 0.25)
-                    {
-                        diseaseEffect = new DiseaseEffect(diseaseProcess.Disease);
-                        actor.Person.Effects.Add(diseaseEffect);
-                    }
-
-                    diseaseProcess.Update();
-
-                    if (diseaseProcess.Value >= 1)
-                    {
-                        actor.Person.DiseaseData.RemoveDisease(diseaseProcess.Disease);
-                        if (diseaseEffect != null)
-                        {
-                            actor.Person.Effects.Remove(diseaseEffect);
-                        }
-                    }
-                }
+                actor.Person.DiseaseData.Update(actor.Person.Effects);
             }
         }
 
