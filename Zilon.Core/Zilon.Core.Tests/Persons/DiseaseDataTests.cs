@@ -52,8 +52,8 @@ namespace Zilon.Core.Persons.Tests
 
             // ARRANGE
             var exceptedTimes = symptoms.Length;
-            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
-            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(x => IsDeaseSymptom(x))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
         }
 
         private static bool IsDeaseSymptom(IPersonEffect x)
