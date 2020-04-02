@@ -47,6 +47,10 @@ namespace Zilon.Core.MapGenerators
 
                     new LocalizedString{
                         Ru = "Помутнение"
+                    },
+
+                    new LocalizedString{
+                        Ru = "Вирус"
                     }
                 };
             }
@@ -79,6 +83,15 @@ namespace Zilon.Core.MapGenerators
                     },
                     new LocalizedString{ 
                         Ru = "Псевдо"
+                    },
+                    new LocalizedString{
+                        Ru = "Черно"
+                    },
+                    new LocalizedString{
+                        Ru = "Красно"
+                    },
+                    new LocalizedString{
+                        Ru = "Желто"
                     }
                 };
         }
@@ -111,6 +124,15 @@ namespace Zilon.Core.MapGenerators
                 },
                 new LocalizedString{ 
                     Ru = "Кишечный"
+                },
+                new LocalizedString{
+                    Ru = "Древний"
+                },
+                new LocalizedString{
+                    Ru = "Античный"
+                },
+                new LocalizedString{
+                    Ru = "Мутировавший"
                 }
             };
         }
