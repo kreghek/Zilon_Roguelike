@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics.Behaviour
             // Все наблюдаемые из базового узла узлы карты.
             var observingNodes = GetObservingNodes(map, baseNode, radius);
 
-            var currentObservedFowNodes = fowData.Nodes.Where(x => x.State == SectorMapNodeFowState.Observing);
+            var currentObservedFowNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing);
 
             var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
 
@@ -46,7 +46,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var fowNode in notObservingFowNodes)
             {
-                fowNode.ChangeState(SectorMapNodeFowState.Explored);
+                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Explored);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     fowData.AddNodes(new[] { fowNode });
                 }
 
-                fowNode.ChangeState(SectorMapNodeFowState.Observing);
+                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
                 observedFowNodes.Add(fowNode);
             }
 
@@ -89,7 +89,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var newBorder = GetNextForBorder(border, resultList, map);
 
-                var visibleBorder = newBorder.AsParallel().Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
+                var visibleBorder = newBorder.Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);
