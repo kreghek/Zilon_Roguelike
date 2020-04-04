@@ -7,7 +7,8 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "Genomass cave"
+				"En": "Enter",
+				"Ru": "Вход"
 			},
 			"IsStart": true,
 			
@@ -33,7 +34,8 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Genomass cave 2"
+				"En": "Level 2"
+				"En": "Уровень 2"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -58,7 +60,8 @@
 		{
 			"Sid": "lvl3",
 			"Name":{
-				"En": "Genomass cave 3"
+				"En": "Level 3"
+				"En": "Уровень 3"
 			},
 			
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -83,7 +86,8 @@
 		{
 			"Sid": "lvl4",
 			"Name":{
-				"En": "Genomass cave 4"
+				"En": "Level 4"
+				"En": "Уровень 4"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -108,7 +112,8 @@
 		{
 			"Sid": "lvl5",
 			"Name":{
-				"En": "Genomass cave 5"
+				"En": "Level 5"
+				"En": "Уровень 5"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -133,7 +138,10 @@
 		{
 			"Sid": "lvl6",
 			"Name":{
-				"En": "Genomass cave 6"
+				"Name":{
+				"En": "Level 6"
+				"En": "Уровень 6"
+			},
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],

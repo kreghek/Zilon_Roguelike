@@ -23,10 +23,15 @@ public class SectorNameHandler : MonoBehaviour
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
-        var locationName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, locationScheme.Name);
-        var sectorLevelName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, scheme.Name);
+        var locationName = LocalizationHelper.GetValue(currentLanguage, locationScheme.Name);
+        var sectorLevelName = LocalizationHelper.GetValue(currentLanguage, scheme.Name);
 
-        SectorNameText.text = $"{locationName} {sectorLevelName}";
+        SectorNameText.text = $"{locationName} {sectorLevelName}".Trim();
+
+        if (string.IsNullOrWhiteSpace(SectorNameText.text))
+        {
+            SectorNameText.text = LocalizationHelper.GetUndefined(currentLanguage);
+        }
 
         Destroy(this);
     }

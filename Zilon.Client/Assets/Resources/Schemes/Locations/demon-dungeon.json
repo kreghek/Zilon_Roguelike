@@ -6,9 +6,7 @@
 	"SectorLevels": [
 		{
 			"Sid": "intro",
-			"Name":{
-				"En": "Demon dungeon"
-			},
+			
 			"IsStart": true,
 			
 			"RegularMonsterSids": ["demon", "demon-spearman", "demon-bat", "hell-bat"],

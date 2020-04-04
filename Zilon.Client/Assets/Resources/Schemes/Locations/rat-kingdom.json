@@ -7,7 +7,8 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "Rat Kingdom Hall"
+				"En": "Hall",
+				"Ru": "Холл"
 			},
 			"IsStart": true,
 			
@@ -32,7 +33,8 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Rat Kingdom Square"
+				"En": "Square",
+				"Ru": "Площадь"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
@@ -56,7 +58,8 @@
 		{
 			"Sid": "lvl-throne",
 			"Name":{
-				"En": "Rat Kingdom Throne"
+				"En": "Throne",
+				"Ru": "Тронный зал"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
@@ -80,7 +83,8 @@
 		{
 			"Sid": "lvl-barracks",
 			"Name":{
-				"En": "Rat Kingdom Barraks"
+				"En": "Barraks",
+				"Ru": "Бараки"
 			},
 			
 			"RegularMonsterSids": ["rat", "bat"],
