@@ -79,6 +79,14 @@ namespace Zilon.Core.Tactics.Spatial
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
+        protected HexNode GetByCoords(int x, int y)
+        {
+            var segmentKey = new SegmentKey(0, 0);
+            var segment = _segmentDict[segmentKey];
+            var node = segment[x, y];
+            return (HexNode)node;
+        }
+
         /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
         /// <param name="node">Опорный узел, относительно которого выбираются соседние узлы.</param>
         /// <returns>Возвращает набор соседних узлов.</returns>

@@ -14,6 +14,7 @@ namespace Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases
                 yield return new TestCaseData(20, 10, 10, 5);
                 yield return new TestCaseData(100, 50, 50, 5);
                 yield return new TestCaseData(1000, 50, 50, 5);
+                yield return new TestCaseData(1000, 50, 50, 10);
             }
         }
     }

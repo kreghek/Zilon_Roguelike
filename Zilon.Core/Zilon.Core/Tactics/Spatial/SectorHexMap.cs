@@ -64,16 +64,17 @@ namespace Zilon.Core.Tactics.Spatial
                 var prevPoint = line[i - 1];
                 var testPoint = line[i];
 
-                var prevNode = HexNodes
-                    .SingleOrDefault(x => x.CubeCoords == prevPoint);
+                var prevOffsetCoords = HexHelper.ConvertToOffset(prevPoint);
+                var testOffsetCoords = HexHelper.ConvertToOffset(testPoint);
+
+                var prevNode = GetByCoords(prevOffsetCoords.X, prevOffsetCoords.Y);
 
                 if (prevNode == null)
                 {
                     return false;
                 }
 
-                var testNode = HexNodes
-                    .SingleOrDefault(x => x.CubeCoords == testPoint);
+                var testNode = GetByCoords(testOffsetCoords.X, testOffsetCoords.Y);
 
                 if (testNode == null)
                 {

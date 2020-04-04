@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -38,15 +38,15 @@ namespace Zilon.Core.Tactics.Behaviour
             // Все наблюдаемые из базового узла узлы карты.
             var observingNodes = GetObservingNodes(map, baseNode, radius);
 
-            var currentObservedFowNodes = fowData.Nodes.Where(x => x.State == SectorMapNodeFowState.Observing);
+            var currentObservedFowNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing);
 
             var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
 
-            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes);
+            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes).ToArray();
 
             foreach (var fowNode in notObservingFowNodes)
             {
-                fowNode.ChangeState(SectorMapNodeFowState.Explored);
+                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Explored);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     fowData.AddNodes(new[] { fowNode });
                 }
 
-                fowNode.ChangeState(SectorMapNodeFowState.Observing);
+                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
                 observedFowNodes.Add(fowNode);
             }
 
@@ -107,7 +107,9 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var next = map.GetNext(node);
 
-                var newBorder = next.Except(border).Except(result).Except(borderTotal);
+                var except = border.Union(result).Union(borderTotal);
+
+                var newBorder = next.Except(except);
 
                 borderTotal.AddRange(newBorder);
             }
