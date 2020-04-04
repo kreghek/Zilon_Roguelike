@@ -138,10 +138,8 @@
 		{
 			"Sid": "lvl6",
 			"Name":{
-				"Name":{
 				"En": "Level 6",
 				"Ru": "Уровень 6"
-			},
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
