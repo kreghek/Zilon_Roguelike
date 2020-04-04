@@ -1,14 +1,12 @@
 {
 	"Name": {
 		"En": "Elder Place",
-		"Ru": "Логово демонов"
+		"Ru": "Древний храм"
 	},
 	"SectorLevels": [
 		{
 			"Sid": "intro",
-			"Name":{
-				"En": "Elder Place"
-			},
+
 			"IsStart": true,
 			
 			"RegularMonsterSids": ["elder-slave", "dark-guardian"],

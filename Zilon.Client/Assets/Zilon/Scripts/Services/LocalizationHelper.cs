@@ -23,10 +23,23 @@ namespace Assets.Zilon.Scripts.Services
             {
                 case Language.English:
                 default:
-                    return localizedString?.En ?? "[noname]";
+                    return localizedString?.En ?? GetUndefined(currentLanguage);
 
                 case Language.Russian:
-                    return localizedString?.Ru ?? "[не задано]";
+                    return localizedString?.Ru ?? GetUndefined(currentLanguage);
+            }
+        }
+
+        public static string GetUndefined(Language currentLanguage)
+        {
+            switch (currentLanguage)
+            {
+                case Language.English:
+                default:
+                    return "[noname]";
+
+                case Language.Russian:
+                    return "[не задано]";
             }
         }
     }
