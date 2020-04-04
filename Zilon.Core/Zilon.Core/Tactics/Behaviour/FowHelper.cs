@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
 
-            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes);
+            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes).ToArray();
 
             foreach (var fowNode in notObservingFowNodes)
             {
@@ -107,7 +107,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var next = map.GetNext(node);
 
-                var except = border.Concat(result).Concat(borderTotal);
+                var except = border.Union(result).Union(borderTotal);
 
                 var newBorder = next.Except(except);
 
