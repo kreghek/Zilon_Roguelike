@@ -34,8 +34,8 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Level 2"
-				"En": "Уровень 2"
+				"En": "Level 2",
+				"Ru": "Уровень 2"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -60,8 +60,8 @@
 		{
 			"Sid": "lvl3",
 			"Name":{
-				"En": "Level 3"
-				"En": "Уровень 3"
+				"En": "Level 3",
+				"Ru": "Уровень 3"
 			},
 			
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -86,8 +86,8 @@
 		{
 			"Sid": "lvl4",
 			"Name":{
-				"En": "Level 4"
-				"En": "Уровень 4"
+				"En": "Level 4",
+				"Ru": "Уровень 4"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -112,8 +112,8 @@
 		{
 			"Sid": "lvl5",
 			"Name":{
-				"En": "Level 5"
-				"En": "Уровень 5"
+				"En": "Level 5",
+				"Ru": "Уровень 5"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
@@ -139,8 +139,8 @@
 			"Sid": "lvl6",
 			"Name":{
 				"Name":{
-				"En": "Level 6"
-				"En": "Уровень 6"
+				"En": "Level 6",
+				"Ru": "Уровень 6"
 			},
 			},
 		
