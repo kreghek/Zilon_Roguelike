@@ -89,7 +89,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var newBorder = GetNextForBorder(border, resultList, map);
 
-                var visibleBorder = newBorder.Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
+                var visibleBorder = newBorder.AsParallel().Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);
@@ -107,7 +107,9 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var next = map.GetNext(node);
 
-                var newBorder = next.Except(border).Except(result).Except(borderTotal);
+                var except = border.Concat(result).Concat(borderTotal);
+
+                var newBorder = next.Except(except);
 
                 borderTotal.AddRange(newBorder);
             }
