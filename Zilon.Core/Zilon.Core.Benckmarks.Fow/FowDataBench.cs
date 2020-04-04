@@ -29,7 +29,6 @@ namespace Zilon.Core.Benckmarks.Fow
             int baseY = 50;
             _radius = 5;
 
-
             // ARRANGE
 
             _map = new SectorHexMap(1000);
