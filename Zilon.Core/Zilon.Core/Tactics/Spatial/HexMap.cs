@@ -83,8 +83,15 @@ namespace Zilon.Core.Tactics.Spatial
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
-            var node = segment[x, y];
-            return (HexNode)node;
+            try
+            {
+                var node = segment[x, y];
+                return (HexNode)node;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
