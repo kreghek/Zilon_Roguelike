@@ -22,11 +22,13 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         protected override void CatchActorTaskExecutionException(ActorTaskExecutionException exception)
         {
+            Console.WriteLine(exception);
             throw exception;
         }
 
         protected override void CatchException(Exception exception)
         {
+            Console.WriteLine(exception);
             throw exception;
         }
 

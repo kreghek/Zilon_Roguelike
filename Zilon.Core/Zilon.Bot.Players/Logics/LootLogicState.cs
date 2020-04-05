@@ -85,10 +85,10 @@ namespace Zilon.Bot.Players.Logics
         {
             var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
                                 container.Content.CalcActualItems(),
-                                new IProp[0]);
+                                System.Array.Empty<IProp>());
 
             var containerTransfer = new PropTransfer(container.Content,
-                new IProp[0],
+                System.Array.Empty<IProp>(),
                 container.Content.CalcActualItems());
 
             return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
