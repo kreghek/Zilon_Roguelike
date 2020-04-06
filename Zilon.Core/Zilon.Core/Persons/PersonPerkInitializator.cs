@@ -38,7 +38,7 @@ namespace Zilon.Core.Persons
                 var rolledTraitScheme = _dice.RollFromList(openTraitSchemeList);
                 openTraitSchemeList.Remove(rolledTraitScheme);
 
-                var traitPerk = new Perk()
+                var traitPerk = new Perk
                 {
                     Scheme = rolledTraitScheme
                 };

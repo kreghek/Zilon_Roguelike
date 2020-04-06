@@ -28,13 +28,6 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
         }
 
-        public HumanPerson CreateStartPerson(IServiceProvider serviceProvider)
-        {
-            var personFactory = serviceProvider.GetRequiredService<IHumanPersonFactory>();
-            var startPerson = personFactory.Create();
-            return startPerson;
-        }
-
         public async Task StartAsync(HumanPerson startPerson, IServiceProvider serviceProvider)
         {
             if (serviceProvider is null)

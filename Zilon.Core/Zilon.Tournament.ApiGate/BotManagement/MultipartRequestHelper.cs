@@ -7,7 +7,6 @@ namespace Zilon.Tournament.ApiGate.BotManagement
 {
     public static class MultipartRequestHelper
     {
-        // Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
         // The spec says 70 characters is a reasonable limit.
         public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
         {
@@ -34,7 +33,6 @@ namespace Zilon.Tournament.ApiGate.BotManagement
 
         public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            // Content-Disposition: form-data; name="key";
             return contentDisposition != null
                    && contentDisposition.DispositionType.Equals("form-data")
                    && string.IsNullOrEmpty(contentDisposition.FileName.ToString())
@@ -43,7 +41,6 @@ namespace Zilon.Tournament.ApiGate.BotManagement
 
         public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            // Content-Disposition: form-data; name="myfile1"; filename="Misc 002.jpg"
             return contentDisposition != null
                    && contentDisposition.DispositionType.Equals("form-data")
                    && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())

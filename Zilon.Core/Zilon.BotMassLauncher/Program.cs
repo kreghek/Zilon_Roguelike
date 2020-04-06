@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -29,10 +28,8 @@ namespace Zilon.BotMassLauncher
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            //TODO Восстановить работу с конфигами или переделать на чтение аргументов.
-            // Стало нерабочим после портирования на netcore.
-            //_pathToEnv = ConfigurationManager.AppSettings["env"];
-            //_launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _pathToEnv = GetProgramArgument(args, "env");
+            _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
             _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
@@ -73,20 +70,6 @@ namespace Zilon.BotMassLauncher
 
 
             Console.WriteLine($"[x] COMPLETE");
-        }
-
-        private static string GenerateUniquePreffix()
-        {
-            var time = DateTime.UtcNow;
-            var year = time.Year;
-            var month = time.Month;
-            var day = time.Day;
-
-            var hours = time.Hour;
-            var minute = time.Minute;
-            var second = time.Second;
-
-            return $"{year:0000}{month:00}{day:00}_{hours:00}{minute:00}{second:00}";
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
