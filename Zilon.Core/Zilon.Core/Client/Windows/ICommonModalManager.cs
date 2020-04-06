@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Client.Windows
+﻿using Zilon.Core.Persons;
+
+namespace Zilon.Core.Client.Windows
 {
     /// <summary>
     /// Менеджер для работы с общеигровыми модалами.
@@ -21,8 +23,9 @@
         void ShowScoreModal();
 
         /// <summary>
-        /// Показывает окно с Кногий Истории.
+        /// Показать окно создания персонажа.
+        /// Используется на старте игры, чтобы показать начальные перки и экипировку персонажа.
         /// </summary>
-        void ShowHistoryBookModal();
+        void ShowCreatePersonModal(HumanPerson playerPerson);
     }
 }

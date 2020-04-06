@@ -14,15 +14,9 @@ namespace Zilon.Core.Benchmark
     {
         public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath, string artifactPath)
         {
-            if (monoRuntimeName != null && monoRuntimePath != null)
-            {
-                Add(Job.Default.With(new MonoRuntime(monoRuntimeName, monoRuntimePath)).WithIterationCount(iterationCount));
-            }
-            else
-            {
-                // Используется на билд-сервере, потому что там сразу запуск в окружении моно.
-                Add(Job.Default.With(new MonoRuntime()).WithIterationCount(iterationCount));
-            }
+            Add(Job.Default.With(CoreRuntime.Core20).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+            Add(Job.Default.With(CoreRtRuntime.CoreRt20).With(Platform.X64).With(Jit.RyuJit).WithIterationCount(iterationCount));
+
 
             Add(ConsoleLogger.Default);
             Add(TargetMethodColumn.Method,

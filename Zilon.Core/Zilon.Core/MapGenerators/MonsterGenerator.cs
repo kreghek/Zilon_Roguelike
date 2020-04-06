@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -13,29 +14,22 @@ namespace Zilon.Core.MapGenerators
     /// <summary>
     /// Реализация генератора монстров.
     /// </summary>
-    /// <seealso cref="Zilon.Core.MapGenerators.IMonsterGenerator" />
+    /// <seealso cref="IMonsterGenerator" />
     public class MonsterGenerator : IMonsterGenerator
     {
         private readonly ISchemeService _schemeService;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
-        private readonly IActorManager _actorManager;
-        private readonly IPropContainerManager _propContainerManager;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
         /// </summary>
         /// <param name="schemeService"> Сервис схем. </param>
         /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
-        /// <param name="actorManager"> Менеджер актёров, в который размещаются монстры. </param>
         public MonsterGenerator(ISchemeService schemeService,
-            IMonsterGeneratorRandomSource generatorRandomSource,
-            IActorManager actorManager,
-            IPropContainerManager propContainerManager)
+            IMonsterGeneratorRandomSource generatorRandomSource)
         {
-            _schemeService = schemeService;
-            _generatorRandomSource = generatorRandomSource;
-            _actorManager = actorManager;
-            _propContainerManager = propContainerManager;
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _generatorRandomSource = generatorRandomSource ?? throw new ArgumentNullException(nameof(generatorRandomSource));
         }
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
@@ -48,13 +42,35 @@ namespace Zilon.Core.MapGenerators
             IEnumerable<MapRegion> monsterRegions,
             ISectorSubScheme sectorScheme)
         {
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (monsterPlayer is null)
+            {
+                throw new ArgumentNullException(nameof(monsterPlayer));
+            }
+
+            if (monsterRegions is null)
+            {
+                throw new ArgumentNullException(nameof(monsterRegions));
+            }
+
+            if (sectorScheme is null)
+            {
+                throw new ArgumentNullException(nameof(sectorScheme));
+            }
+
             var rarityCounter = new int[3];
             var rarityMaxCounter = new[] { -1, 10, 1 };
+
+            var resultMonsterActors = new List<IActor>();
 
             foreach (var region in monsterRegions)
             {
                 var regionNodes = region.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle);
-                var containerNodes = _propContainerManager.Items.Select(x => x.Node);
+                var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);
                 var availableMonsterNodes = regionNodes.Except(containerNodes);
 
                 var freeNodes = new List<IGraphNode>(availableMonsterNodes);
@@ -63,7 +79,7 @@ namespace Zilon.Core.MapGenerators
                     sectorScheme.MinRegionMonsterCount,
                     sectorScheme.RegionMonsterCount);
 
-                for (int i = 0; i < monsterCount; i++)
+                for (var i = 0; i < monsterCount; i++)
                 {
                     // если в комнате все места заняты
                     if (!freeNodes.Any())
@@ -77,33 +93,39 @@ namespace Zilon.Core.MapGenerators
                     var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
                     var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
-
-                    //TODO Восстановить патруллирование марштуров позже
-                    // первый монстр ходит по маршруту
-                    // остальные бродят произвольно
-                    //if (i == 0)
-                    //{
-                    //    // генерируем маршрут обхода
-                    //    var startPatrolNode = region.Nodes.First();
-                    //    var endPatrolNode = region.Nodes.Last();
-
-                    //    // генерируем моснтра
-                    //    var patrolRoute = new PatrolRoute(startPatrolNode, endPatrolNode);
-                    //    var monster = CreateMonster(monsterScheme, startPatrolNode, monsterPlayer);
-                    //    sector.PatrolRoutes[monster] = patrolRoute;
-
-                    //    freeNodes.Remove(monster.Node);
-                    //}
-                    //else
-                    //{
                     var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                     var monsterNode = freeNodes[rollIndex];
-                    var monster = CreateMonster(monsterScheme, monsterNode, monsterPlayer);
+                    var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
 
                     freeNodes.Remove(monster.Node);
-                    //}
+
+                    resultMonsterActors.Add(monster);
                 }
             }
+
+            // Инфицируем монстров, если в секторе есть болезни.
+            RollInfections(sector, resultMonsterActors);
+        }
+
+        private void RollInfections(ISector sector, List<IActor> resultMonsterActors)
+        {
+            var diseaseMonsters = resultMonsterActors.Select(x => x.Person).ToArray();
+            if (sector.Diseases?.Any() == true)
+            {
+                foreach (var disease in sector.Diseases)
+                {
+                    var rollInfectedMonsters = _generatorRandomSource.RollInfectedMonsters(diseaseMonsters, 0.1f);
+                    foreach (var monster in rollInfectedMonsters)
+                    {
+                        SetMonsterInfection(monster, disease);
+                    }
+                }
+            }
+        }
+
+        private static void SetMonsterInfection(IPerson monster, IDisease disease)
+        {
+            monster.DiseaseData.Infect(disease);
         }
 
         /// <summary>
@@ -181,18 +203,18 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private IActor CreateMonster(MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var actor = new Actor(person, botPlayer, startNode);
-            _actorManager.Add(actor);
+            actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
-            _actorManager.Add(actor);
+            actorManager.Add(actor);
             return actor;
         }
 
@@ -225,7 +247,7 @@ namespace Zilon.Core.MapGenerators
                 var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
 
                 var monsterNode = freeNodes[rollIndex];
-                var monster = CreateMonster(monsterPerson, monsterNode, monsterPlayer);
+                var monster = CreateMonster(sector.ActorManager, monsterPerson, monsterNode, monsterPlayer);
 
                 freeNodes.Remove(monster.Node);
             }

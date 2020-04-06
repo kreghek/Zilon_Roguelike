@@ -33,6 +33,16 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Способность восстанвливать раны.
         /// </summary>
-        Wound
+        Wound,
+
+        /// <summary>
+        /// Способность дишать обычным воздухом.
+        /// </summary>
+        Breath,
+
+        /// <summary>
+        /// Энергия для совершения действий.
+        /// </summary>
+        Energy
     }
 }

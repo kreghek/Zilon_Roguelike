@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Players;
-using Zilon.Core.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -15,21 +12,15 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISectorManager" />
     public class SectorManager : ISectorManager
     {
-        private const string INTRO_LOCATION_SID = "intro";
-        private readonly IWorldManager _worldManager;
         private readonly ISectorGenerator _generator;
         private readonly HumanPlayer _humanPlayer;
-        private readonly ISchemeService _schemeService;
 
-        public SectorManager(IWorldManager worldManager,
+        public SectorManager(
             ISectorGenerator generator,
-            HumanPlayer humanPlayer,
-            ISchemeService schemeService)
+            HumanPlayer humanPlayer)
         {
-            _worldManager = worldManager ?? throw new ArgumentNullException(nameof(worldManager));
             _generator = generator ?? throw new ArgumentNullException(nameof(generator));
             _humanPlayer = humanPlayer ?? throw new ArgumentNullException(nameof(humanPlayer));
-            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
         }
 
         /// <summary>
@@ -42,42 +33,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public async Task CreateSectorAsync()
         {
-            var regionNode = _humanPlayer.GlobeNode;
-
-            ILocationScheme scheme = null;
-            if (_humanPlayer.GlobeNode == null)
-            {
-                scheme = _schemeService.GetScheme<ILocationScheme>(INTRO_LOCATION_SID);
-            }
-            else
-            {
-                scheme = _humanPlayer.GlobeNode.Scheme;
-            }
-
-            if (scheme.SectorLevels != null)
-            {
-                ISectorSubScheme sectorLevelScheme;
-                if (_humanPlayer.SectorSid == null)
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.IsStart);
-                }
-                else
-                {
-                    sectorLevelScheme = scheme.SectorLevels.SingleOrDefault(x => x.Sid == _humanPlayer.SectorSid);
-                }
-                
-                CurrentSector = await _generator.GenerateDungeonAsync(sectorLevelScheme).ConfigureAwait(false);
-            }
-            else if (regionNode.IsTown)
-            {
-                CurrentSector = await _generator.GenerateTownQuarterAsync(_worldManager.Globe, regionNode).ConfigureAwait(false);
-            }
-            else
-            {
-                CurrentSector = await _generator.GenerateWildAsync(_worldManager.Globe, regionNode).ConfigureAwait(false);
-            }
-
-            CurrentSector.Scheme = scheme;
+            CurrentSector = await _generator.GenerateAsync(_humanPlayer.SectorNode).ConfigureAwait(false);
         }
     }
 }

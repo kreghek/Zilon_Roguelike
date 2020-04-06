@@ -1,10 +1,10 @@
-﻿using Zilon.Core.Schemes;
+﻿using Zilon.Core.Localization;
 
 namespace Assets.Zilon.Scripts.Services
 {
     static class LocalizationHelper
     {
-        public static string GetValue(Language currentLanguage, LocalizedStringSubScheme localizedString)
+        public static string GetValue(Language currentLanguage, ILocalizedString localizedString)
         {
             switch (currentLanguage)
             {
@@ -17,16 +17,29 @@ namespace Assets.Zilon.Scripts.Services
             }
         }
 
-        public static string GetValueOrDefaultNoname(Language currentLanguage, LocalizedStringSubScheme localizedString)
+        public static string GetValueOrDefaultNoname(Language currentLanguage, ILocalizedString localizedString)
         {
             switch (currentLanguage)
             {
                 case Language.English:
                 default:
-                    return localizedString?.En ?? "[noname]";
+                    return localizedString?.En ?? GetUndefined(currentLanguage);
 
                 case Language.Russian:
-                    return localizedString?.Ru ?? "[не задано]";
+                    return localizedString?.Ru ?? GetUndefined(currentLanguage);
+            }
+        }
+
+        public static string GetUndefined(Language currentLanguage)
+        {
+            switch (currentLanguage)
+            {
+                case Language.English:
+                default:
+                    return "[noname]";
+
+                case Language.Russian:
+                    return "[не задано]";
             }
         }
     }

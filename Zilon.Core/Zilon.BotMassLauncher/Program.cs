@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -16,22 +15,32 @@ namespace Zilon.BotMassLauncher
         private static bool _isInfinite;
         private static ulong _infiniteCounter;
         private static string _botMode;
+        private static string _scorePath;
+        private static string _botCatalog;
+        private static string _botAssembly;
+        private static string _schemeCatlogPath;
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
         static void Main(string[] args)
         {
+            Console.WriteLine("[x] START");
+
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            //TODO Восстановить работу с конфигами или переделать на чтение аргументов.
-            // Стало нерабочим после портирования на netcore.
-            //_pathToEnv = ConfigurationManager.AppSettings["env"];
-            //_launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _pathToEnv = GetProgramArgument(args, "env");
+            _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
             _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
             _isInfinite = HasProgramArgument(args, "infinite");
             _botMode = GetProgramArgument(args, "mode");
+            _scorePath = GetProgramArgument(args, "output");
+
+            _botCatalog = GetProgramArgument(args, "botCatalog");
+            _botAssembly = GetProgramArgument(args, "botAssembly");
+
+            _schemeCatlogPath = GetProgramArgument(args, "schemeCatalogPath");
 
             _shutdownTokenSource = new CancellationTokenSource();
             _shutdownToken = _shutdownTokenSource.Token;
@@ -113,10 +122,21 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg}"
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
+
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 };
 
                 process.Start();
+
+                var output = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
+
+                Console.WriteLine("[x]OUTPUT");
+                Console.WriteLine(output);
+                Console.WriteLine("[x]ERROR");
+                Console.WriteLine(error);
 
                 process.WaitForExit(30000);
             }

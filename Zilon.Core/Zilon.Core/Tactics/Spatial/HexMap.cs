@@ -79,6 +79,21 @@ namespace Zilon.Core.Tactics.Spatial
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
+        protected HexNode GetByCoords(int x, int y)
+        {
+            var segmentKey = new SegmentKey(0, 0);
+            var segment = _segmentDict[segmentKey];
+            try
+            {
+                var node = segment[x, y];
+                return (HexNode)node;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
         /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
         /// <param name="node">Опорный узел, относительно которого выбираются соседние узлы.</param>
         /// <returns>Возвращает набор соседних узлов.</returns>
@@ -275,6 +290,11 @@ namespace Zilon.Core.Tactics.Spatial
             var distance = actorCoords.DistanceTo(containerCoords);
 
             return distance;
+        }
+
+        public override void RemoveNode(IGraphNode node)
+        {
+            throw new NotImplementedException();
         }
 
         private struct SegmentKey

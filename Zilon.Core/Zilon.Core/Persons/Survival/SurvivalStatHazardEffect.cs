@@ -43,12 +43,17 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public EffectRule[] GetRules() {
+        public EffectRule[] GetRules()
+        {
             return _rules;
         }
 
         public event EventHandler Changed;
 
+        /// <summary>
+        /// Применяет эффект к указанным данным.
+        /// </summary>
+        /// <param name="survivalData"> Данные, на коорые влияет эффект. </param>
         public void Apply(ISurvivalData survivalData)
         {
             if (survivalData is null)

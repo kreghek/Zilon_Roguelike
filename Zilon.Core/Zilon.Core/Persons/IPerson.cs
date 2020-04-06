@@ -12,6 +12,8 @@ namespace Zilon.Core.Persons
     {
         int Id { get; set; }
 
+        PhysicalSize PhysicalSize { get; }
+
         /// <summary>
         /// Носитель экипировки.
         /// </summary>
@@ -41,10 +43,21 @@ namespace Zilon.Core.Persons
         IPropStore Inventory { get; }
 
         /// <summary>
+        /// Признак того, что персонаж может иметь инвентарь.
+        /// Для монстров - false.
+        /// </summary>
+        bool HasInventory { get; }
+
+        /// <summary>
         /// Данные по выживанию персонажа.
         /// </summary>
         ISurvivalData Survival { get; }
 
         EffectCollection Effects { get; }
+
+        /// <summary>
+        /// Модуль заболеваний персонажа.
+        /// </summary>
+        IDiseaseData DiseaseData { get; }
     }
 }

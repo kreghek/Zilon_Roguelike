@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators
@@ -13,6 +15,28 @@ namespace Zilon.Core.MapGenerators
         public MonsterGeneratorRandomSource(IDice dice)
         {
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
+        }
+
+        public IEnumerable<IPerson> RollInfectedMonsters(IEnumerable<IPerson> monsters, float diseasePower)
+        {
+            if (!monsters.Any())
+            {
+                return Array.Empty<IPerson>();
+            }
+
+            var currentMonsterCount = monsters.Count();
+            var infectedCount = (int)Math.Ceiling(currentMonsterCount * diseasePower);
+
+            var openList = new List<IPerson>(monsters);
+            var resultList = new List<IPerson>();
+            for (var i = 0; i < infectedCount; i++)
+            {
+                var rolledMonster = _dice.RollFromList(openList);
+                resultList.Add(rolledMonster);
+                openList.Remove(rolledMonster);
+            }
+
+            return resultList;
         }
 
         /// <summary>Выбирает случайную схему монстра среди доступных.</summary>

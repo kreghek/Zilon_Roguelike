@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonDialogs;
 using Zilon.Core.Persons;
@@ -14,7 +15,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
-        private readonly IActorManager _actorManager;
         private readonly ICitizenGeneratorRandomSource _citizenGeneratorRandomSource;
 
         /// <summary>
@@ -25,17 +25,30 @@ namespace Zilon.Core.MapGenerators
         /// <param name="actorManager"> Менеджер актёров. </param>
         public CitizenGenerator(ISchemeService schemeService,
             IDropResolver dropResolver,
-            IActorManager actorManager,
             ICitizenGeneratorRandomSource citizenGeneratorRandomSource)
         {
             _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
             _dropResolver = dropResolver ?? throw new System.ArgumentNullException(nameof(dropResolver));
-            _actorManager = actorManager ?? throw new System.ArgumentNullException(nameof(actorManager));
             _citizenGeneratorRandomSource = citizenGeneratorRandomSource ?? throw new System.ArgumentNullException(nameof(citizenGeneratorRandomSource));
         }
 
         public void CreateCitizens(ISector sector, IBotPlayer botPlayer, IEnumerable<MapRegion> citizenRegions)
         {
+            if (sector is null)
+            {
+                throw new System.ArgumentNullException(nameof(sector));
+            }
+
+            if (botPlayer is null)
+            {
+                throw new System.ArgumentNullException(nameof(botPlayer));
+            }
+
+            if (citizenRegions is null)
+            {
+                throw new System.ArgumentNullException(nameof(citizenRegions));
+            }
+
             var map = sector.Map;
             foreach (var region in citizenRegions)
             {
@@ -72,15 +85,15 @@ namespace Zilon.Core.MapGenerators
                     switch (rollCitizenType)
                     {
                         case CitizenType.Unintresting:
-                            CreateCitizen(objectNode, botPlayer);
+                            CreateCitizen(sector.ActorManager, objectNode, botPlayer);
                             break;
 
                         case CitizenType.Trader:
-                            CreateCitizen(traderDropTable, objectNode, botPlayer);
+                            CreateCitizen(sector.ActorManager, traderDropTable, objectNode, botPlayer);
                             break;
 
                         case CitizenType.QuestGiver:
-                            CreateCitizen(DialogFactory.Create(), objectNode, botPlayer);
+                            CreateCitizen(sector.ActorManager, DialogFactory.Create(), objectNode, botPlayer);
                             break;
 
                         default:
@@ -91,27 +104,27 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private IActor CreateCitizen(IDropTableScheme traderDropTable, IGraphNode startNode, IBotPlayer botPlayer)
+        private IActor CreateCitizen(IActorManager actorManager, IDropTableScheme traderDropTable, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson(traderDropTable, _dropResolver);
             var actor = new Actor(person, botPlayer, startNode);
-            _actorManager.Add(actor);
+            actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateCitizen(IGraphNode startNode, IBotPlayer botPlayer)
+        private static IActor CreateCitizen(IActorManager actorManager, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson();
             var actor = new Actor(person, botPlayer, startNode);
-            _actorManager.Add(actor);
+            actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateCitizen(Dialog dialog, IGraphNode startNode, IBotPlayer botPlayer)
+        private static IActor CreateCitizen(IActorManager actorManager, Dialog dialog, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new CitizenPerson(dialog);
             var actor = new Actor(person, botPlayer, startNode);
-            _actorManager.Add(actor);
+            actorManager.Add(actor);
             return actor;
         }
     }

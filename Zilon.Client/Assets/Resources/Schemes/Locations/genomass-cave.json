@@ -7,18 +7,17 @@
 		{
 			"Sid": "intro",
 			"Name":{
-				"En": "Genomass cave"
+				"En": "Enter",
+				"Ru": "Вход"
 			},
 			"IsStart": true,
 			
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 20,
-			"RegionSize": 20,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl2"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl2"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -35,17 +34,16 @@
 		{
 			"Sid": "lvl2",
 			"Name":{
-				"En": "Genomass cave 2"
+				"En": "Level 2",
+				"Ru": "Уровень 2"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
-			"TransSectorSids": ["lvl3", "lvl4", "lvl5", "lvl6"],
+			"TransSectorSids": [{ "SectorLevelSid": "lvl3"}, { "SectorLevelSid": "lvl4"}, { "SectorLevelSid": "lvl5"}, { "SectorLevelSid": "lvl6"}],
 			
 			"TotalChestCount": 20,
 			"RegionChestCountRatio": 9,
@@ -62,14 +60,13 @@
 		{
 			"Sid": "lvl3",
 			"Name":{
-				"En": "Genomass cave 3"
+				"En": "Level 3",
+				"Ru": "Уровень 3"
 			},
 			
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": ["infernal-genomass"],
-			"RegionCount": 20,
-			"RegionSize": 5,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -82,19 +79,20 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl4",
 			"Name":{
-				"En": "Genomass cave 4"
+				"En": "Level 4",
+				"Ru": "Уровень 4"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -107,19 +105,20 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl5",
 			"Name":{
-				"En": "Genomass cave 5"
+				"En": "Level 5",
+				"Ru": "Уровень 5"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -132,19 +131,20 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		},
 		{
 			"Sid": "lvl6",
 			"Name":{
-				"En": "Genomass cave 6"
+				"En": "Level 6",
+				"Ru": "Уровень 6"
 			},
 		
 			"RegularMonsterSids": ["genomass", "gemonass-slave"],
 			"RareMonsterSids": null,
 			"ChampionMonsterSids": null,
-			"RegionCount": 10,
-			"RegionSize": 10,
 			"RegionMonsterCount": 5,
 			
 			"TotalChestCount": 20,
@@ -157,7 +157,9 @@
 				"MapWidth": 25,
 				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
-			}
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
 		}
 	]
 }

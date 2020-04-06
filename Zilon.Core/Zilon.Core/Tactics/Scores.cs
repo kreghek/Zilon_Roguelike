@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-
+using Zilon.Core.Diseases;
 using Zilon.Core.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -13,7 +12,7 @@ namespace Zilon.Core.Tactics
 
             PlaceTypes = new Dictionary<ILocationScheme, int>();
 
-            Places = new HashSet<GlobeRegionNode>();
+            Diseases = new List<IDisease>();
         }
 
         public float TurnCounter { get; set; }
@@ -29,8 +28,14 @@ namespace Zilon.Core.Tactics
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
 
-        /// <summary>Посещённые места.</summary>
-        public ISet<GlobeRegionNode> Places { get; set; }
+        /// <summary>
+        /// Различные достижения, полученные заигровую сессию.
+        /// </summary>
         public ScoreAchievements Achievements { get; set; }
+
+        /// <summary>
+        /// Болезни, которыми был инфицирован персонаж.
+        /// </summary>
+        public IList<IDisease> Diseases { get; }
     }
 }

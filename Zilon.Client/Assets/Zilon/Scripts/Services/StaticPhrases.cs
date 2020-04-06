@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Zilon.Scripts.Services
 {
     static class StaticPhrases
     {
-        private static Dictionary<string, MultilangPhrase> _pharses;
+        private static readonly Dictionary<string, MultilangPhrase> _pharses;
 
         static StaticPhrases()
         {
@@ -18,11 +19,19 @@ namespace Assets.Zilon.Scripts.Services
                 switch (language)
                 {
                     case Language.English:
-                    default:
                         return phrase.En ?? "[no-name]";
 
                     case Language.Russian:
                         return phrase.Ru ?? "[не определено]";
+
+                    default:
+                        // По умолчанию выводим английское наименование.
+                        // Этой ситуации не должно происходить, потому что язык всегда должен быть задан.
+                        //TODO Разобраться, почему тут нет выброса исключения.
+                        return phrase.En ?? "[no-name]";
+
+                    case Language.Undefined:
+                        throw new NotSupportedException();
                 }
             }
 
@@ -45,6 +54,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-bow", new MultilangPhrase{ En = "bow", Ru = "лук" } },
                 { "prop-tag-staff", new MultilangPhrase{ En = "staff", Ru = "посох" } },
                 { "prop-tag-shield", new MultilangPhrase{ En = "shield", Ru = "щит" } },
+                { "prop-tag-wand", new MultilangPhrase{ En = "wand", Ru = "жезл" } },
 
                 { "impact-kinetic", new MultilangPhrase{ En = "kinetic", Ru = "кинетический" } },
                 { "impact-psy", new MultilangPhrase{ En = "psy", Ru = "пси" } },
@@ -113,7 +123,9 @@ namespace Assets.Zilon.Scripts.Services
                 { "max-injury", new MultilangPhrase{ En = "Vital wound!", Ru = "Смертельная рана!" } },
                 { "max-hunger", new MultilangPhrase{ En = "Starvation!", Ru = "Голодание!" } },
                 { "max-thirst", new MultilangPhrase{ En = "Dehydration!", Ru = "Обезвоживание!" } },
-                { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } }
+                { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } },
+
+                { "caption-person-create", new MultilangPhrase{ En = "Person backstory", Ru = "Предыстория персонажа" } },
             };
         }
 

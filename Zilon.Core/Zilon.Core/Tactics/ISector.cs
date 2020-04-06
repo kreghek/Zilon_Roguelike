@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Zilon.Core.Diseases;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -44,5 +45,19 @@ namespace Zilon.Core.Tactics
         ILocationScheme Scheme { get; set; }
 
         void UseTransition(RoomTransition transition);
+
+        IActorManager ActorManager { get; }
+
+        IPropContainerManager PropContainerManager { get; }
+
+        /// <summary>
+        /// Текущие болезни в секторе.
+        /// </summary>
+        /// <remarks>
+        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
+        /// </remarks>
+        IEnumerable<IDisease> Diseases { get; }
+
+        void AddDisease(IDisease disease);
     }
 }

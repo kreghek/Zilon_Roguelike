@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 using JetBrains.Annotations;
 
@@ -20,6 +21,11 @@ namespace Zilon.Core.Scoring
         //TODO Вместо botName передавать объект BotInfo. Так будет более очевидно.
         public static string CreateTextSummary([NotNull] Scores scores, [CanBeNull] string botName)
         {
+            if (scores is null)
+            {
+                throw new System.ArgumentNullException(nameof(scores));
+            }
+
             var summaryStringBuilder = new StringBuilder();
 
             if (botName == null)
@@ -46,11 +52,20 @@ namespace Zilon.Core.Scoring
 
             summaryStringBuilder.AppendLine("=== You visited ===");
 
-            summaryStringBuilder.AppendLine($"{scores.Places.Count} places");
-
             foreach (var placeType in scores.PlaceTypes)
             {
                 summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
+            }
+
+            if (scores.Diseases.Any())
+            {
+                summaryStringBuilder.AppendLine("=== Infections ===");
+
+                foreach (var disease in scores.Diseases)
+                {
+                    var name = $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
+                    summaryStringBuilder.AppendLine(name);
+                }
             }
 
             summaryStringBuilder.AppendLine("=== You killed ===");

@@ -44,6 +44,18 @@ namespace Zilon.Emulation.Common
 
         public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
+        protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
+        {
+            serviceRegistry.AddScoped<IMonsterGenerator, MonsterGenerator>();
+            serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
+        }
+
+        protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
+        {
+            serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
+            serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
+        }
+
         private void RegisterSectorServices(IServiceCollection serviceRegistry)
         {
             RegisterClientServices(serviceRegistry);
@@ -71,18 +83,16 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private static void RegisterScopedSectorService(IServiceCollection container)
+        private void RegisterScopedSectorService(IServiceCollection container)
         {
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.AddScoped<ISectorGenerator, SectorGenerator>();
-            container.AddScoped<IMonsterGenerator, MonsterGenerator>();
-            container.AddScoped<IChestGenerator, ChestGenerator>();
+            RegisterMonsterGeneratorRandomSource(container);
+            RegisterChestGeneratorRandomSource(container);
             container.AddScoped<ICitizenGenerator, CitizenGenerator>();
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
-            container.AddScoped<IActorManager, ActorManager>();
-            container.AddScoped<IPropContainerManager, PropContainerManager>();
             container.AddScoped<ITacticalActUsageService>(serviceProvider =>
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
@@ -103,6 +113,7 @@ namespace Zilon.Emulation.Common
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
             tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+            tacticalActUsageService.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)
@@ -130,6 +141,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
             container.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
+            container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
             container.AddSingleton<RoomMapFactory>();
@@ -137,11 +149,11 @@ namespace Zilon.Emulation.Common
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
-            container.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
-            container.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
             container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
+
+            container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)

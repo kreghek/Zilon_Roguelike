@@ -39,22 +39,6 @@
         string[] ChampionMonsterSids { get; }
 
         /// <summary>
-        /// Количество регионов в карте.
-        /// </summary>
-        /// <remarks>
-        /// Для подземелий это количество комнат.
-        /// </remarks>
-        int RegionCount { get; }
-
-        /// <summary>
-        /// Максимальный размер комнат.
-        /// </summary>
-        /// <remarks>
-        /// Минимальный размер всегда 2х2.
-        /// </remarks>
-        int RegionSize { get; }
-
-        /// <summary>
         /// Минимальное количество монстров в регионе сектора.
         /// </summary>
         int MinRegionMonsterCount { get; }
@@ -84,7 +68,7 @@
         /// <summary>
         /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        string[] TransSectorSids { get; }
+        ISectorTransitionSubScheme[] TransSectorSids { get; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.

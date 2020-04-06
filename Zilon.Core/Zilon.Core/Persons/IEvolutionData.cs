@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons
@@ -23,6 +25,16 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
         void PerkLevelUp(IPerk perk);
+
+        /// <summary>
+        /// Добавить врождённые перки.
+        /// </summary>
+        /// <param name="perks"> Набор врождённых перков. </param>
+        /// <remarks>
+        /// Метод нужен, потому что реализация этого интерфейса сама собирает данные о доступных перках.
+        /// И реализации нужно знать, какие перки врожденные, а какие приобретаются по мере развития персонажа.
+        /// </remarks>
+        void AddBuildInPerks(IEnumerable<IPerk> perks);
 
         /// <summary>
         /// Выстреливает, когда один из перков повышается на уровень.

@@ -1,4 +1,5 @@
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
@@ -6,6 +7,7 @@ using Zenject;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -15,7 +17,6 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
-using Zilon.Core.WorldGeneration;
 
 public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 {
@@ -31,7 +32,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
         Container.Bind<IPropFactory>().To<PropFactory>().AsSingle();
-        Container.Bind<IHumanPersonFactory>().To<RandomHumanPersonFactory>().AsSingle();
+        Container.RegisterHumanPersonFactory();
         Container.Bind<IDropResolver>().To<DropResolver>().AsSingle();
         Container.Bind<IDropResolverRandomSource>().To<DropResolverRandomSource>().AsSingle();
         Container.Bind<ISurvivalRandomSource>().To<SurvivalRandomSource>().AsSingle();
@@ -43,11 +44,15 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
+        Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
+        Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
+
+        Container.Bind<IDiseaseGenerator>().To<DiseaseGenerator>().AsSingle();
+
         Container.Bind<HumanPlayer>().AsSingle();
         Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
 
-        Container.Bind<IWorldManager>().To<WorldManager>().AsSingle();
-        Container.Bind<IWorldGenerator>().To<WorldGenerator>().AsSingle();
+        Container.Bind<IBiomeSchemeRoller>().To<BiomeSchemeRoller>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 

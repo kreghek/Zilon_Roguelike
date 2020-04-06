@@ -83,6 +83,29 @@ namespace Assets.Zilon.Scripts.Models.Modals
             IconImage.sprite = iconSprite;
         }
 
+        private void UpdateEquipment(Equipment equipment)
+        {
+            CountText.gameObject.SetActive(false);
+
+            if (equipment.Durable.Value <= 0)
+            {
+                DurableStatusText.gameObject.SetActive(true);
+                DurableStatusText.text = "B";
+            }
+            else
+            {
+                DurableStatusText.gameObject.SetActive(false);
+            }
+        }
+
+        private void UpdateResource(Resource resource)
+        {
+            CountText.gameObject.SetActive(true);
+            CountText.text = $"x{resource.Count}";
+
+            DurableStatusText.gameObject.SetActive(false);
+        }
+
         private Sprite CalcIcon(IProp prop)
         {
             var schemeSid = prop.Scheme.Sid;

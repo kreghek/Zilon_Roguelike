@@ -6,6 +6,7 @@ using FluentAssertions;
 
 using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
@@ -27,10 +28,12 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
+
             // ACT
             Func<Task> act = async () =>
             {
-                var map = await factory.CreateAsync(sectorScheme);
+                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
             };
 
             // ARRANGE
@@ -57,10 +60,12 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
+
             // ACT
             Func<Task> act = async () =>
             {
-                var map = await factory.CreateAsync(sectorScheme);
+                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
             };
 
             // ARRANGE
@@ -82,8 +87,10 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var factory = new RoomMapFactory(roomGenerator);
             var sectorScheme = CreateSectorScheme();
 
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
+
             // ACT
-            var map = await factory.CreateAsync(sectorScheme);
+            var map = await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
             // ARRANGE
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
@@ -98,8 +105,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             return new TestSectorSubScheme
             {
-                RegionSize = 20,
-                RegionCount = 20
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20,
+                }
             };
         }
     }

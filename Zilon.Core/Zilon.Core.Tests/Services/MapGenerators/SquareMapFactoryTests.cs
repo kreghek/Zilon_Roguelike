@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// Тест проверяет, что генератор сеточных карт может работать с <see cref="HexMap"/>.
         /// <see cref="HexMap"/> используется на клиенте.
         /// </summary>
-        [Test()]
+        [Test]
         public void Create_HexMapType_NoExceptions()
         {
             // ARRANGE

@@ -60,26 +60,6 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                     // Если в секторе нет переходов, то будет невозможно его покинуть.
                     throw new SectorValidationException("В секторе не найдены переходы.");
                 }
-
-                // Все переходы на уровне должны либо вести на глобальную карту,
-                // либо на корректный уровень сектора.
-
-                foreach (var transition in transitions)
-                {
-                    var targetSectorSid = transition.SectorSid;
-                    if (targetSectorSid == null)
-                    {
-                        // Это значит, что переход на глобальную карту.
-                        // Нормальная ситуация, проверяем следующий переход.
-                        continue;
-                    }
-
-                    var sectorLevelBySid = sector.Scheme.SectorLevels.SingleOrDefault(level => level.Sid == targetSectorSid);
-                    if (sectorLevelBySid == null)
-                    {
-                        throw new SectorValidationException($"Не найден уровень сектора {targetSectorSid}, указанный в переходе.");
-                    }
-                }
             });
         }
     }

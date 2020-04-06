@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -31,6 +32,11 @@ namespace Zilon.Core.Tactics
         public IActorInteractionBus ActorInteractionBus { get; set; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        /// <summary>
+        /// Сервис для работы с достижениями персонажа.
+        /// </summary>
+        public IScoreManager ScoreManager { get; set; }
 
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
@@ -289,7 +295,9 @@ namespace Zilon.Core.Tactics
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
 
-                LogPlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
+                ProcessDiseaseInfection(actor, targetActor);
+
+                LogDamagePlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
 
                 if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
                 {
@@ -329,7 +337,54 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void LogPlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        /// <summary>
+        /// Обработать инфицирование болезью.
+        /// </summary>
+        /// <param name="sourceActor"> Актёр-источник заражения. </param>
+        /// <param name="targetActor"> Актёр-цель заражения. </param>
+        private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
+        {
+            if (sourceActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
+            if (targetActor.Person?.DiseaseData is null)
+            {
+                return;
+            }
+
+            var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
+
+            foreach (var diseaseProcess in currentDiseases)
+            {
+                targetActor.Person.DiseaseData.Infect(diseaseProcess.Disease);
+                CountInfectionInScore(targetActor, diseaseProcess.Disease);
+            }
+        }
+
+        private void CountInfectionInScore(IActor targetActor, IDisease disease)
+        {
+            if (targetActor is MonsterPerson)
+            {
+                // Для монстров не считаем достижения.
+                return;
+            }
+
+            // Сервис подсчёта очков - необязательная зависимость.
+            if (ScoreManager is null)
+            {
+                return;
+            }
+
+            // Каждую болезнь фиксируем только один раз
+            if (!ScoreManager.Scores.Diseases.Any(x => x == disease))
+            {
+                ScoreManager.Scores.Diseases.Add(disease);
+            }
+        }
+
+        private void LogDamagePlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
         {
             // Сервис логирование - необязательная зависимость.
             // Если он не задан, то не выполняем логирование.
@@ -481,7 +536,7 @@ namespace Zilon.Core.Tactics
         {
             var damageEfficientCalcResult = new DamageEfficientCalc();
 
-            var actApRank = GetActApRank(tacticalActRoll.TacticalAct); ;
+            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
             damageEfficientCalcResult.ActApRank = actApRank;
             var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
             damageEfficientCalcResult.ArmorRank = armorRank;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -16,9 +17,9 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Создать сундуки в секторе.
         /// </summary>
-        /// <param name="map"> Карта сектора. Нужна для определения доступного места для сундука. </param>
-        /// <param name="sectorSubScheme"> Схема сектора. По сути - настройки для размещения сундуков. </param>
+        /// <param name="sector"> Сектор, для которого происходит генерация. </param>
+        /// <param name="sectorSubScheme">Схема сектора. По сути - настройки для размещения сундуков.</param>
         /// <param name="regions"> Регионы, в которых возможно размещение сундуков. </param>
-        void CreateChests(ISectorMap map, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions);
+        void CreateChests(ISector sector, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions);
     }
 }

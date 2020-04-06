@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +8,6 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
-using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -32,14 +28,14 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
         }
 
-        public async Task StartAsync(IServiceProvider serviceProvider)
+        public async Task StartAsync(HumanPerson startPerson, IServiceProvider serviceProvider)
         {
             if (serviceProvider is null)
             {
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var humanActor = await CreateSectorAsync(serviceProvider).ConfigureAwait(false);
+            var humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
             var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var botActorTaskSource = serviceProvider.GetRequiredService<T>();
             botActorTaskSource.Configure(BotSettings);
@@ -53,7 +49,7 @@ namespace Zilon.Emulation.Common
 
                     if (_changeSector)
                     {
-                        humanActor = await CreateSectorAsync(serviceProvider).ConfigureAwait(false);
+                        humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
 
                         gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
                         botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
@@ -66,8 +62,12 @@ namespace Zilon.Emulation.Common
                 {
                     CatchActorTaskExecutionException(exception);
                 }
+                catch (AggregateException exception)
+                {
+                    CatchException(exception.InnerException);
+                }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch(Exception exception)
+                catch (Exception exception)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
                     CatchException(exception);
@@ -84,143 +84,28 @@ namespace Zilon.Emulation.Common
         protected abstract void ProcessEnd();
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
-            ISchemeService schemeService,
-            ISurvivalRandomSource survivalRandomSource,
-            IPropFactory propFactory,
+            HumanPerson humanPerson,
             ISectorManager sectorManager,
-            IActorManager actorManager,
             IPlayerEventLogService playerEventLogService)
         {
-            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
-
             var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
                 .SingleOrDefault(x => x.IsStart)
                 .Nodes
                 .First();
 
-            if (humanPlayer.MainPerson == null)
-            {
-                var inventory = new Inventory();
+            humanPerson.PlayerEventLogService = playerEventLogService;
+            humanPlayer.MainPerson = humanPerson;
 
-                var evolutionData = new EvolutionData(schemeService);
-
-                var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-                var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource, inventory)
-                {
-                    PlayerEventLogService = playerEventLogService
-                };
-
-                humanPlayer.MainPerson = person;
-
-                // TODO Использовать генератор персонажа, как в игре.
-                // Для этого нужно научить ботов корректно использовать оружие дальнего боя и посохи лечения.
-                var classRoll = new Random().Next(1, 3);
-                switch (classRoll)
-                {
-                    case 1:
-                        AddEquipmentToActor(person.EquipmentCarrier, 2, "short-sword", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 1, "steel-armor", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 3, "wooden-shield", schemeService, propFactory);
-                        break;
-
-                    case 2:
-                        AddEquipmentToActor(person.EquipmentCarrier, 2, "battle-axe", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 3, "battle-axe", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 0, "highlander-helmet", schemeService, propFactory);
-                        break;
-
-                    case 3:
-                        AddEquipmentToActor(person.EquipmentCarrier, 2, "bow", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 1, "leather-jacket", schemeService, propFactory);
-                        AddEquipmentToActor(inventory, "short-sword", schemeService, propFactory);
-                        AddResourceToActor(inventory, "arrow", 10, schemeService, propFactory);
-                        break;
-
-                    case 4:
-                        AddEquipmentToActor(person.EquipmentCarrier, 2, "fireball-staff", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 1, "scholar-robe", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 0, "wizard-hat", schemeService, propFactory);
-                        AddResourceToActor(inventory, "mana", 15, schemeService, propFactory);
-                        break;
-
-                    case 5:
-                        AddEquipmentToActor(person.EquipmentCarrier, 2, "pistol", schemeService, propFactory);
-                        AddEquipmentToActor(person.EquipmentCarrier, 0, "elder-hat", schemeService, propFactory);
-                        AddResourceToActor(inventory, "bullet-45", 5, schemeService, propFactory);
-
-                        AddResourceToActor(inventory, "packed-food", 1, schemeService, propFactory);
-                        AddResourceToActor(inventory, "water-bottle", 1, schemeService, propFactory);
-                        AddResourceToActor(inventory, "med-kit", 1, schemeService, propFactory);
-
-                        AddResourceToActor(inventory, "mana", 5, schemeService, propFactory);
-                        AddResourceToActor(inventory, "arrow", 3, schemeService, propFactory);
-                        break;
-
-                    default:
-                        throw new InvalidOperationException("Эта комбинация начальной экипировки не поддерживается.");
-                }
-
-                AddResourceToActor(inventory, "packed-food", 1, schemeService, propFactory);
-                AddResourceToActor(inventory, "water-bottle", 1, schemeService, propFactory);
-                AddResourceToActor(inventory, "med-kit", 1, schemeService, propFactory);
-            }
-
-            var actor = new Actor(humanPlayer.MainPerson, humanPlayer, playerActorStartNode);
+            var actor = new Actor(humanPerson, humanPlayer, playerActorStartNode);
 
             playerEventLogService.Actor = actor;
 
-            actorManager.Add(actor);
+            sectorManager.CurrentSector.ActorManager.Add(actor);
 
             return actor;
         }
 
-        private static void AddEquipmentToActor(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid,
-            ISchemeService schemeService, IPropFactory propFactory)
-        {
-            try
-            {
-                var equipmentScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
-                var equipment = propFactory.CreateEquipment(equipmentScheme);
-                equipmentCarrier[slotIndex] = equipment;
-            }
-            catch (KeyNotFoundException)
-            {
-                Debug.WriteLine($"Не найден объект {equipmentSid}");
-            }
-        }
-
-        private static void AddEquipmentToActor(Inventory inventory, string equipmentSid,
-            ISchemeService schemeService, IPropFactory propFactory)
-        {
-            try
-            {
-                var equipmentScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
-                var equipment = propFactory.CreateEquipment(equipmentScheme);
-                inventory.Add(equipment);
-            }
-            catch (KeyNotFoundException)
-            {
-                Debug.WriteLine($"Не найден объект {equipmentSid}");
-            }
-        }
-
-        private static void AddResourceToActor(Inventory inventory, string resourceSid, int count,
-            ISchemeService schemeService, IPropFactory propFactory)
-        {
-            try
-            {
-                var resourceScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
-                var resource = propFactory.CreateResource(resourceScheme, count);
-                inventory.Add(resource);
-            }
-            catch (KeyNotFoundException)
-            {
-                Debug.WriteLine($"Не найден объект {resourceSid}");
-            }
-        }
-
-        private async Task<IActor> CreateSectorAsync(IServiceProvider _globalServiceProvider)
+        private async Task<IActor> CreateSectorAsync(HumanPerson startPerson, IServiceProvider _globalServiceProvider)
         {
             if (ServiceScope != null)
             {
@@ -232,16 +117,12 @@ namespace Zilon.Emulation.Common
 
             ConfigBotAux();
 
-            var schemeService = _globalServiceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
-            var survivalRandomSource = _globalServiceProvider.GetRequiredService<ISurvivalRandomSource>();
-            var propFactory = _globalServiceProvider.GetRequiredService<IPropFactory>();
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
 
             var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-            var actorManager = ServiceScope.ServiceProvider.GetRequiredService<IActorManager>();
             var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
 
@@ -256,11 +137,8 @@ namespace Zilon.Emulation.Common
             };
 
             var humanActor = CreateHumanActor(humanPlayer,
-                schemeService,
-                survivalRandomSource,
-                propFactory,
+                startPerson,
                 sectorManager,
-                actorManager,
                 playerEventLogService);
 
             return humanActor;

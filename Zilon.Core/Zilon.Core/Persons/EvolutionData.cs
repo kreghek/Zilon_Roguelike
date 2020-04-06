@@ -14,9 +14,13 @@ namespace Zilon.Core.Persons
     {
         private readonly ISchemeService _schemeService;
 
+        private readonly List<IPerk> _buildInPerks;
+
         public EvolutionData(ISchemeService schemeService)
         {
             _schemeService = schemeService;
+
+            _buildInPerks = new List<IPerk>();
 
             Stats = new[] {
                 new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 },
@@ -26,15 +30,24 @@ namespace Zilon.Core.Persons
             UpdatePerks();
         }
 
-        /// <summary>
-        /// Перечень навыков.
-        /// </summary>
+        /// <inheritdoc/>
         public SkillStatItem[] Stats { get; }
 
+        /// <inheritdoc/>
         public IPerk[] Perks { get; private set; }
 
+        /// <inheritdoc/>
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
 
+        /// <inheritdoc/>
+        public void AddBuildInPerks(IEnumerable<IPerk> perks)
+        {
+            _buildInPerks.AddRange(perks);
+
+            UpdatePerks();
+        }
+
+        /// <inheritdoc/>
         public void PerkLevelUp(IPerk perk)
         {
             var activePerkIsValid = Perks.Contains(perk);
@@ -72,9 +85,17 @@ namespace Zilon.Core.Persons
 
         private void UpdatePerks()
         {
-            var schemes = _schemeService.GetSchemes<IPerkScheme>();
+            var schemes = _schemeService.GetSchemes<IPerkScheme>()
+                // Для развития годятся только те перки, которые не врождённые.
+                // Врождённые перки даются только при генерации персонажа.
+                .Where(x => !x.IsBuildIn)
+                // Защиита от схем, в которых забыли прописать уровни.
+                // По идее, такие перки либо должны быть врождёнными.
+                // Следовательно, если они не отсеяны выше, то это ошибка.
+                // Такие схемы лучше проверять в тестах на валидацию схем.
+                .Where(x=> x.Levels != null);
 
-            var perks = new List<IPerk>();
+            var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)
             {
                 perks.AddRange(Perks);

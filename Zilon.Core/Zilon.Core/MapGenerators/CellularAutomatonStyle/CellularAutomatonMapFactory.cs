@@ -11,6 +11,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -19,7 +20,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
-        private readonly int SIMULATION_COUNT = 2;
+        private const int SIMULATION_COUNT = 2;
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;
         private const int RETRY_LIMIT = 3;
@@ -38,27 +39,20 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _interiorObjectRandomSource = interiorObjectRandomSource;
         }
 
-        /// <summary>
-        /// Создаёт карту сектора.
-        /// </summary>
-        /// <param name="options">Настройки генерации.
-        /// Должны быть типа ISectorSubScheme с заданным значением MapGeneratorOptions.
-        /// Значение MapGeneratorOptions должно быть типа ISectorCellularAutomataMapFactoryOptionsSubScheme.</param>
-        /// <returns></returns>
-        public Task<ISectorMap> CreateAsync(object options)
+        /// <inheritdoc/>
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
-            if (options is null)
+            if (generationOptions is null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
-            var sectorScheme = (ISectorSubScheme)options;
-            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
+            var transitions = generationOptions.Transitions;
 
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)sectorScheme.MapGeneratorOptions;
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
             if (cellularAutomatonOptions == null)
             {
-                throw new ArgumentException($"Для {nameof(options)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
             var matrixWidth = cellularAutomatonOptions.MapWidth;
@@ -97,6 +91,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
+                // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
+                // мог помещаться персонаж размером в 7 узлов.
+                // Отключено, потому что сейчас слишком долгая генерация + туман войны на больших плошадях тормозит
+                //const int SCALE_FACTOR = 4;
+                //var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
+
                 var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
@@ -114,7 +114,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
                 // На карте должно быть минимум столько регионов, сколько переходов.
                 // +1 - это регион старта.
-                if (draftRegions.Count() < targetRegionDraftCount)
+                if (draftRegions.Length < targetRegionDraftCount)
                 {
                     try
                     {
@@ -191,7 +191,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Пропускаем 1, потому что 1 занять стартом.
                 var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
 
-                Debug.Assert(trasitionRegionDrafts.Count() >= transitionArray.Count(),
+                Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
                     "Должно быть достаточно регионов для размещения всех переходов.");
 
                 for (var i = 0; i < transitionArray.Length; i++)
@@ -204,7 +204,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     map.Transitions.Add(transitionNode, transition);
 
-                    if (transition.SectorSid == null)
+                    if (transition.SectorNode == null)
                     {
                         transitionRegion.IsOut = true;
                     }
@@ -273,13 +273,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
             }
 
-            var regionCountDiff = targetRegionCount - draftRegions.Count();
+            var regionCountDiff = targetRegionCount - draftRegions.Length;
             if (regionCountDiff <= 0)
             {
                 return (RegionDraft[])draftRegions.Clone();
             }
 
-            var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
+            var availableSplitRegions = draftRegions.Where(x => x.Coords.Length > 1);
             var availableCoords = from region in availableSplitRegions
                                   from coord in region.Coords.Skip(1)
                                   select new RegionCoords(coord, region);

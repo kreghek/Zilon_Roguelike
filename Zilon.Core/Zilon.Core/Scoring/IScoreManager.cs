@@ -3,7 +3,6 @@
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Scoring
 {
@@ -26,23 +25,12 @@ namespace Zilon.Core.Scoring
         /// <summary>Счётчик ходов по типам секторов.</summary>
         IDictionary<ILocationScheme, int> PlaceTypes { get; }
 
-        /// <summary>
-        /// Посещённые места.
-        /// </summary>
-        ISet<GlobeRegionNode> Places { get; }
-
         /// <summary>Засчитать убийство монстра.</summary>
         /// <param name="monster"> Монстр, убитый игроком. </param>
         void CountMonsterDefeat(MonsterPerson monster);
 
         /// <summary> Засчитать один прожитый шаг. </summary>
         void CountTurn(ILocationScheme locationScheme);
-
-        /// <summary>
-        /// Засчитывает посещение места на глобальной карте.
-        /// </summary>
-        /// <param name="regionNode">Узел провинции, которая считается посещённым местом.</param>
-        void CountPlace(GlobeRegionNode regionNode);
 
         /// <summary>
         /// Засчитывает посещение победного узла.

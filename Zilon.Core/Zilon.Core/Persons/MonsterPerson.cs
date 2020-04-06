@@ -31,9 +31,13 @@ namespace Zilon.Core.Persons
 
         public IMonsterScheme Scheme { get; }
 
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public bool HasInventory { get => false; }
+        public IDiseaseData DiseaseData { get; }
+
         public MonsterPerson([NotNull] IMonsterScheme scheme)
         {
-            
+
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
@@ -58,6 +62,8 @@ namespace Zilon.Core.Persons
             Survival = new MonsterSurvivalData(scheme);
 
             Effects = new EffectCollection();
+
+            DiseaseData = new DiseaseData();
         }
 
         public override string ToString()

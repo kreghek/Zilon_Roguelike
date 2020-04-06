@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -14,6 +15,8 @@ namespace Zilon.Core.Commands
             _queue = new Queue<ICommand>();
         }
 
+        public event EventHandler CommandPushed;
+
         public ICommand Pop()
         {
             if (_queue.Any())
@@ -27,6 +30,7 @@ namespace Zilon.Core.Commands
         public void Push(ICommand command)
         {
             _queue.Enqueue(command);
+            CommandPushed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -17,8 +17,6 @@ using Zilon.Core.Props;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 {
-    private const string HISTORY_BOOK_SID = "history-book";
-
     private readonly List<PropItemVm> _propViewModels;
 
     public Transform InventoryItemsParent;
@@ -29,12 +27,11 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public GameObject UseButton;
     public GameObject ReadButton;
 
-    [NotNull] [Inject] private DiContainer _diContainer;
-    [NotNull] [Inject] private ISectorUiState _playerState;
-    [NotNull] [Inject] private IInventoryState _inventoryState;
-    [NotNull] [Inject] private ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly DiContainer _diContainer;
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+    [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
-    [NotNull] [Inject(Id = "show-history-command")] private readonly ICommand _showHistoryCommand;
 
     public event EventHandler Closed;
 
@@ -154,13 +151,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         }
     }
 
-    private void InventoryOnContentChanged(object sender, PropStoreEventArgs e)
-    {
-        var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
-        UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
-    }
-
     private void UpdatePropsInner(Transform itemsParent, IEnumerable<IProp> props)
     {
         foreach (Transform itemTranform in itemsParent)
@@ -213,7 +203,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         var canUseProp = currentItemVm.Prop.Scheme.Use != null;
         UseButton.SetActive(canUseProp);
 
-        var canRead = currentItemVm.Prop.Scheme.Sid == HISTORY_BOOK_SID;
+        var canRead = false; // Сейчас всегда false, пока не будут введены книги/свитки
         ReadButton.SetActive(canRead);
         // --- этот фрагмент - не дубликат
 
@@ -227,9 +217,6 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ReadButton_Handler()
     {
-        if (_inventoryState.SelectedProp.Prop.Scheme.Sid == HISTORY_BOOK_SID)
-        {
-            _commandManager.Push(_showHistoryCommand);
-        }
+        // Пок нет чтения, этот метод ничего не делает.
     }
 }

@@ -20,5 +20,27 @@
 		"Direction": "Negative"
       }
     ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "row-meat",
+        "Count": 1
+      },
+      {
+        "PropSid": "potatus",
+        "Count": 1
+      },
+	  {
+        "PropSid": "acid",
+        "Count": 1
+      },
+	  {
+        "PropSid": "strong-fuel",
+        "Count": 1
+      },
+    ],
+    "ProductOutput": 1
   }
 }

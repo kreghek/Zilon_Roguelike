@@ -29,6 +29,12 @@ namespace Zilon.Core.Graphs
         void AddNode(IGraphNode node);
 
         /// <summary>
+        /// Удаляет узел графа.
+        /// </summary>
+        /// <param name="node"></param>
+        void RemoveNode(IGraphNode node);
+
+        /// <summary>
         /// Создаёт ребро между двумя узлами графа карты.
         /// </summary>
         /// <param name="node1"> Узел графа карты. </param>

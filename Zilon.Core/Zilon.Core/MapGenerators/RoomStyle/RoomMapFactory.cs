@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
@@ -31,25 +32,30 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает экземпляр карты.
         /// </returns>
-        public Task<ISectorMap> CreateAsync(object options)
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
-            if (options is null)
+            if (generationOptions is null)
             {
-                throw new System.ArgumentNullException(nameof(options));
+                throw new System.ArgumentNullException(nameof(generationOptions));
             }
 
-            var sectorScheme = (ISectorSubScheme)options;
+            var roomFactoryOptions = generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
+
+            if (roomFactoryOptions is null)
+            {
+                throw new System.ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
+            }
 
             var map = CreateMapInstance();
 
             var edgeHash = new HashSet<string>();
 
             // Генерируем случайные координаты комнат
-            var transitions = MapFactoryHelper.CreateTransitions(sectorScheme);
+            var transitions = generationOptions.Transitions;
 
-            var rooms = _roomGenerator.GenerateRoomsInGrid(sectorScheme.RegionCount,
+            var rooms = _roomGenerator.GenerateRoomsInGrid(roomFactoryOptions.RegionCount,
                 RoomMinSize,
-                sectorScheme.RegionSize,
+                roomFactoryOptions.RegionSize,
                 transitions);
 
             // Создаём узлы и рёбра комнат

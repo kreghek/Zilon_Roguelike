@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
@@ -19,7 +20,6 @@ namespace Zilon.BotEnvironment
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string BOT_MODE_ARG = "Mode";
-
         private static Startup _startUp;
 
         static async Task Main(string[] args)
@@ -44,7 +44,9 @@ namespace Zilon.BotEnvironment
 
             serviceProvider = serviceCollection.BuildServiceProvider();
 
-            await autoPlayEngine.StartAsync(serviceProvider);
+            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
+
+            await autoPlayEngine.StartAsync(startPerson, serviceProvider);
 
             Console.WriteLine(autoPlayEngine.LogOutput);
 
