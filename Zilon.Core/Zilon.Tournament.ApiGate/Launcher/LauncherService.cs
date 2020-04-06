@@ -72,7 +72,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
             return Task.CompletedTask;
         }
 
-        private BotInfo[] GetAllBots(string appPath)
+        private static BotInfo[] GetAllBots(string appPath)
         {
             var botList = new List<BotInfo>();
 

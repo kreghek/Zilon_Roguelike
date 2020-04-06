@@ -8,8 +8,8 @@ namespace Zilon.BotMassLauncher
 {
     class Program
     {
-        private static readonly string _pathToEnv;
-        private static readonly int _launchCount;
+        private static string _pathToEnv;
+        private static int _launchCount;
         private static string _scorePreffix;
         private static string _parallel;
         private static bool _isInfinite;
@@ -28,10 +28,8 @@ namespace Zilon.BotMassLauncher
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            //TODO Восстановить работу с конфигами или переделать на чтение аргументов.
-            // Стало нерабочим после портирования на netcore.
-            //_pathToEnv = ConfigurationManager.AppSettings["env"];
-            //_launchCount = int.Parse(ConfigurationManager.AppSettings["launchCount"]);
+            _pathToEnv = GetProgramArgument(args, "env");
+            _launchCount = int.Parse(GetProgramArgument(args, "launchCount"));
             _scorePreffix = DateTime.UtcNow.ToString().Replace(":", "_").Replace(".", "_");
 
             _parallel = GetProgramArgument(args, "parallel");
