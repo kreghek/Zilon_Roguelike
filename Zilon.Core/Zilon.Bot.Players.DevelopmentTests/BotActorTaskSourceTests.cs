@@ -11,6 +11,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
+using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -34,7 +35,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
 
-            var startPerson = autoPlayEngine.CreateStartPerson(serviceProvider);
+            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
 
             PrintPersonBacklog(startPerson);
 
@@ -43,7 +44,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             PrintResult(serviceProvider);
         }
 
-        private void PrintPersonBacklog(HumanPerson humanPerson)
+        private static void PrintPersonBacklog(HumanPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
             var buildinTraits = humanPerson.EvolutionData.Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
@@ -82,7 +83,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
                         Console.WriteLine(prop.Scheme.Name.En);
                         break;
                 }
-                
+
             }
         }
 

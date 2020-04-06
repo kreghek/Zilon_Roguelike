@@ -1,6 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
@@ -27,6 +25,36 @@ namespace Zilon.Core.Benchmark
             [NotNull] IActorManager actorManager,
             [NotNull] IGraphNode startNode)
         {
+            if (player is null)
+            {
+                throw new System.ArgumentNullException(nameof(player));
+            }
+
+            if (schemeService is null)
+            {
+                throw new System.ArgumentNullException(nameof(schemeService));
+            }
+
+            if (survivalRandomSource is null)
+            {
+                throw new System.ArgumentNullException(nameof(survivalRandomSource));
+            }
+
+            if (personScheme is null)
+            {
+                throw new System.ArgumentNullException(nameof(personScheme));
+            }
+
+            if (actorManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(actorManager));
+            }
+
+            if (startNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(startNode));
+            }
+
             var inventory = new Inventory();
 
             var evolutionData = new EvolutionData(schemeService);

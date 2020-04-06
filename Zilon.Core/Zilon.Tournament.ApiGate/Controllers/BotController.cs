@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+
 using Zilon.Tournament.ApiGate.BotManagement;
 
 namespace Zilon.Tournament.ApiGate.Controllers
@@ -51,20 +51,16 @@ namespace Zilon.Tournament.ApiGate.Controllers
                 {
                     if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
                     {
-
                         using (var copyStream = new MemoryStream())
                         {
                             await section.Body.CopyToAsync(copyStream);
 
                             copyStream.Seek(0, SeekOrigin.Begin);
-                            var botFullNameAndPath = Path.Combine(botRootCatalog, fileName);
                             using (var targetStream = System.IO.File.Create(botRootCatalog))
                             {
-                                await copyStream.CopyToAsync(targetStream);
+                                await copyStream.CopyToAsync(targetStream).ConfigureAwait(false);
                             }
                         }
-
-
                     }
                 }
 

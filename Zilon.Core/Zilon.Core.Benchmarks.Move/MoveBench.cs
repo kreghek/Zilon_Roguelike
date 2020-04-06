@@ -18,7 +18,6 @@ using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {

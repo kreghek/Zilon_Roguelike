@@ -52,9 +52,6 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
                                 process.Start();
 
-                                var output = process.StandardOutput.ReadToEnd();
-                                var error = process.StandardError.ReadToEnd();
-
                                 // Один бот в массланчере в одном режиме может работать 1 час максимум
                                 process.WaitForExit((int)(3.6 * 1000_000));
                             }

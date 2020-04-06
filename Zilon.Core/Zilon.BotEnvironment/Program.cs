@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
@@ -43,7 +44,7 @@ namespace Zilon.BotEnvironment
 
             serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var startPerson = autoPlayEngine.CreateStartPerson(serviceProvider);
+            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
 
             await autoPlayEngine.StartAsync(startPerson, serviceProvider);
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -9,8 +8,8 @@ namespace Zilon.BotMassLauncher
 {
     class Program
     {
-        private static string _pathToEnv;
-        private static int _launchCount;
+        private static readonly string _pathToEnv;
+        private static readonly int _launchCount;
         private static string _scorePreffix;
         private static string _parallel;
         private static bool _isInfinite;
@@ -73,20 +72,6 @@ namespace Zilon.BotMassLauncher
 
 
             Console.WriteLine($"[x] COMPLETE");
-        }
-
-        private static string GenerateUniquePreffix()
-        {
-            var time = DateTime.UtcNow;
-            var year = time.Year;
-            var month = time.Month;
-            var day = time.Day;
-
-            var hours = time.Hour;
-            var minute = time.Minute;
-            var second = time.Second;
-
-            return $"{year:0000}{month:00}{day:00}_{hours:00}{minute:00}{second:00}";
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
