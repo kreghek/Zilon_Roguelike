@@ -32,9 +32,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
         public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords)
         {
+            return Array.Empty<InteriorObjectMeta>();
+
             if (regionDraftCoords is null)
             {
-                throw new System.ArgumentNullException(nameof(regionDraftCoords));
+                throw new ArgumentNullException(nameof(regionDraftCoords));
             }
 
             // Получаем все координаты, которые не прижаты к краю.

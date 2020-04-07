@@ -27,12 +27,15 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new Stack<OffsetCoords>();
-            openPoints.Push(point);
+            var openPoints = new HashSet<OffsetCoords>
+            {
+                point
+            };
 
             while (openPoints.Count > 0)
             {
-                var currentCell = openPoints.Pop();
+                var currentCell = openPoints.First();
+                openPoints.Remove(currentCell);
 
                 var isInBound = IsInBounds(currentCell, matrix.Width, matrix.Height);
 
@@ -64,7 +67,7 @@ namespace Zilon.Core.Common
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
-                        openPoints.Push(neighbourCoords);
+                        openPoints.Add(neighbourCoords);
                     }
                 }
             }
