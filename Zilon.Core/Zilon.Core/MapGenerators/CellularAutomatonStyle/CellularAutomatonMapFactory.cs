@@ -91,7 +91,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
+                var resizedMatrix = ResizeMatrixTo7(matrix);
+
+                var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
 
                 RegionDraft[] draftRegions;
                 try
@@ -135,6 +137,31 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Если цикл закончился, значит вышел лимит попыток.
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
+        }
+
+        private static Matrix<bool> ResizeMatrixTo7(Matrix<bool> matrix)
+        {
+            var resizedMatrix = matrix.CreateMatrixWithMargins(1, 1);
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    if (matrix[x, y])
+                    {
+                        resizedMatrix[x + 1, y + 1] = true;
+
+                        var neighbors = HexHelper.GetNeighbors(x, y);
+                        foreach (var neightbor in neighbors)
+                        {
+                            var resizedX = neightbor.X + 1;
+                            var resizedY = neightbor.Y + 1;
+                            resizedMatrix[resizedX, resizedY] = true;
+                        }
+                    }
+                }
+            }
+
+            return resizedMatrix;
         }
 
         private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
@@ -454,18 +481,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     foreach (var lineItem in line)
                     {
                         var offsetCoords = HexHelper.ConvertToOffset(lineItem);
-
-                        matrix.Items[offsetCoords.X, offsetCoords.Y] = true;
+                        matrix[offsetCoords.X, offsetCoords.Y] = true;
 
                         // Коридоры должны быть размером в Size7.
                         // Поэтому вокруг каждой точки прорываем соседей.
 
-                        var neighborCubeCoordOffsets = HexHelper.GetOffsetClockwise();
-                        foreach (var offset in neighborCubeCoordOffsets)
+                        var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
+                        foreach (var coords in neighborCoords)
                         {
-                            var neighborCubeCoord = lineItem + offset;
-                            var neighborOffsetCoord = HexHelper.ConvertToOffset(neighborCubeCoord);
-                            matrix.Items[neighborOffsetCoord.X, neighborOffsetCoord.Y] = true;
+                            matrix[coords.X, coords.Y] = true;
                         }
                     }
 
@@ -549,7 +573,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static IEnumerable<OffsetCoords> FloodFillRegions(Matrix<bool> matrix, OffsetCoords point)
         {
-            var regionPoints = HexBinaryFiller.FloodFill7(
+            var regionPoints = HexBinaryFiller.FloodFill(
                 matrix,
                 point);
 

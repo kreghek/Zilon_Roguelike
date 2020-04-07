@@ -53,6 +53,16 @@ namespace Zilon.Core.Common
         /// </summary>
         public int Height { get; }
 
+        public T this[int x, int y]
+        {
+            get {
+                return Items[x, y];
+            }
+            set {
+                Items[x, y] = value;
+            }
+        }
+
         private static void CheckArguments(int width, int height)
         {
             if (width <= 0)

@@ -78,13 +78,7 @@ namespace Zilon.Core.Common
         {
             var baseCubeCoords = ConvertToCube(baseX, baseY);
 
-            var offsets = GetOffsetClockwise();
-            var neighborCoords = new CubeCoords[6];
-            for (var i = 0; i < 6; i++)
-            {
-                var offset = offsets[i];
-                neighborCoords[i] = offset + baseCubeCoords;
-            }
+            var neighborCoords = GetNeighbors(baseCubeCoords);
 
             return neighborCoords.Select(x => ConvertToOffset(x)).ToArray();
         }
