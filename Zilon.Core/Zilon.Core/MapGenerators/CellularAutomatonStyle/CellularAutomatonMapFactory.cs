@@ -11,7 +11,6 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -88,7 +87,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 for (var i = 0; i < SIMULATION_COUNT; i++)
                 {
                     var newMap = DoSimulationStep(matrix);
-                    matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
+                    matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
                 }
 
                 var resizedMatrix = MapFactoryHelper.ResizeMatrixTo7(matrix);
@@ -392,7 +391,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var regions = new List<RegionDraft>();
             while (openNodes.Any())
             {
-                var openNode = openNodes.First(x => IsAvailableFor7(matrix, x));
+                var openNode = openNodes.First(x => MapFactoryHelper.IsAvailableFor7(matrix, x));
                 var regionCoords = FloodFillRegions(matrix, openNode);
                 var region = new RegionDraft(regionCoords.ToArray());
 
@@ -476,28 +475,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions.ToArray();
         }
 
-        private static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
+        private static Matrix<bool> DoSimulationStep(Matrix<bool> matrix)
         {
-            if (!matrix[coords.X, coords.Y])
-            {
-                return false;
-            }
-
-            var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
-            foreach (var neightbor in neighbors)
-            {
-                if (!matrix[neightbor.X, neightbor.Y])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static bool[,] DoSimulationStep(Matrix<bool> matrix)
-        {
-            var newCellMap = new bool[matrix.Width, matrix.Height];
+            var newCellMap = new Matrix<bool>(matrix.Width, matrix.Height);
 
             for (var x = 0; x < matrix.Width; x++)
             {

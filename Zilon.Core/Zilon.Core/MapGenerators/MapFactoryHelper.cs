@@ -61,5 +61,24 @@ namespace Zilon.Core.MapGenerators
 
             return resizedMatrix;
         }
+
+        public static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
+        {
+            if (!matrix[coords.X, coords.Y])
+            {
+                return false;
+            }
+
+            var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
+            foreach (var neightbor in neighbors)
+            {
+                if (!matrix[neightbor.X, neightbor.Y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
