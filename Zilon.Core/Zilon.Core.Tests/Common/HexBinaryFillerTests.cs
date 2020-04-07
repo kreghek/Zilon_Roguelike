@@ -1,10 +1,6 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentAssertions;
-using System.Linq;
+﻿using FluentAssertions;
+
+using NUnit.Framework;
 
 namespace Zilon.Core.Common.Tests
 {
@@ -39,6 +35,21 @@ namespace Zilon.Core.Common.Tests
 
             // ASSERT
             regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4), new OffsetCoords(5, 4) });
+        }
+
+        [Test]
+        public void FloodFill7_2Size7AreaInDistance_Returns1CentralPoint()
+        {
+            // ARRANGE
+            var matrix = new Matrix<bool>(10, 10);
+            PlaceArea(4, 4, matrix);
+            PlaceArea(7, 7, matrix);
+
+            // ACT
+            var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
+
+            // ASSERT
+            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
         }
 
         private void PlaceArea(int x, int y, Matrix<bool> matrix)
