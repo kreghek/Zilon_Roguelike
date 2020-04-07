@@ -392,7 +392,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var regions = new List<RegionDraft>();
             while (openNodes.Any())
             {
-                var openNode = openNodes.First();
+                var openNode = openNodes.First(x => IsAvailableFor7(matrix, x));
                 var regionCoords = FloodFillRegions(matrix, openNode);
                 var region = new RegionDraft(regionCoords.ToArray());
 
@@ -474,6 +474,25 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return regions.ToArray();
+        }
+
+        private static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
+        {
+            if (!matrix[coords.X, coords.Y])
+            {
+                return false;
+            }
+
+            var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
+            foreach (var neightbor in neighbors)
+            {
+                if (!matrix[neightbor.X, neightbor.Y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static bool[,] DoSimulationStep(Matrix<bool> matrix)
