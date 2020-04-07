@@ -99,7 +99,7 @@ jobs:
           path: TestResult.xml
   build_Win_x64:
     docker:
-      - image: gableroux/unity3d:2020.1.0f4
+      - image: gableroux/unity3d:2020.1.0b4
     steps:
       - checkout
       - run: mkdir -p /root/.cache/unity3d
