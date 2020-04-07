@@ -91,13 +91,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
-                // мог помещаться персонаж размером в 7 узлов.
-                // Отключено, потому что сейчас слишком долгая генерация + туман войны на больших плошадях тормозит
-                const int SCALE_FACTOR = 4;
-                var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
-
-                var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
+                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
                 try
@@ -555,7 +549,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static IEnumerable<OffsetCoords> FloodFillRegions(Matrix<bool> matrix, OffsetCoords point)
         {
-            var regionPoints = HexBinaryFiller.FloodFill(
+            var regionPoints = HexBinaryFiller.FloodFill7(
                 matrix,
                 point);
 
