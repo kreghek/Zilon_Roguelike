@@ -99,12 +99,12 @@ jobs:
           path: TestResult.xml
   build_Win_x64:
     docker:
-      - image: gableroux/unity3d:2019.2.5f1-windows
+      - image: gableroux/unity3d:2020.1.0f4
     steps:
       - checkout
       - run: mkdir -p /root/.cache/unity3d
       - run: mkdir -p /root/.local/share/unity3d/Unity/
-      - run: openssl aes-256-cbc -d -in .circleci/Unity_v2019.x.ulf-cipher -k ${CIPHER_KEY} >> /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - run: base64 -d ${UNITY2020_LIC_COMMON} > /root/.local/share/unity3d/Unity/Unity_lic.ulf
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
