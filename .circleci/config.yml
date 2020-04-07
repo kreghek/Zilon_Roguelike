@@ -105,7 +105,7 @@ jobs:
       - run: mkdir -p /root/.cache/unity3d
       - run: mkdir -p /root/.local/share/unity3d/Unity/
       - run: echo ${UNITY2020_LIC_COMMON} | base64 -d > /root/.local/share/unity3d/Unity/Unity_v2020.x.ulf
-      - run: echo /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile /root/.local/share/unity3d/Unity/Unity_v2020.x.ulf
+      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile /root/.local/share/unity3d/Unity/Unity_v2020.x.ulf
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
