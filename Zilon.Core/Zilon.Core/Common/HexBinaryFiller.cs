@@ -89,14 +89,14 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new List<OffsetCoords>
+            var openPoints = new HashSet<OffsetCoords>
             {
                 point
             };
 
             while (openPoints.Count > 0)
             {
-                var currentCell = openPoints[0];
+                var currentCell = openPoints.First();
                 openPoints.Remove(currentCell);
 
                 var isInBound = IsInBounds(currentCell, matrix.Width, matrix.Height);
@@ -143,22 +143,20 @@ namespace Zilon.Core.Common
 
         private static bool CheckAvailableFor7(OffsetCoords testCoords, Matrix<bool> matrix)
         {
-            var cubeCoords = HexHelper.ConvertToCube(testCoords);
-            var clockwiseOffsets = HexHelper.GetOffsetClockwise();
-            foreach (var offset in clockwiseOffsets)
+            if (!matrix[testCoords.X, testCoords.Y])
             {
-                var neighbourCubeCoords = cubeCoords + offset;
+                return false;
+            }
 
-                var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
-
-                try
+            var neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
+            foreach (var neighbour in neighbours)
+            {
+                if (neighbour.X >= matrix.Width || neighbour.Y >= matrix.Height)
                 {
-                    if (!matrix.Items[neighbourCoords.X, neighbourCoords.Y])
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-                catch (IndexOutOfRangeException)
+
+                if (!matrix.Items[neighbour.X, neighbour.Y])
                 {
                     return false;
                 }

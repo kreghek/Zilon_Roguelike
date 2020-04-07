@@ -64,6 +64,11 @@ namespace Zilon.Core.MapGenerators
 
         public static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
         {
+            if (matrix is null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+
             if (!matrix[coords.X, coords.Y])
             {
                 return false;
@@ -72,6 +77,11 @@ namespace Zilon.Core.MapGenerators
             var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
             foreach (var neightbor in neighbors)
             {
+                if (!matrix.IsIn(neightbor.X, neightbor.Y))
+                {
+                    return false;
+                }
+
                 if (!matrix[neightbor.X, neightbor.Y])
                 {
                     return false;

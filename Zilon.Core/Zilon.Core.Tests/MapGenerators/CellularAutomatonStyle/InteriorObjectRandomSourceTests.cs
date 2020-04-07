@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
         [Test]
         public void RollInteriorObjectsTest()
         {
-            const int SQARE_SIZE = 4;
+            const int SQUARE_SIZE = 4;
 
             // ARRANGE
 
@@ -30,12 +30,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
 
             var interiorRandomSource = new InteriorObjectRandomSource(dice);
 
-            var coords = new OffsetCoords[SQARE_SIZE * SQARE_SIZE];
-            for (var i = 0; i < SQARE_SIZE; i++)
+            var coords = new OffsetCoords[SQUARE_SIZE * SQUARE_SIZE];
+            for (var i = 0; i < SQUARE_SIZE; i++)
             {
-                for (var j = 0; j < SQARE_SIZE; j++)
+                for (var j = 0; j < SQUARE_SIZE; j++)
                 {
-                    coords[i + (j * SQARE_SIZE)] = new OffsetCoords(i, j);
+                    coords[i + (j * SQUARE_SIZE)] = new OffsetCoords(i, j);
                 }
             }
 

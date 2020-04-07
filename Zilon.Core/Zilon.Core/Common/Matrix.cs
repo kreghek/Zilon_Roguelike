@@ -63,6 +63,21 @@ namespace Zilon.Core.Common
             }
         }
 
+        public bool IsIn(int x, int y)
+        {
+            if (x >= Width || y >= Height)
+            {
+                return false;
+            }
+
+            if (x < 0 || y < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static void CheckArguments(int width, int height)
         {
             if (width <= 0)

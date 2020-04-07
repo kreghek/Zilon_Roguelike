@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -42,10 +43,13 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Коридоры просто строятся от ближайшей точки региона.
             var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
 
+            // Выбираем все координаты, по которым может пройти персонаж размером 7.
+            var passble7Coords = GetAllPassableSize7Coords(regionDraftCoords);
+
             var openCoords = new List<OffsetCoords>(coordsInCenter);
             if (!openCoords.Any())
             {
-                return System.Array.Empty<InteriorObjectMeta>();
+                return Array.Empty<InteriorObjectMeta>();
             }
 
             var count = openCoords.Count / 4;
@@ -58,7 +62,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // декора перекрывает проход к какой-либо доступной ячейке).
                 for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
-                    var isValid = TryRollInteriorCoord(openCoords, regionDraftCoords, out var rolledCoord);
+                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passble7Coords, out var rolledCoord);
 
                     // Вне зависимости от корректности rolledCoord
                     // убираем его из открытых координат.
@@ -91,7 +95,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return resultMetaList.ToArray();
         }
 
-        private bool TryRollInteriorCoord(IList<OffsetCoords> openCoords,
+        private static OffsetCoords[] GetAllPassableSize7Coords(OffsetCoords[] regionDraftCoords)
+        {
+            return GetAvailableCoords(regionDraftCoords).ToArray();
+        }
+
+        private bool TryRollInteriorCoord(OffsetCoords[] openCoords,
             IEnumerable<OffsetCoords> passableRegionCoords,
             out OffsetCoords rolledCoords)
         {
