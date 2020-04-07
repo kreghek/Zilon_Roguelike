@@ -94,10 +94,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Растягиваем матрицу на 4, чтобы в единичную ячейку матрицы клеточного автомата
                 // мог помещаться персонаж размером в 7 узлов.
                 // Отключено, потому что сейчас слишком долгая генерация + туман войны на больших плошадях тормозит
-                //const int SCALE_FACTOR = 4;
-                //var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
+                const int SCALE_FACTOR = 4;
+                var maxtrixScales = MatrixHelper.CreateScaledMatrix(matrix, SCALE_FACTOR);
 
-                var matrixWithMargins = matrix.CreateMatrixWithVerticalMargins();
+                var matrixWithMargins = maxtrixScales.CreateMatrixWithVerticalMargins();
 
                 RegionDraft[] draftRegions;
                 try
@@ -171,8 +171,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 regionIdCounter++;
             }
 
-            // Добавляем узлы каридоров.
-            CreateCorridors(matrix, draftRegions, map);
+            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
 
             // Размещаем переходы и отмечаем стартовую комнату.
             // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
@@ -180,7 +179,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Первую занимаем под старт.
             // Последующие - это переходы.
 
-            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Count()).ToArray();
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
 
             if (regionOrderedBySize.Any())
             {
@@ -337,7 +336,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return newDraftRegionList.ToArray();
         }
 
-        private static void CreateCorridors(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
+        /// <summary>
+        /// Преобразовывет черновые регионы в узлы реальной карты.
+        /// </summary>
+        private static void MapDraftRegionsToSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
         {
             var cellMap = matrix.Items;
             var mapWidth = matrix.Width;
@@ -460,6 +462,17 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                         var offsetCoords = HexHelper.ConvertToOffset(lineItem);
 
                         matrix.Items[offsetCoords.X, offsetCoords.Y] = true;
+
+                        // Коридоры должны быть размером в Size7.
+                        // Поэтому вокруг каждой точки прорываем соседей.
+
+                        var neighborCubeCoordOffsets = HexHelper.GetOffsetClockwise();
+                        foreach (var offset in neighborCubeCoordOffsets)
+                        {
+                            var neighborCubeCoord = lineItem + offset;
+                            var neighborOffsetCoord = HexHelper.ConvertToOffset(neighborCubeCoord);
+                            matrix.Items[neighborOffsetCoord.X, neighborOffsetCoord.Y] = true;
+                        }
                     }
 
                     openRegions.Remove(nearbyOpenRegion);
