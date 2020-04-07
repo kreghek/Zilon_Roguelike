@@ -104,7 +104,7 @@ jobs:
       - checkout
       - run: mkdir -p /root/.cache/unity3d
       - run: mkdir -p /root/.local/share/unity3d/Unity/
-      - run: base64 -d ${UNITY2020_LIC_COMMON} > /root/.local/share/unity3d/Unity/Unity_lic.ulf
+      - run: echo ${UNITY2020_LIC_COMMON} | base64 -d > /root/.local/share/unity3d/Unity/Unity_lic.ulf
       - attach_workspace:
           at: /core-builds/bin
       - run: mkdir -p ./Zilon.Client/Assets/Plugins/ && cp -a /core-builds/bin/. ./Zilon.Client/Assets/Plugins/
