@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zilon.Core.Common
 {
@@ -88,12 +89,15 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new Stack<OffsetCoords>();
-            openPoints.Push(point);
+            var openPoints = new List<OffsetCoords>
+            {
+                point
+            };
 
             while (openPoints.Count > 0)
             {
-                var currentCell = openPoints.Pop();
+                var currentCell = openPoints[0];
+                openPoints.Remove(currentCell);
 
                 var isInBound = IsInBounds(currentCell, matrix.Width, matrix.Height);
 
@@ -128,7 +132,7 @@ namespace Zilon.Core.Common
                         var isAvailbleFor7 = CheckAvailableFor7(neighbourCoords, matrix);
                         if (isAvailbleFor7)
                         {
-                            openPoints.Push(neighbourCoords);
+                            openPoints.Add(neighbourCoords);
                         }
                     }
                 }
