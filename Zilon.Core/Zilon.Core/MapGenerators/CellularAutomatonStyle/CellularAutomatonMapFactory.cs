@@ -91,7 +91,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix = new Matrix<bool>(newMap, matrix.Width, matrix.Height);
                 }
 
-                var resizedMatrix = ResizeMatrixTo7(matrix);
+                var resizedMatrix = MapFactoryHelper.ResizeMatrixTo7(matrix);
 
                 var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
 
@@ -137,31 +137,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Если цикл закончился, значит вышел лимит попыток.
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
-        }
-
-        private static Matrix<bool> ResizeMatrixTo7(Matrix<bool> matrix)
-        {
-            var resizedMatrix = matrix.CreateMatrixWithMargins(1, 1);
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    if (matrix[x, y])
-                    {
-                        resizedMatrix[x + 1, y + 1] = true;
-
-                        var neighbors = HexHelper.GetNeighbors(x, y);
-                        foreach (var neightbor in neighbors)
-                        {
-                            var resizedX = neightbor.X + 1;
-                            var resizedY = neightbor.Y + 1;
-                            resizedMatrix[resizedX, resizedY] = true;
-                        }
-                    }
-                }
-            }
-
-            return resizedMatrix;
         }
 
         private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
