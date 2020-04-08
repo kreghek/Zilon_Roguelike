@@ -266,11 +266,45 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in e.Items)
             {
-                Map.HoldNode(actor.Node, actor);
+                HoldNodes(actor.Node, actor, Map);
 
                 if (actor.Person.Survival != null)
                 {
                     actor.Person.Survival.Dead += ActorState_Dead;
+                }
+            }
+        }
+
+        private void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, nextNode, map);
+
+            foreach (var node in actorNodes)
+            {
+                map.HoldNode(node, actor);
+            }
+        }
+
+        private void ReleaseNodes(IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node,  map);
+
+            foreach (var node in actorNodes)
+            {
+                map.ReleaseNode(node, actor);
+            }
+        }
+
+        private IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        {
+            yield return baseNode;
+
+            if (physicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
                 }
             }
         }
@@ -280,7 +314,7 @@ namespace Zilon.Core.Tactics
             // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
             foreach (var actor in e.Items)
             {
-                Map.ReleaseNode(actor.Node, actor);
+                ReleaseNodes(actor, Map);
 
                 if (actor.Person.Survival != null)
                 {
