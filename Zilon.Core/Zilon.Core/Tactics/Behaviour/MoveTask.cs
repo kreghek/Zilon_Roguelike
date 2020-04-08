@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -39,9 +40,9 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException($"Попытка переместиться в заблокированную ячейку {nextNode}.");
             }
 
-            _map.ReleaseNode(Actor.Node, Actor);
+            ReleaseNodes(Actor);
             Actor.MoveToNode(nextNode);
-            _map.HoldNode(nextNode, Actor);
+            HoldNodes(nextNode, Actor);
 
             if (Actor.SectorFowData is HumanSectorFowData)
             {
@@ -54,6 +55,40 @@ namespace Zilon.Core.Tactics.Behaviour
             if (!_path.Any())
             {
                 _isComplete = true;
+            }
+        }
+
+        private void HoldNodes(IGraphNode nextNode, IActor actor)
+        {
+            var actorNodes = GetActorNodes(actor.Person, nextNode);
+
+            foreach (var node in actorNodes)
+            {
+                _map.HoldNode(node, actor);
+            }
+        }
+
+        private void ReleaseNodes(IActor actor)
+        {
+            var actorNodes = GetActorNodes(actor.Person, actor.Node);
+
+            foreach (var node in actorNodes)
+            {
+                _map.ReleaseNode(node, actor);
+            }
+        }
+
+        private IEnumerable<IGraphNode> GetActorNodes(IPerson person, IGraphNode baseNode)
+        {
+            yield return baseNode;
+
+            if (person.PhysicalSize == Persons.PhysicalSize.Size7)
+            {
+                var neighbors = _map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
             }
         }
 
