@@ -218,7 +218,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             foreach (var draftRegion in draftRegions)
             {
                 var allCoords = draftRegion.Coords;
-                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(allCoords);
+                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(allCoords.ToArray());
 
                 foreach (var meta in interiorMetas)
                 {
@@ -273,7 +273,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 return (RegionDraft[])draftRegions.Clone();
             }
 
-            var availableSplitRegions = draftRegions.Where(x => x.Coords.Length > 1);
+            var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
                                   from coord in region.Coords.Skip(1)
                                   select new RegionCoords(coord, region);
@@ -341,6 +341,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var mapHeight = matrix.Height;
 
             var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
+            var hashSet = new HashSet<OffsetCoords>(regionNodeCoords);
 
             for (var x = 0; x < mapWidth; x++)
             {
@@ -350,7 +351,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     {
                         var offsetCoord = new OffsetCoords(x, y);
 
-                        if (!regionNodeCoords.Contains(offsetCoord))
+                        if (!hashSet.Contains(offsetCoord))
                         {
                             var node = new HexNode(x, y);
                             map.AddNode(node);
@@ -395,7 +396,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var regionCoords = FloodFillRegions(matrix, openNode);
                 var region = new RegionDraft(regionCoords.ToArray());
 
-                openNodes.RemoveAll(x => region.Coords.Contains(x));
+                openNodes.RemoveAll(x => region.Contains(x));
 
                 regions.Add(region);
             }
