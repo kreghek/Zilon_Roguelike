@@ -188,21 +188,21 @@ namespace Zilon.Core.Tactics
 
         private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
         {
-            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, _sectorManager.CurrentSector.Map);
+            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, _sectorManager.CurrentSector.Map);
             var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, _sectorManager.CurrentSector.Map);
             foreach (var node in actorNodes)
             {
                 foreach (var targetNode in targetNodes)
                 {
                     var isInDistanceInNode = act.CheckDistance(node, targetNode, _sectorManager.CurrentSector.Map);
-                    if (!isInDistanceInNode)
+                    if (isInDistanceInNode)
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         }
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)
