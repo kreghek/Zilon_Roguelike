@@ -176,6 +176,11 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>true, если указанный узел проходим для актёра. Иначе - false.</returns>
         public override bool IsPositionAvailableFor(IGraphNode targetNode, IActor actor)
         {
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
             if (!base.IsPositionAvailableFor(targetNode, actor))
             {
                 return false;
