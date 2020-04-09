@@ -16,7 +16,7 @@ namespace Zilon.Bot.Players.Logics
 
         protected ISectorMap Map { get; }
 
-        public MoveLogicStateBase(IDecisionSource decisionSource, ISectorManager sectorManager)
+        protected MoveLogicStateBase(IDecisionSource decisionSource, ISectorManager sectorManager)
         {
             if (sectorManager is null)
             {
