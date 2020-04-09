@@ -16,6 +16,11 @@ namespace Zilon.Bot.Players.Logics
 
         public ExitLogicState(ISectorManager sectorManager)
         {
+            if (sectorManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorManager));
+            }
+
             _sector = sectorManager.CurrentSector;
             _map = sectorManager.CurrentSector.Map;
         }

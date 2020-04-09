@@ -18,6 +18,11 @@ namespace Zilon.Bot.Players.Logics
 
         public RoamingLogicState(IDecisionSource decisionSource, ISectorManager sectorManager)
         {
+            if (sectorManager is null)
+            {
+                throw new ArgumentNullException(nameof(sectorManager));
+            }
+
             _decisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
             _map = sectorManager.CurrentSector.Map;
         }

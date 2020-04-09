@@ -10,9 +10,9 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class LootLogicState : LogicStateBase
     {
-        public IPropContainer _propContainer;
+        private IPropContainer _propContainer;
 
-        public MoveTask _moveTask;
+        private MoveTask _moveTask;
 
         private readonly ISectorMap _map;
         private readonly ISectorManager _sectorManager;
@@ -30,6 +30,11 @@ namespace Zilon.Bot.Players.Logics
 
         public IPropContainer FindContainer(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
             var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
                 actor.Node,
                 _map);

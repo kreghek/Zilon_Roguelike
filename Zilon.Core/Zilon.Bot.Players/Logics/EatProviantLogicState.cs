@@ -13,6 +13,11 @@ namespace Zilon.Bot.Players.Logics
     {
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
             var eatFoodTask = CheckHazard(actor, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
             if (eatFoodTask != null)
             {
