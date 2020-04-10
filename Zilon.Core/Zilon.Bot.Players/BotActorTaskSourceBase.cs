@@ -25,10 +25,15 @@ namespace Zilon.Bot.Players
 
         public IActorTask[] GetActorTasks(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
             // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
             if (actor.Owner != _player)
             {
-                return new IActorTask[0];
+                return System.Array.Empty<IActorTask>();
             }
 
             // Основные компоненты:
@@ -69,7 +74,7 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    return new IActorTask[0];
+                    return System.Array.Empty<IActorTask>();
                 }
 
                 return new[] { actorTask };
@@ -79,7 +84,7 @@ namespace Zilon.Bot.Players
                 _actorStrategies.Remove(actor);
             }
 
-            return new IActorTask[0];
+            return System.Array.Empty<IActorTask>();
         }
 
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);

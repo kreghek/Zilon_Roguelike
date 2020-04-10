@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -12,64 +12,50 @@ namespace Zilon.Bot.Players.Logics
 {
     //TODO Перепроверить работу этого состояния.
     // Есть подозрение, что оно не работает.
-    public sealed class ExploreLogicState : LogicStateBase
+    public sealed class ExploreLogicState : MoveLogicStateBase
     {
-        private MoveTask _moveTask;
-        private IdleTask _idleTask;
-
-        private readonly IDecisionSource _decisionSource;
-        private readonly ISectorMap _map;
-
-        public ExploreLogicState(IDecisionSource decisionSource, ISectorManager sectorManager)
+        public ExploreLogicState(IDecisionSource decisionSource, ISectorManager sectorManager) : base(decisionSource, sectorManager)
         {
-            _decisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
-            _map = sectorManager.CurrentSector.Map;
-        }
-
-        protected override void ResetData()
-        {
-            _moveTask = null;
-            _idleTask = null;
         }
 
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
-            if (_moveTask == null)
+            if (MoveTask == null)
             {
-                _moveTask = CreateBypassMoveTask(actor, strategyData);
+                MoveTask = CreateBypassMoveTask(actor, strategyData);
 
-                if (_moveTask != null)
+                if (MoveTask != null)
                 {
-                    return _moveTask;
+                    return MoveTask;
                 }
                 else
                 {
                     // Это может произойти, если актёр не выбрал следующий узел.
                     // Тогда переводим актёра в режим ожидания.
 
-                    _idleTask = new IdleTask(actor, _decisionSource);
-                    return _idleTask;
+                    IdleTask = new IdleTask(actor, DecisionSource);
+                    return IdleTask;
                 }
             }
             else
             {
-                if (!_moveTask.IsComplete)
+                if (!MoveTask.IsComplete)
                 {
                     // Если команда на перемещение к целевой точке патруля не закончена,
                     // тогда продолжаем её.
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                    if (!_moveTask.CanExecute())
+                    if (!MoveTask.CanExecute())
                     {
-                        _moveTask = CreateBypassMoveTask(actor, strategyData);
+                        MoveTask = CreateBypassMoveTask(actor, strategyData);
                     }
 
-                    if (_moveTask != null)
+                    if (MoveTask != null)
                     {
-                        return _moveTask;
+                        return MoveTask;
                     }
 
-                    _idleTask = new IdleTask(actor, _decisionSource);
-                    return _idleTask;
+                    IdleTask = new IdleTask(actor, DecisionSource);
+                    return IdleTask;
                 }
                 else
                 {
@@ -81,7 +67,7 @@ namespace Zilon.Bot.Players.Logics
 
         private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData)
         {
-            var observeNodes = _map.Nodes.Where(x => _map.DistanceBetween(x, actor.Node) < 5);
+            var observeNodes = Map.Nodes.Where(x => Map.DistanceBetween(x, actor.Node) < 5);
 
             foreach (var mapNode in observeNodes)
             {
@@ -92,7 +78,7 @@ namespace Zilon.Bot.Players.Logics
             var frontNodes = new HashSet<IGraphNode>();
             foreach (var observedNode in strategyData.ObserverdNodes)
             {
-                var nextNodes = _map.GetNext(observedNode);
+                var nextNodes = Map.GetNext(observedNode);
 
                 var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
 
@@ -102,14 +88,14 @@ namespace Zilon.Bot.Players.Logics
                 }
 
                 // Примечаем выходы
-                if (_map.Transitions.ContainsKey(observedNode))
+                if (Map.Transitions.ContainsKey(observedNode))
                 {
                     strategyData.ExitNodes.Add(observedNode);
                 }
             }
 
             var emptyFrontNodes = !frontNodes.Any();
-            var allNodesObserved = _map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+            var allNodesObserved = Map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
 
             Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
                 "Это состояние выполняется, только если есть неисследованые узлы.");
@@ -133,11 +119,11 @@ namespace Zilon.Bot.Players.Logics
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
             for (var i = 0; i < 3; i++)
             {
-                var targetNode = _decisionSource.SelectTargetRoamingNode(availableNodesArray);
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
 
-                if (_map.IsPositionAvailableFor(targetNode, actor))
+                if (Map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var moveTask = new MoveTask(actor, targetNode, _map);
+                    var moveTask = new MoveTask(actor, targetNode, Map);
 
                     return moveTask;
                 }

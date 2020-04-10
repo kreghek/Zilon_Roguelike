@@ -13,6 +13,11 @@ namespace Zilon.Bot.Players.Logics
     {
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
