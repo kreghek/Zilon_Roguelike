@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Common;
-using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -69,7 +69,7 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            if (!matrix[coords.X, coords.Y])
+            if (!IsAvailableFor(matrix, coords))
             {
                 return false;
             }
@@ -86,6 +86,21 @@ namespace Zilon.Core.MapGenerators
                 {
                     return false;
                 }
+            }
+
+            return true;
+        }
+
+        public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)
+        {
+            if (matrix is null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+
+            if (!matrix[coords.X, coords.Y])
+            {
+                return false;
             }
 
             return true;

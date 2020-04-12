@@ -142,8 +142,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 return false;
             }
 
-            var startPoint = availableStartPoints.First(x => MapFactoryHelper.IsAvailableFor7(matrix, x));
-            var floodPoints = HexBinaryFiller.FloodFill7(matrix, startPoint);
+            var startPoint = availableStartPoints.First(x => MapFactoryHelper.IsAvailableFor(matrix, x));
+            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
 
             foreach (var point in floodPoints)
             {
