@@ -4,6 +4,11 @@ using NUnit.Framework;
 
 namespace Zilon.Core.Common.Tests
 {
+    /// <summary>
+    /// Тесты проверяют корректность работы заливки размером в 7.
+    /// Заливка размером 7 - это заливка ттолько тех узлов, для которых есть все соседи.
+    /// То есть может поместиться персонаж размером в 7.
+    /// </summary>
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class HexBinaryFillerTests
@@ -52,7 +57,7 @@ namespace Zilon.Core.Common.Tests
             regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
         }
 
-        private void PlaceArea(int x, int y, Matrix<bool> matrix)
+        private static void PlaceArea(int x, int y, Matrix<bool> matrix)
         {
             matrix.Items[x, y] = true;
             var neighbors = HexHelper.GetNeighbors(x, y);
