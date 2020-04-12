@@ -32,8 +32,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
         public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords)
         {
-            return Array.Empty<InteriorObjectMeta>();
-
             if (regionDraftCoords is null)
             {
                 throw new ArgumentNullException(nameof(regionDraftCoords));

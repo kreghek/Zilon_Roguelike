@@ -51,7 +51,7 @@ namespace Zilon.Core.MassSectorGenerator
             // Проверка
 
             var sectorValidators = GetValidatorsInAssembly();
-            var checkTask = Task.CompletedTask;// CheckSectorAsync(sectorValidators, serviceProvider, sector);
+            var checkTask = CheckSectorAsync(sectorValidators, serviceProvider, sector);
 
             var saveTask = SaveMapAsImageAsync(outputPath, sector);
 

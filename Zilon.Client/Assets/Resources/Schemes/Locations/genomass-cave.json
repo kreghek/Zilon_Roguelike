@@ -102,8 +102,8 @@
 			"MapGeneratorOptions":
 			{
 				"MapGenerator": "CellularAutomaton",
-				"MapWidth": 175,
-				"MapHeight": 175,
+				"MapWidth": 25,
+				"MapHeight": 25,
 				"ChanceToStartAlive": 45,
 			},
 			
