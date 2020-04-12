@@ -1,14 +1,20 @@
 ﻿using FluentAssertions;
+
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture()]
+    [TestFixture]
     public class MapFactoryHelperTests
     {
-        [Test()]
+        /// <summary>
+        /// Тест проверяет, что матрица успешно расширяется до размера 7.
+        /// Это означает, что для каждого узла вокруг будут добавлены соседи с тем же значением.
+        /// </summary>
+        [Test]
         public void ResizeMatrixTo7Test()
         {
             // ARRANGE
