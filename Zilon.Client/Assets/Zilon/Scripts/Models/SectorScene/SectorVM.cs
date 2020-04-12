@@ -342,7 +342,7 @@ public class SectorVM : MonoBehaviour
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
-            actorViewModel.GraphicRoot = actorGraphic;
+            actorViewModel.SetGraphicRoot(actorGraphic);
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
@@ -424,7 +424,7 @@ public class SectorVM : MonoBehaviour
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
         var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
-        actorViewModel.GraphicRoot = actorGraphic;
+        actorViewModel.SetGraphicRoot(actorGraphic);
         actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
         var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
