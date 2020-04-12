@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -11,6 +12,11 @@ namespace Zilon.Bot.Players
         public static IEnumerable<IPropContainer> FindAvailableContainers(IEnumerable<IPropContainer> containers,
             IGraphNode observeNode, ISectorMap map)
         {
+            if (containers is null)
+            {
+                throw new System.ArgumentNullException(nameof(containers));
+            }
+
             foreach (var container in containers)
             {
                 // Проверяем необходимость проверки контейнера

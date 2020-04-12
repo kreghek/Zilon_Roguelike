@@ -12,6 +12,11 @@ namespace Zilon.Bot.Players
 
         public static bool CheckTargetVisible(ISectorMap map, IGraphNode node, IGraphNode target)
         {
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
             var distance = map.DistanceBetween(node, target);
             var isInSignRange = distance <= SIGN_RANGE;
             if (!isInSignRange)
