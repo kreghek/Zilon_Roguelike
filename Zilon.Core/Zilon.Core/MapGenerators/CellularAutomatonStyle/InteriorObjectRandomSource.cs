@@ -44,7 +44,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
 
             // Выбираем все координаты, по которым может пройти персонаж размером 7.
-            var passble7Coords = GetAllPassableSize7Coords(regionDraftCoords);
+            var passableCoords = GetAllPassableSize7Coords(regionDraftCoords);
 
             var openCoords = new List<OffsetCoords>(coordsInCenter);
             if (!openCoords.Any())
@@ -62,7 +62,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // декора перекрывает проход к какой-либо доступной ячейке).
                 for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
-                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passble7Coords, out var rolledCoord);
+                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, out var rolledCoord);
 
                     // Вне зависимости от корректности rolledCoord
                     // убираем его из открытых координат.
@@ -97,7 +97,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static OffsetCoords[] GetAllPassableSize7Coords(OffsetCoords[] regionDraftCoords)
         {
-            return GetAvailableCoords(regionDraftCoords).ToArray();
+            return regionDraftCoords;
         }
 
         private bool TryRollInteriorCoord(OffsetCoords[] openCoords,
