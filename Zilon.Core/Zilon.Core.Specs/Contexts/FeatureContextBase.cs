@@ -225,13 +225,14 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var containerManager = ServiceProvider.GetRequiredService<IPropContainerManager>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
+            var staticObject = new StaticObject(node, id);
+            staticObject.AddModule(chest);
 
-            containerManager.Add(chest);
+            sectorManager.CurrentSector.StaticObjectManager.Add(staticObject);
 
             return chest;
         }
@@ -322,8 +323,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMapFactory, FuncMapFactory>();
             serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();
             serviceCollection.AddSingleton<ISectorManager, SectorManager>();
-            serviceCollection.AddSingleton<IActorManager, ActorManager>();
-            serviceCollection.AddSingleton<IPropContainerManager, StaticObjectManager>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<ICitizenGenerator, CitizenGenerator>();

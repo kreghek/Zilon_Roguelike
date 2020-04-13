@@ -14,13 +14,14 @@ namespace Zilon.Core.Tactics
         int Id { get; }
 
         /// <summary>
-        /// Данные о содержимом статического объекта.
-        /// </summary>
-        IPropContainer PropContainer { get; }
-
-        /// <summary>
         /// Узер карты сектора, в котором находится контейнер.
         /// </summary>
         IGraphNode Node { get; }
+
+        TSectorObjectModule GetModule<TSectorObjectModule>();
+
+        void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule);
+
+        bool HasModule<TSectorObjectModule>();
     }
 }

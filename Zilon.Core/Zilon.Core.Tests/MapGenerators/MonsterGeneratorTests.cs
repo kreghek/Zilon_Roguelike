@@ -56,9 +56,9 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
-            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
-            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IPropContainer>());
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
 
             var monsterGenerator = new MonsterGenerator(schemeService,
                 randomSource);

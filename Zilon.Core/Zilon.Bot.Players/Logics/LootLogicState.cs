@@ -36,7 +36,7 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var containerStaticObjects = _sectorManager.CurrentSector.StaticObjectManager.Items
-                .Where(x => x.PropContainer != null);
+                .Where(x => x.HasModule<IPropContainer>());
 
             var foundContainers = LootHelper.FindAvailableContainers(containerStaticObjects,
                 actor.Node,
@@ -52,7 +52,7 @@ namespace Zilon.Bot.Players.Logics
         {
             _staticObject = FindContainer(actor);
 
-            if (_staticObject == null || !_staticObject.PropContainer.Content.CalcActualItems().Any())
+            if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
@@ -92,12 +92,12 @@ namespace Zilon.Bot.Players.Logics
         private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container)
         {
             var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
-                                container.PropContainer.Content.CalcActualItems(),
+                                container.GetModule<IPropContainer>().Content.CalcActualItems(),
                                 System.Array.Empty<IProp>());
 
-            var containerTransfer = new PropTransfer(container.PropContainer.Content,
+            var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
                 System.Array.Empty<IProp>(),
-                container.PropContainer.Content.CalcActualItems());
+                container.GetModule<IPropContainer>().Content.CalcActualItems());
 
             return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
         }
