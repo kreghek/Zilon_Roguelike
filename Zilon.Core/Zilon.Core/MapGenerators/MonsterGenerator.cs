@@ -70,7 +70,7 @@ namespace Zilon.Core.MapGenerators
             foreach (var region in monsterRegions)
             {
                 var regionNodes = region.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle);
-                var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);
+                var containerNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
                 var availableMonsterNodes = regionNodes.Except(containerNodes);
 
                 var freeNodes = new List<IGraphNode>(availableMonsterNodes);

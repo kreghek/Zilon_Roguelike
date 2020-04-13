@@ -10,7 +10,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class LootLogicState : LogicStateBase
     {
-        private IPropContainer _propContainer;
+        private IStaticObject _staticObject;
 
         private MoveTask _moveTask;
 
@@ -28,14 +28,17 @@ namespace Zilon.Bot.Players.Logics
             _sectorManager = sectorManager;
         }
 
-        public IPropContainer FindContainer(IActor actor)
+        public IStaticObject FindContainer(IActor actor)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
+            var containerStaticObjects = _sectorManager.CurrentSector.StaticObjectManager.Items
+                .Where(x => x.PropContainer != null);
+
+            var foundContainers = LootHelper.FindAvailableContainers(containerStaticObjects,
                 actor.Node,
                 _map);
 
@@ -47,23 +50,23 @@ namespace Zilon.Bot.Players.Logics
 
         public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
         {
-            _propContainer = FindContainer(actor);
+            _staticObject = FindContainer(actor);
 
-            if (_propContainer == null || !_propContainer.Content.CalcActualItems().Any())
+            if (_staticObject == null || !_staticObject.PropContainer.Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
             }
 
-            var distance = _map.DistanceBetween(actor.Node, _propContainer.Node);
+            var distance = _map.DistanceBetween(actor.Node, _staticObject.Node);
             if (distance <= 1)
             {
-                return TakeAllFromContainerTask(actor, _propContainer);
+                return TakeAllFromContainerTask(actor, _staticObject);
             }
             else
             {
                 var storedMoveTask = _moveTask;
-                var moveTask = MoveToContainerTask(actor, _propContainer.Node, storedMoveTask);
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask);
                 _moveTask = moveTask;
                 return moveTask;
             }
@@ -86,22 +89,22 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
-        private static IActorTask TakeAllFromContainerTask(IActor actor, IPropContainer container)
+        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container)
         {
             var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
-                                container.Content.CalcActualItems(),
+                                container.PropContainer.Content.CalcActualItems(),
                                 System.Array.Empty<IProp>());
 
-            var containerTransfer = new PropTransfer(container.Content,
+            var containerTransfer = new PropTransfer(container.PropContainer.Content,
                 System.Array.Empty<IProp>(),
-                container.Content.CalcActualItems());
+                container.PropContainer.Content.CalcActualItems());
 
             return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
         }
 
         protected override void ResetData()
         {
-            _propContainer = null;
+            _staticObject = null;
             _moveTask = null;
         }
     }

@@ -9,7 +9,7 @@ namespace Zilon.Bot.Players
 {
     public static class LootHelper
     {
-        public static IEnumerable<IPropContainer> FindAvailableContainers(IEnumerable<IPropContainer> containers,
+        public static IEnumerable<IStaticObject> FindAvailableContainers(IEnumerable<IStaticObject> containers,
             IGraphNode observeNode, ISectorMap map)
         {
             if (containers is null)
@@ -20,7 +20,7 @@ namespace Zilon.Bot.Players
             foreach (var container in containers)
             {
                 // Проверяем необходимость проверки контейнера
-                var props = container.Content.CalcActualItems();
+                var props = container.PropContainer.Content.CalcActualItems();
                 if (!props.Any())
                 {
                     continue;

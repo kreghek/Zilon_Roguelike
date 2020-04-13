@@ -69,7 +69,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
-            sectorMock.SetupGet(x => x.PropContainerManager).Returns(propContainerManager);
+            sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
             var monsterRegions = new List<MapRegion> {
