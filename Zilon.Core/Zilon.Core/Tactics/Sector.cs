@@ -240,13 +240,13 @@ namespace Zilon.Core.Tactics
         private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
         {
             var container = (IStaticObject)sender;
-            if (!container.Content.CalcActualItems().Any())
+            if (!container.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
-                PropContainerManager.Remove(container);
+                StaticObjectManager.Remove(container);
             }
         }
 
-        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -349,9 +349,12 @@ namespace Zilon.Core.Tactics
 
             var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
 
+            var staticObject = new StaticObject(actor.Node, default);
+            staticObject.AddModule<IPropContainer>(loot);
+
             if (loot.Content.CalcActualItems().Any())
             {
-                PropContainerManager.Add(loot);
+                StaticObjectManager.Add(staticObject);
             }
 
             if (ScoreManager != null)

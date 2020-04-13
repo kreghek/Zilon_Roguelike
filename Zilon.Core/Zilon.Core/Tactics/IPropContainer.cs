@@ -42,14 +42,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<PropStoreEventArgs> ItemsRemoved;
 
         /// <summary>
-        /// Блокер проходимости карты.
-        /// </summary>
-        /// <remarks>
-        /// Это значение задаётся, если контейнер должен блокировать проходимость.
-        /// </remarks>
-        bool IsMapBlock { get; }
-
-        /// <summary>
         /// Открытие контейнера.
         /// </summary>
         void Open();

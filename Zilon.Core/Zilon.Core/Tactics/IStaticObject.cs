@@ -23,5 +23,13 @@ namespace Zilon.Core.Tactics
         void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule);
 
         bool HasModule<TSectorObjectModule>();
+
+        /// <summary>
+        /// Блокер проходимости карты.
+        /// </summary>
+        /// <remarks>
+        /// Это значение задаётся, если контейнер должен блокировать проходимость.
+        /// </remarks>
+        bool IsMapBlock { get; }
     }
 }

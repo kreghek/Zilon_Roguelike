@@ -28,7 +28,6 @@ namespace Zilon.Core.Tactics
 
         public IPropStore Content { get; }
         public bool IsOpened { get; private set; }
-        public abstract bool IsMapBlock { get; }
         public PropContainerPurpose Purpose { get; set; }
 
         public event EventHandler Opened;

@@ -66,7 +66,7 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container));
+            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container.GetModule<IPropContainer>()));
             PlayerState.TaskSource.Intent(intetion);
         }
 

@@ -26,6 +26,8 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         public IGraphNode Node { get; }
 
+        public abstract bool IsMapBlock { get; }
+
         /// <inheritdoc/>
         public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule)
         {
