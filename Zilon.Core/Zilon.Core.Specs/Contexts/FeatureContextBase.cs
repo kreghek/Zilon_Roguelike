@@ -323,7 +323,7 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();
             serviceCollection.AddSingleton<ISectorManager, SectorManager>();
             serviceCollection.AddSingleton<IActorManager, ActorManager>();
-            serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
+            serviceCollection.AddSingleton<IPropContainerManager, StaticObjectManager>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<ICitizenGenerator, CitizenGenerator>();

@@ -61,19 +61,19 @@ namespace Zilon.Core.Tactics
 
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
-        public IPropContainerManager PropContainerManager { get; }
+        public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases { get => _diseases; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
             IActorManager actorManager,
-            IPropContainerManager propContainerManager,
+            IStaticObjectManager staticObjectManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
             ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            PropContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            StaticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
@@ -82,8 +82,8 @@ namespace Zilon.Core.Tactics
 
             ActorManager.Added += ActorManager_Added;
             ActorManager.Removed += ActorManager_Remove;
-            PropContainerManager.Added += PropContainerManager_Added;
-            PropContainerManager.Removed += PropContainerManager_Remove;
+            StaticObjectManager.Added += StaticObjectManager_Added;
+            StaticObjectManager.Removed += StaticObjectManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
@@ -221,7 +221,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -239,14 +239,14 @@ namespace Zilon.Core.Tactics
 
         private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
         {
-            var container = (IPropContainer)sender;
+            var container = (IStaticObject)sender;
             if (!container.Content.CalcActualItems().Any())
             {
                 PropContainerManager.Remove(container);
             }
         }
 
-        private void PropContainerManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
         {
             foreach (var container in e.Items)
             {

@@ -10,7 +10,7 @@ namespace Zilon.Core.Tests.Tactics
     {
         protected override ISectorEntityManager<IPropContainer> CreateManager()
         {
-            var propContainerManager = new PropContainerManager();
+            var propContainerManager = new StaticObjectManager();
             return propContainerManager;
         }
     }
