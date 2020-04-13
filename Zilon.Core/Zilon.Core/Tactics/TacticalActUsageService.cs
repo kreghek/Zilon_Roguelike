@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -115,6 +116,20 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        {
+            yield return baseNode;
+
+            if (physicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
         private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
         {
             bool isInDistance;
@@ -124,7 +139,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                isInDistance = act.CheckDistance(actor.Node, target.Node, _sectorManager.CurrentSector.Map);
+                isInDistance = IsInDistance(actor, target, act);
             }
 
             if (!isInDistance)
@@ -169,6 +184,25 @@ namespace Zilon.Core.Tactics
 
             // Сброс КД, если он есть.
             act.StartCooldownIfItIs();
+        }
+
+        private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
+        {
+            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, _sectorManager.CurrentSector.Map);
+            var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, _sectorManager.CurrentSector.Map);
+            foreach (var node in actorNodes)
+            {
+                foreach (var targetNode in targetNodes)
+                {
+                    var isInDistanceInNode = act.CheckDistance(node, targetNode, _sectorManager.CurrentSector.Map);
+                    if (isInDistanceInNode)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)

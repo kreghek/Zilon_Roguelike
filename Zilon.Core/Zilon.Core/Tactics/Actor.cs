@@ -46,6 +46,7 @@ namespace Zilon.Core.Tactics
 
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
+        public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)

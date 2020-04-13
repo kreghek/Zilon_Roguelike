@@ -55,6 +55,36 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(actor));
             }
 
+            var testTargetNodes = GetActorTestTargetNodes(actor, targetNode);
+
+            foreach (var node in testTargetNodes)
+            {
+                var isAvailable = IsNodeAvailableForActor(node, actor);
+                if (!isAvailable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
+        {
+            yield return baseTargetNode;
+
+            if (actor.Person.PhysicalSize == Persons.PhysicalSize.Size7)
+            {
+                var neighbors = GetNext(baseTargetNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
+        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
+        {
             if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
             {
                 return true;

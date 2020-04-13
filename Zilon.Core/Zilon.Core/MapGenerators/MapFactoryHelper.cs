@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Schemes;
+using Zilon.Core.Common;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -32,6 +32,78 @@ namespace Zilon.Core.MapGenerators
             var next = sectorNode.Biome.GetNext(sectorNode);
 
             return next.Select(node => new RoomTransition(node as ISectorNode));
+        }
+
+        public static Matrix<bool> ResizeMatrixTo7(Matrix<bool> matrix)
+        {
+            if (matrix is null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+
+            var resizedMatrix = matrix.CreateMatrixWithMargins(1, 1);
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    if (matrix[x, y])
+                    {
+                         var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
+                        foreach (var neightbor in neighbors)
+                        {
+                            var resizedX = neightbor.X;
+                            var resizedY = neightbor.Y;
+                            resizedMatrix[resizedX, resizedY] = true;
+                        }
+                    }
+                }
+            }
+
+            return resizedMatrix;
+        }
+
+        public static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
+        {
+            if (matrix is null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+
+            if (!IsAvailableFor(matrix, coords))
+            {
+                return false;
+            }
+
+            var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
+            foreach (var neightbor in neighbors)
+            {
+                if (!matrix.IsIn(neightbor.X, neightbor.Y))
+                {
+                    return false;
+                }
+
+                if (!matrix[neightbor.X, neightbor.Y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)
+        {
+            if (matrix is null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+
+            if (!matrix[coords.X, coords.Y])
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

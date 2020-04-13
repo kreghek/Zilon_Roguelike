@@ -24,7 +24,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
-    public ActorGraphicBase GraphicRoot;
+    public ActorGraphicBase GraphicRoot { get; private set; }
 
     private readonly List<HitSfx> _effectList;
 
@@ -43,6 +43,11 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public IActor Actor { get; set; }
 
     public ISectorUiState PlayerState { get; set; }
+
+    public void SetGraphicRoot(ActorGraphicBase actorGraphic)
+    {
+        GraphicRoot = actorGraphic;
+    }
 
     [UsedImplicitly]
     public void Start()

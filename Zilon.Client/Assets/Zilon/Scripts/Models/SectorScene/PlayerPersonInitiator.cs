@@ -137,7 +137,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         actorViewModel.PlayerState = _playerState;
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
         actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
-        actorViewModel.GraphicRoot = actorGraphic;
+        actorViewModel.SetGraphicRoot(actorGraphic);
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;

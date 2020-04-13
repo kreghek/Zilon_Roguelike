@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -9,18 +10,30 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     internal sealed class RegionDraft
     {
+        private readonly HashSet<OffsetCoords> _coords;
+
         /// <summary>
         /// Конструктор черновика региона карты.
         /// </summary>
         /// <param name="coords"></param>
-        public RegionDraft(OffsetCoords[] coords)
+        public RegionDraft(IEnumerable<OffsetCoords> coords)
         {
-            Coords = coords ?? throw new ArgumentNullException(nameof(coords));
+            if (coords is null)
+            {
+                throw new ArgumentNullException(nameof(coords));
+            }
+
+            _coords = new HashSet<OffsetCoords>(coords);
         }
 
         /// <summary>
         /// Координаты, которые входя в черновик региона.
         /// </summary>
-        public OffsetCoords[] Coords { get; }
+        public IEnumerable<OffsetCoords> Coords { get => _coords; }
+
+        public bool Contains(OffsetCoords coords)
+        {
+            return _coords.Contains(coords);
+        }
     }
 }
