@@ -13,8 +13,6 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </remarks>
     public abstract class ActorTaskBase: IActorTask
     {
-        protected bool _isComplete;
-
         [ExcludeFromCodeCoverage]
         protected ActorTaskBase([NotNull] IActor actor)
         {
@@ -23,7 +21,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected IActor Actor { get; }
 
-        public virtual bool IsComplete => _isComplete;
+        public virtual bool IsComplete { get; protected set; }
 
         public abstract void Execute();
     }
