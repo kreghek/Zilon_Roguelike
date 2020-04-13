@@ -18,6 +18,8 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
+        private int _gameLoopCounter;
+
         /// <inheritdoc/>
         public event EventHandler Moved;
 
@@ -47,6 +49,7 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public int GameLoopCounter { get => _gameLoopCounter; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -429,6 +432,15 @@ namespace Zilon.Core.Tactics
 
                 default:
                     throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        public void IncreaseGameLoopCounter(int value)
+        {
+            _gameLoopCounter += value;
+            if (_gameLoopCounter >= 1000)
+            {
+                _gameLoopCounter -= 1000;
             }
         }
     }
