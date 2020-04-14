@@ -8,6 +8,7 @@ jobs:
       - checkout
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
       - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
+      - sonarcloud/scan
       - persist_to_workspace:
           root: bin
           paths:
@@ -336,11 +337,16 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
+
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.1
+
 workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - build:
+          context: SonarCloud
       - test_45:
           requires:
             - build
@@ -374,6 +380,7 @@ workflows:
   release:
     jobs:
       - build:
+          context: SonarCloud
           filters:
             branches:
               only:
@@ -420,7 +427,8 @@ workflows:
                 - master
                 - beta
     jobs:
-      - build
+      - build:
+          context: SonarCloud
       - test_45:
           requires:
             - build
