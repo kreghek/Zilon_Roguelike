@@ -378,7 +378,7 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build:
+      - build
       - sonar-scan:
           context: SonarCloud
       - test_45:
