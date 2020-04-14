@@ -35,6 +35,7 @@ public class SectorVM : MonoBehaviour
 {
     private readonly List<MapNodeVM> _nodeViewModels;
     private readonly List<ContainerVm> _containerViewModels;
+    private IStaticObjectManager _propContainerManager;
 
     private bool _interuptCommands;
 
@@ -72,7 +73,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-    private IPropContainerManager _propContainerManager;
+    
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -230,11 +231,11 @@ public class SectorVM : MonoBehaviour
         _inventoryState.SelectedProp = null;
     }
 
-    private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+    private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
-        foreach (var container in e.Items)
+        foreach (var staticObject in e.Items)
         {
-            CreateContainerViewModel(_nodeViewModels, container);
+            CreateContainerViewModel(_nodeViewModels, staticObject);
         }
     }
 
@@ -258,10 +259,10 @@ public class SectorVM : MonoBehaviour
 
         sectorNode.Sector.ScoreManager = _scoreManager;
 
-        _propContainerManager = sectorNode.Sector.PropContainerManager;
+        _propContainerManager = sectorNode.Sector.StaticObjectManager;
 
-        _propContainerManager.Added += PropContainerManager_Added;
-        _propContainerManager.Removed += PropContainerManager_Removed;
+        _propContainerManager.Added += StaticObjectManager_Added;
+        _propContainerManager.Removed += StaticObjectManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
 
@@ -273,7 +274,7 @@ public class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
-    private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+    private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
         foreach (var container in e.Items)
         {
@@ -285,8 +286,8 @@ public class SectorVM : MonoBehaviour
 
     public void OnDestroy()
     {
-        _propContainerManager.Added -= PropContainerManager_Added;
-        _propContainerManager.Removed -= PropContainerManager_Removed;
+        _propContainerManager.Added -= StaticObjectManager_Added;
+        _propContainerManager.Removed -= StaticObjectManager_Removed;
 
         _gameLoop.Updated -= GameLoop_Updated;
     }
@@ -402,16 +403,16 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
+    private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IStaticObject staticObject)
     {
-        var containerPrefab = GetContainerPrefab(container);
+        var containerPrefab = GetContainerPrefab(staticObject);
 
         var containerViewModel = Instantiate(containerPrefab, transform);
 
-        var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
+        var containerNodeVm = nodeViewModels.Single(x => x.Node == staticObject.Node);
         var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
         containerViewModel.transform.position = containerPosition;
-        containerViewModel.Container = container;
+        containerViewModel.Container = staticObject;
         containerViewModel.Selected += Container_Selected;
         containerViewModel.MouseEnter += ContainerViewModel_MouseEnter;
 
@@ -474,14 +475,14 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private ContainerVm GetContainerPrefab(IPropContainer container)
+    private ContainerVm GetContainerPrefab(IStaticObject staticObject)
     {
-        if (container is ILootContainer)
+        if (staticObject.GetModule<IPropContainer>() is ILootContainer)
         {
             return LootPrefab;
         }
 
-        if (container.Purpose == PropContainerPurpose.Treasures)
+        if (staticObject.GetModule<IPropContainer>().Purpose == PropContainerPurpose.Treasures)
         {
             return ChestPrefab;
         }

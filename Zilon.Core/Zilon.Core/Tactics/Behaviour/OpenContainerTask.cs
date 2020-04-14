@@ -40,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Задачу на открытие сундука нельзя выполнить сквозь стены.");
             }
 
-            Actor.OpenContainer(_staticObject.GetModule<IPropContainer>(), _method);
+            Actor.OpenContainer(_staticObject, _method);
         }
     }
 }

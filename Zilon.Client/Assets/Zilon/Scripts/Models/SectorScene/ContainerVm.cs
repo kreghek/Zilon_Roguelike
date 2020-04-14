@@ -9,20 +9,30 @@ using Zilon.Core.Tactics.Spatial;
 
 public class ContainerVm : MonoBehaviour, IContainerViewModel
 {
+    private IPropContainer _propContainer;
+
     public SpriteRenderer SpriteRenderer;
     public Sprite ClosedSprite;
     public Sprite OpenedSprite;
-
+    private IStaticObject _container;
 
     public event EventHandler Selected;
     public event EventHandler MouseEnter;
 
-    public IPropContainer Container { get; set; }
+    public IStaticObject Container
+    {
+        get => _container; set
+        {
+            _container = value;
+            _propContainer = value.GetModule<IPropContainer>();
+        }
+    }
 
     public void Start()
     {
         SpriteRenderer.sprite = ClosedSprite;
-        Container.Opened += Container_Opened;
+
+        _propContainer.Opened += Container_Opened;
 
         var hexNode = (HexNode)Container.Node;
         //TODO -0.26 вынести в отдельную константу или вообще сервис.
@@ -35,7 +45,7 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
 
     private void OnDestroy()
     {
-        Container.Opened -= Container_Opened;
+        _propContainer.Opened -= Container_Opened;
     }
 
     public void OnMouseDown()

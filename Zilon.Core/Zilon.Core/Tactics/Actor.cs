@@ -94,9 +94,19 @@ namespace Zilon.Core.Tactics
             Moved?.Invoke(this, new EventArgs());
         }
 
-        public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
+        public void OpenContainer(IStaticObject container, IOpenContainerMethod method)
         {
-            var openResult = method?.TryOpen(container);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryOpen(container.GetModule<IPropContainer>());
 
             DoOpenContainer(container, openResult);
         }
@@ -237,7 +247,7 @@ namespace Zilon.Core.Tactics
 
 
         [ExcludeFromCodeCoverage]
-        private void DoOpenContainer(IPropContainer container, IOpenContainerResult openResult)
+        private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)
         {
             var e = new OpenContainerEventArgs(container, openResult);
             OpenedContainer?.Invoke(this, e);

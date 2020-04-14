@@ -117,9 +117,9 @@ public class SectorUiHandler : MonoBehaviour
 
     private IPropContainer GetContainerInNode(IGraphNode targetnNode)
     {
-        var propContainerManager = _sectorManager.CurrentSector.PropContainerManager;
-        var containerInNode = propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
-        return containerInNode;
+        var staticObjectManager = _sectorManager.CurrentSector.StaticObjectManager;
+        var containerInNode = staticObjectManager.Items.FirstOrDefault(x => x.Node == targetnNode);
+        return containerInNode.GetModule<IPropContainer>();
     }
 
     private void HandleHotKeys()

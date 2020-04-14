@@ -46,7 +46,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
-        void OpenContainer(IPropContainer container, IOpenContainerMethod method);
+        void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
         /// <summary>
         /// Происходит, когда актёр переместился.

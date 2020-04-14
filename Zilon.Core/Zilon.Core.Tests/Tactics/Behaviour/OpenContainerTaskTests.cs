@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            actorMock.Verify(x => x.OpenContainer(It.IsAny<IPropContainer>(), It.IsAny<IOpenContainerMethod>()));
+            actorMock.Verify(x => x.OpenContainer(It.IsAny<IStaticObject>(), It.IsAny<IOpenContainerMethod>()));
         }
 
         /// <summary>
