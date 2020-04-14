@@ -187,7 +187,7 @@ namespace Zilon.Core.Specs.Contexts
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
