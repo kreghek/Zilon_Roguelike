@@ -42,12 +42,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new OpenContainerTask(actor, container, method, map);
 
-
-
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             actorMock.Verify(x => x.OpenContainer(It.IsAny<IStaticObject>(), It.IsAny<IOpenContainerMethod>()));
@@ -81,12 +77,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new OpenContainerTask(actor, container, method, map);
 
-
-
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             mapMock.Verify(x => x.TargetIsOnLine(
@@ -102,7 +94,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return method;
         }
 
-        private IStaticObject CreateContainer(IGraphNode containerNode)
+        private static IStaticObject CreateContainer(IGraphNode containerNode)
         {
             var containerMock = new Mock<IStaticObject>();
             containerMock.SetupGet(x => x.Node).Returns(containerNode);

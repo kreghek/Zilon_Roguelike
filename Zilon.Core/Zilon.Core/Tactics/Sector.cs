@@ -338,6 +338,11 @@ namespace Zilon.Core.Tactics
 
         private void ProcessMonsterDeath(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (!(actor.Person is MonsterPerson monsterPerson))
             {
                 return;
