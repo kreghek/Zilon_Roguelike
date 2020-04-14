@@ -30,7 +30,7 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           echo 'export PATH="$PATH:/root/.dotnet/tools"' >> $BASH_ENV
       - sonarcloud/run-scan:
-          project_key: kreghek_Zilon_Roguelike_Core
+          project_key: kreghek_Zilon_Roguelike
           organization: kreghek
           pull_request_base: master
       - run: dotnet build Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
