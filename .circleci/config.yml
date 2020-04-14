@@ -3,14 +3,14 @@ jobs:
   build:
     working_directory: /core-builds
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     steps:
       - checkout
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
       - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       # Это нужно орбу сонара. Из коробки в образе от майкрософт curl не стоит.
-      - run: sudo apt update && sudo apt upgrade
-      - run: sudo apt install curl
+#      - run: sudo apt update && sudo apt upgrade
+#      - run: sudo apt install curl
       - run: curl --version
       - sonarcloud/scan
       - persist_to_workspace:
