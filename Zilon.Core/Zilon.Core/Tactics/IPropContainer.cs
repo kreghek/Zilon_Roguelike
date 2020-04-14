@@ -50,5 +50,13 @@ namespace Zilon.Core.Tactics
         /// Назначение сундука.
         /// </summary>
         PropContainerPurpose Purpose { get; }
+
+        /// <summary>
+        /// Блокер проходимости карты.
+        /// </summary>
+        /// <remarks>
+        /// Это значение задаётся, если контейнер должен блокировать проходимость.
+        /// </remarks>
+        bool IsMapBlock { get; }
     }
 }

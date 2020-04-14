@@ -17,8 +17,13 @@ namespace Zilon.Core.Tactics
         {
         }
 
-        public FixedPropChest(IGraphNode node, IProp[] props, int id) : base(node, new ChestStore(), id)
+        public FixedPropChest(IGraphNode node, IProp[] props, int id) : base(new ChestStore())
         {
+            if (props is null)
+            {
+                throw new System.ArgumentNullException(nameof(props));
+            }
+
             foreach (var prop in props)
             {
                 Content.Add(prop);

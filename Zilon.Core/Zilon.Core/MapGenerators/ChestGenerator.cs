@@ -133,7 +133,10 @@ namespace Zilon.Core.MapGenerators
                         default:
                             throw new InvalidOperationException($"Не корректное назначение {containerPurpose}.");
                     }
-                    sector.StaticObjectManager.Add(container);
+
+                    var staticObject = new StaticObject(containerNode, default);
+                    staticObject.AddModule(container);
+                    sector.StaticObjectManager.Add(staticObject);
 
                     chestCounter--;
 

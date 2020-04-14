@@ -16,6 +16,38 @@ namespace Zilon.Core.Tactics
             Content.Removed += Content_Removed;
         }
 
+        /// <inheritdoc/>
+        public IPropStore Content { get; }
+
+        /// <inheritdoc/>
+        public bool IsOpened { get; private set; }
+
+        /// <inheritdoc/>
+        public PropContainerPurpose Purpose { get; set; }
+
+        /// <inheritdoc/>
+        public abstract bool IsMapBlock { get; }
+
+        /// <inheritdoc/>
+        public event EventHandler Opened;
+        /// <inheritdoc/>
+        public event EventHandler<PropStoreEventArgs> ItemsAdded;
+        /// <inheritdoc/>
+        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
+
+        /// <inheritdoc/>
+        public void Open()
+        {
+            IsOpened = true;
+            DoSetIsOpened();
+        }
+
+        /// <inheritdoc/>
+        private void DoSetIsOpened()
+        {
+            Opened?.Invoke(this, EventArgs.Empty);
+        }
+
         private void Content_Removed(object sender, PropStoreEventArgs e)
         {
             ItemsRemoved?.Invoke(this, e);
@@ -24,25 +56,6 @@ namespace Zilon.Core.Tactics
         private void Content_Added(object sender, PropStoreEventArgs e)
         {
             ItemsAdded?.Invoke(this, e);
-        }
-
-        public IPropStore Content { get; }
-        public bool IsOpened { get; private set; }
-        public PropContainerPurpose Purpose { get; set; }
-
-        public event EventHandler Opened;
-        public event EventHandler<PropStoreEventArgs> ItemsAdded;
-        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
-
-        public void Open()
-        {
-            IsOpened = true;
-            DoSetIsOpened();
-        }
-
-        private void DoSetIsOpened()
-        {
-            Opened?.Invoke(this, EventArgs.Empty);
         }
     }
 }

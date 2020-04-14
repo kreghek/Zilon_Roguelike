@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public DropTableLoot(IGraphNode node,
             IDropTableScheme[] dropTables,
-            IDropResolver dropResolver) : base(node, new DropTableChestStore(dropTables, dropResolver))
+            IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
         {
         }
     }

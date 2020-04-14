@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public DropTablePropChest(IGraphNode node,
             IDropTableScheme[] dropTables,
-            IDropResolver dropResolver) : base(node, new DropTableChestStore(dropTables, dropResolver))
+            IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
         {
         }
 
@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics
         public DropTablePropChest(IGraphNode node,
             IDropTableScheme[] dropTables,
             IDropResolver dropResolver,
-            int id) : base(node, new DropTableChestStore(dropTables, dropResolver), id)
+            int id) : base(new DropTableChestStore(dropTables, dropResolver), id)
         {
         }
     }

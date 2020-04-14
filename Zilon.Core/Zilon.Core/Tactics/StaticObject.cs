@@ -26,7 +26,8 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         public IGraphNode Node { get; }
 
-        public abstract bool IsMapBlock { get; }
+        /// <inheritdoc/>
+        public bool IsMapBlock { get => GetIsMapBlock(); }
 
         /// <inheritdoc/>
         public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule)
@@ -40,9 +41,17 @@ namespace Zilon.Core.Tactics
             return (TSectorObjectModule)_modules[typeof(TSectorObjectModule)];
         }
 
+        /// <inheritdoc/>
         public bool HasModule<TSectorObjectModule>()
         {
             return _modules.ContainsKey(typeof(TSectorObjectModule));
+        }
+
+        /// <inheritdoc/>
+        private bool GetIsMapBlock()
+        {
+            var propContainer = GetModule<IPropContainer>();
+            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
     }
 }

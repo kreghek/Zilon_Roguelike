@@ -9,7 +9,6 @@ using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -230,9 +229,9 @@ namespace Zilon.Core.Tactics
                     Map.HoldNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModule<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved += LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved += LootContainer_ItemsRemoved;
                 }
             }
         }
@@ -255,9 +254,9 @@ namespace Zilon.Core.Tactics
                     Map.ReleaseNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModule<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved -= LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved -= LootContainer_ItemsRemoved;
                 }
             }
         }
