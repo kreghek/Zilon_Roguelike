@@ -211,7 +211,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
             var botPlayer = ServiceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
@@ -255,7 +255,8 @@ namespace Zilon.Core.Specs.Contexts
 
         public IActor GetMonsterById(int id)
         {
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
 
             var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
