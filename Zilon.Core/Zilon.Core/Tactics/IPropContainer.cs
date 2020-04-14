@@ -1,5 +1,5 @@
 ﻿using System;
-using Zilon.Core.Graphs;
+
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,19 +10,6 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public interface IPropContainer: IPassMapBlocker
     {
-        /// <summary>
-        /// Идентфикиатор контейнера.
-        /// </summary>
-        /// <remarks>
-        /// Задаётся и используется в тестах для выборки сундука.
-        /// </remarks>
-        int Id { get; }
-
-        /// <summary>
-        /// Узер карты сектора, в котором находится контейнер.
-        /// </summary>
-        IGraphNode Node { get; }
-
         /// <summary>
         /// Содержимое контейнера.
         /// </summary>
@@ -55,14 +42,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<PropStoreEventArgs> ItemsRemoved;
 
         /// <summary>
-        /// Блокер проходимости карты.
-        /// </summary>
-        /// <remarks>
-        /// Это значение задаётся, если контейнер должен блокировать проходимость.
-        /// </remarks>
-        bool IsMapBlock { get; }
-
-        /// <summary>
         /// Открытие контейнера.
         /// </summary>
         void Open();
@@ -71,5 +50,13 @@ namespace Zilon.Core.Tactics
         /// Назначение сундука.
         /// </summary>
         PropContainerPurpose Purpose { get; }
+
+        /// <summary>
+        /// Блокер проходимости карты.
+        /// </summary>
+        /// <remarks>
+        /// Это значение задаётся, если контейнер должен блокировать проходимость.
+        /// </remarks>
+        bool IsMapBlock { get; }
     }
 }

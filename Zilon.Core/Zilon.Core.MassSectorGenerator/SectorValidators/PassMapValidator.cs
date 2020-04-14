@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -28,8 +26,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
             return Task.Run(() =>
             {
-                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
-                var containerNodes = containerManager.Items.Select(x => x.Node);
+                var staticObjectManager = sector.StaticObjectManager;
+                var containerNodes = staticObjectManager.Items.Select(x => x.Node);
 
                 var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
                 var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));

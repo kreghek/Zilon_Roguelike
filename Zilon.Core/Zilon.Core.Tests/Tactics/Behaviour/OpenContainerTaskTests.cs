@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
@@ -13,7 +14,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class OpenContainerTaskTests
     {
         /// <summary>
@@ -24,7 +26,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task Execute_ValidLength_ActorOpenedContainerAsync()
         {
             // ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
 
@@ -40,15 +42,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new OpenContainerTask(actor, container, method, map);
 
-
-
             // ACT
             task.Execute();
 
-
-
             // ASSERT
-            actorMock.Verify(x => x.OpenContainer(It.IsAny<IPropContainer>(), It.IsAny<IOpenContainerMethod>()));
+            actorMock.Verify(x => x.OpenContainer(It.IsAny<IStaticObject>(), It.IsAny<IOpenContainerMethod>()));
         }
 
         /// <summary>
@@ -79,12 +77,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var task = new OpenContainerTask(actor, container, method, map);
 
-
-
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             mapMock.Verify(x => x.TargetIsOnLine(
@@ -100,9 +94,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return method;
         }
 
-        private IPropContainer CreateContainer(IGraphNode containerNode)
+        private static IStaticObject CreateContainer(IGraphNode containerNode)
         {
-            var containerMock = new Mock<IPropContainer>();
+            var containerMock = new Mock<IStaticObject>();
             containerMock.SetupGet(x => x.Node).Returns(containerNode);
             var container = containerMock.Object;
             return container;

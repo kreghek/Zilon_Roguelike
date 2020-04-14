@@ -187,7 +187,7 @@ namespace Zilon.Core.Specs.Contexts
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
@@ -211,7 +211,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
             var botPlayer = ServiceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
@@ -225,13 +225,14 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var containerManager = ServiceProvider.GetRequiredService<IPropContainerManager>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
+            var staticObject = new StaticObject(node, id);
+            staticObject.AddModule<IPropContainer>(chest);
 
-            containerManager.Add(chest);
+            sectorManager.CurrentSector.StaticObjectManager.Add(staticObject);
 
             return chest;
         }
@@ -254,7 +255,8 @@ namespace Zilon.Core.Specs.Contexts
 
         public IActor GetMonsterById(int id)
         {
-            var actorManager = ServiceProvider.GetRequiredService<IActorManager>();
+            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var actorManager = sectorManager.CurrentSector.ActorManager;
 
             var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
@@ -322,8 +324,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMapFactory, FuncMapFactory>();
             serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();
             serviceCollection.AddSingleton<ISectorManager, SectorManager>();
-            serviceCollection.AddSingleton<IActorManager, ActorManager>();
-            serviceCollection.AddSingleton<IPropContainerManager, PropContainerManager>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<ICitizenGenerator, CitizenGenerator>();

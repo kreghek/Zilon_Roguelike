@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -16,7 +17,7 @@ namespace Zilon.Core.Tactics
     /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
     /// Актёр может умереть.
     /// </remarks>
-    public interface IActor: IAttackTarget, IPassMapBlocker
+    public interface IActor : IAttackTarget, IPassMapBlocker
     {
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
@@ -45,7 +46,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
-        void OpenContainer(IPropContainer container, IOpenContainerMethod method);
+        void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
@@ -91,5 +92,9 @@ namespace Zilon.Core.Tactics
         /// Но будут специфичны для каждого актёра. Например, для ботов.
         /// </remarks>
         ISectorFowData SectorFowData { get; }
+
+        int GameLoopCounter { get; }
+
+        void IncreaseGameLoopCounter(int value);
     }
 }

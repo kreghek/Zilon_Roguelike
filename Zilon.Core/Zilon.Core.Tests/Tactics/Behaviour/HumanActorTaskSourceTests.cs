@@ -221,7 +221,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = InitTaskSource(actor);
 
-            var containerMock = new Mock<IPropContainer>();
+            var containerMock = new Mock<IStaticObject>();
             var container = containerMock.Object;
 
             var methodMock = new Mock<IOpenContainerMethod>();

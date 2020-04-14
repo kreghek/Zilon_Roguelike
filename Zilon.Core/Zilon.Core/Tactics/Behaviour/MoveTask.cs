@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new TaskException("Актёр не достиг целевого узла при окончании пути.");
                 }
 
-                _isComplete = true;
+                IsComplete = true;
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (!_path.Any())
             {
-                _isComplete = true;
+                IsComplete = true;
             }
         }
 
@@ -113,7 +113,7 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
                 // в результате рандома.
-                _isComplete = true;
+                IsComplete = true;
 
                 _path = new List<IGraphNode>(0);
             }
@@ -125,7 +125,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!_path.Any())
                 {
-                    _isComplete = true;
+                    IsComplete = true;
                 }
             }
         }

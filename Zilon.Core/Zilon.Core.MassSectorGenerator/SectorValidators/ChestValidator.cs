@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -24,8 +22,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 // Сундуки не должны генерироваться на узлы, которые являются препятствием.
                 // Сундуки не должны генерироваться на узлы с выходом.
-                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
-                var allContainers = containerManager.Items;
+                var staticObjectManager = sector.StaticObjectManager;
+                var allContainers = staticObjectManager.Items;
                 var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
                 foreach (var container in allContainers)
                 {
@@ -43,7 +41,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         /// <summary>
         /// Проверяем, что сундук не на клетке с выходом.
         /// </summary>
-        private static void ValidateTransitionOverlap(ISector sector, IPropContainer container)
+        private static void ValidateTransitionOverlap(ISector sector, IStaticObject container)
         {
             var transitionNodes = sector.Map.Transitions.Keys;
             var chestOnTransitionNode = transitionNodes.Contains(container.Node);

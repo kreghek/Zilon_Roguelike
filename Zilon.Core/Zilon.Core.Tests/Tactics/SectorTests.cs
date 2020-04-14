@@ -37,7 +37,7 @@ namespace Zilon.Core.Tests.Tactics
             actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
 
-            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
             var dropResolverMock = new Mock<IDropResolver>();
@@ -81,7 +81,7 @@ namespace Zilon.Core.Tests.Tactics
             actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
 
-            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
 
             var dropResolverMock = new Mock<IDropResolver>();
@@ -105,13 +105,11 @@ namespace Zilon.Core.Tests.Tactics
             innerActorList.Add(actorMock.Object);
 
             // ACT
-            using (var monitor = sector.Monitor())
-            {
-                sector.Update();
+            using var monitor = sector.Monitor();
+            sector.Update();
 
-                // ASSERT
-                monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
-            }
+            // ASSERT
+            monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
         }
 
         private Mock<IActor> CreateActorMock()

@@ -133,7 +133,10 @@ namespace Zilon.Core.MapGenerators
                         default:
                             throw new InvalidOperationException($"Не корректное назначение {containerPurpose}.");
                     }
-                    sector.PropContainerManager.Add(container);
+
+                    var staticObject = new StaticObject(containerNode, default);
+                    staticObject.AddModule(container);
+                    sector.StaticObjectManager.Add(staticObject);
 
                     chestCounter--;
 
@@ -149,7 +152,7 @@ namespace Zilon.Core.MapGenerators
         private static bool CheckMap(ISector sector, HexNode containerNode)
         {
             var map = sector.Map;
-            var containerNodes = sector.PropContainerManager.Items.Select(x => x.Node);
+            var containerNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
 
             var allNonObstacleNodes = map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
             var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));

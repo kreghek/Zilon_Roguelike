@@ -40,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_counter <= 0)
             {
-                _isComplete = true;
+                IsComplete = true;
             }
         }
     }

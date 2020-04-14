@@ -24,7 +24,7 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
-            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
+            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.StaticObjectManager.Items,
                 actor.Node,
                 _map);
 
