@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     working_directory: /core-builds
@@ -12,6 +12,38 @@ jobs:
           root: bin
           paths:
             - ./*
+  sonar-scan:
+    working_directory: /sonar-analysis
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    steps:
+      - checkout
+      - run: dotnet build Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet build Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
+      # Это нужно орбу сонара. Из коробки в образе от майкрософт curl не стоит.
+      # https://circleci.com/docs/2.0/circleci-images/#pre-installed-tools
+      # Потому что документация SonarCloud говорит использовать один из CircleCi-образов
+      # А среди них нет netcore.
+      # Строка из настройки проекта в SonarCloud: Choose an image from the pre-built CircleCI Docker images
+      - run: apt update && apt install -y bzip2
+      - run: apt update && apt install -y ca-certificates
+      - run: apt update && apt install -y curl
+      - run: apt update && apt install -y git
+      - run: apt update && apt install -y gnupg
+      - run: apt update && apt install -y gzip
+      #- run: apt update && apt install -y locales
+      #- run: apt update && apt install -y mercurial
+      - run: apt update && apt install -y net-tools
+      #- run: apt update && apt install -y netcat
+      - run: apt update && apt install -y openssh-client
+      - run: apt update && apt install -y parallel
+      - run: apt update && apt install -y sudo
+      - run: apt update && apt install -y tar
+      - run: apt update && apt install -y unzip
+      - run: apt update && apt install -y wget
+      - run: apt update && apt install -y xvfb
+      - run: apt update && apt install -y zip
+      - sonarcloud/scan
   test_45:
     working_directory: /test45
     docker:
@@ -336,11 +368,15 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.1
 workflows:
   version: 2
   commit:
     jobs:
       - build
+      - sonar-scan:
+          context: SonarCloud
       - test_45:
           requires:
             - build
