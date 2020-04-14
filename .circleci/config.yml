@@ -32,6 +32,7 @@ jobs:
       - sonarcloud/run-scan:
           project_key: kreghek_Zilon_Roguelike_Core
           organization: kreghek
+          pull_request_base: master
       - run: dotnet build Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
       - sonarcloud/end-scan
   test_45:
