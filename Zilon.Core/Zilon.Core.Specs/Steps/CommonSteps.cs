@@ -85,32 +85,36 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
         public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
 
-            container.Content.Add(equipment);
+            container.GetModule<IPropContainer>().Content.Add(equipment);
         }
 
         [UsedImplicitly]
         [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
         public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
             var resource = propFactory.CreateResource(propScheme, count);
 
-            container.Content.Add(resource);
+            container.GetModule<IPropContainer>().Content.Add(resource);
         }
 
         [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
@@ -151,10 +155,11 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я выбираю сундук Id:(.*)")]
         public void WhenЯВыбираюСундукId(int id)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var chestViewMdel = new TestContainerViewModel
             {
@@ -174,10 +179,10 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var equipment = container.Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
+            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
                 PropTransferMachineStores.Container,
@@ -197,10 +202,10 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var resource = container.Content.CalcActualItems()
+            var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
                 .OfType<Resource>()
                 .Single(x => x.Scheme.Sid == resourceSid);
 
@@ -237,10 +242,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
         public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
 
             prop.Should().BeNull();
         }
@@ -249,10 +255,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
         public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
             prop.Should().BeNull();
         }

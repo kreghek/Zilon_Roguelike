@@ -55,10 +55,24 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var targetMock = new Mock<IPropContainer>();
+            if (testMap is null)
+            {
+                throw new System.ArgumentNullException(nameof(testMap));
+            }
+
+            if (playerStateMock is null)
+            {
+                throw new System.ArgumentNullException(nameof(playerStateMock));
+            }
+
+            var targetMock = new Mock<IStaticObject>();
             var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
-            targetMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
+
+            var containerMock = new Mock<IPropContainer>();
+            containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
+            var container = containerMock.Object;
+            targetMock.Setup(x => x.GetModule<IPropContainer>()).Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();

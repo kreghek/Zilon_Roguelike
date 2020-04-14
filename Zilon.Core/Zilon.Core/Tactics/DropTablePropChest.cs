@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics
         public DropTablePropChest(IGraphNode node,
             IDropTableScheme[] dropTables,
             IDropResolver dropResolver,
-            int id) : base(new DropTableChestStore(dropTables, dropResolver), id)
+            int id) : base(new DropTableChestStore(dropTables, dropResolver))
         {
         }
     }

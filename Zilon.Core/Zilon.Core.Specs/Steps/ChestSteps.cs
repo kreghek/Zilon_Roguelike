@@ -30,8 +30,8 @@ namespace Zilon.Core.Specs.Steps
         public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
         {
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
             var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
@@ -52,9 +52,11 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(node, new DropTableScheme[0], dropResolver, chestId);
+            var chest = new DropTablePropChest(node, System.Array.Empty<DropTableScheme>(), dropResolver, chestId);
+            var staticObject = new StaticObject(node, chestId);
+            staticObject.AddModule<IPropContainer>(chest);
 
-            containerManager.Add(chest);
+            staticObjectManager.Add(staticObject);
         }
 
         [Then(@"В выбранном сундуке лут")]
@@ -64,7 +66,7 @@ namespace Zilon.Core.Specs.Steps
             var selectedChest = (playerState.HoverViewModel as IContainerViewModel).Container;
 
             // lootProps будет изменяться
-            var lootProps = selectedChest.Content.CalcActualItems().ToList();
+            var lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
 
             foreach (var tableRow in table.Rows)
             {

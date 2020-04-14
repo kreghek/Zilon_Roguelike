@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -21,12 +19,12 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         {
             return Task.Run(() =>
             {
-                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
-                var allContainers = containerManager.Items;
+                var staticObjectManager = sector.StaticObjectManager;
+                var allContainers = staticObjectManager.Items;
 
                 // Монстры не должны генерироваться на узлах с препятствием.
                 // Монстры не должны генерироваться на узлах с сундуками.
-                var actorManager = scopeContainer.GetRequiredService<IActorManager>();
+                var actorManager = sector.ActorManager;
                 var allMonsters = actorManager.Items;
                 var containerNodes = allContainers.Select(x => x.Node);
                 foreach (var actor in allMonsters)
