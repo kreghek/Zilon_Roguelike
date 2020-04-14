@@ -18,8 +18,8 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.1
     steps:
       - checkout
-      - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
-      - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet build Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet build Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       # Это нужно орбу сонара. Из коробки в образе от майкрософт curl не стоит.
       # https://circleci.com/docs/2.0/circleci-images/#pre-installed-tools
       # Потому что документация SonarCloud говорит использовать один из CircleCi-образов
