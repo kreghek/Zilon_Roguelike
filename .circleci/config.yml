@@ -33,7 +33,7 @@ jobs:
           project_key: kreghek_Zilon_Roguelike
           organization: kreghek
       - run: dotnet build Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
-      - sonarcloud/end-scan
+      - run: dotnet sonarscanner end /d:sonar.login=${SONAR_TOKEN} /d:sonar.verbose=true
   test_45:
     working_directory: /test45
     docker:
