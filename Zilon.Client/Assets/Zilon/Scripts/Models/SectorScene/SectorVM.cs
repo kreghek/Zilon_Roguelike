@@ -519,14 +519,15 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var props = e.Container.Content.CalcActualItems();
+        var props = e.Container.GetModule<IPropContainer>().Content.CalcActualItems();
         if (props.Any())
         {
             var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
 
             var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory,
+                e.Container.GetModule<IPropContainer>().Content);
             containerPopup.Init(transferMachine);
         }
         else
