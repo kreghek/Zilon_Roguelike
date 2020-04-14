@@ -26,10 +26,6 @@ jobs:
       # А среди них нет netcore.
       # Строка из настройки проекта в SonarCloud: Choose an image from the pre-built CircleCI Docker images
       - sonarcloud/scan
-      - persist_to_workspace:
-          root: bin
-          paths:
-            - ./*
   test_45:
     working_directory: /test45
     docker:
