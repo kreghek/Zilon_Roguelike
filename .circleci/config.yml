@@ -18,7 +18,17 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.1
     steps:
       - checkout
-      - sonarcloud/setup-sonar
+      - run: |
+          wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
+          apt-get update
+          apt-get install -y software-properties-common
+          apt-get install -y apt-transport-https
+          add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+          apt-get update
+          apt-get install -y adoptopenjdk-13-hotspot
+      - run: |
+          dotnet tool install --global dotnet-sonarscanner
+          echo 'export PATH="$PATH:/root/.dotnet/tools"' >> $BASH_ENV
       - sonarcloud/run-scan:
           project_key: kreghek_Zilon_Roguelike
           organization: kreghek
