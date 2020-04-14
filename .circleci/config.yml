@@ -337,10 +337,8 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
-
 orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.1
-
 workflows:
   version: 2
   commit:
