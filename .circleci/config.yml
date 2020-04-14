@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /core-builds
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
     steps:
       - checkout
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
@@ -15,7 +15,7 @@ jobs:
   sonar-scan:
     working_directory: /sonar-analysis
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
     steps:
       - checkout
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
