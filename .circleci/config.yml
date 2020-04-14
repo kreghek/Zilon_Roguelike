@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /core-builds
     docker:
-      - image: codekinson/dotnet-circleci:2.0.1
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
     steps:
       - checkout
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
@@ -13,24 +13,24 @@ jobs:
       # Потому что документация SonarCloud говорит использовать один из CircleCi-образов
       # А среди них нет netcore.
       # Строка из настройки проекта в SonarCloud: Choose an image from the pre-built CircleCI Docker images
-#      - run: apk update && apk add bzip2
-#      - run: apk update && apk add ca-certificates
-#      - run: apk update && apk add curl
-#      - run: apk update && apk add git
-#      - run: apk update && apk add gnupg
-#      - run: apk update && apk add gzip
-#      - run: apk update && apk add locales
-#      - run: apk update && apk add mercurial
-#      - run: apk update && apk add net-tools
-#      - run: apk update && apk add netcat
-#      - run: apk update && apk add openssh-client
-#      - run: apk update && apk add parallel
-#      - run: apk update && apk add sudo
-#      - run: apk update && apk add tar
-#      - run: apk update && apk add unzip
-#      - run: apk update && apk add wget
-#      - run: apk update && apk add xvfb
-#      - run: apk update && apk add zip
+      - run: apk update && apk add bzip2
+      - run: apk update && apk add ca-certificates
+      - run: apk update && apk add curl
+      - run: apk update && apk add git
+      - run: apk update && apk add gnupg
+      - run: apk update && apk add gzip
+      #- run: apk update && apk add locales
+      - run: apk update && apk add mercurial
+      - run: apk update && apk add net-tools
+      - run: apk update && apk add netcat
+      - run: apk update && apk add openssh-client
+      - run: apk update && apk add parallel
+      - run: apk update && apk add sudo
+      - run: apk update && apk add tar
+      - run: apk update && apk add unzip
+      - run: apk update && apk add wget
+      - run: apk update && apk add xvfb
+      - run: apk update && apk add zip
       - sonarcloud/scan
       - persist_to_workspace:
           root: bin
