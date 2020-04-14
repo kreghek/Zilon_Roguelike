@@ -13,7 +13,7 @@ jobs:
           paths:
             - ./*
   sonar-scan:
-    working_directory: /core-builds
+    working_directory: /sonar-analysis
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     steps:
