@@ -230,7 +230,7 @@ namespace Zilon.Core.Specs.Contexts
             var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
             var staticObject = new StaticObject(node, id);
-            staticObject.AddModule(chest);
+            staticObject.AddModule<IPropContainer>(chest);
 
             sectorManager.CurrentSector.StaticObjectManager.Add(staticObject);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Zilon.Core.Graphs;
 
@@ -32,7 +33,13 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule)
         {
-            _modules.Add(typeof(TSectorObjectModule), sectorObjectModule);
+            var sanitizedModuleType = GetSanitizedModuleType(typeof(TSectorObjectModule));
+            if (sanitizedModuleType is null)
+            {
+                throw new ArgumentException("Указанные объект не является модулем", nameof(sectorObjectModule));
+            }
+
+            _modules.Add(sanitizedModuleType, sectorObjectModule);
         }
 
         /// <inheritdoc/>
@@ -52,6 +59,27 @@ namespace Zilon.Core.Tactics
         {
             var propContainer = GetModule<IPropContainer>();
             return (propContainer?.IsMapBlock).GetValueOrDefault(true);
+        }
+
+        private Type GetSanitizedModuleType(Type type)
+        {
+            var moduleAttribute = type.GetCustomAttributes(typeof(StaticObjectModuleAttribute), false);
+            if (moduleAttribute is null)
+            {
+                var parent = type.BaseType;
+                if (parent is null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return GetSanitizedModuleType(parent);
+                }
+            }
+            else
+            {
+                return type;
+            }
         }
     }
 }

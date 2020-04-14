@@ -3,6 +3,11 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="Tactics\StaticObjectModules\**" />
+      <EmbeddedResource Remove="Tactics\StaticObjectModules\**" />
+      <None Remove="Tactics\StaticObjectModules\**" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove="World\NameGeneration\names.json" />
     </ItemGroup>
     <ItemGroup>
@@ -27,8 +32,5 @@
         <PackageReference Include="System.Drawing.Common">
             <Version>4.7.0</Version>
         </PackageReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Tactics\StaticObjectModules\" />
     </ItemGroup>
 </Project>
