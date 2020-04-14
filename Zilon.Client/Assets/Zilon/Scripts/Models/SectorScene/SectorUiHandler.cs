@@ -115,11 +115,12 @@ public class SectorUiHandler : MonoBehaviour
         return true;
     }
 
-    private IPropContainer GetContainerInNode(IGraphNode targetnNode)
+    private IStaticObject GetContainerInNode(IGraphNode targetnNode)
     {
         var staticObjectManager = _sectorManager.CurrentSector.StaticObjectManager;
-        var containerInNode = staticObjectManager.Items.FirstOrDefault(x => x.Node == targetnNode);
-        return containerInNode.GetModule<IPropContainer>();
+        var containerStaticObjectInNode = staticObjectManager.Items
+            .FirstOrDefault(x => x.Node == targetnNode && x.HasModule<IPropContainer>());
+        return containerStaticObjectInNode;
     }
 
     private void HandleHotKeys()
@@ -232,7 +233,7 @@ public class SectorUiHandler : MonoBehaviour
         }
     }
 
-    private static ContainerVm GetLootViewModel(IPropContainer lootInNode)
+    private static ContainerVm GetLootViewModel(IStaticObject lootInNode)
     {
         var viewModels = FindObjectsOfType<ContainerVm>();
         foreach (var viewModel in viewModels)
