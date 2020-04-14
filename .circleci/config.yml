@@ -9,7 +9,7 @@ jobs:
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
       - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       # Это нужно орбу сонара. Из коробки в образе от майкрософт curl не стоит.
-      - run: apt update && apt install -y curl
+      - run: apk update && apk add curl
       - run: curl --version
       - sonarcloud/scan
       - persist_to_workspace:
