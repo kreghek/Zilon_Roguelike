@@ -20,9 +20,9 @@ jobs:
       - run: apk update && apk add gnupg
       - run: apk update && apk add gzip
       #- run: apk update && apk add locales
-      - run: apk update && apk add mercurial
+      #- run: apk update && apk add mercurial
       - run: apk update && apk add net-tools
-      - run: apk update && apk add netcat
+      #- run: apk update && apk add netcat
       - run: apk update && apk add openssh-client
       - run: apk update && apk add parallel
       - run: apk update && apk add sudo
