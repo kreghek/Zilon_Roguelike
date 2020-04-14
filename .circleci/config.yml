@@ -20,8 +20,8 @@ jobs:
       - checkout
       - sonarcloud/setup-sonar
       - sonarcloud/run-scan:
-        project_key: kreghek_Zilon_Roguelike
-        organization: kreghek
+          project_key: kreghek_Zilon_Roguelike
+          organization: kreghek
       - run: dotnet build Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
       - run: dotnet build Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       - sonarcloud/end-scan
