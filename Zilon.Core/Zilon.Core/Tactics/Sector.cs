@@ -238,10 +238,11 @@ namespace Zilon.Core.Tactics
 
         private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
         {
-            var container = (IStaticObject)sender;
-            if (!container.GetModule<IPropContainer>().Content.CalcActualItems().Any())
+            var container = (IPropContainer)sender;
+            if (!container.Content.CalcActualItems().Any())
             {
-                StaticObjectManager.Remove(container);
+                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModule<IPropContainer>(), container));
+                StaticObjectManager.Remove(staticObject);
             }
         }
 
