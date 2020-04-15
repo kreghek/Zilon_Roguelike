@@ -36,7 +36,7 @@ namespace Zilon.Core.Commands
             }
 
             var equipment = GetInventorySelectedEquipment();
-            if (equipment == null && _inventoryState.SelectedProp != null)
+            if (equipment is null && _inventoryState.SelectedProp != null)
             {
                 return false;
             }
@@ -44,7 +44,7 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             //TODO Тут есть замечание, что equipment не проверяется.
             // Реорганизовать этот код в более понятный.
-            if (equipment.Durable.Value <= 0)
+            if (equipment != null && equipment.Durable.Value <= 0)
             {
                 return false;
             }
@@ -76,7 +76,7 @@ namespace Zilon.Core.Commands
                 equipment,
                 slot,
                 SlotIndex.Value);
-            
+
             if (!canEquipShield)
             {
                 return false;
@@ -96,7 +96,6 @@ namespace Zilon.Core.Commands
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
             PlayerState.TaskSource.Intent(intention);
-
         }
 
         private Equipment GetInventorySelectedEquipment()
