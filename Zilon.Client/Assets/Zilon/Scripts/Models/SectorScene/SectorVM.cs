@@ -34,8 +34,8 @@ using Zilon.Core.World;
 public class SectorVM : MonoBehaviour
 {
     private readonly List<MapNodeVM> _nodeViewModels;
-    private readonly List<ContainerVm> _containerViewModels;
-    private IStaticObjectManager _propContainerManager;
+    private readonly List<StaticObjectViewModel> _staticObjectViewModels;
+    private IStaticObjectManager _staticObjectManager;
 
     private bool _interuptCommands;
 
@@ -51,12 +51,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
 
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
-
-    [NotNull] public ContainerVm ChestPrefab;
-
-    [NotNull] public ContainerVm LootPrefab;
-
-    [NotNull] public ContainerVm TrashPrefab;
 
     [NotNull] public HitSfx HitSfx;
 
@@ -118,6 +112,9 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
 
+    [Inject]
+    private readonly StaticObjectViewModelSelector _staticObjectViewModelSelector;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -146,7 +143,7 @@ public class SectorVM : MonoBehaviour
     {
         _nodeViewModels = new List<MapNodeVM>();
         ActorViewModels = new List<ActorViewModel>();
-        _containerViewModels = new List<ContainerVm>();
+        _staticObjectViewModels = new List<StaticObjectViewModel>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -204,10 +201,10 @@ public class SectorVM : MonoBehaviour
         AddPlayerActorEventHandlers(playerActorViewModel);
 
         CreateMonsterViewModels(nodeViewModels);
-        CreateContainerViewModels(nodeViewModels);
+        CreateStaticObjectViewModels(nodeViewModels);
         CreateTraderViewModels(nodeViewModels);
 
-        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _containerViewModels);
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
@@ -235,7 +232,7 @@ public class SectorVM : MonoBehaviour
     {
         foreach (var staticObject in e.Items)
         {
-            CreateContainerViewModel(_nodeViewModels, staticObject);
+            CreateStaticObjectViewModel(_nodeViewModels, staticObject);
         }
     }
 
@@ -259,10 +256,10 @@ public class SectorVM : MonoBehaviour
 
         sectorNode.Sector.ScoreManager = _scoreManager;
 
-        _propContainerManager = sectorNode.Sector.StaticObjectManager;
+        _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
-        _propContainerManager.Added += StaticObjectManager_Added;
-        _propContainerManager.Removed += StaticObjectManager_Removed;
+        _staticObjectManager.Added += StaticObjectManager_Added;
+        _staticObjectManager.Removed += StaticObjectManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
 
@@ -278,16 +275,16 @@ public class SectorVM : MonoBehaviour
     {
         foreach (var container in e.Items)
         {
-            var containerViewModel = _containerViewModels.Single(x => x.Container == container);
-            _containerViewModels.Remove(containerViewModel);
+            var containerViewModel = _staticObjectViewModels.Single(x => x.Container == container);
+            _staticObjectViewModels.Remove(containerViewModel);
             Destroy(containerViewModel.gameObject);
         }
     }
 
     public void OnDestroy()
     {
-        _propContainerManager.Added -= StaticObjectManager_Added;
-        _propContainerManager.Removed -= StaticObjectManager_Removed;
+        _staticObjectManager.Added -= StaticObjectManager_Added;
+        _staticObjectManager.Removed -= StaticObjectManager_Removed;
 
         _gameLoop.Updated -= GameLoop_Updated;
     }
@@ -304,7 +301,7 @@ public class SectorVM : MonoBehaviour
             var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
-            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
+            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetCoords);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
@@ -386,11 +383,11 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void CreateContainerViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    private void CreateStaticObjectViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        foreach (var container in _propContainerManager.Items)
+        foreach (var staticObject in _staticObjectManager.Items)
         {
-            CreateContainerViewModel(nodeViewModels, container);
+            CreateStaticObjectViewModel(nodeViewModels, staticObject);
         }
     }
 
@@ -403,20 +400,20 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IStaticObject staticObject)
+    private void CreateStaticObjectViewModel(IEnumerable<MapNodeVM> nodeViewModels, IStaticObject staticObject)
     {
-        var containerPrefab = GetContainerPrefab(staticObject);
+        var staticObjectPrefab = GetStaticObjectPrefab(staticObject);
 
-        var containerViewModel = Instantiate(containerPrefab, transform);
+        var staticObjectViewModel = Instantiate(staticObjectPrefab, transform);
 
-        var containerNodeVm = nodeViewModels.Single(x => x.Node == staticObject.Node);
-        var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
-        containerViewModel.transform.position = containerPosition;
-        containerViewModel.Container = staticObject;
-        containerViewModel.Selected += Container_Selected;
-        containerViewModel.MouseEnter += ContainerViewModel_MouseEnter;
+        var nodeViewModelUnderStaticObject = nodeViewModels.Single(x => x.Node == staticObject.Node);
+        var containerPosition = nodeViewModelUnderStaticObject.transform.position + new Vector3(0, 0, -1);
+        staticObjectViewModel.WorldPosition = containerPosition;
+        staticObjectViewModel.StaticObject = staticObject;
+        staticObjectViewModel.Selected += Container_Selected;
+        staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
 
-        _containerViewModels.Add(containerViewModel);
+        _staticObjectViewModels.Add(staticObjectViewModel);
     }
 
     private void CreateTraderViewModel(IEnumerable<MapNodeVM> nodeViewModels, IActor actor)
@@ -475,19 +472,10 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private ContainerVm GetContainerPrefab(IStaticObject staticObject)
+    private StaticObjectViewModel GetStaticObjectPrefab(IStaticObject staticObject)
     {
-        if (staticObject.GetModule<IPropContainer>() is ILootContainer)
-        {
-            return LootPrefab;
-        }
-
-        if (staticObject.GetModule<IPropContainer>().Purpose == PropContainerPurpose.Treasures)
-        {
-            return ChestPrefab;
-        }
-
-        return TrashPrefab;
+        var prefab = _staticObjectViewModelSelector.SelectViewModel(staticObject);
+        return prefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)

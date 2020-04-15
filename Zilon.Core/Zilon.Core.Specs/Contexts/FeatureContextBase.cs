@@ -194,7 +194,7 @@ namespace Zilon.Core.Specs.Contexts
             var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
 
             // Подготовка актёров
-            var humanStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
@@ -215,7 +215,7 @@ namespace Zilon.Core.Specs.Contexts
             var botPlayer = ServiceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
-            var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(startCoords.X, startCoords.Y);
+            var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
 
             var monster = CreateMonsterActor(botPlayer, monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
@@ -227,7 +227,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
-            var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
+            var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(node, new IProp[0], id);
             var staticObject = new StaticObject(node, id);
             staticObject.AddModule<IPropContainer>(chest);

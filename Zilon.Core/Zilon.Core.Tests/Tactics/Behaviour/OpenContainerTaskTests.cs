@@ -28,13 +28,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             var actor = actorMock.Object;
 
-            var containerNode = map.Nodes.Cast<HexNode>().SelectBy(1, 0);
+            var containerNode = map.Nodes.SelectByHexCoords(1, 0);
 
             var container = CreateContainer(containerNode);
 

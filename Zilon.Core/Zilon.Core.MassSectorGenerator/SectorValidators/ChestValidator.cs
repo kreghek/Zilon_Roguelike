@@ -29,8 +29,6 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 {
                     var hex = (HexNode)container.Node;
 
-                    ValidateObstacleOverlap(hex);
-
                     ValidateTransitionOverlap(sector, container);
 
                     ValidatePassability(hex, sector.Map, allContainerNodes);
@@ -52,17 +50,6 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         }
 
         /// <summary>
-        /// Проверяем, что сундук не стоит на препятствии.
-        /// </summary>
-        private static void ValidateObstacleOverlap(HexNode hex)
-        {
-            if (hex.IsObstacle)
-            {
-                throw new SectorValidationException();
-            }
-        }
-
-        /// <summary>
         /// Проверяем, что к сундуку есть подход.
         /// </summary>
         private static void ValidatePassability(
@@ -76,10 +63,9 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 var neighborHex = (HexNode)neighborNode;
 
-                var isObstacle = neighborHex.IsObstacle;
                 var isContainer = allContainerNodes.Contains(neighborHex);
 
-                if (!isObstacle && !isContainer)
+                if (!isContainer)
                 {
                     hasFreeNeighbor = true;
                     break;

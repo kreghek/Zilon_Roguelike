@@ -34,7 +34,7 @@ namespace Zilon.Core.Specs.Steps
             var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
-            var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
+            var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
 
             var dropProps = new List<IProp>();
             foreach (var tableRow in table.Rows)

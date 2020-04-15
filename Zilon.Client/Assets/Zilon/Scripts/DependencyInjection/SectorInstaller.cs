@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Commands;
+using Assets.Zilon.Scripts.DependencyInjection;
 using Assets.Zilon.Scripts.Models.Globe;
 using Assets.Zilon.Scripts.Services;
 
@@ -125,6 +126,9 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
 
         Container.Bind<SpecialCommandManager>().AsSingle();
+        Container.RegisterStaticObjecServices();
+
+        Container.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
     }
 
     private void RegisterBotLogics(DiContainer container)

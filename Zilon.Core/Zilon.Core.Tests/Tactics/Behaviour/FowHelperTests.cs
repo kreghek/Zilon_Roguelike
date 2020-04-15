@@ -43,7 +43,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
                 .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) => fowNode.ChangeState(targetState));
             var fowData = fowDataMock.Object;
 
-            var baseNode = map.HexNodes.Single(x => x.OffsetX == baseX && x.OffsetY == baseY);
+            var baseNode = map.HexNodes.Single(x => x.OffsetCoords.CompsEqual(baseX, baseY));
 
             var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
 
@@ -77,7 +77,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var fowData = new HumanSectorFowData();
 
-            var baseNode = map.HexNodes.Single(x => x.OffsetX == baseX && x.OffsetY == baseY);
+            var baseNode = map.HexNodes.Single(x => x.OffsetCoords.CompsEqual(baseX, baseY));
 
             var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
 

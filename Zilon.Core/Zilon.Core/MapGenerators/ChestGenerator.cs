@@ -152,25 +152,25 @@ namespace Zilon.Core.MapGenerators
         private static bool CheckMap(ISector sector, HexNode containerNode)
         {
             var map = sector.Map;
-            var containerNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
+            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
 
-            var allNonObstacleNodes = map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
-            var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
+            var allNonObstacleNodes = map.Nodes.OfType<HexNode>().ToArray();
+            var allNonContainerNodes = allNonObstacleNodes.Where(x => !currentStaticObjectsNodes.Contains(x));
             var allNodes = allNonContainerNodes.ToArray();
 
             var matrix = new Matrix<bool>(1000, 1000);
             foreach (var node in allNodes)
             {
-                var x = node.OffsetX;
-                var y = node.OffsetY;
+                var x = node.OffsetCoords.X;
+                var y = node.OffsetCoords.Y;
                 matrix.Items[x, y] = true;
             }
 
             // Закрываем проверяемый узел
-            matrix.Items[containerNode.OffsetX, containerNode.OffsetY] = false;
+            matrix.Items[containerNode.OffsetCoords.X, containerNode.OffsetCoords.Y] = false;
 
             var startNode = allNodes.First();
-            var startPoint = new OffsetCoords(startNode.OffsetX, startNode.OffsetY);
+            var startPoint = startNode.OffsetCoords;
             var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
 
             foreach (var point in floodPoints)
@@ -180,8 +180,8 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var node in allNodes)
             {
-                var x = node.OffsetX;
-                var y = node.OffsetY;
+                var x = node.OffsetCoords.X;
+                var y = node.OffsetCoords.Y;
                 if (matrix.Items[x, y])
                 {
                     return false;

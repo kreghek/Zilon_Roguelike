@@ -56,7 +56,7 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         private bool GetIsMapBlock()
         {
-            var propContainer = GetModule<IPropContainer>();
+            var propContainer = this.GetModuleSafe<IPropContainer>();
             return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
 

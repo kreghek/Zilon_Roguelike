@@ -91,7 +91,7 @@ namespace Zilon.Core.Tests.Commands
             var monsterMock = new Mock<IActor>();
             monsterMock.Setup(x => x.Owner).Returns(player);
 
-            var monsterNode = sectorManager.CurrentSector.Map.Nodes.OfType<HexNode>().SelectBy(0, 2);
+            var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 2);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
 
             var monster = monsterMock.Object;
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Commands
             var monsterMock = new Mock<IActor>();
             monsterMock.Setup(x => x.Owner).Returns(player);
 
-            var monsterNode = sectorManager.CurrentSector.Map.Nodes.OfType<HexNode>().SelectBy(0, 6);
+            var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 6);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
 
             var monster = monsterMock.Object;
@@ -135,7 +135,17 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
+            if (testMap is null)
+            {
+                throw new System.ArgumentNullException(nameof(testMap));
+            }
+
+            if (playerStateMock is null)
+            {
+                throw new System.ArgumentNullException(nameof(playerStateMock));
+            }
+
+            var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
             var targetVmMock = new Mock<IMapNodeViewModel>();
             targetVmMock.SetupProperty(x => x.Node, targetNode);
             var targetVm = targetVmMock.Object;

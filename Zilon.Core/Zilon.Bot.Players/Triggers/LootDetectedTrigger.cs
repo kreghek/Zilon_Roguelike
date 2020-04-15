@@ -24,7 +24,23 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
-            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.StaticObjectManager.Items,
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (currentState is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentState));
+            }
+
+            if (strategyData is null)
+            {
+                throw new System.ArgumentNullException(nameof(strategyData));
+            }
+
+            var containers = _sectorManager.CurrentSector.StaticObjectManager.Items.Where(x => x.HasModule<IPropContainer>());
+            var foundContainers = LootHelper.FindAvailableContainers(containers,
                 actor.Node,
                 _map);
 

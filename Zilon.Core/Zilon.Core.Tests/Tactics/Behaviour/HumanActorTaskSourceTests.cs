@@ -38,7 +38,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
 
             var actor = CreateActor(map, startNode);
 
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
 
             var actor = CreateActor(map, startNode);
 
@@ -93,9 +93,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
-            var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
+            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
 
             var actor = CreateActor(map, startNode);
 
@@ -141,9 +141,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
-            var finishNode2 = map.Nodes.Cast<HexNode>().SelectBy(3, 2);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
+            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
 
             var actor = CreateActor(map, startNode);
 
@@ -188,8 +188,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var attackerStartNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var targetStartNode = map.Nodes.Cast<HexNode>().SelectBy(2, 3);
+            var attackerStartNode = map.Nodes.SelectByHexCoords(3, 3);
+            var targetStartNode = map.Nodes.SelectByHexCoords(2, 3);
 
             var attackerActor = CreateActor(map, attackerStartNode);
             var targetActor = CreateActor(map, targetStartNode);
@@ -215,7 +215,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             //ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+            var startNode = map.Nodes.SelectByHexCoords(0, 0);
 
             var actor = CreateActor(map, startNode);
 

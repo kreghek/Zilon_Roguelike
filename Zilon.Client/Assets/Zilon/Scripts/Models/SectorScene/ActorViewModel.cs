@@ -143,8 +143,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     {
         _moveCounter = 0;
         var actorHexNode = (HexNode)Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetX, actorHexNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetY - 0.26f);
+        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetCoords);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetCoords.Y - 0.26f);
         _moveCommandBlocker = new MoveCommandBlocker();
         _commandBlockerService.AddBlocker(_moveCommandBlocker);
         GraphicRoot.ProcessMove(_targetPosition);
@@ -153,7 +153,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
     {
         var containerNode = (HexNode)e.Container.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetX, containerNode.OffsetY);
+        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetCoords);
         var targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
 
         GraphicRoot.ProcessInteractive(targetPosition);

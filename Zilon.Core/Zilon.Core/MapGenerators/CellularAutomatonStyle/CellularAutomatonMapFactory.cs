@@ -25,17 +25,14 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private const int RETRY_LIMIT = 3;
 
         private readonly IDice _dice;
-        private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
 
         /// <summary>
         /// Конструктор фабрики.
         /// </summary>
         /// <param name="dice"> Кость для рандома. </param>
-        /// <param name="interiorObjectRandomSource"> Источник рандома для элементов интерьера. </param>
-        public CellularAutomatonMapFactory(IDice dice, IInteriorObjectRandomSource interiorObjectRandomSource)
+        public CellularAutomatonMapFactory(IDice dice)
         {
             _dice = dice;
-            _interiorObjectRandomSource = interiorObjectRandomSource;
         }
 
         /// <inheritdoc/>
@@ -138,11 +135,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
         }
 
-        private ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
-            var interiorHashset = GenerateInteriorObjects(draftRegions);
 
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
@@ -151,9 +147,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 foreach (var coord in draftRegion.Coords)
                 {
-                    var isObstacle = interiorHashset.ContainsKey(coord);
-
-                    var node = new HexNode(coord.X, coord.Y, isObstacle);
+                    var node = new HexNode(coord.X, coord.Y);
                     map.AddNode(node);
 
                     regionNodeList.Add(node);
@@ -210,23 +204,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return map;
-        }
-
-        private Dictionary<OffsetCoords, InteriorObjectMeta> GenerateInteriorObjects(RegionDraft[] draftRegions)
-        {
-            var interiorHashset = new Dictionary<OffsetCoords, InteriorObjectMeta>();
-            foreach (var draftRegion in draftRegions)
-            {
-                var allCoords = draftRegion.Coords;
-                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(allCoords.ToArray());
-
-                foreach (var meta in interiorMetas)
-                {
-                    interiorHashset.Add(meta.Coords, meta);
-                }
-            }
-
-            return interiorHashset;
         }
 
         private void InitStartAliveMatrix(Matrix<bool> matrix, int _chanceToStartAlive)

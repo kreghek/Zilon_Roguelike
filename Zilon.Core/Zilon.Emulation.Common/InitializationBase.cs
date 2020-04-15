@@ -52,6 +52,8 @@ namespace Zilon.Emulation.Common
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
+            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>();
+            serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
         }

@@ -8,15 +8,20 @@ namespace Zilon.Core.Tactics
     {
         public static void RemoveEdge(this IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
             var foundFromStart = from node in map.Nodes
                                  let hexNode = (HexNode)node
-                                 where hexNode.OffsetX == offsetX1 && hexNode.OffsetY == offsetY1
+                                 where hexNode.OffsetCoords.X == offsetX1 && hexNode.OffsetCoords.Y == offsetY1
                                  select node;
 
             var foundToEnd = from node in foundFromStart
                              from neighborNode in map.GetNext(node)
                              let hexNode = (HexNode)neighborNode
-                             where hexNode.OffsetX == offsetX2 && hexNode.OffsetY == offsetY2
+                             where hexNode.OffsetCoords.X == offsetX2 && hexNode.OffsetCoords.Y == offsetY2
                              select new
                              {
                                  start = node,
