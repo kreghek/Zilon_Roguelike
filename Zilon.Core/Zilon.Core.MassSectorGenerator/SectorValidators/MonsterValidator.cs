@@ -29,8 +29,6 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 var staticObjectNodes = allStaticObjects.Select(x => x.Node);
                 foreach (var actor in allMonsters)
                 {
-                    var hex = (HexNode)actor.Node;
-
                     var monsterIsOnStaticObject = staticObjectNodes.Contains(actor.Node);
                     if (monsterIsOnStaticObject)
                     {

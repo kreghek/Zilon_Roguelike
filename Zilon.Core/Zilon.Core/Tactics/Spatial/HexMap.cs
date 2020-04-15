@@ -196,8 +196,7 @@ namespace Zilon.Core.Tactics.Spatial
                 return false;
             }
 
-            var hexIsObstacle = CheckNodeIsObstable(targetNode);
-            return !hexIsObstacle;
+            return true;
         }
 
         /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
@@ -245,6 +244,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         private void CreateSegment(int segmentX, int segmentY)
         {
+            //TODO Отказаться от многомерного массива. Вместо этого сделать одномерный и адресацию через смещение.
             var matrix = new IGraphNode[_segmentSize, _segmentSize];
 
             var key = new SegmentKey(segmentX, segmentY);
@@ -265,15 +265,9 @@ namespace Zilon.Core.Tactics.Spatial
             return neighborX;
         }
 
-        private static bool CheckNodeIsObstable(IGraphNode targetNode)
-        {
-            return false;
-        }
-
         public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
         {
-            var isObstacle = CheckNodeIsObstable(targetNode);
-            return !isObstacle;
+            return true;
         }
 
         /// <summary>
@@ -310,7 +304,7 @@ namespace Zilon.Core.Tactics.Spatial
             throw new NotImplementedException();
         }
 
-        private struct SegmentKey
+        private struct SegmentKey : IEquatable<SegmentKey>
         {
             // ReSharper disable once MemberCanBePrivate.Local
             public readonly int X;
@@ -326,9 +320,7 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                return obj is SegmentKey key &&
-                       X == key.X &&
-                       Y == key.Y;
+                return obj is SegmentKey key && Equals(key);
             }
 
             public override int GetHashCode()
@@ -350,6 +342,12 @@ namespace Zilon.Core.Tactics.Spatial
             public static bool operator !=(SegmentKey left, SegmentKey right)
             {
                 return !(left == right);
+            }
+
+            public bool Equals(SegmentKey other)
+            {
+                return X == other.X &&
+                       Y == other.Y;
             }
         }
     }
