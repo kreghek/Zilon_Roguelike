@@ -40,7 +40,7 @@ public class ContainerVm : MonoBehaviour, IContainerViewModel
         // Статья, в которой подтверждается, что коллайдеры, расположенные на одной z-координате,
         // срабатывают в произвольном порядке.
         // Поэтому сундуки рендерятся ближе к камере и поднимают свой коллайдер.
-        transform.position = new Vector3(transform.position.x, transform.position.y, hexNode.OffsetY - 0.26f);
+        transform.position = new Vector3(transform.position.x, transform.position.y, hexNode.OffsetCoords.Y - 0.26f);
     }
 
     private void OnDestroy()
