@@ -16,7 +16,6 @@ public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel
 
     public Vector3 WorldPosition { get; set; }
 
-
     //TODO Убрать, т.к. оставлено для совместимости со старым кодом.
     // Не убрал, потому что работал над другой задачей.
     public IStaticObject Container

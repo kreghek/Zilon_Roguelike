@@ -18,7 +18,6 @@ namespace Assets.Zilon.Scripts.Services
         {
             if (staticObject.HasModule<IPropContainer>())
             {
-
                 if (staticObject.GetModule<IPropContainer>() is ILootContainer)
                 {
                     return LootPrefab;

@@ -29,7 +29,6 @@ public class ContainerVm : StaticObjectViewModel
         SpriteRenderer.sprite = Container.GetModule<IPropContainer>().IsOpened ? OpenedSprite : ClosedSprite;
 
         _propContainer.Opened += Container_Opened;
-
     }
 
     private void OnDestroy()
