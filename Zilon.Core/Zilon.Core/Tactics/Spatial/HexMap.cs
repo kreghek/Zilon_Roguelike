@@ -129,6 +129,11 @@ namespace Zilon.Core.Tactics.Spatial
             var segmentKey = new SegmentKey(segmentX, segmentY);
             var matrix = _segmentDict[segmentKey];
 
+            return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
+        }
+
+        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX, int segmentY, IGraphNode[,] matrix)
+        {
             var directions = HexHelper.GetOffsetClockwise();
             var currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
 
@@ -323,6 +328,12 @@ namespace Zilon.Core.Tactics.Spatial
                 return obj is SegmentKey key && Equals(key);
             }
 
+            public bool Equals(SegmentKey other)
+            {
+                return X == other.X &&
+                       Y == other.Y;
+            }
+
             public override int GetHashCode()
             {
                 unchecked
@@ -342,12 +353,6 @@ namespace Zilon.Core.Tactics.Spatial
             public static bool operator !=(SegmentKey left, SegmentKey right)
             {
                 return !(left == right);
-            }
-
-            public bool Equals(SegmentKey other)
-            {
-                return X == other.X &&
-                       Y == other.Y;
             }
         }
     }
