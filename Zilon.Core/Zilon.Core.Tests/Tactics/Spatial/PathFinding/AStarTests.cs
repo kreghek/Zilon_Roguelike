@@ -48,13 +48,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
-
-
             // ACT
             var factState = astar.Run();
-
-
-
 
             // ASSERT
 
@@ -83,18 +78,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
                 map.Nodes.Cast<HexNode>().SelectBy(4,6)
             };
 
-
             var context = CreatePathFindingContext(map);
 
             var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
-
-
             // ACT
             var factState = astar.Run();
-
-
-
 
             // ASSERT
 
@@ -128,13 +117,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
 
-
-
             // ACT
             var factState = astar.Run();
-
-
-
 
             // ASSERT
 
@@ -154,7 +138,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         {
             var hexMap = new HexMap(10);
             hexMap.AddNode(new HexNode(0, 0));
-            hexMap.AddNode(new HexNode(1, 0, isObstacle: true));
+            // Узел 1, 0 отсутствует, т.к. занят препятсвием.
             hexMap.AddNode(new HexNode(2, 0));
 
             hexMap.AddNode(new HexNode(0, 1));
@@ -173,15 +157,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
                 hexMap.Nodes.Cast<HexNode>().SelectBy(2, 0)
             };
 
-
             var astar = new AStar(context, startNode, finishNode);
-
-
 
             // ACT
             var factState = astar.Run();
-
-
 
             // ASSERT
             factState.Should().Be(State.GoalFound);
@@ -207,7 +186,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>().Where(x => !x.IsObstacle));
+                .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>());
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
 

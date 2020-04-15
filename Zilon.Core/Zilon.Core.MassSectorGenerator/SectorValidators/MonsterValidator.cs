@@ -20,23 +20,19 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             return Task.Run(() =>
             {
                 var staticObjectManager = sector.StaticObjectManager;
-                var allContainers = staticObjectManager.Items;
+                var allStaticObjects = staticObjectManager.Items;
 
                 // Монстры не должны генерироваться на узлах с препятствием.
                 // Монстры не должны генерироваться на узлах с сундуками.
                 var actorManager = sector.ActorManager;
                 var allMonsters = actorManager.Items;
-                var containerNodes = allContainers.Select(x => x.Node);
+                var staticObjectNodes = allStaticObjects.Select(x => x.Node);
                 foreach (var actor in allMonsters)
                 {
                     var hex = (HexNode)actor.Node;
-                    if (hex.IsObstacle)
-                    {
-                        throw new SectorValidationException();
-                    }
 
-                    var monsterIsOnContainer = containerNodes.Contains(actor.Node);
-                    if (monsterIsOnContainer)
+                    var monsterIsOnStaticObject = staticObjectNodes.Contains(actor.Node);
+                    if (monsterIsOnStaticObject)
                     {
                         throw new SectorValidationException();
                     }

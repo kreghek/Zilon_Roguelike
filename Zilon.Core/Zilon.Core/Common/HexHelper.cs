@@ -34,6 +34,11 @@ namespace Zilon.Core.Common
             };
         }
 
+        public static float[] ConvertToWorld(OffsetCoords coords)
+        {
+            return ConvertToWorld(coords.X, coords.Y);
+        }
+
         /// <summary>
         /// Возвращает смещения по часовой стрелке.
         /// </summary>

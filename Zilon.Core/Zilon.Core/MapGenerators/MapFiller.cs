@@ -6,10 +6,14 @@ namespace Zilon.Core.MapGenerators
 {
     public static class MapFiller
     {
-        public static void FillSquareMap(IMap map, int mapSize,
-            OptionsDelegate optionsDelegate = null)
+        public static void FillSquareMap(IMap map, int mapSize)
         {
-            CreateNodes(map, 0, 0, mapSize, optionsDelegate);
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
+            CreateNodes(map, 0, 0, mapSize);
 
             if (!(map is HexMap))
             {
@@ -20,10 +24,14 @@ namespace Zilon.Core.MapGenerators
         public static void FillSquareMap(IMap map,
             int startX,
             int startY,
-            int mapSize,
-            OptionsDelegate optionsDelegate = null)
+            int mapSize)
         {
-            CreateNodes(map, startX, startY, mapSize, optionsDelegate);
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
+            CreateNodes(map, startX, startY, mapSize);
 
             if (!(map is HexMap))
             {
@@ -53,28 +61,14 @@ namespace Zilon.Core.MapGenerators
         private static void CreateNodes(IMap map,
             int startX,
             int startY,
-            int mapSize,
-            OptionsDelegate optionsDelegate)
+            int mapSize)
         {
             var nodeIdCounter = 1;
             for (var row = startY; row < startY + mapSize; row++)
             {
                 for (var col = startX; col < startX + mapSize; col++)
                 {
-                    MapFillerHexNodeOptions options;
-                    if (optionsDelegate != null)
-                    {
-                        options = optionsDelegate(col, row);
-                    }
-                    else
-                    {
-                        options = new MapFillerHexNodeOptions
-                        {
-                            IsObstacle = false
-                        };
-                    }
-
-                    var node = new HexNode(col, row, options.IsObstacle)
+                    var node = new HexNode(col, row)
                     {
                         Id = nodeIdCounter++
                     };
@@ -83,7 +77,5 @@ namespace Zilon.Core.MapGenerators
                 }
             }
         }
-
-        public delegate MapFillerHexNodeOptions OptionsDelegate(int x, int y);
     }
 }

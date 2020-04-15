@@ -61,7 +61,7 @@ namespace Zilon.Core.Specs.Contexts
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var map = sectorManager.CurrentSector.Map;
-            var selectedNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetX == x && n.OffsetY == y);
+            var selectedNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetCoords.X == x && n.OffsetCoords.Y == y);
 
             var nodeViewModelMock = new Mock<IMapNodeViewModel>();
             nodeViewModelMock.SetupGet(n => n.Node).Returns(selectedNode);

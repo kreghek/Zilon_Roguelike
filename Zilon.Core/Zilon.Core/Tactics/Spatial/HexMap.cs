@@ -60,9 +60,14 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="node"></param>
         public override void AddNode(IGraphNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             var hexNode = (HexNode)node;
-            var offsetX = hexNode.OffsetX;
-            var offsetY = hexNode.OffsetY;
+            var offsetX = hexNode.OffsetCoords.X;
+            var offsetY = hexNode.OffsetCoords.Y;
 
             var nodeMatrix = _segmentDict.First().Value;
 
@@ -99,8 +104,13 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>Возвращает набор соседних узлов.</returns>
         public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             var hexCurrent = (HexNode)node;
-            var offsetCoords = new OffsetCoords(hexCurrent.OffsetX, hexCurrent.OffsetY);
+            var offsetCoords = hexCurrent.OffsetCoords;
             var segmentX = offsetCoords.X / _segmentSize;
             if (offsetCoords.X < 0)
             {
@@ -257,9 +267,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         private static bool CheckNodeIsObstable(IGraphNode targetNode)
         {
-            var hex = (HexNode)targetNode;
-            var hexIsObstacle = hex.IsObstacle;
-            return hexIsObstacle;
+            return false;
         }
 
         public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
