@@ -18,7 +18,7 @@ public class FowManager : MonoBehaviour
 
     private MapNodeVM[] _nodeViewModels;
     private IList<ActorViewModel> _actorViewModels;
-    private IList<ContainerVm> _containerViewModels;
+    private IList<StaticObjectViewModel> _staticObjectViewModels;
 
     public void Start()
     {
@@ -35,7 +35,7 @@ public class FowManager : MonoBehaviour
         }
     }
 
-    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels, IList<ContainerVm> containerViewModels)
+    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels, IList<StaticObjectViewModel> staticObjectViewModels)
     {
         if (nodeViewModels is null)
         {
@@ -47,16 +47,16 @@ public class FowManager : MonoBehaviour
             throw new System.ArgumentNullException(nameof(actorViewModels));
         }
 
-        if (containerViewModels is null)
+        if (staticObjectViewModels is null)
         {
-            throw new System.ArgumentNullException(nameof(containerViewModels));
+            throw new System.ArgumentNullException(nameof(staticObjectViewModels));
         }
 
         _nodeViewModels = nodeViewModels.ToArray();
 
         _actorViewModels = actorViewModels;
 
-        _containerViewModels = containerViewModels;
+        _staticObjectViewModels = staticObjectViewModels;
     }
 
     private void PrepareSlowUpdate()
@@ -123,12 +123,12 @@ public class FowManager : MonoBehaviour
 
     private void ProcessContainerFow(ISectorFowData sectorFowData)
     {
-        if (_containerViewModels == null)
+        if (_staticObjectViewModels == null)
         {
             return;
         }
 
-        foreach (var containerViewModel in _containerViewModels.ToArray())
+        foreach (var containerViewModel in _staticObjectViewModels.ToArray())
         {
             var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
 
