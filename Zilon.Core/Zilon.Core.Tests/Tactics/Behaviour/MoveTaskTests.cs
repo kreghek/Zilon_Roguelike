@@ -31,12 +31,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
-                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
+                map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(2, 4),
                 finishNode
             };
 
@@ -153,10 +153,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         private static IGraphNode[] CreateExpectedPath(ISectorMap map)
         {
             return new IGraphNode[] {
-                map.Nodes.Cast<HexNode>().SelectBy(4,4),
-                map.Nodes.Cast<HexNode>().SelectBy(3,4),
-                map.Nodes.Cast<HexNode>().SelectBy(2,4),
-                map.Nodes.Cast<HexNode>().SelectBy(1,5),
+                map.Nodes.SelectByHexCoords(4,4),
+                map.Nodes.SelectByHexCoords(3,4),
+                map.Nodes.SelectByHexCoords(2,4),
+                map.Nodes.SelectByHexCoords(1,5),
             };
         }
     }

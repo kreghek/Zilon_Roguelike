@@ -66,7 +66,7 @@ namespace Zilon.Core.Tests.Commands
             }
 
             var targetMock = new Mock<IStaticObject>();
-            var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
+            var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
 
             var containerMock = new Mock<IPropContainer>();

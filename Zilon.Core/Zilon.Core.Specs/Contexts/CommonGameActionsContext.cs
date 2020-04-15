@@ -24,8 +24,7 @@ namespace Zilon.Core.Specs.Contexts
                 .CurrentSector
                 .Map
                 .Nodes
-                .Cast<HexNode>()
-                .SelectBy(targetCoords.X, targetCoords.Y);
+                .SelectByHexCoords(targetCoords.X, targetCoords.Y);
 
             var nodeViewModel = new TestNodeViewModel
             {
