@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class DialogTransition
     {
-        public string Text;
+        public string Text { get; set; }
 
         public DialogNode StartNode { get; set; }
 

@@ -23,8 +23,8 @@ namespace Zilon.Core.MapGenerators
             int mapSize,
             OptionsDelegate optionsDelegate = null)
         {
-            CreateNodes(map, startX, startY,  mapSize, optionsDelegate);
-            
+            CreateNodes(map, startX, startY, mapSize, optionsDelegate);
+
             if (!(map is HexMap))
             {
                 CreateEdges(map);
@@ -61,14 +61,14 @@ namespace Zilon.Core.MapGenerators
             {
                 for (var col = startX; col < startX + mapSize; col++)
                 {
-                    HexNodeOptions options;
+                    MapFillerHexNodeOptions options;
                     if (optionsDelegate != null)
                     {
                         options = optionsDelegate(col, row);
                     }
                     else
                     {
-                        options = new HexNodeOptions
+                        options = new MapFillerHexNodeOptions
                         {
                             IsObstacle = false
                         };
@@ -84,11 +84,6 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        public struct HexNodeOptions
-        {
-            public bool IsObstacle;
-        }
-
-        public delegate HexNodeOptions OptionsDelegate(int x, int y);
+        public delegate MapFillerHexNodeOptions OptionsDelegate(int x, int y);
     }
 }

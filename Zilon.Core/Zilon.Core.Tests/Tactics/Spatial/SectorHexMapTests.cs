@@ -45,7 +45,7 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var map = new SectorHexMap();
             MapFiller.FillSquareMap(map, 3, (x, y) =>
             {
-                return new MapFiller.HexNodeOptions
+                return new MapFillerHexNodeOptions
                 {
                     IsObstacle = x == 1 && y == 0  // (0, 1) здесь будет препятсвие
                 };
@@ -80,7 +80,7 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var map = new SectorHexMap();
             MapFiller.FillSquareMap(map, 3, (x, y) =>
             {
-                return new MapFiller.HexNodeOptions
+                return new MapFillerHexNodeOptions
                 {
                     IsObstacle = x == 1 && y == 1  // (1, 1) здесь будет препятсвие
                 };
