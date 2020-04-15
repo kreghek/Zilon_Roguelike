@@ -29,7 +29,7 @@ public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel
 
     public virtual void Start()
     {
-        var hexNode = (HexNode)Container.Node;
+        var hexNode = (HexNode)StaticObject.Node;
         //TODO -0.26 вынести в отдельную константу или вообще сервис.
         //https://answers.unity.com/questions/598492/how-do-you-set-an-order-for-2d-colliders-that-over.html
         // Статья, в которой подтверждается, что коллайдеры, расположенные на одной z-координате,

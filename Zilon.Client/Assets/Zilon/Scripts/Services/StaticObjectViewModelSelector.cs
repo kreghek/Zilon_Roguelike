@@ -1,6 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
+﻿using UnityEngine;
 
 using Zilon.Core.Tactics;
 
@@ -8,33 +6,32 @@ namespace Assets.Zilon.Scripts.Services
 {
     class StaticObjectViewModelSelector
     {
-        [NotNull] public ContainerVm ChestPrefab;
-
-        [NotNull] public ContainerVm LootPrefab;
-
-        [NotNull] public ContainerVm TrashPrefab;
-
         public StaticObjectViewModel SelectViewModel(IStaticObject staticObject)
         {
             if (staticObject.HasModule<IPropContainer>())
             {
                 if (staticObject.GetModule<IPropContainer>() is ILootContainer)
                 {
-                    return LootPrefab;
+                    return LoadFromResource("Loot");
                 }
 
                 if (staticObject.GetModule<IPropContainer>().Purpose == PropContainerPurpose.Treasures)
                 {
-                    return ChestPrefab;
+                    return LoadFromResource("Chest");
                 }
 
-                return TrashPrefab;
+                return LoadFromResource("Trash");
             }
             else
             {
                 // Возвращаем представление обычного статика-камня.
-                throw new NotImplementedException();
+                return LoadFromResource("StoneDeposit");
             }
+        }
+
+        private StaticObjectViewModel LoadFromResource(string prefabName)
+        {
+            return Resources.Load<StaticObjectViewModel>($"StaticObjects/{prefabName}");
         }
     }
 }
