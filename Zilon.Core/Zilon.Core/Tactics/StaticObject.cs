@@ -56,7 +56,7 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         private bool GetIsMapBlock()
         {
-            var propContainer = GetModule<IPropContainer>();
+            var propContainer = this.GetModuleSafe<IPropContainer>();
             return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
 
@@ -79,6 +79,24 @@ namespace Zilon.Core.Tactics
             {
                 return type;
             }
+        }
+    }
+
+    public static class IStaticObjectExtensions
+    {
+        public static TStaticObjectModule GetModuleSafe<TStaticObjectModule>(this IStaticObject source)
+        {
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (!source.HasModule<TStaticObjectModule>())
+            {
+                return default;
+            }
+
+            return source.GetModule<TStaticObjectModule>();
         }
     }
 }

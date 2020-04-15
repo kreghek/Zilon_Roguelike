@@ -81,8 +81,8 @@ namespace Zilon.Core.Tests.MapGenerators
         private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
             IMapFactory mapFactory)
         {
-            var chestGeneratorMock = new Mock<IChestGenerator>();
-            var chestGenerator = chestGeneratorMock.Object;
+            var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
+            var staticObstaclesGenerator = staticObstaclesGeneratorMock.Object;
 
             var monsterGeneratorMock = new Mock<IMonsterGenerator>();
             var monsterGenerator = monsterGeneratorMock.Object;
@@ -109,7 +109,7 @@ namespace Zilon.Core.Tests.MapGenerators
             return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
-                chestGenerator,
+                staticObstaclesGenerator,
                 diseaseGenerator,
                 botPlayer);
         }

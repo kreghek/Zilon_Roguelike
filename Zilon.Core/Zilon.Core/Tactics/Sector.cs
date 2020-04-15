@@ -229,7 +229,7 @@ namespace Zilon.Core.Tactics
                     Map.HoldNode(container.Node, container);
                 }
 
-                if (container.GetModule<IPropContainer>() is ILootContainer lootContainer)
+                if (container.GetModuleSafe<IPropContainer>() is ILootContainer lootContainer)
                 {
                     lootContainer.ItemsRemoved += LootContainer_ItemsRemoved;
                 }
@@ -241,7 +241,7 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModule<IPropContainer>(), container));
+                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
                 StaticObjectManager.Remove(staticObject);
             }
         }
