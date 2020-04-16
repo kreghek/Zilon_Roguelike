@@ -11,6 +11,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.

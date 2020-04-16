@@ -15,13 +15,13 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -67,7 +67,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-    
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -126,6 +126,10 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "open-container-command")]
     private readonly ICommand _openContainerCommand;
+
+    [NotNull]
+    [Inject(Id = "mine-deposit-command")]
+    private readonly ICommand _mineDepositCommand;
 
     [NotNull]
     [Inject(Id = "show-trader-modal-command")]
@@ -487,7 +491,14 @@ public class SectorVM : MonoBehaviour
 
         if (containerViewModel != null)
         {
-            _clientCommandExecutor.Push(_openContainerCommand);
+            if (containerViewModel.Container.HasModule<IPropContainer>())
+            {
+                _clientCommandExecutor.Push(_openContainerCommand);
+            }
+            else if (containerViewModel.Container.HasModule<IPropDepositModule>())
+            {
+                _clientCommandExecutor.Push(_mineDepositCommand);
+            }
         }
     }
 

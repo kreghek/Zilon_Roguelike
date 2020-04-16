@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -8,7 +9,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands.Sector
 {
-    public class MineDepositCommand : ActorCommandBase
+    public sealed class MineDepositCommand : ActorCommandBase
     {
         public MineDepositCommand(
             IGameLoop gameLoop,
