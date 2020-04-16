@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics.Behaviour
+namespace Zilon.Core.Benchmarks.Fow
 {
-    public sealed class FowContext : IFowContext
+    class TestFowContext : IFowContext
     {
         private readonly ISectorMap _sectorMap;
-        private readonly IStaticObjectManager _staticObjectManager;
 
-        public FowContext(ISectorMap sectorMap, IStaticObjectManager staticObjectManager)
+        public TestFowContext(ISectorMap sectorMap)
         {
             _sectorMap = sectorMap ?? throw new ArgumentNullException(nameof(sectorMap));
-            _staticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
         }
 
         public IEnumerable<IGraphNode> GetNext(IGraphNode node)
