@@ -1,5 +1,4 @@
 ﻿using Zilon.Core.Schemes;
-using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.StaticObjectModules
 {

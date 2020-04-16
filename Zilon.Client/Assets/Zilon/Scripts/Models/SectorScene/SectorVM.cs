@@ -491,7 +491,8 @@ public class SectorVM : MonoBehaviour
 
         if (containerViewModel != null)
         {
-            if (containerViewModel.Container.HasModule<IPropContainer>())
+            if (containerViewModel.Container.HasModule<IPropContainer>() &&
+                containerViewModel.Container.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
                 _clientCommandExecutor.Push(_openContainerCommand);
             }
