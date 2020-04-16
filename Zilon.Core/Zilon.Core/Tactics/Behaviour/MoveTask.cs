@@ -47,6 +47,7 @@ namespace Zilon.Core.Tactics.Behaviour
             if (Actor.SectorFowData is HumanSectorFowData)
             {
                 const int DISTANCE_OF_SIGN = 5;
+                var fowContext = new FowContext()
                 FowHelper.UpdateFowData(Actor.SectorFowData, _map, nextNode, DISTANCE_OF_SIGN);
             }
 
@@ -82,7 +83,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             yield return baseNode;
 
-            if (person.PhysicalSize == Persons.PhysicalSize.Size7)
+            if (person.PhysicalSize == PhysicalSize.Size7)
             {
                 var neighbors = _map.GetNext(baseNode);
                 foreach (var neighbor in neighbors)

@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Zilon.Core.Graphs;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -15,19 +14,19 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Обновление состояния тумана войны для актёра с учётом карты и опорного узла карты.
         /// </summary>
         /// <param name="fowData">Состояние тумана войны которого обновляется.</param>
-        /// <param name="map">Карта, на которой действует актёр.</param>
+        /// <param name="fowContext">Контекст тумана войны.</param>
         /// <param name="baseNode">Опорный узел.</param>
         /// <param name="radius">Радиус обзора персонажа.</param>
-        public static void UpdateFowData(ISectorFowData fowData, ISectorMap map, IGraphNode baseNode, int radius)
+        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode, int radius)
         {
             if (fowData is null)
             {
                 throw new System.ArgumentNullException(nameof(fowData));
             }
 
-            if (map is null)
+            if (fowContext is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new System.ArgumentNullException(nameof(fowContext));
             }
 
             if (baseNode is null)
@@ -36,7 +35,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             // Все наблюдаемые из базового узла узлы карты.
-            var observingNodes = GetObservingNodes(map, baseNode, radius);
+            var observingNodes = GetObservingNodes(fowContext, baseNode, radius);
 
             var currentObservedFowNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing);
 
@@ -78,18 +77,18 @@ namespace Zilon.Core.Tactics.Behaviour
             return fowData.GetNode(observingNode);
         }
 
-        private static IGraphNode[] GetObservingNodes(ISectorMap map, IGraphNode baseNode, int radius)
+        private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
         {
             var border = new List<IGraphNode> { baseNode };
 
             var resultList = new List<IGraphNode> { baseNode };
 
             // Шаги заливки
-            for (var i = 1; i <= radius; i++)
+            for (var stepIndex = 1; stepIndex <= radius; stepIndex++)
             {
-                var newBorder = GetNextForBorder(border, resultList, map);
+                var newBorder = GetNextForBorder(border, resultList, fowContext);
 
-                var visibleBorder = newBorder.AsParallel().Where(x => map.TargetIsOnLine(x, baseNode)).ToArray();
+                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode)).ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);
@@ -99,13 +98,13 @@ namespace Zilon.Core.Tactics.Behaviour
             return resultList.ToArray();
         }
 
-        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, ISectorMap map)
+        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, IFowContext fowContext)
         {
             var borderTotal = new List<IGraphNode>();
 
             foreach (var node in border)
             {
-                var next = map.GetNext(node);
+                var next = fowContext.GetNext(node);
 
                 var except = border.Union(result).Union(borderTotal);
 
