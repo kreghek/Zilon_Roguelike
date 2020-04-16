@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Client;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -27,7 +28,8 @@ namespace Zilon.Core.Commands.Sector
                 return false;
             }
 
-            var equipedTool = GetEquipedTool(targetDeposit.Tool);
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.Tool);
             if (equipedTool is null)
             {
                 return false;
@@ -41,7 +43,8 @@ namespace Zilon.Core.Commands.Sector
             var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).Container;
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
-            var equipedTool = GetEquipedTool(targetDeposit.Tool);
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.Tool);
             if (equipedTool is null)
             {
                 // Потенциально здесь вместо исключения можно генерировать методы добычи руками.
@@ -54,9 +57,9 @@ namespace Zilon.Core.Commands.Sector
             }
         }
 
-        private Equipment GetEquipedTool(IPropScheme requiredToolScheme)
+        private static Equipment GetEquipedTool(IEquipmentCarrier equipmentCarrier, IPropScheme requiredToolScheme)
         {
-            foreach (var equipment in PlayerState.ActiveActor.Actor.Person.EquipmentCarrier)
+            foreach (var equipment in equipmentCarrier)
             {
                 if (equipment is null)
                 {
@@ -75,7 +78,8 @@ namespace Zilon.Core.Commands.Sector
         private MineTask CreateTask(IActor actor, IStaticObject staticObject, Equipment equipedTool)
         {
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool);
-            return new MineTask(actor, staticObject, toolMineDepositMethod, SectorManager.CurrentSector.Map);
+            var map = SectorManager.CurrentSector.Map;
+            return new MineTask(actor, staticObject, toolMineDepositMethod, map);
         }
     }
 }
