@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -14,17 +13,8 @@ namespace Zilon.Core.StaticObjectModules
         public override bool IsMapBlock => true;
 
         [ExcludeFromCodeCoverage]
-        public DropTablePropChest(IGraphNode node,
-            IDropTableScheme[] dropTables,
+        public DropTablePropChest(IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
-        {
-        }
-
-        [ExcludeFromCodeCoverage]
-        public DropTablePropChest(IGraphNode node,
-            IDropTableScheme[] dropTables,
-            IDropResolver dropResolver,
-            int id) : base(new DropTableChestStore(dropTables, dropResolver))
         {
         }
     }

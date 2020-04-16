@@ -32,7 +32,7 @@ namespace Zilon.Core.StaticObjectModules
         public void Mine()
         {
             if (_exhautingCounter <= 0)
-            { 
+            {
                 throw new InvalidOperationException("Попытка выполнить добычу в исчерпанных залежах");
             }
 
@@ -41,6 +41,8 @@ namespace Zilon.Core.StaticObjectModules
             {
                 _propContainer.Content.Add(prop);
             }
+
+            _exhautingCounter++;
         }
     }
 }

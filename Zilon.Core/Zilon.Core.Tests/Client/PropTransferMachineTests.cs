@@ -36,7 +36,7 @@ namespace Zilon.Core.Tests.Client
                 new Resource(resourceScheme, 1)
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -75,7 +75,7 @@ namespace Zilon.Core.Tests.Client
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -111,7 +111,7 @@ namespace Zilon.Core.Tests.Client
                 resource
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -154,7 +154,7 @@ namespace Zilon.Core.Tests.Client
                 new Resource(resourceScheme, 1)
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -200,7 +200,7 @@ namespace Zilon.Core.Tests.Client
                 new Resource(resourceScheme, 2)
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -241,7 +241,7 @@ namespace Zilon.Core.Tests.Client
                 new Equipment(equipmentScheme, new ITacticalActScheme[0])
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);
@@ -286,7 +286,7 @@ namespace Zilon.Core.Tests.Client
                 new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
             };
             var node = CreateNode();
-            var container = new FixedPropChest(node, containerProps);
+            var container = new FixedPropChest(containerProps);
 
             // трансферная машина
             var transferMachine = new PropTransferMachine(inventory, container.Content);

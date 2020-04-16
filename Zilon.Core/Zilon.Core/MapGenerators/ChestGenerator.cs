@@ -118,14 +118,14 @@ namespace Zilon.Core.MapGenerators
                     switch (containerPurpose)
                     {
                         case PropContainerPurpose.Trash:
-                            container = new DropTablePropChest(containerNode, trashDropTables, _dropResolver)
+                            container = new DropTablePropChest(trashDropTables, _dropResolver)
                             {
                                 Purpose = PropContainerPurpose.Trash
                             };
                             break;
 
                         case PropContainerPurpose.Treasures:
-                            container = new DropTablePropChest(containerNode, treasuresDropTable, _dropResolver)
+                            container = new DropTablePropChest(treasuresDropTable, _dropResolver)
                             {
                                 Purpose = PropContainerPurpose.Treasures
                             };

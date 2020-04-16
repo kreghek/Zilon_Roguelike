@@ -50,8 +50,7 @@ namespace Zilon.Core.Tests.Tactics
                 .Returns(new IProp[] { new Resource(testPropScheme, 1) });
             var dropResolver = dropResolverMock.Object;
 
-            var container = new DropTablePropChest(node,
-                new IDropTableScheme[] { dropTable },
+            var container = new DropTablePropChest(new IDropTableScheme[] { dropTable },
                 dropResolver);
 
 

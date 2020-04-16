@@ -229,7 +229,7 @@ namespace Zilon.Core.Specs.Contexts
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropChest(node, new IProp[0], id);
+            var chest = new FixedPropChest(new IProp[0]);
             var staticObject = new StaticObject(node, id);
             staticObject.AddModule<IPropContainer>(chest);
 

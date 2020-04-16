@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics
 {
@@ -11,7 +10,7 @@ namespace Zilon.Core.Tactics
     /// Тип сущности сектора.
     /// Сейчас это либо <see cref="IActor">IActor</see> либо <see cref="IPropContainer">IPropContainer</see>.
     /// </typeparam>
-    public interface ISectorEntityManager<TSectorEntity> where TSectorEntity: class
+    public interface ISectorEntityManager<TSectorEntity> where TSectorEntity : class
     {
         /// <summary>
         /// Текущий список всех актёров.

@@ -375,7 +375,7 @@ namespace Zilon.Core.Tactics
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);
 
-            var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+            var loot = new DropTableLoot(dropSchemes, _dropResolver);
 
             var staticObject = new StaticObject(actor.Node, default);
             staticObject.AddModule<IPropContainer>(loot);

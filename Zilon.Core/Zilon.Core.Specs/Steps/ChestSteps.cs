@@ -53,7 +53,7 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(node, System.Array.Empty<DropTableScheme>(), dropResolver, chestId);
+            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
             var staticObject = new StaticObject(node, chestId);
             staticObject.AddModule<IPropContainer>(chest);
 
