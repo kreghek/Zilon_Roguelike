@@ -22,7 +22,6 @@ namespace Zilon.Core.Tactics.Behaviour
             _map = map ?? throw new ArgumentNullException(nameof(map));
         }
 
-
         protected override void ExecuteTask()
         {
             var distance = _map.DistanceBetween(Actor.Node, _staticObject.Node);
