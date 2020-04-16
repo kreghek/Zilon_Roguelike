@@ -9,6 +9,8 @@ namespace Zilon.Core.StaticObjectModules
         public DepositContainer() : base(new ChestStore())
         {
             Content.Removed += Content_Removed;
+
+            IsActive = false;
         }
 
         private void Content_Removed(object sender, PropStoreEventArgs e)

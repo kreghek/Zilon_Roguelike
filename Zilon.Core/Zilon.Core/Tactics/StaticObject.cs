@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.StaticObjectModules;
@@ -11,11 +12,11 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class StaticObject : IStaticObject
     {
-        private readonly IDictionary<Type, object> _modules;
+        private readonly IDictionary<string, IStaticObjectModule> _modules;
 
         public StaticObject(IGraphNode node, int id)
         {
-            _modules = new Dictionary<Type, object>();
+            _modules = new Dictionary<string, IStaticObjectModule>();
 
             Id = id;
             Node = node ?? throw new ArgumentNullException(nameof(node));
@@ -34,15 +35,9 @@ namespace Zilon.Core.Tactics
         public bool IsSightBlock { get => false; }
 
         /// <inheritdoc/>
-        public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule)
+        public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule) where TSectorObjectModule: IStaticObjectModule
         {
-            var sanitizedModuleType = GetSanitizedModuleType(typeof(TSectorObjectModule));
-            if (sanitizedModuleType is null)
-            {
-                throw new ArgumentException("Указанные объект не является модулем", nameof(sectorObjectModule));
-            }
-
-            _modules.Add(sanitizedModuleType, sectorObjectModule);
+            _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
 
         /// <inheritdoc/>
@@ -66,23 +61,23 @@ namespace Zilon.Core.Tactics
 
         private Type GetSanitizedModuleType(Type type)
         {
-            var moduleAttribute = type.GetCustomAttributes(typeof(StaticObjectModuleAttribute), false);
-            if (moduleAttribute is null)
+            var implementedInterfaces = type.GetInterfaces();
+
+            foreach (var implementedInterface in implementedInterfaces)
             {
-                var parent = type.BaseType;
-                if (parent is null)
+                //var moduleAttribute = implementedInterface.GetCustomAttributes(typeof(StaticObjectModuleAttribute), false);
+                var moduleAttribute = implementedInterface.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(StaticObjectModuleAttribute));
+                if (moduleAttribute is null)
                 {
-                    return null;
+                    continue;
                 }
                 else
                 {
-                    return GetSanitizedModuleType(parent);
+                    return implementedInterface;
                 }
             }
-            else
-            {
-                return type;
-            }
+
+            return null;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Zilon.Core.StaticObjectModules
 
             Content.Added += Content_Added;
             Content.Removed += Content_Removed;
+
+            IsActive = true;
         }
 
         /// <inheritdoc/>
