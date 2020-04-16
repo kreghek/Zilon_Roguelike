@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Tactics;
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Commands
 {

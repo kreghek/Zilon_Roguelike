@@ -3,7 +3,7 @@
 using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
     /// Реализация сундука с фиксированным лутом.

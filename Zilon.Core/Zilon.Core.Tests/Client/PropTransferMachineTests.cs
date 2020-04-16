@@ -10,7 +10,7 @@ using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Client

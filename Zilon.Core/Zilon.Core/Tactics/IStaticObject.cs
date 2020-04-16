@@ -3,7 +3,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public interface IStaticObject: IPassMapBlocker
+    public interface IStaticObject : IPassMapBlocker
     {
         /// <summary>
         /// Идентфикиатор объекта.
@@ -18,10 +18,25 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IGraphNode Node { get; }
 
+        /// <summary>
+        /// Получение модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
         TSectorObjectModule GetModule<TSectorObjectModule>();
 
+        /// <summary>
+        /// Добавление модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
         void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule);
 
+        /// <summary>
+        /// Проверка наличия модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
         bool HasModule<TSectorObjectModule>();
 
         /// <summary>

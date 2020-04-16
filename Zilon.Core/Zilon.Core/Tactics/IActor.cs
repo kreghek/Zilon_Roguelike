@@ -49,6 +49,13 @@ namespace Zilon.Core.Tactics
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
         /// <summary>
+        /// Добыча ресурса из залежей.
+        /// </summary>
+        /// <param name="deposit"> Целевые залежи. </param>
+        /// <param name="method"> Метод добычи. </param>
+        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
+
+        /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
         event EventHandler Moved;
@@ -57,6 +64,11 @@ namespace Zilon.Core.Tactics
         /// Происходит, когда актёр открывает контейнер в секторе.
         /// </summary>
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <summary>
+        /// Происходит, когда актёр выполняет добычу ресурса в секторе.
+        /// </summary>
+        event EventHandler<MineDepositEventArgs> DepositMined;
 
         /// <summary>
         /// Происходит, когда актёр выполняет действие.
@@ -92,9 +104,5 @@ namespace Zilon.Core.Tactics
         /// Но будут специфичны для каждого актёра. Например, для ботов.
         /// </remarks>
         ISectorFowData SectorFowData { get; }
-
-        int GameLoopCounter { get; }
-
-        void IncreaseGameLoopCounter(int value);
     }
 }

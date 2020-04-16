@@ -1,14 +1,15 @@
 ﻿using System;
 
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
     /// Интерфейт предмета в секторе.
     /// </summary>
-    public interface IPropContainer: IPassMapBlocker
+    public interface IPropContainer : IPassMapBlocker
     {
         /// <summary>
         /// Содержимое контейнера.

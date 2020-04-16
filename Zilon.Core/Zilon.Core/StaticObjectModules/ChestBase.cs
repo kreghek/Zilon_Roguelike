@@ -2,8 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     public abstract class ChestBase : IPropContainer
     {

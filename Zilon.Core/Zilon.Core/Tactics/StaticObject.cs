@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics
 {

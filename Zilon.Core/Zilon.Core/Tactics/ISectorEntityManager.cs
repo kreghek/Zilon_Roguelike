@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics
 {

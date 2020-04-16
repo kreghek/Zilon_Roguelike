@@ -2,8 +2,9 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
     /// Реализация контейнера для выпавшего из монстра лута.

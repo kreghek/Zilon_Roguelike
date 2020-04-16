@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
@@ -18,13 +19,14 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
-        private int _gameLoopCounter;
-
         /// <inheritdoc/>
         public event EventHandler Moved;
 
         /// <inheritdoc/>
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
+        public event EventHandler<MineDepositEventArgs> DepositMined;
 
         /// <inheritdoc/>
         public event EventHandler<UsedActEventArgs> UsedAct;
@@ -49,7 +51,6 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
-        public int GameLoopCounter { get => _gameLoopCounter; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -445,13 +446,27 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void IncreaseGameLoopCounter(int value)
+        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
         {
-            _gameLoopCounter += value;
-            if (_gameLoopCounter >= 1000)
+            if (deposit is null)
             {
-                _gameLoopCounter -= 1000;
+                throw new ArgumentNullException(nameof(deposit));
             }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryOpen(deposit.GetModule<IPropDepositModule>());
+
+            DoMineDeposit(deposit, openResult);
+        }
+
+        private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
+        {
+            var e = new MineDepositEventArgs(deposit, openResult);
+            DepositMined?.Invoke(this, e);
         }
     }
 }

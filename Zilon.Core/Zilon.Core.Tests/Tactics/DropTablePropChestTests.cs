@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
 
