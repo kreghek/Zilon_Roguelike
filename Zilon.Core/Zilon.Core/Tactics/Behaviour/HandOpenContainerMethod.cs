@@ -9,6 +9,11 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         public IOpenContainerResult TryOpen(IPropContainer container)
         {
+            if (container is null)
+            {
+                throw new System.ArgumentNullException(nameof(container));
+            }
+
             container.Open();
             return new SuccessOpenContainerResult();
         }

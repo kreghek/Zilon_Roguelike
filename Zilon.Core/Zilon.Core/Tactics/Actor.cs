@@ -458,7 +458,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(method));
             }
 
-            var openResult = method?.TryOpen(deposit.GetModule<IPropDepositModule>());
+            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
 
             DoMineDeposit(deposit, openResult);
         }

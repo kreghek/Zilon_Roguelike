@@ -13,6 +13,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="container"> Целевые залежи. </param>
         /// <returns> Возвращает результат добычи. </returns>
-        IMineDepositResult TryOpen(IPropDepositModule deposit);
+        IMineDepositResult TryMine(IPropDepositModule deposit);
     }
 }

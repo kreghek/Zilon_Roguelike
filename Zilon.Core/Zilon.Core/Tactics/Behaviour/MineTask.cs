@@ -1,5 +1,7 @@
 ﻿using System;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -7,12 +9,12 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MineTask : OneTurnActorTaskBase
     {
         private readonly IStaticObject _staticObject;
-        private readonly IOpenContainerMethod _method;
+        private readonly IMineDepositMethod _method;
         private readonly ISectorMap _map;
 
         public MineTask([NotNull] IActor actor,
             [NotNull] IStaticObject staticObject,
-            [NotNull] IOpenContainerMethod method,
+            [NotNull] IMineDepositMethod method,
             [NotNull] ISectorMap map) : base(actor)
         {
             _staticObject = staticObject ?? throw new ArgumentNullException(nameof(staticObject));
@@ -36,7 +38,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Задачу на открытие сундука нельзя выполнить сквозь стены.");
             }
 
-            Actor.OpenContainer(_staticObject, _method);
+            Actor.MineDeposit(_staticObject, _method);
         }
     }
 }
