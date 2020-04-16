@@ -73,8 +73,6 @@ public class PlayerPersonActivator : MonoBehaviour
         var fowData = new HumanSectorFowData();
         var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
 
-        FowHelper.UpdateFowData(actor.SectorFowData, SectorViewModel.Sector.Map, startNode, 5);
-
         actorManager.Add(actor);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, TargetObject);
