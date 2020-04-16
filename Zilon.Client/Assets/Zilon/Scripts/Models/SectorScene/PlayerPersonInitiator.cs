@@ -90,13 +90,6 @@ public class PlayerPersonInitiator : MonoBehaviour
             playerActorStartNode,
             nodeViewModels);
 
-        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(
-            playerActorViewModel.Actor.SectorFowData,
-            _sectorManager.CurrentSector.Map,
-            playerActorStartNode,
-            radius: 5);
-
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
