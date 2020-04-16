@@ -54,7 +54,7 @@ namespace Zilon.Core.MapGenerators
 
                     // Все залежи изначально имеют пустой модуль контейнера.
                     // Он будет заполняться по мере добычи.
-                    var containerModule = new FixedPropChest(Array.Empty<IProp>());
+                    var containerModule = new DepositContainer();
                     staticObject.AddModule(containerModule);
 
                     var dropScheme = _schemeService.GetScheme<IDropTableScheme>("ore-deposit");

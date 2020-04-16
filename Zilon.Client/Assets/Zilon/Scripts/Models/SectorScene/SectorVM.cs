@@ -484,7 +484,7 @@ public class SectorVM : MonoBehaviour
 
     private void Container_Selected(object sender, EventArgs e)
     {
-        var containerViewModel = sender as ContainerVm;
+        var containerViewModel = sender as StaticObjectViewModel;
 
         _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
@@ -492,7 +492,7 @@ public class SectorVM : MonoBehaviour
         if (containerViewModel != null)
         {
             if (containerViewModel.Container.HasModule<IPropContainer>() &&
-                containerViewModel.Container.GetModule<IPropContainer>().Content.CalcActualItems().Any())
+                containerViewModel.Container.GetModule<IPropContainer>().IsActive)
             {
                 _clientCommandExecutor.Push(_openContainerCommand);
             }

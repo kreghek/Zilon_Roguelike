@@ -10,7 +10,7 @@ namespace Zilon.Core.StaticObjectModules
     /// Интерфейт предмета в секторе.
     /// </summary>
     [StaticObjectModule]
-    public interface IPropContainer : IPassMapBlocker
+    public interface IPropContainer : IPassMapBlocker, IStaticObjectModule
     {
         /// <summary>
         /// Содержимое контейнера.

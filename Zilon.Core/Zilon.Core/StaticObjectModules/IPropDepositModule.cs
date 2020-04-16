@@ -3,7 +3,7 @@
 namespace Zilon.Core.StaticObjectModules
 {
     [StaticObjectModule]
-    public interface IPropDepositModule
+    public interface IPropDepositModule: IStaticObjectModule
     {
         /// <summary>
         /// Инструмент, необходимый для разработки залежей.

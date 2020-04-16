@@ -30,6 +30,9 @@ namespace Zilon.Core.StaticObjectModules
         public abstract bool IsMapBlock { get; }
 
         /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc/>
         public event EventHandler Opened;
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsAdded;

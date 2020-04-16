@@ -25,10 +25,16 @@ namespace Zilon.Core.StaticObjectModules
             Tool = toolScheme ?? throw new ArgumentNullException(nameof(toolScheme));
         }
 
+        /// <inheritdoc/>
         public IPropScheme Tool { get; }
 
+        /// <inheritdoc/>
         public bool IsExhausted { get => _exhautingCounter > 0; }
 
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc/>
         public void Mine()
         {
             if (_exhautingCounter <= 0)
@@ -43,6 +49,8 @@ namespace Zilon.Core.StaticObjectModules
             }
 
             _exhautingCounter++;
+
+            _propContainer.IsActive = true;
         }
     }
 }
