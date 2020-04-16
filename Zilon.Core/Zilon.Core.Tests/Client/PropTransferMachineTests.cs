@@ -112,7 +112,7 @@ namespace Zilon.Core.Tests.Client
             {
                 resource
             };
-            var node = CreateNode();
+            
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
@@ -153,7 +153,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 1)
             };
-            var node = CreateNode();
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
@@ -170,13 +170,6 @@ namespace Zilon.Core.Tests.Client
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
             monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
-        }
-
-        private static IGraphNode CreateNode()
-        {
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
-            return node;
         }
 
         /// <summary>
@@ -197,7 +190,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Resource(resourceScheme, 2)
             };
-            var node = CreateNode();
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
@@ -236,7 +229,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
             };
-            var node = CreateNode();
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
@@ -277,7 +270,7 @@ namespace Zilon.Core.Tests.Client
             var containerProps = new IProp[] {
                 new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
             };
-            var node = CreateNode();
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
