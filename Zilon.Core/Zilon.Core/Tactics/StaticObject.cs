@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Базовая реализация статического объекта в секторе.
     /// </summary>
-    public sealed class StaticObject: IStaticObject
+    public sealed class StaticObject : IStaticObject
     {
         private readonly IDictionary<Type, object> _modules;
 
@@ -29,6 +29,9 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc/>
         public bool IsMapBlock { get => GetIsMapBlock(); }
+
+        /// <inheritdoc/>
+        public bool IsSightBlock { get => false; }
 
         /// <inheritdoc/>
         public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule)
