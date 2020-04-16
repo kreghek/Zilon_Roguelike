@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.StaticObjectModules
 {
+    [StaticObjectModule]
     public interface IPropDepositModule
     {
         /// <summary>

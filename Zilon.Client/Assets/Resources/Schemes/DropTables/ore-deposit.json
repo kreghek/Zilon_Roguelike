@@ -1,0 +1,16 @@
+{
+  "Rolls": 1,
+  "Records": [
+	{
+      "SchemeSid": "fire-eye",
+	  "MinCount": 1,
+	  "MaxCount": 1,
+      "Weight": 10
+    },
+	
+	{
+	  "SchemeSid": "fire-opal-necklace",
+      "Weight": 1
+	}
+  ]
+}
