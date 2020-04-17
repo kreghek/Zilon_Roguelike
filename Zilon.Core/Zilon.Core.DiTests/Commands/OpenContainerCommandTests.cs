@@ -73,7 +73,7 @@ namespace Zilon.Core.Tests.Commands
             var containerMock = new Mock<IPropContainer>();
             containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
             var container = containerMock.Object;
-            targetMock.Setup(x => x.GetModule<IPropContainer>()).Returns(container);
+            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer))).Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();
