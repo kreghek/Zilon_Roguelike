@@ -1,4 +1,11 @@
-component_depth: 3
+component_depth: 2
+production:
+    include:
+      - .*Zilon.Core/Zilon.Bot.Players.*
+      - .*Zilon.Core/Zilon.Bot.Sdk.*
+      - .*Zilon.Core/Zilon.Core.*
+      - .*Zilon.Core/Zilon.Tournament.ApiGate.*
+      - .*Zilon.Client.*
 test:
     include:
       - .*([Tt]ests|[Ss]pecs|BotEnvironment|Launcher|Generator|Bench).*
