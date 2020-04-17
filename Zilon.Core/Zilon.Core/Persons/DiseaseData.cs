@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Diseases;
@@ -43,96 +44,130 @@ namespace Zilon.Core.Persons
 
         public void Update(IEffectCollection personEffects)
         {
+            if (personEffects is null)
+            {
+                throw new ArgumentNullException(nameof(personEffects));
+            }
+
             foreach (var diseaseProcess in Diseases.ToArray())
             {
-                diseaseProcess.Update();
+                UpdateDeseaseProcess(personEffects, diseaseProcess);
+            }
+        }
 
-                // Если есть болезнь, то назначаем эффекты на симпомы этой болезни.
+        private void UpdateDeseaseProcess(IEffectCollection personEffects, IDiseaseProcess diseaseProcess)
+        {
+            diseaseProcess.Update();
 
-                // Первые 25% силы болезнь себя не проявляет.
-                // Оставшиеся 75% делим на равные отрезки между всеми симптомами.
-                // По мере увеличения силы болезни добавляем по эффекту на каждый симптом за каждый пройденный
-                // рассчитанный отрезок на симптом.
-                // Если эффект на такой симптом уже есть, то добавляем к этому симптому новую болезнь.
-                // После 50% прогресса болезни (то есть когда прошёл пик силы) начинаем обратный процесс - убираем эффекты
-                // за каждый симптом.
-                // Если для эффекта симптома указано несколько болезней, то эффект уходит только после удаления последней болезни.
+            // Если есть болезнь, то назначаем эффекты на симпомы этой болезни.
 
-                var disease = diseaseProcess.Disease;
-                var symptoms = disease.GetSymptoms();
+            // Первые 25% силы болезнь себя не проявляет.
+            // Оставшиеся 75% делим на равные отрезки между всеми симптомами.
+            // По мере увеличения силы болезни добавляем по эффекту на каждый симптом за каждый пройденный
+            // рассчитанный отрезок на симптом.
+            // Если эффект на такой симптом уже есть, то добавляем к этому симптому новую болезнь.
+            // После 50% прогресса болезни (то есть когда прошёл пик силы) начинаем обратный процесс - убираем эффекты
+            // за каждый симптом.
+            // Если для эффекта симптома указано несколько болезней, то эффект уходит только после удаления последней болезни.
 
-                var currentPower = diseaseProcess.CurrentPower;
+            var disease = diseaseProcess.Disease;
+            var symptoms = disease.GetSymptoms();
 
-                // Рассчитываем отрезок силы на один симптом.
-                var symptomPowerSegment = 0.75f / symptoms.Length;
+            var currentPower = diseaseProcess.CurrentPower;
 
-                if (diseaseProcess.Value < 0.5f)
-                {
-                    // Обрабатываем нарастание силы болезни.
+            // Рассчитываем отрезок силы на один симптом.
+            var symptomPowerSegment = 0.75f / symptoms.Length;
 
-                    if (currentPower > 0.25f)
-                    {
-                        // Симптомы начинаю проявляться после 25% силы болезни.
+            // 0.5 длительности обрабатываем нарастание силы болезни.
+            // Затем, остаток, обрабатываем, как спад (выздоровление).
+            if (diseaseProcess.Value < 0.5f)
+            {
+                UpdatePowerUp(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+            }
+            else
+            {
+                UpdatePowerDown(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+            }
 
-                        // Рассчитываем количество симптомов, которые должны быть при текущей силе болезни.
+            // Если процесс болезни прошёл, то удаляем болезнь из модуля персонажа.
+            // Счтаетс, что он её перетерпел.
+            if (diseaseProcess.Value >= 1)
+            {
+                RemoveDisease(diseaseProcess.Disease);
+            }
+        }
 
-                        var activeSymptomCount = (int)Math.Ceiling((currentPower - 0.25f) / symptomPowerSegment);
+        private static void UpdatePowerDown(IEffectCollection personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        {
+            var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
 
-                        // Начинаем проверять, есть ли эффекты на все эти симптомы
-                        // или добавлены ли болезни симптомов в список болезней эффектов.
+            // Начинаем снимать все эффекты, которые за пределами количества.
 
-                        for (var i = 0; i < activeSymptomCount; i++)
-                        {
-                            var currentSymptom = symptoms[i];
+            var symptomLowerIndex = activeSymptomCount;
 
-                            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                                .SingleOrDefault(x => x.Symptom == currentSymptom);
+            for (var i = symptomLowerIndex; i < symptoms.Length; i++)
+            {
+                var currentSymptom = symptoms[i];
+                RemoveDiseaseEffectForSimptom(personEffects, disease, currentSymptom);
+            }
+        }
 
-                            if (currentSymptomEffect is null)
-                            {
-                                currentSymptomEffect = new DiseaseSymptomEffect(disease, currentSymptom);
-                                personEffects.Add(currentSymptomEffect);
-                            }
-                            else
-                            {
-                                currentSymptomEffect.HoldDisease(disease);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
+        private static void RemoveDiseaseEffectForSimptom(IEffectCollection personEffects, IDisease disease, DiseaseSymptom symptom)
+        {
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
 
-                    // Начинаем снимать все эффекты, которые за пределами количества.
+            if (currentSymptomEffect == null)
+            {
+                // По идее, этого не должно произойти. Если симптом был, то он должен был удерживать эффект болезни.
+                // Вероятнее всего это ошибка в логике.
+                Debug.Fail("Если симптом был, то он должен был удерживать эффект болезни");
+                return;
+            }
 
-                    var symptomLowerIndex = activeSymptomCount;
+            currentSymptomEffect.ReleaseDisease(disease);
 
-                    for (var i = symptomLowerIndex; i < symptoms.Length; i++)
-                    {
-                        var currentSymptom = symptoms[i];
+            if (!currentSymptomEffect.Diseases.Any())
+            {
+                personEffects.Remove(currentSymptomEffect);
+            }
+        }
 
-                        var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                            .SingleOrDefault(x => x.Symptom == currentSymptom);
+        private static void UpdatePowerUp(IEffectCollection personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        {
+            if (currentPower <= 0.25f)
+            {
+                // Симптомы начинаю проявляться после 25% силы болезни.
+                return;
+            }
 
-                        if (currentSymptomEffect != null)
-                        {
-                            currentSymptomEffect.ReleaseDisease(disease);
+            // Рассчитываем количество симптомов, которые должны быть при текущей силе болезни.
 
-                            if (!currentSymptomEffect.Diseases.Any())
-                            {
-                                personEffects.Remove(currentSymptomEffect);
-                            }
-                        }
-                    }
-                }
+            var activeSymptomCount = (int)Math.Ceiling((currentPower - 0.25f) / symptomPowerSegment);
 
-                // Если процесс болезни прошёл, то удаляем болезнь из модуля персонажа.
-                // Счтаетс, что он её перетерпел.
-                if (diseaseProcess.Value >= 1)
-                {
-                    RemoveDisease(diseaseProcess.Disease);
-                }
+            // Начинаем проверять, есть ли эффекты на все эти симптомы
+            // или добавлены ли болезни симптомов в список болезней эффектов.
+
+            for (var i = 0; i < activeSymptomCount; i++)
+            {
+                var currentSymptom = symptoms[i];
+                AddDiseaseEffectForSymptom(personEffects, disease, currentSymptom);
+            }
+        }
+
+        private static void AddDiseaseEffectForSymptom(IEffectCollection personEffects, IDisease disease, DiseaseSymptom symptom)
+        {
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
+
+            if (currentSymptomEffect is null)
+            {
+                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
+                personEffects.Add(currentSymptomEffect);
+            }
+            else
+            {
+                currentSymptomEffect.HoldDisease(disease);
             }
         }
     }
