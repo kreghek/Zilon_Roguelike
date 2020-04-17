@@ -63,17 +63,18 @@ namespace Zilon.Core.MapGenerators
             }
 
             var resultMonsterActors = new List<IActor>();
+            var rarityCounter = new int[3];
 
             foreach (var region in monsterRegions)
             {
-                CreateMonstersForRegion(sector, monsterPlayer, sectorScheme, resultMonsterActors, region);
+                CreateMonstersForRegion(sector, monsterPlayer, sectorScheme, resultMonsterActors, region, rarityCounter);
             }
 
             // Инфицируем монстров, если в секторе есть болезни.
             RollInfections(sector, resultMonsterActors);
         }
 
-        private void CreateMonstersForRegion(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region)
+        private void CreateMonstersForRegion(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
         {
             var regionNodes = region.Nodes.OfType<HexNode>();
             var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
@@ -96,16 +97,15 @@ namespace Zilon.Core.MapGenerators
                 var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                 var monsterNode = freeNodes[rollIndex];
 
-                var monster = RollRarityAndCreateMonster(sector, monsterPlayer, sectorScheme, monsterNode);
+                var monster = RollRarityAndCreateMonster(sector, monsterPlayer, sectorScheme, monsterNode, rarityCounter);
 
                 freeNodes.Remove(monster.Node);
                 resultMonsterActors.Add(monster);
             }
         }
 
-        private IActor RollRarityAndCreateMonster(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, IGraphNode monsterNode)
+        private IActor RollRarityAndCreateMonster(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, IGraphNode monsterNode, int[] rarityCounter)
         {
-            var rarityCounter = new int[3];
             var rarityMaxCounter = new[] { -1, 10, 1 };
 
             var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
