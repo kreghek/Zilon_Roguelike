@@ -39,7 +39,7 @@ namespace Zilon.Core.StaticObjectModules
                 throw new ArgumentNullException(nameof(staticObject));
             }
 
-            return staticObject.HasModule<TStaticObjectModule>(typeof(TStaticObjectModule).Name);
+            return staticObject.HasModule(typeof(TStaticObjectModule).Name);
         }
     }
 }

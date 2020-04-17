@@ -47,7 +47,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc/>
-        public bool HasModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
+        public bool HasModule(string key)
         {
             return _modules.ContainsKey(key);
         }

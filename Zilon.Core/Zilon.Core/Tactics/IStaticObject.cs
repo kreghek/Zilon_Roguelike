@@ -36,9 +36,8 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Проверка наличия модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
         /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
-        bool HasModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
+        bool HasModule(string key);
 
         /// <summary>
         /// Блокер проходимости карты.
