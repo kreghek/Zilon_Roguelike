@@ -216,14 +216,14 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
+        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var actor = new Actor(person, botPlayer, startNode);
             actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
+        private static IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
         {
             var person = new MonsterPerson(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
