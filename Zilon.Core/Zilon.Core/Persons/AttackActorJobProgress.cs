@@ -125,7 +125,6 @@ namespace Zilon.Core.Persons
             Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
             if (jobData.WeaponTags.Any())
             {
-
                 var weaponHasAllTags = true;
                 foreach (var tag in jobData.WeaponTags)
                 {
