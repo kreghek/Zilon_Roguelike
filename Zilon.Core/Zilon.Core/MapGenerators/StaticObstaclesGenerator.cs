@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
-using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;

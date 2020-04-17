@@ -4,6 +4,9 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
+    /// <summary>
+    /// Статический объект в секторе. Противоположность актёром, которые активны и воздействуют на статически-пассивные объекты.
+    /// </summary>
     public interface IStaticObject : IPassMapBlocker
     {
         /// <summary>

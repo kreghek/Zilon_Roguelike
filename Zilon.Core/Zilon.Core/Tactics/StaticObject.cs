@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.StaticObjectModules;
@@ -35,7 +34,7 @@ namespace Zilon.Core.Tactics
         public bool IsSightBlock { get => false; }
 
         /// <inheritdoc/>
-        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule: IStaticObjectModule
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
