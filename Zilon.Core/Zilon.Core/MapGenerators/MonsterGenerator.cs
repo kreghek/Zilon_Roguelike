@@ -62,49 +62,62 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(sectorScheme));
             }
 
-            var rarityCounter = new int[3];
-            var rarityMaxCounter = new[] { -1, 10, 1 };
-
             var resultMonsterActors = new List<IActor>();
 
             foreach (var region in monsterRegions)
             {
-                var regionNodes = region.Nodes.OfType<HexNode>();
-                var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
-                var availableMonsterNodes = regionNodes.Except(staticObjectsNodes);
-
-                var freeNodes = new List<IGraphNode>(availableMonsterNodes);
-
-                var monsterCount = _generatorRandomSource.RollRegionCount(
-                    sectorScheme.MinRegionMonsterCount,
-                    sectorScheme.RegionMonsterCount);
-
-                for (var i = 0; i < monsterCount; i++)
-                {
-                    // если в комнате все места заняты
-                    if (!freeNodes.Any())
-                    {
-                        break;
-                    }
-
-                    var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
-                    var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);
-
-                    var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
-
-                    var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
-                    var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
-                    var monsterNode = freeNodes[rollIndex];
-                    var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
-
-                    freeNodes.Remove(monster.Node);
-
-                    resultMonsterActors.Add(monster);
-                }
+                CreateMonstersForRegion(sector, monsterPlayer, sectorScheme, resultMonsterActors, region);
             }
 
             // Инфицируем монстров, если в секторе есть болезни.
             RollInfections(sector, resultMonsterActors);
+        }
+
+        private void CreateMonstersForRegion(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region)
+        {
+            var regionNodes = region.Nodes.OfType<HexNode>();
+            var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
+            var availableMonsterNodes = regionNodes.Except(staticObjectsNodes);
+
+            var freeNodes = new List<IGraphNode>(availableMonsterNodes);
+
+            var monsterCount = _generatorRandomSource.RollRegionCount(
+                sectorScheme.MinRegionMonsterCount,
+                sectorScheme.RegionMonsterCount);
+
+            for (var i = 0; i < monsterCount; i++)
+            {
+                // если в комнате все места заняты
+                if (!freeNodes.Any())
+                {
+                    break;
+                }
+
+                var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
+                var monsterNode = freeNodes[rollIndex];
+
+                var monster = RollRarityAndCreateMonster(sector, monsterPlayer, sectorScheme, monsterNode);
+
+                freeNodes.Remove(monster.Node);
+                resultMonsterActors.Add(monster);
+            }
+        }
+
+        private IActor RollRarityAndCreateMonster(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, IGraphNode monsterNode)
+        {
+            var rarityCounter = new int[3];
+            var rarityMaxCounter = new[] { -1, 10, 1 };
+
+            var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
+            var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);
+
+            var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
+
+            var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
+            
+            var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
+
+            return monster;
         }
 
         private void RollInfections(ISector sector, List<IActor> resultMonsterActors)
