@@ -48,8 +48,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         // Специализированные команды для Ui.
         Container.RegisterSpecialCommands();
 
-        Container.Bind<SpecialCommandManager>().AsSingle();
-
         Container.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
     }
 

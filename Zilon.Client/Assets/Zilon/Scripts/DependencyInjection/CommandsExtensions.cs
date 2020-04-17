@@ -1,5 +1,5 @@
 ﻿using Assets.Zilon.Scripts.Commands;
-
+using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.Commands;
@@ -39,6 +39,8 @@ namespace Assets.Zilon.Scripts.DependencyInjection
         {
             diContainer.Bind<ICommand>().WithId("equip-command").To<EquipCommand>().AsTransient();
             diContainer.Bind<ICommand>().WithId("prop-transfer-command").To<PropTransferCommand>().AsTransient();
+
+            diContainer.Bind<SpecialCommandManager>().AsSingle();
         }
     }
 }
