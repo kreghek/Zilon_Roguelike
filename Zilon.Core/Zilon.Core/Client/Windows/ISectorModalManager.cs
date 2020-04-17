@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Persons;
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Client.Windows
 {
@@ -16,9 +15,5 @@ namespace Zilon.Core.Client.Windows
         void ShowPerksModal(IActor actor);
 
         void ShowInstructionModal();
-
-        void ShowTraderModal(CitizenPerson trader);
-
-        void ShowDialogModal(CitizenPerson trader);
     }
 }

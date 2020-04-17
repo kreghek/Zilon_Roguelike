@@ -15,7 +15,6 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -66,7 +65,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-    
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -125,14 +124,6 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "open-container-command")]
     private readonly ICommand _openContainerCommand;
-
-    [NotNull]
-    [Inject(Id = "show-trader-modal-command")]
-    private readonly ICommand _showTraderModalCommand;
-
-    [NotNull]
-    [Inject(Id = "show-dialog-modal-command")]
-    private readonly ICommand _showDialogCommand;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -201,7 +192,6 @@ public class SectorVM : MonoBehaviour
 
         CreateMonsterViewModels(nodeViewModels);
         CreateStaticObjectViewModels(nodeViewModels);
-        CreateTraderViewModels(nodeViewModels);
 
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
@@ -390,15 +380,6 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
-    {
-        var citizens = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
-        foreach (var trader in citizens)
-        {
-            CreateTraderViewModel(nodeViewModels, trader);
-        }
-    }
-
     private void CreateStaticObjectViewModel(IEnumerable<MapNodeVM> nodeViewModels, IStaticObject staticObject)
     {
         var staticObjectPrefab = GetStaticObjectPrefab(staticObject);
@@ -413,62 +394,6 @@ public class SectorVM : MonoBehaviour
         staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
 
         _staticObjectViewModels.Add(staticObjectViewModel);
-    }
-
-    private void CreateTraderViewModel(IEnumerable<MapNodeVM> nodeViewModels, IActor actor)
-    {
-        var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
-        var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
-
-        var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
-        actorViewModel.SetGraphicRoot(actorGraphic);
-        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
-
-        var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
-        graphicController.Actor = actor;
-        graphicController.Graphic = actorGraphic;
-
-        var actorNodeVm = nodeViewModels.Single(x => x.Node == actor.Node);
-        var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-        actorViewModel.transform.position = actorPosition;
-        actorViewModel.Actor = actor;
-
-        actorViewModel.Selected += TraderViewModel_Selected;
-
-        ActorViewModels.Add(actorViewModel);
-    }
-
-    private void TraderViewModel_Selected(object sender, EventArgs e)
-    {
-        var traderViewModel = sender as ActorViewModel;
-
-        _playerState.SelectedViewModel = traderViewModel;
-
-        if (traderViewModel.Actor.Person is CitizenPerson citizen)
-        {
-            switch (citizen.CitizenType)
-            {
-                case CitizenType.Unintresting:
-                    // Этот тип жителей не интерактивен.
-                    break;
-
-                case CitizenType.Trader:
-                    if (_showTraderModalCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showTraderModalCommand);
-                    }
-                    break;
-
-                case CitizenType.QuestGiver:
-                    if (_showDialogCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showDialogCommand);
-                    }
-                    break;
-            }
-
-
-        }
     }
 
     private StaticObjectViewModel GetStaticObjectPrefab(IStaticObject staticObject)

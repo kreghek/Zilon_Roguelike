@@ -35,8 +35,6 @@ namespace Zilon.Bot.Players
                     return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster);
 
                 case HumanPerson _:
-                case CitizenPerson _:
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Citizen);
 
                 default:
                     throw new NotSupportedException($"{actor.Person.GetType()} не поддерживается.");

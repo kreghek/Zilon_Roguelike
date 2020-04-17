@@ -29,8 +29,6 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             diContainer.Bind<ICommand>().WithId("show-container-modal-command").To<ShowContainerModalCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("show-inventory-command").To<ShowInventoryModalCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("show-perks-command").To<ShowPerksModalCommand>().AsSingle();
-            diContainer.Bind<ICommand>().WithId("show-trader-modal-command").To<ShowTraderModalCommand>().AsSingle();
-            diContainer.Bind<ICommand>().WithId("show-dialog-modal-command").To<ShowDialogModalCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("quit-request-command").To<QuitRequestCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("quit-request-title-command").To<QuitTitleRequestCommand>().AsSingle();
         }
