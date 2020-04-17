@@ -35,6 +35,9 @@ namespace Zilon.Core.StaticObjectModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc/>
+        public string Key { get => nameof(IPropDepositModule); }
+
+        /// <inheritdoc/>
         public void Mine()
         {
             if (_exhautingCounter <= 0)

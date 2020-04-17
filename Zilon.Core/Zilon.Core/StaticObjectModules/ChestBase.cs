@@ -35,6 +35,9 @@ namespace Zilon.Core.StaticObjectModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc/>
+        public string Key { get => nameof(IPropContainer); }
+
+        /// <inheritdoc/>
         public event EventHandler Opened;
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsAdded;

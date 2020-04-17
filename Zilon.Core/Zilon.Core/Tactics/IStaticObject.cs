@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Graphs;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -21,23 +22,23 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Получение модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
         /// <returns>Возвращает объект модуля.</returns>
-        TSectorObjectModule GetModule<TSectorObjectModule>();
+        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
 
         /// <summary>
         /// Добавление модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
         /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
-        void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule);
+        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule;
 
         /// <summary>
         /// Проверка наличия модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TSectorObjectModule">Тип модуля.</typeparam>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
         /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
-        bool HasModule<TSectorObjectModule>();
+        bool HasModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
 
         /// <summary>
         /// Блокер проходимости карты.

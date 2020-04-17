@@ -35,21 +35,21 @@ namespace Zilon.Core.Tactics
         public bool IsSightBlock { get => false; }
 
         /// <inheritdoc/>
-        public void AddModule<TSectorObjectModule>(TSectorObjectModule sectorObjectModule) where TSectorObjectModule: IStaticObjectModule
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule: IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
 
         /// <inheritdoc/>
-        public TSectorObjectModule GetModule<TSectorObjectModule>()
+        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
         {
-            return (TSectorObjectModule)_modules[typeof(TSectorObjectModule)];
+            return (TStaticObjectModule)_modules[key];
         }
 
         /// <inheritdoc/>
-        public bool HasModule<TSectorObjectModule>()
+        public bool HasModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
         {
-            return _modules.ContainsKey(typeof(TSectorObjectModule));
+            return _modules.ContainsKey(key);
         }
 
         /// <inheritdoc/>
@@ -57,27 +57,6 @@ namespace Zilon.Core.Tactics
         {
             var propContainer = this.GetModuleSafe<IPropContainer>();
             return (propContainer?.IsMapBlock).GetValueOrDefault(true);
-        }
-
-        private Type GetSanitizedModuleType(Type type)
-        {
-            var implementedInterfaces = type.GetInterfaces();
-
-            foreach (var implementedInterface in implementedInterfaces)
-            {
-                //var moduleAttribute = implementedInterface.GetCustomAttributes(typeof(StaticObjectModuleAttribute), false);
-                var moduleAttribute = implementedInterface.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(StaticObjectModuleAttribute));
-                if (moduleAttribute is null)
-                {
-                    continue;
-                }
-                else
-                {
-                    return implementedInterface;
-                }
-            }
-
-            return null;
         }
     }
 }

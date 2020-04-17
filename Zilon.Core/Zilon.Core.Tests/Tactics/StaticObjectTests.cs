@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Zilon.Core.Tactics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,6 +65,7 @@ namespace Zilon.Core.Tactics.Tests
         private sealed class TestModule : IAdditionalInterface, ITestModule
         {
             public bool IsActive { get; set; }
+            public string Key { get => nameof(ITestModule); }
         }
 
         private interface IAdditionalInterface
