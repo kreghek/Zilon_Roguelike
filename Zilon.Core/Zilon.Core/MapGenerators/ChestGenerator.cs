@@ -147,7 +147,6 @@ namespace Zilon.Core.MapGenerators
             var containerPurpose = _chestGeneratorRandomSource.RollPurpose();
             var container = CreateContainerModuleByPurpose(trashDropTables,
                 treasuresDropTable,
-                containerNode,
                 containerPurpose);
 
             var staticObject = new StaticObject(containerNode, default);
@@ -155,20 +154,20 @@ namespace Zilon.Core.MapGenerators
             return staticObject;
         }
 
-        private IPropContainer CreateContainerModuleByPurpose(IDropTableScheme[] trashDropTables, IDropTableScheme[] treasuresDropTable, IGraphNode containerNode, PropContainerPurpose containerPurpose)
+        private IPropContainer CreateContainerModuleByPurpose(IDropTableScheme[] trashDropTables, IDropTableScheme[] treasuresDropTable, PropContainerPurpose containerPurpose)
         {
             IPropContainer container;
             switch (containerPurpose)
             {
                 case PropContainerPurpose.Trash:
-                    container = new DropTablePropChest(containerNode, trashDropTables, _dropResolver)
+                    container = new DropTablePropChest(trashDropTables, _dropResolver)
                     {
                         Purpose = PropContainerPurpose.Trash
                     };
                     break;
 
                 case PropContainerPurpose.Treasures:
-                    container = new DropTablePropChest(containerNode, treasuresDropTable, _dropResolver)
+                    container = new DropTablePropChest(treasuresDropTable, _dropResolver)
                     {
                         Purpose = PropContainerPurpose.Treasures
                     };

@@ -2,12 +2,9 @@
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using Zilon.Core.Client;
-using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
