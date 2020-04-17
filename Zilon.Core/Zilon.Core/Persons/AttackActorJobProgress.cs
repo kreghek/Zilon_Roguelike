@@ -71,7 +71,10 @@ namespace Zilon.Core.Persons
                     }
                     else if (jobData.MonsterTags != null)
                     {
-                        ProcessAttackToSpecifiedMonsters(job, modifiedJobs, jobData);
+                        // Засчитываем прогресс, если у атакуемого актёра
+                        // есть все указанные теги.
+
+                        ProcessAttackToSpecifiedMonster(job, modifiedJobs, jobData);
                     }
                     else
                     {
@@ -81,80 +84,104 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void ProcessAttackBySpecifiedWeapons(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
+        private void ProcessAttackToSpecifiedMonster(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
         {
             Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
-            if (jobData.WeaponTags.Any())
+            if (!jobData.MonsterTags.Any())
             {
-                var monsterHasAllTags = true;
-                foreach (var tag in jobData.WeaponTags)
+                return;
+            }
+
+            var monsterHasAllTags = true;
+            foreach (var tag in jobData.WeaponTags)
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
+                if (string.IsNullOrWhiteSpace(tag))
                 {
-                    Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
-                    if (string.IsNullOrWhiteSpace(tag))
-                    {
-                        continue;
-                    }
-
-                    var monsterPerson = _targetActor.Person as MonsterPerson;
-
-                    if (monsterPerson is null)
-                    {
-                        monsterHasAllTags = false;
-                        break;
-                    }
-
-                    if (monsterPerson.Scheme.Tags != null)
-                    {
-                        if (!monsterPerson.Scheme.Tags.Contains(tag))
-                        {
-                            monsterHasAllTags = false;
-                            break;
-                        }
-                    }
+                    continue;
                 }
 
-                if (monsterHasAllTags)
+                var actorHasTag = ActorHasTag(tag, _targetActor);
+                if (!actorHasTag)
                 {
-                    AddProgress(job, modifiedJobs);
+                    monsterHasAllTags = false;
+                    break;
                 }
+            }
+
+            if (monsterHasAllTags)
+            {
+                AddProgress(job, modifiedJobs);
             }
         }
 
-        private void ProcessAttackToSpecifiedMonsters(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
+        private void ProcessAttackBySpecifiedWeapons(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
         {
             Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
-            if (jobData.WeaponTags.Any())
+            if (!jobData.WeaponTags.Any())
             {
-                var weaponHasAllTags = true;
-                foreach (var tag in jobData.WeaponTags)
+                return;
+            }
+
+            var weaponHasAllTags = true;
+            foreach (var tag in jobData.WeaponTags)
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
+                if (string.IsNullOrWhiteSpace(tag))
                 {
-                    Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
-                    if (string.IsNullOrWhiteSpace(tag))
-                    {
-                        continue;
-                    }
-
-                    if (_tacticalAct.Equipment == null)
-                    {
-                        weaponHasAllTags = false;
-                        break;
-                    }
-
-                    if (_tacticalAct.Equipment.Scheme.Tags != null)
-                    {
-                        if (!_tacticalAct.Equipment.Scheme.Tags.Contains(tag))
-                        {
-                            weaponHasAllTags = false;
-                            break;
-                        }
-                    }
+                    continue;
                 }
 
-                if (weaponHasAllTags)
+                var weaponHasTag = WeaponHasTag(tag, _tacticalAct);
+                if (!weaponHasTag)
                 {
-                    AddProgress(job, modifiedJobs);
+                    weaponHasAllTags = false;
+                    break;
                 }
             }
+
+            if (weaponHasAllTags)
+            {
+                AddProgress(job, modifiedJobs);
+            }
+        }
+
+        private static bool ActorHasTag(string tag, IActor targetActor)
+        {
+            var monsterPersonScheme = GetPersonScheme(targetActor);
+
+            if (monsterPersonScheme is null)
+            {
+                return false;
+            }
+
+            if (monsterPersonScheme.Tags != null)
+            {
+                return false;
+            }
+
+            return monsterPersonScheme.Tags.Contains(tag);
+        }
+
+        private static bool WeaponHasTag(string tag, ITacticalAct _tacticalAct)
+        {
+            if (_tacticalAct.Equipment == null)
+            {
+                return false;
+            }
+
+            if (_tacticalAct.Equipment.Scheme.Tags != null)
+            {
+                return false;
+            }
+
+            return _tacticalAct.Equipment.Scheme.Tags.Contains(tag);
+        }
+
+        private static IMonsterScheme GetPersonScheme(IActor targetActor)
+        {
+            var monsterPerson = targetActor.Person as MonsterPerson;
+            return monsterPerson?.Scheme;
         }
 
         private static void AddProgress(IJob job, List<IJob> modifiedJobs)
