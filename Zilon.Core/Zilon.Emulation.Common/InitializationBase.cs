@@ -92,7 +92,6 @@ namespace Zilon.Emulation.Common
             container.AddScoped<ISectorGenerator, SectorGenerator>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<ICitizenGenerator, CitizenGenerator>();
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
             container.AddScoped<ITacticalActUsageService>(serviceProvider =>
@@ -151,7 +150,6 @@ namespace Zilon.Emulation.Common
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
-            container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
 

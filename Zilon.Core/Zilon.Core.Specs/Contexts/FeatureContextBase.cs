@@ -326,8 +326,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<ISectorManager, SectorManager>();
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
-            serviceCollection.AddSingleton<ICitizenGenerator, CitizenGenerator>();
-            serviceCollection.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
             serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
         }
 

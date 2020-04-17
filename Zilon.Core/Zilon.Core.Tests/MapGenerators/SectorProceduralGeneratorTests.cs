@@ -90,9 +90,6 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorFactoryMock = new Mock<ISectorFactory>();
             var sectorFactory = sectorFactoryMock.Object;
 
-            var citizenGeneratorMock = new Mock<ICitizenGenerator>();
-            var citizenGenerator = citizenGeneratorMock.Object;
-
             var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
             mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorNode>()))
                 .Returns(mapFactory);
