@@ -13,6 +13,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -52,7 +53,7 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(node, System.Array.Empty<DropTableScheme>(), dropResolver, chestId);
+            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
             var staticObject = new StaticObject(node, chestId);
             staticObject.AddModule<IPropContainer>(chest);
 

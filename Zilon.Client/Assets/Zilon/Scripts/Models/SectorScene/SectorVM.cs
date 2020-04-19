@@ -20,6 +20,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -125,6 +126,9 @@ public class SectorVM : MonoBehaviour
     [Inject(Id = "open-container-command")]
     private readonly ICommand _openContainerCommand;
 
+    [NotNull]
+    [Inject(Id = "mine-deposit-command")]
+    private readonly ICommand _mineDepositCommand;
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -404,14 +408,22 @@ public class SectorVM : MonoBehaviour
 
     private void Container_Selected(object sender, EventArgs e)
     {
-        var containerViewModel = sender as ContainerVm;
+        var containerViewModel = sender as StaticObjectViewModel;
 
         _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
 
         if (containerViewModel != null)
         {
-            _clientCommandExecutor.Push(_openContainerCommand);
+            if (containerViewModel.Container.HasModule<IPropContainer>() &&
+                containerViewModel.Container.GetModule<IPropContainer>().IsActive)
+            {
+                _clientCommandExecutor.Push(_openContainerCommand);
+            }
+            else if (containerViewModel.Container.HasModule<IPropDepositModule>())
+            {
+                _clientCommandExecutor.Push(_mineDepositCommand);
+            }
         }
     }
 

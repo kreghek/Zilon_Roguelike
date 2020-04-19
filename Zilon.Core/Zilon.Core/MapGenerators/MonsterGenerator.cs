@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
@@ -114,7 +115,7 @@ namespace Zilon.Core.MapGenerators
             var availableMonsterSchemes = availableSchemeSids.Select(x => _schemeService.GetScheme<IMonsterScheme>(x));
 
             var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
-            
+
             var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
 
             return monster;

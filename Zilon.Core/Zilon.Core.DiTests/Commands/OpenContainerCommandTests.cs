@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -72,7 +73,7 @@ namespace Zilon.Core.Tests.Commands
             var containerMock = new Mock<IPropContainer>();
             containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
             var container = containerMock.Object;
-            targetMock.Setup(x => x.GetModule<IPropContainer>()).Returns(container);
+            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer))).Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();

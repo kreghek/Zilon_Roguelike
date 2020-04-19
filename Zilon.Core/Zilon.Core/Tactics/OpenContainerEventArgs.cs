@@ -25,7 +25,7 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public OpenContainerEventArgs(IStaticObject container, [NotNull] IOpenContainerResult result)
         {
-            Container = container;
+            Container = container ?? throw new ArgumentNullException(nameof(container));
             Result = result ?? throw new ArgumentNullException(nameof(result));
         }
     }

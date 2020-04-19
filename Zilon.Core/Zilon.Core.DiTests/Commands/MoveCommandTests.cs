@@ -63,6 +63,8 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
         /// </summary>
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+            Justification = "Naming convention for tests")]
         public void CanRepeate_NoMonsters_ReturnsTrue()
         {
             // ARRANGE
@@ -79,6 +81,8 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение не работает, если в зоне видимости монстр.
         /// </summary>
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+            Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterInSign_ReturnsFalse()
         {
             // ARRANGE
@@ -108,6 +112,8 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение работает, если монстр далеко.
         /// </summary>
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+            Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterNotInSign_ReturnsTrue()
         {
             // ARRANGE

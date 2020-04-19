@@ -12,6 +12,8 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -272,6 +274,25 @@ namespace Zilon.Core.Tactics
                 {
                     actor.Person.Survival.Dead += ActorState_Dead;
                 }
+
+                actor.Moved += Actor_Moved;
+                UpdateFowData(actor);
+            }
+        }
+
+        private void Actor_Moved(object sender, EventArgs e)
+        {
+            var actor = (IActor)sender;
+            UpdateFowData(actor);
+        }
+
+        private void UpdateFowData(IActor actor)
+        {
+            if (actor.SectorFowData is HumanSectorFowData)
+            {
+                const int DISTANCE_OF_SIGN = 5;
+                var fowContext = new FowContext(Map, StaticObjectManager);
+                FowHelper.UpdateFowData(actor.SectorFowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
             }
         }
 
@@ -320,6 +341,8 @@ namespace Zilon.Core.Tactics
                 {
                     actor.Person.Survival.Dead -= ActorState_Dead;
                 }
+
+                actor.Moved -= Actor_Moved;
             }
         }
 
@@ -352,7 +375,7 @@ namespace Zilon.Core.Tactics
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);
 
-            var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+            var loot = new DropTableLoot(dropSchemes, _dropResolver);
 
             var staticObject = new StaticObject(actor.Node, default);
             staticObject.AddModule<IPropContainer>(loot);

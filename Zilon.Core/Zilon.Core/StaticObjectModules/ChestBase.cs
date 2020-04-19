@@ -2,8 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     public abstract class ChestBase : IPropContainer
     {
@@ -14,6 +15,8 @@ namespace Zilon.Core.Tactics
 
             Content.Added += Content_Added;
             Content.Removed += Content_Removed;
+
+            IsActive = true;
         }
 
         /// <inheritdoc/>
@@ -27,6 +30,12 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc/>
         public abstract bool IsMapBlock { get; }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(IPropContainer); }
 
         /// <inheritdoc/>
         public event EventHandler Opened;

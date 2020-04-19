@@ -44,12 +44,6 @@ namespace Zilon.Core.Tactics.Behaviour
             Actor.MoveToNode(nextNode);
             HoldNodes(nextNode, Actor);
 
-            if (Actor.SectorFowData is HumanSectorFowData)
-            {
-                const int DISTANCE_OF_SIGN = 5;
-                FowHelper.UpdateFowData(Actor.SectorFowData, _map, nextNode, DISTANCE_OF_SIGN);
-            }
-
             _path.RemoveAt(0);
 
             if (!_path.Any())
@@ -82,7 +76,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             yield return baseNode;
 
-            if (person.PhysicalSize == Persons.PhysicalSize.Size7)
+            if (person.PhysicalSize == PhysicalSize.Size7)
             {
                 var neighbors = _map.GetNext(baseNode);
                 foreach (var neighbor in neighbors)

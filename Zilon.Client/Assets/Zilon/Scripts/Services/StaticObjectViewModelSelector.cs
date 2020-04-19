@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services

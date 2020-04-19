@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using Zilon.Core.StaticObjectModules;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Метод открытия контейнера.

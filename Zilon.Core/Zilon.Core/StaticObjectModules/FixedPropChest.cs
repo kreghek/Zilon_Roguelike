@@ -1,9 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Zilon.Core.Props;
 
-using Zilon.Core.Graphs;
-using Zilon.Core.Props;
-
-namespace Zilon.Core.Tactics
+namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
     /// Реализация сундука с фиксированным лутом.
@@ -12,12 +9,7 @@ namespace Zilon.Core.Tactics
     {
         public override bool IsMapBlock => true;
 
-        [ExcludeFromCodeCoverage]
-        public FixedPropChest(IGraphNode node, IProp[] props) : this(node, props, 0)
-        {
-        }
-
-        public FixedPropChest(IGraphNode node, IProp[] props, int id) : base(new ChestStore())
+        public FixedPropChest(IProp[] props) : base(new ChestStore())
         {
             if (props is null)
             {
