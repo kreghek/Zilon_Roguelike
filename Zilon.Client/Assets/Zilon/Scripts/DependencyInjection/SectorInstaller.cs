@@ -48,7 +48,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         // Специализированные команды для Ui.
         Container.RegisterSpecialCommands();
 
-        Container.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
+        Container.RegisterStaticObjecServices();
     }
 
     private SectorModalManager GetSectorModalManager()
