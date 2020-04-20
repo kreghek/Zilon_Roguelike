@@ -388,6 +388,11 @@ public class SectorVM : MonoBehaviour
     {
         var staticObjectPrefab = GetStaticObjectPrefab(staticObject);
 
+        if (staticObjectPrefab is null)
+        {
+            throw new InvalidOperationException($"Не удаётся выбрать модель представления для объекта {staticObject.Purpose}");
+        }
+
         var staticObjectViewModel = Instantiate(staticObjectPrefab, transform);
 
         var nodeViewModelUnderStaticObject = nodeViewModels.Single(x => x.Node == staticObject.Node);

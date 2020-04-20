@@ -57,5 +57,11 @@ namespace Zilon.Core.Tactics
         /// Это значение задаётся, если объект должен блокировать видимость.
         /// </remarks>
         bool IsSightBlock { get; }
+
+        /// <summary>
+        /// Назначение статического объекта.
+        /// По сути - определяет внешний вид и действие по умолчанию.
+        /// </summary>
+        PropContainerPurpose Purpose { get; }
     }
 }

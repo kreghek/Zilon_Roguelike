@@ -32,6 +32,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             diContainer.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
 
             diContainer.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
+            diContainer.Bind<IStaticObjectsGeneratorRandomSource>().To<StaticObjectsGeneratorRandomSource>().AsSingle();
         }
     }
 }

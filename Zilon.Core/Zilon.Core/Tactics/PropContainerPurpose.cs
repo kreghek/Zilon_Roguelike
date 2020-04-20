@@ -40,7 +40,7 @@
 
         StoneDeposits,
 
-        ThrashHeap,
+        TrashHeap,
 
         CherryBrush,
 

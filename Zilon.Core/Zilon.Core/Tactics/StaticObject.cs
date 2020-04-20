@@ -13,12 +13,13 @@ namespace Zilon.Core.Tactics
     {
         private readonly IDictionary<string, IStaticObjectModule> _modules;
 
-        public StaticObject(IGraphNode node, int id)
+        public StaticObject(IGraphNode node, PropContainerPurpose purpose, int id)
         {
             _modules = new Dictionary<string, IStaticObjectModule>();
 
             Id = id;
             Node = node ?? throw new ArgumentNullException(nameof(node));
+            Purpose = purpose;
         }
 
         /// <inheritdoc/>
@@ -32,6 +33,9 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc/>
         public bool IsSightBlock { get => false; }
+
+        /// <inheritdoc/>
+        public PropContainerPurpose Purpose { get; }
 
         /// <inheritdoc/>
         public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule

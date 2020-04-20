@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -21,7 +21,8 @@ namespace Zilon.Core.Commands.Sector
 
         public override bool CanExecute()
         {
-            var targetDeposit = (PlayerState.HoverViewModel as IContainerViewModel)?.Container.GetModuleSafe<IPropDepositModule>();
+            var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
+            var targetDeposit = (selectedViewModel as IContainerViewModel)?.Container.GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {
@@ -29,13 +30,24 @@ namespace Zilon.Core.Commands.Sector
             }
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
-            var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.Tool);
-            if (equipedTool is null)
+            var requiredTags = targetDeposit.GetToolTags();
+            if (requiredTags.Any())
             {
-                return false;
-            }
+                var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.GetToolTags());
+                if (equipedTool is null)
+                {
+                    return false;
+                }
 
-            return true;
+                return true;
+            }
+            else
+            {
+                // Если для добычи не указаны теги, то предполагается,
+                // что добывать можно "руками".
+                // То есть никакого инструмента не требуется.
+                return true;
+            }
         }
 
         protected override void ExecuteTacticCommand()
@@ -44,30 +56,49 @@ namespace Zilon.Core.Commands.Sector
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
-            var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.Tool);
-            if (equipedTool is null)
+            var requiredTags = targetDeposit.GetToolTags();
+
+            if (requiredTags.Any())
             {
-                // Потенциально здесь вместо исключения можно генерировать методы добычи руками.
-                throw new InvalidOperationException("Попытка добычи без инструмента");
+                var equipedTool = GetEquipedTool(equipmentCarrier, requiredTags);
+                if (equipedTool is null)
+                {
+                    throw new InvalidOperationException("Попытка добычи без инструмента.");
+                }
+                else
+                {
+                    var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
+                    PlayerState.TaskSource.Intent(intetion);
+                }
             }
             else
             {
-                var intetion = new Intention<MineTask>(actor => CreateTask(actor, targetStaticObject, equipedTool));
+                // Добыча руками, если никаких тегов инструмента не задано.
+                var intetion = new Intention<MineTask>(actor => CreateTaskByHands(actor, targetStaticObject));
                 PlayerState.TaskSource.Intent(intetion);
             }
         }
 
-        private static Equipment GetEquipedTool(IEquipmentCarrier equipmentCarrier, IPropScheme requiredToolScheme)
+        private static Equipment GetEquipedTool(IEquipmentCarrier equipmentCarrier, string[] requiredToolTags)
         {
+            if (!requiredToolTags.Any())
+            {
+                // В этом методе предполагается, что наличие тегов проверено до вызова.
+                throw new ArgumentException("Требуется не пустой набор тегов.", nameof(requiredToolTags));
+            }
+
             foreach (var equipment in equipmentCarrier)
             {
                 if (equipment is null)
                 {
+                    // Если для добычи указаны какие-либо теги, а ничего не экипировано,
+                    // то такая экипировака не подходит.
                     continue;
                 }
 
-                if (equipment.Scheme == requiredToolScheme)
+                if (equipment.Scheme.Tags.Intersect(requiredToolTags) == requiredToolTags)
                 {
+                    // У экипировки должны быть все требуемые теги.
                     return equipment;
                 }
             }
@@ -75,11 +106,18 @@ namespace Zilon.Core.Commands.Sector
             return null;
         }
 
-        private MineTask CreateTask(IActor actor, IStaticObject staticObject, Equipment equipedTool)
+        private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
         {
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool);
             var map = SectorManager.CurrentSector.Map;
             return new MineTask(actor, staticObject, toolMineDepositMethod, map);
+        }
+
+        private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
+        {
+            var handMineDepositMethod = new HandMineDepositMethod();
+            var map = SectorManager.CurrentSector.Map;
+            return new MineTask(actor, staticObject, handMineDepositMethod, map);
         }
     }
 }
