@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
-    public interface IStaticObjectfactoryCollector
+    public interface IStaticObjectFactoryCollector
     {
         IStaticObjectFactory[] GetFactories();
     }

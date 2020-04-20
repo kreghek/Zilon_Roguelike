@@ -15,11 +15,11 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IChestGenerator _chestGenerator;
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
-        private readonly IStaticObjectfactoryCollector _staticObjectfactoryCollector;
+        private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
 
         public StaticObstaclesGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
-            IStaticObjectfactoryCollector staticObjectfactoryCollector)
+            IStaticObjectFactoryCollector staticObjectfactoryCollector)
         {
             _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
             _interiorObjectRandomSource = interiorObjectRandomSource ?? throw new ArgumentNullException(nameof(interiorObjectRandomSource));
@@ -89,7 +89,7 @@ namespace Zilon.Core.MapGenerators
                 PropContainerPurpose.OreDeposits,
                 PropContainerPurpose.Pit,
                 PropContainerPurpose.Puddle,
-                PropContainerPurpose.ThrashHeap
+                PropContainerPurpose.TrashHeap
             };
 
             return PropContainerPurpose.OreDeposits;

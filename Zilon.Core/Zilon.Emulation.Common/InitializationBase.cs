@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
@@ -9,6 +9,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -56,6 +57,16 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
+            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory => {
+                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
+                return new StaticObjectFactoryCollector(factories);
+            });
+            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
         }
 
         private void RegisterSectorServices(IServiceCollection serviceRegistry)

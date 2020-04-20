@@ -6,9 +6,8 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     public sealed class TrashHeapFactory : PropDepositFactoryBase
     {
         public TrashHeapFactory(
-            PropContainerPurpose propContainerPurpose,
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: new[] { "shovel" }, dropTableSchemeSid: "trash-heap", propContainerPurpose, schemeService, dropResolver)
+            IDropResolver dropResolver) : base(toolTags: new[] { "shovel" }, dropTableSchemeSid: "trash-heap", PropContainerPurpose.TrashHeap, schemeService, dropResolver)
         {
         }
     }

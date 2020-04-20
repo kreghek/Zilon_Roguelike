@@ -14,7 +14,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
 
-        public PropDepositFactoryBase(
+        protected PropDepositFactoryBase(
             string[] toolTags,
             string dropTableSchemeSid,
             PropContainerPurpose propContainerPurpose,

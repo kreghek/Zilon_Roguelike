@@ -20,7 +20,7 @@ namespace Zilon.Core.Tactics.Tests
             var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
-            var staticObject = new StaticObject(node, default);
+            var staticObject = new StaticObject(node, default, default);
 
             var testModule = new TestModule();
 
@@ -47,7 +47,7 @@ namespace Zilon.Core.Tactics.Tests
             var nodeMock = new Mock<IGraphNode>();
             var node = nodeMock.Object;
 
-            var staticObject = new StaticObject(node, default);
+            var staticObject = new StaticObject(node, default, default);
 
             // ACT
             staticObject.AddModule(container);
