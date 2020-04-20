@@ -40,9 +40,6 @@ namespace Zilon.Core.StaticObjectModules
         public string Key { get => nameof(IPropDepositModule); }
 
         /// <inheritdoc/>
-        public event EventHandler Exhausted;
-
-        /// <inheritdoc/>
         public void Mine()
         {
             if (_exhautingCounter <= 0)

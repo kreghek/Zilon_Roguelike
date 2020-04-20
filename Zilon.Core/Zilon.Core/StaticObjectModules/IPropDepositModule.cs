@@ -21,10 +21,5 @@ namespace Zilon.Core.StaticObjectModules
         /// Выполняет добычу из залежей.
         /// </summary>
         void Mine();
-
-        /// <summary>
-        /// Выстреливает, когда изменяется состояние залежей с неисчерпанных, на исчерпанные.
-        /// </summary>
-        event EventHandler Exhausted;
     }
 }
