@@ -8,7 +8,6 @@ namespace Zilon.Core.StaticObjectModules
     {
         private readonly IStaticObjectManager _staticObjectManager;
         private readonly IStaticObject _parentStaticObject;
-        private readonly IPropDepositModule _propDepositModule;
 
         public LifetimeModule(IStaticObjectManager staticObjectManager, IStaticObject parentStaticObject)
         {
