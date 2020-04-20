@@ -103,12 +103,18 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorFactoryMock.Setup(x => x.Create(It.IsAny<ISectorMap>(), It.IsAny<ILocationScheme>()))
                 .Returns(sector);
 
+            var resourceMaterializationMapMock = new Mock<IResourceMaterializationMap>();
+            resourceMaterializationMapMock.Setup(x => x.GetDepositData(It.IsAny<ISectorNode>()))
+                .Returns(new Mock<IResourceDepositData>().Object);
+            var sectorMaterializationService = resourceMaterializationMapMock.Object;
+
             return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
                 staticObstaclesGenerator,
                 diseaseGenerator,
-                botPlayer);
+                botPlayer,
+                sectorMaterializationService);
         }
 
         private static IBotPlayer CreateBotPlayer()

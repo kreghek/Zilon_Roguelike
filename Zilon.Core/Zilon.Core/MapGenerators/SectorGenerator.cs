@@ -80,7 +80,7 @@ namespace Zilon.Core.MapGenerators
 
             var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
 
-            var staticObjectgenerationContext = new StaticObjectGenerationContext(sector, sectorScheme, default);
+            var staticObjectgenerationContext = new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
 
             await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext).ConfigureAwait(false);
 
