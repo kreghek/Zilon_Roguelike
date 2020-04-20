@@ -21,7 +21,8 @@ namespace Zilon.Core.Commands.Sector
 
         public override bool CanExecute()
         {
-            var targetDeposit = (PlayerState.HoverViewModel as IContainerViewModel)?.Container.GetModuleSafe<IPropDepositModule>();
+            var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
+            var targetDeposit = (selectedViewModel as IContainerViewModel)?.Container.GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {

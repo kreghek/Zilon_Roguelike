@@ -20,6 +20,10 @@ public class ContainerVm : StaticObjectViewModel
         {
             base.StaticObject = value;
             _propContainer = value.GetModule<IPropContainer>();
+            if (_propContainer is null)
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 
@@ -27,7 +31,8 @@ public class ContainerVm : StaticObjectViewModel
     {
         base.Start();
 
-        SpriteRenderer.sprite = Container.GetModule<IPropContainer>().IsOpened ? OpenedSprite : ClosedSprite;
+        var isOpened = Container.GetModule<IPropContainer>().IsOpened;
+        SpriteRenderer.sprite = isOpened ? OpenedSprite : ClosedSprite;
 
         _propContainer.Opened += Container_Opened;
     }
