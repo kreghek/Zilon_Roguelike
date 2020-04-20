@@ -1,6 +1,4 @@
-﻿using Zilon.Core.Schemes;
-
-namespace Zilon.Core.StaticObjectModules
+﻿namespace Zilon.Core.StaticObjectModules
 {
     [StaticObjectModule]
     public interface IPropDepositModule: IStaticObjectModule
