@@ -10,6 +10,11 @@
                    Equals(options);
         }
 
+        public bool Equals(MapFillerHexNodeOptions other)
+        {
+            return IsObstacle == other.IsObstacle;
+        }
+
         public override int GetHashCode()
         {
             return -1199661580 + IsObstacle.GetHashCode();
@@ -23,11 +28,6 @@
         public static bool operator !=(MapFillerHexNodeOptions left, MapFillerHexNodeOptions right)
         {
             return !(left == right);
-        }
-
-        public bool Equals(MapFillerHexNodeOptions other)
-        {
-            return IsObstacle == other.IsObstacle;
         }
     }
 }

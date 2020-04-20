@@ -56,9 +56,11 @@ namespace Zilon.Core.MapGenerators
                     var containerModule = new DepositContainer();
                     staticObject.AddModule(containerModule);
 
+                    var lifetimeModule = new LifetimeModule(sector.StaticObjectManager, staticObject);
+
                     var dropScheme = _schemeService.GetScheme<IDropTableScheme>("ore-deposit");
                     var toolScheme = _schemeService.GetScheme<IPropScheme>("pick-axe");
-                    var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, toolScheme);
+                    var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, toolScheme, lifetimeModule);
                     staticObject.AddModule(depositModule);
 
                     sector.StaticObjectManager.Add(staticObject);

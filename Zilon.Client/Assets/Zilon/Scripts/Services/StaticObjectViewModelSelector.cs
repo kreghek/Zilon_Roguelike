@@ -9,7 +9,12 @@ namespace Assets.Zilon.Scripts.Services
     {
         public StaticObjectViewModel SelectViewModel(IStaticObject staticObject)
         {
-            if (staticObject.HasModule<IPropContainer>())
+            if (staticObject.HasModule<IPropDepositModule>())
+            {
+                // Возвращаем представление обычного статика-камня.
+                return LoadFromResource("StoneDeposit");
+            }
+            else
             {
                 if (staticObject.GetModule<IPropContainer>() is ILootContainer)
                 {
@@ -22,11 +27,6 @@ namespace Assets.Zilon.Scripts.Services
                 }
 
                 return LoadFromResource("Trash");
-            }
-            else
-            {
-                // Возвращаем представление обычного статика-камня.
-                return LoadFromResource("StoneDeposit");
             }
         }
 
