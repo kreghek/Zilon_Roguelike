@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.StaticObjectModules
 {
@@ -19,5 +21,10 @@ namespace Zilon.Core.StaticObjectModules
         /// Выполняет добычу из залежей.
         /// </summary>
         void Mine();
+
+        /// <summary>
+        /// Выстреливает, когда изменяется состояние залежей с неисчерпанных, на исчерпанные.
+        /// </summary>
+        event EventHandler Exhausted;
     }
 }

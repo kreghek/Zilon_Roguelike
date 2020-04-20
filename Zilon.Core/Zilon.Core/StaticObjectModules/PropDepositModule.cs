@@ -10,17 +10,19 @@ namespace Zilon.Core.StaticObjectModules
         private readonly IPropContainer _propContainer;
         private readonly IDropTableScheme _dropTableScheme;
         private readonly IDropResolver _dropResolver;
-
+        private readonly ILifetimeModule _lifetimeModule;
         private int _exhautingCounter = 10;
 
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
             IDropResolver dropResolver,
-            IPropScheme toolScheme)
+            IPropScheme toolScheme,
+            ILifetimeModule lifetimeModule)
         {
             _propContainer = propContainer ?? throw new ArgumentNullException(nameof(propContainer));
             _dropTableScheme = dropTableScheme ?? throw new ArgumentNullException(nameof(dropTableScheme));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _lifetimeModule = lifetimeModule ?? throw new ArgumentNullException(nameof(lifetimeModule));
 
             Tool = toolScheme ?? throw new ArgumentNullException(nameof(toolScheme));
         }
@@ -38,6 +40,9 @@ namespace Zilon.Core.StaticObjectModules
         public string Key { get => nameof(IPropDepositModule); }
 
         /// <inheritdoc/>
+        public event EventHandler Exhausted;
+
+        /// <inheritdoc/>
         public void Mine()
         {
             if (_exhautingCounter <= 0)
@@ -51,9 +56,16 @@ namespace Zilon.Core.StaticObjectModules
                 _propContainer.Content.Add(prop);
             }
 
-            _exhautingCounter++;
+            _exhautingCounter--;
 
-            _propContainer.IsActive = true;
+            if (_exhautingCounter <= 0)
+            {
+                _lifetimeModule.Destroy();
+            }
+            else
+            {
+                _propContainer.IsActive = true;
+            }
         }
     }
 }
