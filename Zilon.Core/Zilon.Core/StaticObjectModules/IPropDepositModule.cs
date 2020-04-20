@@ -6,9 +6,9 @@ namespace Zilon.Core.StaticObjectModules
     public interface IPropDepositModule: IStaticObjectModule
     {
         /// <summary>
-        /// Инструмент, необходимый для разработки залежей.
+        /// Возвращает теги инструментов, которыми возможна разработка залежей.
         /// </summary>
-        IPropScheme Tool { get; }
+        string[] GetToolTags();
 
         /// <summary>
         /// Признак того, что залежи исчерпаны.

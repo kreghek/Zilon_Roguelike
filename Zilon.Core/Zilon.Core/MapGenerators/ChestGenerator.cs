@@ -149,7 +149,7 @@ namespace Zilon.Core.MapGenerators
                 treasuresDropTable,
                 containerPurpose);
 
-            var staticObject = new StaticObject(containerNode, default);
+            var staticObject = new StaticObject(containerNode, containerPurpose, default);
             staticObject.AddModule(container);
             return staticObject;
         }

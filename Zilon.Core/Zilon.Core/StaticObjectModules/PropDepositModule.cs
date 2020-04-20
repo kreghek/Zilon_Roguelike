@@ -11,24 +11,28 @@ namespace Zilon.Core.StaticObjectModules
         private readonly IDropTableScheme _dropTableScheme;
         private readonly IDropResolver _dropResolver;
         private readonly ILifetimeModule _lifetimeModule;
+        private readonly string[] _toolTags;
+
         private int _exhautingCounter = 10;
 
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
             IDropResolver dropResolver,
-            IPropScheme toolScheme,
+            string[] toolTags,
             ILifetimeModule lifetimeModule)
         {
             _propContainer = propContainer ?? throw new ArgumentNullException(nameof(propContainer));
             _dropTableScheme = dropTableScheme ?? throw new ArgumentNullException(nameof(dropTableScheme));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _toolTags = toolTags ?? throw new ArgumentNullException(nameof(toolTags));
             _lifetimeModule = lifetimeModule ?? throw new ArgumentNullException(nameof(lifetimeModule));
-
-            Tool = toolScheme ?? throw new ArgumentNullException(nameof(toolScheme));
         }
 
         /// <inheritdoc/>
-        public IPropScheme Tool { get; }
+        public string[] GetToolTags()
+        {
+            return _toolTags;
+        }
 
         /// <inheritdoc/>
         public bool IsExhausted { get => _exhautingCounter > 0; }

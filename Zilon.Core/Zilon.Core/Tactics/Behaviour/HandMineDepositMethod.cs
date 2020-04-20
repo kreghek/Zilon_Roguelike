@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Linq;
 
-using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public sealed class ToolMineDepositMethod : IMineDepositMethod
+    public sealed class HandMineDepositMethod : IMineDepositMethod
     {
-        private readonly Equipment _tool;
-
-        public ToolMineDepositMethod(Equipment tool)
+        public HandMineDepositMethod()
         {
-            _tool = tool ?? throw new ArgumentNullException(nameof(tool));
         }
 
         public IMineDepositResult TryMine(IPropDepositModule deposit)
@@ -22,9 +18,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new ArgumentNullException(nameof(deposit));
             }
 
-            var requiredToolTags = deposit.GetToolTags();
-
-            if (_tool.Scheme.Tags.Intersect(requiredToolTags) == requiredToolTags)
+            if (deposit.GetToolTags().Any())
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
             }

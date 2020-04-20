@@ -7,22 +7,22 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
-    public sealed class PropDepositFactory : IStaticObjectFactory
+    public abstract class PropDepositFactoryBase : IStaticObjectFactory
     {
-        private readonly string _toolSchemeSid;
+        private readonly string[] _toolTags;
         private readonly string _dropTableSchemeSid;
         private readonly ISchemeService _schemeService;
         private readonly IDropResolver _dropResolver;
 
-        public PropDepositFactory(
-            string toolSchemeSid,
+        public PropDepositFactoryBase(
+            string[] toolTags,
             string dropTableSchemeSid,
             PropContainerPurpose propContainerPurpose,
             ISchemeService schemeService,
             IDropResolver dropResolver)
         {
-            _toolSchemeSid = toolSchemeSid;
-            _dropTableSchemeSid = dropTableSchemeSid;
+            _toolTags = toolTags ?? throw new ArgumentNullException(nameof(toolTags));
+            _dropTableSchemeSid = dropTableSchemeSid ?? throw new ArgumentNullException(nameof(dropTableSchemeSid));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             Purpose = propContainerPurpose;
@@ -47,8 +47,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             var lifetimeModule = new LifetimeModule(sector.StaticObjectManager, staticObject);
 
             var dropScheme = _schemeService.GetScheme<IDropTableScheme>(_dropTableSchemeSid);
-            var toolScheme = _schemeService.GetScheme<IPropScheme>(_toolSchemeSid);
-            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, toolScheme, lifetimeModule);
+            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags, lifetimeModule);
             staticObject.AddModule(depositModule);
 
             return staticObject;

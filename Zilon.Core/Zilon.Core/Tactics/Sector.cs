@@ -377,7 +377,7 @@ namespace Zilon.Core.Tactics
 
             var loot = new DropTableLoot(dropSchemes, _dropResolver);
 
-            var staticObject = new StaticObject(actor.Node, default);
+            var staticObject = new StaticObject(actor.Node, loot.Purpose, default);
             staticObject.AddModule<IPropContainer>(loot);
 
             if (loot.Content.CalcActualItems().Any())
