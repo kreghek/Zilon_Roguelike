@@ -17,6 +17,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IStaticObstaclesGenerator _staticObstaclesGenerator;
         private readonly IDiseaseGenerator _diseaseGenerator;
         private readonly IBotPlayer _botPlayer;
+        private readonly IResourceMaterializationMap _resourceMaterializationMap;
         private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
@@ -35,7 +36,8 @@ namespace Zilon.Core.MapGenerators
             IMonsterGenerator monsterGenerator,
             IStaticObstaclesGenerator staticObstaclesGenerator,
             IDiseaseGenerator diseaseGenerator,
-            IBotPlayer botPlayer)
+            IBotPlayer botPlayer,
+            IResourceMaterializationMap resourceMaterializationMap)
         {
             _mapFactorySelector = mapFactorySelector ?? throw new ArgumentNullException(nameof(mapFactorySelector));
             _sectorFactory = sectorFactory ?? throw new ArgumentNullException(nameof(sectorFactory));
@@ -43,6 +45,7 @@ namespace Zilon.Core.MapGenerators
             _staticObstaclesGenerator = staticObstaclesGenerator ?? throw new ArgumentNullException(nameof(staticObstaclesGenerator));
             _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
             _botPlayer = botPlayer ?? throw new ArgumentNullException(nameof(botPlayer));
+            _resourceMaterializationMap = resourceMaterializationMap ?? throw new ArgumentNullException(nameof(resourceMaterializationMap));
         }
 
         /// <summary>
@@ -75,7 +78,11 @@ namespace Zilon.Core.MapGenerators
 
             var sectorScheme = sectorNode.SectorScheme;
 
-            await _staticObstaclesGenerator.CreateAsync(sector, sectorScheme).ConfigureAwait(false);
+            var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
+
+            var staticObjectgenerationContext = new StaticObjectGenerationContext(sector, sectorScheme, default);
+
+            await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext).ConfigureAwait(false);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,

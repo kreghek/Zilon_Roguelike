@@ -6,7 +6,7 @@
         /// Предоставляет информацию о ресурсах, которые нужно сгенерировать при материализации сектора.
         /// </summary>
         /// <param name="sectorNode"> Узел графа биома. </param>
-        /// <returns></returns>
+        /// <returns>Возрашает данные о текущем соотношении ресурсов в секторе.</returns>
         /// <remarks>
         /// Идея в том, чтобы было менее хаотичное разпределение ресурсов по секторам.
         /// 1. При переходе между секторами количество какого-то одного ресурса должно увеличиваться, а других - падать.
@@ -16,5 +16,19 @@
         /// Вот в чём назначение данного объекта - распределять информацию о ресурсах наиболее привлекательным образом.
         /// </remarks>
         IResourceDepositData GetDepositData(ISectorNode sectorNode);
+    }
+
+    public sealed class ResourceMaterializationMap : IResourceMaterializationMap
+    {
+        public IResourceDepositData GetDepositData(ISectorNode sectorNode)
+        {
+            var items = new[] { 
+                new ResourceDepositDataItem(SectorResourceType.Iron, 10),
+                new ResourceDepositDataItem(SectorResourceType.Stones, 10),
+                new ResourceDepositDataItem(SectorResourceType.WaterPuddles, 10),
+                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, 10),
+            };
+            return new ResourceDepositData(items);
+        }
     }
 }
