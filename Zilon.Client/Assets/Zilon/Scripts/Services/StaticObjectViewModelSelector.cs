@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 
-using Zilon.Core.StaticObjectModules;
+using UnityEngine;
+
 using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
@@ -9,24 +10,35 @@ namespace Assets.Zilon.Scripts.Services
     {
         public StaticObjectViewModel SelectViewModel(IStaticObject staticObject)
         {
-            if (staticObject.HasModule<IPropDepositModule>())
+            switch (staticObject.Purpose)
             {
-                // Возвращаем представление обычного статика-камня.
-                return LoadFromResource("StoneDeposit");
-            }
-            else
-            {
-                if (staticObject.GetModule<IPropContainer>() is ILootContainer)
-                {
+                // Модели залежей ресурсов
+                case PropContainerPurpose.OreDeposits:
+                    return LoadFromResource("OreDeposit");
+                case PropContainerPurpose.StoneDeposits:
+                    return LoadFromResource("StoneDeposit");
+                case PropContainerPurpose.TrashHeap:
+                    return LoadFromResource("TrashHeap");
+                case PropContainerPurpose.Puddle:
+                    return LoadFromResource("WaterPuddle");
+                case PropContainerPurpose.CherryBrush:
+                    return LoadFromResource("CherryBrush");
+
+                // Модели статических препятсвий
+                case PropContainerPurpose.Pit:
+                    return LoadFromResource("Pit");
+
+                // Модели контейнеров-сундуков
+                case PropContainerPurpose.Trash:
+                    return LoadFromResource("Trash");
+                case PropContainerPurpose.Treasures:
+                    return LoadFromResource("Treasures");
+                case PropContainerPurpose.Loot:
                     return LoadFromResource("Loot");
-                }
 
-                if (staticObject.GetModule<IPropContainer>().Purpose == PropContainerPurpose.Treasures)
-                {
-                    return LoadFromResource("Chest");
-                }
-
-                return LoadFromResource("Trash");
+                case PropContainerPurpose.Undefined:
+                default:
+                    throw new InvalidOperationException($"Статический объект имеет неизвестное назначение {staticObject.Purpose}");
             }
         }
 
