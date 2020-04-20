@@ -32,7 +32,7 @@ namespace Assets.Zilon.Scripts.Services
                 case PropContainerPurpose.Trash:
                     return LoadFromResource("Trash");
                 case PropContainerPurpose.Treasures:
-                    return LoadFromResource("Treasures");
+                    return LoadFromResource("Chest");
                 case PropContainerPurpose.Loot:
                     return LoadFromResource("Loot");
 
