@@ -13,6 +13,8 @@ namespace Zilon.Core.World
         public ResourceMaterializationMap(IDice dice)
         {
             _dice = dice ?? throw new System.ArgumentNullException(nameof(dice));
+
+            _map = new Dictionary<ISectorNode, IResourceDepositData>();
         }
 
         public IResourceDepositData GetDepositData(ISectorNode sectorNode)
