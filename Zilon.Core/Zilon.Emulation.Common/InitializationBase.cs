@@ -67,6 +67,7 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
             serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
             serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
 
         private void RegisterSectorServices(IServiceCollection serviceRegistry)

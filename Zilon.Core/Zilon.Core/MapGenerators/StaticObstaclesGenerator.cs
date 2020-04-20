@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.Schemes;
-using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -16,14 +15,17 @@ namespace Zilon.Core.MapGenerators
         private readonly IChestGenerator _chestGenerator;
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
+        private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
         public StaticObstaclesGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
-            IStaticObjectFactoryCollector staticObjectfactoryCollector)
+            IStaticObjectFactoryCollector staticObjectfactoryCollector,
+            IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
         {
             _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
             _interiorObjectRandomSource = interiorObjectRandomSource ?? throw new ArgumentNullException(nameof(interiorObjectRandomSource));
             _staticObjectfactoryCollector = staticObjectfactoryCollector ?? throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
+            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ?? throw new ArgumentNullException(nameof(staticObjectsGeneratorRandomSource));
         }
 
         public Task CreateAsync(ISector sector, ISectorSubScheme sectorSubScheme)
@@ -92,7 +94,7 @@ namespace Zilon.Core.MapGenerators
                 PropContainerPurpose.TrashHeap
             };
 
-            return PropContainerPurpose.OreDeposits;
+            return _staticObjectsGeneratorRandomSource.RollPurpose(availableStatiObjectPurpose);
         }
     }
 }

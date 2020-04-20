@@ -7,10 +7,6 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class HandMineDepositMethod : IMineDepositMethod
     {
-        public HandMineDepositMethod()
-        {
-        }
-
         public IMineDepositResult TryMine(IPropDepositModule deposit)
         {
             if (deposit is null)
