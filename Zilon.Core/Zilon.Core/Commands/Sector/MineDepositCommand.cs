@@ -100,9 +100,12 @@ namespace Zilon.Core.Commands.Sector
                     continue;
                 }
 
-                if (equipment.Scheme.Tags.Intersect(requiredToolTags) == requiredToolTags)
+                // Check equipment has all required tags.
+                // There is faster method.
+                // https://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
+                if (!requiredToolTags.Except(equipment.Scheme.Tags).Any())
                 {
-                    // У экипировки должны быть все требуемые теги.
+                    // This equipment has all required tags.
                     return equipment;
                 }
             }

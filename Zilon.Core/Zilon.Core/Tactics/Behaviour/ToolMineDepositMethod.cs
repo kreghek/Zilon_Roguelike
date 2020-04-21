@@ -26,7 +26,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var requiredToolTags = deposit.GetToolTags();
 
-            if (_tool.Scheme.Tags.Intersect(requiredToolTags) == requiredToolTags)
+            if (requiredToolTags.All(x => equipment.Scheme.Tags.Contains(x)))
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
             }
