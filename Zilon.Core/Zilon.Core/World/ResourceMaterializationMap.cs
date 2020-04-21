@@ -25,8 +25,10 @@ namespace Zilon.Core.World
             }
 
             // Алгоритм.
+
             // Первое, что делаем, это проверяем, не является ли узел стартовым. То есть еще ничего нет.
             // В этом случае задаём случайные стартовые ресурсы.
+
             // Если не стартовый, тогда собираем данные с соседних, уже сгенерированных узлов.
             // Для каждого ресурса из соседних получаем усреднённое значение.
             // Затем, для каждого ресурса либо снижаем долю, либо увеличиваем.
@@ -70,7 +72,7 @@ namespace Zilon.Core.World
                 foreach (var keyValue in dict)
                 {
                     totalResources[keyValue.Key] = keyValue.Value.Average();
-                    var diff = _dice.Roll(-25, 25) / 10f;
+                    var diff = _dice.Roll(-25, 25) * 0.01f;
                     var totalValue = totalResources[keyValue.Key] + diff;
                     totalResources[keyValue.Key] = totalValue;
 
