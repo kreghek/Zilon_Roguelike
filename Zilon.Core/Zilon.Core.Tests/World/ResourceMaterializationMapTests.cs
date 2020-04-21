@@ -13,6 +13,7 @@ using System.Linq;
 using Zilon.Core.Tactics;
 using System.Drawing;
 using Zilon.Core.Common;
+using System.Globalization;
 
 namespace Zilon.Core.World.Tests
 {
@@ -156,23 +157,22 @@ namespace Zilon.Core.World.Tests
         {
             if (currentResource.Items.Any())
             {
-
                 var colorDict = new Dictionary<SectorResourceType, string> {
-                { SectorResourceType.Iron, "i" },
-                { SectorResourceType.Stones, "s" },
-                { SectorResourceType.WaterPuddles, "w" },
-                { SectorResourceType.CherryBrushes, "b" }
-            };
+                    { SectorResourceType.Iron, "i" },
+                    { SectorResourceType.Stones, "s" },
+                    { SectorResourceType.WaterPuddles, "w" },
+                    { SectorResourceType.CherryBrushes, "b" }
+                };
 
-                var s = string.Empty;
+                var sb = new StringBuilder();
                 foreach (var item in currentResource.Items)
                 {
                     var resColor = colorDict[item.ResourceType];
 
-                    s += $"{resColor}-{Math.Round(item.Share, 2)} ";
+                    sb.Append($"{resColor}-{Math.Round(item.Share, 2).ToString(CultureInfo.InvariantCulture)} ");
                 }
 
-                return $"[{s.Trim()}]";
+                return $"[{sb.ToString().Trim()}]";
             }
             else
             {

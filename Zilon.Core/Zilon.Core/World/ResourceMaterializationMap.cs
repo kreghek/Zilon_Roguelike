@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 
@@ -7,6 +8,8 @@ namespace Zilon.Core.World
 {
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
+        private const float START_RESOURCE_SHARE = 0.10f;
+
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
         private readonly IDice _dice;
 
@@ -35,13 +38,7 @@ namespace Zilon.Core.World
 
             if (!_map.Any())
             {
-                var items = new[] {
-                    new ResourceDepositDataItem(SectorResourceType.Iron, 0.10f),
-                    new ResourceDepositDataItem(SectorResourceType.Stones, 0.10f),
-                    new ResourceDepositDataItem(SectorResourceType.WaterPuddles, 0.10f),
-                    new ResourceDepositDataItem(SectorResourceType.CherryBrushes, 0.10f),
-                };
-                var data = new ResourceDepositData(items);
+                var data = CreateStartResourceData();
 
                 _map[sectorNode] = data;
 
@@ -49,84 +46,114 @@ namespace Zilon.Core.World
             }
             else
             {
-                var neighborNodes = sectorNode.Biome.GetNext(sectorNode);
-                var neighborResourceDatas = GetNeighborResourceData(neighborNodes);
+                var data = CalcCurrentResouceData(sectorNode);
 
-                var dict = new Dictionary<SectorResourceType, List<float>>();
-                foreach (var data1 in neighborResourceDatas)
-                {
-                    foreach (var item in data1.Items)
-                    {
-                        if (dict.TryGetValue(item.ResourceType, out var resourceShareList))
-                        {
-                            resourceShareList.Add(item.Share);
-                        }
-                        else
-                        {
-                            dict[item.ResourceType] = new List<float> { item.Share };
-                        }
-                    }
-                }
+                _map[sectorNode] = data;
 
-                var totalResources = new Dictionary<SectorResourceType, float>();
-                foreach (var keyValue in dict)
-                {
-                    totalResources[keyValue.Key] = keyValue.Value.Average();
-                    var diff = _dice.Roll(-25, 25) * 0.01f;
-                    var totalValue = totalResources[keyValue.Key] + diff;
-                    totalResources[keyValue.Key] = totalValue;
+                return data;
+            }
+        }
 
-                    if (totalValue < 0)
-                    {
-                        totalResources.Remove(keyValue.Key);
-                    }
-                    else if (totalValue > 1)
-                    {
-                        totalResources[keyValue.Key] = 1;
-                    }
-                }
+        private IResourceDepositData CalcCurrentResouceData(ISectorNode sectorNode)
+        {
+            var neighborNodes = sectorNode.Biome.GetNext(sectorNode);
+            var items = CalcAverageResourceByNeightbors(neighborNodes);
+            items = AddNewResourceIfNeed(items);
 
-                var sumShare = totalResources.Values.Sum();
-                if (sumShare > 1)
-                {
-                    foreach (var keyValue in totalResources.ToArray())
-                    {
-                        totalResources[keyValue.Key] = totalResources[keyValue.Key] / sumShare;
-                    }
-                }
+            var data = new ResourceDepositData(items);
+            return data;
+        }
 
-                var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
+        private ResourceDepositDataItem[] AddNewResourceIfNeed(ResourceDepositDataItem[] items)
+        {
+            var newRoll = _dice.RollD6();
 
-                var newRoll = _dice.RollD6();
-
-                if (!items.Any() || newRoll > 3)
-                {
-                    var itemsNew = new List<ResourceDepositDataItem>(items);
-                    var availableResources = new List<SectorResourceType> {
+            if (!items.Any() || newRoll > 3)
+            {
+                var itemsNew = new List<ResourceDepositDataItem>(items);
+                var availableResources = new List<SectorResourceType> {
                         SectorResourceType.CherryBrushes,
                         SectorResourceType.Iron,
                         SectorResourceType.Stones,
                         SectorResourceType.WaterPuddles
                     };
 
-                    foreach (var res in availableResources)
+                foreach (var res in availableResources)
+                {
+                    var roll = _dice.RollD6();
+                    if (roll == 6)
                     {
-                        var roll = _dice.RollD6();
-                        if (roll == 6)
-                        {
-                            itemsNew.Add(new ResourceDepositDataItem(res, 0.10f));
-                        }
+                        itemsNew.Add(new ResourceDepositDataItem(res, START_RESOURCE_SHARE));
                     }
-
-                    items = itemsNew.ToArray();
                 }
 
-                var data = new ResourceDepositData(items);
-
-                _map[sectorNode] = data;
-
-                return data;
+                items = itemsNew.ToArray();
             }
+
+            return items;
+        }
+
+        private ResourceDepositDataItem[] CalcAverageResourceByNeightbors(IEnumerable<IGraphNode> neighborNodes)
+        {
+            var neighborResourceDatas = GetNeighborResourceData(neighborNodes);
+
+            var dict = new Dictionary<SectorResourceType, List<float>>();
+            foreach (var data1 in neighborResourceDatas)
+            {
+                foreach (var item in data1.Items)
+                {
+                    if (dict.TryGetValue(item.ResourceType, out var resourceShareList))
+                    {
+                        resourceShareList.Add(item.Share);
+                    }
+                    else
+                    {
+                        dict[item.ResourceType] = new List<float> { item.Share };
+                    }
+                }
+            }
+
+            var totalResources = new Dictionary<SectorResourceType, float>();
+            foreach (var keyValue in dict)
+            {
+                totalResources[keyValue.Key] = keyValue.Value.Average();
+                var diff = _dice.Roll(-25, 25) * 0.01f;
+                var totalValue = totalResources[keyValue.Key] + diff;
+                totalResources[keyValue.Key] = totalValue;
+
+                if (totalValue < 0)
+                {
+                    totalResources.Remove(keyValue.Key);
+                }
+                else if (totalValue > 1)
+                {
+                    totalResources[keyValue.Key] = 1;
+                }
+            }
+
+            var sumShare = totalResources.Values.Sum();
+            if (sumShare > 1)
+            {
+                foreach (var keyValue in totalResources.ToArray())
+                {
+                    totalResources[keyValue.Key] = totalResources[keyValue.Key] / sumShare;
+                }
+            }
+
+            var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
+            return items;
+        }
+
+        private static IResourceDepositData CreateStartResourceData()
+        {
+            var items = new[] {
+                new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
+                new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
+                new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
+                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE),
+            };
+            var data = new ResourceDepositData(items);
+            return data;
         }
 
         private IEnumerable<IResourceDepositData> GetNeighborResourceData(IEnumerable<IGraphNode> neighborNodes)
