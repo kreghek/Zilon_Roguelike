@@ -450,10 +450,10 @@ public class SectorVM : MonoBehaviour
         }
 
         var propContainer = e.Container.GetModule<IPropContainer>();
-        ShowFoundPropsModal(actor, propContainer);
+        ShowFoundPropsModalOrNotFound(actor, propContainer);
     }
 
-    private void ShowFoundPropsModal(IActor actor, IPropContainer propContainer)
+    private void ShowFoundPropsModalOrNotFound(IActor actor, IPropContainer propContainer)
     {
         var props = propContainer.Content.CalcActualItems();
         if (props.Any())
@@ -661,7 +661,10 @@ public class SectorVM : MonoBehaviour
 
         var propContainer = e.Deposit.GetModule<IPropContainer>();
 
-        ShowFoundPropsModal(actor, propContainer);
+        if (e.Result is SuccessMineDepositResult)
+        {
+            ShowFoundPropsModalOrNotFound(actor, propContainer);
+        }
     }
 
     private static void ProcessHeal(ActorViewModel actorViewModel)

@@ -37,7 +37,7 @@ namespace Zilon.Core.StaticObjectModules
         }
 
         /// <inheritdoc/>
-        public bool IsExhausted { get => _exhaustingCounter > 0; }
+        public bool IsExhausted { get => _exhaustingCounter <= 0; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

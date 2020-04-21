@@ -27,7 +27,7 @@ namespace Zilon.Core.StaticObjectModules
 
         private void ContainerModule_ItemsRemoved(object sender, Props.PropStoreEventArgs e)
         {
-            if (_depositModule.IsExhausted && _containerModule.Content.CalcActualItems().Any())
+            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
             {
                 Destroy();
             }
