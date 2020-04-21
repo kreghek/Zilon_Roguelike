@@ -89,7 +89,7 @@ namespace Zilon.Core.World
                 var sumShare = totalResources.Values.Sum();
                 if (sumShare > 1)
                 {
-                    foreach (var keyValue in totalResources)
+                    foreach (var keyValue in totalResources.ToArray())
                     {
                         totalResources[keyValue.Key] = totalResources[keyValue.Key] / sumShare;
                     }
@@ -97,9 +97,11 @@ namespace Zilon.Core.World
 
                 var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
 
-                if (!items.Any())
+                var newRoll = _dice.RollD6();
+
+                if (!items.Any() || newRoll > 3)
                 {
-                    var itemsNew = new List<ResourceDepositDataItem>();
+                    var itemsNew = new List<ResourceDepositDataItem>(items);
                     var availableResources = new List<SectorResourceType> { 
                         SectorResourceType.CherryBrushes,
                         SectorResourceType.Iron,
