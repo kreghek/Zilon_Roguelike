@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Zilon.Core.Tests.Common.Schemes;
 using System.Linq;
 using Zilon.Core.Tactics;
+using System.Drawing;
+using Zilon.Core.Common;
 
 namespace Zilon.Core.World.Tests
 {
@@ -66,7 +68,7 @@ namespace Zilon.Core.World.Tests
 
             var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
-            var resource = resourceMaterializationMap.GetDepositData(introNode);
+            var currentResource = resourceMaterializationMap.GetDepositData(introNode);
             var currentNode = introNode;
 
             var iteration = 0;
@@ -78,11 +80,12 @@ namespace Zilon.Core.World.Tests
                     .First(x => x.State != SectorNodeState.SectorMaterialized);
 
                 await biomService.MaterializeLevelAsync(nextNode).ConfigureAwait(false);
-                resource = resourceMaterializationMap.GetDepositData(introNode);
+                var nextResource = resourceMaterializationMap.GetDepositData(nextNode);
 
-                resultStringBuilder.AppendLine($"    {currentNode.GetHashCode()}-->{nextNode.GetHashCode()};");
+                resultStringBuilder.AppendLine(GetVisualString(currentNode, nextNode, currentResource, nextResource));
 
                 currentNode = nextNode;
+                currentResource = nextResource;
 
                 iteration++;
             }
@@ -104,6 +107,62 @@ namespace Zilon.Core.World.Tests
             }
 
             Console.Write(resultStringBuilder.ToString());
+        }
+
+        private static string GetVisualString(SectorNode currentNode, SectorNode nextNode, IResourceDepositData currentResource, IResourceDepositData nextResource)
+        {
+            var str = $"    {currentNode.GetHashCode()}[{ResourceToString(currentResource)}]-->{nextNode.GetHashCode()}[{ResourceToString(nextResource)}];";
+
+            var currentResColor = ResourceToStyle(currentResource);
+            var nextResColor = ResourceToStyle(nextResource);
+
+            str += $"\n    style {currentNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(currentResColor)}";
+            str += $"\n    style {nextNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(nextResColor)}";
+
+            return str;
+        }
+
+        private static Color ResourceToStyle(IResourceDepositData currentResource)
+        {
+            var totalColor = new Color();
+            var colorDict = new Dictionary<SectorResourceType, Color> {
+                { SectorResourceType.Iron, Color.Maroon },
+                { SectorResourceType.Stones, Color.Silver },
+                { SectorResourceType.WaterPuddles, Color.Aqua },
+                { SectorResourceType.CherryBrushes, Color.Green }
+            };
+
+            foreach (var item in currentResource.Items)
+            {
+                var resColor = colorDict[item.ResourceType];
+                var r = MathUtils.Lerp(totalColor.R, resColor.R, item.Share);
+                var g = MathUtils.Lerp(totalColor.G, resColor.G, item.Share);
+                var b = MathUtils.Lerp(totalColor.B, resColor.B, item.Share);
+
+                totalColor = Color.FromArgb((int)r, (int)g, (int)b);
+            }
+
+            return totalColor;
+        }
+
+        private static string ResourceToString(IResourceDepositData currentResource)
+        {
+            var colorDict = new Dictionary<SectorResourceType, string> {
+                { SectorResourceType.Iron, "i" },
+                { SectorResourceType.Stones, "s" },
+                { SectorResourceType.WaterPuddles, "w" },
+                { SectorResourceType.CherryBrushes, "b" }
+            };
+
+            var s = string.Empty;
+            foreach (var item in currentResource.Items)
+            {
+                var resColor = colorDict[item.ResourceType];
+
+                s += $"{resColor}-{Math.Round(item.Share, 2)} ";
+            }
+
+            return s;
         }
 
         private static ILocationScheme[] CreateBiomSchemes()
