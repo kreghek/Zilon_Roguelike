@@ -95,7 +95,29 @@ namespace Zilon.Core.World
                     }
                 }
 
-                var items = totalResources.Select(x=>new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
+                var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
+
+                if (!items.Any())
+                {
+                    var itemsNew = new List<ResourceDepositDataItem>();
+                    var availableResources = new List<SectorResourceType> { 
+                        SectorResourceType.CherryBrushes,
+                        SectorResourceType.Iron,
+                        SectorResourceType.Stones,
+                        SectorResourceType.WaterPuddles
+                    };
+
+                    foreach (var res in availableResources)
+                    {
+                        var roll = _dice.RollD6();
+                        if (roll == 6)
+                        {
+                            itemsNew.Add(new ResourceDepositDataItem(res, 0.10f));
+                        }
+                    }
+
+                    items = itemsNew.ToArray();
+                }
 
                 var data = new ResourceDepositData(items);
 

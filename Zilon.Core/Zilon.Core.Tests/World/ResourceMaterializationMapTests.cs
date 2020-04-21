@@ -69,55 +69,61 @@ namespace Zilon.Core.World.Tests
             var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
             var currentResource = resourceMaterializationMap.GetDepositData(introNode);
-            var currentNode = introNode;
+            ISectorNode currentNode = introNode;
 
             var iteration = 0;
             const int ITERATION_MAX = 100;
+
+            var openList = new List<NodeInfo>();
+            var nextNodes1 = currentNode.Biome.GetNext(currentNode)
+                    .OfType<SectorNode>()
+                    .Where(x => x.State != SectorNodeState.SectorMaterialized)
+                    .Select(x=>new NodeInfo { Current = x, Parent = introNode, ParentResource = currentResource });
+            openList.AddRange(nextNodes1);
+
             while (iteration < ITERATION_MAX)
             {
-                var nextNode = currentNode.Biome.GetNext(currentNode)
+                var nextNode = openList[0];
+                openList.RemoveAt(0);
+
+                await biomService.MaterializeLevelAsync(nextNode.Current).ConfigureAwait(false);
+                var nextResource = resourceMaterializationMap.GetDepositData(nextNode.Current);
+
+                resultStringBuilder.AppendLine(GetVisualString(nextNode.Parent, nextNode.Current, nextNode.ParentResource, nextResource));
+
+                var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
                     .OfType<SectorNode>()
-                    .First(x => x.State != SectorNodeState.SectorMaterialized);
-
-                await biomService.MaterializeLevelAsync(nextNode).ConfigureAwait(false);
-                var nextResource = resourceMaterializationMap.GetDepositData(nextNode);
-
-                resultStringBuilder.AppendLine(GetVisualString(currentNode, nextNode, currentResource, nextResource));
-
-                currentNode = nextNode;
-                currentResource = nextResource;
+                    .Where(x => x.State != SectorNodeState.SectorMaterialized)
+                    .Select(x => new NodeInfo { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
+                openList.AddRange(nextNodes2);
 
                 iteration++;
-            }
-
-            var materializedSectorNodes = new List<SectorNode>();
-            var scanNode = introNode;
-            materializedSectorNodes.Add(scanNode);
-            while (true)
-            {
-                var nextNodes = scanNode.Biome.GetNext(scanNode).OfType<SectorNode>();
-                scanNode = nextNodes.SingleOrDefault(x => x.State == SectorNodeState.SectorMaterialized && !materializedSectorNodes.Contains(x));
-
-                if (scanNode is null)
-                {
-                    break;
-                }
-
-                materializedSectorNodes.Add(scanNode);
             }
 
             Console.Write(resultStringBuilder.ToString());
         }
 
-        private static string GetVisualString(SectorNode currentNode, SectorNode nextNode, IResourceDepositData currentResource, IResourceDepositData nextResource)
+        private class NodeInfo {
+            public ISectorNode Parent;
+            public ISectorNode Current;
+            public IResourceDepositData ParentResource;
+        }
+
+        private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode, IResourceDepositData currentResource, IResourceDepositData nextResource)
         {
-            var str = $"    {currentNode.GetHashCode()}[{ResourceToString(currentResource)}]-->{nextNode.GetHashCode()}[{ResourceToString(nextResource)}];";
+            var str = $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};";
 
-            var currentResColor = ResourceToStyle(currentResource);
-            var nextResColor = ResourceToStyle(nextResource);
+            if (currentResource.Items.Any())
+            {
+                var currentResColor = ResourceToStyle(currentResource);
+                str += $"\n    style {currentNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(currentResColor)}";
+            }
 
-            str += $"\n    style {currentNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(currentResColor)}";
-            str += $"\n    style {nextNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(nextResColor)}";
+            if (nextResource.Items.Any())
+            {
+                var nextResColor = ResourceToStyle(nextResource);
+                str += $"\n    style {nextNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(nextResColor)}";
+            }
 
             return str;
         }
@@ -147,22 +153,30 @@ namespace Zilon.Core.World.Tests
 
         private static string ResourceToString(IResourceDepositData currentResource)
         {
-            var colorDict = new Dictionary<SectorResourceType, string> {
+            if (currentResource.Items.Any())
+            {
+
+                var colorDict = new Dictionary<SectorResourceType, string> {
                 { SectorResourceType.Iron, "i" },
                 { SectorResourceType.Stones, "s" },
                 { SectorResourceType.WaterPuddles, "w" },
                 { SectorResourceType.CherryBrushes, "b" }
             };
 
-            var s = string.Empty;
-            foreach (var item in currentResource.Items)
-            {
-                var resColor = colorDict[item.ResourceType];
+                var s = string.Empty;
+                foreach (var item in currentResource.Items)
+                {
+                    var resColor = colorDict[item.ResourceType];
 
-                s += $"{resColor}-{Math.Round(item.Share, 2)} ";
+                    s += $"{resColor}-{Math.Round(item.Share, 2)} ";
+                }
+
+                return $"[{s.Trim()}]";
             }
-
-            return s;
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private static ILocationScheme[] CreateBiomSchemes()
