@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -18,7 +18,8 @@ namespace Zilon.Core.StaticObjectModules
             IDropTableScheme dropTableScheme,
             IDropResolver dropResolver,
             string[] toolTags,
-            int exhaustingValue)
+            int exhaustingValue,
+            DepositMiningDifficulty depositMiningDifficulty)
         {
             _propContainer = propContainer ?? throw new ArgumentNullException(nameof(propContainer));
             _dropTableScheme = dropTableScheme ?? throw new ArgumentNullException(nameof(dropTableScheme));
@@ -26,6 +27,7 @@ namespace Zilon.Core.StaticObjectModules
             _toolTags = toolTags ?? throw new ArgumentNullException(nameof(toolTags));
 
             _exhaustingCounter = exhaustingValue;
+            Difficulty = depositMiningDifficulty;
         }
 
         /// <inheritdoc/>
@@ -42,6 +44,7 @@ namespace Zilon.Core.StaticObjectModules
 
         /// <inheritdoc/>
         public string Key { get => nameof(IPropDepositModule); }
+        public DepositMiningDifficulty Difficulty { get; }
 
         /// <inheritdoc/>
         public void Mine()

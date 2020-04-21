@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
@@ -12,5 +13,6 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         }
 
         protected override int ExhausingValue { get => 10; }
+        protected override DepositMiningDifficulty DepositMiningDifficulty { get => DepositMiningDifficulty.Moderately; }
     }
 }

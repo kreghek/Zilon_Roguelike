@@ -31,7 +31,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
             }
 
-            var isSuccessfulMining = _mineDepositMethodRandomSource.CheckSuccess();
+            var isSuccessfulMining = _mineDepositMethodRandomSource.RollSuccess(deposit.Difficulty);
             if (isSuccessfulMining)
             {
                 deposit.Mine();
