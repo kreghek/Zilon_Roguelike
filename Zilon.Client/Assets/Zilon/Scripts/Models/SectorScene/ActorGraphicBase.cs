@@ -34,6 +34,15 @@ public class ActorGraphicBase : MonoBehaviour
         RotateTo(targetPosition);
     }
 
+    public virtual void ProcessMine(Vector3 targetPosition)
+    {
+        var diffPosition = transform.position - targetPosition;
+        Animator.SetFloat("targetX", diffPosition.x);
+        Animator.SetFloat("targetY", diffPosition.y);
+
+        Animator.Play("Mine");
+    }
+
     public virtual void ProcessInteractive(Vector3 targetPosition)
     {
         RotateTo(targetPosition);

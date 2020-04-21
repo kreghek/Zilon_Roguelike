@@ -214,6 +214,7 @@ public class SectorVM : MonoBehaviour
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
+        actor.DepositMined += Actor_DepositMined;
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
@@ -619,7 +620,7 @@ public class SectorVM : MonoBehaviour
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
-        var actor = GetActor(sender);
+        var actor = GetActorFromEventSender(sender);
 
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
@@ -642,6 +643,15 @@ public class SectorVM : MonoBehaviour
             default:
                 throw new InvalidOperationException($"Неизвестный тип воздействия {actEffect}.");
         }
+    }
+
+    private void Actor_DepositMined(object sender, MineDepositEventArgs e)
+    {
+        var actor = GetActorFromEventSender(sender);
+
+        var depositViewModel = _staticObjectViewModels.Single(x => x.StaticObject == e.Deposit);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+        actorViewModel.GraphicRoot.ProcessMine(depositViewModel.transform.position);
     }
 
     private static void ProcessHeal(ActorViewModel actorViewModel)
@@ -672,7 +682,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private static IActor GetActor(object sender)
+    private static IActor GetActorFromEventSender(object sender)
     {
         if (sender is IActor actor)
         {
