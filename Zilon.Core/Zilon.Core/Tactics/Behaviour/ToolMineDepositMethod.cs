@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-
+using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 
@@ -25,8 +25,8 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var requiredToolTags = deposit.GetToolTags();
-
-            if (!requiredToolTags.Except(_tool.Scheme.Tags).Any())
+            var hasAllTags = EquipmentHelper.HasAllTags(_tool.Scheme.Tags, requiredToolTags);
+            if (!hasAllTags)
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
             }

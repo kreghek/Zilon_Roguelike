@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Zilon.Core.Client;
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
@@ -100,10 +101,8 @@ namespace Zilon.Core.Commands.Sector
                     continue;
                 }
 
-                // Check equipment has all required tags.
-                // There is faster method.
-                // https://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-                if (requiredToolTags.Except(equipment.Scheme.Tags).Any())
+                var hasAllTags = EquipmentHelper.HasAllTags(equipment.Scheme.Tags, requiredToolTags);
+                if (hasAllTags)
                 {
                     // This equipment has all required tags.
                     return equipment;
