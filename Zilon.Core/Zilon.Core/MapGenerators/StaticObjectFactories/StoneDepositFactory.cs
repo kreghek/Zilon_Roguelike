@@ -10,5 +10,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "stone-deposit", PropContainerPurpose.StoneDeposits, schemeService, dropResolver)
         {
         }
+
+        protected override int ExhausingValue { get => 10; }
     }
 }

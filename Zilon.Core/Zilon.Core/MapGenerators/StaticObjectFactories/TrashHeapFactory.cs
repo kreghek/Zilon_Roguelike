@@ -10,5 +10,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             IDropResolver dropResolver) : base(toolTags: new[] { "shovel" }, dropTableSchemeSid: "trash-heap", PropContainerPurpose.TrashHeap, schemeService, dropResolver)
         {
         }
+
+        protected override int ExhausingValue { get => 3; }
     }
 }

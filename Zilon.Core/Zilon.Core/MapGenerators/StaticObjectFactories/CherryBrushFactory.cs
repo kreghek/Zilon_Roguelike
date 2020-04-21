@@ -12,5 +12,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             IDropResolver dropResolver) : base(toolTags: Array.Empty<string>(), dropTableSchemeSid: "cherry-brush", PropContainerPurpose.CherryBrush, schemeService, dropResolver)
         {
         }
+
+        protected override int ExhausingValue { get => 1; }
     }
 }

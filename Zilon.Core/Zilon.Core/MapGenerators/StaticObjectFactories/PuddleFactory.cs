@@ -12,5 +12,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             IDropResolver dropResolver) : base(toolTags: Array.Empty<string>(), dropTableSchemeSid: "water-puddle", PropContainerPurpose.Puddle, schemeService, dropResolver)
         {
         }
+
+        protected override int ExhausingValue { get => 1; }
     }
 }
