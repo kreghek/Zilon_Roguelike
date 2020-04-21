@@ -78,7 +78,7 @@ namespace Zilon.Core.World.Tests
             var nextNodes1 = currentNode.Biome.GetNext(currentNode)
                     .OfType<SectorNode>()
                     .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x=>new NodeInfo { Current = x, Parent = introNode, ParentResource = currentResource });
+                    .Select(x => new NodeInfo { Current = x, Parent = introNode, ParentResource = currentResource });
             openList.AddRange(nextNodes1);
 
             while (iteration < ITERATION_MAX)
@@ -103,7 +103,8 @@ namespace Zilon.Core.World.Tests
             Console.Write(resultStringBuilder.ToString());
         }
 
-        private class NodeInfo {
+        private class NodeInfo
+        {
             public ISectorNode Parent;
             public ISectorNode Current;
             public IResourceDepositData ParentResource;
@@ -111,21 +112,21 @@ namespace Zilon.Core.World.Tests
 
         private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode, IResourceDepositData currentResource, IResourceDepositData nextResource)
         {
-            var str = $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};";
+            var str = new StringBuilder($"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
 
             if (currentResource.Items.Any())
             {
                 var currentResColor = ResourceToStyle(currentResource);
-                str += $"\n    style {currentNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(currentResColor)}";
+                str.AppendLine($"    style {currentNode.GetHashCode()} fill:{ColorTranslator.ToHtml(currentResColor)}");
             }
 
             if (nextResource.Items.Any())
             {
                 var nextResColor = ResourceToStyle(nextResource);
-                str += $"\n    style {nextNode.GetHashCode()} fill:{System.Drawing.ColorTranslator.ToHtml(nextResColor)}";
+                str.AppendLine($"    style {nextNode.GetHashCode()} fill:{ColorTranslator.ToHtml(nextResColor)}");
             }
 
-            return str;
+            return str.ToString();
         }
 
         private static Color ResourceToStyle(IResourceDepositData currentResource)

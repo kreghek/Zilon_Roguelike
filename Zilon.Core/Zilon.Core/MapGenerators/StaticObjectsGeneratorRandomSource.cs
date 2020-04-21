@@ -57,7 +57,7 @@ namespace Zilon.Core.MapGenerators
             return _dice.RollFromList(purposeList);
         }
 
-        private PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
+        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
         {
             switch (resourceType)
             {

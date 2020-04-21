@@ -63,7 +63,7 @@ namespace Zilon.Core.World
                         }
                         else
                         {
-                            dict[item.ResourceType] = new List<float>() { item.Share };
+                            dict[item.ResourceType] = new List<float> { item.Share };
                         }
                     }
                 }
@@ -102,7 +102,7 @@ namespace Zilon.Core.World
                 if (!items.Any() || newRoll > 3)
                 {
                     var itemsNew = new List<ResourceDepositDataItem>(items);
-                    var availableResources = new List<SectorResourceType> { 
+                    var availableResources = new List<SectorResourceType> {
                         SectorResourceType.CherryBrushes,
                         SectorResourceType.Iron,
                         SectorResourceType.Stones,
