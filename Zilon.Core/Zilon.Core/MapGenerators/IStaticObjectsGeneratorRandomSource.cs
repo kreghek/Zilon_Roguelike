@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -12,6 +13,6 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="purposes"> Доступные назначения. </param>
         /// <returns> Возвращает выбранное назначение. </returns>
-        PropContainerPurpose RollPurpose(PropContainerPurpose[] purposes);
+        PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData);
     }
 }

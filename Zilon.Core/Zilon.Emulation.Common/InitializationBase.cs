@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
@@ -18,6 +19,7 @@ using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
@@ -102,6 +104,7 @@ namespace Zilon.Emulation.Common
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
             container.AddScoped<ISectorFactory, SectorFactory>();

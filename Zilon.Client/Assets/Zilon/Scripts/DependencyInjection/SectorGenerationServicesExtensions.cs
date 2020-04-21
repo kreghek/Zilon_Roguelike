@@ -6,6 +6,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.World;
 
 namespace Assets.Zilon.Scripts.DependencyInjection
 {
@@ -33,6 +34,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
 
             diContainer.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
             diContainer.Bind<IStaticObjectsGeneratorRandomSource>().To<StaticObjectsGeneratorRandomSource>().AsSingle();
+            diContainer.Bind<IResourceMaterializationMap>().To<ResourceMaterializationMap>().AsSingle();
         }
     }
 }

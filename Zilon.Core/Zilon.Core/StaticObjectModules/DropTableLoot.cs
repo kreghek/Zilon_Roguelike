@@ -16,6 +16,7 @@ namespace Zilon.Core.StaticObjectModules
         public DropTableLoot(IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
         {
+            Purpose = PropContainerPurpose.Loot;
         }
     }
 }
