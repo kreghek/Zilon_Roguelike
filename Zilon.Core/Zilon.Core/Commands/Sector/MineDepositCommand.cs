@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+
 using Zilon.Core.Client;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -12,11 +12,15 @@ namespace Zilon.Core.Commands.Sector
 {
     public sealed class MineDepositCommand : ActorCommandBase
     {
+        private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
+
         public MineDepositCommand(
             IGameLoop gameLoop,
             ISectorManager sectorManager,
-            ISectorUiState playerState) : base(gameLoop, sectorManager, playerState)
+            ISectorUiState playerState,
+            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(gameLoop, sectorManager, playerState)
         {
+            _mineDepositMethodRandomSource = mineDepositMethodRandomSource;
         }
 
         public override bool CanExecute()
@@ -108,14 +112,14 @@ namespace Zilon.Core.Commands.Sector
 
         private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
         {
-            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool);
+            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
             var map = SectorManager.CurrentSector.Map;
             return new MineTask(actor, staticObject, toolMineDepositMethod, map);
         }
 
         private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
         {
-            var handMineDepositMethod = new HandMineDepositMethod();
+            var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
             var map = SectorManager.CurrentSector.Map;
             return new MineTask(actor, staticObject, handMineDepositMethod, map);
         }

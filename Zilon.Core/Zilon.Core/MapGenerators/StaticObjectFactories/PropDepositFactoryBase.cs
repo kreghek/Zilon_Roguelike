@@ -44,7 +44,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             var containerModule = new DepositContainer();
             staticObject.AddModule(containerModule);
 
-            var lifetimeModule = new LifetimeModule(sector.StaticObjectManager, staticObject);
+            var lifetimeModule = new DepositLifetimeModule(sector.StaticObjectManager, staticObject);
 
             var dropScheme = _schemeService.GetScheme<IDropTableScheme>(_dropTableSchemeSid);
             var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags, lifetimeModule);
