@@ -1,0 +1,11 @@
+{
+  "Rolls": 1,
+  "Records": [
+	{
+      "SchemeSid": "dirty-water",
+	  "MinCount": 1,
+	  "MaxCount": 1,
+      "Weight": 10
+    }
+  ]
+}
