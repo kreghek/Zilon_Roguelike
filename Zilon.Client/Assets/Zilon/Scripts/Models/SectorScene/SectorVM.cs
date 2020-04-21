@@ -449,7 +449,13 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var props = e.Container.GetModule<IPropContainer>().Content.CalcActualItems();
+        var propContainer = e.Container.GetModule<IPropContainer>();
+        ShowFoundPropsModal(actor, propContainer);
+    }
+
+    private void ShowFoundPropsModal(IActor actor, IPropContainer propContainer)
+    {
+        var props = propContainer.Content.CalcActualItems();
         if (props.Any())
         {
             var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
@@ -457,7 +463,7 @@ public class SectorVM : MonoBehaviour
             var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory,
-                e.Container.GetModule<IPropContainer>().Content);
+                propContainer.Content);
             containerPopup.Init(transferMachine);
         }
         else
@@ -652,6 +658,10 @@ public class SectorVM : MonoBehaviour
         var depositViewModel = _staticObjectViewModels.Single(x => x.StaticObject == e.Deposit);
         var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
         actorViewModel.GraphicRoot.ProcessMine(depositViewModel.transform.position);
+
+        var propContainer = e.Deposit.GetModule<IPropContainer>();
+
+        ShowFoundPropsModal(actor, propContainer);
     }
 
     private static void ProcessHeal(ActorViewModel actorViewModel)

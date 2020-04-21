@@ -40,6 +40,8 @@ public class ActorGraphicBase : MonoBehaviour
         Animator.SetFloat("targetX", diffPosition.x);
         Animator.SetFloat("targetY", diffPosition.y);
 
+        RotateTo(targetPosition);
+
         Animator.Play("Mine");
     }
 
