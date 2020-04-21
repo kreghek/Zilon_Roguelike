@@ -103,7 +103,7 @@ namespace Zilon.Core.Commands.Sector
                 // Check equipment has all required tags.
                 // There is faster method.
                 // https://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-                if (!requiredToolTags.Except(equipment.Scheme.Tags).Any())
+                if (requiredToolTags.Except(equipment.Scheme.Tags).Any())
                 {
                     // This equipment has all required tags.
                     return equipment;
