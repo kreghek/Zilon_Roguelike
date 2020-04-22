@@ -23,7 +23,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.RegisterActorTaskSourcesServices();
 
-        Container.RegisterTacticalActUsageService();
+        Container.RegisterActUsageService();
 
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
