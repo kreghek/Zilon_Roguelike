@@ -172,9 +172,13 @@ namespace Zilon.Core.Tactics
             {
                 UseOnActor(actor, targetActor, tacticalActRoll);
             }
+            else if (target is IStaticObject staticObject)
+            {
+                UseOnStaticObject(staticObject, tacticalActRoll);
+            }
             else
             {
-                UseOnChest(target, tacticalActRoll);
+                throw new InvalidOperationException($"{target} is not valid target to use act.");
             }
 
             if (act.Equipment != null)
@@ -261,7 +265,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="target"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private static void UseOnChest(IAttackTarget target, TacticalActRoll tacticalActRoll)
+        private static void UseOnStaticObject(IAttackTarget target, TacticalActRoll tacticalActRoll)
         {
             target.TakeDamage(tacticalActRoll.Efficient);
         }

@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Graphs;
-using Zilon.Core.StaticObjectModules;
+﻿using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -7,7 +6,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Статический объект в секторе. Противоположность актёром, которые активны и воздействуют на статически-пассивные объекты.
     /// </summary>
-    public interface IStaticObject : IPassMapBlocker
+    public interface IStaticObject : IPassMapBlocker, IAttackTarget
     {
         /// <summary>
         /// Идентфикиатор объекта.
@@ -16,11 +15,6 @@ namespace Zilon.Core.Tactics
         /// Задаётся и используется в тестах для выборки сундука.
         /// </remarks>
         int Id { get; }
-
-        /// <summary>
-        /// Узер карты сектора, в котором находится контейнер.
-        /// </summary>
-        IGraphNode Node { get; }
 
         /// <summary>
         /// Получение модуля статического объекта.
