@@ -55,5 +55,4 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
     }
-
 }

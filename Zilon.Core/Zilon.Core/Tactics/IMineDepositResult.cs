@@ -2,5 +2,6 @@
 {
     public interface IMineDepositResult
     {
+        bool Success { get; }
     }
 }
