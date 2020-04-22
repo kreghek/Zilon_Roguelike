@@ -23,6 +23,34 @@ namespace Zilon.Core.Tactics
         IActUsageHandler GetHandler(IAttackTarget attackTarget);
     }
 
+    public sealed class ActUsageHandlerSelector : IActUsageHandlerSelector
+    {
+        private readonly IActUsageHandler[] _actUsageHandlers;
+
+        public ActUsageHandlerSelector(IActUsageHandler[] actUsageHandlers)
+        {
+            _actUsageHandlers = actUsageHandlers;
+        }
+
+        public IActUsageHandler GetHandler(IAttackTarget attackTarget)
+        {
+            if (attackTarget is null)
+            {
+                throw new ArgumentNullException(nameof(attackTarget));
+            }
+
+            foreach (var handler in _actUsageHandlers)
+            {
+                if (handler.TargetType.IsAssignableFrom(attackTarget.GetType()))
+                {
+                    return handler;
+                }
+            }
+
+            throw new InvalidOperationException($"Handler for type {attackTarget.GetType()} not found.");
+        }
+    }
+
     public sealed class ActorActUsageHandler : IActUsageHandler
     {
         private readonly IPerkResolver _perkResolver;

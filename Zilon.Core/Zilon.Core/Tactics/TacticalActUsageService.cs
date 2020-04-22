@@ -6,7 +6,6 @@ using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -23,13 +22,6 @@ namespace Zilon.Core.Tactics
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
-
-        /// <summary>
-        /// Шина событий возаимодействия актёров.
-        /// </summary>
-        public IActorInteractionBus ActorInteractionBus { get; set; }
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
@@ -58,11 +50,9 @@ namespace Zilon.Core.Tactics
             ITacticalActUsageRandomSource actUsageRandomSource,
             ISectorManager sectorManager,
             IActUsageHandlerSelector actUsageHandlerSelector,
-            IEquipmentDurableService equipmentDurableService,
-            IActorInteractionBus actorInteractionBus) : this(actUsageRandomSource, sectorManager, actUsageHandlerSelector)
+            IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, sectorManager, actUsageHandlerSelector)
         {
             EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
-            ActorInteractionBus = actorInteractionBus ?? throw new ArgumentNullException(nameof(actorInteractionBus));
         }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
