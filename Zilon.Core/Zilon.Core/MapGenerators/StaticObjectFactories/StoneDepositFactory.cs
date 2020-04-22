@@ -13,6 +13,6 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         }
 
         protected override int ExhausingValue { get => 10; }
-        protected override DepositMiningDifficulty DepositMiningDifficulty { get => DepositMiningDifficulty.Moderately; }
+        protected override DepositMiningDifficulty Difficulty { get => DepositMiningDifficulty.Moderately; }
     }
 }

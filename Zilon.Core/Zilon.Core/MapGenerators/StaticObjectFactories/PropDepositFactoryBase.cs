@@ -32,7 +32,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 
         protected abstract int ExhausingValue { get; }
 
-        protected abstract DepositMiningDifficulty DepositMiningDifficulty { get; }
+        protected abstract DepositMiningDifficulty Difficulty { get; }
 
         public IStaticObject Create(ISector sector, HexNode node, int id)
         {
@@ -49,7 +49,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             staticObject.AddModule(containerModule);
 
             var dropScheme = _schemeService.GetScheme<IDropTableScheme>(_dropTableSchemeSid);
-            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags, ExhausingValue, DepositMiningDifficulty);
+            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags, ExhausingValue, Difficulty);
             staticObject.AddModule(depositModule);
 
             var lifetimeModule = new DepositLifetimeModule(sector.StaticObjectManager, staticObject);
