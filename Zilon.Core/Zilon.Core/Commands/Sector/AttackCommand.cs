@@ -6,9 +6,9 @@ using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
@@ -36,18 +36,21 @@ namespace Zilon.Core.Commands
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var selectedActorViewModel = GetCanExecuteActorViewModel();
-            if (selectedActorViewModel == null)
+            var target = GetTarget();
+            if (target is null)
             {
                 return false;
             }
 
-            var targetNode = selectedActorViewModel.Actor.Node;
+            var targetNode = target.Node;
 
             var act = PlayerState.TacticalAct;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
-                PlayerState.ActiveActor.Actor == selectedActorViewModel.Actor)
+                ReferenceEquals(PlayerState.ActiveActor.Actor, target))
             {
+                // Лечить можно только самого себя.
+                // Возможно, дальше будут компаньоны и другие НПЦ.
+                // Тогда эту проверку нужно будет доработать.
                 return true;
             }
             else
@@ -92,8 +95,30 @@ namespace Zilon.Core.Commands
                 }
             }
 
-
             return true;
+        }
+
+        private IAttackTarget GetTarget()
+        {
+            var selectedActorViewModel = GetCanExecuteActorViewModel();
+            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel();
+            var canTakeDamage = selectedStaticObjectViewModel?.Container?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
+            if (!canTakeDamage)
+            {
+                selectedStaticObjectViewModel = null;
+            }
+
+            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.Container;
+        }
+
+        protected override void ExecuteTacticCommand()
+        {
+            var target = GetTarget();
+
+            var tacticalAct = PlayerState.TacticalAct;
+
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, target, tacticalAct, _tacticalActUsageService));
+            PlayerState.TaskSource.Intent(intention);
         }
 
         private bool CheckPropResource(IPropStore inventory,
@@ -128,15 +153,11 @@ namespace Zilon.Core.Commands
             return hover ?? selected;
         }
 
-        protected override void ExecuteTacticCommand()
+        private IContainerViewModel GetCanExecuteStaticObjectViewModel()
         {
-            var targetActorViewModel = (IActorViewModel)PlayerState.SelectedViewModel;
-            var targetActor = targetActorViewModel.Actor;
-
-            var tacticalAct = PlayerState.TacticalAct;
-
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct, _tacticalActUsageService));
-            PlayerState.TaskSource.Intent(intention);
+            var hover = PlayerState.HoverViewModel as IContainerViewModel;
+            var selected = PlayerState.SelectedViewModel as IContainerViewModel;
+            return hover ?? selected;
         }
     }
 }
