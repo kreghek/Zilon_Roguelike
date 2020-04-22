@@ -17,5 +17,10 @@
         /// Выполняет добычу из залежей.
         /// </summary>
         void Mine();
+
+        /// <summary>
+        /// Сложность добычи ресурса из данного месторождения.
+        /// </summary>
+        DepositMiningDifficulty Difficulty { get; }
     }
 }

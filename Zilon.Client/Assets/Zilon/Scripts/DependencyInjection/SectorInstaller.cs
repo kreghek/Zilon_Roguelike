@@ -9,6 +9,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 public class SectorInstaller : MonoInstaller<SectorInstaller>
@@ -31,6 +32,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IBiomeInitializer>().To<BiomeInitializer>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
+
+        Container.Bind<IMineDepositMethodRandomSource>().To<MineDepositMethodRandomSource>().AsSingle();
 
         // генерация сектора
         Container.RegisterGenerationServices();

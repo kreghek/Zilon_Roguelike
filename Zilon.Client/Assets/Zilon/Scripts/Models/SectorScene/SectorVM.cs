@@ -214,6 +214,7 @@ public class SectorVM : MonoBehaviour
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
+        actor.DepositMined += Actor_DepositMined;
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
@@ -448,7 +449,13 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var props = e.Container.GetModule<IPropContainer>().Content.CalcActualItems();
+        var propContainer = e.Container.GetModule<IPropContainer>();
+        ShowFoundPropsModalOrNotFound(actor, propContainer);
+    }
+
+    private void ShowFoundPropsModalOrNotFound(IActor actor, IPropContainer propContainer)
+    {
+        var props = propContainer.Content.CalcActualItems();
         if (props.Any())
         {
             var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
@@ -456,7 +463,7 @@ public class SectorVM : MonoBehaviour
             var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory,
-                e.Container.GetModule<IPropContainer>().Content);
+                propContainer.Content);
             containerPopup.Init(transferMachine);
         }
         else
@@ -619,7 +626,7 @@ public class SectorVM : MonoBehaviour
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
-        var actor = GetActor(sender);
+        var actor = GetActorFromEventSender(sender);
 
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
@@ -641,6 +648,22 @@ public class SectorVM : MonoBehaviour
             case TacticalActEffectType.Undefined:
             default:
                 throw new InvalidOperationException($"Неизвестный тип воздействия {actEffect}.");
+        }
+    }
+
+    private void Actor_DepositMined(object sender, MineDepositEventArgs e)
+    {
+        var actor = GetActorFromEventSender(sender);
+
+        var depositViewModel = _staticObjectViewModels.Single(x => x.StaticObject == e.Deposit);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+        actorViewModel.GraphicRoot.ProcessMine(depositViewModel.transform.position);
+
+        var propContainer = e.Deposit.GetModule<IPropContainer>();
+
+        if (e.Result is SuccessMineDepositResult)
+        {
+            ShowFoundPropsModalOrNotFound(actor, propContainer);
         }
     }
 
@@ -672,7 +695,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private static IActor GetActor(object sender)
+    private static IActor GetActorFromEventSender(object sender)
     {
         if (sender is IActor actor)
         {
