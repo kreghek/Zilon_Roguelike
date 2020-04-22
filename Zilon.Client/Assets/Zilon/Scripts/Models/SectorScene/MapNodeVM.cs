@@ -19,11 +19,12 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
     public SpriteRenderer RightBottomRenderer;
     public bool IsExit;
     public GameObject ExitMarker;
-    
+
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }
 
     public ILocationScheme LocaltionScheme { get; set; }
+    public object Item { get => Node; }
 
     public event EventHandler OnSelect;
     public event EventHandler MouseEnter;

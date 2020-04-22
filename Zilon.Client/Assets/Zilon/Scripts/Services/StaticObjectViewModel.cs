@@ -27,6 +27,8 @@ public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel
         }
     }
 
+    public object Item { get => Container; }
+
     public virtual void Start()
     {
         var hexNode = (HexNode)StaticObject.Node;

@@ -43,6 +43,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public IActor Actor { get; set; }
 
     public ISectorUiState PlayerState { get; set; }
+    public object Item { get => Actor; }
 
     public void SetGraphicRoot(ActorGraphicBase actorGraphic)
     {
