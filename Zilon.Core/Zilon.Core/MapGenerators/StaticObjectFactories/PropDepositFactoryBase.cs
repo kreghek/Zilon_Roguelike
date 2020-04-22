@@ -55,7 +55,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             var lifetimeModule = new DepositLifetimeModule(sector.StaticObjectManager, staticObject);
             staticObject.AddModule(lifetimeModule);
 
-            var durabilityModule = new DepositDurabilityModule(depositModule, 10);
+            var durabilityModule = new DepositDurabilityModule(depositModule, lifetimeModule, 10);
             staticObject.AddModule(durabilityModule);
 
             return staticObject;

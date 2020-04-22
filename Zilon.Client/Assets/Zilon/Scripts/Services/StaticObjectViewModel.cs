@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using Assets.Zilon.Scripts.Models.SectorScene;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,14 +8,23 @@ using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel
+public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel, ICanBeHitSectorObject
 {
+    private readonly List<HitSfx> _effectList;
+
+    public StaticObjectViewModel()
+    {
+        _effectList = new List<HitSfx>();
+    }
+
     public event EventHandler Selected;
     public event EventHandler MouseEnter;
 
     public virtual IStaticObject StaticObject { get; set; }
 
     public Vector3 WorldPosition { get; set; }
+
+    public Vector3 Position { get => transform.position; }
 
     //TODO Убрать, т.к. оставлено для совместимости со старым кодом.
     // Не убрал, потому что работал над другой задачей.
@@ -68,5 +78,13 @@ public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel
     private void DoMouseEnter()
     {
         MouseEnter?.Invoke(this, new EventArgs());
+    }
+
+    public void AddHitEffect(HitSfx sfxObject)
+    {
+        sfxObject.HitSfxes = _effectList;
+        sfxObject.transform.position = transform.position + Vector3.up * 0.2f * _effectList.Count;
+
+        _effectList.Add(sfxObject);
     }
 }
