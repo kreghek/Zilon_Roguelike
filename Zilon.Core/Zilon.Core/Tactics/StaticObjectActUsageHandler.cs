@@ -21,9 +21,8 @@ namespace Zilon.Core.Tactics
             UseOnStaticObject(target as IStaticObject, tacticalActRoll);
         }
 
-
         /// <summary>
-        /// Применяет действие на предмет, на который можно подействовать (сундук/дверь).
+        /// Применяет действие на предмет, на который можно подействовать (сундук/дверь/камень).
         /// </summary>
         /// <param name="target"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>

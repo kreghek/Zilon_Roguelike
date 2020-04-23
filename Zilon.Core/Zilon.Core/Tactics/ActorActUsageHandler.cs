@@ -173,7 +173,6 @@ namespace Zilon.Core.Tactics
             }
         }
 
-
         /// <summary>
         /// Лечит актёра.
         /// </summary>
@@ -221,7 +220,6 @@ namespace Zilon.Core.Tactics
 
             return damageEfficientCalcResult;
         }
-
 
         /// <summary>
         /// Возвращает ранг пробития действия.
