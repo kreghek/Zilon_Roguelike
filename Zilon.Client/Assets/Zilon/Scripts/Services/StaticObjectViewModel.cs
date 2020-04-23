@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Assets.Zilon.Scripts.Models.SectorScene;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -83,7 +85,8 @@ public class StaticObjectViewModel : MonoBehaviour, IContainerViewModel, ICanBeH
     public void AddHitEffect(HitSfx sfxObject)
     {
         sfxObject.HitSfxes = _effectList;
-        sfxObject.transform.position = transform.position + Vector3.up * 0.2f * _effectList.Count;
+        var diffVector = Vector3.up * 0.2f;
+        sfxObject.transform.position = transform.position + (diffVector * _effectList.Count);
 
         _effectList.Add(sfxObject);
     }
