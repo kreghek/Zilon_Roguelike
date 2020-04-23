@@ -87,7 +87,7 @@ namespace Zilon.Core.Tactics.Tests
             // ACT
             Action act = () =>
             {
-                var factHandler = selector.GetHandler(targetObject);
+                selector.GetHandler(targetObject);
             };
 
             // ASSERT
@@ -112,7 +112,7 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         private class Test2 : Test1
-        { 
+        {
         }
 
         private sealed class NotHandleTarget : IAttackTarget
@@ -131,8 +131,8 @@ namespace Zilon.Core.Tactics.Tests
             }
         }
 
-        private interface ITest1 { 
-
+        private interface ITest1
+        {
         }
     }
 }

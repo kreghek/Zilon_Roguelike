@@ -26,7 +26,6 @@ namespace Zilon.Core.Tests.Tactics
     public class TacticalActUsageServiceTests
     {
         private ITacticalActUsageRandomSource _actUsageRandomSource;
-        private Mock<IPerkResolver> _perkResolverMock;
         private ITacticalAct _act;
         private IPerson _person;
         private ISectorManager _sectorManager;
