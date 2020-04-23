@@ -135,16 +135,7 @@ namespace Zilon.Core.Tactics
 
                 LogDamagePlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
 
-                if (EquipmentDurableService != null && targetActor.Person.EquipmentCarrier != null)
-                {
-                    var damagedEquipment = GetDamagedEquipment(targetActor);
-
-                    // может быть null, если нет брони вообще
-                    if (damagedEquipment != null)
-                    {
-                        EquipmentDurableService.UpdateByUse(damagedEquipment, targetActor.Person);
-                    }
-                }
+                ReduceTargetEquipmentDurability(targetActor);
 
                 if (!targetIsDeadLast && targetActor.Person.CheckIsDead())
                 {
@@ -171,6 +162,24 @@ namespace Zilon.Core.Tactics
                         factToHitRoll);
                 }
             }
+        }
+
+        private void ReduceTargetEquipmentDurability(IActor targetActor)
+        {
+            if (EquipmentDurableService is null || targetActor.Person.EquipmentCarrier is null)
+            {
+                return;
+            }
+
+            var damagedEquipment = GetDamagedEquipment(targetActor);
+
+            // может быть null, если нет брони вообще
+            if (damagedEquipment is null)
+            {
+                return;
+            }
+
+            EquipmentDurableService.UpdateByUse(damagedEquipment, targetActor.Person);
         }
 
         /// <summary>
