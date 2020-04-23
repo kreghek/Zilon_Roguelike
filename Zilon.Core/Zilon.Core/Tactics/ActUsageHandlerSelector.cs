@@ -30,7 +30,19 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            throw new InvalidOperationException($"Handler for type {attackTarget.GetType()} not found.");
+            throw new HandlerNotFoundException($"Handler for type {attackTarget.GetType()} not found.");
         }
+    }
+
+
+    [Serializable]
+    public class HandlerNotFoundException : Exception
+    {
+        public HandlerNotFoundException() { }
+        public HandlerNotFoundException(string message) : base(message) { }
+        public HandlerNotFoundException(string message, Exception inner) : base(message, inner) { }
+        protected HandlerNotFoundException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

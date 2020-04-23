@@ -137,64 +137,6 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест проверяет, что броня поглощает урон.
-        /// </summary>
-        [Test]
-        public void UseOn_ArmorSavePassed_ActEfficientDecrease()
-        {
-            // ARRANGE
-            const OffenseType offenceType = OffenseType.Tactical;
-            const int fakeToHitDiceRoll = 2; // успех в ToHit 2+
-            const int fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
-            const int fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
-            const int expectedActEfficient = fakeActEfficientRoll - 1;  // -1 даёт текущая броня
-
-            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeArmorSaveDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
-            var actUsageRandomSource = actUsageRandomSourceMock.Object;
-
-            var handlerSelector = CreateEmptyHandlerSelector();
-
-            var actUsageService = new TacticalActUsageService(
-                actUsageRandomSource,
-                _sectorManager,
-                handlerSelector);
-
-            var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            var actor = actorMock.Object;
-
-            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10) };
-            var monsterMock = CreateMonsterMock(armors: armors);
-            var monster = monsterMock.Object;
-
-            // Настройка дествия
-            var actScheme = new TestTacticalActStatsSubScheme
-            {
-                Offence = new TestTacticalActOffenceSubScheme
-                {
-                    Type = offenceType,
-                    ApRank = 10,
-                    Impact = ImpactType.Kinetic
-                }
-            };
-
-            var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(actScheme);
-            var act = actMock.Object;
-
-            // ACT
-            var usedActs = new UsedTacticalActs(new[] { act });
-            actUsageService.UseOn(actor, monster, usedActs);
-
-            // ASSERT
-            actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
-            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
-        }
-
-        /// <summary>
         /// Тест проверяет, что при атаке вызывается событие использования действия у актёра..
         /// </summary>
         [Test]
@@ -350,6 +292,8 @@ namespace Zilon.Core.Tests.Tactics
             var mapMock = new Mock<ISectorMap>();
             mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns(false);
+            mapMock.Setup(x => x.DistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
+                .Returns(1);
             var map = mapMock.Object;
 
             var sectorMock = new Mock<ISector>();
