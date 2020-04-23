@@ -6,7 +6,6 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -23,7 +22,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         Container.RegisterActorTaskSourcesServices();
 
-        Container.RegisterTacticalActUsageService();
+        Container.RegisterActUsageService();
 
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();

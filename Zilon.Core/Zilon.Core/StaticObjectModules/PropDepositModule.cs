@@ -12,7 +12,8 @@ namespace Zilon.Core.StaticObjectModules
         private readonly IDropResolver _dropResolver;
         private readonly string[] _toolTags;
 
-        private int _exhaustingCounter = 10;
+        private readonly int _exhaustingValue;
+        private int _exhaustingCounter;
 
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
@@ -26,6 +27,7 @@ namespace Zilon.Core.StaticObjectModules
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _toolTags = toolTags ?? throw new ArgumentNullException(nameof(toolTags));
 
+            _exhaustingValue = exhaustingValue;
             _exhaustingCounter = exhaustingValue;
             Difficulty = depositMiningDifficulty;
         }
@@ -45,6 +47,7 @@ namespace Zilon.Core.StaticObjectModules
         /// <inheritdoc/>
         public string Key { get => nameof(IPropDepositModule); }
         public DepositMiningDifficulty Difficulty { get; }
+        public float Stock { get => (float)_exhaustingCounter / _exhaustingValue; }
 
         /// <inheritdoc/>
         public void Mine()

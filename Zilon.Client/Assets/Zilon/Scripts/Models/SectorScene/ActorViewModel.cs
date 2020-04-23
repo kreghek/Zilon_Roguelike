@@ -17,7 +17,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorViewModel : MonoBehaviour, IActorViewModel
+public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewModel
 {
     private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
@@ -43,6 +43,8 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public IActor Actor { get; set; }
 
     public ISectorUiState PlayerState { get; set; }
+    public object Item { get => Actor; }
+    public Vector3 Position { get => transform.position; }
 
     public void SetGraphicRoot(ActorGraphicBase actorGraphic)
     {

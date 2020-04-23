@@ -32,7 +32,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var container = targetContainerViewModel.Container;
+            var container = targetContainerViewModel.StaticObject;
             var requiredDistance = 1;
 
             var targetNode = container.Node;
@@ -60,7 +60,7 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
 
-            var staticObject = targetContainerViewModel.Container;
+            var staticObject = targetContainerViewModel.StaticObject;
             if (staticObject == null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");

@@ -4,6 +4,6 @@ namespace Zilon.Core.Client
 {
     public interface IContainerViewModel: ISelectableViewModel
     {
-        IStaticObject Container { get; set; }
+        IStaticObject StaticObject { get; set; }
     }
 }

@@ -59,7 +59,8 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
-            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory => {
+            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            {
                 var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
                 return new StaticObjectFactoryCollector(factories);
             });
@@ -109,27 +110,58 @@ namespace Zilon.Emulation.Common
             RegisterChestGeneratorRandomSource(container);
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
+            RegisterActUsageServices(container);
+            container.AddScoped<MonsterBotActorTaskSource>();
+        }
+
+        private static void RegisterActUsageServices(IServiceCollection container)
+        {
+            container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
+            {
+                var handlers = serviceProvider.GetServices<IActUsageHandler>();
+                var handlersArray = handlers.ToArray();
+                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
+                return handlerSelector;
+            });
+            container.AddScoped<IActUsageHandler>(serviceProvider =>
+            {
+                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
+                var handler = new ActorActUsageHandler(perkResolver, randomSource);
+                ConfigurateActorActUsageHandler(serviceProvider, handler);
+                return handler;
+            });
+            container.AddScoped<IActUsageHandler, StaticObjectActUsageHandler>();
             container.AddScoped<ITacticalActUsageService>(serviceProvider =>
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
                 var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
 
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, perkResolver, sectorManager);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, sectorManager, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 
                 return tacticalActUsageService;
             });
-            container.AddScoped<MonsterBotActorTaskSource>();
         }
 
         private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-            tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-            tacticalActUsageService.ScoreManager = serviceProvider.GetService<IScoreManager>();
+        }
+
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
+        {
+            // Указание необязательных зависимостей
+            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+
+            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
+
+            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+
+            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)

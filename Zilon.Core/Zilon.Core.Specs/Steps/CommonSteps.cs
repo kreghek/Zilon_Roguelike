@@ -164,7 +164,7 @@ namespace Zilon.Core.Specs.Steps
 
             var chestViewMdel = new TestContainerViewModel
             {
-                Container = container
+                StaticObject = container
             };
 
             playerState.HoverViewModel = chestViewMdel;
@@ -178,7 +178,7 @@ namespace Zilon.Core.Specs.Steps
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
             var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
@@ -201,7 +201,7 @@ namespace Zilon.Core.Specs.Steps
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
             var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
             var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;

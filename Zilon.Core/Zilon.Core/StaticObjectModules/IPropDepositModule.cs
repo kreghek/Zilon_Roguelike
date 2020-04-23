@@ -22,5 +22,10 @@
         /// Сложность добычи ресурса из данного месторождения.
         /// </summary>
         DepositMiningDifficulty Difficulty { get; }
+
+        /// <summary>
+        /// Текущий запас. Когда равен 0 - залежи истощаются.
+        /// </summary>
+        float Stock { get; }
     }
 }

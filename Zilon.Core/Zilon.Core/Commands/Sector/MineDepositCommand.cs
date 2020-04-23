@@ -27,7 +27,7 @@ namespace Zilon.Core.Commands.Sector
         public override bool CanExecute()
         {
             var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
-            var targetDeposit = (selectedViewModel as IContainerViewModel)?.Container.GetModuleSafe<IPropDepositModule>();
+            var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject.GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {
@@ -57,7 +57,7 @@ namespace Zilon.Core.Commands.Sector
 
         protected override void ExecuteTacticCommand()
         {
-            var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).Container;
+            var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).StaticObject;
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;

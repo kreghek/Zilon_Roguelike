@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Persons;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics
@@ -36,11 +37,18 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; }
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
         /// <inheritdoc/>
         public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
+        }
+
+        public bool CanBeDamaged()
+        {
+            var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
+            return durabilityModule != null && durabilityModule.Value > 0;
         }
 
         /// <inheritdoc/>
@@ -53,6 +61,17 @@ namespace Zilon.Core.Tactics
         public bool HasModule(string key)
         {
             return _modules.ContainsKey(key);
+        }
+
+        public void TakeDamage(int value)
+        {
+            var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
+            if (durabilityModule is null)
+            {
+                throw new InvalidOperationException("Attempt to damage object with no durability module.");
+            }
+
+            durabilityModule.TakeDamage(value);
         }
 
         /// <inheritdoc/>
