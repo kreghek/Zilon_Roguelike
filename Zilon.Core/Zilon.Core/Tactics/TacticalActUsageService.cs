@@ -126,7 +126,7 @@ namespace Zilon.Core.Tactics
 
             if (!isInDistance)
             {
-                throw new InvalidOperationException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                throw new UsageOutOfDistanceException("Попытка атаковать цель, находящуюся за пределами атаки.");
             }
 
             var targetNode = target.Node;
@@ -137,7 +137,7 @@ namespace Zilon.Core.Tactics
 
             if (!targetIsOnLine)
             {
-                throw new InvalidOperationException("Задачу на атаку нельзя выполнить сквозь стены.");
+                throw new UsageThroughtWallException("Задачу на атаку нельзя выполнить сквозь стены.");
             }
 
             actor.UseAct(target, act);
