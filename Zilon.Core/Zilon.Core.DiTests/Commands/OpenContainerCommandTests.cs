@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.Commands
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();
-            targetVmMock.SetupProperty(x => x.Container, target);
+            targetVmMock.SetupProperty(x => x.StaticObject, target);
             var targetVm = targetVmMock.Object;
 
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);

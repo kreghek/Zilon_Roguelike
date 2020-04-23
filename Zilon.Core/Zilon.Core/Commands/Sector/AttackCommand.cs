@@ -102,13 +102,13 @@ namespace Zilon.Core.Commands
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.Container?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
             if (!canTakeDamage)
             {
                 selectedStaticObjectViewModel = null;
             }
 
-            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.Container;
+            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
 
         protected override void ExecuteTacticCommand()
