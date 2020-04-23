@@ -156,6 +156,12 @@ namespace Zilon.Emulation.Common
         {
             // Указание необязательных зависимостей
             handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+
+            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
+
+            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+
+            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)
