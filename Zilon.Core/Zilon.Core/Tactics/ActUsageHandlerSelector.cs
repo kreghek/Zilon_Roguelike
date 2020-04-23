@@ -24,7 +24,7 @@ namespace Zilon.Core.Tactics
 
             foreach (var handler in _actUsageHandlers)
             {
-                if (handler.TargetType.IsAssignableFrom(attackTarget.GetType()))
+                if (handler.TargetType.IsInstanceOfType(attackTarget))
                 {
                     return handler;
                 }
