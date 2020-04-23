@@ -36,7 +36,7 @@ namespace Zilon.Core.Commands
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var target = GetTarget();
+            var target = GetTarget(PlayerState);
             if (target is null)
             {
                 return false;
@@ -98,10 +98,10 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        private IAttackTarget GetTarget()
+        private IAttackTarget GetTarget(ISectorUiState sectorUiState)
         {
-            var selectedActorViewModel = GetCanExecuteActorViewModel(PlayerState);
-            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(PlayerState);
+            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
+            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
             var canTakeDamage = selectedStaticObjectViewModel?.Container?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
             if (!canTakeDamage)
             {
@@ -113,7 +113,7 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var target = GetTarget();
+            var target = GetTarget(PlayerState);
 
             var tacticalAct = PlayerState.TacticalAct;
 
