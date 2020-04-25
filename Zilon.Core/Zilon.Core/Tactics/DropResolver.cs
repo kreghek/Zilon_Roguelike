@@ -130,7 +130,7 @@ namespace Zilon.Core.Tactics
             return mod;
         }
 
-        private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
+        private static DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
             IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var modificatorsArray = modificators.ToArray();
@@ -179,8 +179,6 @@ namespace Zilon.Core.Tactics
                         return resource;
 
                     case PropClass.Concept:
-
-                        throw new ArgumentException($"Пока концепты не поддерживаются.");
 
                         var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
 
