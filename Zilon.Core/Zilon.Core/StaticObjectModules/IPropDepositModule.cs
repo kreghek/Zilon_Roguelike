@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.StaticObjectModules
+﻿using System;
+
+namespace Zilon.Core.StaticObjectModules
 {
     [StaticObjectModule]
     public interface IPropDepositModule: IStaticObjectModule
@@ -27,5 +29,10 @@
         /// Текущий запас. Когда равен 0 - залежи истощаются.
         /// </summary>
         float Stock { get; }
+
+        /// <summary>
+        /// Выстреливает, когда происходит добыча.
+        /// </summary>
+        event EventHandler Mined;
     }
 }

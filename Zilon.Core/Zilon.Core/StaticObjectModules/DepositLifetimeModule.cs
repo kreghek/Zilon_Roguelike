@@ -22,10 +22,22 @@ namespace Zilon.Core.StaticObjectModules
 
             _depositModule = _parentStaticObject.GetModule<IPropDepositModule>();
             _containerModule = _parentStaticObject.GetModule<IPropContainer>();
+
+            _depositModule.Mined += DepositModule_Mined;
             _containerModule.ItemsRemoved += ContainerModule_ItemsRemoved;
         }
 
+        private void DepositModule_Mined(object sender, EventArgs e)
+        {
+            CheckAndDestroy();
+        }
+
         private void ContainerModule_ItemsRemoved(object sender, Props.PropStoreEventArgs e)
+        {
+            CheckAndDestroy();
+        }
+
+        private void CheckAndDestroy()
         {
             if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
             {
@@ -44,6 +56,7 @@ namespace Zilon.Core.StaticObjectModules
 
         public void Destroy()
         {
+            _depositModule.Mined -= DepositModule_Mined;
             _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
             _staticObjectManager.Remove(_parentStaticObject);
             DoDestroyed();

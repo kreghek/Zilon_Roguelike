@@ -15,6 +15,9 @@ namespace Zilon.Core.StaticObjectModules
         private readonly int _exhaustingValue;
         private int _exhaustingCounter;
 
+        /// <inheritdoc/>
+        public event EventHandler Mined;
+
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
             IDropResolver dropResolver,
@@ -39,7 +42,7 @@ namespace Zilon.Core.StaticObjectModules
         }
 
         /// <inheritdoc/>
-        public bool IsExhausted { get => _exhaustingCounter <= 0; }
+        public bool IsExhausted { get => Stock <= 0; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
@@ -65,6 +68,14 @@ namespace Zilon.Core.StaticObjectModules
             }
 
             _exhaustingCounter--;
+
+            DoMined();
+        }
+
+        private void DoMined()
+        {
+            var eventArgs = new EventArgs();
+            Mined?.Invoke(this, eventArgs);
         }
     }
 }
