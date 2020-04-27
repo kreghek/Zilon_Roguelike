@@ -18,7 +18,7 @@ namespace Zilon.Core.StaticObjectModules
         public DepositLifetimeModule(IStaticObjectManager staticObjectManager, IStaticObject parentStaticObject)
         {
             _staticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
-            _parentStaticObject = parentStaticObject;
+            _parentStaticObject = parentStaticObject ?? throw new ArgumentNullException(nameof(parentStaticObject));
 
             _depositModule = _parentStaticObject.GetModule<IPropDepositModule>();
             _containerModule = _parentStaticObject.GetModule<IPropContainer>();

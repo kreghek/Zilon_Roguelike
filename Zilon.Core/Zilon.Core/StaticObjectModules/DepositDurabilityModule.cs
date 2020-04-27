@@ -9,6 +9,12 @@ namespace Zilon.Core.StaticObjectModules
         private readonly int _damagePerMineUnit;
         private int _mineDamageCounter;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="propDepositModule"> Prop Deposit module from static object. </param>
+        /// <param name="lifetimeModule"> Lifetime module from static object. </param>
+        /// <param name="damagePerMineUnit"> Required damage to mine one time. Example, if this value is 10 and actor hit multiple times sum on 10, this be like one mine action. </param>
         public DepositDurabilityModule(IPropDepositModule propDepositModule, ILifetimeModule lifetimeModule, int damagePerMineUnit)
         {
             IsActive = true;
