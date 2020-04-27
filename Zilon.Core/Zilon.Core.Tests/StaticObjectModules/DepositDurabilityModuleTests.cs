@@ -25,7 +25,6 @@ namespace Zilon.Core.Tests.StaticObjectModules
             var lifetimeModuleMock = new Mock<ILifetimeModule>();
             var lifetimeModule = lifetimeModuleMock.Object;
 
-
             var durabilityModule = new DepositDurabilityModule(depositModule, lifetimeModule, damagePerMineUnit);
 
             // ACT
