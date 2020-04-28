@@ -51,7 +51,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
-            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
@@ -100,7 +100,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .As<IEquipmentModule>();
             equipmentCarrierMock.CallBase = true;
             var equipmentModule = equipmentCarrierMock.Object;
-            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
@@ -149,7 +149,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
-            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
@@ -200,7 +200,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
-            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
